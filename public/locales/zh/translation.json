@@ -326,7 +326,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "errorLoadingRequests": "加载会员申请时出错"
   },
   "users": {
     "membershipStatus": {
@@ -1180,7 +1181,9 @@
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "noResultsFoundFor": "未找到结果",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "加载被阻止用户时发生错误",
+    "errorLoadingMembers": "加载成员时发生错误"
   },
   "eventManagement": {
     "name": "事件管理",

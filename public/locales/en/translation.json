@@ -323,7 +323,8 @@
     "email": "email",
     "profilePictureAlt": "Profile picture of {{name}}",
     "placeholderAvatarAlt": "Placeholder avatar",
-    "newMembersWillAppearHere": "New membership requests will appear here"
+    "newMembersWillAppearHere": "New membership requests will appear here",
+    "errorLoadingRequests": "Error occurred while loading Membership Requests"
   },
   "users": {
     "membershipStatus": {
@@ -1163,7 +1164,9 @@
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "noResultsFoundFor": "noResultsFoundFor",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "Error occurred while loading blocked users data",
+    "errorLoadingMembers": "Error occurred while loading members data"
   },
   "eventManagement": {
     "name": "Event Management Dashboard",

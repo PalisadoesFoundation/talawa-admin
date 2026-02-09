@@ -326,7 +326,8 @@
     "email": "ईमेल",
     "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
     "placeholderAvatarAlt": "प्लेसहोल्डर अवतार",
-    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे"
+    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे",
+    "errorLoadingRequests": "सदस्यता अनुरोध लोड करते समय त्रुटि हुई"
   },
   "users": {
     "membershipStatus": {
@@ -1175,7 +1176,9 @@
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "ब्लॉक किए गए उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "errorLoadingMembers": "सदस्यों को लोड करते समय त्रुटि हुई"
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",

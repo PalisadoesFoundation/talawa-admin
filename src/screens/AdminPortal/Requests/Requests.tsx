@@ -46,6 +46,7 @@ import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 import { DataTable } from 'shared-components/DataTable/DataTable';
+import ErrorPanel from 'shared-components/ErrorPanel';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -166,13 +167,6 @@ const Requests = (): JSX.Element => {
       window.location.assign('/admin/orglist');
     }
   }, [userRole]);
-
-  // Handle errors
-  useEffect(() => {
-    if (error) {
-      errorHandler(t, error);
-    }
-  }, [error, t]);
 
   /**
    * Handles the search input change and updates the search term.
@@ -342,7 +336,14 @@ const Requests = (): JSX.Element => {
         hasDropdowns={false}
       />
 
-      {!loading && orgsData?.organizations?.length === 0 ? (
+      {error ? (
+        <ErrorPanel
+          message={t('requests.errorLoadingRequests')}
+          error={error}
+          onRetry={refetch}
+          testId="errorRequests"
+        />
+      ) : !loading && orgsData?.organizations?.length === 0 ? (
         <EmptyState
           icon={<Group />}
           message={t('requests.noOrgErrorTitle')}

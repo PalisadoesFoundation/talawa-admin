@@ -174,7 +174,7 @@ describe('Testing Users screen', () => {
                     name: 'User One',
                     emailAddress: 'u1@test.com',
                     role: 'regular',
-                    createdAt: new Date().toISOString(),
+                    createdAt: dayjs().utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -230,6 +230,7 @@ describe('Testing Users screen', () => {
             first: 12,
             after: null,
             orgFirst: 32,
+            where: undefined,
           },
         },
         result: {
@@ -243,7 +244,7 @@ describe('Testing Users screen', () => {
                     name: 'User One',
                     emailAddress: 'u1@test.com',
                     role: 'regular',
-                    createdAt: new Date().toISOString(),
+                    createdAt: dayjs().utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -646,7 +647,9 @@ describe('Testing Users screen', () => {
         await new Promise((resolve) => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
       });
 
-      // Test passes if scroll event handler doesn't crash the component
+      // Verify the component remained healthy after scroll event
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+      expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
     });
   });
 
@@ -2595,6 +2598,10 @@ describe('Additional uncovered lines coverage', () => {
 
     vi.resetModules();
 
+    vi.doMock('shared-components/DataTable/DataTable', () => ({
+      DataTable: vi.fn().mockReturnValue(<div data-testid="datatable" />),
+    }));
+
     vi.doMock('shared-components/DataTable/hooks/useTableData', () => ({
       useTableData: () => ({
         rows: [
@@ -2647,54 +2654,6 @@ describe('Additional uncovered lines coverage', () => {
       };
     });
 
-    vi.doMock('components/UsersTableItem/UsersTableItem', async () => {
-      const React = await import('react');
-      interface IUsersTableItemProps {
-        resetAndRefetch: () => void;
-      }
-      return {
-        __esModule: true,
-        default: ({ resetAndRefetch }: IUsersTableItemProps) => {
-          React.useEffect(() => {
-            resetAndRefetch();
-          }, [resetAndRefetch]);
-          return React.createElement('div', { 'data-testid': 'user-row' });
-        },
-      };
-    });
-
-    vi.doMock('react-infinite-scroll-component', async () => {
-      const React = await import('react');
-      interface IInfiniteScrollProps {
-        children: React.ReactNode;
-        next: () => void;
-        hasMore: boolean;
-        dataLength?: number;
-      }
-      return {
-        __esModule: true,
-        default: ({
-          children,
-          next,
-          hasMore,
-          dataLength,
-        }: IInfiniteScrollProps) => {
-          const calledRef = React.useRef(false);
-          React.useEffect(() => {
-            if (hasMore && !calledRef.current) {
-              calledRef.current = true;
-              next();
-            }
-          }, [hasMore, dataLength, next]);
-          return React.createElement(
-            'div',
-            { 'data-testid': 'infinite-scroll' },
-            children,
-          );
-        },
-      };
-    });
-
     const { default: UsersWithMocks } = await import('./Users');
 
     render(
@@ -2725,8 +2684,8 @@ describe('Additional uncovered lines coverage', () => {
       expect(fetchMore).toHaveBeenCalled();
     });
 
-    // Line 223: userIndexMap accessor was called (both with mapped and unmapped ids)
-    // The test passes which means the accessor function executed
+    // Line 252: userIndexMap accessor was called (both with mapped and unmapped ids)
+    // The test passes which means the accessor function executed: userIndexMap.get(row.id) || 0
   });
 
   it('should cover fetchMore with search filter - line 193 branch coverage', async () => {
@@ -2805,7 +2764,6 @@ describe('Additional uncovered lines coverage', () => {
 
     vi.doMock('react-infinite-scroll-component', async () => {
       const React = await import('react');
-      let nextFunctionCalled = false;
       interface IInfiniteScrollProps {
         children: React.ReactNode;
         next: () => void;
@@ -2814,9 +2772,10 @@ describe('Additional uncovered lines coverage', () => {
       return {
         __esModule: true,
         default: ({ children, next, hasMore }: IInfiniteScrollProps) => {
+          const nextFunctionCalledRef = React.useRef(false);
           React.useEffect(() => {
-            if (hasMore && !nextFunctionCalled) {
-              nextFunctionCalled = true;
+            if (hasMore && !nextFunctionCalledRef.current) {
+              nextFunctionCalledRef.current = true;
               next();
             }
           }, [hasMore, next]);

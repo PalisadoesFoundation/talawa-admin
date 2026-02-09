@@ -317,6 +317,7 @@
     "email": "Correo electrónico",
     "accept": "Aceptar",
     "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
+    "errorLoadingRequests": "Error al cargar las solicitudes",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
@@ -1158,7 +1159,9 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "sortOrganizations": "Sort Organizations",
     "noSpammerFound": "No se encontró ningún spammer",
-    "noUsersFound": "No se encontraron usuarios"
+    "noUsersFound": "No se encontraron usuarios",
+    "errorLoadingBlockedUsers": "Error al cargar los datos de los usuarios bloqueados",
+    "errorLoadingMembers": "Error al cargar los datos de los miembros"
   },
   "eventManagement": {
     "name": "Gestión de eventos",

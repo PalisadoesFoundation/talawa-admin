@@ -14,7 +14,8 @@ import type {
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
+import { PersonOff } from '@mui/icons-material';
+import ErrorPanel from 'shared-components/ErrorPanel';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
@@ -22,7 +23,6 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import TableLoader from 'components/TableLoader/TableLoader';
-import Button from 'shared-components/Button/Button';
 
 type SortingOption = 'newest' | 'oldest';
 type FilteringOption = 'admin' | 'user' | 'cancel';
@@ -289,30 +289,12 @@ const Users = (): React.ReactElement => {
     );
 
   const usersQueryErrorPanel = error ? (
-    <div
-      className={`${styles.container} bg-white rounded-4 my-3`}
-      role="alert"
-      aria-live="assertive"
-    >
-      <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.errorIcon} />
-        <h6 className="fw-bold text-danger text-center">
-          {t('errorLoadingUsers')}
-          <br />
-          {error.message}
-        </h6>
-        <div className="text-center mt-3">
-          <Button
-            type="button"
-            className="btn btn-sm btn-outline-danger"
-            onClick={() => refetch()}
-            aria-label={tCommon('retry')}
-          >
-            {tCommon('retry')}
-          </Button>
-        </div>
-      </div>
-    </div>
+    <ErrorPanel
+      message={t('errorLoadingUsers')}
+      error={error}
+      onRetry={refetch}
+      testId="errorMsg"
+    />
   ) : null;
 
   return (

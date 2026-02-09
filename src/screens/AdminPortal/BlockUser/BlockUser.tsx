@@ -66,6 +66,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import Button from 'shared-components/Button';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
+import ErrorPanel from 'shared-components/ErrorPanel';
 
 type BlockUserRow = {
   user: InterfaceUserPg;
@@ -79,9 +80,11 @@ const BlockUser = (): JSX.Element => {
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title'); // Set document title
-  const { orgId: currentUrl } = useParams(); // Get current organization ID from URL
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
+  const { orgId: currentUrl } = useParams(); // Get current organization ID from URL
   // State hooks
   const [showBlockedMembers, setShowBlockedMembers] = useState<boolean>(false);
   const [allMembers, setAllMembers] = useState<InterfaceUserPg[]>([]);
@@ -107,18 +110,13 @@ const BlockUser = (): JSX.Element => {
     rows: blockedUsersRows,
     loading: loadingBlockedUsers,
     error: errorBlockedUsers,
+    refetch: refetchBlockedUsers,
   } = useTableData<InterfaceUserPg, InterfaceUserPg, InterfaceOrganizationPg>(
     blockedUsersResult,
     {
       path: ['organization', 'blockedUsers'],
     },
   );
-
-  useEffect(() => {
-    if (errorBlockedUsers) {
-      errorHandler(t, errorBlockedUsers);
-    }
-  }, [errorBlockedUsers, t]);
 
   useEffect(() => {
     setBlockedUsers(blockedUsersRows);
@@ -138,18 +136,13 @@ const BlockUser = (): JSX.Element => {
     rows: membersRows,
     loading: loadingMembers,
     error: errorMembers,
+    refetch: refetchMembers,
   } = useTableData<InterfaceUserPg, InterfaceUserPg, InterfaceOrganizationPg>(
     membersResult,
     {
       path: ['organization', 'members'],
     },
   );
-
-  useEffect(() => {
-    if (errorMembers) {
-      errorHandler(t, errorMembers);
-    }
-  }, [errorMembers, t]);
 
   useEffect(() => {
     // Filter out blocked users
@@ -326,61 +319,81 @@ const BlockUser = (): JSX.Element => {
     );
   }
 
+  if (errorBlockedUsers) {
+    return (
+      <ErrorPanel
+        message={t('errorLoadingBlockedUsers')}
+        error={errorBlockedUsers}
+        onRetry={refetchBlockedUsers}
+        testId="errorBlockedUsers"
+      />
+    );
+  }
+
+  if (errorMembers) {
+    return (
+      <ErrorPanel
+        message={t('errorLoadingMembers')}
+        error={errorMembers}
+        onRetry={refetchMembers}
+        testId="errorMembers"
+      />
+    );
+  }
+
   return (
     <>
-      <div>
-        <div className={styles.btnsContainer} data-testid="testcomp">
-          <SearchFilterBar
-            hasDropdowns={true}
-            searchPlaceholder={t('searchByName')}
-            searchValue={searchTerm}
-            onSearchChange={handleSearch}
-            searchInputTestId="searchByName"
-            searchButtonTestId="searchBtn"
-            dropdowns={[
-              {
-                id: 'block-user-view',
-                label: t('view'),
-                type: 'filter',
-                options: [
-                  { label: t('allMembers'), value: 'allMembers' },
-                  { label: t('blockedUsers'), value: 'blockedUsers' },
-                ],
-                selectedOption: showBlockedMembers
-                  ? t('blockedUsers')
-                  : t('allMembers'),
-                onOptionChange: (value) =>
-                  setShowBlockedMembers(value === 'blockedUsers'),
-                dataTestIdPrefix: 'blockUserView',
-              },
-            ]}
-          />
-        </div>
-        <div className={styles.listBox}>
-          {(!showBlockedMembers && filteredAllMembers.length > 0) ||
-          (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
-            <div data-testid="userList">
-              <DataTable<BlockUserRow>
-                data={tableRows}
-                columns={tableColumns}
-                rowKey={(row: BlockUserRow) => row.user.id}
-                tableClassName={styles.custom_table}
-              />
-            </div>
-          ) : (
-            <EmptyState
-              icon="person_off"
-              message={
-                searchTerm.length === 0
-                  ? !showBlockedMembers
-                    ? t('noUsersFound')
-                    : t('noSpammerFound')
-                  : tCommon('noResultsFoundFor', { query: searchTerm })
-              }
-              dataTestId="block-user-empty-state"
+      <div className={styles.btnsContainer} data-testid="testcomp">
+        <SearchFilterBar
+          hasDropdowns={true}
+          searchPlaceholder={t('searchByName')}
+          searchValue={searchTerm}
+          onSearchChange={handleSearch}
+          searchInputTestId="searchByName"
+          searchButtonTestId="searchBtn"
+          dropdowns={[
+            {
+              id: 'block-user-view',
+              label: t('view'),
+              type: 'filter',
+              options: [
+                { label: t('allMembers'), value: 'allMembers' },
+                { label: t('blockedUsers'), value: 'blockedUsers' },
+              ],
+              selectedOption: showBlockedMembers
+                ? t('blockedUsers')
+                : t('allMembers'),
+              onOptionChange: (value) =>
+                setShowBlockedMembers(value === 'blockedUsers'),
+              dataTestIdPrefix: 'blockUserView',
+            },
+          ]}
+        />
+      </div>
+      <div className={styles.listBox}>
+        {(!showBlockedMembers && filteredAllMembers.length > 0) ||
+        (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
+          <div data-testid="userList">
+            <DataTable<BlockUserRow>
+              data={tableRows}
+              columns={tableColumns}
+              rowKey={(row: BlockUserRow) => row.user.id}
+              tableClassName={styles.custom_table}
             />
-          )}
-        </div>
+          </div>
+        ) : (
+          <EmptyState
+            icon="person_off"
+            message={
+              searchTerm.length === 0
+                ? !showBlockedMembers
+                  ? t('noUsersFound')
+                  : t('noSpammerFound')
+                : tCommon('noResultsFoundFor', { query: searchTerm })
+            }
+            dataTestId="block-user-empty-state"
+          />
+        )}
       </div>
     </>
   );

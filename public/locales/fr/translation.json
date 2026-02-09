@@ -331,7 +331,8 @@
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
     "placeholderAvatarAlt": "Avatar par défaut",
-    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici",
+    "errorLoadingRequests": "Erreur lors du chargement des demandes d'adhésion"
   },
   "users": {
     "membershipStatus": {
@@ -1163,7 +1164,9 @@
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "Error loading blocked users",
+    "errorLoadingMembers": "Error loading members"
   },
   "eventManagement": {
     "name": "Gestion d'événements",
