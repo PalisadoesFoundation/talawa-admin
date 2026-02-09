@@ -513,7 +513,7 @@ describe('AgendaFolderCreateModal', () => {
         <BrowserRouter>
           <AgendaFolderCreateModal
             isOpen={true}
-            hide={vi.fn()}
+            hide={hideMock}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
