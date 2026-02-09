@@ -2390,7 +2390,7 @@
     "installing": "Installing ({{elapsed}})",
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
-    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
+    "uninstallPluginWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details",
     "failedToParsePluginZip": "Failed to parse plugin ZIP",
     "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list."
