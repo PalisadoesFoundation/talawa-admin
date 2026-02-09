@@ -20,7 +20,7 @@
  */
 import React from 'react';
 import { useMutation } from '@apollo/client';
-import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
+import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
 import styles from './UserPasswordUpdate.module.css';
@@ -48,7 +48,7 @@ export const UserUpdate: React.FC<
 
   const [formState, setFormState] = React.useState(INITIAL_FORM_STATE);
 
-  const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
+  const [login] = useMutation(UPDATE_USER_MUTATION);
 
   /**
    * Handles the form submission to update the password.

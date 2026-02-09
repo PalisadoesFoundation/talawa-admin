@@ -581,16 +581,6 @@
     "joined": "joined",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
-  "orgAdminListCard": {
-    "remove": "Remove",
-    "removeAdmin": "Remove Admin",
-    "removeAdminMsg": "Do you want to remove this admin?",
-    "adminRemoved": "The admin is removed.",
-    "joined": "joined",
-    "no": "no",
-    "yes": "yes",
-    "talawaApiUnavailable": "talawaApiUnavailable"
-  },
   "orgPeopleListCard": {
     "remove": "Remove",
     "removeMember": "Remove Member",
@@ -814,8 +804,10 @@
     "sequence": "Sequence",
     "description": "Description",
     "enterDescription": "Enter Description",
+    "enterNotes": "Enter Notes",
     "category": "Agenda Category",
     "noCategory": "No category",
+    "notes": "Notes",
     "previewItem": "Preview Item",
     "attachments": "Attachments",
     "attachmentLimit": "Add any image file or video file up to 10MB",
@@ -1332,18 +1324,6 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "Previous Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "passCantBeEmpty": "Password can't be empty",
-    "passNoMatch": "New and Confirm password do not match.",
-    "saveChanges": "saveChanges",
-    "cancel": "cancel"
-  },
-  "orgDelete": {
-    "deleteOrg": "Delete Org"
-  },
   "membershipRequest": {
     "accept": "Accept",
     "reject": "Reject",
@@ -1736,7 +1716,8 @@
     "invalidAmount": "Please enter a numerical value for the donation amount.",
     "donationAmountDescription": "Please enter the numerical value for the donation amount.",
     "donationOutOfRange": "Donation amount must be between {{min}} and {{max}}.",
-    "donateTo": "donateTo"
+    "donateTo": "donateTo",
+    "selectCurrency": "Select Currency"
   },
   "transactions": {
     "title": "Transactions",
@@ -2349,7 +2330,8 @@
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
     "options": "Options",
-    "notSpecified": "Not Specified"
+    "notSpecified": "Not Specified",
+    "volunteerTabs": "Volunteer Tabs"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -2410,7 +2392,7 @@
     "installing": "Installing ({{elapsed}})",
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
-    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
+    "uninstallPluginWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details",
     "failedToParsePluginZip": "Failed to parse plugin ZIP",
     "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list."
@@ -2589,17 +2571,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Date N/A",
     "yes": "Yes",
     "no": "No",
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFound": "Event not found or has been deleted",
-    "numberOfAttendees": "Number of attendees",
-    "viewEventDetails": "View event details"
-  },
-  "promotedPost": {
-    "title": "Promoted Content",
-    "promotedContent": "Promoted content: {{title}}"
+    "numberOfAttendees": "Number of attendees"
   },
   "csv": {
     "demographics": "{{category}} Demographics"

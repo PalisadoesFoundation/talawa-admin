@@ -80,6 +80,7 @@ const AgendaItemsCreateModal: React.FC<
       attachments: [],
       folderId: '',
       categoryId: '',
+      notes: '',
     });
 
   useEffect(() => {
@@ -94,6 +95,7 @@ const AgendaItemsCreateModal: React.FC<
         attachments: [],
         folderId: '',
         categoryId: '',
+        notes: '',
       });
       setNewUrl('');
     }
@@ -146,6 +148,7 @@ const AgendaItemsCreateModal: React.FC<
             duration: agendaItemFormState.duration,
             folderId: agendaItemFormState.folderId,
             categoryId: agendaItemFormState.categoryId,
+            notes: agendaItemFormState.notes,
             attachments:
               agendaItemFormState.attachments.length > 0
                 ? agendaItemFormState.attachments.map((att) => ({
@@ -174,6 +177,7 @@ const AgendaItemsCreateModal: React.FC<
         urls: [],
         attachments: [],
         creator: { name: '' },
+        notes: '',
       });
 
       hide();
@@ -386,6 +390,16 @@ const AgendaItemsCreateModal: React.FC<
         }
       />
 
+      <FormTextField
+        name="notes"
+        label={t('notes')}
+        placeholder={t('enterNotes')}
+        value={agendaItemFormState.notes}
+        onChange={(v) =>
+          setAgendaItemFormState((prev) => ({ ...prev, notes: v }))
+        }
+      />
+
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
         <div className="d-flex gap-2">
@@ -441,14 +455,16 @@ const AgendaItemsCreateModal: React.FC<
             <img src={att.previewUrl} alt={t('attachmentPreviewAlt')} />
           )}
 
-          <button
+          <Button
             type="button"
+            variant="danger"
+            size="sm"
             className={styles.closeButtonFile}
             data-testid="deleteAttachment"
             onClick={() => handleRemoveAttachment(att.objectName)}
           >
             <i className="fa fa-times" />
-          </button>
+          </Button>
         </div>
       ))}
     </CreateModal>

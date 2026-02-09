@@ -125,30 +125,8 @@ export const UPDATE_USER_MUTATION = gql`
     }
   }
 `;
-// to update the password of user
-
-export const UPDATE_USER_PASSWORD_MUTATION = gql`
-  mutation UpdateUserPassword(
-    $previousPassword: String!
-    $newPassword: String!
-    $confirmNewPassword: String!
-  ) {
-    updateUserPassword(
-      data: {
-        previousPassword: $previousPassword
-        newPassword: $newPassword
-        confirmNewPassword: $confirmNewPassword
-      }
-    ) {
-      user {
-        _id
-      }
-    }
-  }
-`;
 
 // to sign up in the talawa admin
-
 export const SIGNUP_MUTATION = gql`
   mutation SignUp(
     $ID: ID!
@@ -417,15 +395,6 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
     deleteOrganization(input: $input) {
       id
       name
-    }
-  }
-`;
-
-// to remove an admin from an organization
-export const REMOVE_ADMIN_MUTATION = gql`
-  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
-    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      _id
     }
   }
 `;

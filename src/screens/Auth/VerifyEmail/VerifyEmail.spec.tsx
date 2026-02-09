@@ -599,6 +599,51 @@ describe('Testing VerifyEmail screen', () => {
     });
   });
 
+  it('Should use verificationFailed fallback when verifyEmail message is missing', async () => {
+    const noMessageMock = {
+      request: {
+        query: VERIFY_EMAIL_MUTATION,
+        variables: { token: 'missing-message-token' },
+      },
+      result: {
+        data: {
+          verifyEmail: {
+            success: false,
+            message: null,
+            user: null,
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[noMessageMock]}>
+        <MemoryRouter
+          initialEntries={['/auth/verify-email?token=missing-message-token']}
+        >
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <VerifyEmail />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    await waitFor(() => {
+      expect(toastMocks.error).toHaveBeenCalledWith(
+        i18n.t('verifyEmail.verificationFailed'),
+      );
+    });
+  });
+
   it('Should handle authentication error during verification', async () => {
     const authErrorMock = {
       request: {
