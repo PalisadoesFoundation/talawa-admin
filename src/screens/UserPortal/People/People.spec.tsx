@@ -563,7 +563,7 @@ describe('Testing People Screen [User Portal]', () => {
   it('renders avatar image when member has avatarURL', async () => {
     const rowName = 'User With Avatar';
     render(
-      <MockedProvider mocks={[memberWithAvatarMock]}>
+      <MockedProvider mocks={[memberWithAvatarMock, memberWithAvatarMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -604,7 +604,7 @@ describe('Testing People Screen [User Portal]', () => {
       },
     };
     render(
-      <MockedProvider mocks={[mockWithOrgId]}>
+      <MockedProvider mocks={[mockWithOrgId, mockWithOrgId]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -682,9 +682,9 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 
     // Navigate back to page 1 (covers else-if: setCurrentPage when pageCursors[newPage] is defined)
     await user.click(prevButton);
-    await wait();
-
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
   });
 });
 
