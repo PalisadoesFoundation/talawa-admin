@@ -22,6 +22,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import TableLoader from 'components/TableLoader/TableLoader';
+import Button from 'shared-components/Button/Button';
 
 type SortingOption = 'newest' | 'oldest';
 type FilteringOption = 'admin' | 'user' | 'cancel';
@@ -301,14 +302,14 @@ const Users = (): React.ReactElement => {
           {error.message}
         </h6>
         <div className="text-center mt-3">
-          <button
+          <Button
             type="button"
             className="btn btn-sm btn-outline-danger"
             onClick={() => refetch()}
             aria-label={tCommon('retry')}
           >
             {tCommon('retry')}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
