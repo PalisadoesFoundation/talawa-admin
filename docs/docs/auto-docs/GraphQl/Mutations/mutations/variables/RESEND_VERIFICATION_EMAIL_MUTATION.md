@@ -6,7 +6,7 @@
 
 > `const` **RESEND\_VERIFICATION\_EMAIL\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L293)
+Defined in: [src/GraphQl/Mutations/mutations.ts:271](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L271)
 
 Resends the email verification link to the currently authenticated user.
 

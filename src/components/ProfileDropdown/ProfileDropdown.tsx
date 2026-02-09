@@ -42,10 +42,10 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
+import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import DropDownButton from 'shared-components/DropDownButton';
 import type { InterfaceProfileDropdownProps } from 'types/shared-components/ProfileDropdown/interface';
-
-export const MAX_NAME_LENGTH = 20;
+import { MAX_NAME_LENGTH } from 'Constant/common';
 
 const ProfileDropdown = ({
   portal = 'admin',
@@ -102,7 +102,7 @@ const ProfileDropdown = ({
       icon={
         <div className={styles.profileContainer}>
           <div className={styles.imageContainer}>
-            {userImage && userImage !== 'null' ? (
+            {sanitizeAvatarURL(userImage) ? (
               <img
                 src={userImage}
                 alt={tCommon('profilePicture')}
