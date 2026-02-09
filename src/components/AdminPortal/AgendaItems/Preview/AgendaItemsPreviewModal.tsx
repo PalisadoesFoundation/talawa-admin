@@ -75,6 +75,11 @@ const AgendaItemsPreviewModal: React.FC<
         </div>
 
         <div className={styles.preview}>
+          <p>{t('notes')}</p>
+          <span className={styles.view}>{formState.notes}</span>
+        </div>
+
+        <div className={styles.preview}>
           <p>{t('duration')}</p>
           <span className={styles.view}>{formState.duration}</span>
         </div>

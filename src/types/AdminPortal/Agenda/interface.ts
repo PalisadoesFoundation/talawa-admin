@@ -29,6 +29,7 @@ export interface InterfaceAgendaItemInfo {
   description: string;
   duration: string;
   sequence: number;
+  notes: string;
   type?: string;
   category: {
     id: string;
@@ -79,6 +80,7 @@ export interface InterfaceAgendaFolderInfo {
         description: string;
         duration: string;
         sequence: number;
+        notes: string;
         attachments?: {
           id: string;
           name: string;
@@ -145,6 +147,7 @@ export interface InterfaceCreateFormStateType {
     name: string;
   };
   categoryId: string;
+  notes: string;
 }
 
 /**
@@ -156,6 +159,7 @@ export interface InterfaceFormStateType {
   description: string;
   duration: string;
   category: string;
+  notes: string;
   attachments: InterfaceAttachment[];
   url: string[];
   folder?: string;
@@ -260,6 +264,7 @@ export interface InterfaceItemFormStateType {
   name: string;
   description: string;
   duration: string;
+  notes: string;
   attachment?: {
     mimeType: string;
     previewUrl: string;

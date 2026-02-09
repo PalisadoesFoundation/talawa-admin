@@ -53,6 +53,7 @@ const createAgendaItemNode = (sequence: number) => ({
   description: 'Desc',
   duration: '10',
   sequence,
+  notes: 'Initial notes',
   attachments: [],
   category: {
     id: 'cat-1',
@@ -645,6 +646,57 @@ describe('AgendaItemsCreateModal', () => {
       },
       { timeout: 5000 },
     );
+  });
+
+  it('includes notes in create mutation', async () => {
+    const createMock = vi.fn().mockResolvedValue({});
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: true,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/title/i), 'Agenda title');
+    await user.type(screen.getByLabelText(/notes/i), 'Important notes');
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            input: expect.objectContaining({
+              notes: 'Important notes',
+            }),
+          }),
+        }),
+      );
+    });
   });
 
   it('includes urls in create mutation when present', async () => {

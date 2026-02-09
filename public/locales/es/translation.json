@@ -778,6 +778,8 @@
     "noCategory": "Sin categoría",
     "organizationRequired": "La organización es obligatoria",
     "folder": "Carpeta de la agenda",
+    "notes": "Notas",
+    "enterNotes": "Introducir nota",
     "agendaFolderDetails": "Detalles de la sección de la agenda",
     "agendaFolderCreated": "Sección de la agenda creada exitosamente",
     "attachmentPreviewAlt": "Vista previa del archivo adjunto",

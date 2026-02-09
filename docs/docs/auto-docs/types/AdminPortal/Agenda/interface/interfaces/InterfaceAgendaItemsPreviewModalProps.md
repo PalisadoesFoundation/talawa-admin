@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemsPreviewModalProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L285)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L290)
 
 Props for the AgendaItemsPreviewModal component.
 
@@ -18,7 +18,7 @@ such as updating or deleting an agenda item.
 
 > **formState**: [`InterfaceItemFormStateType`](InterfaceItemFormStateType.md)
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L288)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L293)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:288](https://github.com/P
 
 > **hidePreviewModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L287)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L292)
 
 #### Returns
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:287](https://github.com/P
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L286)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L291)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:286](https://github.com/P
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L289)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L294)
 
 #### Parameters
 

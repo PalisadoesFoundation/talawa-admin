@@ -95,6 +95,7 @@ const createMockAgendaItem1 = (): InterfaceAgendaItemInfo => ({
   description: 'Description 1',
   duration: '30',
   sequence: 1,
+  notes: 'Initial notes',
   category: {
     id: 'cat1',
     name: 'Category 1',
@@ -121,6 +122,7 @@ const createMockAgendaItem2 = (): InterfaceAgendaItemInfo => ({
   description: 'Description 2',
   duration: '45',
   sequence: 2,
+  notes: 'Initial notes',
   category: {
     id: 'cat2',
     name: 'Category 2',
@@ -992,6 +994,7 @@ describe('AgendaDragAndDrop', () => {
         ...base[0].items.edges[0].node,
         attachments: undefined,
         duration: null as unknown as string,
+        notes: 'Initial notes',
         category: null as unknown as InterfaceAgendaItemInfo['category'],
       };
 

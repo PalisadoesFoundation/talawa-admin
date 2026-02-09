@@ -13,6 +13,7 @@ const mockFormState: InterfaceItemFormStateType = {
   name: 'Test Item',
   description: 'Test Description',
   duration: '30 minutes',
+  notes: 'Test Notes',
   creator: {
     id: 'user-1',
     name: 'John Doe',
@@ -99,6 +100,21 @@ describe('AgendaItemsPreviewModal', () => {
     render(<AgendaItemsPreviewModal {...defaultProps} />);
 
     expect(screen.getByText('createdBy')).toBeInTheDocument();
+  });
+
+  it('renders notes label and value', () => {
+    render(<AgendaItemsPreviewModal {...defaultProps} />);
+
+    expect(screen.getByText('notes')).toBeInTheDocument();
+    expect(screen.getByText('Test Notes')).toBeInTheDocument();
+  });
+
+  it('renders empty notes', () => {
+    const formState = { ...mockFormState, notes: '' };
+
+    render(<AgendaItemsPreviewModal {...defaultProps} formState={formState} />);
+
+    expect(screen.getByText('notes')).toBeInTheDocument();
   });
 
   it('displays urls label', () => {

@@ -103,6 +103,7 @@ function AgendaFolderContainer({
     name: string;
     description: string;
     duration: string;
+    notes: string;
     url: string[];
     folder?: string;
     category: string;
@@ -118,6 +119,7 @@ function AgendaFolderContainer({
     name: '',
     description: '',
     duration: '',
+    notes: '',
     url: [''],
     category: '',
     folder: '',
@@ -128,6 +130,7 @@ function AgendaFolderContainer({
     name: string;
     description: string;
     duration: string;
+    notes: string;
     attachment?: {
       objectName: string;
       mimeType: string;
@@ -149,6 +152,7 @@ function AgendaFolderContainer({
     id: '',
     description: '',
     duration: '',
+    notes: '',
     attachment: [],
     sequence: 0,
     category: {
@@ -229,6 +233,7 @@ function AgendaFolderContainer({
       name: agendaItem.name,
       description: agendaItem.description,
       duration: agendaItem.duration,
+      notes: agendaItem.notes,
       attachments: attachmentsWithPreview,
       category: agendaItem.category?.id ?? '',
       folder: agendaItem.folder?.id,
@@ -269,6 +274,7 @@ function AgendaFolderContainer({
       name: agendaItem.name,
       description: agendaItem.description,
       duration: agendaItem.duration,
+      notes: agendaItem.notes,
       attachment: attachmentsWithPreview,
       sequence: agendaItem.sequence,
       category: agendaItem.category

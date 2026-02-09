@@ -24,6 +24,7 @@ export const AGENDA_FOLDER_LIST = gql`
             sequence
             duration
             key
+            notes
             attachments {
               id
               name

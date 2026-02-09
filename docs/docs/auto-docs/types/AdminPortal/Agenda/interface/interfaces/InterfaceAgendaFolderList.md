@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaFolderList
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L118)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L120)
 
 Defines the structure for a list of agenda folders by event.
 
@@ -14,4 +14,4 @@ Defines the structure for a list of agenda folders by event.
 
 > **agendaFoldersByEventId**: [`InterfaceAgendaFolderInfo`](InterfaceAgendaFolderInfo.md)[]
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L119)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L121)
