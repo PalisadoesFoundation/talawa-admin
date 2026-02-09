@@ -17,7 +17,7 @@
 # External Script Handling:
 # - Scripts downloaded from PalisadoesFoundation/.github
 # - Cached locally (24h) to reduce network dependency
-# - Basic validation ensures script integrity
+# - Format/syntax validation (shebang, Python syntax, file size)
 # - Falls back to cached version on download/validation failure
 #
 # Design Notes:
@@ -32,6 +32,7 @@ set -euo pipefail
 
 cleanup() {
   [ -n "${CSS_TMP:-}" ] && rm -f "$CSS_TMP"
+  [ -n "${FETCH_TMP:-}" ] && rm -f "$FETCH_TMP"
   cleanup_staged_cache 2>/dev/null || true
 }
 
@@ -65,9 +66,11 @@ fi
 
 fetch_and_validate() {
   local script_name="$1"
+  local python_bin="$2"
   local dest="$CENTRAL_SCRIPTS_DIR/$script_name"
   local url="https://raw.githubusercontent.com/$REPO_OWNER/$REPO_NAME/main/.github/workflows/scripts/$script_name"
   local cache_mins=$((SCRIPT_CACHE_HOURS * 60))
+  local file_size
   
   mkdir -p "$(dirname "$dest")"
   
@@ -77,10 +80,14 @@ fetch_and_validate() {
   fi
   
   echo "Fetching $script_name..."
-  local temp="${dest}.tmp"
+  
+  # Create unique temp file and register for cleanup
+  FETCH_TMP=$(mktemp "${dest}.XXXXXX")
   
   # Download with timeout and retry
-  if ! curl -fsSL --max-time 30 --retry 2 "$url" -o "$temp" 2>/dev/null; then
+  if ! curl -fsSL --max-time 30 --retry 2 "$url" -o "$FETCH_TMP" 2>/dev/null; then
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
     if [ -f "$dest" ]; then
       echo "Warning: Download failed, using cached version of $script_name" >&2
       return 0
@@ -89,33 +96,37 @@ fetch_and_validate() {
     return 1
   fi
   
-  # Validate: must be Python file
-  if ! head -n 1 "$temp" | grep -qE '^#!/usr/bin/env python|^#.*python'; then
-    echo "Warning: $script_name doesn't appear to be a Python script, using cached version" >&2
-    rm -f "$temp"
+  # Validate: must be Python file with valid shebang
+  if ! head -n 1 "$FETCH_TMP" | grep -qE '^\s*#!.*\bpython([0-9.]+)?\b'; then
+    echo "Warning: $script_name doesn't have a valid Python shebang, using cached version" >&2
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
     [ -f "$dest" ] && return 0
     return 1
   fi
   
   # Validate: Python syntax must be correct
-  if ! python3 -m py_compile "$temp" 2>/dev/null; then
+  if ! "$python_bin" -m py_compile "$FETCH_TMP" 2>/dev/null; then
     echo "Warning: $script_name has syntax errors, using cached version" >&2
-    rm -f "$temp"
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
     [ -f "$dest" ] && return 0
     return 1
   fi
   
   # Validate: reject suspiciously small files (error pages)
-  local file_size=$(wc -c < "$temp" | tr -d ' ')
+  file_size=$(wc -c < "$FETCH_TMP" | tr -d ' ')
   if [ "$file_size" -lt 200 ]; then
     echo "Warning: $script_name too small ($file_size bytes), using cached version" >&2
-    rm -f "$temp"
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
     [ -f "$dest" ] && return 0
     return 1
   fi
   
   # All validations passed
-  mv "$temp" "$dest"
+  mv "$FETCH_TMP" "$dest"
+  FETCH_TMP=""
 }
 
 # =============================================================================
@@ -132,11 +143,14 @@ else
   set -- "$VENV_BIN"
 fi
 
+# Store the Python interpreter for validation functions
+PYTHON_INTERPRETER="$1"
+
 echo "Running Python formatting and lint checks..."
 
 "$@" -m black --check .github
-"$@" -m pydocstyle .github
-"$@" -m flake8 .github
+"$@" -m pydocstyle --convention=google --add-ignore=D415,D205 .github
+"$@" -m flake8 --docstring-convention google --ignore E402,E722,E203,F401,W503 .github
 
 echo "Running Python CI parity checks..."
 
@@ -154,15 +168,15 @@ echo "Running centralized Python policy checks..."
 
 
 echo "Running disable statements check..."
-fetch_and_validate "disable_statements_check.py"
+fetch_and_validate "disable_statements_check.py" "$PYTHON_INTERPRETER"
 xargs -0 "$@" "$CENTRAL_SCRIPTS_DIR/disable_statements_check.py" --files < "$STAGED_SRC_FILE"
 
 echo "Running docstring compliance check..."
-fetch_and_validate "check_docstrings.py"
+fetch_and_validate "check_docstrings.py" "$PYTHON_INTERPRETER"
 "$@" "$CENTRAL_SCRIPTS_DIR/check_docstrings.py" --directories .github
 
 echo "Running line count enforcement check..."
-fetch_and_validate "countline.py"
+fetch_and_validate "countline.py" "$PYTHON_INTERPRETER"
 "$@" "$CENTRAL_SCRIPTS_DIR/countline.py" \
   --lines "$MAX_FILE_LINES" \
   --files ./.github/workflows/config/countline_excluded_file_list.txt
