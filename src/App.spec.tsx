@@ -400,8 +400,18 @@ describe('Testing the App Component', () => {
     errorSpy?.mockRestore();
   });
 
-  it('Component should be rendered properly and user is logged in', async () => {
+  it('Regular user gets redirected from admin routes', async () => {
     renderApp(link, '/admin/orglist');
+
+    await waitFor(() => {
+      // User should see user portal, not admin portal
+      expect(screen.getByTestId('mock-user-organizations')).toBeInTheDocument();
+      expect(screen.queryByTestId('mock-org-list')).not.toBeInTheDocument();
+    });
+  });
+
+  it('Login page shows footer for unauthenticated users', async () => {
+    renderApp(link2, '/');
 
     await wait();
 
@@ -409,7 +419,7 @@ describe('Testing the App Component', () => {
       screen.getByText(
         'An open source application by Palisadoes Foundation volunteers',
       ),
-    ).toBeTruthy();
+    ).toBeInTheDocument();
   });
 
   it('Component should be rendered properly and user is logged out', async () => {
