@@ -2089,6 +2089,9 @@
       "noRecipientsError": "请提供至少一个收件人电子邮件",
       "invalidEmailsError": "无效的电子邮件：{{emails}}",
       "invitesSentSuccessfully": "邀请已成功发送"
+    },
+    "eventRegistrant": {
+      "unknownMember": "未知成员"
     }
   },
   "onSpotAttendee": {

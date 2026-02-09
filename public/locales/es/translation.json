@@ -2072,6 +2072,9 @@
       "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
       "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}",
       "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
+    },
+    "eventRegistrant": {
+      "unknownMember": "Miembro desconocido"
     }
   },
   "onSpotAttendee": {

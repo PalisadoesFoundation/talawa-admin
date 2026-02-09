@@ -2089,6 +2089,9 @@
       "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
       "invalidEmailsError": "Email(s) invalide(s) : {{emails}}",
       "invitesSentSuccessfully": "Invitations envoyées avec succès"
+    },
+    "eventRegistrant": {
+      "unknownMember": "Membre inconnu"
     }
   },
   "onSpotAttendee": {
