@@ -2,16 +2,10 @@
  * Confirmation modal for plugin uninstallation
  */
 import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Typography,
-  Button,
-} from '@mui/material';
-import type { IPluginMeta } from 'plugin';
 import { useTranslation } from 'react-i18next';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { Button } from 'shared-components/Button';
+import type { IPluginMeta } from 'plugin';
 
 interface IUninstallConfirmationModalProps {
   show: boolean;
@@ -29,48 +23,47 @@ export default function UninstallConfirmationModal({
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
   const { t: tCommon } = useTranslation('common');
 
+  const customFooter = (
+    <>
+      <Button
+        variant="secondary" // Was 'color="inherit"' in MUI, usually translates to secondary or outline-secondary in Bootstrap/BaseModal
+        onClick={onClose}
+        className="me-2" // sx={{ mr: 1 }}
+        data-testid="uninstall-cancel-btn"
+      >
+        {tCommon('cancel')}
+      </Button>
+      <Button
+        variant="danger" // Was 'color="error"' in MUI
+        onClick={onConfirm}
+        data-testid="uninstall-remove-btn"
+      >
+        {tCommon('removePermanently')}
+      </Button>
+    </>
+  );
+
   return (
-    <Dialog
-      open={show}
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-      data-testid="uninstall-modal"
+    <BaseModal
+      show={show}
+      title={t('uninstallPlugin')}
+      onHide={onClose}
+      footer={customFooter}
+      size="sm" // maxWidth="sm" in MUI
+      dataTestId="uninstall-modal"
+      centered // Default in BaseModal but good to be explicit if matching MUI's likely centered behavior
     >
-      <DialogTitle sx={{ pb: 1 }}>{t('uninstallPlugin')}</DialogTitle>
-      <DialogContent>
-        <Typography
-          variant="body1"
-          sx={{ mb: 2 }}
-          data-testid="uninstall-modal-title"
-        >
+      <div>
+        <div data-testid="uninstall-modal-title" className="mb-3">
           {t('uninstallPluginMsg', {
             pluginName: plugin?.name || '',
           })}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
+        </div>
+        <div className="text-muted">
           This action will permanently remove the plugin and all its data. This
           action cannot be undone.
-        </Typography>
-      </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 3 }}>
-        <Button
-          onClick={onClose}
-          color="inherit"
-          sx={{ mr: 1 }}
-          data-testid="uninstall-cancel-btn"
-        >
-          {tCommon('cancel')}
-        </Button>
-        <Button
-          onClick={onConfirm}
-          color="error"
-          variant="contained"
-          data-testid="uninstall-remove-btn"
-        >
-          {tCommon('removePermanently')}
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </div>
+      </div>
+    </BaseModal>
   );
 }
