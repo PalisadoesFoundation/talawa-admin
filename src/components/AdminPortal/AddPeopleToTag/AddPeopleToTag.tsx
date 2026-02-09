@@ -343,7 +343,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
                 >
                   {member.firstName} {member.lastName}
-                  <button
+                  <Button
                     type="button"
                     className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
                     onClick={() => removeMember(member._id)}
