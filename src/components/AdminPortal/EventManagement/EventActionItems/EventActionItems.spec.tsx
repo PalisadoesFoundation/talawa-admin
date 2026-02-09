@@ -94,6 +94,13 @@ vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
 
 vi.mock('shared-components/SortingButton/SortingButton', () => {
   let filterClickCount = 0;
+  // Define type for the mock component with the reset method
+  type SortingButtonMock = React.FC<{
+    onSortChange: (value: string) => void;
+    dataTestIdPrefix: string;
+    buttonLabel: string;
+  }> & { resetFilterCount: () => void };
+
   const MockComponent = vi.fn(
     ({
       onSortChange,
@@ -125,10 +132,9 @@ vi.mock('shared-components/SortingButton/SortingButton', () => {
         },
         buttonLabel,
       ),
-  );
+  ) as unknown as SortingButtonMock;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (MockComponent as any).resetFilterCount = () => {
+  MockComponent.resetFilterCount = () => {
     filterClickCount = 0;
   };
 
@@ -447,8 +453,9 @@ describe('EventActionItems', () => {
   beforeEach(async () => {
     const { default: SortingButton } =
       await import('shared-components/SortingButton/SortingButton');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (SortingButton as any).resetFilterCount?.();
+    // Define the type locally for the cast
+    type SortingButtonMock = { resetFilterCount: () => void };
+    (SortingButton as unknown as SortingButtonMock).resetFilterCount?.();
 
     useParamsMock = { orgId: '123' };
     vi.clearAllMocks();
