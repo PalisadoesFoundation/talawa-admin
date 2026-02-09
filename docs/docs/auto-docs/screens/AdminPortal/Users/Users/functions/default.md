@@ -4,7 +4,7 @@
 
 # Function: default()
 
-> **default**(): `Element`
+> **default**(): `ReactElement`
 
 Defined in: [src/screens/AdminPortal/Users/Users.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L73)
 
@@ -16,7 +16,7 @@ for complex organization management, and maintained backward compatibility with 
 
 ## Returns
 
-`Element`
+`ReactElement`
 
 The rendered Users component
 

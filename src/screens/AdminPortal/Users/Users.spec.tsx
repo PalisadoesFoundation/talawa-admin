@@ -1116,6 +1116,43 @@ describe('useEffect loadMoreUsers trigger', () => {
         },
       },
       {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: { role: 'regular' },
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'Regular User',
+                    role: 'regular',
+                    emailAddress: 'u@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
         request: { query: ORGANIZATION_LIST },
         result: { data: { organizations: [] } },
       },
@@ -2818,6 +2855,173 @@ describe('Additional uncovered lines coverage', () => {
           }),
         }),
       );
+    });
+  });
+
+  it('should cover userIndexMap fallback to 0 when id not found - line 282', async () => {
+    // This test covers the edge case: userIndexMap.get(row.id) || 0
+    // when a row has an id that's not in the userIndexMap
+    vi.doMock('shared-components/DataTable/DataTable', async () => {
+      const React = await import('react');
+      interface IDataTableProps {
+        data: Array<{ id: string; name: string }>;
+        columns: Array<{
+          id: string;
+          accessor: string | ((row: { id: string }) => number);
+        }>;
+      }
+      return {
+        DataTable: ({ data, columns }: IDataTableProps) => {
+          // Call the index accessor with a non-existent id
+          const indexColumn = columns.find((col) => col.id === 'index');
+          if (indexColumn && typeof indexColumn.accessor === 'function') {
+            const fakeRow = { id: 'non-existent-id' };
+            const result = indexColumn.accessor(fakeRow);
+            // This should return 0 due to the fallback
+            expect(result).toBe(0);
+          }
+          return React.createElement(
+            'div',
+            { 'data-testid': 'datatable' },
+            data.map((row) =>
+              React.createElement('div', { key: row.id }, row.name),
+            ),
+          );
+        },
+      };
+    });
+
+    vi.resetModules();
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UsersWithMocks />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle null data in path function - lines 125-126', async () => {
+    // This test covers the edge case where data is null/undefined in the path function
+    // The path function should return undefined when data is null or not an object
+    vi.resetModules();
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof import('@apollo/client')>(
+          '@apollo/client',
+        );
+      return {
+        ...actual,
+        useQuery: vi.fn(() => ({
+          data: null, // Null data to trigger first check
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+      return {
+        useTableData: vi.fn((queryResult, config) => {
+          // Test that the path function handles null data correctly
+          const pathResult = config.path?.(queryResult.data);
+          expect(pathResult).toBeUndefined();
+          return {
+            rows: [],
+            loading: false,
+            pageInfo: { hasNextPage: false, endCursor: null },
+            error: undefined,
+            fetchMore: vi.fn(),
+            refetch: vi.fn(),
+          };
+        }),
+      };
+    });
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersWithMocks />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    // Component should render with empty rows
+    await waitFor(() => {
+      expect(screen.getByTestId('users-empty-state')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle missing allUsers in data - lines 131-132', async () => {
+    // This test covers the edge case where data.allUsers is missing or not an object
+    vi.resetModules();
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof import('@apollo/client')>(
+          '@apollo/client',
+        );
+      return {
+        ...actual,
+        useQuery: vi.fn(() => ({
+          data: { someOtherField: 'value' }, // Missing allUsers field
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+      return {
+        useTableData: vi.fn((queryResult, config) => {
+          // Test that the path function handles missing allUsers correctly
+          const pathResult = config.path?.(queryResult.data);
+          expect(pathResult).toBeUndefined();
+          return {
+            rows: [],
+            loading: false,
+            pageInfo: { hasNextPage: false, endCursor: null },
+            error: undefined,
+            fetchMore: vi.fn(),
+            refetch: vi.fn(),
+          };
+        }),
+      };
+    });
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersWithMocks />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    // Component should render with empty rows
+    await waitFor(() => {
+      expect(screen.getByTestId('users-empty-state')).toBeInTheDocument();
     });
   });
 });

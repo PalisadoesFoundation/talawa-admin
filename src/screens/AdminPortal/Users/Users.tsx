@@ -8,7 +8,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type {
-  InterfaceQueryUserListItem,
+  InterfaceQueryUserListItemForAdmin,
   InterfaceUserListQueryResponse,
 } from 'utils/interfaces';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
@@ -70,7 +70,7 @@ export const isValidFilteringOption = (
  *
  * @returns The rendered Users component
  */
-const Users = (): JSX.Element => {
+const Users = (): React.ReactElement => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
 
@@ -91,20 +91,34 @@ const Users = (): JSX.Element => {
   const [filteringOption, setFilteringOption] =
     useState<FilteringOption>('cancel');
 
+  // Build where clause including role filter for server-side filtering
+  const buildWhereClause = () => {
+    const where: { name?: string; role?: string } = {};
+    if (searchByName) {
+      where.name = searchByName;
+    }
+    if (filteringOption === 'user') {
+      where.role = USER_ROLES.REGULAR;
+    } else if (filteringOption === 'admin') {
+      where.role = USER_ROLES.ADMINISTRATOR;
+    }
+    return Object.keys(where).length > 0 ? where : undefined;
+  };
+
   // Use GraphQL query with useTableData hook
   const queryResult = useQuery(USER_LIST_FOR_ADMIN, {
     variables: {
       first: perPageResult,
       after: null,
       orgFirst: 32,
-      where: undefined,
+      where: buildWhereClause(),
     },
     notifyOnNetworkStatusChange: true,
   });
 
   const { rows, loading, pageInfo, error, fetchMore, refetch } = useTableData<
-    InterfaceQueryUserListItem,
-    InterfaceQueryUserListItem
+    InterfaceQueryUserListItemForAdmin,
+    InterfaceQueryUserListItemForAdmin
   >(queryResult, {
     path: (data: unknown) => {
       if (!data || typeof data !== 'object') {
@@ -129,32 +143,25 @@ const Users = (): JSX.Element => {
     }
   }, [dataOrgs, t]);
 
-  // Apply sorting and filtering to rows
+  // Apply sorting only (filtering now happens server-side)
   const displayedUsers = React.useMemo(() => {
-    let filtered = [...rows];
-
-    // Apply filter
-    if (filteringOption === 'user') {
-      filtered = filtered.filter((u) => u.role === USER_ROLES.REGULAR);
-    } else if (filteringOption === 'admin') {
-      filtered = filtered.filter((u) => u.role === USER_ROLES.ADMINISTRATOR);
-    }
+    const sorted = [...rows];
 
     // Apply sort
     if (sortingOption === 'newest') {
-      filtered.sort(
+      sorted.sort(
         (a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
     } else {
-      filtered.sort(
+      sorted.sort(
         (a, b) =>
           new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
     }
 
-    return filtered;
-  }, [rows, sortingOption, filteringOption]);
+    return sorted;
+  }, [rows, sortingOption]);
 
   // Precompute user index map for O(1) serial number lookup
   const userIndexMap = React.useMemo(() => {
@@ -167,11 +174,20 @@ const Users = (): JSX.Element => {
 
   const handleSearch = (value: string): void => {
     setSearchByName(value);
+    const where: { name?: string; role?: string } = {};
+    if (value) {
+      where.name = value;
+    }
+    if (filteringOption === 'user') {
+      where.role = USER_ROLES.REGULAR;
+    } else if (filteringOption === 'admin') {
+      where.role = USER_ROLES.ADMINISTRATOR;
+    }
     refetch({
       first: perPageResult,
       after: null,
       orgFirst: 32,
-      where: value ? { name: value } : undefined,
+      where: Object.keys(where).length > 0 ? where : undefined,
     });
   };
 
@@ -194,6 +210,22 @@ const Users = (): JSX.Element => {
   const handleFiltering = (option: string): void => {
     if (isValidFilteringOption(option)) {
       setFilteringOption(option);
+      // Refetch with new role filter
+      const where: { name?: string; role?: string } = {};
+      if (searchByName) {
+        where.name = searchByName;
+      }
+      if (option === 'user') {
+        where.role = USER_ROLES.REGULAR;
+      } else if (option === 'admin') {
+        where.role = USER_ROLES.ADMINISTRATOR;
+      }
+      refetch({
+        first: perPageResult,
+        after: null,
+        orgFirst: 32,
+        where: Object.keys(where).length > 0 ? where : undefined,
+      });
     }
   };
 
@@ -201,12 +233,22 @@ const Users = (): JSX.Element => {
     if (!pageInfo?.hasNextPage) return;
     if (!pageInfo?.endCursor) return;
 
+    const where: { name?: string; role?: string } = {};
+    if (searchByName) {
+      where.name = searchByName;
+    }
+    if (filteringOption === 'user') {
+      where.role = USER_ROLES.REGULAR;
+    } else if (filteringOption === 'admin') {
+      where.role = USER_ROLES.ADMINISTRATOR;
+    }
+
     await fetchMore({
       variables: {
         first: perPageResult,
         after: pageInfo.endCursor,
         orgFirst: 32,
-        where: searchByName ? { name: searchByName } : undefined,
+        where: Object.keys(where).length > 0 ? where : undefined,
       },
     });
   };
@@ -229,13 +271,13 @@ const Users = (): JSX.Element => {
     [t, tCommon],
   );
 
-  const tableColumns: Array<IColumnDef<InterfaceQueryUserListItem>> =
+  const tableColumns: Array<IColumnDef<InterfaceQueryUserListItemForAdmin>> =
     React.useMemo(
       () => [
         {
           id: 'index',
           header: headerTitles[0],
-          accessor: (row: InterfaceQueryUserListItem) =>
+          accessor: (row: InterfaceQueryUserListItemForAdmin) =>
             userIndexMap.get(row.id) || 0,
         },
         {
@@ -257,7 +299,8 @@ const Users = (): JSX.Element => {
         {
           id: 'joinedOrganizations',
           header: headerTitles[3],
-          accessor: 'id',
+          accessor: (row: InterfaceQueryUserListItemForAdmin) =>
+            row.organizationsWhereMember,
           meta: {
             sortable: false,
           },
@@ -265,7 +308,8 @@ const Users = (): JSX.Element => {
         {
           id: 'blockedOrganizations',
           header: headerTitles[4],
-          accessor: 'id',
+          accessor: (row: InterfaceQueryUserListItemForAdmin) =>
+            row.orgsWhereUserIsBlocked,
           meta: {
             sortable: false,
           },
