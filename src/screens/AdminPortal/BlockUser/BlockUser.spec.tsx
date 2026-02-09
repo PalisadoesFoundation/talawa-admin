@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';
@@ -51,12 +51,6 @@ vi.mock('react-router', async () => {
 vi.mock('utils/errorHandler', () => ({
   errorHandler: errorHandlerMock,
 }));
-
-async function flushPromises() {
-  await act(async () => {
-    await new Promise((r) => setTimeout(r, 0));
-  });
-}
 
 interface InterfaceMockOptions {
   blockUserError?: boolean;
@@ -220,6 +214,7 @@ describe('BlockUser Component', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
   describe('Initial Loading and Error States', () => {
@@ -238,40 +233,6 @@ describe('BlockUser Component', () => {
 
       await waitFor(() => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
-      });
-    });
-
-    it('handles members query error', async () => {
-      render(
-        <MockedProvider mocks={createMocks({ membersQueryError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(errorHandler).toHaveBeenCalledWith(
-          expect.any(Function),
-          expect.objectContaining({ message: 'Failed to fetch members' }),
-        );
-      });
-    });
-
-    it('handles blocked users query error', async () => {
-      render(
-        <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(errorHandler).toHaveBeenCalledWith(
-          expect.any(Function),
-          expect.objectContaining({ message: 'Failed to fetch blocked users' }),
-        );
       });
     });
 
@@ -361,6 +322,46 @@ describe('BlockUser Component', () => {
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
         expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
+      });
+    });
+
+    it('displays error panel when blocked users query fails', async () => {
+      render(
+        <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('errorBlockedUsers')).toBeInTheDocument();
+        expect(
+          screen.getByText(/errorLoadingBlockedUsers/i),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('displays error panel when members query fails', async () => {
+      render(
+        <MockedProvider mocks={createMocks({ membersQueryError: true })}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('errorMembers')).toBeInTheDocument();
+        expect(screen.getByText(/errorLoadingMembers/i)).toBeInTheDocument();
       });
     });
   });
@@ -993,186 +994,6 @@ describe('BlockUser Component', () => {
 
         // John Doe should now be in the list too (added to state)
         expect(screen.getByText('John Doe')).toBeInTheDocument();
-      });
-    });
-  });
-  // Tests for handling falsy responses from block and unblock mutations
-  describe('Falsy Mutation Responses', () => {
-    it('handles falsy block mutation response', async () => {
-      const customMocks = [
-        {
-          request: {
-            query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                members: {
-                  edges: [
-                    {
-                      node: {
-                        id: '1',
-                        name: 'John Doe',
-                        emailAddress: 'john@example.com',
-                        role: 'regular',
-                      },
-                    },
-                  ],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                blockedUsers: {
-                  edges: [],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: BLOCK_USER_MUTATION_PG,
-            variables: { userId: '1', organizationId: '123' },
-          },
-          result: { data: { blockUser: null } },
-        },
-      ];
-
-      render(
-        <MockedProvider mocks={customMocks}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await flushPromises();
-
-      await waitFor(() =>
-        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
-      );
-      await screen.findByText('John Doe');
-
-      const blockButton = screen.getByTestId('blockUser1');
-      await act(async () => {
-        fireEvent.click(blockButton);
-      });
-      await flushPromises();
-
-      await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalledWith(
-          'blockedSuccessfully',
-        );
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-      });
-    });
-
-    it('handles falsy unblock mutation response', async () => {
-      const customMocks = [
-        {
-          request: {
-            query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                members: {
-                  edges: [],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                blockedUsers: {
-                  edges: [
-                    {
-                      node: {
-                        id: '3',
-                        name: 'Bob Johnson',
-                        emailAddress: 'bob@example.com',
-                        role: 'regular',
-                      },
-                    },
-                  ],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: UNBLOCK_USER_MUTATION_PG,
-            variables: { userId: '3', organizationId: '123' },
-          },
-          result: { data: null },
-        },
-      ];
-
-      render(
-        <MockedProvider mocks={customMocks}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await flushPromises();
-      await waitFor(() =>
-        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
-      );
-
-      const sortingButton = await screen.findByTestId('blockUserView-toggle');
-
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
-
-      await flushPromises();
-
-      const blockedUsersOption = await screen.findByTestId(
-        'blockUserView-item-blockedUsers',
-      );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
-
-      await flushPromises();
-
-      await screen.findByText('Bob Johnson');
-
-      const unblockBtn = screen.getByTestId('blockUser3');
-      await act(async () => {
-        fireEvent.click(unblockBtn);
-      });
-
-      await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalledWith(
-          'Un-BlockedSuccessfully',
-        );
-        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
     });
   });

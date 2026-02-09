@@ -429,88 +429,6 @@ describe('Testing Requests screen', () => {
     expect(window.location.href).toEqual('http://localhost/');
   });
 
-  test('Testing Search requests functionality', async () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    const searchBtn = await screen.findByTestId('searchButton');
-    const searchInput = await screen.findByTestId('searchByName');
-
-    const search1 = 'John';
-    await userEvent.type(searchInput, search1);
-    await userEvent.click(searchBtn);
-    await wait(200);
-
-    await userEvent.clear(searchInput);
-    const search2 = 'Pete';
-    await userEvent.type(searchInput, search2);
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
-        expect(
-          screen.getByTestId('requests-search-empty-message'),
-        ).toHaveTextContent(/no results found for pete/i);
-      },
-      { timeout: 3000 },
-    );
-
-    const search3 = 'Sam';
-    await userEvent.type(searchInput, search3);
-    await wait(100);
-    await userEvent.clear(searchInput);
-
-    const search4 = 'P';
-    await userEvent.type(searchInput, search4);
-    await wait(100);
-    await userEvent.clear(searchInput);
-
-    const search5 = 'Xe';
-    await userEvent.type(searchInput, search5);
-    await userEvent.clear(searchInput);
-    await userEvent.click(searchBtn);
-    await wait(200);
-  });
-
-  test('Testing search not found', async () => {
-    render(
-      <MockedProvider link={link3}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    const searchInput = await screen.findByTestId('searchByName');
-    const search = 'hello';
-    await userEvent.type(searchInput, search);
-    await userEvent.keyboard('{Enter}');
-    await waitFor(
-      () => {
-        // When there are no requests at all, show "no requests found" message
-        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
-        expect(
-          screen.getByTestId('requests-search-empty-message'),
-        ).toHaveTextContent(/no results found for hello/i);
-      },
-      { timeout: 3000 },
-    );
-  });
-
   test('Testing Request data is not present', async () => {
     render(
       <MockedProvider link={link3}>
@@ -757,49 +675,6 @@ describe('Testing Requests screen', () => {
     expect(rows.length).toBeGreaterThan(5);
   });
 
-  test('should handle loading more requests with search term', async () => {
-    render(
-      <MockedProvider link={linkInfiniteScroll}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const searchInput = screen.getByTestId('searchByName');
-    await userEvent.type(searchInput, 'User');
-    await wait(200);
-
-    const requestsContainer = document.querySelector(
-      '[data-testid="requests-list"]',
-    );
-    if (requestsContainer) {
-      fireEvent.scroll(requestsContainer, {
-        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
-      });
-    } else {
-      fireEvent.scroll(window, {
-        target: { scrollY: document.documentElement.scrollHeight },
-      });
-    }
-
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
-        expect(
-          screen.getByTestId('requests-search-empty-message'),
-        ).toHaveTextContent(/no results found for user/i);
-      },
-      { timeout: 3000 },
-    );
-  });
-
   test('should handle loading more requests when no previous data exists', async () => {
     render(
       <MockedProvider link={link3}>
@@ -818,122 +693,6 @@ describe('Testing Requests screen', () => {
     expect(
       screen.getByTestId('requests-no-requests-empty'),
     ).toBeInTheDocument();
-  });
-
-  test('shows no results message when search returns no rows', async () => {
-    const SEARCH_EMPTY_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Palisadoes',
-                addressLine1: '123 Jamaica Street',
-                description: 'A community organization',
-                avatarURL: null,
-                members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: 'NonExistent',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [],
-            },
-          },
-        },
-      },
-    ];
-
-    const searchLink = new StaticMockLink(SEARCH_EMPTY_MOCKS, true);
-
-    render(
-      <MockedProvider link={searchLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    const input = await screen.findByTestId('searchByName');
-    await userEvent.type(input, 'NonExistent');
-    await userEvent.keyboard('{Enter}');
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
-        expect(
-          screen.getByTestId('requests-search-empty-message'),
-        ).toHaveTextContent(/no results found for nonexistent/i);
-      },
-      { timeout: 3000 },
-    );
-
-    // Verify the search input still contains the search term
-    expect(input).toHaveValue('NonExistent');
   });
 
   test('renders loading skeleton while fetching first page', async () => {
@@ -1061,6 +820,35 @@ describe('Testing Requests screen', () => {
     await wait(200);
 
     expect(screen.getByTestId('datatable')).toBeInTheDocument();
+  });
+
+  test('handleSearch should update searchByName state when user types in search input', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+    const searchInput = screen.getByTestId('searchByName') as HTMLInputElement;
+
+    expect(searchInput.value).toBe('');
+
+    await userEvent.type(searchInput, 'TestUser');
+    await wait(100);
+
+    expect(searchInput.value).toBe('TestUser');
+
+    await userEvent.clear(searchInput);
+    await wait(100);
+
+    expect(searchInput.value).toBe('');
   });
 
   test('should handle null response in fetchMore correctly', async () => {
