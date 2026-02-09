@@ -10,6 +10,7 @@ import {
   securityRestrictions,
   searchInputRestrictions,
   modalStateRestrictions,
+  nativeButtonRestrictions,
 } from './rules.js';
 
 const filename = fileURLToPath(import.meta.url);
@@ -223,6 +224,47 @@ describe('ESLint Syntax Restrictions', () => {
     });
   });
 
+  describe('Native button restrictions', () => {
+    it('should error on direct native button usage', async () => {
+      const code = `
+        import React from 'react';
+
+        function TestComponent() {
+          return <button type="button">Click me</button>;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const nativeButtonError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('Direct native <button> usage is not allowed'),
+      );
+
+      expect(nativeButtonError).toBeDefined();
+    });
+
+    it('should allow shared Button component usage', async () => {
+      const code = `
+        import React from 'react';
+        import Button from 'shared-components/Button';
+
+        function TestComponent() {
+          return <Button type="button">Click me</Button>;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const nativeButtonError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('Direct native <button> usage is not allowed'),
+      );
+
+      expect(nativeButtonError).toBeUndefined();
+    });
+  });
+
   describe('Modal state restrictions', () => {
     it('should error on useState with modalState variable name', async () => {
       const code = `
@@ -348,6 +390,15 @@ describe('ESLint Syntax Restrictions', () => {
   });
 
   describe('ESLint Rule Data Tests', () => {
+    describe('nativeButtonRestrictions data integrity', () => {
+      it('should include a JSX button selector', () => {
+        expect(nativeButtonRestrictions.length).toBeGreaterThan(0);
+        expect(nativeButtonRestrictions[0]?.selector).toContain(
+          "name.name='button'",
+        );
+      });
+    });
+
     describe('restrictedImports data integrity', () => {
       it('should have all required import restrictions', () => {
         expect(restrictedImports.length).toBeGreaterThan(20);
