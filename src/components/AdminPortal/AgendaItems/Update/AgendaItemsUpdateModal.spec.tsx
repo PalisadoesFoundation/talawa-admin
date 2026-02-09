@@ -99,6 +99,7 @@ const mockFormState: InterfaceFormStateType = {
   name: 'Test Item',
   description: 'Test Description',
   duration: '30',
+  notes: 'Initial notes',
   category: 'cat-1',
   folder: 'folder-1',
   url: ['https://example.com'],
@@ -197,6 +198,7 @@ describe('AgendaItemsUpdateModal', () => {
                     duration: '30',
                     folderId: 'folder-1',
                     categoryId: 'cat-1',
+                    notes: 'Initial notes',
                     url: [{ url: 'https://example.com' }],
                     attachments: [
                       {
@@ -271,6 +273,7 @@ describe('AgendaItemsUpdateModal', () => {
                     duration: '30',
                     folderId: 'folder-1',
                     categoryId: 'cat-1',
+                    notes: 'Initial notes',
                     url: [{ url: 'https://example.com' }],
                     attachments: [
                       {
@@ -813,6 +816,143 @@ describe('AgendaItemsUpdateModal', () => {
     });
   });
 
+  it('includes notes in update mutation when present', async () => {
+    const user = userEvent.setup();
+
+    const formStateWithNotes = {
+      ...mockFormState,
+      notes: 'Updated notes',
+    };
+
+    render(
+      <MockedProvider
+        link={
+          new StaticMockLink([
+            {
+              request: {
+                query: UPDATE_AGENDA_ITEM_MUTATION,
+                variables: {
+                  input: {
+                    id: 'item-1',
+                    name: 'Test Item',
+                    description: 'Test Description',
+                    duration: '30',
+                    folderId: 'folder-1',
+                    categoryId: 'cat-1',
+                    notes: 'Updated notes',
+                    url: [{ url: 'https://example.com' }],
+                    attachments: [
+                      {
+                        name: 'test.png',
+                        mimeType: 'IMAGE_PNG',
+                        fileHash: 'hash123',
+                        objectName: 'obj123',
+                      },
+                    ],
+                  },
+                },
+              },
+              result: { data: { updateAgendaItem: { id: 'item-1' } } },
+            },
+          ])
+        }
+      >
+        <BrowserRouter>
+          <AgendaItemsUpdateModal
+            {...defaultProps}
+            itemFormState={formStateWithNotes}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
+  });
+
+  it('sends null when notes is empty string', async () => {
+    const user = userEvent.setup();
+
+    const formStateWithEmptyNotes = {
+      ...mockFormState,
+      notes: '',
+    };
+
+    render(
+      <MockedProvider
+        link={
+          new StaticMockLink([
+            {
+              request: {
+                query: UPDATE_AGENDA_ITEM_MUTATION,
+                variables: {
+                  input: {
+                    id: 'item-1',
+                    name: 'Test Item',
+                    description: 'Test Description',
+                    duration: '30',
+                    folderId: 'folder-1',
+                    categoryId: 'cat-1',
+                    notes: null,
+                    url: [{ url: 'https://example.com' }],
+                    attachments: [
+                      {
+                        name: 'test.png',
+                        mimeType: 'IMAGE_PNG',
+                        fileHash: 'hash123',
+                        objectName: 'obj123',
+                      },
+                    ],
+                  },
+                },
+              },
+              result: { data: { updateAgendaItem: { id: 'item-1' } } },
+            },
+          ])
+        }
+      >
+        <BrowserRouter>
+          <AgendaItemsUpdateModal
+            {...defaultProps}
+            itemFormState={formStateWithEmptyNotes}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
+  });
+
+  it('updates notes field when typing', async () => {
+    const user = userEvent.setup();
+    const setItemFormStateMock = vi.fn();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsUpdateModal
+            {...defaultProps}
+            setItemFormState={setItemFormStateMock}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const notesInput = screen.getByLabelText(/notes/i);
+
+    await user.clear(notesInput);
+    await user.type(notesInput, 'New notes');
+
+    expect(setItemFormStateMock).toHaveBeenCalled();
+  });
+
   it('handles empty file input', async () => {
     render(
       <MockedProvider>
@@ -856,6 +996,7 @@ describe('AgendaItemsUpdateModal', () => {
                     name: 'Trimmed Title',
                     description: 'Trimmed Description',
                     duration: '30',
+                    notes: 'Initial notes',
                     folderId: 'folder-1',
                     categoryId: 'cat-1',
                     url: [{ url: 'https://example.com' }],
@@ -927,6 +1068,7 @@ describe('AgendaItemsUpdateModal', () => {
                   input: {
                     id: 'item-1',
                     name: 'Valid Name',
+                    notes: 'Initial notes',
                     description: undefined,
                     duration: undefined,
                     folderId: undefined,
@@ -998,6 +1140,7 @@ describe('AgendaItemsUpdateModal', () => {
                     name: 'Test Item',
                     description: 'Test Description',
                     duration: '30',
+                    notes: 'Initial notes',
                     folderId: 'folder-1',
                     categoryId: 'cat-1',
                     url: [],
@@ -1288,6 +1431,7 @@ describe('AgendaItemsUpdateModal', () => {
                     name: 'Test Item',
                     description: 'Test Description',
                     duration: '30',
+                    notes: 'Initial notes',
                     folderId: 'folder-1',
                     categoryId: 'cat-1',
                     url: [{ url: 'https://example.com' }],

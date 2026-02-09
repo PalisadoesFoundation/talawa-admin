@@ -575,16 +575,6 @@
     "addAdmin": "Agregar administrador",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
-  "orgAdminListCard": {
-    "joined": "Unido",
-    "remove": "Remover",
-    "removeAdmin": "Eliminar administrador",
-    "removeAdminMsg": "¿Quieres eliminar a este administrador?",
-    "no": "No",
-    "yes": "Sí",
-    "adminRemoved": "Se elimina el administrador.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
-  },
   "orgPeopleListCard": {
     "joined": "Unido",
     "remove": "Remover",
@@ -788,6 +778,8 @@
     "noCategory": "Sin categoría",
     "organizationRequired": "La organización es obligatoria",
     "folder": "Carpeta de la agenda",
+    "notes": "Notas",
+    "enterNotes": "Introducir nota",
     "agendaFolderDetails": "Detalles de la sección de la agenda",
     "agendaFolderCreated": "Sección de la agenda creada exitosamente",
     "attachmentPreviewAlt": "Vista previa del archivo adjunto",
@@ -1265,18 +1257,6 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "Contraseña anterior",
-    "newPassword": "Nueva contraseña",
-    "confirmNewPassword": "Confirmar nueva contraseña",
-    "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar",
-    "passCantBeEmpty": "La contraseña no puede estar vacía",
-    "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
-  },
-  "orgDelete": {
-    "deleteOrg": "Eliminar organización"
-  },
   "membershipRequest": {
     "joined": "Unido",
     "accept": "Aceptar",
@@ -1734,7 +1714,8 @@
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
     "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
-    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
+    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}.",
+    "selectCurrency": "Seleccionar moneda"
   },
   "transactions": {
     "title": "Transacciones",
@@ -1900,7 +1881,6 @@
     "hash": "#",
     "description": "Descripción",
     "groupInfo": "Información del grupo",
-    "memberOptions": "Opciones de miembro",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
     "userNotFound": "Usuario no encontrado",
@@ -1931,7 +1911,8 @@
     "next": "Siguiente",
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
     "thisUser": "este usuario",
-    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?"
+    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?",
+    "memberActionsMenu": "Menú de acciones del miembro"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
@@ -2347,7 +2328,8 @@
     "invited": "Invitado",
     "groupsAvailable": "{{count}} grupos disponibles",
     "volunteersRequired": "Requerido",
-    "signedUp": "Registrado"
+    "signedUp": "Registrado",
+    "volunteerTabs": "Pestañas de voluntarios"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
@@ -2408,7 +2390,7 @@
     "installing": "Instalando ({{elapsed}})",
     "uploading": "Subiendo...",
     "screenshotCounter": "{{current}} de {{total}}",
-    "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
+    "uninstallPluginWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin",
     "failedToParsePluginZip": "Error al analizar el archivo ZIP del plugin",
     "pluginUploadedSuccess": "¡Plugin subido exitosamente! (componentes {{components}}) - Ahora puedes instalarlo desde la lista de plugins."
@@ -2587,17 +2569,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Fecha N/A",
     "yes": "Sí",
     "no": "No",
     "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFound": "Evento no encontrado o ha sido eliminado",
-    "numberOfAttendees": "Número de asistentes",
-    "viewEventDetails": "Ver detalles del evento"
-  },
-  "promotedPost": {
-    "title": "Contenido Promocionado",
-    "promotedContent": "Contenido promocionado: {{title}}"
+    "numberOfAttendees": "Número de asistentes"
   },
   "csv": {
     "demographics": "Demografía de {{category}}"
