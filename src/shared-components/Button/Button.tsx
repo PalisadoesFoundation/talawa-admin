@@ -44,9 +44,7 @@ const BOOTSTRAP_VARIANTS = new Set([
   'outline-dark',
 ]);
 
-const mapVariantToBootstrap = (
-  variant: ButtonVariant | undefined,
-): string | undefined => {
+const mapVariantToBootstrap = (variant: ButtonVariant | undefined): string => {
   if (!variant) return 'primary';
 
   if (BOOTSTRAP_VARIANTS.has(variant)) {

@@ -46,7 +46,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, Typography } from '@mui/material';
-import Button from 'shared-components/Button';
+import Button, { ButtonVariant } from 'shared-components/Button';
 import IconComponent from 'components/IconComponent/IconComponent';
 import type { InterfaceEmptyStateProps } from 'types/shared-components/EmptyState/interface';
 
@@ -62,8 +62,8 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
 
   /**
    * Helper to handle both i18n keys and plain strings
-   * @param text - (Optional) Text to translate or return as it is
-   * @returns - Translated text or original string
+   * @param text - Text to translate or return as it is
+   * @returns Translated text or original string
    */
   const getText = (text: string): string => {
     try {
@@ -77,12 +77,12 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
 
   /**
    * Helper to map action variant to shared Button variant
-   * `@param` variant - (Optional) Action button variant type
-   * `@returns` Mapped Button variant string
+   * @param variant - (Optional) Action button variant type
+   * @returns Mapped Button variant string
    */
   const getButtonVariant = (
     variant: 'primary' | 'secondary' | 'outlined' | undefined,
-  ): 'contained' | 'outlined' | 'text' => {
+  ): ButtonVariant => {
     switch (variant) {
       case 'primary':
         return 'contained';
