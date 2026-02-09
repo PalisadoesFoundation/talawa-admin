@@ -298,5 +298,10 @@
   "clearSelection": "Clear selection",
   "toggleSidebar": "Toggle sidebar",
   "picture": "{{name}} Picture",
-  "optionsSuffix": "options"
+  "optionsSuffix": "options",
+  "userMenu": "User menu",
+  "searchPlaceholder": "Search...",
+  "noOptionsFound": "No options found",
+  "noUserId": "User ID not available",
+  "noTagsFound": "No tags found"
 }

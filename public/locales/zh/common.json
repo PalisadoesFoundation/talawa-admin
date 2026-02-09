@@ -298,5 +298,10 @@
   "clearSelection": "清除选择",
   "toggleSidebar": "切换侧边栏",
   "picture": "{{name}}的图片",
-  "optionsSuffix": "选项"
+  "optionsSuffix": "选项",
+  "userMenu": "用户菜单",
+  "searchPlaceholder": "搜索...",
+  "noOptionsFound": "未找到选项",
+  "noUserId": "用户ID不可用",
+  "noTagsFound": "未找到标签"
 }

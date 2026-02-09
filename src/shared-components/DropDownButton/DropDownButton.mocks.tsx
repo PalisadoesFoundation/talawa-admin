@@ -34,6 +34,7 @@ export const baseProps: InterfaceDropDownButtonProps = {
   onSelect: mockOnSelect,
   ariaLabel: 'Test Dropdown',
   dataTestIdPrefix: 'test-dropdown',
+  showCaret: true,
 };
 
 export const noSelectionProps: InterfaceDropDownButtonProps = {
@@ -79,4 +80,42 @@ export const noTestIdProps: InterfaceDropDownButtonProps = {
   selectedValue: '2',
   onSelect: mockOnSelect,
   ariaLabel: 'No Test ID Dropdown',
+};
+
+export const dropUpProps: InterfaceDropDownButtonProps = {
+  ...baseProps,
+  drop: 'up',
+};
+
+export const searchableOptionsForCoverage: InterfaceDropDownOption[] = [
+  { value: '1', label: 'Apple' },
+  { value: '2', label: 'Banana' },
+];
+
+export const searchableMinimalProps: InterfaceDropDownButtonProps = {
+  id: 'searchable-dropdown',
+  options: searchableOptionsForCoverage,
+  selectedValue: undefined,
+  onSelect: mockOnSelect,
+  dataTestIdPrefix: 'test-dropdown',
+  searchable: true,
+};
+
+export const withIconSearchProps: InterfaceDropDownButtonProps = {
+  ...searchableMinimalProps,
+  icon: <ArrowDownwardSharp fontSize="small" data-testid="dropdown-icon" />,
+};
+
+export const optionsWithNonStringLabel: InterfaceDropDownOption[] = [
+  { value: '1', label: <span data-testid="icon-label">📋</span> },
+  { value: '2', label: 'String Label Option' },
+];
+
+export const withNonStringLabelProps: InterfaceDropDownButtonProps = {
+  id: 'searchable-non-string',
+  options: optionsWithNonStringLabel,
+  selectedValue: undefined,
+  onSelect: mockOnSelect,
+  dataTestIdPrefix: 'test-dropdown',
+  searchable: true,
 };

@@ -28,4 +28,7 @@ export interface InterfaceEmailFieldProps {
 
   /** Test ID for testing purposes */
   testId?: string;
+
+  /** Optional data-cy for e2e (Cypress) selectors */
+  dataCy?: string;
 }

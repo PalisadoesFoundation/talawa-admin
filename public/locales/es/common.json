@@ -298,5 +298,10 @@
   "clearSelection": "Limpiar selección",
   "toggleSidebar": "Alternar barra lateral",
   "picture": "Imagen de {{name}}",
-  "optionsSuffix": "opciones"
+  "optionsSuffix": "opciones",
+  "userMenu": "Menú de usuario",
+  "searchPlaceholder": "Buscar...",
+  "noOptionsFound": "No se encontraron opciones",
+  "noUserId": "ID de usuario no disponible",
+  "noTagsFound": "No se encontraron etiquetas"
 }

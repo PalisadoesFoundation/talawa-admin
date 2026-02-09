@@ -1,6 +1,8 @@
 import inquirer from 'inquirer';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { main } from './index';
+import * as installModule from './index';
+const { runIfDirectExecution, main, handleDirectExecutionError } =
+  installModule;
 import * as detectorModule from './os/detector';
 import * as packagesModule from './packages';
 import type { IPackageStatus } from './types';
@@ -13,9 +15,12 @@ vi.mock('./packages');
 vi.mock('./utils/exec');
 vi.mock('inquirer');
 
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 describe('install/index', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(process, 'exit').mockImplementation((() => undefined) as never);
@@ -220,6 +225,80 @@ describe('install/index', () => {
       await main();
 
       expect(process.exit).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('handleDirectExecutionError', () => {
+    it('should log error and exit with code 1', () => {
+      const testError = new Error('Test error');
+
+      handleDirectExecutionError(testError);
+
+      expect(console.error).toHaveBeenCalledWith('Unhandled error:', testError);
+      expect(process.exit).toHaveBeenCalledWith(1);
+    });
+
+    it('should handle non-Error objects', () => {
+      const testError = 'String error';
+
+      handleDirectExecutionError(testError);
+
+      expect(console.error).toHaveBeenCalledWith('Unhandled error:', testError);
+      expect(process.exit).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('runIfDirectExecution', () => {
+    it('should call main when argv[1] contains install/index.ts', () => {
+      const mainMock = vi.fn().mockResolvedValue(undefined);
+      const errorSpy = vi.fn();
+      const fakePath = '/different/path/to/install/index.ts';
+      const argv = ['node', fakePath];
+      runIfDirectExecution(argv, fakePath, mainMock, errorSpy);
+      expect(mainMock).toHaveBeenCalled();
+    });
+
+    it('should not call main when argv[1] does not match conditions', () => {
+      const mainMock = vi.fn();
+      const argv = ['node', '/some/other/file.ts'];
+      runIfDirectExecution(argv, undefined, mainMock);
+      expect(mainMock).not.toHaveBeenCalled();
+    });
+
+    it('should not call main when argv[1] is undefined', () => {
+      const mainMock = vi.fn().mockResolvedValue(undefined);
+      runIfDirectExecution(['node'], undefined, mainMock);
+      expect(mainMock).not.toHaveBeenCalled();
+    });
+
+    it('should handle main rejection with error handler', async () => {
+      const testError = new Error('Main failed');
+      const mainMock = vi.fn().mockRejectedValue(testError);
+      const errorSpy = vi.fn();
+      const fakePath = '/some/path/install/index.ts';
+      const argv = ['node', fakePath];
+      runIfDirectExecution(argv, fakePath, mainMock, errorSpy);
+      await vi.waitFor(() => {
+        expect(errorSpy).toHaveBeenCalledWith(testError);
+      });
+    });
+
+    it('should use process.argv by default', () => {
+      const originalArgv = process.argv;
+      const mainSpy = vi.fn().mockResolvedValue(undefined);
+      const errorSpy = vi.fn();
+      try {
+        process.argv = ['node', '/some/path/install/index.ts'];
+        runIfDirectExecution(
+          undefined,
+          '/some/path/install/index.ts',
+          mainSpy,
+          errorSpy,
+        );
+        expect(mainSpy).toHaveBeenCalled();
+      } finally {
+        process.argv = originalArgv;
+      }
     });
   });
 });

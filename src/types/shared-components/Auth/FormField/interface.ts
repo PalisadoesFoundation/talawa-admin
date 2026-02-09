@@ -37,6 +37,9 @@ export interface InterfaceFormFieldProps {
   /** Test ID for testing purposes */
   testId?: string;
 
+  /** Optional data-cy for e2e (Cypress) selectors */
+  dataCy?: string;
+
   /** Error message to display - null or undefined means no error */
   error?: string | null;
 
