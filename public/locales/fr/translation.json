@@ -1277,15 +1277,6 @@
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "Mot de passe précédent",
-    "newPassword": "nouveau mot de passe",
-    "confirmNewPassword": "Confirmer le nouveau mot de passe",
-    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
-    "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas.",
-    "saveChanges": "Enregistrer les modifications",
-    "cancel": "Annuler"
-  },
   "membershipRequest": {
     "accept": "Accepter",
     "reject": "Rejeter",
@@ -2581,10 +2572,6 @@
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFound": "Événement introuvable ou supprimé",
     "numberOfAttendees": "Nombre de participants"
-  },
-  "promotedPost": {
-    "title": "Contenu Promu",
-    "promotedContent": "Contenu promu : {{title}}"
   },
   "csv": {
     "demographics": "Démographie de {{category}}"

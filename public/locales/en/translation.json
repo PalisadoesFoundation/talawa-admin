@@ -1321,15 +1321,6 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "Previous Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "passCantBeEmpty": "Password can't be empty",
-    "passNoMatch": "New and Confirm password do not match.",
-    "saveChanges": "saveChanges",
-    "cancel": "cancel"
-  },
   "membershipRequest": {
     "accept": "Accept",
     "reject": "Reject",
@@ -2581,10 +2572,6 @@
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFound": "Event not found or has been deleted",
     "numberOfAttendees": "Number of attendees"
-  },
-  "promotedPost": {
-    "title": "Promoted Content",
-    "promotedContent": "Promoted content: {{title}}"
   },
   "csv": {
     "demographics": "{{category}} Demographics"

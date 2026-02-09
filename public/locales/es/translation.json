@@ -1255,15 +1255,6 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "Contraseña anterior",
-    "newPassword": "Nueva contraseña",
-    "confirmNewPassword": "Confirmar nueva contraseña",
-    "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar",
-    "passCantBeEmpty": "La contraseña no puede estar vacía",
-    "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
-  },
   "membershipRequest": {
     "joined": "Unido",
     "accept": "Aceptar",
@@ -2581,10 +2572,6 @@
     "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFound": "Evento no encontrado o ha sido eliminado",
     "numberOfAttendees": "Número de asistentes"
-  },
-  "promotedPost": {
-    "title": "Contenido Promocionado",
-    "promotedContent": "Contenido promocionado: {{title}}"
   },
   "csv": {
     "demographics": "Demografía de {{category}}"
