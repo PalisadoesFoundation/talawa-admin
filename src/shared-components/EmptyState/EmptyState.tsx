@@ -50,6 +50,26 @@ import Button, { ButtonVariant } from 'shared-components/Button';
 import IconComponent from 'components/IconComponent/IconComponent';
 import type { InterfaceEmptyStateProps } from 'types/shared-components/EmptyState/interface';
 
+/**
+ * Helper to map action variant to shared Button variant
+ * @param variant - (Optional) Action button variant type
+ * @returns Mapped Button variant string
+ */
+const getButtonVariant = (
+  variant: 'primary' | 'secondary' | 'outlined' | undefined,
+): ButtonVariant => {
+  switch (variant) {
+    case 'primary':
+      return 'primary';
+    case 'secondary':
+      return 'link';
+    case 'outlined':
+      return 'outline-primary';
+    default:
+      return 'primary';
+  }
+};
+
 const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
   message,
   description,
@@ -75,26 +95,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
     }
   };
 
-  /**
-   * Helper to map action variant to shared Button variant
-   * @param variant - (Optional) Action button variant type
-   * @returns Mapped Button variant string
-   */
-  const getButtonVariant = (
-    variant: 'primary' | 'secondary' | 'outlined' | undefined,
-  ): ButtonVariant => {
-    switch (variant) {
-      case 'primary':
-        return 'contained';
-      case 'secondary':
-        return 'text';
-      case 'outlined':
-        return 'outlined';
-      default:
-        return 'contained';
-    }
-  };
-
   const messageText = getText(message);
   const descriptionText = description ? getText(description) : undefined;
   const buttonVariant = getButtonVariant(action?.variant);
@@ -107,7 +107,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
       spacing={2}
       padding={4}
       role="status"
-      aria-live="polite"
       aria-label={messageText}
       className={className}
       data-testid={dataTestId}
