@@ -24,20 +24,6 @@ type GraphQLResponse = {
 
 const requestTimeoutMs = 10000;
 
-type EventsResponseShape = {
-  data?: {
-    organization?: {
-      events?: {
-        edges?: Array<{
-          node?: {
-            id?: string;
-          };
-        }>;
-      };
-    };
-  };
-};
-
 type VolunteersResponseShape = {
   data?: {
     event?: {
@@ -113,27 +99,13 @@ const requestGraphQL = (
 };
 
 /**
- * Ensure an event volunteer exists for the first event in the organization.
- * @param orgId - Organization ID to seed volunteers for.
+ * Ensure an event volunteer exists for the provided event id.
+ * @param eventId - Event ID to seed volunteers for.
  * @returns Cypress.Chainable that resolves when a volunteer exists.
  */
-const ensureVolunteerExistsForOrg = (
-  orgId: string,
+const ensureVolunteerExistsForEvent = (
+  eventId: string,
 ): Cypress.Chainable<void> => {
-  const getEventsQuery = `
-    query GetOrganizationEvents($id: String!, $first: Int) {
-      organization(input: { id: $id }) {
-        events(first: $first) {
-          edges {
-            node {
-              id
-            }
-          }
-        }
-      }
-    }
-  `;
-
   const getVolunteersQuery = `
     query GetEventVolunteers($input: QueryEventInput!, $where: EventVolunteerWhereInput!) {
       event(input: $input) {
@@ -160,70 +132,53 @@ const ensureVolunteerExistsForOrg = (
     }
   `;
 
+  if (!eventId) {
+    cy.log('Skipping volunteer seed: event id is missing.');
+    return cy.wrap(undefined);
+  }
+
   return getAuthToken().then((token) => {
     if (!token) {
       cy.log('Auth token not found; attempting volunteer seed via cookies.');
     }
     return requestGraphQL(token, {
-      operationName: 'GetOrganizationEvents',
-      query: getEventsQuery,
-      variables: { id: orgId, first: 1 },
-    }).then((eventsResponse) => {
-      if (eventsResponse.status !== 200) {
+      operationName: 'GetEventVolunteers',
+      query: getVolunteersQuery,
+      variables: { input: { id: eventId }, where: {} },
+    }).then((volunteersResponse) => {
+      if (volunteersResponse.status !== 200) {
         cy.log(
-          `Skipping volunteer seed: events query failed with status ${eventsResponse.status}`,
+          `Skipping volunteer seed: volunteers query failed with status ${volunteersResponse.status}`,
         );
         return;
       }
-      const eventsBody = eventsResponse.body as EventsResponseShape;
-      const eventId =
-        eventsBody?.data?.organization?.events?.edges?.[0]?.node?.id;
-
-      if (!eventId) {
-        cy.log(`Skipping volunteer seed: no events found for org ${orgId}.`);
-        return;
-      }
+      const volunteersBody = volunteersResponse.body as VolunteersResponseShape;
+      const volunteers = volunteersBody?.data?.event?.volunteers;
+      if (Array.isArray(volunteers) && volunteers.length > 0) return;
 
       return requestGraphQL(token, {
-        operationName: 'GetEventVolunteers',
-        query: getVolunteersQuery,
-        variables: { input: { id: eventId }, where: {} },
-      }).then((volunteersResponse) => {
-        if (volunteersResponse.status !== 200) {
+        operationName: 'CurrentUser',
+        query: currentUserQuery,
+        variables: {},
+      }).then((userResponse) => {
+        if (userResponse.status !== 200) {
           cy.log(
-            `Skipping volunteer seed: volunteers query failed with status ${volunteersResponse.status}`,
+            `Skipping volunteer seed: current user query failed with status ${userResponse.status}`,
           );
           return;
         }
-        const volunteersBody =
-          volunteersResponse.body as VolunteersResponseShape;
-        const volunteers = volunteersBody?.data?.event?.volunteers;
-        if (Array.isArray(volunteers) && volunteers.length > 0) return;
+        const userBody = userResponse.body as CurrentUserResponseShape;
+        const userId = userBody?.data?.user?.id;
+        if (!userId) {
+          cy.log('Skipping volunteer seed: current user not found.');
+          return;
+        }
 
         return requestGraphQL(token, {
-          operationName: 'CurrentUser',
-          query: currentUserQuery,
-          variables: {},
-        }).then((userResponse) => {
-          if (userResponse.status !== 200) {
-            cy.log(
-              `Skipping volunteer seed: current user query failed with status ${userResponse.status}`,
-            );
-            return;
-          }
-          const userBody = userResponse.body as CurrentUserResponseShape;
-          const userId = userBody?.data?.user?.id;
-          if (!userId) {
-            cy.log('Skipping volunteer seed: current user not found.');
-            return;
-          }
-
-          return requestGraphQL(token, {
-            operationName: 'CreateEventVolunteer',
-            query: createVolunteerMutation,
-            variables: { data: { eventId, userId } },
-          }).then(() => undefined);
-        });
+          operationName: 'CreateEventVolunteer',
+          query: createVolunteerMutation,
+          variables: { data: { eventId, userId } },
+        }).then(() => undefined);
       });
     });
   });
@@ -232,11 +187,17 @@ const ensureVolunteerExistsForOrg = (
 describe('Admin Event Action Items Tab', () => {
   const actionItemPage = new ActionItemPage();
   let orgId = '';
+  let eventId = '';
 
   before(() => {
     cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
       ({ orgId: createdOrgId }) => {
         orgId = createdOrgId;
+        return cy
+          .seedTestData('events', { orgId, auth: { role: 'admin' } })
+          .then(({ eventId: createdEventId }) => {
+            eventId = createdEventId;
+          });
       },
     );
   });
@@ -244,7 +205,7 @@ describe('Admin Event Action Items Tab', () => {
   beforeEach(() => {
     cy.loginByApi('admin');
     cy.visit(`/admin/orgdash/${orgId}`);
-    ensureVolunteerExistsForOrg(orgId);
+    ensureVolunteerExistsForEvent(eventId);
     actionItemPage.visitEventActionItems();
   });
 
