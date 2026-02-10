@@ -1160,13 +1160,25 @@ jobs:
           CYPRESS_BASE_URL: http://localhost:4321
           CYPRESS_API_URL: http://127.0.0.1:4000/graphql
 
+      # Best-effort artifact upload: continue even if upload fails due to
+      # transient GitHub Actions infrastructure issues. The test result
+      # should not be affected by artifact upload service hiccups.
       - name: Upload cypress screenshots on failure
+        id: upload-screenshots
         uses: actions/upload-artifact@v4
         if: failure()
+        continue-on-error: true
         with:
           name: cypress-screenshots
           path: frontend/cypress/screenshots
           compression-level: 9
+          retention-days: 7
+
+      - name: Log artifact upload status
+        if: always() && steps.upload-screenshots.outcome == 'failure'
+        run: |
+          echo "⚠️ Warning: Screenshot upload failed due to infrastructure issue"
+          echo "This does not indicate a test failure - check test results above"
 
   ZAP-Security-Scan:
     name: ZAP Security Scan
