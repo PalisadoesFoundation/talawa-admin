@@ -1155,7 +1155,6 @@ jobs:
   Test-Application-E2E:
     timeout-minutes: 35
     runs-on: ubuntu-latest
-    needs: [Merge-Coverage]
     env:
       REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
     steps:
