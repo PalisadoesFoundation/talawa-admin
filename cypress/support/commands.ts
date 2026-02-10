@@ -34,6 +34,13 @@ type CreateTestOrganizationPayload = {
   auth?: AuthOptions;
 };
 
+type CreateOrganizationMembershipOptions = {
+  memberId: string;
+  organizationId: string;
+  role?: 'administrator' | 'regular';
+  auth?: AuthOptions;
+};
+
 type SeedEventPayload = {
   orgId: string;
   name?: string;
@@ -225,6 +232,9 @@ declare global {
       createTestOrganization(
         payload: CreateTestOrganizationPayload,
       ): Chainable<{ orgId: string }>;
+      createOrganizationMembership(
+        payload: CreateOrganizationMembershipOptions,
+      ): Chainable<void>;
       seedTestData(
         kind: 'events',
         payload: SeedEventPayload,
@@ -406,6 +416,28 @@ Cypress.Commands.add(
           return { orgId };
         });
     });
+  },
+);
+
+Cypress.Commands.add(
+  'createOrganizationMembership',
+  (payload: CreateOrganizationMembershipOptions) => {
+    const role = payload.role ?? 'administrator';
+    return resolveAuthToken({ role: 'superAdmin', ...payload.auth }).then(
+      (token) => {
+        return cy
+          .task('createOrganizationMembership', {
+            apiUrl: payload.auth?.apiUrl,
+            token,
+            input: {
+              memberId: payload.memberId,
+              organizationId: payload.organizationId,
+              role,
+            },
+          })
+          .then(() => undefined);
+      },
+    );
   },
 );
 

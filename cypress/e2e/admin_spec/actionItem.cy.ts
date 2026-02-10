@@ -17,6 +17,29 @@ const getAuthToken = (): Cypress.Chainable<string | null> => {
   });
 };
 
+const resolveCredentials = (
+  role: 'admin',
+): Cypress.Chainable<{ email: string; password: string }> => {
+  const envEmail = Cypress.env('E2E_ADMIN_EMAIL') as string | undefined;
+  const envPassword = Cypress.env('E2E_ADMIN_PASSWORD') as string | undefined;
+  if (envEmail && envPassword) {
+    return cy.wrap({ email: envEmail, password: envPassword });
+  }
+  return cy
+    .fixture('auth/credentials')
+    .then(
+      (credentials: Record<string, { email: string; password: string }>) => {
+        const user = credentials[role];
+        if (!user) {
+          throw new Error(
+            `User role "${role}" not found in auth/credentials fixture`,
+          );
+        }
+        return user;
+      },
+    );
+};
+
 type GraphQLResponse = {
   status: number;
   body: unknown;
@@ -193,11 +216,38 @@ describe('Admin Event Action Items Tab', () => {
     cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
       ({ orgId: createdOrgId }) => {
         orgId = createdOrgId;
-        return cy
-          .seedTestData('events', { orgId, auth: { role: 'admin' } })
-          .then(({ eventId: createdEventId }) => {
-            eventId = createdEventId;
-          });
+        return resolveCredentials('admin').then((credentials) => {
+          return cy
+            .task('gqlSignIn', {
+              apiUrl: Cypress.env('apiUrl'),
+              email: credentials.email,
+              password: credentials.password,
+            })
+            .then((result) => {
+              const { userId } = result as SignInTaskResult;
+              if (!userId) {
+                throw new Error(
+                  'Unable to resolve admin userId for membership seeding.',
+                );
+              }
+              return cy
+                .createOrganizationMembership({
+                  memberId: userId,
+                  organizationId: orgId,
+                  role: 'administrator',
+                })
+                .then(() => {
+                  return cy
+                    .seedTestData('events', {
+                      orgId,
+                      auth: { role: 'admin' },
+                    })
+                    .then(({ eventId: createdEventId }) => {
+                      eventId = createdEventId;
+                    });
+                });
+            });
+        });
       },
     );
   });
