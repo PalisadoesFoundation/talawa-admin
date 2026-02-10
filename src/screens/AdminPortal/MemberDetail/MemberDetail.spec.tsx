@@ -94,6 +94,7 @@ describe('MemberDetail', () => {
       userId: undefined,
     });
 
+    mockGetItem.mockReturnValueOnce(null).mockReturnValueOnce(null);
     render(<MemberDetail />);
 
     // Should render the noUserId message
@@ -171,10 +172,25 @@ describe('MemberDetail', () => {
       userId: undefined,
     });
 
-    mockGetItem.mockReturnValueOnce('999');
+    // first call -> getItem('id') -> null
+    // second call -> getItem('userId') -> 999
+    mockGetItem.mockReturnValueOnce(null).mockReturnValueOnce('999');
 
     render(<MemberDetail />);
 
     expect(screen.getByTestId('user-contact-details')).toHaveTextContent('999');
+  });
+
+  it('falls back to admin id when param missing', () => {
+    mockUseParams.mockReturnValueOnce({
+      userId: undefined,
+    });
+
+    // getItem('id') -> 777
+    mockGetItem.mockReturnValueOnce('777');
+
+    render(<MemberDetail />);
+
+    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('777');
   });
 });

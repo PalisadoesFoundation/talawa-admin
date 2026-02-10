@@ -53,8 +53,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const MemberDetail: React.FC = (): JSX.Element => {
   const { getItem } = useLocalStorage();
+  const storedAdminId = getItem<string>('id');
+  const storedUserId = getItem<string>('userId');
   const { userId: paramUserId } = useParams<{ userId?: string }>();
-  const userId = paramUserId ?? getItem<string>('userId');
+  const userId = paramUserId ?? (storedAdminId || storedUserId);
   const { t: tCommon } = useTranslation('common');
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
 
