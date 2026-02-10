@@ -7,7 +7,7 @@
     var(--datatable-skeleton-base) 50%,
     var(--datatable-skeleton-highlight) 75%
   );
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   animation: datatable-loading 1.2s ease-in-out infinite;
 }
 

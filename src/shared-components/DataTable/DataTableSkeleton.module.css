@@ -6,10 +6,10 @@
 
 .visuallyHidden {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: var(--space-0-5);
+  height: var(--space-0-5);
   padding: 0;
-  margin: -1px;
+  margin: calc(var(--space-0-5) * -1);
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -17,7 +17,7 @@
 }
 
 .selectCol {
-  width: 42px;
+  width: var(--space-10);
   text-align: center;
   vertical-align: middle;
 }
@@ -31,7 +31,7 @@
     var(--datatable-skeleton-base) 50%,
     var(--datatable-skeleton-highlight) 75%
   );
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   animation: datatable-loading 1.2s ease-in-out infinite;
 }
 

@@ -2,32 +2,32 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  margin: 0 0 8px;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  margin: 0 0 var(--space-3);
   background: var(--datatable-bulk-bg);
-  border: 1px solid var(--datatable-bulk-border);
-  border-radius: 8px;
+  border: var(--border-1) solid var(--datatable-bulk-border);
+  border-radius: var(--radius-md);
 }
 
 .bulkLeft {
   color: var(--datatable-bulk-text);
-  font-size: 0.9rem;
+  font-size: var(--font-size-15);
 }
 
 .bulkRight {
   display: inline-flex;
-  gap: 8px;
+  gap: var(--space-3);
   align-items: center;
 }
 
 .bulkBtn {
-  border: 1px solid var(--datatable-border);
+  border: var(--border-1) solid var(--datatable-border);
   background: var(--datatable-surface);
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   transition: background-color 0.15s ease;
 }
 
@@ -41,12 +41,12 @@
 }
 
 .bulkClear {
-  border: 1px solid var(--datatable-border);
+  border: var(--border-1) solid var(--datatable-border);
   background: var(--datatable-surface);
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   color: var(--datatable-muted-text);
 }
 

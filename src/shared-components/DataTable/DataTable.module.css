@@ -5,48 +5,48 @@
 }
 
 .dataTableBase {
-  font-size: 0.95rem;
+  font-size: var(--font-size-15);
 }
 
 .toolbar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin: 8px 0 12px;
+  gap: var(--space-4);
+  margin: var(--space-3) 0 var(--space-4);
 }
 
 .dataErrorState {
-  padding: 16px;
+  padding: var(--space-5);
   text-align: left;
   color: var(--datatable-error-text);
   background: var(--datatable-error-bg);
-  border: 1px solid var(--datatable-error-border);
-  border-radius: 6px;
+  border: var(--border-1) solid var(--datatable-error-border);
+  border-radius: var(--radius-md);
 }
 
 .dataErrorDetails {
-  margin-top: 4px;
+  margin-top: var(--space-2);
   font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   color: var(--errorState-color, #5c1a21);
 }
 
 .dataEmptyState {
-  padding: 16px;
+  padding: var(--space-5);
   text-align: center;
   color: var(--datatable-text);
-  border: 1px solid var(--datatable-empty-border);
-  border-radius: 6px;
+  border: var(--border-1) solid var(--datatable-empty-border);
+  border-radius: var(--radius-md);
   background: var(--datatable-empty-bg);
 }
 
 .bulkBtn {
-  border: 1px solid var(--datatable-border);
+  border: var(--border-1) solid var(--datatable-border);
   background: var(--datatable-surface);
-  padding: 6px 12px;
-  border-radius: 6px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   transition: background-color 0.15s ease;
 }
 
@@ -61,17 +61,17 @@
 
 .actionsCellContainer {
   display: inline-flex;
-  gap: 8px;
+  gap: var(--space-3);
   align-items: center;
 }
 
 .actionBtn {
-  border: 1px solid var(--datatable-border);
+  border: var(--border-1) solid var(--datatable-border);
   background: var(--datatable-surface);
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
   transition: background-color 0.15s ease;
 }
 

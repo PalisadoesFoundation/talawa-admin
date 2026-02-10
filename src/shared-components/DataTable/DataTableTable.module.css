@@ -1,9 +1,9 @@
 .visuallyHidden {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: var(--space-0-5);
+  height: var(--space-0-5);
   padding: 0;
-  margin: -1px;
+  margin: calc(var(--space-0-5) * -1);
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
@@ -11,15 +11,15 @@
 }
 
 .selectCol {
-  width: 42px;
+  width: var(--space-10);
   text-align: center;
   vertical-align: middle;
 }
 
 .selectCol input[type='checkbox'] {
   cursor: pointer;
-  width: 18px;
-  height: 18px;
+  width: var(--space-5);
+  height: var(--space-5);
 }
 
 .sortable {
@@ -29,21 +29,21 @@
 }
 
 .sortable:focus {
-  outline: 2px solid var(--datatable-focus-outline);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--datatable-focus-outline);
+  outline-offset: var(--border-2);
 }
 
 .sortable:focus-visible {
-  outline: 2px solid var(--datatable-focus-outline);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 2px var(--datatable-focus-ring);
+  outline: var(--border-2) solid var(--datatable-focus-outline);
+  outline-offset: var(--border-2);
+  box-shadow: 0 0 0 var(--border-2) var(--datatable-focus-ring);
   background: var(--datatable-focus-background);
 }
 
 .headerInner {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--space-3);
 }
 
 .sortIndicator {
