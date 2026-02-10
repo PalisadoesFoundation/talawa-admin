@@ -70,9 +70,13 @@ export class AdvertisementPage {
 
   private waitForGraphQL(alias: string, label: string) {
     return cy.wait(`@${alias}`, { timeout: 20000 }).then((interception) => {
-      const body = interception.response?.body as { errors?: { message: string }[] };
+      const body = interception.response?.body as {
+        errors?: { message: string }[];
+      };
       if (body?.errors?.length) {
-        const errorMessage = body.errors.map((error) => error.message).join(', ');
+        const errorMessage = body.errors
+          .map((error) => error.message)
+          .join(', ');
         throw new Error(`${label} failed: ${errorMessage}`);
       }
     });
