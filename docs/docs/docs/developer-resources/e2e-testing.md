@@ -231,8 +231,8 @@ specs:
   `{ orgId }`.
 - `cy.createTestOrganization(payload)` → creates an organization and returns
   `{ orgId }`.
-- `cy.seedTestData('events' | 'users', payload)` → creates events or users and
-  returns IDs for reuse.
+- `cy.seedTestData('events' | 'volunteers' | 'posts', payload)` → creates
+  events, volunteers, or posts and returns IDs for reuse.
 - `cy.cleanupTestOrganization(orgId, options?)` → deletes the org and (optionally)
   any test users you created.
 
@@ -248,6 +248,7 @@ Example usage:
 
 ```ts
 let orgId = '';
+const userIds: string[] = [];
 
 before(() => {
   cy.setupTestEnvironment().then(({ orgId: createdOrgId }) => {
@@ -257,7 +258,7 @@ before(() => {
 
 after(() => {
   if (orgId) {
-    cy.cleanupTestOrganization(orgId);
+    cy.cleanupTestOrganization(orgId, { userIds });
   }
 });
 
@@ -266,14 +267,31 @@ it('seeds event data', () => {
     expect(eventId).to.be.a('string').and.not.equal('');
   });
 });
+
+it('seeds post data', () => {
+  cy.seedTestData('posts', { orgId }).then(({ postId }) => {
+    expect(postId).to.be.a('string').and.not.equal('');
+  });
+});
+
+it('seeds volunteer data', () => {
+  cy.seedTestData('events', { orgId }).then(({ eventId }) => {
+    cy.seedTestData('volunteers', { eventId }).then(({ userId }) => {
+      if (userId) {
+        userIds.push(userId);
+      }
+    });
+  });
+});
 ```
 
 Best practices:
 
 - Keep data creation inside `before`/`beforeEach`, and cleanup in `after`/`afterEach`.
 - Use unique names to avoid collisions (`E2E Org ${Date.now()}`, etc.).
-- If you create users with `seedTestData('users')`, pass their IDs to
-  `cleanupTestOrganization` via `options.userIds` to avoid leaking accounts.
+- If you seed volunteers without supplying `userId`, a user is created for you.
+  Pass those IDs to `cleanupTestOrganization` via `options.userIds` to avoid
+  leaking accounts.
 
 Example usage with JSON fixtures:
 

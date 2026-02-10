@@ -64,12 +64,33 @@ type SeedEventPayload = {
   auth?: AuthOptions;
 };
 
-type SeedUserPayload = {
+type SeedUserDetails = {
   name?: string;
   email?: string;
   password?: string;
   role?: 'administrator' | 'regular';
   isEmailAddressVerified?: boolean;
+};
+
+type SeedUserPayload = SeedUserDetails & {
+  auth?: AuthOptions;
+};
+
+type SeedVolunteerPayload = {
+  eventId: string;
+  userId?: string;
+  user?: SeedUserDetails;
+  auth?: AuthOptions;
+  userAuth?: AuthOptions;
+  scope?: 'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY';
+  recurringEventInstanceId?: string;
+};
+
+type SeedPostPayload = {
+  orgId: string;
+  caption?: string;
+  body?: string;
+  isPinned?: boolean;
   auth?: AuthOptions;
 };
 
@@ -86,6 +107,8 @@ type CreateUserTaskResult = {
   userId: string;
   authenticationToken?: string;
 };
+type CreateVolunteerTaskResult = { volunteerId: string };
+type CreatePostTaskResult = { postId: string };
 
 type CredentialRecord = { email: string; password: string };
 type CredentialFixture = Record<AuthRole, CredentialRecord>;
@@ -189,9 +212,18 @@ declare global {
         payload: SeedEventPayload,
       ): Chainable<{ eventId: string }>;
       seedTestData(
-        kind: 'users',
-        payload: SeedUserPayload,
-      ): Chainable<{ userId: string; email: string; password: string }>;
+        kind: 'volunteers',
+        payload: SeedVolunteerPayload,
+      ): Chainable<{
+        volunteerId: string;
+        userId?: string;
+        email?: string;
+        password?: string;
+      }>;
+      seedTestData(
+        kind: 'posts',
+        payload: SeedPostPayload,
+      ): Chainable<{ postId: string }>;
       cleanupTestOrganization(
         orgId: string,
         options?: CleanupTestOrganizationOptions,
@@ -320,7 +352,10 @@ Cypress.Commands.add(
 
 Cypress.Commands.add(
   'seedTestData',
-  (kind: 'events' | 'users', payload: SeedEventPayload | SeedUserPayload) => {
+  (
+    kind: 'events' | 'volunteers' | 'posts',
+    payload: SeedEventPayload | SeedVolunteerPayload | SeedPostPayload,
+  ) => {
     if (kind === 'events') {
       const eventPayload = payload as SeedEventPayload;
       const startAt = eventPayload.startAt ?? new Date().toISOString();
@@ -354,37 +389,102 @@ Cypress.Commands.add(
       });
     }
 
-    const userPayload = payload as SeedUserPayload;
-    const email =
-      userPayload.email ||
-      `e2e-user-${Date.now()}-${Math.floor(Math.random() * 10000)}@example.com`;
-    const password = userPayload.password || 'Pass@123';
-    const name = userPayload.name || makeUniqueLabel('E2E User');
-    const role = userPayload.role ?? 'regular';
-    return resolveAuthToken({ role: 'superAdmin', ...userPayload.auth }).then(
-      (token) => {
+    const createSeedUser = (userPayload: SeedUserPayload) => {
+      const email =
+        userPayload.email ||
+        `e2e-user-${Date.now()}-${Math.floor(Math.random() * 10000)}@example.com`;
+      const password = userPayload.password || 'Pass@123';
+      const name = userPayload.name || makeUniqueLabel('E2E User');
+      const role = userPayload.role ?? 'regular';
+      return resolveAuthToken({ role: 'superAdmin', ...userPayload.auth }).then(
+        (token) => {
+          return cy
+            .task('createTestUser', {
+              apiUrl: userPayload.auth?.apiUrl,
+              token,
+              input: {
+                name,
+                email,
+                password,
+                role,
+                isEmailAddressVerified:
+                  userPayload.isEmailAddressVerified ?? true,
+              },
+            })
+            .then((result) => {
+              const { userId } = result as CreateUserTaskResult;
+              if (!userId) {
+                throw new Error('createTestUser did not return userId.');
+              }
+              return { userId, email, password };
+            });
+        },
+      );
+    };
+
+    if (kind === 'posts') {
+      const postPayload = payload as SeedPostPayload;
+      const caption = postPayload.caption || makeUniqueLabel('E2E Post');
+      const body = postPayload.body ?? 'E2E post body';
+      const isPinned = postPayload.isPinned ?? false;
+      return resolveAuthToken(postPayload.auth).then((token) => {
         return cy
-          .task('createTestUser', {
-            apiUrl: userPayload.auth?.apiUrl,
+          .task('createTestPost', {
+            apiUrl: postPayload.auth?.apiUrl,
             token,
             input: {
-              name,
-              email,
-              password,
-              role,
-              isEmailAddressVerified:
-                userPayload.isEmailAddressVerified ?? true,
+              caption,
+              body,
+              organizationId: postPayload.orgId,
+              isPinned,
             },
           })
           .then((result) => {
-            const { userId } = result as CreateUserTaskResult;
-            if (!userId) {
-              throw new Error('seedTestData(users) did not return userId.');
+            const { postId } = result as CreatePostTaskResult;
+            if (!postId) {
+              throw new Error('seedTestData(posts) did not return postId.');
             }
-            return { userId, email, password };
+            return { postId };
           });
-      },
-    );
+      });
+    }
+
+    const volunteerPayload = payload as SeedVolunteerPayload;
+    const userChain = volunteerPayload.userId
+      ? cy.wrap({ userId: volunteerPayload.userId })
+      : createSeedUser({
+          ...(volunteerPayload.user ?? {}),
+          auth: volunteerPayload.userAuth,
+        });
+
+    return userChain.then(({ userId, email, password }) => {
+      if (!userId) {
+        throw new Error('seedTestData(volunteers) missing userId.');
+      }
+      return resolveAuthToken(volunteerPayload.auth).then((token) => {
+        return cy
+          .task('createTestVolunteer', {
+            apiUrl: volunteerPayload.auth?.apiUrl,
+            token,
+            input: {
+              eventId: volunteerPayload.eventId,
+              userId,
+              scope: volunteerPayload.scope,
+              recurringEventInstanceId:
+                volunteerPayload.recurringEventInstanceId,
+            },
+          })
+          .then((result) => {
+            const { volunteerId } = result as CreateVolunteerTaskResult;
+            if (!volunteerId) {
+              throw new Error(
+                'seedTestData(volunteers) did not return volunteerId.',
+              );
+            }
+            return { volunteerId, userId, email, password };
+          });
+      });
+    });
   },
 );
 

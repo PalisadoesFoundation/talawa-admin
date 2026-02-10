@@ -1,5 +1,6 @@
 describe('Organization test data setup', () => {
   let orgId = '';
+  const userIds: string[] = [];
 
   before(() => {
     cy.setupTestEnvironment().then(({ orgId: createdOrgId }) => {
@@ -10,7 +11,7 @@ describe('Organization test data setup', () => {
 
   after(() => {
     if (orgId) {
-      cy.cleanupTestOrganization(orgId);
+      cy.cleanupTestOrganization(orgId, { userIds });
     }
   });
 
@@ -21,6 +22,25 @@ describe('Organization test data setup', () => {
   it('seeds event data for a new organization', () => {
     cy.seedTestData('events', { orgId }).then(({ eventId }) => {
       expect(eventId).to.be.a('string').and.not.equal('');
+    });
+  });
+
+  it('seeds post data for a new organization', () => {
+    cy.seedTestData('posts', { orgId }).then(({ postId }) => {
+      expect(postId).to.be.a('string').and.not.equal('');
+    });
+  });
+
+  it('seeds volunteer data for a new event', () => {
+    cy.seedTestData('events', { orgId }).then(({ eventId }) => {
+      cy.seedTestData('volunteers', { eventId }).then(
+        ({ volunteerId, userId }) => {
+          expect(volunteerId).to.be.a('string').and.not.equal('');
+          if (userId) {
+            userIds.push(userId);
+          }
+        },
+      );
     });
   });
 });

@@ -103,6 +103,22 @@ const CREATE_USER_MUTATION = `
   }
 `;
 
+const CREATE_VOLUNTEER_MUTATION = `
+  mutation CreateEventVolunteer($data: EventVolunteerInput!) {
+    createEventVolunteer(data: $data) {
+      id
+    }
+  }
+`;
+
+const CREATE_POST_MUTATION = `
+  mutation CreatePost($input: MutationCreatePostInput!) {
+    createPost(input: $input) {
+      id
+    }
+  }
+`;
+
 const DELETE_ORGANIZATION_MUTATION = `
   mutation DeleteOrganization($input: MutationDeleteOrganizationInput!) {
     deleteOrganization(input: $input) {
@@ -301,6 +317,70 @@ export default defineConfig({
             userId,
             authenticationToken: response.data?.createUser?.authenticationToken,
           };
+        },
+        async createTestVolunteer({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          const resolvedApiUrl = resolveApiUrl(
+            apiUrl || (config.env.apiUrl as string | undefined),
+          );
+          const response = await postGraphQL<{
+            createEventVolunteer?: { id?: string };
+          }>(resolvedApiUrl, token, {
+            operationName: 'CreateEventVolunteer',
+            query: CREATE_VOLUNTEER_MUTATION,
+            variables: { data: input },
+          });
+          if (response.errors?.length) {
+            throw new Error(
+              `CreateEventVolunteer failed: ${response.errors
+                .map((error) => error.message)
+                .join(', ')}`,
+            );
+          }
+          const volunteerId = response.data?.createEventVolunteer?.id;
+          if (!volunteerId) {
+            throw new Error('CreateEventVolunteer response missing id.');
+          }
+          return { volunteerId };
+        },
+        async createTestPost({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          const resolvedApiUrl = resolveApiUrl(
+            apiUrl || (config.env.apiUrl as string | undefined),
+          );
+          const response = await postGraphQL<{
+            createPost?: { id?: string };
+          }>(resolvedApiUrl, token, {
+            operationName: 'CreatePost',
+            query: CREATE_POST_MUTATION,
+            variables: { input },
+          });
+          if (response.errors?.length) {
+            throw new Error(
+              `CreatePost failed: ${response.errors
+                .map((error) => error.message)
+                .join(', ')}`,
+            );
+          }
+          const postId = response.data?.createPost?.id;
+          if (!postId) {
+            throw new Error('CreatePost response missing id.');
+          }
+          return { postId };
         },
         async deleteTestOrganization({
           apiUrl,
