@@ -45,9 +45,9 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
 
 const { setItem } = useLocalStorage();
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
-const link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
+let link1: StaticMockLink;
+let link2: StaticMockLink;
+let link3: StaticMockLink;
 
 const cTranslations = JSON.parse(
   JSON.stringify(
@@ -84,6 +84,9 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
 describe('Testing User Campaigns Screen', () => {
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
+    link1 = new StaticMockLink(MOCKS);
+    link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
+    link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
     user = userEvent.setup();
     setItem('userId', 'userId');
   });
@@ -101,6 +104,7 @@ describe('Testing User Campaigns Screen', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render the User Campaigns screen', async () => {

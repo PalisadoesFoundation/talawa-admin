@@ -1,6 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { vi, describe, test, expect } from 'vitest';
@@ -9,7 +10,12 @@ import OrgContribution from './OrgContribution';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-const link = new StaticMockLink([], true);
+let link: StaticMockLink;
+
+beforeEach(() => {
+  link = new StaticMockLink([], true);
+});
+
 async function wait(ms = 100): Promise<void> {
   await new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -37,6 +43,8 @@ describe('Organisation Contribution Page', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
   });
 
   test('should render props and text elements test for the screen', async () => {
@@ -70,15 +78,16 @@ describe('Organisation Contribution Page', () => {
     expect(screen.getByText('johndoexyz@gmail.com')).toBeInTheDocument();
   });
 
-  test('updates org name and transaction filter when typing in search', () => {
+  test('updates org name and transaction filter when typing in search', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     const orgInput = screen.getByTestId('filterOrgName');
-    fireEvent.input(orgInput, { target: { value: 'Test Org' } });
-    fireEvent.keyDown(orgInput, { key: 'Enter' });
+    await user.type(orgInput, 'Test Org');
+    await user.keyboard('{Enter}');
     const txnInput = screen.getByTestId('filterTransaction');
-    fireEvent.input(txnInput, { target: { value: 'TXN123' } });
-    fireEvent.keyDown(txnInput, { key: 'Enter' });
+    await user.type(txnInput, 'TXN123');
+    await user.keyboard('{Enter}');
     expect(orgInput).toHaveValue('Test Org');
     expect(txnInput).toHaveValue('TXN123');
   });

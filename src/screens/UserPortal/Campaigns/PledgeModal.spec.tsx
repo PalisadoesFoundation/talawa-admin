@@ -88,6 +88,7 @@ afterEach(() => {
   localStorageMock.clear();
 
   vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 const pledgeProps: InterfacePledgeModal[] = [
@@ -281,7 +282,7 @@ const PLEDGE_MODAL_MOCKS = [
   }),
 ];
 
-const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
+let link1: StaticMockLink;
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
@@ -318,6 +319,10 @@ describe('PledgeModal', () => {
         useNavigate: vi.fn(),
       };
     });
+  });
+
+  beforeEach(() => {
+    link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
   });
 
   afterAll(() => {

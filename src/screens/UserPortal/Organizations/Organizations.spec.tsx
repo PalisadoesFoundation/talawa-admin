@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { act } from 'react-dom/test-utils';
 import { expect, vi } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
@@ -447,9 +446,9 @@ const ERROR_MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
-const emptyLink = new StaticMockLink(EMPTY_MOCKS, true);
-const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+let link: StaticMockLink;
+let emptyLink: StaticMockLink;
+let errorLink: StaticMockLink;
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -460,6 +459,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
+  link = new StaticMockLink(MOCKS, true);
+  emptyLink = new StaticMockLink(EMPTY_MOCKS, true);
+  errorLink = new StaticMockLink(ERROR_MOCKS, true);
   const { setItem: setItemLocal, clearAllItems: clearAllItemsLocal } =
     useLocalStorage();
   setItem = setItemLocal;
@@ -471,7 +473,9 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
+  vi.restoreAllMocks();
   clearAllItems();
+  cleanup();
 });
 
 test('Screen should be rendered properly', async () => {
@@ -1306,16 +1310,20 @@ test('should reset page when changing rows per page', async () => {
 });
 
 describe('Email Verification Warning', () => {
-  const emailLink = new StaticMockLink(
-    [
-      COMMUNITY_TIMEOUT_MOCK,
-      CURRENT_USER_UNVERIFIED_MOCK,
-      RESEND_SUCCESS_MOCK,
-      RESEND_FAILURE_MOCK,
-      ORGANIZATION_FILTER_LIST_MOCK,
-    ],
-    true,
-  );
+  let emailLink: StaticMockLink;
+
+  beforeEach(() => {
+    emailLink = new StaticMockLink(
+      [
+        COMMUNITY_TIMEOUT_MOCK,
+        CURRENT_USER_UNVERIFIED_MOCK,
+        RESEND_SUCCESS_MOCK,
+        RESEND_FAILURE_MOCK,
+        ORGANIZATION_FILTER_LIST_MOCK,
+      ],
+      true,
+    );
+  });
 
   test('should display email verification warning when user is not verified', async () => {
     render(
