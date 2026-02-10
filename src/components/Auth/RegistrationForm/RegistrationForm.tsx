@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
-import ReCAPTCHA from 'react-google-recaptcha';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import { getRecaptchaToken } from 'utils/recaptcha';
 import Button from 'shared-components/Button';
 import { FormField } from '../../../shared-components/Auth/FormField/FormField';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
@@ -45,13 +45,9 @@ export const RegistrationForm = ({
     password: '',
     confirmPassword: '',
   });
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const { register, loading } = useRegistration({
     onSuccess,
     onError: (err) => {
-      recaptchaRef.current?.reset();
-      setRecaptchaToken(null);
       onError?.(err);
     },
   });
@@ -91,6 +87,12 @@ export const RegistrationForm = ({
     ) {
       return;
     }
+
+    // Get reCAPTCHA token dynamically
+    const recaptchaToken =
+      enableRecaptcha && RECAPTCHA_SITE_KEY
+        ? await getRecaptchaToken(RECAPTCHA_SITE_KEY, 'signup')
+        : null;
 
     await register({
       name: formData.name,
@@ -146,22 +148,9 @@ export const RegistrationForm = ({
         onChange={(orgId) => setFormData((s) => ({ ...s, orgId }))}
         testId="selectOrg"
       />
-      {enableRecaptcha && RECAPTCHA_SITE_KEY && (
-        <div data-testid="recaptcha-placeholder">
-          <ReCAPTCHA
-            ref={recaptchaRef}
-            sitekey={RECAPTCHA_SITE_KEY}
-            onChange={(token): void => setRecaptchaToken(token)}
-            onExpired={(): void => setRecaptchaToken(null)}
-          />
-        </div>
-      )}
       <Button
         type="submit"
-        disabled={
-          loading ||
-          (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken)
-        }
+        disabled={loading}
         data-testid="registrationBtn"
         className={styles.submitBtn}
       >
