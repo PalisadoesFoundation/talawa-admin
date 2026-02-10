@@ -191,6 +191,21 @@ export default defineConfig({
     env: {
       apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
       RECAPTCHA_SITE_KEY: process.env.REACT_APP_RECAPTCHA_SITE_KEY,
+      E2E_ADMIN_EMAIL:
+        process.env.E2E_ADMIN_EMAIL || process.env.CYPRESS_E2E_ADMIN_EMAIL,
+      E2E_ADMIN_PASSWORD:
+        process.env.E2E_ADMIN_PASSWORD ||
+        process.env.CYPRESS_E2E_ADMIN_PASSWORD,
+      E2E_SUPERADMIN_EMAIL:
+        process.env.E2E_SUPERADMIN_EMAIL ||
+        process.env.CYPRESS_E2E_SUPERADMIN_EMAIL,
+      E2E_SUPERADMIN_PASSWORD:
+        process.env.E2E_SUPERADMIN_PASSWORD ||
+        process.env.CYPRESS_E2E_SUPERADMIN_PASSWORD,
+      E2E_USER_EMAIL:
+        process.env.E2E_USER_EMAIL || process.env.CYPRESS_E2E_USER_EMAIL,
+      E2E_USER_PASSWORD:
+        process.env.E2E_USER_PASSWORD || process.env.CYPRESS_E2E_USER_PASSWORD,
     },
     setupNodeEvents(on, config) {
       codeCoverageTask(on, config);

@@ -1,10 +1,10 @@
 import { AdvertisementPage } from '../../pageObjects/AdminPortal/AdvertisementPage';
-import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 
 interface InterfaceAdvertisementData {
   ad1: {
     name: string;
     description: string;
+    mediaPath: string;
     type: string;
   };
   ad2: {
@@ -13,7 +13,6 @@ interface InterfaceAdvertisementData {
 }
 
 describe('Testing Admin Advertisement Management', () => {
-  const dashboard = new AdminDashboardPage();
   const adPage = new AdvertisementPage();
   let adData: InterfaceAdvertisementData;
 
@@ -24,6 +23,7 @@ describe('Testing Admin Advertisement Management', () => {
         ad1: {
           name: ad1?.name ?? 'Advertisement 1',
           description: ad1?.description ?? 'This is a test advertisement',
+          mediaPath: 'cypress/fixtures/advertisement_banner.png',
           type: ad1?.type ?? 'Popup Ad',
         },
         ad2: {
@@ -35,7 +35,32 @@ describe('Testing Admin Advertisement Management', () => {
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard.visit().verifyOnDashboard().openFirstOrganization();
+    cy.intercept('POST', '**/graphql', (req) => {
+      if (req.body?.operationName === 'GetAllPlugins') {
+        req.reply({
+          data: {
+            getPlugins: [
+              {
+                id: 'advertisement-plugin',
+                pluginId: 'advertisement',
+                isActivated: true,
+                isInstalled: true,
+                backup: false,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                __typename: 'Plugin',
+              },
+            ],
+          },
+        });
+        return;
+      }
+      req.continue();
+    }).as('getPlugins');
+    cy.window().then((win) => {
+      const token = win.localStorage.getItem('Talawa-admin_token');
+      expect(token, 'User should be authenticated').to.exist;
+    });
     adPage.visitAdvertisementPage();
   });
 
@@ -43,6 +68,7 @@ describe('Testing Admin Advertisement Management', () => {
     adPage.createAdvertisement(
       adData.ad1.name,
       adData.ad1.description,
+      adData.ad1.mediaPath,
       adData.ad1.type,
     );
   });
