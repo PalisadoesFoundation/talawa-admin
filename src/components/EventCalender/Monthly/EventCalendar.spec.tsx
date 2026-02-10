@@ -447,12 +447,12 @@ describe('Calendar', () => {
     const event5 = screen.queryByText('Event 5');
     expect(event5).toBeNull();
 
-    const viewLessButtons = screen.getAllByText('View less');
+    const viewLessButtons = screen.getAllByText('View Less');
     expect(viewLessButtons.length).toBeGreaterThan(0);
 
-    // Simulate clicking "View less" to collapse the list
+    // Simulate clicking "View Less" to collapse the list
     await userEvent.click(viewLessButtons[0]);
-    const viewAllButtons = screen.getAllByText('View all');
+    const viewAllButtons = screen.getAllByText('View All');
     expect(viewAllButtons.length).toBeGreaterThan(0);
 
     // Reset the window size to avoid side effects for other tests
@@ -976,10 +976,10 @@ describe('Calendar', () => {
       const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
-      // Check that "View all" button exists, indicating multiple events are available
+      // Check that "View All" button exists, indicating multiple events are available
       const viewAllButton = screen.queryByTestId('more');
       expect(viewAllButton).toBeInTheDocument();
-      expect(viewAllButton).toHaveTextContent('View all');
+      expect(viewAllButton).toHaveTextContent('View All');
     });
 
     it('should filter events for regular users who are organization members', async () => {
@@ -1640,9 +1640,9 @@ describe('Calendar', () => {
 
       // This test verifies the filtering logic works by checking that:
       // 1. Events are processed (day has events class)
-      // 2. Multiple events are available (View all button exists)
+      // 2. Multiple events are available (View All button exists)
       // 3. The filtering allows both public and private events for org members
-      expect(viewAllButton).toHaveTextContent('View all');
+      expect(viewAllButton).toHaveTextContent('View All');
     });
     it('should show invite-only events only to creator and admins', async () => {
       const today = dayjs();
@@ -1905,15 +1905,15 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      const viewAllBtn = await screen.findByText('View all');
+      const viewAllBtn = await screen.findByText('View All');
       expect(viewAllBtn).toBeInTheDocument();
 
       await userEvent.click(viewAllBtn);
-      const viewLessBtn = await screen.findByText('View less');
+      const viewLessBtn = await screen.findByText('View Less');
       expect(viewLessBtn).toBeInTheDocument();
 
       await userEvent.click(viewLessBtn);
-      const viewAllBtnAgain = await screen.findByText('View all');
+      const viewAllBtnAgain = await screen.findByText('View All');
       expect(viewAllBtnAgain).toBeInTheDocument();
     });
 
