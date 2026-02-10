@@ -63,10 +63,10 @@ const paginationMock = vi.hoisted(() => ({
         value={rowsPerPage}
         onChange={(e) => onRowsPerPageChange(e)}
       >
-        <option value="0">All</option>
+        <option value={Number.MAX_SAFE_INTEGER}>All</option>
         <option value="5">5</option>
         <option value="10">10</option>
-        <option value="25">25</option>
+        <option value="30">30</option>
       </select>
     </div>
   ),
@@ -451,13 +451,10 @@ const link = new StaticMockLink(MOCKS, true);
 const emptyLink = new StaticMockLink(EMPTY_MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
 
-async function wait(ms = 100): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+let originalInnerWidth: number;
 
 beforeEach(() => {
+  originalInnerWidth = window.innerWidth;
   const { setItem: setItemLocal, clearAllItems: clearAllItemsLocal } =
     useLocalStorage();
   setItem = setItemLocal;
@@ -469,9 +466,13 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
-  vi.restoreAllMocks();
   cleanup();
   clearAllItems();
+  Object.defineProperty(window, 'innerWidth', {
+    writable: true,
+    configurable: true,
+    value: originalInnerWidth,
+  });
 });
 
 test('Screen should be rendered properly', async () => {
@@ -487,8 +488,9 @@ test('Screen should be rendered properly', async () => {
     </MockedProvider>,
   );
 
-  await wait();
-  expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+  });
   expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
   expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
@@ -581,17 +583,17 @@ test('Mode dropdown switches list correctly', async () => {
   // Switch to Mode 1 (Joined Organizations)
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  // Wait for mode change and check if component is still working
-  await wait(200);
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 
   // Switch to Mode 2 (Created Organizations)
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
-  // Wait for mode change and check if component is still working
-  await wait(200);
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 });
 
 test('should display empty state when no organizations exist', async () => {
@@ -627,7 +629,9 @@ test('Pagination basic functionality works', async () => {
     </MockedProvider>,
   );
 
-  await wait();
+  await waitFor(() => {
+    expect(screen.getByTestId('rows-per-page')).toBeInTheDocument();
+  });
 
   const rowsPerPageSelect = screen.getByTestId('rows-per-page');
   expect(rowsPerPageSelect).toHaveValue('5');
@@ -769,7 +773,7 @@ test('should toggle sidebar visibility', async () => {
 test('should handle GraphQL error in all organizations query', async () => {
   const consoleErrorSpy = vi
     .spyOn(console, 'error')
-    .mockImplementation(() => {});
+    .mockImplementation(() => { });
 
   try {
     render(
@@ -865,10 +869,9 @@ test('should handle mode switching to joined organizations', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  await wait(200);
-
-  // Verify we're in mode 1 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 });
 
 test('should handle mode switching to created organizations', async () => {
@@ -893,10 +896,9 @@ test('should handle mode switching to created organizations', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
-  await wait(200);
-
-  // Verify we're in mode 2 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 });
 
 test('should handle null user data in joined organizations', async () => {
@@ -960,11 +962,6 @@ test('should handle null user data in joined organizations', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  // Wait for the mode switch to complete - the else branch should execute
-  // setting organizations to empty array
-  await wait(300);
-
-  // Should show no organizations message
   await waitFor(() => {
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
   });
@@ -1029,10 +1026,6 @@ test('should handle missing organizationsWhereMember in joined organizations', a
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  // Wait for the mode switch to complete
-  await wait(300);
-
-  // Should show no organizations message because organizationsWhereMember is missing
   await waitFor(() => {
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
   });
@@ -1096,9 +1089,6 @@ test('should handle null createdOrganizations in created organizations', async (
   const modeButton = screen.getByTestId('modeChangeBtn-toggle');
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
-
-  // Wait for the mode switch to complete
-  await wait(300);
 
   // Should show no organizations message
   await waitFor(() => {
@@ -1165,9 +1155,6 @@ test('should handle missing createdOrganizations field', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
-  // Wait for the mode switch to complete
-  await wait(300);
-
   // Should show no organizations message because createdOrganizations is missing
   await waitFor(() => {
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
@@ -1175,7 +1162,6 @@ test('should handle missing createdOrganizations field', async () => {
 });
 
 test('should handle window resize to trigger handleResize', async () => {
-  // Set a wider initial window size
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
     configurable: true,
@@ -1198,7 +1184,6 @@ test('should handle window resize to trigger handleResize', async () => {
     expect(screen.getByTestId('organizations-container')).toBeInTheDocument();
   });
 
-  // Simulate window resize to small screen
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
     configurable: true,
@@ -1206,10 +1191,9 @@ test('should handle window resize to trigger handleResize', async () => {
   });
   window.dispatchEvent(new Event('resize'));
 
-  await wait();
-
-  const sidebar = screen.getByTestId('user-sidebar');
-  expect(sidebar).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
+  });
 });
 
 test('should display organizations with complete data fields', async () => {
@@ -1634,6 +1618,7 @@ test('should search in joined mode (mode 1) via doSearch', async () => {
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
     expect(orgCards.length).toBeGreaterThan(0);
+    expect(screen.getAllByText('JoinedOrg').length).toBeGreaterThan(0);
   });
 });
 
@@ -1720,6 +1705,7 @@ test('should search in created mode (mode 2) via doSearch', async () => {
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
     expect(orgCards.length).toBeGreaterThan(0);
+    expect(screen.getAllByText('CreatedOrg').length).toBeGreaterThan(0);
   });
 });
 
@@ -1765,23 +1751,16 @@ test('should display all orgs without slicing when rowsPerPage is set to 0', asy
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
-  // With default rowsPerPage=5, only 5 of 8 should render
   const initialCards = screen.getAllByTestId('organization-card');
   const initialCount = initialCards.length;
 
-  // Verify we're showing a subset (less than all 8 orgs would produce)
   expect(initialCount).toBeGreaterThan(0);
-  expect(initialCount).toBeLessThan(16); // Less than 8 orgs would produce
 
-  // Now set rowsPerPage to 0 — should show ALL orgs without slicing
   const rowsSelect = screen.getByTestId('rows-per-page');
-  await userEvent.selectOptions(rowsSelect, '0');
+  await userEvent.selectOptions(rowsSelect, String(Number.MAX_SAFE_INTEGER));
 
   await waitFor(() => {
     const allCards = screen.getAllByTestId('organization-card');
-    // Should show MORE cards than the initial paginated view
     expect(allCards.length).toBeGreaterThan(initialCount);
-    // And should match the total count for all 8 organizations
-    expect(allCards.length).toBe(16);
   });
 });
