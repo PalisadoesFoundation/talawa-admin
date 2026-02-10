@@ -1,3 +1,7 @@
+.displayHidden {
+  visibility: hidden;
+}
+
 .btnsContainer {
   display: flex;
   margin: var(--space-9) 0;

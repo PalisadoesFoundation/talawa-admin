@@ -281,19 +281,25 @@ const BlockUser = (): JSX.Element => {
             {t('unblock')}
           </Button>
         ) : (
-          <Button
-            variant="success"
-            size="sm"
-            className={styles.removeButton}
-            onClick={async (): Promise<void> => {
-              await handleBlockUser(user);
-            }}
-            data-testid={`blockUser${user.id}`}
-            aria-label={t('block') + ': ' + user.name}
+          <div
+            className={
+              user.role === 'administrator' ? styles.displayHidden : ''
+            }
           >
-            <FontAwesomeIcon icon={faBan} className={styles.banIcon} />
-            {t('block')}
-          </Button>
+            <Button
+              variant="success"
+              size="sm"
+              className={styles.removeButton}
+              onClick={async (): Promise<void> => {
+                await handleBlockUser(user);
+              }}
+              data-testid={`blockUser${user.id}`}
+              aria-label={t('block') + ': ' + user.name}
+            >
+              <FontAwesomeIcon icon={faBan} className={styles.banIcon} />
+              {t('block')}
+            </Button>
+          </div>
         );
       },
     },
