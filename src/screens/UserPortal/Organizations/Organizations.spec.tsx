@@ -584,7 +584,7 @@ test('Mode dropdown switches list correctly', async () => {
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
   // Switch to Mode 2 (Created Organizations)
@@ -592,7 +592,7 @@ test('Mode dropdown switches list correctly', async () => {
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 });
 
@@ -870,7 +870,7 @@ test('should handle mode switching to joined organizations', async () => {
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 });
 
@@ -897,7 +897,7 @@ test('should handle mode switching to created organizations', async () => {
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 });
 
@@ -1192,7 +1192,9 @@ test('should handle window resize to trigger handleResize', async () => {
   window.dispatchEvent(new Event('resize'));
 
   await waitFor(() => {
-    expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
+    const sidebar = screen.getByTestId('user-sidebar');
+    expect(sidebar).toBeInTheDocument();
+    expect(sidebar.getAttribute('data-hide-drawer')).toBe('true');
   });
 });
 
@@ -1293,7 +1295,6 @@ describe('Email Verification Warning', () => {
       COMMUNITY_TIMEOUT_MOCK,
       CURRENT_USER_UNVERIFIED_MOCK,
       RESEND_SUCCESS_MOCK,
-      RESEND_FAILURE_MOCK,
       ORGANIZATION_FILTER_LIST_MOCK,
     ],
     true,
