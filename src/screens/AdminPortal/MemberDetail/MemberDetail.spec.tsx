@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MemberDetail from './MemberDetail';
 import { ReactNode } from 'react';
@@ -12,7 +12,7 @@ const mockUseParams = vi.fn((): { userId?: string } => ({
 }));
 
 const mockGetItem = vi.fn().mockReturnValue(null);
-
+// Explicit null default for clarity
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
     getItem: mockGetItem,
@@ -85,7 +85,8 @@ vi.mock(
 
 describe('MemberDetail', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
     mockGetItem.mockReturnValue(null);
   });
 
