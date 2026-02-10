@@ -83,12 +83,16 @@ export class ActionItemPage {
     return this;
   }
 
-  createActionItemWithVolunteer(category: string) {
+  createActionItemWithVolunteer(category: string, volunteerName?: string) {
     cy.get(this.createActionItemBtn).should('be.visible').click();
     cy.get(this.categorySelect).should('be.visible').click();
     cy.get('ul[role="listbox"] li').contains(category).click();
     cy.get(this.volunteerSelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').first().click();
+    if (volunteerName) {
+      cy.get('ul[role="listbox"] li').contains(volunteerName).click();
+    } else {
+      cy.get('ul[role="listbox"] li').first().click();
+    }
     cy.get(this.submitBtn).should('be.visible').click();
     cy.assertToast('Action Item created successfully');
     return this;

@@ -145,6 +145,15 @@ const CREATE_POST_MUTATION = `
   }
 `;
 
+const CREATE_ACTION_ITEM_CATEGORY_MUTATION = `
+  mutation CreateActionItemCategory($input: MutationCreateActionItemCategoryInput!) {
+    createActionItemCategory(input: $input) {
+      id
+      name
+    }
+  }
+`;
+
 const DELETE_ORGANIZATION_MUTATION = `
   mutation DeleteOrganization($input: MutationDeleteOrganizationInput!) {
     deleteOrganization(input: $input) {
@@ -487,6 +496,38 @@ export default defineConfig({
                 throw new Error('CreatePost response missing id.');
               }
               return { postId };
+            },
+          });
+        },
+        async createTestActionItemCategory({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createActionItemCategory?: { id?: string; name?: string } },
+            { categoryId: string; name?: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateActionItemCategory',
+            query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+            variables: { input },
+            extract: (data) => {
+              const categoryId = data?.createActionItemCategory?.id;
+              if (!categoryId) {
+                throw new Error(
+                  'CreateActionItemCategory response missing category id.',
+                );
+              }
+              return {
+                categoryId,
+                name: data?.createActionItemCategory?.name,
+              };
             },
           });
         },
