@@ -1,11 +1,13 @@
 .postCardContainer {
   width: 340px;
-  height: 380px;
+  border-radius: 8px;
+  height: 390px;
 }
 
 .card {
   width: 340px;
-  border-radius: 2px;
+  height: 390px;
+  border: 1px solid #ddd;
   overflow: hidden;
 }
 
@@ -27,25 +29,24 @@
 }
 
 .postMedia {
-  height: 195px;
+  height: 175px;
   width: 100%;
 }
 
 .cardContent {
-  height: 136px;
+  height: 165px;
 }
 
-/* Scoped button styles with parent class for proper specificity */
-.postCardContainer .viewPostButton {
+.viewPostButton {
   background-color: #a8c7fa;
   color: black;
   text-transform: none;
-  border-radius: 8px;
-  padding: 8px 24px;
+  border-radius: 6px;
+  padding: 6px 16px;
   font-size: 0.9rem;
   font-weight: 500;
 }
 
-.postCardContainer .viewPostButton:hover {
-  background-color: #8bb5e8;
+.viewPostButton:hover {
+  background-color: #8bb5e8 !important;
 }

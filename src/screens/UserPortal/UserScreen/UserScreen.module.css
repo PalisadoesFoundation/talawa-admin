@@ -60,10 +60,10 @@
 }
 
 .titleContainer h1 {
-  font-size: var(--font-size-28);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-500);
-  margin-top: var(--space-2);
+  font-size: 40px;
+  font-weight: 500;
+  color: black;
+  margin-top: 2rem;
 }
 
 .drawer {

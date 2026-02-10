@@ -45,6 +45,8 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number | null>(null);
+  const isPausedRef = useRef(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -70,6 +72,13 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
 
   useEffect(() => {
     checkScrollability();
+    startAutoScroll();
+  }, [pinnedPosts]);
+
+  useEffect(() => {
+    startAutoScroll();
+
+    return () => stopAutoScroll();
   }, [pinnedPosts]);
 
   const scrollLeft = () => {
@@ -90,8 +99,52 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
     });
   };
 
+  const startAutoScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    if (animationRef.current) return; // prevent multiple loops
+
+    const speed = 1;
+
+    const step = () => {
+      if (!container || isPausedRef.current) return;
+
+      container.scrollLeft += speed;
+
+      const maxScroll = container.scrollWidth / 2;
+
+      if (container.scrollLeft >= maxScroll) {
+        container.scrollLeft -= maxScroll;
+      }
+      animationRef.current = requestAnimationFrame(step);
+    };
+
+    animationRef.current = requestAnimationFrame(step);
+  };
+
+  const stopAutoScroll = () => {
+    isPausedRef.current = true;
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+  };
+
+  const resumeAutoScroll = () => {
+    isPausedRef.current = false;
+    startAutoScroll();
+  };
+
+  const allPosts = [...pinnedPosts, ...pinnedPosts];
+
   return (
-    <div className={styles.carouselWrapper} data-testid="pinned-posts-layout">
+    <div
+      className={styles.carouselWrapper}
+      data-testid="pinned-posts-layout"
+      onMouseEnter={stopAutoScroll}
+      onMouseLeave={resumeAutoScroll}
+    >
       {canScrollLeft && (
         <button
           type="button"
@@ -109,7 +162,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
         className={styles.scrollContainer}
         data-testid="scroll-container"
       >
-        {pinnedPosts
+        {allPosts
           .filter(
             (
               pinnedPost,

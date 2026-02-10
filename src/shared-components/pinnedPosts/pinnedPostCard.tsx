@@ -39,7 +39,6 @@ import {
   Avatar,
   Box,
   IconButton,
-  Container,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -131,7 +130,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   };
 
   return (
-    <Container className={styles.postCardContainer}>
+    <Box className={styles.postCardContainer}>
       <Card className={styles.card}>
         {/* Header with user info and actions */}
         <Box
@@ -140,8 +139,8 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            p: 2,
-            pb: 1,
+            p: 1,
+            borderRadius: 8,
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -151,14 +150,14 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             >
               {pinnedPost.node?.creator?.name?.[0]}
             </Avatar>
-            <Typography className={styles.creatorName}>
+            <Typography sx={{ fontSize: 14, fontWeight: 300 }}>
               {pinnedPost.node?.creator?.name}
             </Typography>
           </Box>
 
           <Box sx={{ display: 'flex', gap: 0.5 }}>
             <IconButton size="small" aria-label={t('pinnedPost')}>
-              <PushPin className={styles.pushPin} />
+              <PushPin fontSize="small" />
             </IconButton>
             {canManage && (
               <>
@@ -261,7 +260,10 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
         )}
 
         {/* Post Content */}
-        <CardContent className={styles.cardContent}>
+        <CardContent
+          className={styles.cardContent}
+          sx={{ position: 'relative' }}
+        >
           <Typography
             sx={{
               fontWeight: 500,
@@ -279,14 +281,35 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
           <Typography
             color="text.secondary"
             sx={{
-              mb: 1,
               fontSize: '12px',
+              fontWeight: '400',
             }}
           >
             {t('postedOn', { date: formatDate(pinnedPost.node.createdAt) })}
           </Typography>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Typography
+            color="text.secondary"
+            sx={{
+              fontSize: '14px',
+              fontWeight: '400',
+            }}
+          >
+            {pinnedPost.node.body &&
+              (pinnedPost.node.body.length > 100
+                ? pinnedPost.node.body?.substring(0, 100) + '...'
+                : pinnedPost.node.body)}
+          </Typography>
+
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: '1rem',
+              right: '1rem',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            }}
+          >
             <Button
               variant="contained"
               icon={<Visibility />}
@@ -300,7 +323,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
           </Box>
         </CardContent>
       </Card>
-    </Container>
+    </Box>
   );
 };
 

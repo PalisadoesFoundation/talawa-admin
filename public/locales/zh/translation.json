@@ -1479,6 +1479,7 @@
   },
   "posts": {
     "pinnedPosts": "置顶帖子",
+    "yourFeed": "您的动态",
     "errorLoadingPreviewPost": "加载预览帖子时出错。请重试。",
     "title": "帖子",
     "latest": "最新",
@@ -1497,6 +1498,11 @@
     "errorLoadingPosts": "加载帖子时出错。请重试。",
     "loadMorePostsError": "加载更多帖子时出错。请重试。",
     "sortPost": "排序帖子"
+  },
+  "createPostContainer": {
+    "startAPost": "发帖",
+    "startYourPost": "开始你的帖子",
+    "browseFiles": "浏览文件"
   },
   "home": {
     "title": "帖子",

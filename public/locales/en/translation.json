@@ -1523,6 +1523,7 @@
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",
+    "yourFeed": "Your Feed",
     "errorLoadingPreviewPost": "Error loading preview post",
     "title": "Posts",
     "latest": "Latest",
@@ -1541,6 +1542,11 @@
     "errorLoadingPosts": "Error loading posts",
     "loadMorePostsError": "Error loading more posts",
     "sortPost": "Sort Post"
+  },
+  "createPostContainer": {
+    "startAPost": "Start a Post",
+    "startYourPost": "Start Your Post",
+    "browseFiles": "Browse Files"
   },
   "home": {
     "posts": "Posts",

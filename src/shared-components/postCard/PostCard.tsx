@@ -12,9 +12,9 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
+import Button from 'shared-components/Button';
 import {
   IconButton,
-  Button,
   Input,
   InputAdornment,
   Box,
@@ -211,9 +211,31 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             imageUrl={props.creator.avatarURL || UserDefault}
             enableEnlarge
           />
-          <Typography variant="subtitle2" fontWeight="bold">
+          <Typography
+            sx={{
+              fontSize: '14px',
+              fontWeight: '500',
+            }}
+          >
             {props.creator.name}
+          </Typography>{' '}
+          <Typography
+            color="text.secondary"
+            sx={{
+              fontSize: '12px',
+              fontWeight: '400',
+            }}
+          >
+            {t('postedOn', props.postedAt)}
           </Typography>
+          {isPinned && (
+            <PushPinOutlined
+              fontSize="small"
+              color="primary"
+              data-testid="pinned-icon"
+              className={postCardStyles.pinnedIcon}
+            />
+          )}
         </Box>
         <>
           <IconButton
@@ -338,12 +360,26 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       {/* Post Content */}
       <Box className={postCardStyles.postContent}>
-        <Typography className={postCardStyles.caption}>
+        <Typography
+          className={postCardStyles.caption}
+          sx={{
+            margin: '8px 0 8px 0',
+            fontSize: '18px',
+            fontWeight: '600',
+          }}
+        >
           {props.title}
         </Typography>
         {postCardStyles.body && (
           <Box className={postCardStyles.bodyContainer}>
-            <Typography variant="body2" className={`${postCardStyles.body}`}>
+            <Typography
+              variant="body2"
+              className={`${postCardStyles.body}`}
+              sx={{
+                fontSize: '14px',
+                fontWeight: '300',
+              }}
+            >
               {props.body}
             </Typography>
           </Box>
@@ -370,62 +406,107 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           },
         }) as React.ReactNode
       }
-      {/* Post Actions */}
-      <Box className={postCardStyles.postActions}>
-        <Box className={postCardStyles.leftActions}>
-          <IconButton
-            onClick={handleToggleLike}
-            size="small"
-            data-testid="like-btn"
-            aria-label={
-              isLikedByUser ? t('postCard.unlike') : t('postCard.like')
-            }
-          >
-            {likeLoading ? (
-              <CircularProgress size={20} />
-            ) : isLikedByUser ? (
-              <Favorite color="error" fontSize="small" data-testid="liked" />
-            ) : (
-              <Favorite fontSize="small" data-testid="unliked" />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={toggleComments}
-            size="small"
-            aria-label={
-              showComments
-                ? t('postCard.hideComments')
-                : t('postCard.viewComments')
-            }
-          >
-            <ChatBubbleOutline fontSize="small" />
-          </IconButton>
-          <IconButton
-            size="small"
-            aria-label={t('postCard.share')}
-            onClick={copyToClipboard}
-            data-testid="share-post-quick-button"
-          >
-            <Share fontSize="small" />
-          </IconButton>
-        </Box>
-        {isPinned && (
-          <PushPinOutlined
-            fontSize="small"
-            color="primary"
-            data-testid="pinned-icon"
-            className={postCardStyles.pinnedIcon}
-          />
-        )}
-      </Box>
-      <Box className={postCardStyles.likesCount}>
+
+      <Box
+        className={postCardStyles.likesCount}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
         <Typography
-          variant="subtitle2"
+          variant="subtitle1"
           fontWeight="bold"
           data-testid="like-count"
         >
           {likeCount} {t('postCard.likes')}
         </Typography>
+        {/* View/Hide Comments Button */}
+        {commentCount > 0 && (
+          <Button
+            className={postCardStyles.viewHideCommentsButton}
+            onClick={toggleComments}
+            data-testid="comment-card"
+            size="sm"
+          >
+            {showComments
+              ? t('postCard.hideComments')
+              : t('postCard.viewComments', { count: commentCount })}
+          </Button>
+        )}
+      </Box>
+
+      <Divider variant="fullWidth" sx={{ color: 'black' }}></Divider>
+
+      {/* Post Actions */}
+      <Box className={postCardStyles.postActions}>
+        <Box className={postCardStyles.leftActions}>
+          <Box onClick={handleToggleLike} className={postCardStyles.action}>
+            <IconButton
+              sx={{ padding: 0 }}
+              size="medium"
+              data-testid="like-btn"
+              aria-label={
+                isLikedByUser ? t('postCard.unlike') : t('postCard.like')
+              }
+            >
+              {likeLoading ? (
+                <CircularProgress size={20} />
+              ) : isLikedByUser ? (
+                <Favorite color="error" fontSize="small" data-testid="liked" />
+              ) : (
+                <Favorite fontSize="small" data-testid="unliked" />
+              )}
+            </IconButton>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              sx={{ color: 'rgb(117 117 117)' }}
+            >
+              Like
+            </Typography>
+          </Box>
+
+          <Box className={postCardStyles.action} onClick={toggleComments}>
+            <IconButton
+              sx={{ padding: 0 }}
+              size="medium"
+              aria-label={
+                showComments
+                  ? t('postCard.hideComments')
+                  : t('postCard.viewComments')
+              }
+            >
+              <ChatBubbleOutline fontSize="small" />
+            </IconButton>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              sx={{ color: 'rgb(117 117 117)' }}
+            >
+              Comment
+            </Typography>
+          </Box>
+
+          <Box className={postCardStyles.action} onClick={copyToClipboard}>
+            <IconButton
+              sx={{ padding: 0 }}
+              size="medium"
+              aria-label={t('postCard.share')}
+              data-testid="share-post-quick-button"
+            >
+              <Share fontSize="small" />
+            </IconButton>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              sx={{ color: 'rgb(117 117 117)' }}
+            >
+              Share
+            </Typography>
+          </Box>
+        </Box>
       </Box>
 
       {/* Comments Section */}
@@ -464,34 +545,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         </>
       )}
 
-      {/* View/Hide Comments Button */}
-      {commentCount > 0 && (
-        <Button
-          onClick={toggleComments}
-          data-testid="comment-card"
-          size="small"
-          sx={{
-            color: 'text.secondary',
-            fontSize: '0.75rem',
-            ml: 2,
-            mb: 1,
-            textTransform: 'none',
-          }}
-        >
-          {showComments
-            ? t('postCard.hideComments')
-            : t('postCard.viewComments', { count: commentCount })}
-        </Button>
-      )}
-
-      {/* Post Time */}
-      <Typography
-        className={postCardStyles.timeText}
-        sx={{ color: 'text.secondary' }}
-      >
-        {props.postedAt}
-      </Typography>
-
       {/* Add Comment */}
       <div className={postCardStyles.commentFormContainer}>
         <Box className={postCardStyles.commentForm}>
@@ -522,7 +575,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               backgroundColor: 'action.hover',
               borderRadius: 20,
               px: 2,
-              py: 0.5,
+              py: 1,
             }}
           />
         </Box>

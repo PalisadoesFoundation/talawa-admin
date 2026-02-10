@@ -1,6 +1,6 @@
 export class PostsPage {
   private readonly _postsTabButton = '[data-cy="leftDrawerButton-Posts"]';
-  private readonly _createPostButton = '[data-cy="createPostModalBtn"]';
+  private readonly _createPostInput = '[data-cy="createPostInput"]';
   private readonly _postTitleInput = '[data-cy="modalTitle"]';
   private readonly _postDescriptionInput =
     '[data-cy="create-post-description"]';
@@ -19,7 +19,7 @@ export class PostsPage {
   }
 
   createPost(title: string, description: string) {
-    cy.get(this._createPostButton).should('be.visible').click();
+    cy.get(this._createPostInput).should('be.visible').click();
     cy.get(this._postTitleInput).filter(':visible').type(title);
     cy.get(this._postDescriptionInput).filter(':visible').type(description);
     cy.get(this._pinPostCheckbox).filter(':visible').click();

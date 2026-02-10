@@ -1462,6 +1462,7 @@
   },
   "posts": {
     "pinnedPosts": "Publicaciones fijadas",
+    "yourFeed": "Tu feed",
     "errorLoadingPreviewPost": "Error al cargar la vista previa de la publicación.",
     "title": "Publicaciones",
     "latest": "El Más Reciente",
@@ -1480,6 +1481,11 @@
     "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde.",
     "loadMorePostsError": "Error al cargar más publicaciones. Por favor, inténtelo de nuevo más tarde.",
     "sortPost": "Ordenar Publicaciones"
+  },
+  "createPostContainer": {
+    "startAPost": "Iniciar una publicación",
+    "startYourPost": "Inicia tu publicación",
+    "browseFiles": "Examinar archivos"
   },
   "home": {
     "posts": "Publicaciones",

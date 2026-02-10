@@ -132,7 +132,6 @@ vi.mock('shared-components/Navbar/Navbar', () => ({
   default: ({
     search,
     sorting,
-    actions,
   }: {
     search: {
       placeholder: string;
@@ -145,7 +144,6 @@ vi.mock('shared-components/Navbar/Navbar', () => ({
       onChange: (option: string) => void;
       testIdPrefix: string;
     }>;
-    actions: React.ReactNode;
   }) => (
     <div data-testid="page-header">
       <input
@@ -173,7 +171,6 @@ vi.mock('shared-components/Navbar/Navbar', () => ({
           </select>
         </div>
       ))}
-      {actions}
     </div>
   ),
 }));
@@ -197,6 +194,18 @@ vi.mock('shared-components/posts/createPostModal/createPostModal', () => ({
       </div>
     ) : null,
 }));
+
+//Mock CreatePostContainer component
+vi.mock(
+  'shared-components/posts/createPostContainer/createPostContainer',
+  () => ({
+    default: ({ onClick }: { onClick: () => void }) => (
+      <div data-testid="createPostContainer">
+        <input onClick={onClick} readOnly data-testid="postInput"></input>
+      </div>
+    ),
+  }),
+);
 
 // Mock PostViewModal
 vi.mock('shared-components/PostViewModal/PostViewModal', () => ({
@@ -263,6 +272,7 @@ const enrichPostNode = (
   post: Partial<{
     id: string;
     caption: string;
+    body: string | null;
     createdAt: string;
     pinnedAt: string | null;
     pinned: boolean;
@@ -279,6 +289,7 @@ const enrichPostNode = (
 ) => ({
   id: post.id ?? `post-${nextId++}`,
   caption: post.caption ?? 'Test Caption',
+  body: post.body ?? 'Test body',
   createdAt: post.createdAt ?? FIXED_TIMESTAMP,
   updatedAt: post.createdAt ?? FIXED_TIMESTAMP,
   pinnedAt: post.pinnedAt ?? null,
@@ -307,6 +318,7 @@ const samplePosts = [
   {
     id: 'post-1',
     caption: 'First Post Title',
+    body: 'First Post Body',
     // Use dynamic past date to avoid test staleness
     createdAt: dayjs().subtract(30, 'days').toISOString(),
     creator: {
@@ -324,6 +336,7 @@ const samplePosts = [
   {
     id: 'post-2',
     caption: 'Second Post About Testing',
+    body: 'Second Post Body',
     // Use dynamic past date to avoid test staleness
     createdAt: dayjs().subtract(29, 'days').toISOString(),
     creator: {
@@ -342,6 +355,7 @@ const samplePosts = [
   {
     id: 'post-4-invalid-date',
     caption: 'Third Post Content',
+    body: 'Third Post Body',
     // Use dynamic past date to avoid test staleness
     createdAt: dayjs().subtract(28, 'days').toISOString(),
     creator: {
@@ -359,6 +373,7 @@ const samplePosts = [
   {
     id: 'post-3',
     caption: 'Fourth Post Content',
+    body: 'Fourth Post Body',
     createdAt: 'invalid-date-string',
     creator: {
       id: 'user-1',
@@ -979,12 +994,46 @@ describe('Create Post Modal', () => {
     renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('postInput')).toBeInTheDocument();
     });
 
     // Open modal
-    const createButton = screen.getByTestId('createPostModalBtn');
-    await user.click(createButton);
+    const postInput = screen.getByTestId('postInput');
+    await user.click(postInput);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
+    });
+
+    // Close modal
+    const closeButton = screen.getByTestId('close-create-modal');
+    await user.click(closeButton);
+
+    expect(screen.queryByTestId('create-post-modal')).not.toBeInTheDocument();
+  });
+});
+
+describe('Create Post Container', () => {
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('opens create post modal when post input is clicked', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('postInput')).toBeInTheDocument();
+    });
+
+    // Open modal
+    const postInput = screen.getByTestId('postInput');
+    await user.click(postInput);
 
     await waitFor(() => {
       expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();

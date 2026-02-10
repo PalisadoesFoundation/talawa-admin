@@ -87,11 +87,11 @@ export interface InterfaceCreator {
 export interface InterfacePost {
   id: string;
   caption?: string | null;
+  body?: string | null;
   createdAt: string;
   pinnedAt?: string | null;
   pinned?: boolean;
   creator?: InterfaceCreator | null;
-  body?: string;
   attachmentURL?: string;
   attachments?: [{ mimeType: string }];
   hasUserVoted?: {
@@ -113,6 +113,10 @@ export interface InterfacePinnedPostCardProps {
   pinnedPost: InterfacePostEdge;
   onStoryClick: (post: InterfacePost) => void;
   onPostUpdate?: () => void;
+}
+
+export interface InterfaceCreatePostContainerProps {
+  onClick: () => void;
 }
 
 export interface ICreatePostModalProps {

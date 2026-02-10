@@ -5,6 +5,7 @@
   max-width: 600px;
   margin: 0 auto 24px;
   border-radius: 8px;
+  border: 1px solid #dddddd;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
@@ -14,6 +15,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px;
+  height: 49px;
 }
 
 .userInfo {
@@ -22,9 +24,27 @@
   gap: 12px;
 }
 
+.userImageUserPost {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid var(--userImageUserPost-border);
+}
+
+.userImageUserPost img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: scale(1.5);
+}
+
 .postMedia {
-  padding-left: 16px;
-  padding-right: 16px;
   width: 100%;
 }
 
@@ -38,11 +58,26 @@
 .postActions {
   display: flex;
   justify-content: space-between;
-  padding: 8px 12px 0px;
+  padding: 8px 12px 8px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  gap: 8px;
+  padding: 8px;
+}
+
+.action:hover {
+  background-color: rgb(232 232 232);
+  cursor: pointer;
 }
 
 .leftActions {
   display: flex;
+  justify-content: space-around;
+  width: 100%;
   gap: 8px;
 }
 
@@ -56,8 +91,6 @@
 
 .caption {
   margin: 8px 8px;
-  font-weight: 900;
-  font-size: 16px;
   white-space: pre-line;
   overflow-wrap: break-word;
 }
@@ -139,11 +172,15 @@
 }
 
 .pinnedIcon {
-  margin-left: auto;
+  margin-left: 15rem;
 }
 
 .editModalWrapper {
   position: absolute;
+}
+
+.image {
+  width: 100%;
 }
 
 .closeButton {
@@ -176,23 +213,16 @@
   font-size: 0.875rem;
 }
 
-.userImageUserPost {
-  display: flex;
-  width: 50px;
-  height: 50px;
-  margin-left: 1rem;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 50%;
-  position: relative;
-  border: 2px solid var(--userImageUserPost-border);
+.viewHideCommentsButton {
+  color: rgb(0, 0, 0, 0.6);
+  background-color: rgb(232 232 232);
+  font-size: 0.75rem;
+  text-transform: none;
+  margin: 0 0 0.5rem 1rem;
+  border: none;
 }
 
-.userImageUserPost img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  transform: scale(1.5);
+.viewHideCommentsButton:hover {
+  background-color: rgb(232 232 232);
+  color: rgb(0, 0, 0, 0.6) !important;
 }

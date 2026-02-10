@@ -46,7 +46,7 @@ export const formatPostForCard = (
   attachmentURL: post.attachmentURL ?? null,
   title: post.caption ?? '',
   text: post.caption ?? '',
-  body: post.body,
+  body: post.body ?? '',
   commentCount: post.commentsCount ?? 0,
   upVoteCount: post.upVotesCount ?? 0,
   downVoteCount: post.downVotesCount ?? 0,

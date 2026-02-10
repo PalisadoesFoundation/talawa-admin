@@ -1479,6 +1479,7 @@
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
+    "yourFeed": "Votre flux",
     "errorLoadingPreviewPost": "Erreur lors du chargement de l'aperçu du message.",
     "title": "Publications",
     "latest": "Dernier",
@@ -1497,6 +1498,11 @@
     "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer.",
     "loadMorePostsError": "Erreur lors du chargement de plus de messages. Veuillez réessayer.",
     "sortPost": "Trier le message"
+  },
+  "createPostContainer": {
+    "startAPost": "Commencer une publication",
+    "startYourPost": "Commencez votre publication",
+    "browseFiles": "Parcourir les fichiers"
   },
   "home": {
     "posts": "Des postes",

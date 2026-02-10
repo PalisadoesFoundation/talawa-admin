@@ -1,0 +1,73 @@
+.createPostContainer {
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 1130px;
+}
+
+.createPostContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.9);
+  margin-top: 8px;
+}
+
+.inputArea {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  min-height: 48px;
+}
+
+.browseFilesButton {
+  flex-shrink: 0;
+  background-color: #1778f2;
+  color: white;
+  text-transform: none;
+  padding: 8px 16px;
+  border-radius: 8px 0 0 8px;
+  font-weight: 500;
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.postInput {
+  flex: 1;
+  font-size: 1rem;
+  background-color: transparent;
+}
+
+.postInput::placeholder {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.sendButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sendButton {
+  background-color: #1778f2 !important;
+  color: white;
+  width: 55px;
+  height: 37px;
+  border-radius: 8px;
+}
+
+.sendButton svg {
+  font-size: 20px;
+  color: white;
+}

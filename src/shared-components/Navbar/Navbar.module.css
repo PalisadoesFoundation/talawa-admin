@@ -29,6 +29,10 @@
   display: inline-block;
 }
 
+.dropdown:hover {
+  color: var(--dropdown-font-color) !important;
+}
+
 .btnsBlock {
   display: flex;
   flex-direction: row;
