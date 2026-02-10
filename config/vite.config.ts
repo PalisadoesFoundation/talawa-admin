@@ -203,6 +203,29 @@ export default defineConfig(({ mode }) => {
           secure: false,
           ws: true,
           configure: (proxy) => {
+            const isLoggableContentType = (value: string | string[] | undefined) => {
+              if (!value) return false;
+              const contentType = Array.isArray(value) ? value.join(';') : value;
+              const normalized = contentType.toLowerCase();
+              return (
+                normalized.includes('application/json') ||
+                normalized.includes('application/graphql') ||
+                normalized.startsWith('text/')
+              );
+            };
+
+            const logBody = (label: string, body: string) => {
+              const maxLength = 2000;
+              if (body.length > maxLength) {
+                console.log(`${label} (truncated):`, body.slice(0, maxLength));
+                console.log(
+                  `${label} length: ${body.length} chars (truncated to ${maxLength})`,
+                );
+                return;
+              }
+              console.log(`${label}:`, body);
+            };
+
             // Log outgoing request
             proxy.on('proxyReq', (proxyReq, req) => {
               console.log('\n[PROXY REQUEST]');
@@ -212,15 +235,19 @@ export default defineConfig(({ mode }) => {
               console.log('Headers:', JSON.stringify(req.headers, null, 2));
 
               // Check if body exists and log it
-              let body = '';
-              req.on('data', (chunk) => {
-                body += chunk.toString();
-              });
-              req.on('end', () => {
-                if (body) {
-                  console.log('Body:', body);
-                }
-              });
+              if (isLoggableContentType(req.headers['content-type'])) {
+                let body = '';
+                req.on('data', (chunk) => {
+                  body += chunk.toString();
+                });
+                req.on('end', () => {
+                  if (body) {
+                    logBody('Body', body);
+                  }
+                });
+              } else {
+                console.log('Body: [skipped non-text content]');
+              }
             });
 
             // Log response
@@ -229,15 +256,19 @@ export default defineConfig(({ mode }) => {
               console.log('Status:', proxyRes.statusCode);
               console.log('URL:', req.url);
 
-              let responseBody = '';
-              proxyRes.on('data', (chunk) => {
-                responseBody += chunk.toString();
-              });
-              proxyRes.on('end', () => {
-                if (responseBody) {
-                  console.log('Response Body:', responseBody);
-                }
-              });
+              if (isLoggableContentType(proxyRes.headers['content-type'])) {
+                let responseBody = '';
+                proxyRes.on('data', (chunk) => {
+                  responseBody += chunk.toString();
+                });
+                proxyRes.on('end', () => {
+                  if (responseBody) {
+                    logBody('Response Body', responseBody);
+                  }
+                });
+              } else {
+                console.log('Response Body: [skipped non-text content]');
+              }
             });
 
             proxy.on('error', (err) => {
