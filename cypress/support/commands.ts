@@ -113,6 +113,8 @@ type CreatePostTaskResult = { postId: string };
 type CredentialRecord = { email: string; password: string };
 type CredentialFixture = Record<AuthRole, CredentialRecord>;
 
+const DEFAULT_TEST_PASSWORD = 'Pass@123';
+
 const roleToEnvKey = (
   role: AuthRole,
 ): { emailKey: string; passwordKey: string } => {
@@ -124,8 +126,10 @@ const roleToEnvKey = (
       };
     case 'user':
       return { emailKey: 'E2E_USER_EMAIL', passwordKey: 'E2E_USER_PASSWORD' };
-    default:
+    case 'admin':
       return { emailKey: 'E2E_ADMIN_EMAIL', passwordKey: 'E2E_ADMIN_PASSWORD' };
+    default:
+      throw new Error(`Unknown AuthRole: ${role}`);
   }
 };
 
@@ -406,10 +410,11 @@ Cypress.Commands.add(
     }
 
     const createSeedUser = (userPayload: SeedUserPayload) => {
+      // Math.random is sufficient for test email uniqueness (non-crypto).
       const email =
         userPayload.email ||
-        `e2e-user-${Date.now()}-${getSecureRandomSuffix(8)}@example.com`;
-      const password = userPayload.password || 'Pass@123';
+        `e2e-user-${Date.now()}-${Math.floor(Math.random() * 10000)}@example.com`;
+      const password = userPayload.password || DEFAULT_TEST_PASSWORD;
       const name = userPayload.name || makeUniqueLabel('E2E User');
       const role = userPayload.role ?? 'regular';
       return resolveAuthToken({ role: 'superAdmin', ...userPayload.auth }).then(
@@ -467,7 +472,11 @@ Cypress.Commands.add(
 
     const volunteerPayload = payload as SeedVolunteerPayload;
     const userChain = volunteerPayload.userId
-      ? cy.wrap({ userId: volunteerPayload.userId })
+      ? cy.wrap({
+          userId: volunteerPayload.userId,
+          email: undefined,
+          password: undefined,
+        })
       : createSeedUser({
           ...(volunteerPayload.user ?? {}),
           auth: volunteerPayload.userAuth,

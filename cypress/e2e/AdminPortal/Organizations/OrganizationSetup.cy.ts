@@ -32,15 +32,15 @@ describe('Organization test data setup', () => {
   });
 
   it('seeds volunteer data for a new event', () => {
-    cy.seedTestData('events', { orgId }).then(({ eventId }) => {
-      cy.seedTestData('volunteers', { eventId }).then(
-        ({ volunteerId, userId }) => {
-          expect(volunteerId).to.be.a('string').and.not.equal('');
-          if (userId) {
-            userIds.push(userId);
-          }
-        },
-      );
-    });
+    cy.seedTestData('events', { orgId })
+      .then(({ eventId }) => {
+        return cy.seedTestData('volunteers', { eventId });
+      })
+      .then(({ volunteerId, userId }) => {
+        expect(volunteerId).to.be.a('string').and.not.equal('');
+        if (userId) {
+          userIds.push(userId);
+        }
+      });
   });
 });

@@ -17,9 +17,6 @@ const resolveApiUrl = (rawUrl?: string): string => {
     process.env.CYPRESS_API_URL ||
     process.env.API_URL ||
     DEFAULT_API_URL;
-  if (!baseUrl) {
-    throw new Error('Cypress API URL is not configured.');
-  }
   if (baseUrl.endsWith('/graphql')) {
     return baseUrl;
   }
@@ -48,7 +45,28 @@ const postGraphQL = async <T>(
     body: JSON.stringify(body),
   });
 
-  const json = (await response.json()) as GraphQLResponse<T>;
+  let json: GraphQLResponse<T>;
+  try {
+    json = (await response.clone().json()) as GraphQLResponse<T>;
+  } catch (error) {
+    let rawBody = '';
+    try {
+      rawBody = await response.text();
+    } catch (readError) {
+      const readMessage =
+        readError instanceof Error ? readError.message : String(readError);
+      rawBody = `Unable to read response body: ${readMessage}`;
+    }
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown JSON parse error';
+    return {
+      errors: [
+        {
+          message: `GraphQL response parse failed (${response.status} ${response.statusText}). ${rawBody || errorMessage}`,
+        },
+      ],
+    };
+  }
   if (!response.ok && !json.errors?.length) {
     return {
       errors: [
@@ -168,6 +186,64 @@ export default defineConfig({
     },
     setupNodeEvents(on, config) {
       codeCoverageTask(on, config);
+      const runGraphQLTask = async <TData, TResult>({
+        apiUrl,
+        token,
+        operationName,
+        query,
+        variables,
+        extract,
+        onErrors,
+      }: {
+        apiUrl?: string;
+        token?: string;
+        operationName: string;
+        query: string;
+        variables?: Record<string, unknown>;
+        extract: (data: TData | undefined) => TResult;
+        onErrors?: (errors: GraphQLError[]) => TResult | undefined;
+      }): Promise<TResult> => {
+        const resolvedApiUrl = resolveApiUrl(
+          apiUrl || (config.env.apiUrl as string | undefined),
+        );
+        const response = await postGraphQL<TData>(resolvedApiUrl, token, {
+          operationName,
+          query,
+          variables,
+        });
+        if (response.errors?.length) {
+          const fallback = onErrors?.(response.errors);
+          if (fallback !== undefined) {
+            return fallback;
+          }
+          const errorMessage = response.errors
+            .map((error) => error.message)
+            .join(', ');
+          throw new Error(`${operationName} failed: ${errorMessage}`);
+        }
+        return extract(response.data);
+      };
+
+      const isNotFoundError = (errors: GraphQLError[]): boolean => {
+        return errors.some((error) => {
+          const extensions = error.extensions ?? {};
+          const code =
+            typeof extensions.code === 'string' ? extensions.code : undefined;
+          const classification =
+            typeof extensions.classification === 'string'
+              ? extensions.classification
+              : undefined;
+          const indicator =
+            `${code ?? ''} ${classification ?? ''}`.toUpperCase();
+          if (
+            indicator.includes('NOT_FOUND') ||
+            indicator.includes('NOT_EXISTS')
+          ) {
+            return true;
+          }
+          return /not found|does not exist|no such/i.test(error.message);
+        });
+      };
       // Custom task to log messages and read files
       on('task', {
         log(message: string) {
@@ -190,29 +266,30 @@ export default defineConfig({
           password: string;
           recaptchaToken?: string;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            signIn?: { authenticationToken?: string; user?: { id?: string } };
-          }>(resolvedApiUrl, undefined, {
+          return runGraphQLTask<
+            {
+              signIn?: {
+                authenticationToken?: string;
+                user?: { id?: string };
+              };
+            },
+            { token: string; userId: string }
+          >({
+            apiUrl,
             operationName: 'SignIn',
             query: SIGN_IN_QUERY,
             variables: { email, password, recaptchaToken },
+            extract: (data) => {
+              const token = data?.signIn?.authenticationToken;
+              const userId = data?.signIn?.user?.id;
+              if (!token || !userId) {
+                throw new Error(
+                  'SignIn response missing authentication token.',
+                );
+              }
+              return { token, userId };
+            },
           });
-          if (response.errors?.length) {
-            throw new Error(
-              `SignIn failed: ${response.errors
-                .map((error) => error.message)
-                .join(', ')}`,
-            );
-          }
-          const token = response.data?.signIn?.authenticationToken;
-          const userId = response.data?.signIn?.user?.id;
-          if (!token || !userId) {
-            throw new Error('SignIn response missing authentication token.');
-          }
-          return { token, userId };
         },
         async createTestOrganization({
           apiUrl,
@@ -223,30 +300,24 @@ export default defineConfig({
           token: string;
           input: Record<string, unknown>;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            createOrganization?: { id?: string; _id?: string };
-          }>(resolvedApiUrl, token, {
+          return runGraphQLTask<
+            { createOrganization?: { id?: string; _id?: string } },
+            { orgId: string }
+          >({
+            apiUrl,
+            token,
             operationName: 'CreateOrganization',
             query: CREATE_ORGANIZATION_MUTATION,
             variables: { input },
+            extract: (data) => {
+              const orgId =
+                data?.createOrganization?.id || data?.createOrganization?._id;
+              if (!orgId) {
+                throw new Error('CreateOrganization response missing org id.');
+              }
+              return { orgId };
+            },
           });
-          if (response.errors?.length) {
-            throw new Error(
-              `CreateOrganization failed: ${response.errors
-                .map((error) => error.message)
-                .join(', ')}`,
-            );
-          }
-          const orgId =
-            response.data?.createOrganization?.id ||
-            response.data?.createOrganization?._id;
-          if (!orgId) {
-            throw new Error('CreateOrganization response missing org id.');
-          }
-          return { orgId };
         },
         async createTestEvent({
           apiUrl,
@@ -257,28 +328,23 @@ export default defineConfig({
           token: string;
           input: Record<string, unknown>;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            createEvent?: { id?: string };
-          }>(resolvedApiUrl, token, {
+          return runGraphQLTask<
+            { createEvent?: { id?: string } },
+            { eventId: string }
+          >({
+            apiUrl,
+            token,
             operationName: 'CreateEvent',
             query: CREATE_EVENT_MUTATION,
             variables: { input },
+            extract: (data) => {
+              const eventId = data?.createEvent?.id;
+              if (!eventId) {
+                throw new Error('CreateEvent response missing event id.');
+              }
+              return { eventId };
+            },
           });
-          if (response.errors?.length) {
-            throw new Error(
-              `CreateEvent failed: ${response.errors
-                .map((error) => error.message)
-                .join(', ')}`,
-            );
-          }
-          const eventId = response.data?.createEvent?.id;
-          if (!eventId) {
-            throw new Error('CreateEvent response missing event id.');
-          }
-          return { eventId };
         },
         async createTestUser({
           apiUrl,
@@ -289,34 +355,31 @@ export default defineConfig({
           token: string;
           input: Record<string, unknown>;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            createUser?: {
-              authenticationToken?: string;
-              user?: { id?: string };
-            };
-          }>(resolvedApiUrl, token, {
+          return runGraphQLTask<
+            {
+              createUser?: {
+                authenticationToken?: string;
+                user?: { id?: string };
+              };
+            },
+            { userId: string; authenticationToken?: string }
+          >({
+            apiUrl,
+            token,
             operationName: 'CreateUser',
             query: CREATE_USER_MUTATION,
             variables: { input },
+            extract: (data) => {
+              const userId = data?.createUser?.user?.id;
+              if (!userId) {
+                throw new Error('CreateUser response missing user id.');
+              }
+              return {
+                userId,
+                authenticationToken: data?.createUser?.authenticationToken,
+              };
+            },
           });
-          if (response.errors?.length) {
-            throw new Error(
-              `CreateUser failed: ${response.errors
-                .map((error) => error.message)
-                .join(', ')}`,
-            );
-          }
-          const userId = response.data?.createUser?.user?.id;
-          if (!userId) {
-            throw new Error('CreateUser response missing user id.');
-          }
-          return {
-            userId,
-            authenticationToken: response.data?.createUser?.authenticationToken,
-          };
         },
         async createTestVolunteer({
           apiUrl,
@@ -327,28 +390,23 @@ export default defineConfig({
           token: string;
           input: Record<string, unknown>;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            createEventVolunteer?: { id?: string };
-          }>(resolvedApiUrl, token, {
+          return runGraphQLTask<
+            { createEventVolunteer?: { id?: string } },
+            { volunteerId: string }
+          >({
+            apiUrl,
+            token,
             operationName: 'CreateEventVolunteer',
             query: CREATE_VOLUNTEER_MUTATION,
             variables: { data: input },
+            extract: (data) => {
+              const volunteerId = data?.createEventVolunteer?.id;
+              if (!volunteerId) {
+                throw new Error('CreateEventVolunteer response missing id.');
+              }
+              return { volunteerId };
+            },
           });
-          if (response.errors?.length) {
-            throw new Error(
-              `CreateEventVolunteer failed: ${response.errors
-                .map((error) => error.message)
-                .join(', ')}`,
-            );
-          }
-          const volunteerId = response.data?.createEventVolunteer?.id;
-          if (!volunteerId) {
-            throw new Error('CreateEventVolunteer response missing id.');
-          }
-          return { volunteerId };
         },
         async createTestPost({
           apiUrl,
@@ -359,28 +417,23 @@ export default defineConfig({
           token: string;
           input: Record<string, unknown>;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            createPost?: { id?: string };
-          }>(resolvedApiUrl, token, {
+          return runGraphQLTask<
+            { createPost?: { id?: string } },
+            { postId: string }
+          >({
+            apiUrl,
+            token,
             operationName: 'CreatePost',
             query: CREATE_POST_MUTATION,
             variables: { input },
+            extract: (data) => {
+              const postId = data?.createPost?.id;
+              if (!postId) {
+                throw new Error('CreatePost response missing id.');
+              }
+              return { postId };
+            },
           });
-          if (response.errors?.length) {
-            throw new Error(
-              `CreatePost failed: ${response.errors
-                .map((error) => error.message)
-                .join(', ')}`,
-            );
-          }
-          const postId = response.data?.createPost?.id;
-          if (!postId) {
-            throw new Error('CreatePost response missing id.');
-          }
-          return { postId };
         },
         async deleteTestOrganization({
           apiUrl,
@@ -393,29 +446,35 @@ export default defineConfig({
           orgId: string;
           allowNotFound?: boolean;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            deleteOrganization?: { id?: string; _id?: string };
-          }>(resolvedApiUrl, token, {
+          return runGraphQLTask<
+            { deleteOrganization?: { id?: string; _id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
             operationName: 'DeleteOrganization',
             query: DELETE_ORGANIZATION_MUTATION,
             variables: { input: { id: orgId } },
+            extract: (data) => {
+              const deletedId =
+                data?.deleteOrganization?.id || data?.deleteOrganization?._id;
+              return { ok: Boolean(deletedId) };
+            },
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (allowNotFound && isNotFoundError(responseErrors)) {
+                return { ok: true };
+              }
+              if (allowNotFound) {
+                console.warn(
+                  `DeleteOrganization failed for ${orgId} with allowNotFound=true: ${errorMessage}`,
+                );
+              }
+              return undefined;
+            },
           });
-          if (response.errors?.length) {
-            const errorMessage = response.errors
-              .map((error) => error.message)
-              .join(', ');
-            if (allowNotFound && /not found/i.test(errorMessage)) {
-              return { ok: true };
-            }
-            throw new Error(`DeleteOrganization failed: ${errorMessage}`);
-          }
-          const deletedId =
-            response.data?.deleteOrganization?.id ||
-            response.data?.deleteOrganization?._id;
-          return { ok: Boolean(deletedId) };
         },
         async deleteTestUser({
           apiUrl,
@@ -428,26 +487,31 @@ export default defineConfig({
           userId: string;
           allowNotFound?: boolean;
         }) {
-          const resolvedApiUrl = resolveApiUrl(
-            apiUrl || (config.env.apiUrl as string | undefined),
-          );
-          const response = await postGraphQL<{
-            deleteUser?: { id?: string };
-          }>(resolvedApiUrl, token, {
+          return runGraphQLTask<
+            { deleteUser?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
             operationName: 'DeleteUser',
             query: DELETE_USER_MUTATION,
             variables: { input: { id: userId } },
+            extract: (data) => ({ ok: Boolean(data?.deleteUser?.id) }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (allowNotFound && isNotFoundError(responseErrors)) {
+                return { ok: true };
+              }
+              if (allowNotFound) {
+                console.warn(
+                  `DeleteUser failed for ${userId} with allowNotFound=true: ${errorMessage}`,
+                );
+              }
+              return undefined;
+            },
           });
-          if (response.errors?.length) {
-            const errorMessage = response.errors
-              .map((error) => error.message)
-              .join(', ');
-            if (allowNotFound && /not found/i.test(errorMessage)) {
-              return { ok: true };
-            }
-            throw new Error(`DeleteUser failed: ${errorMessage}`);
-          }
-          return { ok: Boolean(response.data?.deleteUser?.id) };
         },
       });
 
