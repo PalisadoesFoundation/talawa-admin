@@ -281,6 +281,9 @@ Allowed IDs by folder:
 - DataTable: `rb-table`, `rb-table-path`, `mui-table-table`, `mui-table-table-path`, `mui-table-body`, `mui-table-body-path`, `mui-table-cell`, `mui-table-cell-path`, `mui-table-container`, `mui-table-container-path`, `mui-table-head`, `mui-table-head-path`, `mui-table-row`, `mui-table-row-path`, `mui-table-pagination`, `mui-table-pagination-path`
   - `src/shared-components/DataTable/**`
   - `src/types/shared-components/DataTable/**`
+- PaginationList: `mui-table-pagination`, `mui-table-pagination-path`
+  - `src/shared-components/PaginationList/**`
+  - `src/types/shared-components/PaginationList/**`
 
 ### Adding a new restricted import or wrapper
 

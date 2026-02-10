@@ -115,6 +115,10 @@ export const wrapperExemptions = [
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
   }),
+  createWrapperExemption({
+    componentName: 'PaginationList',
+    allowedIds: ['mui-table-pagination', 'mui-table-pagination-path'],
+  }),
   {
     files: [
       'src/components/AdminPortal/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx',
