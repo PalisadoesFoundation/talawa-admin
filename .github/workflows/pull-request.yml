@@ -21,6 +21,7 @@ env:
 
 jobs:
   Code-Quality-Checks:
+    needs: [Test-Application-E2E]
     name: Performs linting, formatting, type-checking, unused file detection, checking for different source and target branch
     runs-on: ubuntu-latest
     steps:
@@ -179,6 +180,7 @@ jobs:
           fi
 
   CSS-Policy-Check:
+    needs: [Test-Application-E2E]
     name: CSS Policy Check
     runs-on: ubuntu-latest
 
@@ -230,6 +232,7 @@ jobs:
     needs: [Code-Quality-Checks]
     uses: PalisadoesFoundation/.github/.github/workflows/typescript-autodocs.yml@main
   Check-Sensitive-Files:
+    needs: [Test-Application-E2E]
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if sensitive files have been changed without authorization
     runs-on: ubuntu-latest
@@ -296,9 +299,11 @@ jobs:
           fi
 
   Count-Changed-Files:
+    needs: [Test-Application-E2E]
     uses: PalisadoesFoundation/.github/.github/workflows/count-changed-files.yml@main
 
   Check-Disable-Statements:
+    needs: [Test-Application-E2E]
     name: Check for disable statements (eslint-disable, istanbul-ignore, it.skip)
     runs-on: ubuntu-latest
     steps:
@@ -329,6 +334,7 @@ jobs:
           python .github-central/.github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Translation-Tag-Check:
+    needs: [Test-Application-E2E]
     name: Translation Tag Check
     runs-on: ubuntu-latest
     steps:
@@ -353,6 +359,7 @@ jobs:
           fi
 
   MinIO-Compliance-Check:
+    needs: [Test-Application-E2E]
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: MinIO Compliance Check
     runs-on: ubuntu-latest
@@ -1081,6 +1088,7 @@ jobs:
         run: pnpm run build
 
   Check-Target-Branch:
+    needs: [Test-Application-E2E]
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Check Target Branch
     runs-on: ubuntu-latest
@@ -1093,6 +1101,7 @@ jobs:
           exit 1
 
   Python-Compliance:
+    needs: [Test-Application-E2E]
     name: Check Python Code Style
     runs-on: ubuntu-latest
     steps:
