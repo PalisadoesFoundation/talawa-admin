@@ -42,7 +42,13 @@
  * - `react-icons`
  *
  */
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -201,8 +207,9 @@ export default function GroupChatDetails({
     setAddUserModalisOpen(true);
   }
 
-  const toggleAddUserModal = (): void =>
-    setAddUserModalisOpen(!addUserModalisOpen);
+  const toggleAddUserModal = useCallback((): void => {
+    setAddUserModalisOpen((prev) => !prev);
+  }, []);
 
   const {
     data: allUsersData,
@@ -217,13 +224,16 @@ export default function GroupChatDetails({
     },
   });
 
-  const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({
-      variables: {
-        input: { memberId: userId, chatId: chat.id, role: 'regular' },
-      },
-    });
-  };
+  const addUserToGroupChat = useCallback(
+    async (memberId: string): Promise<void> => {
+      await addUser({
+        variables: {
+          input: { memberId, chatId: chat.id, role: 'regular' },
+        },
+      });
+    },
+    [addUser, chat.id],
+  );
 
   const handleUserModalSearchChange = (value: string): void => {
     const trimmedName = value.trim();
@@ -295,12 +305,7 @@ export default function GroupChatDetails({
             index: number,
           ) => ({ ...userDetails, index: index + 1 }),
         ) ?? [],
-    [
-      allUsersData?.organization?.members?.edges,
-      userId,
-      chat.members?.edges,
-      chat.id,
-    ],
+    [allUsersData?.organization?.members?.edges, userId, chat.members?.edges],
   );
 
   const addUserColumns = useMemo<
