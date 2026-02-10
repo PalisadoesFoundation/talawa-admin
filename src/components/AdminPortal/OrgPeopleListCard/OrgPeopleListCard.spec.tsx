@@ -72,7 +72,7 @@ describe('Testing Organization People List Card', () => {
     vi.restoreAllMocks();
   });
   const props = {
-    toggleRemoveModal: vi.fn(),
+    closeRemoveModal: vi.fn(),
     id: '1',
   };
 
@@ -125,7 +125,7 @@ describe('Testing Organization People List Card', () => {
     // Verify that success toast and toggleRemoveModal were not called
     await waitFor(() => {
       expect(NotificationToast.success).not.toHaveBeenCalled();
-      expect(props.toggleRemoveModal).not.toHaveBeenCalled();
+      expect(props.closeRemoveModal).not.toHaveBeenCalled();
     });
   });
 
@@ -168,7 +168,7 @@ describe('Testing Organization People List Card', () => {
     await waitFor(
       () => {
         expect(NotificationToast.success).toHaveBeenCalled();
-        expect(props.toggleRemoveModal).toHaveBeenCalled();
+        expect(props.closeRemoveModal).toHaveBeenCalled();
       },
       { timeout: 3000 },
     );
@@ -214,12 +214,12 @@ describe('Testing Organization People List Card', () => {
     // Close via No button
     const noButton = screen.getByRole('button', { name: /no/i });
     await user.click(noButton);
-    expect(props.toggleRemoveModal).toHaveBeenCalled();
+    expect(props.closeRemoveModal).toHaveBeenCalled();
 
     // Close via close button
     const closeButton = screen.getByTestId('modalCloseBtn');
     await user.click(closeButton);
-    expect(props.toggleRemoveModal).toHaveBeenCalled();
+    expect(props.closeRemoveModal).toHaveBeenCalled();
   });
 
   test('should redirect when id is undefined', async () => {
@@ -227,7 +227,7 @@ describe('Testing Organization People List Card', () => {
       <MockedProvider>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <OrgPeopleListCard id={undefined} toggleRemoveModal={vi.fn()} />
+            <OrgPeopleListCard id={undefined} closeRemoveModal={vi.fn()} />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,

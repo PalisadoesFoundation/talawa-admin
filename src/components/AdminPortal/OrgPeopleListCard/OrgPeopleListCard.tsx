@@ -25,7 +25,7 @@
  * ```tsx
  * <OrgPeopleListCard
  *   id="member123"
- *   toggleRemoveModal={() => setShowModal(false)}
+ *   closeRemoveModal={() => setShowModal(false)}
  * />
  * ```
  */
@@ -70,7 +70,7 @@ function orgPeopleListCard(
       });
       if (data) {
         NotificationToast.success(t('memberRemoved') as string);
-        props.toggleRemoveModal();
+        props.closeRemoveModal();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -88,7 +88,7 @@ function orgPeopleListCard(
         {/* Modal to confirm member removal */}
         <BaseModal
           show={true}
-          onHide={props.toggleRemoveModal}
+          onHide={props.closeRemoveModal}
           title={t('removeMember')}
           headerTestId="removeMemberModal"
           footer={
@@ -103,7 +103,7 @@ function orgPeopleListCard(
               </Button>
               <Button
                 type="button"
-                onClick={props.toggleRemoveModal}
+                onClick={props.closeRemoveModal}
                 className={styles.removeButton}
                 data-testid="closeRemoveId"
               >

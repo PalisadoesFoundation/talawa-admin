@@ -8,20 +8,20 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:1](https://github.c
 
 ## Properties
 
-### id
+### closeRemoveModal()
 
-> **id**: `string`
-
-Defined in: [src/types/AdminPortal/Organization/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L2)
-
-***
-
-### toggleRemoveModal()
-
-> **toggleRemoveModal**: () => `void`
+> **closeRemoveModal**: () => `void`
 
 Defined in: [src/types/AdminPortal/Organization/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L3)
 
 #### Returns
 
 `void`
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/types/AdminPortal/Organization/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L2)

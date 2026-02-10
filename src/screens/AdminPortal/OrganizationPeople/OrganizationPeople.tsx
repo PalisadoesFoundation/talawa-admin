@@ -6,7 +6,7 @@
  * managing members within an organization.
  *
  * @remarks
- * - Uses Apollo Client's `useLazyQuery` for fetching data.
+ * - Uses CursorPaginationManager for all modes (members, admins, users) with "Load More" pagination.
  * - Uses DataGridWrapper for client-side pagination and display.
  * - Supports filtering by roles (members, administrators, users).
  * - Includes local search functionality for filtering rows by name or email.
@@ -19,11 +19,10 @@
  *
  * @returns A JSX element rendering the organization people table.
  */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
-import { useLazyQuery } from '@apollo/client';
 import {
   DataGridWrapper,
   GridCellParams,
@@ -41,10 +40,9 @@ import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopl
 import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { errorHandler } from 'utils/errorHandler';
 import { languages } from 'utils/languages';
 import Button from 'shared-components/Button';
-
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 /**
  * Maps numeric filter state to string option identifiers.
  *
@@ -98,25 +96,13 @@ interface IProcessedRow {
   rowNumber: number;
 }
 
-interface IEdges {
-  cursor: string;
-  node: {
-    id: string;
-    name: string;
-    role: string;
-    avatarURL: string;
-    emailAddress: string;
-    createdAt: string;
-  };
-}
-
-interface IQueryVariable {
-  orgId?: string | undefined;
-  first?: number | null;
-  after?: string | null;
-  last?: number | null;
-  before?: string | null;
-  where?: { role: { equal: 'administrator' | 'regular' } };
+interface IMemberNode {
+  id: string;
+  name: string;
+  role: string;
+  avatarURL: string;
+  emailAddress: string;
+  createdAt: string;
 }
 
 function OrganizationPeople(): JSX.Element {
@@ -141,107 +127,28 @@ function OrganizationPeople(): JSX.Element {
   } = useModalState();
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
-  const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
-  const [data, setData] = useState<
-    | {
-        edges: IEdges[];
-        pageInfo: {
-          startCursor?: string;
-          endCursor?: string;
-          hasNextPage: boolean;
-          hasPreviousPage: boolean;
-        };
-      }
-    | undefined
-  >();
+  // Rows for all modes (will be populated by CursorPaginationManager)
+  const [memberRows, setMemberRows] = useState<IProcessedRow[]>([]);
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-  // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
+  const processMemberNodes = useCallback((nodes: IMemberNode[]) => {
+    const rows = nodes.map((node, index) => ({
+      id: node.id,
+      name: node.name,
+      email: node.emailAddress,
+      image: node.avatarURL,
+      createdAt: node.createdAt || new Date().toISOString(),
+      rowNumber: index + 1,
+    }));
+    setMemberRows(rows);
+  }, []);
 
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
-  );
-
-  // Handle data changes
+  // trigger refetch in CursorPaginationManager
   useEffect(() => {
-    if (data) {
-      const { edges } = data;
-      const processedRows = edges.map(
-        (edge: IEdges, index: number): IProcessedRow => ({
-          id: edge.node.id,
-          name: edge.node.name,
-          email: edge.node.emailAddress,
-          image: edge.node.avatarURL,
-          createdAt: edge.node.createdAt || new Date().toISOString(),
-          rowNumber: index + 1,
-        }),
-      );
+    setRefetchTrigger((prev) => prev + 1);
+  }, [state, currentUrl]);
 
-      setCurrentRows(processedRows);
-    }
-  }, [data]);
-
-  // Handle tab changes (members, admins, users)
-  useEffect(() => {
-    const variables: IQueryVariable = {
-      first: PAGE_SIZE,
-      after: null,
-      last: null,
-      before: null,
-      orgId: currentUrl,
-    };
-
-    if (state === 0) {
-      // All members
-      fetchMembers({ variables });
-    } else if (state === 1) {
-      // Administrators only
-      fetchMembers({
-        variables: {
-          ...variables,
-          where: { role: { equal: 'administrator' } },
-        },
-      });
-    } else if (state === 2) {
-      // Users
-      fetchUsers({ variables });
-    }
-  }, [state, currentUrl, fetchMembers, fetchUsers]);
-
-  // Initial data fetch (members only when on members tab; tab effect handles admin/users)
-  useEffect(() => {
-    if (state === 0) {
-      fetchMembers({
-        variables: {
-          orgId: currentUrl,
-          first: PAGE_SIZE,
-          after: null,
-          last: null,
-          before: null,
-        },
-      });
-    }
-  }, [currentUrl, fetchMembers, state]);
-
-  // Error handling
-  useEffect(() => {
-    if (memberError) {
-      errorHandler(t, memberError);
-    }
-    if (userError) {
-      errorHandler(t, userError);
-    }
-  }, [memberError, userError, t]);
+  const currentRows = memberRows;
 
   // Local search implementation
   const filteredRows = useMemo(() => {
@@ -254,7 +161,19 @@ function OrganizationPeople(): JSX.Element {
     );
   }, [currentRows, searchTerm]);
 
-  // Modal handlers
+  // Build query variables for members/admins mode
+  const memberQueryVariables = useMemo(() => {
+    const vars: Record<string, unknown> = {
+      orgId: currentUrl,
+    };
+    if (state === 1) {
+      vars.where = { role: { equal: 'administrator' } };
+    }
+    return vars;
+  }, [currentUrl, state]);
+
+  const isLoading = false;
+
   const toggleRemoveMemberModal = (id: string) => {
     setSelectedMemId(id);
     openRemoveModal();
@@ -272,7 +191,8 @@ function OrganizationPeople(): JSX.Element {
       flex: 1,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeader} ${styles.colMinWidthXs}`,
+      cellClassName: styles.colMinWidthXs,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
@@ -288,7 +208,8 @@ function OrganizationPeople(): JSX.Element {
       flex: 1,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeader} ${styles.colMinWidthXs}`,
+      cellClassName: styles.colMinWidthXs,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         const columnWidth = params.colDef.computedWidth || 150;
@@ -330,7 +251,8 @@ function OrganizationPeople(): JSX.Element {
       flex: 2,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeader} ${styles.colMinWidthMd}`,
+      cellClassName: styles.colMinWidthMd,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
@@ -349,7 +271,8 @@ function OrganizationPeople(): JSX.Element {
       headerName: tCommon('email'),
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeader} ${styles.colMinWidthMd}`,
+      cellClassName: styles.colMinWidthMd,
       flex: 2,
       sortable: false,
     },
@@ -359,7 +282,8 @@ function OrganizationPeople(): JSX.Element {
       flex: 2,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeader} ${styles.colMinWidthSm}`,
+      cellClassName: styles.colMinWidthSm,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         const currentLang = languages.find(
@@ -388,7 +312,8 @@ function OrganizationPeople(): JSX.Element {
       flex: 1,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
+      headerClassName: `${styles.tableHeader} ${styles.colMinWidthSm}`,
+      cellClassName: styles.colMinWidthSm,
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <Button
@@ -434,11 +359,47 @@ function OrganizationPeople(): JSX.Element {
           additionalButtons={<AddMember />}
         />
 
+        {/* CursorPaginationManager for all modes */}
+        {state !== 2 ? (
+          <CursorPaginationManager<
+            unknown,
+            IMemberNode,
+            Record<string, unknown>
+          >
+            query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
+            queryVariables={memberQueryVariables}
+            dataPath="organization.members"
+            itemsPerPage={PAGE_SIZE}
+            onDataChange={processMemberNodes}
+            refetchTrigger={refetchTrigger}
+            renderItem={() => null}
+            loadingComponent={<></>}
+            emptyStateComponent={<></>}
+            className={styles.hidden}
+          />
+        ) : (
+          <CursorPaginationManager<
+            unknown,
+            IMemberNode,
+            Record<string, unknown>
+          >
+            query={USER_LIST_FOR_TABLE}
+            queryVariables={{}}
+            dataPath="allUsers"
+            itemsPerPage={PAGE_SIZE}
+            onDataChange={processMemberNodes}
+            refetchTrigger={refetchTrigger}
+            renderItem={() => null}
+            loadingComponent={<></>}
+            emptyStateComponent={<></>}
+            className={styles.hidden}
+          />
+        )}
+
         <DataGridWrapper<IProcessedRow>
           rows={filteredRows}
           columns={columns}
-          error={state === 2 ? userError?.message : memberError?.message}
-          loading={memberLoading || userLoading}
+          loading={isLoading}
           emptyStateProps={{
             message: tCommon('notFound'),
             description: tCommon('noDataDescription'),
@@ -450,14 +411,14 @@ function OrganizationPeople(): JSX.Element {
             pageSizeOptions: [10, 25, 50, 100],
           }}
         />
-      </div>
 
-      {showRemoveModal && selectedMemId && (
-        <OrgPeopleListCard
-          id={selectedMemId}
-          toggleRemoveModal={closeRemoveModal}
-        />
-      )}
+        {showRemoveModal && selectedMemId && (
+          <OrgPeopleListCard
+            id={selectedMemId}
+            closeRemoveModal={closeRemoveModal}
+          />
+        )}
+      </div>
     </>
   );
 }

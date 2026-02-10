@@ -1,6 +1,12 @@
 export interface InterfaceOrgPeopleListCardProps {
   id: string | undefined;
-  toggleRemoveModal: () => void;
+  closeRemoveModal: () => void;
+}
+
+export interface InterfaceOrganizationCardStartProps {
+  image: string;
+  id: string;
+  name: string;
 }
 
 export interface InterfaceOrgPostCardProps {
