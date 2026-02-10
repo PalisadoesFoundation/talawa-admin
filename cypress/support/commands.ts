@@ -180,8 +180,24 @@ const resolveAuthToken = (auth?: AuthOptions): Cypress.Chainable<string> => {
   });
 };
 
+const getSecureRandomSuffix = (length = 8): string => {
+  if (globalThis.crypto?.randomUUID) {
+    return globalThis.crypto.randomUUID().replace(/-/g, '').slice(0, length);
+  }
+
+  if (globalThis.crypto?.getRandomValues) {
+    const bytes = new Uint8Array(length);
+    globalThis.crypto.getRandomValues(bytes);
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0'))
+      .join('')
+      .slice(0, length);
+  }
+
+  return `${Date.now()}`;
+};
+
 const makeUniqueLabel = (prefix: string): string => {
-  const suffix = `${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+  const suffix = `${Date.now()}-${getSecureRandomSuffix(8)}`;
   return `${prefix} ${suffix}`;
 };
 
@@ -392,7 +408,7 @@ Cypress.Commands.add(
     const createSeedUser = (userPayload: SeedUserPayload) => {
       const email =
         userPayload.email ||
-        `e2e-user-${Date.now()}-${Math.floor(Math.random() * 10000)}@example.com`;
+        `e2e-user-${Date.now()}-${getSecureRandomSuffix(8)}@example.com`;
       const password = userPayload.password || 'Pass@123';
       const name = userPayload.name || makeUniqueLabel('E2E User');
       const role = userPayload.role ?? 'regular';
