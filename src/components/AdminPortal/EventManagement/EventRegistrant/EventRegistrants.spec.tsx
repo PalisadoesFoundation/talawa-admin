@@ -553,4 +553,71 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
       });
     });
   });
+
+  describe('Edge Cases - Null/Undefined Handling', () => {
+    test('handles registrant with null user gracefully', async () => {
+      const mockDataWithNullUser = {
+        getEventAttendeesByEventId: [
+          {
+            id: 'att1',
+            userId: 'user1',
+            createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
+            user: {
+              id: 'user1',
+              name: 'Valid User',
+              emailAddress: 'valid@example.com',
+              avatarURL: null,
+            },
+          },
+          {
+            id: 'att2',
+            userId: null,
+            createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+            user: null,
+          },
+        ],
+      };
+
+      const customMocks = [
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: mockDataWithNullUser },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+      ];
+
+      renderEventRegistrants(customMocks);
+
+      await waitFor(() => {
+        expect(screen.getByText('Valid User')).toBeInTheDocument();
+      });
+    });
+
+    test('prevents unregistering checked-in user', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        const checkedInButton = screen.getByRole('button', {
+          name: 'Checked In',
+        });
+        expect(checkedInButton).toBeDisabled();
+      });
+    });
+  });
 });

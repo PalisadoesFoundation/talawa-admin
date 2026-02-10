@@ -1725,4 +1725,38 @@ describe('EventActionItems', () => {
       });
     });
   });
+
+  describe('Modal Mode - Edit vs Create', () => {
+    test('sets modal to edit mode when actionItem exists', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('editItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const editBtn = screen.getByTestId('editItemBtnactionItemId1');
+      await userEvent.click(editBtn);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+
+    test('sets modal to create mode when actionItem is null', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createActionItemBtn');
+      await userEvent.click(createBtn);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+  });
 });
