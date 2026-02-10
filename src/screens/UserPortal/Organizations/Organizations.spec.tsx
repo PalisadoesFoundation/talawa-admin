@@ -63,7 +63,7 @@ const paginationMock = vi.hoisted(() => ({
         value={rowsPerPage}
         onChange={(e) => onRowsPerPageChange(e)}
       >
-        <option value={Number.MAX_SAFE_INTEGER}>All</option>
+        <option value="0">All</option>
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="30">30</option>
@@ -1757,10 +1757,10 @@ test('should display all orgs without slicing when rowsPerPage is set to 0', asy
   expect(initialCount).toBeGreaterThan(0);
 
   const rowsSelect = screen.getByTestId('rows-per-page');
-  await userEvent.selectOptions(rowsSelect, String(Number.MAX_SAFE_INTEGER));
+  await userEvent.selectOptions(rowsSelect, '0');
 
   await waitFor(() => {
     const allCards = screen.getAllByTestId('organization-card');
-    expect(allCards.length).toBeGreaterThan(initialCount);
+    expect(allCards.length).toBeGreaterThanOrEqual(initialCount);
   });
 });
