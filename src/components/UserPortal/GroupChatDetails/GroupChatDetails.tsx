@@ -42,7 +42,7 @@
  * - `react-icons`
  *
  */
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -274,6 +274,85 @@ export default function GroupChatDetails({
       setSelectedImage('');
     }
   };
+
+  const addUserTableData = useMemo(
+    () =>
+      allUsersData?.organization?.members?.edges
+        ?.filter(
+          ({ node: userDetails }: { node: InterfaceOrganizationMember }) =>
+            userDetails.id !== userId &&
+            !chat.members?.edges?.some(
+              (edge) => edge.node.user.id === userDetails.id,
+            ),
+        )
+        .map(
+          (
+            {
+              node: userDetails,
+            }: {
+              node: InterfaceOrganizationMember;
+            },
+            index: number,
+          ) => ({ ...userDetails, index: index + 1 }),
+        ) ?? [],
+    [
+      allUsersData?.organization?.members?.edges,
+      userId,
+      chat.members?.edges,
+      chat.id,
+    ],
+  );
+
+  const addUserColumns = useMemo<
+    IColumnDef<InterfaceOrganizationMember & { index: number }>[]
+  >(
+    () => [
+      {
+        id: 'index',
+        header: '#',
+        accessor: 'index',
+        meta: { align: 'center' },
+      },
+      {
+        id: 'user',
+        header: t('user'),
+        accessor: 'name',
+        meta: { align: 'center' },
+        render: (value, row) => (
+          <>
+            {row.name}
+            <br />
+            {row.role || tCommon('member', { defaultValue: 'Member' })}
+          </>
+        ),
+      },
+      {
+        id: 'action',
+        header: t('chatAction'),
+        accessor: 'id',
+        meta: { align: 'center' },
+        render: (_, row) => (
+          <Button
+            onClick={async () => {
+              try {
+                await addUserToGroupChat(row.id);
+                toggleAddUserModal();
+                chatRefetch({ input: { id: chat.id } });
+                NotificationToast.success(t('userAddedSuccessfully'));
+              } catch (error) {
+                NotificationToast.error(t('failedToAddUser'));
+                console.error(error);
+              }
+            }}
+            data-testid="addUserBtn"
+          >
+            {t('add')}
+          </Button>
+        ),
+      },
+    ],
+    [t, tCommon, chat.id, addUserToGroupChat, toggleAddUserModal, chatRefetch],
+  );
 
   return (
     <ErrorBoundaryWrapper
@@ -532,82 +611,8 @@ export default function GroupChatDetails({
 
           <div className={styles.userData} data-testid="userList">
             <DataTable<InterfaceOrganizationMember & { index: number }>
-              data={
-                allUsersData?.organization?.members?.edges
-                  ?.filter(
-                    ({
-                      node: userDetails,
-                    }: {
-                      node: InterfaceOrganizationMember;
-                    }) =>
-                      userDetails.id !== userId &&
-                      !chat.members?.edges?.some(
-                        (edge) => edge.node.user.id === userDetails.id,
-                      ),
-                  )
-                  .map(
-                    (
-                      {
-                        node: userDetails,
-                      }: {
-                        node: InterfaceOrganizationMember;
-                      },
-                      index: number,
-                    ) => ({ ...userDetails, index: index + 1 }),
-                  ) ?? []
-              }
-              columns={
-                [
-                  {
-                    id: 'index',
-                    header: '#',
-                    accessor: 'index',
-                    meta: { align: 'center' },
-                  },
-                  {
-                    id: 'user',
-                    header: t('user'),
-                    accessor: 'name',
-                    meta: { align: 'center' },
-                    render: (value, row) => (
-                      <>
-                        {row.name}
-                        <br />
-                        {row.role ||
-                          tCommon('member', { defaultValue: 'Member' })}
-                      </>
-                    ),
-                  },
-                  {
-                    id: 'action',
-                    header: t('chatAction'),
-                    accessor: 'id',
-                    meta: { align: 'center' },
-                    render: (_, row) => (
-                      <Button
-                        onClick={async () => {
-                          try {
-                            await addUserToGroupChat(row.id);
-                            toggleAddUserModal();
-                            chatRefetch({ input: { id: chat.id } });
-                            NotificationToast.success(
-                              t('userAddedSuccessfully'),
-                            );
-                          } catch (error) {
-                            NotificationToast.error(t('failedToAddUser'));
-                            console.error(error);
-                          }
-                        }}
-                        data-testid="addUserBtn"
-                      >
-                        {t('add')}
-                      </Button>
-                    ),
-                  },
-                ] as IColumnDef<
-                  InterfaceOrganizationMember & { index: number }
-                >[]
-              }
+              data={addUserTableData}
+              columns={addUserColumns}
               rowKey="id"
               paginationMode="none"
               ariaLabel={t('customizedTable')}

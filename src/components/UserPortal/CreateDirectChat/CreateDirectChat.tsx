@@ -20,7 +20,7 @@
  * />
  * ```
  */
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -167,6 +167,88 @@ export default function createDirectChatModal({
 
   const currentUserName = currentUser?.name || 'You';
 
+  const memberTableData = useMemo(
+    () =>
+      allUsersData?.organization?.members?.edges
+        ?.filter(
+          ({ node: userDetails }: { node: InterfaceOrganizationMember }) =>
+            userDetails.id !== userId,
+        )
+        .map(
+          (
+            { node: userDetails }: { node: InterfaceOrganizationMember },
+            index: number,
+          ) => ({ ...userDetails, index: index + 1 }),
+        ) ?? [],
+    [allUsersData?.organization?.members?.edges, userId],
+  );
+
+  const memberColumns = useMemo<
+    IColumnDef<InterfaceOrganizationMember & { index: number }>[]
+  >(
+    () => [
+      {
+        id: 'index',
+        header: tCommon('hash', { defaultValue: '#' }),
+        accessor: 'index',
+        meta: { align: 'center' },
+      },
+      {
+        id: 'user',
+        header: t('user', { defaultValue: 'User' }),
+        accessor: 'name',
+        meta: { align: 'center' },
+        render: (value, row) => (
+          <>
+            {row.name}
+            <br />
+            {row.role || t('role.member', { defaultValue: 'Member' })}
+          </>
+        ),
+      },
+      {
+        id: 'action',
+        header: t('chat', { defaultValue: 'Chat' }),
+        accessor: 'id',
+        meta: { align: 'center' },
+        render: (_, row) => (
+          <Button
+            onClick={() => {
+              handleCreateDirectChat(
+                row.id,
+                row.name,
+                chats,
+                t,
+                createChat,
+                createChatMembership,
+                organizationId,
+                userId,
+                currentUserName,
+                chatsListRefetch,
+                toggleCreateDirectChatModal,
+              );
+            }}
+            data-testid="addBtn"
+          >
+            {t('add', { defaultValue: 'Add' })}
+          </Button>
+        ),
+      },
+    ],
+    [
+      t,
+      tCommon,
+      chats,
+      createChat,
+      createChatMembership,
+      organizationId,
+      userId,
+      currentUserName,
+      chatsListRefetch,
+      toggleCreateDirectChatModal,
+    ],
+  );
+
   const handleUserModalSearchChange = (value: string): void => {
     const trimmedName = value.trim();
     allUsersRefetch({
@@ -218,78 +300,8 @@ export default function createDirectChatModal({
             </div>
             <div className={styles.tableContainer}>
               <DataTable<InterfaceOrganizationMember & { index: number }>
-                data={
-                  allUsersData?.organization?.members?.edges
-                    ?.filter(
-                      ({
-                        node: userDetails,
-                      }: {
-                        node: InterfaceOrganizationMember;
-                      }) => userDetails.id !== userId,
-                    )
-                    .map(
-                      (
-                        {
-                          node: userDetails,
-                        }: { node: InterfaceOrganizationMember },
-                        index: number,
-                      ) => ({ ...userDetails, index: index + 1 }),
-                    ) ?? []
-                }
-                columns={
-                  [
-                    {
-                      id: 'index',
-                      header: tCommon('hash', { defaultValue: '#' }),
-                      accessor: 'index',
-                      meta: { align: 'center' },
-                    },
-                    {
-                      id: 'user',
-                      header: t('user', { defaultValue: 'User' }),
-                      accessor: 'name',
-                      meta: { align: 'center' },
-                      render: (value, row) => (
-                        <>
-                          {row.name}
-                          <br />
-                          {row.role ||
-                            t('role.member', { defaultValue: 'Member' })}
-                        </>
-                      ),
-                    },
-                    {
-                      id: 'action',
-                      header: t('chat', { defaultValue: 'Chat' }),
-                      accessor: 'id',
-                      meta: { align: 'center' },
-                      render: (_, row) => (
-                        <Button
-                          onClick={() => {
-                            handleCreateDirectChat(
-                              row.id,
-                              row.name,
-                              chats,
-                              t,
-                              createChat,
-                              createChatMembership,
-                              organizationId,
-                              userId,
-                              currentUserName,
-                              chatsListRefetch,
-                              toggleCreateDirectChatModal,
-                            );
-                          }}
-                          data-testid="addBtn"
-                        >
-                          {t('add', { defaultValue: 'Add' })}
-                        </Button>
-                      ),
-                    },
-                  ] as IColumnDef<
-                    InterfaceOrganizationMember & { index: number }
-                  >[]
-                }
+                data={memberTableData}
+                columns={memberColumns}
                 rowKey="id"
                 paginationMode="none"
                 ariaLabel={t('organizationMembersTable', {
