@@ -1,0 +1,32 @@
+{
+  "data": {
+    "organization": {
+      "members": {
+        "edges": [
+          {
+            "node": {
+              "id": "person_001",
+              "name": "Alex Example",
+              "emailAddress": "alex@example.org",
+              "role": "administrator"
+            },
+            "cursor": "cursor-1"
+          },
+          {
+            "node": {
+              "id": "person_002",
+              "name": "Long Name Member — 世界",
+              "emailAddress": "long.name@example.org",
+              "role": "member"
+            },
+            "cursor": "cursor-2"
+          }
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": "cursor-2"
+        }
+      }
+    }
+  }
+}

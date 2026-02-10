@@ -256,7 +256,7 @@ export enum Iso3166Alpha2CountryCode {
 /**
  * Represents the education grades for a user.
  */
-enum UserEducationGrade {
+export enum UserEducationGrade {
   GRADE_1 = 'grade_1',
   GRADE_2 = 'grade_2',
   GRADE_3 = 'grade_3',
@@ -278,7 +278,7 @@ enum UserEducationGrade {
 /**
  * Represents the employment status of a user.
  */
-enum UserEmploymentStatus {
+export enum UserEmploymentStatus {
   FULL_TIME = 'full_time',
   PART_TIME = 'part_time',
   UNEMPLOYED = 'unemployed',
@@ -287,7 +287,7 @@ enum UserEmploymentStatus {
 /**
  * Represents the marital status of a user.
  */
-enum UserMaritalStatus {
+export enum UserMaritalStatus {
   DIVORCED = 'divorced',
   ENGAGED = 'engaged',
   MARRIED = 'married',
@@ -299,7 +299,7 @@ enum UserMaritalStatus {
 /**
  * Represents the natal sex of a user.
  */
-enum UserNatalSex {
+export enum UserNatalSex {
   FEMALE = 'female',
   INTERSEX = 'intersex',
   MALE = 'male',
@@ -313,7 +313,7 @@ type ID = string | number;
 /**
  * Represents the role of a user within the system.
  */
-enum UserRole {
+export enum UserRole {
   Administrator = 'administrator',
   Regular = 'regular',
 }
@@ -321,7 +321,7 @@ enum UserRole {
 /**
  * Represents the type of an advertisement.
  */
-enum AdvertisementTypePg {
+export enum AdvertisementTypePg {
   BANNER = 'banner',
   MENU = 'menu',
   POP_UP = 'pop_up',
@@ -1656,69 +1656,6 @@ export interface InterfaceQueryMembershipRequestsListItem {
       };
     }[];
   }[];
-}
-
-/**
- * Defines the structure for agenda item category information.
- */
-export interface InterfaceAgendaItemCategoryInfo {
-  _id: string;
-  name: string;
-  description: string;
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-}
-
-/**
- * Defines the structure for a list of agenda item categories by organization.
- */
-export interface InterfaceAgendaItemCategoryList {
-  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
-}
-
-/**
- * Defines the structure for agenda item information.
- */
-export interface InterfaceAgendaItemInfo {
-  _id: string;
-  title: string;
-  description: string;
-  duration: string;
-  attachments: string[];
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  urls: string[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  }[];
-  sequence: number;
-  categories: {
-    _id: string;
-    name: string;
-  }[];
-  organization: {
-    _id: string;
-    name: string;
-  };
-  relatedEvent: {
-    _id: string;
-    title: string;
-  };
-}
-
-/**
- * Defines the structure for a list of agenda items by event.
- */
-export interface InterfaceAgendaItemList {
-  agendaItemByEvent: InterfaceAgendaItemInfo[];
 }
 
 /**

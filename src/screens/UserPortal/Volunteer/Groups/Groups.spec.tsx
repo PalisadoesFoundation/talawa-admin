@@ -408,10 +408,10 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     // Change searchBy to leader - this changes the condition path
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     await userEvent.click(searchByDropdown);
 
-    const leaderOption = await screen.findByTestId('leader');
+    const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     // Type in search to trigger the leaderName variable assignment (line 96)
@@ -441,10 +441,10 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     // Change searchBy to leader to enable leaderName code path
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     await userEvent.click(searchByDropdown);
 
-    const leaderOption = await screen.findByTestId('leader');
+    const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     // Type leader name with whitespace to test trim() functionality
@@ -609,11 +609,11 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     // Click sort dropdown
-    const sortButton = screen.getByTestId('sort');
+    const sortButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortButton);
 
     // Select ASC sorting
-    const sortAscOption = await screen.findByTestId('volunteers_asc');
+    const sortAscOption = await screen.findByTestId('sort-item-volunteers_asc');
     await userEvent.click(sortAscOption);
 
     // Wait for re-query with new sort
@@ -667,7 +667,7 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    const sortButton = screen.getByTestId('sort');
+    const sortButton = screen.getByTestId('sort-container');
     expect(sortButton).toBeInTheDocument();
   });
 
@@ -840,15 +840,15 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     // Switch to leader
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     await userEvent.click(searchByDropdown);
 
-    let leaderOption = await screen.findByTestId('leader');
+    let leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     // Switch back to group
     await userEvent.click(searchByDropdown);
-    const groupOption = await screen.findByTestId('group');
+    const groupOption = await screen.findByTestId('searchBy-item-group');
     await userEvent.click(groupOption);
 
     expect(screen.getByText('Group 1')).toBeInTheDocument();
@@ -889,7 +889,7 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    const sortButton = screen.getByTestId('sort');
+    const sortButton = screen.getByTestId('sort-container');
 
     // Click multiple times
     await userEvent.click(sortButton);
@@ -960,9 +960,9 @@ describe('Groups Screen [User Portal]', () => {
     expect(searchInput).toHaveValue('');
 
     // Test search mode switching
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     await userEvent.click(searchByDropdown);
-    const leaderOption = await screen.findByTestId('leader');
+    const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     await userEvent.type(searchInput, 'leader test');
@@ -976,9 +976,9 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     await userEvent.click(searchByDropdown);
-    const leaderOption = await screen.findByTestId('leader');
+    const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     const searchInput = screen.getByTestId('searchByInput');
@@ -1021,9 +1021,9 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     await userEvent.click(searchByDropdown);
-    const leaderOption = await screen.findByTestId('leader');
+    const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     const searchInput = screen.getByTestId('searchByInput');
@@ -1039,10 +1039,10 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    const sortDropdown = screen.getByTestId('sort');
+    const sortDropdown = screen.getByTestId('sort-toggle');
     await userEvent.click(sortDropdown);
 
-    const sortOption = await screen.findByTestId('volunteers_desc');
+    const sortOption = await screen.findByTestId('sort-item-volunteers_desc');
     await userEvent.click(sortOption);
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
@@ -1065,7 +1065,7 @@ describe('Groups Screen [User Portal]', () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
     // Just verify the component renders with search functionality
@@ -1081,13 +1081,13 @@ describe('Groups Screen [User Portal]', () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('searchBy-container')).toBeInTheDocument();
     });
 
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     await userEvent.click(searchByDropdown);
 
-    const leaderOption = await screen.findByTestId('leader');
+    const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     await waitFor(() => {
@@ -1099,13 +1099,15 @@ describe('Groups Screen [User Portal]', () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sort')).toBeInTheDocument();
+      expect(screen.getByTestId('sort-container')).toBeInTheDocument();
     });
 
-    const sortDropdown = screen.getByTestId('sort');
+    const sortDropdown = screen.getByTestId('sort-toggle');
     await userEvent.click(sortDropdown);
 
-    const leastVolunteersOption = await screen.findByTestId('volunteers_asc');
+    const leastVolunteersOption = await screen.findByTestId(
+      'sort-item-volunteers_asc',
+    );
     await userEvent.click(leastVolunteersOption);
 
     await waitFor(() => {
@@ -1307,13 +1309,17 @@ describe('Groups Screen [User Portal]', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Verify search by options are available
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
     expect(searchByDropdown).toBeInTheDocument();
 
     // Test search by options
     await userEvent.click(searchByDropdown);
-    expect(await screen.findByTestId('group')).toBeInTheDocument();
-    expect(await screen.findByTestId('leader')).toBeInTheDocument();
+    expect(
+      await screen.findByTestId('searchBy-item-group'),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByTestId('searchBy-item-leader'),
+    ).toBeInTheDocument();
   });
 
   test('DataGridWrapper handles server-side search term changes', async () => {
@@ -1340,18 +1346,24 @@ describe('Groups Screen [User Portal]', () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sort')).toBeInTheDocument();
+      expect(screen.getByTestId('sort-container')).toBeInTheDocument();
     });
 
-    const sortDropdown = screen.getByTestId('sort');
+    const sortDropdown = screen.getByTestId('sort-toggle');
     await userEvent.click(sortDropdown);
 
-    // Verify sort options are available
-    expect(await screen.findByTestId('volunteers_desc')).toBeInTheDocument();
-    expect(await screen.findByTestId('volunteers_asc')).toBeInTheDocument();
+    await waitFor(() => {
+      // Verify sort options are available
+      expect(
+        screen.getByTestId('sort-item-volunteers_desc'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('sort-item-volunteers_asc'),
+      ).toBeInTheDocument();
+    });
 
     // Test sort selection
-    const sortOption = await screen.findByTestId('volunteers_asc');
+    const sortOption = await screen.findByTestId('sort-item-volunteers_asc');
     await userEvent.click(sortOption);
 
     // Verify sort change is handled
@@ -1364,19 +1376,19 @@ describe('Groups Screen [User Portal]', () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('searchBy-container')).toBeInTheDocument();
     });
 
-    const searchByDropdown = screen.getByTestId('searchBy');
+    const searchByDropdown = screen.getByTestId('searchBy-toggle');
 
     // Test switching to leader search
     await userEvent.click(searchByDropdown);
-    const leaderOption = await screen.findByTestId('leader');
+    const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
     // Test switching back to group search
     await userEvent.click(searchByDropdown);
-    const groupOption = await screen.findByTestId('group');
+    const groupOption = await screen.findByTestId('searchBy-item-group');
     await userEvent.click(groupOption);
 
     expect(screen.getByRole('grid')).toBeInTheDocument();

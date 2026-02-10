@@ -37,7 +37,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Outlet, useLocation, useParams } from 'react-router';
+import { Outlet, useLocation, useParams, useNavigate } from 'react-router';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
@@ -48,6 +48,10 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
+import DropDownButton from 'shared-components/DropDownButton';
+import useUserProfile from 'hooks/useUserProfile';
+import Avatar from 'shared-components/Avatar/Avatar';
+
 const map: InterfaceMapType = {
   organization: 'home',
   people: 'people',
@@ -74,6 +78,18 @@ const UserScreen = (): React.JSX.Element => {
   });
 
   const { orgId } = useParams();
+
+  const {
+    name,
+    displayedName,
+    userRole,
+    userImage,
+    profileDestination,
+    handleLogout,
+    tCommon,
+  } = useUserProfile('user');
+
+  const navigate = useNavigate();
 
   // Note: some user routes (for example global user pages like /user/notification)
   // don't include an `orgId`. In that case render the global user sidebar
@@ -134,27 +150,6 @@ const UserScreen = (): React.JSX.Element => {
 
   return (
     <>
-      {/* {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )} */}
       <div className={styles.drawer}>
         {orgId ? (
           <UserSidebarOrg
@@ -175,7 +170,81 @@ const UserScreen = (): React.JSX.Element => {
           <div className={styles.titleContainer}>
             <h1>{tScoped('title')}</h1>
           </div>
-          {/* <ProfileDropdown /> */}
+          <DropDownButton
+            id="user-profile-dropdown"
+            options={[
+              {
+                value: 'viewProfile',
+                label: tCommon('viewProfile'),
+              },
+              {
+                value: 'logout',
+                label: (
+                  <span className={styles.logoutBtn}>{tCommon('logout')}</span>
+                ),
+              },
+            ]}
+            onSelect={(eventKey) => {
+              switch (eventKey) {
+                case 'viewProfile':
+                  navigate(profileDestination);
+                  break;
+                case 'logout':
+                  handleLogout().catch((err) => {
+                    console.error('Logout failed:', err);
+                    // Optionally show a toast notification here
+                    // toast.error(tCommon('logoutFailed'));
+                  });
+                  break;
+                default:
+                  break;
+              }
+            }}
+            icon={
+              <div className={styles.profileContainer}>
+                <div className={styles.imageContainer}>
+                  {userImage ? (
+                    <img
+                      src={userImage}
+                      alt={tCommon('profilePicture')}
+                      data-testid="display-img"
+                      crossOrigin="anonymous"
+                      className={styles.profileImage}
+                    />
+                  ) : (
+                    <Avatar
+                      avatarStyle={styles.profileImage}
+                      containerStyle={styles.imageContainer}
+                      dataTestId="display-img"
+                      size={45}
+                      name={name}
+                      alt={tCommon('profilePicturePlaceholder')}
+                    />
+                  )}
+                </div>
+                <div className={styles.profileText}>
+                  <span
+                    className={styles.profileName}
+                    data-testid="display-name"
+                  >
+                    {displayedName}
+                  </span>
+                  <span
+                    className={styles.profileRole}
+                    data-testid="display-type"
+                  >
+                    {userRole}
+                  </span>
+                </div>
+              </div>
+            }
+            ariaLabel={tCommon('userProfileMenu')}
+            dataTestIdPrefix="profile"
+            btnStyle={styles.profileDropdownBtn}
+            variant="light"
+            menuClassName={styles.profileDropdownMenu}
+            showCaret={false}
+          />
         </div>
         <Outlet />
       </div>

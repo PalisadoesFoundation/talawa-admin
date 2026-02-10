@@ -7,7 +7,7 @@ describe('User Login Functionality', () => {
   });
 
   it('User Login', () => {
-    cy.fixture('users').then((users) => {
+    cy.fixture('auth/credentials').then((users) => {
       const userData = users['user'];
       const loginPage = new LoginPage();
 
@@ -18,7 +18,7 @@ describe('User Login Functionality', () => {
   });
 
   it('User Login with Invalid Credentials', () => {
-    cy.fixture('users').then((users) => {
+    cy.fixture('auth/credentials').then((users) => {
       const userData = users['user'];
       const loginPage = new LoginPage();
 

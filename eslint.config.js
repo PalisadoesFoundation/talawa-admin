@@ -1,15 +1,16 @@
-import { baseTypeScriptConfig } from './scripts/eslint/config/base.ts';
+import { baseTypeScriptConfig } from './scripts/eslint/config/base.js';
 import {
   avatarExemption,
   wrapperExemptions,
-} from './scripts/eslint/config/exemptions.ts';
-import { cypressConfig } from './scripts/eslint/config/cypress.ts';
-import { testConfig } from './scripts/eslint/config/tests.ts';
+} from './scripts/eslint/config/exemptions.js';
+import { cypressConfig } from './scripts/eslint/config/cypress.js';
+import { testConfig } from './scripts/eslint/config/tests.js';
+import { preferCrudModalTemplateConfig } from './scripts/eslint/config/prefer-crud-modal-template.js';
 import {
   configFilesConfig,
   graphqlConfig,
   searchComponentsExemption,
-} from './scripts/eslint/config/special.ts';
+} from './scripts/eslint/config/special.js';
 
 export default [
   {
@@ -42,4 +43,5 @@ export default [
   cypressConfig,
   configFilesConfig,
   testConfig,
+  preferCrudModalTemplateConfig,
 ];

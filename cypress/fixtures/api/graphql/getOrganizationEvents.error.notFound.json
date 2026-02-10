@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "message": "Organization not found",
+      "extensions": {
+        "code": "NOT_FOUND"
+      }
+    }
+  ]
+}
