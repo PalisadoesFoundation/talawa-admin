@@ -752,7 +752,8 @@
     "late": "En Retard",
     "searchByAssignee": "Rechercher par Attribué",
     "searchByCategory": "Rechercher par Catégorie",
-    "sortByAssignedDate": "Trier par Date d'Attribution"
+    "sortByAssignedDate": "Trier par Date d'Attribution",
+    "selectCategory": "Sélectionner une catégorie"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",

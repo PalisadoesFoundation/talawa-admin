@@ -747,7 +747,8 @@
     "late": "Atrasado",
     "searchByAssignee": "Buscar por Asignado",
     "searchByCategory": "Buscar por Categoría",
-    "sortByAssignedDate": "Ordenar por Fecha de Asignación"
+    "sortByAssignedDate": "Ordenar por Fecha de Asignación",
+    "selectCategory": "Seleccionar categoría"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",

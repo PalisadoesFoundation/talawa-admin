@@ -764,7 +764,8 @@
     "late": "देर",
     "searchByAssignee": "प्राप्तकर्ता द्वारा खोजें",
     "searchByCategory": "श्रेणी द्वारा खोजें",
-    "sortByAssignedDate": "आवंटन तिथि द्वारा क्रमबद्ध करें"
+    "sortByAssignedDate": "आवंटन तिथि द्वारा क्रमबद्ध करें",
+    "selectCategory": "श्रेणी चुनें"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",

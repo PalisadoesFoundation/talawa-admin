@@ -752,7 +752,8 @@
     "late": "Late",
     "searchByAssignee": "Search by assignee",
     "searchByCategory": "Search by category",
-    "sortByAssignedDate": "Sort by assigned date"
+    "sortByAssignedDate": "Sort by assigned date",
+    "selectCategory": "Select Category"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",

@@ -752,7 +752,8 @@
     "late": "逾期",
     "searchByAssignee": "按受托人搜索",
     "searchByCategory": "按类别搜索",
-    "sortByAssignedDate": "按分配日期排序"
+    "sortByAssignedDate": "按分配日期排序",
+    "selectCategory": "选择类别"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
