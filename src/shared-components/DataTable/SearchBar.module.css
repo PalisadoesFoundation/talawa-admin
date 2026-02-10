@@ -14,11 +14,14 @@
   min-width: var(--space-17);
 }
 
-.searchInput:focus-visible,
-.searchInput:focus {
+.searchInput:focus-visible {
   outline: var(--border-2) solid var(--datatable-focus-outline);
   outline-offset: var(--border-2);
   border-radius: var(--radius-sm);
+}
+
+.searchInput:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .searchClear {

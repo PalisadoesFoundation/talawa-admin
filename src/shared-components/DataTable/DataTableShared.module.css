@@ -3,6 +3,12 @@
  * These classes should be composed locally where needed.
  */
 
+.dataTableWrapper {
+  width: 100%;
+  position: relative;
+  overflow-x: auto;
+}
+
 .dataSkeletonCell {
   height: var(--space-5);
   width: 100%;
@@ -12,6 +18,7 @@
     var(--datatable-skeleton-base) 50%,
     var(--datatable-skeleton-highlight) 75%
   );
+  background-size: 200px 100%;
   border-radius: var(--radius-sm);
   animation: datatable-loading 1.2s ease-in-out infinite;
 }

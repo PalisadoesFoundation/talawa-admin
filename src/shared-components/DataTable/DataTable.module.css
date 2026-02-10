@@ -1,7 +1,5 @@
 .dataTableWrapper {
-  width: 100%;
-  position: relative;
-  overflow-x: auto;
+  composes: dataTableWrapper from './DataTableShared.module.css';
 }
 
 .dataTableBase {
