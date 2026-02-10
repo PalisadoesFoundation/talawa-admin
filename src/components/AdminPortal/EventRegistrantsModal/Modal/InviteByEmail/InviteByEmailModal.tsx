@@ -229,8 +229,6 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
             label={t('messageLabel', { defaultValue: 'Message (optional)' })}
             value={message || ''}
             onChange={(v: string) => setMessage(v)}
-            multiline
-            minRows={2}
             placeholder={t('messagePlaceholder')}
             data-testid="invite-message"
           />

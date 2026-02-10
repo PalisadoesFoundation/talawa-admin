@@ -356,6 +356,81 @@ export const MOCKS = [
   },
 ];
 
+export const ERROR_MOCKS = [
+  // 1️⃣ Assign fails
+  {
+    request: {
+      query: ASSIGN_TO_TAGS,
+      variables: {
+        currentTagId: '1',
+        selectedTagIds: ['Tag2', 'Tag3'],
+      },
+    },
+    error: new Error('Mock Graphql Error While assigning/removing tags'),
+  },
+
+  // 2️⃣ The component still queries tags
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            id: 'org1',
+            name: 'Org 1',
+            userTags: {
+              edges: userTagEdgesFirst,
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '10',
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 12,
+            },
+          },
+        ],
+      },
+    },
+  },
+
+  // 3️⃣ Sub-tags query (still runs)
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: subTagEdgesFirst,
+            pageInfo: {
+              startCursor: 'subTag1',
+              endCursor: 'subTag10',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 11,
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+];
+
 export const MOCKS_ERROR_SUBTAGS_QUERY = [
   {
     request: {

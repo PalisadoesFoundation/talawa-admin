@@ -57,6 +57,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   tagActionType,
   t,
   tCommon,
+  availableTags,
+  assignToTagsFn,
+  removeFromTagsFn,
 }) => {
   const { tagId: currentTagId } = useParams();
 
@@ -187,8 +190,10 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     }
   };
 
-  const [assignToTags] = useMutation(ASSIGN_TO_TAGS);
-  const [removeFromTags] = useMutation(REMOVE_FROM_TAGS);
+  const [assignToTags] =
+    assignToTagsFn?.(ASSIGN_TO_TAGS) ?? useMutation(ASSIGN_TO_TAGS);
+  const [removeFromTags] =
+    removeFromTagsFn?.(REMOVE_FROM_TAGS) ?? useMutation(REMOVE_FROM_TAGS);
 
   const handleTagAction = async (
     e: FormEvent<HTMLFormElement>,
@@ -262,7 +267,21 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         }
       >
         <form id="tagActionForm" onSubmit={handleTagAction}>
-          {/* modal content */}
+          {availableTags.map((tag) => (
+            <div key={tag._id}>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={checkedTags.has(tag._id)}
+                  onChange={() =>
+                    _toggleTagSelection(tag, !checkedTags.has(tag._id))
+                  }
+                  data-testid={`check${tag._id}`}
+                />
+                {tag.name}
+              </label>
+            </div>
+          ))}
         </form>
       </BaseModal>
     </>

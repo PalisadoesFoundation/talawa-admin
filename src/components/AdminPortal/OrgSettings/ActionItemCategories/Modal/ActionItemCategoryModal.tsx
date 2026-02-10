@@ -228,8 +228,6 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
           <FormTextField
             name="categoryDescription"
             label={t('actionItemCategoryDescription')}
-            as="textarea"
-            rows={3}
             autoComplete="off"
             value={description}
             onChange={(value: string): void =>

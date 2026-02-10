@@ -228,7 +228,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             <FormTextField
               name="orgDescrip"
               label={''}
-              as="textarea"
               className={styles.descriptionTextField}
               placeholder={t('enterOrganizationDescription')}
               autoComplete="off"

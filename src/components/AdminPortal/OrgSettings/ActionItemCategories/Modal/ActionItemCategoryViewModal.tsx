@@ -62,7 +62,6 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             name="categoryNameField"
             label={t('actionItemCategoryName')}
             value={category.name}
-            fullWidth
             disabled
             data-testid="categoryNameView"
           />
@@ -78,9 +77,6 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             name="categoryDescriptionField"
             label={t('status')}
             value={category.description || t('noDescriptionProvided')}
-            fullWidth
-            multiline
-            rows={4}
             disabled
             data-testid="categoryDescriptionView"
           />
@@ -94,7 +90,6 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             value={
               category.isDisabled ? tCommon('disabled') : tCommon('active')
             }
-            fullWidth
             startAdornment={
               <Circle
                 sx={{

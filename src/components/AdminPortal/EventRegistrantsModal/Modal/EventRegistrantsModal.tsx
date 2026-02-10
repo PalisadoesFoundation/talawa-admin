@@ -47,8 +47,6 @@ import {
   EVENT_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
@@ -58,6 +56,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
+import DropDownButton from 'shared-components/DropDownButton';
 
 export const EventRegistrantsModal = ({
   eventId,
@@ -179,59 +178,54 @@ export const EventRegistrantsModal = ({
             </div>
           }
         >
-          <Autocomplete
-            disablePortal
-            inputValue={inputValue}
-            onInputChange={(_, value) => setInputValue(value)}
+          {/* Replace the Autocomplete block inside BaseModal with this */}
+          <DropDownButton
             id="addRegistrant"
-            onChange={(_, newMember): void => {
-              setMember(newMember);
+            options={memberData?.usersByOrganizationId.map(
+              (user: InterfaceUser) => ({
+                value: user.id,
+                label: user.name || t('unknownUser'),
+              }),
+            )}
+            selectedValue={member?.id ?? ''}
+            onSelect={(val: string) => {
+              const selectedUser =
+                memberData?.usersByOrganizationId.find(
+                  (u: InterfaceUser) => u.id === val,
+                ) || null;
+              setMember(selectedUser);
+              setInputValue(selectedUser?.name || '');
             }}
-            noOptionsText={
-              <div className="d-flex ">
-                <p className="me-2">{t('noRegistrationsFound')}</p>
-                <button
-                  type="button"
-                  data-testid="add-onspot-link"
-                  className={`underline ${styles.underlineText}`}
-                  onClick={() => setOpen(true)}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setOpen(true);
-                    }
-                  }}
-                >
-                  {t('addOnspotRegistrationLink')}
-                </button>
-              </div>
-            }
-            options={memberData?.usersByOrganizationId || []}
-            getOptionLabel={(member: InterfaceUser): string =>
-              member.name || t('unknownUser')
-            }
-            renderInput={(params): React.ReactNode => (
-              <FormTextField
-                name="addRegistrant"
-                label={t('addRegistrantLabel') as string}
-                ref={params.InputProps.ref}
-                value={inputValue}
-                placeholder={t('addRegistrantPlaceholder') as string}
-                data-testid="autocomplete"
-                id={params.id}
-                disabled={params.disabled}
-                fullWidth
-                onChange={(v: string) => {
-                  if (params.inputProps?.onChange) {
-                    params.inputProps.onChange({
-                      target: { value: v },
-                    } as React.ChangeEvent<HTMLInputElement>);
+            searchable={true}
+            placeholder={t('addRegistrantPlaceholder')}
+            buttonLabel={inputValue}
+            ariaLabel={t('addRegistrantLabel')}
+          />
+
+          {/* Custom "no options / add on-spot registration" */}
+          {memberData?.usersByOrganizationId.filter((user: InterfaceUser) =>
+            (user.name || '').toLowerCase().includes(inputValue.toLowerCase()),
+          ).length === 0 && (
+            <div className="d-flex mt-2 align-items-center">
+              <p className="me-2">{t('noRegistrationsFound')}</p>
+              <Button
+                type="button"
+                data-testid="add-onspot-link"
+                className={`underline ${styles.underlineText}`}
+                onClick={() => setOpen(true)}
+                onMouseDown={(e) => e.preventDefault()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setOpen(true);
                   }
                 }}
-              />
-            )}
-          />
+              >
+                {t('addOnspotRegistrationLink')}
+              </Button>
+            </div>
+          )}
+
           <br />
         </BaseModal>
       </section>

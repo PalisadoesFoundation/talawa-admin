@@ -342,7 +342,6 @@ const VenueModal = ({
         <FormTextField
           name="venueDescription"
           label={tCommon('description')}
-          as="textarea"
           placeholder={t('enterVenueDesc')}
           value={description}
           required

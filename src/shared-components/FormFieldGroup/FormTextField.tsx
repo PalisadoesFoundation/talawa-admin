@@ -24,6 +24,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   onChange,
   disabled,
   hideLabel,
+  autoComplete,
   'data-testid': dataTestId,
   ...props
 }) => {
@@ -31,7 +32,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
 
   const renderControl = () => (
     <Form.Control
-      {...(props.as !== 'textarea' && { type })}
+      type={type}
       placeholder={placeholder}
       value={value}
       onChange={(e) => {
@@ -39,6 +40,8 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       }}
       isInvalid={isInvalid}
       disabled={disabled}
+      required={required}
+      autoComplete={autoComplete}
       data-testid={dataTestId}
       {...props}
     />

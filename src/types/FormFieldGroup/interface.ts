@@ -17,14 +17,19 @@ export interface InterfaceFormFieldGroupProps {
   inputId?: string;
 }
 
-export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
+export interface IFormTextFieldProps
+  extends
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      'name' | 'disabled' | 'value' | 'onChange' | 'size' | 'as'
+    >,
+    InterfaceFormFieldGroupProps {
   type?: 'text' | 'email' | 'password' | 'number' | 'url' | 'tel';
-  placeholder?: string;
   value: string;
   onChange?: (v: string) => void;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
   disabled?: boolean;
-  /** Additional HTML input attributes passed through to the underlying control */
-  [x: string]: unknown;
+  autoComplete?: string;
+  as?: 'input' | 'textarea';
 }

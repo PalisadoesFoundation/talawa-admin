@@ -348,6 +348,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                     className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
                     onClick={() => removeMember(member._id)}
                     data-testid="clearSelectedMember"
+                    aria-label={t('removeMember')}
                   />
                 </div>
               ))

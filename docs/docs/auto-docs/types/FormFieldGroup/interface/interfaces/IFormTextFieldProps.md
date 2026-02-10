@@ -10,25 +10,27 @@ Props for FormFieldGroup component.
 
 ## Extends
 
-- [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md)
-
-## Indexable
-
-\[`x`: `string`\]: `unknown`
-
-Additional HTML input attributes passed through to the underlying control
+- `Omit`\<`React.InputHTMLAttributes`\<`HTMLInputElement`\>, `"name"` \| `"disabled"` \| `"value"` \| `"onChange"` \| `"size"` \| `"as"`\>.[`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md)
 
 ## Properties
 
-### className?
+### as?
 
-> `optional` **className**: `string`
+> `optional` **as**: `"input"` \| `"textarea"`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
+Defined in: [src/types/FormFieldGroup/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L34)
 
-#### Inherited from
+***
 
-[`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`className`](InterfaceFormFieldGroupProps.md#classname)
+### autoComplete?
+
+> `optional` **autoComplete**: `string`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L33)
+
+#### Overrides
+
+`Omit.autoComplete`
 
 ***
 
@@ -48,7 +50,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L27)
+Defined in: [src/types/FormFieldGroup/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L32)
 
 #### Overrides
 
@@ -60,7 +62,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:27](https://github.com/Palisa
 
 > `optional` **endAdornment**: `ReactNode`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L26)
+Defined in: [src/types/FormFieldGroup/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L31)
 
 ***
 
@@ -164,7 +166,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/Palisad
 
 > `optional` **onChange**: (`v`) => `void`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L24)
+Defined in: [src/types/FormFieldGroup/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L29)
 
 #### Parameters
 
@@ -178,31 +180,11 @@ Defined in: [src/types/FormFieldGroup/interface.ts:24](https://github.com/Palisa
 
 ***
 
-### placeholder?
-
-> `optional` **placeholder**: `string`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L22)
-
-***
-
-### required?
-
-> `optional` **required**: `boolean`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L7)
-
-#### Inherited from
-
-[`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`required`](InterfaceFormFieldGroupProps.md#required)
-
-***
-
 ### startAdornment?
 
 > `optional` **startAdornment**: `ReactNode`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L25)
+Defined in: [src/types/FormFieldGroup/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L30)
 
 ***
 
@@ -222,7 +204,11 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/Palisa
 
 > `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"url"` \| `"tel"`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L21)
+Defined in: [src/types/FormFieldGroup/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L27)
+
+#### Overrides
+
+`Omit.type`
 
 ***
 
@@ -230,4 +216,4 @@ Defined in: [src/types/FormFieldGroup/interface.ts:21](https://github.com/Palisa
 
 > **value**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L23)
+Defined in: [src/types/FormFieldGroup/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L28)
