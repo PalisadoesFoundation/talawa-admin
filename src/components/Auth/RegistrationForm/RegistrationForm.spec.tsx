@@ -39,11 +39,13 @@ describe('RegistrationForm', () => {
       register: mockRegister,
       loading: false,
     });
+    vi.resetModules();
   });
 
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    vi.resetModules();
   });
 
   const renderComponent = (props = {}) => {
@@ -259,6 +261,23 @@ describe('RegistrationForm', () => {
 
   it('calls onSuccess callback when provided', async () => {
     const mockCallback = vi.fn();
+    const mockRegisterWithCallback = vi.fn().mockImplementation(() => {
+      // Simulate successful registration by calling onSuccess
+      const useRegistrationCall = vi.mocked(useRegistration).mock.calls[0][0];
+      if (useRegistrationCall?.onSuccess) {
+        useRegistrationCall.onSuccess({
+          signUp: { user: { id: 'test-user-id' } },
+          name: 'John Doe',
+          email: 'john@example.com',
+        });
+      }
+    });
+
+    vi.mocked(useRegistration).mockReturnValue({
+      register: mockRegisterWithCallback,
+      loading: false,
+    });
+
     renderComponent({ onSuccess: mockCallback });
 
     await user.type(screen.getByLabelText('First Name'), 'John Doe');
@@ -269,12 +288,13 @@ describe('RegistrationForm', () => {
     await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith({
+      expect(mockRegisterWithCallback).toHaveBeenCalledWith({
         name: 'John Doe',
         email: 'john@example.com',
         password: 'Password123!',
         organizationId: '',
       });
+      expect(mockCallback).toHaveBeenCalled();
     });
   });
 

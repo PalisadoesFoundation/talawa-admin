@@ -150,11 +150,13 @@ describe('LoginForm', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
+    vi.resetModules();
   });
 
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -670,6 +672,10 @@ describe('LoginForm', () => {
     test('form submission works with reCAPTCHA V3 enabled', async () => {
       const onSuccess = vi.fn();
 
+      // Ensure the reCAPTCHA mock is properly set up for this test
+      const { getRecaptchaToken } = await import('utils/recaptcha');
+      vi.mocked(getRecaptchaToken).mockResolvedValue('mock-recaptcha-token');
+
       render(
         <MockedProvider
           link={new StaticMockLink([mockSignInWithRecaptcha], true)}
@@ -689,18 +695,16 @@ describe('LoginForm', () => {
       await user.type(screen.getByTestId('login-form-password'), 'password123');
       await user.click(screen.getByTestId('login-form-submit'));
 
-      // Verify the success callback is called with the full signIn result
+      // Wait for the form submission to complete and verify the result
       await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalled();
+        const expected = (
+          mockSignInWithRecaptcha.result as
+            | { data?: { signIn: unknown } }
+            | undefined
+        )?.data?.signIn;
+        expect(onSuccess).toHaveBeenCalledWith(expected);
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
-
-      const expected = (
-        mockSignInWithRecaptcha.result as
-          | { data?: { signIn: unknown } }
-          | undefined
-      )?.data?.signIn;
-      expect(onSuccess).toHaveBeenCalledWith(expected);
     });
   });
 

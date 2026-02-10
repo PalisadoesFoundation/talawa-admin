@@ -339,6 +339,7 @@ beforeEach(() => {
   );
   // Avoid real network health-check fetch errors influencing toast assertions
   vi.spyOn(global, 'fetch').mockResolvedValue({} as Response);
+  vi.resetModules();
 });
 
 afterEach(() => {
@@ -351,6 +352,7 @@ afterEach(() => {
     writable: true,
     value: originalLocation,
   });
+  vi.resetModules();
 });
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
