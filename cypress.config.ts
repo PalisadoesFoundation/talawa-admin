@@ -99,7 +99,6 @@ const CREATE_ORGANIZATION_MUTATION = `
   mutation CreateOrganization($input: MutationCreateOrganizationInput!) {
     createOrganization(input: $input) {
       id
-      _id
     }
   }
 `;
@@ -141,7 +140,6 @@ const DELETE_ORGANIZATION_MUTATION = `
   mutation DeleteOrganization($input: MutationDeleteOrganizationInput!) {
     deleteOrganization(input: $input) {
       id
-      _id
     }
   }
 `;
@@ -282,10 +280,13 @@ export default defineConfig({
             extract: (data) => {
               const token = data?.signIn?.authenticationToken;
               const userId = data?.signIn?.user?.id;
-              if (!token || !userId) {
+              if (!token) {
                 throw new Error(
                   'SignIn response missing authentication token.',
                 );
+              }
+              if (!userId) {
+                throw new Error('SignIn response missing userId.');
               }
               return { token, userId };
             },
@@ -301,7 +302,7 @@ export default defineConfig({
           input: Record<string, unknown>;
         }) {
           return runGraphQLTask<
-            { createOrganization?: { id?: string; _id?: string } },
+            { createOrganization?: { id?: string } },
             { orgId: string }
           >({
             apiUrl,
@@ -310,8 +311,7 @@ export default defineConfig({
             query: CREATE_ORGANIZATION_MUTATION,
             variables: { input },
             extract: (data) => {
-              const orgId =
-                data?.createOrganization?.id || data?.createOrganization?._id;
+              const orgId = data?.createOrganization?.id;
               if (!orgId) {
                 throw new Error('CreateOrganization response missing org id.');
               }
@@ -398,6 +398,7 @@ export default defineConfig({
             token,
             operationName: 'CreateEventVolunteer',
             query: CREATE_VOLUNTEER_MUTATION,
+            // CREATE_VOLUNTEER_MUTATION uses $data for CreateEventVolunteer, not $input.
             variables: { data: input },
             extract: (data) => {
               const volunteerId = data?.createEventVolunteer?.id;
@@ -447,7 +448,7 @@ export default defineConfig({
           allowNotFound?: boolean;
         }) {
           return runGraphQLTask<
-            { deleteOrganization?: { id?: string; _id?: string } },
+            { deleteOrganization?: { id?: string } },
             { ok: boolean }
           >({
             apiUrl,
@@ -456,8 +457,7 @@ export default defineConfig({
             query: DELETE_ORGANIZATION_MUTATION,
             variables: { input: { id: orgId } },
             extract: (data) => {
-              const deletedId =
-                data?.deleteOrganization?.id || data?.deleteOrganization?._id;
+              const deletedId = data?.deleteOrganization?.id;
               return { ok: Boolean(deletedId) };
             },
             onErrors: (responseErrors) => {

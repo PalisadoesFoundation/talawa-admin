@@ -165,6 +165,7 @@ const resolveAuthToken = (auth?: AuthOptions): Cypress.Chainable<string> => {
   if (auth?.token) {
     return cy.wrap(auth.token, { log: false });
   }
+  // resolveAuthToken defaults role to 'admin' unless auth.role overrides it.
   const role = auth?.role ?? 'admin';
   return resolveCredentials(role, auth).then((credentials) => {
     return cy
@@ -197,7 +198,7 @@ const getSecureRandomSuffix = (length = 8): string => {
       .slice(0, length);
   }
 
-  return `${Date.now()}`;
+  return String(Date.now()).slice(0, length);
 };
 
 const makeUniqueLabel = (prefix: string): string => {
