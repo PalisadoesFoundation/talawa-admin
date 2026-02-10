@@ -168,7 +168,7 @@ Whether the field is required
 
 ### slotProps?
 
-> `optional` **slotProps**: `Partial`\<`DatePickerSlotProps`\<`false`\>\>
+> `optional` **slotProps**: `any`
 
 Defined in: [src/types/shared-components/DatePicker/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L47)
 
