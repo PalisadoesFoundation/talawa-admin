@@ -17,6 +17,8 @@
  * @param placeholder - Placeholder text when no option is selected.
  * @param parentContainerStyle - Additional styles for the parent container.
  * @param btnStyle - Additional styles for the dropdown button.
+ * @param menuClassName - Custom class name for the dropdown menu.
+ * @param showCaret - Whether to render the caret indicator (non-searchable mode).
  *
  * @returns A DropDownButton component.
  *
@@ -44,11 +46,12 @@
  * Ensure to pass appropriate props for optimal usage.
  *
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import type { InterfaceDropDownButtonProps } from 'types/shared-components/DropDownButton/interface';
 import styles from './DropDownButton.module.css';
 import { useTranslation } from 'react-i18next';
+import SearchToggle from './SearchToggle';
 
 const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   id,
@@ -66,13 +69,131 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   placeholder = 'Select an option',
   parentContainerStyle,
   btnStyle,
+  searchable = false,
+  searchPlaceholder,
+  showCaret = true,
+  menuClassName,
 }) => {
   const { t: tCommon } = useTranslation('common');
+  const resolvedSearchPlaceholder =
+    searchPlaceholder ?? tCommon('searchPlaceholder');
   const [isOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Sync searchTerm with selectedValue or initial implementation
+  React.useEffect(() => {
+    const selected = options.find((o) => o.value === (selectedValue ?? ''));
+    if (selected && typeof selected.label === 'string') {
+      setSearchTerm(selected.label);
+    } else {
+      setSearchTerm('');
+    }
+  }, [selectedValue, options]);
+
   const selected = options.find((o) => o.value === (selectedValue ?? ''));
   const displayLabel = buttonLabel || selected?.label || placeholder;
 
-  const handleSelect = useCallback((val: string) => onSelect(val), [onSelect]);
+  const handleSelect = useCallback(
+    (val: string) => {
+      onSelect(val);
+      setIsOpen(false);
+      // Update local search term immediately for better UX
+      const selectedOpt = options.find((o) => o.value === val);
+      if (selectedOpt && typeof selectedOpt.label === 'string')
+        setSearchTerm(selectedOpt.label);
+    },
+    [onSelect, options],
+  );
+
+  const filteredOptions = useMemo(
+    () =>
+      searchable
+        ? options.filter((opt) => {
+            if (typeof opt.label !== 'string') {
+              return searchTerm.trim().length === 0;
+            }
+            return opt.label.toLowerCase().includes(searchTerm.toLowerCase());
+          })
+        : options,
+    [searchable, options, searchTerm],
+  );
+
+  if (searchable) {
+    return (
+      <Dropdown
+        drop={drop}
+        show={isOpen}
+        onToggle={(nextIsOpen, metadata) => {
+          if (metadata.source === 'select' || metadata.source === 'rootClose') {
+            setIsOpen(false);
+            return;
+          }
+          setIsOpen(nextIsOpen);
+        }}
+        className={[
+          styles.dropdownContainer,
+          parentContainerStyle || '',
+          isOpen ? styles.dropdownOpen : '',
+        ].join(' ')}
+        data-testid={`${dataTestIdPrefix}-container`}
+      >
+        <Dropdown.Toggle
+          as={SearchToggle}
+          id={id}
+          variant={variant}
+          disabled={disabled}
+          // Pass props needed by SearchToggle
+          value={searchTerm}
+          // Type assertion needed: Dropdown.Toggle expects FormEventHandler,
+          // but SearchToggle uses ChangeEventHandler for the input element
+          onChange={
+            ((e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchTerm(e.target.value);
+              setIsOpen(true);
+            }) as unknown as React.FormEventHandler<HTMLButtonElement>
+          }
+          onInputClick={() => setIsOpen(true)}
+          placeholder={resolvedSearchPlaceholder}
+          icon={icon}
+          dataTestIdPrefix={dataTestIdPrefix}
+          className={`${styles.dropdownToggle} ${btnStyle || ''}`}
+        />
+
+        <Dropdown.Menu
+          role="listbox"
+          aria-label={ariaLabel || tCommon('optionsSuffix')}
+          className={`${styles.dropdownMenu} w-100 ${menuClassName || ''}`}
+          data-testid={`${dataTestIdPrefix}-menu`}
+        >
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((opt) => (
+              <Dropdown.Item
+                key={opt.value}
+                role="option"
+                aria-selected={opt.value === selectedValue}
+                disabled={opt.disabled}
+                className={[
+                  styles.dropdownItem,
+                  opt.value === selectedValue
+                    ? styles.dropdownItemSelected
+                    : '',
+                  opt.disabled ? styles.dropdownItemDisabled : '',
+                ].join(' ')}
+                onClick={() => handleSelect(opt.value)}
+                data-testid={`${dataTestIdPrefix}-item-${opt.value}`}
+              >
+                {opt.label}
+              </Dropdown.Item>
+            ))
+          ) : (
+            <div className="px-3 py-2 text-muted text-center">
+              {tCommon('noOptionsFound')}
+            </div>
+          )}
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
 
   return (
     <Dropdown
@@ -103,7 +224,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
           </span>
         )}
         <span className={styles.buttonLabel}>{displayLabel}</span>
-        <span className={styles.dropdownCaret}>▼</span>
+        {showCaret && <span className={styles.dropdownCaret}>▼</span>}
       </Dropdown.Toggle>
       <Dropdown.Menu
         role="listbox"
@@ -112,7 +233,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
             ? `${ariaLabel} ${tCommon('optionsSuffix')}`
             : tCommon('optionsSuffix')
         }
-        className={styles.dropdownMenu}
+        className={`${styles.dropdownMenu} ${menuClassName || ''}`}
         data-testid={`${dataTestIdPrefix}-menu`}
       >
         {options.map((opt) => (

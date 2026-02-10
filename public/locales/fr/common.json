@@ -299,5 +299,9 @@
   "toggleSidebar": "Basculer la barre latérale",
   "picture": "Image de {{name}}",
   "optionsSuffix": "options",
-  "userMenu": "Menu utilisateur"
+  "userMenu": "Menu utilisateur",
+  "searchPlaceholder": "Rechercher...",
+  "noOptionsFound": "Aucune option trouvée",
+  "noUserId": "ID utilisateur non disponible",
+  "noTagsFound": "Aucune étiquette trouvée"
 }

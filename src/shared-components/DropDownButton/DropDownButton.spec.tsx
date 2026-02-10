@@ -16,6 +16,9 @@ import {
   mockOnSelect,
   noTestIdProps,
   dropUpProps,
+  searchableMinimalProps,
+  withIconSearchProps,
+  withNonStringLabelProps,
 } from './DropDownButton.mocks';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -148,11 +151,169 @@ describe('DropDownButton Component', () => {
     const button = screen.getByTestId('dropdown-toggle');
     expect(button).toBeInTheDocument();
   });
+
   it('opens dropdown menu upwards when drop up is provided', async () => {
     renderComponent(dropUpProps);
     const button = screen.getByTestId('test-dropdown-toggle');
     await userEvent.click(button);
     const menu = screen.getByTestId('test-dropdown-menu');
     expect(menu.parentElement).toHaveClass('dropup');
+  });
+  it('does not show caret when showCaret is false', () => {
+    renderComponent({
+      ...baseProps,
+      showCaret: false,
+    });
+    const caret = screen.queryByText('▼');
+    expect(caret).not.toBeInTheDocument();
+  });
+
+  it('updates search term on option selection in searchable dropdown', async () => {
+    renderComponent(searchableMinimalProps);
+
+    const input = screen.getByTestId('test-dropdown-input');
+
+    await userEvent.click(input);
+    await screen.findByTestId('test-dropdown-menu');
+
+    const option = screen.getByTestId('test-dropdown-item-1');
+    await userEvent.click(option);
+    expect(input).toHaveValue('Apple');
+  });
+
+  it('shows noOptionsFound when all options filtered out', async () => {
+    renderComponent(searchableMinimalProps);
+
+    const input = screen.getByTestId('test-dropdown-input');
+
+    await userEvent.click(input);
+    await userEvent.type(input, 'Xyz');
+
+    const noOptionsMsg = await screen.findByText('No options found');
+    expect(noOptionsMsg).toBeInTheDocument();
+  });
+  it('renders icon in searchable toggle when icon prop is provided', () => {
+    renderComponent(withIconSearchProps);
+
+    const icon = screen.getByTestId('dropdown-icon');
+    expect(icon).toBeInTheDocument();
+  });
+  describe('Searchable DropDownButton', () => {
+    const searchableProps = {
+      ...baseProps,
+      searchable: true,
+      searchPlaceholder: 'Search options...',
+      selectedValue: undefined,
+    };
+
+    it('renders SearchToggle when searchable is true', () => {
+      renderComponent(searchableProps);
+      expect(screen.getByTestId('test-dropdown-input')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('test-dropdown-toggle'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('updates internal searchTerm and filters options when typing', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      // Helper to scroll input into view if needed (though not strictly required for unit tests usually)
+      await userEvent.type(input, 'Option 1');
+
+      expect(input).toHaveValue('Option 1');
+
+      // The menu should be open and contain only the matching option
+      const menu = screen.getByTestId('test-dropdown-menu');
+      expect(menu).toHaveClass('show');
+
+      const option1 = screen.getByText('Option 1');
+      expect(option1).toBeInTheDocument();
+      expect(screen.queryByText('Option 2')).not.toBeInTheDocument();
+    });
+
+    it('shows "No options found" message when no options match', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      await userEvent.type(input, 'Nonexistent Option');
+
+      expect(screen.getByText('No options found')).toBeInTheDocument();
+    });
+
+    it('syncs searchTerm with selectedValue prop', () => {
+      // explicit selectedValue to test sync
+      renderComponent({ ...searchableProps, selectedValue: '1' });
+      const input = screen.getByTestId(
+        'test-dropdown-input',
+      ) as HTMLInputElement;
+
+      // Should match label of option with value '1'
+      expect(input.value).toBe('Option 1');
+    });
+
+    it('updates searchTerm and closes menu on selection', async () => {
+      renderComponent({ ...searchableProps, selectedValue: undefined });
+      const input = screen.getByTestId('test-dropdown-input');
+
+      await userEvent.click(input); // Open menu
+      await userEvent.click(screen.getByText('Option 2'));
+
+      expect(mockOnSelect).toHaveBeenCalledWith('2');
+      // searchTerm update is immediate in component
+      expect(input).toHaveValue('Option 2');
+    });
+
+    it('opens menu on input click', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      await userEvent.click(input);
+      expect(screen.getByTestId('test-dropdown-menu')).toHaveClass('show');
+    });
+
+    it('opens menu on Enter key press', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+      input.focus();
+      await userEvent.keyboard('{Enter}');
+      expect(screen.getByTestId('test-dropdown-menu')).toHaveClass('show');
+    });
+
+    it('closes menu on Escape key', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+      await userEvent.click(input);
+      await userEvent.keyboard('{Escape}');
+      expect(screen.queryByTestId('test-dropdown-menu')).not.toHaveClass(
+        'show',
+      );
+    });
+
+    it('navigates and selects options with keyboard (ArrowDown/Enter)', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+      await userEvent.click(input);
+
+      await userEvent.keyboard('{ArrowDown}');
+
+      await userEvent.keyboard('{Enter}');
+
+      expect(mockOnSelect).toHaveBeenCalledWith('1');
+    });
+    it('filters non-string label options based on search term', async () => {
+      renderComponent(withNonStringLabelProps);
+
+      const input = screen.getByTestId('test-dropdown-input');
+      await userEvent.click(input);
+
+      expect(screen.getByTestId('icon-label')).toBeInTheDocument();
+      expect(screen.getByText('String Label Option')).toBeInTheDocument();
+
+      await userEvent.type(input, 'String');
+
+      expect(screen.queryByTestId('icon-label')).not.toBeInTheDocument();
+      expect(screen.getByText('String Label Option')).toBeInTheDocument();
+    });
   });
 });

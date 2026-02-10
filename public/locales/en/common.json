@@ -299,5 +299,9 @@
   "toggleSidebar": "Toggle sidebar",
   "picture": "{{name}} Picture",
   "optionsSuffix": "options",
-  "userMenu": "User menu"
+  "userMenu": "User menu",
+  "searchPlaceholder": "Search...",
+  "noOptionsFound": "No options found",
+  "noUserId": "User ID not available",
+  "noTagsFound": "No tags found"
 }
