@@ -16,6 +16,24 @@ export class AdvertisementPage {
   private readonly _deleteBtn = '[data-cy="deletebtn"]';
   private readonly _deleteConfirmBtn = '[data-testid="delete_yes"]';
 
+  private aliasAdvertisementListQuery() {
+    cy.aliasGraphQLOperation('OrganizationAdvertisements');
+  }
+
+  private aliasDeleteAdvertisementMutation() {
+    const apiPattern =
+      (Cypress.env('apiUrl') as string | undefined) ||
+      (Cypress.env('API_URL') as string | undefined) ||
+      (Cypress.env('CYPRESS_API_URL') as string | undefined) ||
+      '**/graphql';
+
+    cy.intercept('POST', apiPattern, (req) => {
+      if (req.body?.query?.includes('deleteAdvertisement')) {
+        req.alias = 'deleteAdvertisement';
+      }
+    });
+  }
+
   visitAdvertisementPage(orgId?: string, timeout = 10000) {
     const openOrgDashboard = (id: string) => {
       cy.visit(`/admin/orgdash/${id}`);
@@ -89,11 +107,15 @@ export class AdvertisementPage {
   }
 
   verifyAndDeleteAdvertisement(adName: string) {
-    cy.contains(this._activeCampaignsTab).should('be.visible').click();
+    this.aliasAdvertisementListQuery();
+    cy.reload();
+    cy.wait('@OrganizationAdvertisements', { timeout: 20000 });
     cy.contains(adName).should('be.visible');
+    this.aliasDeleteAdvertisementMutation();
     cy.get(this._dropdownBtn).should('be.visible').click();
     cy.get(this._deleteBtn).should('be.visible').trigger('click');
     cy.get(this._deleteConfirmBtn).should('be.visible').click();
+    cy.wait('@deleteAdvertisement');
     cy.get(this._alert)
       .should('be.visible')
       .and('contain.text', 'Advertisement deleted successfully.');
