@@ -2442,7 +2442,19 @@
     "eventsCreatedByOrganization": "Événements créés par l'organisation",
     "today": "Aujourd'hui",
     "viewLess": "Voir moins",
-    "viewAll": "Voir tout"
+    "viewAll": "Voir tout",
+    "noHolidaysAvailable": "Aucun jour férié disponible",
+    "holidayNames": {
+      "mayDayLabourDay": "Fête du Travail",
+      "mothersDay": "Fête des Mères",
+      "fathersDay": "Fête des Pères",
+      "independenceDayUS": "Fête de l'Indépendance (États-Unis)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Jour du Souvenir / Jour des Anciens Combattants",
+      "christmasDay": "Jour de Noël"
+    }
   },
   "contact": {
     "card_aria": "Carte de contact"

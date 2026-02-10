@@ -2442,7 +2442,19 @@
     "eventsCreatedByOrganization": "组织创建的活动",
     "today": "今天",
     "viewLess": "查看更少",
-    "viewAll": "查看全部"
+    "viewAll": "查看全部",
+    "noHolidaysAvailable": "没有可用的节假日",
+    "holidayNames": {
+      "mayDayLabourDay": "劳动节",
+      "mothersDay": "母亲节",
+      "fathersDay": "父亲节",
+      "independenceDayUS": "独立日（美国）",
+      "oktoberfest": "慕尼黑啤酒节",
+      "halloween": "万圣节",
+      "diwali": "排灯节",
+      "remembranceDayVeteransDay": "阵亡将士纪念日 / 退伍军人节",
+      "christmasDay": "圣诞节"
+    }
   },
   "contact": {
     "card_aria": "联系人卡片"
