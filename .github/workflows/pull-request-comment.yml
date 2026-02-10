@@ -1,4 +1,4 @@
-name: On PR Open – First-Time Contributor Comment
+name: On PR Open - First Time Contributor Comment
 
 on:
   pull_request_target:
