@@ -7,16 +7,16 @@
 }
 
 .icon {
-  margin-right: 8px;
+  margin-right: var(--space-3);
 }
 
 .iconLarge {
-  font-size: 48px;
+  font-size: var(--font-size-4xl);
 }
 
 .TableImage {
   object-fit: cover;
-  margin-right: 5px;
+  margin-right: var(--space-3);
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
   border-radius: 100% !important;
@@ -25,10 +25,13 @@
 .assigneeCellContainer {
   display: flex;
   align-items: center;
+  font-weight: var(--font-weight-bold);
+  margin-inline-start: var(--space-3);
 }
 
 .groupIconSecondary {
   background-color: var(--color-gray-300);
+  margin-inline-start: var(--space-2);
 }
 
 .tableHeader {
@@ -40,8 +43,8 @@
   background-color: var(--infoButton-bg) !important;
   border-color: var(--infoButton-border);
   color: var(--infoButton-color);
-  margin-right: 0.5rem;
-  border-radius: 0.25rem;
+  margin-right: var(--space-3);
+  border-radius: var(--space-2);
 }
 
 .infoButton:hover {
@@ -71,39 +74,41 @@
 
 .checkboxButton input:focus {
   border-color: var(--checkbox-focus-border);
-  outline: 2px solid var(--checkbox-focus-border);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--checkbox-focus-border);
+  outline-offset: var(--space-1);
 }
 
 .dropdown {
   background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
+  min-width: var(--space-15);
+  border: var(--border-1) solid var(--dropdown-border);
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
 }
 
 .createButton {
-  background-color: var(--createButton-bg) !important;
-  color: var(--createButton-color) !important;
-  border: 1px solid var(--createButton-border) !important;
-  margin: 5px 10px;
-  width: 10rem;
-  height: 3rem;
+  background-color: var(--createButton-bg);
+  color: var(--createButton-color);
+  border: var(--border-1) solid var(--createButton-border);
+  margin: var(--space-3) var(--space-4);
+  width: var(--space-16);
+  height: var(--space-10);
 }
 
 .rowBackground {
   background-color: var(--rowBackground-bg);
   color: var(--rowBackground-color);
-  max-height: 120px;
+  max-height: var(--space-14);
   overflow-y: auto;
 }
 
 .btnsContainer {
   display: flex;
-  margin: 2.5rem 0;
+  margin: var(--space-9) var(--space-0);
   align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
 }
 
 @media (max-width: 520px) {
@@ -115,7 +120,7 @@
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
-    margin: 1.5rem 0;
+    margin: var(--space-7) var(--space-0);
   }
 }
 
@@ -125,4 +130,28 @@
     display: flex;
     flex-direction: column;
   }
+}
+
+.loadingHeading {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-red-500);
+  text-align: center;
+}
+
+.categoryName {
+  display: flex;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+}
+
+.statusCheckBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-5);
+}
+
+.searchByContainer {
+  display: flex;
+  gap: var(--space-4);
 }

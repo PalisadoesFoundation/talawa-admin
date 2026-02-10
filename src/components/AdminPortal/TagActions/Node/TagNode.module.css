@@ -1,0 +1,77 @@
+.errorContainer {
+  min-height: 100vh;
+  border-radius: var(--space-3);
+  background-color: var(--color-white);
+  margin: var(--space-5) var(--space-0);
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+  font-size: var(--font-size-md);
+}
+
+.loadingError {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-red-500);
+  text-align: center;
+}
+
+.childTags {
+  margin: var(--space-3) var(--space-0);
+}
+
+.expandSubTags {
+  cursor: pointer;
+  margin-inline-end: var(--space-5);
+}
+.checkTags {
+  cursor: pointer;
+  margin-inline-end: var(--space-3);
+}
+
+.dotSeparator {
+  margin-inline-end: var(--space-5);
+}
+.checkTagsExtend {
+  cursor: pointer;
+  margin-inline-end: var(--space-3);
+  margin-inline-start: var(--space-2);
+}
+
+.simpleLoaderContainer {
+  margin-inline-start: var(--space-10);
+}
+
+.simpleLoader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+.spinner {
+  width: var(--space-8);
+  height: var(--space-8);
+  margin: var(--space-5) var(--space-0);
+  border: var(--border-4) solid transparent;
+  border-top-color: var(--spinner-border);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+.subTagsScrollableContainer {
+  margin-inline-end: var(--space-7);
+}
+
+.subtagsScrollableDiv {
+  max-height: var(--space-20);
+  overflow: auto;
+}

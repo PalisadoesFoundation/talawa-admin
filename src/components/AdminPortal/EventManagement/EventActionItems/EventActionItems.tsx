@@ -52,6 +52,7 @@ import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdat
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -85,6 +86,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const { t: tErrors } = useTranslation('errors');
 
   const { orgId } = useParams();
+  const MIN_WIDTH_VALUE = 100;
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -97,32 +102,32 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const [actionItems, setActionItems] = useState<IActionItemInfo[]>([]);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-
-  const itemModalState = useModalState();
-  const deleteModalState = useModalState();
-  const viewModalState = useModalState();
-  const statusModalState = useModalState();
+  const sameModal = useModalState(); // SAME
+  const viewModal = useModalState(); // VIEW
+  const deleteModal = useModalState(); // DELETE
+  const statusModal = useModalState(); // STATUS
 
   const handleModalClick = useCallback(
-    (actionItem: IActionItemInfo | null, modal: ModalState): void => {
-      setActionItem(actionItem);
-      if (modal === ModalState.SAME) {
-        setModalMode(actionItem ? 'edit' : 'create');
-        itemModalState.open();
-      } else if (modal === ModalState.DELETE) {
-        deleteModalState.open();
-      } else if (modal === ModalState.VIEW) {
-        viewModalState.open();
-      } else if (modal === ModalState.STATUS) {
-        statusModalState.open();
+    (item: IActionItemInfo | null, modal: ModalState): void => {
+      setActionItem(item);
+
+      switch (modal) {
+        case ModalState.SAME:
+          setModalMode(item ? 'edit' : 'create');
+          sameModal.open();
+          break;
+        case ModalState.VIEW:
+          viewModal.open();
+          break;
+        case ModalState.DELETE:
+          deleteModal.open();
+          break;
+        case ModalState.STATUS:
+          statusModal.open();
+          break;
       }
     },
-    [
-      itemModalState.open,
-      deleteModalState.open,
-      viewModalState.open,
-      statusModalState.open,
-    ],
+    [sameModal, viewModal, deleteModal, statusModal],
   );
 
   const {
@@ -228,7 +233,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={`${styles.icon} ${styles.iconLarge}`} />
-        <h6 className="fw-bold text-danger text-center">
+        <h6 className={styles.loadingHeading}>
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
       </div>
@@ -241,7 +246,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('assignedTo'),
       flex: 1,
       align: 'left',
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: MIN_WIDTH_VALUE,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -271,7 +276,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
         return (
           <div
-            className={`d-flex fw-bold align-items-center ms-2 ${styles.assigneeCellContainer}`}
+            className={styles.assigneeCellContainer}
             data-testid="assigneeName"
           >
             <div className={styles.TableImage}>
@@ -292,7 +297,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             {isGroup && (
               <Group
                 fontSize="small"
-                className={`ms-1 ${styles.groupIconSecondary}`}
+                className={styles.groupIconSecondary}
                 data-testid="groupIcon"
               />
             )}
@@ -305,16 +310,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('itemCategory'),
       flex: 1,
       align: 'center',
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: MIN_WIDTH_VALUE,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
+          <div className={styles.categoryName} data-testid="categoryName">
             {params.row.category?.name || t('noCategory')}
           </div>
         );
@@ -360,7 +362,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('options'),
       align: 'center',
       flex: 1,
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: MIN_WIDTH_VALUE,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -405,13 +407,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('completed'),
       align: 'center',
       flex: 1,
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: MIN_WIDTH_VALUE,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex align-items-center justify-content-center mt-3">
+          <div className={styles.statusCheckBox}>
             <input
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
@@ -432,7 +434,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   return (
     <div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div className={styles.btnsContainer}>
         <SearchBar
           placeholder={tCommon('searchBy', {
             item:
@@ -446,7 +448,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           inputTestId="searchBy"
           buttonTestId="searchBtn"
         />
-        <div className="d-flex gap-3">
+        <div className={styles.searchByContainer}>
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[
@@ -524,7 +526,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         hideFooter={true}
         getRowId={(row) => row.id}
         sx={{
-          backgroundColor: 'white',
+          backgroundColor: 'var(--color-white)',
           borderRadius: 'var(--radius-xl)',
           '& .MuiDataGrid-columnHeaders': { border: 'none' },
           '& .MuiDataGrid-cell': { border: 'none' },
@@ -549,8 +551,8 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       />
 
       <ItemModal
-        isOpen={itemModalState.isOpen}
-        hide={itemModalState.close}
+        isOpen={sameModal.isOpen}
+        hide={sameModal.close}
         orgId={orgId}
         eventId={eventId}
         actionItemsRefetch={eventActionItemsRefetch}
@@ -564,23 +566,23 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       {actionItem && (
         <>
           <ItemViewModal
-            isOpen={viewModalState.isOpen}
-            hide={viewModalState.close}
+            isOpen={viewModal.isOpen}
+            hide={viewModal.close}
             item={actionItem}
           />
 
           <ItemUpdateStatusModal
             actionItem={actionItem}
-            isOpen={statusModalState.isOpen}
-            hide={statusModalState.close}
+            isOpen={statusModal.isOpen}
+            hide={statusModal.close}
             actionItemsRefetch={eventActionItemsRefetch}
             isRecurring={isRecurring}
             eventId={eventId}
           />
 
           <ItemDeleteModal
-            isOpen={deleteModalState.isOpen}
-            hide={deleteModalState.close}
+            isOpen={deleteModal.isOpen}
+            hide={deleteModal.close}
             actionItem={actionItem}
             actionItemsRefetch={eventActionItemsRefetch}
             eventId={eventId}
