@@ -28,7 +28,7 @@
   margin-top: var(--space-2);
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: var(--font-size-sm);
-  color: var(--errorState-color, #5c1a21);
+  color: var(--datatable-error-details-color, #5c1a21);
 }
 
 .dataEmptyState {
@@ -41,22 +41,7 @@
 }
 
 .bulkBtn {
-  border: var(--border-1) solid var(--datatable-border);
-  background: var(--datatable-surface);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.15s ease;
-}
-
-.bulkBtn:hover:not(:disabled) {
-  background: var(--datatable-hover-bg);
-}
-
-.bulkBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  composes: bulkBtn from './DataTableShared.module.css';
 }
 
 .actionsCellContainer {

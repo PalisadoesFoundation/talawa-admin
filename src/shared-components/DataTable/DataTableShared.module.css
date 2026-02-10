@@ -1,0 +1,46 @@
+/**
+ * Shared styles for DataTable components to avoid code duplication.
+ * These classes should be composed locally where needed.
+ */
+
+.dataSkeletonCell {
+  height: 1em;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--datatable-skeleton-highlight) 25%,
+    var(--datatable-skeleton-base) 50%,
+    var(--datatable-skeleton-highlight) 75%
+  );
+  border-radius: var(--radius-sm);
+  animation: datatable-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes datatable-loading {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.bulkBtn {
+  border: var(--border-1) solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: background-color 0.15s ease;
+}
+
+.bulkBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

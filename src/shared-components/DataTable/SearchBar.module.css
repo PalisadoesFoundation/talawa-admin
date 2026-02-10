@@ -34,5 +34,5 @@
 }
 
 .searchClear:hover {
-  color: var(--primaryText-color, #000000);
+  color: var(--datatable-clear-hover-color, #000000);
 }

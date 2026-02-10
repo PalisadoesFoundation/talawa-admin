@@ -22,22 +22,7 @@
 }
 
 .bulkBtn {
-  border: var(--border-1) solid var(--datatable-border);
-  background: var(--datatable-surface);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.15s ease;
-}
-
-.bulkBtn:hover:not(:disabled) {
-  background: var(--datatable-hover-bg);
-}
-
-.bulkBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  composes: bulkBtn from './DataTableShared.module.css';
 }
 
 .bulkClear {
