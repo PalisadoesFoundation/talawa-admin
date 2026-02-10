@@ -773,7 +773,7 @@ test('should toggle sidebar visibility', async () => {
 test('should handle GraphQL error in all organizations query', async () => {
   const consoleErrorSpy = vi
     .spyOn(console, 'error')
-    .mockImplementation(() => { });
+    .mockImplementation(() => {});
 
   try {
     render(
