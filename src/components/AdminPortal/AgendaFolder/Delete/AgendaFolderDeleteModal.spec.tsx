@@ -1,10 +1,10 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-
+import { vi, describe, it, expect, afterEach } from 'vitest';
+import * as ApolloClient from '@apollo/client';
 import AgendaFolderDeleteModal from './AgendaFolderDeleteModal';
 import { DELETE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
 import i18nForTest from 'utils/i18nForTest';
@@ -92,6 +92,8 @@ const renderAgendaFolderDeleteModal = (
 
 describe('AgendaFolderDeleteModal', () => {
   afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
@@ -131,61 +133,21 @@ describe('AgendaFolderDeleteModal', () => {
     });
   });
 
-  describe('Branch coverage – non-Error rejection', () => {
-    beforeEach(async () => {
-      vi.resetModules();
+  it('shows error toast with error message when mutation throws an Error', async () => {
+    const mutationError = new Error('Delete failed directly');
 
-      vi.doMock('@apollo/client', async () => {
-        const actual =
-          await vi.importActual<typeof import('@apollo/client')>(
-            '@apollo/client',
-          );
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      vi.fn().mockRejectedValueOnce(mutationError),
+      { loading: false, error: undefined, called: false },
+    ] as unknown as ReturnType<typeof ApolloClient.useMutation>);
 
-        return {
-          ...actual,
-          useMutation: () => [
-            vi.fn().mockRejectedValueOnce('Network failure'),
-            { loading: false, error: undefined },
-          ],
-        };
-      });
-    });
+    renderAgendaFolderDeleteModal([], true);
 
-    afterEach(() => {
-      vi.doUnmock('@apollo/client');
-      vi.resetModules();
-      vi.clearAllMocks();
-    });
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
-    it('does nothing when mutation throws non-Error value', async () => {
-      const { default: AgendaFolderDeleteModal } =
-        await import('./AgendaFolderDeleteModal');
-
-      render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaFolderDeleteModal
-              isOpen
-              onClose={mockOnClose}
-              agendaFolderId={mockAgendaFolderId}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockT}
-              tCommon={mockTCommon}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await userEvent.click(screen.getByTestId('modal-delete-btn'));
-
-      await waitFor(
-        () => {
-          expect(NotificationToast.error).not.toHaveBeenCalled();
-          expect(NotificationToast.success).not.toHaveBeenCalled();
-          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
-          expect(mockOnClose).not.toHaveBeenCalled();
-        },
-        { timeout: 5000 },
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Delete failed directly',
       );
     });
   });
