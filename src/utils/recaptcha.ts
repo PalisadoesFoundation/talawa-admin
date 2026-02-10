@@ -4,7 +4,8 @@ interface InterfaceGrecaptcha {
 }
 
 declare global {
-  interface InterfaceWindow extends Window {
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  interface Window {
     grecaptcha?: InterfaceGrecaptcha;
   }
 }
@@ -46,9 +47,12 @@ export const loadRecaptchaScript = async (siteKey: string): Promise<void> => {
       isScriptLoaded = true;
 
       // Hide reCAPTCHA badge with CSS injection
-      const style = document.createElement('style');
-      style.innerHTML = '.grecaptcha-badge { display: none !important; }';
-      document.head.appendChild(style);
+      if (!document.querySelector('style[data-recaptcha-hide]')) {
+        const style = document.createElement('style');
+        style.setAttribute('data-recaptcha-hide', '');
+        style.textContent = '.grecaptcha-badge { display: none !important; }';
+        document.head.appendChild(style);
+      }
 
       resolve();
     };
@@ -80,25 +84,18 @@ export const getRecaptchaToken = async (
   // Ensure script is loaded before using grecaptcha
   await loadRecaptchaScript(siteKey);
 
-  return new Promise((resolve, reject) => {
-    const grecaptcha = (window as InterfaceWindow).grecaptcha;
+  const grecaptcha = window.grecaptcha;
+  if (!grecaptcha?.ready) {
+    throw new Error('reCAPTCHA not loaded');
+  }
 
-    if (grecaptcha && grecaptcha.ready) {
-      grecaptcha.ready(() => {
-        grecaptcha
-          .execute(siteKey, { action })
-          .then((token) => {
-            // Ensure badge is hidden after token generation
-            const badge = document.querySelector('.grecaptcha-badge');
-            if (badge instanceof HTMLElement) {
-              badge.style.display = 'none';
-            }
-            resolve(token);
-          })
-          .catch((error: unknown) => reject(error));
-      });
-    } else {
-      reject(new Error('reCAPTCHA not loaded'));
-    }
-  });
+  await new Promise<void>((resolve) => grecaptcha.ready(resolve));
+  const token = await grecaptcha.execute(siteKey, { action });
+
+  const badge = document.querySelector('.grecaptcha-badge');
+  if (badge instanceof HTMLElement) {
+    badge.style.display = 'none';
+  }
+
+  return token;
 };

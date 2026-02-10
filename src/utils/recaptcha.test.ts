@@ -40,7 +40,24 @@ describe('reCAPTCHA', () => {
       onerror: null,
     } as unknown as HTMLScriptElement;
 
-    vi.spyOn(document, 'createElement').mockReturnValue(mockScript);
+    const mockStyle = {
+      setAttribute: vi.fn(),
+      textContent: '',
+    } as unknown as HTMLStyleElement;
+
+    const originalCreateElement = document.createElement.bind(document);
+    vi.spyOn(document, 'createElement').mockImplementation(
+      (tagName: string) => {
+        if (tagName === 'script') {
+          return mockScript;
+        }
+        if (tagName === 'style') {
+          return mockStyle;
+        }
+        // Delegate to real createElement for other elements
+        return originalCreateElement(tagName);
+      },
+    );
     vi.spyOn(document.head, 'appendChild').mockImplementation(() => mockScript);
     vi.spyOn(document, 'querySelector').mockReturnValue(null);
 
@@ -152,5 +169,15 @@ describe('reCAPTCHA', () => {
     await expect(
       recaptchaModule.getRecaptchaToken(siteKey, action),
     ).rejects.toThrow('reCAPTCHA not loaded');
+  });
+
+  it('propagates errors when loadRecaptchaScript rejects', async () => {
+    // Make loadRecaptchaScript fail by triggering script error
+    const promise = recaptchaModule.getRecaptchaToken(siteKey, action);
+
+    // Trigger error on the script to make loadRecaptchaScript reject
+    triggerError();
+
+    await expect(promise).rejects.toThrow('Failed to load reCAPTCHA script');
   });
 });

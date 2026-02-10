@@ -88,19 +88,24 @@ export const RegistrationForm = ({
       return;
     }
 
-    // Get reCAPTCHA token dynamically
-    const recaptchaToken =
-      enableRecaptcha && RECAPTCHA_SITE_KEY
-        ? await getRecaptchaToken(RECAPTCHA_SITE_KEY, 'signup')
-        : null;
+    try {
+      const recaptchaToken =
+        enableRecaptcha && RECAPTCHA_SITE_KEY
+          ? await getRecaptchaToken(RECAPTCHA_SITE_KEY, 'signup')
+          : undefined;
 
-    await register({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      organizationId: formData.orgId || '',
-      recaptchaToken: recaptchaToken ?? undefined,
-    });
+      await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        organizationId: formData.orgId || '',
+        recaptchaToken: recaptchaToken ?? undefined,
+      });
+    } catch (error) {
+      if (onError) {
+        onError(error as Error);
+      }
+    }
   };
 
   return (

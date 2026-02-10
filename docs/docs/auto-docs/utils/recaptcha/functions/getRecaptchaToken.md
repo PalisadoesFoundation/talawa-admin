@@ -6,7 +6,7 @@
 
 > **getRecaptchaToken**(`siteKey`, `action`): `Promise`\<`string`\>
 
-Defined in: [src/utils/recaptcha.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recaptcha.ts#L76)
+Defined in: [src/utils/recaptcha.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recaptcha.ts#L80)
 
 Get a reCAPTCHA token for the specified action
 

@@ -343,6 +343,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  // Using clearAllMocks() instead of restoreAllMocks() to preserve module-level mocks
   vi.clearAllMocks();
   // Restore original window.location to prevent cross-test bleed
   Object.defineProperty(window, 'location', {

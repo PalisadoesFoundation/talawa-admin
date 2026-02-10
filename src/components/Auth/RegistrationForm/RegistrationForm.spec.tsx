@@ -278,6 +278,31 @@ describe('RegistrationForm', () => {
     });
   });
 
+  it('handles getRecaptchaToken rejection gracefully', async () => {
+    const { getRecaptchaToken } = await import('utils/recaptcha');
+    vi.mocked(getRecaptchaToken).mockRejectedValueOnce(
+      new Error('reCAPTCHA failed'),
+    );
+
+    renderComponent({ enableRecaptcha: true });
+
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
+
+    await user.click(screen.getByRole('button', { name: /register/i }));
+
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+      expect(mockOnError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'reCAPTCHA failed',
+        }),
+      );
+    });
+  });
+
   it('shows validation errors when form is submitted with invalid data', async () => {
     renderComponent();
 

@@ -89,6 +89,34 @@ const mockSignInAdminSuccess: MockedResponse = {
   },
 };
 
+const mockSignInWithRecaptcha: MockedResponse = {
+  request: {
+    query: SIGNIN_QUERY,
+    variables: {
+      email: 'test@example.com',
+      password: 'password123',
+      recaptchaToken: 'mock-recaptcha-token',
+    },
+  },
+  result: {
+    data: {
+      signIn: {
+        user: {
+          id: '1',
+          name: 'Test User',
+          emailAddress: 'test@example.com',
+          role: 'user',
+          countryCode: 'US',
+          avatarURL: null,
+          isEmailAddressVerified: true,
+        },
+        authenticationToken: 'test-auth-token',
+        refreshToken: 'test-refresh-token',
+      },
+    },
+  },
+};
+
 const mockSignInError: MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
@@ -640,11 +668,17 @@ describe('LoginForm', () => {
     });
 
     test('form submission works with reCAPTCHA V3 enabled', async () => {
-      const mockLink = new StaticMockLink([mockSignInSuccess], true);
+      const onSuccess = vi.fn();
 
       render(
-        <MockedProvider link={mockLink}>
-          <LoginForm {...defaultProps} enableRecaptcha={true} />
+        <MockedProvider
+          link={new StaticMockLink([mockSignInWithRecaptcha], true)}
+        >
+          <LoginForm
+            {...defaultProps}
+            onSuccess={onSuccess}
+            enableRecaptcha={true}
+          />
         </MockedProvider>,
       );
 
@@ -655,10 +689,18 @@ describe('LoginForm', () => {
       await user.type(screen.getByTestId('login-form-password'), 'password123');
       await user.click(screen.getByTestId('login-form-submit'));
 
-      // Since reCAPTCHA V3 works silently, the form should submit successfully
+      // Verify the success callback is called with the full signIn result
       await waitFor(() => {
-        expect(mockLink.operation).toBeDefined();
+        expect(onSuccess).toHaveBeenCalled();
       });
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+
+      const expected = (
+        mockSignInWithRecaptcha.result as
+          | { data?: { signIn: unknown } }
+          | undefined
+      )?.data?.signIn;
+      expect(onSuccess).toHaveBeenCalledWith(expected);
     });
   });
 
