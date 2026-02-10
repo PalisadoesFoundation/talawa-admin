@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { cleanup } from '@testing-library/react';
 
 type RecaptchaModule = typeof import('./recaptcha');
 
@@ -38,6 +39,7 @@ describe('reCAPTCHA', () => {
       defer: false,
       onload: null,
       onerror: null,
+      remove: vi.fn(),
     } as unknown as HTMLScriptElement;
 
     const mockStyle = {
@@ -65,6 +67,7 @@ describe('reCAPTCHA', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 

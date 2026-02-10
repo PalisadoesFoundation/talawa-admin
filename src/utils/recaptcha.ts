@@ -4,8 +4,7 @@ interface InterfaceGrecaptcha {
 }
 
 declare global {
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  interface Window {
+  interface InterfaceWindow {
     grecaptcha?: InterfaceGrecaptcha;
   }
 }
@@ -32,8 +31,22 @@ export const loadRecaptchaScript = async (siteKey: string): Promise<void> => {
   );
 
   if (existingScript) {
-    isScriptLoaded = true;
-    return Promise.resolve();
+    if ((window as InterfaceWindow).grecaptcha?.ready) {
+      isScriptLoaded = true;
+      return Promise.resolve();
+    }
+    return new Promise<void>((resolve, reject) => {
+      const onLoad = () => {
+        isScriptLoaded = true;
+        resolve();
+      };
+      const onError = () => {
+        existingScript.remove();
+        reject(new Error('Failed to load reCAPTCHA script'));
+      };
+      existingScript.addEventListener('load', onLoad, { once: true });
+      existingScript.addEventListener('error', onError, { once: true });
+    });
   }
 
   // Create loading promise
@@ -58,6 +71,7 @@ export const loadRecaptchaScript = async (siteKey: string): Promise<void> => {
     };
 
     script.onerror = () => {
+      script.remove();
       reject(new Error('Failed to load reCAPTCHA script'));
     };
 
@@ -84,7 +98,7 @@ export const getRecaptchaToken = async (
   // Ensure script is loaded before using grecaptcha
   await loadRecaptchaScript(siteKey);
 
-  const grecaptcha = window.grecaptcha;
+  const grecaptcha = (window as InterfaceWindow).grecaptcha;
   if (!grecaptcha?.ready) {
     throw new Error('reCAPTCHA not loaded');
   }

@@ -6,7 +6,7 @@
 
 > **loadRecaptchaScript**(`siteKey`): `Promise`\<`void`\>
 
-Defined in: [src/utils/recaptcha.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recaptcha.ts#L22)
+Defined in: [src/utils/recaptcha.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recaptcha.ts#L21)
 
 Load the reCAPTCHA script if not already loaded
 
