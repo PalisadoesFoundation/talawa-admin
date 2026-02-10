@@ -1,5 +1,3 @@
-import { getApiPattern } from '../../support/graphql-utils';
-
 export class AdvertisementPage {
   private readonly _createAdBtn = '[data-testid="createAdvertisement"]';
   private readonly _adNameInput = '[data-cy="advertisementNameInput"]';
@@ -18,8 +16,7 @@ export class AdvertisementPage {
   private readonly _deleteConfirmBtn = '[data-testid="delete_yes"]';
 
   private aliasGraphQLByKeyword(alias: string, keyword: string) {
-    const apiPattern = getApiPattern();
-    cy.intercept('POST', apiPattern, (req) => {
+    cy.intercept('POST', '**/graphql', (req) => {
       const body = req.body as unknown;
       const candidates: string[] = [];
 
@@ -65,7 +62,10 @@ export class AdvertisementPage {
   }
 
   private aliasAdvertisementListQuery() {
-    cy.aliasGraphQLOperation('OrganizationAdvertisements');
+    this.aliasGraphQLByKeyword(
+      'OrganizationAdvertisements',
+      'OrganizationAdvertisements',
+    );
   }
 
   private waitForGraphQL(alias: string, label: string) {
