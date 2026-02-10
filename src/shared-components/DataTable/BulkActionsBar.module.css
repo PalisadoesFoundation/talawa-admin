@@ -1,15 +1,55 @@
 .bulkBar {
-  composes: bulkBar from '../../style/app-fixed.module.css';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+  background: var(--datatable-bulk-bg);
+  border: 1px solid var(--datatable-bulk-border);
+  border-radius: 8px;
 }
+
 .bulkLeft {
-  composes: bulkLeft from '../../style/app-fixed.module.css';
+  color: var(--datatable-bulk-text);
+  font-size: 0.9rem;
 }
+
 .bulkRight {
-  composes: bulkRight from '../../style/app-fixed.module.css';
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
 }
+
 .bulkBtn {
-  composes: bulkBtn from '../../style/app-fixed.module.css';
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
 }
+
+.bulkBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .bulkClear {
-  composes: bulkClear from '../../style/app-fixed.module.css';
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--datatable-muted-text);
+}
+
+.bulkClear:hover {
+  background: var(--datatable-hover-bg);
 }

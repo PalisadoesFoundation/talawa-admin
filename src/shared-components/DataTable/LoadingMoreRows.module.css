@@ -1,3 +1,22 @@
 .dataSkeletonCell {
-  composes: dataSkeletonCell from '../../style/app-fixed.module.css';
+  height: 1em;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--datatable-skeleton-highlight) 25%,
+    var(--datatable-skeleton-base) 50%,
+    var(--datatable-skeleton-highlight) 75%
+  );
+  border-radius: 4px;
+  animation: datatable-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes datatable-loading {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
 }

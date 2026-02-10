@@ -1,21 +1,61 @@
 .visuallyHidden {
-  composes: visuallyHidden from '../../style/app-fixed.module.css';
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
+
 .selectCol {
-  composes: selectCol from '../../style/app-fixed.module.css';
+  width: 42px;
+  text-align: center;
+  vertical-align: middle;
 }
+
+.selectCol input[type='checkbox'] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
 .sortable {
-  composes: sortable from '../../style/app-fixed.module.css';
+  cursor: pointer;
+  user-select: none;
+  outline: none;
 }
+
+.sortable:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+}
+
+.sortable:focus-visible {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--datatable-focus-ring);
+  background: var(--datatable-focus-background);
+}
+
 .headerInner {
-  composes: headerInner from '../../style/app-fixed.module.css';
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
+
 .sortIndicator {
-  composes: sortIndicator from '../../style/app-fixed.module.css';
+  font-size: 0.8em;
+  opacity: 0.5;
 }
+
 .active {
-  composes: active from '../../style/app-fixed.module.css';
+  opacity: 1;
 }
+
 .actionsCol {
-  composes: actionsCol from '../../style/app-fixed.module.css';
+  white-space: nowrap;
+  text-align: right;
 }

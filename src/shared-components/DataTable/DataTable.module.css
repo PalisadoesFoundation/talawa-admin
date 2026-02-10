@@ -1,21 +1,85 @@
 .dataTableWrapper {
-  composes: dataTableWrapper from '../../style/app-fixed.module.css';
+  width: 100%;
+  position: relative;
+  overflow-x: auto;
 }
+
 .dataTableBase {
-  composes: dataTableBase from '../../style/app-fixed.module.css';
+  font-size: 0.95rem;
 }
+
 .toolbar {
-  composes: toolbar from '../../style/app-fixed.module.css';
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 12px;
 }
+
 .dataErrorState {
-  composes: dataErrorState from '../../style/app-fixed.module.css';
+  padding: 16px;
+  text-align: left;
+  color: var(--datatable-error-text);
+  background: var(--datatable-error-bg);
+  border: 1px solid var(--datatable-error-border);
+  border-radius: 6px;
 }
+
 .dataErrorDetails {
-  composes: dataErrorDetails from '../../style/app-fixed.module.css';
+  margin-top: 4px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  color: var(--errorState-color, #5c1a21);
 }
+
 .dataEmptyState {
-  composes: dataEmptyState from '../../style/app-fixed.module.css';
+  padding: 16px;
+  text-align: center;
+  color: var(--datatable-text);
+  border: 1px solid var(--datatable-empty-border);
+  border-radius: 6px;
+  background: var(--datatable-empty-bg);
 }
+
 .bulkBtn {
-  composes: bulkBtn from '../../style/app-fixed.module.css';
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.bulkBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.actionsCellContainer {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionBtn {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

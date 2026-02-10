@@ -1,9 +1,38 @@
 .searchWrap {
-  composes: searchWrap from '../../style/app-fixed.module.css';
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--datatable-border);
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: var(--datatable-surface);
 }
+
 .searchInput {
-  composes: searchInput from '../../style/app-fixed.module.css';
+  border: none;
+  outline: none;
+  min-width: 220px;
 }
+
+.searchInput:focus-visible,
+.searchInput:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .searchClear {
-  composes: searchClear from '../../style/app-fixed.module.css';
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 0.9rem;
+  color: var(--datatable-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchClear:hover {
+  color: var(--primaryText-color, #000000);
 }
