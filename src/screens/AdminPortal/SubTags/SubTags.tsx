@@ -341,39 +341,23 @@ function SubTags(): JSX.Element {
                   <IconComponent name="Tag" />
                 </div>
 
-                <button
-                  type="button"
+                <Button
+                  variant="link"
                   onClick={() => navigate(`/admin/orgtags/${orgId}`)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      navigate(`/admin/orgtags/${orgId}`);
-                    } else if (e.key === ' ') {
-                      e.preventDefault();
-                      navigate(`/admin/orgtags/${orgId}`);
-                    }
-                  }}
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                   data-testid="allTagsBtn"
                   data-text={t('tags')}
                 >
                   {t('tags')}
                   <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
-                </button>
+                </Button>
 
                 {orgUserTagAncestors?.map((tag, index) => (
-                  <button
-                    type="button"
+                  <Button
+                    variant="link"
                     key={index}
                     className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                     onClick={() => redirectToSubTags(tag._id as string)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        redirectToSubTags(tag._id as string);
-                      } else if (e.key === ' ') {
-                        e.preventDefault();
-                        redirectToSubTags(tag._id as string);
-                      }
-                    }}
                     data-testid="redirectToSubTags"
                     data-text={tag.name}
                   >
@@ -385,7 +369,7 @@ function SubTags(): JSX.Element {
                         aria-hidden="true"
                       />
                     )}
-                  </button>
+                  </Button>
                 ))}
               </div>
               <div
