@@ -11,6 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import People from './People';
 import userEvent from '@testing-library/user-event';
 import { vi, it, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
 /**
  * This file contains unit tests for the People component.
  *
@@ -50,7 +51,7 @@ const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
     role: props.role || 'member',
     avatarURL: props.avatarURL || null,
     emailAddress: props.emailAddress || 'user1@example.com',
-    createdAt: '2024-03-15T10:00:00.000Z',
+    createdAt: dayjs().subtract(1, 'year').month(2).toISOString(),
     ...props.node,
   },
 });
@@ -908,7 +909,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
                     role: 'member',
                     avatarURL: null,
                     emailAddress: null,
-                    createdAt: '2023-01-15T10:00:00.000Z',
+                    createdAt: dayjs().subtract(2, 'year').toISOString(),
                   },
                 },
               ],
