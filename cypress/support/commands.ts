@@ -29,6 +29,7 @@ type AuthOptions = {
   email?: string;
   password?: string;
   token?: string;
+  userId?: string;
   apiUrl?: string;
   recaptchaToken?: string;
 };
@@ -101,6 +102,7 @@ type CleanupTestOrganizationOptions = {
 };
 
 type SignInTaskResult = { token: string; userId: string };
+type AuthSession = { token: string; userId?: string };
 type CreateOrganizationTaskResult = { orgId: string };
 type CreateEventTaskResult = { eventId: string };
 type CreateUserTaskResult = {
@@ -161,11 +163,13 @@ const resolveCredentials = (
     });
 };
 
-const resolveAuthToken = (auth?: AuthOptions): Cypress.Chainable<string> => {
+const resolveAuthSession = (
+  auth?: AuthOptions,
+): Cypress.Chainable<AuthSession> => {
   if (auth?.token) {
-    return cy.wrap(auth.token, { log: false });
+    return cy.wrap({ token: auth.token, userId: auth.userId }, { log: false });
   }
-  // resolveAuthToken defaults role to 'admin' unless auth.role overrides it.
+  // resolveAuthSession defaults role to 'admin' unless auth.role overrides it.
   const role = auth?.role ?? 'admin';
   return resolveCredentials(role, auth).then((credentials) => {
     return cy
@@ -176,14 +180,17 @@ const resolveAuthToken = (auth?: AuthOptions): Cypress.Chainable<string> => {
         recaptchaToken: auth?.recaptchaToken,
       })
       .then((result) => {
-        const { token } = result as SignInTaskResult;
+        const { token, userId } = result as SignInTaskResult;
         if (!token) {
           throw new Error('SignIn task failed to return a token.');
         }
-        return token;
+        return { token, userId };
       });
   });
 };
+
+const resolveAuthToken = (auth?: AuthOptions): Cypress.Chainable<string> =>
+  resolveAuthSession(auth).then((session) => session.token);
 
 const getSecureRandomSuffix = (length = 8): string => {
   if (globalThis.crypto?.randomUUID) {
@@ -343,7 +350,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'createTestOrganization',
   (payload: CreateTestOrganizationPayload) => {
-    return resolveAuthToken(payload.auth).then((token) => {
+    return resolveAuthSession(payload.auth).then(({ token, userId }) => {
       return cy
         .task('createTestOrganization', {
           apiUrl: payload.auth?.apiUrl,
@@ -365,7 +372,25 @@ Cypress.Commands.add(
           if (!orgId) {
             throw new Error('createTestOrganization did not return orgId.');
           }
-          return { orgId };
+          if (!userId) {
+            return { orgId };
+          }
+          return resolveAuthToken({
+            role: 'superAdmin',
+            apiUrl: payload.auth?.apiUrl,
+          }).then((membershipToken) => {
+            return cy
+              .task('createOrganizationMembership', {
+                apiUrl: payload.auth?.apiUrl,
+                token: membershipToken,
+                input: {
+                  memberId: userId,
+                  organizationId: orgId,
+                  role: 'administrator',
+                },
+              })
+              .then(() => ({ orgId }));
+          });
         });
     });
   },

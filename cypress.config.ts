@@ -103,6 +103,16 @@ const CREATE_ORGANIZATION_MUTATION = `
   }
 `;
 
+const CREATE_ORGANIZATION_MEMBERSHIP_MUTATION = `
+  mutation CreateOrganizationMembership(
+    $input: MutationCreateOrganizationMembershipInput!
+  ) {
+    createOrganizationMembership(input: $input) {
+      id
+    }
+  }
+`;
+
 const CREATE_EVENT_MUTATION = `
   mutation CreateEvent($input: MutationCreateEventInput!) {
     createEvent(input: $input) {
@@ -316,6 +326,38 @@ export default defineConfig({
                 throw new Error('CreateOrganization response missing org id.');
               }
               return { orgId };
+            },
+          });
+        },
+        async createOrganizationMembership({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createOrganizationMembership?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateOrganizationMembership',
+            query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION,
+            variables: { input },
+            extract: (data) => ({
+              ok: Boolean(data?.createOrganizationMembership?.id),
+            }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (/already|exists/i.test(errorMessage)) {
+                return { ok: true };
+              }
+              return undefined;
             },
           });
         },
