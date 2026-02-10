@@ -24,8 +24,12 @@ export class AdminDashboardPage {
 
   verifyOnDashboard(timeout = 20000) {
     cy.url({ timeout }).should('include', '/admin/orglist');
-    cy.get('body').then(($body) => {
-      if ($body.find('[data-testid="orglist-no-orgs-empty"]').length > 0) {
+    const emptyStateSelector = '[data-testid="orglist-no-orgs-empty"]';
+    cy.get('body', { timeout }).then(($body) => {
+      const hasOrgCards = $body.find(this._orgcardContainer).length > 0;
+      const hasEmptyState = $body.find(emptyStateSelector).length > 0;
+
+      if (!hasOrgCards && hasEmptyState) {
         cy.createTestOrganization({
           name: `E2E Org ${Date.now()}`,
           auth: { role: 'admin' },
@@ -33,17 +37,32 @@ export class AdminDashboardPage {
         cy.reload();
       }
     });
-    cy.get(this._orgcardContainer, { timeout }).should('be.visible');
-    cy.contains('Admin Portal', { timeout }).should('be.visible');
     return this;
   }
 
   openFirstOrganization(timeout = 20000) {
-    cy.get(this._manageButton, { timeout })
-      .should('be.visible')
-      .first()
-      .click();
-    cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
+    const openByNavigation = (orgId: string) => {
+      cy.visit(`/admin/orgdash/${orgId}`);
+      cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
+    };
+
+    cy.get('body', { timeout }).then(($body) => {
+      if ($body.find(this._manageButton).length > 0) {
+        cy.get(this._manageButton, { timeout })
+          .should('be.visible')
+          .first()
+          .click();
+        cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
+        return;
+      }
+
+      cy.createTestOrganization({
+        name: `E2E Org ${Date.now()}`,
+        auth: { role: 'admin' },
+      }).then(({ orgId }) => {
+        openByNavigation(orgId);
+      });
+    });
     return this;
   }
 

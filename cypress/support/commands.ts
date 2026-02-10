@@ -168,7 +168,6 @@ const resolveAuthSession = (
         apiUrl: auth?.apiUrl,
         email: credentials.email,
         password: credentials.password,
-        recaptchaToken: auth?.recaptchaToken,
       })
       .then((result) => {
         const { token, userId } = result as SignInTaskResult;
@@ -263,10 +262,17 @@ Cypress.Commands.add('loginByApi', (role: string) => {
     }
   `;
   const storagePrefix = 'Talawa-admin';
+  const roleValue =
+    resolvedRole === 'superAdmin'
+      ? 'superuser'
+      : resolvedRole === 'admin'
+        ? 'administrator'
+        : 'user';
   const setAuthStorage = (
     win: Window,
     token: string,
-    userId?: string,
+    userId: string | undefined,
+    email: string,
   ): void => {
     const setItem = (key: string, value: unknown) => {
       win.localStorage.setItem(
@@ -275,6 +281,8 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       );
     };
     setItem('token', token);
+    setItem('role', roleValue);
+    setItem('email', email);
     if (userId) {
       setItem('userId', userId);
       setItem('id', userId);
@@ -307,7 +315,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
 
             cy.visit(loginPath, {
               onBeforeLoad(win) {
-                setAuthStorage(win, token, userId);
+                setAuthStorage(win, token, userId, user.email);
               },
             });
 

@@ -6,8 +6,21 @@ export class LeftDrawer {
     cy.intercept('POST', '**/graphql').as('graphql');
     cy.visit('/admin/orglist');
     // Visit any organization to check OrgBtn test id
-    cy.get('[data-testid="manageBtn"]').first().click();
-    cy.url().should('include', '/admin/orgdash');
+    cy.get('body', { timeout: 20000 }).then(($body) => {
+      if ($body.find('[data-testid="manageBtn"]').length > 0) {
+        cy.get('[data-testid="manageBtn"]').first().click();
+        cy.url().should('include', '/admin/orgdash');
+        return;
+      }
+
+      cy.createTestOrganization({
+        name: `E2E Org ${Date.now()}`,
+        auth: { role: 'admin' },
+      }).then(({ orgId }) => {
+        cy.visit(`/admin/orgdash/${orgId}`);
+        cy.url().should('include', '/admin/orgdash');
+      });
+    });
     cy.wait('@graphql', { timeout: 15000 });
   }
 

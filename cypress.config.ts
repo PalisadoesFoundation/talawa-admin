@@ -81,12 +81,11 @@ const postGraphQL = async <T>(
 };
 
 const SIGN_IN_QUERY = `
-  query SignIn($email: EmailAddress!, $password: String!, $recaptchaToken: String) {
+  query SignIn($email: EmailAddress!, $password: String!) {
     signIn(
       input: {
         emailAddress: $email
         password: $password
-        recaptchaToken: $recaptchaToken
       }
     ) {
       user { id }
@@ -282,12 +281,10 @@ export default defineConfig({
           apiUrl,
           email,
           password,
-          recaptchaToken,
         }: {
           apiUrl?: string;
           email: string;
           password: string;
-          recaptchaToken?: string;
         }) {
           return runGraphQLTask<
             {
@@ -301,7 +298,7 @@ export default defineConfig({
             apiUrl,
             operationName: 'SignIn',
             query: SIGN_IN_QUERY,
-            variables: { email, password, recaptchaToken },
+            variables: { email, password },
             extract: (data) => {
               const token = data?.signIn?.authenticationToken;
               const userId = data?.signIn?.user?.id;
