@@ -24,6 +24,15 @@ export class AdminDashboardPage {
 
   verifyOnDashboard(timeout = 20000) {
     cy.url({ timeout }).should('include', '/admin/orglist');
+    cy.get('body').then(($body) => {
+      if ($body.find('[data-testid="orglist-no-orgs-empty"]').length > 0) {
+        cy.createTestOrganization({
+          name: `E2E Org ${Date.now()}`,
+          auth: { role: 'admin' },
+        });
+        cy.reload();
+      }
+    });
     cy.get(this._orgcardContainer, { timeout }).should('be.visible');
     cy.contains('Admin Portal', { timeout }).should('be.visible');
     return this;

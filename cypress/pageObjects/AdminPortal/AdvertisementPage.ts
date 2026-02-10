@@ -18,6 +18,15 @@ export class AdvertisementPage {
 
   visitAdvertisementPage(timeout = 10000) {
     cy.visit('/admin/orglist');
+    cy.get('body').then(($body) => {
+      if ($body.find('[data-testid="orglist-no-orgs-empty"]').length > 0) {
+        cy.createTestOrganization({
+          name: `E2E Org ${Date.now()}`,
+          auth: { role: 'admin' },
+        });
+        cy.reload();
+      }
+    });
     cy.get('[data-cy="manageBtn"]').should('be.visible').first().click();
     cy.url({ timeout }).should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
     cy.get('body').then(($body) => {
