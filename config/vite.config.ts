@@ -203,9 +203,13 @@ export default defineConfig(({ mode }) => {
           secure: false,
           ws: true,
           configure: (proxy) => {
-            const isLoggableContentType = (value: string | string[] | undefined) => {
+            const isLoggableContentType = (
+              value: string | string[] | undefined,
+            ) => {
               if (!value) return false;
-              const contentType = Array.isArray(value) ? value.join(';') : value;
+              const contentType = Array.isArray(value)
+                ? value.join(';')
+                : value;
               const normalized = contentType.toLowerCase();
               return (
                 normalized.includes('application/json') ||
