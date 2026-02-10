@@ -189,66 +189,6 @@ const signInWithCredentials = (
     });
 };
 
-const createFallbackUserSession = (
-  apiUrl: string | undefined,
-): Cypress.Chainable<AuthSession> => {
-  const email = `e2e-user-${Date.now()}-${getSecureRandomSuffix(8)}@example.com`;
-  const password = DEFAULT_TEST_PASSWORD;
-  const name = makeUniqueLabel('E2E User');
-
-  return resolveAuthToken({ role: 'admin', apiUrl }).then((adminToken) => {
-    return cy
-      .task('createTestOrganization', {
-        apiUrl,
-        token: adminToken,
-        input: {
-          name: makeUniqueLabel('E2E Org'),
-          description: 'E2E organization',
-        },
-      })
-      .then((result) => {
-        const { orgId } = result as CreateOrganizationTaskResult;
-        if (!orgId) {
-          throw new Error('Fallback user org creation failed.');
-        }
-        return cy
-          .task('createTestUser', {
-            apiUrl,
-            token: adminToken,
-            input: {
-              name,
-              emailAddress: email,
-              password,
-              role: 'regular',
-              isEmailAddressVerified: true,
-            },
-          })
-          .then((userResult) => {
-            const { userId } = userResult as CreateUserTaskResult;
-            if (!userId) {
-              throw new Error('Fallback user creation failed.');
-            }
-            return cy
-              .task('createOrganizationMembership', {
-                apiUrl,
-                token: adminToken,
-                input: {
-                  memberId: userId,
-                  organizationId: orgId,
-                  role: 'regular',
-                },
-              })
-              .then(() => ({ email, password }));
-          });
-      })
-      .then((creds) => {
-        Cypress.env('E2E_USER_EMAIL', creds.email);
-        Cypress.env('E2E_USER_PASSWORD', creds.password);
-        return signInWithCredentials(apiUrl, creds);
-      });
-  });
-};
-
 const resolveAuthSession = (
   auth?: AuthOptions,
 ): Cypress.Chainable<AuthSession> => {
@@ -258,15 +198,7 @@ const resolveAuthSession = (
   // resolveAuthSession defaults role to 'admin' unless auth.role overrides it.
   const role = auth?.role ?? 'admin';
   return resolveCredentials(role, auth).then((credentials) => {
-    return signInWithCredentials(auth?.apiUrl, credentials).then(
-      undefined,
-      (error) => {
-        if (role !== 'user') {
-          throw error;
-        }
-        return createFallbackUserSession(auth?.apiUrl);
-      },
-    );
+    return signInWithCredentials(auth?.apiUrl, credentials);
   });
 };
 
