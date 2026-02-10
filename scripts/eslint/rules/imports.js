@@ -69,6 +69,97 @@ const restrictedImports = [
       'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
   },
   {
+    id: 'mui-table-table',
+    name: '@mui/material',
+    importNames: ['Table'],
+    message:
+      'Do not import Table from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-table-path',
+    name: '@mui/material/Table',
+    message:
+      'Do not import Table from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-body',
+    name: '@mui/material',
+    importNames: ['TableBody'],
+    message:
+      'Do not import TableBody from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-body-path',
+    name: '@mui/material/TableBody',
+    message:
+      'Do not import TableBody from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-cell',
+    name: '@mui/material',
+    importNames: ['TableCell'],
+    message:
+      'Do not import TableCell from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-cell-path',
+    name: '@mui/material/TableCell',
+    message:
+      'Do not import TableCell from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-container',
+    name: '@mui/material',
+    importNames: ['TableContainer'],
+    message:
+      'Do not import TableContainer from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-container-path',
+    name: '@mui/material/TableContainer',
+    message:
+      'Do not import TableContainer from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-head',
+    name: '@mui/material',
+    importNames: ['TableHead'],
+    message:
+      'Do not import TableHead from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-head-path',
+    name: '@mui/material/TableHead',
+    message:
+      'Do not import TableHead from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-row',
+    name: '@mui/material',
+    importNames: ['TableRow'],
+    message:
+      'Do not import TableRow from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-row-path',
+    name: '@mui/material/TableRow',
+    message:
+      'Do not import TableRow from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-pagination',
+    name: '@mui/material',
+    importNames: ['TablePagination'],
+    message:
+      'Do not import TablePagination from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
+    id: 'mui-table-pagination-path',
+    name: '@mui/material/TablePagination',
+    message:
+      'Do not import TablePagination from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.',
+  },
+  {
     id: 'rb-button',
     name: 'react-bootstrap',
     importNames: ['Button'],
