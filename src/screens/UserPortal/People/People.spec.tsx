@@ -675,7 +675,9 @@ describe('Testing People Screen Pagination [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitFor(() =>
+      expect(screen.getByText('Test User')).toBeInTheDocument(),
+    );
 
     const nextButton = screen.getByTestId('nextPage');
     const prevButton = screen.getByTestId('previousPage');
