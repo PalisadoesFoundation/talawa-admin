@@ -152,7 +152,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             }}
           >
             <ProfileAvatarDisplay
-              imageUrl={pinnedPost.node?.creator?.avatarURL || defaultImg}
+              imageUrl={pinnedPost.node?.creator?.avatarURL ?? undefined}
               fallbackName={pinnedPost.node?.creator?.name || ''}
               size="small"
               crossOrigin="anonymous"

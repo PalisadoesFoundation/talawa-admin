@@ -132,6 +132,7 @@ vi.mock(
             React.createElement(
               'button',
               {
+                type: 'button',
                 'data-testid': 'volunteerViewModalCloseBtn',
                 onClick: hide,
               },

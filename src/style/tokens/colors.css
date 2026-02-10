@@ -15,7 +15,6 @@
 
   --color-blue-100: #d3e3fd;
   --color-blue-200: #a8c7fa;
-  --color-blue-300: #8bb5e8;
   --color-blue-500: #1778f2;
   --color-blue-600: #286fe0;
   --color-blue-700: #0056b3;
@@ -30,8 +29,4 @@
   --color-yellow-100: #fff3cd;
   --color-yellow-500: #febc59;
   --color-yellow-600: #856404;
-
-  --color-overlay-5: rgba(0, 0, 0, 0.05);
-  --color-overlay-10: rgba(0, 0, 0, 0.1);
-  --color-overlay-20: rgba(0, 0, 0, 0.2);
 }
