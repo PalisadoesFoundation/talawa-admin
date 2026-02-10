@@ -335,7 +335,7 @@ const Calendar: React.FC<
 
   const renderInfoCards = (): JSX.Element => (
     <div className={styles.calendar_infocards}>
-      <div
+      <section
         className={styles.holidays_card}
         role="region"
         aria-label={t('holidays')}
@@ -352,9 +352,9 @@ const Calendar: React.FC<
             </li>
           ))}
         </ul>
-      </div>
+      </section>
 
-      <div
+      <section
         className={styles.events_card}
         role="region"
         aria-label={t('events')}
@@ -372,7 +372,7 @@ const Calendar: React.FC<
             <span className={styles.holidayText}>{t('holidays')}</span>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 

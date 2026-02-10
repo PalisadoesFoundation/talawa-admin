@@ -23,6 +23,25 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-600);
+  border-radius: var(--radius-md);
+}
+
+.dropdown:is(:hover, :active),
+:global(.show).dropdown {
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-gray-800) !important;
+  box-shadow: none !important;
+}
+
+/* Ensure the dropdown menu matches the button width perfectly */
+.dropdown :global(.dropdown-menu) {
+  min-width: 100% !important;
+  width: 100% !important;
+  margin-top: var(--radius-sm);
+  border-radius: var(--radius-lg);
 }
 
 .btnsBlock {
