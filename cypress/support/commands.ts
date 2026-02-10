@@ -226,6 +226,13 @@ const makeUniqueLabel = (prefix: string): string => {
   return `${prefix} ${suffix}`;
 };
 
+const isAuthorizationError = (error: unknown): boolean => {
+  const message = error instanceof Error ? error.message : String(error);
+  return /not authorized|unauthorized|forbidden|permission|status code 403/i.test(
+    message,
+  );
+};
+
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
@@ -539,10 +546,27 @@ Cypress.Commands.add(
             return { eventId };
           });
       };
+      const canRetryWithSuperAdmin =
+        (eventPayload.auth?.role ?? 'admin') === 'admin';
 
-      return resolveAuthToken(eventPayload.auth).then((token) =>
-        createEvent(token),
-      );
+      return resolveAuthToken(eventPayload.auth).then((token) => {
+        return createEvent(token).then(undefined, (error: unknown) => {
+          if (!canRetryWithSuperAdmin || !isAuthorizationError(error)) {
+            throw error;
+          }
+
+          Cypress.log({
+            name: 'seedTestData(events)',
+            message:
+              'Retrying event seed with superAdmin credentials after authorization failure.',
+          });
+
+          return resolveAuthToken({
+            ...(eventPayload.auth ?? {}),
+            role: 'superAdmin',
+          }).then((superAdminToken) => createEvent(superAdminToken));
+        });
+      });
     }
 
     const createSeedUser = (userPayload: SeedUserPayload) => {
@@ -642,10 +666,27 @@ Cypress.Commands.add(
             return { volunteerId, userId, email, password };
           });
       };
+      const canRetryWithSuperAdmin =
+        (volunteerPayload.auth?.role ?? 'admin') === 'admin';
 
-      return resolveAuthToken(volunteerPayload.auth).then((token) =>
-        createVolunteer(token),
-      );
+      return resolveAuthToken(volunteerPayload.auth).then((token) => {
+        return createVolunteer(token).then(undefined, (error: unknown) => {
+          if (!canRetryWithSuperAdmin || !isAuthorizationError(error)) {
+            throw error;
+          }
+
+          Cypress.log({
+            name: 'seedTestData(volunteers)',
+            message:
+              'Retrying volunteer seed with superAdmin credentials after authorization failure.',
+          });
+
+          return resolveAuthToken({
+            ...(volunteerPayload.auth ?? {}),
+            role: 'superAdmin',
+          }).then((superAdminToken) => createVolunteer(superAdminToken));
+        });
+      });
     });
   },
 );
