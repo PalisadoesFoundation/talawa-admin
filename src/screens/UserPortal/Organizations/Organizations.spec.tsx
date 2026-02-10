@@ -1552,7 +1552,12 @@ test('should call errorHandler when resend verification mutation throws', async 
   await userEvent.click(screen.getByTestId('resend-verification-btn'));
 
   await waitFor(() => {
-    expect(errorHandler).toHaveBeenCalled();
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.objectContaining({
+        networkError: resendError,
+      }),
+    );
   });
 });
 
