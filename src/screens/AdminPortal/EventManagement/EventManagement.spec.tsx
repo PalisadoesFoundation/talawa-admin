@@ -73,7 +73,7 @@ MOCKS_WITH_FIXED_TIME[0].result.data.event.updater = {
   emailAddress: 'jane.doe@example.com',
 };
 
-const mockWithTime = new StaticMockLink(MOCKS_WITH_FIXED_TIME, true);
+let mockWithTime: StaticMockLink;
 
 const renderEventManagement = (): RenderResult => {
   return render(
@@ -112,6 +112,7 @@ describe('Event Management', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
+    mockWithTime = new StaticMockLink(MOCKS_WITH_FIXED_TIME, true);
     user = userEvent.setup();
   });
 

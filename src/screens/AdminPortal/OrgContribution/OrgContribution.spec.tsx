@@ -9,7 +9,12 @@ import OrgContribution from './OrgContribution';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-const link = new StaticMockLink([], true);
+let link: StaticMockLink;
+
+beforeEach(() => {
+  link = new StaticMockLink([], true);
+});
+
 async function wait(ms = 100): Promise<void> {
   await new Promise((resolve) => {
     setTimeout(resolve, ms);

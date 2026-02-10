@@ -21,7 +21,7 @@ vi.mock('shared-components/CRUDModalTemplate/hooks/useModalState', () => ({
   useModalState: vi.fn(),
 }));
 
-const link = new StaticMockLink(checkInQueryMock, true);
+let link: StaticMockLink;
 
 /**
  * This file contains unit tests for the CheckInWrapper component.
@@ -37,6 +37,7 @@ const link = new StaticMockLink(checkInQueryMock, true);
  */
 
 beforeEach(() => {
+  link = new StaticMockLink(checkInQueryMock, true);
   (useModalState as Mock).mockReturnValue({
     isOpen: false,
     open: vi.fn(),

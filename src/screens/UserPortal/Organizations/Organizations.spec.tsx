@@ -447,9 +447,9 @@ const ERROR_MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
-const emptyLink = new StaticMockLink(EMPTY_MOCKS, true);
-const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+let link: StaticMockLink;
+let emptyLink: StaticMockLink;
+let errorLink: StaticMockLink;
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -460,6 +460,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
+  link = new StaticMockLink(MOCKS, true);
+  emptyLink = new StaticMockLink(EMPTY_MOCKS, true);
+  errorLink = new StaticMockLink(ERROR_MOCKS, true);
   const { setItem: setItemLocal, clearAllItems: clearAllItemsLocal } =
     useLocalStorage();
   setItem = setItemLocal;
