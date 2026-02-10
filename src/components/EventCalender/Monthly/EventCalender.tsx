@@ -366,14 +366,18 @@ const Calendar: React.FC<
                 )
                 .join('');
 
+              // Get the translated holiday name with fallback
+              const translatedName = t(
+                ['holidayNames', translationKey].join('.'),
+                { defaultValue: holiday.name },
+              );
+
               return (
                 <li className={styles.card_list_item} key={index}>
                   <span className={styles.holiday_date}>
                     {localizedMonth} {day}
                   </span>
-                  <span className={styles.holiday_name}>
-                    {t(`holidayNames.${translationKey}`, holiday.name)}
-                  </span>
+                  <span className={styles.holiday_name}>{translatedName}</span>
                 </li>
               );
             })
