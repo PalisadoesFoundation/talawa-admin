@@ -135,6 +135,16 @@ const roleToEnvKey = (
   }
 };
 
+const normalizeAuthRole = (role: string): AuthRole => {
+  if (role === 'superadmin') return 'superAdmin';
+  if (role === 'admin' || role === 'user' || role === 'superAdmin') {
+    return role;
+  }
+  throw new Error(
+    `Unknown auth role "${role}". Expected "admin", "user", or "superAdmin".`,
+  );
+};
+
 const resolveCredentials = (
   role: AuthRole,
   overrides?: Partial<CredentialRecord>,
@@ -261,17 +271,11 @@ declare global {
 }
 
 Cypress.Commands.add('loginByApi', (role: string) => {
-  const sessionName = `login-${role}`;
+  const resolvedRole = normalizeAuthRole(role);
+  const sessionName = `login-${resolvedRole}`;
 
   return cy.session(sessionName, () => {
-    cy.fixture('auth/credentials').then((credentials) => {
-      const user = credentials[role];
-      if (!user) {
-        throw new Error(
-          `User role "${role}" not found in auth/credentials fixture`,
-        );
-      }
-
+    resolveCredentials(resolvedRole).then((user) => {
       // Intercept signIn query to capture response using operation name for robust matching
       cy.intercept('POST', '**/graphql', (req) => {
         if (req.body?.operationName === 'SignIn') {
@@ -303,7 +307,10 @@ Cypress.Commands.add('loginByApi', (role: string) => {
         const body = interception.response?.body as SignInResponse;
         if (body?.errors && body.errors.length > 0) {
           const errMsg = body.errors.map((e) => e.message).join(', ');
-          throw new Error(`Login failed: ${errMsg}`);
+          const { emailKey, passwordKey } = roleToEnvKey(resolvedRole);
+          throw new Error(
+            `Login failed: ${errMsg}. Verify credentials for role "${resolvedRole}" via ${emailKey}/${passwordKey} or cypress/fixtures/auth/credentials.json.`,
+          );
         }
         if (!body?.data?.signIn) {
           const message = `Login response missing signIn data. Response: ${JSON.stringify(body)}`;
@@ -312,7 +319,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
         }
       });
 
-      if (role === 'user') {
+      if (resolvedRole === 'user') {
         cy.url({ timeout: 15000 }).should('include', '/user/organizations');
       } else {
         cy.url({ timeout: 15000 }).should('include', '/admin/orglist');
