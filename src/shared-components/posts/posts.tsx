@@ -354,7 +354,7 @@ export default function PostsPage() {
                 ],
                 selected: sortingOption,
                 onChange: handleSorting,
-                testIdPrefix: 'sortpost-toggle',
+                testIdPrefix: 'sortpost',
               },
             ]}
             showEventTypeFilter={false}
@@ -365,7 +365,7 @@ export default function PostsPage() {
                 disabled={!userId}
                 data-testid="createPostModalBtn"
                 data-cy="createPostModalBtn"
-                className={`${styles.createButton} mb-2`}
+                className={styles.createButton}
               >
                 <Add />
                 {t('createPost')}
@@ -410,7 +410,13 @@ export default function PostsPage() {
               {/* Posts List with Infinite Scroll */}
               {isFiltering ? (
                 // Display filtered posts without infinite scroll
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 'var(--space-2)',
+                  }}
+                >
                   {postsToDisplay.map((post) => (
                     <PostCard
                       key={post.id}
@@ -437,7 +443,11 @@ export default function PostsPage() {
                   scrollThreshold={0.8}
                 >
                   <Box
-                    sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 'var(--space-2)',
+                    }}
                   >
                     {postsToDisplay.map((post) => (
                       <PostCard

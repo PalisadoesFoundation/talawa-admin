@@ -92,6 +92,7 @@
     "userEditProfilePicture": "प्रोफ़ाइल चित्र संपादित करें",
     "communityLogo": "समुदाय लोगो",
     "organizations": "संगठन",
+    "clickToSelectOrg": "संगठन का चयन करने के लिए क्लिक करें",
     "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
     "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
@@ -99,6 +100,21 @@
     "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
+  },
+  "verifyEmail": {
+    "title": "ईमेल सत्यापित करें",
+    "loginRequired": "लॉगिन आवश्यक",
+    "verifying": "सत्यापित हो रहा है...",
+    "success": "ईमेल सत्यापित",
+    "successMessage": "आपका ईमेल सफलतापूर्वक सत्यापित हो गया है। अब आप लॉग इन कर सकते हैं।",
+    "error": "सत्यापन विफल",
+    "invalidToken": "सत्यापन लिंक अमान्य है या समाप्त हो गया है।",
+    "noToken": "कोई सत्यापन टोकन प्रदान नहीं किया गया। कृपया सत्यापन लिंक के लिए अपना ईमेल जांचें।",
+    "verificationFailed": "ईमेल सत्यापन विफल। कृपया पुनः प्रयास करें।",
+    "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेज दिया गया है।",
+    "resendFailed": "सत्यापन ईमेल भेजने में विफल। कृपया पुनः प्रयास करें।",
+    "resendButton": "सत्यापन ईमेल पुनः भेजें",
+    "goToLogin": "लॉगिन पर जाएं"
   },
   "adminProfile": {
     "title": "एडमिन प्रोफ़ाइल",
@@ -576,16 +592,6 @@
     "joined": "शामिल हुए",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
-  "orgAdminListCard": {
-    "remove": "निकालना",
-    "removeAdmin": "व्यवस्थापक हटाएँ",
-    "removeAdminMsg": "क्या आप इस व्यवस्थापक को हटाना चाहते हैं?",
-    "adminRemoved": "व्यवस्थापक को हटा दिया गया है.",
-    "joined": "शामिल हुए",
-    "no": "नहीं",
-    "yes": "हाँ",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
-  },
   "orgPeopleListCard": {
     "remove": "निकालना",
     "removeMember": "सदस्य हटाएँ",
@@ -776,9 +782,38 @@
     "deleteAgendaCategory": "एजेंडा श्रेणी हटाएं",
     "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "एजेंडा फ़ोल्डर सफलतापूर्वक अपडेट किया गया",
+    "agendaFolderDeleted": "एजेंडा फ़ोल्डर सफलतापूर्वक हटा दिया गया",
+    "deleteAgendaFolder": "एजेंडा फ़ोल्डर हटाएं",
+    "deleteAgendaFolderMsg": "क्या आप इस एजेंडा फ़ोल्डर को हटाना चाहते हैं?",
+    "updateAgendaFolder": "एजेंडा फ़ोल्डर अपडेट करें",
+    "folderNamePlaceholder": "फ़ोल्डर का नाम",
+    "createAgendaFolder": "एजेंडा सेक्शन बनाएं",
+    "folderName": "फ़ोल्डर",
+    "categoryName": "श्रेणी",
+    "noCategory": "कोई एजेंडा श्रेणी नहीं",
+    "folder": "एजेंडा फ़ोल्डर",
+    "notes": "नोट्स",
+    "enterNotes": "नोट दर्ज करें",
+    "previewItem": "आइटम का पूर्वावलोकन",
+    "agendaFolderDetails": "एजेंडा सेक्शन विवरण",
+    "agendaFolderCreated": "एजेंडा सेक्शन सफलतापूर्वक बनाया गया",
+    "attachmentPreviewAlt": "अनुलग्नक पूर्वावलोकन",
+    "agendaFolderUpdateFailed": "एजेंडा फ़ोल्डर अपडेट करने में विफल",
+    "removeUrl": "URL हटाएं",
+    "removeAttachment": "अनुलग्नक हटाएं",
+    "itemSequenceUpdateSuccessMsg": "आइटम का क्रम सफलतापूर्वक अपडेट किया गया",
+    "sectionSequenceUpdateSuccessMsg": "सेक्शन का क्रम सफलतापूर्वक अपडेट किया गया",
+    "editFolder": "फ़ोल्डर संपादित करें",
+    "editItem": "आइटम संपादित करें",
+    "deleteItem": "आइटम हटाएं",
+    "deleteFolder": "फ़ोल्डर हटाएं",
+    "itemPreview": "आइटम पूर्वावलोकन",
     "agendaItemDetails": "एजेंडा आइटम विवरण",
     "updateAgendaItem": "एजेंडा आइटम अपडेट करें",
+    "fileUploadFailed": "फ़ाइल अपलोड विफल हुआ",
+    "organizationRequired": "संगठन आवश्यक है",
     "title": "शीर्षक",
     "enterTitle": "शीर्षक दर्ज करें",
     "sequence": "क्रम",
@@ -1153,7 +1188,9 @@
     "statistics": "आँकड़े",
     "to": "को",
     "volunteers": "स्वयंसेवक",
-    "backToEvents": "इवेंट्स पर वापस जाएं"
+    "backToEvents": "इवेंट्स पर वापस जाएं",
+    "selectTab": "टैब चुनें",
+    "eventTabs": "इवेंट टैब्स"
   },
   "forgotPassword": {
     "title": "तलावा पासवर्ड भूल गए",
@@ -1237,18 +1274,6 @@
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "पिछला पासवर्ड",
-    "newPassword": "नया पासवर्ड",
-    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
-    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
-    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
-    "saveChanges": "परिवर्तन सहेजें",
-    "cancel": "रद्द करें"
-  },
-  "orgDelete": {
-    "deleteOrg": "संगठन हटाएं"
-  },
   "membershipRequest": {
     "accept": "स्वीकार करना",
     "reject": "अस्वीकार करना",
@@ -1311,6 +1336,7 @@
     }
   },
   "memberDetail": {
+    "user": "उपयोगकर्ता",
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
     "noeventsAttended": "कोई कार्यक्रम में भाग नहीं लिया",
@@ -1700,7 +1726,8 @@
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए.",
-    "donateTo": "दान करें"
+    "donateTo": "दान करें",
+    "selectCurrency": "मुद्रा चुनें"
   },
   "transactions": {
     "title": "लेन-देन",
@@ -1791,7 +1818,11 @@
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "location": "स्थान",
     "register": "पंजीकरण करें",
-    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया"
+    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया",
+    "eventCardAriaLabel": "{{name}} के लिए इवेंट कार्ड",
+    "unknownCreator": "अज्ञात निर्माता",
+    "alreadyRegisteredAriaLabel": "इवेंट पहले से पंजीकृत है",
+    "inviteOnlyEventAriaLabel": "केवल आमंत्रण इवेंट"
   },
   "advertisement": {
     "title": "विज्ञापनों",
@@ -1889,10 +1920,14 @@
     "confirmRemoveMember": "सदस्य हटाने की पुष्टि करें",
     "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
     "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
-    "next": "अगला"
+    "next": "अगला",
+    "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
+    "thisUser": "इस उपयोगकर्ता",
+    "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
+    "memberActionsMenu": "सदस्य क्रियाएं मेनू"
   },
   "userChatRoom": {
-    "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
+    "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",
     "sendMessage": "मेसेज भेजें",
     "loading": "लोड हो रहा है...",
     "loadOlderMessages": "पुराने संदेश लोड करें",
@@ -1911,7 +1946,8 @@
       "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
       "resetButton": "फिर से प्रयास करें",
       "resetButtonAriaLabel": "फिर से प्रयास करें"
-    }
+    },
+    "messageActions": "संदेश क्रियाएं"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
@@ -2304,7 +2340,8 @@
     "invited": "आमंत्रित",
     "groupsAvailable": "{{count}} समूह उपलब्ध",
     "volunteersRequired": "आवश्यक",
-    "signedUp": "पंजीकृत"
+    "signedUp": "पंजीकृत",
+    "volunteerTabs": "स्वयंसेवक टैब"
   },
   "plugin": {
     "error": "प्लगइन त्रुटि",
@@ -2370,7 +2407,7 @@
     "installing": "इंस्टॉल हो रहा है ({{elapsed}})",
     "uploading": "अपलोड हो रहा है...",
     "screenshotCounter": "{{current}} में से {{total}}",
-    "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
+    "uninstallPluginWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
     "errorInstalling": "प्लगइन विवरण लोड करने में विफल",
     "failedToParsePluginZip": "प्लगइन ZIP फ़ाइल पार्स करने में विफल",
     "pluginUploadedSuccess": "प्लगइन सफलतापूर्वक अपलोड हो गया! ({{components}} घटक) - अब आप इसे प्लगइन सूची से इंस्टॉल कर सकते हैं।"
@@ -2389,7 +2426,9 @@
     "editComment": "टिप्पणी संपादित करें",
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
-    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
+    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
+    "commentBy": "टिप्पणी: {{name}} द्वारा",
+    "moreOptionsAriaLabel": "टिप्पणी के लिए अधिक विकल्प"
   },
   "profileAvatar": {
     "altText": "{{name}} की प्रोफ़ाइल तस्वीर",
@@ -2529,31 +2568,12 @@
       }
     }
   },
-  "verifyEmail": {
-    "title": "ईमेल सत्यापित करें",
-    "verifying": "आपका ईमेल सत्यापित किया जा रहा है...",
-    "success": "ईमेल सत्यापित!",
-    "successMessage": "आपका ईमेल सफलतापूर्वक सत्यापित हो गया है। अब आप लॉगिन कर सकते हैं।",
-    "error": "सत्यापन विफल",
-    "invalidToken": "सत्यापन लिंक अमान्य है या समाप्त हो गया है।",
-    "loginRequired": "कृपया अपना ईमेल सत्यापित करने के लिए लॉगिन करें।",
-    "resendButton": "सत्यापन ईमेल पुनः भेजें",
-    "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
-    "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
-    "goToLogin": "लॉगिन पर जाएं"
-  },
   "memberActivity": {
-    "dateNA": "दिनांक उपलब्ध नहीं",
     "yes": "हाँ",
     "no": "नहीं",
     "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
     "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
-    "numberOfAttendees": "उपस्थित लोगों की संख्या",
-    "viewEventDetails": "इवेंट विवरण देखें"
-  },
-  "promotedPost": {
-    "title": "प्रचारित सामग्री",
-    "promotedContent": "प्रचारित सामग्री: {{title}}"
+    "numberOfAttendees": "उपस्थित लोगों की संख्या"
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"

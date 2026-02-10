@@ -1,19 +1,11 @@
 .dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
-  color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
+  background-color: var(--color-gray-100) !important;
+  color: var(--color-gray-700) !important;
+  font-weight: var(--font-weight-heavy) !important;
 }
 
 .iconRightMargin {
-  margin-right: 0.6rem;
-}
-
-.dropdownItem {
-  background-color: var(--dropdownItem-bg) !important;
-  color: var(--dropdownItem-color) !important;
-  border: none !important;
-  box-shadow: var(--dropdownItem-box-shadow);
+  margin-left: var(--space-4);
 }

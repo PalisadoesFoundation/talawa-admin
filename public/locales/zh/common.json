@@ -253,6 +253,7 @@
   "organizationEvent": "组织成员",
   "organizationEventDescription": "组织的所有成员都可见",
   "inviteOnlyEvent": "仅限受邀者",
+  "inviteOnlyEventAriaLabel": "仅限受邀活动",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
   "noCategory": "无分类",
   "to": "至",
@@ -296,5 +297,11 @@
   "unavailable": "不可用",
   "clearSelection": "清除选择",
   "toggleSidebar": "切换侧边栏",
-  "picture": "{{name}}的图片"
+  "picture": "{{name}}的图片",
+  "optionsSuffix": "选项",
+  "userMenu": "用户菜单",
+  "searchPlaceholder": "搜索...",
+  "noOptionsFound": "未找到选项",
+  "noUserId": "用户ID不可用",
+  "noTagsFound": "未找到标签"
 }

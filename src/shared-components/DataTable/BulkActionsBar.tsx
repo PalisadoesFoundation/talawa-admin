@@ -47,5 +47,3 @@ export function BulkActionsBar({
     </section>
   );
 }
-
-export default BulkActionsBar;

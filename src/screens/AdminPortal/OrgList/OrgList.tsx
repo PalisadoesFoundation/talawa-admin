@@ -36,7 +36,6 @@ import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
 import type { ChangeEvent } from 'react';
-import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
@@ -44,6 +43,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { Alert } from 'react-bootstrap';
 import RBButton from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -146,7 +146,7 @@ function OrgList(): JSX.Element {
   });
 
   const [searchByName, setSearchByName] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const { isOpen, open, close } = useModalState();
 
   const [formState, setFormState] = useState<InterfaceFormStateType>({
     addressLine1: '',
@@ -160,7 +160,6 @@ function OrgList(): JSX.Element {
     state: '',
   });
 
-  const toggleModal = (): void => setShowModal(!showModal);
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION_PG);
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -316,7 +315,7 @@ function OrgList(): JSX.Element {
           postalCode: '',
           state: '',
         });
-        toggleModal();
+        close();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -360,8 +359,8 @@ function OrgList(): JSX.Element {
     setPage(0);
   };
 
-  const shimmerClass = styles.orgImgContainer + ' shimmer';
-  const shimmerBtnClass = 'shimmer ' + styles.button;
+  const shimmerClass = `${styles.orgImgContainer} ${styles.shimmerText}`;
+  const shimmerBtnClass = `${styles.shimmerText} ${styles.button}`;
   const pluginBtnClass = 'btn  btn-primary ' + styles.pluginStoreBtn;
   const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
 
@@ -373,11 +372,11 @@ function OrgList(): JSX.Element {
           variant="warning"
           dismissible
           onClose={handleDismissWarning}
-          className="mb-3"
+          className={styles.warningAlert}
           data-testid="email-verification-warning"
           aria-live="polite"
         >
-          <div className="d-flex justify-content-between align-items-center">
+          <div className={styles.notVerifiedContainer}>
             <div>
               <strong>{tLogin('emailNotVerified')}</strong>
             </div>
@@ -422,14 +421,13 @@ function OrgList(): JSX.Element {
           ]}
           additionalButtons={
             <>
-              <NotificationIcon />
               {role === 'administrator' && (
                 <RBButton
                   className={`${styles.dropdown} ${styles.createorgdropdown}`}
-                  onClick={toggleModal}
+                  onClick={open}
                   data-testid="createOrganizationBtn"
                 >
-                  <i className="fa fa-plus me-2" />
+                  <i className={`fa fa-plus ${styles.plusIcon}`} />
                   {t('createOrganization')}
                 </RBButton>
               )}
@@ -472,10 +470,22 @@ function OrgList(): JSX.Element {
                       <div className={shimmerClass} />
 
                       <div className={styles.content}>
-                        <h5 className="shimmer" title={t('orgName')}></h5>
-                        <h6 className="shimmer" title={t('location')}></h6>
-                        <h6 className="shimmer" title={t('admins')}></h6>
-                        <h6 className="shimmer" title={t('members')}></h6>
+                        <h5
+                          className={styles.shimmerText}
+                          title={t('orgName')}
+                        ></h5>
+                        <h6
+                          className={styles.shimmerText}
+                          title={t('location')}
+                        ></h6>
+                        <h6
+                          className={styles.shimmerText}
+                          title={t('admins')}
+                        ></h6>
+                        <h6
+                          className={styles.shimmerText}
+                          title={t('members')}
+                        ></h6>
                       </div>
                     </div>
                     <div className={shimmerBtnClass} />
@@ -519,8 +529,9 @@ function OrgList(): JSX.Element {
       {/**
        * Renders the `OrganizationModal` component.
        *
-       * @param showModal - A boolean indicating whether the modal should be displayed.
-       * @param toggleModal - A function to toggle the visibility of the modal.
+       * @param useModalState - Manages organization creation modal state (provides: isOpen, open, close, toggle)
+       * @param isOpen - A boolean indicating whether the modal should be displayed.
+       * @param toggle - A function to toggle the visibility of the modal.
        * @param formState - The state of the form in the organization modal.
        * @param setFormState - A function to update the state of the form in the organization modal.
        * @param createOrg - A function to handle the submission of the organization creation form.
@@ -530,8 +541,8 @@ function OrgList(): JSX.Element {
        */}
 
       <OrganizationModal
-        showModal={showModal}
-        toggleModal={toggleModal}
+        showModal={isOpen}
+        toggleModal={close}
         formState={formState}
         setFormState={setFormState}
         createOrg={createOrg}

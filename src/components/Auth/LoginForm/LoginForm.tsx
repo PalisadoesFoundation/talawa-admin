@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
+import ReCAPTCHA from 'react-google-recaptcha';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
+import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
-import { PasswordField } from '../PasswordField/PasswordField';
+import { PasswordField } from '../../../shared-components/Auth/PasswordField/PasswordField';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
 import type {
   InterfaceLoginFormData,
   InterfaceLoginFormProps,
 } from '../../../types/Auth/LoginForm/interface';
+import styles from './LoginForm.module.css';
 
 /**
  * Reusable login form component that composes EmailField and PasswordField.
@@ -19,7 +22,7 @@ import type {
  * and user login modes via the isAdmin prop.
  *
  * @param isAdmin - Whether the login form is rendered for an admin user
- * @param onSuccess - Callback invoked with the authentication token on successful login
+ * @param onSuccess - Callback invoked with the full sign-in result (user + tokens)
  * @param onError - Callback invoked when the login request fails
  * @param testId - Optional test ID used for querying the component in tests
  *
@@ -39,6 +42,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   onSuccess,
   onError,
   testId = 'login-form',
+  enableRecaptcha = false,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
@@ -60,35 +64,73 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     email: '',
     password: '',
   });
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const reportedNotFoundRef = useRef(false);
+
+  const isRecaptchaBlocking =
+    enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken;
 
   const [signin, { loading, data, error }] = useLazyQuery(SIGNIN_QUERY, {
     fetchPolicy: 'network-only',
   });
 
-  // Handle successful login
-  useEffect(() => {
-    if (data?.signIn?.authenticationToken) {
-      onSuccessRef.current?.(data.signIn.authenticationToken);
-    }
-  }, [data]);
-
-  // Handle login error
+  // Single effect: error first, then success, then not-found
   useEffect(() => {
     if (error) {
+      const isAbortError =
+        (error instanceof DOMException && error.name === 'AbortError') ||
+        (error as { networkError?: { name?: string } })?.networkError?.name ===
+          'AbortError';
+      if (isAbortError) return;
+      reportedNotFoundRef.current = false;
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
       onErrorRef.current?.(error);
+      return;
     }
-  }, [error]);
+    if (data?.signIn?.authenticationToken) {
+      reportedNotFoundRef.current = false;
+      onSuccessRef.current?.(data.signIn);
+      return;
+    }
+    if (data !== undefined && !data?.signIn) {
+      if (!reportedNotFoundRef.current) {
+        reportedNotFoundRef.current = true;
+        recaptchaRef.current?.reset();
+        setRecaptchaToken(null);
+        onErrorRef.current?.(new Error('Not found'));
+      }
+    }
+  }, [data, error]);
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    await signin({
-      variables: {
-        email: formData.email,
-        password: formData.password,
-      },
-    });
+
+    if (isRecaptchaBlocking) {
+      return;
+    }
+
+    const variables = {
+      email: formData.email,
+      password: formData.password,
+      ...(recaptchaToken && { recaptchaToken }),
+    };
+
+    try {
+      await signin({ variables });
+    } catch (err) {
+      const isAbortError =
+        (err instanceof DOMException && err.name === 'AbortError') ||
+        (err as { networkError?: { name?: string } })?.networkError?.name ===
+          'AbortError';
+      if (isAbortError) return;
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
+      onErrorRef.current?.(err as Error);
+    }
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -110,6 +152,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         value={formData.email}
         onChange={handleEmailChange}
         testId={`${testId}-email`}
+        dataCy="loginEmail"
       />
 
       <PasswordField
@@ -118,18 +161,29 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         onChange={handlePasswordChange}
         placeholder={tCommon('enterPassword')}
         testId={`${testId}-password`}
+        dataCy="loginPassword"
       />
+
+      {enableRecaptcha && RECAPTCHA_SITE_KEY && (
+        <div data-testid="recaptcha-placeholder">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onChange={(token): void => setRecaptchaToken(token)}
+            onExpired={(): void => setRecaptchaToken(null)}
+          />
+        </div>
+      )}
 
       <Button
         type="submit"
-        disabled={loading}
+        disabled={loading || isRecaptchaBlocking}
         data-testid={`${testId}-submit`}
-        className="w-100 mt-3"
+        data-cy="loginBtn"
+        className={styles.submitBtn}
       >
         {loading ? t('loading') : tCommon('login')}
       </Button>
     </form>
   );
 };
-
-export default LoginForm;

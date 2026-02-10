@@ -4,23 +4,37 @@
 
 # Interface: InterfaceCreateFormStateType
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L14)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L138)
+
+Defines the form state structure for creating a new agenda item.
 
 ## Properties
 
-### agendaItemCategoryIds
+### attachments
 
-> **agendaItemCategoryIds**: `string`[]
+> **attachments**: [`InterfaceAttachment`](InterfaceAttachment.md)[]
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L15)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L144)
 
 ***
 
-### attachments
+### categoryId
 
-> **attachments**: `string`[]
+> **categoryId**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L19)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L149)
+
+***
+
+### creator
+
+> **creator**: `object`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L146)
+
+#### name
+
+> **name**: `string`
 
 ***
 
@@ -28,7 +42,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:19](https://github.com/Pa
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L17)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L142)
 
 ***
 
@@ -36,7 +50,31 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:17](https://github.com/Pa
 
 > **duration**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L18)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L143)
+
+***
+
+### folderId
+
+> **folderId**: `string`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L140)
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L139)
+
+***
+
+### notes
+
+> **notes**: `string`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L150)
 
 ***
 
@@ -44,7 +82,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:18](https://github.com/Pa
 
 > **title**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L16)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L141)
 
 ***
 
@@ -52,4 +90,4 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:16](https://github.com/Pa
 
 > **urls**: `string`[]
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L20)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L145)
