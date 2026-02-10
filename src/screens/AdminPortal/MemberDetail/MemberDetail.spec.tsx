@@ -11,7 +11,7 @@ const mockUseParams = vi.fn((): { userId?: string } => ({
   userId: '123',
 }));
 
-const mockGetItem = vi.fn();
+const mockGetItem = vi.fn().mockReturnValue(null);
 
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
@@ -86,6 +86,7 @@ vi.mock(
 describe('MemberDetail', () => {
   afterEach(() => {
     vi.clearAllMocks();
+    mockGetItem.mockReturnValue(null);
   });
 
   it('renders noUserId message when userId is not provided', () => {
