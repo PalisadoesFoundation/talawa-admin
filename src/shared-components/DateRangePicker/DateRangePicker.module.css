@@ -43,9 +43,9 @@
 }
 
 .presetButtonActive {
-  background: var(--bs-primary, #0d6efd) !important;
+  background: var(--color-blue-600) !important;
   color: var(--color-blue-600) !important;
-  border-color: var(--bs-primary, #0d6efd) !important;
+  border-color: var(--color-blue-600) !important;
 }
 
 /* Input Group styling */

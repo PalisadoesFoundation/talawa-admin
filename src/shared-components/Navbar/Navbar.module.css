@@ -40,7 +40,7 @@
 .dropdown :global(.dropdown-menu) {
   min-width: 100% !important;
   width: 100% !important;
-  margin-top: var(--radius-sm);
+  margin-top: var(--space-1);
   border-radius: var(--radius-lg);
 }
 

@@ -69,18 +69,23 @@
 .btn__more {
   border: 0;
   font-size: var(--font-size-sm);
-  background-color: initial;
-  color: var(--btnMore-color);
+  background-color: var(--color-primary);
+  color: var(--color-white);
   font-weight: var(--font-weight-semibold);
   position: relative;
-  display: block;
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
   margin: var(--space-1);
-  margin-top: var(--space-7);
+  margin-top: var(--space-2);
+  border-radius: var(--space-2);
   z-index: 10;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .btn__more:hover {
-  color: var(--btnMore-color-hover);
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
 }
 
 @media only screen and (max-width: 576px) {

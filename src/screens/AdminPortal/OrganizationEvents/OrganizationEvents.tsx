@@ -106,7 +106,7 @@ function organizationEvents(): JSX.Element {
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
 
-  const showInviteModal = (): void => createEventModal.open();
+  const showCreateEventModal = (): void => createEventModal.open();
   const hideCreateEventModal = (): void => createEventModal.close();
 
   const handleChangeView = (item: string | null): void => {
@@ -263,7 +263,7 @@ function organizationEvents(): JSX.Element {
               actions={
                 <Button
                   className={styles.dropdown}
-                  onClick={showInviteModal}
+                  onClick={showCreateEventModal}
                   data-testid="createEventModalBtn"
                   data-cy="createEventModalBtn"
                 >

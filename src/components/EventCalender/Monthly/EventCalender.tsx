@@ -317,11 +317,17 @@ const Calendar: React.FC<
               </div>
               {Array.isArray(allDayEventsList) && shouldShowViewMore && (
                 <Button
+                  variant="primary"
                   className={styles.btn__more}
                   onClick={handleExpandClick}
                   data-testid="view-more-button"
+                  style={{
+                    backgroundColor: '#1976d2',
+                    color: 'white',
+                    border: 'none',
+                  }}
                 >
-                  {expanded === -100 ? 'View less' : 'View all'}
+                  {expanded === -100 ? t('viewLess') : t('viewAll')}
                 </Button>
               )}
             </div>
@@ -335,11 +341,7 @@ const Calendar: React.FC<
 
   const renderInfoCards = (): JSX.Element => (
     <div className={styles.calendar_infocards}>
-      <section
-        className={styles.holidays_card}
-        role="region"
-        aria-label={t('holidays')}
-      >
+      <section className={styles.holidays_card} aria-label={t('holidays')}>
         <h3 className={styles.card_title}>{t('holidays')}</h3>
         <ul className={styles.card_list}>
           {filteredHolidays.map((holiday, index) => (
@@ -354,11 +356,7 @@ const Calendar: React.FC<
         </ul>
       </section>
 
-      <section
-        className={styles.events_card}
-        role="region"
-        aria-label={t('events')}
-      >
+      <section className={styles.events_card} aria-label={t('events')}>
         <h3 className={styles.card_title}>{t('events')}</h3>
         <div className={styles.legend}>
           <div className={styles.eventsLegend}>
@@ -493,11 +491,17 @@ const Calendar: React.FC<
               </div>
               {shouldShowViewMore && (
                 <Button
+                  variant="primary"
                   className={styles.btn__more}
                   data-testid="more"
                   onClick={() => toggleExpand(index)}
+                  style={{
+                    backgroundColor: '#1976d2',
+                    color: 'white',
+                    border: 'none',
+                  }}
                 >
-                  {expanded === index ? 'View less' : 'View all'}
+                  {expanded === index ? t('viewLess') : t('viewAll')}
                 </Button>
               )}
             </div>

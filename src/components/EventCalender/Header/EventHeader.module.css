@@ -63,7 +63,7 @@
 .btnsBlock button.dropdown:hover,
 .btnsBlock .dropdown :global(.btn):hover {
   background-color: var(--color-gray-400);
-  border-color: var(--color-gray-300);
+  border-color: var(--color-gray-600);
   color: var(--color-gray-800);
 }
 
@@ -73,10 +73,9 @@
   width: 100% !important;
   margin-top: var(--radius-sm);
   border-radius: var(--radius-lg);
-  border-radius: var(--radius-lg);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: var(--breakpoint-md)) {
   .calendar__header {
     flex-wrap: wrap;
     height: auto;
