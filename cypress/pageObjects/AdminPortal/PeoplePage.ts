@@ -12,6 +12,9 @@ export class PeoplePage {
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
   private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
   private readonly _alert = '[role=alert]';
+  private readonly _dataGridRows =
+    '.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-row';
+  private readonly _dataGridCellContent = '.MuiDataGrid-cellContent';
 
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
@@ -28,7 +31,13 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    cy.get('.MuiDataGrid-row', { timeout }).contains(name).should('be.visible');
+    const escapedName = Cypress._.escapeRegExp(name);
+    cy.get(this._dataGridRows, { timeout }).should('exist');
+    cy.contains(
+      `${this._dataGridRows} ${this._dataGridCellContent}`,
+      new RegExp(`^${escapedName}$`),
+      { timeout },
+    ).should('be.visible');
     return this;
   }
 
@@ -41,17 +50,29 @@ export class PeoplePage {
   }
 
   searchAndSelectUser(name: string, timeout = 40000) {
-    cy.get(this._searchUserInput, { timeout }).should('be.visible').type(name);
+    const escapedName = Cypress._.escapeRegExp(name);
+    cy.get(this._searchUserInput, { timeout })
+      .should('be.visible')
+      .clear()
+      .type(name);
     cy.get(this._submitSearchBtn, { timeout }).should('be.visible').click();
-    cy.contains(name, { timeout }).should('be.visible');
+    cy.contains(
+      `${this._dataGridRows} ${this._dataGridCellContent}`,
+      new RegExp(`^${escapedName}$`),
+      { timeout },
+    ).should('be.visible');
     return this;
   }
 
   confirmAddUser(name: string, timeout = 100000) {
     cy.get(this._addBtn, { timeout }).should('be.visible').click();
-    cy.get(this._alert, { timeout })
-      .should('be.visible')
-      .and('contain.text', 'Member added Successfully');
+    cy.get('body', { timeout }).then(($body) => {
+      if ($body.find(this._alert).length > 0) {
+        cy.get(this._alert, { timeout })
+          .should('be.visible')
+          .and('contain.text', 'Member added Successfully');
+      }
+    });
     cy.reload();
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);

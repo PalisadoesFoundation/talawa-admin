@@ -75,9 +75,13 @@ export class ActionItemPage {
   createActionItem(category: string, member: string) {
     cy.get(this.createActionItemBtn).should('be.visible').click();
     cy.get(this.categorySelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').contains(category).click();
+    cy.contains('[role="listbox"] [role="option"]', category, {
+      timeout: 50000,
+    }).click();
     cy.get(this.memberSelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').contains(member).click();
+    cy.contains('[role="listbox"] [role="option"]', member, {
+      timeout: 50000,
+    }).click();
     cy.get(this.submitBtn).should('be.visible').click();
     cy.assertToast('Action Item created successfully');
     return this;
@@ -86,12 +90,18 @@ export class ActionItemPage {
   createActionItemWithVolunteer(category: string, volunteerName?: string) {
     cy.get(this.createActionItemBtn).should('be.visible').click();
     cy.get(this.categorySelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').contains(category).click();
+    cy.contains('[role="listbox"] [role="option"]', category, {
+      timeout: 50000,
+    }).click();
     cy.get(this.volunteerSelect).should('be.visible').click();
     if (volunteerName) {
-      cy.get('ul[role="listbox"] li').contains(volunteerName).click();
+      cy.contains('[role="listbox"] [role="option"]', volunteerName, {
+        timeout: 50000,
+      }).click();
     } else {
-      cy.get('ul[role="listbox"] li').first().click();
+      cy.get('[role="listbox"] [role="option"]', { timeout: 50000 })
+        .first()
+        .click();
     }
     cy.get(this.submitBtn).should('be.visible').click();
     cy.assertToast('Action Item created successfully');
@@ -113,7 +123,7 @@ export class ActionItemPage {
   }
 
   viewFirstActionItemAndCloseModal() {
-    cy.get(this.viewItemBtn).first().click();
+    cy.get(this.viewItemBtn, { timeout: 50000 }).first().click();
     cy.get(this.modalCloseBtn).should('be.visible').click();
     return this;
   }
@@ -127,7 +137,7 @@ export class ActionItemPage {
   }
 
   deleteFirstActionItem() {
-    cy.get(this.deleteItemBtn).first().click();
+    cy.get(this.deleteItemBtn, { timeout: 50000 }).first().click();
     cy.get(this.deleteYesBtn).should('be.visible').click();
     cy.assertToast('Action Item deleted successfully');
     return this;

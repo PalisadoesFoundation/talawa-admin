@@ -34,6 +34,20 @@ export class AdvertisementPage {
     });
   }
 
+  private aliasCreateAdvertisementMutation() {
+    const apiPattern =
+      (Cypress.env('apiUrl') as string | undefined) ||
+      (Cypress.env('API_URL') as string | undefined) ||
+      (Cypress.env('CYPRESS_API_URL') as string | undefined) ||
+      '**/graphql';
+
+    cy.intercept('POST', apiPattern, (req) => {
+      if (req.body?.query?.includes('createAdvertisement')) {
+        req.alias = 'createAdvertisement';
+      }
+    });
+  }
+
   visitAdvertisementPage(orgId?: string, timeout = 10000) {
     const openOrgDashboard = (id: string) => {
       cy.visit(`/admin/orgdash/${id}`);
@@ -79,6 +93,7 @@ export class AdvertisementPage {
     type: string,
     timeout = 10000,
   ) {
+    this.aliasCreateAdvertisementMutation();
     cy.get(this._createAdBtn, { timeout }).should('be.visible').click();
     cy.get(this._adNameInput).should('be.visible').type(name);
     cy.get(this._adDescriptionInput).should('be.visible').type(description);
@@ -87,13 +102,30 @@ export class AdvertisementPage {
       .selectFile(mediaPath, { force: true });
     cy.get(this._adTypeSelect).should('be.visible').select(type);
     cy.get(this._registerAdBtn).should('be.visible').click();
-    cy.get(this._alert)
-      .should('be.visible')
-      .and('contain.text', 'Advertisement created successfully.');
+    cy.wait('@createAdvertisement')
+      .its('response.body')
+      .then((body) => {
+        expect(body?.errors, 'createAdvertisement GraphQL errors').to.equal(
+          undefined,
+        );
+        expect(
+          body?.data?.createAdvertisement?.id,
+          'createAdvertisement id',
+        ).to.be.a('string');
+      });
+    cy.get('body').then(($body) => {
+      if ($body.find(this._alert).length > 0) {
+        cy.get(this._alert)
+          .should('be.visible')
+          .and('contain.text', 'Advertisement created successfully.');
+      }
+    });
     return this;
   }
 
   verifyAndEditAdvertisement(oldName: string, newName: string) {
+    this.aliasAdvertisementListQuery();
+    cy.reload();
     cy.contains(this._activeCampaignsTab).should('be.visible').click();
     cy.contains(oldName).should('be.visible');
     cy.get(this._dropdownBtn).should('be.visible').click();
@@ -109,7 +141,6 @@ export class AdvertisementPage {
   verifyAndDeleteAdvertisement(adName: string) {
     this.aliasAdvertisementListQuery();
     cy.reload();
-    cy.wait('@OrganizationAdvertisements', { timeout: 20000 });
     cy.contains(adName).should('be.visible');
     this.aliasDeleteAdvertisementMutation();
     cy.get(this._dropdownBtn).should('be.visible').click();

@@ -7,8 +7,9 @@ const peoplePage = new PeoplePage();
 describe('Admin People Tab', () => {
   let orgId = '';
   const userIds: string[] = [];
-  const wiltShepherd: SeededUser = { name: 'Wilt Shepherd' };
-  const praiseNorris: SeededUser = { name: 'Praise Norris' };
+  const runId = Date.now();
+  const wiltShepherd: SeededUser = { name: `Wilt Shepherd ${runId}` };
+  const praiseNorris: SeededUser = { name: `Praise Norris ${runId}` };
 
   before(() => {
     cy.setupTestEnvironment({ auth: { role: 'admin' } })

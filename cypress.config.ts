@@ -145,6 +145,28 @@ const CREATE_POST_MUTATION = `
   }
 `;
 
+const CREATE_PLUGIN_MUTATION = `
+  mutation CreatePlugin($input: CreatePluginInput!) {
+    createPlugin(input: $input) {
+      id
+      pluginId
+      isInstalled
+      isActivated
+    }
+  }
+`;
+
+const INSTALL_PLUGIN_MUTATION = `
+  mutation InstallPlugin($input: InstallPluginInput!) {
+    installPlugin(input: $input) {
+      id
+      pluginId
+      isInstalled
+      isActivated
+    }
+  }
+`;
+
 const CREATE_ACTION_ITEM_CATEGORY_MUTATION = `
   mutation CreateActionItemCategory($input: MutationCreateActionItemCategoryInput!) {
     createActionItemCategory(input: $input) {
@@ -496,6 +518,68 @@ export default defineConfig({
                 throw new Error('CreatePost response missing id.');
               }
               return { postId };
+            },
+          });
+        },
+        async createTestPlugin({
+          apiUrl,
+          token,
+          pluginId,
+        }: {
+          apiUrl?: string;
+          token: string;
+          pluginId: string;
+        }) {
+          return runGraphQLTask<
+            { createPlugin?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreatePlugin',
+            query: CREATE_PLUGIN_MUTATION,
+            variables: { input: { pluginId } },
+            extract: (data) => ({ ok: Boolean(data?.createPlugin?.id) }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (/already|exists|duplicate/i.test(errorMessage)) {
+                return { ok: true };
+              }
+              return undefined;
+            },
+          });
+        },
+        async installTestPlugin({
+          apiUrl,
+          token,
+          pluginId,
+        }: {
+          apiUrl?: string;
+          token: string;
+          pluginId: string;
+        }) {
+          return runGraphQLTask<
+            { installPlugin?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'InstallPlugin',
+            query: INSTALL_PLUGIN_MUTATION,
+            variables: { input: { pluginId } },
+            extract: (data) => ({ ok: Boolean(data?.installPlugin?.id) }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (
+                /already.*installed|is installed|exists/i.test(errorMessage)
+              ) {
+                return { ok: true };
+              }
+              return undefined;
             },
           });
         },

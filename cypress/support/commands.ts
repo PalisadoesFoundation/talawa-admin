@@ -546,13 +546,39 @@ Cypress.Commands.add(
             return { eventId };
           });
       };
+      const ensureOrganizationMembership = (
+        token: string,
+        userId?: string,
+      ): Cypress.Chainable<void> => {
+        if (!userId) {
+          return cy.wrap(undefined, { log: false });
+        }
+        return cy
+          .task('createOrganizationMembership', {
+            apiUrl: eventPayload.auth?.apiUrl,
+            token,
+            input: {
+              memberId: userId,
+              organizationId: eventPayload.orgId,
+              role: 'administrator',
+            },
+          })
+          .then(() => {
+            // Give permission propagation a short window before retrying createEvent.
+            cy.wait(500, { log: false });
+          });
+      };
       const canRetryWithSuperAdmin =
         (eventPayload.auth?.role ?? 'admin') === 'admin';
 
-      return resolveAuthToken(eventPayload.auth).then((token) => {
-        return createEvent(token).then(undefined, (error: unknown) => {
-          if (!canRetryWithSuperAdmin || !isAuthorizationError(error)) {
-            throw error;
+      return resolveAuthSession(eventPayload.auth).then(({ token, userId }) => {
+        const retryWithSuperAdmin = () => {
+          if (!canRetryWithSuperAdmin) {
+            return cy.wrap(null, { log: false }).then(() => {
+              throw new Error(
+                'seedTestData(events) authorization failed and superAdmin fallback is disabled.',
+              );
+            });
           }
 
           Cypress.log({
@@ -565,6 +591,24 @@ Cypress.Commands.add(
             ...(eventPayload.auth ?? {}),
             role: 'superAdmin',
           }).then((superAdminToken) => createEvent(superAdminToken));
+        };
+
+        return createEvent(token).then(undefined, (error: unknown) => {
+          if (!isAuthorizationError(error)) {
+            throw error;
+          }
+
+          return ensureOrganizationMembership(token, userId)
+            .then(
+              () => createEvent(token),
+              () => createEvent(token),
+            )
+            .then(undefined, (retryError: unknown) => {
+              if (!isAuthorizationError(retryError)) {
+                throw retryError;
+              }
+              return retryWithSuperAdmin();
+            });
         });
       });
     }
