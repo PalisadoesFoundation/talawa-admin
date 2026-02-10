@@ -1,13 +1,16 @@
 .cardsEventListCard {
   background-color: var(--cardsEventListCard-bg);
-  border: 0.5px solid var(--cardsEventListCard-border);
+  border: var(--border-0) solid var(--cardsEventListCard-border);
   box-shadow: 0px 4px 4px var(--cardsEventListCard-box-shadow);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  height: 90px;
+  height: var(--space-8);
   cursor: pointer;
-  padding: 10px;
+  padding: 0 var(--space-2);
   transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cardsEventListCard:hover {
@@ -15,14 +18,14 @@
 }
 
 .cardsEventListCard > p {
-  font-size: 14px;
+  font-size: var(--font-size-xs);
   margin-top: 0px;
-  margin-bottom: 7px;
+  margin-bottom: var(--space-2);
 }
 
 .cardsEventListCard a {
   color: var(--cardsEventListCard-a-color);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .cardsEventListCard a:hover {
@@ -40,15 +43,16 @@
 .dispflexEventListCard {
   display: flex;
   cursor: pointer;
-  justify-content: space-between;
-  margin: 10px 5px 5px 0px;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
 }
 
 .dispflexEventListCard > input {
   width: 20%;
   border: none;
   box-shadow: none;
-  margin-top: 5px;
+  margin-top: var(--space-2);
 }
 
 .eventtitle {
@@ -56,6 +60,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 1.1rem;
+  font-size: var(--font-size-xs);
   color: var(--cardsEventListCard-h2-color);
+  text-align: center;
 }
