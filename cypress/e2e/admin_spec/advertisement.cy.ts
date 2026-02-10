@@ -59,7 +59,7 @@ describe('Testing Admin Advertisement Management', () => {
     }).as('getPlugins');
     cy.window().then((win) => {
       const token = win.localStorage.getItem('Talawa-admin_token');
-      expect(token, 'User should be authenticated').to.exist;
+      expect(token, 'User should be authenticated').to.not.equal(null);
     });
     adPage.visitAdvertisementPage();
   });
