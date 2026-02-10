@@ -11,7 +11,7 @@
 .searchInput {
   border: none;
   outline: none;
-  min-width: 220px;
+  min-width: var(--space-17);
 }
 
 .searchInput:focus-visible,
