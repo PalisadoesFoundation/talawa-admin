@@ -1,13 +1,21 @@
-import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { PeoplePage } from '../../pageObjects/AdminPortal/PeoplePage';
 
-const dashboard = new AdminDashboardPage();
 const peoplePage = new PeoplePage();
 
 describe('Admin People Tab', () => {
+  let orgId = '';
+
+  before(() => {
+    cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
+      ({ orgId: createdOrgId }) => {
+        orgId = createdOrgId;
+      },
+    );
+  });
+
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard.visit().verifyOnDashboard().openFirstOrganization();
+    cy.visit(`/admin/orgdash/${orgId}`);
     peoplePage.visitPeoplePage();
   });
 
@@ -35,5 +43,11 @@ describe('Admin People Tab', () => {
   afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+  });
+
+  after(() => {
+    if (orgId) {
+      cy.cleanupTestOrganization(orgId);
+    }
   });
 });

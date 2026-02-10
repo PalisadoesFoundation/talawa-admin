@@ -1,4 +1,3 @@
-import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { ActionItemPage } from '../../pageObjects/AdminPortal/ActionItemPage';
 
 /**
@@ -231,17 +230,21 @@ const ensureVolunteerExistsForOrg = (
 };
 
 describe('Admin Event Action Items Tab', () => {
-  const dashboard = new AdminDashboardPage();
   const actionItemPage = new ActionItemPage();
+  let orgId = '';
+
+  before(() => {
+    cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
+      ({ orgId: createdOrgId }) => {
+        orgId = createdOrgId;
+      },
+    );
+  });
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard.visit().verifyOnDashboard().openFirstOrganization();
-    cy.url().then((url) => {
-      const match = url.match(/\/admin\/orgdash\/([a-f0-9-]+)/);
-      if (!match) return;
-      return ensureVolunteerExistsForOrg(match[1]);
-    });
+    cy.visit(`/admin/orgdash/${orgId}`);
+    ensureVolunteerExistsForOrg(orgId);
     actionItemPage.visitEventActionItems();
   });
 
@@ -266,5 +269,8 @@ describe('Admin Event Action Items Tab', () => {
   after(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+    if (orgId) {
+      cy.cleanupTestOrganization(orgId);
+    }
   });
 });

@@ -15,6 +15,7 @@ interface InterfaceAdvertisementData {
 describe('Testing Admin Advertisement Management', () => {
   const adPage = new AdvertisementPage();
   let adData: InterfaceAdvertisementData;
+  let orgId = '';
 
   before(() => {
     cy.fixture('admin/advertisements').then((data) => {
@@ -31,6 +32,11 @@ describe('Testing Admin Advertisement Management', () => {
         },
       };
     });
+    cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
+      ({ orgId: createdOrgId }) => {
+        orgId = createdOrgId;
+      },
+    );
   });
 
   beforeEach(() => {
@@ -61,7 +67,7 @@ describe('Testing Admin Advertisement Management', () => {
       const token = win.localStorage.getItem('Talawa-admin_token');
       expect(token, 'User should be authenticated').to.not.equal(null);
     });
-    adPage.visitAdvertisementPage();
+    adPage.visitAdvertisementPage(orgId);
   });
 
   it('create a new advertisement', () => {
@@ -84,5 +90,11 @@ describe('Testing Admin Advertisement Management', () => {
   afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+  });
+
+  after(() => {
+    if (orgId) {
+      cy.cleanupTestOrganization(orgId);
+    }
   });
 });

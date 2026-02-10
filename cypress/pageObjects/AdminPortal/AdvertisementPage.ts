@@ -16,14 +16,22 @@ export class AdvertisementPage {
   private readonly _deleteBtn = '[data-cy="deletebtn"]';
   private readonly _deleteConfirmBtn = '[data-testid="delete_yes"]';
 
-  visitAdvertisementPage(timeout = 10000) {
-    cy.createTestOrganization({
-      name: `E2E Org ${Date.now()}`,
-      auth: { role: 'admin' },
-    }).then(({ orgId }) => {
-      cy.visit(`/admin/orgdash/${orgId}`);
+  visitAdvertisementPage(orgId?: string, timeout = 10000) {
+    const openOrgDashboard = (id: string) => {
+      cy.visit(`/admin/orgdash/${id}`);
       cy.url({ timeout }).should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
-    });
+    };
+
+    if (orgId) {
+      openOrgDashboard(orgId);
+    } else {
+      cy.createTestOrganization({
+        name: `E2E Org ${Date.now()}`,
+        auth: { role: 'admin' },
+      }).then(({ orgId: createdOrgId }) => {
+        openOrgDashboard(createdOrgId);
+      });
+    }
     cy.get('body').then(($body) => {
       const drawerElement = $body.find('[data-testid="leftDrawerContainer"]');
       if (drawerElement.length > 0) {

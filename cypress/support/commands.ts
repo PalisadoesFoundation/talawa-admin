@@ -381,7 +381,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'createTestOrganization',
   (payload: CreateTestOrganizationPayload) => {
-    return resolveAuthSession(payload.auth).then(({ token, userId }) => {
+    return resolveAuthSession(payload.auth).then(({ token }) => {
       return cy
         .task('createTestOrganization', {
           apiUrl: payload.auth?.apiUrl,
@@ -403,25 +403,7 @@ Cypress.Commands.add(
           if (!orgId) {
             throw new Error('createTestOrganization did not return orgId.');
           }
-          if (!userId) {
-            return { orgId };
-          }
-          return resolveAuthToken({
-            role: 'superAdmin',
-            apiUrl: payload.auth?.apiUrl,
-          }).then((membershipToken) => {
-            return cy
-              .task('createOrganizationMembership', {
-                apiUrl: payload.auth?.apiUrl,
-                token: membershipToken,
-                input: {
-                  memberId: userId,
-                  organizationId: orgId,
-                  role: 'administrator',
-                },
-              })
-              .then(() => ({ orgId }));
-          });
+          return { orgId };
         });
     });
   },
