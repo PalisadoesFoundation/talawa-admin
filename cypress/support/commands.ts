@@ -516,7 +516,7 @@ Cypress.Commands.add(
         eventPayload.endAt ??
         new Date(Date.now() + 60 * 60 * 1000).toISOString();
       const name = eventPayload.name || makeUniqueLabel('E2E Event');
-      return resolveAuthToken(eventPayload.auth).then((token) => {
+      const createEvent = (token: string) => {
         return cy
           .task('createTestEvent', {
             apiUrl: eventPayload.auth?.apiUrl,
@@ -539,7 +539,21 @@ Cypress.Commands.add(
             }
             return { eventId };
           });
-      });
+      };
+
+      return resolveAuthToken(eventPayload.auth)
+        .then((token) => createEvent(token))
+        .then(undefined, (error) => {
+          const message =
+            error instanceof Error ? error.message : String(error);
+          if (!/not authorized|unauthorized|forbidden/i.test(message)) {
+            throw error;
+          }
+          return resolveAuthToken({
+            role: 'superAdmin',
+            apiUrl: eventPayload.auth?.apiUrl,
+          }).then((token) => createEvent(token));
+        });
     }
 
     const createSeedUser = (userPayload: SeedUserPayload) => {
@@ -618,7 +632,7 @@ Cypress.Commands.add(
       if (!userId) {
         throw new Error('seedTestData(volunteers) missing userId.');
       }
-      return resolveAuthToken(volunteerPayload.auth).then((token) => {
+      const createVolunteer = (token: string) => {
         return cy
           .task('createTestVolunteer', {
             apiUrl: volunteerPayload.auth?.apiUrl,
@@ -640,7 +654,21 @@ Cypress.Commands.add(
             }
             return { volunteerId, userId, email, password };
           });
-      });
+      };
+
+      return resolveAuthToken(volunteerPayload.auth)
+        .then((token) => createVolunteer(token))
+        .then(undefined, (error) => {
+          const message =
+            error instanceof Error ? error.message : String(error);
+          if (!/not authorized|unauthorized|forbidden/i.test(message)) {
+            throw error;
+          }
+          return resolveAuthToken({
+            role: 'superAdmin',
+            apiUrl: volunteerPayload.auth?.apiUrl,
+          }).then((token) => createVolunteer(token));
+        });
     });
   },
 );

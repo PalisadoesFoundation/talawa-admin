@@ -55,7 +55,13 @@ export class ActionItemPage {
     return this;
   }
 
-  visitEventActionItems() {
+  visitEventActionItems(orgId?: string, eventId?: string) {
+    if (orgId && eventId) {
+      cy.visit(`/admin/event/${orgId}/${eventId}`);
+      this.navigateToEventActionItemsTab();
+      return this;
+    }
+
     this.visitEventsPage();
     this.selectFirstEvent();
     // After selecting event, click "Show Event Dashboard" button

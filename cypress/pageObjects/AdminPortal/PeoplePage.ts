@@ -28,9 +28,7 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    cy.get(this._searchResult, { timeout })
-      .should('be.visible')
-      .and('contain.text', name);
+    cy.get('.MuiDataGrid-row', { timeout }).contains(name).should('be.visible');
     return this;
   }
 

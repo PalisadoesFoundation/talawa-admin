@@ -3,6 +3,7 @@ import { ActionItemPage } from '../../pageObjects/AdminPortal/ActionItemPage';
 describe('Admin Event Action Items Tab', () => {
   const actionItemPage = new ActionItemPage();
   let orgId = '';
+  let eventId = '';
   const userIds: string[] = [];
 
   before(() => {
@@ -11,7 +12,8 @@ describe('Admin Event Action Items Tab', () => {
         orgId = createdOrgId;
         return cy.seedTestData('events', { orgId, auth: { role: 'admin' } });
       })
-      .then(({ eventId }) => {
+      .then(({ eventId: createdEventId }) => {
+        eventId = createdEventId;
         return cy.seedTestData('volunteers', {
           eventId,
           auth: { role: 'admin' },
@@ -27,7 +29,7 @@ describe('Admin Event Action Items Tab', () => {
   beforeEach(() => {
     cy.loginByApi('admin');
     cy.visit(`/admin/orgdash/${orgId}`);
-    actionItemPage.visitEventActionItems();
+    actionItemPage.visitEventActionItems(orgId, eventId);
   });
 
   it('creates a new action item with volunteer and updates it', () => {
