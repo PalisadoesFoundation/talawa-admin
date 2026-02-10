@@ -14,7 +14,7 @@
 
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import { render, screen, waitFor, cleanup, act } from '@testing-library/react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -233,7 +233,6 @@ describe('UserScreen tests', () => {
 
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
     vi.clearAllMocks();
 
     localStorage.removeItem('name');
@@ -247,17 +246,8 @@ describe('UserScreen tests', () => {
   });
 
   it('renders the correct title for posts', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderUserScreen();
+
     const titleElement = screen.getByRole('heading', { level: 1 });
     expect(titleElement).toHaveTextContent('Posts');
   });
@@ -394,17 +384,7 @@ describe('UserScreen tests', () => {
   it('renders default title "User Portal" for unknown routes', () => {
     mockLocation = '/user/unknownroute/123';
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderUserScreen();
 
     const titleElement = screen.getByRole('heading', { level: 1 });
     expect(titleElement).toHaveTextContent('User Portal');
@@ -417,17 +397,7 @@ describe('UserScreen tests', () => {
       value: 800,
     });
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderUserScreen();
 
     const drawer = screen.getByTestId('leftDrawerContainer');
     await waitFor(() => {
@@ -441,17 +411,7 @@ describe('UserScreen tests', () => {
   it('hides drawer when localStorage sidebar is true', async () => {
     localStorage.setItem('Talawa-admin_sidebar', JSON.stringify('true'));
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderUserScreen();
 
     const drawer = screen.getByTestId('leftDrawerContainer');
 
@@ -466,6 +426,7 @@ describe('UserScreen tests', () => {
   it('shows drawer when localStorage sidebar is false', async () => {
     localStorage.setItem('Talawa-admin_sidebar', JSON.stringify('false'));
 
+    renderUserScreen();
     renderUserScreen();
 
     const drawer = screen.getByTestId('leftDrawerContainer');
