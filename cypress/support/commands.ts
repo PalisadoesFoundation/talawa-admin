@@ -89,6 +89,15 @@ type CleanupTestOrganizationOptions = {
   allowNotFound?: boolean;
 };
 
+type CreateTestUserPayload = {
+  name?: string;
+  email?: string;
+  password?: string;
+  role?: 'administrator' | 'regular';
+  isEmailAddressVerified?: boolean;
+  auth?: AuthOptions;
+};
+
 type SignInTaskResult = { token: string; userId: string };
 type AuthSession = { token: string; userId?: string };
 type CreateOrganizationTaskResult = { orgId: string };
@@ -235,6 +244,9 @@ declare global {
       createOrganizationMembership(
         payload: CreateOrganizationMembershipOptions,
       ): Chainable<void>;
+      createTestUser(
+        payload: CreateTestUserPayload,
+      ): Chainable<{ userId: string; email: string; password: string }>;
       seedTestData(
         kind: 'events',
         payload: SeedEventPayload,
@@ -391,7 +403,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'createTestOrganization',
   (payload: CreateTestOrganizationPayload) => {
-    return resolveAuthSession(payload.auth).then(({ token }) => {
+    return resolveAuthSession(payload.auth).then(({ token, userId }) => {
       return cy
         .task('createTestOrganization', {
           apiUrl: payload.auth?.apiUrl,
@@ -412,6 +424,24 @@ Cypress.Commands.add(
           const { orgId } = result as CreateOrganizationTaskResult;
           if (!orgId) {
             throw new Error('createTestOrganization did not return orgId.');
+          }
+          if (userId && (payload.auth?.role ?? 'admin') === 'admin') {
+            return resolveAuthToken({
+              role: 'superAdmin',
+              apiUrl: payload.auth?.apiUrl,
+            }).then((membershipToken) => {
+              return cy
+                .task('createOrganizationMembership', {
+                  apiUrl: payload.auth?.apiUrl,
+                  token: membershipToken,
+                  input: {
+                    memberId: userId,
+                    organizationId: orgId,
+                    role: 'administrator',
+                  },
+                })
+                .then(() => ({ orgId }));
+            });
           }
           return { orgId };
         });
@@ -440,6 +470,38 @@ Cypress.Commands.add(
     );
   },
 );
+
+Cypress.Commands.add('createTestUser', (payload: CreateTestUserPayload) => {
+  const email =
+    payload.email ||
+    `e2e-user-${Date.now()}-${getSecureRandomSuffix(8)}@example.com`;
+  const password = payload.password || DEFAULT_TEST_PASSWORD;
+  const name = payload.name || makeUniqueLabel('E2E User');
+  const role = payload.role ?? 'regular';
+  return resolveAuthToken({ role: 'superAdmin', ...payload.auth }).then(
+    (token) => {
+      return cy
+        .task('createTestUser', {
+          apiUrl: payload.auth?.apiUrl,
+          token,
+          input: {
+            name,
+            emailAddress: email,
+            password,
+            role,
+            isEmailAddressVerified: payload.isEmailAddressVerified ?? true,
+          },
+        })
+        .then((result) => {
+          const { userId } = result as CreateUserTaskResult;
+          if (!userId) {
+            throw new Error('createTestUser did not return userId.');
+          }
+          return { userId, email, password };
+        });
+    },
+  );
+});
 
 Cypress.Commands.add(
   'seedTestData',
