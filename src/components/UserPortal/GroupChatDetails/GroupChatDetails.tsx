@@ -106,20 +106,6 @@ export default function GroupChatDetails({
     }
   }, [userId, t]);
 
-  if (!userId) {
-    return (
-      <BaseModal
-        show={groupChatDetailsModalisOpen}
-        onHide={toggleGroupChatDetailsModal}
-        title={t('Error')}
-        dataTestId="groupChatDetailsModal"
-        className={styles.modalContent}
-      >
-        {t('userNotFound')}
-      </BaseModal>
-    );
-  }
-
   //states
 
   const [userName, setUserName] = useState('');
@@ -358,6 +344,20 @@ export default function GroupChatDetails({
     ],
     [t, tCommon, chat.id, addUserToGroupChat, toggleAddUserModal, chatRefetch],
   );
+
+  if (!userId) {
+    return (
+      <BaseModal
+        show={groupChatDetailsModalisOpen}
+        onHide={toggleGroupChatDetailsModal}
+        title={t('Error')}
+        dataTestId="groupChatDetailsModal"
+        className={styles.modalContent}
+      >
+        {t('userNotFound')}
+      </BaseModal>
+    );
+  }
 
   return (
     <ErrorBoundaryWrapper
