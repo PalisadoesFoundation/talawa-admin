@@ -154,6 +154,37 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     };
   }, [debouncedSearch]);
 
+  // Memoized helper to convert CSS token values (e.g. "var(--space-13)") to pixels.
+  // We compute the root styles once and reuse them to avoid repeated DOM queries
+  // on every render. Declared here with the other hooks so hooks order remains
+  // stable across renders (avoids conditional hook calls after early returns).
+  const tokenToPx = useMemo(() => {
+    if (typeof window === 'undefined') return (_: string) => undefined;
+    const rootStyle = getComputedStyle(document.documentElement);
+    const rootFont = parseFloat(rootStyle.fontSize) || 16;
+
+    return (tokenName: string): number | undefined => {
+      try {
+        const raw = rootStyle.getPropertyValue(tokenName)?.trim();
+        if (!raw) return undefined;
+        const match = raw.match(/^([\d.]+)\s*(px|rem)?$/);
+        if (!match) {
+          const digits = raw.replace(/[^0-9.]/g, '');
+          const parsed = parseFloat(digits);
+          return Number.isFinite(parsed) ? Math.round(parsed) : undefined;
+        }
+        const value = parseFloat(match[1]);
+        const unit = match[2] || 'px';
+        if (unit === 'px') return Math.round(value);
+        if (unit === 'rem') return Math.round(value * rootFont);
+        return Math.round(value);
+      } catch {
+        return undefined;
+      }
+    };
+    // empty deps: compute once on mount in browser environments
+  }, []);
+
   useEffect(() => {
     if (eventData && eventData.event) {
       const items = eventData.event.actionItems.edges.map(
@@ -229,38 +260,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       </div>
     );
   }
-
-  // Helper to convert CSS token values (e.g. "var(--space-13)") to pixels at runtime.
-  // Avoids hardcoded numeric literals in TSX inline styles so the design-token
-  // validator recognizes token usage while keeping `minWidth` as a number.
-  const tokenToPx = (tokenName: string): number | undefined => {
-    if (typeof window === 'undefined') return undefined;
-    try {
-      const raw = getComputedStyle(document.documentElement)
-        .getPropertyValue(tokenName)
-        ?.trim();
-      if (!raw) return undefined;
-      // raw may be like "0.75rem" or "16px". Extract numeric part and unit.
-      const match = raw.match(/^([\d.]+)\s*(px|rem)?$/);
-      if (!match) {
-        // If it's a complex value, try stripping non-numeric chars and parse
-        const digits = raw.replace(/[^0-9.]/g, '');
-        const parsed = parseFloat(digits);
-        return Number.isFinite(parsed) ? Math.round(parsed) : undefined;
-      }
-      const value = parseFloat(match[1]);
-      const unit = match[2] || 'px';
-      if (unit === 'px') return Math.round(value);
-      if (unit === 'rem') {
-        const rootFont =
-          parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-        return Math.round(value * rootFont);
-      }
-      return Math.round(value);
-    } catch {
-      return undefined;
-    }
-  };
 
   const columns: GridColDef[] = [
     {

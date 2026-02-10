@@ -4,7 +4,7 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -407,6 +407,7 @@ const renderEventActionItems = (
 
 describe('EventActionItems', () => {
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -617,7 +618,9 @@ describe('EventActionItems', () => {
 
       // Ensure `searchBy` state has applied before the debounced search term resolves.
       // This avoids a race where the first debounced search runs while still in "assignee" mode.
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await waitFor(() =>
+        expect((searchInput as HTMLInputElement).value).toBe('Category 2'),
+      );
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'Category 2');
 
@@ -1036,12 +1039,12 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item1',
-          assignedAt: dayjs().add(1, 'day').toDate(),
+          assignedAt: dayjs.utc().add(1, 'day').toDate(),
         },
         {
           ...mockActionItem,
           id: 'item2',
-          assignedAt: dayjs().add(3, 'days').toDate(),
+          assignedAt: dayjs.utc().add(3, 'days').toDate(),
         },
       ];
 
@@ -1104,10 +1107,9 @@ describe('EventActionItems', () => {
 
       // Click twice to get to Completed filter
       await userEvent.click(filterBtn);
-
-      // Small delay between clicks to ensure state updates
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
+      await waitFor(() => {
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+      });
       await userEvent.click(filterBtn);
 
       // Verify only completed item (Bob Wilson) is visible
@@ -1135,10 +1137,14 @@ describe('EventActionItems', () => {
 
       // Click three times to cycle through all states
       await userEvent.click(filterBtn);
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await waitFor(() => {
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+      });
 
       await userEvent.click(filterBtn);
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await waitFor(() => {
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
+      });
 
       await userEvent.click(filterBtn);
 
