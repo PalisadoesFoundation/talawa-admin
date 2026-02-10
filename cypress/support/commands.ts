@@ -410,10 +410,9 @@ Cypress.Commands.add(
     }
 
     const createSeedUser = (userPayload: SeedUserPayload) => {
-      // Math.random is sufficient for test email uniqueness (non-crypto).
       const email =
         userPayload.email ||
-        `e2e-user-${Date.now()}-${Math.floor(Math.random() * 10000)}@example.com`;
+        `e2e-user-${Date.now()}-${getSecureRandomSuffix(8)}@example.com`;
       const password = userPayload.password || DEFAULT_TEST_PASSWORD;
       const name = userPayload.name || makeUniqueLabel('E2E User');
       const role = userPayload.role ?? 'regular';
