@@ -211,16 +211,25 @@ export default defineConfig(({ mode }) => {
               console.log('Target:', apiTarget + req.url);
               console.log('Headers:', JSON.stringify(req.headers, null, 2));
 
-              // Check if body exists and log it
-              let body = '';
-              req.on('data', (chunk) => {
-                body += chunk.toString();
-              });
-              req.on('end', () => {
-                if (body) {
-                  console.log('Body:', body);
-                }
-              });
+              const contentType =
+                typeof req.headers['content-type'] === 'string'
+                  ? req.headers['content-type']
+                  : '';
+              const shouldLogBody = contentType.includes('application/json');
+
+              if (shouldLogBody) {
+                let body = '';
+                req.on('data', (chunk) => {
+                  body += chunk.toString();
+                });
+                req.on('end', () => {
+                  if (body) {
+                    console.log('Body:', body);
+                  }
+                });
+              } else if (contentType) {
+                console.log(`Body: [skipped logging for ${contentType}]`);
+              }
             });
 
             // Log response
@@ -229,15 +238,28 @@ export default defineConfig(({ mode }) => {
               console.log('Status:', proxyRes.statusCode);
               console.log('URL:', req.url);
 
-              let responseBody = '';
-              proxyRes.on('data', (chunk) => {
-                responseBody += chunk.toString();
-              });
-              proxyRes.on('end', () => {
-                if (responseBody) {
-                  console.log('Response Body:', responseBody);
-                }
-              });
+              const responseContentType =
+                typeof proxyRes.headers['content-type'] === 'string'
+                  ? proxyRes.headers['content-type']
+                  : '';
+              const shouldLogResponseBody =
+                responseContentType.includes('application/json');
+
+              if (shouldLogResponseBody) {
+                let responseBody = '';
+                proxyRes.on('data', (chunk) => {
+                  responseBody += chunk.toString();
+                });
+                proxyRes.on('end', () => {
+                  if (responseBody) {
+                    console.log('Response Body:', responseBody);
+                  }
+                });
+              } else if (responseContentType) {
+                console.log(
+                  `Response Body: [skipped logging for ${responseContentType}]`,
+                );
+              }
             });
 
             proxy.on('error', (err) => {
