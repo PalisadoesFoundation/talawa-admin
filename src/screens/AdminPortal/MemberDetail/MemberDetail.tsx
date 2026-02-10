@@ -49,11 +49,15 @@ import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
 import UserTags from 'components/UserDetails/UserTags';
 import { useParams } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const MemberDetail: React.FC = (): JSX.Element => {
-  const { userId } = useParams<{ userId: string }>();
+  const { getItem } = useLocalStorage();
+  const { userId: paramUserId } = useParams<{ userId?: string }>();
+  const userId = paramUserId ?? getItem<string>('userId');
   const { t: tCommon } = useTranslation('common');
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
+
   if (!userId) {
     return <div>{tCommon('noUserId')}</div>;
   }

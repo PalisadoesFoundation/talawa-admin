@@ -11,6 +11,14 @@ const mockUseParams = vi.fn((): { userId?: string } => ({
   userId: '123',
 }));
 
+const mockGetItem = vi.fn();
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: mockGetItem,
+  }),
+}));
+
 vi.mock('react-router-dom', () => ({
   useParams: () => mockUseParams(),
 }));
@@ -156,5 +164,17 @@ describe('MemberDetail', () => {
       'data-active',
       'true',
     );
+  });
+
+  it('falls back to localStorage userId when URL param is missing', () => {
+    mockUseParams.mockReturnValueOnce({
+      userId: undefined,
+    });
+
+    mockGetItem.mockReturnValueOnce('999');
+
+    render(<MemberDetail />);
+
+    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('999');
   });
 });
