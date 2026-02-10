@@ -621,7 +621,6 @@ export default function GroupChatDetails({
               rowKey="id"
               paginationMode="none"
               ariaLabel={t('customizedTable')}
-              tableClassName={styles.userData}
             />
           </div>
         </LoadingState>
