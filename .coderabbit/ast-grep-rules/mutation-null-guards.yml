@@ -1,0 +1,17 @@
+id: mutation-null-guard-check
+language: typescript
+rule:
+  pattern: |
+    await $MUTATION({
+      variables: {
+        $$$
+        id: $VAR?.$PROP
+        $$$
+      }
+    })
+  not:
+    precedes:
+      pattern: |
+        if (!$VAR?.$PROP) return;
+message: 'Missing null guard for optional property in mutation variables'
+severity: error

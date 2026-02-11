@@ -50,7 +50,27 @@ reviews:
   path_instructions:
     # 1) Tests — Vitest + RTL + sharded stability
     - path: '**/*.{spec,test}.{ts,tsx}'
+      severity: 'error' # Make test violations blocking
       instructions: |
+        ═══════════════════════════════════════════════════════════════
+        🚨 ANTI-PATTERNS TO FLAG IMMEDIATELY (Search for these first):
+        ═══════════════════════════════════════════════════════════════
+
+        1. PATTERN: vi.clearAllMocks() anywhere in test file
+          FLAG AS: "❌ BLOCKING - Use vi.restoreAllMocks() at file:line"
+          WHY: Incomplete cleanup causes sharded test failures
+
+        2. PATTERN: afterEach without both cleanup() AND vi.restoreAllMocks()
+          FLAG AS: "❌ BLOCKING - Missing required cleanup at file:line"
+          
+        3. PATTERN: setTimeout or hardcoded delays
+          FLAG AS: "⚠️ RACE CONDITION - Replace with waitFor at file:line"
+
+        4. PATTERN: .catch(() => {}) without re-throw or assertion
+          FLAG AS: "❌ SILENT ERROR - Add fallback assertion at file:line"
+
+        ═══════════════════════════════════════════════════════════════
+
         Post a single, structured comment with these sections: Issue Goals, Tests (incl. Flakiness), Components/Policy, GraphQL, i18n & a11y, Security, Action Items.
         Reference exact file:line for each finding.
 
@@ -73,9 +93,37 @@ reviews:
 
         Flaky test guard (12 shards) — CRITICAL PATTERNS:
 
-        Cleanup (MANDATORY):
-        - Each file: afterEach(() => cleanup()); and vi.restoreAllMocks().
-        - Clear localStorage/sessionStorage/window state; tests must be independent.
+        # MANDATORY CHECKLIST - Flag violations as BLOCKING
+
+        ## 1. Cleanup (CRITICAL for sharded CI)
+        [ ] afterEach contains cleanup() from `@testing-library/react`
+        [ ] afterEach contains vi.restoreAllMocks() (NOT vi.clearAllMocks())
+        [ ] localStorage/sessionStorage cleared if used
+        [ ] window state reset if modified
+
+        ⚠️ FLAG: "INCOMPLETE CLEANUP at file:line - Missing vi.restoreAllMocks()"
+        ⚠️ FLAG: "INCORRECT CLEANUP at file:line - Uses vi.clearAllMocks() instead of vi.restoreAllMocks()"
+
+        RATIONALE: vi.clearAllMocks() only clears call history but keeps mock 
+        implementations. vi.restoreAllMocks() restores originals AND clears history.
+        This prevents mock leakage between tests in parallel shards.
+
+        # ENHANCED: More specific delay detection
+        Hardcoded delays (ABSOLUTELY FORBIDDEN):
+        - ❌ NEVER use: setTimeout, setInterval, delay(), sleep(), wait() helpers with fixed durations
+        - ❌ Pattern to flag: "await wait(", "setTimeout(", "delay("
+        - ✅ ONLY use: waitFor(() => expect(...), { timeout: ... }) with explicit assertions
+        - Report as "🔴 HARDCODED DELAY at file:line — Replace with waitFor assertion"
+        - Exception: Only allow setTimeout in beforeEach/afterEach for test infrastructure setup (must have comment explaining why)
+
+        Assertion placement (MANDATORY):
+        - ALL mock function assertions (toHaveBeenCalled, toHaveBeenCalledWith) MUST be inside waitFor blocks
+        - ALL state change assertions MUST be inside waitFor blocks
+        - Pattern to flag: "expect(.*).toHaveBeenCalled" outside waitFor scope
+        - Report as "🔴 RACE CONDITION at file:line — Assertion outside waitFor block"
+        - Valid pattern:
+          ✅ await waitFor(() => { expect(mockFn).toHaveBeenCalled(); });
+          ❌ await waitFor(() => ...); expect(mockFn).toHaveBeenCalled();
 
         Async patterns (NO RACE CONDITIONS):
         - NO hardcoded setTimeout or fixed delays; use waitFor with explicit assertions.
@@ -154,6 +202,17 @@ reviews:
         - No hardcoded UI strings; use useTranslation with keys; add new keys to all 5 locales (en, es, fr, hi, zh).
         - Ensure roles/ARIA (aria-label/aria-describedby/aria-live), keyboard navigation, and semantic markup.
 
+        # NEW: Null safety in mutations
+        Null guard enforcement (CRITICAL for GraphQL mutations):
+        - When calling mutations with variables containing optional properties (fund?.id, user?.id, etc.):
+          MUST add null guard BEFORE the mutation call.
+        - Pattern to flag: "variables.*: \{\s*id: \w+\?\.\w+" without preceding "if (!...?.id) return;"
+        - Valid pattern:
+          ✅ if (!fund?.id) return; await deleteFund({ variables: { id: fund.id } });
+          ❌ await deleteFund({ variables: { id: fund?.id } });
+        - Report as "🔴 MISSING NULL GUARD at file:line — Add null check before mutation with optional property"
+        - Apply to all mutation calls: create*, update*, delete*, archive*, etc.
+
     # 3) GraphQL operations
     - path: 'src/GraphQl/**/*.ts'
       instructions: |
@@ -166,6 +225,39 @@ reviews:
         Correctness & duplication:
         - No duplicate or conflicting operations; watch pagination params (first/last).
         - Components using these operations must handle loading and error states in UI.
+
+        # NEW: Schema validation
+        Schema compliance (CRITICAL):
+        - For each mutation/query, verify ALL input fields in the schema are used by components.
+        - For each component form, verify ALL form fields are sent in the mutation variables.
+        - Flag any form field (input, select, checkbox) NOT present in the mutation schema.
+        - Report as "🔴 SCHEMA MISMATCH at file:line — Field '<name>' in form but not in mutation schema"
+        - Flag any mutation accepting field X but component doesn't provide it.
+        - Report as "⚠️ MISSING FIELD at file:line — Mutation expects '<name>' but component doesn't send it"
+
+    - path: '**/*.module.css'
+      instructions: |
+        Post a single, structured comment; reference file:line.
+
+        Design token usage:
+        - Use CSS variables from design tokens (var(--space-*, --color-*, --radius-*, etc.))
+        - No hardcoded pixel values for spacing, colors, shadows, or border-radius
+        - Flag any hardcoded values that could be tokens
+
+        !important consistency (CRITICAL):
+        - If a base selector uses !important for a property, ALL state selectors (:hover, :active, :focus, :disabled) must also use !important for that property
+        - Pattern to flag:
+          ❌ .btn { color: red !important; }
+              .btn:hover { color: blue; }  /* Missing !important */
+          ✅ .btn { color: red !important; }
+              .btn:hover { color: blue !important; }
+        - Report as "🔴 CSS SPECIFICITY BUG at file:line — :state selector missing !important when base has it"
+        - Check properties: color, background, background-color, border, box-shadow, opacity
+
+        BEM/Module naming:
+        - Use camelCase for module class names
+        - Keep selectors flat; avoid deep nesting
+        - Use :global() sparingly and document why
 
   pre_merge_checks:
     # Enforce test file updates for modified source files
@@ -190,3 +282,29 @@ reviews:
           BLOCKING: All components follow reusable component policy.
           Verify: No inline interfaces, correct portal placement, wrapper usage.
           See: https://docs-admin.talawa.io/docs/developer-resources/reusable-components/
+
+      - name: 'i18n Key Completeness'
+        mode: 'error'
+        instructions: |
+          BLOCKING: All translation keys must exist in ALL 5 locales.
+
+          For each t('key') or tCommon('key') usage:
+          1. Extract the key name
+          2. Verify it exists in public/locales/{en,es,fr,hi,zh}/translation.json
+          3. Flag if missing from ANY locale
+
+          Common patterns to check:
+          - t('namespace.key')
+          - tCommon('key')
+          - useTranslation hook with namespace
+
+          Report format:
+          - "🔴 MISSING i18n KEY at file:line — 'key' not found in locales: [es, fr]"
+          - "🔴 NAMESPACE MISMATCH at file:line — Using 'common.required' but should be 'validation.required'"
+
+          Must check all 5 locales:
+          - public/locales/en/translation.json
+          - public/locales/es/translation.json
+          - public/locales/fr/translation.json
+          - public/locales/hi/translation.json
+          - public/locales/zh/translation.json

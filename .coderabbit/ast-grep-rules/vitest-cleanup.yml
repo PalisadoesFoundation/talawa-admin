@@ -1,0 +1,14 @@
+id: enforce-restore-all-mocks
+language: typescript
+rule:
+  pattern: vi.clearAllMocks()
+  kind: call_expression
+message: |
+  ⚠️ INCOMPLETE CLEANUP - Use vi.restoreAllMocks() instead of vi.clearAllMocks()
+
+  vi.clearAllMocks() only clears call history but keeps mock implementations.
+  vi.restoreAllMocks() restores original implementations AND clears history.
+
+  Required in sharded tests to prevent cross-test contamination.
+severity: error
+note: 'Change to: vi.restoreAllMocks()'
