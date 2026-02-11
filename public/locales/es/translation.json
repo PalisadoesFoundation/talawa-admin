@@ -568,7 +568,8 @@
     "tagActions": "Acciones de etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
     "addMember": "Agregar miembro",
-    "removeMember": "Eliminar miembro"
+    "removeMember": "Eliminar miembro",
+    "invalidTagName": "Nombre de etiqueta no válido"
   },
   "userListCard": {
     "joined": "Unido",

@@ -573,7 +573,8 @@
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
     "addMember": "Ajouter un membre",
-    "removeMember": "Supprimer un membre"
+    "removeMember": "Supprimer un membre",
+    "invalidTagName": "Nom de tag invalide"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

@@ -573,7 +573,8 @@
     "sortPeople": "Sort People",
     "noTagsFound": "No tags found",
     "addMember": "Add Member",
-    "removeMember": "Remove Member"
+    "removeMember": "Remove Member",
+    "invalidTagName": "Invalid tag name"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

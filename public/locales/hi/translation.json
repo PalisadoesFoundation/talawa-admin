@@ -585,7 +585,8 @@
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
     "noTagsFound": "कोई टैग नहीं मिला",
     "addMember": "सदस्य जोड़ें",
-    "removeMember": "सदस्य हटाएँ"
+    "removeMember": "सदस्य हटाएँ",
+    "invalidTagName": "अमान्य टैग नाम"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
