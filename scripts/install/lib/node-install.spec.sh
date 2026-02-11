@@ -838,6 +838,1967 @@ test_ensure_node_toolchain_no_fail_fast() {
     return $result
 }
 
+# ==============================================================================
+# install_fnm tests
+# ==============================================================================
+
+# Test install_fnm returns early when fnm is already installed
+test_install_fnm_already_installed() {
+    source_library
+    save_env
+
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'setup_fnm_env() { return 0; }'
+
+    local result=0
+    local output
+    output=$(install_fnm 2>&1)
+    if [[ $? -ne 0 ]]; then
+        echo "  install_fnm should return 0 when fnm is already installed"
+        result=1
+    fi
+    if [[ "$output" != *"already installed"* ]]; then
+        echo "  install_fnm should report fnm is already installed"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# Test install_fnm fails when curl is not available
+test_install_fnm_no_curl() {
+    source_library
+    save_env
+
+    local orig_check_fnm orig_command_exists
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_command_exists="$(declare -f command_exists)"
+
+    eval 'check_fnm() { return 1; }'
+    eval 'command_exists() { [[ "$1" != "curl" ]]; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_fnm should fail when curl is not available"
+        result=1
+    fi
+    if [[ "$output" != *"curl is required"* ]]; then
+        echo "  install_fnm should report curl is required"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_command_exists"
+    restore_env
+    return $result
+}
+
+# Test install_fnm fails when curl download fails
+test_install_fnm_curl_download_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-fnm-curl-fail")
+    # Create a curl stub that always fails
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
+#!/bin/bash
+exit 1
+STUBEOF
+    chmod +x "$fixture_dir/bin/curl"
+
+    local orig_check_fnm
+    orig_check_fnm="$(declare -f check_fnm)"
+    eval 'check_fnm() { return 1; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_fnm should fail when curl download fails"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to download"* ]]; then
+        echo "  install_fnm should report download failure"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    restore_env
+    return $result
+}
+
+# Test install_fnm fails when downloaded file has invalid shebang
+test_install_fnm_invalid_shebang() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-fnm-bad-shebang")
+    mkdir -p "$fixture_dir/bin"
+    # curl stub that writes a file WITHOUT valid shebang
+    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
+#!/bin/bash
+prev=""
+output_file=""
+for arg in "$@"; do
+    if [[ "$prev" == "-o" ]]; then
+        output_file="$arg"
+    fi
+    prev="$arg"
+done
+if [[ -n "$output_file" ]]; then
+    printf '%s\n' "NOT A VALID SCRIPT" > "$output_file"
+    printf '%s\n' "install_fnm FNM_DIR" >> "$output_file"
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/curl"
+
+    local orig_check_fnm
+    orig_check_fnm="$(declare -f check_fnm)"
+    eval 'check_fnm() { return 1; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_fnm should fail with invalid shebang"
+        result=1
+    fi
+    if [[ "$output" != *"valid shell shebang"* ]]; then
+        echo "  install_fnm should report invalid shebang (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    restore_env
+    return $result
+}
+
+# Test install_fnm fails when downloaded file has no fnm markers
+test_install_fnm_no_markers() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-fnm-no-markers")
+    mkdir -p "$fixture_dir/bin"
+    # curl stub writes valid shebang but NO fnm markers
+    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
+#!/bin/bash
+prev=""
+output_file=""
+for arg in "$@"; do
+    if [[ "$prev" == "-o" ]]; then
+        output_file="$arg"
+    fi
+    prev="$arg"
+done
+if [[ -n "$output_file" ]]; then
+    printf '%s\n' "#!/bin/bash" > "$output_file"
+    printf '%s\n' "echo hello world" >> "$output_file"
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/curl"
+
+    local orig_check_fnm
+    orig_check_fnm="$(declare -f check_fnm)"
+    eval 'check_fnm() { return 1; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_fnm should fail with no fnm markers"
+        result=1
+    fi
+    if [[ "$output" != *"does not appear to be a valid fnm installer"* ]]; then
+        echo "  install_fnm should report invalid fnm installer (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    restore_env
+    return $result
+}
+
+# Test install_fnm fails when bash installer execution fails
+test_install_fnm_installer_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-fnm-exec-fail")
+    mkdir -p "$fixture_dir/bin"
+    # curl stub writes a valid-looking installer that will fail when executed
+    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
+#!/bin/bash
+prev=""
+output_file=""
+for arg in "$@"; do
+    if [[ "$prev" == "-o" ]]; then
+        output_file="$arg"
+    fi
+    prev="$arg"
+done
+if [[ -n "$output_file" ]]; then
+    printf '%s\n' "#!/bin/bash" > "$output_file"
+    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
+    printf '%s\n' "exit 1" >> "$output_file"
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/curl"
+
+    local orig_check_fnm
+    orig_check_fnm="$(declare -f check_fnm)"
+    eval 'check_fnm() { return 1; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_fnm should fail when installer script exits non-zero"
+        result=1
+    fi
+    if [[ "$output" != *"fnm installation failed"* ]]; then
+        echo "  install_fnm should report installation failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    restore_env
+    return $result
+}
+
+# Test install_fnm fails when setup_fnm_env fails after install
+test_install_fnm_setup_env_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-fnm-env-fail")
+    mkdir -p "$fixture_dir/bin"
+    # curl stub writes a valid installer that succeeds
+    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
+#!/bin/bash
+prev=""
+output_file=""
+for arg in "$@"; do
+    if [[ "$prev" == "-o" ]]; then
+        output_file="$arg"
+    fi
+    prev="$arg"
+done
+if [[ -n "$output_file" ]]; then
+    printf '%s\n' "#!/bin/bash" > "$output_file"
+    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
+    printf '%s\n' "exit 0" >> "$output_file"
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/curl"
+
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+    eval 'check_fnm() { return 1; }'
+    eval 'setup_fnm_env() { return 1; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_fnm should fail when setup_fnm_env fails"
+        result=1
+    fi
+    if [[ "$output" != *"could not set up environment"* ]]; then
+        echo "  install_fnm should report environment setup failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# Test install_fnm succeeds end-to-end
+test_install_fnm_success() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-fnm-success")
+    mkdir -p "$fixture_dir/bin"
+    # curl stub writes a valid installer that succeeds
+    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
+#!/bin/bash
+prev=""
+output_file=""
+for arg in "$@"; do
+    if [[ "$prev" == "-o" ]]; then
+        output_file="$arg"
+    fi
+    prev="$arg"
+done
+if [[ -n "$output_file" ]]; then
+    printf '%s\n' "#!/bin/bash" > "$output_file"
+    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
+    printf '%s\n' "exit 0" >> "$output_file"
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/curl"
+
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+    eval 'check_fnm() { return 1; }'
+    eval 'setup_fnm_env() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  install_fnm should succeed (exit code: $exit_code, output: $output)"
+        result=1
+    fi
+    if [[ "$output" != *"fnm installed successfully"* ]]; then
+        echo "  install_fnm should report success (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# ==============================================================================
+# verify_fnm tests
+# ==============================================================================
+
+# Test verify_fnm succeeds with working fnm stub
+test_verify_fnm_success() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-fnm-ok")
+    create_stub_executable "$fixture_dir/bin" "fnm" "fnm 1.35.0" 0
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    local result=0
+    if ! verify_fnm 2>/dev/null; then
+        echo "  verify_fnm should pass with working fnm"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# Test verify_fnm fails when fnm is not in PATH
+test_verify_fnm_missing_in_path() {
+    source_library
+    save_env
+
+    export PATH="/nonexistent"
+    export HOME="/nonexistent"
+
+    local orig_setup_fnm_env orig_command_exists
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+    orig_command_exists="$(declare -f command_exists)"
+
+    eval 'setup_fnm_env() { return 0; }'
+    eval 'command_exists() { [[ "$1" != "fnm" ]]; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(verify_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  verify_fnm should fail when fnm is not available in PATH"
+        result=1
+    fi
+    if [[ "$output" != *"fnm is not available in PATH"* ]]; then
+        echo "  verify_fnm should report missing fnm in PATH (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_setup_fnm_env"
+    eval "$orig_command_exists"
+    restore_env
+    return $result
+}
+
+# Test verify_fnm fails when setup_fnm_env fails (fnm not found anywhere)
+test_verify_fnm_not_found() {
+    source_library
+    save_env
+
+    export PATH="/nonexistent"
+    export HOME="/nonexistent"
+    unset FNM_DIR 2>/dev/null || true
+
+    local result=0 exit_code
+    set +e
+    verify_fnm >/dev/null 2>&1
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  verify_fnm should fail when fnm is not found"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# Test verify_fnm fails when fnm --version fails
+test_verify_fnm_version_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-fnm-ver-fail")
+    # fnm stub that returns 0 for env but fails for --version
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/fnm" << 'STUBEOF'
+#!/bin/bash
+if [[ "${1:-}" == "env" ]]; then
+    echo "# fnm env stub"
+    exit 0
+fi
+if [[ "${1:-}" == "--version" ]]; then
+    exit 1
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/fnm"
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    local result=0 output exit_code
+    set +e
+    output=$(verify_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  verify_fnm should fail when fnm --version fails"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# ==============================================================================
+# install_node tests
+# ==============================================================================
+
+# Test install_node fails when fnm not found and install_fnm fails
+test_install_node_no_fnm() {
+    source_library
+    save_env
+
+    local orig_check_fnm orig_install_fnm
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_install_fnm="$(declare -f install_fnm)"
+
+    eval 'check_fnm() { return 1; }'
+    eval 'install_fnm() { return 1; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_node 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_node should fail when fnm cannot be installed"
+        result=1
+    fi
+    if [[ "$output" != *"Cannot install Node.js without fnm"* ]]; then
+        echo "  install_node should report fnm dependency failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_install_fnm"
+    restore_env
+    return $result
+}
+
+# Test install_node fails when setup_fnm_env fails
+test_install_node_env_fails() {
+    source_library
+    save_env
+
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'setup_fnm_env() { return 1; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_node 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_node should fail when setup_fnm_env fails"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to set up fnm environment"* ]]; then
+        echo "  install_node should report fnm env failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# Test install_node fails when fnm install fails
+test_install_node_fnm_install_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-node-fnm-fail")
+    # fnm stub that fails on "install" subcommand
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/fnm" << 'STUBEOF'
+#!/bin/bash
+if [[ "${1:-}" == "env" ]]; then
+    echo "# fnm env stub"
+    exit 0
+fi
+if [[ "${1:-}" == "install" ]]; then
+    exit 1
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/fnm"
+    write_nvmrc "$fixture_dir" "22"
+
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'setup_fnm_env() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_node 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_node should fail when fnm install fails"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to install Node.js"* ]]; then
+        echo "  install_node should report installation failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# Test install_node fails when fnm use fails
+test_install_node_fnm_use_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-node-use-fail")
+    # fnm stub: install succeeds, use fails
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/fnm" << 'STUBEOF'
+#!/bin/bash
+if [[ "${1:-}" == "env" ]]; then
+    echo "# fnm env stub"
+    exit 0
+fi
+if [[ "${1:-}" == "install" ]]; then
+    exit 0
+fi
+if [[ "${1:-}" == "use" ]]; then
+    exit 1
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/fnm"
+    write_nvmrc "$fixture_dir" "22"
+
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'setup_fnm_env() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_node 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_node should fail when fnm use fails"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to activate Node.js"* ]]; then
+        echo "  install_node should report activation failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# Test install_node succeeds end-to-end
+test_install_node_success() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-node-ok")
+    # fnm stub: install and use both succeed
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/fnm" << 'STUBEOF'
+#!/bin/bash
+if [[ "${1:-}" == "env" ]]; then
+    echo "# fnm env stub"
+    exit 0
+fi
+if [[ "${1:-}" == "install" ]]; then
+    exit 0
+fi
+if [[ "${1:-}" == "use" ]]; then
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/fnm"
+    write_nvmrc "$fixture_dir" "22"
+
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'setup_fnm_env() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_node 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  install_node should succeed (exit: $exit_code, output: $output)"
+        result=1
+    fi
+    if [[ "$output" != *"Node.js installed and activated"* ]]; then
+        echo "  install_node should report success (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# ==============================================================================
+# verify_node version mismatch test
+# ==============================================================================
+
+# Test verify_node fails on version mismatch
+test_verify_node_version_mismatch() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-node-mismatch")
+
+    create_stub_executable "$fixture_dir/bin" "node" "v18.0.0" 0
+    create_stub_executable "$fixture_dir/bin" "fnm" "fnm 1.35.0" 0
+    write_nvmrc "$fixture_dir" "22.0.0"
+
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    source_library
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(verify_node 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  verify_node should fail when installed version < required"
+        result=1
+    fi
+    if [[ "$output" != *"version mismatch"* ]]; then
+        echo "  verify_node should report version mismatch (output: $output)"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# ==============================================================================
+# install_pnpm tests
+# ==============================================================================
+
+# Test install_pnpm fails when node is not available and install_node fails
+test_install_pnpm_no_node() {
+    source_library
+    save_env
+
+    local orig_check_node orig_install_node
+    orig_check_node="$(declare -f check_node)"
+    orig_install_node="$(declare -f install_node)"
+
+    eval 'check_node() { return 1; }'
+    eval 'install_node() { return 1; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_pnpm should fail when node cannot be installed"
+        result=1
+    fi
+    if [[ "$output" != *"Cannot install pnpm without Node.js"* ]]; then
+        echo "  install_pnpm should report node dependency failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    eval "$orig_install_node"
+    restore_env
+    return $result
+}
+
+# Test install_pnpm fails when corepack enable fails and sudo is not available
+test_install_pnpm_corepack_no_sudo() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-pnpm-no-sudo")
+    # corepack stub that always fails
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+exit 1
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    local orig_check_node orig_command_exists
+    orig_check_node="$(declare -f check_node)"
+    orig_command_exists="$(declare -f command_exists)"
+
+    eval 'check_node() { return 0; }'
+    # sudo not available, corepack available
+    eval 'command_exists() { [[ "$1" != "sudo" ]]; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_pnpm should fail when corepack fails and sudo unavailable"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to enable corepack"* ]]; then
+        echo "  install_pnpm should report corepack failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    eval "$orig_command_exists"
+    restore_env
+    return $result
+}
+
+# Test install_pnpm fails when sudo is available but not passwordless
+test_install_pnpm_sudo_needs_password() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-pnpm-sudo-pw")
+    mkdir -p "$fixture_dir/bin"
+    # corepack stub that fails
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+exit 1
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+    # sudo stub: "sudo -n true" fails (needs password)
+    cat > "$fixture_dir/bin/sudo" << 'STUBEOF'
+#!/bin/bash
+exit 1
+STUBEOF
+    chmod +x "$fixture_dir/bin/sudo"
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    local orig_check_node
+    orig_check_node="$(declare -f check_node)"
+    eval 'check_node() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_pnpm should fail when sudo needs password"
+        result=1
+    fi
+    if [[ "$output" != *"passwordless sudo is not available"* ]]; then
+        echo "  install_pnpm should report passwordless sudo unavailable (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    restore_env
+    return $result
+}
+
+# Test install_pnpm fails when corepack prepare fails
+test_install_pnpm_prepare_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-pnpm-prepare-fail")
+    mkdir -p "$fixture_dir/bin"
+    # corepack stub: enable succeeds, prepare fails
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+if [[ "${1:-}" == "enable" ]]; then
+    exit 0
+fi
+if [[ "${1:-}" == "prepare" ]]; then
+    exit 1
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    local orig_check_node
+    orig_check_node="$(declare -f check_node)"
+    eval 'check_node() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_pnpm should fail when corepack prepare fails"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to prepare pnpm"* ]]; then
+        echo "  install_pnpm should report prepare failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    restore_env
+    return $result
+}
+
+# Test install_pnpm succeeds end-to-end
+test_install_pnpm_success() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-pnpm-ok")
+    mkdir -p "$fixture_dir/bin"
+    # corepack stub: enable and prepare succeed
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+if [[ "${1:-}" == "enable" ]]; then
+    exit 0
+fi
+if [[ "${1:-}" == "prepare" ]]; then
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    local orig_check_node
+    orig_check_node="$(declare -f check_node)"
+    eval 'check_node() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  install_pnpm should succeed (exit: $exit_code, output: $output)"
+        result=1
+    fi
+    if [[ "$output" != *"pnpm installed successfully"* ]]; then
+        echo "  install_pnpm should report success (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    restore_env
+    return $result
+}
+
+# ==============================================================================
+# verify_node_toolchain tests
+# ==============================================================================
+
+# Test verify_node_toolchain succeeds when all components pass
+test_verify_node_toolchain_success() {
+    source_library
+    save_env
+
+    local orig_verify_fnm orig_verify_node orig_verify_pnpm
+    orig_verify_fnm="$(declare -f verify_fnm)"
+    orig_verify_node="$(declare -f verify_node)"
+    orig_verify_pnpm="$(declare -f verify_pnpm)"
+
+    eval 'verify_fnm() { return 0; }'
+    eval 'verify_node() { return 0; }'
+    eval 'verify_pnpm() { return 0; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(verify_node_toolchain 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  verify_node_toolchain should succeed when all pass"
+        result=1
+    fi
+    if [[ "$output" != *"Node.js toolchain verified"* ]]; then
+        echo "  verify_node_toolchain should report verified (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_verify_fnm"
+    eval "$orig_verify_node"
+    eval "$orig_verify_pnpm"
+    restore_env
+    return $result
+}
+
+# Test verify_node_toolchain fails when one component fails
+test_verify_node_toolchain_partial_failure() {
+    source_library
+    save_env
+
+    local orig_verify_fnm orig_verify_node orig_verify_pnpm
+    orig_verify_fnm="$(declare -f verify_fnm)"
+    orig_verify_node="$(declare -f verify_node)"
+    orig_verify_pnpm="$(declare -f verify_pnpm)"
+
+    eval 'verify_fnm() { return 0; }'
+    eval 'verify_node() { return 1; }'
+    eval 'verify_pnpm() { return 0; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(verify_node_toolchain 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  verify_node_toolchain should fail when one component fails"
+        result=1
+    fi
+    if [[ "$output" != *"Some toolchain components failed verification"* ]]; then
+        echo "  verify_node_toolchain should report partial failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_verify_fnm"
+    eval "$orig_verify_node"
+    eval "$orig_verify_pnpm"
+    restore_env
+    return $result
+}
+
+# ==============================================================================
+# ensure_node_toolchain additional tests
+# ==============================================================================
+
+# Test ensure_node_toolchain succeeds when all components are already installed
+test_ensure_node_toolchain_all_present() {
+    source_library
+    save_env
+
+    local orig_check_fnm orig_setup_fnm_env orig_check_node orig_check_pnpm
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+    orig_check_node="$(declare -f check_node)"
+    orig_check_pnpm="$(declare -f check_pnpm)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'setup_fnm_env() { return 0; }'
+    eval 'check_node() { return 0; }'
+    eval 'check_pnpm() { return 0; }'
+
+    local result=0 output exit_code
+    set +e
+    output=$(ensure_node_toolchain 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  ensure_node_toolchain should succeed when all present"
+        result=1
+    fi
+    if [[ "$output" != *"Node.js toolchain is ready"* ]]; then
+        echo "  ensure_node_toolchain should report ready (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_setup_fnm_env"
+    eval "$orig_check_node"
+    eval "$orig_check_pnpm"
+    restore_env
+    return $result
+}
+
+# Test ensure_node_toolchain rejects unknown arguments
+test_ensure_node_toolchain_unknown_arg() {
+    source_library
+    save_env
+
+    local result=0 output exit_code
+    set +e
+    output=$(ensure_node_toolchain --bogus 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  ensure_node_toolchain should fail on unknown argument"
+        result=1
+    fi
+    if [[ "$output" != *"Unknown argument"* ]]; then
+        echo "  ensure_node_toolchain should report unknown argument (output: $output)"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# ==============================================================================
+# ADDITIONAL TESTS FOR CODE COVERAGE GAPS
+# ==============================================================================
+
+# Test install_fnm when check_fnm returns true during installation
+test_install_fnm_check_fnm_true_after_install() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-fnm-after-check")
+    mkdir -p "$fixture_dir/bin"
+
+    # Create a curl stub that writes a valid installer
+    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
+#!/bin/bash
+prev=""
+output_file=""
+for arg in "$@"; do
+    if [[ "$prev" == "-o" ]]; then
+        output_file="$arg"
+    fi
+    prev="$arg"
+done
+if [[ -n "$output_file" ]]; then
+    printf '%s\n' "#!/bin/bash" > "$output_file"
+    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
+    printf '%s\n' "exit 0" >> "$output_file"
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/curl"
+
+    # Mock check_fnm to return 1 initially, then 0 after install
+    local check_fnm_call_count=0
+    eval 'check_fnm() { 
+        ((check_fnm_call_count++))
+        if [[ $check_fnm_call_count -gt 1 ]]; then
+            return 0
+        fi
+        return 1
+    }'
+
+    local orig_setup_fnm_env
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
+    eval 'setup_fnm_env() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local result=0 output exit_code
+    set +e
+    output=$(install_fnm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  install_fnm should succeed (exit: $exit_code)"
+        result=1
+    fi
+
+    eval "$orig_setup_fnm_env"
+    restore_env
+    return $result
+}
+
+# Test verify_pnpm fails on version mismatch
+test_verify_pnpm_version_mismatch() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-pnpm-mismatch")
+
+    # Create stub pnpm returning older version
+    create_stub_executable "$fixture_dir/bin" "pnpm" "9.0.0" 0
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    source_library
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(verify_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  verify_pnpm should fail when installed version < required"
+        result=1
+    fi
+    if [[ "$output" != *"version mismatch"* ]]; then
+        echo "  verify_pnpm should report version mismatch (output: $output)"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# Test verify_pnpm with v-prefixed version
+test_verify_pnpm_v_prefixed_version() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-pnpm-v-prefix")
+
+    create_stub_executable "$fixture_dir/bin" "pnpm" "v10.4.1" 0
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    source_library
+
+    cd "$fixture_dir" || return 1
+    local result=0
+    if ! verify_pnpm 2>/dev/null; then
+        echo "  verify_pnpm should handle v-prefixed pnpm version"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+
+    restore_env
+    return $result
+}
+
+# Test verify_pnpm fails when pnpm --version fails
+test_verify_pnpm_version_fails() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-pnpm-ver-fail")
+
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/pnpm" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "--version" ]]; then
+    exit 1
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/pnpm"
+
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    source_library
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(verify_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  verify_pnpm should fail when --version fails"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to get pnpm version"* ]]; then
+        echo "  verify_pnpm should report version failure (output: $output)"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# Test ensure_node_toolchain installs all components when missing
+test_ensure_node_toolchain_installs_all() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "ensure-all")
+    export HOME="$fixture_dir"
+
+    # Create stubs for fnm, node, pnpm
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/fnm" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "env" ]]; then
+    echo "# fnm env"
+    exit 0
+fi
+if [[ "$1" == "install" ]] || [[ "$1" == "use" ]]; then
+    exit 0
+fi
+if [[ "$1" == "--version" ]]; then
+    echo "fnm 1.35.0"
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/fnm"
+
+    cat > "$fixture_dir/bin/node" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "--version" ]]; then
+    echo "v22.0.0"
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/node"
+
+    cat > "$fixture_dir/bin/pnpm" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "--version" ]]; then
+    echo "10.4.1"
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/pnpm"
+
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+
+    write_nvmrc "$fixture_dir" "22"
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    local orig_check_fnm orig_check_node orig_check_pnpm
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_check_node="$(declare -f check_node)"
+    orig_check_pnpm="$(declare -f check_pnpm)"
+
+    # All components return not installed initially
+    local check_count=0
+    eval 'check_fnm() { 
+        if [[ -f "$HOME/.fnm_installed" ]]; then
+            return 0
+        fi
+        return 1
+    }'
+    eval 'check_node() { 
+        if [[ -f "$HOME/.node_installed" ]]; then
+            return 0
+        fi
+        return 1
+    }'
+    eval 'check_pnpm() { 
+        if [[ -f "$HOME/.pnpm_installed" ]]; then
+            return 0
+        fi
+        return 1
+    }'
+
+    # Mock install functions to touch marker files
+    local orig_install_fnm orig_install_node orig_install_pnpm
+    orig_install_fnm="$(declare -f install_fnm)"
+    orig_install_node="$(declare -f install_node)"
+    orig_install_pnpm="$(declare -f install_pnpm)"
+
+    eval 'install_fnm() { touch "$HOME/.fnm_installed"; return 0; }'
+    eval 'install_node() { touch "$HOME/.node_installed"; return 0; }'
+    eval 'install_pnpm() { touch "$HOME/.pnpm_installed"; return 0; }'
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(ensure_node_toolchain 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  ensure_node_toolchain should succeed when all install (exit: $exit_code)"
+        result=1
+    fi
+    if [[ "$output" != *"Node.js toolchain is ready"* ]]; then
+        echo "  ensure_node_toolchain should report ready (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_check_node"
+    eval "$orig_check_pnpm"
+    eval "$orig_install_fnm"
+    eval "$orig_install_node"
+    eval "$orig_install_pnpm"
+    restore_env
+    return $result
+}
+
+# Test ensure_node_toolchain with --fail-fast when node install fails
+test_ensure_node_toolchain_fail_fast_node() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "fail-fast-node")
+    export HOME="$fixture_dir"
+    export PATH="/nonexistent:$SAVED_PATH"
+
+    local orig_check_fnm orig_install_fnm orig_check_node orig_install_node
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_install_fnm="$(declare -f install_fnm)"
+    orig_check_node="$(declare -f check_node)"
+    orig_install_node="$(declare -f install_node)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'install_fnm() { return 0; }'
+    eval 'check_node() { return 1; }'
+    eval 'install_node() { return 1; }'
+
+    local output exit_code result=0
+    set +e
+    output=$(ensure_node_toolchain --fail-fast 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  ensure_node_toolchain --fail-fast should fail when node install fails"
+        result=1
+    fi
+    if [[ "$output" != *"Node.js installation failed"* ]]; then
+        echo "  ensure_node_toolchain should report node failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_install_fnm"
+    eval "$orig_check_node"
+    eval "$orig_install_node"
+    restore_env
+    return $result
+}
+
+# Test ensure_node_toolchain with --fail-fast when pnpm install fails
+test_ensure_node_toolchain_fail_fast_pnpm() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "fail-fast-pnpm")
+    export HOME="$fixture_dir"
+    export PATH="/nonexistent:$SAVED_PATH"
+
+    local orig_check_fnm orig_check_node orig_check_pnpm orig_install_pnpm
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_check_node="$(declare -f check_node)"
+    orig_check_pnpm="$(declare -f check_pnpm)"
+    orig_install_pnpm="$(declare -f install_pnpm)"
+
+    eval 'check_fnm() { return 0; }'
+    eval 'check_node() { return 0; }'
+    eval 'check_pnpm() { return 1; }'
+    eval 'install_pnpm() { return 1; }'
+
+    local output exit_code result=0
+    set +e
+    output=$(ensure_node_toolchain --fail-fast 2>&1)
+    exit_code=$?
+    set -euo pipefail
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  ensure_node_toolchain --fail-fast should fail when pnpm install fails"
+        result=1
+    fi
+    if [[ "$output" != *"pnpm installation failed"* ]]; then
+        echo "  ensure_node_toolchain should report pnpm failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    eval "$orig_check_node"
+    eval "$orig_check_pnpm"
+    eval "$orig_install_pnpm"
+    restore_env
+    return $result
+}
+
+# Test install_node when fnm is already available
+test_install_node_fnm_already_installed() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-node-fnmpresent")
+    mkdir -p "$fixture_dir/bin"
+
+    cat > "$fixture_dir/bin/fnm" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "env" ]]; then
+    echo "# fnm env"
+    exit 0
+fi
+if [[ "$1" == "install" ]] || [[ "$1" == "use" ]]; then
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/fnm"
+
+    write_nvmrc "$fixture_dir" "22"
+
+    local orig_check_fnm
+    orig_check_fnm="$(declare -f check_fnm)"
+    eval 'check_fnm() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_node 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  install_node should succeed when fnm already present (exit: $exit_code)"
+        result=1
+    fi
+
+    eval "$orig_check_fnm"
+    restore_env
+    return $result
+}
+
+# Test verify_node handles empty required version gracefully
+test_verify_node_empty_required_version() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-node-empty-req")
+
+    create_stub_executable "$fixture_dir/bin" "node" "v22.14.0" 0
+    create_stub_executable "$fixture_dir/bin" "fnm" "fnm 1.35.0" 0
+
+    # Don't create .nvmrc or package.json to trigger default
+
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    source_library
+
+    cd "$fixture_dir" || return 1
+    local result=0
+    if ! verify_node 2>/dev/null; then
+        echo "  verify_node should work with default version when no config"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+
+    restore_env
+    return $result
+}
+
+# Test required_node_version with jq parsing
+test_required_node_version_jq_parsing() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "node-version-jq")
+
+    # Create a package.json with engines.node
+    write_package_json "$fixture_dir" '{"engines": {"node": ">=20.5.0"}}'
+
+    # Create a jq stub
+    mkdir -p "$fixture_dir/bin"
+    cat > "$fixture_dir/bin/jq" << 'STUBEOF'
+#!/bin/bash
+# Simple jq stub that returns the engines.node value
+if [[ "$*" == *".engines.node"* ]]; then
+    echo ">=20.5.0"
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/jq"
+
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+
+    source_library
+
+    cd "$fixture_dir" || return 1
+    local version
+    version=$(required_node_version)
+    cd - > /dev/null || return 1
+
+    local result=0
+    # Should extract version without >= prefix
+    if [[ "$version" != "20.5.0" ]]; then
+        echo "  required_node_version should parse engines.node with jq (got: $version)"
+        result=1
+    fi
+
+    restore_env
+    return $result
+}
+
+# Test install_pnpm when corepack enable succeeds without sudo
+test_install_pnpm_corepack_no_sudo_needed() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-pnpm-no-sudo-need")
+    mkdir -p "$fixture_dir/bin"
+
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "enable" ]]; then
+    exit 0
+fi
+if [[ "$1" == "prepare" ]]; then
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    local orig_check_node
+    orig_check_node="$(declare -f check_node)"
+    eval 'check_node() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  install_pnpm should succeed when corepack works without sudo (exit: $exit_code)"
+        result=1
+    fi
+    if [[ "$output" != *"pnpm installed successfully"* ]]; then
+        echo "  install_pnpm should report success (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    restore_env
+    return $result
+}
+
+# Test version_satisfies with empty values
+test_version_satisfies_empty_values() {
+    source_library
+
+    local result=0
+
+    if version_satisfies "" "1.0.0"; then
+        echo "  version_satisfies should fail with empty installed version"
+        result=1
+    fi
+
+    if version_satisfies "1.0.0" ""; then
+        echo "  version_satisfies should fail with empty required version"
+        result=1
+    fi
+
+    return $result
+}
+
+# Test version_satisfies with non-numeric components
+test_version_satisfies_non_numeric() {
+    source_library
+
+    local result=0
+
+    if version_satisfies "latest" "1.0.0"; then
+        echo "  version_satisfies should fail with non-numeric installed"
+        result=1
+    fi
+
+    if version_satisfies "1.0.0" "lts/*"; then
+        echo "  version_satisfies should fail with non-numeric required"
+        result=1
+    fi
+
+    return $result
+}
+
+# Test normalize_version with various inputs
+test_normalize_version_various() {
+    source_library
+
+    local result=0
+    local output
+
+    output=$(normalize_version "v1.2.3")
+    if [[ "$output" != "1.2.3" ]]; then
+        echo "  normalize_version should strip lowercase v (got: $output)"
+        result=1
+    fi
+
+    output=$(normalize_version "V1.2.3")
+    if [[ "$output" != "1.2.3" ]]; then
+        echo "  normalize_version should strip uppercase V (got: $output)"
+        result=1
+    fi
+
+    output=$(normalize_version "1.2.3")
+    if [[ "$output" != "1.2.3" ]]; then
+        echo "  normalize_version should keep clean version (got: $output)"
+        result=1
+    fi
+
+    return $result
+}
+
+# Test parse_version_component with edge cases
+test_parse_version_component_edge_cases() {
+    source_library
+
+    local result=0
+    local output
+
+    # Component beyond available parts should return 0
+    output=$(parse_version_component "1.2" 2)
+    if [[ "$output" != "0" ]]; then
+        echo "  parse_version_component should return 0 for missing patch (got: $output)"
+        result=1
+    fi
+
+    output=$(parse_version_component "1" 1)
+    if [[ "$output" != "0" ]]; then
+        echo "  parse_version_component should return 0 for missing minor (got: $output)"
+        result=1
+    fi
+
+    return $result
+}
+
+# Test required_pnpm_version with various packageManager formats
+test_required_pnpm_version_formats() {
+    source_library
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "pnpm-version-formats")
+    local result=0
+
+    # Test with pnpm@X.Y.Z format
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+    cd "$fixture_dir" || return 1
+    local version
+    version=$(required_pnpm_version)
+    if [[ "$version" != "10.4.1" ]]; then
+        echo "  required_pnpm_version should parse pnpm@10.4.1 (got: $version)"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+
+    # Test with pnpm@X.Y.Z+sha256... format
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1+sha256.abc123"}'
+    cd "$fixture_dir" || return 1
+    version=$(required_pnpm_version)
+    if [[ "$version" != "10.4.1" ]]; then
+        echo "  required_pnpm_version should parse pnpm@10.4.1+sha (got: $version)"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+
+    return $result
+}
+
+# Test install_pnpm succeeds with passwordless sudo fallback
+test_install_pnpm_sudo_passwordless() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-pnpm-sudo-ok")
+    mkdir -p "$fixture_dir/bin"
+    # corepack stub: fails without sudo
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+if [[ "${1:-}" == "enable" ]]; then
+    exit 1
+fi
+if [[ "${1:-}" == "prepare" ]]; then
+    exit 0
+fi
+exit 0
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+    # sudo stub: -n true succeeds, -n corepack enable succeeds
+    cat > "$fixture_dir/bin/sudo" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "-n" ]]; then
+    shift
+    if [[ "$1" == "true" ]]; then
+        exit 0
+    fi
+    if [[ "$1" == "corepack" ]]; then
+        exit 0
+    fi
+fi
+exit 1
+STUBEOF
+    chmod +x "$fixture_dir/bin/sudo"
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    local orig_check_node
+    orig_check_node="$(declare -f check_node)"
+    eval 'check_node() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  install_pnpm should succeed with passwordless sudo (exit: $exit_code, output: $output)"
+        result=1
+    fi
+    if [[ "$output" != *"pnpm installed successfully"* ]]; then
+        echo "  install_pnpm should report success with sudo fallback (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    restore_env
+    return $result
+}
+
+# Test install_pnpm fails when sudo -n corepack enable fails
+test_install_pnpm_sudo_corepack_fails() {
+    source_library
+    save_env
+
+    local fixture_dir
+    fixture_dir=$(create_fixture "install-pnpm-sudo-cp-fail")
+    mkdir -p "$fixture_dir/bin"
+    # corepack stub that always fails
+    cat > "$fixture_dir/bin/corepack" << 'STUBEOF'
+#!/bin/bash
+exit 1
+STUBEOF
+    chmod +x "$fixture_dir/bin/corepack"
+    # sudo stub: -n true succeeds, -n corepack enable fails
+    cat > "$fixture_dir/bin/sudo" << 'STUBEOF'
+#!/bin/bash
+if [[ "$1" == "-n" ]]; then
+    shift
+    if [[ "$1" == "true" ]]; then
+        exit 0
+    fi
+    if [[ "$1" == "corepack" ]]; then
+        exit 1
+    fi
+fi
+exit 1
+STUBEOF
+    chmod +x "$fixture_dir/bin/sudo"
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+
+    local orig_check_node
+    orig_check_node="$(declare -f check_node)"
+    eval 'check_node() { return 0; }'
+
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+
+    cd "$fixture_dir" || return 1
+    local result=0 output exit_code
+    set +e
+    output=$(install_pnpm 2>&1)
+    exit_code=$?
+    set -euo pipefail
+    cd - > /dev/null || return 1
+
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  install_pnpm should fail when sudo corepack enable fails"
+        result=1
+    fi
+    if [[ "$output" != *"Failed to enable corepack with sudo"* ]]; then
+        echo "  install_pnpm should report sudo corepack failure (output: $output)"
+        result=1
+    fi
+
+    eval "$orig_check_node"
+    restore_env
+    return $result
+}
+
 main() {
     echo "=========================================="
     echo "Node.js Installation Helper Test Suite"
@@ -872,7 +2833,54 @@ main() {
     run_test "verify_pnpm with stub" test_verify_pnpm_with_stub
     run_test "ensure_node_toolchain --fail-fast" test_ensure_node_toolchain_fail_fast
     run_test "ensure_node_toolchain without --fail-fast" test_ensure_node_toolchain_no_fail_fast
-    
+    run_test "install_fnm already installed" test_install_fnm_already_installed
+    run_test "install_fnm no curl" test_install_fnm_no_curl
+    run_test "install_fnm curl download fails" test_install_fnm_curl_download_fails
+    run_test "install_fnm invalid shebang" test_install_fnm_invalid_shebang
+    run_test "install_fnm no markers" test_install_fnm_no_markers
+    run_test "install_fnm installer fails" test_install_fnm_installer_fails
+    run_test "install_fnm setup env fails" test_install_fnm_setup_env_fails
+    run_test "install_fnm success" test_install_fnm_success
+    run_test "verify_fnm success" test_verify_fnm_success
+    run_test "verify_fnm missing in PATH" test_verify_fnm_missing_in_path
+    run_test "verify_fnm not found" test_verify_fnm_not_found
+    run_test "verify_fnm version fails" test_verify_fnm_version_fails
+    run_test "install_node no fnm" test_install_node_no_fnm
+    run_test "install_node env fails" test_install_node_env_fails
+    run_test "install_node fnm install fails" test_install_node_fnm_install_fails
+    run_test "install_node fnm use fails" test_install_node_fnm_use_fails
+    run_test "install_node success" test_install_node_success
+    run_test "verify_node version mismatch" test_verify_node_version_mismatch
+    run_test "install_pnpm no node" test_install_pnpm_no_node
+    run_test "install_pnpm corepack no sudo" test_install_pnpm_corepack_no_sudo
+    run_test "install_pnpm sudo needs password" test_install_pnpm_sudo_needs_password
+    run_test "install_pnpm prepare fails" test_install_pnpm_prepare_fails
+    run_test "install_pnpm success" test_install_pnpm_success
+    run_test "install_pnpm sudo passwordless" test_install_pnpm_sudo_passwordless
+    run_test "install_pnpm sudo corepack fails" test_install_pnpm_sudo_corepack_fails
+    run_test "verify_node_toolchain success" test_verify_node_toolchain_success
+    run_test "verify_node_toolchain partial failure" test_verify_node_toolchain_partial_failure
+    run_test "ensure_node_toolchain all present" test_ensure_node_toolchain_all_present
+    run_test "ensure_node_toolchain unknown arg" test_ensure_node_toolchain_unknown_arg
+
+    # Additional tests for code coverage gaps
+    run_test "install_fnm check_fnm after install" test_install_fnm_check_fnm_true_after_install
+    run_test "verify_pnpm version mismatch" test_verify_pnpm_version_mismatch
+    run_test "verify_pnpm v-prefixed version" test_verify_pnpm_v_prefixed_version
+    run_test "verify_pnpm version fails" test_verify_pnpm_version_fails
+    run_test "ensure_node_toolchain installs all" test_ensure_node_toolchain_installs_all
+    run_test "ensure_node_toolchain fail-fast node" test_ensure_node_toolchain_fail_fast_node
+    run_test "ensure_node_toolchain fail-fast pnpm" test_ensure_node_toolchain_fail_fast_pnpm
+    run_test "install_node fnm already installed" test_install_node_fnm_already_installed
+    run_test "verify_node empty required version" test_verify_node_empty_required_version
+    run_test "required_node_version jq parsing" test_required_node_version_jq_parsing
+    run_test "install_pnpm corepack no sudo needed" test_install_pnpm_corepack_no_sudo_needed
+    run_test "version_satisfies empty values" test_version_satisfies_empty_values
+    run_test "version_satisfies non-numeric" test_version_satisfies_non_numeric
+    run_test "normalize_version various" test_normalize_version_various
+    run_test "parse_version_component edge cases" test_parse_version_component_edge_cases
+    run_test "required_pnpm_version formats" test_required_pnpm_version_formats
+
     echo ""
     echo "=========================================="
     echo "Test Results"
