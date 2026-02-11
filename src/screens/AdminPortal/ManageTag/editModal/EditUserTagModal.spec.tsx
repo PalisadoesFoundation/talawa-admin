@@ -137,9 +137,6 @@ describe('EditUserTagModal Component', () => {
   it('applies the correct CSS classes from the module', () => {
     render(<EditUserTagModal {...defaultProps} />);
 
-    expect(screen.getByTestId('modalOrganizationHeader')).toHaveClass(
-      'modalHeader-class',
-    );
     expect(screen.getByTestId('tagNameInput')).toHaveClass('inputField-class');
     expect(screen.getByTestId('closeEditTagModalBtn')).toHaveClass(
       'removeButton-class',
@@ -147,11 +144,14 @@ describe('EditUserTagModal Component', () => {
     expect(screen.getByTestId('editTagSubmitBtn')).toHaveClass(
       'addButton-class',
     );
+
+    expect(screen.getByText('tagDetails')).toHaveClass('modal-title h4');
   });
 
-  it('sets the required attribute on the input field', () => {
+  it('renders a visual required indicator', () => {
     render(<EditUserTagModal {...defaultProps} />);
-    expect(screen.getByTestId('tagNameInput')).toHaveAttribute('required');
+    const label = screen.getByText(/tagName/i).closest('label');
+    expect(label).toHaveTextContent('*'); // checks that "*" is rendered
   });
 
   it('sets autoComplete to off on the input field', () => {
