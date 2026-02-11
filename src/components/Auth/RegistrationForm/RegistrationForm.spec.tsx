@@ -13,43 +13,11 @@ vi.mock('Constant/constant', async () => ({
   RECAPTCHA_SITE_KEY: 'test-recaptcha-site-key',
 }));
 
-vi.mock('react-google-recaptcha', async () => {
-  const React = await import('react');
-  return {
-    __esModule: true,
-    default: React.default.forwardRef(
-      (
-        props: {
-          onChange?: (token: string) => void;
-          onExpired?: () => void;
-        } & Record<string, unknown>,
-        ref: React.Ref<HTMLDivElement>,
-      ) => {
-        const { onChange, onExpired, ...rest } = props;
-        return React.default.createElement(
-          'div',
-          { ref, 'data-testid': 'recaptcha-container', ...rest },
-          React.default.createElement('input', {
-            'data-testid': 'mock-recaptcha-input',
-            'aria-label': 'Complete reCAPTCHA',
-            onChange: (e: { target: { value: string } }) =>
-              onChange?.(e.target.value),
-          }),
-          React.default.createElement(
-            'button',
-            {
-              type: 'button',
-              'data-testid': 'mock-recaptcha-expire',
-              'aria-label': 'Expire reCAPTCHA',
-              onClick: () => onExpired?.(),
-            },
-            'Expire',
-          ),
-        );
-      },
-    ),
-  };
-});
+// Mock reCAPTCHA V3 utilities
+vi.mock('utils/recaptcha', () => ({
+  getRecaptchaToken: vi.fn().mockResolvedValue('mock-recaptcha-token'),
+  loadRecaptchaScript: vi.fn().mockResolvedValue(undefined),
+}));
 
 const mockOrganizations = [
   { _id: '1', name: 'Test Organization 1' },
@@ -71,11 +39,14 @@ describe('RegistrationForm', () => {
       register: mockRegister,
       loading: false,
     });
+    vi.resetModules();
   });
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
     vi.clearAllMocks();
+    vi.resetModules();
   });
 
   const renderComponent = (props = {}) => {
@@ -268,113 +239,25 @@ describe('RegistrationForm', () => {
     });
   });
 
-  it('shows reCAPTCHA when enabled', () => {
-    renderComponent({ enableRecaptcha: true });
-
-    expect(screen.getByTestId('recaptcha-placeholder')).toBeInTheDocument();
-  });
-
-  it('hides reCAPTCHA when disabled', () => {
-    renderComponent({ enableRecaptcha: false });
-
-    expect(
-      screen.queryByTestId('recaptcha-placeholder'),
-    ).not.toBeInTheDocument();
-  });
-
-  it('handles default reCAPTCHA prop', () => {
-    renderComponent();
-
-    expect(
-      screen.queryByTestId('recaptcha-placeholder'),
-    ).not.toBeInTheDocument();
-  });
-
-  it('disables submit button when enableRecaptcha is true and no recaptcha token', () => {
-    renderComponent({ enableRecaptcha: true });
-
-    const submitButton = screen.getByRole('button', { name: /register/i });
-    expect(submitButton).toBeDisabled();
-  });
-
-  it('calls reCAPTCHA onChange and enables submit with token', async () => {
-    renderComponent({ enableRecaptcha: true });
-
-    const submitButton = screen.getByRole('button', { name: /register/i });
-    expect(submitButton).toBeDisabled();
-
-    const recaptchaInput = screen.getByTestId('mock-recaptcha-input');
-    await user.type(recaptchaInput, 'recaptcha-token-xyz');
-
-    await waitFor(() => {
-      expect(submitButton).not.toBeDisabled();
-    });
-  });
-
-  it('submits with recaptcha token when form is valid', async () => {
-    renderComponent({ enableRecaptcha: true });
-
-    await user.type(screen.getByLabelText('First Name'), 'John Doe');
-    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
-    await user.type(screen.getByLabelText('Password'), 'Password123!');
-    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
-    await user.click(screen.getByLabelText('Organization'));
-    await user.click(
-      screen.getByRole('option', { name: 'Test Organization 1' }),
-    );
-
-    await user.type(
-      screen.getByTestId('mock-recaptcha-input'),
-      'recaptcha-token-xyz',
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: /register/i }),
-      ).not.toBeDisabled();
-    });
-
-    await user.click(screen.getByRole('button', { name: /register/i }));
-
-    await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledTimes(1);
-      const call = mockRegister.mock.calls[0][0];
-      expect(call.recaptchaToken).toBe('recaptcha-token-xyz');
-      expect(call.name).toBe('John Doe');
-      expect(call.organizationId).toBe('1');
-    });
-  });
-
-  it('calls reCAPTCHA onExpired and clears token', async () => {
-    renderComponent({ enableRecaptcha: true });
-
-    await user.type(screen.getByLabelText('First Name'), 'John Doe');
-    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
-    await user.type(screen.getByLabelText('Password'), 'Password123!');
-    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
-    await user.click(screen.getByLabelText('Organization'));
-    await user.click(
-      screen.getByRole('option', { name: 'Test Organization 1' }),
-    );
-
-    const recaptchaInput = screen.getByTestId('mock-recaptcha-input');
-    await user.type(recaptchaInput, 'recaptcha-token-xyz');
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: /register/i }),
-      ).not.toBeDisabled();
-    });
-
-    const expireButton = screen.getByTestId('mock-recaptcha-expire');
-    await user.click(expireButton);
-
-    const submitButton = screen.getByRole('button', { name: /register/i });
-    await waitFor(() => expect(submitButton).toBeDisabled());
-  });
-
   it('calls onSuccess callback when provided', async () => {
     const mockCallback = vi.fn();
+    const mockRegisterWithCallback = vi.fn().mockImplementation(() => {
+      // Simulate successful registration by calling onSuccess
+      const useRegistrationCall = vi.mocked(useRegistration).mock.calls[0][0];
+      if (useRegistrationCall?.onSuccess) {
+        useRegistrationCall.onSuccess({
+          signUp: { user: { id: 'test-user-id' } },
+          name: 'John Doe',
+          email: 'john@example.com',
+        });
+      }
+    });
+
+    vi.mocked(useRegistration).mockReturnValue({
+      register: mockRegisterWithCallback,
+      loading: false,
+    });
+
     renderComponent({ onSuccess: mockCallback });
 
     await user.type(screen.getByLabelText('First Name'), 'John Doe');
@@ -385,12 +268,38 @@ describe('RegistrationForm', () => {
     await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith({
+      expect(mockRegisterWithCallback).toHaveBeenCalledWith({
         name: 'John Doe',
         email: 'john@example.com',
         password: 'Password123!',
         organizationId: '',
       });
+      expect(mockCallback).toHaveBeenCalled();
+    });
+  });
+
+  it('handles getRecaptchaToken rejection gracefully', async () => {
+    const { getRecaptchaToken } = await import('utils/recaptcha');
+    vi.mocked(getRecaptchaToken).mockRejectedValueOnce(
+      new Error('reCAPTCHA failed'),
+    );
+
+    renderComponent({ enableRecaptcha: true });
+
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
+
+    await user.click(screen.getByRole('button', { name: /register/i }));
+
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+      expect(mockOnError).toHaveBeenCalledWith(
+        expect.objectContaining({
+          message: 'reCAPTCHA failed',
+        }),
+      );
     });
   });
 
