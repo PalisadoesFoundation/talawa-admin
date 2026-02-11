@@ -1884,6 +1884,56 @@ describe('Extra coverage for 100 %', () => {
     expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
+  it('logs error when reCAPTCHA script fails to load', async () => {
+    // Spy on console.error
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    // Set up reCAPTCHA enabled environment
+    setLocationPath('/');
+    vi.resetModules();
+    vi.doMock('Constant/constant.ts', async () => ({
+      ...(await vi.importActual('Constant/constant.ts')),
+      REACT_APP_USE_RECAPTCHA: 'YES',
+      RECAPTCHA_SITE_KEY: 'test-site-key',
+    }));
+
+    // Mock loadRecaptchaScript to throw an error
+    vi.doMock('utils/recaptcha', () => ({
+      getRecaptchaToken: vi.fn().mockResolvedValue('mock-recaptcha-token'),
+      loadRecaptchaScript: vi
+        .fn()
+        .mockRejectedValue(new Error('Failed to load script')),
+    }));
+
+    // Import fresh component with mocked dependencies
+    const { default: LoginPageFresh } = await import('./LoginPage');
+    const history = createMemoryHistory({ initialEntries: ['/'] });
+    render(
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPageFresh />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
+
+    // Wait for the useEffect to execute
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to load reCAPTCHA script:',
+        expect.any(Error),
+      );
+    });
+
+    // Clean up
+    consoleErrorSpy.mockRestore();
+  });
+
   it.todo(
     'shows toast for invalid name during registration (RegistrationForm shows inline errors)',
     async () => {
