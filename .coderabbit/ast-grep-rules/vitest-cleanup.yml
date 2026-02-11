@@ -12,3 +12,4 @@ message: |
   Required in sharded tests to prevent cross-test contamination.
 severity: error
 note: 'Change to: vi.restoreAllMocks()'
+fix: 'vi.restoreAllMocks()'
