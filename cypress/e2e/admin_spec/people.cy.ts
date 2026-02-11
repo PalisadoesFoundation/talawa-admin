@@ -56,6 +56,9 @@ describe('Admin People Tab', () => {
   });
 
   it('delete a member from the organization', () => {
+    peoplePage.clickAddExistingMember();
+    peoplePage.searchAndSelectUser(praiseNorris.name);
+    peoplePage.confirmAddUser(praiseNorris.name);
     peoplePage.deleteMember(praiseNorris.name);
   });
 

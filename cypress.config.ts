@@ -11,6 +11,27 @@ const DEFAULT_API_URL = 'http://localhost:4000/graphql';
 type GraphQLError = { message: string; extensions?: Record<string, unknown> };
 type GraphQLResponse<T> = { data?: T; errors?: GraphQLError[] };
 
+/** Returns true when a GraphQL error array contains a 'forbidden' code whose
+ *  extensions.issues indicate the resource already exists / is installed. */
+const isForbiddenWithExistingResource = (
+  errors: { message: string; extensions?: Record<string, unknown> }[],
+): boolean =>
+  errors.some((error) => {
+    const code =
+      typeof error.extensions?.code === 'string'
+        ? error.extensions.code.toLowerCase()
+        : '';
+    const issues = Array.isArray(error.extensions?.issues)
+      ? (error.extensions.issues as { message?: string }[])
+      : [];
+    return (
+      code.includes('forbidden') &&
+      issues.some((issue) =>
+        /already\s*exists|installed/i.test(issue.message ?? ''),
+      )
+    );
+  });
+
 const resolveApiUrl = (rawUrl?: string): string => {
   const baseUrl =
     rawUrl ||
@@ -219,7 +240,7 @@ export default defineConfig({
 
     // Environment variables
     env: {
-      apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
+      apiUrl: resolveApiUrl(),
       RECAPTCHA_SITE_KEY: process.env.REACT_APP_RECAPTCHA_SITE_KEY,
       E2E_ADMIN_EMAIL:
         process.env.E2E_ADMIN_EMAIL || process.env.CYPRESS_E2E_ADMIN_EMAIL,
@@ -547,29 +568,7 @@ export default defineConfig({
               if (/already|exists|duplicate/i.test(errorMessage)) {
                 return { ok: true };
               }
-              // The backend returns a 'forbidden' error with the detail
-              // "A plugin with this ID already exists" in extensions.issues
-              // when the plugin was already created.
-              const hasForbiddenWithExisting = responseErrors.some((error) => {
-                const code =
-                  typeof error.extensions?.code === 'string'
-                    ? error.extensions.code
-                    : '';
-                const issues = Array.isArray(
-                  (error.extensions as Record<string, unknown>)?.issues,
-                )
-                  ? ((error.extensions as Record<string, unknown>).issues as {
-                      message?: string;
-                    }[])
-                  : [];
-                return (
-                  code.includes('forbidden') &&
-                  issues.some((issue) =>
-                    /already\s*exists/i.test(issue.message ?? ''),
-                  )
-                );
-              });
-              if (hasForbiddenWithExisting) {
+              if (isForbiddenWithExistingResource(responseErrors)) {
                 return { ok: true };
               }
               return undefined;
@@ -604,31 +603,7 @@ export default defineConfig({
               ) {
                 return { ok: true };
               }
-              // The backend returns a 'forbidden' error with the detail
-              // "Plugin is already installed" in extensions.issues
-              // when the plugin was already installed.
-              const hasForbiddenWithInstalled = responseErrors.some((error) => {
-                const code =
-                  typeof error.extensions?.code === 'string'
-                    ? error.extensions.code
-                    : '';
-                const issues = Array.isArray(
-                  (error.extensions as Record<string, unknown>)?.issues,
-                )
-                  ? ((error.extensions as Record<string, unknown>).issues as {
-                      message?: string;
-                    }[])
-                  : [];
-                return (
-                  code.includes('forbidden') &&
-                  issues.some((issue) =>
-                    /already\s*installed|already\s*exists/i.test(
-                      issue.message ?? '',
-                    ),
-                  )
-                );
-              });
-              if (hasForbiddenWithInstalled) {
+              if (isForbiddenWithExistingResource(responseErrors)) {
                 return { ok: true };
               }
               return undefined;

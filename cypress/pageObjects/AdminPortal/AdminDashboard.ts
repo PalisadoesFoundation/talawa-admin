@@ -33,8 +33,12 @@ export class AdminDashboardPage {
         cy.createTestOrganization({
           name: `E2E Org ${Date.now()}`,
           auth: { role: 'admin' },
+        }).then(({ orgId }) => {
+          // Persist so callers can clean up via cy.cleanupTestOrganization
+          Cypress.env('testOrgId', orgId);
+          cy.reload();
+          cy.get(this._orgcardContainer, { timeout }).should('exist');
         });
-        cy.reload();
       }
     });
     return this;
@@ -60,6 +64,8 @@ export class AdminDashboardPage {
         name: `E2E Org ${Date.now()}`,
         auth: { role: 'admin' },
       }).then(({ orgId }) => {
+        // Persist so callers can clean up via cy.cleanupTestOrganization
+        Cypress.env('testOrgId', orgId);
         openByNavigation(orgId);
       });
     });

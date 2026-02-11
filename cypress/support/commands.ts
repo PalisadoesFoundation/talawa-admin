@@ -83,6 +83,14 @@ type SeedPostPayload = {
   auth?: AuthOptions;
 };
 
+type SeedActionItemCategoryPayload = {
+  orgId: string;
+  name?: string;
+  description?: string;
+  isDisabled?: boolean;
+  auth?: AuthOptions;
+};
+
 type CleanupTestOrganizationOptions = {
   auth?: AuthOptions;
   userIds?: string[];
@@ -185,7 +193,7 @@ const signInWithCredentials = (
       if (!token) {
         throw new Error('SignIn task failed to return a token.');
       }
-      return { token, userId };
+      return { token, userId } as AuthSession;
     });
 };
 
@@ -193,7 +201,10 @@ const resolveAuthSession = (
   auth?: AuthOptions,
 ): Cypress.Chainable<AuthSession> => {
   if (auth?.token) {
-    return cy.wrap({ token: auth.token, userId: auth.userId }, { log: false });
+    return cy.wrap(
+      { token: auth.token, userId: auth.userId } as AuthSession,
+      { log: false },
+    );
   }
   // resolveAuthSession defaults role to 'admin' unless auth.role overrides it.
   const role = auth?.role ?? 'admin';
@@ -271,6 +282,10 @@ declare global {
         kind: 'posts',
         payload: SeedPostPayload,
       ): Chainable<{ postId: string }>;
+      seedTestData(
+        kind: 'actionItemCategories',
+        payload: SeedActionItemCategoryPayload,
+      ): Chainable<{ categoryId: string; name?: string }>;
       cleanupTestOrganization(
         orgId: string,
         options?: CleanupTestOrganizationOptions,
@@ -445,7 +460,7 @@ Cypress.Commands.add(
               })
               .then(() => ({ orgId }));
           }
-          return { orgId };
+          return cy.wrap({ orgId });
         });
     });
   },
@@ -466,7 +481,9 @@ Cypress.Commands.add(
             role,
           },
         })
-        .then(() => undefined);
+        .then(() => {
+          return undefined;
+        }) as Cypress.Chainable<void>;
     });
   },
 );
@@ -501,11 +518,24 @@ Cypress.Commands.add('createTestUser', (payload: CreateTestUserPayload) => {
   });
 });
 
+/**
+ * Seeds test data (events, volunteers, posts, action item categories) via direct GraphQL API calls.
+ *
+ * **Role escalation**: If `auth.role` is `'admin'` (or omitted, defaulting to
+ * `'admin'`), the implementation automatically escalates to `'superAdmin'`
+ * when calling `resolveAuthToken` for event, user, and volunteer creation.
+ * This is required because the backend APIs for these operations require
+ * superAdmin-level permissions.
+ */
 Cypress.Commands.add(
   'seedTestData',
   (
-    kind: 'events' | 'volunteers' | 'posts',
-    payload: SeedEventPayload | SeedVolunteerPayload | SeedPostPayload,
+    kind: 'events' | 'volunteers' | 'posts' | 'actionItemCategories',
+    payload:
+      | SeedEventPayload
+      | SeedVolunteerPayload
+      | SeedPostPayload
+      | SeedActionItemCategoryPayload,
   ) => {
     if (kind === 'events') {
       const eventPayload = payload as SeedEventPayload;
@@ -546,6 +576,40 @@ Cypress.Commands.add(
 
       return resolveAuthToken(eventAuth).then((token) => {
         return createEvent(token);
+      });
+    }
+
+    if (kind === 'actionItemCategories') {
+      const categoryPayload = payload as SeedActionItemCategoryPayload;
+      const name =
+        categoryPayload.name || makeUniqueLabel('E2E Action Item Category');
+      const description =
+        categoryPayload.description ?? 'E2E Action Item Category';
+      const isDisabled = categoryPayload.isDisabled ?? false;
+      return resolveAuthToken(categoryPayload.auth).then((token) => {
+        return cy
+          .task('createTestActionItemCategory', {
+            apiUrl: categoryPayload.auth?.apiUrl,
+            token,
+            input: {
+              name,
+              description,
+              isDisabled,
+              organizationId: categoryPayload.orgId,
+            },
+          })
+          .then((result) => {
+            const { categoryId } = result as {
+              categoryId?: string;
+              name?: string;
+            };
+            if (!categoryId) {
+              throw new Error(
+                'seedTestData(actionItemCategories) did not return categoryId.',
+              );
+            }
+            return { categoryId, name };
+          });
       });
     }
 
@@ -611,60 +675,84 @@ Cypress.Commands.add(
       });
     }
 
-    const volunteerPayload = payload as SeedVolunteerPayload;
-    const userChain = volunteerPayload.userId
-      ? cy.wrap({
-          userId: volunteerPayload.userId,
-          email: undefined,
-          password: undefined,
-        })
-      : createSeedUser({
+    if (kind === 'volunteers') {
+      const volunteerPayload = payload as SeedVolunteerPayload;
+
+      // Unified chain to guarantee consistent return type
+      const ensureUser = (): Cypress.Chainable<{
+        userId: string;
+        email?: string;
+        password?: string;
+      }> => {
+        if (volunteerPayload.userId) {
+          return cy.wrap({
+            userId: volunteerPayload.userId,
+            email: undefined,
+            password: undefined,
+          });
+        }
+        return createSeedUser({
           ...(volunteerPayload.user ?? {}),
           auth: volunteerPayload.userAuth,
-        });
-
-    return userChain.then(({ userId, email, password }) => {
-      if (!userId) {
-        throw new Error('seedTestData(volunteers) missing userId.');
-      }
-      const createVolunteer = (token: string) => {
-        return cy
-          .task('createTestVolunteer', {
-            apiUrl: volunteerPayload.auth?.apiUrl,
-            token,
-            input: {
-              eventId: volunteerPayload.eventId,
-              userId,
-              scope: volunteerPayload.scope,
-              recurringEventInstanceId:
-                volunteerPayload.recurringEventInstanceId,
-            },
-          })
-          .then((result) => {
-            const { volunteerId } = result as CreateVolunteerTaskResult;
-            if (!volunteerId) {
-              throw new Error(
-                'seedTestData(volunteers) did not return volunteerId.',
-              );
-            }
-            return { volunteerId, userId, email, password };
-          });
+        }) as Cypress.Chainable<{
+          userId: string;
+          email?: string;
+          password?: string;
+        }>;
       };
-      const volunteerAuth =
-        (volunteerPayload.auth?.role ?? 'admin') === 'admin'
-          ? { ...(volunteerPayload.auth ?? {}), role: 'superAdmin' as const }
-          : volunteerPayload.auth;
 
-      return resolveAuthToken(volunteerAuth).then((token) => {
-        return createVolunteer(token);
-      });
-    });
+      return ensureUser().then(
+        (userResult: {
+          userId: string;
+          email?: string;
+          password?: string;
+        }) => {
+          const { userId, email, password } = userResult;
+          if (!userId) {
+            throw new Error('seedTestData(volunteers) missing userId.');
+          }
+          const createVolunteer = (token: string) => {
+            return cy
+              .task('createTestVolunteer', {
+                apiUrl: volunteerPayload.auth?.apiUrl,
+                token,
+                input: {
+                  eventId: volunteerPayload.eventId,
+                  userId,
+                  scope: volunteerPayload.scope,
+                  recurringEventInstanceId:
+                    volunteerPayload.recurringEventInstanceId,
+                },
+              })
+              .then((result) => {
+                const { volunteerId } = result as CreateVolunteerTaskResult;
+                if (!volunteerId) {
+                  throw new Error(
+                    'seedTestData(volunteers) did not return volunteerId.',
+                  );
+                }
+                return { volunteerId, userId, email, password };
+              });
+          };
+          const volunteerAuth =
+            (volunteerPayload.auth?.role ?? 'admin') === 'admin'
+              ? { ...(volunteerPayload.auth ?? {}), role: 'superAdmin' as const }
+              : volunteerPayload.auth;
+
+          return resolveAuthToken(volunteerAuth).then((token) => {
+            return createVolunteer(token);
+          });
+        },
+      );
+    }
+
+    return cy.wrap(undefined);
   },
 );
 
-Cypress.Commands.add(
-  'cleanupTestOrganization',
-  (orgId: string, options: CleanupTestOrganizationOptions = {}) => {
+  Cypress.Commands.add(
+    'cleanupTestOrganization',
+    (orgId: string, options: CleanupTestOrganizationOptions = {}) => {
     return resolveAuthToken(options.auth).then((token) => {
       const apiUrl = options.auth?.apiUrl;
       return cy
@@ -679,14 +767,17 @@ Cypress.Commands.add(
           if (userIds.length === 0) {
             return undefined;
           }
-          return cy.wrap(userIds).each((userId) => {
-            return cy.task('deleteTestUser', {
-              apiUrl,
-              token,
-              userId,
-              allowNotFound: true,
-            });
-          });
+          return cy
+            .wrap(userIds)
+            .each((userId) => {
+              return cy.task('deleteTestUser', {
+                apiUrl,
+                token,
+                userId,
+                allowNotFound: true,
+              });
+            })
+            .then(() => undefined) as Cypress.Chainable<void>;
         });
     });
   },

@@ -6,42 +6,21 @@ describe('Admin Event Action Items Tab', () => {
   let eventId = '';
   let actionItemCategoryName = '';
   let volunteerDisplayName = '';
-  let adminEmail = '';
-  let adminPassword = '';
   const userIds: string[] = [];
 
   before(() => {
     actionItemCategoryName = `E2E Action Category ${Date.now()}`;
     volunteerDisplayName = `E2E Volunteer ${Date.now()}`;
 
-    cy.fixture('auth/credentials')
-      .then((credentials) => {
-        adminEmail =
-          (Cypress.env('E2E_ADMIN_EMAIL') as string | undefined) ||
-          credentials.admin.email;
-        adminPassword =
-          (Cypress.env('E2E_ADMIN_PASSWORD') as string | undefined) ||
-          credentials.admin.password;
-      })
-      .then(() => cy.setupTestEnvironment({ auth: { role: 'admin' } }))
+    cy.setupTestEnvironment({ auth: { role: 'admin' } })
       .then(({ orgId: createdOrgId }) => {
         orgId = createdOrgId;
-        return cy.task('gqlSignIn', {
-          apiUrl: Cypress.env('apiUrl') as string | undefined,
-          email: adminEmail,
-          password: adminPassword,
-        });
-      })
-      .then(({ token }) => {
-        return cy.task('createTestActionItemCategory', {
-          apiUrl: Cypress.env('apiUrl') as string | undefined,
-          token,
-          input: {
-            name: actionItemCategoryName,
-            description: 'E2E Action Item Category',
-            isDisabled: false,
-            organizationId: orgId,
-          },
+        return cy.seedTestData('actionItemCategories', {
+          orgId,
+          name: actionItemCategoryName,
+          description: 'E2E Action Item Category',
+          isDisabled: false,
+          auth: { role: 'admin' },
         });
       })
       .then(() => {
@@ -91,9 +70,12 @@ describe('Admin Event Action Items Tab', () => {
     actionItemPage.sortByNewest().deleteFirstActionItem();
   });
 
-  after(() => {
+  afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+  });
+
+  after(() => {
     if (orgId) {
       cy.cleanupTestOrganization(orgId, { userIds });
     }

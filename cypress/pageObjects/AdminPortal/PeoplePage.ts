@@ -2,7 +2,7 @@ export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
   private readonly _searchButton = '[data-testid="searchbtn"]';
-  private readonly _searchResult = '[data-field="name"]';
+  private readonly _nameCell = '[data-field="name"]';
   private readonly _addMembersBtn = '[data-testid="addMembers-toggle"]';
   private readonly _existingUserToggle =
     '[data-testid="addMembers-item-existingUser"]';
@@ -13,7 +13,6 @@ export class PeoplePage {
   private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
   private readonly _alert = '[role=alert]';
   private readonly _dataGridRows = '.MuiDataGrid-row';
-  private readonly _nameCell = '[data-field="name"]';
 
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
@@ -57,9 +56,10 @@ export class PeoplePage {
 
   confirmAddUser(name: string, timeout = 100000) {
     cy.get(this._addBtn, { timeout }).first().should('be.visible').click();
-    cy.get('body', { timeout }).then(($body) => {
-      if ($body.find(this._alert).length > 0) {
-        cy.get(this._alert, { timeout })
+    // Assert alert when it appears; skip if member already exists and no alert shown
+    cy.get(this._alert, { timeout }).then(($els) => {
+      if ($els.length) {
+        cy.wrap($els)
           .should('be.visible')
           .and('contain.text', 'Member added Successfully');
       }
