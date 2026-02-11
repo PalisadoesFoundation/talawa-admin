@@ -56,7 +56,7 @@ export class PeoplePage {
   }
 
   confirmAddUser(name: string, timeout = 100000) {
-    cy.get(this._addBtn, { timeout }).should('be.visible').click();
+    cy.get(this._addBtn, { timeout }).first().should('be.visible').click();
     cy.get('body', { timeout }).then(($body) => {
       if ($body.find(this._alert).length > 0) {
         cy.get(this._alert, { timeout })
