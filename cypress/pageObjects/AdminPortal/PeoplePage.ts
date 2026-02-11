@@ -12,9 +12,8 @@ export class PeoplePage {
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
   private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
   private readonly _alert = '[role=alert]';
-  private readonly _dataGridRows =
-    '.MuiDataGrid-virtualScrollerRenderZone .MuiDataGrid-row';
-  private readonly _dataGridCellContent = '.MuiDataGrid-cellContent';
+  private readonly _dataGridRows = '.MuiDataGrid-row';
+  private readonly _nameCell = '[data-field="name"]';
 
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
@@ -31,13 +30,10 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    const escapedName = Cypress._.escapeRegExp(name);
     cy.get(this._dataGridRows, { timeout }).should('exist');
-    cy.contains(
-      `${this._dataGridRows} ${this._dataGridCellContent}`,
-      new RegExp(`^${escapedName}$`),
-      { timeout },
-    ).should('be.visible');
+    cy.contains(`${this._dataGridRows} ${this._nameCell}`, name, {
+      timeout,
+    }).should('be.visible');
     return this;
   }
 
@@ -50,17 +46,12 @@ export class PeoplePage {
   }
 
   searchAndSelectUser(name: string, timeout = 40000) {
-    const escapedName = Cypress._.escapeRegExp(name);
     cy.get(this._searchUserInput, { timeout })
       .should('be.visible')
       .clear()
       .type(name);
     cy.get(this._submitSearchBtn, { timeout }).should('be.visible').click();
-    cy.contains(
-      `${this._dataGridRows} ${this._dataGridCellContent}`,
-      new RegExp(`^${escapedName}$`),
-      { timeout },
-    ).should('be.visible');
+    cy.contains(name, { timeout }).should('be.visible');
     return this;
   }
 

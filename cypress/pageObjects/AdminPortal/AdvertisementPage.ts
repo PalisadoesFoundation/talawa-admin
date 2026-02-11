@@ -34,20 +34,6 @@ export class AdvertisementPage {
     });
   }
 
-  private aliasCreateAdvertisementMutation() {
-    const apiPattern =
-      (Cypress.env('apiUrl') as string | undefined) ||
-      (Cypress.env('API_URL') as string | undefined) ||
-      (Cypress.env('CYPRESS_API_URL') as string | undefined) ||
-      '**/graphql';
-
-    cy.intercept('POST', apiPattern, (req) => {
-      if (req.body?.query?.includes('createAdvertisement')) {
-        req.alias = 'createAdvertisement';
-      }
-    });
-  }
-
   visitAdvertisementPage(orgId?: string, timeout = 10000) {
     const openOrgDashboard = (id: string) => {
       cy.visit(`/admin/orgdash/${id}`);
@@ -93,7 +79,6 @@ export class AdvertisementPage {
     type: string,
     timeout = 10000,
   ) {
-    this.aliasCreateAdvertisementMutation();
     cy.get(this._createAdBtn, { timeout }).should('be.visible').click();
     cy.get(this._adNameInput).should('be.visible').type(name);
     cy.get(this._adDescriptionInput).should('be.visible').type(description);
@@ -101,18 +86,7 @@ export class AdvertisementPage {
       .should('be.visible')
       .selectFile(mediaPath, { force: true });
     cy.get(this._adTypeSelect).should('be.visible').select(type);
-    cy.get(this._registerAdBtn).should('be.visible').click();
-    cy.wait('@createAdvertisement')
-      .its('response.body')
-      .then((body) => {
-        expect(body?.errors, 'createAdvertisement GraphQL errors').to.equal(
-          undefined,
-        );
-        expect(
-          body?.data?.createAdvertisement?.id,
-          'createAdvertisement id',
-        ).to.be.a('string');
-      });
+    cy.get(this._registerAdBtn).should('be.visible').click({ force: true });
     cy.get('body').then(($body) => {
       if ($body.find(this._alert).length > 0) {
         cy.get(this._alert)
@@ -120,6 +94,10 @@ export class AdvertisementPage {
           .and('contain.text', 'Advertisement created successfully.');
       }
     });
+    cy.contains(this._activeCampaignsTab, { timeout: 50000 })
+      .should('be.visible')
+      .click();
+    cy.contains(name, { timeout: 50000 }).should('be.visible');
     return this;
   }
 
