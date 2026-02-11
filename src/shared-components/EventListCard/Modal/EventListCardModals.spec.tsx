@@ -621,7 +621,6 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    // Select the 'entire series' option
     const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
     await userEvent.click(entireSeriesRadio);
 
