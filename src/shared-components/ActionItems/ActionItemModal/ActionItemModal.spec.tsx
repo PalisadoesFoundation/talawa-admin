@@ -971,10 +971,6 @@ describe('ActionItemModal', () => {
       // wait until volunteerSelect exists AND volunteers query finished
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
 
-      await waitFor(() => {
-        expect(volunteerSelect).toBeInTheDocument();
-      });
-
       const volunteerInput = within(volunteerSelect).getByRole(
         'combobox',
       ) as HTMLInputElement;
