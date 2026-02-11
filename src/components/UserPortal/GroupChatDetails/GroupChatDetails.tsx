@@ -328,7 +328,7 @@ export default function GroupChatDetails({
               try {
                 await addUserToGroupChat(row.id);
                 toggleAddUserModal();
-                chatRefetch({ input: { id: chat.id } });
+                await chatRefetch({ input: { id: chat.id } });
                 NotificationToast.success(t('userAddedSuccessfully'));
               } catch (error) {
                 NotificationToast.error(t('failedToAddUser'));

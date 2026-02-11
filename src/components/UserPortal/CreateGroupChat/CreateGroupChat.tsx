@@ -252,6 +252,7 @@ export default function CreateGroupChat({
             onClick={handleImageClick}
             className={styles.editImgBtn}
             variant="light"
+            aria-label={t('editImage')}
           >
             <FiEdit />
           </Button>
