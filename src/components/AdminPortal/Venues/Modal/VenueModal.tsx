@@ -45,7 +45,8 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
+import { InterfaceQueryVenueListItem } from 'utils/interfaces';
+
 export interface InterfaceVenueModalProps {
   show: boolean;
   onHide: () => void;
@@ -332,13 +333,7 @@ const VenueModal = ({
   };
   return (
     <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
-      <form
-        data-testid="venueForm"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
-      >
+      <form data-testid="venueForm">
         <label htmlFor="venuetitle">{t('venueName')}</label>
         <FormTextField
           name="venueTitle"
