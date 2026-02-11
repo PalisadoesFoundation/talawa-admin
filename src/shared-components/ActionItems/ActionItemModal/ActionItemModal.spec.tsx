@@ -45,7 +45,6 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 
 afterEach(() => {
   cleanup();
-  vi.restoreAllMocks();
   vi.clearAllMocks();
 });
 
