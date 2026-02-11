@@ -2,7 +2,6 @@
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { act, render, screen, cleanup, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -716,6 +715,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing search functionality by Btn click', async () => {
+    const user = userEvent.setup();
     setupUser('superAdmin');
 
     renderWithProviders();
@@ -724,10 +724,11 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.type(searchBar, 'Dummy');
-    fireEvent.click(searchBtn);
+    await user.click(searchBtn);
   });
 
   test('Testing search functionality by with empty search bar', async () => {
+    const user = userEvent.setup();
     setupUser('basic');
 
     renderWithProviders();
@@ -736,7 +737,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.clear(searchBar);
-    fireEvent.click(searchBtn);
+    await user.click(searchBtn);
   });
 
   test('Testing debounced search functionality', async () => {
@@ -758,6 +759,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing immediate search on Enter key press', async () => {
+    const user = userEvent.setup();
     setupUser('superAdmin');
 
     renderWithProviders();
@@ -768,7 +770,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     // Type and press Enter to test immediate search
     await userEvent.type(searchBar, 'Dogs');
-    fireEvent.keyDown(searchBar, { key: 'Enter', code: 'Enter' });
+    await user.keyboard('{Enter}');
   });
 
   test('Testing pagination component presence', async () => {
@@ -814,6 +816,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination rows per page change functionality', async () => {
+    const user = userEvent.setup();
     setupUser('superAdmin');
     setItem('role', 'administrator');
 
@@ -826,7 +829,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(rowsPerPageSelect).toBeInTheDocument();
 
     // Change rows per page to 10
-    fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+    await user.type(rowsPerPageSelect, '10');
 
     await wait();
   });
@@ -884,16 +887,31 @@ describe('Organisations Page testing as SuperAdmin', () => {
       expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
     });
 
-    // Wait for initial organizations to load
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
-    fireEvent.scroll(window, { target: { scrollY: 1000 } });
+    Object.defineProperty(window, 'innerHeight', {
+      configurable: true,
+      value: 800,
+    });
+
+    Object.defineProperty(document.documentElement, 'scrollHeight', {
+      configurable: true,
+      value: 1600,
+    });
+
+    Object.defineProperty(window, 'scrollY', {
+      configurable: true,
+      value: 1000,
+    });
+
+    window.dispatchEvent(new Event('scroll'));
   });
 });
 
 describe('Organisations Page testing as Admin', () => {
   test('Testing sort latest and oldest toggle', async () => {
+    const user = userEvent.setup();
     setupUser('admin');
 
     renderWithProviders(mockLinks.admin);
@@ -906,19 +924,19 @@ describe('Organisations Page testing as Admin', () => {
     const sortToggle = screen.getByTestId('sortOrgs-toggle');
 
     await act(async () => {
-      fireEvent.click(sortToggle);
+      await user.click(sortToggle);
     });
 
     const latestOption = screen.getByTestId('sortOrgs-item-Latest');
 
     await act(async () => {
-      fireEvent.click(latestOption);
+      await user.click(latestOption);
     });
 
     expect(sortDropdown).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(sortToggle);
+      await user.click(sortToggle);
     });
 
     const oldestOption = await waitFor(() =>
@@ -926,7 +944,7 @@ describe('Organisations Page testing as Admin', () => {
     );
 
     await act(async () => {
-      fireEvent.click(oldestOption);
+      await user.click(oldestOption);
     });
 
     expect(sortDropdown).toBeInTheDocument();
@@ -1000,6 +1018,7 @@ describe('Plugin Modal Tests', () => {
 
 describe('Advanced Component Functionality Tests', () => {
   test('Testing pagination edge cases', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
@@ -1051,11 +1070,12 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Test pagination with rowsPerPage = 0 edge case
     const rowsPerPageSelect = screen.getByDisplayValue('5');
-    fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+    await user.type(rowsPerPageSelect, '0');
     await wait();
   });
 
   test('Testing handleChangePage pagination navigation', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
@@ -1075,7 +1095,7 @@ describe('Advanced Component Functionality Tests', () => {
       .find((btn) => btn.getAttribute('aria-label')?.includes('next'));
 
     if (nextPageButton && !nextPageButton.hasAttribute('disabled')) {
-      fireEvent.click(nextPageButton);
+      await user.click(nextPageButton);
       await wait(200);
     }
   });
@@ -1195,6 +1215,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing create organization modal opens and closes', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('SuperAdmin', true);
@@ -1212,7 +1233,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open the create organization modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await user.click(createOrgBtn);
 
     await wait();
 
@@ -1347,6 +1368,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing error handling for organization creation', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -1400,7 +1422,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await user.click(createOrgBtn);
 
     await wait();
 
@@ -1581,6 +1603,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing handleChangeRowsPerPage functionality', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
@@ -1608,7 +1631,7 @@ describe('Advanced Component Functionality Tests', () => {
     if (selects.length > 0) {
       // Trigger the select to ensure the handler is tested
       const paginationSelect = selects[0];
-      fireEvent.mouseDown(paginationSelect);
+      await user.click(paginationSelect);
       await wait(100);
     }
 
@@ -1730,6 +1753,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing pagination navigation functionality', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
@@ -1832,7 +1856,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (nextButton && !nextButton.hasAttribute('disabled')) {
-      fireEvent.click(nextButton);
+      await user.click(nextButton);
       await wait(200);
     }
 
@@ -1842,7 +1866,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (prevButton && !prevButton.hasAttribute('disabled')) {
-      fireEvent.click(prevButton);
+      await user.click(prevButton);
       await wait(200);
     }
   });
@@ -2602,6 +2626,7 @@ describe('Email Verification Actions Tests', () => {
   };
 
   test('dismisses warning and clears local storage', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2620,10 +2645,10 @@ describe('Email Verification Actions Tests', () => {
 
     const closeBtn = warningAlert.querySelector('.btn-close');
     if (closeBtn) {
-      fireEvent.click(closeBtn);
+      await user.click(closeBtn);
     } else {
       const altBtn = screen.getByLabelText('Close alert');
-      fireEvent.click(altBtn);
+      await user.click(altBtn);
     }
 
     await waitFor(() => {
@@ -2643,6 +2668,7 @@ describe('Email Verification Actions Tests', () => {
   });
 
   test('handleResendVerification success', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2654,7 +2680,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
@@ -2665,6 +2691,7 @@ describe('Email Verification Actions Tests', () => {
   });
 
   test('handleResendVerification failure (API returns false)', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2676,7 +2703,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       // The component uses tLogin('resendFailed') or data message
@@ -2689,6 +2716,7 @@ describe('Email Verification Actions Tests', () => {
   });
 
   test('handleResendVerification error (catch block)', async () => {
+    const user = userEvent.setup();
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2707,7 +2735,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       // errorHandler should be called
