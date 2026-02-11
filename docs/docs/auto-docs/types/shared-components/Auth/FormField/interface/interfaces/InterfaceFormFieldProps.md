@@ -18,11 +18,21 @@ Supports optional validator callbacks and aria-live behaviors for accessibility.
 
 > `optional` **ariaLive**: `boolean`
 
-Defined in: [src/types/shared-components/Auth/FormField/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/FormField/interface.ts#L51)
+Defined in: [src/types/shared-components/Auth/FormField/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/FormField/interface.ts#L54)
 
 Whether to use aria-live for dynamic error announcements.
 When true, error messages are announced to screen readers.
 Defaults to true.
+
+***
+
+### dataCy?
+
+> `optional` **dataCy**: `string`
+
+Defined in: [src/types/shared-components/Auth/FormField/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/FormField/interface.ts#L41)
+
+Optional data-cy for e2e (Cypress) selectors
 
 ***
 
@@ -40,7 +50,7 @@ Whether the input is disabled
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/shared-components/Auth/FormField/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/FormField/interface.ts#L41)
+Defined in: [src/types/shared-components/Auth/FormField/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/FormField/interface.ts#L44)
 
 Error message to display - null or undefined means no error
 
@@ -50,7 +60,7 @@ Error message to display - null or undefined means no error
 
 > `optional` **helperText**: `string`
 
-Defined in: [src/types/shared-components/Auth/FormField/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/FormField/interface.ts#L44)
+Defined in: [src/types/shared-components/Auth/FormField/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/FormField/interface.ts#L47)
 
 Helper text to display below the input when no error
 

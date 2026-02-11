@@ -1659,69 +1659,6 @@ export interface InterfaceQueryMembershipRequestsListItem {
 }
 
 /**
- * Defines the structure for agenda item category information.
- */
-export interface InterfaceAgendaItemCategoryInfo {
-  _id: string;
-  name: string;
-  description: string;
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-}
-
-/**
- * Defines the structure for a list of agenda item categories by organization.
- */
-export interface InterfaceAgendaItemCategoryList {
-  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
-}
-
-/**
- * Defines the structure for agenda item information.
- */
-export interface InterfaceAgendaItemInfo {
-  _id: string;
-  title: string;
-  description: string;
-  duration: string;
-  attachments: string[];
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  urls: string[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  }[];
-  sequence: number;
-  categories: {
-    _id: string;
-    name: string;
-  }[];
-  organization: {
-    _id: string;
-    name: string;
-  };
-  relatedEvent: {
-    _id: string;
-    title: string;
-  };
-}
-
-/**
- * Defines the structure for a list of agenda items by event.
- */
-export interface InterfaceAgendaItemList {
-  agendaItemByEvent: InterfaceAgendaItemInfo[];
-}
-
-/**
  * Defines a generic map type where keys and values are strings.
  */
 export interface InterfaceMapType {

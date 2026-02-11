@@ -84,6 +84,31 @@ To start the application you will need to build, then run the Docker Image. Thes
       http://localhost:4321
       ```
 
+3. **Linux Systems (Rootless Docker - Optional):**
+   1. Set `DOCKER_HOST` dynamically (do not hardcode UID):
+
+      ```bash
+      export DOCKER_HOST=unix:///run/user/$UID/docker.sock
+      ```
+
+      Or run:
+
+      ```bash
+      eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"
+      ```
+
+   2. Build using the rootless compose file:
+
+      ```bash
+      docker compose -f docker/docker-compose.rootless.prod.yaml build
+      ```
+
+   3. Start the app:
+
+      ```bash
+      docker compose -f docker/docker-compose.rootless.prod.yaml --env-file .env up -d
+      ```
+
 #### Stopping The Application
 
 To stop the container run the following command:
@@ -98,6 +123,12 @@ To stop the container run the following command:
 
    ```bash
    docker compose -f docker/docker-compose.prod.yaml down
+   ```
+
+1. **Linux Systems (Rootless Docker - Optional):** Run:
+
+   ```bash
+   docker compose -f docker/docker-compose.rootless.prod.yaml down
    ```
 
 ### For Development Environments
@@ -148,6 +179,31 @@ To start the application you will need to build, then run the Docker Image. Thes
       http://localhost:4321
       ```
 
+3. **Linux Systems (Rootless Docker - Optional):**
+   1. Set `DOCKER_HOST` dynamically:
+
+      ```bash
+      export DOCKER_HOST=unix:///run/user/$UID/docker.sock
+      ```
+
+      Or run:
+
+      ```bash
+      eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"
+      ```
+
+   2. Build rootless development image:
+
+      ```bash
+      docker compose -f docker/docker-compose.rootless.dev.yaml build
+      ```
+
+   3. Start rootless development container:
+
+      ```bash
+      docker compose -f docker/docker-compose.rootless.dev.yaml --env-file .env up -d
+      ```
+
 #### Stopping The Application
 
 To stop the container run the following command:
@@ -162,6 +218,12 @@ To stop the container run the following command:
 
    ```bash
    docker compose -f docker/docker-compose.dev.yaml down
+   ```
+
+1. **Linux Systems (Rootless Docker - Optional):** Run:
+
+   ```bash
+   docker compose -f docker/docker-compose.rootless.dev.yaml down
    ```
 
 ## Operation Without Docker
@@ -209,6 +271,28 @@ Alternatively, you can use a single command:
 pkill -f "pnpm run serve"
 ```
 
+## Rootless Troubleshooting
+
+If Docker rootless mode fails to start, check the following:
+
+1. **Socket mismatch (`/var/run/docker.sock` vs `/run/user/$UID/docker.sock`)**
+   - Ensure `DOCKER_HOST` is set dynamically:
+     ```bash
+     export DOCKER_HOST=unix:///run/user/$UID/docker.sock
+     ```
+   - Or run:
+     ```bash
+     eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"
+     ```
+2. **`dockerd-rootless-setuptool.sh` run with sudo**
+   - Re-run as your regular user (no `sudo`):
+     ```bash
+     dockerd-rootless-setuptool.sh install
+     ```
+3. **`mkdir /var/run/docker.sock: file exists`**
+   - This usually indicates a rootful/rootless context mix.
+   - Stop containers, verify `DOCKER_HOST`, then restart with the intended compose file.
+
 ### For Development Environments
 
 Follow these steps if you are running the app in a development environment without Docker.
@@ -221,11 +305,8 @@ Run the following command to start the development server:
 pnpm run serve
 ```
 
-The app will run until you hit: 
+The app will run until you hit:
 
 ```
 <CTRL-C>
 ```
-
-
-

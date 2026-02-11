@@ -47,7 +47,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import DropDownButton from 'shared-components/DropDownButton';
 import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -80,6 +79,8 @@ import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import DropDownButton from 'shared-components/DropDownButton';
+import { CHAT_BY_ID } from 'GraphQl/Queries/PlugInQueries';
 
 export default function GroupChatDetails({
   toggleGroupChatDetailsModal,
@@ -131,9 +132,31 @@ export default function GroupChatDetails({
 
   const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
   const [updateChat] = useMutation(UPDATE_CHAT);
-  const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP);
+  const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP, {
+    refetchQueries: [
+      {
+        query: CHAT_BY_ID,
+        variables: {
+          input: { id: chat.id },
+          first: 15,
+          lastMessages: 1,
+        },
+      },
+    ],
+  });
   const [deleteChat] = useMutation(DELETE_CHAT);
-  const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
+  const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP, {
+    refetchQueries: [
+      {
+        query: CHAT_BY_ID,
+        variables: {
+          input: { id: chat.id },
+          first: 15,
+          lastMessages: 1,
+        },
+      },
+    ],
+  });
 
   const currentUserRole = chat.members?.edges?.find(
     (edge) => edge.node.user.id === userId,
@@ -150,7 +173,6 @@ export default function GroupChatDetails({
           },
         },
       });
-      await chatRefetch();
       NotificationToast.success(t('roleUpdatedSuccessfully'));
     } catch (error) {
       NotificationToast.error(t('failedToUpdateRole'));
@@ -168,7 +190,6 @@ export default function GroupChatDetails({
           },
         },
       });
-      await chatRefetch();
       NotificationToast.success(t('memberRemovedSuccessfully'));
     } catch (error) {
       NotificationToast.error(t('failedToRemoveMember'));
@@ -271,13 +292,14 @@ export default function GroupChatDetails({
         dataTestId="groupChatDetailsModal"
         className={styles.modalContent}
         headerContent={
-          <div className="d-flex justify-content-between w-100">
-            <div className="modal-title h4">{t('groupInfo')}</div>
+          <div className={styles.headerSection}>
+            <div className={styles.headerGroupInfo}>{t('groupInfo')}</div>
             {currentUserRole === 'administrator' && (
               <Button
                 variant="outline-danger"
                 size="sm"
                 aria-label={t('deleteChat')}
+                className="mx-5"
                 onClick={async () => {
                   if (window.confirm(t('deleteChatConfirmation'))) {
                     try {
@@ -409,30 +431,23 @@ export default function GroupChatDetails({
                   className={styles.groupMembersList}
                   key={user.id}
                 >
-                  <div
-                    className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
-                  >
-                    <div className="d-flex align-items-center grow">
+                  <div className={styles.chatUserDetails}>
+                    <div className={styles.profileAvatarContainer}>
                       <ProfileAvatarDisplay
                         className={styles.membersImage}
                         fallbackName={user.name}
                         imageUrl={user.avatarURL}
                         size="small"
                       />
-                      <span className="ms-2">{user.name}</span>
-                      <span
-                        className={`badge bg-success text-dark ms-2 ${styles.roleBadge}`}
-                      >
-                        {role}
-                      </span>
+                      <span className={styles.userName}>{user.name}</span>
+                      <span className={styles.roleBadge}>{role}</span>
                     </div>
                     {canManage && (
                       <DropDownButton
                         id={`dropdown-${user.id}`}
-                        variant="outline-secondary"
+                        variant="light"
                         icon={<BsThreeDotsVertical />}
-                        buttonLabel=" "
-                        ariaLabel={t('memberOptions')}
+                        buttonLabel=""
                         options={[
                           {
                             value: 'roleChange',
@@ -472,7 +487,12 @@ export default function GroupChatDetails({
                         }}
                         btnStyle={styles.dropdownToggle}
                         parentContainerStyle="ms-auto"
-                        drop="start"
+                        // drop="start"
+                        showCaret={false}
+                        // i18n-ignore-next-line
+                        dataTestIdPrefix={`member-actions-${user.id}`}
+                        ariaLabel={t('memberActionsMenu')}
+                        placeholder=""
                       />
                     )}
                   </div>

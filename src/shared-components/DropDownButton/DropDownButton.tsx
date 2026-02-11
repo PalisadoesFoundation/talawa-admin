@@ -17,6 +17,8 @@
  * @param placeholder - Placeholder text when no option is selected.
  * @param parentContainerStyle - Additional styles for the parent container.
  * @param btnStyle - Additional styles for the dropdown button.
+ * @param menuClassName - Custom class name for the dropdown menu.
+ * @param showCaret - Whether to render the caret indicator (non-searchable mode).
  *
  * @returns A DropDownButton component.
  *
@@ -69,6 +71,8 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   btnStyle,
   searchable = false,
   searchPlaceholder,
+  showCaret = true,
+  menuClassName,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const resolvedSearchPlaceholder =
@@ -79,7 +83,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   // Sync searchTerm with selectedValue or initial implementation
   React.useEffect(() => {
     const selected = options.find((o) => o.value === (selectedValue ?? ''));
-    if (selected) {
+    if (selected && typeof selected.label === 'string') {
       setSearchTerm(selected.label);
     } else {
       setSearchTerm('');
@@ -95,7 +99,8 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
       setIsOpen(false);
       // Update local search term immediately for better UX
       const selectedOpt = options.find((o) => o.value === val);
-      if (selectedOpt) setSearchTerm(selectedOpt.label);
+      if (selectedOpt && typeof selectedOpt.label === 'string')
+        setSearchTerm(selectedOpt.label);
     },
     [onSelect, options],
   );
@@ -103,9 +108,12 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   const filteredOptions = useMemo(
     () =>
       searchable
-        ? options.filter((opt) =>
-            opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
-          )
+        ? options.filter((opt) => {
+            if (typeof opt.label !== 'string') {
+              return searchTerm.trim().length === 0;
+            }
+            return opt.label.toLowerCase().includes(searchTerm.toLowerCase());
+          })
         : options,
     [searchable, options, searchTerm],
   );
@@ -154,7 +162,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         <Dropdown.Menu
           role="listbox"
           aria-label={ariaLabel || tCommon('optionsSuffix')}
-          className={`${styles.dropdownMenu} w-100`}
+          className={`${styles.dropdownMenu} w-100 ${menuClassName || ''}`}
           data-testid={`${dataTestIdPrefix}-menu`}
         >
           {filteredOptions.length > 0 ? (
@@ -216,7 +224,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
           </span>
         )}
         <span className={styles.buttonLabel}>{displayLabel}</span>
-        <span className={styles.dropdownCaret}>▼</span>
+        {showCaret && <span className={styles.dropdownCaret}>▼</span>}
       </Dropdown.Toggle>
       <Dropdown.Menu
         role="listbox"
@@ -225,7 +233,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
             ? `${ariaLabel} ${tCommon('optionsSuffix')}`
             : tCommon('optionsSuffix')
         }
-        className={styles.dropdownMenu}
+        className={`${styles.dropdownMenu} ${menuClassName || ''}`}
         data-testid={`${dataTestIdPrefix}-menu`}
       >
         {options.map((opt) => (

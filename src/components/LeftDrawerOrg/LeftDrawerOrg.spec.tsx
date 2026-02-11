@@ -177,6 +177,19 @@ vi.mock('shared-components/Avatar/Avatar', () => ({
   )),
 }));
 
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: vi.fn(({ imageUrl, fallbackName, dataTestId }) => {
+    if (imageUrl && imageUrl !== 'null') {
+      return <img src={imageUrl} alt={fallbackName} data-testid={dataTestId} />;
+    }
+    return (
+      <div data-testid={dataTestId || 'avatar'} data-name={fallbackName}>
+        Avatar: {fallbackName}
+      </div>
+    );
+  }),
+}));
+
 vi.mock('components/ProfileCard/ProfileCard', () => ({
   default: vi.fn(() => <div data-testid="profile-card">Profile Card</div>),
 }));
@@ -458,11 +471,9 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, mocksWithoutAvatar);
 
       await waitFor(() => {
-        const avatars = screen.getAllByTestId('avatar');
-        const orgAvatar = avatars.find(
-          (avatar) => avatar.getAttribute('data-name') === 'Test Organization',
-        );
+        const orgAvatar = screen.getByTestId('org-avatar');
         expect(orgAvatar).toBeInTheDocument();
+        expect(orgAvatar).toHaveAttribute('data-name', 'Test Organization');
         expect(orgAvatar).toHaveTextContent('Avatar: Test Organization');
       });
     });

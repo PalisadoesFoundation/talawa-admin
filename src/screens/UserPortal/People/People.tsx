@@ -13,6 +13,7 @@
  * - Supports filtering between "All Members" and "Admins" via a dropdown menu.
  * - Implements pagination to display users in manageable chunks.
  * - Provides a search bar to find members by first name.
+ * - Uses the DataTable shared component for consistent table rendering.
  *
  * **Dependencies**
  * - Core libraries:
@@ -21,8 +22,8 @@
  *   - `@apollo/client`
  *   - `@mui/icons-material`
  * - Custom components:
- *   - `components/UserPortal/PeopleCard/PeopleCard`
- *   - `components/Pagination/PaginationList/PaginationList`
+ *   - `shared-components/DataTable/DataTable`
+ *   - `shared-components/PaginationList/PaginationList`
  * - GraphQL queries:
  *   - `GraphQl/Queries/Queries`
  * - Styles:
@@ -46,7 +47,6 @@
  * @param organizationId - The ID of the organization extracted from URL parameters.
  */
 import React, { useEffect, useState } from 'react';
-import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
@@ -55,7 +55,9 @@ import { useTranslation } from 'react-i18next';
 
 import { useParams } from 'react-router';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import Avatar from 'shared-components/Avatar/Avatar';
 
 interface IMemberNode {
   id: string;
@@ -75,13 +77,14 @@ interface IMemberWithUserType extends IMemberEdge {
   userType: string;
 }
 
-interface IOrganizationCardProps {
+// Type for DataTable rows
+interface IPeopleTableRow {
   id: string;
   name: string;
-  image: string;
   email: string;
+  image: string;
   role: string;
-  sno: string;
+  sno: number;
 }
 
 export default function People(): React.JSX.Element {
@@ -200,6 +203,62 @@ export default function People(): React.JSX.Element {
     });
   }, [mode, organizationId, rowsPerPage]); // intentionally not including searchTerm (it's handled above)
 
+  // Transform members data for DataTable
+  const tableData: IPeopleTableRow[] = React.useMemo(() => {
+    return members.map((member, index) => ({
+      id: member.node.id,
+      name: member.node.name,
+      email: member.node.emailAddress ?? t('emailNotAvailable'),
+      image: member.node.avatarURL ?? '',
+      role: member.userType,
+      sno: index + 1 + currentPage * rowsPerPage,
+    }));
+  }, [members, currentPage, rowsPerPage, t]);
+
+  // Column definitions for DataTable
+  const columns: IColumnDef<IPeopleTableRow>[] = [
+    {
+      id: 'sno',
+      header: t('sNo'),
+      accessor: 'sno',
+      meta: { width: 'var(--space-11)' },
+    },
+    {
+      id: 'avatar',
+      header: t('avatar'),
+      accessor: 'image',
+      meta: { width: 'var(--space-12)' },
+      render: (value, row) => (
+        <div className={styles.avatarCell}>
+          {value ? (
+            <img
+              src={value as string}
+              alt={row.name}
+              className={styles.avatarImage}
+            />
+          ) : (
+            <Avatar name={row.name} alt={row.name} size={40} />
+          )}
+        </div>
+      ),
+    },
+    {
+      id: 'name',
+      header: t('name'),
+      accessor: 'name',
+    },
+    {
+      id: 'email',
+      header: t('email'),
+      accessor: 'email',
+    },
+    {
+      id: 'role',
+      header: t('role'),
+      accessor: 'role',
+    },
+  ];
+
   return (
     <>
       <div className={`${styles.mainContainer_people}`}>
@@ -230,50 +289,15 @@ export default function People(): React.JSX.Element {
         </div>
 
         <div className={styles.people_content}>
-          <div className={styles.people_card_header}>
-            {/* Nested span groups sNo and avatar in a flex container for horizontal alignment */}
-            <span className={`d-flex ${styles.people_card_header_col_1}`}>
-              <span className={styles.people_card_header_col_1}>
-                {t('sNo')}
-              </span>
-              <span className={styles.people_card_header_col_1}>
-                {t('avatar')}
-              </span>
-            </span>
-            <span className={styles.people_card_header_col_2}>{t('name')}</span>
-            <span className={styles.people_card_header_col_2}>
-              {t('email')}
-            </span>
-            <span className={styles.people_card_header_col_2}>{t('role')}</span>
-          </div>
-
-          <div className={styles.people_card_main_container}>
-            <LoadingState
-              isLoading={loading}
-              variant="skeleton"
-              skeletonRows={rowsPerPage}
-              skeletonCols={4}
-            >
-              <>
-                {members && members.length > 0 ? (
-                  members.map((member: IMemberWithUserType, index) => {
-                    const name = `${member.node.name}`;
-                    const cardProps: IOrganizationCardProps = {
-                      name,
-                      image: member.node.avatarURL ?? '',
-                      id: member.node.id ?? '',
-                      email: member.node.emailAddress ?? t('emailNotAvailable'),
-                      role: member.userType ?? '',
-                      sno: (index + 1 + currentPage * rowsPerPage).toString(),
-                    };
-                    return <PeopleCard key={index} {...cardProps} />;
-                  })
-                ) : (
-                  <span>{t('nothingToShow')}</span>
-                )}
-              </>
-            </LoadingState>
-          </div>
+          <DataTable<IPeopleTableRow>
+            data={tableData}
+            columns={columns}
+            loading={loading}
+            emptyMessage={t('nothingToShow')}
+            rowKey="id"
+            tableClassName={styles.peopleTable}
+            skeletonRows={rowsPerPage}
+          />
           <table>
             <tfoot>
               <tr>

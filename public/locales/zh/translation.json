@@ -580,16 +580,6 @@
     "joined": "已加入",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
-  "orgAdminListCard": {
-    "remove": "消除",
-    "removeAdmin": "删除管理员",
-    "removeAdminMsg": "您想删除该管理员吗？",
-    "adminRemoved": "管理员被删除。",
-    "joined": "已加入",
-    "no": "否",
-    "yes": "是",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
-  },
   "orgPeopleListCard": {
     "remove": "消除",
     "removeMember": "删除会员",
@@ -780,9 +770,38 @@
     "deleteAgendaCategory": "删除议程类别",
     "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "议程文件夹已成功更新",
+    "agendaFolderDeleted": "议程文件夹已成功删除",
+    "deleteAgendaFolder": "删除议程文件夹",
+    "deleteAgendaFolderMsg": "您确定要删除此议程文件夹吗？",
+    "updateAgendaFolder": "更新议程文件夹",
+    "folderNamePlaceholder": "文件夹名称",
+    "createAgendaFolder": "创建议程部分",
+    "folderName": "文件夹",
+    "categoryName": "类别",
+    "noCategory": "无分类",
+    "folder": "议程文件夹",
+    "notes": "备注",
+    "enterNotes": "输入备注",
+    "agendaFolderDetails": "议程部分详情",
+    "agendaFolderCreated": "议程部分已成功创建",
+    "attachmentPreviewAlt": "附件预览",
+    "agendaFolderUpdateFailed": "议程文件夹更新失败",
+    "previewItem": "预览项目",
+    "removeUrl": "移除网址",
+    "removeAttachment": "移除附件",
+    "itemSequenceUpdateSuccessMsg": "项目顺序已成功更新",
+    "sectionSequenceUpdateSuccessMsg": "部分顺序已成功更新",
+    "editFolder": "编辑文件夹",
+    "editItem": "编辑项目",
+    "deleteItem": "删除项目",
+    "deleteFolder": "删除文件夹",
+    "itemPreview": "项目预览",
     "agendaItemDetails": "议程项目详细信息",
     "updateAgendaItem": "更新议程项目",
+    "fileUploadFailed": "文件上传失败",
+    "organizationRequired": "需要选择组织",
     "title": "标题",
     "enterTitle": "输入标题",
     "sequence": "顺序",
@@ -1174,7 +1193,9 @@
     "statistics": "统计数据",
     "to": "到",
     "volunteers": "志愿者",
-    "backToEvents": "返回活动"
+    "backToEvents": "返回活动",
+    "selectTab": "选择标签页",
+    "eventTabs": "活动选项卡"
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1257,18 +1278,6 @@
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "旧密码",
-    "newPassword": "新密码",
-    "confirmNewPassword": "确认新密码",
-    "passCantBeEmpty": "密码不能为空",
-    "passNoMatch": "新密码和确认密码不匹配。",
-    "saveChanges": "保存更改",
-    "cancel": "取消"
-  },
-  "orgDelete": {
-    "deleteOrg": "删除组织"
   },
   "membershipRequest": {
     "accept": "接受",
@@ -1722,7 +1731,8 @@
     "invalidAmount": "请输入捐赠金额的数值。",
     "donationAmountDescription": "请输入捐款金额的数值。",
     "donationOutOfRange": "捐款金额必须在 {{min}} 和 {{max}} 之间。",
-    "donateTo": "捐赠给"
+    "donateTo": "捐赠给",
+    "selectCurrency": "选择货币"
   },
   "transactions": {
     "title": "交易",
@@ -1884,7 +1894,6 @@
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
     "groupInfo": "群组信息",
-    "memberOptions": "成员选项",
     "description": "描述",
     "hash": "#",
     "members": "会员",
@@ -1919,7 +1928,8 @@
     "next": "下一步",
     "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
     "thisUser": "此用户",
-    "deleteChatConfirmation": "您确定要删除此聊天吗？"
+    "deleteChatConfirmation": "您确定要删除此聊天吗？",
+    "memberActionsMenu": "成员操作菜单"
   },
   "userChatRoom": {
     "selectContact": "点击 + 图标以开始新的聊天",
@@ -2335,7 +2345,8 @@
     "invited": "已邀请",
     "groupsAvailable": "{{count}} 个小组可用",
     "volunteersRequired": "必需",
-    "signedUp": "已报名"
+    "signedUp": "已报名",
+    "volunteerTabs": "志愿者选项卡"
   },
   "pluginStore": {
     "title": "插件商店",
@@ -2396,7 +2407,7 @@
     "installing": "安装中 ({{elapsed}})",
     "uploading": "上传中...",
     "screenshotCounter": "{{current}} / {{total}}",
-    "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
+    "uninstallPluginWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败",
     "failedToParsePluginZip": "解析插件 ZIP 文件失败",
     "pluginUploadedSuccess": "插件上传成功！({{components}} 组件) - 您现在可以从插件列表中安装它。"
@@ -2558,17 +2569,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "日期不可用",
     "yes": "是",
     "no": "否",
     "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
     "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数",
-    "viewEventDetails": "查看活动详情"
-  },
-  "promotedPost": {
-    "title": "推广内容",
-    "promotedContent": "推广内容：{{title}}"
+    "numberOfAttendees": "出席人数"
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
