@@ -108,5 +108,3 @@ export function DataTableSkeleton<T>({
     </div>
   );
 }
-
-export default DataTableSkeleton;
