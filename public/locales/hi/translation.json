@@ -2440,7 +2440,21 @@
     "holidays": "छुट्टियाँ",
     "events": "इवेंट्स",
     "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
-    "today": "आज"
+    "today": "आज",
+    "viewLess": "कम देखें",
+    "viewAll": "सब देखें",
+    "noHolidaysAvailable": "कोई छुट्टियाँ उपलब्ध नहीं हैं",
+    "holidayNames": {
+      "mayDayLabourDay": "मई दिवस / श्रमिक दिवस",
+      "mothersDay": "मातृ दिवस",
+      "fathersDay": "पितृ दिवस",
+      "independenceDayUS": "स्वतंत्रता दिवस (अमेरिका)",
+      "oktoberfest": "ऑक्टोबरफेस्ट",
+      "halloween": "हैलोवीन",
+      "diwali": "दिवाली",
+      "remembranceDayVeteransDay": "स्मरण दिवस / वयोवृद्ध दिवस",
+      "christmasDay": "क्रिसमस दिवस"
+    }
   },
   "contact": {
     "card_aria": "संपर्क कार्ड"

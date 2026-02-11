@@ -1,22 +1,24 @@
 .calendarEventHeader {
   width: 100%;
-  border-radius: 10px;
-  padding: 5px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
 }
 
 .calendar__header {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: 0.75rem;
+  gap: var(--space-1);
   flex-wrap: wrap;
-  margin-right: 0;
+  margin-left: calc(var(--space-1) * 2);
+  margin-top: calc(var(--space-6) * -1);
 }
 
 .calendar__search {
-  flex: 1 1 360px;
-  min-width: 260px;
+  flex: 0 1 calc(var(--space-27) + var(--space-6));
+  min-width: var(--space-24);
   max-width: 100%;
+  margin-left: calc(var(--space-2) * -1);
 }
 
 .btnsBlock {
@@ -24,18 +26,80 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: 12px;
+  gap: var(--space-4);
   width: auto;
   flex-shrink: 0;
-  height: 48px;
-  margin: 0;
+  height: var(--space-9);
+  margin-top: var(--space-10);
+  margin-left: calc(var(--space-1) * -20);
 }
 
-.dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
-  color: var(--dropdown-font-color) !important;
+.btnsBlock .dropdown {
+  min-width: var(--space-15);
   position: relative;
-  display: inline-block;
+  background-color: transparent;
+  border: none;
+}
+
+.btnsBlock button.dropdown {
+  background-color: var(--color-gray-50);
+  border: var(--border-1) solid var(--color-gray-600);
+  color: var(--color-gray-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+.btnsBlock .dropdown :global(.btn) {
+  background-color: var(--color-gray-50);
+  border: var(--border-1) solid var(--color-gray-600);
+  color: var(--color-gray-600);
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+.btnsBlock button.dropdown:hover,
+.btnsBlock .dropdown :global(.btn):hover {
+  background-color: var(--color-gray-400);
+  border-color: var(--color-gray-600);
+  color: var(--color-gray-800);
+}
+
+/* Ensure the dropdown menu matches the button width perfectly */
+.dropdown :global(.dropdown-menu) {
+  min-width: 100% !important;
+  width: 100% !important;
+  margin-top: var(--radius-sm);
+  border-radius: var(--radius-lg);
+}
+
+@media screen and (max-width: var(--breakpoint-md)) {
+  .calendar__header {
+    flex-wrap: wrap;
+    height: auto;
+  }
+
+  .calendar__search {
+    flex: 1 1 100%;
+    min-width: 100%;
+    margin-left: 0;
+    margin-bottom: var(--space-4);
+  }
+
+  .btnsBlock {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0;
+    justify-content: space-between;
+    height: auto;
+  }
+
+  .btnsBlock .dropdown,
+  .btnsBlock button.dropdown {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
 }

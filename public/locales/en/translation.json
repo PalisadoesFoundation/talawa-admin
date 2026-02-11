@@ -2440,7 +2440,21 @@
     "holidays": "Holidays",
     "events": "Events",
     "eventsCreatedByOrganization": "Events Created by Organization",
-    "today": "Today"
+    "today": "Today",
+    "viewLess": "View Less",
+    "viewAll": "View all",
+    "noHolidaysAvailable": "No holidays available",
+    "holidayNames": {
+      "mayDayLabourDay": "May Day / Labour Day",
+      "mothersDay": "Mother's Day",
+      "fathersDay": "Father's Day",
+      "independenceDayUS": "Independence Day (US)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Remembrance Day / Veterans Day",
+      "christmasDay": "Christmas Day"
+    }
   },
   "contact": {
     "card_aria": "Contact card"
