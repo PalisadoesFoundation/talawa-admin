@@ -332,7 +332,13 @@ const VenueModal = ({
   };
   return (
     <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
-      <form data-testid="venueForm">
+      <form
+        data-testid="venueForm"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <label htmlFor="venuetitle">{t('venueName')}</label>
         <FormTextField
           name="venueTitle"
@@ -340,7 +346,7 @@ const VenueModal = ({
           placeholder={t('enterVenueName')}
           value={name}
           required
-          onChange={(v) => setFormState({ ...formState, name: v })}
+          onChange={(v) => setFormState((prev) => ({ ...prev, name: v }))}
           className={styles.inputField}
           data-testid="venueTitleInput"
         />
@@ -353,7 +359,9 @@ const VenueModal = ({
           value={description}
           required
           maxLength={500}
-          onChange={(v) => setFormState({ ...formState, description: v })}
+          onChange={(v) =>
+            setFormState((prev) => ({ ...prev, description: v }))
+          }
           className={styles.inputField}
         />
 
@@ -364,7 +372,7 @@ const VenueModal = ({
           placeholder={t('enterVenueCapacity')}
           value={capacity}
           required
-          onChange={(v) => setFormState({ ...formState, capacity: v })}
+          onChange={(v) => setFormState((prev) => ({ ...prev, capacity: v }))}
           className={styles.inputField}
         />
         <label htmlFor="venueImgUrl">{t('image')}</label>
@@ -387,7 +395,7 @@ const VenueModal = ({
               className={styles.closeButtonP}
               onClick={clearImageInput}
               data-testid="closeimage"
-              aria-label={t('closeImagePreview') || 'Close image preview'}
+              aria-label={t('closeImagePreview')}
             >
               <i className="fa fa-times"></i>
             </Button>
