@@ -1,0 +1,35 @@
+server {
+    listen ${NGINX_PORT};
+    server_name admin-demo.talawa.io;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+
+    location /graphql {
+        # 'api' is the Docker Service Name defined in docker-compose.yml.
+        # If running outside Docker, replace 'api' with your API IP address.
+        proxy_pass http://api:4000;
+
+        # Proxy headers
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Gzip Compression
+    gzip on;
+    gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+    gzip_min_length 256;
+    gzip_vary on;
+
+    error_page 404 /index.html;
+}
