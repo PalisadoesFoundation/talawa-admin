@@ -56,9 +56,11 @@ describe('Admin People Tab', () => {
   });
 
   it('delete a member from the organization', () => {
-    peoplePage.clickAddExistingMember();
-    peoplePage.searchAndSelectUser(praiseNorris.name);
-    peoplePage.confirmAddUser(praiseNorris.name);
+    if (!praiseNorris.userId) {
+      throw new Error('Expected praiseNorris.userId to be set before delete.');
+    }
+
+    cy.reload();
     peoplePage.deleteMember(praiseNorris.name);
   });
 

@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
@@ -56,14 +57,9 @@ export class PeoplePage {
 
   confirmAddUser(name: string, timeout = 100000) {
     cy.get(this._addBtn, { timeout }).first().should('be.visible').click();
-    // Assert alert when it appears; skip if member already exists and no alert shown
-    cy.get(this._alert, { timeout }).then(($els) => {
-      if ($els.length) {
-        cy.wrap($els)
-          .should('be.visible')
-          .and('contain.text', 'Member added Successfully');
-      }
-    });
+    // Assert alert text when it appears; skip if member already exists and no alert shown.
+    // Assert alert text when it appears
+    cy.contains(this._alert, 'Member added Successfully', { timeout }).should('be.visible');
     cy.reload();
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
@@ -78,15 +74,12 @@ export class PeoplePage {
     cy.wait(1000);
 
     // Scope search to DataGrid rows to avoid matching headers/other UI
+    // Scope search to DataGrid rows to avoid matching headers/other UI
     cy.contains(`${this._dataGridRows} ${this._nameCell}`, name, { timeout })
+      .closest(this._dataGridRows)
+      .find(this._removeModalBtn)
       .should('be.visible')
-      .then(($cell) => {
-        cy.wrap($cell)
-          .closest(this._dataGridRows)
-          .find(this._removeModalBtn)
-          .should('be.visible')
-          .click();
-      });
+      .click();
 
     cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
