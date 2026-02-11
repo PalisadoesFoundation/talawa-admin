@@ -16,9 +16,9 @@
 .dataErrorState {
   padding: var(--space-5);
   text-align: left;
-  color: var(--datatable-error-text);
-  background: var(--datatable-error-bg);
-  border: var(--border-1) solid var(--datatable-error-border);
+  color: var(--color-red-500);
+  background: var(--color-red-100);
+  border: var(--border-1) solid var(--color-red-500);
   border-radius: var(--radius-md);
 }
 
@@ -26,16 +26,16 @@
   margin-top: var(--space-2);
   font-family: ui-monospace, Menlo, Consolas, monospace;
   font-size: var(--font-size-sm);
-  color: var(--datatable-error-details-color, #5c1a21);
+  color: var(--color-red-500);
 }
 
 .dataEmptyState {
   padding: var(--space-5);
   text-align: center;
-  color: var(--datatable-text);
-  border: var(--border-1) solid var(--datatable-empty-border);
+  color: var(--color-gray-900);
+  border: var(--border-1) solid var(--color-gray-200);
   border-radius: var(--radius-md);
-  background: var(--datatable-empty-bg);
+  background: var(--color-gray-50);
 }
 
 .bulkBtn {

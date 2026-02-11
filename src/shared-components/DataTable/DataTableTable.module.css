@@ -13,15 +13,15 @@
 }
 
 .sortable:focus {
-  outline: var(--border-2) solid var(--datatable-focus-outline);
+  outline: var(--border-2) solid var(--color-blue-600);
   outline-offset: var(--border-2);
 }
 
 .sortable:focus-visible {
-  outline: var(--border-2) solid var(--datatable-focus-outline);
+  outline: var(--border-2) solid var(--color-blue-600);
   outline-offset: var(--border-2);
-  box-shadow: 0 0 0 var(--border-2) var(--datatable-focus-ring);
-  background: var(--datatable-focus-background);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-200);
+  background: var(--color-blue-100);
 }
 
 .headerInner {

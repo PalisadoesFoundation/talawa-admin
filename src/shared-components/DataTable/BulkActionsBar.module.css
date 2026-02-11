@@ -5,13 +5,13 @@
   gap: var(--space-4);
   padding: var(--space-3) var(--space-4);
   margin: 0 0 var(--space-3);
-  background: var(--datatable-bulk-bg);
-  border: var(--border-1) solid var(--datatable-bulk-border);
+  background: var(--color-blue-100);
+  border: var(--border-1) solid var(--color-blue-200);
   border-radius: var(--radius-md);
 }
 
 .bulkLeft {
-  color: var(--datatable-bulk-text);
+  color: var(--color-gray-900);
   font-size: var(--font-size-15);
 }
 
@@ -26,15 +26,15 @@
 }
 
 .bulkClear {
-  border: var(--border-1) solid var(--datatable-border);
-  background: var(--datatable-surface);
+  border: var(--border-1) solid var(--color-gray-200);
+  background: var(--color-white);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   cursor: pointer;
   font-size: var(--font-size-sm);
-  color: var(--datatable-muted-text);
+  color: var(--color-gray-600);
 }
 
 .bulkClear:hover {
-  background: var(--datatable-hover-bg);
+  background: var(--color-gray-100);
 }

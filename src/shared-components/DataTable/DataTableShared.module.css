@@ -14,9 +14,9 @@
   width: 100%;
   background: linear-gradient(
     90deg,
-    var(--datatable-skeleton-highlight) 25%,
-    var(--datatable-skeleton-base) 50%,
-    var(--datatable-skeleton-highlight) 75%
+    var(--color-gray-200) 25%,
+    var(--color-gray-100) 50%,
+    var(--color-gray-200) 75%
   );
   background-size: 200px 100%;
   border-radius: var(--radius-sm);
@@ -64,8 +64,8 @@
 }
 
 .bulkBtn {
-  border: var(--border-1) solid var(--datatable-border);
-  background-color: var(--datatable-surface);
+  border: var(--border-1) solid var(--color-gray-200);
+  background-color: var(--color-white);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -74,7 +74,7 @@
 }
 
 .bulkBtn:hover:not(:disabled) {
-  background-color: var(--datatable-hover-bg);
+  background-color: var(--color-gray-100);
 }
 
 .bulkBtn:disabled {
