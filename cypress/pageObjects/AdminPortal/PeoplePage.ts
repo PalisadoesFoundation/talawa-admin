@@ -59,7 +59,9 @@ export class PeoplePage {
     cy.get(this._addBtn, { timeout }).first().should('be.visible').click();
     // Assert alert text when it appears; skip if member already exists and no alert shown.
     // Assert alert text when it appears
-    cy.contains(this._alert, 'Member added Successfully', { timeout }).should('be.visible');
+    cy.contains(this._alert, 'Member added Successfully', { timeout }).should(
+      'be.visible',
+    );
     cy.reload();
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
