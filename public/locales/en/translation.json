@@ -573,7 +573,8 @@
     "sortPeople": "Sort People",
     "noTagsFound": "No tags found",
     "addMember": "Add Member",
-    "removeMember": "Remove Member"
+    "removeMember": "Remove Member",
+    "invalidTagName": "Invalid tag name"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -1988,7 +1989,8 @@
     "name": "name",
     "desc": "desc",
     "venueImagePreview": "Preview of venue image",
-    "sortVenues": "Sort Venues"
+    "sortVenues": "Sort Venues",
+    "closeImagePreview": "Close image preview"
   },
   "addMember": {
     "title": "Add Member",

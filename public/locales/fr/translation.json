@@ -573,7 +573,8 @@
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
     "addMember": "Ajouter un membre",
-    "removeMember": "Supprimer un membre"
+    "removeMember": "Supprimer un membre",
+    "invalidTagName": "Nom de tag invalide"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -2005,7 +2006,8 @@
     "name": "Nom",
     "desc": "Description",
     "venueImagePreview": "Aperçu de l’image du lieu",
-    "sortVenues": "Trier les lieux"
+    "sortVenues": "Trier les lieux",
+    "closeImagePreview": "Fermer l'aperçu de l'image"
   },
   "addMember": {
     "title": "Ajouter un membre",
