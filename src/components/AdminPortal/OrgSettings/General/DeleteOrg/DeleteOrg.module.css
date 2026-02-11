@@ -4,7 +4,7 @@
   box-shadow: 0 var(--space-1) var(--space-2)
     rgba(var(--color-black-rgb), 0.075);
   border: none;
-  height: var(--space-22) !important;
+  height: var(--space-20) !important;
   width: 98% !important;
 }
 

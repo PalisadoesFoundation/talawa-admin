@@ -36,7 +36,7 @@ function DeleteOrg(): JSX.Element {
 
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
-  const canDelete = Boolean(getItem('SuperAdmin'));
+  const canDelete = Boolean(getItem('role') == 'administrator');
 
   // GraphQL mutations for deleting organizations
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);

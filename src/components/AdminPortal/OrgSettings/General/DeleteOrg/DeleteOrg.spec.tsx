@@ -71,7 +71,7 @@ describe('DeleteOrg Component', () => {
     (useParams as Mock).mockReturnValue({ orgId: '1' });
     (useNavigate as Mock).mockReturnValue(navigateMock);
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn().mockReturnValue('true'),
+      getItem: vi.fn().mockReturnValue('administrator'),
     });
     (useQuery as Mock).mockReturnValue({
       data: { isSampleOrganization: false },
@@ -149,7 +149,7 @@ describe('DeleteOrg Component', () => {
 
   it('does not render delete section when SuperAdmin is false', () => {
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn().mockReturnValue(false),
+      getItem: vi.fn().mockReturnValue('member'),
     });
 
     render(<DeleteOrg />);
