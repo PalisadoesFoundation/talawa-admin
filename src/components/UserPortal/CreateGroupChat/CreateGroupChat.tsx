@@ -1,4 +1,3 @@
-/* eslint-disable custom-rules/prefer-crud-modal-template -- Custom modals with show/onHide/footer; CRUDModalTemplate uses open/onClose and does not fit this flow. */
 /**
  * Renders a modal interface for creating a new group chat.
  *
@@ -45,7 +44,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
@@ -212,15 +211,26 @@ export default function CreateGroupChat({
       resetButtonText={tErrors('resetButton')}
       onReset={chatsListRefetch}
     >
-      <BaseModal
-        show={createGroupChatModalisOpen}
-        onHide={() => {
+      <CRUDModalTemplate
+        open={createGroupChatModalisOpen}
+        onClose={() => {
           toggleCreateGroupChatModal();
           reset();
         }}
         title={t('newGroup', { defaultValue: 'New Group' })}
-        dataTestId="createGroupChatModal"
+        data-testid="createGroupChatModal"
         className={styles.modalContent}
+        customFooter={
+          <Button
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            variant="success"
+            onClick={openAddUserModal}
+            data-testid="nextBtn"
+          >
+            {t('next', { defaultValue: 'Next' })}
+          </Button>
+        }
+        showFooter={true}
       >
         <input
           type="file"
@@ -291,23 +301,15 @@ export default function CreateGroupChat({
               />
             </FormFieldGroup>
           </div>
-          <Button
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
-            variant="success"
-            onClick={openAddUserModal}
-            data-testid="nextBtn"
-          >
-            {t('next', { defaultValue: 'Next' })}
-          </Button>
         </form>
-      </BaseModal>
-      <BaseModal
-        show={addUserModalisOpen}
-        onHide={toggleAddUserModal}
+      </CRUDModalTemplate>
+      <CRUDModalTemplate
+        open={addUserModalisOpen}
+        onClose={toggleAddUserModal}
         title={t('chat', { defaultValue: 'Chat' })}
-        dataTestId="addExistingUserModal"
+        data-testid="addExistingUserModal"
         className={styles.modalContent}
-        footer={
+        customFooter={
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"
@@ -317,6 +319,7 @@ export default function CreateGroupChat({
             {t('create', { defaultValue: 'Create' })}
           </Button>
         }
+        showFooter={true}
       >
         <LoadingState
           isLoading={allUsersLoading}
@@ -451,7 +454,7 @@ export default function CreateGroupChat({
             </div>
           </>
         </LoadingState>
-      </BaseModal>
+      </CRUDModalTemplate>
     </ErrorBoundaryWrapper>
   );
 }
