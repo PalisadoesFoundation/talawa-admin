@@ -10,9 +10,11 @@
  * - Events: Shows events associated with the member.
  * - Tags: Displays tags assigned to the member.
  *
- * The component determines which member to display from the URL parameters
- * `orgId` and `userId` using `useParams`. The `userId` is passed to child
- * components that require it (e.g., `UserContactDetails` and `UserTags`).
+ * The component determines which member to display from the URL parameter
+ * `userId` (via `useParams`), falling back to the logged-in user's ID
+ * stored in localStorage (`id` or `userId` key) when the route param is absent.
+ * The resolved `userId` is passed to child components that require it
+ * (e.g., `UserContactDetails` and `UserTags`).
  *
  * The expected route format is:
  * ```
@@ -49,11 +51,17 @@ import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
 import UserTags from 'components/UserDetails/UserTags';
 import { useParams } from 'react-router-dom';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const MemberDetail: React.FC = (): JSX.Element => {
-  const { userId } = useParams<{ userId: string }>();
+  const { getItem } = useLocalStorage();
+  const storedAdminId = getItem<string>('id');
+  const storedUserId = getItem<string>('userId');
+  const { userId: paramUserId } = useParams<{ userId?: string }>();
+  const userId = paramUserId ?? (storedAdminId || storedUserId);
   const { t: tCommon } = useTranslation('common');
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
+
   if (!userId) {
     return <div>{tCommon('noUserId')}</div>;
   }
