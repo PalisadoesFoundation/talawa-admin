@@ -50,7 +50,6 @@ reviews:
   path_instructions:
     # 1) Tests — Vitest + RTL + sharded stability
     - path: '**/*.{spec,test}.{ts,tsx}'
-      severity: 'error' # Make test violations blocking
       instructions: |
         ═══════════════════════════════════════════════════════════════
         🚨 ANTI-PATTERNS TO FLAG IMMEDIATELY (Search for these first):
@@ -147,12 +146,6 @@ reviews:
           * UI animations (dropdowns, modals, transitions)
         - Consider vi.useRealTimers() in beforeEach for tests with heavy user interaction.
         - Flag any test using both fake timers AND user-event without explicit timer management.
-
-        Cleanup (MANDATORY) — SPECIFIC REQUIREMENTS:
-        - MUST use cleanup() from `@testing-library/react` in afterEach (unless global setup handles it).
-        - MUST use vi.restoreAllMocks() (NOT vi.clearAllMocks()) to restore original implementations.
-        - If test file has its own afterEach, verify it calls both cleanup() and vi.restoreAllMocks().
-        - Flag any use of vi.clearAllMocks() without vi.restoreAllMocks() as "⚠️ INCOMPLETE CLEANUP at file:line".
 
         DataTable-specific testing (CRITICAL for this codebase):
         - After finding datatable container (findByTestId('datatable')), MUST waitFor rows to populate:
@@ -303,8 +296,6 @@ reviews:
           - "🔴 NAMESPACE MISMATCH at file:line — Using 'common.required' but should be 'validation.required'"
 
           Must check all 5 locales:
-          - public/locales/en/translation.json
-          - public/locales/es/translation.json
-          - public/locales/fr/translation.json
-          - public/locales/hi/translation.json
-          - public/locales/zh/translation.json
+          - public/locales/{en,es,fr,hi,zh}/translation.json
+          - public/locales/{en,es,fr,hi,zh}/common.json
+          - public/locales/{en,es,fr,hi,zh}/errors.json
