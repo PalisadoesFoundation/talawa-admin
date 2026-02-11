@@ -392,7 +392,7 @@ describe('OrgPostCard Component', () => {
       });
     });
 
-    it('shows default image when no image attachment is provided', () => {
+    it('does not show default image when no image attachment is provided', () => {
       const postWithoutImage = {
         ...mockPost,
         attachments: [],
@@ -406,8 +406,8 @@ describe('OrgPostCard Component', () => {
         </MockedProvider>,
       );
 
-      const defaultImage = screen.getByAltText('Default image');
-      expect(defaultImage).toBeInTheDocument();
+      const defaultImage = screen.queryByAltText('Default image');
+      expect(defaultImage).not.toBeInTheDocument();
     });
 
     it('handleVideoPlay: sets playing to true and calls video.play()', async () => {

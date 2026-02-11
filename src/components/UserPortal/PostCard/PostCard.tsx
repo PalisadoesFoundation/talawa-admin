@@ -393,10 +393,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       {/* Post Media */}
       <PostMedia>
-        {props.image ||
-          (UserDefault && (
-            <img src={props.image || UserDefault} alt={props.title} />
-          ))}
+        {props.image && <img src={props.image} alt={props.title} />}
         {props.video && (
           <video controls style={{ width: '100%' }}>
             <source src={props.video} type="video/mp4" />

@@ -362,14 +362,7 @@ export default function OrgPostCard({
                 src={imageAttachment.name}
                 alt="Post image"
               />
-            ) : (
-              <Card.Img
-                variant="top"
-                src={AboutImg}
-                alt="Default image"
-                className={styles.nopostimage}
-              />
-            )}
+            ) : null}
 
             <Card.Body className={styles.cardBodyAdminPosts}>
               {isPinned && (
