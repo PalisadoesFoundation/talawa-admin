@@ -344,15 +344,13 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
-  // Using clearAllMocks() instead of restoreAllMocks() to preserve module-level mocks
-  vi.clearAllMocks();
-  // Restore original window.location to prevent cross-test bleed
+  vi.clearAllMocks(); // Preserves module-level mocks
+  // Restore original window.location
   Object.defineProperty(window, 'location', {
     configurable: true,
     writable: true,
     value: originalLocation,
   });
-  vi.resetModules();
 });
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
