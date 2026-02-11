@@ -23,7 +23,7 @@ import {
   BACKEND_WEBSOCKET_URL,
   deriveBackendWebsocketUrl,
 } from 'Constant/constant';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -55,7 +55,7 @@ const getTestExpiredToken = (): string =>
 
 // Mock external dependencies
 vi.mock(
-  'components/NotificationToast/NotificationToast',
+  'shared-components/NotificationToast/NotificationToast',
   (): { NotificationToast: InterfaceNotificationToastMock } => ({
     NotificationToast: {
       error: vi.fn(),
@@ -902,6 +902,179 @@ describe('Apollo Client Configuration', () => {
 
       expect(splitPredicate({ query: subscriptionQuery })).toBe(true);
       expect(splitPredicate({ query: otherQuery })).toBe(false);
+    });
+
+    it('should not show API unavailable toast for subscription network errors', async () => {
+      await import('./index');
+
+      const subscriptionOperation = {
+        operationName: 'SubscriptionQuery',
+        query: {
+          kind: 'Document',
+          definitions: [
+            {
+              kind: 'OperationDefinition',
+              operation: 'subscription',
+            },
+          ],
+        } as unknown as DocumentNode,
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      onErrorCallback({
+        networkError: new Error('Network Error'),
+        operation: subscriptionOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
+    it('should not show API unavailable toast for aborted network errors', async () => {
+      await import('./index');
+
+      const queryOperation = {
+        operationName: 'RegularQuery',
+        query: {
+          kind: 'Document',
+          definitions: [
+            {
+              kind: 'OperationDefinition',
+              operation: 'query',
+            },
+          ],
+        } as unknown as DocumentNode,
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      const abortError = new Error('The operation was aborted');
+      abortError.name = 'AbortError';
+
+      onErrorCallback({
+        networkError: abortError,
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
+    it('should show API unavailable toast for query network errors', async () => {
+      await import('./index');
+
+      const queryOperation = {
+        operationName: 'RegularQuery',
+        query: {
+          kind: 'Document',
+          definitions: [
+            {
+              kind: 'OperationDefinition',
+              operation: 'query',
+            },
+          ],
+        } as unknown as DocumentNode,
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      onErrorCallback({
+        networkError: new Error('Network Error'),
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'API server unavailable. Check your connection or try again later',
+        {
+          toastId: 'apiServer',
+        },
+      );
+    });
+
+    it('should not show API unavailable toast for 4xx query errors', async () => {
+      await import('./index');
+
+      const queryOperation = {
+        operationName: 'RegularQuery',
+        query: {
+          kind: 'Document',
+          definitions: [
+            {
+              kind: 'OperationDefinition',
+              operation: 'query',
+            },
+          ],
+        } as unknown as DocumentNode,
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      const badRequestError = new Error(
+        'Response not successful: Received status code 400',
+      ) as Error & { statusCode?: number };
+      badRequestError.statusCode = 400;
+
+      onErrorCallback({
+        networkError: badRequestError,
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
+    it('should show API unavailable toast for 5xx query errors', async () => {
+      await import('./index');
+
+      const queryOperation = {
+        operationName: 'RegularQuery',
+        query: {
+          kind: 'Document',
+          definitions: [
+            {
+              kind: 'OperationDefinition',
+              operation: 'query',
+            },
+          ],
+        } as unknown as DocumentNode,
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      const serverError = new Error(
+        'Response not successful: Received status code 503',
+      ) as Error & { statusCode?: number };
+      serverError.statusCode = 503;
+
+      onErrorCallback({
+        networkError: serverError,
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'API server unavailable. Check your connection or try again later',
+        {
+          toastId: 'apiServer',
+        },
+      );
     });
   });
 });

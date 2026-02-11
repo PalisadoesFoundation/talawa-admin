@@ -624,6 +624,33 @@ export const DONATE_TO_ORGANIZATION = gql`
   }
 `;
 
+export const DONATE_TO_ORGANIZATION_WITH_CURRENCY = gql`
+  mutation donateWithCurrency(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+    $currencyCode: Iso4217CurrencyCode!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+      currencyCode: $currencyCode
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
+  }
+`;
+
 // Create and Update Action Item Categories
 export {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,

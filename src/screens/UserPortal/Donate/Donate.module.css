@@ -28,9 +28,9 @@
 .dropdown:is(:hover, :active, .show, :disabled, :checked) {
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-700);
   border: var(--border-1) solid var(--color-gray-700);
   color: var(--color-gray-700);
 }
@@ -52,20 +52,34 @@
   background-color: var(--color-blue-200);
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-700);
   color: var(--color-gray-700);
 }
 
 .mainContainer50 {
-  width: 50%;
-  flex-grow: 3;
+  width: 100%;
+  flex-grow: 1;
   padding: var(--space-5);
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: var(--color-gray-50);
+}
+
+.donateSearchContainer {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: auto;
+  margin: 0 0 var(--space-5) 0;
+  padding: 0;
+}
+
+.donateSearchContainer :global(.searchBarContainer) {
+  margin: 0;
+  max-width: 100%;
 }
 
 .inputContainer {
@@ -77,9 +91,9 @@
 .box:hover {
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-700);
   transition: box-shadow 0.2s ease;
 }
 
@@ -102,6 +116,8 @@
 
 .donateBtn {
   padding-inline: var(--space-5);
+  margin-left: auto;
+  display: block;
 }
 
 /* Base container pattern */

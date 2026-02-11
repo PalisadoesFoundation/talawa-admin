@@ -16,7 +16,10 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
-import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import {
+  DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+  DONATE_TO_ORGANIZATION,
+} from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 
 const MOCK_DATE = `${DUMMY_DATE_TIME_PREFIX}00:00:00.000Z`;
@@ -230,7 +233,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -238,6 +241,7 @@ const MOCKS = [
         nameOfUser: 'name',
         amount: 100,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     result: {
@@ -350,7 +354,7 @@ const DONATION_ERROR_MOCK = [
   },
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -358,6 +362,7 @@ const DONATION_ERROR_MOCK = [
         nameOfUser: 'name',
         amount: 100,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     error: new Error('Donation failed'),
@@ -368,7 +373,7 @@ const BOUNDARY_MOCKS = [
   ...MOCKS,
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -376,6 +381,7 @@ const BOUNDARY_MOCKS = [
         nameOfUser: 'name',
         amount: 1,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     result: {
@@ -393,7 +399,7 @@ const BOUNDARY_MOCKS = [
   },
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -401,6 +407,7 @@ const BOUNDARY_MOCKS = [
         nameOfUser: 'name',
         amount: 10000000,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     result: {
@@ -453,7 +460,9 @@ describe('Donate Component', () => {
     expect(screen.getByTestId('currency-dropdown-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
     expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('organization-sidebar')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('organization-sidebar'),
+    ).not.toBeInTheDocument();
   });
 
   test('search input updates value when typed into', async () => {
@@ -634,6 +643,212 @@ describe('Donate Component', () => {
     // Wait for state update
     await waitFor(() => {
       expect(currencyButton).toHaveTextContent('INR');
+    });
+  });
+
+  test('sends selected currency to donation mutation', async () => {
+    const currencyAwareMocks = [
+      {
+        request: {
+          query: ORGANIZATION_DONATION_CONNECTION_LIST,
+          variables: {
+            orgId: '',
+          },
+        },
+        result: {
+          data: {
+            getDonationByOrgIdConnection: [],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+          variables: {
+            id: '',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '6401ff65ce8e8406b8f07af3',
+                name: 'anyOrganization2',
+                description: 'desc',
+                address: {
+                  city: 'abc',
+                  countryCode: '123',
+                  postalCode: '456',
+                  state: 'def',
+                  __typename: 'Address',
+                },
+                userRegistrationRequired: true,
+                createdAt: '12345678900',
+                creator: {
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  __typename: 'User',
+                },
+                members: [],
+                admins: [],
+                membershipRequests: [],
+                __typename: 'Organization',
+              },
+            ],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+        },
+        variableMatcher: (vars: Record<string, unknown>) =>
+          vars.currencyCode === 'INR' && vars.amount === 100,
+        result: {
+          data: {
+            createDonation: {
+              _id: 'currency-donation',
+              amount: 100,
+              nameOfUser: 'name',
+              nameOfOrg: 'anyOrganization2',
+              __typename: 'Donation',
+            },
+            __typename: 'Mutation',
+          },
+        },
+      },
+    ];
+
+    renderDonate(new StaticMockLink(currencyAwareMocks, true));
+
+    const currencyButton = await screen.findByTestId(
+      'currency-dropdown-toggle',
+    );
+    await userEvent.click(currencyButton);
+    await screen.findByTestId('currency-dropdown-menu');
+    await userEvent.click(
+      await screen.findByTestId('currency-dropdown-item-INR'),
+    );
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
+  });
+
+  test('falls back to legacy donation mutation when currency argument is unsupported', async () => {
+    const legacyFallbackMocks = [
+      {
+        request: {
+          query: ORGANIZATION_DONATION_CONNECTION_LIST,
+          variables: {
+            orgId: '',
+          },
+        },
+        result: {
+          data: {
+            getDonationByOrgIdConnection: [],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+          variables: {
+            id: '',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '6401ff65ce8e8406b8f07af3',
+                name: 'anyOrganization2',
+                description: 'desc',
+                address: {
+                  city: 'abc',
+                  countryCode: '123',
+                  postalCode: '456',
+                  state: 'def',
+                  __typename: 'Address',
+                },
+                userRegistrationRequired: true,
+                createdAt: '12345678900',
+                creator: {
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  __typename: 'User',
+                },
+                members: [],
+                admins: [],
+                membershipRequests: [],
+                __typename: 'Organization',
+              },
+            ],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+        },
+        variableMatcher: (vars: Record<string, unknown>) =>
+          vars.currencyCode === 'EUR' && vars.amount === 100,
+        error: new Error(
+          'Unknown argument "currencyCode" on field "Mutation.createDonation".',
+        ),
+      },
+      {
+        request: {
+          query: DONATE_TO_ORGANIZATION,
+          variables: {
+            userId: '123',
+            createDonationOrgId2: '',
+            payPalId: 'paypalId',
+            nameOfUser: 'name',
+            amount: 100,
+            nameOfOrg: 'anyOrganization2',
+          },
+        },
+        result: {
+          data: {
+            createDonation: {
+              _id: 'legacy-donation',
+              amount: 100,
+              nameOfUser: 'name',
+              nameOfOrg: 'anyOrganization2',
+              __typename: 'Donation',
+            },
+            __typename: 'Mutation',
+          },
+        },
+      },
+    ];
+
+    renderDonate(new StaticMockLink(legacyFallbackMocks, true));
+
+    const currencyButton = await screen.findByTestId(
+      'currency-dropdown-toggle',
+    );
+    await userEvent.click(currencyButton);
+    await screen.findByTestId('currency-dropdown-menu');
+    await userEvent.click(
+      await screen.findByTestId('currency-dropdown-item-EUR'),
+    );
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
     });
   });
 
