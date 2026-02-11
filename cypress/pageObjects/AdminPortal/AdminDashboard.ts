@@ -29,7 +29,7 @@ export class AdminDashboardPage {
       // Check that either org cards or empty state are present (page loaded)
       const hasOrgCards = $body.find(this._orgcardContainer).length > 0;
       const hasEmptyState = $body.find(emptyStateSelector).length > 0;
-      expect(hasOrgCards || hasEmptyState).to.be.true;
+      expect(hasOrgCards || hasEmptyState).to.equal(true);
     });
     return this;
   }
