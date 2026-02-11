@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import EditUserTagModal, {
   InterfaceEditUserTagModalProps,
@@ -46,6 +46,7 @@ describe('EditUserTagModal Component', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -151,6 +152,7 @@ describe('EditUserTagModal Component', () => {
   it('renders a visual required indicator', () => {
     render(<EditUserTagModal {...defaultProps} />);
     const label = screen.getByText(/tagName/i).closest('label');
+    expect(label).toBeInTheDocument();
     expect(label).toHaveTextContent('*'); // checks that "*" is rendered
   });
 
