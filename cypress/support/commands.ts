@@ -201,10 +201,9 @@ const resolveAuthSession = (
   auth?: AuthOptions,
 ): Cypress.Chainable<AuthSession> => {
   if (auth?.token) {
-    return cy.wrap(
-      { token: auth.token, userId: auth.userId } as AuthSession,
-      { log: false },
-    );
+    return cy.wrap({ token: auth.token, userId: auth.userId } as AuthSession, {
+      log: false,
+    });
   }
   // resolveAuthSession defaults role to 'admin' unless auth.role overrides it.
   const role = auth?.role ?? 'admin';
@@ -702,11 +701,7 @@ Cypress.Commands.add(
       };
 
       return ensureUser().then(
-        (userResult: {
-          userId: string;
-          email?: string;
-          password?: string;
-        }) => {
+        (userResult: { userId: string; email?: string; password?: string }) => {
           const { userId, email, password } = userResult;
           if (!userId) {
             throw new Error('seedTestData(volunteers) missing userId.');
@@ -736,7 +731,10 @@ Cypress.Commands.add(
           };
           const volunteerAuth =
             (volunteerPayload.auth?.role ?? 'admin') === 'admin'
-              ? { ...(volunteerPayload.auth ?? {}), role: 'superAdmin' as const }
+              ? {
+                  ...(volunteerPayload.auth ?? {}),
+                  role: 'superAdmin' as const,
+                }
               : volunteerPayload.auth;
 
           return resolveAuthToken(volunteerAuth).then((token) => {
@@ -750,9 +748,9 @@ Cypress.Commands.add(
   },
 );
 
-  Cypress.Commands.add(
-    'cleanupTestOrganization',
-    (orgId: string, options: CleanupTestOrganizationOptions = {}) => {
+Cypress.Commands.add(
+  'cleanupTestOrganization',
+  (orgId: string, options: CleanupTestOrganizationOptions = {}) => {
     return resolveAuthToken(options.auth).then((token) => {
       const apiUrl = options.auth?.apiUrl;
       return cy
