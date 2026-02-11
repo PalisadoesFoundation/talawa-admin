@@ -854,7 +854,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
       await new Promise((resolve) => setTimeout(resolve, 350));
     });
 
-    // After search, pagination should still be present
     const paginationAfterSearch = screen.getByTestId('table-pagination');
     expect(paginationAfterSearch).toBeInTheDocument();
   });
