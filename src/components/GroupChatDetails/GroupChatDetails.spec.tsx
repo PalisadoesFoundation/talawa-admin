@@ -172,6 +172,59 @@ describe('GroupChatDetails', () => {
     fireEvent.click(closeButton);
   });
 
+  it('should have descriptive alt text for group chat avatar', () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    const avatarImage = screen.getByRole('img');
+    expect(avatarImage).toBeInTheDocument();
+    expect(avatarImage).toHaveAttribute(
+      'alt',
+      'Group chat avatar for Test Group',
+    );
+  });
+
+  it('should have fallback alt text when chat name is empty', () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const chatWithoutName = {
+      ...filledMockChat,
+      name: '',
+    };
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(chatWithoutName)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    const avatarImage = screen.getByRole('img');
+    expect(avatarImage).toBeInTheDocument();
+    expect(avatarImage).toHaveAttribute(
+      'alt',
+      'Group chat avatar for this group',
+    );
+  });
+
   it('cancelling editing chat title', async () => {
     useLocalStorage().setItem('userId', '2');
 

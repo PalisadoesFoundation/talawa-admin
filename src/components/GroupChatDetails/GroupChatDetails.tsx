@@ -307,7 +307,11 @@ export default function groupChatDetails({
           />
           <div className={styles.groupInfo}>
             {chat?.avatarURL ? (
-              <img className={styles.chatImage} src={chat?.avatarURL} alt="" />
+              <img
+                className={styles.chatImage}
+                src={chat?.avatarURL}
+                alt={`Group chat avatar for ${chat?.name?.trim() || 'this group'}`}
+              />
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
             )}
