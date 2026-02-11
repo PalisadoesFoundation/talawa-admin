@@ -230,7 +230,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 {expandedY === expandKey && renderedEvents}
               </div>
               {eventsForDate.length > 0 ? (
-                <button
+                <Button
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`expand-btn-${expandKey}`}
@@ -243,9 +243,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   ) : (
                     <div className={styles.circularButton}></div>
                   )}
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`no-events-btn-${expandKey}`}
@@ -261,7 +261,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   ) : (
                     <div className={styles.circularButton}></div>
                   )}
-                </button>
+                </Button>
               )}
             </div>
           </div>

@@ -316,13 +316,13 @@ const Calendar: React.FC<
                 )}
               </div>
               {Array.isArray(allDayEventsList) && shouldShowViewMore && (
-                <button
+                <Button
                   className={styles.btn__more}
                   onClick={handleExpandClick}
                   data-testid="view-more-button"
                 >
                   {expanded === -100 ? t('viewLess') : t('viewAll')}
-                </button>
+                </Button>
               )}
             </div>
           </div>
