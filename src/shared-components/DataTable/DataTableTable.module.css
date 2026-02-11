@@ -24,6 +24,12 @@
   background: var(--color-blue-100);
 }
 
+.sortable:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
 .headerInner {
   display: inline-flex;
   align-items: center;
