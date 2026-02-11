@@ -144,28 +144,28 @@ const pledgeProps: InterfacePledgeModal[] = [
 
 // Shared user details mock for reuse across tests
 const USER_DETAILS_MOCK = {
-    request: {
-      query: USER_DETAILS,
-      variables: {
+  request: {
+    query: USER_DETAILS,
+    variables: {
       input: { id: 'userId' },
-      },
     },
-    result: {
-      data: {
-        user: {
+  },
+  result: {
+    data: {
+      user: {
         id: 'userId',
         name: 'Harve Lance',
         emailAddress: 'harve@example.com',
         avatarURL: null,
-            birthDate: null,
+        birthDate: null,
         city: null,
         countryCode: null,
         createdAt: dayjs().toISOString(),
         updatedAt: dayjs().toISOString(),
-            educationGrade: null,
-            employmentStatus: null,
+        educationGrade: null,
+        employmentStatus: null,
         isEmailAddressVerified: false,
-            maritalStatus: null,
+        maritalStatus: null,
         natalSex: null,
         naturalLanguageCode: 'en',
         postalCode: null,
@@ -178,7 +178,7 @@ const USER_DETAILS_MOCK = {
         workPhoneNumber: null,
         organizationsWhereMember: { edges: [] },
         createdOrganizations: [],
-            __typename: 'User',
+        __typename: 'User',
       },
     },
   },
@@ -186,14 +186,14 @@ const USER_DETAILS_MOCK = {
 
 // Admin user details mock for tests that need autocomplete visible
 const USER_DETAILS_ADMIN_MOCK = {
-    request: {
+  request: {
     query: USER_DETAILS,
-      variables: {
+    variables: {
       input: { id: 'userId' },
-      },
     },
-    result: {
-      data: {
+  },
+  result: {
+    data: {
       user: {
         ...USER_DETAILS_MOCK.result.data.user,
         role: 'admin',
@@ -214,7 +214,7 @@ const BASE_PLEDGE_MODAL_ADMIN_MOCKS = [USER_DETAILS_ADMIN_MOCK];
  * @returns A MockedResponse suitable for MockedProvider.
  */
 const createUpdatePledgeMock = (
-      variables: {
+  variables: {
     id: string;
     amount?: number;
     currency?: string;
@@ -230,8 +230,8 @@ const createUpdatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to update pledge') }
     : {
-    result: {
-      data: {
+        result: {
+          data: {
             updateFundraisingCampaignPledge: {
               _id: variables.id,
             },
@@ -277,10 +277,10 @@ const createCreatePledgeMock = (
               pledger: {
                 id: variables.pledgerId,
                 name: 'Pledger Name',
+              },
+            },
+          },
         },
-      },
-    },
-  },
       }),
 });
 
@@ -532,7 +532,7 @@ describe('PledgeModal', () => {
     // NEW: Test for non-numeric input validation
     it('should not update pledgeAmount when input value is non-numeric', async () => {
       await act(async () => {
-    renderPledgeModal(link1, pledgeProps[1]);
+        renderPledgeModal(link1, pledgeProps[1]);
       });
       const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
       expect(amountInput).toHaveAttribute('value', '100');
@@ -881,7 +881,7 @@ describe('PledgeModal', () => {
 
     it('should maintain form state when modal stays open after validation', async () => {
       await act(async () => {
-    renderPledgeModal(link1, pledgeProps[0]);
+        renderPledgeModal(link1, pledgeProps[0]);
       });
 
       const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
@@ -1010,8 +1010,8 @@ describe('PledgeModal', () => {
       const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
-    await waitFor(
-      () => {
+      await waitFor(
+        () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeCreated,
             expect.any(Object),
@@ -1175,9 +1175,9 @@ describe('PledgeModal', () => {
         () => {
           const options = screen.queryAllByRole('option');
           expect(options.length).toBeGreaterThan(0);
-      },
-      { timeout: 2000 },
-    );
+        },
+        { timeout: 2000 },
+      );
 
       // Try to select an option if available
       const options = screen.getAllByRole('option');
