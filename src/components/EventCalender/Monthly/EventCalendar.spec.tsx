@@ -452,7 +452,7 @@ describe('Calendar', () => {
 
     // Simulate clicking "View Less" to collapse the list
     await userEvent.click(viewLessButtons[0]);
-    const viewAllButtons = screen.getAllByText('View All');
+    const viewAllButtons = screen.getAllByText('View all');
     expect(viewAllButtons.length).toBeGreaterThan(0);
 
     // Reset the window size to avoid side effects for other tests
@@ -978,7 +978,7 @@ describe('Calendar', () => {
       // Check that "View All" button exists, indicating multiple events are available
       const viewAllButton = screen.queryByTestId('more');
       expect(viewAllButton).toBeInTheDocument();
-      expect(viewAllButton).toHaveTextContent('View All');
+      expect(viewAllButton).toHaveTextContent('View all');
     });
 
     it('should filter events for regular users who are organization members', async () => {
@@ -1641,7 +1641,7 @@ describe('Calendar', () => {
       // 1. Events are processed (day has events class)
       // 2. Multiple events are available (View All button exists)
       // 3. The filtering allows both public and private events for org members
-      expect(viewAllButton).toHaveTextContent('View All');
+      expect(viewAllButton).toHaveTextContent('View all');
     });
     it('should show invite-only events only to creator and admins', async () => {
       const today = dayjs();
@@ -1904,7 +1904,7 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      const viewAllBtn = await screen.findByText('View All');
+      const viewAllBtn = await screen.findByText('View all');
       expect(viewAllBtn).toBeInTheDocument();
 
       await userEvent.click(viewAllBtn);
@@ -1912,7 +1912,7 @@ describe('Calendar', () => {
       expect(viewLessBtn).toBeInTheDocument();
 
       await userEvent.click(viewLessBtn);
-      const viewAllBtnAgain = await screen.findByText('View All');
+      const viewAllBtnAgain = await screen.findByText('View all');
       expect(viewAllBtnAgain).toBeInTheDocument();
     });
 
