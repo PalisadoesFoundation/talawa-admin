@@ -1,19 +1,22 @@
+# Rootless compose requires UID/GID exported for USER_UID/USER_GID mapping.
+# Local setup example:
+#   export UID="$(id -u)"
+#   export GID="$(id -g)"
+# CI already exports these values.
 services:
   app:
     build:
       context: ..
-      dockerfile: docker/Dockerfile.dev
+      dockerfile: docker/Dockerfile.rootless.dev
       args:
         PNPM_VERSION: '${PNPM_VERSION:-10.4.1}'
+        USER_UID: '${UID:-1000}'
+        USER_GID: '${GID:-1000}'
     ports:
       - '${PORT:-4321}:${PORT:-4321}'
     env_file:
       - ../.env
-    #environment:
-    #  - REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL}
-    #  - PORT=${PORT}
-    #  - REACT_APP_USE_RECAPTCHA=${REACT_APP_USE_RECAPTCHA}
-    #  - REACT_APP_RECAPTCHA_SITE_KEY=${REACT_APP_RECAPTCHA_SITE_KEY}
+    user: '${UID:-1000}:${GID:-1000}'
     volumes:
       - ..:/usr/src/app
       - /usr/src/app/node_modules
