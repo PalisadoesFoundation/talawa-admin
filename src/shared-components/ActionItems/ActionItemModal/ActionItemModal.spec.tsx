@@ -1,5 +1,11 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type {
   IItemModalProps,
@@ -38,6 +44,8 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
   vi.clearAllMocks();
 });
 
@@ -958,28 +966,34 @@ describe('ActionItemModal', () => {
     it('should handle volunteer autocomplete selection (covers line 573)', async () => {
       const user = userEvent.setup();
       renderModal();
+
       await screen.findByTestId('actionItemModal');
 
-      // Select volunteer - triggers isOptionEqualToValue
-      const volunteerSelect = screen.getByTestId('volunteerSelect');
+      // wait until volunteerSelect exists AND volunteers query finished
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+
+      await waitFor(() => {
+        expect(volunteerSelect).toBeInTheDocument();
+      });
+
       const volunteerInput = within(volunteerSelect).getByRole(
         'combobox',
       ) as HTMLInputElement;
-      volunteerInput.focus();
-      await user.click(volunteerInput);
-      await user.type(volunteerInput, 'John');
-      const volunteerOption = await screen.findByText('John Doe', undefined, {
-        timeout: 3000,
-      });
-      await user.click(volunteerOption);
 
-      // Verify selection
-      await waitFor(
-        () => {
-          expect(volunteerInput.value).toBe('John Doe');
-        },
-        { timeout: 3000 },
-      );
+      // open dropdown AFTER data is ready
+      await user.click(volunteerInput);
+
+      // type to filter
+      await user.type(volunteerInput, 'John');
+
+      // wait for option text to appear anywhere in DOM (portal-safe)
+      const option = await screen.findByText('John Doe', {}, { timeout: 5000 });
+
+      await user.click(option);
+
+      await waitFor(() => {
+        expect(volunteerInput).toHaveValue('John Doe');
+      });
     });
 
     it('should handle volunteer group autocomplete (covers line 634)', async () => {
@@ -1027,24 +1041,20 @@ describe('ActionItemModal', () => {
     it('should update preCompletionNotes field (covers line 705)', async () => {
       const user = userEvent.setup();
       renderModal();
+
       await screen.findByTestId('actionItemModal');
 
-      const notesInput = (await screen.findByLabelText(
-        'preCompletionNotes',
-      )) as HTMLInputElement;
+      const notesInput = await screen.findByLabelText('preCompletionNotes');
 
-      // Click to focus first; user.type() alone can send keystrokes to the category
-      // autocomplete when it retains focus on modal open, so we use click + keyboard.
-      await user.click(notesInput);
-      await user.keyboard('T');
+      // ensure no stale value
+      await user.clear(notesInput);
 
-      // Wait for the value to be updated - verify onChange was triggered
-      await waitFor(
-        () => {
-          expect(notesInput.value).toBe('T');
-        },
-        { timeout: 3000 },
-      );
+      // type directly into the element (not keyboard())
+      await user.type(notesInput, 'T');
+
+      await waitFor(() => {
+        expect(notesInput).toHaveValue('T');
+      });
     });
 
     it('should update postCompletionNotes field for completed items (covers line 717)', async () => {
