@@ -36,7 +36,7 @@ function DeleteOrg(): JSX.Element {
 
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
-  const canDelete = getItem('SuperAdmin') || true;
+  const canDelete = Boolean(getItem('SuperAdmin'));
 
   // GraphQL mutations for deleting organizations
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
@@ -47,7 +47,7 @@ function DeleteOrg(): JSX.Element {
    */
   const deleteOrg = async (): Promise<void> => {
     try {
-      await del({ variables: { input: { id: currentUrl || '' } } });
+      await del({ variables: { input: { id: currentUrl } } });
       NotificationToast.success(t('successfullyDeletedOrganization') as string);
       navigate('/admin/orglist');
     } catch (error) {
@@ -67,6 +67,7 @@ function DeleteOrg(): JSX.Element {
             <Button
               variant="danger"
               className={styles.deleteButton}
+              disabled={!currentUrl}
               onClick={toggle}
               data-testid="openDeleteModalBtn"
             >
