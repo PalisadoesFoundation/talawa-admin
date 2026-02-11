@@ -401,8 +401,11 @@ describe('GroupChatDetails', () => {
     });
 
     await waitFor(
-      async () => {
-        expect(await screen.findByTestId('user')).toBeInTheDocument();
+      () => {
+        const rows = document.querySelectorAll(
+          '[data-testid^="datatable-row-"]',
+        );
+        expect(rows.length).toBeGreaterThan(0);
       },
       { timeout: 5000 },
     );
@@ -1331,8 +1334,11 @@ describe('GroupChatDetails', () => {
     });
 
     await waitFor(
-      async () => {
-        expect(await screen.findByTestId('user')).toBeInTheDocument();
+      () => {
+        const rows = document.querySelectorAll(
+          '[data-testid^="datatable-row-"]',
+        );
+        expect(rows.length).toBeGreaterThan(0);
       },
       { timeout: 5000 },
     );

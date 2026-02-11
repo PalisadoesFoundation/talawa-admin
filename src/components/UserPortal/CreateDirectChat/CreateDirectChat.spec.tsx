@@ -224,8 +224,13 @@ describe('CreateDirectChatModal', () => {
     const user = userEvent.setup();
     renderComponent();
 
-    const userRows = await screen.findAllByTestId('user');
-    expect(userRows.length).toBe(2);
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBe(2);
+    });
+    const userRows = document.querySelectorAll(
+      '[data-testid^="datatable-row-"]',
+    );
     expect(userRows[0]).toHaveTextContent('Test User 2');
     expect(userRows[1]).toHaveTextContent('Test User 3');
     expect(screen.queryByText('Current User')).not.toBeInTheDocument();
@@ -243,7 +248,10 @@ describe('CreateDirectChatModal', () => {
     const user = userEvent.setup();
     renderComponent();
 
-    await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBe(2);
+    });
 
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
@@ -252,7 +260,9 @@ describe('CreateDirectChatModal', () => {
     await user.click(searchButton);
 
     await waitFor(() => {
-      const userRows = screen.getAllByTestId('user');
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });
@@ -263,7 +273,10 @@ describe('CreateDirectChatModal', () => {
     const user = userEvent.setup();
     renderComponent();
 
-    await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBe(2);
+    });
 
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
@@ -272,7 +285,9 @@ describe('CreateDirectChatModal', () => {
     await user.click(searchButton);
 
     await waitFor(() => {
-      const userRows = screen.getAllByTestId('user');
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });
@@ -287,7 +302,13 @@ describe('CreateDirectChatModal', () => {
   test('shows member fallback when role is missing', async () => {
     renderComponent();
 
-    const userRows = await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBe(2);
+    });
+    const userRows = document.querySelectorAll(
+      '[data-testid^="datatable-row-"]',
+    );
     const lastRow = userRows[userRows.length - 1];
 
     expect(lastRow).toHaveTextContent('Test User 3');
@@ -324,7 +345,13 @@ describe('CreateDirectChatModal', () => {
 
     renderComponent({ chats: existingChats });
 
-    const userRows = await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBeGreaterThanOrEqual(1);
+    });
+    const userRows = document.querySelectorAll(
+      '[data-testid^="datatable-row-"]',
+    );
     expect(userRows[0]).toHaveTextContent('Test User 2');
 
     const addButtons = await screen.findAllByTestId('addBtn');
