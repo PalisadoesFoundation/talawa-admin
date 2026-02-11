@@ -2720,6 +2720,7 @@ textarea.form-control-lg {
 
 .form-check-input {
   --bs-form-check-bg: var(--form-check-input-bg);
+
   width: var(--space-5);
   height: var(--space-5);
   margin-top: var(--space-4);

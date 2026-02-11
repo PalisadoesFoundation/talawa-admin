@@ -14,12 +14,21 @@ import {
 } from 'GraphQl/Mutations/mutations';
 
 // Mock dependencies
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
-  }),
-}));
+vi.mock('react-i18next', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-i18next')>('react-i18next');
+
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      tCommon: (key: string) => key,
+      i18n: {
+        changeLanguage: () => Promise.resolve(),
+      },
+    }),
+  };
+});
 
 vi.mock('react-router', () => ({
   useParams: vi.fn(),
@@ -134,24 +143,17 @@ describe('DeleteOrg Component', () => {
     deleteOrgMutationMock.mockResolvedValue({});
 
     render(<DeleteOrg />);
-    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
-
-    await waitFor(() => {
-      expect(deleteOrgMutationMock).toHaveBeenCalledWith({
-        variables: { input: { id: '' } },
-      });
-    });
+    const btn = screen.getByTestId('openDeleteModalBtn');
+    expect(btn).toBeDisabled();
   });
 
-  it('renders delete button even when SuperAdmin is false', () => {
+  it('does not render delete section when SuperAdmin is false', () => {
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn().mockReturnValue(false),
     });
 
     render(<DeleteOrg />);
-    // Should still render because of || true fallback
-    expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
+    expect(screen.queryByTestId('openDeleteModalBtn')).not.toBeInTheDocument();
   });
 
   it('handles query loading state', () => {

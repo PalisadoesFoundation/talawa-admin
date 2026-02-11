@@ -1,8 +1,5 @@
-:root {
-  --color-black-rgb: 0, 0, 0;
-}
-
 .DeleteOrgCard {
+  --color-black-rgb: 0, 0, 0;
   border-radius: var(--space-3);
   box-shadow: 0 var(--space-1) var(--space-2)
     rgba(var(--color-black-rgb), 0.075);

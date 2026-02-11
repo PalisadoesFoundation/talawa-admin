@@ -69,7 +69,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
   const [userRegistrationRequiredChecked, setuserRegistrationRequiredChecked] =
     React.useState(false);
-  const [visiblechecked, setVisibleChecked] = React.useState(false);
 
   const [updateOrganization] = useMutation<
     { updateOrganization: { organization: InterfaceOrganization } },
@@ -116,7 +115,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       setuserRegistrationRequiredChecked(
         data.organization.isUserRegistrationRequired ?? false,
       );
-      setVisibleChecked(data.organization.isVisibleInSearch ?? false);
     }
     return () => {
       isMounted = false;
@@ -164,7 +162,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         countryCode: formState.address?.countryCode,
         ...(formState.avatar ? { avatar: formState.avatar } : {}),
         isUserRegistrationRequired: userRegistrationRequiredChecked,
-        isVisibleInSearch: visiblechecked,
       };
 
       // Filter out empty fields
@@ -290,18 +287,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                     !userRegistrationRequiredChecked,
                   )
                 }
-                inline
-              />
-            </Col>
-            <Col sm={6} className="d-flex align-items-center">
-              <FormCheckField
-                name="isVisibleInSearch"
-                id="isVisibleInSearch"
-                label={`${t('isVisibleInSearch')}`}
-                type="checkbox"
-                data-testid="visibility-switch"
-                checked={visiblechecked}
-                onChange={() => setVisibleChecked(!visiblechecked)}
                 inline
               />
             </Col>

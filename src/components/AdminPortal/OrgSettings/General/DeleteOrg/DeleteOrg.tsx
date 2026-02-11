@@ -4,7 +4,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './DeleteOrg.module.css';
