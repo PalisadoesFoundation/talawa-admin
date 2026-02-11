@@ -15,6 +15,7 @@ describe('reCAPTCHA', () => {
   let recaptchaModule: RecaptchaModule;
   let grecaptchaMock: MockGrecaptcha;
   let mockScript: HTMLScriptElement;
+  let originalGrecaptcha: unknown;
 
   const triggerLoad = () => mockScript.onload?.(new Event('load'));
 
@@ -28,10 +29,8 @@ describe('reCAPTCHA', () => {
       execute: vi.fn(),
     };
 
-    Object.defineProperty(globalThis, 'window', {
-      value: { grecaptcha: grecaptchaMock },
-      writable: true,
-    });
+    originalGrecaptcha = (window as { grecaptcha?: unknown }).grecaptcha;
+    (window as { grecaptcha?: MockGrecaptcha }).grecaptcha = grecaptchaMock;
 
     mockScript = {
       src: '',

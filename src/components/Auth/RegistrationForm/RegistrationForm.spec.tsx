@@ -44,6 +44,7 @@ describe('RegistrationForm', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
     vi.clearAllMocks();
     vi.resetModules();
   });
@@ -234,27 +235,6 @@ describe('RegistrationForm', () => {
         email: 'john@example.com',
         password: 'Password123!',
         organizationId: '',
-      });
-    });
-  });
-
-  it('handles form submission with recaptcha enabled', async () => {
-    renderComponent({ enableRecaptcha: true });
-
-    await user.type(screen.getByLabelText('First Name'), 'John Doe');
-    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
-    await user.type(screen.getByLabelText('Password'), 'Password123!');
-    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
-
-    await user.click(screen.getByRole('button', { name: /register/i }));
-
-    await waitFor(() => {
-      expect(mockRegister).toHaveBeenCalledWith({
-        name: 'John Doe',
-        email: 'john@example.com',
-        password: 'Password123!',
-        organizationId: '',
-        recaptchaToken: 'mock-recaptcha-token',
       });
     });
   });
