@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the User Campaigns screen.
+ *
+ * Covers campaign listing, sorting, pagination, fund-selection dropdown,
+ * empty/error states, and pledge modal interactions.
+ */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import {
@@ -55,6 +61,12 @@ const cTranslations = JSON.parse(
   ),
 );
 
+/**
+ * Renders the Campaigns component with the given Apollo link.
+ *
+ * @param link - The Apollo link providing mocked GraphQL responses.
+ * @returns The render result for querying and assertions.
+ */
 const renderCampaigns = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>

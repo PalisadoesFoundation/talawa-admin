@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the EventManagement screen.
+ *
+ * Covers tab navigation, event dashboard rendering, and agenda/action-items
+ * display with mocked GraphQL responses and fixed UTC timestamps.
+ */
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
@@ -75,6 +81,11 @@ MOCKS_WITH_FIXED_TIME[0].result.data.event.updater = {
 
 let mockWithTime: StaticMockLink;
 
+/**
+ * Renders the EventManagement component inside required providers.
+ *
+ * @returns The render result for querying and assertions.
+ */
 const renderEventManagement = (): RenderResult => {
   return render(
     <MockedProvider link={mockWithTime} mocks={MOCKS_WITH_FIXED_TIME}>

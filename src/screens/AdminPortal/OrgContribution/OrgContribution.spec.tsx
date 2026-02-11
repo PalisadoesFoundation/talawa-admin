@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the OrgContribution screen.
+ *
+ * Validates rendering of contribution data, search filtering by
+ * organisation name and transaction ID, and empty-state handling.
+ */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { cleanup, render, screen } from '@testing-library/react';
@@ -16,12 +22,22 @@ beforeEach(() => {
   link = new StaticMockLink([], true);
 });
 
+/**
+ * Waits for the given number of milliseconds.
+ *
+ * @param ms - Delay in milliseconds (default 100).
+ */
 async function wait(ms = 100): Promise<void> {
   await new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
+/**
+ * Renders the OrgContribution component inside required providers.
+ *
+ * @returns The render result for querying and assertions.
+ */
 const renderComponent = () => {
   return render(
     <MockedProvider link={link}>

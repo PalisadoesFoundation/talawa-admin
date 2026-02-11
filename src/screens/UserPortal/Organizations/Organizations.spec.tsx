@@ -1,3 +1,9 @@
+/**
+ * Unit tests for the Organizations screen (User Portal).
+ *
+ * Covers organisation listing, search, join/leave flows,
+ * email verification banner, pagination, and error states.
+ */
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
@@ -158,6 +164,12 @@ const baseOrgFields = {
   },
 };
 
+/**
+ * Creates a mock organisation object with optional field overrides.
+ *
+ * @param overrides - Fields to merge over the base organisation template.
+ * @returns A plain organisation object for GraphQL mock responses.
+ */
 const makeOrg = (overrides: Record<string, unknown> = {}) => ({
   __typename: 'Organization',
   ...baseOrgFields,
@@ -167,6 +179,12 @@ const makeOrg = (overrides: Record<string, unknown> = {}) => ({
   ...overrides,
 });
 
+/**
+ * Creates a mock organisation that the test user has already joined.
+ *
+ * @param overrides - Fields to merge over the joined-org template.
+ * @returns A plain organisation object with isMember set to true.
+ */
 const makeCreatedOrg = (overrides: Record<string, unknown> = {}) => ({
   ...makeOrg({
     avatarMimeType: 'image/png',
@@ -205,14 +223,14 @@ const baseUserFields = {
 };
 
 const CURRENT_USER_VERIFIED_MOCK = {
-  request: {
+    request: {
     query: CURRENT_USER,
     variables: {},
-  },
-  result: {
-    data: {
+    },
+    result: {
+      data: {
       currentUser: {
-        __typename: 'User',
+                    __typename: 'User',
         ...baseUserFields,
         isEmailAddressVerified: true,
       },
@@ -237,12 +255,12 @@ const CURRENT_USER_UNVERIFIED_MOCK = {
 };
 
 const RESEND_SUCCESS_MOCK = {
-  request: {
+    request: {
     query: RESEND_VERIFICATION_EMAIL_MUTATION,
     variables: {},
-  },
-  result: {
-    data: {
+    },
+    result: {
+      data: {
       sendVerificationEmail: {
         __typename: 'ResendVerificationEmailPayload',
         success: true,
@@ -269,11 +287,11 @@ const RESEND_FAILURE_MOCK = {
 };
 
 const COMMUNITY_TIMEOUT_MOCK = {
-  request: {
+    request: {
     query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
-  },
-  result: {
-    data: {
+    },
+    result: {
+      data: {
       community: {
         inactivityTimeoutDuration: 1800,
       },
@@ -282,28 +300,28 @@ const COMMUNITY_TIMEOUT_MOCK = {
 };
 
 const ORGANIZATION_FILTER_LIST_MOCK = {
-  request: {
-    query: ORGANIZATION_FILTER_LIST,
-    variables: {
+    request: {
+      query: ORGANIZATION_FILTER_LIST,
+      variables: {
       filter: '',
+      },
     },
-  },
-  result: {
-    data: {
-      organizations: [
+    result: {
+      data: {
+        organizations: [
         makeOrg({
           id: '6401ff65ce8e8406b8f07af2',
           name: 'anyOrganization1',
           isMember: true,
         }),
         makeOrg({
-          id: '6401ff65ce8e8406b8f07af3',
-          name: 'anyOrganization2',
+            id: '6401ff65ce8e8406b8f07af3',
+            name: 'anyOrganization2',
           isMember: true,
         }),
-      ],
+        ],
+      },
     },
-  },
 };
 
 const MOCKS = [
@@ -323,14 +341,14 @@ const MOCKS = [
           id: TEST_USER_ID,
           createdOrganizations: [
             makeCreatedOrg({
-              id: '6401ff65ce8e8406b8f07af2',
-              name: 'anyOrganization1',
+                  id: '6401ff65ce8e8406b8f07af2',
+                  name: 'anyOrganization1',
             }),
-          ],
+            ],
+          },
         },
       },
     },
-  },
   ORGANIZATION_FILTER_LIST_MOCK,
   {
     request: {
@@ -430,9 +448,9 @@ const EMPTY_MOCKS = [
           id: TEST_USER_ID,
           createdOrganizations: [],
         },
+          },
+        },
       },
-    },
-  },
 ];
 
 const ERROR_MOCKS = [
@@ -450,6 +468,11 @@ let link: StaticMockLink;
 let emptyLink: StaticMockLink;
 let errorLink: StaticMockLink;
 
+/**
+ * Waits for the given number of milliseconds inside an act() wrapper.
+ *
+ * @param ms - Delay in milliseconds (default 100).
+ */
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -906,12 +929,12 @@ test('should handle null user data in joined organizations', async () => {
   const nullUserMocks = [
     COMMUNITY_TIMEOUT_MOCK,
     {
-      request: {
+    request: {
         query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
-      },
-      result: {
-        data: {
+    },
+    result: {
+      data: {
           organizations: [
             makeOrg({
               id: 'org1',
@@ -1325,17 +1348,17 @@ describe('Email Verification Warning', () => {
   });
 
   test('should display email verification warning when user is not verified', async () => {
-    render(
+  render(
       <MockedProvider link={emailLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
 
     await waitFor(() => {
       expect(
@@ -1359,19 +1382,19 @@ describe('Email Verification Warning', () => {
       true,
     );
 
-    render(
+  render(
       <MockedProvider link={verifiedLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
 
-    await waitFor(() => {
+  await waitFor(() => {
       expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
     });
     expect(
@@ -1380,28 +1403,28 @@ describe('Email Verification Warning', () => {
   });
 
   test('should handle resend verification success', async () => {
-    render(
+  render(
       <MockedProvider link={emailLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
 
-    await waitFor(() => {
+  await waitFor(() => {
       expect(
         screen.getByTestId('email-verification-warning'),
       ).toBeInTheDocument();
-    });
+  });
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
     await userEvent.click(resendBtn);
 
-    await waitFor(() => {
+  await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith(
         'Verification email has been resent successfully.',
       );
@@ -1448,19 +1471,19 @@ describe('Email Verification Warning', () => {
   });
 
   test('should dismiss email verification warning', async () => {
-    render(
+  render(
       <MockedProvider link={emailLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Organizations />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
 
-    await waitFor(() => {
+  await waitFor(() => {
       expect(
         screen.getByTestId('email-verification-warning'),
       ).toBeInTheDocument();
