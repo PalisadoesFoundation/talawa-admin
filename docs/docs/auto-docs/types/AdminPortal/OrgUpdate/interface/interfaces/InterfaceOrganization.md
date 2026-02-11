@@ -90,16 +90,6 @@ Whether user registration requires approval, or null if not configured.
 
 ***
 
-### isVisibleInSearch
-
-> **isVisibleInSearch**: `boolean`
-
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L36)
-
-Whether the organization is visible in search results.
-
-***
-
 ### name
 
 > **name**: `string`
