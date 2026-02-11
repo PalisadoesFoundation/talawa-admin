@@ -2440,7 +2440,21 @@
     "holidays": "Días festivos",
     "events": "Eventos",
     "eventsCreatedByOrganization": "Eventos creados por la organización",
-    "today": "Hoy"
+    "today": "Hoy",
+    "viewLess": "Ver menos",
+    "viewAll": "Ver todo",
+    "noHolidaysAvailable": "No hay días festivos disponibles",
+    "holidayNames": {
+      "mayDayLabourDay": "Día del Trabajo",
+      "mothersDay": "Día de la Madre",
+      "fathersDay": "Día del Padre",
+      "independenceDayUS": "Día de la Independencia (EE.UU.)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Día del Recuerdo / Día de los Veteranos",
+      "christmasDay": "Día de Navidad"
+    }
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"
