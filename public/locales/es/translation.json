@@ -568,7 +568,8 @@
     "tagActions": "Acciones de etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
     "addMember": "Agregar miembro",
-    "removeMember": "Eliminar miembro"
+    "removeMember": "Eliminar miembro",
+    "invalidTagName": "Nombre de etiqueta no válido"
   },
   "userListCard": {
     "joined": "Unido",
@@ -778,6 +779,8 @@
     "noCategory": "Sin categoría",
     "organizationRequired": "La organización es obligatoria",
     "folder": "Carpeta de la agenda",
+    "notes": "Notas",
+    "enterNotes": "Introducir nota",
     "agendaFolderDetails": "Detalles de la sección de la agenda",
     "agendaFolderCreated": "Sección de la agenda creada exitosamente",
     "attachmentPreviewAlt": "Vista previa del archivo adjunto",
@@ -1254,15 +1257,6 @@
     "displayImage": "Mostrar imagen",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "Contraseña anterior",
-    "newPassword": "Nueva contraseña",
-    "confirmNewPassword": "Confirmar nueva contraseña",
-    "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar",
-    "passCantBeEmpty": "La contraseña no puede estar vacía",
-    "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
   },
   "membershipRequest": {
     "joined": "Unido",
@@ -1995,7 +1989,8 @@
     "name": "Nombre",
     "desc": "Descripción",
     "venueImagePreview": "Vista previa de la imagen del lugar",
-    "sortVenues": "Ordenar lugares"
+    "sortVenues": "Ordenar lugares",
+    "closeImagePreview": "Cerrar vista previa de imagen"
   },
   "addMember": {
     "title": "Agregar miembro",
@@ -2397,7 +2392,7 @@
     "installing": "Instalando ({{elapsed}})",
     "uploading": "Subiendo...",
     "screenshotCounter": "{{current}} de {{total}}",
-    "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
+    "uninstallPluginWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin",
     "failedToParsePluginZip": "Error al analizar el archivo ZIP del plugin",
     "pluginUploadedSuccess": "¡Plugin subido exitosamente! (componentes {{components}}) - Ahora puedes instalarlo desde la lista de plugins."
@@ -2448,8 +2443,20 @@
     "events": "Eventos",
     "eventsCreatedByOrganization": "Eventos creados por la organización",
     "today": "Hoy",
+    "viewLess": "Ver menos",
     "viewAll": "Ver todo",
-    "viewLess": "Ver menos"
+    "noHolidaysAvailable": "No hay días festivos disponibles",
+    "holidayNames": {
+      "mayDayLabourDay": "Día del Trabajo",
+      "mothersDay": "Día de la Madre",
+      "fathersDay": "Día del Padre",
+      "independenceDayUS": "Día de la Independencia (EE.UU.)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Día del Recuerdo / Día de los Veteranos",
+      "christmasDay": "Día de Navidad"
+    }
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"
@@ -2578,17 +2585,6 @@
         "failedToLoad": "Error al cargar el componente"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "Sí",
-    "no": "No",
-    "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
-    "eventNotFound": "Evento no encontrado o ha sido eliminado",
-    "numberOfAttendees": "Número de asistentes"
-  },
-  "promotedPost": {
-    "title": "Contenido Promocionado",
-    "promotedContent": "Contenido promocionado: {{title}}"
   },
   "csv": {
     "demographics": "Demografía de {{category}}"

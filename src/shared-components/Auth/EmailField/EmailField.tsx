@@ -59,5 +59,3 @@ export const EmailField: React.FC<InterfaceEmailFieldProps> = ({
     />
   );
 };
-
-export default EmailField;

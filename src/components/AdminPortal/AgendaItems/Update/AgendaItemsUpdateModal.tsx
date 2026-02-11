@@ -201,6 +201,10 @@ const AgendaItemsUpdateModal: React.FC<
             duration: itemFormState.duration?.trim() || undefined,
             folderId: itemFormState.folder || undefined,
             categoryId: itemFormState.category || undefined,
+            notes:
+              itemFormState.notes?.trim() === ''
+                ? null
+                : (itemFormState.notes?.trim() ?? undefined),
             url: itemFormState.url.map((u) => ({ url: u })),
             attachments: itemFormState.attachments.map((att) => ({
               name: att.name,
@@ -320,6 +324,19 @@ const AgendaItemsUpdateModal: React.FC<
         }
       />
 
+      <FormTextField
+        name="notes"
+        label={t('notes')}
+        placeholder={t('enterNotes')}
+        value={itemFormState.notes}
+        onChange={(v) =>
+          setItemFormState({
+            ...itemFormState,
+            notes: v,
+          })
+        }
+      />
+
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
         <div className="d-flex gap-2">
@@ -385,14 +402,14 @@ const AgendaItemsUpdateModal: React.FC<
                 />
               )}
 
-              <button
+              <Button
                 type="button"
                 className={styles.closeButtonFile}
                 aria-label={t('removeAttachment')}
                 onClick={() => handleRemoveAttachment(attachment.objectName)}
               >
                 <i className="fa fa-times" />
-              </button>
+              </Button>
             </div>
           ))}
         </div>

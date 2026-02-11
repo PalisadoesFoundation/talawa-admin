@@ -573,7 +573,8 @@
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
     "addMember": "Ajouter un membre",
-    "removeMember": "Supprimer un membre"
+    "removeMember": "Supprimer un membre",
+    "invalidTagName": "Nom de tag invalide"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -793,6 +794,8 @@
     "sectionSequenceUpdateSuccessMsg": "La séquence de la section a été mise à jour avec succès",
     "editFolder": "Modifier le dossier",
     "editItem": "Modifier l’élément",
+    "notes": "Notes",
+    "enterNotes": "Saisir une note",
     "deleteItem": "Supprimer l’élément",
     "deleteFolder": "Supprimer le dossier",
     "itemPreview": "Aperçu de l’élément",
@@ -1274,15 +1277,6 @@
     "admin": "Admin",
     "superAdmin": "Super Admin",
     "displayImage": "Image d'affichage",
-    "saveChanges": "Enregistrer les modifications",
-    "cancel": "Annuler"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "Mot de passe précédent",
-    "newPassword": "nouveau mot de passe",
-    "confirmNewPassword": "Confirmer le nouveau mot de passe",
-    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
-    "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas.",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
   },
@@ -2012,7 +2006,8 @@
     "name": "Nom",
     "desc": "Description",
     "venueImagePreview": "Aperçu de l’image du lieu",
-    "sortVenues": "Trier les lieux"
+    "sortVenues": "Trier les lieux",
+    "closeImagePreview": "Fermer l'aperçu de l'image"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -2414,7 +2409,7 @@
     "installing": "Installation ({{elapsed}})",
     "uploading": "Téléchargement...",
     "screenshotCounter": "{{current}} sur {{total}}",
-    "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
+    "uninstallPluginWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
     "errorInstalling": "Échec du chargement des détails du plugin",
     "failedToParsePluginZip": "Échec de l'analyse du fichier ZIP du plugin",
     "pluginUploadedSuccess": "Plugin téléchargé avec succès ! (composants {{components}}) - Vous pouvez maintenant l'installer depuis la liste des plugins."
@@ -2448,8 +2443,20 @@
     "events": "Événements",
     "eventsCreatedByOrganization": "Événements créés par l'organisation",
     "today": "Aujourd'hui",
-    "viewAll": "Tout afficher",
-    "viewLess": "Afficher moins"
+    "viewLess": "Voir moins",
+    "viewAll": "Voir tout",
+    "noHolidaysAvailable": "Aucun jour férié disponible",
+    "holidayNames": {
+      "mayDayLabourDay": "Fête du Travail",
+      "mothersDay": "Fête des Mères",
+      "fathersDay": "Fête des Pères",
+      "independenceDayUS": "Fête de l'Indépendance (États-Unis)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Jour du Souvenir / Jour des Anciens Combattants",
+      "christmasDay": "Jour de Noël"
+    }
   },
   "contact": {
     "card_aria": "Carte de contact"
@@ -2578,17 +2585,6 @@
         "failedToLoad": "Échec du chargement du composant"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "Oui",
-    "no": "Non",
-    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
-    "eventNotFound": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants"
-  },
-  "promotedPost": {
-    "title": "Contenu Promu",
-    "promotedContent": "Contenu promu : {{title}}"
   },
   "csv": {
     "demographics": "Démographie de {{category}}"

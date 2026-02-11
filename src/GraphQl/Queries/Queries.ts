@@ -331,21 +331,6 @@ export const EVENT_DETAILS = gql`
   }
 `;
 
-export const EVENT_DETAILS_BASIC = gql`
-  query GetEventBasic($eventId: String!) {
-    event(input: { id: $eventId }) {
-      id
-      name
-      location
-      startAt
-      organization {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const RECURRING_EVENTS = gql`
   query RecurringEvents($baseRecurringEventId: ID!) {
     getRecurringEvents(baseRecurringEventId: $baseRecurringEventId) {
@@ -1272,6 +1257,32 @@ export const GET_ORGANIZATION_VENUES_PG = gql`
           hasNextPage
           endCursor
         }
+      }
+    }
+  }
+`;
+
+/** Fetches tags assigned to a user, including assignees (capped), creator, and folder. */
+export const GET_USER_TAGS = gql`
+  query GetUserTags($userId: ID!) {
+    userTags(userId: $userId) {
+      id
+      name
+      createdAt
+      folder {
+        id
+      }
+      assignees(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+
+      creator {
+        id
+        name
       }
     }
   }

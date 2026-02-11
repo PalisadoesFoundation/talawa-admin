@@ -573,7 +573,8 @@
     "loadAssignedUsersError": "加载已分配用户时发生错误",
     "noTagsFound": "未找到标签",
     "addMember": "添加会员",
-    "removeMember": "删除会员"
+    "removeMember": "删除会员",
+    "invalidTagName": "无效的标签名称"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -782,6 +783,8 @@
     "categoryName": "类别",
     "noCategory": "无分类",
     "folder": "议程文件夹",
+    "notes": "备注",
+    "enterNotes": "输入备注",
     "agendaFolderDetails": "议程部分详情",
     "agendaFolderCreated": "议程部分已成功创建",
     "attachmentPreviewAlt": "附件预览",
@@ -1274,15 +1277,6 @@
     "admin": "管理员",
     "superAdmin": "超级管理员",
     "displayImage": "显示图像",
-    "saveChanges": "保存更改",
-    "cancel": "取消"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "旧密码",
-    "newPassword": "新密码",
-    "confirmNewPassword": "确认新密码",
-    "passCantBeEmpty": "密码不能为空",
-    "passNoMatch": "新密码和确认密码不匹配。",
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
@@ -2012,7 +2006,8 @@
     "name": "名称",
     "desc": "描述",
     "venueImagePreview": "场地图片预览",
-    "sortVenues": "排序场地"
+    "sortVenues": "排序场地",
+    "closeImagePreview": "关闭图片预览"
   },
   "addMember": {
     "title": "添加会员",
@@ -2414,7 +2409,7 @@
     "installing": "安装中 ({{elapsed}})",
     "uploading": "上传中...",
     "screenshotCounter": "{{current}} / {{total}}",
-    "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
+    "uninstallPluginWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败",
     "failedToParsePluginZip": "解析插件 ZIP 文件失败",
     "pluginUploadedSuccess": "插件上传成功！({{components}} 组件) - 您现在可以从插件列表中安装它。"
@@ -2448,8 +2443,20 @@
     "events": "活动",
     "eventsCreatedByOrganization": "组织创建的活动",
     "today": "今天",
+    "viewLess": "查看更少",
     "viewAll": "查看全部",
-    "viewLess": "查看较少"
+    "noHolidaysAvailable": "没有可用的节假日",
+    "holidayNames": {
+      "mayDayLabourDay": "劳动节",
+      "mothersDay": "母亲节",
+      "fathersDay": "父亲节",
+      "independenceDayUS": "独立日（美国）",
+      "oktoberfest": "慕尼黑啤酒节",
+      "halloween": "万圣节",
+      "diwali": "排灯节",
+      "remembranceDayVeteransDay": "阵亡将士纪念日 / 退伍军人节",
+      "christmasDay": "圣诞节"
+    }
   },
   "contact": {
     "card_aria": "联系人卡片"
@@ -2578,17 +2585,6 @@
         "failedToLoad": "加载组件失败"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "是",
-    "no": "否",
-    "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
-    "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数"
-  },
-  "promotedPost": {
-    "title": "推广内容",
-    "promotedContent": "推广内容：{{title}}"
   },
   "csv": {
     "demographics": "{{category}} 人口统计"

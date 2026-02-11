@@ -42,7 +42,7 @@ import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
-import { holidays, months, weekdays } from 'types/Event/utils';
+import { holidays, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
 import type {
   InterfaceEvent,
@@ -70,7 +70,9 @@ const Calendar: React.FC<
   currentMonth,
   currentYear,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventCalendar' });
+  const { t, i18n } = useTranslation('translation', {
+    keyPrefix: 'eventCalendar',
+  });
   const { t: tErrors } = useTranslation('errors');
   const [selectedDate] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(() => new Date().getDate());
@@ -317,6 +319,7 @@ const Calendar: React.FC<
               </div>
               {Array.isArray(allDayEventsList) && shouldShowViewMore && (
                 <Button
+                  variant="primary"
                   className={styles.btn__more}
                   onClick={handleExpandClick}
                   data-testid="view-more-button"
@@ -328,49 +331,81 @@ const Calendar: React.FC<
           </div>
         </div>
 
-        <div className={styles.calendar_infocards}>
-          <div
-            className={styles.holidays_card}
-            role="region"
-            aria-label={t('holidays')}
-          >
-            <h3 className={styles.card_title}>{t('holidays')}</h3>
-            <ul className={styles.card_list}>
-              {filteredHolidays.map((holiday, index) => (
-                <li className={styles.card_list_item} key={index}>
-                  <span className={styles.holiday_date}>
-                    {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
-                    {holiday.date.slice(3)}
-                  </span>
-                  <span className={styles.holiday_name}>{holiday.name}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div
-            className={styles.events_card}
-            role="region"
-            aria-label={t('events')}
-          >
-            <h3 className={styles.card_title}>{t('events')}</h3>
-            <div className={styles.legend}>
-              <div className={styles.eventsLegend}>
-                <span className={styles.organizationIndicator}></span>
-                <span className={styles.legendText}>
-                  {t('eventsCreatedByOrganization')}
-                </span>
-              </div>
-              <div className={styles.list_container_holidays}>
-                <span className={styles.holidayIndicator}></span>
-                <span className={styles.holidayText}>{t('holidays')}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {renderInfoCards()}
       </>
     );
   };
+
+  const renderInfoCards = (): JSX.Element => (
+    <div className={styles.calendar_infocards}>
+      <section className={styles.holidays_card} aria-label={t('holidays')}>
+        <h3 className={styles.card_title}>{t('holidays')}</h3>
+        <ul className={styles.card_list}>
+          {filteredHolidays.length > 0 ? (
+            filteredHolidays.map((holiday, index) => {
+              // Parse the holiday date (MM-DD format) and get localized month name
+              const holidayDate = dayjs(
+                `${currentYear}-${holiday.date}`,
+                'YYYY-MM-DD',
+              );
+              const localizedMonth = holidayDate
+                .locale(i18n.language)
+                .format('MMMM');
+              const day = holiday.date.slice(3);
+
+              // Create a translation key from the holiday name
+              // Convert to camelCase: "May Day / Labour Day" -> "mayDayLabourDay"
+              const translationKey = holiday.name
+                .replace(/[^\w\s]/g, '') // Remove special characters
+                .split(/\s+/) // Split by whitespace
+                .map((word, idx) =>
+                  idx === 0
+                    ? word.toLowerCase()
+                    : word.charAt(0).toUpperCase() +
+                      word.slice(1).toLowerCase(),
+                )
+                .join('');
+
+              // Get the translated holiday name with fallback
+              const translatedName = t(
+                ['holidayNames', translationKey].join('.'),
+                { defaultValue: holiday.name },
+              );
+
+              return (
+                <li className={styles.card_list_item} key={index}>
+                  <span className={styles.holiday_date}>
+                    {localizedMonth} {day}
+                  </span>
+                  <span className={styles.holiday_name}>{translatedName}</span>
+                </li>
+              );
+            })
+          ) : (
+            <li className={styles.card_list_item}>
+              {t('noHolidaysAvailable')}
+            </li>
+          )}
+        </ul>
+      </section>
+
+      <section className={styles.events_card} aria-label={t('events')}>
+        <h3 className={styles.card_title}>{t('events')}</h3>
+        <div className={styles.legend}>
+          <div className={styles.eventsLegend}>
+            <span className={styles.organizationIndicator}></span>
+            <span className={styles.legendText}>
+              {t('eventsCreatedByOrganization')}
+            </span>
+          </div>
+          <div className={styles.list_container_holidays}>
+            <span className={styles.holidayIndicator}></span>
+            <span className={styles.holidayText}>{t('holidays')}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 
   const renderDays = (): JSX.Element[] => {
     const monthStart = new Date(currentYear, currentMonth, 1);
@@ -489,6 +524,7 @@ const Calendar: React.FC<
               </div>
               {shouldShowViewMore && (
                 <Button
+                  variant="primary"
                   className={styles.btn__more}
                   data-testid="more"
                   onClick={() => toggleExpand(index)}
@@ -541,7 +577,11 @@ const Calendar: React.FC<
                   data-testid="current-date"
                 >
                   {viewType === ViewType.DAY ? `${currentDate} ` : ''}
-                  {currentYear} {months[currentMonth]}
+                  {currentYear}{' '}
+                  {dayjs()
+                    .month(currentMonth)
+                    .locale(i18n.language)
+                    .format('MMMM')}
                 </div>
               </div>
             </div>
@@ -567,6 +607,7 @@ const Calendar: React.FC<
                 ))}
               </div>
               <div className={styles.calendar__days}>{renderDays()}</div>
+              {renderInfoCards()}
             </>
           ) : viewType === ViewType.YEAR ? (
             <YearlyEventCalender
