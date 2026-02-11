@@ -310,21 +310,49 @@ required_node_version() {
     # Check for engines.node in package.json (must be inside "engines" object, not dependencies)
     if [[ -f "package.json" ]]; then
         local engines_node raw_version=""
-        
+
         # Prefer jq for reliable JSON parsing if available
         if command_exists jq; then
             raw_version="$(jq -r '.engines.node // empty' package.json 2>/dev/null)"
+        # Try python3 or python as second choice (widely available)
+        elif command_exists python3; then
+            raw_version="$(python3 -c "import json; d=json.load(open('package.json')); print(d.get('engines', {}).get('node', ''))" 2>/dev/null)"
+        elif command_exists python; then
+            raw_version="$(python -c "import json; d=json.load(open('package.json')); print(d.get('engines', {}).get('node', ''))" 2>/dev/null)"
+        # Try node itself if available
+        elif command_exists node; then
+            raw_version="$(node -pe "require('./package.json').engines?.node || ''" 2>/dev/null)"
         else
-            # Fallback: extract engines block first, then find node within it
-            # This prevents matching "node" in dependencies or other fields
-            local engines_block
-            engines_block="$(sed -n '/"engines"[[:space:]]*:/,/}/p' package.json 2>/dev/null)"
-            if [[ -n "$engines_block" ]]; then
-                raw_version="$(printf '%s' "$engines_block" | \
-                               grep -o '"node"[[:space:]]*:[[:space:]]*"[^"]*"' 2>/dev/null | \
-                               sed 's/.*"node"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | \
-                               head -1)"
-            fi
+            # Final fallback: brace-counting awk to extract engines block
+            # This handles nested braces correctly unlike simple sed
+            raw_version="$(awk '
+                /"engines"[[:space:]]*:/ {
+                    brace_count = 0
+                    in_engines = 0
+                    engines_content = ""
+                }
+                in_engines || /"engines"[[:space:]]*:/ {
+                    in_engines = 1
+                    for (i = 1; i <= NF; i++) {
+                        char = substr($i, 1, 1)
+                        if (char == "{" || (length($i) > 1 && substr($i, 1, 1) == "{")) brace_count++
+                        if (char == "}" || (length($i) > 1 && substr($i, length($i), 1) == "}")) brace_count--
+                    }
+                    engines_content = engines_content $0 "\n"
+                    if (brace_count == 0 && engines_content != "") {
+                        # Extract node version from engines block
+                        if (match(engines_content, /"node"[[:space:]]*:[[:space:]]*"[^"]+"/)) {
+                            node_line = substr(engines_content, RSTART, RLENGTH)
+                            if (match(node_line, /"[0-9^~>=.][^"]*"/)) {
+                                version = substr(node_line, RSTART + 1, RLENGTH - 2)
+                                print version
+                            }
+                        }
+                        in_engines = 0
+                        engines_content = ""
+                    }
+                }
+            ' package.json 2>/dev/null)"
         fi
         
         if [[ -n "$raw_version" ]]; then
@@ -582,8 +610,10 @@ ensure_node_toolchain() {
         fi
     fi
     
-    # Check/install Node.js
-    if check_node; then
+    # Check/install Node.js (skip if fnm failed since node depends on fnm)
+    if [[ "$had_error" == "true" ]]; then
+        log_info "Skipping Node.js check - fnm installation failed"
+    elif check_node; then
         log_success "Node.js is available"
     else
         if ! install_node; then
@@ -594,9 +624,11 @@ ensure_node_toolchain() {
             had_error=true
         fi
     fi
-    
-    # Check/install pnpm
-    if check_pnpm; then
+
+    # Check/install pnpm (skip if fnm failed since pnpm depends on node/fnm)
+    if [[ "$had_error" == "true" ]]; then
+        log_info "Skipping pnpm check - previous installation failed"
+    elif check_pnpm; then
         log_success "pnpm is available"
     else
         if ! install_pnpm; then

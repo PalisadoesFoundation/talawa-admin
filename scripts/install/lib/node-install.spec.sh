@@ -65,7 +65,7 @@ create_stub_executable() {
     local name="$2"
     local output="${3:-}"
     local exit_code="${4:-0}"
-    
+
     mkdir -p "$dir"
     cat > "$dir/$name" << EOF
 #!/bin/bash
@@ -81,6 +81,40 @@ echo "$output"
 exit $exit_code
 EOF
     chmod +x "$dir/$name"
+}
+
+# Create a curl stub that writes content to the -o output file
+# Usage: create_curl_stub <bin_dir> <exit_code> [line1] [line2] ...
+create_curl_stub() {
+    local bin_dir="$1"
+    local exit_code="$2"
+    shift 2
+
+    mkdir -p "$bin_dir"
+    cat > "$bin_dir/curl" << STUBEOF
+#!/bin/bash
+prev=""
+output_file=""
+for arg in "\$@"; do
+    if [[ "\$prev" == "-o" ]]; then
+        output_file="\$arg"
+    fi
+    prev="\$arg"
+done
+if [[ -n "\$output_file" ]]; then
+STUBEOF
+
+    # Add each line to the output file
+    for line in "$@"; do
+        printf '%s\n' "    echo '$line' >> \"\$output_file\"" >> "$bin_dir/curl"
+    done
+
+    cat >> "$bin_dir/curl" << STUBEOF
+fi
+exit $exit_code
+STUBEOF
+
+    chmod +x "$bin_dir/curl"
 }
 
 # Save and restore PATH/HOME for isolated tests
@@ -662,16 +696,17 @@ test_verify_node_v_prefix_requirement() {
 test_check_fnm_locations() {
     source_library
     save_env
-    
+
     local failed=0
-    
+
     # Test: fnm in PATH
+    unset FNM_DIR 2>/dev/null || true
     local fixture1
     fixture1=$(create_fixture "check-fnm-path")
     create_stub_executable "$fixture1/bin" "fnm" "fnm 1.35.0" 0
     export PATH="$fixture1/bin:$SAVED_PATH"
     export HOME="/nonexistent"
-    
+
     if ! check_fnm; then
         echo "  check_fnm should find fnm in PATH"
         failed=1
@@ -787,53 +822,48 @@ test_ensure_node_toolchain_fail_fast() {
 test_ensure_node_toolchain_no_fail_fast() {
     source_library
     save_env
-    
+
     local fixture_dir
     fixture_dir=$(create_fixture "no-fail-fast")
     export HOME="$fixture_dir"
     export PATH="/nonexistent:$SAVED_PATH"
-    
-    local orig_check_fnm orig_install_fnm orig_check_node orig_check_pnpm
+
+    local orig_check_fnm orig_install_fnm
     orig_check_fnm="$(declare -f check_fnm)"
     orig_install_fnm="$(declare -f install_fnm)"
-    orig_check_node="$(declare -f check_node)"
-    orig_check_pnpm="$(declare -f check_pnpm)"
-    
+
     eval 'check_fnm() { return 1; }'
     eval 'install_fnm() { return 1; }'
-    eval 'check_node() { return 0; }'
-    eval 'check_pnpm() { return 0; }'
-    
+
     local output exit_code result=0
     set +e
     output=$(ensure_node_toolchain 2>&1)
     exit_code=$?
     set -euo pipefail
-    
+
     if [[ $exit_code -eq 0 ]]; then
         echo "  ensure_node_toolchain should return non-zero when install fails"
         result=1
     fi
-    
+
     if [[ "$output" != *"Some toolchain components failed"* ]]; then
         echo "  ensure_node_toolchain should report partial failure"
         result=1
     fi
-    
-    if [[ "$output" != *"Node.js is available"* ]]; then
-        echo "  ensure_node_toolchain without --fail-fast should continue checking Node.js"
+
+    # When fnm fails, dependent checks (node, pnpm) should be skipped
+    if [[ "$output" != *"Skipping Node.js check"* ]]; then
+        echo "  ensure_node_toolchain should skip Node.js check when fnm fails"
         result=1
     fi
-    
-    if [[ "$output" != *"pnpm is available"* ]]; then
-        echo "  ensure_node_toolchain without --fail-fast should continue checking pnpm"
+
+    if [[ "$output" != *"Skipping pnpm check"* ]]; then
+        echo "  ensure_node_toolchain should skip pnpm check when fnm fails"
         result=1
     fi
-    
+
     eval "$orig_check_fnm"
     eval "$orig_install_fnm"
-    eval "$orig_check_node"
-    eval "$orig_check_pnpm"
     restore_env
     return $result
 }
@@ -913,12 +943,7 @@ test_install_fnm_curl_download_fails() {
     local fixture_dir
     fixture_dir=$(create_fixture "install-fnm-curl-fail")
     # Create a curl stub that always fails
-    mkdir -p "$fixture_dir/bin"
-    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
-#!/bin/bash
-exit 1
-STUBEOF
-    chmod +x "$fixture_dir/bin/curl"
+    create_curl_stub "$fixture_dir/bin" 1
 
     local orig_check_fnm
     orig_check_fnm="$(declare -f check_fnm)"
@@ -953,25 +978,8 @@ test_install_fnm_invalid_shebang() {
 
     local fixture_dir
     fixture_dir=$(create_fixture "install-fnm-bad-shebang")
-    mkdir -p "$fixture_dir/bin"
     # curl stub that writes a file WITHOUT valid shebang
-    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
-#!/bin/bash
-prev=""
-output_file=""
-for arg in "$@"; do
-    if [[ "$prev" == "-o" ]]; then
-        output_file="$arg"
-    fi
-    prev="$arg"
-done
-if [[ -n "$output_file" ]]; then
-    printf '%s\n' "NOT A VALID SCRIPT" > "$output_file"
-    printf '%s\n' "install_fnm FNM_DIR" >> "$output_file"
-fi
-exit 0
-STUBEOF
-    chmod +x "$fixture_dir/bin/curl"
+    create_curl_stub "$fixture_dir/bin" 0 "NOT A VALID SCRIPT" "install_fnm FNM_DIR"
 
     local orig_check_fnm
     orig_check_fnm="$(declare -f check_fnm)"
@@ -1006,25 +1014,8 @@ test_install_fnm_no_markers() {
 
     local fixture_dir
     fixture_dir=$(create_fixture "install-fnm-no-markers")
-    mkdir -p "$fixture_dir/bin"
     # curl stub writes valid shebang but NO fnm markers
-    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
-#!/bin/bash
-prev=""
-output_file=""
-for arg in "$@"; do
-    if [[ "$prev" == "-o" ]]; then
-        output_file="$arg"
-    fi
-    prev="$arg"
-done
-if [[ -n "$output_file" ]]; then
-    printf '%s\n' "#!/bin/bash" > "$output_file"
-    printf '%s\n' "echo hello world" >> "$output_file"
-fi
-exit 0
-STUBEOF
-    chmod +x "$fixture_dir/bin/curl"
+    create_curl_stub "$fixture_dir/bin" 0 "#!/bin/bash" "echo hello world"
 
     local orig_check_fnm
     orig_check_fnm="$(declare -f check_fnm)"
@@ -1059,26 +1050,8 @@ test_install_fnm_installer_fails() {
 
     local fixture_dir
     fixture_dir=$(create_fixture "install-fnm-exec-fail")
-    mkdir -p "$fixture_dir/bin"
     # curl stub writes a valid-looking installer that will fail when executed
-    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
-#!/bin/bash
-prev=""
-output_file=""
-for arg in "$@"; do
-    if [[ "$prev" == "-o" ]]; then
-        output_file="$arg"
-    fi
-    prev="$arg"
-done
-if [[ -n "$output_file" ]]; then
-    printf '%s\n' "#!/bin/bash" > "$output_file"
-    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
-    printf '%s\n' "exit 1" >> "$output_file"
-fi
-exit 0
-STUBEOF
-    chmod +x "$fixture_dir/bin/curl"
+    create_curl_stub "$fixture_dir/bin" 0 "#!/bin/bash" "# install_fnm FNM_DIR marker" "exit 1"
 
     local orig_check_fnm
     orig_check_fnm="$(declare -f check_fnm)"
@@ -1113,26 +1086,8 @@ test_install_fnm_setup_env_fails() {
 
     local fixture_dir
     fixture_dir=$(create_fixture "install-fnm-env-fail")
-    mkdir -p "$fixture_dir/bin"
     # curl stub writes a valid installer that succeeds
-    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
-#!/bin/bash
-prev=""
-output_file=""
-for arg in "$@"; do
-    if [[ "$prev" == "-o" ]]; then
-        output_file="$arg"
-    fi
-    prev="$arg"
-done
-if [[ -n "$output_file" ]]; then
-    printf '%s\n' "#!/bin/bash" > "$output_file"
-    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
-    printf '%s\n' "exit 0" >> "$output_file"
-fi
-exit 0
-STUBEOF
-    chmod +x "$fixture_dir/bin/curl"
+    create_curl_stub "$fixture_dir/bin" 0 "#!/bin/bash" "# install_fnm FNM_DIR marker" "exit 0"
 
     local orig_check_fnm orig_setup_fnm_env
     orig_check_fnm="$(declare -f check_fnm)"
@@ -1170,26 +1125,8 @@ test_install_fnm_success() {
 
     local fixture_dir
     fixture_dir=$(create_fixture "install-fnm-success")
-    mkdir -p "$fixture_dir/bin"
     # curl stub writes a valid installer that succeeds
-    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
-#!/bin/bash
-prev=""
-output_file=""
-for arg in "$@"; do
-    if [[ "$prev" == "-o" ]]; then
-        output_file="$arg"
-    fi
-    prev="$arg"
-done
-if [[ -n "$output_file" ]]; then
-    printf '%s\n' "#!/bin/bash" > "$output_file"
-    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
-    printf '%s\n' "exit 0" >> "$output_file"
-fi
-exit 0
-STUBEOF
-    chmod +x "$fixture_dir/bin/curl"
+    create_curl_stub "$fixture_dir/bin" 0 "#!/bin/bash" "# install_fnm FNM_DIR marker" "exit 0"
 
     local orig_check_fnm orig_setup_fnm_env
     orig_check_fnm="$(declare -f check_fnm)"
@@ -2017,40 +1954,28 @@ test_install_fnm_check_fnm_true_after_install() {
 
     local fixture_dir
     fixture_dir=$(create_fixture "install-fnm-after-check")
-    mkdir -p "$fixture_dir/bin"
-
     # Create a curl stub that writes a valid installer
-    cat > "$fixture_dir/bin/curl" << 'STUBEOF'
-#!/bin/bash
-prev=""
-output_file=""
-for arg in "$@"; do
-    if [[ "$prev" == "-o" ]]; then
-        output_file="$arg"
-    fi
-    prev="$arg"
-done
-if [[ -n "$output_file" ]]; then
-    printf '%s\n' "#!/bin/bash" > "$output_file"
-    printf '%s\n' "# install_fnm FNM_DIR marker" >> "$output_file"
-    printf '%s\n' "exit 0" >> "$output_file"
-fi
-exit 0
-STUBEOF
-    chmod +x "$fixture_dir/bin/curl"
+    create_curl_stub "$fixture_dir/bin" 0 "#!/bin/bash" "# install_fnm FNM_DIR marker" "exit 0"
+
+    # Save original check_fnm and setup_fnm_env before mocking
+    local orig_check_fnm orig_setup_fnm_env
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
 
     # Mock check_fnm to return 1 initially, then 0 after install
-    local check_fnm_call_count=0
-    eval 'check_fnm() { 
-        ((check_fnm_call_count++))
-        if [[ $check_fnm_call_count -gt 1 ]]; then
+    # Use a file-based counter to track calls and avoid shellcheck SC2034
+    check_fnm_call_file="$fixture_dir/.check_fnm_count"
+    echo 0 > "$check_fnm_call_file"
+    eval 'check_fnm() {
+        local count
+        count=$(cat "'"$check_fnm_call_file"'" 2>/dev/null) || count=0
+        count=$((count + 1))
+        echo $count > "'"$check_fnm_call_file"'"
+        if [[ $count -gt 1 ]]; then
             return 0
         fi
         return 1
     }'
-
-    local orig_setup_fnm_env
-    orig_setup_fnm_env="$(declare -f setup_fnm_env)"
     eval 'setup_fnm_env() { return 0; }'
 
     export PATH="$fixture_dir/bin:$SAVED_PATH"
@@ -2066,6 +1991,9 @@ STUBEOF
         result=1
     fi
 
+    # Cleanup counter file and restore original functions
+    rm -f "$check_fnm_call_file"
+    eval "$orig_check_fnm"
     eval "$orig_setup_fnm_env"
     restore_env
     return $result
@@ -2240,7 +2168,6 @@ STUBEOF
     orig_check_pnpm="$(declare -f check_pnpm)"
 
     # All components return not installed initially
-    local check_count=0
     eval 'check_fnm() { 
         if [[ -f "$HOME/.fnm_installed" ]]; then
             return 0
@@ -2863,7 +2790,28 @@ main() {
     run_test "ensure_node_toolchain all present" test_ensure_node_toolchain_all_present
     run_test "ensure_node_toolchain unknown arg" test_ensure_node_toolchain_unknown_arg
 
+    # ==============================================================================
     # Additional tests for code coverage gaps
+    # ==============================================================================
+    # NOTE: Tests that override library functions (using eval) MUST save the
+    # original function definition first and restore it after the test. This
+    # prevents function stubs from leaking into later tests.
+    #
+    # Pattern:
+    #   local orig_check_fnm
+    #   orig_check_fnm="$(declare -f check_fnm)"
+    #   eval 'check_fnm() { ... }'
+    #   # ... run test ...
+    #   eval "$orig_check_fnm"
+    #
+    # Examples in this test suite:
+    #   - test_ensure_node_toolchain_fail_fast, test_ensure_node_toolchain_no_fail_fast
+    #   - test_install_fnm_check_fnm_true_after_install, test_install_fnm_already_installed
+    #   - test_install_node_fnm_already_installed
+    #
+    # Tests using this pattern: check_fnm, install_fnm, check_node, install_node,
+    # check_pnpm, install_pnpm, verify_fnm, verify_node, verify_pnpm, setup_fnm_env
+
     run_test "install_fnm check_fnm after install" test_install_fnm_check_fnm_true_after_install
     run_test "verify_pnpm version mismatch" test_verify_pnpm_version_mismatch
     run_test "verify_pnpm v-prefixed version" test_verify_pnpm_v_prefixed_version
