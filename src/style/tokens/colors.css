@@ -29,4 +29,6 @@
   --color-yellow-100: #fff3cd;
   --color-yellow-500: #febc59;
   --color-yellow-600: #856404;
+
+  --color-black-100: rgba(0, 0, 0, 0.1);
 }

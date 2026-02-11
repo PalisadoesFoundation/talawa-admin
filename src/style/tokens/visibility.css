@@ -1,0 +1,5 @@
+:root {
+  --visibility-visible: visible;
+  --visibility-hidden: hidden;
+  --visibility-collapse: collapse;
+}
