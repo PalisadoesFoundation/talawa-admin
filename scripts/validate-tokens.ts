@@ -125,7 +125,8 @@ export const CSS_PATTERNS = {
   // Box shadow with hardcoded values and color
   boxShadow:
     /box-shadow:\s*(-?[\d.]+(px|rem|em)\s*){2,4}(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\))/gi,
-  // Box shadow with bare hardcoded values (no color, e.g. box-shadow: 6px or box-shadow: 2px 4px)
+  // Box shadow with bare hardcoded values (no color, e.g. box-shadow: 6px or box-shadow: 2px 4px).
+  // Overlap with boxShadow is guarded in validateCssLine to avoid duplicate findings.
   boxShadowBare: /box-shadow:\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
   // Box shadow with hardcoded px values mixed with var() (e.g. box-shadow: 0 var(--x) 5px)
   // Requires at least one var() to be present; pure hardcoded values are handled by boxShadowBare
@@ -524,6 +525,19 @@ const addMatches = (
   }
 };
 
+const hasLineResult = (
+  results: IValidationResult[],
+  file: string,
+  lineNumber: number,
+  type: ValidationResultType,
+): boolean =>
+  results.some(
+    (result) =>
+      result.file === file &&
+      result.line === lineNumber &&
+      result.type === type,
+  );
+
 /**
  * Validate CSS files for hardcoded values
  */
@@ -621,22 +635,24 @@ const validateCssLine = (
     lineNumber,
     results,
   );
-  addMatches(
-    line,
-    CSS_PATTERNS.boxShadowBare,
-    'box-shadow',
-    file,
-    lineNumber,
-    results,
-  );
-  addMatches(
-    line,
-    CSS_PATTERNS.boxShadowMixed,
-    'box-shadow',
-    file,
-    lineNumber,
-    results,
-  );
+  if (!hasLineResult(results, file, lineNumber, 'box-shadow')) {
+    addMatches(
+      line,
+      CSS_PATTERNS.boxShadowBare,
+      'box-shadow',
+      file,
+      lineNumber,
+      results,
+    );
+    addMatches(
+      line,
+      CSS_PATTERNS.boxShadowMixed,
+      'box-shadow',
+      file,
+      lineNumber,
+      results,
+    );
+  }
 
   // Outline patterns
   addMatches(

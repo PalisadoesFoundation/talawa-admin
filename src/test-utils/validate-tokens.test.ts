@@ -244,12 +244,14 @@ describe('validateFiles', () => {
     expect(result[0].type).toBe('border-radius');
   });
 
-  test('detects hardcoded box-shadow in CSS files', async () => {
+  test('detects hardcoded box-shadow in CSS files without duplicate box-shadow findings', async () => {
     readFileSyncMock.mockReturnValue('.test { box-shadow: 2px 4px 8px #000; }');
 
     const result = await validateFiles('**/*.css', ['src/style/test.css']);
+    const boxShadowResults = result.filter((r) => r.type === 'box-shadow');
 
-    expect(result.some((r) => r.type === 'box-shadow')).toBe(true);
+    expect(boxShadowResults).toHaveLength(1);
+    expect(boxShadowResults[0].match).toBe('box-shadow: 2px 4px 8px #000');
   });
 
   test('detects bare hardcoded box-shadow values in CSS files', async () => {
