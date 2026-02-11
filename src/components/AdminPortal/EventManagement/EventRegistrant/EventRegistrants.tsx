@@ -121,6 +121,12 @@ function EventRegistrants(): JSX.Element {
         setRegistrants(mappedData);
       }
     },
+    onError: (error) => {
+      if (isMountedRef.current) {
+        console.error('Error refreshing data:', error);
+        NotificationToast.error(tErrors('errorLoadingData'));
+      }
+    },
   });
 
   // Fetch check-in status
@@ -135,18 +141,16 @@ function EventRegistrants(): JSX.Element {
         setCheckedInUsers(checkedInUserIds);
       }
     },
+    onError: (error) => {
+      if (isMountedRef.current) {
+        console.error('Error refreshing data:', error);
+        NotificationToast.error(tErrors('errorLoadingData'));
+      }
+    },
   });
   // callback function to refresh the data
   const refreshData = useCallback(async () => {
-    try {
-      await Promise.all([getEventRegistrants(), getEventCheckIns()]);
-
-      if (!isMountedRef.current) return;
-    } catch (error) {
-      if (!isMountedRef.current) return;
-      console.error('Error refreshing data:', error);
-      NotificationToast.error(tErrors('errorLoadingData'));
-    }
+    await Promise.all([getEventRegistrants(), getEventCheckIns()]);
   }, [getEventRegistrants, getEventCheckIns]);
 
   // Function to remove a registrant from the event

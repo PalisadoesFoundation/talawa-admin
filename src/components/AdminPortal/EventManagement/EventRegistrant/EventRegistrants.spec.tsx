@@ -16,6 +16,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { vi } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 import {
   COMBINED_MOCKS,
@@ -41,6 +42,26 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     info: vi.fn(),
     dismiss: vi.fn(),
   },
+}));
+
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: vi.fn(
+    ({
+      dataTestId,
+      fallbackName,
+      imageUrl,
+    }: {
+      dataTestId?: string;
+      fallbackName?: string;
+      imageUrl?: string;
+    }) => (
+      <div
+        data-testid={dataTestId ?? 'profile-avatar-display'}
+        data-name={fallbackName ?? ''}
+        data-image={imageUrl ?? ''}
+      />
+    ),
+  ),
 }));
 
 let mockParams: { eventId?: string; orgId?: string } = {
@@ -429,6 +450,22 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
         expect(screen.getByText('Jane Smith')).toBeInTheDocument();
       });
     });
+
+    test('passes fallback name and imageUrl to ProfileAvatarDisplay', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+
+      const avatarDisplayMock = vi.mocked(ProfileAvatarDisplay);
+      const avatarCall = avatarDisplayMock.mock.calls.find(
+        ([props]) => props.fallbackName === 'Bruce Garza',
+      );
+
+      expect(avatarCall).toBeTruthy();
+      expect(avatarCall?.[0].imageUrl).toBeUndefined();
+    });
   });
 
   describe('Optional Chaining Edge Cases', () => {
@@ -726,11 +763,17 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
         expect(screen.getByText('Test User')).toBeInTheDocument();
       });
 
-      // The onError callback should be set up on the ProfileAvatarDisplay
-      // When the image fails to load naturally, it will call console.warn
-      // We verify the component renders with the onError prop
-      const avatarDisplay = screen.getByTestId('profile-avatar-display');
-      expect(avatarDisplay).toBeInTheDocument();
+      const avatarDisplayMock = vi.mocked(ProfileAvatarDisplay);
+      const avatarCall = avatarDisplayMock.mock.calls.find(
+        ([props]) => props.fallbackName === 'Test User',
+      );
+      expect(avatarCall).toBeTruthy();
+
+      avatarCall?.[0].onError?.();
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Failed to load avatar for user: user1',
+      );
 
       consoleWarnSpy.mockRestore();
     });
@@ -752,6 +795,150 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
       avatarDisplays.forEach((avatar) => {
         expect(avatar).toBeInTheDocument();
       });
+    });
+
+    test('should log warning when avatar fails to load', async () => {
+      const consoleWarnSpy = vi
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+
+      const avatarDisplayMock = vi.mocked(ProfileAvatarDisplay);
+      const avatarCall = avatarDisplayMock.mock.calls.find(
+        ([props]) => props.fallbackName === 'Bruce Garza',
+      );
+      expect(avatarCall).toBeTruthy();
+
+      avatarCall?.[0].onError?.();
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Failed to load avatar for user: 6589386a2caa9d8d69087484',
+      );
+
+      consoleWarnSpy.mockRestore();
+    });
+  });
+
+  describe('Error Handling', () => {
+    test('should show error toast when check-in query fails', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const notificationErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+      const errorMocks = [
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: {
+            data: {
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+                recurrenceRule: null,
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: {
+            data: { getEventAttendeesByEventId: [] },
+          },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          error: new Error('Failed to fetch check-ins'),
+        },
+      ];
+
+      renderEventRegistrants(errorMocks);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Error refreshing data:',
+          expect.any(Error),
+        );
+      });
+
+      await waitFor(() => {
+        expect(notificationErrorSpy).toHaveBeenCalledWith('errorLoadingData');
+      });
+
+      consoleErrorSpy.mockRestore();
+      notificationErrorSpy.mockRestore();
+    });
+
+    test('should handle refreshData errors gracefully', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const notificationErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+      const ERROR_MOCKS = [
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: {
+            data: {
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+                recurrenceRule: null,
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          error: new Error('Failed to fetch registrants'),
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          error: new Error('Failed to fetch check-ins'),
+        },
+      ];
+
+      renderEventRegistrants(ERROR_MOCKS);
+
+      // Wait for the error to be logged
+      await waitFor(
+        () => {
+          expect(consoleErrorSpy).toHaveBeenCalledWith(
+            'Error refreshing data:',
+            expect.any(Error),
+          );
+        },
+        { timeout: 3000 },
+      );
+
+      await waitFor(() => {
+        expect(notificationErrorSpy).toHaveBeenCalledWith('errorLoadingData');
+      });
+
+      consoleErrorSpy.mockRestore();
+      notificationErrorSpy.mockRestore();
     });
   });
 });

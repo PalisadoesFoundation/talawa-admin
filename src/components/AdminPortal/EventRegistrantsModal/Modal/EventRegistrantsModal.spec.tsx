@@ -2218,6 +2218,83 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   });
 
   test('ProfileAvatarDisplay onError logs warning when avatar fails to load', async () => {
+    vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: vi.fn(({ imageUrl, fallbackName, onError }) => (
+          <img
+            data-testid="profile-avatar-img"
+            src={imageUrl ?? ''}
+            alt={fallbackName}
+            onError={onError}
+          />
+        )),
+      }),
+    );
+    vi.doMock('@mui/material/Autocomplete', () => ({
+      __esModule: true,
+      default: ({
+        renderInput,
+        renderOption,
+        options,
+        onChange,
+        onInputChange,
+      }: InterfaceAutocompleteMockProps) => {
+        const [_localInputValue, setLocalInputValue] = React.useState('');
+
+        const handleInputChange = (
+          e: React.ChangeEvent<HTMLInputElement>,
+        ): void => {
+          const newValue = e.target.value;
+          setLocalInputValue(newValue);
+          if (onInputChange) {
+            onInputChange({} as React.SyntheticEvent, newValue, 'input');
+          }
+        };
+
+        const inputProps = {
+          onChange: handleInputChange,
+          onInput: handleInputChange,
+        };
+
+        return (
+          <div data-testid="autocomplete-mock">
+            {renderInput({
+              InputProps: { ref: vi.fn() },
+              id: 'test-autocomplete',
+              disabled: false,
+              inputProps: inputProps,
+            })}
+            <div data-testid="options-container">
+              {options && options.length > 0 ? (
+                options.map((option) => {
+                  const liProps = {
+                    key: option.id,
+                    'data-testid': `rendered-option-${option.id}`,
+                    onClick: (): void => {
+                      if (onChange) {
+                        onChange({} as React.SyntheticEvent, option);
+                      }
+                    },
+                    role: 'option',
+                    tabIndex: 0,
+                  };
+
+                  return renderOption
+                    ? renderOption(liProps, option, { selected: false })
+                    : null;
+                })
+              ) : (
+                <div data-testid="no-options">No options</div>
+              )}
+            </div>
+          </div>
+        );
+      },
+    }));
+
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
@@ -2245,11 +2322,25 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       },
     };
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      mockWithAvatar,
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          mockWithAvatar,
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
@@ -2270,12 +2361,89 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       { timeout: 3000 },
     );
 
-    // The ProfileAvatarDisplay component should be rendered with onError callback
-    // When the image fails to load (which it will with the invalid URL),
-    // the onError callback should log a warning
-    // Note: We verify the component renders with the onError prop configured
-    // The actual error will be triggered when the browser attempts to load the image
+    const avatarImg = await screen.findByTestId(
+      'profile-avatar-img',
+      {},
+      { timeout: 3000 },
+    );
+
+    avatarImg.dispatchEvent(new Event('error'));
+
+    // Verify console.warn was called with the expected message
+    await waitFor(() => {
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Failed to load avatar for user: user1',
+      );
+    });
 
     consoleWarnSpy.mockRestore();
+  });
+
+  it('should prevent double-clicking add registrant button (isAdding guard)', async () => {
+    const user = userEvent.setup();
+
+    // Spy on the mutation to verify it's only called once
+    const addRegistrantSpy = vi.fn().mockResolvedValue({
+      data: {
+        addEventAttendee: {
+          id: 'attendee1',
+        },
+      },
+    });
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      addRegistrantSpy,
+      {
+        loading: false,
+        error: undefined,
+        data: undefined,
+        called: false,
+        client: {} as ApolloClient.ApolloClient<object>,
+        reset: vi.fn(),
+      },
+    ]);
+
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
+
+    // Type to select a member
+    await user.type(input, 'John');
+
+    // Wait for the option to appear and click it
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    const option = screen.getByText('John Doe');
+    await user.click(option);
+
+    // Get the add button
+    const addButton = screen.getByTestId('add-registrant-btn');
+
+    // Click the button twice rapidly
+    await user.click(addButton);
+    await user.click(addButton);
+
+    // The mutation should only be called once due to the isAdding guard
+    await waitFor(
+      () => {
+        expect(addRegistrantSpy).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 3000 },
+    );
   });
 });

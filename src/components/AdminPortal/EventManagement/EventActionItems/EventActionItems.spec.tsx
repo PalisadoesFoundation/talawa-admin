@@ -4,7 +4,7 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
-import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import { render, screen, waitFor, cleanup, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -19,6 +19,9 @@ dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
+import type { InterfaceSortingButtonProps } from 'types/shared-components/SortingButton/interface';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 // Mock dependencies
 let useParamsMock: { orgId: string | undefined } = { orgId: 'orgId1' };
@@ -1419,6 +1422,91 @@ describe('EventActionItems', () => {
         expect(screen.getByTestId('filterBtn')).toBeInTheDocument();
       });
     });
+
+    it('should update sort selected option and order', async () => {
+      const mockDataWithDates = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item1',
+                  assignedAt: dayjs.utc().add(5, 'day').toDate(),
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item2',
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      };
+
+      const mocksWithDates = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithDates },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocksWithDates);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('sortBtn')).toBeInTheDocument();
+      });
+
+      const sortingButtonMock = vi.mocked(SortingButton);
+      const getSortButtonProps = (): {
+        selectedOption?: string | number;
+        onSortChange: (value: string) => void;
+      } => {
+        const sortCall = [...sortingButtonMock.mock.calls]
+          .reverse()
+          .find(([props]) => props.dataTestIdPrefix === 'sort');
+        expect(sortCall).toBeTruthy();
+        const sortProps = sortCall as [InterfaceSortingButtonProps];
+        return sortProps[0];
+      };
+
+      expect(getSortButtonProps().selectedOption).toBe('sort');
+
+      await act(async () => {
+        getSortButtonProps().onSortChange('assignedAt_DESC');
+      });
+
+      await waitFor(() => {
+        expect(getSortButtonProps().selectedOption).toBe('latestAssigned');
+        const assignedDates = screen.getAllByTestId('assignedDate');
+        expect(assignedDates[0]).toHaveTextContent(
+          dayjs.utc().add(10, 'day').format('DD/MM/YYYY'),
+        );
+      });
+
+      await act(async () => {
+        getSortButtonProps().onSortChange('assignedAt_ASC');
+      });
+
+      await waitFor(() => {
+        expect(getSortButtonProps().selectedOption).toBe('earliestAssigned');
+        const assignedDates = screen.getAllByTestId('assignedDate');
+        expect(assignedDates[0]).toHaveTextContent(
+          dayjs.utc().add(5, 'day').format('DD/MM/YYYY'),
+        );
+      });
+    });
   });
 
   describe('Additional Coverage Tests', () => {
@@ -1919,9 +2007,19 @@ describe('EventActionItems', () => {
         expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
       });
 
-      // The ProfileAvatarDisplay component should be rendered with onError callback
-      // When the image fails to load, the onError callback should log a warning
-      // Note: We verify the component renders with the onError prop configured
+      const profileAvatarMock = vi.mocked(ProfileAvatarDisplay);
+      const avatarCall = profileAvatarMock.mock.calls.find(
+        ([props]) =>
+          props.fallbackName === 'Test User' &&
+          typeof props.onError === 'function',
+      );
+
+      expect(avatarCall).toBeTruthy();
+      avatarCall?.[0].onError?.();
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Failed to load avatar for user: vol1',
+      );
 
       consoleWarnSpy.mockRestore();
     });
