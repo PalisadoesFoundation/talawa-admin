@@ -78,13 +78,15 @@ export class PeoplePage {
     cy.wait(1000);
 
     // Scope search to DataGrid rows to avoid matching headers/other UI
-    cy.get('.MuiDataGrid-row', { timeout })
-      .contains(name)
+    cy.contains(`${this._dataGridRows} ${this._nameCell}`, name, { timeout })
       .should('be.visible')
-      .parents('.MuiDataGrid-row')
-      .find(this._removeModalBtn)
-      .should('be.visible')
-      .click();
+      .then(($cell) => {
+        cy.wrap($cell)
+          .closest(this._dataGridRows)
+          .find(this._removeModalBtn)
+          .should('be.visible')
+          .click();
+      });
 
     cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
