@@ -19,7 +19,7 @@ rule:
           }
         })
   not:
-    follows:
+    precedes: # ← Changed from 'follows'
       pattern: |
         if (!$VAR?.$PROP) return;
 message: 'Missing null guard for optional property in mutation variables'
