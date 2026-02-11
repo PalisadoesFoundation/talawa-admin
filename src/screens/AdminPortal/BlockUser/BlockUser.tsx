@@ -266,21 +266,33 @@ const BlockUser = (): JSX.Element => {
       accessor: (row) => row.user.id,
       render: (_, row) => {
         const user = row.user;
-        return showBlockedMembers ? (
-          <Button
-            variant="success"
-            size="sm"
-            className={styles.unblockButton}
-            onClick={async (): Promise<void> => {
-              await handleUnBlockUser(user);
-            }}
-            data-testid={`blockUser${user.id}`}
-            aria-label={t('unblock') + ': ' + user.name}
-          >
-            <FontAwesomeIcon icon={faUserPlus} className={styles.unbanIcon} />
-            {t('unblock')}
-          </Button>
-        ) : (
+        if (showBlockedMembers) {
+          return (
+            <Button
+              variant="success"
+              size="sm"
+              className={styles.unblockButton}
+              onClick={async (): Promise<void> => {
+                await handleUnBlockUser(user);
+              }}
+              data-testid={`blockUser${user.id}`}
+              aria-label={t('unblock') + ': ' + user.name}
+            >
+              <FontAwesomeIcon icon={faUserPlus} className={styles.unbanIcon} />
+              {t('unblock')}
+            </Button>
+          );
+        }
+
+        if (user.role === 'administrator') {
+          return (
+            <div className={styles.removeButtonPlaceholder} aria-hidden="true">
+              {t('block')}
+            </div>
+          );
+        }
+
+        return (
           <Button
             variant="success"
             size="sm"

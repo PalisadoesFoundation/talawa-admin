@@ -996,6 +996,90 @@ describe('BlockUser Component', () => {
       });
     });
   });
+  it('does not render block button for administrator users', async () => {
+    const customMocks: InterfaceGraphQLMock[] = [
+      {
+        request: {
+          query: GET_ORGANIZATION_MEMBERS_PG,
+          variables: { id: '123', first: 32, after: null },
+        },
+        result: {
+          data: {
+            organization: {
+              members: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      name: 'Admin User',
+                      emailAddress: 'admin@example.com',
+                      role: 'administrator',
+                    },
+                  },
+                  {
+                    node: {
+                      id: '2',
+                      name: 'Regular User',
+                      emailAddress: 'user@example.com',
+                      role: 'regular',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+          variables: { id: '123', first: 32, after: null },
+        },
+        result: {
+          data: {
+            organization: {
+              blockedUsers: {
+                edges: [],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: BLOCK_USER_MUTATION_PG,
+          variables: { userId: '2', organizationId: '123' },
+        },
+        result: { data: { blockUser: { success: true } } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={customMocks}>
+        <BrowserRouter>
+          <BlockUser />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+    });
+
+    // Admin and regular users are rendered
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.getByText('Regular User')).toBeInTheDocument();
+    });
+
+    // Block button is not rendered for administrator user
+    expect(screen.queryByTestId('blockUser1')).not.toBeInTheDocument();
+
+    // Block button is still rendered for regular user
+    expect(screen.getByTestId('blockUser2')).toBeInTheDocument();
+  });
   // Tests for handling falsy responses from block and unblock mutations
   describe('Falsy Mutation Responses', () => {
     it('handles falsy block mutation response', async () => {
