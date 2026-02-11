@@ -69,6 +69,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const { data: membersData } = useQuery(MEMBERS_LIST_WITH_DETAILS, {
     variables: { organizationId: organizationId },
+    skip: !organizationId,
   });
 
   const members = membersData?.usersByOrganizationId || [];
