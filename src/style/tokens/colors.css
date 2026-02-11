@@ -1,6 +1,7 @@
 :root {
   --color-white: #ffffff;
   --color-black: #000000;
+  --color-black-alpha-10: rgba(0, 0, 0, 0.1);
 
   --color-gray-50: #f8f9fa;
   --color-gray-100: #eaebef;
@@ -29,6 +30,4 @@
   --color-yellow-100: #fff3cd;
   --color-yellow-500: #febc59;
   --color-yellow-600: #856404;
-
-  --color-black-100: rgba(0, 0, 0, 0.1);
 }

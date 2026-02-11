@@ -57,9 +57,10 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
 import { useParams } from 'react-router';
 
-import type {
-  InterfaceUserPg,
-  InterfaceOrganizationPg,
+import {
+  type InterfaceUserPg,
+  type InterfaceOrganizationPg,
+  UserRole,
 } from 'utils/interfaces';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
@@ -284,9 +285,13 @@ const BlockUser = (): JSX.Element => {
           );
         }
 
-        if (user.role === 'administrator') {
+        if (user.role === UserRole.Administrator) {
           return (
-            <div className={styles.removeButtonPlaceholder} aria-hidden="true">
+            <div
+              className={styles.removeButtonPlaceholder}
+              aria-hidden="true"
+              data-testid={`blockUserDisabled${user.id}`}
+            >
               {t('block')}
             </div>
           );
