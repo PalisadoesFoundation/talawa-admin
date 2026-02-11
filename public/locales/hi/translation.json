@@ -2001,7 +2001,8 @@
     "name": "नाम",
     "desc": "विवरण",
     "venueImagePreview": "स्थान की छवि का पूर्वावलोकन",
-    "sortVenues": "स्थानों को क्रमबद्ध करें"
+    "sortVenues": "स्थानों को क्रमबद्ध करें",
+    "closeImagePreview": "इमेज पूर्वावलोकन बंद करें"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",

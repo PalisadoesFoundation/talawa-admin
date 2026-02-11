@@ -3,7 +3,8 @@
   margin-bottom: var(--space-4);
   background-color: var(--eventManagement-button-bg);
   border: var(--border-1) solid var(--color-gray-100);
-  box-shadow: 0 var(--space-3) var(--space-5) var(--color-shadow-light);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-sm)
+    var(--color-shadow-light);
 }
 
 .closeButtonP {
@@ -19,7 +20,7 @@
   border: none;
   color: var(--closeButtonP-color);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--space-5);
+  font-size: var(--font-size-md);
   transition:
     background-color 0.3s,
     transform 0.3s;

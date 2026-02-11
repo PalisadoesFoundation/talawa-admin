@@ -2006,7 +2006,8 @@
     "name": "Nom",
     "desc": "Description",
     "venueImagePreview": "Aperçu de l’image du lieu",
-    "sortVenues": "Trier les lieux"
+    "sortVenues": "Trier les lieux",
+    "closeImagePreview": "Fermer l'aperçu de l'image"
   },
   "addMember": {
     "title": "Ajouter un membre",

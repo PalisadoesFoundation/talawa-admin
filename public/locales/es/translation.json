@@ -1989,7 +1989,8 @@
     "name": "Nombre",
     "desc": "Descripción",
     "venueImagePreview": "Vista previa de la imagen del lugar",
-    "sortVenues": "Ordenar lugares"
+    "sortVenues": "Ordenar lugares",
+    "closeImagePreview": "Cerrar vista previa de imagen"
   },
   "addMember": {
     "title": "Agregar miembro",

@@ -2006,7 +2006,8 @@
     "name": "名称",
     "desc": "描述",
     "venueImagePreview": "场地图片预览",
-    "sortVenues": "排序场地"
+    "sortVenues": "排序场地",
+    "closeImagePreview": "关闭图片预览"
   },
   "addMember": {
     "title": "添加会员",

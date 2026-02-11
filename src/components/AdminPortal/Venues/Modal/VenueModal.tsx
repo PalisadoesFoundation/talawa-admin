@@ -387,6 +387,7 @@ const VenueModal = ({
               className={styles.closeButtonP}
               onClick={clearImageInput}
               data-testid="closeimage"
+              aria-label={t('closeImagePreview') || 'Close image preview'}
             >
               <i className="fa fa-times"></i>
             </Button>

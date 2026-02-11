@@ -75,7 +75,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
         >
           <FormTextField
             name="categoryDescriptionField"
-            label={t('status')}
+            label={t('actionItemCategoryDescription')}
             value={category.description || t('noDescriptionProvided')}
             disabled
             data-testid="categoryDescriptionView"
@@ -93,7 +93,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             startAdornment={
               <Circle
                 sx={{
-                  fontSize: '--font-size-sm',
+                  fontSize: 'var(--font-size-sm)',
                   color: category.isDisabled
                     ? 'var(--errorIcon-color)'
                     : 'var(--bs-success)',

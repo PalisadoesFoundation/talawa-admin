@@ -52,7 +52,7 @@ const mockDisabledCategory: IActionItemCategoryInfo = {
   name: 'Disabled Category',
   description: '',
   isDisabled: true,
-  createdAt: dayjs.utc().subtract(15, 'days').toISOString(),
+  createdAt: dayjs.utc().subtract(5, 'days').toISOString(),
   updatedAt: dayjs.utc().toISOString(),
   creatorId: 'user789',
   organizationId: 'org456',
@@ -64,8 +64,9 @@ const mockCategoryWithLongDescription: IActionItemCategoryInfo = {
   description:
     'This is a very long description that spans multiple lines and contains detailed information about the category purpose, usage guidelines, and important notes for users who will be working with this category in their daily operations.',
   isDisabled: false,
-  createdAt: dayjs.utc().subtract(30, 'days').toISOString(),
+  createdAt: dayjs.utc().subtract(5, 'days').toISOString(),
   updatedAt: dayjs.utc().toISOString(),
+
   creatorId: 'user456',
   organizationId: 'org456',
 };
@@ -93,13 +94,11 @@ const renderCategoryViewModal = (
 };
 
 describe('Testing CategoryViewModal Component', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render modal with category details', () => {

@@ -153,7 +153,9 @@ describe('EditUserTagModal Component', () => {
     render(<EditUserTagModal {...defaultProps} />);
     const label = screen.getByText(/tagName/i).closest('label');
     expect(label).toBeInTheDocument();
-    expect(label).toHaveTextContent('*'); // checks that "*" is rendered
+    if (label) {
+      expect(label).toHaveTextContent('*');
+    }
   });
 
   it('sets autoComplete to off on the input field', () => {
