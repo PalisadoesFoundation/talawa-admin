@@ -20,6 +20,10 @@ Environment variable key names used by the setup script
 
 > `readonly` **BACKEND\_WEBSOCKET\_URL**: `"REACT_APP_BACKEND_WEBSOCKET_URL"` = `'REACT_APP_BACKEND_WEBSOCKET_URL'`
 
+### DOCKER\_MODE
+
+> `readonly` **DOCKER\_MODE**: `"DOCKER_MODE"` = `'DOCKER_MODE'`
+
 ### RECAPTCHA\_SITE\_KEY
 
 > `readonly` **RECAPTCHA\_SITE\_KEY**: `"REACT_APP_RECAPTCHA_SITE_KEY"` = `'REACT_APP_RECAPTCHA_SITE_KEY'`

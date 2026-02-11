@@ -6,6 +6,7 @@ const ENV_PATH = path.resolve(process.cwd(), '.env');
 const PARAM_DESCRIPTIONS: Record<string, string> = {
   PORT: 'Frontend port number to run the app on.',
   USE_DOCKER: 'Indicates whether Docker is being used.',
+  DOCKER_MODE: 'Docker daemon mode: ROOTFUL (default) or ROOTLESS.',
   DOCKER_PORT: 'Docker container port mapping for frontend.',
   REACT_APP_TALAWA_URL: 'GraphQL endpoint for the Talawa backend.',
   REACT_APP_DOCKER_TALAWA_URL: 'GraphQL endpoint inside Docker container.',
