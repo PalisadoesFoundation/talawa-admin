@@ -2584,13 +2584,6 @@
       }
     }
   },
-  "memberActivity": {
-    "yes": "Oui",
-    "no": "Non",
-    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
-    "eventNotFound": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants"
-  },
   "csv": {
     "demographics": "Démographie de {{category}}"
   }

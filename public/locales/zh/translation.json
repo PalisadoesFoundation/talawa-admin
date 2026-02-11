@@ -2584,13 +2584,6 @@
       }
     }
   },
-  "memberActivity": {
-    "yes": "是",
-    "no": "否",
-    "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
-    "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数"
-  },
   "csv": {
     "demographics": "{{category}} 人口统计"
   }
