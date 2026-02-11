@@ -368,7 +368,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                     campaignGoal: 0,
                   });
                 } else {
-                  const parsed = parseInt(value);
+                  const parsed = parseInt(value, 10);
                   if (!isNaN(parsed)) {
                     setFormState({
                       ...formState,

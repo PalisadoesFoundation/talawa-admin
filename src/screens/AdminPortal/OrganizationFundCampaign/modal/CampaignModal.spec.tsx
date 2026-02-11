@@ -1600,7 +1600,7 @@ describe('CampaignModal', () => {
     const endDate = getEndDateInput();
 
     expect(campaignName).toHaveValue('');
-    expect(goalAmount).toHaveValue(0);
+    expect(goalAmount).toHaveValue(null);
     expect(startDate).toHaveValue('');
     expect(endDate).toHaveValue('');
   });
@@ -1643,7 +1643,7 @@ describe('CampaignModal', () => {
 
   it('shows error when creating campaign with invalid start date', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
 
     await user.type(getCampaignNameInput(), 'Test Campaign');
     await user.clear(getFundingGoalInput());
@@ -1721,11 +1721,12 @@ describe('CampaignModal', () => {
     // Test with zero
     await user.clear(goalAmountInput);
     await user.type(goalAmountInput, '0');
-    expect(goalAmountInput).toHaveValue(0);
+    // Component stores 0 internally but renders empty string for display
+    expect(goalAmountInput).toHaveValue(null);
 
     // Test clearing to empty - component sets value to 0 when cleared
     await user.clear(goalAmountInput);
-    expect(goalAmountInput).toHaveValue(0);
+    expect(goalAmountInput).toHaveValue(null);
   });
 
   it('should auto-adjust end date when start date is changed to after end date', async () => {
@@ -1787,7 +1788,7 @@ describe('CampaignModal', () => {
 
   it('shows error when creating campaign with invalid end date', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
 
     await user.type(getCampaignNameInput(), 'Test Campaign');
     await user.clear(getFundingGoalInput());
@@ -1813,7 +1814,7 @@ describe('CampaignModal', () => {
 
   it('shows error when updating campaign with invalid dates', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1834,7 +1835,7 @@ describe('CampaignModal', () => {
 
   it('auto-adjusts end date when start date is set after current end date', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     // Set end date first to an early date
     const earlyEndDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');

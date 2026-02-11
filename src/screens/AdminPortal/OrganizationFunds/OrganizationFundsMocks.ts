@@ -300,6 +300,20 @@ export const MOCKS_ERROR = [
       variables: {
         input: {
           id: 'fundId',
+          name: 'Fund 2',
+          isTaxDeductible: false,
+          isDefault: true,
+        },
+      },
+    },
+    error: new Error('Mock graphql error'),
+  },
+  {
+    request: {
+      query: UPDATE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
           isArchived: true,
         },
       },

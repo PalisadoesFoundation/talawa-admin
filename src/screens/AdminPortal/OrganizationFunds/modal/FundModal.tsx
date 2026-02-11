@@ -11,7 +11,7 @@ import {
   UPDATE_FUND_MUTATION,
   DELETE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 export interface InterfaceFundModal {
@@ -89,7 +89,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
-  const [deleteFund] = useMutation(DELETE_FUND_MUTATION);
+  const [deleteFund, { loading: deleteFundLoading }] =
+    useMutation(DELETE_FUND_MUTATION);
 
   const createFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
@@ -341,9 +342,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 className={styles.deleteButton}
                 data-testid="deleteFundBtn"
                 onClick={deleteFundHandler}
+                disabled={deleteFundLoading}
               >
                 <i className="fas fa-trash me-2" />
-                {t('delete')}
+                {deleteFundLoading ? t('delete') + '...' : t('delete')}
               </Button>
             </div>
             <Button

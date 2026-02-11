@@ -10,15 +10,14 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import * as apollo from '@apollo/client';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -255,9 +254,9 @@ describe('FundModal', () => {
       ...fundProps[1],
       fund: baseFund
         ? {
-            ...baseFund,
-            isArchived: true,
-          }
+          ...baseFund,
+          isArchived: true,
+        }
         : null,
       hide: vi.fn(),
       refetchFunds: vi.fn(),
@@ -285,9 +284,9 @@ describe('FundModal', () => {
       ...fundProps[1],
       fund: baseFund
         ? {
-            ...baseFund,
-            id: undefined as unknown as string,
-          }
+          ...baseFund,
+          id: undefined as unknown as string,
+        }
         : null,
       hide: vi.fn(),
       refetchFunds: vi.fn(),
@@ -387,8 +386,8 @@ describe('FundModal', () => {
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     await userEvent.click(defaultSwitch);
 
-    const archiveBtn = screen.getByTestId('archiveFundBtn');
-    await userEvent.click(archiveBtn);
+    // Note: Archive button click removed to isolate update-error path
+    // archiveFundBtn triggers a separate mutation that would fire its own error
 
     await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
@@ -569,6 +568,24 @@ describe('FundModal', () => {
       // Verify modal closed and refetch called
       expect(fundProps[1].hide).toHaveBeenCalled();
       expect(fundProps[1].refetchFunds).toHaveBeenCalled();
+    });
+  });
+
+  it('should show error notification when archive fund fails', async () => {
+    const props = {
+      ...fundProps[1],
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link2, props);
+
+    const archiveBtn = screen.getByTestId('archiveFundBtn');
+    await userEvent.click(archiveBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
     });
   });
 

@@ -138,7 +138,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                       }
                       data-testid={dataTestId}
                       data-cy={dataCy}
-                      className={`form-control ${styles.fullWidth} ${textFieldClassName || ''} ${InputProps?.endAdornment ? styles.paddedInput : ''} ${showError ? 'is-invalid' : ''}`.trim()}
+                      className={`form-control ${styles.fullWidth} ${InputProps?.endAdornment ? styles.paddedInput : ''} ${showError ? 'is-invalid' : ''}`.trim()}
                     />
                     {InputProps?.endAdornment && (
                       <div

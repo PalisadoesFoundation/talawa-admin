@@ -78,7 +78,8 @@
 
 .createFundButton {
   background-color: var(--color-gray-50);
-  color: var(--color-gray-700) !important;
+  --btn-text-color: var(--color-gray-700);
+  color: var(--btn-text-color) !important;
   border: var(--border-1) solid var(--color-gray-700);
   padding: var(--space-2) var(--space-4);
   flex-shrink: 0;
@@ -92,12 +93,12 @@
 .createFundButton:hover {
   box-shadow: var(--drop-shadow);
   background-color: var(--color-gray-100);
-  color: var(--color-black) !important;
+  --btn-text-color: var(--color-black);
   border: var(--border-1) solid var(--color-gray-700);
 }
 
 .createFundButton:active {
-  color: var(--color-black) !important;
+  --btn-text-color: var(--color-black);
   background-color: var(--color-gray-200);
   border: var(--border-1) solid var(--color-gray-700);
 }
