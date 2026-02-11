@@ -30,7 +30,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 // Common test params
 const DEFAULT_ORG_ID = '';
-const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 10; // Matches ITEMS_PER_PAGE in component
 
 // Helper for members edges
@@ -60,18 +59,11 @@ const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
 
 // Queries in People.tsx use these variables (orgId, where, first, after)
 const makeQueryVars = (overrides: Record<string, unknown> = {}) => {
-  const { where: overrideWhere, ...rest } = overrides as {
-    where?: Record<string, unknown>;
-  };
   return {
     orgId: DEFAULT_ORG_ID,
-    where: {
-      firstName_contains: DEFAULT_SEARCH,
-      ...(overrideWhere ?? {}),
-    },
     first: DEFAULT_FIRST,
     after: null,
-    ...rest,
+    ...overrides,
   };
 };
 
@@ -158,69 +150,9 @@ const loadMoreMock = {
 const adminsOnlyMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ where: { role: { equal: 'administrator' } } }),
-  },
-  result: {
-    data: {
-      organization: {
-        members: {
-          edges: [
-            memberEdge({
-              cursor: 'cursor2',
-              id: '2',
-              name: 'Admin User',
-              role: 'administrator',
-              emailAddress: 'admin@example.com',
-            }),
-          ],
-          pageInfo: {
-            endCursor: 'cursor2',
-            hasPreviousPage: false,
-            hasNextPage: false,
-            startCursor: 'cursor2',
-          },
-        },
-      },
-    },
-  },
-};
-
-// Mock for search with "Admin" as firstName_contains
-const adminSearchMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ where: { firstName_contains: 'Admin' } }),
-  },
-  result: {
-    data: {
-      organization: {
-        members: {
-          edges: [
-            memberEdge({
-              cursor: 'cursor2',
-              id: '2',
-              name: 'Admin User',
-              role: 'administrator',
-              emailAddress: 'admin@example.com',
-            }),
-          ],
-          pageInfo: {
-            endCursor: 'cursor2',
-            hasPreviousPage: false,
-            hasNextPage: false,
-            startCursor: 'cursor2',
-          },
-        },
-      },
-    },
-  },
-};
-
-// Mock for search with "Ad" as firstName_contains
-const adSearchMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ where: { firstName_contains: 'Ad' } }),
+    variables: makeQueryVars({
+      where: { role: { equal: 'administrator' } },
+    }),
   },
   result: {
     data: {
@@ -340,7 +272,7 @@ describe('Testing People Screen [User Portal]', () => {
   });
 
   it('Search works properly by pressing enter', async () => {
-    const link = new StaticMockLink([defaultQueryMock, adSearchMock], true);
+    const link = new StaticMockLink([defaultQueryMock], true);
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -365,7 +297,7 @@ describe('Testing People Screen [User Portal]', () => {
   });
 
   it('Search works properly by clicking search Btn', async () => {
-    const link = new StaticMockLink([defaultQueryMock, adminSearchMock], true);
+    const link = new StaticMockLink([defaultQueryMock], true);
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -557,7 +489,7 @@ describe('Testing People Screen Load More [User Portal]', () => {
 
 describe('People Component Mode Switch and Search Coverage', () => {
   it('searches partial user name correctly and displays matching results', async (): Promise<void> => {
-    const link = new StaticMockLink([defaultQueryMock, adminSearchMock], true);
+    const link = new StaticMockLink([defaultQueryMock], true);
     render(
       <MockedProvider link={link}>
         <BrowserRouter>

@@ -72,11 +72,11 @@ export default function People(): React.JSX.Element {
 
   const modes = [t('allMembers'), t('admins')];
 
-  // Reset rows on filter or search change; CursorPaginationManager refetches via variables
+  // Reset rows on filter change; CursorPaginationManager refetches via variables
   useEffect(() => {
     setMembers([]);
     setIsLoading(true);
-  }, [mode, searchTerm]);
+  }, [mode]);
 
   const handleSearch = (newFilter: string): void => {
     setSearchTerm(newFilter);
@@ -88,26 +88,30 @@ export default function People(): React.JSX.Element {
     setIsLoading(false);
   }, []);
 
-  // Build query variables based on current mode and search term
+  // Build query variables based on current mode
   const queryVariables = useMemo(() => {
     const vars: Record<string, unknown> = {
       orgId: organizationId,
-      where: {
-        firstName_contains: searchTerm,
-      },
     };
     // Add admin filter when in admin mode
     if (mode === 1) {
-      (vars.where as Record<string, unknown>).role = {
-        equal: 'administrator',
+      vars.where = {
+        role: {
+          equal: 'administrator',
+        },
       };
     }
     return vars;
-  }, [organizationId, searchTerm, mode]);
+  }, [organizationId, mode]);
 
-  // Transform members data for DataTable
+  // Transform members data for DataTable (with client-side name filtering)
   const tableData: IPeopleTableRow[] = useMemo(() => {
-    return members.map((member, index) => ({
+    const filtered = searchTerm
+      ? members.filter((member) =>
+          member.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        )
+      : members;
+    return filtered.map((member, index) => ({
       id: member.id,
       name: member.name,
       email: member.emailAddress ?? t('emailNotAvailable'),
@@ -115,7 +119,7 @@ export default function People(): React.JSX.Element {
       role: member.role === 'administrator' ? 'Admin' : 'Member',
       sno: index + 1,
     }));
-  }, [members, t]);
+  }, [members, t, searchTerm]);
 
   // Column definitions for DataTable
   const columns: IColumnDef<IPeopleTableRow>[] = [
