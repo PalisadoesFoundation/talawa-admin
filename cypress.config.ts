@@ -192,6 +192,30 @@ const DELETE_USER_MUTATION = `
   }
 `;
 
+const CREATE_ADVERTISEMENT_MUTATION = `
+  mutation CreateAdvertisement(
+    $organizationId: ID!
+    $name: String!
+    $type: AdvertisementType!
+    $startAt: DateTime!
+    $endAt: DateTime!
+    $description: String
+  ) {
+    createAdvertisement(
+      input: {
+        organizationId: $organizationId
+        name: $name
+        type: $type
+        startAt: $startAt
+        endAt: $endAt
+        description: $description
+      }
+    ) {
+      id
+    }
+  }
+`;
+
 export default defineConfig({
   e2e: {
     baseUrl: `http://localhost:${PORT}`,
@@ -559,8 +583,8 @@ export default defineConfig({
                   (error.extensions as Record<string, unknown>)?.issues,
                 )
                   ? ((error.extensions as Record<string, unknown>).issues as {
-                    message?: string;
-                  }[])
+                      message?: string;
+                    }[])
                   : [];
                 return (
                   code.includes('forbidden') &&
@@ -607,28 +631,27 @@ export default defineConfig({
               // The backend returns a 'forbidden' error with the detail
               // "Plugin is already installed" in extensions.issues
               // when the plugin was already installed.
-              const hasForbiddenWithInstalled = responseErrors.some(
-                (error) => {
-                  const code =
-                    typeof error.extensions?.code === 'string'
-                      ? error.extensions.code
-                      : '';
-                  const issues = Array.isArray(
-                    (error.extensions as Record<string, unknown>)?.issues,
+              const hasForbiddenWithInstalled = responseErrors.some((error) => {
+                const code =
+                  typeof error.extensions?.code === 'string'
+                    ? error.extensions.code
+                    : '';
+                const issues = Array.isArray(
+                  (error.extensions as Record<string, unknown>)?.issues,
+                )
+                  ? ((error.extensions as Record<string, unknown>).issues as {
+                      message?: string;
+                    }[])
+                  : [];
+                return (
+                  code.includes('forbidden') &&
+                  issues.some((issue) =>
+                    /already\s*installed|already\s*exists/i.test(
+                      issue.message ?? '',
+                    ),
                   )
-                    ? ((error.extensions as Record<string, unknown>)
-                      .issues as { message?: string }[])
-                    : [];
-                  return (
-                    code.includes('forbidden') &&
-                    issues.some((issue) =>
-                      /already\s*installed|already\s*exists/i.test(
-                        issue.message ?? '',
-                      ),
-                    )
-                  );
-                },
-              );
+                );
+              });
               if (hasForbiddenWithInstalled) {
                 return { ok: true };
               }
@@ -742,6 +765,42 @@ export default defineConfig({
                 );
               }
               return undefined;
+            },
+          });
+        },
+        async createTestAdvertisement({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: {
+            organizationId: string;
+            name: string;
+            type: string;
+            startAt: string;
+            endAt: string;
+            description?: string;
+          };
+        }) {
+          return runGraphQLTask<
+            { createAdvertisement?: { id?: string } },
+            { adId: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateAdvertisement',
+            query: CREATE_ADVERTISEMENT_MUTATION,
+            variables: input,
+            extract: (data) => {
+              const adId = data?.createAdvertisement?.id;
+              if (!adId) {
+                throw new Error(
+                  'CreateAdvertisement response missing advertisement id.',
+                );
+              }
+              return { adId };
             },
           });
         },

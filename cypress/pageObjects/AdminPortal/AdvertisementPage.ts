@@ -14,8 +14,7 @@ export class AdvertisementPage {
   private readonly _saveChangesBtn = '[data-cy="saveChanges"]';
   private readonly _deleteBtn = '[data-cy="deletebtn"]';
   private readonly _deleteConfirmBtn = '[data-testid="delete_yes"]';
-  private readonly _advertisementModal =
-    '[data-testid="advertisementModal"]';
+  private readonly _advertisementModal = '[data-testid="advertisementModal"]';
 
   private aliasAdvertisementListQuery() {
     cy.aliasGraphQLOperation('OrganizationAdvertisements');
@@ -66,6 +65,21 @@ export class AdvertisementPage {
     type: string,
     timeout = 10000,
   ) {
+    // Intercept the createAdvertisement mutation to capture the actual response.
+    // This is critical for CI debugging — the proxy logger skips multipart
+    // response bodies, making it impossible to see why the mutation fails.
+    cy.intercept('POST', '/graphql', (req) => {
+      // Match multipart requests (createAdvertisement uses apollo-upload-client)
+      const contentType =
+        req.headers['content-type'] || req.headers['Content-Type'] || '';
+      if (
+        typeof contentType === 'string' &&
+        contentType.includes('multipart')
+      ) {
+        req.alias = 'createAdMutation';
+      }
+    });
+
     // Click the "Create Advertisement" button to open the modal
     cy.get(this._createAdBtn, { timeout }).should('be.visible').click();
 
@@ -80,26 +94,29 @@ export class AdvertisementPage {
     // Click register
     cy.get(this._registerAdBtn).should('be.visible').click({ force: true });
 
-    // Wait for the mutation response to arrive (file upload can be slow)
-    cy.wait(5000);
+    // Wait for the mutation response (up to 60s for slow CI file uploads)
+    cy.wait('@createAdMutation', { timeout: 60000 }).then((interception) => {
+      // Log the mutation response for CI debugging
+      const status = interception.response?.statusCode;
+      const body = interception.response?.body;
+      cy.log(`createAdvertisement response: status=${status}`);
+      cy.log(`createAdvertisement body: ${JSON.stringify(body)}`);
 
-    // Check if the modal closed (success) or is still open (mutation failed
-    // silently, e.g. on a retry where the ad was already created)
-    cy.get('body').then(($body) => {
-      if ($body.find(this._advertisementModal).length > 0) {
-        // Modal is still open — likely a retry where the ad already exists
-        // and the mutation failed silently. Close the modal manually via reload.
-        cy.reload();
+      // Verify the mutation actually succeeded
+      if (body?.errors) {
+        // Log errors but don't throw — let the DOM assertion below catch it
+        cy.log(`createAdvertisement errors: ${JSON.stringify(body.errors)}`);
       }
     });
 
-    // Make sure the modal is gone
-    cy.get(this._advertisementModal).should('not.exist');
+    // Wait for the modal to close — this signals handleRegister succeeded.
+    // Use a generous timeout to account for file upload latency in CI.
+    cy.get(this._advertisementModal, { timeout: 30000 }).should('not.exist');
 
     // Reload to get fresh data (avoids Apollo cache mismatch with refetchQueries)
     cy.reload();
 
-    // Now click the "Active Campaigns" tab (default tab is "Completed Campaigns")
+    // Now click the "Active Campaigns" tab (default tab is "Archived Ads")
     cy.contains(this._activeCampaignsTab, { timeout: 50000 })
       .should('be.visible')
       .click();
@@ -130,7 +147,7 @@ export class AdvertisementPage {
     cy.get(this._saveChangesBtn).should('be.visible').click();
 
     // Wait for modal to close (signals handleUpdate succeeded)
-    cy.get(this._advertisementModal, { timeout: 15000 }).should('not.exist');
+    cy.get(this._advertisementModal, { timeout: 30000 }).should('not.exist');
 
     // Reload and verify the name change persisted
     cy.reload();

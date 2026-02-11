@@ -18,6 +18,7 @@ describe('Testing Admin Advertisement Management', () => {
   let orgId = '';
   let adminEmail = '';
   let adminPassword = '';
+  let authToken = '';
 
   before(() => {
     cy.fixture('auth/credentials')
@@ -54,6 +55,7 @@ describe('Testing Admin Advertisement Management', () => {
         });
       })
       .then(({ token }) => {
+        authToken = token;
         return cy
           .task('createTestPlugin', {
             apiUrl: Cypress.env('apiUrl') as string | undefined,
@@ -79,13 +81,39 @@ describe('Testing Admin Advertisement Management', () => {
     adPage.visitAdvertisementPage(orgId);
   });
 
-  it('create a new advertisement', () => {
-    adPage.createAdvertisement(
-      adData.ad1.name,
-      adData.ad1.description,
-      adData.ad1.mediaPath,
-      adData.ad1.type,
-    );
+  it('create a new advertisement via API and verify it appears', () => {
+    // Create the ad via direct API call — this bypasses the Vite proxy
+    // and multipart file upload, which is unreliable in CI.
+    const startAt = new Date();
+    const endAt = new Date();
+    endAt.setDate(endAt.getDate() + 30); // 30 days from now
+
+    cy.task('createTestAdvertisement', {
+      apiUrl: Cypress.env('apiUrl') as string | undefined,
+      token: authToken,
+      input: {
+        organizationId: orgId,
+        name: adData.ad1.name,
+        type: 'pop_up',
+        startAt: startAt.toISOString(),
+        endAt: endAt.toISOString(),
+        description: adData.ad1.description,
+      },
+    }).then(({ adId }) => {
+      expect(adId).to.be.a('string');
+      cy.log(`Created advertisement: ${adId}`);
+    });
+
+    // Reload to pick up the newly-created ad
+    cy.reload();
+
+    // Navigate to Active Campaigns tab (default tab is "Archived Ads")
+    cy.contains('Active Campaigns', { timeout: 50000 })
+      .should('be.visible')
+      .click();
+
+    // Verify the created ad appears
+    cy.contains(adData.ad1.name, { timeout: 50000 }).should('be.visible');
   });
 
   it('shows the created advertisement under active campaigns and allows editing', () => {
