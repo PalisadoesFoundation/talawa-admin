@@ -26,49 +26,20 @@ export class AdminDashboardPage {
     cy.url({ timeout }).should('include', '/admin/orglist');
     const emptyStateSelector = '[data-testid="orglist-no-orgs-empty"]';
     cy.get('body', { timeout }).then(($body) => {
+      // Check that either org cards or empty state are present (page loaded)
       const hasOrgCards = $body.find(this._orgcardContainer).length > 0;
       const hasEmptyState = $body.find(emptyStateSelector).length > 0;
-
-      if (!hasOrgCards && hasEmptyState) {
-        cy.createTestOrganization({
-          name: `E2E Org ${Date.now()}`,
-          auth: { role: 'admin' },
-        }).then(({ orgId }) => {
-          // Persist so callers can clean up via cy.cleanupTestOrganization
-          Cypress.env('testOrgId', orgId);
-          cy.reload();
-          cy.get(this._orgcardContainer, { timeout }).should('exist');
-        });
-      }
+      expect(hasOrgCards || hasEmptyState).to.be.true;
     });
     return this;
   }
 
   openFirstOrganization(timeout = 20000) {
-    const openByNavigation = (orgId: string) => {
-      cy.visit(`/admin/orgdash/${orgId}`);
-      cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
-    };
-
-    cy.get('body', { timeout }).then(($body) => {
-      if ($body.find(this._manageButton).length > 0) {
-        cy.get(this._manageButton, { timeout })
-          .should('be.visible')
-          .first()
-          .click();
-        cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
-        return;
-      }
-
-      cy.createTestOrganization({
-        name: `E2E Org ${Date.now()}`,
-        auth: { role: 'admin' },
-      }).then(({ orgId }) => {
-        // Persist so callers can clean up via cy.cleanupTestOrganization
-        Cypress.env('testOrgId', orgId);
-        openByNavigation(orgId);
-      });
-    });
+    cy.get(this._manageButton, { timeout })
+      .should('be.visible')
+      .first()
+      .click();
+    cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
     return this;
   }
 
