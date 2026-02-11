@@ -1,10 +1,10 @@
 import { AdvertisementPage } from '../../pageObjects/AdminPortal/AdvertisementPage';
+import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 
 interface InterfaceAdvertisementData {
   ad1: {
     name: string;
     description: string;
-    mediaPath: string;
     type: string;
   };
   ad2: {
@@ -13,6 +13,7 @@ interface InterfaceAdvertisementData {
 }
 
 describe('Testing Admin Advertisement Management', () => {
+  const dashboard = new AdminDashboardPage();
   const adPage = new AdvertisementPage();
   let adData: InterfaceAdvertisementData;
 
@@ -23,7 +24,6 @@ describe('Testing Admin Advertisement Management', () => {
         ad1: {
           name: ad1?.name ?? 'Advertisement 1',
           description: ad1?.description ?? 'This is a test advertisement',
-          mediaPath: 'cypress/fixtures/advertisement_banner.png',
           type: ad1?.type ?? 'Popup Ad',
         },
         ad2: {
@@ -35,6 +35,7 @@ describe('Testing Admin Advertisement Management', () => {
 
   beforeEach(() => {
     cy.loginByApi('admin');
+    dashboard.visit().verifyOnDashboard().openFirstOrganization();
     adPage.visitAdvertisementPage();
   });
 
@@ -42,7 +43,6 @@ describe('Testing Admin Advertisement Management', () => {
     adPage.createAdvertisement(
       adData.ad1.name,
       adData.ad1.description,
-      adData.ad1.mediaPath,
       adData.ad1.type,
     );
   });
