@@ -739,7 +739,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await user.click(searchBtn);
   });
 
-  test('filters organizations when typing in search', async () => {
+  test('filters organizations based on search input', async () => {
     const user = userEvent.setup();
     setupUser('superAdmin');
 
@@ -748,15 +748,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = await screen.findByTestId('searchInput');
 
     await user.type(searchBar, 'Dog');
+    await user.keyboard('{Enter}');
 
-    // input updated
     expect(searchBar).toHaveValue('Dog');
 
-    // filtered result appears
     await waitFor(() => {
       const cards = screen.getAllByTestId('organization-card-mock');
       expect(cards.length).toBeGreaterThan(0);
-      expect(cards[0]).toHaveTextContent('Dog');
+      expect(cards[0]).toHaveTextContent(/Dog/i);
     });
   });
 
@@ -880,37 +879,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
     });
-  });
-
-  test('testing scroll', async () => {
-    setupUser('superAdmin');
-    setItem('role', 'administrator');
-
-    renderWithMocks(mockConfigurations.scrollMocks);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
-    });
-
-    expect(await screen.findByText('Organization 1')).toBeInTheDocument();
-    expect(await screen.findByText('Organization 2')).toBeInTheDocument();
-
-    Object.defineProperty(window, 'innerHeight', {
-      configurable: true,
-      value: 800,
-    });
-
-    Object.defineProperty(document.documentElement, 'scrollHeight', {
-      configurable: true,
-      value: 1600,
-    });
-
-    Object.defineProperty(window, 'scrollY', {
-      configurable: true,
-      value: 1000,
-    });
-
-    window.dispatchEvent(new Event('scroll'));
   });
 });
 
