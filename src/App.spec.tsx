@@ -378,12 +378,6 @@ const renderApp = (mockLink = link, initialRoute = '/') => {
   );
 };
 
-async function wait(ms = 100): Promise<void> {
-  await new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 let logSpy: ReturnType<typeof vi.spyOn> | undefined;
 let errorSpy: ReturnType<typeof vi.spyOn> | undefined;
 
@@ -405,11 +399,16 @@ describe('Testing the App Component', () => {
   it('Regular user gets redirected from admin routes', async () => {
     renderApp(link, '/admin/orglist');
 
-    await waitFor(() => {
-      // User should see user portal, not admin portal
-      expect(screen.getByTestId('mock-user-organizations')).toBeInTheDocument();
-      expect(screen.queryByTestId('mock-org-list')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        // User should see user portal, not admin portal
+        expect(
+          screen.getByTestId('mock-user-organizations'),
+        ).toBeInTheDocument();
+        expect(screen.queryByTestId('mock-org-list')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Login page shows footer for unauthenticated users', async () => {
@@ -422,7 +421,7 @@ describe('Testing the App Component', () => {
 
   it('Component should be rendered properly and user is logged out', async () => {
     renderApp(link2);
-    await wait();
+    await screen.findByTestId('app-footer');
   });
 
   it('should initialize plugin system on app startup', async () => {
@@ -523,10 +522,8 @@ describe('Testing the App Component', () => {
     const noAdminLink = new StaticMockLink(noAdminMocks, true);
     renderApp(noAdminLink);
 
-    await wait();
-
     // Should handle null adminFor gracefully
-    expect(document.body).toBeInTheDocument();
+    await screen.findByTestId('app-footer');
     // Verify plugin system is initialized even with null adminFor
     await waitFor(() => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
@@ -537,10 +534,8 @@ describe('Testing the App Component', () => {
     // Test that the app doesn't crash with error mocks
     renderApp(errorLink);
 
-    await wait();
-
     // Should not crash and should render something (either loading or login page)
-    expect(document.body).toBeInTheDocument();
+    await screen.findByTestId('app-footer');
 
     // The GraphQL error should not cause the app to crash
     // We don't expect a specific console.error call since the error might be handled silently
@@ -584,10 +579,8 @@ describe('Testing the App Component', () => {
     const emptyLink = new StaticMockLink(emptyMocks, true);
     renderApp(emptyLink);
 
-    await wait();
-
     // Should handle null user gracefully without crashing
-    expect(document.body).toBeInTheDocument();
+    await screen.findByTestId('app-footer');
     // Verify plugin system is initialized even with null user
     await waitFor(() => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
@@ -615,10 +608,8 @@ describe('Testing the App Component', () => {
     const noProfileLink = new StaticMockLink(noProfileMocks, true);
     renderApp(noProfileLink);
 
-    await wait();
-
     // Should handle missing appUserProfile gracefully
-    expect(document.body).toBeInTheDocument();
+    await screen.findByTestId('app-footer');
     // Verify plugin system is initialized even without appUserProfile
     await waitFor(() => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
