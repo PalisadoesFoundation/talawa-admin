@@ -498,8 +498,10 @@ describe('Calendar', () => {
 
     await wait();
     // Verify that the year view renders by checking for year navigation
-    const prevYearButton = screen.getByTestId('prevYear');
-    const nextYearButton = screen.getByTestId('nextYear');
+    const prevYearButton = screen.getByRole('button', {
+      name: /previousYear/i,
+    });
+    const nextYearButton = screen.getByRole('button', { name: /nextYear/i });
     expect(prevYearButton).toBeInTheDocument();
     expect(nextYearButton).toBeInTheDocument();
   });
@@ -977,7 +979,7 @@ describe('Calendar', () => {
       // Check that "View All" button exists, indicating multiple events are available
       const viewAllButton = screen.queryByTestId('more');
       expect(viewAllButton).toBeInTheDocument();
-      expect(viewAllButton).toHaveTextContent('View All');
+      expect(viewAllButton).toHaveTextContent(/view all/i);
     });
 
     it('should filter events for regular users who are organization members', async () => {
