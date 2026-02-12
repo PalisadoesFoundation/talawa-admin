@@ -101,6 +101,10 @@ while [[ $# -gt 0 ]]; do
         --help)
             _show_help
             ;;
+        --)
+            shift
+            break
+            ;;
         *)
             log_error "Unknown option: $1"
             log_info "Run '$(basename "$0") --help' for usage information"
@@ -116,6 +120,50 @@ done
 log_verbose() {
     if [[ "$VERBOSE" == "true" ]]; then
         log_info "[VERBOSE] $1"
+    fi
+}
+
+# ==============================================================================
+# ENSURE TOOL HELPER
+# ==============================================================================
+# Checks for a tool and installs it if missing.
+#
+# Arguments:
+#   $1 - check_fn:     Function that returns 0 if the tool is present
+#   $2 - install_fn:   Function that installs the tool
+#   $3 - display_name: Human-readable name (e.g. "Node.js")
+#   $4 - confirm_msg:  Prompt shown in interactive mode when tool is missing
+#   $5 - version_cmd:  (optional) Command whose stdout is the version string
+#
+# Behaviour mirrors the original per-tool blocks so exit codes, log messages,
+# and interactive/non-interactive flow remain identical.
+# ------------------------------------------------------------------------------
+ensure_tool() {
+    local check_fn="$1"
+    local install_fn="$2"
+    local display_name="$3"
+    local confirm_msg="$4"
+    local version_cmd="${5:-}"
+
+    log_verbose "Checking $display_name..."
+
+    if "$check_fn"; then
+        if [[ -n "$version_cmd" ]]; then
+            log_success "$display_name is available ($($version_cmd 2>/dev/null))"
+        else
+            log_success "$display_name is available"
+        fi
+    else
+        log_info "$display_name not found, installing..."
+        if [[ "$NON_INTERACTIVE" == "true" ]]; then
+            "$install_fn" || die "$display_name installation failed" "$E_MISSING_DEP"
+        else
+            if confirm "$confirm_msg" "y"; then
+                "$install_fn" || die "$display_name installation failed" "$E_MISSING_DEP"
+            else
+                die "$display_name is required for installation" "$E_USER_ABORT"
+            fi
+        fi
     fi
 }
 
@@ -265,55 +313,17 @@ if [[ "$DRY_RUN" == "true" ]]; then
     log_info "[DRY] Would check/install Node.js (version: project-defined)"
     log_info "[DRY] Would check/install pnpm (version: project-defined)"
 else
-    log_verbose "Checking fnm..."
-    if check_fnm; then
-        setup_fnm_env
-        log_success "fnm is available"
-    else
-        log_info "fnm not found, installing..."
-        if [[ "$NON_INTERACTIVE" == "true" ]]; then
-            install_fnm || die "fnm installation failed" "$E_MISSING_DEP"
-        else
-            if confirm "fnm (Fast Node Manager) is not installed. Install it?" "y"; then
-                install_fnm || die "fnm installation failed" "$E_MISSING_DEP"
-            else
-                die "fnm is required for installation" "$E_USER_ABORT"
-            fi
-        fi
-        setup_fnm_env
-    fi
+    ensure_tool check_fnm install_fnm "fnm" \
+        "fnm (Fast Node Manager) is not installed. Install it?"
+    setup_fnm_env
 
-    log_verbose "Checking Node.js..."
-    if check_node; then
-        log_success "Node.js is available ($(node --version 2>/dev/null))"
-    else
-        log_info "Node.js not found, installing..."
-        if [[ "$NON_INTERACTIVE" == "true" ]]; then
-            install_node || die "Node.js installation failed" "$E_MISSING_DEP"
-        else
-            if confirm "Node.js is not installed. Install it via fnm?" "y"; then
-                install_node || die "Node.js installation failed" "$E_MISSING_DEP"
-            else
-                die "Node.js is required for installation" "$E_USER_ABORT"
-            fi
-        fi
-    fi
+    ensure_tool check_node install_node "Node.js" \
+        "Node.js is not installed. Install it via fnm?" \
+        "node --version"
 
-    log_verbose "Checking pnpm..."
-    if check_pnpm; then
-        log_success "pnpm is available ($(pnpm --version 2>/dev/null))"
-    else
-        log_info "pnpm not found, installing..."
-        if [[ "$NON_INTERACTIVE" == "true" ]]; then
-            install_pnpm || die "pnpm installation failed" "$E_MISSING_DEP"
-        else
-            if confirm "pnpm is not installed. Install it via corepack?" "y"; then
-                install_pnpm || die "pnpm installation failed" "$E_MISSING_DEP"
-            else
-                die "pnpm is required for installation" "$E_USER_ABORT"
-            fi
-        fi
-    fi
+    ensure_tool check_pnpm install_pnpm "pnpm" \
+        "pnpm is not installed. Install it via corepack?" \
+        "pnpm --version"
 fi
 
 # ==============================================================================
