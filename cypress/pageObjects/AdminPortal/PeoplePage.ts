@@ -6,7 +6,6 @@ export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
   private readonly _searchButton = '[data-testid="searchbtn"]';
-  private readonly _nameCell = '[data-field="name"]';
   private readonly _addMembersBtn = '[data-testid="addMembers-toggle"]';
   private readonly _existingUserToggle =
     '[data-testid="addMembers-item-existingUser"]';
@@ -16,7 +15,6 @@ export class PeoplePage {
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
   private readonly _confirmRemoveBtnTestId = 'removeMemberBtn';
   private readonly _alert = '[role=alert]';
-  private readonly _dataGridRows = '.MuiDataGrid-row';
   private readonly tableActions = new TableActions('.MuiDataGrid-root');
   private readonly removeMemberModal = new ModalActions('[role="dialog"]');
 
@@ -35,10 +33,7 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    cy.get(this._dataGridRows, { timeout }).should('exist');
-    cy.contains(`${this._dataGridRows} ${this._nameCell}`, name, {
-      timeout,
-    }).should('be.visible');
+    this.tableActions.findRowByText(name, timeout).should('exist');
     return this;
   }
 
@@ -79,14 +74,12 @@ export class PeoplePage {
         name,
         this._removeModalBtn,
         timeout,
-        undefined,
-        true,
       );
     });
 
     this.removeMemberModal
       .waitVisible(timeout)
-      .clickByTestId(this._confirmRemoveBtnTestId, undefined, timeout);
+      .clickByTestId(this._confirmRemoveBtnTestId, { timeout });
 
     cy.get(this._alert, { timeout })
       .should('be.visible')

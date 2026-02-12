@@ -1,4 +1,4 @@
-import type { ClickOptions } from './types';
+import type { ClickOptions, TestIdClickConfig } from './types';
 
 export class ModalActions {
   constructor(private readonly rootSelector = '[role="dialog"]') {}
@@ -12,7 +12,10 @@ export class ModalActions {
     return this;
   }
 
-  clickByTestId(testId: string, options?: ClickOptions, timeout = 10000): this {
+  clickByTestId(
+    testId: string,
+    { options, timeout = 10000 }: TestIdClickConfig = {},
+  ): this {
     this.root(timeout)
       .find(`[data-testid="${testId}"]`)
       .should('be.visible')
@@ -30,15 +33,15 @@ export class ModalActions {
   }
 
   submit(testId = 'modal-submit-btn', options?: ClickOptions): this {
-    return this.clickByTestId(testId, options);
+    return this.clickByTestId(testId, { options });
   }
 
   cancel(testId = 'modal-cancel-btn', options?: ClickOptions): this {
-    return this.clickByTestId(testId, options);
+    return this.clickByTestId(testId, { options });
   }
 
   close(testId = 'modalCloseBtn', options?: ClickOptions): this {
-    return this.clickByTestId(testId, options);
+    return this.clickByTestId(testId, { options });
   }
 
   hasTitle(title: string, timeout = 10000): this {
