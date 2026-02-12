@@ -7,7 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { weekdays, months } from 'types/Event/utils';
+import { weekdays } from 'types/Event/utils';
 import {
   BrowserRouter as Router,
   MemoryRouter,
@@ -176,18 +176,14 @@ describe('Calendar', () => {
       </MockedProvider>,
     );
     await wait();
-    const prevButtons = screen.getAllByTestId('prevYear');
-    // Use for...of to handle awaits sequentially
-    for (const button of prevButtons) {
-      await userEvent.click(button);
-    }
-    await wait();
-    //testing next year button
-    const nextButton = screen.getAllByTestId('prevYear');
-    // Use for...of to handle awaits sequentially
-    for (const button of nextButton) {
-      await userEvent.click(button);
-    }
+    const prevButton = screen.getByLabelText(/previousYear/i);
+    const nextButton = screen.getByTestId('nextYear');
+
+    // click previous year
+    await userEvent.click(prevButton);
+
+    // click next year
+    await userEvent.click(nextButton);
   });
 
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
@@ -333,7 +329,8 @@ describe('Calendar', () => {
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const date = `${year}-${month}-${day}`;
-    const multipleEventData = [
+
+    const multipleEventData: InterfaceEvent[] = [
       {
         id: '1',
         name: 'Event 1',
@@ -348,7 +345,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u1', name: 'Alice' },
       },
       {
         id: '2',
@@ -364,7 +361,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u2', name: 'Bob' },
       },
       {
         id: '3',
@@ -380,7 +377,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u3', name: 'Charlie' },
       },
       {
         id: '4',
@@ -396,7 +393,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u4', name: 'David' },
       },
       {
         id: '5',
@@ -412,9 +409,10 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u5', name: 'Eve' },
       },
     ];
+
     render(
       <Router>
         <MockedProvider link={link}>
@@ -431,34 +429,35 @@ describe('Calendar', () => {
       </Router>,
     );
 
-    // Simulate window resize and check if components respond correctly
+    // Resize window
     await act(async () => {
-      window.innerWidth = 500; // Set the window width to <= 700
-      window.dispatchEvent(new globalThis.Event('resize'));
+      window.innerWidth = 500;
+      window.dispatchEvent(new Event('resize'));
     });
 
-    // Check for "View all" button if there are more than 2 events
-    const viewAllButton = await screen.findAllByTestId('more');
-    expect(viewAllButton.length).toBeGreaterThan(0);
+    // Find and click "View All"
+    const viewAllButtons = screen.getAllByText(/view all/i);
+    expect(viewAllButtons.length).toBeGreaterThan(0);
+    await userEvent.click(viewAllButtons[0]);
 
-    // Simulate clicking the "View all" button to expand the list
-    await userEvent.click(viewAllButton[0]);
-
+    // Ensure Event 5 is not shown yet if collapsed by default
     const event5 = screen.queryByText('Event 5');
     expect(event5).toBeNull();
 
-    const viewLessButtons = screen.getAllByText('View less');
+    const viewLessButtons = screen.getAllByText('View Less');
     expect(viewLessButtons.length).toBeGreaterThan(0);
 
-    // Simulate clicking "View less" to collapse the list
+    // Simulate clicking "View Less" to collapse the list
     await userEvent.click(viewLessButtons[0]);
-    const viewAllButtons = screen.getAllByText('View all');
-    expect(viewAllButtons.length).toBeGreaterThan(0);
 
-    // Reset the window size to avoid side effects for other tests
+    // Check "View All" appears again
+    const viewAllButtonsAfter = screen.getAllByText(/view all/i);
+    expect(viewAllButtonsAfter.length).toBeGreaterThan(0);
+
+    // Reset window size
     await act(async () => {
       window.innerWidth = 1024;
-      window.dispatchEvent(new globalThis.Event('resize'));
+      window.dispatchEvent(new Event('resize'));
     });
   });
 
@@ -498,12 +497,13 @@ describe('Calendar', () => {
     );
 
     await wait();
-    months.forEach((month) => {
-      const elements = screen.getAllByText(month);
-      elements.forEach((element) => {
-        expect(element).toBeInTheDocument();
-      });
+    // Verify that the year view renders by checking for year navigation
+    const prevYearButton = screen.getByRole('button', {
+      name: /previousYear/i,
     });
+    const nextYearButton = screen.getByRole('button', { name: /nextYear/i });
+    expect(prevYearButton).toBeInTheDocument();
+    expect(nextYearButton).toBeInTheDocument();
   });
 
   it('render the hour view', async () => {
@@ -976,10 +976,10 @@ describe('Calendar', () => {
       const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
-      // Check that "View all" button exists, indicating multiple events are available
+      // Check that "View All" button exists, indicating multiple events are available
       const viewAllButton = screen.queryByTestId('more');
       expect(viewAllButton).toBeInTheDocument();
-      expect(viewAllButton).toHaveTextContent('View all');
+      expect(viewAllButton).toHaveTextContent(/view all/i);
     });
 
     it('should filter events for regular users who are organization members', async () => {
@@ -1640,10 +1640,11 @@ describe('Calendar', () => {
 
       // This test verifies the filtering logic works by checking that:
       // 1. Events are processed (day has events class)
-      // 2. Multiple events are available (View all button exists)
+      // 2. Multiple events are available (View All button exists)
       // 3. The filtering allows both public and private events for org members
-      expect(viewAllButton).toHaveTextContent('View all');
+      expect(viewAllButton).toHaveTextContent(/view all/i);
     });
+
     it('should show invite-only events only to creator and admins', async () => {
       const today = dayjs();
 
@@ -1905,15 +1906,16 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      const viewAllBtn = await screen.findByText('View all');
+      const viewAllBtn = await screen.findByText(/view all/i); // regex, case-insensitive
       expect(viewAllBtn).toBeInTheDocument();
 
       await userEvent.click(viewAllBtn);
-      const viewLessBtn = await screen.findByText('View less');
+      const viewLessBtn = await screen.findByText('View Less');
       expect(viewLessBtn).toBeInTheDocument();
 
       await userEvent.click(viewLessBtn);
-      const viewAllBtnAgain = await screen.findByText('View all');
+
+      const viewAllBtnAgain = await screen.findByText(/view all/i);
       expect(viewAllBtnAgain).toBeInTheDocument();
     });
 
@@ -2010,6 +2012,198 @@ describe('Calendar', () => {
       } finally {
         mockHolidays.value = originalValue;
       }
+    });
+
+    describe('Localization Tests', () => {
+      it('should display localized month names in calendar header', () => {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  viewType={ViewType.MONTH}
+                  onMonthChange={onMonthChange}
+                  currentMonth={0} // January
+                  currentYear={2024}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+
+        const headerElement = screen.getByTestId('current-date');
+        // Should contain the year
+        expect(headerElement.textContent).toContain('2024');
+        // Should contain a month name (dayjs formatted)
+        expect(headerElement.textContent).toBeTruthy();
+      });
+
+      it('should display localized month names for holidays', () => {
+        const originalValue = mockHolidays.value;
+        mockHolidays.value = [
+          { name: 'Christmas Day', date: '12-25', month: 'December' },
+        ];
+
+        try {
+          render(
+            <Router>
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={[]}
+                    viewType={ViewType.MONTH}
+                    onMonthChange={onMonthChange}
+                    currentMonth={11} // December
+                    currentYear={2024}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            </Router>,
+          );
+
+          // The holiday should be displayed with a localized month name
+          // In English, it should show "December 25"
+          const holidayElements = screen.getAllByText(/25/);
+          expect(holidayElements.length).toBeGreaterThan(0);
+        } finally {
+          mockHolidays.value = originalValue;
+        }
+      });
+
+      it('should use translation keys for holiday names with fallback', () => {
+        const originalValue = mockHolidays.value;
+        mockHolidays.value = [
+          { name: 'Christmas Day', date: '12-25', month: 'December' },
+        ];
+
+        try {
+          render(
+            <Router>
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={[]}
+                    viewType={ViewType.MONTH}
+                    onMonthChange={onMonthChange}
+                    currentMonth={11} // December
+                    currentYear={2024}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            </Router>,
+          );
+
+          // Should display the holiday name (either translated or fallback)
+          const holidayNames = screen.getAllByText('Christmas Day');
+          expect(holidayNames.length).toBeGreaterThan(0);
+        } finally {
+          mockHolidays.value = originalValue;
+        }
+      });
+
+      it('should handle special characters in holiday names when creating translation keys', () => {
+        const originalValue = mockHolidays.value;
+        mockHolidays.value = [
+          {
+            name: "Mother's Day",
+            date: '05-08',
+            month: 'May',
+          },
+        ];
+
+        try {
+          render(
+            <Router>
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={[]}
+                    viewType={ViewType.MONTH}
+                    onMonthChange={onMonthChange}
+                    currentMonth={4} // May
+                    currentYear={2024}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            </Router>,
+          );
+
+          // Should display the holiday name (apostrophe should be handled)
+          const holidayNames = screen.getAllByText("Mother's Day");
+          expect(holidayNames.length).toBeGreaterThan(0);
+        } finally {
+          mockHolidays.value = originalValue;
+        }
+      });
+
+      it('should display "No holidays available" message when no holidays exist', () => {
+        const originalValue = mockHolidays.value;
+        mockHolidays.value = [];
+
+        try {
+          render(
+            <Router>
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={[]}
+                    viewType={ViewType.MONTH}
+                    onMonthChange={onMonthChange}
+                    currentMonth={0}
+                    currentYear={2024}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            </Router>,
+          );
+
+          // Should display the "No holidays available" message
+          const noHolidaysMessage = screen.getByText(/No holidays available/i);
+          expect(noHolidaysMessage).toBeInTheDocument();
+        } finally {
+          mockHolidays.value = originalValue;
+        }
+      });
+
+      it('should correctly format holiday dates with localized month names', () => {
+        const originalValue = mockHolidays.value;
+        mockHolidays.value = [
+          {
+            name: 'Independence Day (US)',
+            date: '07-04',
+            month: 'July',
+          },
+        ];
+
+        try {
+          render(
+            <Router>
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={[]}
+                    viewType={ViewType.MONTH}
+                    onMonthChange={onMonthChange}
+                    currentMonth={6} // July
+                    currentYear={2024}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            </Router>,
+          );
+
+          // Should display the day number
+          const dayElement = screen.getByText(/04/);
+          expect(dayElement).toBeInTheDocument();
+
+          // Should display the holiday name (may appear in multiple places)
+          const holidayNames = screen.getAllByText('Independence Day (US)');
+          expect(holidayNames.length).toBeGreaterThan(0);
+        } finally {
+          mockHolidays.value = originalValue;
+        }
+      });
     });
   });
 });

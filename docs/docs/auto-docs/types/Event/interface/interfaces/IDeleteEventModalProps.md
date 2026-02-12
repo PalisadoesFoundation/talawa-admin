@@ -18,7 +18,7 @@ Defined in: [src/types/Event/interface.ts:144](https://github.com/PalisadoesFoun
 
 ##### deleteOption?
 
-`"single"` | `"following"` | `"all"`
+`"all"` | `"single"` | `"following"`
 
 #### Returns
 

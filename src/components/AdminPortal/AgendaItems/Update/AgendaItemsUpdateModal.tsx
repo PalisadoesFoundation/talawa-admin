@@ -402,14 +402,14 @@ const AgendaItemsUpdateModal: React.FC<
                 />
               )}
 
-              <button
+              <Button
                 type="button"
                 className={styles.closeButtonFile}
                 aria-label={t('removeAttachment')}
                 onClick={() => handleRemoveAttachment(attachment.objectName)}
               >
                 <i className="fa fa-times" />
-              </button>
+              </Button>
             </div>
           ))}
         </div>
