@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
@@ -133,8 +133,7 @@ i18n.init({
   },
 });
 
-// Simplify EventListCard rendering to avoid router/i18n dependencies in tests
-vi.mock('components/EventListCard/EventListCard', () => {
+vi.mock('shared-components/EventListCard/EventListCard', () => {
   return {
     __esModule: true,
     default: (props: { name?: string } & Record<string, unknown>) => (
@@ -185,7 +184,7 @@ describe('Calendar Component', () => {
   });
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
+    cleanup();
   });
   const mockRefetchEvents = vi.fn();
   const today = new Date();
@@ -315,18 +314,21 @@ describe('Calendar Component', () => {
   });
 
   it('handles year navigation correctly', async () => {
-    const { getByTestId, getByText } = renderWithRouterAndPath(
+    const { getByText } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
     const currentYear = new Date().getFullYear();
 
-    await user.click(getByTestId('prevYear'));
+    const prevButton = screen.getByLabelText('previousYear');
+    const nextButton = screen.getByLabelText('nextYear');
+
+    await user.click(prevButton);
     await waitFor(() => {
       expect(getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
-    await user.click(getByTestId('nextYear'));
+    await user.click(nextButton);
     await waitFor(() => {
       expect(getByText(String(currentYear))).toBeInTheDocument();
     });
@@ -489,7 +491,6 @@ describe('Calendar Component', () => {
     let foundMatch = false;
     for (const button of Array.from(expandButtons)) {
       await user.click(button);
-      // Expect one of the event names to appear when expanded
       const matches = screen.queryAllByText(/New Test Event|Test Event/);
       if (matches.length > 0) {
         expect(matches[0]).toBeInTheDocument();
@@ -568,19 +569,30 @@ describe('Calendar Component', () => {
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
-    // Use the helper with default route for consistency
-    const { getByTestId, getByText, rerender } = renderWithRouterAndPath(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+    const { rerender } = renderWithRouterAndPath(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+      />,
     );
 
-    await user.click(getByTestId('prevYear'));
-    await user.click(getByTestId('prevYear'));
-
-    await user.click(getByTestId('nextYear'));
-    await user.click(getByTestId('nextYear'));
-
     const currentYear = new Date().getFullYear();
-    expect(getByText(String(currentYear))).toBeInTheDocument();
+
+    const prevButton = screen.getByLabelText('previousYear');
+    const nextButton = screen.getByLabelText('nextYear');
+
+    await user.click(prevButton);
+    await user.click(prevButton);
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear - 2))).toBeInTheDocument();
+    });
+
+    await user.click(nextButton);
+    await user.click(nextButton);
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear))).toBeInTheDocument();
+    });
 
     rerender(
       <MemoryRouter initialEntries={['/organization/org1']}>
@@ -594,7 +606,7 @@ describe('Calendar Component', () => {
       </MemoryRouter>,
     );
 
-    expect(getByText(String(currentYear))).toBeInTheDocument();
+    expect(screen.getByText(String(currentYear))).toBeInTheDocument();
   });
 
   it('collapses expanded event list when clicked again', async () => {
@@ -899,24 +911,18 @@ describe('Calendar Component', () => {
       '[data-testid^="expand-btn-"]',
     );
 
+    // Ensure at least one expand button exists
+    expect(expandButtons.length).toBeGreaterThan(0);
+
     // Check if there are events by clicking expand buttons and checking content
     for (const button of Array.from(expandButtons)) {
       await user.click(button);
 
       // Wait for potential event list to appear
-      await waitFor(
-        () => {
-          const eventList = container.querySelector(
-            '._expand_event_list_d8535b',
-          );
-          if (eventList) {
-            // Assert public event is present and private event is not
-            expect(screen.getByText('Public Event')).toBeInTheDocument();
-            expect(screen.queryByText('Private Event')).toBeNull();
-          }
-        },
-        { timeout: 1000 },
-      );
+      await waitFor(() => {
+        expect(screen.getByText('Public Event')).toBeInTheDocument();
+        expect(screen.queryByText('Private Event')).toBeNull();
+      });
     }
   });
 
@@ -983,29 +989,13 @@ describe('Calendar Component', () => {
     });
 
     // Look for expand buttons that may contain events
-    const expandButtons = container.querySelectorAll(
-      '[data-testid^="expand-btn-"]',
-    );
 
     // Check if there are events by clicking expand buttons and checking content
-    for (const button of Array.from(expandButtons)) {
-      await user.click(button);
-
-      // Wait for potential event list to appear
-      await waitFor(
-        () => {
-          const eventList = container.querySelector(
-            '._expand_event_list_d8535b',
-          );
-          if (eventList) {
-            // Assert public event is present and private event is not
-            expect(screen.getByText('Public Event')).toBeInTheDocument();
-            expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
-          }
-        },
-        { timeout: 1000 },
-      );
-    }
+    await clickExpandForDate(container, new Date(publicEvent.startAt), user);
+    await waitFor(() => {
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.queryByText('Private Event')).toBeNull();
+    });
   });
 
   test('handles orgData being undefined', async () => {
@@ -1226,7 +1216,7 @@ describe('Calendar Component', () => {
   });
 
   test('handles calendar navigation across year boundaries', async () => {
-    const { getByTestId } = render(
+    const { getByLabelText } = render(
       <BrowserRouter>
         <Calendar
           eventData={[]}
@@ -1239,26 +1229,20 @@ describe('Calendar Component', () => {
     );
 
     const currentYear = new Date().getFullYear();
-    const prevButton = getByTestId('prevYear');
-    const nextButton = getByTestId('nextYear');
+    const prevButton = getByLabelText('previousYear'); // fixed
+    const nextButton = getByLabelText('nextYear');
 
-    // Test navigation to previous year
     await user.click(prevButton);
-
     await waitFor(() => {
       expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
-    // Test navigation to next year (back to current)
     await user.click(nextButton);
-
     await waitFor(() => {
       expect(screen.getByText(String(currentYear))).toBeInTheDocument();
     });
 
-    // Test navigation to future year
     await user.click(nextButton);
-
     await waitFor(() => {
       expect(screen.getByText(String(currentYear + 1))).toBeInTheDocument();
     });

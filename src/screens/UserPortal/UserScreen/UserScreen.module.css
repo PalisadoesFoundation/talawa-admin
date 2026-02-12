@@ -105,7 +105,7 @@
 .profileImage {
   width: var(--space-9);
   height: var(--space-9);
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   object-fit: cover;
   border: var(--border-2) solid var(--color-gray-100);
 }

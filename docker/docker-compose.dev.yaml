@@ -3,6 +3,8 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.dev
+      args:
+        PNPM_VERSION: '${PNPM_VERSION:-10.4.1}'
     ports:
       - '${PORT:-4321}:${PORT:-4321}'
     env_file:

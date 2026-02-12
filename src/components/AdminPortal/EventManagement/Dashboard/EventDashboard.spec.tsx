@@ -1,7 +1,7 @@
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, waitFor } from '@testing-library/react';
+import { render, act, waitFor, screen, cleanup } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
@@ -113,16 +113,31 @@ const { mockEventListCardModals } = vi.hoisted(() => ({
   mockEventListCardModals: vi.fn(),
 }));
 
-mockEventListCardModals.mockImplementation(() => (
-  <div data-testid="event-list-card-modals" />
-));
+mockEventListCardModals.mockImplementation(
+  ({ eventModalIsOpen, hideViewModal }) => {
+    return eventModalIsOpen ? (
+      <div data-testid="event-list-card-modals">
+        <button
+          type="button"
+          data-testid="modal-close-btn"
+          onClick={hideViewModal}
+        >
+          Close
+        </button>
+      </div>
+    ) : null;
+  },
+);
 
 describe('Testing Event Dashboard Screen', () => {
   beforeAll(() => {
-    vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
-      __esModule: true,
-      default: mockEventListCardModals,
-    }));
+    vi.mock(
+      'shared-components/EventListCard/Modal/EventListCardModals',
+      () => ({
+        __esModule: true,
+        default: mockEventListCardModals,
+      }),
+    );
   });
 
   beforeEach(() => {
@@ -135,13 +150,15 @@ describe('Testing Event Dashboard Screen', () => {
     // Clean up after each test
     localStorageMock.clear();
     vi.clearAllMocks();
+    cleanup();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -162,9 +179,10 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('The page should display event details correctly and should not show the time if all day event', async () => {
     const { getByTestId } = renderEventDashboard(mockWithoutTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -216,7 +234,9 @@ describe('Testing Event Dashboard Screen', () => {
     await wait();
 
     expect(getByTestId('event-location')).toHaveTextContent('N/A');
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
   });
 
   it('Should handle empty description gracefully', async () => {
@@ -242,9 +262,10 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should handle invalid date formats with fallback time', async () => {
     const { getByTestId } = renderEventDashboard(mockInvalidDateTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-details')).toBeInTheDocument();
 
     // Time is displayed from startTime/endTime fields
@@ -489,5 +510,37 @@ describe('Testing Event Dashboard Screen', () => {
     // Assert that the date containers are rendered even if content is empty (strict coverage)
     expect(getByTestId('start-date')).toBeInTheDocument();
     expect(getByTestId('end-date')).toBeInTheDocument();
+  });
+  it('should have correct aria-label on edit button', async () => {
+    renderEventDashboard(mockWithTime);
+    // Select the edit button
+    const editButton = await screen.findByTestId('edit-event-button');
+
+    // Assert the aria-label is correctly set
+    expect(editButton).toHaveAttribute(
+      'aria-label',
+      i18nForTest.t('eventListCard.editEvent'),
+    );
+  });
+
+  it('opens and closes modal', async () => {
+    renderEventDashboard(mockWithTime);
+
+    const editButton = await screen.findByTestId('edit-event-button');
+
+    await user.click(editButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('event-list-card-modals')).toBeVisible();
+    });
+
+    const closeButton = screen.getByTestId('modal-close-btn');
+    await user.click(closeButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('event-list-card-modals'),
+      ).not.toBeInTheDocument();
+    });
   });
 });
