@@ -136,7 +136,21 @@ Guidelines:
 
 ### Custom Commands
 
-Custom Cypress commands are defined in `cypress/support/commands.ts` to provide reusable functionality across tests.
+Common commands defined in `cypress/support/commands.ts`:
+
+- **`cy.loginByApi(role)`**:
+  Logs in programmatically via GraphQL mutation (bypassing UI).
+  - Roles: `'admin'`, `'superAdmin'`, `'user'`.
+  - Usage: `cy.loginByApi('admin')`.
+
+- **`cy.assertToast(message)`**:
+  Waits for a toast notification and asserts its text.
+  - Usage: `cy.assertToast('Organization created successfully')`.
+
+- **`cy.clearAllGraphQLMocks()`**:
+  Resets all GraphQL request interceptors.
+
+See [API-driven test data management](#api-driven-test-data-management) for data setup commands like `createTestOrganization`.
 
 ### GraphQL Utilities
 
@@ -249,6 +263,79 @@ cy.mockGraphQLOperation(
   'api/graphql/createOrganization.error.conflict.json',
 );
 ```
+
+### API-driven test data management
+
+When a spec needs real data against talawa-api (instead of mocks), use the
+custom Cypress commands backed by Node tasks in `cypress/support/commands.ts`.
+These helpers keep setup/cleanup consistent and avoid leaking state between
+specs:
+
+- `cy.setupTestEnvironment(options?)` → creates an organization and returns
+  `{ orgId }`.
+- `cy.createTestOrganization(payload)` → creates an organization and returns
+  `{ orgId }`.
+- `cy.seedTestData('events' | 'volunteers' | 'posts', payload)` → creates
+  events, volunteers, or posts and returns IDs for reuse.
+- `cy.cleanupTestOrganization(orgId, options?)` → deletes the org and (optionally)
+  any test users you created.
+
+The Node tasks handle GraphQL requests directly, so they can be used even when
+tests are running headless in CI. Credentials are resolved from env vars first,
+then from fixtures:
+
+- `CYPRESS_E2E_ADMIN_EMAIL` / `CYPRESS_E2E_ADMIN_PASSWORD`
+- `CYPRESS_E2E_SUPERADMIN_EMAIL` / `CYPRESS_E2E_SUPERADMIN_PASSWORD`
+- `CYPRESS_E2E_USER_EMAIL` / `CYPRESS_E2E_USER_PASSWORD`
+
+Example usage:
+
+```ts
+let orgId = '';
+const userIds: string[] = [];
+
+before(() => {
+  cy.setupTestEnvironment().then(({ orgId: createdOrgId }) => {
+    orgId = createdOrgId;
+  });
+});
+
+after(() => {
+  if (orgId) {
+    cy.cleanupTestOrganization(orgId, { userIds });
+  }
+});
+
+it('seeds event data', () => {
+  cy.seedTestData('events', { orgId }).then(({ eventId }) => {
+    expect(eventId).to.be.a('string').and.not.equal('');
+  });
+});
+
+it('seeds post data', () => {
+  cy.seedTestData('posts', { orgId }).then(({ postId }) => {
+    expect(postId).to.be.a('string').and.not.equal('');
+  });
+});
+
+it('seeds volunteer data', () => {
+  cy.seedTestData('events', { orgId }).then(({ eventId }) => {
+    cy.seedTestData('volunteers', { eventId }).then(({ userId }) => {
+      if (userId) {
+        userIds.push(userId);
+      }
+    });
+  });
+});
+```
+
+Best practices:
+
+- Keep data creation inside `before`/`beforeEach`, and cleanup in `after`/`afterEach`.
+- Use unique names to avoid collisions (`E2E Org ${Date.now()}`, etc.).
+- If you seed volunteers without supplying `userId`, a user is created for you.
+  Pass those IDs to `cleanupTestOrganization` via `options.userIds` to avoid
+  leaking accounts.
 
 Example usage with JSON fixtures:
 

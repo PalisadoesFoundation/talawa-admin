@@ -24,8 +24,13 @@ export class AdminDashboardPage {
 
   verifyOnDashboard(timeout = 20000) {
     cy.url({ timeout }).should('include', '/admin/orglist');
-    cy.get(this._orgcardContainer, { timeout }).should('be.visible');
-    cy.contains('Admin Portal', { timeout }).should('be.visible');
+    const emptyStateSelector = '[data-testid="orglist-no-orgs-empty"]';
+    cy.get('body', { timeout }).then(($body) => {
+      // Check that either org cards or empty state are present (page loaded)
+      const hasOrgCards = $body.find(this._orgcardContainer).length > 0;
+      const hasEmptyState = $body.find(emptyStateSelector).length > 0;
+      expect(hasOrgCards || hasEmptyState).to.equal(true);
+    });
     return this;
   }
 

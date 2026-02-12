@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 import { ModalActions } from '../shared/ModalActions';
 import { TableActions } from '../shared/TableActions';
 
@@ -5,7 +6,7 @@ export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
   private readonly _searchButton = '[data-testid="searchbtn"]';
-  private readonly _searchResult = '[data-field="name"]';
+  private readonly _nameCell = '[data-field="name"]';
   private readonly _addMembersBtn = '[data-testid="addMembers-toggle"]';
   private readonly _existingUserToggle =
     '[data-testid="addMembers-item-existingUser"]';
@@ -15,6 +16,7 @@ export class PeoplePage {
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
   private readonly _confirmRemoveBtnTestId = 'removeMemberBtn';
   private readonly _alert = '[role=alert]';
+  private readonly _dataGridRows = '.MuiDataGrid-row';
   private readonly tableActions = new TableActions('.MuiDataGrid-root');
   private readonly removeMemberModal = new ModalActions('[role="dialog"]');
 
@@ -33,9 +35,10 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    cy.get(this._searchResult, { timeout })
-      .should('be.visible')
-      .and('contain.text', name);
+    cy.get(this._dataGridRows, { timeout }).should('exist');
+    cy.contains(`${this._dataGridRows} ${this._nameCell}`, name, {
+      timeout,
+    }).should('be.visible');
     return this;
   }
 
@@ -48,17 +51,20 @@ export class PeoplePage {
   }
 
   searchAndSelectUser(name: string, timeout = 40000) {
-    cy.get(this._searchUserInput, { timeout }).should('be.visible').type(name);
+    cy.get(this._searchUserInput, { timeout })
+      .should('be.visible')
+      .clear()
+      .type(name);
     cy.get(this._submitSearchBtn, { timeout }).should('be.visible').click();
     cy.contains(name, { timeout }).should('be.visible');
     return this;
   }
 
   confirmAddUser(name: string, timeout = 100000) {
-    cy.get(this._addBtn, { timeout }).should('be.visible').click();
-    cy.get(this._alert, { timeout })
-      .should('be.visible')
-      .and('contain.text', 'Member added Successfully');
+    cy.get(this._addBtn, { timeout }).first().should('be.visible').click();
+    cy.contains(this._alert, 'Member added Successfully', { timeout }).should(
+      'be.visible',
+    );
     cy.reload();
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
@@ -77,6 +83,8 @@ export class PeoplePage {
             name,
             this._removeModalBtn,
             timeout,
+            undefined,
+            true,
           );
         });
     });
@@ -94,6 +102,11 @@ export class PeoplePage {
   resetSearch(timeout = 40000) {
     cy.get(this._searchInput, { timeout }).should('be.visible').clear();
     cy.get(this._searchButton, { timeout }).should('be.visible').click();
+    return this;
+  }
+
+  verifyMinRows(minRows: number, timeout = 40000) {
+    this.tableActions.expectMinRows(minRows, timeout);
     return this;
   }
 }
