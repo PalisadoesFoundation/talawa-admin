@@ -97,6 +97,10 @@
   font-size: var(--font-size-md);
 }
 
+.orgPeopleGrid {
+  padding-right: var(--space-7);
+}
+
 .orgPeopleGrid [data-field='sl_no'],
 .orgPeopleGrid [data-field='profile'] {
   min-width: var(--space-10);
@@ -110,4 +114,40 @@
 .orgPeopleGrid [data-field='joined'],
 .orgPeopleGrid [data-field='action'] {
   min-width: var(--space-13);
+}
+
+.orgPeopleGrid [data-testid='calendarEventHeader'] {
+  width: auto;
+  flex-shrink: 0;
+}
+
+.orgPeopleGrid [data-testid='addMembers-toggle'] {
+  width: auto;
+  min-width: var(--space-16);
+}
+
+.orgPeopleGrid [data-testid='sort-container'],
+.orgPeopleGrid [data-testid='sort-toggle'] {
+  background-color: var(--color-gray-50) !important;
+}
+
+.orgPeopleGrid [data-testid='sort-container']:is(:hover, :active),
+.orgPeopleGrid [data-testid='sort-container'].show,
+.orgPeopleGrid [data-testid='addMembers-container']:is(:hover, :active),
+.orgPeopleGrid [data-testid='addMembers-container'].show {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.orgPeopleGrid [data-testid='sort-toggle']:is(:hover, :active),
+.orgPeopleGrid [data-testid='sort-container'].show [data-testid='sort-toggle'],
+.orgPeopleGrid [data-testid='addMembers-toggle']:is(:hover, :active),
+.orgPeopleGrid
+  [data-testid='addMembers-container'].show
+  [data-testid='addMembers-toggle'] {
+  background-color: var(--color-gray-500) !important;
+  border: var(--border-1) solid var(--color-gray-500) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
 }
