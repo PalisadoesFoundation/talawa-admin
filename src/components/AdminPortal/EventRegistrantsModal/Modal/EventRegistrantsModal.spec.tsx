@@ -436,6 +436,76 @@ describe('EventRegistrantsModal', () => {
     );
   });
 
+  test('does not trigger addRegistrant when isAdding is true (guard at line 123)', async () => {
+    const addMutateMock = vi
+      .fn()
+      .mockImplementation(
+        () => new Promise((resolve) => setTimeout(resolve, 500)),
+      );
+
+    const useMutationSpy = vi
+      .spyOn(ApolloClient, 'useMutation')
+      .mockReturnValue([
+        addMutateMock,
+        {
+          loading: false,
+          error: undefined,
+          called: false,
+          client: {} as ApolloClient.ApolloClient<object>,
+          reset: vi.fn(),
+        },
+      ]);
+
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
+    await user.type(input, 'John');
+    const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+    await user.click(option);
+
+    await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+
+    vi.clearAllMocks();
+
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
+
+    await user.click(addButton);
+
+    await waitFor(
+      () => {
+        expect(addMutateMock).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 3000 },
+    );
+
+    vi.clearAllMocks();
+
+    await user.click(addButton);
+
+    await waitFor(
+      () => {
+        expect(addMutateMock).not.toHaveBeenCalled();
+      },
+      { timeout: 1000 },
+    );
+
+    useMutationSpy.mockRestore();
+  });
+
   test('shows warning when Add Registrant is clicked without selecting a member', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
