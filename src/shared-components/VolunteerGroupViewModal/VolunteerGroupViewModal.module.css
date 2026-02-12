@@ -1,6 +1,6 @@
 .volunteerGroupViewModal {
-  max-width: 80vw;
-  margin: 2vh auto;
+  max-width: var(--space-29);
+  margin: var(--space-5) auto;
 }
 
 .tableimages {
@@ -15,7 +15,7 @@
 .imageContainer {
   width: var(--space-10);
   height: var(--space-10);
-  border-radius: 100%;
+  border-radius: var(--radius-full);
   margin-right: var(--space-4);
   margin-top: var(--space-4);
 }
@@ -24,7 +24,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 100%;
+  border-radius: var(--radius-full);
 }
 
 .modalTable {

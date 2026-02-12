@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   position: relative;
   border: var(--border-2) solid var(--color-blue-500);
 }
