@@ -31,7 +31,7 @@
  * ```
  *
  */
-import EventListCard from 'components/EventListCard/EventListCard';
+import EventListCard from 'shared-components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'shared-components/Button';
 import React, { useState, useEffect, type JSX } from 'react';
@@ -230,7 +230,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 {expandedY === expandKey && renderedEvents}
               </div>
               {eventsForDate.length > 0 ? (
-                <button
+                <Button
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`expand-btn-${expandKey}`}
@@ -243,9 +243,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   ) : (
                     <div className={styles.circularButton}></div>
                   )}
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`no-events-btn-${expandKey}`}
@@ -261,7 +261,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   ) : (
                     <div className={styles.circularButton}></div>
                   )}
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -303,7 +303,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             variant="outlined"
             className={styles.buttonEventCalendar}
             onClick={handlePrevYear}
-            data-testid="prevYear"
+            aria-label={tCommon('previousYear')}
           >
             <ChevronLeft />
           </Button>
@@ -313,6 +313,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             className={styles.buttonEventCalendar}
             onClick={handleNextYear}
             data-testid="nextYear"
+            aria-label={tCommon('nextYear')}
           >
             <ChevronRight />
           </Button>
