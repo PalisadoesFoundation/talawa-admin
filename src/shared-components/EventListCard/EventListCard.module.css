@@ -1,0 +1,65 @@
+.cardsEventListCard {
+  background-color: var(--cardsEventListCard-bg);
+  border: var(--border-0) solid var(--cardsEventListCard-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  height: var(--space-8);
+  cursor: pointer;
+  padding: 0 var(--space-2);
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardsEventListCard:hover {
+  transform: scale(1.02);
+}
+
+.cardsEventListCard > p {
+  font-size: var(--font-size-xs);
+  margin-top: 0px;
+  margin-bottom: var(--space-2);
+}
+
+.cardsEventListCard a {
+  color: var(--cardsEventListCard-a-color);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cardsEventListCard a:hover {
+  color: var(--cardsEventListCard-a-color-hover);
+}
+
+.cardsEventListCard:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cardsEventListCard:first-child:nth-last-child(even) {
+  grid-column: auto / span 1;
+}
+
+.dispflexEventListCard {
+  display: flex;
+  cursor: pointer;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+}
+
+.dispflexEventListCard > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: var(--space-2);
+}
+
+.eventtitle {
+  margin-bottom: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
+  color: var(--cardsEventListCard-h2-color);
+  text-align: center;
+}

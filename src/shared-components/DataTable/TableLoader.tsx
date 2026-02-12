@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ITableLoaderProps } from '../../types/shared-components/DataTable/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './TableLoader.module.css';
 
 /**
  * TableLoader renders skeleton loading rows that match the table structure.
@@ -69,5 +69,3 @@ TableLoaderMemo.displayName = 'TableLoader';
 export const TableLoader = TableLoaderMemo as <T>(
   props: ITableLoaderProps<T>,
 ) => React.ReactElement;
-
-export default TableLoader;
