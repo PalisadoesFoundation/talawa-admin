@@ -6,7 +6,7 @@
 
 > **BulkActionsBar**(`count`): `Element`
 
-Defined in: [src/shared-components/DataTable/BulkActionsBar.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/BulkActionsBar.tsx#L17)
+Defined in: [src/shared-components/DataTable/BulkActionsBar.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/BulkActionsBar.tsx#L18)
 
 BulkActionsBar displays a toolbar when rows are selected.
 Shows the selected count, action buttons, and a clear button.

@@ -276,7 +276,7 @@
   font-family: var(--font-family-sans, 'Outfit', sans-serif);
   padding: var(--space-6);
   background-color: var(--calendar-bg);
-  min-height: 80vh;
+  min-height: 100%;
   margin-right: var(--space-6);
 }
 

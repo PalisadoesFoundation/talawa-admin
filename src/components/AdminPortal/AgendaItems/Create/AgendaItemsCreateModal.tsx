@@ -455,14 +455,14 @@ const AgendaItemsCreateModal: React.FC<
             <img src={att.previewUrl} alt={t('attachmentPreviewAlt')} />
           )}
 
-          <button
+          <Button
             type="button"
             className={styles.closeButtonFile}
             data-testid="deleteAttachment"
             onClick={() => handleRemoveAttachment(att.objectName)}
           >
             <i className="fa fa-times" />
-          </button>
+          </Button>
         </div>
       ))}
     </CreateModal>

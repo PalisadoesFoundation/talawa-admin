@@ -2485,7 +2485,9 @@
     "clear": "Clear",
     "clearSelection": "Clear selection",
     "loading": "Loading...",
-    "selectRow": "Select row {{rowKey}}"
+    "selectRow": "Select row {{rowKey}}",
+    "previousYear": "Previous Year",
+    "nextYear": "Next Year"
   },
   "donation": {
     "amount_label": "Amount",

@@ -2485,7 +2485,9 @@
     "clear": "Limpiar",
     "clearSelection": "Limpiar selección",
     "loading": "Cargando...",
-    "selectRow": "Seleccionar fila {{rowKey}}"
+    "selectRow": "Seleccionar fila {{rowKey}}",
+    "previousYear": "Año anterior",
+    "nextYear": "Siguiente año"
   },
   "donation": {
     "amount_label": "Cantidad",

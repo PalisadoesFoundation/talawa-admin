@@ -16,7 +16,7 @@
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   border: none;
   color: var(--closeButtonP-color);
   font-weight: var(--font-weight-semibold);
