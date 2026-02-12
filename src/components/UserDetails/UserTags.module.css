@@ -4,10 +4,9 @@
 
 .peopleTabUserTagHeader {
   display: flex;
-  flex-direction: row;
+  flex-flow: row nowrap;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: nowrap;
   width: 100%;
   gap: var(--space-5);
 }
@@ -51,10 +50,7 @@
 }
 
 .peopleTabUserTagTableCell {
-  padding-left: var(--space-7);
-  padding-right: var(--space-7);
-  padding-top: var(--space-5);
-  padding-bottom: var(--space-5);
+  padding: var(--space-5) var(--space-7);
   white-space: nowrap;
   font-size: var(--font-size-sm);
   line-height: var(--space-6);
@@ -74,4 +70,11 @@
 
 .peopleTabUserTagTableRow:hover {
   background-color: var(--color-gray-50);
+}
+
+.peopleTabUserTagNoResults {
+  text-align: center;
+  padding: var(--space-10);
+  color: var(--color-gray-500);
+  font-size: var(--font-size-md);
 }

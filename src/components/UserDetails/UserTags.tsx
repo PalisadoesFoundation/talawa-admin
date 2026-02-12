@@ -38,6 +38,7 @@ import styles from './UserTags.module.css';
 import { useTranslation } from 'react-i18next';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { GET_USER_TAGS } from 'GraphQl/Queries/Queries';
+import Button from 'shared-components/Button/Button';
 import { useQuery } from '@apollo/client';
 import { InterfaceUserTagsProps } from 'types/AdminPortal/UserDetails/UserOrganization/UserEvent/type';
 import {
@@ -86,7 +87,7 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
   const filterTags = (tags: InterfaceUserTag[]) => {
     if (!searchTerm) return tags;
 
-    const term = searchTerm.toLowerCase();
+    const term = searchTerm.trim().toLowerCase();
 
     return tags.filter(
       (tag) =>
@@ -119,7 +120,7 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
         hasDropdowns={true}
         searchPlaceholder={tCommon('searchTags')}
         searchValue={searchTerm}
-        onSearchChange={(value) => setSearchTerm(value.trim())}
+        onSearchChange={(value) => setSearchTerm(value)}
         searchInputTestId="tagsSearchInput"
         searchButtonTestId="tagsSearchBtn"
         dropdowns={[
@@ -175,9 +176,9 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
                     {tag.createdOn}
                   </td>
                   <td className={styles.peopleTabUserTagTableCell}>
-                    <a className={styles.peopleTabUserTagCreatedByButton}>
+                    <Button className={styles.peopleTabUserTagCreatedByButton}>
                       {tag.createdBy}
-                    </a>
+                    </Button>
                   </td>
                 </tr>
               ))}
