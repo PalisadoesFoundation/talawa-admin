@@ -75,18 +75,13 @@ export class PeoplePage {
     this.searchMemberByName(name, timeout);
     cy.then(() => {
       this.tableActions.waitVisible(timeout);
-      this.tableActions
-        .findRowByText(name, timeout, true)
-        .should('exist')
-        .then(() => {
-          this.tableActions.clickRowActionByText(
-            name,
-            this._removeModalBtn,
-            timeout,
-            undefined,
-            true,
-          );
-        });
+      this.tableActions.clickRowActionByText(
+        name,
+        this._removeModalBtn,
+        timeout,
+        undefined,
+        true,
+      );
     });
 
     this.removeMemberModal
