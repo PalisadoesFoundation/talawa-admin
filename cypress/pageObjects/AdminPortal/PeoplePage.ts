@@ -1,9 +1,11 @@
 /// <reference types="cypress" />
+import { ModalActions } from '../shared/ModalActions';
+import { TableActions } from '../shared/TableActions';
+
 export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
   private readonly _searchButton = '[data-testid="searchbtn"]';
-  private readonly _nameCell = '[data-field="name"]';
   private readonly _addMembersBtn = '[data-testid="addMembers-toggle"]';
   private readonly _existingUserToggle =
     '[data-testid="addMembers-item-existingUser"]';
@@ -11,9 +13,10 @@ export class PeoplePage {
   private readonly _submitSearchBtn = '[data-testid="submitBtn"]';
   private readonly _addBtn = '[data-testid="addBtn"]';
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
-  private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
+  private readonly _confirmRemoveBtnTestId = 'removeMemberBtn';
   private readonly _alert = '[role=alert]';
-  private readonly _dataGridRows = '.MuiDataGrid-row';
+  private readonly tableActions = new TableActions('.MuiDataGrid-root');
+  private readonly removeMemberModal = new ModalActions('[role="dialog"]');
 
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
@@ -30,10 +33,7 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    cy.get(this._dataGridRows, { timeout }).should('exist');
-    cy.contains(`${this._dataGridRows} ${this._nameCell}`, name, {
-      timeout,
-    }).should('be.visible');
+    this.tableActions.findRowByText(name, timeout);
     return this;
   }
 
@@ -57,8 +57,6 @@ export class PeoplePage {
 
   confirmAddUser(name: string, timeout = 100000) {
     cy.get(this._addBtn, { timeout }).first().should('be.visible').click();
-    // Assert alert text when it appears; skip if member already exists and no alert shown.
-    // Assert alert text when it appears
     cy.contains(this._alert, 'Member added Successfully', { timeout }).should(
       'be.visible',
     );
@@ -70,20 +68,19 @@ export class PeoplePage {
 
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
-    this.verifyMemberInList(name, timeout);
+    cy.then(() => {
+      this.tableActions.waitVisible(timeout);
+      this.tableActions.clickRowActionByText(
+        name,
+        this._removeModalBtn,
+        timeout,
+      );
+    });
 
-    // Wait for DataGrid to stabilize after search
-    cy.wait(1000);
+    this.removeMemberModal
+      .waitVisible(timeout)
+      .clickByTestId(this._confirmRemoveBtnTestId, { timeout });
 
-    // Scope search to DataGrid rows to avoid matching headers/other UI
-    // Scope search to DataGrid rows to avoid matching headers/other UI
-    cy.contains(`${this._dataGridRows} ${this._nameCell}`, name, { timeout })
-      .closest(this._dataGridRows)
-      .find(this._removeModalBtn)
-      .should('be.visible')
-      .click();
-
-    cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
       .should('be.visible')
       .and('contain.text', 'The Member is removed');
@@ -93,6 +90,11 @@ export class PeoplePage {
   resetSearch(timeout = 40000) {
     cy.get(this._searchInput, { timeout }).should('be.visible').clear();
     cy.get(this._searchButton, { timeout }).should('be.visible').click();
+    return this;
+  }
+
+  verifyMinRows(minRows: number, timeout = 40000) {
+    this.tableActions.expectMinRows(minRows, timeout);
     return this;
   }
 }

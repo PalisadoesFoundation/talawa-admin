@@ -43,10 +43,9 @@ describe('Admin People Tab', () => {
       .searchMemberByName(wiltShepherd.name)
       .verifyMemberInList(wiltShepherd.name);
     peoplePage.resetSearch();
-    peoplePage.verifyMemberInList(wiltShepherd.name);
+    peoplePage.verifyMemberInList(wiltShepherd.name).verifyMinRows(2);
     // Verify that at least 2 members appear (Wilt + the admin who created the org).
     // We avoid hard-coding the admin's display name because it depends on CI seed data.
-    cy.get('.MuiDataGrid-row').should('have.length.at.least', 2);
   });
 
   it('add an existing member to the organization', () => {
