@@ -60,7 +60,7 @@ import { formatDate } from '../../utils/dateFormatter';
 import useLocalStorage from '../../utils/useLocalstorage';
 import styles from './pinnedPostCard.module.css';
 import defaultImg from '../../assets/images/defaultImg.png';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { Button } from '../Button';
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({

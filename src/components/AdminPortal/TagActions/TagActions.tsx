@@ -47,7 +47,7 @@ import {
 } from 'GraphQl/Mutations/TagMutations';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import TagNode from './Node/TagNode';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';

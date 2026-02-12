@@ -19,7 +19,7 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { ApolloLink, Observable } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // Mock Setup
 const MOCKS = [
@@ -236,7 +236,7 @@ vi.mock('react-router-dom', async () => {
   return { ...actual, useParams: () => ({ orgId: mockId }) };
 });
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

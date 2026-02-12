@@ -1,4 +1,4 @@
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   FILE_UPLOAD_MAX_SIZE_MB,
   FILE_UPLOAD_ALLOWED_TYPES,

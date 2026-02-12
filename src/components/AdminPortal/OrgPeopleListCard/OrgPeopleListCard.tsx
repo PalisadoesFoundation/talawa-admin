@@ -33,7 +33,7 @@ import React from 'react';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { useParams, Navigate } from 'react-router';

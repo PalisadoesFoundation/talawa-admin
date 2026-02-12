@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from './useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { toast } from 'react-toastify';
 
 type UseSessionReturnType = {

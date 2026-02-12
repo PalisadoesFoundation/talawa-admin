@@ -20,7 +20,7 @@ import {
   MOCKS_ERROR,
 } from './AddPeopleToTagsMocks';
 import type { TFunction } from 'i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -42,7 +42,7 @@ const toastMocks = vi.hoisted(() => {
   };
 });
 
-vi.mock('components/NotificationToast/NotificationToast', async () => {
+vi.mock('shared-components/NotificationToast/NotificationToast', async () => {
   return {
     NotificationToast: toastMocks,
   };

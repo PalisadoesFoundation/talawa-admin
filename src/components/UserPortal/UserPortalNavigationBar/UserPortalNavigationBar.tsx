@@ -32,7 +32,7 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageSelector from './LanguageSelector';
 import UserProfileDropdown from './UserDropdown';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 export const UserPortalNavigationBar = (
   props: InterfaceUserPortalNavbarProps,

@@ -69,7 +69,7 @@ import {
 } from 'types/AdminPortal/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const GRID_COLUMN_MIN_WIDTH = 100;
 

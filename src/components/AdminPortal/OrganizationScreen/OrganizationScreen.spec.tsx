@@ -33,7 +33,7 @@ const toastMocks = vi.hoisted(() => {
   };
 });
 
-vi.mock('components/NotificationToast/NotificationToast', async () => {
+vi.mock('shared-components/NotificationToast/NotificationToast', async () => {
   return {
     NotificationToast: toastMocks,
   };

@@ -13,7 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import { StaticMockLink } from '../../utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
@@ -31,7 +31,7 @@ import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),

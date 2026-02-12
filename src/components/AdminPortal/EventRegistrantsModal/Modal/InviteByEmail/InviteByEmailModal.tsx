@@ -26,7 +26,7 @@ import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import styles from './InviteByEmailModal.module.css';
 import type { InterfaceInviteByEmailModalProps } from 'types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface';
 
