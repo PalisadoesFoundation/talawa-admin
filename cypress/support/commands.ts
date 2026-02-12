@@ -522,9 +522,9 @@ Cypress.Commands.add('createTestUser', (payload: CreateTestUserPayload) => {
  *
  * **Role escalation**: If `auth.role` is `'admin'` (or omitted, defaulting to
  * `'admin'`), the implementation automatically escalates to `'superAdmin'`
- * when calling `resolveAuthToken` for event, user, and volunteer creation.
- * This is required because the backend APIs for these operations require
- * superAdmin-level permissions.
+ * when calling `resolveAuthToken` for **user creation only**.
+ * Event and volunteer creation require org membership, not superAdmin privilege,
+ * so those use the caller's role directly.
  */
 Cypress.Commands.add(
   'seedTestData',
@@ -568,12 +568,7 @@ Cypress.Commands.add(
             return { eventId };
           });
       };
-      const eventAuth =
-        (eventPayload.auth?.role ?? 'admin') === 'admin'
-          ? { ...(eventPayload.auth ?? {}), role: 'superAdmin' as const }
-          : eventPayload.auth;
-
-      return resolveAuthToken(eventAuth).then((token) => {
+      return resolveAuthToken(eventPayload.auth).then((token) => {
         return createEvent(token);
       });
     }
@@ -729,15 +724,7 @@ Cypress.Commands.add(
                 return { volunteerId, userId, email, password };
               });
           };
-          const volunteerAuth =
-            (volunteerPayload.auth?.role ?? 'admin') === 'admin'
-              ? {
-                  ...(volunteerPayload.auth ?? {}),
-                  role: 'superAdmin' as const,
-                }
-              : volunteerPayload.auth;
-
-          return resolveAuthToken(volunteerAuth).then((token) => {
+          return resolveAuthToken(volunteerPayload.auth).then((token) => {
             return createVolunteer(token);
           });
         },
