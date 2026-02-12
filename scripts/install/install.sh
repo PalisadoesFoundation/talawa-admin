@@ -181,6 +181,9 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
             not_installed)
                 log_warning "Docker CLI: not installed"
                 ;;
+            *)
+                log_warning "Docker CLI: unknown status ($docker_cli_status)"
+                ;;
         esac
 
         # Report daemon status
@@ -200,6 +203,9 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
             cli_not_installed)
                 log_info "Docker daemon: cannot check (CLI not installed)"
                 ;;
+            *)
+                log_warning "Docker daemon: unknown status ($docker_daemon_status)"
+                ;;
         esac
 
         # Report Compose status
@@ -214,6 +220,9 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
                 ;;
             not_installed)
                 log_warning "Docker Compose: not installed"
+                ;;
+            *)
+                log_warning "Docker Compose: unknown status ($docker_compose_status)"
                 ;;
         esac
 
@@ -268,6 +277,7 @@ else
                 die "fnm is required for installation" "$E_USER_ABORT"
             fi
         fi
+        setup_fnm_env
     fi
 
     log_verbose "Checking Node.js..."

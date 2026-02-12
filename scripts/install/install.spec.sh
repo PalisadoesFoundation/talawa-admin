@@ -206,6 +206,11 @@ test_wrapper_delegates() {
 # TEST: Wrapper passes through all flags
 # ==============================================================================
 test_wrapper_passthrough_flags() {
+    if [[ ! -f "$WRAPPER_SCRIPT" ]]; then
+        echo "  ✗ FAILED: Wrapper script not found at $WRAPPER_SCRIPT"
+        return 1
+    fi
+
     local output exit_code
     output="$(bash "$WRAPPER_SCRIPT" --dry-run --non-interactive --skip-docker-check --verbose 2>&1)" && exit_code=$? || exit_code=$?
 
