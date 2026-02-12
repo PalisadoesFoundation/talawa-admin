@@ -1,13 +1,20 @@
-import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { AdminEventPage } from '../../pageObjects/AdminPortal/AdminEventPage';
 
 describe('Admin Event Tab', () => {
-  const dashboard = new AdminDashboardPage();
   const eventPage = new AdminEventPage();
+  let orgId = '';
+
+  before(() => {
+    cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
+      ({ orgId: createdOrgId }) => {
+        orgId = createdOrgId;
+      },
+    );
+  });
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard.visit().verifyOnDashboard().openFirstOrganization();
+    cy.visit(`/admin/orgdash/${orgId}`);
     eventPage.visitEventPage();
   });
 
@@ -37,5 +44,11 @@ describe('Admin Event Tab', () => {
   afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+  });
+
+  after(() => {
+    if (orgId) {
+      cy.cleanupTestOrganization(orgId);
+    }
   });
 });

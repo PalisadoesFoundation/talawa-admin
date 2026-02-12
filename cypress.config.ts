@@ -1,10 +1,217 @@
 import { defineConfig } from 'cypress';
 import fs from 'node:fs';
+import { URL } from 'node:url';
 import codeCoverageTask from '@cypress/code-coverage/task';
 import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || '4321';
+const DEFAULT_API_URL = 'http://localhost:4000/graphql';
+
+type GraphQLError = { message: string; extensions?: Record<string, unknown> };
+type GraphQLResponse<T> = { data?: T; errors?: GraphQLError[] };
+
+/** Returns true when a GraphQL error array contains a 'forbidden' code whose
+ *  extensions.issues indicate the resource already exists / is installed. */
+const isForbiddenWithExistingResource = (
+  errors: { message: string; extensions?: Record<string, unknown> }[],
+): boolean =>
+  errors.some((error) => {
+    const code =
+      typeof error.extensions?.code === 'string'
+        ? error.extensions.code.toLowerCase()
+        : '';
+    const issues = Array.isArray(error.extensions?.issues)
+      ? (error.extensions.issues as { message?: string }[])
+      : [];
+    return (
+      code.includes('forbidden') &&
+      issues.some((issue) =>
+        /already\s*exists|installed/i.test(issue.message ?? ''),
+      )
+    );
+  });
+
+const resolveApiUrl = (rawUrl?: string): string => {
+  const baseUrl =
+    rawUrl ||
+    process.env.CYPRESS_API_URL ||
+    process.env.API_URL ||
+    DEFAULT_API_URL;
+  if (baseUrl.endsWith('/graphql')) {
+    return baseUrl;
+  }
+  return new URL('/graphql', baseUrl).toString();
+};
+
+const postGraphQL = async <T>(
+  apiUrl: string,
+  token: string | undefined,
+  body: {
+    operationName: string;
+    query: string;
+    variables?: Record<string, unknown>;
+  },
+): Promise<GraphQLResponse<T>> => {
+  const fetcher = globalThis.fetch;
+  if (!fetcher) {
+    throw new Error('Global fetch is not available in this Node runtime.');
+  }
+  const response = await fetcher(apiUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(body),
+  });
+
+  let json: GraphQLResponse<T>;
+  try {
+    json = (await response.clone().json()) as GraphQLResponse<T>;
+  } catch (error) {
+    let rawBody = '';
+    try {
+      rawBody = await response.text();
+    } catch (readError) {
+      const readMessage =
+        readError instanceof Error ? readError.message : String(readError);
+      rawBody = `Unable to read response body: ${readMessage}`;
+    }
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown JSON parse error';
+    return {
+      errors: [
+        {
+          message: `GraphQL response parse failed (${response.status} ${response.statusText}). ${rawBody || errorMessage}`,
+        },
+      ],
+    };
+  }
+  if (!response.ok && !json.errors?.length) {
+    return {
+      errors: [
+        {
+          message: `GraphQL request failed (${response.status} ${response.statusText})`,
+        },
+      ],
+    };
+  }
+
+  return json;
+};
+
+const SIGN_IN_QUERY = `
+  query SignIn($email: EmailAddress!, $password: String!) {
+    signIn(
+      input: {
+        emailAddress: $email
+        password: $password
+      }
+    ) {
+      user { id }
+      authenticationToken
+    }
+  }
+`;
+
+const CREATE_ORGANIZATION_MUTATION = `
+  mutation CreateOrganization($input: MutationCreateOrganizationInput!) {
+    createOrganization(input: $input) {
+      id
+    }
+  }
+`;
+
+const CREATE_ORGANIZATION_MEMBERSHIP_MUTATION = `
+  mutation CreateOrganizationMembership(
+    $input: MutationCreateOrganizationMembershipInput!
+  ) {
+    createOrganizationMembership(input: $input) {
+      id
+    }
+  }
+`;
+
+const CREATE_EVENT_MUTATION = `
+  mutation CreateEvent($input: MutationCreateEventInput!) {
+    createEvent(input: $input) {
+      id
+    }
+  }
+`;
+
+const CREATE_USER_MUTATION = `
+  mutation CreateUser($input: MutationCreateUserInput!) {
+    createUser(input: $input) {
+      authenticationToken
+      user { id }
+    }
+  }
+`;
+
+const CREATE_VOLUNTEER_MUTATION = `
+  mutation CreateEventVolunteer($data: EventVolunteerInput!) {
+    createEventVolunteer(data: $data) {
+      id
+    }
+  }
+`;
+
+const CREATE_POST_MUTATION = `
+  mutation CreatePost($input: MutationCreatePostInput!) {
+    createPost(input: $input) {
+      id
+    }
+  }
+`;
+
+const CREATE_PLUGIN_MUTATION = `
+  mutation CreatePlugin($input: CreatePluginInput!) {
+    createPlugin(input: $input) {
+      id
+      pluginId
+      isInstalled
+      isActivated
+    }
+  }
+`;
+
+const INSTALL_PLUGIN_MUTATION = `
+  mutation InstallPlugin($input: InstallPluginInput!) {
+    installPlugin(input: $input) {
+      id
+      pluginId
+      isInstalled
+      isActivated
+    }
+  }
+`;
+
+const CREATE_ACTION_ITEM_CATEGORY_MUTATION = `
+  mutation CreateActionItemCategory($input: MutationCreateActionItemCategoryInput!) {
+    createActionItemCategory(input: $input) {
+      id
+      name
+    }
+  }
+`;
+
+const DELETE_ORGANIZATION_MUTATION = `
+  mutation DeleteOrganization($input: MutationDeleteOrganizationInput!) {
+    deleteOrganization(input: $input) {
+      id
+    }
+  }
+`;
+
+const DELETE_USER_MUTATION = `
+  mutation DeleteUser($input: MutationDeleteUserInput!) {
+    deleteUser(input: $input) {
+      id
+    }
+  }
+`;
 
 export default defineConfig({
   e2e: {
@@ -33,11 +240,84 @@ export default defineConfig({
 
     // Environment variables
     env: {
-      apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
+      apiUrl: resolveApiUrl(),
       RECAPTCHA_SITE_KEY: process.env.REACT_APP_RECAPTCHA_SITE_KEY,
+      E2E_ADMIN_EMAIL:
+        process.env.E2E_ADMIN_EMAIL || process.env.CYPRESS_E2E_ADMIN_EMAIL,
+      E2E_ADMIN_PASSWORD:
+        process.env.E2E_ADMIN_PASSWORD ||
+        process.env.CYPRESS_E2E_ADMIN_PASSWORD,
+      E2E_SUPERADMIN_EMAIL:
+        process.env.E2E_SUPERADMIN_EMAIL ||
+        process.env.CYPRESS_E2E_SUPERADMIN_EMAIL,
+      E2E_SUPERADMIN_PASSWORD:
+        process.env.E2E_SUPERADMIN_PASSWORD ||
+        process.env.CYPRESS_E2E_SUPERADMIN_PASSWORD,
+      E2E_USER_EMAIL:
+        process.env.E2E_USER_EMAIL || process.env.CYPRESS_E2E_USER_EMAIL,
+      E2E_USER_PASSWORD:
+        process.env.E2E_USER_PASSWORD || process.env.CYPRESS_E2E_USER_PASSWORD,
     },
     setupNodeEvents(on, config) {
       codeCoverageTask(on, config);
+      const runGraphQLTask = async <TData, TResult>({
+        apiUrl,
+        token,
+        operationName,
+        query,
+        variables,
+        extract,
+        onErrors,
+      }: {
+        apiUrl?: string;
+        token?: string;
+        operationName: string;
+        query: string;
+        variables?: Record<string, unknown>;
+        extract: (data: TData | undefined) => TResult;
+        onErrors?: (errors: GraphQLError[]) => TResult | undefined;
+      }): Promise<TResult> => {
+        const resolvedApiUrl = resolveApiUrl(
+          apiUrl || (config.env.apiUrl as string | undefined),
+        );
+        const response = await postGraphQL<TData>(resolvedApiUrl, token, {
+          operationName,
+          query,
+          variables,
+        });
+        if (response.errors?.length) {
+          const fallback = onErrors?.(response.errors);
+          if (fallback !== undefined) {
+            return fallback;
+          }
+          const errorMessage = response.errors
+            .map((error) => error.message)
+            .join(', ');
+          throw new Error(`${operationName} failed: ${errorMessage}`);
+        }
+        return extract(response.data);
+      };
+
+      const isNotFoundError = (errors: GraphQLError[]): boolean => {
+        return errors.some((error) => {
+          const extensions = error.extensions ?? {};
+          const code =
+            typeof extensions.code === 'string' ? extensions.code : undefined;
+          const classification =
+            typeof extensions.classification === 'string'
+              ? extensions.classification
+              : undefined;
+          const indicator =
+            `${code ?? ''} ${classification ?? ''}`.toUpperCase();
+          if (
+            indicator.includes('NOT_FOUND') ||
+            indicator.includes('NOT_EXISTS')
+          ) {
+            return true;
+          }
+          return /not found|does not exist|no such/i.test(error.message);
+        });
+      };
       // Custom task to log messages and read files
       on('task', {
         log(message: string) {
@@ -48,6 +328,396 @@ export default defineConfig({
           return fs.existsSync(filename)
             ? fs.readFileSync(filename, 'utf8')
             : null;
+        },
+        async gqlSignIn({
+          apiUrl,
+          email,
+          password,
+        }: {
+          apiUrl?: string;
+          email: string;
+          password: string;
+        }) {
+          return runGraphQLTask<
+            {
+              signIn?: {
+                authenticationToken?: string;
+                user?: { id?: string };
+              };
+            },
+            { token: string; userId: string }
+          >({
+            apiUrl,
+            operationName: 'SignIn',
+            query: SIGN_IN_QUERY,
+            variables: { email, password },
+            extract: (data) => {
+              const token = data?.signIn?.authenticationToken;
+              const userId = data?.signIn?.user?.id;
+              if (!token) {
+                throw new Error(
+                  'SignIn response missing authentication token.',
+                );
+              }
+              if (!userId) {
+                throw new Error('SignIn response missing userId.');
+              }
+              return { token, userId };
+            },
+          });
+        },
+        async createTestOrganization({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createOrganization?: { id?: string } },
+            { orgId: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateOrganization',
+            query: CREATE_ORGANIZATION_MUTATION,
+            variables: { input },
+            extract: (data) => {
+              const orgId = data?.createOrganization?.id;
+              if (!orgId) {
+                throw new Error('CreateOrganization response missing org id.');
+              }
+              return { orgId };
+            },
+          });
+        },
+        async createOrganizationMembership({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createOrganizationMembership?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateOrganizationMembership',
+            query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION,
+            variables: { input },
+            extract: (data) => ({
+              ok: Boolean(data?.createOrganizationMembership?.id),
+            }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (/already|exists/i.test(errorMessage)) {
+                return { ok: true };
+              }
+              return undefined;
+            },
+          });
+        },
+        async createTestEvent({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createEvent?: { id?: string } },
+            { eventId: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateEvent',
+            query: CREATE_EVENT_MUTATION,
+            variables: { input },
+            extract: (data) => {
+              const eventId = data?.createEvent?.id;
+              if (!eventId) {
+                throw new Error('CreateEvent response missing event id.');
+              }
+              return { eventId };
+            },
+          });
+        },
+        async createTestUser({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            {
+              createUser?: {
+                authenticationToken?: string;
+                user?: { id?: string };
+              };
+            },
+            { userId: string; authenticationToken?: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateUser',
+            query: CREATE_USER_MUTATION,
+            variables: { input },
+            extract: (data) => {
+              const userId = data?.createUser?.user?.id;
+              if (!userId) {
+                throw new Error('CreateUser response missing user id.');
+              }
+              return {
+                userId,
+                authenticationToken: data?.createUser?.authenticationToken,
+              };
+            },
+          });
+        },
+        async createTestVolunteer({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createEventVolunteer?: { id?: string } },
+            { volunteerId: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateEventVolunteer',
+            query: CREATE_VOLUNTEER_MUTATION,
+            // CREATE_VOLUNTEER_MUTATION uses $data for CreateEventVolunteer, not $input.
+            variables: { data: input },
+            extract: (data) => {
+              const volunteerId = data?.createEventVolunteer?.id;
+              if (!volunteerId) {
+                throw new Error('CreateEventVolunteer response missing id.');
+              }
+              return { volunteerId };
+            },
+          });
+        },
+        async createTestPost({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createPost?: { id?: string } },
+            { postId: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreatePost',
+            query: CREATE_POST_MUTATION,
+            variables: { input },
+            extract: (data) => {
+              const postId = data?.createPost?.id;
+              if (!postId) {
+                throw new Error('CreatePost response missing id.');
+              }
+              return { postId };
+            },
+          });
+        },
+        async createTestPlugin({
+          apiUrl,
+          token,
+          pluginId,
+        }: {
+          apiUrl?: string;
+          token: string;
+          pluginId: string;
+        }) {
+          return runGraphQLTask<
+            { createPlugin?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreatePlugin',
+            query: CREATE_PLUGIN_MUTATION,
+            variables: { input: { pluginId } },
+            extract: (data) => ({ ok: Boolean(data?.createPlugin?.id) }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (/already|exists|duplicate/i.test(errorMessage)) {
+                return { ok: true };
+              }
+              if (isForbiddenWithExistingResource(responseErrors)) {
+                return { ok: true };
+              }
+              return undefined;
+            },
+          });
+        },
+        async installTestPlugin({
+          apiUrl,
+          token,
+          pluginId,
+        }: {
+          apiUrl?: string;
+          token: string;
+          pluginId: string;
+        }) {
+          return runGraphQLTask<
+            { installPlugin?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'InstallPlugin',
+            query: INSTALL_PLUGIN_MUTATION,
+            variables: { input: { pluginId } },
+            extract: (data) => ({ ok: Boolean(data?.installPlugin?.id) }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (
+                /already.*installed|is installed|exists/i.test(errorMessage)
+              ) {
+                return { ok: true };
+              }
+              if (isForbiddenWithExistingResource(responseErrors)) {
+                return { ok: true };
+              }
+              return undefined;
+            },
+          });
+        },
+        async createTestActionItemCategory({
+          apiUrl,
+          token,
+          input,
+        }: {
+          apiUrl?: string;
+          token: string;
+          input: Record<string, unknown>;
+        }) {
+          return runGraphQLTask<
+            { createActionItemCategory?: { id?: string; name?: string } },
+            { categoryId: string; name?: string }
+          >({
+            apiUrl,
+            token,
+            operationName: 'CreateActionItemCategory',
+            query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+            variables: { input },
+            extract: (data) => {
+              const categoryId = data?.createActionItemCategory?.id;
+              if (!categoryId) {
+                throw new Error(
+                  'CreateActionItemCategory response missing category id.',
+                );
+              }
+              return {
+                categoryId,
+                name: data?.createActionItemCategory?.name,
+              };
+            },
+          });
+        },
+        async deleteTestOrganization({
+          apiUrl,
+          token,
+          orgId,
+          allowNotFound,
+        }: {
+          apiUrl?: string;
+          token: string;
+          orgId: string;
+          allowNotFound?: boolean;
+        }) {
+          return runGraphQLTask<
+            { deleteOrganization?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'DeleteOrganization',
+            query: DELETE_ORGANIZATION_MUTATION,
+            variables: { input: { id: orgId } },
+            extract: (data) => {
+              const deletedId = data?.deleteOrganization?.id;
+              return { ok: Boolean(deletedId) };
+            },
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (allowNotFound && isNotFoundError(responseErrors)) {
+                return { ok: true };
+              }
+              if (allowNotFound) {
+                console.warn(
+                  `DeleteOrganization failed for ${orgId} with allowNotFound=true: ${errorMessage}`,
+                );
+              }
+              return undefined;
+            },
+          });
+        },
+        async deleteTestUser({
+          apiUrl,
+          token,
+          userId,
+          allowNotFound,
+        }: {
+          apiUrl?: string;
+          token: string;
+          userId: string;
+          allowNotFound?: boolean;
+        }) {
+          return runGraphQLTask<
+            { deleteUser?: { id?: string } },
+            { ok: boolean }
+          >({
+            apiUrl,
+            token,
+            operationName: 'DeleteUser',
+            query: DELETE_USER_MUTATION,
+            variables: { input: { id: userId } },
+            extract: (data) => ({ ok: Boolean(data?.deleteUser?.id) }),
+            onErrors: (responseErrors) => {
+              const errorMessage = responseErrors
+                .map((error) => error.message)
+                .join(', ');
+              if (allowNotFound && isNotFoundError(responseErrors)) {
+                return { ok: true };
+              }
+              if (allowNotFound) {
+                console.warn(
+                  `DeleteUser failed for ${userId} with allowNotFound=true: ${errorMessage}`,
+                );
+              }
+              return undefined;
+            },
+          });
         },
       });
 

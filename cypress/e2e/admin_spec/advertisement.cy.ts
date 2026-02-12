@@ -1,5 +1,4 @@
 import { AdvertisementPage } from '../../pageObjects/AdminPortal/AdvertisementPage';
-import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 
 interface InterfaceAdvertisementData {
   ad1: {
@@ -13,11 +12,17 @@ interface InterfaceAdvertisementData {
 }
 
 describe('Testing Admin Advertisement Management', () => {
-  const dashboard = new AdminDashboardPage();
   const adPage = new AdvertisementPage();
   let adData: InterfaceAdvertisementData;
+  let orgId = '';
 
   before(() => {
+    cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
+      ({ orgId: createdOrgId }) => {
+        orgId = createdOrgId;
+      },
+    );
+
     cy.fixture('admin/advertisements').then((data) => {
       const ad1 = data.advertisements?.[0];
       adData = {
@@ -35,7 +40,7 @@ describe('Testing Admin Advertisement Management', () => {
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard.visit().verifyOnDashboard().openFirstOrganization();
+    cy.visit(`/admin/orgdash/${orgId}`);
     adPage.visitAdvertisementPage();
   });
 
@@ -58,5 +63,11 @@ describe('Testing Admin Advertisement Management', () => {
   afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+  });
+
+  after(() => {
+    if (orgId) {
+      cy.cleanupTestOrganization(orgId);
+    }
   });
 });
