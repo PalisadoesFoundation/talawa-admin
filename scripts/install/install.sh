@@ -166,11 +166,11 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
         log_info "[DRY] Would check Docker CLI, daemon, and Compose status"
     else
         log_verbose "Checking Docker CLI..."
-        docker_cli_status="$(check_docker_cli)"
+        docker_cli_status="$(check_docker_cli)" || true
         log_verbose "Checking Docker daemon..."
-        docker_daemon_status="$(check_docker_daemon)"
+        docker_daemon_status="$(check_docker_daemon)" || true
         log_verbose "Checking Docker Compose..."
-        docker_compose_status="$(check_docker_compose)"
+        docker_compose_status="$(check_docker_compose)" || true
 
         # Report CLI status
         case "$docker_cli_status" in
