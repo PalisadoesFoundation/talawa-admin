@@ -283,7 +283,9 @@ const LoginPage = (): JSX.Element => {
                     className={styles.palisadoes_logo}
                     data-testid="PalisadoesLogo"
                   />
-                  <p className="text-center">{t('fromPalisadoes')}</p>
+                  <p className="text-center" data-testid="app-footer">
+                    {t('fromPalisadoes')}
+                  </p>
                 </a>
               )}
             </div>
