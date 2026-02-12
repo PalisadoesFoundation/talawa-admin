@@ -595,17 +595,33 @@ test('Mode dropdown switches list correctly', async () => {
   // Switch to Mode 1 (Joined Organizations)
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  // Wait for mode change and check if component is still working
-  await wait(200);
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+      expect(screen.getByTestId('org-name-Test Edge Org')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('org-name-anyOrganization2'),
+      ).not.toBeInTheDocument();
+    },
+    { timeout: 3000 },
+  );
 
   // Switch to Mode 2 (Created Organizations)
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
-  // Wait for mode change and check if component is still working
-  await wait(200);
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+      expect(
+        screen.getByTestId('org-name-anyOrganization1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('org-name-Test Edge Org'),
+      ).not.toBeInTheDocument();
+    },
+    { timeout: 3000 },
+  );
 });
 
 test('should display empty state when no organizations exist', async () => {
@@ -879,10 +895,16 @@ test('should handle mode switching to joined organizations', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  await wait(200);
-
-  // Verify we're in mode 1 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+      expect(screen.getByTestId('org-name-Test Edge Org')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('org-name-anyOrganization2'),
+      ).not.toBeInTheDocument();
+    },
+    { timeout: 3000 },
+  );
 });
 
 test('should handle mode switching to created organizations', async () => {
@@ -907,10 +929,18 @@ test('should handle mode switching to created organizations', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
-  await wait(200);
-
-  // Verify we're in mode 2 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+      expect(
+        screen.getByTestId('org-name-anyOrganization1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('org-name-Test Edge Org'),
+      ).not.toBeInTheDocument();
+    },
+    { timeout: 3000 },
+  );
 });
 
 test('should handle null user data in joined organizations', async () => {
@@ -1562,9 +1592,6 @@ test('should call errorHandler when resend verification mutation throws', async 
 });
 
 test('should search joined organizations in mode 1', async () => {
-  // NOTE: In this suite we use StaticMockLink; refetch responses for changed
-  // variables are not reliably reflected in rendered state for this joined-mode
-  // path, so this test validates search submission flow without asserting a new card.
   const joinedSearchLink = new StaticMockLink(
     [
       COMMUNITY_TIMEOUT_MOCK,
@@ -1663,11 +1690,13 @@ test('should search joined organizations in mode 1', async () => {
   await userEvent.type(searchInput, 'joined-search');
   await userEvent.click(screen.getByTestId('searchBtn'));
 
-  // Note: StaticMockLink doesn't reliably reflect refetch responses in DOM,
-  // so we verify component stability rather than asserting the refetched org name.
   await waitFor(() => {
+    expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
+      'joined-search',
+    );
     expect(screen.getByTestId('org-name-JoinedInitial')).toBeInTheDocument();
     expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
 });
 
@@ -1762,11 +1791,13 @@ test('should search created organizations in mode 2', async () => {
   await userEvent.type(searchInput, 'created-search');
   await userEvent.click(screen.getByTestId('searchBtn'));
 
-  // Note: StaticMockLink doesn't reliably reflect refetch responses in DOM,
-  // so we verify component stability rather than asserting the refetched org name.
   await waitFor(() => {
+    expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
+      'created-search',
+    );
     expect(screen.getByTestId('org-name-CreatedInitial')).toBeInTheDocument();
     expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
 });
 
