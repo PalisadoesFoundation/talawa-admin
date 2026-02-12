@@ -1,7 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { TestWrapper } from '../../test-utils/TestWrapper';
 import { TableLoader } from './TableLoader';
 
 // Mock the CSS module to avoid issues during testing
@@ -35,18 +34,11 @@ describe('TableLoader', () => {
   });
 
   it('renders default skeleton grid with minimum rows and columns', () => {
-    render(
-      <TestWrapper>
-        <TableLoader columns={[]} />
-      </TestWrapper>,
-    );
+    render(<TableLoader columns={[]} />);
 
     const grid = screen.getByTestId('table-loader-grid');
     expect(grid).toBeInTheDocument();
-    // Verify default aria-label from translation (key 'loading' or mock value if configured)
-    // Since we use real I18n provider from TestWrapper, it likely returns 'loading' key or value.
-    // We check if it has A attribute.
-    expect(grid).toHaveAttribute('aria-label');
+    expect(grid).toHaveAttribute('aria-label', 'Loading');
 
     // Default rows = 5
     const rows = screen.getAllByTestId(/skeleton-row-/);
@@ -61,11 +53,7 @@ describe('TableLoader', () => {
 
   it('renders correct number of rows and columns based on props', () => {
     const columns = [mockColumn, mockColumn, mockColumn];
-    render(
-      <TestWrapper>
-        <TableLoader columns={columns} rows={4} />
-      </TestWrapper>,
-    );
+    render(<TableLoader columns={columns} rows={4} />);
 
     const rows = screen.getAllByTestId(/skeleton-row-/);
     expect(rows.length).toBe(4);
@@ -76,11 +64,7 @@ describe('TableLoader', () => {
   });
 
   it('handles edge case: rows = 0 (defaults to minimum 1)', () => {
-    render(
-      <TestWrapper>
-        <TableLoader columns={[mockColumn]} rows={0} />
-      </TestWrapper>,
-    );
+    render(<TableLoader columns={[mockColumn]} rows={0} />);
 
     const rows = screen.getAllByTestId(/skeleton-row-/);
     expect(rows.length).toBe(1);
@@ -88,22 +72,14 @@ describe('TableLoader', () => {
 
   it('uses custom ariaLabel when provided', () => {
     const customLabel = 'Custom loading label';
-    render(
-      <TestWrapper>
-        <TableLoader columns={[mockColumn]} ariaLabel={customLabel} />
-      </TestWrapper>,
-    );
+    render(<TableLoader columns={[mockColumn]} ariaLabel={customLabel} />);
 
     const grid = screen.getByTestId('table-loader-grid');
     expect(grid).toHaveAttribute('aria-label', customLabel);
   });
 
   it('renders inside overlay when asOverlay is true', () => {
-    render(
-      <TestWrapper>
-        <TableLoader columns={[mockColumn]} asOverlay={true} />
-      </TestWrapper>,
-    );
+    render(<TableLoader columns={[mockColumn]} asOverlay={true} />);
 
     const overlay = screen.getByTestId('table-loader-overlay');
     expect(overlay).toBeInTheDocument();
@@ -114,11 +90,7 @@ describe('TableLoader', () => {
   });
 
   it('does not render overlay when asOverlay is false', () => {
-    render(
-      <TestWrapper>
-        <TableLoader columns={[mockColumn]} asOverlay={false} />
-      </TestWrapper>,
-    );
+    render(<TableLoader columns={[mockColumn]} asOverlay={false} />);
 
     expect(screen.queryByTestId('table-loader-overlay')).toBeNull();
     const grid = screen.getByTestId('table-loader-grid');
@@ -126,11 +98,7 @@ describe('TableLoader', () => {
   });
 
   it('renders correct structural hierarchy explicitly', () => {
-    render(
-      <TestWrapper>
-        <TableLoader columns={[mockColumn, mockColumn]} rows={2} />
-      </TestWrapper>,
-    );
+    render(<TableLoader columns={[mockColumn, mockColumn]} rows={2} />);
 
     const grid = screen.getByTestId('table-loader-grid');
     const rows = within(grid).getAllByTestId(/skeleton-row-/);
