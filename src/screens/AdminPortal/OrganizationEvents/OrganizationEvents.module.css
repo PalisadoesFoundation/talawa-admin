@@ -1,21 +1,19 @@
 .dropdown {
   background-color: var(--color-gray-50);
-  min-width: var(--space-15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  width: var(--space-16);
+  border: var(--border-1) solid var(--color-gray-600);
+  color: var(--color-gray-600);
   position: relative;
   display: inline-block;
+  border-radius: var(--radius-md);
 }
 
-.dropdown:is(:hover, :active, :focus, :focus-visible),
+.dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
@@ -28,6 +26,7 @@
   margin-block: var(--space-6);
   margin-inline: calc(var(--space-5) * -1);
 }
+
 @media screen and (max-width: 1200px) {
   .mainpageright {
     width: 100%;

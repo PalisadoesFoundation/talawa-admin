@@ -4,15 +4,15 @@
  * This component represents a card displaying details of a membership request.
  * It provides functionality to accept or reject a membership request.
  *
- * @param {InterfaceMemberRequestCardProps} props - The properties passed to the component.
- * @param {string} props.id - The unique identifier of the membership request.
- * @param {string} [props.memberImage] - The URL of the member's profile image.
- * @param {string} [props.memberName] - The name of the member.
- * @param {string} [props.memberLocation] - The location of the member.
- * @param {string} [props.email] - The email address of the member.
- * @param {string} [props.joinDate] - The date the member requested to join.
+ * @param props - The properties passed to the component.
+ * @param id - The unique identifier of the membership request.
+ * @param memberImage - The URL of the member's profile image.
+ * @param memberName - The name of the member.
+ * @param memberLocation - The location of the member.
+ * @param email - The email address of the member.
+ * @param joinDate - The date the member requested to join.
  *
- * @returns {JSX.Element} A JSX element representing the membership request card.
+ * @returns - A JSX element representing the membership request card.
  *
  * @remarks
  * - The component uses GraphQL mutations to handle accept and reject actions.
@@ -36,7 +36,7 @@ import React from 'react';
 import styles from './MemberRequestCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,

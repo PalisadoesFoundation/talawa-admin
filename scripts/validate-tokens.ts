@@ -17,11 +17,11 @@
  *   - Hex colors (#fff, #ffffff, #ffffffaa)
  *   - RGB/RGBA colors (rgb(0,0,0), rgba(0,0,0,0.5))
  *   - HSL/HSLA colors (hsl(0,0%,0%), hsla(0,0%,0%,0.5))
- *   - CSS spacing properties with px/rem/em values
+ *   - CSS spacing properties with px/rem/em/vh/vw values
  *   - CSS font-size with px/rem/em values
  *   - CSS font-weight with numeric values (100-900)
  *   - CSS line-height with px values
- *   - CSS border-radius with px/rem/em values
+ *   - CSS border-radius with px/rem/em/% values
  *   - CSS border with px values and colors
  *   - CSS box-shadow with hardcoded values
  *   - TSX inline styles with camelCase properties (marginTop, paddingLeft, fontSize, etc.)
@@ -101,13 +101,13 @@ export const CSS_PATTERNS = {
   hslColor:
     /hsla?\(\s*\d{1,3}\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*(,\s*[\d.]+)?\s*\)/gi,
 
-  // Spacing patterns - matches px, rem, em values
+  // Spacing patterns - matches px, rem, em, vh, vw values
   // Note: padding and margin are handled exclusively by spacingShorthand to avoid double-counting
   spacingPx:
-    /(?:width|height|gap|top|right|bottom|left|inset):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
+    /(?:width|height|gap|top|right|bottom|left|inset):\s*-?[\d.]+(px|rem|em|vh|vw)(\s+-?[\d.]+(px|rem|em|vh|vw))*/gi,
   // Shorthand spacing - handles all padding/margin patterns (single and multi-value)
   spacingShorthand:
-    /(?:padding|margin):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
+    /(?:padding|margin):\s*-?[\d.]+(px|rem|em|vh|vw)(\s+-?[\d.]+(px|rem|em|vh|vw))*/gi,
 
   // Typography patterns
   fontSize: /font-size:\s*[\d.]+(px|rem|em)/gi,
@@ -115,15 +115,23 @@ export const CSS_PATTERNS = {
   lineHeightPx: /line-height:\s*[\d.]+(px|rem|em)/gi,
 
   // Border patterns
-  borderRadius: /border-radius:\s*[\d.]+(px|rem|em)(\s+[\d.]+(px|rem|em))*/gi,
+  borderRadius:
+    /border-radius:\s*[\d.]+(px|rem|em|%)(\s+[\d.]+(px|rem|em|%))*/gi,
   borderWidth:
     /border(-top|-right|-bottom|-left)?(-width)?:\s*[\d.]+(px|rem|em)/gi,
   borderFull:
     /border(-top|-right|-bottom|-left)?:\s*[\d.]+(px|rem|em)\s+\w+\s+#[0-9a-fA-F]{3,8}/gi,
 
-  // Box shadow with hardcoded values
+  // Box shadow with hardcoded values and color
   boxShadow:
     /box-shadow:\s*(-?[\d.]+(px|rem|em)\s*){2,4}(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\))/gi,
+  // Box shadow with bare hardcoded values (no color, e.g. box-shadow: 6px or box-shadow: 2px 4px).
+  // Overlap with boxShadow is guarded in validateCssLine to avoid duplicate findings.
+  boxShadowBare: /box-shadow:\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
+  // Box shadow with hardcoded px values mixed with var() (e.g. box-shadow: 0 var(--x) 5px)
+  // Requires at least one var() to be present; pure hardcoded values are handled by boxShadowBare
+  boxShadowMixed:
+    /box-shadow:\s*(?:(?:-?[\d.]+(?:px|rem|em)?\s+)+)?var\(--[^)]+\)(?:\s+(?:-?[\d.]+(?:px|rem|em)?|var\(--[^)]+\)))*\s+-?[\d.]+(px|rem|em)/gi,
 
   // Outline patterns
   outlineWidth: /outline(-width)?:\s*[\d.]+(px|rem|em)/gi,
@@ -136,12 +144,12 @@ export const CSS_PATTERNS = {
  * Matches patterns like: marginTop: 8, marginTop: '8px', fontSize: 16
  */
 export const TSX_PATTERNS = {
-  // Spacing camelCase properties with numeric or string px/rem/em values
+  // Spacing camelCase properties with numeric or string px/rem/em/vh/vw values
   spacingCamelCase:
-    /(?:margin|padding)(?:Top|Right|Bottom|Left|Inline|Block|InlineStart|InlineEnd|BlockStart|BlockEnd)?:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+    /(?:margin|padding)(?:Top|Right|Bottom|Left|Inline|Block|InlineStart|InlineEnd|BlockStart|BlockEnd)?:\s*(?:'[^']*(?:px|rem|em|vh|vw)'|"[^"]*(?:px|rem|em|vh|vw)"|[\d.]+)/gi,
   // Width/height with hardcoded values
   dimensionsCamelCase:
-    /(?:width|height|minWidth|minHeight|maxWidth|maxHeight|gap|rowGap|columnGap|top|right|bottom|left):\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+    /(?:width|height|minWidth|minHeight|maxWidth|maxHeight|gap|rowGap|columnGap|top|right|bottom|left):\s*(?:'[^']*(?:px|rem|em|vh|vw)'|"[^"]*(?:px|rem|em|vh|vw)"|[\d.]+)/gi,
 
   // Font size in TSX
   fontSizeCamelCase:
@@ -154,9 +162,9 @@ export const TSX_PATTERNS = {
   lineHeightCamelCase:
     /lineHeight:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+(?:px|rem|em))/gi,
 
-  // Border radius in TSX
+  // Border radius in TSX (includes % to flag values like '50%')
   borderRadiusCamelCase:
-    /borderRadius:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+    /borderRadius:\s*(?:'[^']*(?:px|rem|em|%)'|"[^"]*(?:px|rem|em|%)"|[\d.]+)/gi,
 
   // Colors in TSX (hex, rgb, hsl)
   colorCamelCase:
@@ -180,8 +188,8 @@ const ALLOWLIST_PATTERNS = [
   /--[\w-]+:\s*/,
   // 0 values without units are valid CSS (allow whitespace, semicolon, comma, or end-of-line)
   /:\s*0(?:px|rem|em)?(?:\s|;|,|$)/,
-  // Percentage values
-  /:\s*[\d.]+%/,
+  // Percentage values — allowed for spacing properties but NOT for border-radius
+  /(?<!border-radius):\s*[\d.]+%/,
   // Common allowed numeric values in specific contexts
   /z-index:\s*\d+/,
   /opacity:\s*[\d.]+/,
@@ -519,6 +527,19 @@ const addMatches = (
   }
 };
 
+const hasLineResult = (
+  results: IValidationResult[],
+  file: string,
+  lineNumber: number,
+  type: ValidationResultType,
+): boolean =>
+  results.some(
+    (result) =>
+      result.file === file &&
+      result.line === lineNumber &&
+      result.type === type,
+  );
+
 /**
  * Validate CSS files for hardcoded values
  */
@@ -616,6 +637,24 @@ const validateCssLine = (
     lineNumber,
     results,
   );
+  if (!hasLineResult(results, file, lineNumber, 'box-shadow')) {
+    addMatches(
+      line,
+      CSS_PATTERNS.boxShadowBare,
+      'box-shadow',
+      file,
+      lineNumber,
+      results,
+    );
+    addMatches(
+      line,
+      CSS_PATTERNS.boxShadowMixed,
+      'box-shadow',
+      file,
+      lineNumber,
+      results,
+    );
+  }
 
   // Outline patterns
   addMatches(

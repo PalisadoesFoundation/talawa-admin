@@ -813,7 +813,7 @@ jobs:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
     needs: [Merge-Coverage]
-    if: github.actor != 'dependabot'
+    if: github.actor != 'dependabot[bot]'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -827,6 +827,7 @@ jobs:
           REACT_APP_RECAPTCHA_SITE_KEY=
           ALLOW_LOGS=NO
           USE_DOCKER=YES
+          DOCKER_MODE=ROOTFUL
           DOCKER_PORT=4321
           EOF
 
@@ -839,6 +840,7 @@ jobs:
       - name: Build Docker images
         run: |
           set -e
+          export PNPM_VERSION="${PNPM_VERSION:-10.4.1}"
           echo "Building Docker images..."
           docker compose -f docker/docker-compose.prod.yaml build
           docker compose -f docker/docker-compose.dev.yaml build
@@ -879,6 +881,160 @@ jobs:
         run: |
           docker compose -f docker/docker-compose.dev.yaml down
           echo "Dev Docker containers stopped and removed"
+
+  Start-App-Using-Docker-Rootless:
+    name: Check if Talawa Admin app starts in Docker (Rootless)
+    runs-on: ubuntu-latest
+    needs: [Merge-Coverage]
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+
+      - name: Generate `.env` File with Hardcoded Values
+        run: |
+          cat > .env <<'EOF'
+          PORT=4321
+          REACT_APP_TALAWA_URL=http://localhost:4000/graphql
+          REACT_APP_USE_RECAPTCHA=
+          REACT_APP_RECAPTCHA_SITE_KEY=
+          ALLOW_LOGS=NO
+          USE_DOCKER=YES
+          DOCKER_MODE=ROOTLESS
+          DOCKER_PORT=4321
+          EOF
+
+      - name: Install rootless prerequisites
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install -y uidmap dbus-user-session slirp4netns fuse-overlayfs ca-certificates curl gnupg
+
+          if ! command -v dockerd-rootless-setuptool.sh >/dev/null 2>&1; then
+            sudo install -m 0755 -d /etc/apt/keyrings
+            if [ ! -f /etc/apt/keyrings/docker.gpg ]; then
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+              sudo chmod a+r /etc/apt/keyrings/docker.gpg
+            fi
+
+            echo \
+              "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+              $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+              sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+            sudo apt-get update
+            sudo apt-get install -y docker-ce-rootless-extras
+          fi
+
+      - name: Start rootless Docker daemon
+        run: |
+          set -euxo pipefail
+          export XDG_RUNTIME_DIR="/run/user/$UID"
+          sudo mkdir -p "$XDG_RUNTIME_DIR"
+          sudo chown "$USER":"$USER" "$XDG_RUNTIME_DIR"
+
+          if [ ! -f "$HOME/.config/systemd/user/docker.service" ]; then
+            dockerd-rootless-setuptool.sh install --force
+          fi
+
+          systemctl --user daemon-reload || true
+          systemctl --user start docker || true
+
+          if ! systemctl --user --no-pager status docker >/dev/null 2>&1; then
+            nohup dockerd-rootless.sh > "$RUNNER_TEMP/dockerd-rootless.log" 2>&1 &
+          fi
+
+          chmod +x scripts/docker/resolve-docker-host.sh
+          eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"
+          echo "DOCKER_HOST=$DOCKER_HOST" >> "$GITHUB_ENV"
+          echo "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" >> "$GITHUB_ENV"
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
+      - name: Verify rootless daemon
+        run: |
+          set -euxo pipefail
+          chmod +x scripts/docker/resolve-docker-host.sh
+          eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"
+
+          TIMEOUT=60
+          until docker info >/dev/null 2>&1 || [ "$TIMEOUT" -le 0 ]; do
+            sleep 2
+            TIMEOUT=$((TIMEOUT - 2))
+          done
+
+          if ! docker info >/dev/null 2>&1; then
+            echo "Rootless Docker daemon did not start in time."
+            if [ -f "$RUNNER_TEMP/dockerd-rootless.log" ]; then
+              tail -n 200 "$RUNNER_TEMP/dockerd-rootless.log"
+            fi
+            exit 1
+          fi
+
+          docker info
+          docker info --format '{{json .SecurityOptions}}' | tee "$RUNNER_TEMP/rootless-security-options.json"
+          grep -qi rootless "$RUNNER_TEMP/rootless-security-options.json"
+
+      - name: Build Docker images (Rootless)
+        run: |
+          set -e
+          export PNPM_VERSION="${PNPM_VERSION:-10.4.1}"
+          export UID
+          export GID="$(id -g)"
+          echo "Building rootless Docker images..."
+          docker compose -f docker/docker-compose.rootless.prod.yaml build
+          docker compose -f docker/docker-compose.rootless.dev.yaml build
+          echo "Rootless Docker images built successfully"
+
+      - name: Run Docker Containers (Rootless Production)
+        run: |
+          set -e
+          export UID
+          export GID="$(id -g)"
+          echo "Starting rootless Docker container for production..."
+          docker compose -f docker/docker-compose.rootless.prod.yaml up -d
+          echo "Rootless production Docker container started successfully"
+
+      - name: Check if Talawa Admin App is running (Rootless Production)
+        run: |
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
+
+      - name: Stop rootless prod Docker Containers
+        if: always()
+        run: |
+          export UID
+          export GID="$(id -g)"
+          docker compose -f docker/docker-compose.rootless.prod.yaml down
+          echo "Rootless prod Docker container stopped and removed"
+
+      - name: Run Docker Containers (Rootless Development)
+        run: |
+          set -e
+          export UID
+          export GID="$(id -g)"
+          echo "Starting rootless Docker container for development..."
+          docker compose -f docker/docker-compose.rootless.dev.yaml up -d
+          echo "Rootless development Docker container started successfully"
+
+      - name: Check if Talawa Admin App is running (Rootless Development)
+        run: |
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120 true
+
+      - name: Stop rootless dev Docker Containers
+        if: always()
+        run: |
+          export UID
+          export GID="$(id -g)"
+          docker compose -f docker/docker-compose.rootless.dev.yaml down
+          echo "Rootless dev Docker containers stopped and removed"
+
+      - name: Print rootless daemon logs on failure
+        if: failure()
+        run: |
+          if [ -f "$RUNNER_TEMP/dockerd-rootless.log" ]; then
+            tail -n 200 "$RUNNER_TEMP/dockerd-rootless.log"
+          fi
 
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
@@ -1177,6 +1333,7 @@ jobs:
         Test-Application-E2E,
         Start-App-Without-Docker,
         Start-App-Using-Docker,
+        Start-App-Using-Docker-Rootless,
       ]
     permissions:
       contents: read
