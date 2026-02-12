@@ -2138,7 +2138,15 @@
     "other": "其他",
     "placeholderFirstName": "小明",
     "placeholderLastName": "张",
-    "placeholderEmail": "abc@gmail.com"
+    "placeholderEmail": "abc@gmail.com",
+
+    "hello": "你好",
+    "copyPassword": "复制密码",
+    "show": "显示",
+    "hide": "隐藏",
+    "passwordCopied": "密码已复制！",
+    "copyFailed": "复制密码失败",
+    "passwordWarning": "请保存此密码，并要求参与者登录后更改。"
   },
   "userCampaigns": {
     "title": "筹款活动",
