@@ -9,7 +9,7 @@
 }
 
 .deleteCardHeader {
-  background-color: var(--activeTab-bg);
+  background-color: var(--color-gray-100);
   border-top-left-radius: var(--radius-sm) !important;
   border-top-right-radius: var(--radius-sm) !important;
   padding-top: var(--space-5);
@@ -22,9 +22,9 @@
 }
 
 .deleteButton {
-  background-color: var(--removeButton-bg);
-  color: var(--removeButton-color);
-  border: var(--border-1) solid var(--removeButton-color);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  border: var(--border-1) solid var(--color-red-500);
   padding: var(--space-2) var(--space-10);
   cursor: pointer;
   display: block;
@@ -37,8 +37,8 @@
 .deleteButton:hover,
 .deleteButton:active,
 .deleteButton:focus {
-  background-color: var(--removeButton-bg) !important;
-  color: var(--removeButton-color);
+  background-color: var(--color-red-100) !important;
+  color: var(--color-red-500);
   box-shadow: var(--border-shadow-xs) var(--hover-shadow);
   outline: none;
 }
@@ -48,18 +48,18 @@
 }
 
 .modalHeaderDelete {
-  background-color: var(--card-header-background-color);
+  background-color: var(--color-blue-500);
   color: var(--color-white);
 }
 
 .btnDelete {
-  background-color: var(--activeTab-bg);
+  background-color: var(--color-gray-100);
   border: var(--border-1) solid var(--active-item-color) !important;
-  color: var(--active-item-color);
+  color: var(--color-black);
 }
 
 .btnConfirmDelete {
-  background-color: var(--removeButton-bg);
-  color: var(--removeButton-color);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
   border: none;
 }

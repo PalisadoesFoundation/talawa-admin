@@ -8,7 +8,7 @@
 
 .iconOrgActionItemCategories {
   transform: scale(1.5);
-  color: var(--iconOrgActionItemCategories-color);
+  color: var(--color-blue-500);
   margin-bottom: var(--space-4);
 }
 
@@ -17,11 +17,11 @@
 }
 
 .editButton {
-  background-color: var(--editButton-bg);
-  color: var(--editButton-font);
-  border-color: var(--editButton-border);
-  --bs-btn-active-bg: var(--editButton-bg-active);
-  --bs-btn-active-border-color: var(--editButton-border-active);
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-600);
+  border-color: var(--color-gray-100);
+  --bs-btn-active-bg: var(--color-blue-500);
+  --bs-btn-active-border-color: var(--color-gray-100);
 }
 
 .btnsContainerOrgActionItemCategories {
@@ -33,19 +33,19 @@
 }
 
 .dropdown {
-  background-color: var(--dropdown-bg) !important;
+  background-color: var(--color-white) !important;
   min-width: var(--space-16);
-  color: var(--dropdown-font-color) !important;
+  color: var(--color-gray-600) !important;
   position: relative;
   display: inline-block;
 }
 
 .createButton {
-  background-color: var(--createButton-bg);
-  color: var(--createButton-font);
-  border-color: var(--createButton-border);
-  --bs-btn-active-bg: var(--createButton-bg-active);
-  --bs-btn-active-border-color: var(--createButton-border-active);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-600);
+  border-color: var(--color-gray-600);
+  --bs-btn-active-bg: var(--color-gray-100);
+  --bs-btn-active-border-color: var(--color-gray-400);
   padding: var(--space-4) var(--space-6);
 }
 
@@ -54,8 +54,8 @@
 }
 
 .rowBackground {
-  background-color: var(--rowBackground-bg);
-  color: var(--rowBackground-color);
+  background-color: var(--color-white);
+  color: var(--color-gray-600);
   max-height: var(--space-24);
   overflow-y: auto;
 }
