@@ -2562,5 +2562,17 @@
   },
   "csv": {
     "demographics": "{{category}} Demographics"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
+    },
+    "expandDay": "Expand day"
   }
 }

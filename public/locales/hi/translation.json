@@ -2562,5 +2562,17 @@
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "सो",
+      "tue": "मं",
+      "wed": "बु",
+      "thu": "गु",
+      "fri": "शु",
+      "sat": "श",
+      "sun": "र"
+    },
+    "expandDay": "दिन विस्तारित करें"
   }
 }

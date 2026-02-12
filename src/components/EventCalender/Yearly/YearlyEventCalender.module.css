@@ -12,11 +12,11 @@
 
 .day__yearly {
   border-radius: var(--space-2);
-  font-size: small;
+  font-size: var(--font-size-sm);
   padding: var(--space-2);
   text-align: center;
   height: var(--space-8);
-  margin: var(--space-1px);
+  margin: var(--size-1px);
 }
 
 .day__events {
@@ -60,6 +60,8 @@
   position: relative;
   display: block;
   margin: var(--space-1);
+  height: var(--space-2);
+  width: var(--space-2);
 }
 
 .btn__more:hover {
@@ -74,6 +76,14 @@
 
 .closebtnYearlyEventCalender {
   padding: var(--space-3);
+}
+
+.closebtnYearlyEventCalenderTopSpacing {
+  margin-top: var(--space-2);
+}
+
+.closebtnYearlyEventCalenderBottomSpacing {
+  margin-bottom: var(--space-2);
 }
 
 .circularButton {
@@ -102,19 +112,11 @@
 .cardYearlyEventCalender {
   padding: var(--space-5);
   text-align: center;
-  height: var(--space-21rem);
+  height: var(--space-30);
 }
 
 .cardHeaderYearlyEventCalender {
   text-align: left;
-}
-
-.weekday__yearly {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--weekdayYearly-bg);
-  font-weight: var(--font-weight-semibold);
 }
 
 .calendar__days {
@@ -132,7 +134,7 @@
 .weekdayHeaderRow {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--space-2px);
+  gap: var(--size-2px);
   margin-bottom: var(--space-3);
   padding: 0 var(--space-3);
 }
@@ -167,14 +169,14 @@
 }
 
 .rowYearlyEventCalender {
-  margin: var(--space-1px) var(--space-n5px);
+  margin: var(--size-1px) var(--size-n5px);
 }
 
-.rowYearlyEventCalender:after {
+.rowYearlyEventCalender::after {
   content: '';
   display: table;
   clear: both;
-  margin: 0 var(--space-n5px);
+  margin: 0 var(--size-n5px);
 }
 
 .yearlyCalender {
@@ -186,5 +188,5 @@
   font-family: var(--font-family-sans, 'Outfit', sans-serif);
   padding: var(--space-6);
   background-color: var(--calendar-bg);
-  min-height: var(--space-80vh);
+  min-height: var(--size-80vh);
 }
