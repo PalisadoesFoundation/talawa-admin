@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button } from 'shared-components/Button';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';

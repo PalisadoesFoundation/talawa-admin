@@ -45,7 +45,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';

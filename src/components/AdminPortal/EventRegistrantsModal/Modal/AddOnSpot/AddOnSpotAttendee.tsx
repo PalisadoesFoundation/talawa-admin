@@ -36,7 +36,7 @@ import {
   FormTextField,
   FormSelectField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';

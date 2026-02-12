@@ -36,7 +36,7 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
 import styles from './TagActions.module.css';
