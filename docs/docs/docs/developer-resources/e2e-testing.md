@@ -106,7 +106,23 @@ it('should login successfully', () => {
 
 ### Custom Commands
 
-Custom Cypress commands are defined in `cypress/support/commands.ts` to provide reusable functionality across tests.
+### Custom Commands
+
+Common commands defined in `cypress/support/commands.ts`:
+
+- **`cy.loginByApi(role)`**:
+  Logs in programmatically via GraphQL mutation (bypassing UI).
+  - Roles: `'admin'`, `'superAdmin'`, `'user'`.
+  - Usage: `cy.loginByApi('admin')`.
+
+- **`cy.assertToast(message)`**:
+  Waits for a toast notification and asserts its text.
+  - Usage: `cy.assertToast('Organization created successfully')`.
+
+- **`cy.clearAllGraphQLMocks()`**:
+  Resets all GraphQL request interceptors.
+
+See [API-driven test data management](#api-driven-test-data-management) for data setup commands like `createTestOrganization`.
 
 ### GraphQL Utilities
 
