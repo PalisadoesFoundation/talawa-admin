@@ -707,7 +707,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
 
     // Test that the search bar filters organizations by name
     const searchBar = screen.getByTestId(/searchInput/i);
@@ -720,7 +722,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
@@ -733,7 +737,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('basic');
 
     renderWithProviders();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
@@ -746,7 +752,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
 
     const searchBar = screen.getByTestId('searchInput');
     expect(searchBar).toBeInTheDocument();
@@ -765,8 +773,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
-
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
     const searchBar = screen.getByTestId('searchInput');
     expect(searchBar).toBeInTheDocument();
 
@@ -831,7 +840,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(rowsPerPageSelect).toBeInTheDocument();
 
     // Change rows per page to 10
-    await user.type(rowsPerPageSelect, '10');
+    await user.selectOptions(rowsPerPageSelect, '10');
 
     await wait();
   });
@@ -1653,7 +1662,7 @@ describe('Advanced Component Functionality Tests', () => {
               birthDate: null,
               city: 'City',
               countryCode: 'US',
-              createdAt: new Date().toISOString(),
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               description: '',
               educationGrade: '',
               employmentStatus: '',
@@ -1664,7 +1673,7 @@ describe('Advanced Component Functionality Tests', () => {
               naturalLanguageCode: 'en',
               postalCode: '',
               state: '',
-              updatedAt: new Date().toISOString(),
+              updatedAt: dayjs().toISOString(),
               workPhoneNumber: '',
               eventsAttended: [],
             },
@@ -1745,7 +1754,7 @@ describe('Advanced Component Functionality Tests', () => {
               birthDate: null,
               city: 'City',
               countryCode: 'US',
-              createdAt: new Date().toISOString(),
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               description: '',
               educationGrade: '',
               employmentStatus: '',
@@ -1756,7 +1765,7 @@ describe('Advanced Component Functionality Tests', () => {
               naturalLanguageCode: 'en',
               postalCode: '',
               state: '',
-              updatedAt: new Date().toISOString(),
+              updatedAt: dayjs().toISOString(),
               workPhoneNumber: '',
               eventsAttended: [],
             },
@@ -1784,7 +1793,10 @@ describe('Advanced Component Functionality Tests', () => {
               name: `Organization ${i + 1}`,
               avatarURL: '',
               description: `Description ${i + 1}`,
-              createdAt: `2023-04-${String(13 + i).padStart(2, '0')}T04:53:17.742+00:00`,
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(i, 'days')
+                .toISOString(),
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Test Address',
             })),
@@ -2146,18 +2158,16 @@ describe('Advanced Component Functionality Tests', () => {
     await user.click(submitBtn);
 
     // Wait for the plugin modal to appear and verify closeDialogModal is triggered
-    try {
-      const enableEverythingBtn = await screen.findByTestId(
-        'enableEverythingForm',
-        {},
-        { timeout: 3000 },
-      );
+    const enableEverythingBtn = await screen.queryByTestId(
+      'enableEverythingForm',
+    );
+    if (enableEverythingBtn) {
       await user.click(enableEverythingBtn);
-      await wait(200);
-    } catch {
-      // Plugin modal may not appear depending on mock timing — this is acceptable
-      // because the org creation flow itself was already verified above.
-      expect(true).toBe(true); // Explicit acknowledgment of fallback path
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('enableEverythingForm'),
+        ).not.toBeInTheDocument();
+      });
     }
   });
 
@@ -2250,24 +2260,17 @@ describe('Advanced Component Functionality Tests', () => {
     await user.click(submitBtn);
 
     // Wait for plugin modal to appear, then verify toggleDialogModal behavior when closing
-    try {
-      // Wait for the modal to appear
-      await waitFor(
-        () => {
-          const enableBtn = screen.queryByTestId('enableEverythingForm');
-          expect(enableBtn).toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-
-      // Find close button or backdrop to trigger onHide (toggleDialogModal)
+    const enableBtn = screen.queryByTestId('enableEverythingForm');
+    if (enableBtn) {
       const closeButtons = screen.queryAllByLabelText(/close/i);
       if (closeButtons.length > 0) {
         await user.click(closeButtons[closeButtons.length - 1]);
-        await wait(200);
+        await waitFor(() => {
+          expect(
+            screen.queryByTestId('enableEverythingForm'),
+          ).not.toBeInTheDocument();
+        });
       }
-    } catch {
-      // If modal doesn't appear, test still passes
     }
   });
 
@@ -2423,7 +2426,9 @@ describe('Advanced Component Functionality Tests', () => {
     // Explicitly do NOT set token to test the else branch
 
     renderWithProviders();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
 
     // Verify component renders without authorization header
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();

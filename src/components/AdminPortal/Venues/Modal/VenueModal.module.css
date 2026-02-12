@@ -1,22 +1,31 @@
 .inputField {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
   background-color: var(--eventManagement-button-bg);
-  border: var(--border-1) solid var(--color-gray-100);
-  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-sm)
-    var(--color-shadow-light);
+  border: var(--border-width-sm) solid var(--input-shadow);
+  box-shadow: var(--shadow-sm);
+}
+
+.previewVenueModal {
+  display: flex;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* Ensures content doesn't overflow the card */
+  justify-content: center;
+  border: var(--border-width-sm) solid var(--previewVenueModal-border);
 }
 
 .closeButtonP {
   position: absolute;
-  top: var(--space-0);
-  right: var(--space-0);
-  width: var(--space-8);
-  height: var(--space-8);
+  top: 0px;
+  right: 0px;
+  width: var(--size-8);
+  height: var(--size-8);
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   border: none;
   color: var(--closeButtonP-color);
   font-weight: var(--font-weight-semibold);
@@ -27,19 +36,9 @@
 }
 
 .addButton {
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--spacing-sm);
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
-
   --bs-btn-focus-box-shadow: none;
-}
-
-.previewVenueModal {
-  display: flex;
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  justify-content: center;
-  border: var(--border-1) solid var(--previewVenueModal-border);
 }
