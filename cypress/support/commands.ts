@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 import { getApiPattern } from './graphql-utils';
 
-export { };
+export {};
 
 type AuthRole = 'superAdmin' | 'admin' | 'user';
 
@@ -732,9 +732,9 @@ Cypress.Commands.add(
           const volunteerAuth =
             (volunteerPayload.auth?.role ?? 'admin') === 'admin'
               ? {
-                ...(volunteerPayload.auth ?? {}),
-                role: 'superAdmin' as const,
-              }
+                  ...(volunteerPayload.auth ?? {}),
+                  role: 'superAdmin' as const,
+                }
               : volunteerPayload.auth;
 
           return resolveAuthToken(volunteerAuth).then((token) => {
