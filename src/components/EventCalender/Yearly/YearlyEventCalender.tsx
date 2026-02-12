@@ -247,7 +247,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`expand-btn-${expandKey}`}
                   aria-label={
-                    expandedY === expandKey ? tCommon('close') : t('expandDay')
+                    expandedY === expandKey
+                      ? tCommon('close')
+                      : tYearlyCalendar('expandDay')
                   }
                 >
                   {expandedY === expandKey ? (
@@ -267,7 +269,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`no-events-btn-${expandKey}`}
                   aria-label={
-                    expandedY === expandKey ? tCommon('close') : t('expandDay')
+                    expandedY === expandKey
+                      ? tCommon('close')
+                      : tYearlyCalendar('expandDay')
                   }
                 >
                   {expandedY === expandKey ? (
