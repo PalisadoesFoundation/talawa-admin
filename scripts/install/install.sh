@@ -211,12 +211,12 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
         # Report Compose status
         case "$docker_compose_status" in
             v2:*)
-                docker_version="${docker_compose_status#v2:}"
-                log_success "Docker Compose: v2 (version $docker_version)"
+                docker_compose_version="${docker_compose_status#v2:}"
+                log_success "Docker Compose: v2 (version $docker_compose_version)"
                 ;;
             v1:*)
-                docker_version="${docker_compose_status#v1:}"
-                log_success "Docker Compose: v1 (version $docker_version)"
+                docker_compose_version="${docker_compose_status#v1:}"
+                log_success "Docker Compose: v1 (version $docker_compose_version)"
                 ;;
             not_installed)
                 log_warning "Docker Compose: not installed"

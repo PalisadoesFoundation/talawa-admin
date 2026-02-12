@@ -256,6 +256,73 @@ test_non_interactive_mode() {
 }
 
 # ==============================================================================
+# TEST: --dry-run uses placeholder versions (no real file I/O)
+# ==============================================================================
+test_dry_run_placeholder_versions() {
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" && exit_code=$? || exit_code=$?
+
+    assert_equals "0" "$exit_code" "Dry-run should exit with 0" && \
+    assert_contains "$output" "project-defined" "Dry-run should use placeholder instead of reading files" && \
+    assert_not_contains "$output" "required_node_version" "Should not leak function names"
+}
+
+# ==============================================================================
+# TEST: Combined --dry-run --verbose --skip-docker-check
+# ==============================================================================
+test_combined_flags() {
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --verbose --skip-docker-check --non-interactive 2>&1)" && exit_code=$? || exit_code=$?
+
+    assert_equals "0" "$exit_code" "Combined flags should exit with 0" && \
+    assert_contains "$output" "[DRY RUN]" "Should show dry-run banner" && \
+    assert_contains "$output" "[VERBOSE]" "Should show verbose output" && \
+    assert_contains "$output" "Docker check skipped" "Should skip docker" && \
+    assert_contains "$output" "Script directory" "Verbose should show script directory" && \
+    assert_contains "$output" "non-interactive" "Verbose should note non-interactive mode"
+}
+
+# ==============================================================================
+# TEST: Multiple unknown flags reports first unknown
+# ==============================================================================
+test_multiple_unknown_flags() {
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --bad-flag --worse-flag 2>&1)" && exit_code=$? || exit_code=$?
+
+    assert_equals "6" "$exit_code" "Unknown flags should exit with E_INVALID_ARG (6)" && \
+    assert_contains "$output" "Unknown option" "Should report unknown option" && \
+    assert_contains "$output" "--bad-flag" "Should identify the first unknown flag"
+}
+
+# ==============================================================================
+# TEST: --dry-run summary step content
+# ==============================================================================
+test_dry_run_summary() {
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" && exit_code=$? || exit_code=$?
+
+    assert_equals "0" "$exit_code" "Dry-run should exit with 0" && \
+    assert_contains "$output" "Step 5" "Should show Step 5 (Summary)" && \
+    assert_contains "$output" "[DRY] Would display installation summary" "Should show dry summary message"
+}
+
+# ==============================================================================
+# TEST: Wrapper passes through unknown flag error
+# ==============================================================================
+test_wrapper_unknown_flag() {
+    if [[ ! -f "$WRAPPER_SCRIPT" ]]; then
+        echo "  ✗ FAILED: Wrapper script not found at $WRAPPER_SCRIPT"
+        return 1
+    fi
+
+    local output exit_code
+    output="$(bash "$WRAPPER_SCRIPT" --invalid-flag 2>&1)" && exit_code=$? || exit_code=$?
+
+    assert_equals "6" "$exit_code" "Wrapper should propagate error exit code" && \
+    assert_contains "$output" "Unknown option" "Wrapper should propagate error message"
+}
+
+# ==============================================================================
 # MAIN
 # ==============================================================================
 main() {
@@ -275,6 +342,11 @@ main() {
     run_test "Script is executable" test_script_is_executable
     run_test "Works from different cwd" test_works_from_different_cwd
     run_test "Non-interactive mode" test_non_interactive_mode
+    run_test "--dry-run uses placeholder versions" test_dry_run_placeholder_versions
+    run_test "Combined flags work together" test_combined_flags
+    run_test "Multiple unknown flags" test_multiple_unknown_flags
+    run_test "--dry-run summary step" test_dry_run_summary
+    run_test "Wrapper propagates unknown flag error" test_wrapper_unknown_flag
 
     echo ""
     echo "=========================================="
