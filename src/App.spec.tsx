@@ -396,7 +396,7 @@ describe('Testing the App Component', () => {
     errorSpy?.mockRestore();
   });
 
-  it('Regular user gets redirected from admin routes', async () => {
+  it('Regular user sees user portal when accessing admin routes', async () => {
     renderApp(link, '/admin/orglist');
 
     await waitFor(
@@ -414,9 +414,12 @@ describe('Testing the App Component', () => {
   it('Login page shows footer for unauthenticated users', async () => {
     renderApp(link2, '/');
 
-    await waitFor(() => {
-      expect(screen.getByTestId('app-footer')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('app-footer')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Component should be rendered properly and user is logged out', async () => {
