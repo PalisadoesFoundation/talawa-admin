@@ -1,4 +1,4 @@
-type ClickOptions = Partial<Cypress.ClickOptions>;
+import type { ClickOptions } from './types';
 
 export class ModalActions {
   constructor(private readonly rootSelector = '[role="dialog"]') {}
@@ -42,7 +42,10 @@ export class ModalActions {
   }
 
   hasTitle(title: string, timeout = 10000): this {
-    this.root(timeout).contains(title).should('be.visible');
+    this.root(timeout)
+      .find('h1,h2,h3,[class*="Title"],[role="heading"]')
+      .should('contain.text', title)
+      .and('be.visible');
     return this;
   }
 }

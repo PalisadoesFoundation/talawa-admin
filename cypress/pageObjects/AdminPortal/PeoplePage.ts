@@ -67,14 +67,19 @@ export class PeoplePage {
 
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
-    this.verifyMemberInList(name, timeout);
-
-    // Wait for DataGrid to stabilize after search
-    cy.wait(1000);
-
-    this.tableActions
-      .waitVisible(timeout)
-      .clickRowActionByText(name, this._removeModalBtn, timeout);
+    cy.then(() => {
+      this.tableActions.waitVisible(timeout);
+      this.tableActions
+        .findRowByText(name, timeout, true)
+        .should('exist')
+        .then(() => {
+          this.tableActions.clickRowActionByText(
+            name,
+            this._removeModalBtn,
+            timeout,
+          );
+        });
+    });
 
     this.removeMemberModal
       .waitVisible(timeout)

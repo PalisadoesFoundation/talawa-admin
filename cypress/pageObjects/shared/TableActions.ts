@@ -1,7 +1,11 @@
-type ClickOptions = Partial<Cypress.ClickOptions>;
+import type { ClickOptions } from './types';
 
 export class TableActions {
   constructor(private readonly tableSelector = '.MuiDataGrid-root') {}
+
+  private escapeRegex(text: string): string {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
 
   private root(timeout = 10000): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get(this.tableSelector, { timeout });
@@ -15,10 +19,13 @@ export class TableActions {
   findRowByText(
     text: string,
     timeout = 10000,
+    exact = true,
   ): Cypress.Chainable<JQuery<HTMLElement>> {
+    const matcher = exact ? new RegExp(`^${this.escapeRegex(text)}$`) : text;
+
     return cy
       .get(`${this.tableSelector} .MuiDataGrid-row`, { timeout })
-      .contains(text)
+      .contains(matcher)
       .should('be.visible')
       .closest('.MuiDataGrid-row');
   }
@@ -28,14 +35,16 @@ export class TableActions {
     actionSelector: string,
     timeout = 10000,
     options?: ClickOptions,
+    exact = true,
   ): this {
-    this.findRowByText(rowText, timeout)
+    this.findRowByText(rowText, timeout, exact)
       .find(actionSelector)
       .should('be.visible')
       .click(options);
     return this;
   }
 
+  // Intentionally global queries: sorting menus can render outside `tableSelector`.
   sortBy(
     toggleSelector: string,
     optionSelector: string,
