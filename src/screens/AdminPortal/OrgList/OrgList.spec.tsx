@@ -790,10 +790,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithOrgData = createOrgMock(mockOrgData.singleOrg);
     renderWithMocks(mockWithOrgData);
-    await wait();
-
-    // Check if pagination component is rendered (should appear when there are organizations)
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = await screen.findByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
   });
 
@@ -802,10 +799,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
-    await wait();
+    const paginationElement = await screen.findByTestId('table-pagination');
 
-    // Check if pagination component is rendered
-    const paginationElement = screen.getByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
     // Check if rows per page selector is present
@@ -819,10 +814,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
-    await wait();
-
-    // Verify pagination component is rendered
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = await screen.findByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
   });
 
@@ -851,10 +843,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setItem('role', 'administrator');
 
     renderWithMocks(mockConfigurations.searchableMocks);
-    await wait();
-
-    // Verify pagination is present initially
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = await screen.findByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
     // Perform search
@@ -1065,10 +1054,7 @@ describe('Advanced Component Functionality Tests', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-
-    // Verify pagination is shown even with single organization
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = await screen.findByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
     // Test pagination with rowsPerPage = 0 edge case
@@ -1086,10 +1072,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
-    await wait();
-
-    // Verify pagination component is rendered
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = await screen.findByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
     // Verify pagination navigation works correctly
@@ -1819,10 +1802,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Get pagination controls
-    const paginationElement = screen.getByTestId('table-pagination');
+    const paginationElement = await screen.findByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
     // Verify pagination button navigation works correctly
