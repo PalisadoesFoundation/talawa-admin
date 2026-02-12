@@ -106,8 +106,6 @@ it('should login successfully', () => {
 
 ### Custom Commands
 
-### Custom Commands
-
 Common commands defined in `cypress/support/commands.ts`:
 
 - **`cy.loginByApi(role)`**:
