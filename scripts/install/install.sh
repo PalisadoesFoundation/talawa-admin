@@ -243,6 +243,9 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
                     cli_not_installed)
                         log_verbose "Visit https://docs.docker.com/get-docker/ for installation"
                         ;;
+                    *)
+                        log_verbose "Run 'print_docker_status_report' for detailed guidance"
+                        ;;
                 esac
             fi
         fi
@@ -259,8 +262,8 @@ log_step "3" "Node.js Toolchain"
 
 if [[ "$DRY_RUN" == "true" ]]; then
     log_info "[DRY] Would check/install fnm (Fast Node Manager)"
-    log_info "[DRY] Would check/install Node.js (version: $(required_node_version))"
-    log_info "[DRY] Would check/install pnpm (version: $(required_pnpm_version))"
+    log_info "[DRY] Would check/install Node.js (version: project-defined)"
+    log_info "[DRY] Would check/install pnpm (version: project-defined)"
 else
     log_verbose "Checking fnm..."
     if check_fnm; then

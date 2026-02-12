@@ -172,6 +172,7 @@ test_verbose_flag() {
 # ==============================================================================
 test_missing_library_detection() {
     _TEST_TEMP_DIR="$(mktemp -d -t talawa-install-test.XXXXXX)"
+    trap 'rm -rf "$_TEST_TEMP_DIR"' EXIT
 
     cp "$INSTALL_SCRIPT" "$_TEST_TEMP_DIR/install.sh"
     mkdir -p "$_TEST_TEMP_DIR/lib"
@@ -179,8 +180,6 @@ test_missing_library_detection() {
 
     local output exit_code
     output="$(bash "$_TEST_TEMP_DIR/install.sh" 2>&1)" && exit_code=$? || exit_code=$?
-
-    rm -rf "$_TEST_TEMP_DIR"
 
     assert_equals "1" "$exit_code" "Missing libs should exit with 1" && \
     assert_contains "$output" "Required library not found" "Should report missing library"
@@ -237,11 +236,10 @@ test_script_is_executable() {
 # ==============================================================================
 test_works_from_different_cwd() {
     _TEST_CWD_TEMP_DIR="$(mktemp -d -t talawa-cwd-test.XXXXXX)"
+    trap 'rm -rf "$_TEST_CWD_TEMP_DIR"' EXIT
 
     local output exit_code
     output="$(cd "$_TEST_CWD_TEMP_DIR" && bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" && exit_code=$? || exit_code=$?
-
-    rm -rf "$_TEST_CWD_TEMP_DIR"
 
     assert_equals "0" "$exit_code" "Should work from different cwd" && \
     assert_contains "$output" "Step 1" "Should still show steps from different cwd"
