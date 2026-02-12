@@ -31,7 +31,8 @@ cypress/
 ├── fixtures/               # Test data and mock files
 │   └── users.json         # User test data
 ├── pageObjects/           # Page Object Model files
-│   └── auth/              # Authentication page objects
+│   ├── auth/              # Authentication page objects
+│   └── shared/            # Reusable page object utilities (modal/table/form/toast)
 └── support/               # Support files and custom commands
     └── commands.ts        # Custom Cypress commands
 ```
@@ -103,6 +104,35 @@ it('should login successfully', () => {
   loginPage.verifyLoginPage().login(userData.email, userData.password);
 });
 ```
+
+### Shared Page Object Utilities
+
+Use shared helpers in `cypress/pageObjects/shared/` to avoid repeating common
+modal and table interactions across page objects.
+
+```ts
+import { ModalActions } from '../shared/ModalActions';
+import { TableActions } from '../shared/TableActions';
+
+const table = new TableActions('.MuiDataGrid-root');
+const modal = new ModalActions('[role="dialog"]');
+
+table
+  .waitVisible()
+  .clickRowActionByText(
+    'Praise Norris',
+    '[data-testid="removeMemberModalBtn"]',
+  );
+
+modal.waitVisible().clickByTestId('removeMemberBtn');
+```
+
+Guidelines:
+
+- Prefer `data-testid` selectors first, then role/semantic selectors.
+- Keep helper methods typed and chainable.
+- Keep network mocking in specs or support utilities; page object helpers should
+  only perform UI interactions.
 
 ### Custom Commands
 
