@@ -1,11 +1,11 @@
 .calendar_hour_block {
-  border-top: 1px solid var(--calenderHourBlock-border);
+  border-top: var(--border-1) solid var(--calenderHourBlock-border);
   display: flex;
 }
 
 .calendar_hour_text_container {
   width: var(--space-10);
-  border-right: 1px solid var(--calenderHourTextContainer-border);
+  border-right: var(--border-1) solid var(--calenderHourTextContainer-border);
   height: auto;
 }
 
@@ -39,7 +39,7 @@
   top: 0;
   left: 0;
   background-color: var(--expandListContainer-bg);
-  border: 1px solid var(--expandListContainer-border);
+  border: var(--border-1) solid var(--expandListContainer-border);
   border-radius: var(--space-2);
   margin: var(--space-2);
 }
@@ -69,17 +69,23 @@
 .btn__more {
   border: 0;
   font-size: var(--font-size-sm);
-  background-color: initial;
-  color: var(--btnMore-color);
+  background-color: var(--color-primary);
+  color: var(--color-white);
   font-weight: var(--font-weight-semibold);
   position: relative;
-  display: block;
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
   margin: var(--space-1);
+  margin-top: var(--space-2);
+  border-radius: var(--space-2);
   z-index: 10;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .btn__more:hover {
-  color: var(--btnMore-color-hover);
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
 }
 
 @media only screen and (max-width: 576px) {
@@ -110,9 +116,9 @@
 }
 
 .card_title {
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-sm);
   margin-bottom: var(--space-3);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-medium);
   color: var(--cardTitle-color);
 }
 
@@ -151,7 +157,7 @@
 
 .holiday_name {
   font-size: var(--font-size-md);
-  font-weight: 200;
+  font-weight: var(--font-weight-lighter);
   color: var(--holidayName-color);
 }
 
@@ -230,10 +236,10 @@
   padding-right: var(--space-1);
   border-radius: var(--space-3);
   margin: var(--space-2);
-  border: 1px solid var(--day-border);
+  border: var(--border-1) solid var(--day-border);
   color: var(--day-color);
   font-weight: var(--font-weight-semibold);
-  height: 9rem;
+  height: var(--space-15);
   position: relative;
 }
 
@@ -271,6 +277,7 @@
   padding: var(--space-6);
   background-color: var(--calendar-bg);
   min-height: 80vh;
+  margin-right: var(--space-6);
 }
 
 .calendar__header {
@@ -295,7 +302,7 @@
 }
 
 .buttonEventCalendar {
-  border-radius: 100rem;
+  border-radius: var(--radius-full);
   color: var(--buttonEventCalendar-color);
   border: 0;
 }
