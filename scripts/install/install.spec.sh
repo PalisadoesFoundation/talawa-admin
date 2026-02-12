@@ -32,7 +32,7 @@ run_test() {
     echo ""
     echo "Running: $test_name"
 
-    if $test_func; then
+    if ( $test_func ); then
         TESTS_PASSED=$((TESTS_PASSED + 1))
         echo "  ✓ PASSED"
     else
