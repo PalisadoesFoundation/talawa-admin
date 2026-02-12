@@ -44,6 +44,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { errorHandler } from 'utils/errorHandler';
 import { languages } from 'utils/languages';
 import Button from 'shared-components/Button';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -407,6 +408,18 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
+      <SafeBreadcrumbs
+        items={[
+          {
+            translationKey: 'organization',
+            to: `/admin/orgdash/${currentUrl}`,
+          },
+          {
+            translationKey: 'people',
+            isCurrent: true,
+          },
+        ]}
+      />
       <div className={styles.orgPeopleGrid}>
         <SearchFilterBar
           hasDropdowns={true}

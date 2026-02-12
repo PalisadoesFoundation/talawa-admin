@@ -39,6 +39,7 @@ import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -236,6 +237,18 @@ function organizationEvents(): JSX.Element {
   return (
     <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
       <>
+        <SafeBreadcrumbs
+          items={[
+            {
+              translationKey: 'organization',
+              to: `/admin/orgdash/${currentUrl}`,
+            },
+            {
+              translationKey: 'events',
+              isCurrent: true,
+            },
+          ]}
+        />
         <div className={styles.mainpageright}>
           <div className={styles.justifyspOrganizationEvents}>
             <PageHeader
