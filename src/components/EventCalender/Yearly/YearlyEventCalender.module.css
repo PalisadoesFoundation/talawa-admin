@@ -15,8 +15,8 @@
   font-size: small;
   padding: var(--space-2);
   text-align: center;
-  height: 2rem;
-  margin: 1px;
+  height: var(--space-8);
+  margin: var(--space-1px);
 }
 
 .day__events {
@@ -33,7 +33,7 @@
   top: 0;
   left: 0;
   background-color: var(--expandListContainer-bg);
-  border: 1px solid var(--expandListContainer-border);
+  border: var(--border-1) solid var(--expandListContainer-border);
   border-radius: var(--space-2);
   margin: var(--space-2);
 }
@@ -80,7 +80,7 @@
   width: var(--space-2);
   height: var(--space-2);
   background-color: var(--color-red-500);
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   display: inline-block;
   margin-left: var(--space-2);
 }
@@ -102,7 +102,7 @@
 .cardYearlyEventCalender {
   padding: var(--space-5);
   text-align: center;
-  height: 21rem;
+  height: var(--space-21rem);
 }
 
 .cardHeaderYearlyEventCalender {
@@ -129,6 +129,24 @@
   margin: 0 auto;
 }
 
+.weekdayHeaderRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-2px);
+  margin-bottom: var(--space-3);
+  padding: 0 var(--space-3);
+}
+
+.weekdayHeaderCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--weekdayYearly-bg);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-2);
+  font-size: small;
+}
+
 .yearlyCalendarHeader {
   display: flex;
   justify-content: center;
@@ -137,7 +155,7 @@
 }
 
 .buttonEventCalendar {
-  border-radius: 100rem;
+  border-radius: var(--radius-pill);
   color: var(--buttonEventCalendar-color);
   border: 0;
 }
@@ -149,14 +167,14 @@
 }
 
 .rowYearlyEventCalender {
-  margin: 1px -5px;
+  margin: var(--space-1px) var(--space-n5px);
 }
 
 .rowYearlyEventCalender:after {
   content: '';
   display: table;
   clear: both;
-  margin: 0 -5px;
+  margin: 0 var(--space-n5px);
 }
 
 .yearlyCalender {
@@ -168,5 +186,5 @@
   font-family: var(--font-family-sans, 'Outfit', sans-serif);
   padding: var(--space-6);
   background-color: var(--calendar-bg);
-  min-height: 80vh;
+  min-height: var(--space-80vh);
 }
