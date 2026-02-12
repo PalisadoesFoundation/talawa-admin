@@ -21,13 +21,34 @@ export class TableActions {
     timeout = 10000,
     exact = true,
   ): Cypress.Chainable<JQuery<HTMLElement>> {
-    const matcher = exact ? new RegExp(`^${this.escapeRegex(text)}$`) : text;
+    const matcher = exact ? new RegExp(`^${this.escapeRegex(text)}$`) : null;
 
     return cy
       .get(`${this.tableSelector} .MuiDataGrid-row`, { timeout })
-      .contains(matcher)
-      .should('be.visible')
-      .closest('.MuiDataGrid-row');
+      .then(($rows) => {
+        const matchedRow = $rows.toArray().find((row) => {
+          const cells = Cypress.$(row).find('[role="gridcell"], td').toArray();
+
+          return cells.some((cell) => {
+            const cellText = Cypress.$(cell).text().trim();
+
+            if (matcher) {
+              return matcher.test(cellText);
+            }
+
+            return cellText.includes(text);
+          });
+        });
+
+        if (!matchedRow) {
+          throw new Error(
+            `No DataGrid row found in ${this.tableSelector} matching text "${text}".`,
+          );
+        }
+
+        return cy.wrap(matchedRow, { log: false });
+      })
+      .should('be.visible');
   }
 
   clickRowActionByText(

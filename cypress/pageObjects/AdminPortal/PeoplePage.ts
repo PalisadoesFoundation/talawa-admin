@@ -33,7 +33,7 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    this.tableActions.findRowByText(name, timeout).should('exist');
+    this.tableActions.findRowByText(name, timeout);
     return this;
   }
 
