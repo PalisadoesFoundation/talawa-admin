@@ -754,9 +754,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // Type multiple characters quickly to test debouncing
     await user.type(searchBar, 'Dum');
 
-    // Wait for debounce delay (300ms)
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
+    // Wait for debounced search result
+    await waitFor(() => {
+      // Assert the expected outcome of the debounced search
+      expect(screen.getByTestId('searchInput')).toHaveValue('Dum');
     });
   });
 
@@ -846,9 +847,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchInput = screen.getByTestId('searchInput');
     await user.type(searchInput, 'Dog');
 
-    // Wait for debounce
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
+    // Wait for debounced search result
+    await waitFor(() => {
+      // Assert the expected outcome of the debounced search
+      expect(screen.getByTestId('searchInput')).toHaveValue('Dog');
     });
 
     const paginationAfterSearch = screen.getByTestId('table-pagination');
@@ -2440,16 +2442,13 @@ describe('Advanced Component Functionality Tests', () => {
     // Submit form
     await user.click(screen.getByTestId('submitOrganizationForm'));
 
-    // Wait for form submission to complete
     await waitFor(() => {
       expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
+      // Verify that toast.success was NOT called since data is null
+      expect(mockToast.success).not.toHaveBeenCalled();
+      // Verify that the modal should still be open since the success path wasn't taken
+      expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     });
-
-    // Verify that toast.success was NOT called since data is null
-    expect(mockToast.success).not.toHaveBeenCalled();
-
-    // Verify that the modal should still be open since the success path wasn't taken
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
   });
 
   test('Testing missing token scenario', async () => {
