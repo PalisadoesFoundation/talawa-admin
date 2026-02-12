@@ -14,6 +14,28 @@ const sharedMocks = vi.hoisted(() => ({
 
 vi.mock('plugin', () => sharedMocks);
 
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => (
+    <nav aria-label="breadcrumbs">
+      <ol>
+        {items.map((item) => (
+          <li key={item.translationKey || item.label}>
+            {item.to ? (
+              <a href={item.to}>{item.translationKey}</a>
+            ) : (
+              <span aria-current="page">{item.translationKey}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  ),
+}));
+
 describe('OrganizationTransactions', () => {
   beforeEach(() => {
     document.title = '';
@@ -49,5 +71,24 @@ describe('OrganizationTransactions', () => {
     renderWithRouter();
 
     expect(document.title).toBe('Transactions');
+  });
+
+  it('renders breadcrumbs correctly', () => {
+    renderWithRouter();
+
+    // Verify breadcrumb navigation is present
+    expect(
+      screen.getByRole('navigation', { name: /breadcrumbs/i }),
+    ).toBeInTheDocument();
+
+    // Verify breadcrumb items
+    const breadcrumbLinks = screen.getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (Transactions) has aria-current
+    expect(screen.getByText(/transactions/i)).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 });

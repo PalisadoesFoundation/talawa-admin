@@ -166,6 +166,28 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => (
+    <nav aria-label="breadcrumbs">
+      <ol>
+        {items.map((item) => (
+          <li key={item.translationKey || item.label}>
+            {item.to ? (
+              <a href={item.to}>{item.translationKey}</a>
+            ) : (
+              <span aria-current="page">{item.translationKey}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  ),
+}));
+
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -521,5 +543,27 @@ describe('Organisation Venues Error Handling', () => {
       const venues = screen.getAllByTestId(/^venue-item/);
       expect(venues).toHaveLength(3);
     });
+  });
+
+  test('renders breadcrumbs correctly', async () => {
+    renderOrganizationVenue(link);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    // Verify breadcrumb navigation is present
+    await waitFor(() => {
+      expect(
+        screen.getByRole('navigation', { name: /breadcrumbs/i }),
+      ).toBeInTheDocument();
+    });
+
+    // Verify breadcrumb items
+    const breadcrumbLinks = screen.getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (Venues) has aria-current
+    expect(screen.getByText(/venues/i)).toHaveAttribute('aria-current', 'page');
   });
 });

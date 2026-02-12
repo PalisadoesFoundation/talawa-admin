@@ -3,7 +3,13 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent, {
   PointerEventsCheckLevel,
 } from '@testing-library/user-event';
@@ -72,6 +78,28 @@ vi.mock(
     };
   },
 );
+
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => (
+    <nav aria-label="breadcrumbs">
+      <ol>
+        {items.map((item) => (
+          <li key={item.translationKey || item.label}>
+            {item.to ? (
+              <a href={item.to}>{item.translationKey}</a>
+            ) : (
+              <span aria-current="page">{item.translationKey}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  ),
+}));
 
 // Setup mock window.location
 const setupLocationMock = () => {
@@ -1902,5 +1930,57 @@ describe('OrganizationPeople', () => {
       // DataGridWrapper applies standard MUI DataGrid classes
       expect(row.getAttribute('class')).toMatch(/MuiDataGrid-row/);
     });
+  });
+
+  test('renders breadcrumbs correctly', async () => {
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      }),
+    ];
+
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for data to load
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Verify breadcrumb navigation is present
+    const breadcrumbsNav = await screen.findByRole('navigation', {
+      name: /breadcrumbs/i,
+    });
+    expect(breadcrumbsNav).toBeInTheDocument();
+
+    // Verify breadcrumb items
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (People) has aria-current
+    expect(screen.getByText(/people/i)).toHaveAttribute('aria-current', 'page');
   });
 });
