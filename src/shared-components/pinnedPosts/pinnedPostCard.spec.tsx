@@ -299,13 +299,10 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
-      // When avatarURL is undefined, the component falls back to UserDefault image
-      const avatarImg = screen.getByTestId('org-avatar');
-      expect(avatarImg).toBeInTheDocument();
-      expect(avatarImg).toHaveAttribute(
-        'src',
-        '/src/assets/images/defaultImg.png',
-      );
+      // When avatarURL is undefined, the mock ProfileAvatarDisplay renders fallback initials
+      const avatar = screen.getByTestId('org-avatar');
+      expect(avatar).toBeInTheDocument();
+      expect(avatar).toHaveTextContent('J'); // First letter of "John Doe"
     });
   });
 
