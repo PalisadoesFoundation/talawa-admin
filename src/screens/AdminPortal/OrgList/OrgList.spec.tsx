@@ -739,25 +739,24 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await user.click(searchBtn);
   });
 
-  test('Testing debounced search functionality', async () => {
+  test('filters organizations when typing in search', async () => {
     const user = userEvent.setup();
     setupUser('superAdmin');
 
-    renderWithProviders();
+    renderWithMocks(mockConfigurations.searchableMocks);
+
+    const searchBar = await screen.findByTestId('searchInput');
+
+    await user.type(searchBar, 'Dog');
+
+    // input updated
+    expect(searchBar).toHaveValue('Dog');
+
+    // filtered result appears
     await waitFor(() => {
-      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-    });
-
-    const searchBar = screen.getByTestId('searchInput');
-    expect(searchBar).toBeInTheDocument();
-
-    // Type multiple characters quickly to test debouncing
-    await user.type(searchBar, 'Dum');
-
-    // Wait for debounced search result
-    await waitFor(() => {
-      // Assert the expected outcome of the debounced search
-      expect(screen.getByTestId('searchInput')).toHaveValue('Dum');
+      const cards = screen.getAllByTestId('organization-card-mock');
+      expect(cards.length).toBeGreaterThan(0);
+      expect(cards[0]).toHaveTextContent('Dog');
     });
   });
 
@@ -818,20 +817,24 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
-    await waitFor(() => {
-      expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
+
+    await screen.findByTestId('table-pagination');
+
+    const rowsPerPageSelect = screen.getByRole('combobox', {
+      name: /rows per page/i,
     });
 
-    // Verify default rows per page is 5
-    const rowsPerPageSelect = screen.getByDisplayValue('5');
-    expect(rowsPerPageSelect).toBeInTheDocument();
+    expect(rowsPerPageSelect).toHaveValue('5');
 
-    // Change rows per page to 10
     await user.selectOptions(rowsPerPageSelect, '10');
 
     await waitFor(() => {
-      expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
+      expect(rowsPerPageSelect).toHaveValue('10');
     });
+
+    // OPTIONAL (stronger assertion)
+    const displayedRows = screen.getByText(/of/i);
+    expect(displayedRows.textContent).toMatch(/1–\d+ of/);
   });
 
   test('Testing pagination with search integration', async () => {
@@ -863,10 +866,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     renderWithProviders(mockLinks.empty);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
-    });
-    expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();
+    // Wait for empty state AFTER query resolves
+    const emptyState = await screen.findByTestId('orglist-no-orgs-empty');
+
+    expect(emptyState).toBeInTheDocument();
   });
 
   test('Testing Organization data is not present', async () => {
@@ -1007,12 +1010,9 @@ describe('Plugin Modal Tests', () => {
 
     await user.click(screen.getByTestId('submitOrganizationForm'));
 
-    // Wait for the modal to close after submission
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
-    });
+    const pluginModal = await screen.findByTestId('pluginNotificationModal');
+
+    expect(pluginModal).toBeInTheDocument();
   });
 });
 
@@ -1205,15 +1205,9 @@ describe('Advanced Component Functionality Tests', () => {
       'Afghanistan',
     );
 
-    // Submit form
     await user.click(screen.getByTestId('submitOrganizationForm'));
 
-    // Wait for the modal to close after submission
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
-    });
+    await screen.findByTestId('pluginNotificationModal');
   });
 
   test('Testing create organization modal opens and closes', async () => {
@@ -1294,15 +1288,20 @@ describe('Advanced Component Functionality Tests', () => {
       'Afghanistan',
     );
 
-    // Submit form to verify organization creation flow
+    // Verify form values before submission
+    expect(screen.getByTestId('modalOrganizationName')).toHaveValue(
+      'Test Organization',
+    );
+
+    expect(screen.getByTestId('modalOrganizationCity')).toHaveValue(
+      'Test City',
+    );
+
+    // Submit form
     await user.click(screen.getByTestId('submitOrganizationForm'));
 
-    // Wait for the modal to close after successful submission
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
-    });
+    // Verify success side-effect
+    await screen.findByTestId('pluginNotificationModal');
   });
 
   test('Testing successful organization creation triggers plugin modal', async () => {
@@ -1354,11 +1353,9 @@ describe('Advanced Component Functionality Tests', () => {
     await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after submission
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
-    });
+    const pluginModal = await screen.findByTestId('pluginNotificationModal');
+
+    expect(pluginModal).toBeInTheDocument();
   });
 
   test('Testing error handling for organization creation', async () => {
@@ -2450,7 +2447,6 @@ describe('Advanced Component Functionality Tests', () => {
       expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     });
   });
-
   test('Testing missing token scenario', async () => {
     setItem('id', '123');
     setItem('role', 'administrator');
