@@ -60,6 +60,7 @@ SKIP_DOCKER=false
 NON_INTERACTIVE=false
 DRY_RUN=false
 VERBOSE=false
+DEPS_SKIPPED=false
 
 _show_help() {
     cat <<EOF
@@ -119,15 +120,6 @@ log_verbose() {
 }
 
 # ==============================================================================
-# CLEANUP HANDLER
-# ==============================================================================
-cleanup() {
-    # Clean up temporary files if any
-    :
-}
-trap cleanup EXIT INT TERM
-
-# ==============================================================================
 # BANNER
 # ==============================================================================
 log_section "Talawa Admin Installation"
@@ -174,17 +166,17 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
         log_info "[DRY] Would check Docker CLI, daemon, and Compose status"
     else
         log_verbose "Checking Docker CLI..."
-        local_cli_status="$(check_docker_cli)"
+        docker_cli_status="$(check_docker_cli)"
         log_verbose "Checking Docker daemon..."
-        local_daemon_status="$(check_docker_daemon)"
+        docker_daemon_status="$(check_docker_daemon)"
         log_verbose "Checking Docker Compose..."
-        local_compose_status="$(check_docker_compose)"
+        docker_compose_status="$(check_docker_compose)"
 
         # Report CLI status
-        case "$local_cli_status" in
+        case "$docker_cli_status" in
             installed:*)
-                local_version="${local_cli_status#installed:}"
-                log_success "Docker CLI: installed (version $local_version)"
+                docker_version="${docker_cli_status#installed:}"
+                log_success "Docker CLI: installed (version $docker_version)"
                 ;;
             not_installed)
                 log_warning "Docker CLI: not installed"
@@ -192,7 +184,7 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
         esac
 
         # Report daemon status
-        case "$local_daemon_status" in
+        case "$docker_daemon_status" in
             running)
                 log_success "Docker daemon: running"
                 ;;
@@ -211,14 +203,14 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
         esac
 
         # Report Compose status
-        case "$local_compose_status" in
+        case "$docker_compose_status" in
             v2:*)
-                local_version="${local_compose_status#v2:}"
-                log_success "Docker Compose: v2 (version $local_version)"
+                docker_version="${docker_compose_status#v2:}"
+                log_success "Docker Compose: v2 (version $docker_version)"
                 ;;
             v1:*)
-                local_version="${local_compose_status#v1:}"
-                log_success "Docker Compose: v1 (version $local_version)"
+                docker_version="${docker_compose_status#v1:}"
+                log_success "Docker Compose: v1 (version $docker_version)"
                 ;;
             not_installed)
                 log_warning "Docker Compose: not installed"
@@ -226,13 +218,13 @@ if [[ "$SKIP_DOCKER" != "true" ]]; then
         esac
 
         # Provide guidance if Docker is not fully operational
-        if [[ "$local_daemon_status" != "running" ]]; then
+        if [[ "$docker_daemon_status" != "running" ]]; then
             log_info ""
             log_info "Docker is optional but recommended for development."
             log_info "Installation will continue without Docker."
 
             if [[ "$VERBOSE" == "true" ]]; then
-                case "$local_daemon_status" in
+                case "$docker_daemon_status" in
                     not_running|unresponsive)
                         log_verbose "Run 'print_docker_status_report' for detailed guidance"
                         ;;
@@ -321,14 +313,15 @@ if [[ "$DRY_RUN" == "true" ]]; then
 else
     if [[ "$NON_INTERACTIVE" == "true" ]]; then
         log_info "Running pnpm install..."
-        (cd "$PROJECT_ROOT" && pnpm install) || die "Dependency installation failed"
+        (cd "$PROJECT_ROOT" && pnpm install) || die "Dependency installation failed" "$E_MISSING_DEP"
         log_success "Project dependencies installed"
     else
         if confirm "Install project dependencies (pnpm install)?" "y"; then
             log_info "Running pnpm install..."
-            (cd "$PROJECT_ROOT" && pnpm install) || die "Dependency installation failed"
+            (cd "$PROJECT_ROOT" && pnpm install) || die "Dependency installation failed" "$E_MISSING_DEP"
             log_success "Project dependencies installed"
         else
+            DEPS_SKIPPED=true
             log_warning "Skipping dependency installation"
         fi
     fi
@@ -343,10 +336,17 @@ if [[ "$DRY_RUN" == "true" ]]; then
     log_info "[DRY] Would display installation summary"
 else
     log_section "Installation Complete"
-    log_success "Talawa Admin installation finished"
+
+    if [[ "$DEPS_SKIPPED" == "true" ]]; then
+        log_warning "Talawa Admin installation finished (dependencies skipped)"
+        log_info ""
+        log_info "Run 'pnpm install' manually before starting the development server."
+    else
+        log_success "Talawa Admin installation finished"
+    fi
+
     log_info ""
 
-    # Show toolchain versions
     log_info "Installed toolchain:"
     if command_exists fnm; then
         log_info "  fnm:    $(fnm --version 2>/dev/null || echo 'unknown')"

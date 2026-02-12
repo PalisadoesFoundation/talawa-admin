@@ -91,9 +91,8 @@ assert_not_contains() {
 # TEST: --help flag
 # ==============================================================================
 test_help_flag() {
-    local output
-    output="$(bash "$INSTALL_SCRIPT" --help 2>&1)" || true
-    local exit_code=$?
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --help 2>&1)" && exit_code=$? || exit_code=$?
 
     assert_equals "0" "$exit_code" "--help should exit with 0" && \
     assert_contains "$output" "Usage:" "--help should show Usage" && \
@@ -118,22 +117,25 @@ test_unknown_flag() {
 # TEST: --dry-run does not execute pnpm install
 # ==============================================================================
 test_dry_run_no_side_effects() {
-    local output
-    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" || true
-    local exit_code=$?
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" && exit_code=$? || exit_code=$?
 
     assert_equals "0" "$exit_code" "--dry-run should exit with 0" && \
     assert_contains "$output" "[DRY]" "Output should contain [DRY] markers" && \
     assert_contains "$output" "DRY RUN" "Output should indicate dry run mode" && \
-    assert_not_contains "$output" "Dependency installation failed" "Should not attempt real install"
+    assert_not_contains "$output" "Dependency installation failed" "Should not attempt real install" && \
+    assert_not_contains "$output" "Running pnpm install" "Should not run pnpm install" && \
+    assert_not_contains "$output" "fnm not found, installing" "Should not attempt fnm install" && \
+    assert_not_contains "$output" "Node.js not found, installing" "Should not attempt Node.js install" && \
+    assert_not_contains "$output" "pnpm not found, installing" "Should not attempt pnpm install"
 }
 
 # ==============================================================================
 # TEST: --dry-run shows all steps
 # ==============================================================================
 test_dry_run_shows_steps() {
-    local output
-    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" || true
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" && exit_code=$? || exit_code=$?
 
     assert_contains "$output" "Step 1" "Should show Step 1 (OS detection)" && \
     assert_contains "$output" "Step 2" "Should show Step 2 (Docker)" && \
@@ -146,9 +148,10 @@ test_dry_run_shows_steps() {
 # TEST: --skip-docker-check skips Docker step
 # ==============================================================================
 test_skip_docker_check() {
-    local output
-    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive --skip-docker-check 2>&1)" || true
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive --skip-docker-check 2>&1)" && exit_code=$? || exit_code=$?
 
+    assert_equals "0" "$exit_code" "--skip-docker-check should exit with 0" && \
     assert_contains "$output" "Docker check skipped" "Should indicate Docker was skipped"
 }
 
@@ -156,9 +159,10 @@ test_skip_docker_check() {
 # TEST: --verbose enables extra output
 # ==============================================================================
 test_verbose_flag() {
-    local output
-    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive --verbose 2>&1)" || true
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive --verbose 2>&1)" && exit_code=$? || exit_code=$?
 
+    assert_equals "0" "$exit_code" "--verbose should exit with 0" && \
     assert_contains "$output" "[VERBOSE]" "Verbose mode should produce [VERBOSE] output" && \
     assert_contains "$output" "Script directory" "Verbose should show script directory"
 }
@@ -168,7 +172,6 @@ test_verbose_flag() {
 # ==============================================================================
 test_missing_library_detection() {
     _TEST_TEMP_DIR="$(mktemp -d -t talawa-install-test.XXXXXX)"
-    trap 'rm -rf "$_TEST_TEMP_DIR"' RETURN
 
     cp "$INSTALL_SCRIPT" "$_TEST_TEMP_DIR/install.sh"
     mkdir -p "$_TEST_TEMP_DIR/lib"
@@ -176,6 +179,8 @@ test_missing_library_detection() {
 
     local output exit_code
     output="$(bash "$_TEST_TEMP_DIR/install.sh" 2>&1)" && exit_code=$? || exit_code=$?
+
+    rm -rf "$_TEST_TEMP_DIR"
 
     assert_equals "1" "$exit_code" "Missing libs should exit with 1" && \
     assert_contains "$output" "Required library not found" "Should report missing library"
@@ -190,9 +195,8 @@ test_wrapper_delegates() {
         return 1
     fi
 
-    local output
-    output="$(bash "$WRAPPER_SCRIPT" --help 2>&1)" || true
-    local exit_code=$?
+    local output exit_code
+    output="$(bash "$WRAPPER_SCRIPT" --help 2>&1)" && exit_code=$? || exit_code=$?
 
     assert_equals "0" "$exit_code" "Wrapper --help should exit with 0" && \
     assert_contains "$output" "Usage:" "Wrapper should delegate --help to main script"
@@ -202,9 +206,8 @@ test_wrapper_delegates() {
 # TEST: Wrapper passes through all flags
 # ==============================================================================
 test_wrapper_passthrough_flags() {
-    local output
-    output="$(bash "$WRAPPER_SCRIPT" --dry-run --non-interactive --skip-docker-check --verbose 2>&1)" || true
-    local exit_code=$?
+    local output exit_code
+    output="$(bash "$WRAPPER_SCRIPT" --dry-run --non-interactive --skip-docker-check --verbose 2>&1)" && exit_code=$? || exit_code=$?
 
     assert_equals "0" "$exit_code" "Wrapper should pass through all flags" && \
     assert_contains "$output" "[DRY]" "Wrapper should delegate dry-run" && \
@@ -229,11 +232,11 @@ test_script_is_executable() {
 # ==============================================================================
 test_works_from_different_cwd() {
     _TEST_CWD_TEMP_DIR="$(mktemp -d -t talawa-cwd-test.XXXXXX)"
-    trap 'rm -rf "$_TEST_CWD_TEMP_DIR"' RETURN
 
-    local output
-    output="$(cd "$_TEST_CWD_TEMP_DIR" && bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" || true
-    local exit_code=$?
+    local output exit_code
+    output="$(cd "$_TEST_CWD_TEMP_DIR" && bash "$INSTALL_SCRIPT" --dry-run --non-interactive 2>&1)" && exit_code=$? || exit_code=$?
+
+    rm -rf "$_TEST_CWD_TEMP_DIR"
 
     assert_equals "0" "$exit_code" "Should work from different cwd" && \
     assert_contains "$output" "Step 1" "Should still show steps from different cwd"
@@ -243,10 +246,8 @@ test_works_from_different_cwd() {
 # TEST: Non-interactive mode runs without prompts
 # ==============================================================================
 test_non_interactive_mode() {
-    local output
-    # Run with stdin closed to ensure no prompts
-    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive </dev/null 2>&1)" || true
-    local exit_code=$?
+    local output exit_code
+    output="$(bash "$INSTALL_SCRIPT" --dry-run --non-interactive </dev/null 2>&1)" && exit_code=$? || exit_code=$?
 
     assert_equals "0" "$exit_code" "Non-interactive dry-run should succeed without stdin"
 }
