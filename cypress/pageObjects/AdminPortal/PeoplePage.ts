@@ -1,3 +1,6 @@
+import { ModalActions } from '../shared/ModalActions';
+import { TableActions } from '../shared/TableActions';
+
 export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
@@ -10,8 +13,10 @@ export class PeoplePage {
   private readonly _submitSearchBtn = '[data-testid="submitBtn"]';
   private readonly _addBtn = '[data-testid="addBtn"]';
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
-  private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
+  private readonly _confirmRemoveBtnTestId = 'removeMemberBtn';
   private readonly _alert = '[role=alert]';
+  private readonly tableActions = new TableActions('.MuiDataGrid-root');
+  private readonly removeMemberModal = new ModalActions('[role="dialog"]');
 
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
@@ -67,16 +72,14 @@ export class PeoplePage {
     // Wait for DataGrid to stabilize after search
     cy.wait(1000);
 
-    // Scope search to DataGrid rows to avoid matching headers/other UI
-    cy.get('.MuiDataGrid-row', { timeout })
-      .contains(name)
-      .should('be.visible')
-      .parents('.MuiDataGrid-row')
-      .find(this._removeModalBtn)
-      .should('be.visible')
-      .click();
+    this.tableActions
+      .waitVisible(timeout)
+      .clickRowActionByText(name, this._removeModalBtn, timeout);
 
-    cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
+    this.removeMemberModal
+      .waitVisible(timeout)
+      .clickByTestId(this._confirmRemoveBtnTestId, undefined, timeout);
+
     cy.get(this._alert, { timeout })
       .should('be.visible')
       .and('contain.text', 'The Member is removed');
