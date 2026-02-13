@@ -711,3 +711,53 @@ export const GET_FILE_PRESIGNEDURL = gql`
     }
   }
 `;
+
+// to link OAuth account to existing user
+export const LINK_OAUTH_ACCOUNT = gql`
+  mutation LinkOAuthAccount($input: OAuthLoginInput!) {
+    linkOAuthAccount(input: $input) {
+      id
+      name
+      emailAddress
+      isEmailAddressVerified
+      role
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+// to unlink OAuth account from existing user
+export const UNLINK_OAUTH_ACCOUNT = gql`
+  mutation UnlinkOAuthAccount($provider: OAuthProvider!) {
+    unlinkOAuthAccount(provider: $provider) {
+      id
+      emailAddress
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+// to sign in with OAuth
+export const SIGN_IN_WITH_OAUTH = gql`
+  mutation SignInWithOAuth($input: OAuthLoginInput!) {
+    signInWithOAuth(input: $input) {
+      authenticationToken
+      refreshToken
+      user {
+        id
+        name
+        emailAddress
+      }
+    }
+  }
+`;
