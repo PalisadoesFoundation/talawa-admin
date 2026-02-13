@@ -92,7 +92,7 @@ beforeEach(() => {
 afterEach(() => {
   cleanup();
   localStorageMock.clear();
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 const pledgeProps: InterfacePledgeModal[] = [
@@ -346,7 +346,7 @@ describe('PledgeModal', () => {
   });
 
   afterAll(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should populate form fields with correct values in edit mode', async () => {

@@ -6,7 +6,7 @@
  */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -21,17 +21,6 @@ let link: StaticMockLink;
 beforeEach(() => {
   link = new StaticMockLink([], true);
 });
-
-/**
- * Waits for the given number of milliseconds.
- *
- * @param ms - Delay in milliseconds (default 100).
- */
-async function wait(ms = 100): Promise<void> {
-  await new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
 
 /**
  * Renders the OrgContribution component inside required providers.
@@ -53,12 +42,7 @@ const renderComponent = () => {
 };
 
 describe('Organisation Contribution Page', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
     cleanup();
   });
@@ -68,11 +52,12 @@ describe('Organisation Contribution Page', () => {
 
     expect(document.title).toBe('Talawa Contributions');
     expect(container.textContent).not.toBe('Loading data...');
-    await wait();
-    expect(container.textContent).toMatch('Filter by Name');
-    expect(container.textContent).toMatch('Filter by Trans. ID');
-    expect(container.textContent).toMatch('Recent Stats');
-    expect(container.textContent).toMatch('Contribution');
+    await waitFor(() => {
+      expect(container.textContent).toMatch('Filter by Name');
+      expect(container.textContent).toMatch('Filter by Trans. ID');
+      expect(container.textContent).toMatch('Recent Stats');
+      expect(container.textContent).toMatch('Contribution');
+    });
   });
 
   test('renders ContriStats with correct props', () => {

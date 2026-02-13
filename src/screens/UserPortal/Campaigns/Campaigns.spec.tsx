@@ -95,6 +95,16 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
 
 describe('Testing User Campaigns Screen', () => {
   let user: ReturnType<typeof userEvent.setup>;
+  beforeAll(() => {
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
+      return {
+        ...actual,
+        useParams: () => ({ orgId: 'orgId' }),
+      };
+    });
+  });
+
   beforeEach(() => {
     link1 = new StaticMockLink(MOCKS);
     link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
@@ -103,19 +113,9 @@ describe('Testing User Campaigns Screen', () => {
     setItem('userId', 'userId');
   });
 
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: vi.fn(() => ({ orgId: 'orgId' })),
-      };
-    });
-  });
-
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render the User Campaigns screen', async () => {

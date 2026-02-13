@@ -468,19 +468,6 @@ let link: StaticMockLink;
 let emptyLink: StaticMockLink;
 let errorLink: StaticMockLink;
 
-/**
- * Waits for the given number of milliseconds inside an act() wrapper.
- *
- * @param ms - Delay in milliseconds (default 100).
- */
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 beforeEach(() => {
   link = new StaticMockLink(MOCKS, true);
   emptyLink = new StaticMockLink(EMPTY_MOCKS, true);
@@ -495,7 +482,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
   clearAllItems();
   cleanup();
 });
@@ -513,11 +500,12 @@ test('Screen should be rendered properly', async () => {
     </MockedProvider>,
   );
 
-  await wait();
-  expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
-  expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-  expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 });
 
 test('should search organizations when pressing Enter key', async () => {
@@ -608,16 +596,18 @@ test('Mode dropdown switches list correctly', async () => {
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
   // Wait for mode change and check if component is still working
-  await wait(200);
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 
   // Switch to Mode 2 (Created Organizations)
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
   // Wait for mode change and check if component is still working
-  await wait(200);
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 });
 
 test('should display empty state when no organizations exist', async () => {
@@ -653,10 +643,11 @@ test('Pagination basic functionality works', async () => {
     </MockedProvider>,
   );
 
-  await wait();
+  await waitFor(() => {
+    expect(screen.getByTestId('rows-per-page')).toHaveValue('5');
+  });
 
   const rowsPerPageSelect = screen.getByTestId('rows-per-page');
-  expect(rowsPerPageSelect).toHaveValue('5');
 
   await userEvent.selectOptions(rowsPerPageSelect, '10');
   expect(rowsPerPageSelect).toHaveValue('10');
@@ -891,10 +882,10 @@ test('should handle mode switching to joined organizations', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  await wait(200);
-
   // Verify we're in mode 1 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 });
 
 test('should handle mode switching to created organizations', async () => {
@@ -919,10 +910,10 @@ test('should handle mode switching to created organizations', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
-  await wait(200);
-
   // Verify we're in mode 2 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
 });
 
 test('should handle null user data in joined organizations', async () => {
@@ -985,10 +976,6 @@ test('should handle null user data in joined organizations', async () => {
   const modeButton = screen.getByTestId('modeChangeBtn-toggle');
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
-
-  // Wait for the mode switch to complete - the else branch should execute
-  // setting organizations to empty array
-  await wait(300);
 
   // Should show no organizations message
   await waitFor(() => {
@@ -1055,9 +1042,6 @@ test('should handle missing organizationsWhereMember in joined organizations', a
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
 
-  // Wait for the mode switch to complete
-  await wait(300);
-
   // Should show no organizations message because organizationsWhereMember is missing
   await waitFor(() => {
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
@@ -1122,9 +1106,6 @@ test('should handle null createdOrganizations in created organizations', async (
   const modeButton = screen.getByTestId('modeChangeBtn-toggle');
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
-
-  // Wait for the mode switch to complete
-  await wait(300);
 
   // Should show no organizations message
   await waitFor(() => {
@@ -1191,9 +1172,6 @@ test('should handle missing createdOrganizations field', async () => {
   await userEvent.click(modeButton);
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
-  // Wait for the mode switch to complete
-  await wait(300);
-
   // Should show no organizations message because createdOrganizations is missing
   await waitFor(() => {
     expect(screen.getByTestId('no-organizations-message')).toBeInTheDocument();
@@ -1234,10 +1212,9 @@ test('should handle window resize to trigger handleResize', async () => {
     window.dispatchEvent(new Event('resize'));
   });
 
-  await wait();
-
-  const sidebar = screen.getByTestId('user-sidebar');
-  expect(sidebar).toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
+  });
 });
 
 test('should display organizations with complete data fields', async () => {
