@@ -341,8 +341,7 @@ function SubTags(): JSX.Element {
                   <IconComponent name="Tag" />
                 </div>
 
-                <button
-                  type="button"
+                <div
                   onClick={() => navigate(`/admin/orgtags/${orgId}`)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -355,14 +354,15 @@ function SubTags(): JSX.Element {
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                   data-testid="allTagsBtn"
                   data-text={t('tags')}
+                  role="button"
+                  tabIndex={0}
                 >
                   {t('tags')}
                   <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
-                </button>
+                </div>
 
                 {orgUserTagAncestors?.map((tag, index) => (
-                  <button
-                    type="button"
+                  <div
                     key={index}
                     className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                     onClick={() => redirectToSubTags(tag._id as string)}
@@ -376,6 +376,8 @@ function SubTags(): JSX.Element {
                     }}
                     data-testid="redirectToSubTags"
                     data-text={tag.name}
+                    role="button"
+                    tabIndex={0}
                   >
                     {tag.name}
 
@@ -385,7 +387,7 @@ function SubTags(): JSX.Element {
                         aria-hidden="true"
                       />
                     )}
-                  </button>
+                  </div>
                 ))}
               </div>
               <div

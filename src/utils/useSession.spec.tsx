@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import useSession from './useSession';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
@@ -10,8 +10,8 @@ import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { BrowserRouter } from 'react-router';
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     info: vi.fn(),
     warning: vi.fn(),
     error: vi.fn(),
@@ -122,7 +122,7 @@ describe('useSession Hook', () => {
         'keydown',
         expect.any(Function),
       );
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'sessionWarning',
         expect.any(Object),
       );
@@ -162,7 +162,7 @@ describe('useSession Hook', () => {
         'keydown',
         expect.any(Function),
       );
-      expect(toast.warning).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
     });
 
     vi.useRealTimers();
@@ -222,15 +222,15 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledTimes(2);
+      expect(NotificationToast.warning).toHaveBeenCalledTimes(2);
 
-      expect(toast.warning).toHaveBeenNthCalledWith(
+      expect(NotificationToast.warning).toHaveBeenNthCalledWith(
         1,
         'sessionWarning',
         expect.any(Object),
       );
 
-      expect(toast.warning).toHaveBeenNthCalledWith(
+      expect(NotificationToast.warning).toHaveBeenNthCalledWith(
         2,
         'sessionLogOut',
         expect.objectContaining({
@@ -256,7 +256,7 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(15 * 60 * 1000);
 
     await vi.waitFor(() =>
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'sessionWarning',
         expect.any(Object),
       ),
@@ -476,7 +476,7 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'sessionLogOut',
         expect.objectContaining({ autoClose: false }),
       );
@@ -501,7 +501,7 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'sessionLogOut',
         expect.objectContaining({ autoClose: false }),
       );
@@ -533,13 +533,13 @@ test('should extend session when called directly', async () => {
   vi.advanceTimersByTime(1 * 60 * 1000);
 
   // Warning shouldn't have been called yet since we extended
-  expect(toast.warning).not.toHaveBeenCalled();
+  expect(NotificationToast.warning).not.toHaveBeenCalled();
 
   // Advance to new warning time
   vi.advanceTimersByTime(14 * 60 * 1000);
 
   await vi.waitFor(() =>
-    expect(toast.warning).toHaveBeenCalledWith(
+    expect(NotificationToast.warning).toHaveBeenCalledWith(
       'sessionWarning',
       expect.any(Object),
     ),
@@ -752,7 +752,7 @@ test('should handle edge case when visibility state is neither visible nor hidde
   vi.advanceTimersByTime(15 * 60 * 1000);
 
   await vi.waitFor(() => {
-    expect(toast.warning).toHaveBeenCalledWith(
+    expect(NotificationToast.warning).toHaveBeenCalledWith(
       'sessionWarning',
       expect.any(Object),
     );

@@ -4,8 +4,7 @@
  * A reusable component for displaying consistent empty state UI across the application.
  * Supports icons, messages, descriptions, and action buttons.
  *
- * @component
- * @category Shared Components
+ *
  *
  * @remarks
  * - All text is i18n-ready - pass translation keys or plain strings
@@ -30,29 +29,26 @@
  * />
  * ```
  *
- * @param {string} [message] - Primary message to display (i18n key or plain string)
+ * @param message - Primary message to display (i18n key or plain string)
  *
- * @param {string | undefined} [description] - Optional secondary description text
+ * @param description - Optional secondary description text
  *
- * @param {React.ReactNode} [icon] - Icon to display above the message (string name or ReactNode)
+ * @param icon - Icon to display above the message (string name or ReactNode)
  *
- * @param {{action: {
- *   label: string;
- *   onClick: () => void;
- *   variant?: "primary" | "secondary" | "outlined" | undefined;
- *  } | undefined}} [action] - Action button configuration
+ * @param action - Action button configuration
  *
- * @param {string | undefined} [className] - Custom CSS class name
+ * @param className - Custom CSS class name
  *
- * @param {string} [dataTestId = 'empty-state'] - Test identifier
+ * @param dataTestId - Test identifier (default: 'empty-state')
  *
- * @returns {JSX.Element} The rendered EmptyState component
+ * @returns The rendered EmptyState component
  *
  * @see {@link InterfaceEmptyStateProps} for prop definitions
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Stack, Button, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import Button from 'shared-components/Button/Button';
 import IconComponent from 'shared-components/IconComponent/IconComponent';
 import type { InterfaceEmptyStateProps } from 'types/shared-components/EmptyState/interface';
 
@@ -68,8 +64,8 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
 
   /**
    * Helper to handle both i18n keys and plain strings
-   * @param {string} [text] - Text to translate or return as it is
-   * @returns {string} - Translated text or original string
+   * @param text - Text to translate or return as it is
+   * @returns Translated text or original string
    */
   const getText = (text: string): string => {
     try {
@@ -83,21 +79,29 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
 
   /**
    * Helper to map custom variant to MUI Button variant
-   * @param {('primary' | 'secondary' | 'outlined') | undefined} [variant] - Button variant type
-   * @returns {string} - MUI Button variant
+   * @param variant - Button variant type
+   * @returns MUI Button variant
    */
   const getButtonVariant = (
     variant: 'primary' | 'secondary' | 'outlined' | undefined,
-  ): 'contained' | 'outlined' | 'text' => {
+  ):
+    | 'primary'
+    | 'secondary'
+    | 'outline'
+    | 'danger'
+    | 'success'
+    | 'warning'
+    | 'info'
+    | undefined => {
     switch (variant) {
       case 'primary':
-        return 'contained';
+        return 'primary';
       case 'secondary':
-        return 'text';
+        return 'secondary';
       case 'outlined':
-        return 'outlined';
+        return 'outline';
       default:
-        return 'contained';
+        return 'primary';
     }
   };
 

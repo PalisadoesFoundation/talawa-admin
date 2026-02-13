@@ -1,17 +1,5 @@
-import React from 'react';
 /**
  * Props for the ProfileAvatarDisplay component.
- *
- * @property imageUrl - Optional URL of the avatar image to display.
- * @property size - Optional size preset: 'small', 'medium', 'large', or 'custom'.
- * @property shape - Optional shape: 'circle', 'square', or 'rounded'.
- * @property customSize - Optional custom size in pixels (used when size='custom').
- * @property border - Optional flag to add a border around the avatar.
- * @property className - Optional additional CSS class names.
- * @property style - Optional inline React CSS properties.
- * @property fallbackName - Required name used for fallback avatar generation.
- * @property dataTestId - Optional test ID for testing purposes.
- * @property objectFit - Optional CSS object-fit value for the image.
  */
 export interface InterfaceProfileAvatarDisplayProps {
   imageUrl?: string | null;
