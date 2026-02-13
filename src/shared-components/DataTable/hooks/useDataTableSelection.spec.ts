@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { useDataTableSelection } from './useDataTableSelection';
+import { useDataTableSelection } from '../../../hooks/useDataTableSelection';
 import type {
   Key,
   IBulkAction,
