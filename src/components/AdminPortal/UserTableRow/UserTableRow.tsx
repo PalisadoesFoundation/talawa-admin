@@ -32,7 +32,7 @@ import {
 } from 'types/AdminPortal/UserTableRow/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
-const mapVariantToColor = (
+const mapToButtonVariant = (
   v: InterfaceActionButton['variant'],
 ): ButtonProps['variant'] => {
   switch (v) {
@@ -94,7 +94,7 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
       return (
         <Stack direction="row" spacing={compact ? 0.5 : 1}>
           {actions.map((action, idx) => {
-            const variant = mapVariantToColor(action.variant);
+            const variant = mapToButtonVariant(action.variant);
             const label = action.label;
             const aria = action.ariaLabel || label;
             const key = action.testId || `${action.label}-${idx}`;
