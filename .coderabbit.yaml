@@ -39,32 +39,134 @@ reviews:
     - '!*.html'
     - '!*.md'
     - '!*.svg'
+  tools:
+    ast-grep:
+      enabled: true
+      rule_dirs:
+        - .coderabbit/ast-grep-rules
+      essential_rules: true
 
   # Keep instructions concise and scoped by file patterns to stay far under limits
   path_instructions:
     # 1) Tests — Vitest + RTL + sharded stability
     - path: '**/*.{spec,test}.{ts,tsx}'
       instructions: |
+        ═══════════════════════════════════════════════════════════════
+        🚨 ANTI-PATTERNS TO FLAG IMMEDIATELY (Search for these first):
+        ═══════════════════════════════════════════════════════════════
+
+        1. PATTERN: vi.clearAllMocks() anywhere in test file
+          FLAG AS: "❌ BLOCKING - Use vi.restoreAllMocks() at file:line"
+          WHY: Incomplete cleanup causes sharded test failures
+
+        2. PATTERN: afterEach without both cleanup() AND vi.restoreAllMocks()
+          FLAG AS: "❌ BLOCKING - Missing required cleanup at file:line"
+          
+        3. PATTERN: setTimeout or hardcoded delays
+          FLAG AS: "⚠️ RACE CONDITION - Replace with waitFor at file:line"
+
+        4. PATTERN: .catch(() => {}) without re-throw or assertion
+          FLAG AS: "❌ SILENT ERROR - Add fallback assertion at file:line"
+
+        ═══════════════════════════════════════════════════════════════
+
         Post a single, structured comment with these sections: Issue Goals, Tests (incl. Flakiness), Components/Policy, GraphQL, i18n & a11y, Security, Action Items.
         Reference exact file:line for each finding.
 
         Issue goals (Priority `#1`):
         - Parse the first PR comment for "Fixes/Closes/Resolves #<id>". Confirm every acceptance criterion is tested; list gaps with file:line.
 
+        Timezone Safety & Test Determinism (CRITICAL):
+        - REQUIRED: Use UTC date methods in all test assertions:
+          - ✅ Use: `.getUTCDate()`, `.getUTCMonth()`, `.getUTCDay()`, `.getUTCHours()`, `.getUTCMinutes()`, `.getUTCSeconds()`
+          - ❌ NEVER use: `.getDate()`, `.getMonth()`, `.getDay()`, `.getHours()`, `.getMinutes()`, `.getSeconds()`
+        - All test dates must use fixed UTC timestamps (e.g., `"2025-01-01T10:00:00Z"`)
+        - Avoid `new Date()` without arguments (uses current time)
+        - Avoid `Date.now()` in tests (use fixed timestamps or mock timers)
+        - Flag ANY usage of local timezone methods as CRITICAL - these cause CI flakiness in non-UTC environments
+
         Test quality (Vitest + RTL):
         - Use vi.mock; prefer accessible queries (getByRole/LabelText); use user-event.
         - Cover success, error (network/GraphQL/validation), edge/empty states, loading, and user interactions.
         - List uncovered line numbers in changed source files.
 
-        Flaky test guard (12 shards):
-        - Each file: afterEach(() => cleanup()); and vi.clearAllMocks() or vi.restoreAllMocks().
-        - No hardcoded setTimeout/fixed delays; use waitFor for async assertions.
-        - No shared module/global state without cleanup (localStorage/sessionStorage/window); tests independent, no order dependence.
-        - Respect 30s timeout; avoid race conditions across shards.
+        Flaky test guard (12 shards) — CRITICAL PATTERNS:
+
+        # MANDATORY CHECKLIST - Flag violations as BLOCKING
+
+        ## 1. Cleanup (CRITICAL for sharded CI)
+        [ ] afterEach contains cleanup() from `@testing-library/react`
+        [ ] afterEach contains vi.restoreAllMocks() (NOT vi.clearAllMocks())
+        [ ] localStorage/sessionStorage cleared if used
+        [ ] window state reset if modified
+
+        ⚠️ FLAG: "INCOMPLETE CLEANUP at file:line - Missing vi.restoreAllMocks()"
+        ⚠️ FLAG: "INCORRECT CLEANUP at file:line - Uses vi.clearAllMocks() instead of vi.restoreAllMocks()"
+
+        RATIONALE: vi.clearAllMocks() only clears call history but keeps mock 
+        implementations. vi.restoreAllMocks() restores originals AND clears history.
+        This prevents mock leakage between tests in parallel shards.
+
+        # ENHANCED: More specific delay detection
+        Hardcoded delays (ABSOLUTELY FORBIDDEN):
+        - ❌ NEVER use: setTimeout, setInterval, delay(), sleep(), wait() helpers with fixed durations
+        - ❌ Pattern to flag: "await wait(", "setTimeout(", "delay("
+        - ✅ ONLY use: waitFor(() => expect(...), { timeout: ... }) with explicit assertions
+        - Report as "🔴 HARDCODED DELAY at file:line — Replace with waitFor assertion"
+        - Exception: Only allow setTimeout in beforeEach/afterEach for test infrastructure setup (must have comment explaining why)
+
+        Assertion placement (MANDATORY):
+        - ALL mock function assertions (toHaveBeenCalled, toHaveBeenCalledWith) MUST be inside waitFor blocks
+        - ALL state change assertions MUST be inside waitFor blocks
+        - Pattern to flag: "expect(.*).toHaveBeenCalled" outside waitFor scope
+        - Report as "🔴 RACE CONDITION at file:line — Assertion outside waitFor block"
+        - Valid pattern:
+          ✅ await waitFor(() => { expect(mockFn).toHaveBeenCalled(); });
+          ❌ await waitFor(() => ...); expect(mockFn).toHaveBeenCalled();
+
+        Async patterns (NO RACE CONDITIONS):
+        - NO hardcoded setTimeout or fixed delays; use waitFor with explicit assertions.
+        - After clicking elements that open UI (dropdowns, modals, dialogs, tooltips):
+          MUST waitFor the container/menu itself to be visible BEFORE checking child elements.
+          Example: await user.click(toggle); await waitFor(() => expect(menu).toBeInTheDocument());
+        - After clicking elements that close UI: MUST waitFor close completion (aria-expanded="false" or element removed) BEFORE re-opening.
+          Example: await waitFor(() => expect(toggle).toHaveAttribute('aria-expanded', 'false'));
+        - In loops testing multiple UI states: re-open → wait for open → interact → wait for result → wait for close. No shortcuts.
+        - ALL user-event clicks/types must be awaited; check that state changes are awaited with waitFor.
+
+        Error handling (NO SILENT FAILURES):
+        - NO .catch() blocks that swallow errors without re-throwing or explicit fallback assertions.
+        - If .catch() is used, must have a comment explaining why + alternative assertion inside catch.
+        - Prefer try/catch with explicit expect() in catch block over silent .catch(() => {}).
+
+        Timer interactions (AVOID CONFLICTS):
+        - If global vi.useFakeTimers() is active (check setupTests), check for conflicts with:
+          * `@testing-library/user-event` async operations
+          * waitFor timeouts
+          * UI animations (dropdowns, modals, transitions)
+        - Consider vi.useRealTimers() in beforeEach for tests with heavy user interaction.
+        - Flag any test using both fake timers AND user-event without explicit timer management.
+
+        DataTable-specific testing (CRITICAL for this codebase):
+        - After finding datatable container (findByTestId('datatable')), MUST waitFor rows to populate:
+          ❌ BAD: await screen.findByTestId('datatable'); const rows = getDataTableBodyRows();
+          ✅ GOOD: await screen.findByTestId('datatable'); await waitFor(() => expect(getDataTableBodyRows()).toHaveLength(N));
+        - DataTable shows skeleton first, then data asynchronously — tests MUST wait for transition.
+        - Report as "⚠️ DATATABLE RACE CONDITION at file:line — Not waiting for rows after container".
+
+        Double network requests (AVOID):
+        - Flag if a handler (onClick, onChange) calls refetch() AND a useEffect also refetches with same dependency.
+        - Example: handleChangeRowsPerPage calls refetch(...rowsPerPage...) BUT useEffect([rowsPerPage]) also refetches.
+        - Report as "⚠️ DOUBLE REFETCH at file:line — Both handler and useEffect refetch on same state change".
 
         Structure:
         - No it.skip/describe.skip unless commented with reason + linked issue.
         - Wrap state updates in act() when needed.
+
+        REPORT FORMAT for flakiness issues:
+        - "⚠️ RACE CONDITION at file:line — [description]"
+        - "❌ SILENT ERROR SWALLOW at file:line — .catch() without fallback"
+        - "⏱️ TIMER CONFLICT at file:line — fake timers + user-event"
 
     # 2) React components/screens/pages — enforce architecture & policy
     - path: 'src/{components,screens,pages}/**/*.{ts,tsx}'
@@ -93,6 +195,17 @@ reviews:
         - No hardcoded UI strings; use useTranslation with keys; add new keys to all 5 locales (en, es, fr, hi, zh).
         - Ensure roles/ARIA (aria-label/aria-describedby/aria-live), keyboard navigation, and semantic markup.
 
+        # NEW: Null safety in mutations
+        Null guard enforcement (CRITICAL for GraphQL mutations):
+        - When calling mutations with variables containing optional properties (fund?.id, user?.id, etc.):
+          MUST add null guard BEFORE the mutation call.
+        - Pattern to flag: "variables.*: \{\s*id: \w+\?\.\w+" without preceding "if (!...?.id) return;"
+        - Valid pattern:
+          ✅ if (!fund?.id) return; await deleteFund({ variables: { id: fund.id } });
+          ❌ await deleteFund({ variables: { id: fund?.id } });
+        - Report as "🔴 MISSING NULL GUARD at file:line — Add null check before mutation with optional property"
+        - Apply to all mutation calls: create*, update*, delete*, archive*, etc.
+
     # 3) GraphQL operations
     - path: 'src/GraphQl/**/*.ts'
       instructions: |
@@ -105,6 +218,39 @@ reviews:
         Correctness & duplication:
         - No duplicate or conflicting operations; watch pagination params (first/last).
         - Components using these operations must handle loading and error states in UI.
+
+        # NEW: Schema validation
+        Schema compliance (CRITICAL):
+        - For each mutation/query, verify ALL input fields in the schema are used by components.
+        - For each component form, verify ALL form fields are sent in the mutation variables.
+        - Flag any form field (input, select, checkbox) NOT present in the mutation schema.
+        - Report as "🔴 SCHEMA MISMATCH at file:line — Field '<name>' in form but not in mutation schema"
+        - Flag any mutation accepting field X but component doesn't provide it.
+        - Report as "⚠️ MISSING FIELD at file:line — Mutation expects '<name>' but component doesn't send it"
+
+    - path: '**/*.module.css'
+      instructions: |
+        Post a single, structured comment; reference file:line.
+
+        Design token usage:
+        - Use CSS variables from design tokens (var(--space-*, --color-*, --radius-*, etc.))
+        - No hardcoded pixel values for spacing, colors, shadows, or border-radius
+        - Flag any hardcoded values that could be tokens
+
+        !important consistency (CRITICAL):
+        - If a base selector uses !important for a property, ALL state selectors (:hover, :active, :focus, :disabled) must also use !important for that property
+        - Pattern to flag:
+          ❌ .btn { color: red !important; }
+              .btn:hover { color: blue; }  /* Missing !important */
+          ✅ .btn { color: red !important; }
+              .btn:hover { color: blue !important; }
+        - Report as "🔴 CSS SPECIFICITY BUG at file:line — :state selector missing !important when base has it"
+        - Check properties: color, background, background-color, border, box-shadow, opacity
+
+        BEM/Module naming:
+        - Use camelCase for module class names
+        - Keep selectors flat; avoid deep nesting
+        - Use :global() sparingly and document why
 
   pre_merge_checks:
     # Enforce test file updates for modified source files
@@ -129,3 +275,27 @@ reviews:
           BLOCKING: All components follow reusable component policy.
           Verify: No inline interfaces, correct portal placement, wrapper usage.
           See: https://docs-admin.talawa.io/docs/developer-resources/reusable-components/
+
+      - name: 'i18n Key Completeness'
+        mode: 'error'
+        instructions: |
+          BLOCKING: All translation keys must exist in ALL 5 locales.
+
+          For each t('key') or tCommon('key') usage:
+          1. Extract the key name
+          2. Verify it exists in public/locales/{en,es,fr,hi,zh}/translation.json
+          3. Flag if missing from ANY locale
+
+          Common patterns to check:
+          - t('namespace.key')
+          - tCommon('key')
+          - useTranslation hook with namespace
+
+          Report format:
+          - "🔴 MISSING i18n KEY at file:line — 'key' not found in locales: [es, fr]"
+          - "🔴 NAMESPACE MISMATCH at file:line — Using 'common.required' but should be 'validation.required'"
+
+          Must check all 5 locales:
+          - public/locales/{en,es,fr,hi,zh}/translation.json
+          - public/locales/{en,es,fr,hi,zh}/common.json
+          - public/locales/{en,es,fr,hi,zh}/errors.json

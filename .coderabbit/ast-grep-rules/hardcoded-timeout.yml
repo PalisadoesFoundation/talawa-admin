@@ -1,0 +1,14 @@
+id: hardcoded-timeout-in-tests
+language: typescript
+rule:
+  any:
+    - pattern: setTimeout($_, $NUM)
+    - pattern: await wait($NUM)
+    - pattern: delay($NUM)
+  inside:
+    kind: function_declaration
+    has:
+      field: name
+      regex: '^(it|test|describe)'
+message: 'Hardcoded timeout in test - use waitFor with assertions instead'
+severity: error

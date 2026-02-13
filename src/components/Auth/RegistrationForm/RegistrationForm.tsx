@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import { getRecaptchaToken } from 'utils/recaptcha';
+import Button from 'shared-components/Button';
 import { FormField } from '../../../shared-components/Auth/FormField/FormField';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
-import { PasswordField } from '../PasswordField/PasswordField';
+import { PasswordField } from '../../../shared-components/Auth/PasswordField/PasswordField';
 import { PasswordStrengthIndicator } from '../PasswordStrengthIndicator/PasswordStrengthIndicator';
 import { OrgSelector } from '../OrgSelector/OrgSelector';
 import { useRegistration } from '../../../hooks/auth/useRegistration';
@@ -16,6 +19,7 @@ import type {
   IRegistrationFormProps,
   IRegistrationFormData,
 } from '../../../types/Auth/RegistrationForm/interface';
+import styles from './RegistrationForm.module.css';
 
 /**
  * RegistrationForm component for user registration with validation and reCAPTCHA support
@@ -41,7 +45,12 @@ export const RegistrationForm = ({
     password: '',
     confirmPassword: '',
   });
-  const { register, loading } = useRegistration({ onSuccess, onError });
+  const { register, loading } = useRegistration({
+    onSuccess,
+    onError: (err) => {
+      onError?.(err);
+    },
+  });
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,12 +88,24 @@ export const RegistrationForm = ({
       return;
     }
 
-    await register({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      organizationId: formData.orgId || '',
-    });
+    try {
+      const recaptchaToken =
+        enableRecaptcha && RECAPTCHA_SITE_KEY
+          ? await getRecaptchaToken(RECAPTCHA_SITE_KEY, 'signup')
+          : undefined;
+
+      await register({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        organizationId: formData.orgId || '',
+        recaptchaToken: recaptchaToken ?? undefined,
+      });
+    } catch (error) {
+      if (onError) {
+        onError(error as Error);
+      }
+    }
   };
 
   return (
@@ -101,6 +122,7 @@ export const RegistrationForm = ({
         value={formData.email}
         error={errors.email}
         onChange={(e) => setFormData((s) => ({ ...s, email: e.target.value }))}
+        testId="registrationEmail"
       />
 
       <PasswordField
@@ -111,6 +133,7 @@ export const RegistrationForm = ({
         onChange={(e) =>
           setFormData((s) => ({ ...s, password: e.target.value }))
         }
+        testId="passwordField"
       />
 
       <PasswordField
@@ -121,21 +144,23 @@ export const RegistrationForm = ({
         onChange={(e) =>
           setFormData((s) => ({ ...s, confirmPassword: e.target.value }))
         }
+        testId="cpassword"
       />
       <PasswordStrengthIndicator password={formData.password} isVisible />
       <OrgSelector
         options={organizations}
         value={formData.orgId}
         onChange={(orgId) => setFormData((s) => ({ ...s, orgId }))}
+        testId="selectOrg"
       />
-      {enableRecaptcha && (
-        <div data-testid="recaptcha-placeholder" data-content="recaptcha-ready">
-          {/* reCAPTCHA component will be rendered here */}
-        </div>
-      )}
-      <button type="submit" disabled={loading}>
+      <Button
+        type="submit"
+        disabled={loading}
+        data-testid="registrationBtn"
+        className={styles.submitBtn}
+      >
         {loading ? t('loading') : t('register')}
-      </button>
+      </Button>
     </form>
   );
 };
