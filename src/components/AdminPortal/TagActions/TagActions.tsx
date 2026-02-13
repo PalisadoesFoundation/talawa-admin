@@ -239,8 +239,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   return (
     <>
       <BaseModal
-        show={tagActionsModalIsOpen}
-        onHide={hideTagActionsModal}
+        open={tagActionsModalIsOpen}
+        onClose={hideTagActionsModal}
         backdrop="static"
         centered
         title={
@@ -249,7 +249,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             : t('removeFromTags')
         }
         headerClassName={styles.modalHeader}
-        dataTestId="modalOrganizationHeader"
+        data-testid="modalOrganizationHeader"
         footer={
           <>
             <Button

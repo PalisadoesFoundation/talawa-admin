@@ -58,13 +58,21 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   primaryDisabled = false,
   hideSecondary = false,
   customFooter,
+  footer: footerAlias,
   showFooter = true,
+  backdrop,
+  headerContent,
+  headerClassName,
+  headerTestId,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const resolvedPrimaryText = primaryText ?? tCommon('save');
   const resolvedSecondaryText = secondaryText ?? tCommon('cancel');
 
   const isOpen = open ?? false;
+
+  // Use footer or customFooter (footer takes precedence for compatibility)
+  const resolvedCustomFooter = footerAlias ?? customFooter;
 
   const handleEscapeKey = useCallback(
     (event: KeyboardEvent) => {
@@ -89,8 +97,8 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   };
 
   const footer = showFooter ? (
-    customFooter ? (
-      customFooter
+    resolvedCustomFooter ? (
+      resolvedCustomFooter
     ) : (
       <>
         {!hideSecondary && (
@@ -133,11 +141,14 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
       centered={centered}
       className={className}
       dataTestId={dataTestId}
-      backdrop={loading ? 'static' : true}
+      backdrop={backdrop !== undefined ? backdrop : loading ? 'static' : true}
       keyboard={!loading}
       showCloseButton={!loading}
       footer={footer}
       bodyClassName={styles.modalBody}
+      headerContent={headerContent}
+      headerClassName={headerClassName}
+      headerTestId={headerTestId}
     >
       {error && (
         <Alert variant="danger" className={styles.errorAlert}>

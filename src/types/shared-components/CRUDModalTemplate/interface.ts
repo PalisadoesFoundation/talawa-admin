@@ -27,8 +27,9 @@ export interface InterfaceCrudModalBaseProps {
 
   /**
    * Modal title displayed in the header
+   * Can be omitted if headerContent is provided
    */
-  title: string;
+  title?: string;
 
   /**
    * Callback function invoked when the modal is closed
@@ -82,6 +83,30 @@ export interface InterfaceCrudModalBaseProps {
    * Test ID for the modal container (useful for testing)
    */
   'data-testid'?: string;
+
+  /**
+   * Backdrop behavior for the modal
+   * - 'static': clicking backdrop won't close modal
+   * - true: clicking backdrop closes modal
+   * - false: no backdrop
+   */
+  backdrop?: 'static' | boolean;
+
+  /**
+   * Custom content for the modal header
+   * When provided, overrides the default title and close button
+   */
+  headerContent?: ReactNode;
+
+  /**
+   * Additional CSS class name for the modal header
+   */
+  headerClassName?: string;
+
+  /**
+   * Test ID for the modal header (useful for testing)
+   */
+  headerTestId?: string;
 }
 
 /**
@@ -123,8 +148,15 @@ export interface InterfaceCRUDModalTemplateProps extends InterfaceCrudModalBaseP
   /**
    * Custom footer content to replace the default action buttons
    * When provided, primaryText, secondaryText, and onPrimary are ignored
+   * Alias: footer
    */
   customFooter?: ReactNode;
+
+  /**
+   * Custom footer content (alias for customFooter)
+   * Provided for compatibility with BaseModal
+   */
+  footer?: ReactNode;
 
   /**
    * Whether to show the modal footer at all

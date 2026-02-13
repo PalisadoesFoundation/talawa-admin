@@ -132,8 +132,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       resetButtonText={tErrors('resetButton')}
     >
       <BaseModal
-        show={show}
-        onHide={handleClose}
+        open={show}
+        onClose={handleClose}
         backdrop="static"
         centered={true}
         headerClassName={styles.modalHeader}

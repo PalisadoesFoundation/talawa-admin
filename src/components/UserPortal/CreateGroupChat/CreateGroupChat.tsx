@@ -216,13 +216,13 @@ export default function CreateGroupChat({
       onReset={chatsListRefetch}
     >
       <BaseModal
-        show={createGroupChatModalisOpen}
-        onHide={() => {
+        open={createGroupChatModalisOpen}
+        onClose={() => {
           toggleCreateGroupChatModal();
           reset();
         }}
         title={t('newGroup', { defaultValue: 'New Group' })}
-        dataTestId="createGroupChatModal"
+        data-testid="createGroupChatModal"
         className={styles.modalContent}
       >
         <input
@@ -304,10 +304,10 @@ export default function CreateGroupChat({
         </form>
       </BaseModal>
       <BaseModal
-        show={addUserModalisOpen}
-        onHide={toggleAddUserModal}
+        open={addUserModalisOpen}
+        onClose={toggleAddUserModal}
         title={t('chat', { defaultValue: 'Chat' })}
-        dataTestId="addExistingUserModal"
+        data-testid="addExistingUserModal"
         className={styles.modalContent}
         footer={
           <Button

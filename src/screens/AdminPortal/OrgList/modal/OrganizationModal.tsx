@@ -92,11 +92,11 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
   return (
     <BaseModal
-      show={showModal}
-      onHide={toggleModal}
+      open={showModal}
+      onClose={toggleModal}
       title={t('createOrganization')}
       headerClassName={styles.modalHeader}
-      dataTestId="modalOrganizationHeader"
+      data-testid="modalOrganizationHeader"
     >
       <Form onSubmitCapture={createOrg}>
         <FormTextField

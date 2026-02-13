@@ -170,8 +170,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   return (
     <BaseModal
       className={styles.fundModal}
-      show={isOpen}
-      onHide={hide}
+      open={isOpen}
+      onClose={hide}
       headerContent={
         <div className="d-flex justify-content-between align-items-center">
           <p className={styles.titlemodal} data-testid="modalTitle">

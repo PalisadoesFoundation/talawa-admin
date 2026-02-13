@@ -406,8 +406,8 @@ function OrganizationTags(): JSX.Element {
 
       {/* Create Tag Modal */}
       <BaseModal
-        show={createTagModalIsOpen}
-        onHide={hideCreateTagModal}
+        open={createTagModalIsOpen}
+        onClose={hideCreateTagModal}
         backdrop="static"
         centered
         title={t('tagDetails')}
