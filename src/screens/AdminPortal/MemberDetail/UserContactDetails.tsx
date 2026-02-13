@@ -254,7 +254,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     setisUpdated(false);
     setSelectedAvatar(null);
     setNewAvatarUploaded(false);
-    if (data?.user) setFormState({ ...data.user });
+    if (data?.user) setFormState({ ...data.user } as typeof formState);
   };
   if (loading) {
     return <div data-testid="loader">{tCommon('loading')}</div>;

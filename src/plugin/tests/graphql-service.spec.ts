@@ -384,9 +384,8 @@ describe('GraphQL Hooks', () => {
         dataState: 'complete' as const,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as ReturnType<typeof useQuery>,
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -408,9 +407,8 @@ describe('GraphQL Hooks', () => {
         dataState: 'empty' as const,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as ReturnType<typeof useQuery>,
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -431,9 +429,8 @@ describe('GraphQL Hooks', () => {
         dataState: 'complete' as const,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as ReturnType<typeof useQuery>,
-      );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 

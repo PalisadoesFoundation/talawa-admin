@@ -128,7 +128,12 @@ function OrganizationDashboard(): JSX.Element {
     data: orgEventsData,
     loading: orgEventsLoading,
     error: orgEventsError,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+  } = useQuery<{
+    organization?: {
+      events?: { edges?: IEvent[]; eventsCount?: number };
+      eventsCount?: number;
+    };
+  }>(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId ?? '', first: 8, after: null },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
@@ -170,35 +175,33 @@ function OrganizationDashboard(): JSX.Element {
   }, [orgMemberData, orgId]);
 
   useEffect(() => {
-    if (orgEventsData) {
+    if (orgEventsData?.organization?.events?.edges) {
       const now = new Date();
-
       const allEvents = orgEventsData.organization.events.edges;
 
       const upcomingEvents = allEvents.filter((event: IEvent) => {
-        // Filter events that start after the current date
         return new Date(event?.node?.startAt) > now;
       });
 
-      // Set to actual total count since fetchMore accumulates results
-      setEventCount(orgEventsData.organization.eventsCount);
-
-      // For upcoming events, we need to replace with new filtered results
+      setEventCount(
+        orgEventsData.organization.eventsCount ??
+          orgEventsData.organization.events.edges.length,
+      );
       setUpcomingEvents(upcomingEvents);
     }
   }, [orgEventsData, orgId]);
 
   useEffect(() => {
-    if (orgBlockedUsersData) {
-      // Set to actual total count since fetchMore accumulates results
-      setBlockedCount(orgBlockedUsersData.organization.blockedUsersCount);
+    if (orgBlockedUsersData?.organization) {
+      setBlockedCount(
+        orgBlockedUsersData.organization.blockedUsersCount ?? 0,
+      );
     }
   }, [orgBlockedUsersData, orgId]);
 
   useEffect(() => {
-    if (orgVenuesData) {
-      // Set to actual total count since fetchMore accumulates results
-      setVenueCount(orgVenuesData.organization.venuesCount);
+    if (orgVenuesData?.organization) {
+      setVenueCount(orgVenuesData.organization.venuesCount ?? 0);
     }
   }, [orgVenuesData]);
 
@@ -293,8 +296,8 @@ function OrganizationDashboard(): JSX.Element {
   const membershipRequests =
     (membershipRequestData?.organization?.membershipRequests ?? []) as Array<{
       status: string;
-      membershipRequestId?: string;
-      user?: { name?: string; avatarURL?: string };
+      membershipRequestId: string;
+      user: { name: string; avatarURL?: string };
     }>;
   const pendingMembershipRequests = membershipRequests.filter(
     (request) => request.status === 'pending',
@@ -310,7 +313,7 @@ function OrganizationDashboard(): JSX.Element {
             eventCount={eventCount}
             venueCount={venueCount}
             blockedCount={blockedCount}
-            postsCount={orgPostsData?.organization.postsCount}
+            postsCount={orgPostsData?.organization?.postsCount}
             isLoading={
               orgMemberLoading ||
               orgPostsLoading ||
@@ -460,20 +463,14 @@ function OrganizationDashboard(): JSX.Element {
                   ) : (
                     pendingMembershipRequests
                       .slice(0, 8)
-                      .map(
-                        (request: {
-                          status: string;
-                          membershipRequestId: string;
-                          user: { name: string; avatarURL?: string };
-                        }) => (
-                          <CardItem
-                            type="MembershipRequest"
-                            key={request.membershipRequestId}
-                            title={request.user.name}
-                            image={request.user.avatarURL}
-                          />
-                        ),
-                      )
+                      .map((request) => (
+                        <CardItem
+                          type="MembershipRequest"
+                          key={request.membershipRequestId}
+                          title={request.user?.name ?? ''}
+                          image={request.user?.avatarURL}
+                        />
+                      ))
                   )}
                 </LoadingState>
               </Card.Body>

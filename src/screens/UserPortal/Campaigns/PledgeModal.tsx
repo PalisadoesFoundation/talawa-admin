@@ -144,8 +144,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   // Query to get the user details based on the userId prop
   const { data: userData } = useQuery<{
     user?: {
-      id?: string;
-      name?: string;
+      id: string;
+      name: string;
       avatarURL?: string;
       role?: string;
     };
@@ -155,18 +155,18 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // Effect to update the pledgers state when user data is fetched
   useEffect(() => {
-    if (userData?.user) {
+    if (userData?.user?.id && userData?.user?.name) {
       const user = userData.user;
-      const nameParts = user.name ? user.name.split(' ') : [''];
-      const firstName = nameParts[0];
+      const nameParts = user.name.split(' ');
+      const firstName = nameParts[0] ?? '';
       const lastName = nameParts.slice(1).join(' ');
 
-      const currentUser = {
+      const currentUser: InterfaceUserInfoPG = {
         id: user.id,
         firstName,
         lastName,
         name: user.name,
-        avatarURL: user.avatarURL,
+        avatarURL: user.avatarURL ?? undefined,
       };
 
       setPledgers([currentUser]);

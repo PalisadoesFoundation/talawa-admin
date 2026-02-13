@@ -1742,7 +1742,7 @@ export interface InterfaceVolunteerGroupInfo {
 export interface InterfaceCreateVolunteerGroup {
   name: string;
   description: string | null;
-  leader: InterfaceUserInfo | null;
+  leader: InterfaceUserInfoPG | null;
   volunteersRequired: number | null;
   volunteerUsers: InterfaceUserInfoPG[];
 }

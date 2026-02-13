@@ -162,8 +162,8 @@ function organizationEvents(): JSX.Element {
 
   // Normalize event data for EventCalendar with proper typing
   const allEvents: InterfaceEvent[] = (
-    eventData?.organization?.events?.edges || []
-  ).map((edge: IEventEdge) => ({
+    (eventData?.organization?.events?.edges ?? []) as IEventEdge[]
+  ).map((edge) => ({
     id: edge.node.id,
     name: edge.node.name,
     description: edge.node.description || '',

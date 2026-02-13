@@ -97,7 +97,7 @@ function organizationVenues(): JSX.Element {
     refetch: venueRefetch,
   } = useQuery<{
     organization?: {
-      venues?: { edges?: { node: InterfaceQueryVenueListItem }[] };
+      venues?: { edges?: InterfaceQueryVenueListItem[] };
     };
   }>(VENUE_LIST, {
     variables: {
@@ -202,15 +202,15 @@ function organizationVenues(): JSX.Element {
       // Client-side sorting by capacity
       if (filteredVenues.length > 0) {
         filteredVenues = [...filteredVenues].sort((a, b) => {
-          const capacityA = parseInt(a.node.capacity || '0');
-          const capacityB = parseInt(b.node.capacity || '0');
+          const capacityA = Number(a.node.capacity) || 0;
+          const capacityB = Number(b.node.capacity) || 0;
           return sortOrder === 'highest'
             ? capacityB - capacityA
             : capacityA - capacityB;
         });
       }
 
-      setVenues(filteredVenues.map((edge) => edge.node));
+      setVenues(filteredVenues);
     }
   }, [venueData, searchTerm, searchBy, sortOrder]);
 

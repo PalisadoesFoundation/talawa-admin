@@ -145,7 +145,9 @@ const ItemModal: FC<IItemModalProps> = ({
     },
   );
 
-  const { data: volunteersData } = useQuery(GET_EVENT_VOLUNTEERS, {
+  const { data: volunteersData } = useQuery<{
+    event?: { volunteers?: InterfaceEventVolunteerInfo[] };
+  }>(GET_EVENT_VOLUNTEERS, {
     variables: {
       input: { id: eventId },
       where: {},
