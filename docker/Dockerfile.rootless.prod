@@ -1,0 +1,37 @@
+# Step 1: Build Stage
+FROM node:24-slim AS builder
+WORKDIR /talawa-admin
+
+ARG PNPM_VERSION=10.4.1
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+ENV NODE_ENV=production
+
+RUN pnpm run build
+
+# Step 2: Production
+FROM nginx:1.27.3-alpine AS production
+
+ENV NODE_ENV=production
+ENV NGINX_PORT=8080
+
+COPY config/docker/setup/nginx.rootless.conf.template /etc/nginx/templates/default.conf.template
+COPY --from=builder /talawa-admin/build /usr/share/nginx/html
+
+RUN set -eux; \
+    apk add --no-cache gettext=~0.22; \
+    envsubst '${NGINX_PORT}' < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf; \
+    rm -rf /etc/nginx/templates; \
+    mkdir -p /var/cache/nginx /var/run /var/log/nginx; \
+    touch /var/run/nginx.pid; \
+    chown -R nginx:nginx /var/cache/nginx /var/run /var/log/nginx /usr/share/nginx/html /etc/nginx/conf.d
+
+USER nginx
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD wget -q -O /dev/null http://127.0.0.1:8080 || exit 1
+CMD ["nginx", "-g", "daemon off;"]

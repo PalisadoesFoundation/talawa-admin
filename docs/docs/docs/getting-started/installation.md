@@ -25,12 +25,52 @@ If you're using Windows with WSL:
    - Settings → Resources → WSL Integration → Enable for your distro
    - See: https://docs.docker.com/desktop/wsl/
 
+### Rootless Docker (Optional)
+
+If you plan to run Talawa-Admin with Docker rootless mode on Linux/WSL:
+
+1. Install rootless prerequisites:
+   - `uidmap`
+   - `dbus-user-session`
+   - `slirp4netns`
+   - `fuse-overlayfs`
+   - `docker-ce-rootless-extras` (if `dockerd-rootless-setuptool.sh` is missing)
+2. Run rootless setup as your regular user:
+
+   ```bash
+   dockerd-rootless-setuptool.sh install
+   ```
+
+   Do **not** run that command with `sudo`.
+
+3. Configure Docker host dynamically:
+
+   ```bash
+   export DOCKER_HOST=unix:///run/user/$UID/docker.sock
+   ```
+
+   Or use:
+
+   ```bash
+   eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"
+   ```
+
+4. Verify rootless daemon:
+
+   ```bash
+   docker info
+   ```
+
+   `SecurityOptions` should include `rootless`.
+
+If your user is in the `docker` group, be careful during validation to ensure you are actually using the rootless socket, not the rootful daemon.
 
 ### Prerequisites
 
 The only prerequisite is having `git` installed on your system (usually pre-installed on macOS/Linux, or install via your package manager).
 
 **Additional prerequisites for contributors:**
+
 - **curl** or **wget**: Required by pre-commit hooks to download centralized scripts
   - **macOS**: `curl` is pre-installed
   - **Linux (Ubuntu/Debian)**: Install with `sudo apt install curl`
@@ -325,16 +365,19 @@ python -m venv venv
 Then activate the virtual environment:
 
 **On macOS/Linux:**
+
 ```bash
 source venv/bin/activate
 ```
 
 **On Windows (PowerShell):**
+
 ```powershell
 venv\Scripts\Activate.ps1
 ```
 
 **On Windows (Git Bash/MSYS2):**
+
 ```bash
 source venv/Scripts/activate
 ```
@@ -344,7 +387,6 @@ Now install the required Python packages:
 ```bash
 pip install -r .github/workflows/requirements.txt
 ```
-
 
 ### Install The Required Packages
 

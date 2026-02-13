@@ -1,4 +1,8 @@
-import type { GroupChat, DirectMessage } from 'types/UserPortal/Chat/type';
+import type {
+  Chat as ChatType,
+  InterfaceChatUser,
+  InterfaceMockMessage,
+} from 'types/UserPortal/Chat/interface';
 import {
   CREATE_CHAT_MEMBERSHIP,
   UPDATE_CHAT,
@@ -14,13 +18,59 @@ import dayjs from 'dayjs';
  * Mocks for the GroupChatDetails component
  */
 
-interface InterfaceChatUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  createdAt: Date;
-}
+const createMemberSearchMock = (searchTerm: string) => ({
+  request: {
+    query: ORGANIZATION_MEMBERS,
+    variables: {
+      input: { id: 'org123' },
+      first: 20,
+      after: null,
+      where: { name_contains: searchTerm },
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [],
+          pageInfo: { hasNextPage: false, endCursor: null },
+        },
+      },
+    },
+  },
+});
+
+const createMemberSearchMockWithResult = (searchTerm: string) => ({
+  request: {
+    query: ORGANIZATION_MEMBERS,
+    variables: {
+      input: { id: 'org123' },
+      first: 20,
+      after: null,
+      where: { name_contains: searchTerm },
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [
+            {
+              cursor: 'cursor-1',
+              node: {
+                id: 'user3',
+                name: 'Disha Smith',
+                avatarURL: undefined,
+                role: 'Member',
+              },
+            },
+          ],
+          pageInfo: { hasNextPage: false, endCursor: null },
+        },
+      },
+    },
+  },
+});
 
 function createUser(
   id: string,
@@ -41,9 +91,9 @@ function createMessage(
   id: string,
   sender: InterfaceChatUser,
   content: string,
-  replyTo?: DirectMessage,
+  replyTo?: InterfaceMockMessage,
   media?: string,
-): DirectMessage {
+): InterfaceMockMessage {
   return {
     _id: id,
     createdAt: dayjs().toDate(),
@@ -83,19 +133,66 @@ const createGroupChat = (
   name: string,
   image: string,
   users: InterfaceChatUser[],
-  messages: DirectMessage[],
-): GroupChat => ({
-  _id: id,
-  isGroup: true,
-  name,
-  image,
-  messages,
-  admins: [alice],
-  users,
-  unseenMessagesByUsers: JSON.parse('{"user1": 0, "user2": 1}'),
-  description: 'Test Description',
-  createdAt: dayjs().toDate(),
-});
+  messages: InterfaceMockMessage[],
+): ChatType => {
+  const admins = users.filter((u) => u._id === 'user1'); // Alice is admin
+
+  return {
+    id: id,
+    name: name,
+    description: 'Test Description',
+    avatarURL: image || undefined,
+    avatarMimeType: undefined,
+    isGroup: true,
+    createdAt: dayjs().toDate().toISOString(),
+    updatedAt: undefined,
+    members: {
+      edges: users.map((user) => ({
+        node: {
+          user: {
+            id: user._id,
+            name: user.firstName + (user.lastName ? ' ' + user.lastName : ''),
+            avatarURL: undefined,
+            avatarMimeType: undefined,
+          },
+          role: admins.some((a) => a._id === user._id)
+            ? 'administrator'
+            : 'regular',
+        },
+      })),
+    },
+    messages: {
+      edges: messages.map((msg) => ({
+        node: {
+          id: msg._id,
+          body: msg.messageContent,
+          createdAt: msg.createdAt.toISOString(),
+          updatedAt: msg.updatedAt.toISOString(),
+          creator: {
+            id: msg.sender._id,
+            name: msg.sender.firstName,
+            avatarURL: undefined,
+            avatarMimeType: undefined,
+          },
+          parentMessage: msg.replyTo
+            ? {
+                id: msg.replyTo._id,
+                body: msg.replyTo.messageContent,
+                createdAt: msg.replyTo.createdAt.toISOString(),
+                creator: {
+                  id: msg.replyTo.sender._id,
+                  name: msg.replyTo.sender.firstName,
+                },
+              }
+            : null,
+        },
+      })),
+    },
+    unreadMessagesCount: 0,
+    lastMessage: undefined,
+    organization: { id: 'org123', name: 'Test Org' },
+  };
+};
 
 export const filledMockChat = createGroupChat(
   'chat1',
@@ -139,6 +236,13 @@ export const mocks = [
       },
     },
   },
+  // Intermediate mocks for 'Disha'
+  createMemberSearchMock('D'),
+  createMemberSearchMock('Di'),
+  createMemberSearchMock('Dis'),
+  createMemberSearchMock('Dish'),
+  createMemberSearchMockWithResult('Disha'),
+
   // Organization members mock for name search 'Disha'
   {
     request: {
@@ -156,10 +260,11 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -170,6 +275,13 @@ export const mocks = [
       },
     },
   },
+  // Intermediate mocks for 'Smith'
+  createMemberSearchMock('S'),
+  createMemberSearchMock('Sm'),
+  createMemberSearchMock('Smi'),
+  createMemberSearchMock('Smit'),
+  createMemberSearchMockWithResult('Smith'),
+
   // Organization members mock for name search 'Disha' - duplicate for multiple calls
   {
     request: {
@@ -187,10 +299,11 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -218,10 +331,11 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -249,10 +363,11 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -275,14 +390,16 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
             ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },
@@ -300,14 +417,16 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
             ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },
@@ -400,6 +519,16 @@ export const mocks = [
     },
     result: { data: { deleteChat: { id: 'chat1', success: true } } },
   },
+  // Mock for updating chat membership (demoting from administrator to regular)
+  {
+    request: {
+      query: UPDATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user2', chatId: 'chat1', role: 'regular' },
+      },
+    },
+    result: { data: { updateChatMembership: { id: 'chat1', success: true } } },
+  },
 ];
 
 export const failingMocks = [
@@ -447,4 +576,55 @@ export const failingMocks = [
     },
     error: new Error('Failed to update chat image'),
   },
+  // Mock for adding user failure
+  // Mock for adding user to chat failure
+  {
+    request: {
+      query: CREATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user3', chatId: 'chat1', role: 'regular' },
+      },
+    },
+    error: new Error('Failed to add user'),
+  },
+  // Organization members mocks
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Disha' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                cursor: 'cursor-1',
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: undefined,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
 ];
+
+/**
+ * Delayed mocks to simulate network latency for loading states testing
+ */
+export const delayedMocks = mocks.map((mock) => ({
+  ...mock,
+  delay: 300,
+}));

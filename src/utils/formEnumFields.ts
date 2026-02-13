@@ -323,30 +323,10 @@ const employmentStatusEnum = [
   },
 ];
 
-const userRoleEnum = [
-  {
-    value: 'USER',
-    label: 'User',
-  },
-  {
-    value: 'ADMIN',
-    label: 'Admin',
-  },
-  {
-    value: 'SUPERADMIN',
-    label: 'Super Admin',
-  },
-  {
-    value: 'NON_USER',
-    label: 'Non-User',
-  },
-];
-
 export {
   countryOptions,
   educationGradeEnum,
   maritalStatusEnum,
   genderEnum,
   employmentStatusEnum,
-  userRoleEnum,
 };

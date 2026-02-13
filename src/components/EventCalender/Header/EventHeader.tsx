@@ -13,7 +13,7 @@
  *
  * @remarks
  * - Uses `SearchBar` for searching events by name.
- * - Uses `SortingButton` for selecting calendar view type and event type.
+ * - Uses `SortingButton` for selecting calendar view type.
  * - Uses `AddIcon` from MUI for the create event button.
  * - Styles from `EventHeader.module.css`.
  *
@@ -79,27 +79,15 @@ function EventHeader({
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
-          <SortingButton
-            title={t('eventType')}
-            sortingOptions={[
-              { label: t('Events'), value: 'Events' },
-              { label: t('Workshops'), value: 'Workshops' },
-            ]}
-            selectedOption={t('eventType')}
-            onSortChange={() => {}}
-            dataTestIdPrefix="eventType"
-            className={styles.dropdown}
-            buttonLabel={t('eventType')}
-          />
-
           <Button
+            variant="outline-secondary"
             className={styles.dropdown}
             onClick={showInviteModal}
             data-testid="createEventModalBtn"
             data-cy="createEventModalBtn"
           >
             <AddIcon className={styles.addButtonIcon} />
-            <span>{tCommon('create')}</span>
+            <span>{tCommon('createEvent')}</span>
           </Button>
         </div>
       </div>

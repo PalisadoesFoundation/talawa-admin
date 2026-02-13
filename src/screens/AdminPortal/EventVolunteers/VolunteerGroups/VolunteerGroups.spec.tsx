@@ -155,12 +155,14 @@ describe('Testing VolunteerGroups Screen', () => {
     const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    let sortBtn = await screen.findByTestId('sort');
+    let sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by members_DESC
     await user.click(sortBtn);
-    const volunteersDESC = await screen.findByTestId('volunteers_DESC');
+    const volunteersDESC = await screen.findByTestId(
+      'sort-item-volunteers_DESC',
+    );
     expect(volunteersDESC).toBeInTheDocument();
     await user.click(volunteersDESC);
 
@@ -168,10 +170,10 @@ describe('Testing VolunteerGroups Screen', () => {
     expect(groupName[0]).toHaveTextContent('Group 1');
 
     // Sort by members_ASC
-    sortBtn = await screen.findByTestId('sort');
+    sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
     await user.click(sortBtn);
-    const volunteersASC = await screen.findByTestId('volunteers_ASC');
+    const volunteersASC = await screen.findByTestId('sort-item-volunteers_ASC');
     expect(volunteersASC).toBeInTheDocument();
     await user.click(volunteersASC);
 
@@ -191,11 +193,13 @@ describe('Testing VolunteerGroups Screen', () => {
     const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    const searchToggle = await screen.findByTestId('searchByToggle');
+    const searchToggle = await screen.findByTestId('searchByToggle-toggle');
     expect(searchToggle).toBeInTheDocument();
     await userEvent.click(searchToggle);
 
-    const searchByGroup = await screen.findByTestId('group');
+    const searchByGroup = await screen.findByTestId(
+      'searchByToggle-item-group',
+    );
     expect(searchByGroup).toBeInTheDocument();
     await userEvent.click(searchByGroup);
 
@@ -218,11 +222,13 @@ describe('Testing VolunteerGroups Screen', () => {
     const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    const searchToggle = await screen.findByTestId('searchByToggle');
+    const searchToggle = await screen.findByTestId('searchByToggle-toggle');
     expect(searchToggle).toBeInTheDocument();
     await userEvent.click(searchToggle);
 
-    const searchByLeader = await screen.findByTestId('leader');
+    const searchByLeader = await screen.findByTestId(
+      'searchByToggle-item-leader',
+    );
     expect(searchByLeader).toBeInTheDocument();
     await userEvent.click(searchByLeader);
 
@@ -315,9 +321,11 @@ describe('Testing VolunteerGroups Screen', () => {
       });
 
       // Switch to search by leader
-      const searchToggle = await screen.findByTestId('searchByToggle');
+      const searchToggle = await screen.findByTestId('searchByToggle-toggle');
       await userEvent.click(searchToggle);
-      const searchByLeader = await screen.findByTestId('leader');
+      const searchByLeader = await screen.findByTestId(
+        'searchByToggle-item-leader',
+      );
       await userEvent.click(searchByLeader);
 
       // Test case insensitive search with leader name
@@ -339,9 +347,11 @@ describe('Testing VolunteerGroups Screen', () => {
       });
 
       // Switch to search by leader
-      const searchToggle = await screen.findByTestId('searchByToggle');
+      const searchToggle = await screen.findByTestId('searchByToggle-toggle');
       await userEvent.click(searchToggle);
-      const searchByLeader = await screen.findByTestId('leader');
+      const searchByLeader = await screen.findByTestId(
+        'searchByToggle-item-leader',
+      );
       await userEvent.click(searchByLeader);
 
       // Test partial match with includes() functionality
@@ -405,9 +415,11 @@ describe('Testing VolunteerGroups Screen', () => {
       });
 
       // Switch to search by leader
-      const searchToggle = await screen.findByTestId('searchByToggle');
+      const searchToggle = await screen.findByTestId('searchByToggle-toggle');
       await userEvent.click(searchToggle);
-      const searchByLeader = await screen.findByTestId('leader');
+      const searchByLeader = await screen.findByTestId(
+        'searchByToggle-item-leader',
+      );
       await userEvent.click(searchByLeader);
 
       // Search for something that won't match any leader
@@ -457,9 +469,11 @@ describe('Testing VolunteerGroups Screen', () => {
       const searchInput = screen.getByTestId('searchBy');
 
       // Test leader search branch
-      const searchToggle = await screen.findByTestId('searchByToggle');
+      const searchToggle = await screen.findByTestId('searchByToggle-toggle');
       await userEvent.click(searchToggle);
-      const searchByLeader = await screen.findByTestId('leader');
+      const searchByLeader = await screen.findByTestId(
+        'searchByToggle-item-leader',
+      );
       await userEvent.click(searchByLeader);
 
       await userEvent.type(searchInput, 'a'); // Generic search that should match
@@ -467,7 +481,9 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Switch back to group search to test else branch
       await userEvent.click(searchToggle);
-      const searchByGroup = await screen.findByTestId('group');
+      const searchByGroup = await screen.findByTestId(
+        'searchByToggle-item-group',
+      );
       await userEvent.click(searchByGroup);
 
       await debounceWait();
@@ -520,9 +536,11 @@ describe('Testing VolunteerGroups Screen', () => {
       });
 
       // Switch to leader search first
-      const searchToggle = await screen.findByTestId('searchByToggle');
+      const searchToggle = await screen.findByTestId('searchByToggle-toggle');
       await userEvent.click(searchToggle);
-      const searchByLeader = await screen.findByTestId('leader');
+      const searchByLeader = await screen.findByTestId(
+        'searchByToggle-item-leader',
+      );
       await userEvent.click(searchByLeader);
 
       // Type and press Enter to trigger search

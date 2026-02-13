@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloError } from '@apollo/client';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
@@ -162,7 +162,7 @@ describe('PluginStore', () => {
 
       expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
       expect(screen.getByTestId('searchPlugins')).toBeInTheDocument();
-      expect(screen.getByTestId('filterPlugins')).toBeInTheDocument();
+      expect(screen.getByTestId('filterPlugins-container')).toBeInTheDocument();
       expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
     });
 
@@ -224,7 +224,7 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: 'test plugin' } });
+      await userEvent.type(searchInput, 'test plugin');
 
       await waitFor(() => {
         expect(
@@ -244,10 +244,12 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterButton = screen.getByTestId('filterPlugins');
-      fireEvent.click(filterButton);
-      const installedOption = screen.getByTestId('installed');
-      fireEvent.click(installedOption);
+      const filterButton = screen.getByTestId('filterPlugins-toggle');
+      await userEvent.click(filterButton);
+      const installedOption = screen.getByTestId(
+        'filterPlugins-item-installed',
+      );
+      await userEvent.click(installedOption);
 
       await waitFor(() => {
         expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
@@ -271,10 +273,10 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
     });
 
@@ -284,28 +286,28 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Close modal (this would depend on the actual modal implementation)
       const closeButton = screen.getByRole('button', { name: /close/i });
-      fireEvent.click(closeButton);
+      await userEvent.click(closeButton);
 
       await waitFor(() => {
-        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
       });
     });
   });
 
   describe('Upload Plugin Modal', () => {
-    it('should open upload modal when upload button is clicked', () => {
+    it('should open upload modal when upload button is clicked', async () => {
       renderPluginStore();
 
       const uploadButton = screen.getByTestId('uploadPluginBtn');
-      fireEvent.click(uploadButton);
+      await userEvent.click(uploadButton);
 
       // Upload modal might not be implemented yet
       // expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
@@ -323,16 +325,16 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-2',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Activate plugin - look for button with "Activate" text
       const activateButton = screen.getByRole('button', { name: /Activate/i });
 
-      fireEvent.click(activateButton);
+      await userEvent.click(activateButton);
 
       await waitFor(() => {
         expect(mockUpdatePlugin).toHaveBeenCalled();
@@ -349,10 +351,10 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Deactivate plugin
@@ -360,7 +362,7 @@ describe('PluginStore', () => {
         name: /Deactivate/i,
       });
 
-      fireEvent.click(deactivateButton);
+      await userEvent.click(deactivateButton);
 
       await waitFor(
         () => {
@@ -378,17 +380,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Uninstall plugin
       const uninstallButton = screen.getByRole('button', {
         name: /Uninstall/i,
       });
-      fireEvent.click(uninstallButton);
+      await userEvent.click(uninstallButton);
 
       await waitFor(() => {
         expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
@@ -405,17 +407,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Uninstall plugin
       const uninstallButton = screen.getByRole('button', {
         name: /Uninstall/i,
       });
-      fireEvent.click(uninstallButton);
+      await userEvent.click(uninstallButton);
 
       await waitFor(() => {
         expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
@@ -424,7 +426,7 @@ describe('PluginStore', () => {
       // Remove permanently
       const removeButton = screen.getByTestId('uninstall-remove-btn');
 
-      fireEvent.click(removeButton);
+      await userEvent.click(removeButton);
 
       await waitFor(
         () => {
@@ -440,17 +442,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Uninstall plugin
       const uninstallButton = screen.getByRole('button', {
         name: /Uninstall/i,
       });
-      fireEvent.click(uninstallButton);
+      await userEvent.click(uninstallButton);
 
       await waitFor(() => {
         expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
@@ -458,7 +460,7 @@ describe('PluginStore', () => {
 
       // Cancel
       const cancelButton = screen.getByTestId('uninstall-cancel-btn');
-      fireEvent.click(cancelButton);
+      await userEvent.click(cancelButton);
 
       await waitFor(() => {
         expect(screen.queryByTestId('uninstall-modal')).not.toBeInTheDocument();
@@ -491,10 +493,12 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterButton = screen.getByTestId('filterPlugins');
-      fireEvent.click(filterButton);
-      const installedOption = screen.getByTestId('installed');
-      fireEvent.click(installedOption);
+      const filterButton = screen.getByTestId('filterPlugins-toggle');
+      await userEvent.click(filterButton);
+      const installedOption = screen.getByTestId(
+        'filterPlugins-item-installed',
+      );
+      await userEvent.click(installedOption);
 
       await waitFor(() => {
         expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
@@ -556,10 +560,7 @@ describe('PluginStore', () => {
       const searchInput = screen.getByTestId('searchPlugins');
 
       // Type quickly to test debouncing
-      fireEvent.change(searchInput, { target: { value: 't' } });
-      fireEvent.change(searchInput, { target: { value: 'te' } });
-      fireEvent.change(searchInput, { target: { value: 'tes' } });
-      fireEvent.change(searchInput, { target: { value: 'test' } });
+      await userEvent.type(searchInput, 'test');
 
       // Wait for debounce delay
       await new Promise((resolve) => setTimeout(resolve, 350));
@@ -579,7 +580,7 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: 'test plugin' } });
+      await userEvent.type(searchInput, 'test plugin');
 
       // Wait for debounce delay
       await new Promise((resolve) => setTimeout(resolve, 350));
@@ -650,17 +651,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Try to deactivate plugin
       const deactivateButton = screen.getByRole('button', {
         name: /Deactivate/i,
       });
-      fireEvent.click(deactivateButton);
+      await userEvent.click(deactivateButton);
 
       // Should handle error gracefully
       await waitFor(() => {
@@ -676,17 +677,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Uninstall plugin
       const uninstallButton = screen.getByRole('button', {
         name: /Uninstall/i,
       });
-      fireEvent.click(uninstallButton);
+      await userEvent.click(uninstallButton);
 
       await waitFor(() => {
         expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
@@ -694,7 +695,7 @@ describe('PluginStore', () => {
 
       // Remove permanently
       const removeButton = screen.getByTestId('uninstall-remove-btn');
-      fireEvent.click(removeButton);
+      await userEvent.click(removeButton);
 
       // Should handle error gracefully
       await waitFor(() => {
@@ -728,17 +729,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Deactivate plugin
       const deactivateButton = screen.getByRole('button', {
         name: /Deactivate/i,
       });
-      fireEvent.click(deactivateButton);
+      await userEvent.click(deactivateButton);
 
       // Should handle plugin manager failure gracefully
       await waitFor(() => {
@@ -768,17 +769,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Uninstall plugin
       const uninstallButton = screen.getByRole('button', {
         name: /Uninstall/i,
       });
-      fireEvent.click(uninstallButton);
+      await userEvent.click(uninstallButton);
 
       await waitFor(() => {
         expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
@@ -786,7 +787,7 @@ describe('PluginStore', () => {
 
       // Remove permanently
       const removeButton = screen.getByTestId('uninstall-remove-btn');
-      fireEvent.click(removeButton);
+      await userEvent.click(removeButton);
 
       // Should handle plugin manager failure gracefully
       await waitFor(() => {
@@ -810,17 +811,17 @@ describe('PluginStore', () => {
       const pluginButton = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      fireEvent.click(pluginButton);
+      await userEvent.click(pluginButton);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
 
       // Uninstall plugin
       const uninstallButton = screen.getByRole('button', {
         name: /Uninstall/i,
       });
-      fireEvent.click(uninstallButton);
+      await userEvent.click(uninstallButton);
 
       await waitFor(() => {
         expect(screen.getByTestId('uninstall-modal')).toBeInTheDocument();
@@ -828,7 +829,7 @@ describe('PluginStore', () => {
 
       // Remove permanently
       const removeButton = screen.getByTestId('uninstall-remove-btn');
-      fireEvent.click(removeButton);
+      await userEvent.click(removeButton);
 
       // Should handle file service failure gracefully
       await waitFor(() => {
@@ -842,7 +843,7 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: '' } });
+      await userEvent.clear(searchInput);
 
       // Wait for debounce delay
       await new Promise((resolve) => setTimeout(resolve, 350));
@@ -861,7 +862,7 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: 'TEST PLUGIN' } });
+      await userEvent.type(searchInput, 'TEST PLUGIN');
 
       // Wait for debounce delay
       await new Promise((resolve) => setTimeout(resolve, 350));
@@ -880,7 +881,7 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: 'test' } });
+      await userEvent.type(searchInput, 'test');
 
       // Wait for debounce delay
       await new Promise((resolve) => setTimeout(resolve, 350));
@@ -1054,7 +1055,7 @@ describe('PluginStore', () => {
 
       // Search for something
       const searchInput = screen.getByTestId('searchPlugins');
-      fireEvent.change(searchInput, { target: { value: 'Plugin 1' } });
+      await userEvent.type(searchInput, 'Plugin 1');
 
       // Wait for debounce and page reset
       await new Promise((resolve) => setTimeout(resolve, 350));
@@ -1093,10 +1094,12 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       // Change filter dropdown
-      const filterButton = screen.getByTestId('filterPlugins');
-      fireEvent.click(filterButton);
-      const installedOption = screen.getByTestId('installed');
-      fireEvent.click(installedOption);
+      const filterButton = screen.getByTestId('filterPlugins-toggle');
+      await userEvent.click(filterButton);
+      const installedOption = screen.getByTestId(
+        'filterPlugins-item-installed',
+      );
+      await userEvent.click(installedOption);
 
       // Page should be reset to 0 when filter changes. Verify first-page items are rendered
       await waitFor(() => {
@@ -1217,7 +1220,7 @@ describe('PluginStore', () => {
         const uploadButton = screen.getByTestId('uploadPluginBtn');
         // If you switch to userEvent, remember to await:
         // await userEvent.click(uploadButton);
-        fireEvent.click(uploadButton);
+        await userEvent.click(uploadButton);
 
         await waitFor(() =>
           expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument(),
@@ -1226,7 +1229,7 @@ describe('PluginStore', () => {
         // Trigger closeUploadModal by clicking the close button
         const closeButton = screen.getByTestId('mock-close-upload-modal');
         // await userEvent.click(closeButton);
-        fireEvent.click(closeButton);
+        await userEvent.click(closeButton);
 
         // Verify the async steps performed by closeUploadModal
         await waitFor(() => expect(mockRefetch).toHaveBeenCalled());

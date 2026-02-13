@@ -12,7 +12,6 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
-import Button from 'shared-components/Button';
 import {
   IconButton,
   Input,
@@ -26,6 +25,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
+import { Button } from 'shared-components/Button';
 import {
   Favorite,
   ChatBubbleOutline,
@@ -162,7 +162,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           : t('postCard.postPinnedSuccess'),
       );
       setDropdownAnchor(null);
-      window.location.reload();
     } catch (error) {
       errorHandler(t, error);
     }
@@ -260,7 +259,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }}
             PaperProps={{
               sx: {
-                minWidth: '150px',
+                minWidth: 'var(--space-15)',
                 '& .MuiMenuItem-root': {
                   px: 2,
                   py: 1,
@@ -370,7 +369,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         >
           {props.title}
         </Typography>
-        {postCardStyles.body && (
+        {props.body && (
           <Box className={postCardStyles.bodyContainer}>
             <Typography
               variant="body2"
@@ -573,7 +572,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }
             sx={{
               backgroundColor: 'action.hover',
-              borderRadius: 20,
+              borderRadius: 'var(--radius-2xl)',
               px: 2,
               py: 1,
             }}

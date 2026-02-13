@@ -146,9 +146,6 @@ importers:
       react-dom:
         specifier: ^19.2.3
         version: 19.2.3(react@19.2.3)
-      react-google-recaptcha:
-        specifier: ^3.1.0
-        version: 3.1.0(react@19.2.3)
       react-i18next:
         specifier: ^16.3.5
         version: 16.3.5(i18next@25.6.3(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3)
@@ -243,9 +240,6 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.3
         version: 19.2.3(@types/react@19.2.8)
-      '@types/react-google-recaptcha':
-        specifier: ^2.1.9
-        version: 2.1.9
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.51.0
         version: 8.51.0(@typescript-eslint/parser@8.51.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)
@@ -271,7 +265,7 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       cypress:
-        specifier: ^14.4.0
+        specifier: ^14.5.4
         version: 14.5.4
       eslint:
         specifier: ^9.29.0
@@ -315,6 +309,9 @@ importers:
       sass:
         specifier: ^1.93.3
         version: 1.94.1
+      ts-unused-exports:
+        specifier: ^11.0.1
+        version: 11.0.1(typescript@5.9.3)
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -3143,9 +3140,6 @@ packages:
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
       '@types/react': ^19.2.0
-
-  '@types/react-google-recaptcha@2.1.9':
-    resolution: {integrity: sha512-nT31LrBDuoSZJN4QuwtQSF3O89FVHC4jLhM+NtKEmVF5R1e8OY0Jo4//x2Yapn2aNHguwgX5doAq8Zo+Ehd0ug==}
 
   '@types/react-transition-group@4.4.12':
     resolution: {integrity: sha512-8TV6R3h2j7a91c+1DXdJi3Syo69zzIZbz7Lg5tORM5LEJG7X/E6a1V3drRyBRZq7/utz7A+c4OgYLiLcYGHG6w==}
@@ -6218,11 +6212,6 @@ packages:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
 
-  react-async-script@1.2.0:
-    resolution: {integrity: sha512-bCpkbm9JiAuMGhkqoAiC0lLkb40DJ0HOEJIku+9JDjxX3Rcs+ztEOG13wbrOskt3n2DTrjshhaQ/iay+SnGg5Q==}
-    peerDependencies:
-      react: '>=16.4.1'
-
   react-bootstrap@2.10.10:
     resolution: {integrity: sha512-gMckKUqn8aK/vCnfwoBpBVFUGT9SVQxwsYrp9yDHt0arXMamxALerliKBxr1TPbntirK/HGrUAHYbAeQTa9GHQ==}
     peerDependencies:
@@ -6256,11 +6245,6 @@ packages:
 
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
-
-  react-google-recaptcha@3.1.0:
-    resolution: {integrity: sha512-cYW2/DWas8nEKZGD7SCu9BSuVz8iOcOLHChHyi7upUuVhkpkhYG/6N3KDiTQ3XAiZ2UAZkfvYKMfAHOzBOcGEg==}
-    peerDependencies:
-      react: '>=16.4.1'
 
   react-i18next@16.3.5:
     resolution: {integrity: sha512-F7Kglc+T0aE6W2rO5eCAFBEuWRpNb5IFmXOYEgztjZEuiuSLTe/xBIEG6Q3S0fbl8GXMNo+Q7gF8bpokFNWJww==}
@@ -6979,6 +6963,12 @@ packages:
   ts-invariant@0.10.3:
     resolution: {integrity: sha512-uivwYcQaxAucv1CzRp2n/QdYPo4ILf9VXgH19zEIjFx2EJufV16P0JtJVpYHy89DItG6Kwj2oIUjrcK5au+4tQ==}
     engines: {node: '>=8'}
+
+  ts-unused-exports@11.0.1:
+    resolution: {integrity: sha512-b1uIe0B8YfNZjeb+bx62LrB6qaO4CHT8SqMVBkwbwLj7Nh0xQ4J8uV0dS9E6AABId0U4LQ+3yB/HXZBMslGn2A==}
+    hasBin: true
+    peerDependencies:
+      typescript: '>=3.8.3'
 
   tsconfck@3.1.6:
     resolution: {integrity: sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==}
@@ -10409,10 +10399,6 @@ snapshots:
   '@types/prop-types@15.7.15': {}
 
   '@types/react-dom@19.2.3(@types/react@19.2.8)':
-    dependencies:
-      '@types/react': 19.2.8
-
-  '@types/react-google-recaptcha@2.1.9':
     dependencies:
       '@types/react': 19.2.8
 
@@ -14118,12 +14104,6 @@ snapshots:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 
-  react-async-script@1.2.0(react@19.2.3):
-    dependencies:
-      hoist-non-react-statics: 3.3.2
-      prop-types: 15.8.1
-      react: 19.2.3
-
   react-bootstrap@2.10.10(@types/react@19.2.8)(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       '@babel/runtime': 7.28.4
@@ -14178,12 +14158,6 @@ snapshots:
       scheduler: 0.27.0
 
   react-fast-compare@3.2.2: {}
-
-  react-google-recaptcha@3.1.0(react@19.2.3):
-    dependencies:
-      prop-types: 15.8.1
-      react: 19.2.3
-      react-async-script: 1.2.0(react@19.2.3)
 
   react-i18next@16.3.5(i18next@25.6.3(typescript@5.9.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(typescript@5.9.3):
     dependencies:
@@ -14924,6 +14898,12 @@ snapshots:
   ts-invariant@0.10.3:
     dependencies:
       tslib: 2.8.1
+
+  ts-unused-exports@11.0.1(typescript@5.9.3):
+    dependencies:
+      chalk: 4.1.2
+      tsconfig-paths: 3.15.0
+      typescript: 5.9.3
 
   tsconfck@3.1.6(typescript@5.9.3):
     optionalDependencies:

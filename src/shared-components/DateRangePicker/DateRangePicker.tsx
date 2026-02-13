@@ -24,9 +24,8 @@ import React, { useCallback, useMemo } from 'react';
 import DatePicker from 'shared-components/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import type {
   InterfaceDateRangePickerProps,
@@ -35,6 +34,7 @@ import type {
 } from 'types/shared-components/DateRangePicker/interface';
 
 import styles from './DateRangePicker.module.css';
+import Button from 'shared-components/Button';
 
 function isDayjsLike(value: unknown): value is { toDate: () => Date } {
   return (
@@ -158,87 +158,94 @@ export default function DateRangePicker({
       className={`${styles.root} ${className ?? ''}`}
       data-testid={dataTestId}
     >
-      <Form.Group>
-        <Row className={styles.controlsRow}>
-          <Col xs={12} sm={6}>
-            <Form.Label>{t('startDate')}</Form.Label>
-            <DatePicker
-              value={startDayjs}
-              onChange={handleStartChange}
-              disabled={disabled}
-              data-testid={`${dataTestId}-start-input`}
-              slotProps={{
-                textField: {
-                  'aria-label': t('startDate'),
-                },
-              }}
-            />
-          </Col>
-          <Col xs={12} sm={6}>
-            <Form.Label>{t('endDate')}</Form.Label>
-            <DatePicker
-              value={endDayjs}
-              onChange={handleEndChange}
-              disabled={disabled}
-              minDate={
-                normalizedStartDate ? dayjs(normalizedStartDate) : undefined
-              }
-              data-testid={`${dataTestId}-end-input`}
-              slotProps={{
-                textField: {
-                  'aria-label': t('endDate'),
-                },
-              }}
-            />
-          </Col>
-        </Row>
+      <div className={styles.controlsRow}>
+        <FormFieldGroup
+          label={t('startDate')}
+          name="startDate"
+          className={styles.inputGroup}
+        >
+          <DatePicker
+            value={startDayjs}
+            name="start-date"
+            onChange={handleStartChange}
+            disabled={disabled}
+            data-testid={`${dataTestId}-start-input`}
+            slotProps={{
+              textField: {
+                'aria-label': t('startDate'),
+              },
+            }}
+          />
+        </FormFieldGroup>
 
-        {presets && presets.length > 0 && showPresets !== false && (
-          <div className={styles.presetRow}>
-            {presets.map((preset) => {
-              const isActive = preset.key === activePresetKey;
+        <FormFieldGroup
+          label={t('endDate')}
+          name="endDate"
+          className={styles.inputGroup}
+        >
+          <DatePicker
+            value={endDayjs}
+            name="end-date"
+            onChange={handleEndChange}
+            disabled={disabled}
+            minDate={
+              normalizedStartDate ? dayjs(normalizedStartDate) : undefined
+            }
+            data-testid={`${dataTestId}-end-input`}
+            slotProps={{
+              textField: {
+                'aria-label': t('endDate'),
+              },
+            }}
+          />
+        </FormFieldGroup>
+      </div>
 
-              return (
-                <button
-                  key={preset.key}
-                  type="button"
-                  disabled={disabled}
-                  aria-pressed={isActive}
-                  data-testid={`${dataTestId}-preset-${preset.key}`}
-                  className={`${styles.presetButton} ${
-                    isActive ? styles.presetButtonActive : ''
-                  }`}
-                  onClick={() => handlePresetClick(preset)}
-                >
-                  {preset.label}
-                </button>
-              );
-            })}
-          </div>
-        )}
+      {helperText && (
+        <div
+          data-testid={`${dataTestId}-helper`}
+          className={error ? 'text-danger' : undefined}
+        >
+          {helperText}
+        </div>
+      )}
 
-        {helperText && (
-          <Form.Text
-            className={error ? 'text-danger' : undefined}
-            data-testid={`${dataTestId}-helper`}
-          >
-            {helperText}
-          </Form.Text>
-        )}
-      </Form.Group>
+      {presets && presets.length > 0 && showPresets !== false && (
+        <div className={styles.presetRow}>
+          {presets.map((preset) => {
+            const isActive = preset.key === activePresetKey;
+
+            return (
+              <Button
+                key={preset.key}
+                type="button"
+                disabled={disabled}
+                aria-pressed={isActive}
+                data-testid={`${dataTestId}-preset-${preset.key}`}
+                className={`${styles.presetButton} ${
+                  isActive ? styles.presetButtonActive : ''
+                }`}
+                onClick={() => handlePresetClick(preset)}
+              >
+                {preset.label}
+              </Button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
 
 /**
  * Re-exported MUI date picker LocalizationProvider for test utilities and localization support.
- * Allows tests and other modules to import MUI date picker localization without direct \@mui dependencies.
- * Requires \@mui/x-date-pickers to be installed.
+ * Allows tests and other modules to import MUI date picker localization without direct mui dependencies.
+ * Requires mui/x-date-pickers to be installed.
  */
 export { LocalizationProvider } from '@mui/x-date-pickers';
 
 /**
  * Re-exported MUI date picker AdapterDayjs for Day.js integration.
- * Provides Day.js adapter for MUI date pickers. Requires both \@mui/x-date-pickers and dayjs to be installed and configured.
+ * Provides Day.js adapter for MUI date pickers. Requires both mui/x-date-pickers and dayjs to be installed and configured.
  */
 export { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

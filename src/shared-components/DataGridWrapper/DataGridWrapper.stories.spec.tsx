@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import {
   BasicUsage,
@@ -33,7 +34,7 @@ vi.mock('react-i18next', () => ({
 
 describe('DataGridWrapper Stories', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('BasicUsage Story', () => {
@@ -135,6 +136,26 @@ describe('DataGridWrapper Stories', () => {
       expect(WithActionColumn.args?.actionColumn).toBeDefined();
       expect(typeof WithActionColumn.args?.actionColumn).toBe('function');
     });
+
+    test('edit button onClick triggers alert with user name', async () => {
+      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+      render(<DataGridWrapper {...WithActionColumn.args} />);
+
+      const editButton = screen.getByLabelText('Edit Alice Johnson');
+      await userEvent.click(editButton);
+
+      expect(alertMock).toHaveBeenCalledWith('Edit user: Alice Johnson');
+    });
+
+    test('delete button onClick triggers alert with user name', async () => {
+      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+      render(<DataGridWrapper {...WithActionColumn.args} />);
+
+      const deleteButton = screen.getByLabelText('Delete Alice Johnson');
+      await userEvent.click(deleteButton);
+
+      expect(alertMock).toHaveBeenCalledWith('Delete user: Alice Johnson');
+    });
   });
 
   describe('LoadingState Story', () => {
@@ -226,6 +247,36 @@ describe('DataGridWrapper Stories', () => {
         'status',
       ]);
     });
+
+    test('edit button onClick triggers alert with user name', async () => {
+      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+      render(<DataGridWrapper {...CompleteExample.args} />);
+
+      const editButton = screen.getByLabelText('Edit Alice Johnson');
+      await userEvent.click(editButton);
+
+      expect(alertMock).toHaveBeenCalledWith('Edit user: Alice Johnson');
+    });
+
+    test('delete button onClick triggers alert with user name', async () => {
+      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+      render(<DataGridWrapper {...CompleteExample.args} />);
+
+      const deleteButton = screen.getByLabelText('Delete Alice Johnson');
+      await userEvent.click(deleteButton);
+
+      expect(alertMock).toHaveBeenCalledWith('Delete user: Alice Johnson');
+    });
+
+    test('row click triggers alert with user name', async () => {
+      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+      render(<DataGridWrapper {...CompleteExample.args} />);
+
+      const row = screen.getByText('Alice Johnson');
+      await userEvent.click(row);
+
+      expect(alertMock).toHaveBeenCalledWith('Row clicked: Alice Johnson');
+    });
   });
 
   describe('SearchWithNoResults Story', () => {
@@ -265,6 +316,16 @@ describe('DataGridWrapper Stories', () => {
 
     test('has correct number of rows', () => {
       expect(WithRowClick.args?.rows).toHaveLength(5);
+    });
+
+    test('row click triggers alert with user name', async () => {
+      const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
+      render(<DataGridWrapper {...WithRowClick.args} />);
+
+      const row = screen.getByText('Alice Johnson');
+      await userEvent.click(row);
+
+      expect(alertMock).toHaveBeenCalledWith('Clicked on user: Alice Johnson');
     });
   });
 });

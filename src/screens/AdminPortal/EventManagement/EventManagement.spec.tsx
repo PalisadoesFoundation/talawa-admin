@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, it } from 'vitest';
+import { vi, it, describe } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -33,6 +33,16 @@ vi.mock('@mui/icons-material', async () => {
   };
 });
 
+vi.mock(
+  'components/AdminPortal/EventManagement/EventAgenda/EventAgenda',
+  () => ({
+    __esModule: true,
+    default: ({ eventId }: { eventId: string }) => (
+      <div data-testid="mock-event-agenda">EventAgenda mock – {eventId}</div>
+    ),
+  }),
+);
+
 const MOCKS_WITH_FIXED_TIME = JSON.parse(JSON.stringify(MOCKS_WITH_TIME));
 MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =
   MOCKS_WITH_TIME[0].result.data.event.startAt;
@@ -48,6 +58,7 @@ MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.id = 'creator1';
 MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.name = 'John Doe';
 MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.emailAddress =
   'john.doe@example.com';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.isRecurringEventTemplate = false;
 MOCKS_WITH_FIXED_TIME[0].result.data.event.organization = {
   _id: 'orgId',
   id: 'orgId',
@@ -112,15 +123,20 @@ describe('Event Management', () => {
         useParams: vi.fn(),
       };
     });
-    vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
-      __esModule: true,
-      default: () => <div data-testid="event-list-card-modals" />,
-    }));
+    vi.mock(
+      'shared-components/EventListCard/Modal/EventListCardModals',
+      () => ({
+        __esModule: true,
+        default: () => <div data-testid="event-list-card-modals" />,
+      }),
+    );
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
     clearAllItems();
+
+    vi.clearAllMocks();
   });
 
   describe('Navigation Tests', () => {
@@ -191,9 +207,18 @@ describe('Event Management', () => {
       });
     });
 
-    it('renders dashboard tab by default', async () => {
+    it('renders dashboard tab by default', () => {
       renderEventManagement();
       expect(screen.getByTestId('eventDashboardTab')).toBeInTheDocument();
+    });
+
+    it('renders EventAgenda component when agendas tab is selected', async () => {
+      renderEventManagement();
+
+      await user.click(screen.getByTestId('agendasBtn'));
+
+      expect(screen.getByTestId('eventAgendasTab')).toBeInTheDocument();
+      expect(screen.getByTestId('mock-event-agenda')).toBeInTheDocument();
     });
 
     it('switches between all available tabs', async () => {
@@ -210,19 +235,19 @@ describe('Event Management', () => {
 
       for (const { button, tab } of tabsToTest) {
         await user.click(screen.getByTestId(button));
-        expect(screen.getByTestId(tab)).toBeInTheDocument();
+
+        await waitFor(() => {
+          expect(screen.getByTestId(tab)).toBeInTheDocument();
+        });
       }
     });
 
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ tab: 'invalid' }), // simulate invalid tab
-      };
-    });
-
-    it('returns dashboard tab for an invalid tab selection', async () => {
+    it('renders dashboard tab by default when no tab state is set', async () => {
+      vi.mocked(useParams).mockReturnValue({
+        orgId: 'orgId',
+        eventId: 'event123',
+        tab: 'invalid',
+      });
       await act(async () => {
         renderEventManagement();
       });
@@ -252,35 +277,16 @@ describe('Event Management', () => {
     });
 
     it('renders dropdown with all options', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
+      renderEventManagement();
 
-      const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
+      const dropdownContainer = screen.getByTestId('tabs-container');
       expect(dropdownContainer).toBeInTheDocument();
 
-      await user.click(screen.getByTestId('tabsDropdownToggle'));
+      await user.click(screen.getByTestId('tabs-toggle'));
 
-      const tabOptions = [
-        'dashboard',
-        'registrants',
-        'attendance',
-        'agendas',
-        'actions',
-        'volunteers',
-        'statistics',
-      ];
-
-      tabOptions.forEach((option) => {
-        expect(screen.getByTestId(`${option}DropdownItem`)).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-item-dashboard')).toBeInTheDocument();
       });
-    });
-
-    it('switches tabs through dropdown selection', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
-      await user.click(screen.getByTestId('tabsDropdownToggle'));
 
       const tabOptions = [
         'dashboard',
@@ -293,12 +299,66 @@ describe('Event Management', () => {
       ];
 
       for (const option of tabOptions) {
-        await user.click(screen.getByTestId(`${option}DropdownItem`));
-
-        expect(screen.getByTestId(`${option}DropdownItem`)).toHaveClass(
-          'd-flex gap-2 dropdown-item',
-        );
+        await waitFor(() => {
+          expect(screen.getByTestId(`tabs-item-${option}`)).toBeInTheDocument();
+        });
       }
+    });
+
+    it('switches tabs through dropdown selection', async () => {
+      renderEventManagement();
+
+      const tabOptions = [
+        { name: 'dashboard', expectedTab: 'eventDashboardTab' },
+        { name: 'registrants', expectedTab: 'eventRegistrantsTab' },
+        { name: 'attendance', expectedTab: 'eventAttendanceTab' },
+        { name: 'agendas', expectedTab: 'eventAgendasTab' },
+        { name: 'actions', expectedTab: 'eventActionsTab' },
+        { name: 'volunteers', expectedTab: 'eventVolunteersTab' },
+        { name: 'statistics', expectedTab: 'eventStatsTab' },
+      ];
+
+      for (const { name, expectedTab } of tabOptions) {
+        await user.click(screen.getByTestId('tabs-toggle'));
+
+        await waitFor(() => {
+          expect(screen.getByTestId(`tabs-item-${name}`)).toBeInTheDocument();
+        });
+
+        await user.click(screen.getByTestId(`tabs-item-${name}`));
+
+        await waitFor(() => {
+          expect(screen.getByTestId(expectedTab)).toBeInTheDocument();
+        });
+      }
+    });
+
+    it('opens dropdown menu on Enter key', async () => {
+      renderEventManagement();
+
+      const toggle = screen.getByTestId('tabs-toggle');
+      await act(async () => {
+        toggle.focus();
+      });
+      await user.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-menu')).toBeInTheDocument();
+      });
+    });
+
+    it('opens dropdown menu on Space key', async () => {
+      renderEventManagement();
+
+      const toggle = screen.getByTestId('tabs-toggle');
+      await act(async () => {
+        toggle.focus();
+      });
+      await user.keyboard(' ');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-menu')).toBeInTheDocument();
+      });
     });
   });
 });

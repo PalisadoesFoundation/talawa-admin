@@ -4,8 +4,9 @@ export class ActionItemPage {
   private readonly memberSelect = '[data-cy="memberSelect"]';
   private readonly volunteerSelect = '[data-cy="volunteerSelect"]';
   private readonly submitBtn = '[data-testid="modal-submit-btn"]';
-  private readonly sortBtn = '[data-testid="sort"]';
-  private readonly sortByAssignedAtDesc = '[data-testid="assignedAt_DESC"]';
+  private readonly sortBtn = '[data-testid="sort-toggle"]';
+  private readonly sortByAssignedAtDesc =
+    '[data-testid="sort-item-assignedAt_DESC"]';
   private readonly editItemBtn = '[data-testid^="editItemBtn"]';
   private readonly viewItemBtn = '[data-testid^="viewItemBtn"]';
   private readonly statusCheckbox = '[data-testid^="statusCheckbox"]';
@@ -54,7 +55,13 @@ export class ActionItemPage {
     return this;
   }
 
-  visitEventActionItems() {
+  visitEventActionItems(orgId?: string, eventId?: string) {
+    if (orgId && eventId) {
+      cy.visit(`/admin/event/${orgId}/${eventId}`);
+      this.navigateToEventActionItemsTab();
+      return this;
+    }
+
     this.visitEventsPage();
     this.selectFirstEvent();
     // After selecting event, click "Show Event Dashboard" button
@@ -68,20 +75,24 @@ export class ActionItemPage {
   createActionItem(category: string, member: string) {
     cy.get(this.createActionItemBtn).should('be.visible').click();
     cy.get(this.categorySelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').contains(category).click();
+    cy.contains('[role="listbox"] [role="option"]', category).click();
     cy.get(this.memberSelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').contains(member).click();
+    cy.contains('[role="listbox"] [role="option"]', member).click();
     cy.get(this.submitBtn).should('be.visible').click();
     cy.assertToast('Action Item created successfully');
     return this;
   }
 
-  createActionItemWithVolunteer(category: string) {
+  createActionItemWithVolunteer(category: string, volunteerName?: string) {
     cy.get(this.createActionItemBtn).should('be.visible').click();
     cy.get(this.categorySelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').contains(category).click();
+    cy.contains('[role="listbox"] [role="option"]', category).click();
     cy.get(this.volunteerSelect).should('be.visible').click();
-    cy.get('ul[role="listbox"] li').first().click();
+    if (volunteerName) {
+      cy.contains('[role="listbox"] [role="option"]', volunteerName).click();
+    } else {
+      cy.get('[role="listbox"] [role="option"]').first().click();
+    }
     cy.get(this.submitBtn).should('be.visible').click();
     cy.assertToast('Action Item created successfully');
     return this;

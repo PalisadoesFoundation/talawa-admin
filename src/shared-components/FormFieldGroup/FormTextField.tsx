@@ -23,6 +23,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   value,
   onChange,
   disabled,
+  hideLabel,
   'data-testid': dataTestId,
   ...props
 }) => {
@@ -30,11 +31,11 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
 
   const renderControl = () => (
     <Form.Control
-      type={type}
+      {...(props.as !== 'textarea' && { type })}
       placeholder={placeholder}
       value={value}
       onChange={(e) => {
-        onChange(e.target.value);
+        onChange?.(e.target.value);
       }}
       isInvalid={isInvalid}
       disabled={disabled}
@@ -42,7 +43,6 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       {...props}
     />
   );
-
   return (
     <FormFieldGroup
       name={name}
@@ -51,6 +51,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       helpText={helpText}
       error={error}
       touched={touched}
+      hideLabel={hideLabel}
     >
       {startAdornment || endAdornment ? (
         <React.Fragment>

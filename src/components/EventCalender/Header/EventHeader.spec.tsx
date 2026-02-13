@@ -39,8 +39,7 @@ describe('EventHeader Component', () => {
     expect(getByTestId('searchEvent')).toBeInTheDocument();
     expect(getByTestId('searchButton')).toBeInTheDocument();
     expect(getByTestId('createEventModalBtn')).toBeInTheDocument();
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
-    expect(getByTestId('eventType')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
   it('renders with correct initial viewType', () => {
@@ -54,7 +53,7 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
   it('calls handleChangeView with MONTH view type', async () => {
@@ -68,9 +67,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType-toggle'));
 
-    await user.click(getByTestId('Month View'));
+    await user.click(getByTestId('selectViewType-item-Month View'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.MONTH);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -87,9 +86,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType-toggle'));
 
-    await user.click(getByTestId('Day'));
+    await user.click(getByTestId('selectViewType-item-Day'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -106,48 +105,12 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType-toggle'));
 
-    await user.click(getByTestId('Year View'));
+    await user.click(getByTestId('selectViewType-item-Year View'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.YEAR);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not call handleChangeView when Events option is selected', async () => {
-    const { getByTestId } = render(
-      <I18nextProvider i18n={i18nForTest}>
-        <EventHeader
-          viewType={viewType}
-          handleChangeView={handleChangeView}
-          showInviteModal={showInviteModal}
-        />
-      </I18nextProvider>,
-    );
-
-    await user.click(getByTestId('eventType'));
-
-    await user.click(getByTestId('Events'));
-
-    expect(handleChangeView).not.toHaveBeenCalled();
-  });
-
-  it('does not call handleChangeView when Workshops option is selected', async () => {
-    const { getByTestId } = render(
-      <I18nextProvider i18n={i18nForTest}>
-        <EventHeader
-          viewType={viewType}
-          handleChangeView={handleChangeView}
-          showInviteModal={showInviteModal}
-        />
-      </I18nextProvider>,
-    );
-
-    await user.click(getByTestId('eventType'));
-
-    await user.click(getByTestId('Workshops'));
-
-    expect(handleChangeView).not.toHaveBeenCalled();
   });
 
   it('calls showInviteModal when create event button is clicked', async () => {
@@ -263,7 +226,7 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
   it('renders with ViewType.YEAR as initial viewType', () => {
@@ -277,31 +240,7 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
-  });
-
-  it('maintains separate functionality for view type and event type dropdowns', async () => {
-    const { getByTestId } = render(
-      <I18nextProvider i18n={i18nForTest}>
-        <EventHeader
-          viewType={viewType}
-          handleChangeView={handleChangeView}
-          showInviteModal={showInviteModal}
-        />
-      </I18nextProvider>,
-    );
-
-    // Change view type
-    await user.click(getByTestId('selectViewType'));
-    await user.click(getByTestId('Day'));
-
-    expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
-
-    // Change event type
-    await user.click(getByTestId('eventType'));
-    await user.click(getByTestId('Events'));
-
-    expect(handleChangeView).toHaveBeenCalledTimes(1); // Only called once from view type change
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
   it('handles rapid successive interactions correctly', async () => {

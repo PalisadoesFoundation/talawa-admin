@@ -132,7 +132,7 @@ export const getRecurrenceRuleText = (
           .join(', ');
         recurrenceRuleText += ` on the ${dayText}`; // i18n-ignore-line
       } else {
-        recurrenceRuleText += ` on Day ${startDate.getDate()}`; // i18n-ignore-line
+        recurrenceRuleText += ` on Day ${startDate.getUTCDate()}`; // i18n-ignore-line
       }
       break;
     case Frequency.YEARLY:
@@ -143,7 +143,7 @@ export const getRecurrenceRuleText = (
           .join(', ');
         recurrenceRuleText += ` in ${monthNamesList}`; // i18n-ignore-line
       } else {
-        recurrenceRuleText += ` in ${monthNames[startDate.getMonth()]}`; // i18n-ignore-line
+        recurrenceRuleText += ` in ${monthNames[startDate.getUTCMonth()]}`; // i18n-ignore-line
       }
 
       if (recurrence.byMonthDay && recurrence.byMonthDay.length > 0) {
@@ -152,7 +152,7 @@ export const getRecurrenceRuleText = (
           .join(', ');
         recurrenceRuleText += ` on the ${dayText}`; // i18n-ignore-line
       } else {
-        recurrenceRuleText += ` on the ${startDate.getDate()}${getOrdinalSuffix(startDate.getDate())}`; // i18n-ignore-line
+        recurrenceRuleText += ` on the ${startDate.getUTCDate()}${getOrdinalSuffix(startDate.getUTCDate())}`; // i18n-ignore-line
       }
       break;
   }
@@ -224,7 +224,6 @@ export const createDefaultRecurrenceRule = (
   startDate: Date,
   frequency: Frequency,
 ): InterfaceRecurrenceRule => {
-  const eventDay = dayjs(startDate);
   const weekDayByJs = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
   const rule: InterfaceRecurrenceRule = {
     frequency,
@@ -234,14 +233,14 @@ export const createDefaultRecurrenceRule = (
 
   switch (frequency) {
     case Frequency.WEEKLY:
-      rule.byDay = [weekDayByJs[eventDay.day()] as WeekDays];
+      rule.byDay = [weekDayByJs[startDate.getUTCDay()] as WeekDays];
       break;
     case Frequency.MONTHLY:
-      rule.byMonthDay = [eventDay.date()];
+      rule.byMonthDay = [startDate.getUTCDate()];
       break;
     case Frequency.YEARLY:
-      rule.byMonth = [eventDay.month() + 1];
-      rule.byMonthDay = [eventDay.date()];
+      rule.byMonth = [startDate.getUTCMonth() + 1];
+      rule.byMonthDay = [startDate.getUTCDate()];
       break;
     case Frequency.DAILY:
     default:
@@ -317,14 +316,45 @@ export const formatRecurrenceForApi = (
 };
 
 /**
- * Calculates which week of the month a given date falls in
+ * Calculates which week of the month a given date falls in (calendar row), using UTC.
  * @param date - The date to calculate the week for
- * @returns The week number (1-5) within the month
+ * @returns The week number (1-6) within the month
  */
 export const getWeekOfMonth = (date: Date): number => {
-  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-  const weekNumber = Math.ceil((date.getDate() + firstDay.getDay()) / 7);
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth();
+  const firstDay = new Date(Date.UTC(year, month, 1));
+  const weekNumber = Math.ceil((date.getUTCDate() + firstDay.getUTCDay()) / 7);
   return weekNumber;
+};
+
+/**
+ * Returns which occurrence (1st, 2nd, 3rd, etc., or last) of the given weekday
+ * the date is within the month (UTC). Used for "Monthly on the third Monday" style labels.
+ * Uses UTC to avoid timezone drift and flakiness across environments (CI TZ=UTC vs local).
+ * Returns 6 when the date is the last occurrence of that weekday in the month
+ * (i.e. date + 7 days crosses the month boundary).
+ * @param date - The date to check
+ * @returns Occurrence index 1-5, or 6 for "last" when date+7 days crosses month boundary
+ */
+const getWeekdayOccurrenceInMonth = (date: Date): number => {
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth();
+  const dayOfWeek = date.getUTCDay();
+  const dayOfMonth = date.getUTCDate();
+  let count = 0;
+  for (let d = 1; d <= dayOfMonth; d++) {
+    const utcDate = new Date(Date.UTC(year, month, d));
+    if (utcDate.getUTCDay() === dayOfWeek) {
+      count++;
+    }
+  }
+  // Last occurrence: date + 7 days crosses month boundary (issue #6966)
+  const plusSeven = new Date(Date.UTC(year, month, dayOfMonth + 7));
+  if (plusSeven.getUTCMonth() !== month) {
+    return 6;
+  }
+  return count;
 };
 
 /**
@@ -353,14 +383,14 @@ export const getDayName = (dayIndex: number): string => {
  */
 export const getMonthlyOptions = (startDate: Date) => {
   const eventDate = new Date(startDate);
-  const dayOfMonth = eventDate.getDate();
-  const dayOfWeek = eventDate.getDay();
-  const weekOfMonth = getWeekOfMonth(eventDate);
+  const dayOfMonth = eventDate.getUTCDate();
+  const dayOfWeek = eventDate.getUTCDay();
+  const weekdayOccurrence = getWeekdayOccurrenceInMonth(eventDate);
 
   return {
     byDate: `Monthly on day ${dayOfMonth}`, // i18n-ignore-line
-    byWeekday: `Monthly on the ${getOrdinalString(weekOfMonth)} ${getDayName(dayOfWeek)}`, // i18n-ignore-line
+    byWeekday: `Monthly on the ${getOrdinalString(weekdayOccurrence)} ${getDayName(dayOfWeek)}`, // i18n-ignore-line
     dateValue: dayOfMonth,
-    weekdayValue: { week: weekOfMonth, day: Days[dayOfWeek] },
+    weekdayValue: { week: weekdayOccurrence, day: Days[dayOfWeek] },
   };
 };

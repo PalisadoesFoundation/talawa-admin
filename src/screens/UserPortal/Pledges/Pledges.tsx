@@ -4,6 +4,7 @@
  * in a DataGrid with search, sorting, pagination, and modal dialogs.
  */
 import React, { useCallback, useEffect, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { Button } from 'shared-components/Button';
 import { ProgressBar } from 'react-bootstrap';
 import styles from './Pledges.module.css';
@@ -33,11 +34,6 @@ import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModa
 import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
 
-enum ModalState {
-  UPDATE = 'update',
-  DELETE = 'delete',
-}
-
 const Pledges = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
   const { t: tCommon } = useTranslation('common');
@@ -50,9 +46,16 @@ const Pledges = (): JSX.Element => {
 
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
+  const {
+    isOpen: isUpdateModalOpen,
+    open: openUpdateModal,
+    close: closeUpdateModal,
+  } = useModalState();
+  const {
+    isOpen: isDeleteModalOpen,
+    open: openDeleteModal,
+    close: closeDeleteModal,
+  } = useModalState();
 
   type PledgeQueryResult = ApolloQueryResult<{
     getPledgesByUserId: InterfacePledgeInfo[];
@@ -89,23 +92,21 @@ const Pledges = (): JSX.Element => {
     return <Navigate to="/" replace />;
   }
 
-  const openModal = (modal: ModalState): void => {
-    setModalState((prev) => ({ ...prev, [modal]: true }));
-  };
+  const handleOpenModal = useCallback(
+    (p: InterfacePledgeInfo | null): void => {
+      setPledge(p);
+      openUpdateModal();
+    },
+    [openUpdateModal],
+  );
 
-  const closeModal = (modal: ModalState): void => {
-    setModalState((prev) => ({ ...prev, [modal]: false }));
-  };
-
-  const handleOpenModal = useCallback((p: InterfacePledgeInfo | null): void => {
-    setPledge(p);
-    openModal(ModalState.UPDATE);
-  }, []);
-
-  const handleDeleteClick = useCallback((p: InterfacePledgeInfo): void => {
-    setPledge(p);
-    openModal(ModalState.DELETE);
-  }, []);
+  const handleDeleteClick = useCallback(
+    (p: InterfacePledgeInfo): void => {
+      setPledge(p);
+      openDeleteModal();
+    },
+    [openDeleteModal],
+  );
 
   const isNoPledgesFoundError =
     pledgeError?.graphQLErrors.some((graphQLError) => {
@@ -317,10 +318,10 @@ const Pledges = (): JSX.Element => {
           }}
         />
 
-        {modalState[ModalState.UPDATE] && pledge && pledge.campaign?.id && (
+        {isUpdateModalOpen && pledge && pledge.campaign?.id && (
           <PledgeModal
-            isOpen={modalState[ModalState.UPDATE]}
-            hide={() => closeModal(ModalState.UPDATE)}
+            isOpen={isUpdateModalOpen}
+            hide={closeUpdateModal}
             pledge={pledge}
             refetchPledge={refetchPledge}
             campaignId={pledge.campaign.id}
@@ -329,10 +330,10 @@ const Pledges = (): JSX.Element => {
           />
         )}
 
-        {modalState[ModalState.DELETE] && pledge && (
+        {isDeleteModalOpen && pledge && (
           <PledgeDeleteModal
-            isOpen={modalState[ModalState.DELETE]}
-            hide={() => closeModal(ModalState.DELETE)}
+            isOpen={isDeleteModalOpen}
+            hide={closeDeleteModal}
             pledge={pledge}
             refetchPledge={refetchPledge}
           />

@@ -27,7 +27,7 @@ const { mockNotificationToast } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
 
@@ -564,7 +564,6 @@ beforeEach(() => {
 describe('PostsPage Component', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -877,7 +876,6 @@ describe('PostsPage Component', () => {
 describe('Sorting Functionality', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -923,10 +921,10 @@ describe('Sorting Functionality', () => {
     renderComponent([emptyPostsMock, emptyPinnedPostsMock]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+      expect(screen.getByTestId('sortpost-select')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
     await user.selectOptions(sortSelect, 'latest');
 
     // Should handle empty posts gracefully and not crash
@@ -940,10 +938,10 @@ describe('Sorting Functionality', () => {
     renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+      expect(screen.getByTestId('sortpost-select')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
 
     await user.selectOptions(sortSelect, 'oldest');
 
@@ -961,10 +959,10 @@ describe('Sorting Functionality', () => {
     ]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+      expect(screen.getByTestId('sortpost-select')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
 
     // Sort by latest first
     await user.selectOptions(sortSelect, 'latest');
@@ -982,7 +980,6 @@ describe('Sorting Functionality', () => {
 describe('Create Post Modal', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -1417,7 +1414,7 @@ describe('HandleSorting Edge Case', () => {
       expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
 
     // Verify hasMore is false when sorting is applied
     let infiniteScroll = screen.getByTestId('infinite-scroll');
@@ -1432,6 +1429,11 @@ describe('HandleSorting Edge Case', () => {
     // Verify hasMore is now false because hasNextPage is false
     infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
+
+    // Verify endMessage is displayed when hasMore is false
+    expect(
+      screen.getByText(i18nForTest.t('posts.noMorePosts')),
+    ).toBeInTheDocument();
   });
 });
 

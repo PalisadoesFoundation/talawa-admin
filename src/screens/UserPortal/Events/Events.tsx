@@ -11,7 +11,6 @@
  * Dependencies:
  * - `EventCalendar`: Displays events in a calendar view.
  * - `EventHeader`: Provides controls for calendar view and event creation.
- * - `DateRangePicker`: Used for selecting arbitrary event date ranges.
  * - `EventForm`: Form component for event creation with validation.
  *
  * State:
@@ -25,7 +24,7 @@
  *
  * Methods:
  * - `handleCreateEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
- * - `toggleCreateEventModal`: Toggles the visibility of the event creation modal.
+ * - `closeCreateEventModal`: Closes the event creation modal.
  * - `showInviteModal`: Opens the event creation modal.
  * - `handleChangeView`: Updates the calendar view type.
  *
@@ -57,8 +56,13 @@ import {
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import React from 'react';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+
+import {
+  CRUDModalTemplate,
+  useModalState,
+} from 'shared-components/CRUDModalTemplate';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
@@ -73,10 +77,8 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
-
-import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+dayjs.extend(utc);
 
 export function computeCalendarFromStartDate(
   startDate: Date | null,
@@ -106,63 +108,8 @@ export default function Events(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  // Define date presets using translations (inside component to access t)
-  const datePresets: IDateRangePreset[] = React.useMemo(
-    () => [
-      {
-        key: 'today',
-        label: tCommon('userEvents.presetToday'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'thisWeek',
-        label: tCommon('userEvents.presetThisWeek'),
-        getRange: () => ({
-          startDate: dayjs().startOf('week').toDate(),
-          endDate: dayjs().endOf('week').toDate(),
-        }),
-      },
-      {
-        key: 'thisMonth',
-        label: tCommon('userEvents.presetThisMonth'),
-        getRange: () => ({
-          startDate: dayjs().startOf('month').toDate(),
-          endDate: dayjs().endOf('month').toDate(),
-        }),
-      },
-      {
-        key: 'next7Days',
-        label: tCommon('userEvents.presetNext7Days'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().add(7, 'days').endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'next30Days',
-        label: tCommon('userEvents.presetNext30Days'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().add(30, 'days').endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'nextMonth',
-        label: tCommon('userEvents.presetNextMonth'),
-        getRange: () => ({
-          startDate: dayjs().add(1, 'month').startOf('month').toDate(),
-          endDate: dayjs().add(1, 'month').endOf('month').toDate(),
-        }),
-      },
-    ],
-    [tCommon],
-  );
-
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
-  const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
+  const createEventModal = useModalState();
   const { orgId: organizationId } = useParams();
   const [dateRange, setDateRange] = React.useState<{
     startDate: Date | null;
@@ -213,7 +160,6 @@ export default function Events(): JSX.Element {
     errorPolicy: 'all',
   });
 
-  // Get user details from local storage
   // Get user details from local storage
   const userId = (getItem('userId') || getItem('id') || '') as string;
 
@@ -279,7 +225,7 @@ export default function Events(): JSX.Element {
           // Refetch failure is non-critical, suppressing error
         }
         setFormResetKey((prev) => prev + 1);
-        setCreateEventmodalisOpen(false);
+        createEventModal.close();
       } else if (errors && errors.length > 0) {
         throw new Error(errors[0].message);
       }
@@ -288,8 +234,7 @@ export default function Events(): JSX.Element {
     }
   };
 
-  const toggleCreateEventModal = (): void =>
-    setCreateEventmodalisOpen(!createEventModal);
+  const closeCreateEventModal = (): void => createEventModal.close();
 
   // Normalize event data for EventCalendar with proper typing
   const events = (data?.organization?.events?.edges || []).map(
@@ -359,7 +304,7 @@ export default function Events(): JSX.Element {
    */
 
   const showInviteModal = (): void => {
-    setCreateEventmodalisOpen(true);
+    createEventModal.open();
   };
 
   /**
@@ -376,7 +321,6 @@ export default function Events(): JSX.Element {
 
   return (
     <>
-      {/* <div className={`d-flex flex-row`}> */}
       <div className={styles.mainpageright}>
         <div className={`${styles.justifyspOrganizationEvents}`}>
           <EventHeader
@@ -387,15 +331,6 @@ export default function Events(): JSX.Element {
         </div>
       </div>
 
-      <DateRangePicker
-        value={dateRange}
-        onChange={setDateRange}
-        dataTestId="events-date-range"
-        showPresets
-        presets={datePresets}
-      />
-
-      {/* <div className="mt-4"> */}
       <EventCalendar
         viewType={viewType}
         eventData={events}
@@ -416,18 +351,19 @@ export default function Events(): JSX.Element {
         currentMonth={calendarMonth}
         currentYear={calendarYear}
       />
-      {/* </div> */}
-      <BaseModal
-        show={createEventModal}
-        onHide={toggleCreateEventModal}
+
+      <CRUDModalTemplate
+        open={createEventModal.isOpen}
+        onClose={closeCreateEventModal}
         title={t('eventDetails')}
-        dataTestId="createEventModal"
+        data-testid="createEventModal"
+        showFooter={false}
       >
         <EventForm
           key={formResetKey}
           initialValues={defaultEventValues}
           onSubmit={handleCreateEvent}
-          onCancel={toggleCreateEventModal}
+          onCancel={closeCreateEventModal}
           submitLabel={t('createEvent')}
           t={t}
           tCommon={tCommon}
@@ -436,9 +372,7 @@ export default function Events(): JSX.Element {
           showPublicToggle
           showRecurrenceToggle
         />
-      </BaseModal>
-
-      {/* </div> */}
+      </CRUDModalTemplate>
     </>
   );
 }

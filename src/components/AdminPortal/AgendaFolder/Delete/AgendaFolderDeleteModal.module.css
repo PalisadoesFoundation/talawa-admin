@@ -1,0 +1,20 @@
+/* -- AgendaFolderDeleteModal.tsx -- */
+
+.agendaFolderModal {
+  max-width: 80vw;
+  margin: var(--space-10) auto;
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .agendaFolderModal {
+    margin: var(--space-12) auto;
+    max-width: 90%;
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .agendaFolderModal {
+    margin: var(--space-9) auto;
+    max-width: 95%;
+  }
+}

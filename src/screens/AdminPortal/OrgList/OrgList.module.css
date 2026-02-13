@@ -1,5 +1,5 @@
 .orgListContainer {
-  padding-left: var(--space-9);
+  padding-left: var(--space-8);
   padding-right: var(--space-8);
 }
 
@@ -48,9 +48,9 @@
 ) {
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--shadow-spread-none);
   border: var(--border-1) solid var(--color-gray-700) !important;
   color: var(--color-gray-700) !important;
 }
@@ -63,9 +63,8 @@
 .createorgdropdown {
   background-color: var(--color-gray-100) !important;
   border: var(--border-1) solid var(--color-gray-700) !important;
-  height: var(--space-10);
-  margin-top: var(--space-4);
   color: var(--color-gray-700);
+  padding: var(--space-4) var(--space-4);
 }
 
 .createorgdropdown:active,
@@ -75,11 +74,10 @@
   color: var(--color-gray-700) !important;
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-300);
 }
-
 .listBoxOrgList {
   display: flex;
   flex-wrap: wrap;
@@ -252,9 +250,9 @@
   border-color: var(--color-blue-500);
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-300);
 }
 
 .orgImgContainer {
@@ -292,4 +290,55 @@
 
 .itemCardOrgList {
   display: block;
+}
+
+.warningAlert {
+  margin-bottom: var(--space-5);
+}
+
+.notVerifiedContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.plusIcon {
+  margin-right: var(--space-2);
+}
+
+.shimmerText {
+  animation-duration: 2.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+  background: var(--color-gray-200);
+  background: linear-gradient(
+    to right,
+    var(--color-gray-50) 8%,
+    var(--color-gray-100) 18%,
+    var(--color-gray-50) 33%
+  );
+  background-size: calc(var(--space-25)+var(--space-50)) 100%;
+}
+
+@-webkit-keyframes shimmer {
+  0% {
+    background-position: -100% var(--space-0);
+  }
+
+  100% {
+    background-position: 100% var(--space-0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: calc((var(--space-25) + var(--space-50)) * -1)
+      var(--space-0);
+  }
+
+  100% {
+    background-position: calc(var(--space-25) + var(--space-50)) var(--space-0);
+  }
 }

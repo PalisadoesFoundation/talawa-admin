@@ -1,0 +1,26 @@
+.createModal {
+  margin-top: 20vh;
+  margin-left: 13vw;
+  max-width: 80vw;
+}
+
+.titlemodal {
+  color: var(--titlemodal-color);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
+  width: 65%;
+  margin-bottom: var(--space-0);
+}
+
+.editButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-100);
+  --bs-btn-active-bg: var(--color-blue-500);
+  --bs-btn-active-border-color: var(--color-gray-100);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+}

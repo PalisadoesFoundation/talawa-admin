@@ -1,7 +1,7 @@
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, waitFor } from '@testing-library/react';
+import { render, act, waitFor, screen, cleanup } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
@@ -24,6 +24,8 @@ import {
   MOCKS_MISSING_DATA,
   MOCKS_NO_LOCATION,
   MOCKS_INVALID_DATETIME,
+  MOCKS_UNDEFINED_INVITE_ONLY,
+  MOCKS_EMPTY_DATE_STRINGS,
 } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import {
@@ -107,12 +109,35 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
   );
 };
 
+const { mockEventListCardModals } = vi.hoisted(() => ({
+  mockEventListCardModals: vi.fn(),
+}));
+
+mockEventListCardModals.mockImplementation(
+  ({ eventModalIsOpen, hideViewModal }) => {
+    return eventModalIsOpen ? (
+      <div data-testid="event-list-card-modals">
+        <button
+          type="button"
+          data-testid="modal-close-btn"
+          onClick={hideViewModal}
+        >
+          Close
+        </button>
+      </div>
+    ) : null;
+  },
+);
+
 describe('Testing Event Dashboard Screen', () => {
   beforeAll(() => {
-    vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
-      __esModule: true,
-      default: () => <div data-testid="event-list-card-modals" />,
-    }));
+    vi.mock(
+      'shared-components/EventListCard/Modal/EventListCardModals',
+      () => ({
+        __esModule: true,
+        default: mockEventListCardModals,
+      }),
+    );
   });
 
   beforeEach(() => {
@@ -125,13 +150,15 @@ describe('Testing Event Dashboard Screen', () => {
     // Clean up after each test
     localStorageMock.clear();
     vi.clearAllMocks();
+    cleanup();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -152,9 +179,10 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('The page should display event details correctly and should not show the time if all day event', async () => {
     const { getByTestId } = renderEventDashboard(mockWithoutTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -206,7 +234,9 @@ describe('Testing Event Dashboard Screen', () => {
     await wait();
 
     expect(getByTestId('event-location')).toHaveTextContent('N/A');
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
   });
 
   it('Should handle empty description gracefully', async () => {
@@ -232,9 +262,10 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should handle invalid date formats with fallback time', async () => {
     const { getByTestId } = renderEventDashboard(mockInvalidDateTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-details')).toBeInTheDocument();
 
     // Time is displayed from startTime/endTime fields
@@ -439,6 +470,77 @@ describe('Testing Event Dashboard Screen', () => {
 
       expect(queryByTestId('spinner')).not.toBeInTheDocument();
       expect(getByTestId('event-details')).toBeInTheDocument();
+    });
+  });
+  it('Should default isInviteOnly to false when undefined', async () => {
+    const mockUndefinedInviteOnly = new StaticMockLink(
+      MOCKS_UNDEFINED_INVITE_ONLY,
+      true,
+    );
+    const { getByTestId } = renderEventDashboard(mockUndefinedInviteOnly);
+    await wait();
+
+    expect(getByTestId('event-details')).toBeInTheDocument();
+    expect(mockEventListCardModals).toHaveBeenCalled();
+    const props = mockEventListCardModals.mock.lastCall?.[0];
+    expect(props).toEqual(
+      expect.objectContaining({
+        eventListCardProps: expect.objectContaining({
+          isInviteOnly: false,
+        }),
+      }),
+    );
+  });
+
+  it('Should handle empty date strings by defaulting to 08:00', async () => {
+    const mockEmptyDates = new StaticMockLink(MOCKS_EMPTY_DATE_STRINGS, true);
+    const { getByTestId } = renderEventDashboard(mockEmptyDates);
+    await wait();
+
+    // Covers formatTimeFromDateTime fallback to '08:00' when startAt/endAt are empty strings
+    // (exercised via eventListCardProps.startTime/endTime construction)
+    expect(getByTestId('event-details')).toBeInTheDocument();
+
+    // Assert the fallback time was passed to the modal component
+    expect(mockEventListCardModals).toHaveBeenCalled();
+    const props = mockEventListCardModals.mock.lastCall?.[0];
+    expect(props?.eventListCardProps?.startTime).toBe('08:00');
+    expect(props?.eventListCardProps?.endTime).toBe('08:00');
+
+    // Assert that the date containers are rendered even if content is empty (strict coverage)
+    expect(getByTestId('start-date')).toBeInTheDocument();
+    expect(getByTestId('end-date')).toBeInTheDocument();
+  });
+  it('should have correct aria-label on edit button', async () => {
+    renderEventDashboard(mockWithTime);
+    // Select the edit button
+    const editButton = await screen.findByTestId('edit-event-button');
+
+    // Assert the aria-label is correctly set
+    expect(editButton).toHaveAttribute(
+      'aria-label',
+      i18nForTest.t('eventListCard.editEvent'),
+    );
+  });
+
+  it('opens and closes modal', async () => {
+    renderEventDashboard(mockWithTime);
+
+    const editButton = await screen.findByTestId('edit-event-button');
+
+    await user.click(editButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('event-list-card-modals')).toBeVisible();
+    });
+
+    const closeButton = screen.getByTestId('modal-close-btn');
+    await user.click(closeButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('event-list-card-modals'),
+      ).not.toBeInTheDocument();
     });
   });
 });

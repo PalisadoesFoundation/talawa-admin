@@ -18,7 +18,7 @@ Defined in: [src/types/Event/interface.ts:144](https://github.com/PalisadoesFoun
 
 ##### deleteOption?
 
-`"single"` | `"following"` | `"all"`
+`"all"` | `"single"` | `"following"`
 
 #### Returns
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Event/interface.ts:139](https://github.com/PalisadoesFoun
 
 ### t()
 
-> **t**: (`key`) => `string`
+> **t**: (`key`, `options?`) => `string`
 
 Defined in: [src/types/Event/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L142)
 
@@ -53,6 +53,10 @@ Defined in: [src/types/Event/interface.ts:142](https://github.com/PalisadoesFoun
 ##### key
 
 `string`
+
+##### options?
+
+`Record`\<`string`, `unknown`\>
 
 #### Returns
 

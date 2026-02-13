@@ -13,6 +13,12 @@
   "ends": "Ends",
   "occurrences": "Occurrences",
   "customRecurrence": "Custom Recurrence",
+  "frequency": "Frequency",
+  "repeatsEvery": "Repeats Every",
+  "day": "Day",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
   "role": {
     "member": "Member"
   },
@@ -91,6 +97,7 @@
     "userEditProfilePicture": "Edit profile picture",
     "communityLogo": "Community Logo",
     "organizations": "Organizations",
+    "clickToSelectOrg": "Click to select organization",
     "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
     "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s).",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
@@ -98,6 +105,21 @@
     "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "loginRequired": "Login Required",
+    "verifying": "Verifying...",
+    "success": "Email Verified",
+    "successMessage": "Your email has been successfully verified. You can now log in.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "noToken": "No verification token provided. Please check your email for the verification link.",
+    "verificationFailed": "Email verification failed. Please try again.",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "resendButton": "Resend Verification Email",
+    "goToLogin": "Go to Login"
   },
   "adminProfile": {
     "title": "Admin Profile",
@@ -551,21 +573,12 @@
     "sortPeople": "Sort People",
     "noTagsFound": "No tags found",
     "addMember": "Add Member",
-    "removeMember": "Remove Member"
+    "removeMember": "Remove Member",
+    "invalidTagName": "Invalid tag name"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
     "joined": "joined",
-    "talawaApiUnavailable": "talawaApiUnavailable"
-  },
-  "orgAdminListCard": {
-    "remove": "Remove",
-    "removeAdmin": "Remove Admin",
-    "removeAdminMsg": "Do you want to remove this admin?",
-    "adminRemoved": "The admin is removed.",
-    "joined": "joined",
-    "no": "no",
-    "yes": "yes",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "orgPeopleListCard": {
@@ -758,17 +771,46 @@
     "deleteAgendaCategory": "Delete Agenda Category",
     "deleteAgendaCategoryMsg": "Do you want to remove this agenda category?"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "Agenda Folder updated successfully",
+    "agendaFolderDeleted": "Agenda Folder deleted successfully",
+    "deleteAgendaFolder": "Delete Agenda Folder",
+    "deleteAgendaFolderMsg": "Do you want to remove this agenda folder?",
+    "updateAgendaFolder": "Update Agenda Folder",
+    "folderNamePlaceholder": "Folder Name",
+    "createAgendaFolder": "Create Agenda Section",
+    "folderName": "Folder",
+    "organizationRequired": "Organization is required",
+    "categoryName": "Category",
+    "folder": "Agenda Folder",
+    "agendaFolderDetails": "Agenda Section Details",
+    "agendaFolderCreated": "Agenda Section created successfully",
     "agendaItemDetails": "Agenda Item Details",
     "updateAgendaItem": "Update Agenda Item",
+    "attachmentPreviewAlt": "Attachment preview",
+    "agendaFolderUpdateFailed": "Agenda folder Update Failed",
+    "removeUrl": "Remove Url",
+    "removeAttachment": "Remove Attachment",
+    "itemSequenceUpdateSuccessMsg": "Item sequence updated successfully",
+    "sectionSequenceUpdateSuccessMsg": "Section sequence updated successfully",
+    "editFolder": "Edit Folder",
+    "editItem": "Edit Item",
+    "deleteItem": "Delete Item",
+    "deleteFolder": "Delete Folder",
+    "itemPreview": "Item Preview",
+    "fileUploadFailed": "File upload failed",
     "title": "Title",
     "enterTitle": "Enter Title",
     "sequence": "Sequence",
     "description": "Description",
     "enterDescription": "Enter Description",
+    "enterNotes": "Enter Notes",
     "category": "Agenda Category",
+    "noCategory": "No category",
+    "notes": "Notes",
+    "previewItem": "Preview Item",
     "attachments": "Attachments",
-    "attachmentLimit": "Add any image file or video file upto 10MB",
+    "attachmentLimit": "Add any image file or video file up to 10MB",
     "fileSizeExceedsLimit": "File size exceeds the limit which is 10MB",
     "urls": "URLs",
     "url": "add link to URL",
@@ -853,6 +895,32 @@
     "description": "description",
     "startDate": "startDate",
     "endDate": "endDate",
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Monday to Friday)",
+    "customOption": "Custom...",
+    "selectRecurrencePattern": "Select recurrence pattern",
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
@@ -938,6 +1006,7 @@
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
+    "createFailed": "Failed to create pledge",
     "pledgeAmount": "Pledge Amount",
     "pledgeOptions": "Options",
     "pledgeCreated": "Pledge created successfully",
@@ -1108,7 +1177,9 @@
     "statistics": "Statistics",
     "to": "TO",
     "volunteers": "Volunteers",
-    "backToEvents": "Back to Events"
+    "backToEvents": "Back to Events",
+    "selectTab": "Select Tab",
+    "eventTabs": "Event Tabs"
   },
   "eventAttendance": {
     "event_attendance_table": "Event Attendance Table",
@@ -1177,7 +1248,7 @@
     "getOtp": "Get OTP",
     "enterOtp": "Enter OTP",
     "enterNewPassword": "Enter New Password",
-    "cofirmNewPassword": "Confirm New Password",
+    "confirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
     "backToLogin": "Back to Login",
     "userOtp": "e.g. 12345",
@@ -1253,18 +1324,6 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "Previous Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "passCantBeEmpty": "Password can't be empty",
-    "passNoMatch": "New and Confirm password do not match.",
-    "saveChanges": "saveChanges",
-    "cancel": "cancel"
-  },
-  "orgDelete": {
-    "deleteOrg": "Delete Org"
-  },
   "membershipRequest": {
     "accept": "Accept",
     "reject": "Reject",
@@ -1327,6 +1386,7 @@
     }
   },
   "memberDetail": {
+    "user": "User",
     "title": "User Details",
     "to": "TO",
     "addAdmin": "Add Admin",
@@ -1661,7 +1721,8 @@
     "invalidAmount": "Please enter a numerical value for the donation amount.",
     "donationAmountDescription": "Please enter the numerical value for the donation amount.",
     "donationOutOfRange": "Donation amount must be between {{min}} and {{max}}.",
-    "donateTo": "donateTo"
+    "donateTo": "donateTo",
+    "selectCurrency": "Select Currency"
   },
   "transactions": {
     "title": "Transactions",
@@ -1735,7 +1796,14 @@
     "after": "After",
     "customRecurrence": "Custom Recurrence",
     "repeatsEvery": "Repeats Every",
-    "noEventAvailable": "No Event Available!"
+    "noEventAvailable": "No Event Available!",
+    "eventDetails": "Event Details",
+    "presetToday": "Today",
+    "presetThisWeek": "This Week",
+    "presetThisMonth": "This Month",
+    "presetNext7Days": "Next 7 Days",
+    "presetNext30Days": "Next 30 Days",
+    "presetNextMonth": "Next Month"
   },
   "userEventCard": {
     "failedToRegister": "Failed to register for the event",
@@ -1745,7 +1813,11 @@
     "alreadyRegistered": "Already registered",
     "location": "location",
     "register": "register",
-    "registeredSuccessfully": "Successfully registered for {{eventName}}"
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "eventCardAriaLabel": "Event card for {{name}}",
+    "alreadyRegisteredAriaLabel": "Event is already registered",
+    "unknownCreator": "Unknown Creator",
+    "inviteOnlyEventAriaLabel": "Invite only event"
   },
   "advertisement": {
     "title": "Advertisements",
@@ -1843,10 +1915,14 @@
     "confirmRemoveMember": "Confirm Remove Member",
     "failedToAddUser": "Failed to Add User",
     "userAddedSuccessfully": "User Added Successfully",
-    "next": "Next"
+    "next": "Next",
+    "conversationAlreadyExists": "A conversation with {{userName}} already exists!",
+    "thisUser": "this user",
+    "deleteChatConfirmation": "Are you sure you want to delete this chat?",
+    "memberActionsMenu": "Member Actions Menu"
   },
   "userChatRoom": {
-    "selectContact": "Select a contact to start conversation",
+    "selectContact": "Click the + icon to start a new chat",
     "sendMessage": "Send Message",
     "loading": "Loading...",
     "loadOlderMessages": "Load older messages",
@@ -1865,7 +1941,8 @@
       "message": "An unexpected error occurred in the chat room",
       "resetButton": "Try Again",
       "resetButtonAriaLabel": "Try again"
-    }
+    },
+    "messageActions": "Message actions"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",
@@ -1918,7 +1995,8 @@
     "name": "name",
     "desc": "desc",
     "venueImagePreview": "Preview of venue image",
-    "sortVenues": "Sort Venues"
+    "sortVenues": "Sort Venues",
+    "closeImagePreview": "Close image preview"
   },
   "addMember": {
     "title": "Add Member",
@@ -2258,7 +2336,8 @@
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
     "options": "Options",
-    "notSpecified": "Not Specified"
+    "notSpecified": "Not Specified",
+    "volunteerTabs": "Volunteer Tabs"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -2319,8 +2398,10 @@
     "installing": "Installing ({{elapsed}})",
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
-    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
-    "errorInstalling": "Failed to load plugin details"
+    "uninstallPluginWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
+    "errorInstalling": "Failed to load plugin details",
+    "failedToParsePluginZip": "Failed to parse plugin ZIP",
+    "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list."
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",
@@ -2353,7 +2434,9 @@
     "editComment": "Edit Comment",
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
-    "emptyCommentError": "Please enter a comment before submitting."
+    "emptyCommentError": "Please enter a comment before submitting.",
+    "commentBy": "Comment by {{name}}",
+    "moreOptionsAriaLabel": "More options for comment"
   },
   "profileAvatar": {
     "altText": "Profile picture of {{name}}",
@@ -2365,7 +2448,21 @@
     "holidays": "Holidays",
     "events": "Events",
     "eventsCreatedByOrganization": "Events Created by Organization",
-    "today": "Today"
+    "today": "Today",
+    "viewLess": "View Less",
+    "viewAll": "View all",
+    "noHolidaysAvailable": "No holidays available",
+    "holidayNames": {
+      "mayDayLabourDay": "May Day / Labour Day",
+      "mothersDay": "Mother's Day",
+      "fathersDay": "Father's Day",
+      "independenceDayUS": "Independence Day (US)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Remembrance Day / Veterans Day",
+      "christmasDay": "Christmas Day"
+    }
   },
   "contact": {
     "card_aria": "Contact card"
@@ -2394,7 +2491,9 @@
     "clear": "Clear",
     "clearSelection": "Clear selection",
     "loading": "Loading...",
-    "selectRow": "Select row {{rowKey}}"
+    "selectRow": "Select row {{rowKey}}",
+    "previousYear": "Previous Year",
+    "nextYear": "Next Year"
   },
   "donation": {
     "amount_label": "Amount",
@@ -2467,19 +2566,6 @@
       "filledByCount": "{{count}} people have filled feedback for this event."
     }
   },
-  "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
-  },
   "plugins": {
     "loading": "Loading plugin...",
     "component": "Component",
@@ -2505,19 +2591,6 @@
         "failedToLoad": "Failed to load component"
       }
     }
-  },
-  "memberActivity": {
-    "dateNA": "Date N/A",
-    "yes": "Yes",
-    "no": "No",
-    "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
-    "eventNotFound": "Event not found or has been deleted",
-    "numberOfAttendees": "Number of attendees",
-    "viewEventDetails": "View event details"
-  },
-  "promotedPost": {
-    "title": "Promoted Content",
-    "promotedContent": "Promoted content: {{title}}"
   },
   "csv": {
     "demographics": "{{category}} Demographics"

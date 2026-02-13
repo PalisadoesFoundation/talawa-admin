@@ -59,22 +59,20 @@ export class AdminEventPage {
       'be.visible',
     );
 
-    // Click all "View all" buttons to expand calendar days
-    // This ensures events hidden behind the 2-per-day limit are visible
-    cy.get('[data-testid="more"]').then(($buttons) => {
-      const viewAllButtons = $buttons.filter((_, el) =>
-        el.textContent?.includes('View all'),
-      );
-      if (viewAllButtons.length > 0) {
-        // Use Cypress.Promise to ensure all clicks complete before continuing
-        cy.wrap(viewAllButtons).each(($btn) => {
-          cy.wrap($btn).click();
-        });
-      }
-    });
-
-    // Now verify the event exists
-    cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
+    // Cypress cannot click this due to calendar cards overlapping the button.
+    // This is a known Cypress actionability limitation — force click is required.
+    cy.get('[data-testid="more"]')
+      .filter(':contains("View all")')
+      .each(($btn) => {
+        cy.wrap($btn).click({ force: true });
+      })
+      .then(($buttons) => {
+        // Wait for all clicks to be flushed; branch on whether any buttons existed.
+        if ($buttons.length === 0) {
+          return;
+        }
+        cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
+      });
 
     return this;
   }

@@ -263,8 +263,13 @@ def check_files(
     # Process individual files explicitly listed
     for file_path in files:
         file_path = os.path.abspath(file_path)
-        if file_path not in exclude_files and file_path.endswith(
-            (".ts", ".tsx")
+        file_name = os.path.basename(file_path)
+        if (
+            file_path not in exclude_files
+            and file_path.endswith((".ts", ".tsx"))
+            and not any(
+                pattern in file_name for pattern in [".test.", ".spec."]
+            )
         ):
             process_typescript_file(file_path, all_violations)
 

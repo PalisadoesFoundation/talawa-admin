@@ -73,11 +73,15 @@
   --bs-btn-active-border-color: var(--color-blue-200);
   --bs-btn-active-color: var(--color-blue-500);
   width: var(--space-14);
-  height: 2.2rem;
-  padding: 0;
+  height: var(--space-9);
+  padding: var(--space-3);
   color: var(--color-blue-500);
   border-color: var(--color-blue-200);
   background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
 }
 
 .langChangeBtnStyle:hover {
@@ -183,13 +187,14 @@
   margin: 0;
   position: absolute;
   top: var(--space-5);
-  left: var(--space-5);
+  right: var(--space-9);
+  left: auto;
 }
 
 .orText {
   display: block;
   position: absolute;
-  top: -0.2rem;
+  top: calc(var(--space-2) * -1);
   left: calc(50% - 2.6rem);
   margin: 0 auto;
   padding: var(--space-3) var(--space-8);
@@ -201,10 +206,10 @@
 .row .orText {
   display: block;
   position: absolute;
-  top: -0.5rem;
+  top: calc(var(--space-3) * -1);
   left: calc(50% - 2.6rem);
   margin: 0 auto;
-  padding: 0.35rem var(--space-8);
+  padding: var(--space-2) var(--space-8);
   z-index: 100;
   background: var(--color-white);
   color: var(--color-gray-600);
@@ -271,9 +276,9 @@
 
   .row .right_portion .langChangeBtn {
     position: absolute;
-    margin: var(--space-5);
-    left: 0;
-    top: 0;
+    top: var(--space-5);
+    right: var(--space-5);
+    left: auto;
   }
 
   .marginTopForReg {

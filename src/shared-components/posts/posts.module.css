@@ -1,13 +1,37 @@
 .createButton {
-  composes: createButton from '../../style/app-fixed.module.css';
-}
-
-.list_box {
-  composes: list_box from '../../style/app-fixed.module.css';
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
+  margin-top: calc(var(--space-2) + var(--space-0-5));
+  margin-inline: calc(var(--space-3) + var(--space-1));
+  margin-bottom: var(--space-3);
+  width: var(--space-16);
+  height: var(--space-10);
 }
 
 .closeButton {
-  composes: closeButton from '../../style/app-fixed.module.css';
+  color: var(--color-red-500);
+  border: none;
+  background-color: var(--color-white);
+}
+
+.createButton:hover {
+  box-shadow: var(--shadow-xs);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+  border: var(--border-1) solid var(--color-gray-700);
+}
+
+.createButton:active {
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-400);
+}
+
+.list_box {
+  height: 70vh;
+  overflow-y: auto;
+  width: auto;
 }
 
 .head {

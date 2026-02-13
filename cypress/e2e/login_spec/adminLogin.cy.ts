@@ -6,7 +6,7 @@ describe('Admin Login Functionality', () => {
 
   rolesToTest.forEach((role) => {
     it(`logs in as ${role}`, () => {
-      cy.fixture('users').then((users) => {
+      cy.fixture('auth/credentials').then((users) => {
         const userData = users[role];
         const loginPage = new LoginPage();
 
@@ -20,7 +20,7 @@ describe('Admin Login Functionality', () => {
 
   rolesToTest.forEach((role) => {
     it(`fails to log in as ${role} with invalid credentials`, () => {
-      cy.fixture('users').then((users) => {
+      cy.fixture('auth/credentials').then((users) => {
         const userData = users[role];
         const loginPage = new LoginPage();
 

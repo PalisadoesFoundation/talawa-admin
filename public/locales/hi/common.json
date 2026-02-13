@@ -154,7 +154,7 @@
   "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
-  "pluginSettings": "प्लगइन सेटिंग्स",
+  "pluginSettings": "प्लगइन्स सेटिंग्स",
   "noeventsAttended": "कोई कार्यक्रम में भाग नहीं लिया",
   "birthDate": "जन्म तिथि",
   "contactInfoHeading": "संपर्क जानकारी",
@@ -253,6 +253,7 @@
   "organizationEvent": "संगठन के सदस्य",
   "organizationEventDescription": "संगठन के सभी सदस्यों के लिए दृश्य",
   "inviteOnlyEvent": "केवल आमंत्रण",
+  "inviteOnlyEventAriaLabel": "केवल आमंत्रण इवेंट",
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
   "noCategory": "कोई श्रेणी नहीं",
   "to": "को",
@@ -270,14 +271,6 @@
   "imageNotFound": "छवि नहीं मिली",
   "changeLanguage": "भाषा बदलें",
   "selectField": "{{fieldName}} चुनें",
-  "userEvents": {
-    "presetToday": "आज",
-    "presetThisWeek": "इस सप्ताह",
-    "presetThisMonth": "इस महीने",
-    "presetNext7Days": "अगले 7 दिन",
-    "presetNext30Days": "अगले 30 दिन",
-    "presetNextMonth": "अगले महीने"
-  },
   "ascending": "आरोही",
   "descending": "अवरोही",
   "noRegistrations": "पंजीकरण संख्या",
@@ -304,5 +297,11 @@
   "unavailable": "अनुपलब्ध",
   "clearSelection": "चयन साफ़ करें",
   "toggleSidebar": "साइडबार टॉगल करें",
-  "picture": "{{name}} चित्र"
+  "picture": "{{name}} चित्र",
+  "optionsSuffix": "विकल्प",
+  "userMenu": "उपयोगकर्ता मेनू",
+  "searchPlaceholder": "खोजें...",
+  "noOptionsFound": "कोई विकल्प नहीं मिला",
+  "noUserId": "उपयोगकर्ता आईडी उपलब्ध नहीं है",
+  "noTagsFound": "कोई टैग नहीं मिले"
 }

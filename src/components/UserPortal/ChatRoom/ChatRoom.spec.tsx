@@ -832,10 +832,12 @@ describe('ChatRoom Component', () => {
       .getByText('Hello World')
       .closest('[data-testid="message"]') as HTMLElement | null;
     if (!msgNode) throw new Error('message node not found');
-    const toggle = within(msgNode as HTMLElement).getByTestId('dropdown');
+    const toggle = within(msgNode as HTMLElement).getByTestId(
+      'more-options-toggle',
+    );
     await user.click(toggle);
 
-    const editButton = screen.getByTestId('replyToMessage');
+    const editButton = screen.getByTestId('more-options-item-edit');
     await user.click(editButton);
 
     const editInput = screen.getByTestId('messageInput') as HTMLInputElement;
@@ -864,10 +866,12 @@ describe('ChatRoom Component', () => {
       .getByText('Hello World')
       .closest('[data-testid="message"]') as HTMLElement | null;
     if (!msgNode) throw new Error('message node not found');
-    const toggle = within(msgNode as HTMLElement).getByTestId('dropdown');
+    const toggle = within(msgNode as HTMLElement).getByTestId(
+      'more-options-toggle',
+    );
     await user.click(toggle);
 
-    const deleteButton = screen.getByTestId('deleteMessage');
+    const deleteButton = screen.getByTestId('more-options-item-delete');
     await user.click(deleteButton);
 
     await waitFor(() => {
@@ -941,10 +945,14 @@ describe('ChatRoom Component', () => {
       .getByText('Hello World')
       .closest('[data-testid="message"]') as HTMLElement | null;
     if (!msgNode) throw new Error('message node not found');
-    const toggle = within(msgNode as HTMLElement).getByTestId('dropdown');
+    const toggle = within(msgNode as HTMLElement).getByTestId(
+      'more-options-toggle',
+    );
     await user.click(toggle);
 
-    const replyButton = within(msgNode as HTMLElement).getByTestId('replyBtn');
+    const replyButton = within(msgNode as HTMLElement).getByTestId(
+      'more-options-item-reply',
+    );
     await user.click(replyButton);
 
     await waitFor(() => {
@@ -1143,10 +1151,12 @@ describe('ChatRoom Component', () => {
       .getByText('Hello World')
       .closest('[data-testid="message"]') as HTMLElement | null;
     if (!msgNode) throw new Error('message node not found');
-    const toggle = within(msgNode as HTMLElement).getByTestId('dropdown');
+    const toggle = within(msgNode as HTMLElement).getByTestId(
+      'more-options-toggle',
+    );
     await user.click(toggle);
 
-    const deleteBtn = screen.getByTestId('deleteMessage');
+    const deleteBtn = screen.getByTestId('more-options-item-delete');
     await user.click(deleteBtn);
 
     await waitFor(() => {
@@ -1842,10 +1852,12 @@ describe('ChatRoom Component', () => {
       .getByText('Hello World')
       .closest('[data-testid="message"]') as HTMLElement | null;
     if (!msgNode) throw new Error('message node not found');
-    const toggle = within(msgNode as HTMLElement).getByTestId('dropdown');
+    const toggle = within(msgNode as HTMLElement).getByTestId(
+      'more-options-toggle',
+    );
     await user.click(toggle);
 
-    const editButton = screen.getByTestId('replyToMessage');
+    const editButton = screen.getByTestId('more-options-item-edit');
     await user.click(editButton);
 
     const editInput = screen.getByTestId('messageInput') as HTMLInputElement;
@@ -2398,9 +2410,11 @@ describe('ChatRoom Component', () => {
       .getByText('Hello World')
       .closest('[data-testid="message"]') as HTMLElement | null;
     if (msgNode) {
-      const toggle = within(msgNode).getByTestId('dropdown');
+      const toggle = within(msgNode).getByTestId('more-options-toggle');
       await user.click(toggle);
-      const replyButton = within(msgNode).getByTestId('replyBtn');
+      const replyButton = within(msgNode).getByTestId(
+        'more-options-item-reply',
+      );
       await user.click(replyButton);
     }
 
@@ -2474,13 +2488,17 @@ describe('ChatRoom Component', () => {
       .getElementById('msg1')
       ?.closest('[data-testid="message"]') as HTMLElement | null;
     if (msgNode) {
-      const toggle = within(msgNode).getByTestId('dropdown');
+      const toggle = within(msgNode).getByTestId('more-options-toggle');
       await user.click(toggle);
 
       // Edit option should not be shown for file messages
-      expect(screen.queryByTestId('replyToMessage')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('more-options-item-edit'),
+      ).not.toBeInTheDocument();
       // Delete should still be available
-      expect(screen.getByTestId('deleteMessage')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('more-options-item-delete'),
+      ).toBeInTheDocument();
     }
   });
 

@@ -314,40 +314,6 @@ const MOCKS_EMPTY = [
     },
   },
 ];
-const MOCKS_WITH_ERROR = [
-  {
-    request: {
-      query: ALL_ORGANIZATIONS_PG,
-      variables: {
-        first: 8,
-        skip: 0,
-        filter: '',
-        orderBy: 'createdAt_ASC',
-      },
-      notifyOnNetworkStatusChange: true,
-    },
-    result: {
-      data: {
-        organizations: organizations,
-      },
-    },
-  },
-  {
-    request: {
-      query: CURRENT_USER,
-      variables: { userId: '123' },
-    },
-    result: {
-      data: { user: superAdminUser },
-    },
-  },
-  {
-    request: {
-      query: CREATE_SAMPLE_ORGANIZATION_MUTATION,
-    },
-    error: new Error('Failed to create sample organization'),
-  },
-];
 
 // MOCKS FOR ADMIN
 const MOCKS_ADMIN = [
@@ -409,4 +375,4 @@ const MOCKS_ADMIN = [
   },
 ];
 
-export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY, MOCKS_WITH_ERROR };
+export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY };

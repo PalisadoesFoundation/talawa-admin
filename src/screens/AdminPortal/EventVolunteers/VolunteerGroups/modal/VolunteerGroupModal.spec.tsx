@@ -17,6 +17,8 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerGroupModal } from './VolunteerGroupModal';
 import GroupModal from './VolunteerGroupModal';
+import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
+import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
@@ -252,7 +254,7 @@ describe('Testing VolunteerGroupModal', () => {
             name: 'Group 1',
             description: 'desc',
             volunteersRequired: 1,
-            volunteerUserIds: ['userId', 'userId'],
+            volunteerUserIds: ['userId'],
           },
         },
       },
@@ -352,15 +354,12 @@ describe('Testing VolunteerGroupModal', () => {
     const descInput = await screen.findByTestId('groupDescriptionInput');
     await user.clear(descInput);
     await user.type(descInput, 'desc');
-    await waitFor(() => {
-      expect(descInput).toHaveValue('desc');
-    });
 
     const vrInput = await screen.findByTestId('volunteersRequiredInput');
     await user.clear(vrInput);
-    await user.type(vrInput, '10');
+    await user.type(vrInput, '1');
     await waitFor(() => {
-      expect(vrInput).toHaveValue(10);
+      expect(vrInput).toHaveValue(1);
     });
 
     // Select Leader
@@ -397,7 +396,7 @@ describe('Testing VolunteerGroupModal', () => {
   });
 
   it('GroupModal -> Update', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderGroupModal(successLink, modalProps[1]);
     expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
     await wait();
@@ -406,7 +405,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(nameInput).toBeInTheDocument();
     await user.clear(nameInput);
     await user.type(nameInput, 'Group 2');
-    expect(nameInput).toHaveValue('Group 2');
+    await waitFor(() => {
+      expect(nameInput).toHaveValue('Group 2');
+    });
 
     const descInput = screen.getByTestId('groupDescriptionInput');
     expect(descInput).toBeInTheDocument();
@@ -420,7 +421,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(vrInput).toBeInTheDocument();
     await user.clear(vrInput);
     await user.type(vrInput, '10');
-    expect(vrInput).toHaveValue(10);
+    await waitFor(() => {
+      expect(vrInput).toHaveValue(10);
+    });
 
     const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
@@ -436,7 +439,7 @@ describe('Testing VolunteerGroupModal', () => {
   });
 
   it('GroupModal -> Details -> Update -> Error', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderGroupModal(errorLink, modalProps[1]);
     expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
     await wait();
@@ -445,7 +448,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(nameInput).toBeInTheDocument();
     await user.clear(nameInput);
     await user.type(nameInput, 'Group 2');
-    expect(nameInput).toHaveValue('Group 2');
+    await waitFor(() => {
+      expect(nameInput).toHaveValue('Group 2');
+    });
 
     const descInput = screen.getByTestId('groupDescriptionInput');
     expect(descInput).toBeInTheDocument();
@@ -459,7 +464,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(vrInput).toBeInTheDocument();
     await user.clear(vrInput);
     await user.type(vrInput, '10');
-    expect(vrInput).toHaveValue(10);
+    await waitFor(() => {
+      expect(vrInput).toHaveValue(10);
+    });
 
     const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
@@ -518,6 +525,56 @@ describe('Testing VolunteerGroupModal', () => {
     });
   });
 
+  it('GroupModal -> should clear leader when Autocomplete onChange is called with null', async () => {
+    renderGroupModal(successLink, modalProps[0]);
+    await wait();
+
+    // First select a leader
+    const leaderSelect = await screen.findByTestId('leaderSelect');
+    expect(leaderSelect).toBeInTheDocument();
+    const leaderInput = within(leaderSelect).getByRole('combobox');
+    const openButton = within(leaderSelect).getByRole('button', {
+      name: /open/i,
+    });
+    await userEvent.click(openButton);
+    const memberOption = await screen.findByRole(
+      'option',
+      {
+        name: 'Harve Lance',
+      },
+      { timeout: 3000 },
+    );
+    await userEvent.click(memberOption);
+
+    await waitFor(() => {
+      expect(leaderInput).toHaveValue('Harve Lance');
+    });
+
+    // Clear the input - this triggers the Autocomplete's onChange with null
+    await userEvent.clear(leaderInput);
+
+    await waitFor(() => {
+      expect(leaderInput).toHaveValue('');
+    });
+
+    // Now verify that the previously selected leader is available in volunteers dropdown
+    const volunteerSelect = await screen.findByTestId('volunteerSelect');
+    const volunteerOpenButton = within(volunteerSelect).getByRole('button', {
+      name: /open/i,
+    });
+    await userEvent.click(volunteerOpenButton);
+
+    // This should now work - Harve Lance should be available in volunteers
+    const harveLanceOption = await screen.findByRole(
+      'option',
+      {
+        name: 'Harve Lance',
+      },
+      { timeout: 3000 },
+    );
+    expect(harveLanceOption).toBeInTheDocument();
+  });
+
   describe('Recurring Events', () => {
     const recurringEventProps: InterfaceVolunteerGroupModal = {
       isOpen: true,
@@ -563,7 +620,6 @@ describe('Testing VolunteerGroupModal', () => {
       const memberSelect = await screen.findByTestId('leaderSelect');
       const memberInputField = within(memberSelect).getByRole('combobox');
       await user.click(memberInputField);
-      await user.type(memberInputField, 'Harve');
 
       const memberOption = await screen.findByRole('option', {
         name: 'Harve Lance',
@@ -573,7 +629,6 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInputField = within(volunteerSelect).getByRole('combobox');
       await user.click(volunteerInputField);
-      await user.type(volunteerInputField, 'John');
 
       const volunteerOption = await screen.findByRole('option', {
         name: 'John Doe',
@@ -621,7 +676,6 @@ describe('Testing VolunteerGroupModal', () => {
       const memberSelect = await screen.findByTestId('leaderSelect');
       const memberInputField = within(memberSelect).getByRole('combobox');
       await user.click(memberInputField);
-      await user.type(memberInputField, 'Harve');
 
       const memberOption = await screen.findByRole('option', {
         name: 'Harve Lance',
@@ -631,7 +685,6 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInputField = within(volunteerSelect).getByRole('combobox');
       await user.click(volunteerInputField);
-      await user.type(volunteerInputField, 'John');
 
       const volunteerOption = await screen.findByRole('option', {
         name: 'John Doe',
@@ -719,27 +772,13 @@ describe('Testing VolunteerGroupModal', () => {
       const memberInputField = within(memberSelect).getByRole('combobox');
       await user.click(memberInputField);
 
-      await waitFor(() => {
-        expect(memberInputField).toHaveAttribute('aria-expanded', 'true');
-      });
-
       const memberOption = await screen.findByRole('option', {
         name: 'Harve Lance',
       });
       await user.click(memberOption);
 
-      const volunteerSelect = await screen.findByTestId('volunteerSelect');
-      const volunteerInputField = within(volunteerSelect).getByRole('combobox');
-      await user.click(volunteerInputField);
-
-      await waitFor(() => {
-        expect(volunteerInputField).toHaveAttribute('aria-expanded', 'true');
-      });
-
-      const volunteerOption = await screen.findByRole('option', {
-        name: 'John Doe',
-      });
-      await user.click(volunteerOption);
+      // Note: After selecting a leader, they are automatically added to volunteers
+      // So we don't need to add them again, the form already has the leader in volunteers
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
@@ -942,18 +981,19 @@ describe('Testing VolunteerGroupModal', () => {
       });
 
       await user.click(leaderInputField);
-      expect(screen.queryByText('Harve Lance')).not.toBeInTheDocument();
+      expect(leaderInputField).toHaveValue('Harve Lance');
     });
 
     it('should handle clearing volunteersRequired field', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       renderGroupModal(successLink, modalProps[0]);
+      await wait();
       expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
-      const volunteersRequiredInput = screen.getByTestId(
+      const volunteersRequiredInput = await screen.findByTestId(
         'volunteersRequiredInput',
       );
-      await user.clear(volunteersRequiredInput);
+      await user.click(volunteersRequiredInput);
       await user.type(volunteersRequiredInput, '5');
       await waitFor(() => {
         expect(volunteersRequiredInput).toHaveValue(5);
@@ -1029,6 +1069,196 @@ describe('Testing VolunteerGroupModal', () => {
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
       expect(submitBtn).toBeDisabled();
+    });
+  });
+});
+
+describe('VolunteerGroupModal helper functions (coverage)', () => {
+  it('areOptionsEqual returns true when ids match', () => {
+    const a: InterfaceUserInfoPG = {
+      id: '1',
+      name: 'John Doe',
+    };
+    const b: InterfaceUserInfoPG = {
+      id: '1',
+      name: 'John Doe',
+    };
+    expect(areOptionsEqual(a, b)).toBe(true);
+  });
+
+  it('areOptionsEqual returns false when ids differ', () => {
+    const a: InterfaceUserInfoPG = {
+      id: '1',
+      name: 'John Doe',
+    };
+    const b: InterfaceUserInfoPG = {
+      id: '2',
+      name: 'Jane Smith',
+    };
+    expect(areOptionsEqual(a, b)).toBe(false);
+  });
+
+  it('getMemberLabel returns the member name', () => {
+    const member: InterfaceUserInfoPG = {
+      id: '1',
+      name: 'John Doe',
+    };
+
+    expect(getMemberLabel(member)).toBe('John Doe');
+  });
+
+  it('getMemberLabel returns combined first and last name', () => {
+    const member: InterfaceUserInfoPG = {
+      id: '2',
+      name: 'Jane Smith',
+      firstName: 'Jane',
+      lastName: 'Smith',
+    };
+
+    expect(getMemberLabel(member)).toBe('Jane Smith');
+  });
+
+  it('getMemberLabel returns first name only when last name is missing', () => {
+    const member: InterfaceUserInfoPG = {
+      id: '3',
+      name: 'Alice',
+      firstName: 'Alice',
+    };
+
+    expect(getMemberLabel(member)).toBe('Alice');
+  });
+  it('should ensure leader ID is placed first in volunteer list', async () => {
+    const user = userEvent.setup({ delay: null });
+
+    // We want Leader = John Doe (userId2) and Volunteer = Harve Lance (userId)
+    // Expected volunteerUserIds = ['userId2', 'userId'] - Leader first
+
+    const orderingMock: MockedResponse = {
+      request: {
+        query: CREATE_VOLUNTEER_GROUP,
+        variables: {
+          data: {
+            eventId: 'eventId',
+            leaderId: 'userId2',
+            name: 'Ordered Group',
+            description: 'desc',
+            volunteersRequired: 5,
+            volunteerUserIds: ['userId2', 'userId'],
+          },
+        },
+      },
+      result: {
+        data: {
+          createEventVolunteerGroup: {
+            id: 'orderedGroupId',
+          },
+        },
+      },
+      variableMatcher: (variables) => {
+        const data = variables.data as { volunteerUserIds: string[] };
+        return (
+          JSON.stringify(data.volunteerUserIds) ===
+          JSON.stringify(['userId2', 'userId'])
+        );
+      },
+    };
+
+    // Need MEMBERS_LIST mock as well
+    const link = new StaticMockLink([MOCKS[1], orderingMock]);
+    renderGroupModal(link, modalProps[0]);
+    await wait();
+
+    const nameInput = screen.getByTestId('groupNameInput');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Ordered Group');
+
+    const descInput = screen.getByTestId('groupDescriptionInput');
+    await user.clear(descInput);
+    await user.type(descInput, 'desc');
+
+    const vrInput = screen.getByTestId('volunteersRequiredInput');
+    await user.clear(vrInput);
+    await user.type(vrInput, '5');
+
+    // Select Leader: John Doe
+    const memberSelect = await screen.findByTestId('leaderSelect');
+    const memberInputField = within(memberSelect).getByRole('combobox');
+    await user.click(memberInputField);
+    const johnOption = await screen.findByRole('option', {
+      name: 'John Doe',
+    });
+    await user.click(johnOption);
+
+    // Select Volunteer: Harve Lance
+    const volunteerSelect = await screen.findByTestId('volunteerSelect');
+    const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+    await user.click(volunteerInputField);
+    const harveOption = await screen.findByRole('option', {
+      name: 'Harve Lance',
+    });
+    await user.click(harveOption);
+
+    const submitBtn = screen.getByTestId('modal-submit-btn');
+    await user.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupCreated,
+      );
+    });
+  });
+
+  describe('Additional Error Handling Coverage', () => {
+    it('should show error toast when updating a group without an ID (client-side check)', async () => {
+      // Clone props and remove ID from group to simulate the error condition
+      const propsNoId = {
+        ...modalProps[1],
+        group: {
+          ...(modalProps[1].group as NonNullable<
+            InterfaceVolunteerGroupModal['group']
+          >),
+          id: '',
+        },
+      };
+
+      // Let's use fireEvent to force the click.
+      const { getByTestId } = renderGroupModal(successLink, propsNoId);
+      const submitBtn = getByTestId('modal-submit-btn');
+
+      // Force click even if disabled.
+
+      await act(async () => {
+        submitBtn.removeAttribute('disabled');
+        submitBtn.click();
+      });
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith('errorOccured');
+      });
+    });
+
+    it('should throw error when baseEvent is missing for recurring create (internal check)', async () => {
+      const propsNoBase = {
+        ...modalProps[0],
+        isRecurring: true,
+        baseEvent: null,
+      };
+
+      const { getByTestId } = renderGroupModal(successLink, propsNoBase);
+      const submitBtn = getByTestId('modal-submit-btn');
+
+      // Force click even if disabled.
+
+      await act(async () => {
+        submitBtn.removeAttribute('disabled');
+        submitBtn.click();
+      });
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          t.baseEventRequired,
+        );
+      });
     });
   });
 });

@@ -34,6 +34,7 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
   required = false,
   disabled = false,
   testId,
+  dataCy,
   error,
   helperText,
   ariaLive = true,
@@ -64,6 +65,7 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
         aria-invalid={hasError}
         aria-describedby={describedBy}
         data-testid={testId}
+        data-cy={dataCy}
       />
 
       {/* Error message with aria-live for screen reader announcements */}
@@ -88,5 +90,3 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
     </Form.Group>
   );
 };
-
-export default FormField;

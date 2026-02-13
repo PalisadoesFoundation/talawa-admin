@@ -233,7 +233,6 @@ function AdvertisementRegister({
         type: string;
         startAt: string;
         endAt: string;
-        attachments: File[] | undefined;
         description?: string | null;
       } = {
         organizationId: currentOrg,
@@ -241,7 +240,6 @@ function AdvertisementRegister({
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: formState.attachments,
       };
 
       if (formState.description !== null) {
@@ -448,7 +446,7 @@ function AdvertisementRegister({
             />
           </FormFieldGroup>
           {formStatus === 'register' && (
-            <FormFieldGroup name="attachments" label={t('Rmedia')}>
+            <FormFieldGroup name="advertisementMedia" label={t('Rmedia')}>
               <input
                 className={styles.inputField}
                 id="advertisementMedia"

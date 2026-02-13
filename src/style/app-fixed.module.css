@@ -619,10 +619,6 @@
 
   --fonts-color: #707070;
 
-  --dropwdownToggle-bg: #f1f3f6;
-  --dropwdownToggle-color: #000000;
-  --dropwdownToggle-outline: #9ca3af;
-
   --createButtonEventHeader-bg: #eaebef;
   --createButtonEventHeader-color: #555555;
   --createButtonEventHeader-border: #555555;
@@ -792,10 +788,6 @@
 
   --titlemodalCustomRecurrenceModal-color: #707070;
   --titlemodalCustomRecurrenceModal-border: #7c9beb;
-
-  --memberfontcreatedbtnUserListCard-border: #286fe0;
-  --memberfontcreatedbtnUserListCard-bg: #286fe0;
-  --memberfontcreatedbtnUserListCard-color: #ffffff;
 
   --recurrenceDayButton-border: #808080;
   --recurrenceDayButton-outline-focus: #0056b3;
@@ -2739,46 +2731,6 @@ form label,
   font-weight: 600;
 }
 
-/* -- CurrentHourIndicator.tsx -- */
-
-.currentHourIndicator_container {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  top: -8px;
-  left: -9px;
-}
-
-.currentHourIndicator_round {
-  background-color: var(--current-hour-indicator-color);
-  border-radius: 100%;
-  width: 15px;
-  height: 15px;
-}
-
-.currentHourIndicator_line {
-  width: 100%;
-  height: 1px;
-  background-color: var(--current-hour-indicator-color);
-  margin: auto;
-}
-
-/* -- DynamicDropDown.tsx -- */
-
-.dropwdownToggle {
-  background-color: var(--dropwdownToggle-bg);
-  color: var(--dropwdownToggle-color);
-  width: 100%;
-  border: none;
-  padding: 0.5rem;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 8rem;
-  outline: 1px solid var(--dropwdownToggle-outline);
-}
-
 /* -- EditCustomFieldDropDown.tsx -- */
 
 /* -- EventHeader.tsx -- */
@@ -3727,8 +3679,6 @@ form label,
   animation: load8 1.1s infinite linear;
 }
 
-/* -- EventStatsWrapper.tsx -- */
-
 /* -- GroupChatDetails.tsx -- */
 
 .groupInfo {
@@ -3996,45 +3946,6 @@ form label,
   }
 }
 
-/* -- LoginPortalToggle.tsx -- */
-
-.navLinkClass {
-  display: inline-block;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.4;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  color: var(--LoginToggle-button-color);
-  border-radius: 0.3rem;
-  width: 100%;
-  box-sizing: border-box;
-  border: 1px solid var(--LoginToggle-button-border);
-  font-weight: 500;
-  transition: all 0.25s ease;
-  background-color: var(--LoginToggle-button-bg);
-}
-
-.navLinkClass:hover {
-  box-shadow: var(--hover-shadow);
-  background-color: var(--LoginToggle-button-bg-hover);
-  border-color: var(--LoginToggle-button-border-hover);
-}
-
-.activeLink {
-  color: var(--LoginToggle-button-color-active);
-  border: 1px solid var(--LoginToggle-button-border-active);
-  background-color: var(--LoginToggle-button-bg-active);
-}
-
-.activeLink:hover {
-  box-shadow: var(--hover-shadow);
-  color: var(--LoginToggle-button-color-active-hover);
-  border: 1px solid var(--LoginToggle-button-border-active-hover);
-  background-color: var(--LoginToggle-button-bg-active-hover);
-}
-
 /* -- Sidebar options -- */
 
 .sidebarBtn {
@@ -4055,13 +3966,7 @@ form label,
   font-weight: bold;
 }
 
-/* -- customTableCell.tsx -- */
-
-/* -- EventsAttendedByMember.tsx -- */
-
 /* -- EventsAttendedCardItem.tsx -- */
-
-/* -- EventsAttendedMemberModal.tsx -- */
 
 /* -- MemberRequestCard.tsx -- */
 
@@ -4161,8 +4066,6 @@ form label,
   }
 }
 
-/* -- OrgAdminListCard.tsx -- */
-
 /* -- OrganizationCard.tsx -- */
 
 .orgName {
@@ -4241,55 +4144,6 @@ form label,
   justify-content: space-around;
   width: 8rem;
   border-width: medium;
-}
-
-/* -- OrganizationCardStart.tsx -- */
-
-.alignimg {
-  border-radius: 50%;
-  background-blend-mode: darken;
-  height: 65px;
-  width: 65px;
-}
-
-.box {
-  color: var(--box-color);
-}
-
-.box :hover {
-  color: var(--box-color-hover);
-}
-
-.first_box {
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 10px;
-  padding-top: 10px;
-}
-
-.second_box {
-  padding-left: 20px;
-  padding-top: 10px;
-}
-
-.second_box > h4 {
-  font-size: 10;
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--secondBox-h4-color);
-}
-
-.second_box > h5 {
-  text-decoration: none;
-  font-size: 10;
-  font-weight: 100;
-  color: var(--secondBox-h5-color);
-}
-
-.deco {
-  border: 1px solid var(--deco-bg);
-  width: 65vw;
-  height: 0px !important;
 }
 
 /* -- CardItem.tsx -- */
@@ -4789,8 +4643,6 @@ form label,
 .cards:last-child:nth-last-child(odd) {
   grid-column: auto / span 2;
 }
-
-/* -- OrgDelete.tsx -- */
 
 /* -- OrgListCard.tsx -- */
 
@@ -5866,8 +5718,6 @@ form {
 
 /* -- OrganizationCard.tsx -- */
 
-/* -- OrganizationCardStart.tsx -- */
-
 /* -- CardItem.tsx -- */
 
 /* -- CardItemLoading.tsx -- */
@@ -6302,61 +6152,6 @@ form {
   transform: scale(0.98);
 }
 
-/* -- UserListCard.tsx -- */
-
-.memberfontcreatedbtnUserListCard {
-  margin-top: 33px;
-  border-radius: 7px;
-  border-color: var(--memberfontcreatedbtnUserListCard-border);
-  background-color: var(--memberfontcreatedbtnUserListCard-bg);
-  color: var(--memberfontcreatedbtnUserListCard-color);
-  padding-right: 10px;
-  padding-left: 10px;
-  justify-content: flex-end;
-  float: right;
-  text-align: right;
-  box-shadow: none;
-}
-
-/* -- UserPasswordUpdate.tsx -- */
-
-.dispflexUserPasswordUpdate {
-  display: flex;
-  justify-content: flex-start;
-  margin: 0 auto;
-}
-
-.dispflexUserPasswordUpdate > div {
-  width: 50%;
-  margin-right: 50px;
-}
-
-.dispbtnflex {
-  width: 90%;
-  display: flex;
-  margin: 20px 30% 0 30%;
-}
-
-.whitebtn {
-  margin: 1rem 0 0;
-  margin-top: 10px;
-  border: 1px solid var(--whitebtn-border);
-  box-shadow: 0 2px 2px var(--whitebtn-box-shadow);
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 20%;
-  font-size: 16px;
-  color: var(--whitebtn-color);
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  float: left;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-}
-
 /* -- ChatRoom.tsx -- */
 /* -- CommentCard.tsx -- */
 /* -- ContactCard.tsx -- */
@@ -6438,44 +6233,6 @@ form {
 
 /* -- EventCard.tsx -- */
 /* -- OrganizationCard.tsx -- */
-/* -- OrganizationNavbar.tsx -- */
-
-/* -- PeopleCard.tsx -- */
-
-.personImage_peoplecard {
-  border-radius: 50%;
-  margin-right: 25px;
-  max-width: 70px;
-}
-
-.userAvatar {
-  border-radius: 50%;
-  margin-right: 25px;
-  width: 53px;
-  height: 53px;
-}
-
-.people_card_container {
-  display: flex;
-}
-
-.display_flex {
-  display: flex;
-}
-
-.align_center {
-  align-self: center;
-}
-
-.people_role {
-  width: 75%;
-  border: 1px solid var(--peopleRole-border);
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 0.25rem;
-}
 
 /* -- PostCard.tsx -- */
 
@@ -6686,20 +6443,6 @@ form {
 
 .postInput:focus {
   box-shadow: none;
-}
-
-/* -- PromotedPost.tsx -- */
-
-.cardHeaderPromotedPost {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  color: var(--cardHeaderPromotedPost-color);
-}
-
-.imageContainerPromotedPost {
-  max-width: 100%;
 }
 
 /* -- Register.tsx -- */
@@ -8111,8 +7854,18 @@ form {
 
 .cardBody .textBox {
   margin: 0 0 3rem 0;
-  padding-bottom: 10px;
+  padding: 10px;
   color: var(--cardBody-color);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cardBody .textWrapper {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .textBox {
