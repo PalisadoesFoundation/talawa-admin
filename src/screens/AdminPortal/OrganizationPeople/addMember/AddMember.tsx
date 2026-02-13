@@ -105,6 +105,7 @@ function AddMember({
   const createMember = useCallback(
     async (userId: string): Promise<void> => {
       try {
+        if (!currentUrl) return;
         await addMember({
           variables: {
             memberId: userId,
@@ -172,6 +173,7 @@ function AddMember({
           },
         });
         const createdUserId = registeredUser?.data.createUser.user.id;
+        if (!createdUserId) return;
         await createMember(createdUserId);
         closeCreateNewUserModal();
         setCreateUserVariables({
