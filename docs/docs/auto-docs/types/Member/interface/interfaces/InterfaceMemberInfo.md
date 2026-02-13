@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMemberInfo
 
-Defined in: [src/types/Member/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L22)
+Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L13)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Member/interface.ts:22](https://github.com/PalisadoesFoun
 
 > **avatarURL**: `string`
 
-Defined in: [src/types/Member/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L26)
+Defined in: [src/types/Member/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L17)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Member/interface.ts:26](https://github.com/PalisadoesFoun
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Member/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L27)
+Defined in: [src/types/Member/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L18)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Member/interface.ts:27](https://github.com/PalisadoesFoun
 
 > **emailAddress**: `string`
 
-Defined in: [src/types/Member/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L25)
+Defined in: [src/types/Member/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L16)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Member/interface.ts:25](https://github.com/PalisadoesFoun
 
 > **id**: `string`
 
-Defined in: [src/types/Member/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L23)
+Defined in: [src/types/Member/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L14)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/types/Member/interface.ts:23](https://github.com/PalisadoesFoun
 
 > **name**: `string`
 
-Defined in: [src/types/Member/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L24)
+Defined in: [src/types/Member/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L15)

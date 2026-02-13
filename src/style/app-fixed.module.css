@@ -3968,78 +3968,6 @@ form label,
 
 /* -- EventsAttendedCardItem.tsx -- */
 
-/* -- MemberRequestCard.tsx -- */
-
-.memberlist {
-  margin-top: -1px;
-}
-
-.memberimg {
-  width: 12.5rem;
-  height: 6.25rem;
-  border-radius: 7px;
-  margin-left: 20px;
-}
-
-.singledetails {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.singledetails p {
-  margin-bottom: -5px;
-}
-
-.singledetails_data_left {
-  margin-top: 10px;
-  margin-left: 10px;
-  color: var(--singledetails_dl-color);
-}
-
-.memberfont {
-  margin-top: 3px;
-}
-
-.memberfont > span {
-  width: 80%;
-}
-
-.memberfontcreated {
-  margin-top: 18px;
-}
-
-@media only screen and (max-width: var(--breakpoint-mobile)) {
-  .singledetails {
-    margin-left: 20px;
-  }
-
-  .memberimg {
-    margin: auto;
-  }
-
-  .singledetails_data_right {
-    margin-right: -52px;
-  }
-
-  .singledetails_data_left {
-    margin-left: 0px;
-  }
-}
-
-.memberfontcreatedbtn {
-  border-radius: 7px;
-  border-color: var(--memberfontbtn-border);
-  background-color: var(--memberfont-bg);
-  color: var(--memberfont-color);
-  box-shadow: none;
-  height: 2.5rem;
-  width: max-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 /* -- NotFound.tsx -- */
 
 .section {
@@ -5716,8 +5644,6 @@ form {
   font-size: 0.8rem;
 }
 
-/* -- OrganizationCard.tsx -- */
-
 /* -- CardItem.tsx -- */
 
 /* -- CardItemLoading.tsx -- */
@@ -6232,7 +6158,6 @@ form {
 }
 
 /* -- EventCard.tsx -- */
-/* -- OrganizationCard.tsx -- */
 
 /* -- PostCard.tsx -- */
 
@@ -6445,7 +6370,6 @@ form {
   box-shadow: none;
 }
 
-/* -- Register.tsx -- */
 /* -- SecuredRouteForUser.tsx -- */
 /* -- StartPostModal.tsx -- */
 
@@ -6990,7 +6914,6 @@ form {
   }
 }
 
-/* -- DeleteUser.tsx -- */
 /* -- OtherSettings.tsx -- */
 /* -- UserProfile.tsx -- */
 

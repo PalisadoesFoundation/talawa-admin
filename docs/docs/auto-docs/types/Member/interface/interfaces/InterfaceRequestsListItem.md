@@ -4,7 +4,7 @@
 
 # Interface: InterfaceRequestsListItem
 
-Defined in: [src/types/Member/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L10)
+Defined in: [src/types/Member/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Member/interface.ts:10](https://github.com/PalisadoesFoun
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L12)
+Defined in: [src/types/Member/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L3)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoun
 
 > **membershipRequestId**: `string`
 
-Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L11)
+Defined in: [src/types/Member/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L2)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoun
 
 > **status**: `string`
 
-Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L13)
+Defined in: [src/types/Member/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L4)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoun
 
 > **user**: `object`
 
-Defined in: [src/types/Member/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L14)
+Defined in: [src/types/Member/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L5)
 
 #### avatarURL?
 
