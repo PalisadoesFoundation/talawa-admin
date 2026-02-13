@@ -111,8 +111,9 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
                     data-testid={
                       action.testId || `${testIdPrefix}-action-${idx}`
                     }
-                    icon={action.icon}
-                    iconPosition="start"
+                    {...(action.icon
+                      ? { icon: action.icon, iconPosition: 'start' as const }
+                      : {})}
                   >
                     {label}
                   </Button>
