@@ -75,18 +75,18 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     tYearlyCalendar('weekdaysShorthand.sun'),
   ];
   const months = [
-    tRoot('january'),
-    tRoot('february'),
-    tRoot('march'),
-    tRoot('april'),
-    tRoot('may'),
-    tRoot('june'),
-    tRoot('july'),
-    tRoot('august'),
-    tRoot('september'),
-    tRoot('october'),
-    tRoot('november'),
-    tRoot('december'),
+    tRoot('eventListCard.january'),
+    tRoot('eventListCard.february'),
+    tRoot('eventListCard.march'),
+    tRoot('eventListCard.april'),
+    tRoot('eventListCard.may'),
+    tRoot('eventListCard.june'),
+    tRoot('eventListCard.july'),
+    tRoot('eventListCard.august'),
+    tRoot('eventListCard.september'),
+    tRoot('eventListCard.october'),
+    tRoot('eventListCard.november'),
+    tRoot('eventListCard.december'),
   ];
 
   /**

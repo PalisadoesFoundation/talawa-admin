@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
+import dayjs from 'dayjs';
 import Calendar from './YearlyEventCalender';
 // Removed dependency on Monthly EventCalendar for tests that target yearly view directly
 // import EventCalendar from '../Monthly/EventCalender';
@@ -115,6 +116,20 @@ i18n.init({
   resources: {
     en: {
       translation: {
+        eventListCard: {
+          january: 'January',
+          february: 'February',
+          march: 'March',
+          april: 'April',
+          may: 'May',
+          june: 'June',
+          july: 'July',
+          august: 'August',
+          september: 'September',
+          october: 'October',
+          november: 'November',
+          december: 'December',
+        },
         userEvents: {
           noEventAvailable: 'No Event Available!',
         },
@@ -140,18 +155,6 @@ i18n.init({
           resetButtonAriaLabel: 'Reset',
           resetButton: 'Reset',
         },
-        january: 'January',
-        february: 'February',
-        march: 'March',
-        april: 'April',
-        may: 'May',
-        june: 'June',
-        july: 'July',
-        august: 'August',
-        september: 'September',
-        october: 'October',
-        november: 'November',
-        december: 'December',
       },
     },
   },
@@ -207,11 +210,12 @@ describe('Calendar Component', () => {
     user = userEvent.setup();
   });
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
   const mockRefetchEvents = vi.fn();
-  const today = new Date();
+  const today = new Date(new Date().getFullYear(), 3, 15);
+  const todayISO = dayjs(today).toISOString();
 
   const mockEventData = [
     {
@@ -219,8 +223,8 @@ describe('Calendar Component', () => {
       location: 'Test Location',
       name: 'Test Event',
       description: 'Test Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -296,7 +300,7 @@ describe('Calendar Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setMockOrgId('org1');
   });
 
@@ -551,8 +555,8 @@ describe('Calendar Component', () => {
     const multiMonthEvents = [
       {
         ...mockEventData[0],
-        startAt: new Date(today.getFullYear(), 0, 15).toISOString(),
-        endAt: new Date(today.getFullYear(), 1, 15).toISOString(),
+        startAt: new Date(today.getFullYear(), 3, 15).toISOString(),
+        endAt: new Date(today.getFullYear(), 4, 15).toISOString(),
       },
     ];
 
@@ -588,7 +592,7 @@ describe('Calendar Component', () => {
       expect(buttons.length).toBeGreaterThan(0);
     });
 
-    const start = new Date(today.getFullYear(), 0, 15);
+    const start = new Date(today.getFullYear(), 3, 15);
     await clickExpandForDate(container, start, user);
   });
 
@@ -1135,14 +1139,14 @@ describe('Calendar Component', () => {
   });
 
   test('processes multiple events for REGULAR user when user is a member', async () => {
-    const today = new Date();
+    const eventDate = dayjs().toISOString();
     const publicEvent: CalendarEventItem = {
       id: 'public-event',
       location: 'Public Location',
       name: 'Public Event',
       description: 'Public Description',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: eventDate,
+      endAt: eventDate,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -1432,7 +1436,9 @@ describe('Calendar Component', () => {
       expect(screen.getByText('Event B')).toBeInTheDocument(),
     );
 
-    expect(screen.queryByText('Event A')).toBeNull();
+    await waitFor(() => {
+      expect(screen.queryByText('Event A')).toBeNull();
+    });
   });
 
   it('handles month layout correctly when month starts on Sunday', async () => {
