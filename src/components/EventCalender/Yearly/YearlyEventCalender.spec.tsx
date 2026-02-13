@@ -316,7 +316,7 @@ describe('Calendar Component', () => {
   };
 
   beforeEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     setMockOrgId('org1');
   });
 
