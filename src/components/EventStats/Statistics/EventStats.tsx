@@ -55,7 +55,13 @@ export const EventStats = ({
   const { t: tErrors } = useTranslation('errors');
   const { t } = useTranslation('translation', { keyPrefix: 'eventStats' });
   // Query to fetch event feedback data
-  const { data, loading } = useQuery(EVENT_FEEDBACKS, {
+  const { data, loading } = useQuery<{
+    event: {
+      _id: string;
+      averageFeedbackScore: number | null;
+      feedback: Array<{ rating?: number; review?: string }>;
+    };
+  }>(EVENT_FEEDBACKS, {
     variables: { id: eventId },
   });
 
@@ -86,11 +92,11 @@ export const EventStats = ({
         title={t('title')}
       >
         {/* Render feedback statistics */}
-        <FeedbackStats data={data} />
+        {data && <FeedbackStats data={data} />}
         <div>
           {/* Render review statistics and average rating */}
-          <ReviewStats data={data} />
-          <AverageRating data={data} />
+          {data && <ReviewStats data={data} />}
+          {data && <AverageRating data={data} />}
         </div>
       </BaseModal>
     </ErrorBoundaryWrapper>

@@ -61,8 +61,10 @@ export default function OrganizationSidebar(): JSX.Element {
   const peopleLink = `/user/people/${organizationId}`;
 
   // Query to fetch members of the organization
-  const { data: memberData, loading: memberLoading } = useQuery(
-    ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  const { data: memberData, loading: memberLoading } = useQuery<{
+    organizationsMemberConnection?: { edges?: Array<{ node?: unknown }> };
+    organization?: { members?: { edges?: Array<{ node?: { id?: string; name?: string; emailAddress?: string; avatarURL?: string; createdAt?: string } }> } };
+  }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
       variables: {
         orgId: organizationId,
@@ -73,8 +75,9 @@ export default function OrganizationSidebar(): JSX.Element {
   );
 
   // Query to fetch events of the organization
-  const { data: eventsData, loading: eventsLoading } = useQuery(
-    ORGANIZATION_EVENT_CONNECTION_LIST,
+  const { data: eventsData, loading: eventsLoading } = useQuery<{
+    eventsByOrganizationConnection?: unknown;
+  }>(ORGANIZATION_EVENT_CONNECTION_LIST,
     {
       variables: {
         organization_id: organizationId,
@@ -93,7 +96,7 @@ export default function OrganizationSidebar(): JSX.Element {
     if (memberData) {
       const legacyMembers = memberData.organizationsMemberConnection?.edges;
       if (legacyMembers) {
-        setMembers(legacyMembers);
+        setMembers(legacyMembers as InterfaceMemberInfo[]);
         return;
       }
 
@@ -132,8 +135,8 @@ export default function OrganizationSidebar(): JSX.Element {
    * Sets the events state with the data from the query.
    */
   useEffect(() => {
-    if (eventsData) {
-      setEvents(eventsData.eventsByOrganizationConnection);
+    if (eventsData?.eventsByOrganizationConnection) {
+      setEvents(eventsData.eventsByOrganizationConnection as InterfaceQueryOrganizationEventListItem[]);
     }
   }, [eventsData]);
 

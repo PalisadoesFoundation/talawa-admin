@@ -322,12 +322,23 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     },
     skip: !props.selectedContact,
     onData: async (messageSubscriptionData) => {
+      type SubData = {
+        chatMessageCreate?: {
+          id: string;
+          body: string;
+          createdAt: string;
+          updatedAt: string;
+          chat?: { id: string };
+          creator?: { id?: string; name?: string; avatarMimeType?: string; avatarURL?: string };
+          parentMessage?: { id: string; body: string; createdAt: string; creator?: { id: string; name: string } };
+        };
+      };
+      const subData = messageSubscriptionData?.data?.data as SubData | undefined;
       if (
-        messageSubscriptionData?.data.data.chatMessageCreate &&
-        messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-          props.selectedContact
+        subData?.chatMessageCreate &&
+        subData.chatMessageCreate.chat?.id === props.selectedContact
       ) {
-        const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
+        const newMessage = subData.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
           const el = document.querySelector(`.${styles.chatMessages}`);
           if (el) {
@@ -493,7 +504,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 loading: false,
                 networkStatus: 7,
                 error: undefined,
-              } as ObservableQuery.Result<{ chat: INewChat }>)
+              } as import('@apollo/client').ObservableQuery.Result<{ chat: INewChat }>)
             }
           />
         )}

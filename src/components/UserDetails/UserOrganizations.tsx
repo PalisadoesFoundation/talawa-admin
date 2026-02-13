@@ -73,7 +73,30 @@ const UserOrganizations: React.FC<InterfaceUserOrganizationsProps> = ({
       },
     );
 
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<{
+    user?: {
+      createdOrganizations?: Array<{
+        id: string;
+        name: string;
+        adminsCount: number;
+        membersCount: number;
+        description?: string;
+        avatarURL?: string;
+      }>;
+      organizationsWhereMember?: {
+        edges?: Array<{
+          node: {
+            id: string;
+            name: string;
+            adminsCount: number;
+            membersCount: number;
+            description?: string;
+            avatarURL?: string;
+          };
+        }>;
+      };
+    };
+  }>(USER_DETAILS, {
     variables: { input: { id: currentId } },
   });
 

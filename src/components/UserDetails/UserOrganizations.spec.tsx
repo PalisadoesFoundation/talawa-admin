@@ -13,8 +13,7 @@ import {
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import { DocumentNode } from 'graphql';
-import { OperationVariables } from '@apollo/client/core/types';
-import { QueryHookOptions } from '@apollo/client/react/types/types';
+import type { OperationVariables } from '@apollo/client';
 
 vi.mock('react-router', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-router')>();
@@ -146,11 +145,10 @@ vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
   ),
 }));
 
-// Mock @apollo/client with factory function
-vi.mock('@apollo/client', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@apollo/client')>();
+// Mock @apollo/client/react (useQuery is in react, not core)
+vi.mock('@apollo/client/react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@apollo/client/react')>();
 
-  // Create mock function inside the factory
   const mockUseQuery = vi.fn();
 
   return {
@@ -167,9 +165,9 @@ describe('UserOrganizations', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
 
-    // Get the mocked useQuery function
-    const apolloClient = await import('@apollo/client');
-    mockUseQuery = apolloClient.useQuery as ReturnType<typeof vi.fn>;
+    // Get the mocked useQuery function (useQuery is in @apollo/client/react)
+    const apolloReact = await import('@apollo/client/react');
+    mockUseQuery = (apolloReact as unknown as { useQuery: ReturnType<typeof vi.fn> }).useQuery;
 
     // Define interface for query variables
     interface InterfaceUserDetailsVariables {
@@ -186,9 +184,9 @@ describe('UserOrganizations', () => {
 
     // Default mock implementation with proper typing
     mockUseQuery.mockImplementation(
-      <TData, TVariables extends OperationVariables>(
+      (
         query: DocumentNode,
-        options?: QueryHookOptions<TData, TVariables>,
+        options?: { variables?: OperationVariables },
       ) => {
         if (query === USER_DETAILS) {
           const vars = options?.variables as

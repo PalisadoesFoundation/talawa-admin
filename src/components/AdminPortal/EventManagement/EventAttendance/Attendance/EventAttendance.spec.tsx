@@ -14,9 +14,8 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, afterEach, expect, it, beforeEach } from 'vitest';
 import styles from './EventAttendance.module.css';
-import { ApolloError } from '@apollo/client/v4-migration';
 import { useLazyQuery } from '@apollo/client/react';
-import * as ApolloClientModule from '@apollo/client';
+import * as apolloReact from '@apollo/client/react';
 
 // Mock chart.js to avoid canvas errors
 vi.mock('react-chartjs-2', async () => ({
@@ -54,9 +53,9 @@ const renderEventAttendanceWithSpy = (): RenderResult => {
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
-  error?: ApolloError | null;
+  error?: Error | null;
 }) {
-  vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
+  vi.spyOn(apolloReact, 'useLazyQuery').mockReturnValue([
     () => {},
     {
       data: returned.data,
@@ -323,7 +322,7 @@ describe('Event Attendance Component', () => {
     mockLazyQuery({
       loading: false,
       data: undefined,
-      error: new ApolloError({ errorMessage: 'Network Error' }),
+      error: new Error('Network Error'),
     });
 
     renderEventAttendanceWithSpy();

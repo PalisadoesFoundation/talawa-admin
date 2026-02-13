@@ -116,7 +116,11 @@ const errorLink = onError(
                   error: observer.error.bind(observer),
                   complete: observer.complete.bind(observer),
                 };
-                forward(operation).subscribe(subscriber);
+                (
+                  forward as (
+                    op: import('@apollo/client/link').ApolloLink.Operation,
+                  ) => import('rxjs').Observable<import('@apollo/client/link').ApolloLink.Result>
+                )(operation).subscribe(subscriber);
               });
             });
           }
@@ -164,6 +168,8 @@ const errorLink = onError(
         { toastId: 'apiServer' },
       );
     }
+
+    return forward(operation);
   },
 );
 

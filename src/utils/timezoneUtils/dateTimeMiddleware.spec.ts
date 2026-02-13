@@ -1,12 +1,23 @@
 import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
-import type { ApolloLink } from '@apollo/client';
-import { gql, Observable } from '@apollo/client';
+import {
+  gql,
+  Observable,
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+} from '@apollo/client';
+import { createOperation } from '@apollo/client/link/utils';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { DocumentNode } from 'graphql';
 import { describe, it, expect, vi } from 'vitest';
 
 dayjs.extend(utc);
+
+const mockClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.empty(),
+});
 
 const DUMMY_QUERY: DocumentNode = gql`
   query GetDummyData {
@@ -16,6 +27,13 @@ const DUMMY_QUERY: DocumentNode = gql`
   }
 `;
 
+function makeOperation(variables: Record<string, unknown> = {}): ApolloLink.Operation {
+  return createOperation(
+    { query: DUMMY_QUERY, variables },
+    { client: mockClient },
+  );
+}
+
 describe('Date Time Middleware Tests', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -23,17 +41,10 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Request Middleware', () => {
     it('should convert local date and time to UTC format in request variables', () => {
-      const operation: ApolloLink.Operation = {
-        query: DUMMY_QUERY,
-        operationName: 'GetDummyData',
-        variables: {
-          startDate: dayjs().format('YYYY-MM-DD'),
-          startTime: '12:00:00',
-        },
-        getContext: vi.fn(() => ({})),
-        setContext: vi.fn(),
-        extensions: {},
-      };
+      const operation = makeOperation({
+        startDate: dayjs().format('YYYY-MM-DD'),
+        startTime: '12:00:00',
+      });
 
       const forward = vi.fn(
         (op) =>
@@ -62,17 +73,9 @@ describe('Date Time Middleware Tests', () => {
       const testResponse: ApolloLink.Result = {
         data: { createdAt: utcDate.toISOString() },
         extensions: {},
-        context: {},
       };
 
-      const operation: ApolloLink.Operation = {
-        query: DUMMY_QUERY,
-        operationName: 'GetDummyData',
-        variables: {},
-        getContext: vi.fn(() => ({})),
-        setContext: vi.fn(),
-        extensions: {},
-      };
+      const operation = makeOperation({});
 
       const forward = vi.fn(
         () =>
@@ -106,14 +109,10 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Date Time Middleware Edge Cases', () => {
     it('should handle invalid date formats gracefully in request middleware', () => {
-      const operation: ApolloLink.Operation = {
-        query: DUMMY_QUERY,
-        operationName: 'GetDummyData',
-        variables: { startDate: 'not-a-date', startTime: '25:99:99' },
-        getContext: vi.fn(() => ({})),
-        setContext: vi.fn(),
-        extensions: {},
-      };
+      const operation = makeOperation({
+        startDate: 'not-a-date',
+        startTime: '25:99:99',
+      });
 
       const forward = vi.fn(
         (op) =>
@@ -135,17 +134,9 @@ describe('Date Time Middleware Tests', () => {
       const testResponse: ApolloLink.Result = {
         data: { createdAt: 'invalid-date-time' },
         extensions: {},
-        context: {},
       };
 
-      const operation: ApolloLink.Operation = {
-        query: DUMMY_QUERY,
-        operationName: 'GetDummyData',
-        variables: {},
-        getContext: vi.fn(() => ({})),
-        setContext: vi.fn(),
-        extensions: {},
-      };
+      const operation = makeOperation({});
 
       const forward = vi.fn(
         () =>
@@ -189,26 +180,19 @@ describe('Date Time Middleware Tests', () => {
         .format('YYYY-MM-DD')
         .concat('T08:00:00.000Z');
 
-      const operation: ApolloLink.Operation = {
-        query: DUMMY_QUERY,
-        operationName: 'GetDummyData',
-        variables: {
-          event: {
-            startDate: today,
-            startTime: '08:00:00',
-            details: {
-              endDate: today,
-              endTime: '18:00:00',
-              additionalInfo: {
-                createdAt: startDateTime,
-              },
+      const operation = makeOperation({
+        event: {
+          startDate: today,
+          startTime: '08:00:00',
+          details: {
+            endDate: today,
+            endTime: '18:00:00',
+            additionalInfo: {
+              createdAt: startDateTime,
             },
           },
         },
-        getContext: vi.fn(() => ({})),
-        setContext: vi.fn(),
-        extensions: {},
-      };
+      });
 
       const forward = vi.fn(
         (op) =>

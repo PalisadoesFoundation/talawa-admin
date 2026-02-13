@@ -155,22 +155,25 @@ function OrganizationPeople(): JSX.Element {
     | undefined
   >();
 
-  // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
+  // Query hooks (Apollo v4: onCompleted removed, use data + useEffect)
+  const [fetchMembers, { data: memberData, loading: memberLoading, error: memberError }] =
+    useLazyQuery<{ organization?: { members?: IEdges } }>(
+      ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    );
 
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
-  );
+  const [fetchUsers, { data: userData, loading: userLoading, error: userError }] =
+    useLazyQuery<{ allUsers?: IEdges }>(USER_LIST_FOR_TABLE);
+
+  // Sync lazy query results to state (based on active tab)
+  useEffect(() => {
+    if (state === 0 || state === 1) {
+      if (memberData?.organization?.members) {
+        setData(memberData.organization.members as typeof data);
+      }
+    } else if (state === 2 && userData?.allUsers) {
+      setData(userData.allUsers as typeof data);
+    }
+  }, [state, memberData, userData]);
 
   // Handle data changes
   useEffect(() => {

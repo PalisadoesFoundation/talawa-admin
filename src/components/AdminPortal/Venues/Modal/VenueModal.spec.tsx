@@ -2786,7 +2786,7 @@ describe('Validation', () => {
       }
 
       mutationSpy(variables);
-      return Observable.of({
+      return of({
         data: { createVenue: { id: 'newVenue' } },
       });
     });

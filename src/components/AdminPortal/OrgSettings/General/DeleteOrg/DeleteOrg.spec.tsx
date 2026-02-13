@@ -210,7 +210,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles query loading state', () => {
-    (useQuery as Mock).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: undefined,
       loading: true,
     });
@@ -221,7 +221,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles undefined query data', () => {
-    (useQuery as Mock).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: undefined,
       loading: false,
     });

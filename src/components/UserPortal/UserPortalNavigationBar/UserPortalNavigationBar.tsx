@@ -85,10 +85,13 @@ export const UserPortalNavigationBar = (
     mode === 'organization' && fetchOrganizationData && finalOrganizationId;
 
   // GraphQL query for organization data
-  const { data: orgData } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
-    variables: { id: finalOrganizationId },
-    skip: !shouldFetchOrgData,
-  });
+  const { data: orgData } = useQuery<{ organization?: { name: string } }>(
+    GET_ORGANIZATION_BASIC_DATA,
+    {
+      variables: { id: finalOrganizationId },
+      skip: !shouldFetchOrgData,
+    },
+  );
 
   const [logout] = useMutation(LOGOUT_MUTATION);
 

@@ -88,10 +88,13 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     loading: boolean;
     refetch: (variables: { id: string }) => void;
     error?: ErrorLike;
-  } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
-    variables: { id: orgId },
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useQuery<{ organization: InterfaceOrganization }>(
+    GET_ORGANIZATION_BASIC_DATA,
+    {
+      variables: { id: orgId },
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
   // Update form state when data changes
   useEffect(() => {

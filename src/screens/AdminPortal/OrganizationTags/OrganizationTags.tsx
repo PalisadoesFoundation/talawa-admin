@@ -349,7 +349,7 @@ function OrganizationTags(): JSX.Element {
           </div>
 
           {orgUserTagsError ? (
-            showErrorMessage(orgUserTagsError.message)
+            showErrorMessage((orgUserTagsError as Error).message)
           ) : (
             <div className="mb-4">
               <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">

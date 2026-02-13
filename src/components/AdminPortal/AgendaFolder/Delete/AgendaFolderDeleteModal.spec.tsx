@@ -5,7 +5,7 @@ import { MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, afterEach } from 'vitest';
-import * as ApolloClient from '@apollo/client';
+import * as apolloReact from '@apollo/client/react';
 import AgendaFolderDeleteModal from './AgendaFolderDeleteModal';
 import { DELETE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
 import i18nForTest from 'utils/i18nForTest';
@@ -137,10 +137,10 @@ describe('AgendaFolderDeleteModal', () => {
   it('shows error toast with error message when mutation throws an Error', async () => {
     const mutationError = new Error('Delete failed directly');
 
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       vi.fn().mockRejectedValueOnce(mutationError),
       { loading: false, error: undefined, called: false },
-    ] as unknown as ReturnType<typeof ApolloClient.useMutation>);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     renderAgendaFolderDeleteModal([], true);
 

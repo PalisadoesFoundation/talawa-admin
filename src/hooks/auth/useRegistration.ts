@@ -64,7 +64,9 @@ export const useRegistration = ({
   onSuccess,
   onError,
 }: IUseRegistrationProps) => {
-  const [signup, { loading }] = useMutation(SIGNUP_MUTATION);
+  const [signup, { loading }] = useMutation<{
+    signUp?: { user?: { id: string } };
+  }>(SIGNUP_MUTATION);
 
   const register = async (data: IRegisterInput): Promise<void> => {
     try {
@@ -91,7 +93,7 @@ export const useRegistration = ({
         },
       });
 
-      if (signUpData?.signUp) {
+      if (signUpData?.signUp?.user) {
         onSuccess?.({
           signUp: signUpData.signUp,
           name: data.name,

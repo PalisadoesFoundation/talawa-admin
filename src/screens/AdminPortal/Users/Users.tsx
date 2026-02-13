@@ -326,7 +326,7 @@ const Users = (): JSX.Element => {
         <h6 className="fw-bold text-danger text-center">
           {t('errorLoadingUsers')}
           <br />
-          {UsersError.message}
+          {(UsersError as Error).message}
         </h6>
       </div>
     </div>

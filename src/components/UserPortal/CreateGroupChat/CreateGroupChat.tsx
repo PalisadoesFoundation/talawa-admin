@@ -169,7 +169,9 @@ export default function CreateGroupChat({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<{ organization?: { members?: { edges?: Array<{ node: { id: string; name: string; avatarURL?: string; role: string } }> } } }>(
+    ORGANIZATION_MEMBERS,
+    {
     variables: {
       input: { id: currentOrg },
       first: 20,
@@ -363,8 +365,8 @@ export default function CreateGroupChat({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {allUsersData &&
-                    allUsersData.organization?.members?.edges?.length > 0 &&
+                  {allUsersData?.organization?.members?.edges &&
+                    allUsersData.organization.members.edges.length > 0 &&
                     allUsersData.organization.members.edges
                       .filter(
                         ({

@@ -80,9 +80,17 @@ function AddMember(): JSX.Element {
   const [
     fetchUsers,
     { loading: userLoading, error: userError, data: userData },
-  ] = useLazyQuery(USER_LIST_FOR_TABLE, {
-    variables: { first: PAGE_SIZE, after: null, last: null, before: null },
-  });
+  ] = useLazyQuery<{
+    allUsers?: {
+      edges: IEdge[];
+      pageInfo?: {
+        endCursor?: string | null;
+        hasNextPage?: boolean;
+        hasPreviousPage?: boolean;
+        startCursor?: string | null;
+      };
+    };
+  }>(USER_LIST_FOR_TABLE);
 
   const openAddUserModal = () => setAddUserModalIsOpen(true);
   useEffect(() => {
@@ -166,8 +174,10 @@ function AddMember(): JSX.Element {
             isEmailAddressVerified: true,
           },
         });
-        const createdUserId = registeredUser?.data.createUser.user.id;
-        await createMember(createdUserId);
+        const createdUserId = (registeredUser?.data as { createUser?: { user?: { id: string } } })?.createUser?.user?.id;
+        if (createdUserId) {
+          await createMember(createdUserId);
+        }
         closeCreateNewUserModal();
         setCreateUserVariables({
           name: '',
@@ -226,17 +236,17 @@ function AddMember(): JSX.Element {
   }, [currentUrl, addUserModalisOpen]);
   useEffect(() => {
     if (userData?.allUsers) {
-      const { pageInfo } = userData.allUsers;
+      const pageInfo = userData.allUsers.pageInfo;
       const pageIndex = responsePageRef.current;
-      if (pageInfo.endCursor) {
+      if (pageInfo?.endCursor) {
         mapPageToCursor.current[pageIndex + 1] = pageInfo.endCursor;
       }
-      if (pageIndex > 0 && pageInfo.startCursor) {
+      if (pageIndex > 0 && pageInfo?.startCursor) {
         backwardMapPageToCursor.current[pageIndex - 1] = pageInfo.startCursor;
       }
       setPaginationMeta({
-        hasNextPage: pageInfo.hasNextPage,
-        hasPreviousPage: pageInfo.hasPreviousPage,
+        hasNextPage: pageInfo?.hasNextPage ?? false,
+        hasPreviousPage: pageInfo?.hasPreviousPage ?? false,
       });
     }
   }, [userData]);

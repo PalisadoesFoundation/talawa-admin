@@ -64,8 +64,6 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
   );
   const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT_PG);
 
-  type TimeoutDataType = { inactivityTimeoutDuration: number };
-
   /**
    * Effect that fetches the current session timeout from the server and sets the initial state.
    * If there is an error in fetching the data, it is handled using the error handler.
@@ -75,15 +73,9 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
       errorHandler(t, queryError as Error);
     }
 
-    const SessionTimeoutData: TimeoutDataType | undefined = data?.community;
-
-    if (
-      SessionTimeoutData &&
-      SessionTimeoutData.inactivityTimeoutDuration !== null
-    ) {
-      const timeoutInMinutes = Math.floor(
-        SessionTimeoutData.inactivityTimeoutDuration / 60,
-      );
+    const duration = data?.community?.inactivityTimeoutDuration;
+    if (duration != null && typeof duration === 'number') {
+      const timeoutInMinutes = Math.floor(duration / 60);
       setCommunityTimeout(timeoutInMinutes);
       setTimeout(timeoutInMinutes);
     } else {

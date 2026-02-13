@@ -104,10 +104,14 @@ function EventRegistrants(): JSX.Element {
     }> } | undefined;
     if (data?.getEventAttendeesByEventId) {
       const mappedData = data.getEventAttendeesByEventId
-        .filter((a): a is NonNullable<typeof a> => a != null)
+        .filter(
+          (a): a is NonNullable<typeof a> & {
+            user: { id: string; name: string; emailAddress: string };
+          } => a != null && a.user != null,
+        )
         .map((attendee) => ({
           id: attendee.id,
-          userId: attendee.user?.id ?? '',
+          userId: attendee.user.id,
           isRegistered: attendee.isRegistered,
           user: attendee.user,
           createdAt: attendee.createdAt,

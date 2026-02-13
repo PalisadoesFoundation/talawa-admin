@@ -1154,13 +1154,6 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
           },
         },
       },
-      variableMatcher: (variables) => {
-        const data = variables.data as { volunteerUserIds: string[] };
-        return (
-          JSON.stringify(data.volunteerUserIds) ===
-          JSON.stringify(['userId2', 'userId'])
-        );
-      },
     };
 
     // Need MEMBERS_LIST mock as well

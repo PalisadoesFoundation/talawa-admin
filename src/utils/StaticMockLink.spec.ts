@@ -1,20 +1,61 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
-import { Observer } from '@apollo/client/v4-migration';
+import type { Observer } from 'rxjs';
 import type { MockedResponse } from '@apollo/client/testing';
 import { gql, Observable } from '@apollo/client';
 import { print } from 'graphql';
-import type { ApolloLink } from '@apollo/client/link';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+} from '@apollo/client';
+import { createOperation } from '@apollo/client/link/utils';
 import { equal } from '@wry/equality';
 
+const mockClient = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: ApolloLink.empty(),
+});
+
+function makeOperation(
+  query: import('graphql').DocumentNode,
+  variables: Record<string, unknown> = {},
+): ApolloLink.Operation {
+  return createOperation({ query, variables }, { client: mockClient });
+}
+
 class TestableStaticMockLink extends StaticMockLink {
+  private _onError?: (
+    error: unknown,
+    observer?: Observer<ApolloLink.Result>,
+  ) => false | void;
+
   public setErrorHandler(
     handler: (
       error: unknown,
       observer?: Observer<ApolloLink.Result>,
     ) => false | void,
   ): void {
-    this.onError = handler;
+    this._onError = handler;
+  }
+
+  public override request(
+    operation: ApolloLink.Operation,
+    forward?: ApolloLink.ForwardFunction,
+  ): Observable<ApolloLink.Result> {
+    const observable = super.request(operation, forward);
+    if (!this._onError) return observable;
+    return new Observable((observer) => {
+      const sub = observable.subscribe({
+        next: (v) => observer.next(v),
+        error: (err) => {
+          this._onError?.(err, observer);
+          observer.error(err);
+        },
+        complete: () => observer.complete(),
+      });
+      return () => sub.unsubscribe();
+    });
   }
 }
 
@@ -42,56 +83,17 @@ const sampleQuery = gql`
     }
   }
 `;
-const operation: ApolloLink.Operation = {
-  query: sampleQuery,
-  variables: { id: '2' },
-  operationName: 'SampleQuery',
-  extensions: {},
-  setContext: () => {},
-  getContext: () => ({}),
-};
-const oper: ApolloLink.Operation = {
-  query: sampleQuery,
-  variables: { id: '1' },
-  operationName: 'SampleQuery',
-  extensions: {},
-  setContext: () => {},
-  getContext: () => ({}),
-};
-
-function createOperation(
-  query: import('graphql').DocumentNode,
-  variables: Record<string, unknown> = {},
-): ApolloLink.Operation {
-  return {
-    query,
-    variables,
-    operationName: '', // or extract from query if needed
-    extensions: {},
-    setContext: () => {},
-    getContext: () => ({}),
-  };
-}
-const operation2: ApolloLink.Operation = {
-  query: gql`
+const operation = makeOperation(sampleQuery, { id: '2' });
+const oper = makeOperation(sampleQuery, { id: '1' });
+const operation2 = makeOperation(
+  gql`
     query TestQuery {
       field
     }
   `,
-  variables: {},
-  operationName: 'TestQuery', // Use the actual operation name
-  extensions: {},
-  setContext: () => {},
-  getContext: () => ({}),
-};
-const operation3 = {
-  query: TEST_QUERY,
-  variables: { id: '1' },
-  operationName: 'TestQuery', // or the actual operation name from your query
-  extensions: {},
-  setContext: () => {},
-  getContext: () => ({}),
-};
+  {},
+);
+const operation3 = makeOperation(TEST_QUERY, { id: '1' });
 const sampleResponse = {
   data: {
     user: {
@@ -151,7 +153,7 @@ describe('StaticMockLink', () => {
     // This is Mocked Response
     return new Promise<void>((resolve) => {
       const observable = mockLink.request(
-        createOperation(sampleQuery, sampleVariables),
+        makeOperation(sampleQuery, sampleVariables),
       );
 
       observable?.subscribe({
@@ -183,7 +185,7 @@ describe('StaticMockLink', () => {
 
     return new Promise<void>((resolve) => {
       const observable = mockLink.request(
-        createOperation(sampleQuery, sampleVariables),
+        makeOperation(sampleQuery, sampleVariables),
       );
 
       observable?.subscribe({
@@ -219,7 +221,7 @@ describe('StaticMockLink', () => {
 
     return new Promise<void>((resolve) => {
       const observable = mockLink.request(
-        createOperation(sampleQuery, sampleVariables),
+        makeOperation(sampleQuery, sampleVariables),
       );
 
       observable?.subscribe({
@@ -280,7 +282,7 @@ describe('StaticMockLink', () => {
   test('should error when no matching response is found', () => {
     return new Promise<void>((resolve) => {
       const observable = mockLink.request(
-        createOperation(sampleQuery, sampleVariables),
+        makeOperation(sampleQuery, sampleVariables),
       );
 
       observable?.subscribe({
@@ -412,14 +414,7 @@ describe('mockSingleLink', () => {
 
     const link = new StaticMockLink(mockedResponses);
 
-    const operation4 = {
-      query: mockQuery,
-      variables: {},
-      operationName: '',
-      extensions: {},
-      setContext: () => {},
-      getContext: () => ({}),
-    };
+    const operation4 = makeOperation(mockQuery, {});
 
     const observable = link.request(operation4);
 
@@ -458,10 +453,7 @@ describe('mockSingleLink', () => {
     const link = new StaticMockLink(mockedResponses);
 
     // Simulate operation with unmatched variables
-    const operation = {
-      query: mockQuery,
-      variables: { id: '999' },
-    };
+    const unmatchedOp = makeOperation(mockQuery, { id: '999' });
 
     const key = JSON.stringify({
       query: link.addTypename
@@ -474,7 +466,7 @@ describe('mockSingleLink', () => {
     // Emulate the internal logic
     let responseIndex = -1;
     const response = (mockedResponsesByKey || []).find((res, index) => {
-      const requestVariables = operation.variables || {};
+      const requestVariables = unmatchedOp.variables || {};
       const mockedResponseVariables = res.request.variables || {};
       if (equal(requestVariables, mockedResponseVariables)) {
         responseIndex = index;
@@ -575,14 +567,7 @@ describe('mockSingleLink', () => {
 
     mockLink.addMockedResponse(mockedResponse);
 
-    const observable = mockLink.request({
-      query: sampleQuery,
-      variables: {},
-      operationName: '',
-      extensions: {},
-      setContext: () => {},
-      getContext: () => ({}),
-    });
+    const observable = mockLink.request(makeOperation(sampleQuery, {}));
 
     return new Promise<void>((resolve) => {
       observable?.subscribe({
@@ -762,14 +747,7 @@ describe('StaticMockLink variableMatcher', () => {
   function createMatcherOperation(
     variables: Record<string, unknown>,
   ): ApolloLink.Operation {
-    return {
-      query: MATCHER_QUERY,
-      variables,
-      operationName: 'MatcherQuery',
-      extensions: {},
-      setContext: () => {},
-      getContext: () => ({}),
-    };
+    return makeOperation(MATCHER_QUERY, variables);
   }
 
   function runOperation(

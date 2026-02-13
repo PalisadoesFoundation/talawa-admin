@@ -16,7 +16,7 @@ import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import * as apollo from '@apollo/client';
+import * as apollo from '@apollo/client/react';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -135,7 +135,7 @@ const mutationReturn = [
     reset: vi.fn(),
     client: {} as never,
   },
-] satisfies ReturnType<typeof apollo.useMutation>;
+] as unknown as ReturnType<typeof apollo.useMutation>;
 
 describe('PledgeModal', () => {
   afterEach(() => {

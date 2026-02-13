@@ -67,7 +67,7 @@ function deleteOrg(): JSX.Element {
    * Displays success or error messages based on the operation result.
    */
   const deleteOrg = async (): Promise<void> => {
-    if (data && data.isSampleOrganization) {
+    if (data?.organization?.isSampleOrganization) {
       // If it's a sample organization, use a specific mutation
       removeSampleOrganization()
         .then(() => {

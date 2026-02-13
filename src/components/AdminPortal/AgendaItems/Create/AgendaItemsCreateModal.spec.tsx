@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import * as ReactRouter from 'react-router';
 import { vi } from 'vitest';
-import * as ApolloClient from '@apollo/client';
+import * as apolloReact from '@apollo/client/react';
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
@@ -133,7 +133,7 @@ describe('AgendaItemsCreateModal', () => {
   it('handles non-Error rejection gracefully', async () => {
     const createMock = vi.fn().mockRejectedValue('boom');
 
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       createMock,
       {
         loading: false,
@@ -141,9 +141,9 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
+        client: {},
       },
-    ]);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     const user = userEvent.setup();
 
@@ -359,7 +359,7 @@ describe('AgendaItemsCreateModal', () => {
 
     const createMock = vi.fn().mockResolvedValue({});
 
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       createMock,
       {
         loading: false,
@@ -367,9 +367,9 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
+        client: {},
       },
-    ]);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     const user = userEvent.setup();
 
@@ -410,7 +410,7 @@ describe('AgendaItemsCreateModal', () => {
   it('shows error toast when create agenda item fails', async () => {
     const createMock = vi.fn().mockRejectedValue(new Error('boom'));
 
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       createMock,
       {
         loading: false,
@@ -418,9 +418,9 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
+        client: {},
       },
-    ]);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     const user = userEvent.setup();
 
@@ -542,7 +542,7 @@ describe('AgendaItemsCreateModal', () => {
     vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-123' });
 
     const createMock = vi.fn().mockResolvedValue({});
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       createMock,
       {
         loading: false,
@@ -550,9 +550,9 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
+        client: {},
       },
-    ]);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     const user = userEvent.setup();
 
@@ -595,7 +595,7 @@ describe('AgendaItemsCreateModal', () => {
     getFileFromMinioMock.mockResolvedValue('preview-url');
 
     const createMock = vi.fn().mockResolvedValue({});
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       createMock,
       {
         loading: false,
@@ -603,9 +603,9 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
+        client: {},
       },
-    ]);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     const user = userEvent.setup();
     render(
@@ -651,7 +651,7 @@ describe('AgendaItemsCreateModal', () => {
   it('includes notes in create mutation', async () => {
     const createMock = vi.fn().mockResolvedValue({});
 
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       createMock,
       {
         loading: false,
@@ -659,9 +659,9 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
+        client: {},
       },
-    ]);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     const user = userEvent.setup();
 
@@ -704,7 +704,7 @@ describe('AgendaItemsCreateModal', () => {
 
     const createMock = vi.fn().mockResolvedValue({});
 
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+    vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
       createMock,
       {
         loading: false,
@@ -712,9 +712,9 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
+        client: {},
       },
-    ]);
+    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     const user = userEvent.setup();
 

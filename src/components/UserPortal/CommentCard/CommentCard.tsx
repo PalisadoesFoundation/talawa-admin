@@ -89,8 +89,12 @@ function CommentCard({
   const [showEditComment, setShowEditComment] = React.useState(false);
   const [editedCommentText, setEditedCommentText] = React.useState(text);
   const menuAnchorRef = React.useRef<HTMLButtonElement>(null);
-  const [likeComment, { loading: liking }] = useMutation(LIKE_COMMENT);
-  const [unlikeComment, { loading: unliking }] = useMutation(UNLIKE_COMMENT);
+  const [likeComment, { loading: liking }] = useMutation<{
+    createCommentVote?: { id: string };
+  }>(LIKE_COMMENT);
+  const [unlikeComment, { loading: unliking }] = useMutation<{
+    deleteCommentVote?: unknown;
+  }>(UNLIKE_COMMENT);
   const [deleteComment, { loading: deletingComment }] =
     useMutation(DELETE_COMMENT);
   const [updateComment, { loading: updatingComment }] =

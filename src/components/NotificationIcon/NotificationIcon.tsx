@@ -41,7 +41,9 @@ const NotificationIcon = (): JSX.Element => {
   );
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
-  const { loading, error, data } = useQuery(GET_USER_NOTIFICATIONS, {
+  const { loading, error, data } = useQuery<{
+    user?: { notifications?: InterfaceNotification[] };
+  }>(GET_USER_NOTIFICATIONS, {
     variables: {
       userId: userId,
       input: {

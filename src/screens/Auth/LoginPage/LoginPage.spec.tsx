@@ -105,8 +105,6 @@ const createMocks = (): MockLink.MockedResponse[] => [
       query: SIGNIN_QUERY,
       variables: { email: 'johndoe@gmail.com', password: 'johndoe' },
     },
-    variableMatcher: (vars: Record<string, unknown> | undefined) =>
-      vars?.email === 'johndoe@gmail.com' && vars?.password === 'johndoe',
     result: {
       data: {
         signIn: {
@@ -134,12 +132,6 @@ const createMocks = (): MockLink.MockedResponse[] => [
         password: 'Johndoe@123',
       },
     },
-    variableMatcher: (vars: Record<string, unknown> | undefined) =>
-      vars?.email === 'johndoe@gmail.com' &&
-      vars?.name === 'John Doe' &&
-      vars?.password === 'Johndoe@123' &&
-      typeof vars?.ID === 'string' &&
-      vars.ID.length > 0,
     result: {
       data: {
         signUp: {
@@ -250,8 +242,6 @@ const createMocksVerifiedEmail = (): MockLink.MockedResponse[] => [
       query: SIGNIN_QUERY,
       variables: { email: 'verified@gmail.com', password: 'password123' },
     },
-    variableMatcher: (vars: Record<string, unknown> | undefined) =>
-      vars?.email === 'verified@gmail.com' && vars?.password === 'password123',
     result: {
       data: {
         signIn: {

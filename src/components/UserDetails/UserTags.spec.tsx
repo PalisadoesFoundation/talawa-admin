@@ -5,15 +5,8 @@ import UserTags from './UserTags';
 import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { OperationVariables } from '@apollo/client/core/types';
-import * as apolloClient from '@apollo/client';
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  ObservableQuery,
-} from '@apollo/client';
-
-import { ApolloError } from '@apollo/client/v4-migration';
+import type { OperationVariables } from '@apollo/client';
+import * as apolloReact from '@apollo/client/react';
 
 dayjs.extend(utc);
 
@@ -198,24 +191,12 @@ describe('UserTags - loading and error states', () => {
   });
 
   it('renders loading state correctly', () => {
-    vi.mocked(apolloClient.useQuery).mockReturnValue({
+    vi.mocked(apolloReact.useQuery).mockReturnValue({
       data: undefined,
       loading: true,
       error: undefined,
       refetch: vi.fn(),
-      networkStatus: 1,
-      called: true,
-      client: {} as ApolloClient,
-      observable: {} as ObservableQuery<unknown, OperationVariables>,
-      previousData: undefined,
-      variables: undefined,
-      fetchMore: vi.fn(),
-      subscribeToMore: vi.fn(),
-      updateQuery: vi.fn(),
-      startPolling: vi.fn(),
-      stopPolling: vi.fn(),
-      reobserve: vi.fn(),
-    });
+    } as unknown as ReturnType<typeof apolloReact.useQuery>);
 
     render(<UserTags id="user-123" />);
 
@@ -224,24 +205,12 @@ describe('UserTags - loading and error states', () => {
   });
 
   it('renders error state correctly', () => {
-    vi.mocked(apolloClient.useQuery).mockReturnValue({
+    vi.mocked(apolloReact.useQuery).mockReturnValue({
       data: undefined,
       loading: false,
-      error: new ApolloError({ errorMessage: 'GraphQL error' }),
+      error: new Error('GraphQL error'),
       refetch: vi.fn(),
-      networkStatus: 8,
-      called: true,
-      client: {} as ApolloClient,
-      observable: {} as ObservableQuery<unknown, OperationVariables>,
-      previousData: undefined,
-      variables: undefined,
-      fetchMore: vi.fn(),
-      subscribeToMore: vi.fn(),
-      updateQuery: vi.fn(),
-      startPolling: vi.fn(),
-      stopPolling: vi.fn(),
-      reobserve: vi.fn(),
-    });
+    } as ReturnType<typeof apolloReact.useQuery>);
 
     render(<UserTags id="user-123" />);
 
@@ -250,24 +219,12 @@ describe('UserTags - loading and error states', () => {
   });
 
   it('renders noTagsFound when there are no tags', () => {
-    vi.mocked(apolloClient.useQuery).mockReturnValue({
+    vi.mocked(apolloReact.useQuery).mockReturnValue({
       data: { userTags: [] }, // empty list
       loading: false,
       error: undefined,
       refetch: vi.fn(),
-      networkStatus: 7,
-      called: true,
-      client: {} as ApolloClient,
-      observable: {} as ObservableQuery<unknown, OperationVariables>,
-      previousData: undefined,
-      variables: undefined,
-      fetchMore: vi.fn(),
-      subscribeToMore: vi.fn(),
-      updateQuery: vi.fn(),
-      startPolling: vi.fn(),
-      stopPolling: vi.fn(),
-      reobserve: vi.fn(),
-    });
+    } as unknown as ReturnType<typeof apolloReact.useQuery>);
 
     render(<UserTags id="user-123" />);
 
