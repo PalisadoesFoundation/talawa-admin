@@ -446,7 +446,7 @@ describe('Organisation Tags Page', () => {
     };
 
     // Spy on useQuery to intercept fetchMore configuration
-    vi.spyOn(Apollo, 'useQuery').mockReturnValue({
+    vi.spyOn(ApolloReact, 'useQuery').mockReturnValue({
       data: prevResultMock,
       loading: false,
       error: undefined,

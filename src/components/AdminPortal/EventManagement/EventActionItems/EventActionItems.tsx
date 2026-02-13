@@ -155,7 +155,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   useEffect(() => {
     if (eventData && eventData.event) {
-      const items = eventData.event.actionItems.edges.map(
+      const items = (eventData.event.actionItems?.edges ?? []).map(
         (edge: { node: IActionItemInfo }) => edge.node,
       );
       let filteredItems = items;
@@ -205,7 +205,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
       setActionItems(filteredItems);
       setIsRecurring(!!eventData.event.recurrenceRule);
-      setBaseEvent(eventData.event.baseEvent);
+      setBaseEvent(eventData.event.baseEvent != null ? eventData.event.baseEvent : null);
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 

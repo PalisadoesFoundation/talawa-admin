@@ -285,7 +285,7 @@ export default function Organizations(): React.JSX.Element {
             description: org.description || '',
             addressLine1: org.addressLine1 || '',
             membersCount: org.membersCount || 0,
-            admins: [],
+            admins: [] as [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],

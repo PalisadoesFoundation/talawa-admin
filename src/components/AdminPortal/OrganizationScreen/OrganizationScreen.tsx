@@ -71,7 +71,9 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+  const { data: eventsData } = useQuery<{
+    organization?: { events?: { edges?: Array<{ node?: { id?: string; name?: string } }> } };
+  }>(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: orgId ?? '',
       first: EVENTS_PAGE_SIZE,

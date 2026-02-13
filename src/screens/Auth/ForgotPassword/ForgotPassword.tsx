@@ -104,7 +104,9 @@ const ForgotPassword = (): JSX.Element => {
     try {
       const { data } = await otp({ variables: { email: registeredEmail } });
 
-      setItem('otpToken', data.otp.otpToken);
+      if (data?.otp?.otpToken) {
+        setItem('otpToken', data.otp.otpToken);
+      }
       NotificationToast.success(t('OTPsent'));
       setShowEnterEmail(false);
     } catch (error: unknown) {

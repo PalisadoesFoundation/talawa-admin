@@ -26,7 +26,7 @@ import {
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { refreshToken } from 'utils/getRefreshToken';
 
 // Define types for mocked modules
@@ -150,7 +150,7 @@ describe('Apollo Client Configuration', () => {
   });
 
   it('should configure upload link with correct URI', (): void => {
-    const uploadLink = createUploadLink({
+    const uploadLink = new UploadHttpLink({
       uri: BACKEND_URL,
       headers: {
         'Apollo-Require-Preflight': 'true',
@@ -643,12 +643,19 @@ describe('Apollo Client Configuration', () => {
         '@apollo/client',
       )) as unknown as typeof import('@apollo/client');
       const ApolloLink = actualApollo.ApolloLink;
+      const Observable = actualApollo.Observable;
+      const emptyObservable = new Observable<Record<string, unknown>>(
+        (observer) => {
+          observer.next({ data: {} });
+          observer.complete();
+        },
+      );
 
       // Mock onError to capture the callback
       vi.doMock('@apollo/link-error', () => ({
         onError: vi.fn((cb) => {
           onErrorCallback = cb;
-          return new ApolloLink(() => null);
+          return new ApolloLink(() => emptyObservable);
         }),
       }));
 
@@ -657,7 +664,7 @@ describe('Apollo Client Configuration', () => {
         ...actualApollo,
         split: vi.fn((predicate) => {
           splitPredicate = predicate;
-          return new ApolloLink(() => null);
+          return new ApolloLink(() => emptyObservable);
         }),
         ApolloClient: vi.fn(),
       }));

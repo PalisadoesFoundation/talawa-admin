@@ -67,7 +67,7 @@ vi.mock('./Delete/EventListCardDeleteModal', () => ({
   default: vi.fn(),
 }));
 
-const mockUseMutation = useMutation as Mock;
+const mockUseMutation = useMutation as unknown as Mock;
 const mockUseNavigate = useNavigate as Mock;
 const mockUseParams = useParams as Mock;
 const mockUseLocalStorage = useLocalStorage as Mock;

@@ -92,8 +92,9 @@ function EventAttendance(): JSX.Element {
   };
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
-
-    const filtered = (memberData?.event?.attendees ?? []).filter(
+    const data = memberData as { event?: { attendees?: InterfaceMember[] } } | undefined;
+    const attendees = data?.event?.attendees ?? [];
+    const filtered = attendees.filter(
       (attendee: InterfaceMember) => {
         const name = attendee.name?.toLowerCase() || '';
         const email = attendee.emailAddress?.toLowerCase() || '';
@@ -123,8 +124,7 @@ function EventAttendance(): JSX.Element {
   }, [filteredAttendees]);
 
   const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery<{ event?: { attendees?: InterfaceMember[] } }>(EVENT_ATTENDEES, {
-      variables: { eventId: eventId },
+    useLazyQuery(EVENT_ATTENDEES, {
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
       errorPolicy: 'all',
@@ -132,16 +132,18 @@ function EventAttendance(): JSX.Element {
     });
 
   useEffect(() => {
-    if (memberData?.event?.attendees) {
-      const updatedAttendees = filterAndSortAttendees(
-        memberData.event.attendees,
+    const data = memberData as { event?: { attendees?: InterfaceMember[] } } | undefined;
+    if (data?.event?.attendees) {
+      const attendees = data.event.attendees.filter(
+        (a): a is InterfaceMember => a != null,
       );
+      const updatedAttendees = filterAndSortAttendees(attendees);
       setFilteredAttendees(updatedAttendees);
     }
   }, [sortOrder, filteringBy, memberData]);
 
   useEffect(() => {
-    getEventAttendees();
+    getEventAttendees({ variables: { eventId: eventId ?? '' } });
   }, [eventId, getEventAttendees]);
 
   const columns: GridColDef<InterfaceMember & { index: number }>[] = useMemo(

@@ -18,7 +18,8 @@ import {
   CREATE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { ApolloLink, Observable } from '@apollo/client';
+import { ApolloLink } from '@apollo/client';
+import { of } from 'rxjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Mock Setup
@@ -451,7 +452,7 @@ describe('Form Fields', () => {
     const mockLink = new ApolloLink((operation) => {
       // This will capture the actual variables being sent
       mutationSpy(operation);
-      return Observable.of({ data: { createVenue: { id: 'newVenue' } } });
+      return of({ data: { createVenue: { id: 'newVenue' } } });
     });
 
     // Create a component with the spy link
@@ -2876,7 +2877,7 @@ describe('Validation', () => {
 
     // Create a flexible mock using ApolloLink
     const mutationSpy = vi.fn().mockReturnValue(
-      Observable.of({
+      of({
         data: {
           updateVenue: {
             id: 'venue1',
@@ -2936,7 +2937,7 @@ describe('Validation', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
     const mutationSpy = vi.fn().mockReturnValue(
-      Observable.of({
+      of({
         data: {
           createVenue: {
             id: 'newVenue',

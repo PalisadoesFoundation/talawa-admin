@@ -66,7 +66,9 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   });
   const reportedNotFoundRef = useRef(false);
 
-  const [signin, { loading, data, error }] = useLazyQuery(SIGNIN_QUERY, {
+  const [signin, { loading, data, error }] = useLazyQuery<{
+    signIn?: { authenticationToken?: string; [key: string]: unknown };
+  }>(SIGNIN_QUERY, {
     fetchPolicy: 'network-only',
   });
 

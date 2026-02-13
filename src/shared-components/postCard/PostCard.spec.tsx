@@ -667,9 +667,9 @@ describe('PostCard', () => {
     const originalUseMutation = apolloReact.useMutation;
 
     // Override just for this test
-    (apolloReact as { useMutation: typeof apolloReact.useMutation }).useMutation = vi
+    (apolloReact as unknown as { useMutation: typeof apolloReact.useMutation }).useMutation = vi
       .fn()
-      .mockReturnValue([mockLikePost, { loading: false }]);
+      .mockReturnValue([mockLikePost, { loading: false }]) as typeof apolloReact.useMutation;
 
     try {
       renderPostCard({
@@ -710,9 +710,8 @@ describe('PostCard', () => {
       if (mutation === CREATE_COMMENT_POST) {
         return [mockCreateComment, { loading: false }];
       }
-      // For other mutations, return the normal mock
       return [vi.fn().mockResolvedValue({}), { loading: false }];
-    }) as ReturnType<typeof vi.fn>;
+    }) as typeof apolloReact.useMutation;
 
     try {
       renderPostCard();

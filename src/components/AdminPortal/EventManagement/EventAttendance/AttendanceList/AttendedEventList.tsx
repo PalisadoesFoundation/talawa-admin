@@ -43,7 +43,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
   const { t: tCommon } = useTranslation('common');
   const { orgId: currentOrg } = useParams();
   const { data, loading, error } = useQuery<{
-    event?: { id: string; name: string };
+    event?: { id: string; name: string; startAt?: string };
   }>(EVENT_DETAILS, {
     variables: { eventId: id },
     fetchPolicy: 'cache-first',
@@ -54,7 +54,11 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
     return <p>{tCommon('errorLoadingEventDetails')}</p>;
   }
 
-  const event = data?.event ?? null;
+  const event = (data?.event ?? null) as {
+    id: string;
+    name: string;
+    startAt?: string;
+  } | null;
 
   if (loading)
     return (
@@ -86,7 +90,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
                   />
                   <div>
                     <div>{event.name}</div>
-                    <div>{formatDate(event.startAt)}</div>
+                    <div>{event.startAt ? formatDate(event.startAt) : ''}</div>
                   </div>
                 </Link>
               </TableCell>

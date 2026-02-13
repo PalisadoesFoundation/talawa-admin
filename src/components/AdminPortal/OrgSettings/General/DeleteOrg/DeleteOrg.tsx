@@ -56,7 +56,9 @@ function deleteOrg(): JSX.Element {
   );
 
   // Query to check if the organization is a sample organization
-  const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
+  const { data } = useQuery<{
+    organization?: { isSampleOrganization?: boolean };
+  }>(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: { id: currentUrl },
   });
 
@@ -106,7 +108,7 @@ function deleteOrg(): JSX.Element {
               data-testid="openDeleteModalBtn"
             >
               <DeleteIcon className={styles.icon} />
-              {data?.isSampleOrganization
+              {data?.organization?.isSampleOrganization
                 ? t('deleteSampleOrganization')
                 : t('delete')}
             </Button>

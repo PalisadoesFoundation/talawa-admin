@@ -59,7 +59,9 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
     data,
     loading,
     error: queryError,
-  } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG);
+  } = useQuery<{ community?: { inactivityTimeoutDuration?: number | null } }>(
+    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+  );
   const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT_PG);
 
   type TimeoutDataType = { inactivityTimeoutDuration: number };

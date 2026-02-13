@@ -23,7 +23,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap i
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import 'react-toastify/dist/ReactToastify.css'; // React Toastify Styles
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
@@ -91,7 +91,7 @@ const errorLink = onError(
         // Skip token refresh logic for authentication operations (login/signup/logout)
         const operationName = operation.operationName;
         const authOperations = ['SignIn', 'SignUp', 'RefreshToken', 'Logout'];
-        if (authOperations.includes(operationName)) {
+        if (authOperations.includes(operationName ?? '')) {
           continue;
         }
 
@@ -104,7 +104,7 @@ const errorLink = onError(
           // (actual tokens are in HTTP-Only cookies)
           const isLoggedIn = getItem('IsLoggedIn');
           if (isLoggedIn !== 'TRUE') {
-            return;
+            return forward(operation);
           }
 
           // If already refreshing, queue this request
@@ -125,7 +125,7 @@ const errorLink = onError(
 
           return fromPromise(
             refreshToken()
-              .then((success) => {
+              .then((success: boolean) => {
                 if (success) {
                   resolvePendingRequests();
                   return true;
@@ -144,7 +144,7 @@ const errorLink = onError(
               .finally(() => {
                 isRefreshing = false;
               }),
-          ).flatMap((success) => {
+          ).flatMap((success: boolean) => {
             if (success) {
               // Retry the original request
               // No need to set headers - HTTP-Only cookies are automatically included
@@ -167,7 +167,7 @@ const errorLink = onError(
   },
 );
 
-const uploadLink = createUploadLink({
+const uploadLink = new UploadHttpLink({
   uri: BACKEND_URL,
   headers: { 'Apollo-Require-Preflight': 'true' },
   credentials: 'include',
