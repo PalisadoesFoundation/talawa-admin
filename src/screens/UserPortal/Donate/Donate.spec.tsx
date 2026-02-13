@@ -24,14 +24,21 @@ import dayjs from 'dayjs';
 
 const MOCK_DATE = `${DUMMY_DATE_TIME_PREFIX}00:00:00.000Z`;
 
-const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
-  mockErrorHandler: vi.fn(),
-  mockUseParams: vi.fn(),
-  mockToast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
+const { mockErrorHandler, mockUseParams, mockToast, mockGetItem } = vi.hoisted(
+  () => ({
+    mockErrorHandler: vi.fn(),
+    mockUseParams: vi.fn(),
+    mockToast: {
+      error: vi.fn(),
+      success: vi.fn(),
+    },
+    mockGetItem: vi.fn((key: string) => {
+      if (key === 'userId') return '123';
+      if (key === 'name') return 'name';
+      return null;
+    }),
+  }),
+);
 
 vi.mock('utils/errorHandler', () => ({
   errorHandler: mockErrorHandler,
@@ -53,11 +60,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    getItem: vi.fn((key) => {
-      if (key === 'userId') return '123';
-      if (key === 'name') return 'name';
-      return null;
-    }),
+    getItem: mockGetItem,
     setItem: vi.fn(),
   })),
 }));
@@ -442,6 +445,11 @@ const renderDonate = (link: ApolloLink = new StaticMockLink(MOCKS, true)) => {
 describe('Donate Component', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: '' });
+    mockGetItem.mockImplementation((key: string) => {
+      if (key === 'userId') return '123';
+      if (key === 'name') return 'name';
+      return null;
+    });
   });
 
   afterEach(() => {
@@ -519,6 +527,54 @@ describe('Donate Component', () => {
         'Please enter a numerical value for the donation amount.',
       );
     });
+  });
+
+  test('aborts donation when userId is missing', async () => {
+    mockGetItem.mockImplementation((key: string) => {
+      if (key === 'userId') return null;
+      if (key === 'name') return 'name';
+      return null;
+    });
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    renderDonate();
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Missing required donation identifiers for mutation.',
+        expect.objectContaining({ userId: null, organizationId: '' }),
+      );
+    });
+    expect(mockToast.success).not.toHaveBeenCalled();
+    expect(mockErrorHandler).not.toHaveBeenCalled();
+  });
+
+  test('aborts donation when organizationId is missing', async () => {
+    mockUseParams.mockReturnValue({ orgId: undefined });
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    renderDonate();
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Missing required donation identifiers for mutation.',
+        expect.objectContaining({ userId: '123', organizationId: undefined }),
+      );
+    });
+    expect(mockToast.success).not.toHaveBeenCalled();
+    expect(mockErrorHandler).not.toHaveBeenCalled();
   });
 
   test('shows error toast for donation amount below minimum', async () => {

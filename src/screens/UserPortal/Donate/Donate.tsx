@@ -204,6 +204,14 @@ export default function Donate(): JSX.Element {
   };
 
   const donateToOrg = async (): Promise<void> => {
+    if (!userId || organizationId == null) {
+      console.error('Missing required donation identifiers for mutation.', {
+        userId,
+        organizationId,
+      });
+      return;
+    }
+
     if (amount === '' || Number.isNaN(Number(amount))) {
       NotificationToast.error(t('invalidAmount'));
       return;
@@ -249,7 +257,7 @@ export default function Donate(): JSX.Element {
         }
       }
 
-      refetch();
+      await refetch();
       NotificationToast.success(t('success') as string);
     } catch (error) {
       errorHandler(t, error);
