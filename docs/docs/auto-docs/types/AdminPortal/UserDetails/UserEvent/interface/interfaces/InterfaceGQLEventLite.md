@@ -4,7 +4,10 @@
 
 # Interface: InterfaceGQLEventLite
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L18)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L27)
+
+Represents a minimal GraphQL event reference used
+for relational fields such as attended events.
 
 ## Properties
 
@@ -12,4 +15,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:18](https:
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L19)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L28)

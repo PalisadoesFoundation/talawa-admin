@@ -4,7 +4,10 @@
 
 # Interface: InterfaceGQLUser
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L13)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L19)
+
+Represents a lightweight GraphQL user object containing
+basic identity details used in event relationships.
 
 ## Properties
 
@@ -12,7 +15,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:13](https:
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L14)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L20)
 
 ***
 
@@ -20,4 +23,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:14](https:
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L15)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L21)

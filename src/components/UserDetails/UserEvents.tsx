@@ -40,9 +40,12 @@ import { useQuery } from '@apollo/client';
 import { GET_EVENTS_BY_ORGANIZATION_ID } from 'GraphQl/Queries/Queries';
 import {
   InterfaceUserEvent,
-  InterfaceGetUserTagsData,
+  InterfaceGetUserEventsData,
 } from 'types/AdminPortal/UserDetails/UserEvent/interface';
 import { PeopleTabUserEventsProps } from 'types/AdminPortal/UserDetails/UserEvent/type';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
@@ -56,18 +59,14 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
     useState<ParticipationFilter>('ALL');
 
   const splitDateTime = (dateTime: string) => {
-    const date = new Date(dateTime);
-
+    const d = dayjs.utc(dateTime);
     return {
-      date: date.toISOString().split('T')[0],
-      time: date.toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
+      date: d.format('YYYY-MM-DD'),
+      time: d.format('HH:mm'),
     };
   };
 
-  const { data, loading, error } = useQuery<InterfaceGetUserTagsData>(
+  const { data, loading, error } = useQuery<InterfaceGetUserEventsData>(
     GET_EVENTS_BY_ORGANIZATION_ID,
     {
       variables: {
@@ -90,7 +89,6 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
         startTime: start.time,
         endDate: end.date,
         endTime: end.time,
-        isRecurringEventTemplate: event.isRecurringEventTemplate,
         creatorId: event.creator.id,
       };
     }) ?? [];

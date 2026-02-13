@@ -303,5 +303,6 @@
   "searchPlaceholder": "Rechercher...",
   "noOptionsFound": "Aucune option trouvée",
   "noUserId": "ID utilisateur non disponible",
+  "noOrgId": "ID d'organisation non disponible",
   "noTagsFound": "Aucune étiquette trouvée"
 }

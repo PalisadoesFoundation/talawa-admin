@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import UserEvents from './UserEvents';
@@ -12,13 +12,13 @@ import {
   InterfacePeopleTabNavbarProps,
   InterfacePeopletabUserEventsProps,
 } from 'types/PeopleTab/interface';
-import { InterfaceGetUserTagsData } from 'types/AdminPortal/UserDetails/UserEvent/interface';
+import { InterfaceGetUserEventsData } from 'types/AdminPortal/UserDetails/UserEvent/interface';
 import dayjs from 'dayjs';
 
 /* ---------------- MOCK DATA ---------------- */
 const now = dayjs();
 
-const mockEvents: InterfaceGetUserTagsData['eventsByOrganizationId'] = [
+const mockEvents: InterfaceGetUserEventsData['eventsByOrganizationId'] = [
   {
     id: '1',
     name: 'React Workshop',
@@ -95,19 +95,21 @@ const mockEvents: InterfaceGetUserTagsData['eventsByOrganizationId'] = [
 
 /* ---------------- HELPER MOCK ---------------- */
 function createMockQueryResult(
-  overrides: Partial<QueryResult<InterfaceGetUserTagsData, OperationVariables>>,
-): QueryResult<InterfaceGetUserTagsData, OperationVariables> {
+  overrides: Partial<
+    QueryResult<InterfaceGetUserEventsData, OperationVariables>
+  >,
+): QueryResult<InterfaceGetUserEventsData, OperationVariables> {
   return {
     data: undefined,
     loading: false,
     error: undefined,
     called: true,
     client: {} as QueryResult<
-      InterfaceGetUserTagsData,
+      InterfaceGetUserEventsData,
       OperationVariables
     >['client'],
     observable: {} as QueryResult<
-      InterfaceGetUserTagsData,
+      InterfaceGetUserEventsData,
       OperationVariables
     >['observable'],
     networkStatus: 7,
@@ -120,7 +122,7 @@ function createMockQueryResult(
     updateQuery: vi.fn(),
     reobserve: vi.fn(),
     ...overrides,
-  } as QueryResult<InterfaceGetUserTagsData, OperationVariables>;
+  } as QueryResult<InterfaceGetUserEventsData, OperationVariables>;
 }
 
 /* ---------------- MOCKS ---------------- */
@@ -187,13 +189,14 @@ vi.mock('@apollo/client', async () => {
 });
 
 const mockedUseQuery = vi.mocked(
-  useQuery<InterfaceGetUserTagsData, OperationVariables>,
+  useQuery<InterfaceGetUserEventsData, OperationVariables>,
 );
 
 /* ---------------- TESTS ---------------- */
 describe('UserEvents', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('shows loading state', () => {

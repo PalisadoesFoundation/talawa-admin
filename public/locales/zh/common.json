@@ -303,5 +303,6 @@
   "searchPlaceholder": "搜索...",
   "noOptionsFound": "未找到选项",
   "noUserId": "用户ID不可用",
+  "noOrgId": "组织 ID 不可用",
   "noTagsFound": "未找到标签"
 }

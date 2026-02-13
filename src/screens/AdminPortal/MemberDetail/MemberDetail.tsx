@@ -57,6 +57,9 @@ const MemberDetail: React.FC = (): JSX.Element => {
   if (!userId) {
     return <div>{tCommon('noUserId')}</div>;
   }
+  if (!orgId) {
+    return <div>{tCommon('noOrgId')}</div>;
+  }
   return (
     <div className={styles.peopleTabComponent}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
