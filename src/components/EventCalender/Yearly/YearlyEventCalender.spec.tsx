@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
-import dayjs from 'dayjs';
 import Calendar from './YearlyEventCalender';
 // Removed dependency on Monthly EventCalendar for tests that target yearly view directly
 // import EventCalendar from '../Monthly/EventCalender';
@@ -230,7 +229,7 @@ describe('Calendar Component', () => {
     cleanup();
   });
   const mockRefetchEvents = vi.fn();
-  const today = dayjs().month(3).date(15).hour(10).minute(0).second(0).toDate();
+  const today = new Date(Date.UTC(2026, 3, 15, 10, 0, 0));
   const todayISO = today.toISOString();
 
   const mockEventData = [
