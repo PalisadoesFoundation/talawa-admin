@@ -90,7 +90,9 @@ function Leaderboard(): JSX.Element {
   );
   const [timeFrame, setTimeFrame] = useState<TimeFrame>(TimeFrame.All);
 
-  const { data, loading, error } = useQuery(VOLUNTEER_RANKING, {
+  const { data, loading, error } = useQuery<{
+    getVolunteerRanks?: InterfaceVolunteerRank[];
+  }>(VOLUNTEER_RANKING, {
     variables: {
       orgId,
       where: {

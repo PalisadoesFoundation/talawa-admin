@@ -76,7 +76,9 @@ function Actions(): JSX.Element {
     [openStatusModal],
   );
 
-  const { data, loading, error, refetch } = useQuery(ACTION_ITEM_LIST, {
+  const { data, loading, error, refetch } = useQuery<{
+    actionItemsByOrganization?: IActionItemInfo[];
+  }>(ACTION_ITEM_LIST, {
     variables: { input: { organizationId: orgId } },
   });
 

@@ -110,12 +110,9 @@ const Invitations = (): JSX.Element => {
     loading: invitationLoading,
     error: invitationError,
     refetch: refetchInvitations,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<{ getVolunteerMembership: InterfaceVolunteerMembership[] }>(
+    USER_VOLUNTEER_MEMBERSHIP,
+    {
     variables: {
       where: {
         userId: userId,

@@ -142,7 +142,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const { pledgeUsers, pledgeAmount, pledgeCurrency } = formState;
 
   // Query to get the user details based on the userId prop
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<{
+    user?: {
+      id?: string;
+      name?: string;
+      avatarURL?: string;
+      role?: string;
+    };
+  }>(USER_DETAILS, {
     variables: { input: { id: userId } },
   });
 

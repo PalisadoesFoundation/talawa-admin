@@ -40,6 +40,7 @@ import { useQuery } from '@apollo/client/react';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
+import type { IStatsModal } from 'types/Event/interface';
 
 type ModalPropType = {
   show: boolean;
@@ -59,7 +60,7 @@ export const EventStats = ({
     event: {
       _id: string;
       averageFeedbackScore: number | null;
-      feedback: Array<{ rating?: number; review?: string }>;
+      feedback: Array<{ _id?: string; rating?: number; review?: string | null }>;
     };
   }>(EVENT_FEEDBACKS, {
     variables: { id: eventId },
@@ -92,11 +93,11 @@ export const EventStats = ({
         title={t('title')}
       >
         {/* Render feedback statistics */}
-        {data && <FeedbackStats data={data} />}
+        {data && <FeedbackStats data={data as IStatsModal['data']} />}
         <div>
           {/* Render review statistics and average rating */}
-          {data && <ReviewStats data={data} />}
-          {data && <AverageRating data={data} />}
+          {data && <ReviewStats data={data as IStatsModal['data']} />}
+          {data && <AverageRating data={data as IStatsModal['data']} />}
         </div>
       </BaseModal>
     </ErrorBoundaryWrapper>

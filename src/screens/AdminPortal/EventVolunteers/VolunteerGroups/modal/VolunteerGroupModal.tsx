@@ -76,7 +76,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [createVolunteerGroup] = useMutation(CREATE_VOLUNTEER_GROUP);
 
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<{
+    usersByOrganizationId?: unknown[];
+  }>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 

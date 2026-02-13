@@ -157,21 +157,39 @@ function OrganizationPeople(): JSX.Element {
 
   // Query hooks (Apollo v4: onCompleted removed, use data + useEffect)
   const [fetchMembers, { data: memberData, loading: memberLoading, error: memberError }] =
-    useLazyQuery<{ organization?: { members?: IEdges } }>(
-      ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    );
+    useLazyQuery<{
+      organization?: {
+        members?: {
+          edges: IEdges[];
+          pageInfo?: { startCursor?: string; endCursor?: string; hasNextPage: boolean; hasPreviousPage: boolean };
+        };
+      };
+    }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST);
 
   const [fetchUsers, { data: userData, loading: userLoading, error: userError }] =
-    useLazyQuery<{ allUsers?: IEdges }>(USER_LIST_FOR_TABLE);
+    useLazyQuery<{
+      allUsers?: {
+        edges: IEdges[];
+        pageInfo?: { startCursor?: string; endCursor?: string; hasNextPage: boolean; hasPreviousPage: boolean };
+      };
+    }>(USER_LIST_FOR_TABLE);
 
   // Sync lazy query results to state (based on active tab)
   useEffect(() => {
     if (state === 0 || state === 1) {
       if (memberData?.organization?.members) {
-        setData(memberData.organization.members as typeof data);
+        const m = memberData.organization.members;
+        setData({
+          edges: m.edges,
+          pageInfo: m.pageInfo ?? { hasNextPage: false, hasPreviousPage: false },
+        });
       }
     } else if (state === 2 && userData?.allUsers) {
-      setData(userData.allUsers as typeof data);
+      const u = userData.allUsers;
+      setData({
+        edges: u.edges,
+        pageInfo: u.pageInfo ?? { hasNextPage: false, hasPreviousPage: false },
+      });
     }
   }, [state, memberData, userData]);
 

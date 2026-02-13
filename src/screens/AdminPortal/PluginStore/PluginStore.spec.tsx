@@ -1,6 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { ApolloError } from '@apollo/client/v4-migration';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import PluginStore from './PluginStore';
 import * as pluginHooks from 'plugin/hooks';
@@ -37,7 +36,7 @@ const mockUpdatePlugin = vi.fn();
 const mockDeletePlugin = vi.fn();
 const mockGetAllPlugins = vi.fn();
 const mockRefetch = vi.fn();
-let mockGraphQLError: ApolloError | null = null;
+let mockGraphQLError: Error | null = null;
 
 vi.mock('plugin/graphql-service', () => ({
   useGetAllPlugins: () => ({
@@ -612,11 +611,9 @@ describe('PluginStore', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      // Set the error in our mock
-      const apolloError = new ApolloError({
-        errorMessage: 'GraphQL fetch failed',
-      });
-      mockGraphQLError = apolloError;
+      // Set the error in our mock (Apollo v4: use Error instead of ApolloError)
+      const graphQLError = new Error('GraphQL fetch failed');
+      mockGraphQLError = graphQLError;
 
       // Render the component which will trigger the useEffect with error
       render(
@@ -634,7 +631,7 @@ describe('PluginStore', () => {
       await waitFor(() => {
         expect(consoleErrorSpy).toHaveBeenCalledWith(
           'Failed to fetch plugins via GraphQL:',
-          apolloError,
+          graphQLError,
         );
       });
 

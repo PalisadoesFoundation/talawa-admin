@@ -127,7 +127,14 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     document.title = t('title');
   }, [t]);
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const { data, loading, error } = useQuery(GET_USER_BY_ID, {
+  const { data, loading, error } = useQuery<{
+    user?: {
+      birthDate?: string | null;
+      role?: string;
+      emailAddress?: string;
+      [key: string]: unknown;
+    };
+  }>(GET_USER_BY_ID, {
     variables: {
       input: {
         id: resolvedUserId,

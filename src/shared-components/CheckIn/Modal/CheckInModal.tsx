@@ -54,7 +54,9 @@ export const CheckInModal = ({
   });
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<{
+    event?: { recurrenceRule?: unknown };
+  }>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -64,7 +66,11 @@ export const CheckInModal = ({
     data: checkInData,
     loading: checkInLoading,
     refetch: checkInRefetch,
-  } = useQuery(EVENT_CHECKINS, {
+  } = useQuery<{
+    event?: {
+      attendeesCheckInStatus?: InterfaceAttendeeCheckIn[];
+    };
+  }>(EVENT_CHECKINS, {
     variables: { eventId: eventId },
   });
 

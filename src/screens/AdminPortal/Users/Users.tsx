@@ -115,39 +115,17 @@ const Users = (): JSX.Element => {
     fetchMore,
     refetch: refetchUsers,
     error: UsersError,
-  }: {
-    data?: {
-      allUsers: {
-        pageInfo: {
-          endCursor: string | null;
-          hasNextPage: boolean;
-          hasPreviousPage?: boolean;
-          startCursor?: string;
-        };
-        edges: {
-          cursor: string;
-          node: InterfaceQueryUserListItem;
-        }[];
+  } = useQuery<{
+    allUsers: {
+      pageInfo: {
+        endCursor: string | null;
+        hasNextPage: boolean;
+        hasPreviousPage?: boolean;
+        startCursor?: string;
       };
+      edges: { cursor: string; node: InterfaceQueryUserListItem }[];
     };
-    loading: boolean;
-    fetchMore: (options: { variables: Record<string, unknown> }) => Promise<{
-      data?: {
-        allUsers: {
-          pageInfo: {
-            endCursor: string | null;
-            hasNextPage: boolean;
-          };
-          edges: {
-            cursor: string;
-            node: InterfaceQueryUserListItem;
-          }[];
-        };
-      };
-    }>;
-    refetch: (variables?: Record<string, unknown>) => void;
-    error?: ApolloError;
-  } = useQuery(USER_LIST_FOR_ADMIN, {
+  }>(USER_LIST_FOR_ADMIN, {
     variables: {
       first: perPageResult,
       after: null,
@@ -176,7 +154,9 @@ const Users = (): JSX.Element => {
     setHasMore(pageInfo?.hasNextPage ?? false);
   }, [data]);
 
-  const { data: dataOrgs } = useQuery(ORGANIZATION_LIST);
+  const { data: dataOrgs } = useQuery<{ organizations?: unknown[] }>(
+    ORGANIZATION_LIST,
+  );
   const [displayedUsers, setDisplayedUsers] = useState<
     InterfaceQueryUserListItem[]
   >([]);

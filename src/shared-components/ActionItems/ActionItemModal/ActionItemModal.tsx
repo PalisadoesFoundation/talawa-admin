@@ -133,8 +133,9 @@ const ItemModal: FC<IItemModalProps> = ({
     isCompleted,
   } = formState;
 
-  const { data: actionItemCategoriesData } = useQuery(
-    ACTION_ITEM_CATEGORY_LIST,
+  const { data: actionItemCategoriesData } = useQuery<{
+    actionCategoriesByOrganization?: IActionItemCategoryInfo[];
+  }>(ACTION_ITEM_CATEGORY_LIST,
     {
       variables: {
         input: {
@@ -152,7 +153,9 @@ const ItemModal: FC<IItemModalProps> = ({
     skip: !eventId,
   });
 
-  const { data: volunteerGroupsData } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
+  const { data: volunteerGroupsData } = useQuery<{
+    event?: { volunteerGroups?: IEventVolunteerGroup[] };
+  }>(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
       input: { id: eventId },
     },

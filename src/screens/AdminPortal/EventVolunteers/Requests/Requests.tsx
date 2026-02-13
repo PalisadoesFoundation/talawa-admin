@@ -103,12 +103,9 @@ function Requests(): JSX.Element {
     loading: requestsLoading,
     error: requestsError,
     refetch: refetchRequests,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<{ getVolunteerMembership: InterfaceVolunteerMembership[] }>(
+    USER_VOLUNTEER_MEMBERSHIP,
+    {
     variables: {
       where: {
         eventId,

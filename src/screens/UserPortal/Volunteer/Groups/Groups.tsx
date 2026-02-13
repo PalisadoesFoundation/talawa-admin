@@ -112,12 +112,9 @@ function Groups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  }: {
-    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
+  } = useQuery<{ getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] }>(
+    EVENT_VOLUNTEER_GROUP_LIST,
+    {
     variables: {
       where: whereVariables,
       orderBy: sortBy,

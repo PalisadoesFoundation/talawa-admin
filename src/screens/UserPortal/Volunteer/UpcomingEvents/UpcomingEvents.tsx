@@ -94,16 +94,18 @@ const UpcomingEvents = (): JSX.Element => {
     data: eventsData,
     loading: eventsLoading,
     error: eventsError,
-  } = useQuery(USER_EVENTS_VOLUNTEER, {
+  } = useQuery<{
+    organization?: { events?: { edges?: InterfaceEventEdge[] } };
+  }>(USER_EVENTS_VOLUNTEER, {
     variables: {
       organizationId: orgId,
       upcomingOnly: true,
       first: 30,
     },
   });
-  const { data: membershipData, loading: membershipLoading } = useQuery(
-    USER_VOLUNTEER_MEMBERSHIP,
-    {
+  const { data: membershipData, loading: membershipLoading } = useQuery<{
+    getVolunteerMembership?: InterfaceVolunteerMembership[];
+  }>(USER_VOLUNTEER_MEMBERSHIP, {
       variables: { where: { userId } },
       skip: !userId,
     },

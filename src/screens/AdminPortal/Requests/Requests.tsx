@@ -99,7 +99,11 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, refetch } = useQuery(MEMBERSHIP_REQUEST_PG, {
+  const { data, loading, refetch } = useQuery<{
+    organization?: {
+      membershipRequests?: InterfaceRequestsListItem[];
+    };
+  }>(MEMBERSHIP_REQUEST_PG, {
     variables: {
       input: {
         id: organizationId,
@@ -111,7 +115,9 @@ const Requests = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
-  const { data: orgsData } = useQuery(ORGANIZATION_LIST);
+  const { data: orgsData } = useQuery<{ organizations?: unknown[] }>(
+    ORGANIZATION_LIST,
+  );
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
   >([]);

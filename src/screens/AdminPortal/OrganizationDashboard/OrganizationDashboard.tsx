@@ -80,7 +80,13 @@ function OrganizationDashboard(): JSX.Element {
    */
 
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
-    useQuery(MEMBERSHIP_REQUEST_PG, {
+    useQuery<{
+      organization?: {
+        membershipRequests?: Array<{ status: string; [key: string]: unknown }>;
+      };
+    }>(
+      MEMBERSHIP_REQUEST_PG,
+      {
       variables: {
         input: {
           id: orgId ?? '',
@@ -109,7 +115,9 @@ function OrganizationDashboard(): JSX.Element {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
+  } = useQuery<{ organization?: { postsCount?: number } }>(
+    GET_ORGANIZATION_POSTS_COUNT_PG,
+    {
     variables: { id: orgId ?? '' },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
@@ -131,7 +139,9 @@ function OrganizationDashboard(): JSX.Element {
     data: orgBlockedUsersData,
     loading: orgBlockedUsersLoading,
     error: orgBlockedUsersError,
-  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
+  } = useQuery<{
+    organization?: { blockedUsersCount?: number };
+  }>(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
     variables: { id: orgId ?? '' },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
@@ -142,7 +152,9 @@ function OrganizationDashboard(): JSX.Element {
     data: orgVenuesData,
     loading: orgVenuesLoading,
     error: orgVenuesError,
-  } = useQuery(GET_ORGANIZATION_VENUES_COUNT, {
+  } = useQuery<{
+    organization?: { venuesCount?: number };
+  }>(GET_ORGANIZATION_VENUES_COUNT, {
     variables: { id: orgId ?? '' },
     skip: !orgId,
     notifyOnNetworkStatusChange: true,
@@ -241,7 +253,12 @@ function OrganizationDashboard(): JSX.Element {
     data: postData,
     loading: loadingPost,
     error: errorPost,
-  } = useQuery(GET_ORGANIZATION_POSTS_PG, {
+  } = useQuery<{
+    organization?: {
+      posts?: { edges?: InterfaceOrganizationPostsConnectionEdgePg[] };
+      postsCount?: number;
+    };
+  }>(GET_ORGANIZATION_POSTS_PG, {
     variables: { id: orgId, first: 5 },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
@@ -274,9 +291,13 @@ function OrganizationDashboard(): JSX.Element {
   ]);
 
   const membershipRequests =
-    membershipRequestData?.organization?.membershipRequests ?? [];
+    (membershipRequestData?.organization?.membershipRequests ?? []) as Array<{
+      status: string;
+      membershipRequestId?: string;
+      user?: { name?: string; avatarURL?: string };
+    }>;
   const pendingMembershipRequests = membershipRequests.filter(
-    (request: { status: string }) => request.status === 'pending',
+    (request) => request.status === 'pending',
   );
 
   return (
@@ -371,12 +392,12 @@ function OrganizationDashboard(): JSX.Element {
                       <CardItemLoading key={'postLoading_' + index} />
                     ))}
                   >
-                    {orgPostsData?.organization.postsCount == 0 ? (
+                    {orgPostsData?.organization?.postsCount == 0 ? (
                       <div className={styles.emptyContainer}>
                         <h6>{t('noPostsPresent')}</h6>
                       </div>
                     ) : (
-                      postData?.organization.posts.edges
+                      (postData?.organization?.posts?.edges ?? [])
                         .slice(0, 5)
                         .map(
                           (

@@ -159,7 +159,7 @@ export default function People(): React.JSX.Element {
       });
       setPageCursors((prev) => {
         const next = [...prev];
-        next[newPage] = afterCursor;
+        next[newPage] = afterCursor ?? '';
         return next;
       });
       setCurrentPage(newPage);

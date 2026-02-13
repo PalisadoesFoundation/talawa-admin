@@ -95,7 +95,7 @@ export const useRegistration = ({
 
       if (signUpData?.signUp?.user) {
         onSuccess?.({
-          signUp: signUpData.signUp,
+          signUp: signUpData.signUp as { user: { id: string } },
           name: data.name,
           email: data.email,
         });

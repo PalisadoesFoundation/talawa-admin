@@ -82,7 +82,15 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  } = useQuery(USER_FUND_CAMPAIGNS, {
+  } = useQuery<{
+    organization?: {
+      funds?: {
+        edges?: Array<{
+          node: { campaigns?: { edges?: Array<{ node: InterfaceUserCampaign }> } };
+        }>;
+      };
+    };
+  }>(USER_FUND_CAMPAIGNS, {
     variables: {
       input: { id: orgId as string },
     },

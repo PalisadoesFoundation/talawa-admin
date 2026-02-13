@@ -14,6 +14,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
+import type { IPlugin } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';
 
 export default function PluginStore() {
@@ -41,7 +42,9 @@ export default function PluginStore() {
     handleFilterChange,
     isInstalled,
     getInstalledPlugin,
-  } = usePluginFilters({ pluginData });
+  } = usePluginFilters({
+    pluginData: pluginData as { getPlugins: IPlugin[] } | undefined,
+  });
 
   const {
     loading,
@@ -52,7 +55,10 @@ export default function PluginStore() {
     uninstallPlugin,
     handleUninstallConfirm,
     closeUninstallModal,
-  } = usePluginActions({ pluginData, refetch });
+  } = usePluginActions({
+    pluginData: pluginData as { getPlugins: IPlugin[] } | undefined,
+    refetch,
+  });
 
   useEffect(() => {
     if (pluginError) {

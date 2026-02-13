@@ -15,7 +15,7 @@ export interface IActionItemCategoryList {
   actionItemCategoriesByOrganization: IActionItemCategoryInfo[];
 }
 
-interface IActionUserInfo {
+export interface IActionUserInfo {
   id: string;
   name: string;
   avatarURL: string;

@@ -115,7 +115,9 @@ const CommunityProfile = (): JSX.Element => {
   const logoInputRef = React.useRef<HTMLInputElement>(null);
 
   // Query to fetch community data
-  const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
+  const { data, loading } = useQuery<{
+    community?: PreLoginImageryDataType;
+  }>(GET_COMMUNITY_DATA_PG);
 
   // Mutations for updating and resetting community data
   const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY_PG);

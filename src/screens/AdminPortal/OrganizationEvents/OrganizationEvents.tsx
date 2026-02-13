@@ -31,7 +31,7 @@ import dayjs from 'dayjs';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEvent, IOrgList } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
@@ -123,7 +123,9 @@ function organizationEvents(): JSX.Element {
     data: eventData,
     error: eventDataError,
     refetch: refetchEvents,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+  } = useQuery<{
+    organization?: { events?: { edges?: unknown[] } };
+  }>(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
       first: 100,
@@ -145,7 +147,7 @@ function organizationEvents(): JSX.Element {
     data: orgData,
     loading: orgLoading,
     error: orgDataError,
-  } = useQuery(GET_ORGANIZATION_DATA_PG, {
+  } = useQuery<{ organization?: IOrgList }>(GET_ORGANIZATION_DATA_PG, {
     variables: {
       id: currentUrl,
       first: 10,
@@ -177,6 +179,7 @@ function organizationEvents(): JSX.Element {
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
+    isInviteOnly: (edge.node as { isInviteOnly?: boolean }).isInviteOnly ?? false,
     // Add recurring event information
     isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
     baseEvent: edge.node.baseEvent,

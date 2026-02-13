@@ -95,7 +95,11 @@ function organizationVenues(): JSX.Element {
     loading: venueLoading,
     error: venueError,
     refetch: venueRefetch,
-  } = useQuery(VENUE_LIST, {
+  } = useQuery<{
+    organization?: {
+      venues?: { edges?: { node: InterfaceQueryVenueListItem }[] };
+    };
+  }>(VENUE_LIST, {
     variables: {
       orgId: orgId,
     },
@@ -206,7 +210,7 @@ function organizationVenues(): JSX.Element {
         });
       }
 
-      setVenues(filteredVenues);
+      setVenues(filteredVenues.map((edge) => edge.node));
     }
   }, [venueData, searchTerm, searchBy, sortOrder]);
 

@@ -28,8 +28,12 @@ const AcceptInvitation = (): JSX.Element => {
 
   const { getItem, setItem, removeItem } = useLocalStorage();
 
-  const [verify] = useMutation(VERIFY_EVENT_INVITATION);
-  const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
+  const [verify] = useMutation<{ verifyEventInvitation?: unknown }>(
+    VERIFY_EVENT_INVITATION,
+  );
+  const [accept] = useMutation<{ acceptEventInvitation?: unknown }>(
+    ACCEPT_EVENT_INVITATION,
+  );
 
   const [loading, setLoading] = useState(true);
   type InviteMetadata = {

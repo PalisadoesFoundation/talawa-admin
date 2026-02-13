@@ -106,14 +106,11 @@ const orgFundCampaign = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaign,
-  }: {
-    data?: {
-      fund: InterfaceQueryOrganizationFundCampaigns;
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_CAMPAIGN, {
+  } = useQuery<{
+    fund?: InterfaceQueryOrganizationFundCampaigns;
+  }>(
+    FUND_CAMPAIGN,
+    {
     variables: {
       input: { id: fundId },
     },

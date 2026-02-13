@@ -81,7 +81,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST_PG, {
+  const { data: memberData } = useQuery<{
+    organization?: {
+      members: { edges: { node: InterfaceUserInfoPG }[] };
+    };
+  }>(MEMBERS_LIST_PG, {
     variables: { input: { id: orgId } },
   });
 
@@ -96,7 +100,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   }, [pledge]);
 
   useEffect(() => {
-    if (memberData) {
+    if (memberData?.organization?.members?.edges) {
       const members = memberData.organization.members.edges.map(
         (edge: { node: InterfaceUserInfoPG }) => edge.node,
       );

@@ -210,7 +210,7 @@ describe('UserTags - loading and error states', () => {
       loading: false,
       error: new Error('GraphQL error'),
       refetch: vi.fn(),
-    } as ReturnType<typeof apolloReact.useQuery>);
+    } as unknown as ReturnType<typeof apolloReact.useQuery>);
 
     render(<UserTags id="user-123" />);
 

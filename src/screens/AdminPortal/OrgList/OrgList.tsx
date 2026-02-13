@@ -86,9 +86,9 @@ function OrgList(): JSX.Element {
   // Email verification warning state
   const [showEmailWarning, setShowEmailWarning] = useState(false);
 
-  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
-    RESEND_VERIFICATION_EMAIL_MUTATION,
-  );
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation<{
+    sendVerificationEmail?: { success?: boolean; message?: string };
+  }>(RESEND_VERIFICATION_EMAIL_MUTATION);
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
@@ -160,7 +160,9 @@ function OrgList(): JSX.Element {
     state: '',
   });
 
-  const [create] = useMutation(CREATE_ORGANIZATION_MUTATION_PG);
+  const [create] = useMutation<{
+    createOrganization?: { id: string };
+  }>(CREATE_ORGANIZATION_MUTATION_PG);
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
   );
@@ -169,13 +171,7 @@ function OrgList(): JSX.Element {
     ? { headers: { authorization: 'Bearer ' + token } }
     : { headers: {} };
   // Fetch current user status (consolidated query with network-only for fresh data)
-  const {
-    data: userData,
-  }: {
-    data: InterfaceCurrentUserType | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(CURRENT_USER, {
+  const { data: userData } = useQuery<InterfaceCurrentUserType>(CURRENT_USER, {
     fetchPolicy: 'network-only',
     context,
   });
@@ -211,7 +207,9 @@ function OrgList(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchOrgs,
-  } = useQuery(ORGANIZATION_FILTER_LIST, {
+  } = useQuery<{ organizations?: InterfaceOrgInfoTypePG[] }>(
+    ORGANIZATION_FILTER_LIST,
+    {
     variables: { filter: filterName },
     fetchPolicy: 'cache-and-network',
     errorPolicy: 'all',
@@ -294,13 +292,13 @@ function OrgList(): JSX.Element {
 
       await createMembership({
         variables: {
-          memberId: userData?.user.id,
-          organizationId: data?.createOrganization.id,
+          memberId: userData?.user?.id,
+          organizationId: data?.createOrganization?.id,
           role: 'administrator',
         },
       });
 
-      if (data) {
+      if (data?.createOrganization) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
         openDialogModal(data.createOrganization.id);

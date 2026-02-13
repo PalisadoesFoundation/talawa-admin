@@ -77,7 +77,9 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
   const [addVolunteer] = useMutation(ADD_VOLUNTEER);
 
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<{
+    usersByOrganizationId?: InterfaceUserInfo[];
+  }>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 

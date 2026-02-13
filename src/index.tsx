@@ -10,7 +10,8 @@ import {
 } from '@apollo/client';
 import { Defer20220824Handler } from '@apollo/client/incremental';
 import { LocalState } from '@apollo/client/local-state';
-import { fromPromise } from '@apollo/client/v4-migration';
+import { from } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -127,7 +128,7 @@ const errorLink = onError(
 
           isRefreshing = true;
 
-          return fromPromise(
+          return from(
             refreshToken()
               .then((success: boolean) => {
                 if (success) {
@@ -148,16 +149,18 @@ const errorLink = onError(
               .finally(() => {
                 isRefreshing = false;
               }),
-          ).flatMap((success: boolean) => {
-            if (success) {
-              // Retry the original request
-              // No need to set headers - HTTP-Only cookies are automatically included
-              return forward(operation);
-            }
-            return new Observable((observer) => {
-              observer.error(error);
-            });
-          });
+          ).pipe(
+            mergeMap((success: boolean) => {
+              if (success) {
+                // Retry the original request
+                // No need to set headers - HTTP-Only cookies are automatically included
+                return forward(operation);
+              }
+              return new Observable((observer) => {
+                observer.error(error);
+              });
+            }),
+          );
         }
       }
     }

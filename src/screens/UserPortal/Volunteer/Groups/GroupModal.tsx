@@ -131,12 +131,9 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   const {
     data: requestsData,
     refetch: refetchRequests,
-  }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<{ getVolunteerMembership: InterfaceVolunteerMembership[] }>(
+    USER_VOLUNTEER_MEMBERSHIP,
+    {
     variables: {
       where: {
         eventId,

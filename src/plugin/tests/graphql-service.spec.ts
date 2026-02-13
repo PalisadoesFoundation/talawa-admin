@@ -381,10 +381,11 @@ describe('GraphQL Hooks', () => {
         fetchMore: vi.fn(),
         networkStatus: 7,
         called: true,
+        dataState: 'complete' as const,
       };
 
       vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as useQuery.Result,
+        mockQueryResult as unknown as ReturnType<typeof useQuery>,
       );
 
       const { result } = renderHook(() => useGetAllPlugins());
@@ -404,10 +405,11 @@ describe('GraphQL Hooks', () => {
         fetchMore: vi.fn(),
         networkStatus: 1,
         called: true,
+        dataState: 'empty' as const,
       };
 
       vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as useQuery.Result,
+        mockQueryResult as unknown as ReturnType<typeof useQuery>,
       );
 
       const { result } = renderHook(() => useGetAllPlugins());
@@ -426,10 +428,11 @@ describe('GraphQL Hooks', () => {
         fetchMore: vi.fn(),
         networkStatus: 8,
         called: true,
+        dataState: 'complete' as const,
       };
 
       vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as useQuery.Result,
+        mockQueryResult as unknown as ReturnType<typeof useQuery>,
       );
 
       const { result } = renderHook(() => useGetAllPlugins());

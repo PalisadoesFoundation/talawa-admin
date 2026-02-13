@@ -178,8 +178,10 @@ const BlockUser = (): JSX.Element => {
     }
   }, [searchTerm, allMembers, blockedUsers]);
 
-  const [blockUser] = useMutation(BLOCK_USER_MUTATION_PG);
-  const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
+  const [blockUser] = useMutation<{ blockUser?: unknown }>(BLOCK_USER_MUTATION_PG);
+  const [unBlockUser] = useMutation<{ unblockUser?: unknown }>(
+    UNBLOCK_USER_MUTATION_PG,
+  );
 
   const handleBlockUser = useCallback(
     async (user: InterfaceUserPg): Promise<void> => {
