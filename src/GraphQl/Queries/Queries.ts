@@ -568,6 +568,10 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
+            attendees {
+              id
+              name
+            }
             baseEvent {
               id
               name
@@ -1296,6 +1300,40 @@ export const GET_USER_TAGS = gql`
       }
 
       creator {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_EVENTS_BY_ORGANIZATION_ID = gql`
+  query GetEventsByOrganizationId($organizationId: ID!) {
+    eventsByOrganizationId(input: { organizationId: $organizationId }) {
+      id
+      name
+      description
+      startAt
+      endAt
+      allDay
+      location
+      isPublic
+      isRegisterable
+      createdAt
+      updatedAt
+      attendees {
+        id
+        name
+      }
+      creator {
+        id
+        name
+        eventsAttended {
+          id
+        }
+      }
+
+      organization {
         id
         name
       }

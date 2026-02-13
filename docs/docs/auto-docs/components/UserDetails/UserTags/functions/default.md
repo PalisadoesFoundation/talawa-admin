@@ -12,7 +12,7 @@ Defined in: [src/components/UserDetails/UserTags.tsx:51](https://github.com/Pali
 
 ### \_\_namedParameters
 
-[`InterfaceUserTagsProps`](../../../../types/AdminPortal/UserDetails/UserOrganization/UserEvent/type/type-aliases/InterfaceUserTagsProps.md)
+[`InterfaceUserTagsProps`](../../../../types/AdminPortal/UserDetails/UserTags/type/type-aliases/InterfaceUserTagsProps.md)
 
 ## Returns
 
