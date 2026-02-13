@@ -69,7 +69,11 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge, ICreateEventInput, IOrgList } from 'types/Event/interface';
+import type {
+  IEventEdge,
+  ICreateEventInput,
+  IOrgList,
+} from 'types/Event/interface';
 import styles from './Events.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -133,30 +137,41 @@ export default function Events(): JSX.Element {
     data,
     error: eventDataError,
     refetch,
-  } = useQuery<{ organization?: { events?: { edges: IEventEdge[] } } }>(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
-    variables: {
-      id: organizationId,
-      first: 100,
-      after: null,
-      startDate: dateRange.startDate
-        ? dayjs(dateRange.startDate).startOf('day').toISOString()
-        : null,
-      endDate: dateRange.endDate
-        ? dayjs(dateRange.endDate).endOf('day').toISOString()
-        : null,
-      includeRecurring: true,
+  } = useQuery<{ organization?: { events?: { edges: IEventEdge[] } } }>(
+    GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+    {
+      variables: {
+        id: organizationId,
+        first: 100,
+        after: null,
+        startDate: dateRange.startDate
+          ? dayjs(dateRange.startDate).startOf('day').toISOString()
+          : null,
+        endDate: dateRange.endDate
+          ? dayjs(dateRange.endDate).endOf('day').toISOString()
+          : null,
+        includeRecurring: true,
+      },
+      notifyOnNetworkStatusChange: true,
+      errorPolicy: 'all',
+      fetchPolicy: 'cache-and-network',
     },
-    notifyOnNetworkStatusChange: true,
-    errorPolicy: 'all',
-    fetchPolicy: 'cache-and-network',
-  });
+  );
 
   // Query to fetch organization with members (for EventCalendar visibility filtering)
   type OrgQueryData = {
     organization?: {
       id: string;
       members?: {
-        edges?: Array<{ node: { id: string; name: string; emailAddress?: string; role?: string }; cursor: string }>;
+        edges?: Array<{
+          node: {
+            id: string;
+            name: string;
+            emailAddress?: string;
+            role?: string;
+          };
+          cursor: string;
+        }>;
         pageInfo?: { hasNextPage: boolean; endCursor: string };
       };
     };

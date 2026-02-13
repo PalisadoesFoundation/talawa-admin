@@ -210,11 +210,12 @@ function OrgList(): JSX.Element {
   } = useQuery<{ organizations?: InterfaceOrgInfoTypePG[] }>(
     ORGANIZATION_FILTER_LIST,
     {
-    variables: { filter: filterName },
-    fetchPolicy: 'cache-and-network',
-    errorPolicy: 'all',
-    notifyOnNetworkStatusChange: true,
-  });
+      variables: { filter: filterName },
+      fetchPolicy: 'cache-and-network',
+      errorPolicy: 'all',
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
   const orgsData = allOrganizationsData?.organizations;
 

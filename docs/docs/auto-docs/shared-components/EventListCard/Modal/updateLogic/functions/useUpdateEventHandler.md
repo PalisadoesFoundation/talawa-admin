@@ -6,7 +6,7 @@
 
 > **useUpdateEventHandler**(): `object`
 
-Defined in: [src/shared-components/EventListCard/Modal/updateLogic.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventListCard/Modal/updateLogic.ts#L28)
+Defined in: [src/shared-components/EventListCard/Modal/updateLogic.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventListCard/Modal/updateLogic.ts#L29)
 
 Creates the update handler for EventListCard modal edits, managing mutations for standalone and recurring events.
 

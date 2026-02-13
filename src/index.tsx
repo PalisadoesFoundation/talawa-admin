@@ -120,7 +120,9 @@ const errorLink = onError(
                 (
                   forward as (
                     op: import('@apollo/client/link').ApolloLink.Operation,
-                  ) => import('rxjs').Observable<import('@apollo/client/link').ApolloLink.Result>
+                  ) => import('rxjs').Observable<
+                    import('@apollo/client/link').ApolloLink.Result
+                  >
                 )(operation).subscribe(subscriber);
               });
             });
@@ -304,4 +306,3 @@ root.render(
     </ApolloProvider>
   </Suspense>,
 );
-

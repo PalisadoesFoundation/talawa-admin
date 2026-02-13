@@ -18,7 +18,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:102](https://github.com/Pali
 
 ### chatRefetch()
 
-> **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`Chat`](../type-aliases/Chat.md); \}\>\>
+> **chatRefetch**: (`variables?`) => `Promise`\<`Result`\<\{ `chat`: [`Chat`](../type-aliases/Chat.md); \}, `"empty"` \| `"complete"` \| `"streaming"` \| `"partial"`\>\>
 
 Defined in: [src/types/UserPortal/Chat/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L103)
 
@@ -30,7 +30,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:103](https://github.com/Pali
 
 #### Returns
 
-`Promise`\<`ApolloQueryResult`\<\{ `chat`: [`Chat`](../type-aliases/Chat.md); \}\>\>
+`Promise`\<`Result`\<\{ `chat`: [`Chat`](../type-aliases/Chat.md); \}, `"empty"` \| `"complete"` \| `"streaming"` \| `"partial"`\>\>
 
 ***
 

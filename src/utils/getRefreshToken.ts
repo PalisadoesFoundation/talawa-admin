@@ -71,4 +71,3 @@ export async function handleTokenRefresh(): Promise<void> {
     window.location.href = '/';
   }
 }
-

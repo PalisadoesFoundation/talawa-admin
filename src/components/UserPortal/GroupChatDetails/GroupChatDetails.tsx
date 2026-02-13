@@ -212,9 +212,11 @@ export default function GroupChatDetails({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery<{ organization?: { members?: { edges?: Array<{ node: InterfaceOrganizationMember }> } } }>(
-    ORGANIZATION_MEMBERS,
-    {
+  } = useQuery<{
+    organization?: {
+      members?: { edges?: Array<{ node: InterfaceOrganizationMember }> };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: chat.organization?.id },
       first: 20,

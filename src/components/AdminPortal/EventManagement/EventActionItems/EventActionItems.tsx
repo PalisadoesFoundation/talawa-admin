@@ -205,7 +205,9 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
       setActionItems(filteredItems);
       setIsRecurring(!!eventData.event.recurrenceRule);
-      setBaseEvent(eventData.event.baseEvent != null ? eventData.event.baseEvent : null);
+      setBaseEvent(
+        eventData.event.baseEvent != null ? eventData.event.baseEvent : null,
+      );
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 

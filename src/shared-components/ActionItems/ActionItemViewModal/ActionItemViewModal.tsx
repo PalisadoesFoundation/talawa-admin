@@ -111,11 +111,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   const category = categoryData?.actionItemCategory || item.category;
 
   const getUserDisplayName = (
-    user:
-      | InterfaceUser
-      | IActionUserInfo
-      | null
-      | undefined,
+    user: InterfaceUser | IActionUserInfo | null | undefined,
   ): string => {
     if (!user) return 'Unknown';
 

@@ -4,6 +4,6 @@
 
 # Variable: client
 
-> `const` **client**: `ApolloClient`\<`NormalizedCacheObject`\>
+> `const` **client**: `ApolloClient`
 
-Defined in: [src/index.tsx:217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/index.tsx#L217)
+Defined in: [src/index.tsx:229](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/index.tsx#L229)

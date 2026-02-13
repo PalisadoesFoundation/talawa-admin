@@ -91,21 +91,30 @@ function EventRegistrants(): JSX.Element {
   );
 
   // Fetch check-in status
-  const [getEventCheckIns, { data: checkInData }] = useLazyQuery(EVENT_CHECKINS, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const [getEventCheckIns, { data: checkInData }] = useLazyQuery(
+    EVENT_CHECKINS,
+    {
+      fetchPolicy: 'cache-and-network',
+    },
+  );
 
   useEffect(() => {
-    const data = registrantsData as { getEventAttendeesByEventId?: Array<{
-      id: string;
-      user?: { id: string; name: string; emailAddress: string };
-      isRegistered: boolean;
-      createdAt: string;
-    }> } | undefined;
+    const data = registrantsData as
+      | {
+          getEventAttendeesByEventId?: Array<{
+            id: string;
+            user?: { id: string; name: string; emailAddress: string };
+            isRegistered: boolean;
+            createdAt: string;
+          }>;
+        }
+      | undefined;
     if (data?.getEventAttendeesByEventId) {
       const mappedData = data.getEventAttendeesByEventId
         .filter(
-          (a): a is NonNullable<typeof a> & {
+          (
+            a,
+          ): a is NonNullable<typeof a> & {
             user: { id: string; name: string; emailAddress: string };
           } => a != null && a.user != null,
         )
@@ -122,10 +131,16 @@ function EventRegistrants(): JSX.Element {
   }, [registrantsData]);
 
   useEffect(() => {
-    const data = checkInData as { event?: { attendeesCheckInStatus?: Array<{
-      isCheckedIn: boolean;
-      user?: { id: string };
-    }> } } | undefined;
+    const data = checkInData as
+      | {
+          event?: {
+            attendeesCheckInStatus?: Array<{
+              isCheckedIn: boolean;
+              user?: { id: string };
+            }>;
+          };
+        }
+      | undefined;
     if (data?.event?.attendeesCheckInStatus) {
       const checkedInUserIds = data.event.attendeesCheckInStatus
         .filter((s): s is NonNullable<typeof s> => s != null && s.isCheckedIn)

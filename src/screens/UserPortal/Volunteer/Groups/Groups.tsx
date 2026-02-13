@@ -115,12 +115,13 @@ function Groups(): JSX.Element {
   } = useQuery<{ getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] }>(
     EVENT_VOLUNTEER_GROUP_LIST,
     {
-    variables: {
-      where: whereVariables,
-      orderBy: sortBy,
+      variables: {
+        where: whereVariables,
+        orderBy: sortBy,
+      },
+      skip: !userId || !orgId,
     },
-    skip: !userId || !orgId,
-  });
+  );
 
   const handleEditClick = useCallback(
     (group: InterfaceVolunteerGroupInfo | null): void => {

@@ -84,9 +84,7 @@ function OrganizationDashboard(): JSX.Element {
       organization?: {
         membershipRequests?: Array<{ status: string; [key: string]: unknown }>;
       };
-    }>(
-      MEMBERSHIP_REQUEST_PG,
-      {
+    }>(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
           id: orgId ?? '',
@@ -118,11 +116,12 @@ function OrganizationDashboard(): JSX.Element {
   } = useQuery<{ organization?: { postsCount?: number } }>(
     GET_ORGANIZATION_POSTS_COUNT_PG,
     {
-    variables: { id: orgId ?? '' },
-    skip: !orgId,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  });
+      variables: { id: orgId ?? '' },
+      skip: !orgId,
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
   const {
     data: orgEventsData,
@@ -193,9 +192,7 @@ function OrganizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (orgBlockedUsersData?.organization) {
-      setBlockedCount(
-        orgBlockedUsersData.organization.blockedUsersCount ?? 0,
-      );
+      setBlockedCount(orgBlockedUsersData.organization.blockedUsersCount ?? 0);
     }
   }, [orgBlockedUsersData, orgId]);
 
@@ -293,12 +290,12 @@ function OrganizationDashboard(): JSX.Element {
     orgVenuesError,
   ]);
 
-  const membershipRequests =
-    (membershipRequestData?.organization?.membershipRequests ?? []) as Array<{
-      status: string;
-      membershipRequestId: string;
-      user: { name: string; avatarURL?: string };
-    }>;
+  const membershipRequests = (membershipRequestData?.organization
+    ?.membershipRequests ?? []) as Array<{
+    status: string;
+    membershipRequestId: string;
+    user: { name: string; avatarURL?: string };
+  }>;
   const pendingMembershipRequests = membershipRequests.filter(
     (request) => request.status === 'pending',
   );

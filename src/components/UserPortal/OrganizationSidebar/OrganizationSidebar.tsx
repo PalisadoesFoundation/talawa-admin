@@ -63,29 +63,37 @@ export default function OrganizationSidebar(): JSX.Element {
   // Query to fetch members of the organization
   const { data: memberData, loading: memberLoading } = useQuery<{
     organizationsMemberConnection?: { edges?: Array<{ node?: unknown }> };
-    organization?: { members?: { edges?: Array<{ node?: { id?: string; name?: string; emailAddress?: string; avatarURL?: string; createdAt?: string } }> } };
-  }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    {
-      variables: {
-        orgId: organizationId,
-        first: 3, // Fetch top 3 members
-        skip: 0, // No offset
-      },
+    organization?: {
+      members?: {
+        edges?: Array<{
+          node?: {
+            id?: string;
+            name?: string;
+            emailAddress?: string;
+            avatarURL?: string;
+            createdAt?: string;
+          };
+        }>;
+      };
+    };
+  }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+    variables: {
+      orgId: organizationId,
+      first: 3, // Fetch top 3 members
+      skip: 0, // No offset
     },
-  );
+  });
 
   // Query to fetch events of the organization
   const { data: eventsData, loading: eventsLoading } = useQuery<{
     eventsByOrganizationConnection?: unknown;
-  }>(ORGANIZATION_EVENT_CONNECTION_LIST,
-    {
-      variables: {
-        organization_id: organizationId,
-        first: 3, // Fetch top 3 upcoming events
-        skip: 0, // No offset
-      },
+  }>(ORGANIZATION_EVENT_CONNECTION_LIST, {
+    variables: {
+      organization_id: organizationId,
+      first: 3, // Fetch top 3 upcoming events
+      skip: 0, // No offset
     },
-  );
+  });
 
   /**
    * Effect hook to update members state when memberData is fetched.
@@ -136,7 +144,9 @@ export default function OrganizationSidebar(): JSX.Element {
    */
   useEffect(() => {
     if (eventsData?.eventsByOrganizationConnection) {
-      setEvents(eventsData.eventsByOrganizationConnection as InterfaceQueryOrganizationEventListItem[]);
+      setEvents(
+        eventsData.eventsByOrganizationConnection as InterfaceQueryOrganizationEventListItem[],
+      );
     }
   }, [eventsData]);
 

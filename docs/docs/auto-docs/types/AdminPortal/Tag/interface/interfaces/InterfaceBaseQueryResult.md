@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/Palis
 
 ### error?
 
-> `optional` **error**: `ApolloError`
+> `optional` **error**: `ErrorLike`
 
 Defined in: [src/types/AdminPortal/Tag/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L41)
 

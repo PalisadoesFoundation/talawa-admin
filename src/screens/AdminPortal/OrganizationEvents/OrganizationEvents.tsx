@@ -179,7 +179,8 @@ function organizationEvents(): JSX.Element {
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
-    isInviteOnly: (edge.node as { isInviteOnly?: boolean }).isInviteOnly ?? false,
+    isInviteOnly:
+      (edge.node as { isInviteOnly?: boolean }).isInviteOnly ?? false,
     // Add recurring event information
     isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
     baseEvent: edge.node.baseEvent,

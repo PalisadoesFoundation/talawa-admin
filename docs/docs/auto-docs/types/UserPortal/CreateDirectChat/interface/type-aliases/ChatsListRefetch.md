@@ -4,7 +4,7 @@
 
 # Type Alias: ChatsListRefetch()
 
-> **ChatsListRefetch** = (`variables?`) => `Promise`\<`ApolloQueryResult`\<`unknown`\>\>
+> **ChatsListRefetch** = (`variables?`) => `Promise`\<`unknown`\>
 
 Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L11)
 
@@ -16,4 +16,4 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:11](https://gith
 
 ## Returns
 
-`Promise`\<`ApolloQueryResult`\<`unknown`\>\>
+`Promise`\<`unknown`\>

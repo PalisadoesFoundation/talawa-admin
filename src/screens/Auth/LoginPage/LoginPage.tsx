@@ -181,7 +181,11 @@ const LoginPage = (): JSX.Element => {
   };
 
   const handleLoginError = (error: Error): void => {
-    const err = error as Error & { graphQLErrors?: Array<{ extensions?: { code?: string; retryAfter?: string | number | Date } }> };
+    const err = error as Error & {
+      graphQLErrors?: Array<{
+        extensions?: { code?: string; retryAfter?: string | number | Date };
+      }>;
+    };
     if (err.graphQLErrors?.length) {
       const graphQLError = err.graphQLErrors[0];
       const extensions = graphQLError?.extensions;

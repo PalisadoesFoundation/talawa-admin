@@ -18,9 +18,7 @@ interface IMockedResponseWithMatcher extends MockedResponse {
 }
 
 function requestToKey(
-  request:
-    | ApolloLink.Operation
-    | import('@apollo/client/core').GraphQLRequest,
+  request: ApolloLink.Operation | import('@apollo/client/core').GraphQLRequest,
   addTypename: boolean,
 ): string {
   const queryString =
@@ -103,7 +101,7 @@ export class StaticMockLink extends ApolloLink {
       );
     } else {
       const { result, error } = response;
-      // In v4, MockedResponse no longer has newData. 
+      // In v4, MockedResponse no longer has newData.
       // result can be a function which achieves the same purpose.
 
       if (!result && !error) {
@@ -125,9 +123,12 @@ export class StaticMockLink extends ApolloLink {
               if (response.result) {
                 observer.next(
                   typeof response.result === 'function'
-                    ? (response.result as ResultFunction<ApolloLink.Result, any>)(
-                      operation.variables,
-                    )
+                    ? (
+                        response.result as ResultFunction<
+                          ApolloLink.Result,
+                          any
+                        >
+                      )(operation.variables)
                     : response.result,
                 );
               }
@@ -158,7 +159,7 @@ export class StaticMockLink extends ApolloLink {
     }
 
     // In Apollo 4, we don't need to manually remove connection/client directives
-    // as it's handled internally or by the matchers. 
+    // as it's handled internally or by the matchers.
     // If we find matching issues, we can re-implement this using generic ast visitors.
 
     return newMockedResponse;

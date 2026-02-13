@@ -157,9 +157,11 @@ export default function createDirectChatModal({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery<{ organization?: { members?: { edges?: Array<{ node: InterfaceOrganizationMember }> } } }>(
-    ORGANIZATION_MEMBERS,
-    {
+  } = useQuery<{
+    organization?: {
+      members?: { edges?: Array<{ node: InterfaceOrganizationMember }> };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: organizationId },
       first: 20,

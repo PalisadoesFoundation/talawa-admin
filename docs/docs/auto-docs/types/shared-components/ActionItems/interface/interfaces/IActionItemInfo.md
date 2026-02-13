@@ -58,7 +58,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:38](https://gi
 
 ### creator
 
-> **creator**: `IActionUserInfo`
+> **creator**: [`IActionUserInfo`](IActionUserInfo.md)
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L77)
 

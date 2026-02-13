@@ -4,7 +4,7 @@
 
 # Interface: IUseDataTableSelectionOptions\<T\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L190)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L191)
 
 Configuration options for row selection in a DataTable.
 
@@ -25,7 +25,7 @@ The type of row data in the table
 
 > `optional` **bulkActions**: readonly [`IBulkAction`](IBulkAction.md)\<`T`\>[]
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L207)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L208)
 
 Array of bulk actions available for selected rows
 
@@ -35,7 +35,7 @@ Array of bulk actions available for selected rows
 
 > `optional` **initialSelectedKeys**: `ReadonlySet`\<[`Key`](../../types/type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L205)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L206)
 
 Initial set of selected rows on component mount
 
@@ -45,7 +45,7 @@ Initial set of selected rows on component mount
 
 > **keysOnPage**: [`Key`](../../types/type-aliases/Key.md)[]
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L194)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L195)
 
 Array of keys for rows on the current page
 
@@ -55,7 +55,7 @@ Array of keys for rows on the current page
 
 > `optional` **onSelectionChange**: (`next`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L203)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L204)
 
 Callback fired when the selection changes.
 Receives a new immutable set of selected keys.
@@ -76,7 +76,7 @@ Receives a new immutable set of selected keys.
 
 > **paginatedData**: readonly `T`[]
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L192)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L193)
 
 Array of rows currently shown on the page
 
@@ -86,7 +86,7 @@ Array of rows currently shown on the page
 
 > `optional` **selectable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:196](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L196)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L197)
 
 Whether row selection is enabled for this table
 
@@ -96,6 +96,6 @@ Whether row selection is enabled for this table
 
 > `optional` **selectedKeys**: `ReadonlySet`\<[`Key`](../../types/type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L198)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:199](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L199)
 
 Set of currently selected row keys

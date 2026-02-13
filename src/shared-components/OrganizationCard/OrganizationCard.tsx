@@ -127,7 +127,9 @@ function OrganizationCard({
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        const apolloError = error as Error & { graphQLErrors?: Array<{ extensions?: { code?: string } }> };
+        const apolloError = error as Error & {
+          graphQLErrors?: Array<{ extensions?: { code?: string } }>;
+        };
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
           NotificationToast.error(t('users.AlreadyJoined'));

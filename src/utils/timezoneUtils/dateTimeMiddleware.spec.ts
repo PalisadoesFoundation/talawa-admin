@@ -27,7 +27,9 @@ const DUMMY_QUERY: DocumentNode = gql`
   }
 `;
 
-function makeOperation(variables: Record<string, unknown> = {}): ApolloLink.Operation {
+function makeOperation(
+  variables: Record<string, unknown> = {},
+): ApolloLink.Operation {
   return createOperation(
     { query: DUMMY_QUERY, variables },
     { client: mockClient },

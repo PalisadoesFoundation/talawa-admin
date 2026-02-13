@@ -106,10 +106,9 @@ const UpcomingEvents = (): JSX.Element => {
   const { data: membershipData, loading: membershipLoading } = useQuery<{
     getVolunteerMembership?: InterfaceVolunteerMembership[];
   }>(USER_VOLUNTEER_MEMBERSHIP, {
-      variables: { where: { userId } },
-      skip: !userId,
-    },
-  );
+    variables: { where: { userId } },
+    skip: !userId,
+  });
   const basicMembershipLookup = useMemo(() => {
     const lookup: Record<string, InterfaceVolunteerMembership> = {};
     membershipData?.getVolunteerMembership?.forEach(

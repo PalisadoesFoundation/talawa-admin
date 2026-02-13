@@ -28,7 +28,7 @@ Extract GraphQL connection data into table rows with optional node transform; fi
 
 ### result
 
-`QueryResult`\<`TData`\>
+`Result`\<`TData`\>
 
 ### options
 

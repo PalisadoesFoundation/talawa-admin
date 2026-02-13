@@ -60,7 +60,11 @@ export const EventStats = ({
     event: {
       _id: string;
       averageFeedbackScore: number | null;
-      feedback: Array<{ _id?: string; rating?: number; review?: string | null }>;
+      feedback: Array<{
+        _id?: string;
+        rating?: number;
+        review?: string | null;
+      }>;
     };
   }>(EVENT_FEEDBACKS, {
     variables: { id: eventId },

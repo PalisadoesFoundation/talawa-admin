@@ -1458,9 +1458,7 @@ describe('CursorPaginationManager', () => {
       };
 
       const { rerender } = render(
-        <MockedProvider
-          mocks={[initialMock, slowFetchMoreMock, refetchMock]}
-        >
+        <MockedProvider mocks={[initialMock, slowFetchMoreMock, refetchMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1484,9 +1482,7 @@ describe('CursorPaginationManager', () => {
 
       // Immediately trigger refetch (increments generation counter)
       rerender(
-        <MockedProvider
-          mocks={[initialMock, slowFetchMoreMock, refetchMock]}
-        >
+        <MockedProvider mocks={[initialMock, slowFetchMoreMock, refetchMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}

@@ -760,4 +760,3 @@ describe('UserSidebar', () => {
     });
   });
 });
-

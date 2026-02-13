@@ -135,15 +135,13 @@ const ItemModal: FC<IItemModalProps> = ({
 
   const { data: actionItemCategoriesData } = useQuery<{
     actionCategoriesByOrganization?: IActionItemCategoryInfo[];
-  }>(ACTION_ITEM_CATEGORY_LIST,
-    {
-      variables: {
-        input: {
-          organizationId: orgId,
-        },
+  }>(ACTION_ITEM_CATEGORY_LIST, {
+    variables: {
+      input: {
+        organizationId: orgId,
       },
     },
-  );
+  });
 
   const { data: volunteersData } = useQuery<{
     event?: { volunteers?: InterfaceEventVolunteerInfo[] };

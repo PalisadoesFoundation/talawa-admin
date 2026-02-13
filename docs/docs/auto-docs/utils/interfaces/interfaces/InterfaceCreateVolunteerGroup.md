@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1744](https://github.com/PalisadoesFoundati
 
 ### leader
 
-> **leader**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
+> **leader**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
 Defined in: [src/utils/interfaces.ts:1745](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1745)
 

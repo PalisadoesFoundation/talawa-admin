@@ -174,7 +174,9 @@ function AddMember(): JSX.Element {
             isEmailAddressVerified: true,
           },
         });
-        const createdUserId = (registeredUser?.data as { createUser?: { user?: { id: string } } })?.createUser?.user?.id;
+        const createdUserId = (
+          registeredUser?.data as { createUser?: { user?: { id: string } } }
+        )?.createUser?.user?.id;
         if (createdUserId) {
           await createMember(createdUserId);
         }

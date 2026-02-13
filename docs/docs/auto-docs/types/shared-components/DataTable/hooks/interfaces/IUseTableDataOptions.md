@@ -4,7 +4,7 @@
 
 # Interface: IUseTableDataOptions\<TNode, TRow, TData\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L32)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L33)
 
 Configuration options for fetching table data from a GraphQL connection.
 
@@ -37,7 +37,7 @@ The complete GraphQL query result data shape
 
 > `optional` **deps**: `DependencyList`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L47)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L48)
 
 React dependency array to control when the data fetching updates
 
@@ -47,7 +47,7 @@ React dependency array to control when the data fetching updates
 
 > **path**: `DataPath`\<`TNode`, `TData`\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L37)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L38)
 
 Path to the connection data within the query result.
 Can be a function that extracts the connection from data, or an array of keys/indices.
@@ -58,7 +58,7 @@ Can be a function that extracts the connection from data, or an array of keys/in
 
 > `optional` **transformNode**: (`node`) => `TRow`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L45)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L46)
 
 Optional transform function to convert raw node data into row format.
 Called for each node in the connection.

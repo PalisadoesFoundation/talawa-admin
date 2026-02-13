@@ -106,17 +106,18 @@ function Requests(): JSX.Element {
   } = useQuery<{ getVolunteerMembership: InterfaceVolunteerMembership[] }>(
     USER_VOLUNTEER_MEMBERSHIP,
     {
-    variables: {
-      where: {
-        eventId,
-        status: 'requested',
-        userName: searchTerm || undefined,
+      variables: {
+        where: {
+          eventId,
+          status: 'requested',
+          userName: searchTerm || undefined,
+        },
+        orderBy: sortBy
+          ? (sortBy as 'createdAt_ASC' | 'createdAt_DESC')
+          : undefined,
       },
-      orderBy: sortBy
-        ? (sortBy as 'createdAt_ASC' | 'createdAt_DESC')
-        : undefined,
     },
-  });
+  );
 
   const requests = useMemo(() => {
     if (!requestsData) return [];

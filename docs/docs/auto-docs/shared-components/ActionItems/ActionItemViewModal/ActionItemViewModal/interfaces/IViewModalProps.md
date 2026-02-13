@@ -4,7 +4,7 @@
 
 # Interface: IViewModalProps
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L37)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L40)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemVie
 
 > **hide**: () => `void`
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L39)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L42)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemVie
 
 > **isOpen**: `boolean`
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L38)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L41)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemVie
 
 > **item**: [`IActionItemInfo`](../../../../../types/shared-components/ActionItems/interface/interfaces/IActionItemInfo.md)
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L40)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L43)

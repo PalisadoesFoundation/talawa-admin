@@ -664,10 +664,12 @@ describe('PostCard', () => {
 
     // Temporarily mock useMutation for this test only (useMutation is in @apollo/client/react)
     const apolloReact = await import('@apollo/client/react');
-    const useMutationSpy = vi.spyOn(apolloReact, 'useMutation').mockReturnValue([
-      mockLikePost,
-      { loading: false },
-    ] as unknown as ReturnType<typeof apolloReact.useMutation>);
+    const useMutationSpy = vi
+      .spyOn(apolloReact, 'useMutation')
+      .mockReturnValue([
+        mockLikePost,
+        { loading: false },
+      ] as unknown as ReturnType<typeof apolloReact.useMutation>);
 
     try {
       renderPostCard({
@@ -703,7 +705,9 @@ describe('PostCard', () => {
     const originalUseMutation = apolloReact.useMutation;
 
     // Override just for this test to return the error mock for CREATE_COMMENT_POST
-    (apolloReact as { useMutation: typeof apolloReact.useMutation }).useMutation = vi.fn((mutation) => {
+    (
+      apolloReact as { useMutation: typeof apolloReact.useMutation }
+    ).useMutation = vi.fn((mutation) => {
       if (mutation === CREATE_COMMENT_POST) {
         return [mockCreateComment, { loading: false }];
       }
@@ -734,7 +738,9 @@ describe('PostCard', () => {
       });
     } finally {
       // Always restore the original mock
-      (apolloReact as { useMutation: typeof apolloReact.useMutation }).useMutation = originalUseMutation;
+      (
+        apolloReact as { useMutation: typeof apolloReact.useMutation }
+      ).useMutation = originalUseMutation;
     }
   });
 

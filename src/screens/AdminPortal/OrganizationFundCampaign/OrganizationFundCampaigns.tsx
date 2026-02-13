@@ -108,9 +108,7 @@ const orgFundCampaign = (): JSX.Element => {
     refetch: refetchCampaign,
   } = useQuery<{
     fund?: InterfaceQueryOrganizationFundCampaigns;
-  }>(
-    FUND_CAMPAIGN,
-    {
+  }>(FUND_CAMPAIGN, {
     variables: {
       input: { id: fundId },
     },

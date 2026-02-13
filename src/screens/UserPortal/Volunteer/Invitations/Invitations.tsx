@@ -113,15 +113,16 @@ const Invitations = (): JSX.Element => {
   } = useQuery<{ getVolunteerMembership: InterfaceVolunteerMembership[] }>(
     USER_VOLUNTEER_MEMBERSHIP,
     {
-    variables: {
-      where: {
-        userId: userId,
-        status: 'invited',
-        eventTitle: appliedSearch || undefined,
+      variables: {
+        where: {
+          userId: userId,
+          status: 'invited',
+          eventTitle: appliedSearch || undefined,
+        },
+        orderBy: sortBy,
       },
-      orderBy: sortBy,
     },
-  });
+  );
 
   const invitations = useMemo(() => {
     if (!invitationData) return [];

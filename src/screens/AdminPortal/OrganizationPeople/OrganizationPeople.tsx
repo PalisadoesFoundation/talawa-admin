@@ -156,23 +156,37 @@ function OrganizationPeople(): JSX.Element {
   >();
 
   // Query hooks (Apollo v4: onCompleted removed, use data + useEffect)
-  const [fetchMembers, { data: memberData, loading: memberLoading, error: memberError }] =
-    useLazyQuery<{
-      organization?: {
-        members?: {
-          edges: IEdges[];
-          pageInfo?: { startCursor?: string; endCursor?: string; hasNextPage: boolean; hasPreviousPage: boolean };
+  const [
+    fetchMembers,
+    { data: memberData, loading: memberLoading, error: memberError },
+  ] = useLazyQuery<{
+    organization?: {
+      members?: {
+        edges: IEdges[];
+        pageInfo?: {
+          startCursor?: string;
+          endCursor?: string;
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
         };
       };
-    }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST);
+    };
+  }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST);
 
-  const [fetchUsers, { data: userData, loading: userLoading, error: userError }] =
-    useLazyQuery<{
-      allUsers?: {
-        edges: IEdges[];
-        pageInfo?: { startCursor?: string; endCursor?: string; hasNextPage: boolean; hasPreviousPage: boolean };
+  const [
+    fetchUsers,
+    { data: userData, loading: userLoading, error: userError },
+  ] = useLazyQuery<{
+    allUsers?: {
+      edges: IEdges[];
+      pageInfo?: {
+        startCursor?: string;
+        endCursor?: string;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
       };
-    }>(USER_LIST_FOR_TABLE);
+    };
+  }>(USER_LIST_FOR_TABLE);
 
   // Sync lazy query results to state (based on active tab)
   useEffect(() => {
@@ -181,7 +195,10 @@ function OrganizationPeople(): JSX.Element {
         const m = memberData.organization.members;
         setData({
           edges: m.edges,
-          pageInfo: m.pageInfo ?? { hasNextPage: false, hasPreviousPage: false },
+          pageInfo: m.pageInfo ?? {
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
         });
       }
     } else if (state === 2 && userData?.allUsers) {

@@ -399,7 +399,7 @@ Defined in: [src/types/shared-components/DataTable/props.ts:164](https://github.
 
 ### refetch?
 
-> `optional` **refetch**: `QueryResult`\<`unknown`\>\[`"refetch"`\]
+> `optional` **refetch**: `useQuery.Result`\<`unknown`\>\[`"refetch"`\]
 
 Defined in: [src/types/shared-components/DataTable/props.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L184)
 

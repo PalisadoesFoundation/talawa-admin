@@ -4,7 +4,7 @@
 
 # Interface: IRowAction\<T\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L129)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L130)
 
 Configuration for an action available on individual table rows.
 
@@ -25,7 +25,7 @@ The type of row data this action operates on
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L146)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L147)
 
 ARIA label for accessibility when label alone is not descriptive
 
@@ -35,7 +35,7 @@ ARIA label for accessibility when label alone is not descriptive
 
 > `optional` **disabled**: `boolean` \| (`row`) => `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L144)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L145)
 
 Whether this action is disabled.
 Can be a boolean or a function that evaluates the row to determine disabled state.
@@ -46,7 +46,7 @@ Can be a boolean or a function that evaluates the row to determine disabled stat
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L131)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L132)
 
 Unique identifier for this action
 
@@ -56,7 +56,7 @@ Unique identifier for this action
 
 > **label**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L133)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L134)
 
 Display label for the action button or menu item
 
@@ -66,7 +66,7 @@ Display label for the action button or menu item
 
 > **onClick**: (`row`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L139)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L140)
 
 Callback fired when the action is triggered on a row.
 

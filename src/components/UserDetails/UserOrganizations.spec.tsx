@@ -167,7 +167,9 @@ describe('UserOrganizations', () => {
 
     // Get the mocked useQuery function (useQuery is in @apollo/client/react)
     const apolloReact = await import('@apollo/client/react');
-    mockUseQuery = (apolloReact as unknown as { useQuery: ReturnType<typeof vi.fn> }).useQuery;
+    mockUseQuery = (
+      apolloReact as unknown as { useQuery: ReturnType<typeof vi.fn> }
+    ).useQuery;
 
     // Define interface for query variables
     interface InterfaceUserDetailsVariables {
@@ -184,10 +186,7 @@ describe('UserOrganizations', () => {
 
     // Default mock implementation with proper typing
     mockUseQuery.mockImplementation(
-      (
-        query: DocumentNode,
-        options?: { variables?: OperationVariables },
-      ) => {
+      (query: DocumentNode, options?: { variables?: OperationVariables }) => {
         if (query === USER_DETAILS) {
           const vars = options?.variables as
             | InterfaceUserDetailsVariables

@@ -1324,9 +1324,7 @@ describe('Validation', () => {
       // Completely unmount by setting show to false
       await act(async () => {
         rerender(
-          <MockedProvider
-            link={new StaticMockLink(MOCKS, true)}
-          >
+          <MockedProvider link={new StaticMockLink(MOCKS, true)}>
             <BrowserRouter>
               <Provider store={store}>
                 <I18nextProvider i18n={i18nForTest}>

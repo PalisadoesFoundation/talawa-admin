@@ -101,7 +101,11 @@ const Pledges = (): JSX.Element => {
     [openDeleteModal],
   );
 
-  const graphQLErrors = (pledgeError as ErrorLike & { graphQLErrors?: Array<{ extensions?: { code?: string } }> })?.graphQLErrors;
+  const graphQLErrors = (
+    pledgeError as ErrorLike & {
+      graphQLErrors?: Array<{ extensions?: { code?: string } }>;
+    }
+  )?.graphQLErrors;
   const isNoPledgesFoundError =
     graphQLErrors?.some((graphQLError) => {
       const code = graphQLError.extensions?.code;

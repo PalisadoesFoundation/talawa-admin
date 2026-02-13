@@ -6,7 +6,7 @@
 
 > **EventStats**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/Statistics/EventStats.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/EventStats.tsx#L50)
+Defined in: [src/components/EventStats/Statistics/EventStats.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/EventStats.tsx#L51)
 
 ## Parameters
 

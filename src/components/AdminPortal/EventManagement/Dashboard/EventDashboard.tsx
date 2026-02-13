@@ -133,7 +133,10 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     isRegisterable: eventData.event.isRegisterable,
     isInviteOnly: eventData.event.isInviteOnly ?? false,
     attendees: [],
-    creator: (eventData.event.creator ?? {}) as Partial<{ id: string; name: string }>,
+    creator: (eventData.event.creator ?? {}) as Partial<{
+      id: string;
+      name: string;
+    }>,
     userId: userId as string,
   };
 

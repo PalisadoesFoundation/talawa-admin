@@ -927,4 +927,3 @@ describe('Apollo Client Configuration', () => {
     });
   });
 });
-

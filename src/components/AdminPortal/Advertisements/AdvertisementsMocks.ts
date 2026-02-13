@@ -592,4 +592,3 @@ export const fetchErrorMocks = [
     new Error('Failed to fetch advertisements'),
   ),
 ];
-

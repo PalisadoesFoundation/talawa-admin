@@ -2208,10 +2208,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const cache = new InMemoryCache();
     render(
-      <MockedProvider
-        mocks={[...MOCKS, mutationErrorMock]}
-        cache={cache}
-      >
+      <MockedProvider mocks={[...MOCKS, mutationErrorMock]} cache={cache}>
         <BrowserRouter>
           <ThemeProvider theme={theme}>
             <I18nextProvider i18n={i18nForTest}>

@@ -4,11 +4,7 @@ import type { Observer } from 'rxjs';
 import type { MockedResponse } from '@apollo/client/testing';
 import { gql, Observable } from '@apollo/client';
 import { print } from 'graphql';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloLink,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
 import { createOperation } from '@apollo/client/link/utils';
 import { equal } from '@wry/equality';
 

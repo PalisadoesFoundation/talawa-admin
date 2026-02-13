@@ -169,9 +169,15 @@ export default function CreateGroupChat({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery<{ organization?: { members?: { edges?: Array<{ node: { id: string; name: string; avatarURL?: string; role: string } }> } } }>(
-    ORGANIZATION_MEMBERS,
-    {
+  } = useQuery<{
+    organization?: {
+      members?: {
+        edges?: Array<{
+          node: { id: string; name: string; avatarURL?: string; role: string };
+        }>;
+      };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: currentOrg },
       first: 20,

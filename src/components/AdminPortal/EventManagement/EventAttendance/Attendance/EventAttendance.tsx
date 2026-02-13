@@ -92,17 +92,17 @@ function EventAttendance(): JSX.Element {
   };
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
-    const data = memberData as { event?: { attendees?: InterfaceMember[] } } | undefined;
+    const data = memberData as
+      | { event?: { attendees?: InterfaceMember[] } }
+      | undefined;
     const attendees = data?.event?.attendees ?? [];
-    const filtered = attendees.filter(
-      (attendee: InterfaceMember) => {
-        const name = attendee.name?.toLowerCase() || '';
-        const email = attendee.emailAddress?.toLowerCase() || '';
-        return (
-          name.includes(searchValueLower) || email.includes(searchValueLower)
-        );
-      },
-    );
+    const filtered = attendees.filter((attendee: InterfaceMember) => {
+      const name = attendee.name?.toLowerCase() || '';
+      const email = attendee.emailAddress?.toLowerCase() || '';
+      return (
+        name.includes(searchValueLower) || email.includes(searchValueLower)
+      );
+    });
 
     const finalFiltered = filterAndSortAttendees(filtered);
     setFilteredAttendees(finalFiltered);
@@ -132,7 +132,9 @@ function EventAttendance(): JSX.Element {
     });
 
   useEffect(() => {
-    const data = memberData as { event?: { attendees?: InterfaceMember[] } } | undefined;
+    const data = memberData as
+      | { event?: { attendees?: InterfaceMember[] } }
+      | undefined;
     if (data?.event?.attendees) {
       const attendees = data.event.attendees.filter(
         (a): a is InterfaceMember => a != null,

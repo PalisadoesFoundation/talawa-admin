@@ -313,7 +313,8 @@ export default function Organizations(): React.JSX.Element {
         const orgs =
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
             (edge) => {
-              const organization = edge.node as IOrgData & Partial<IOrganization>;
+              const organization = edge.node as IOrgData &
+                Partial<IOrganization>;
               return {
                 ...organization,
                 membershipRequestStatus: 'accepted',
@@ -321,7 +322,8 @@ export default function Organizations(): React.JSX.Element {
                 address: organization.address ?? defaultAddress,
                 admins: organization.admins ?? [],
                 membershipRequests: organization.membershipRequests ?? [],
-                userRegistrationRequired: organization.userRegistrationRequired ?? false,
+                userRegistrationRequired:
+                  organization.userRegistrationRequired ?? false,
               } as IOrganization;
             },
           );

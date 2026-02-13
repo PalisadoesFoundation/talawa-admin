@@ -168,7 +168,10 @@ function App(): React.ReactElement {
       data?.currentUser?.appUserProfile?.adminFor ??
       data?.user?.appUserProfile?.adminFor;
     return adminFor?.map((org: { _id: string }) => org._id) ?? [];
-  }, [data?.currentUser?.appUserProfile?.adminFor, data?.user?.appUserProfile?.adminFor]);
+  }, [
+    data?.currentUser?.appUserProfile?.adminFor,
+    data?.user?.appUserProfile?.adminFor,
+  ]);
 
   // Get plugin routes
   const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
