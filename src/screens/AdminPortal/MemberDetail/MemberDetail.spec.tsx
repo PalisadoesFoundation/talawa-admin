@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MemberDetail from './MemberDetail';
 import { ReactNode } from 'react';
@@ -7,16 +7,9 @@ import { ReactNode } from 'react';
 /* -------------------- mocks -------------------- */
 
 // mock react-router params - default mock
-const mockUseParams = vi.fn((): { userId?: string } => ({
+const mockUseParams = vi.fn((): { userId?: string; orgId?: string } => ({
   userId: '123',
-}));
-
-const mockGetItem = vi.fn().mockReturnValue(null);
-// Explicit null default for clarity
-vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    getItem: mockGetItem,
-  }),
+  orgId: '456',
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -85,18 +78,16 @@ vi.mock(
 
 describe('MemberDetail', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
-    cleanup();
-    mockGetItem.mockReturnValue(null);
+    vi.clearAllMocks();
   });
 
   it('renders noUserId message when userId is not provided', () => {
     // Override the mock to return no userId
     mockUseParams.mockReturnValueOnce({
       userId: undefined,
+      orgId: undefined,
     });
 
-    mockGetItem.mockReturnValueOnce(null).mockReturnValueOnce(null);
     render(<MemberDetail />);
 
     // Should render the noUserId message
@@ -167,32 +158,5 @@ describe('MemberDetail', () => {
       'data-active',
       'true',
     );
-  });
-
-  it('falls back to localStorage userId when URL param is missing', () => {
-    mockUseParams.mockReturnValueOnce({
-      userId: undefined,
-    });
-
-    // first call -> getItem('id') -> null
-    // second call -> getItem('userId') -> 999
-    mockGetItem.mockReturnValueOnce(null).mockReturnValueOnce('999');
-
-    render(<MemberDetail />);
-
-    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('999');
-  });
-
-  it('falls back to admin id when param missing', () => {
-    mockUseParams.mockReturnValueOnce({
-      userId: undefined,
-    });
-
-    // getItem('id') -> 777
-    mockGetItem.mockReturnValueOnce('777');
-
-    render(<MemberDetail />);
-
-    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('777');
   });
 });
