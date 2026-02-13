@@ -1,4 +1,4 @@
-import { AdvertisementPage } from '../../pageObjects/AdminPortal/AdvertisementPage';
+import { AdvertisementPage } from '../../../pageObjects/AdminPortal/AdvertisementPage';
 
 interface InterfaceAdvertisementData {
   ad1: {
