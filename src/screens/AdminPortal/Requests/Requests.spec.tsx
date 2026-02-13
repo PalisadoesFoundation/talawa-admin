@@ -780,7 +780,6 @@ describe('Testing Requests screen', () => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
   });
-
   test('should handle loading more requests when no previous data exists', async () => {
     render(
       <MockedProvider link={link3}>
