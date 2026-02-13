@@ -101,6 +101,25 @@ describe('MemberDetail', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('renders noOrgId message when orgId is not provided', () => {
+    // Override params → userId exists but orgId missing
+    mockUseParams.mockReturnValueOnce({
+      userId: '123',
+      orgId: undefined,
+    });
+
+    render(<MemberDetail />);
+
+    // Should render the noOrgId message
+    expect(screen.getByText('noOrgId')).toBeInTheDocument();
+
+    // Should NOT render tabs or member content
+    expect(screen.queryByTestId('tab-overview')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('user-contact-details'),
+    ).not.toBeInTheDocument();
+  });
+
   it('renders overview tab by default with userId from route', () => {
     render(<MemberDetail />);
 
