@@ -52,17 +52,13 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
-interface IAddMemberProps {
-  rootClassName?: string;
-  containerClassName?: string;
-  toggleClassName?: string;
-}
+import type { InterfaceAddMemberProps } from 'types/AdminPortal/OrganizationPeople/addMember/interface';
 
 function AddMember({
   rootClassName,
   containerClassName,
   toggleClassName,
-}: IAddMemberProps = {}): JSX.Element {
+}: InterfaceAddMemberProps = {}): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
