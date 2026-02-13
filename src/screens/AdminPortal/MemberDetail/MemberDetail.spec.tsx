@@ -43,7 +43,9 @@ vi.mock('components/UserDetails/UserOrganizations', () => ({
 }));
 
 vi.mock('components/UserDetails/UserEvents', () => ({
-  default: () => <div data-testid="user-events" />,
+  default: ({ orgId, userId }: { orgId?: string; userId?: string }) => (
+    <div data-testid="user-events" data-orgid={orgId} data-userid={userId} />
+  ),
 }));
 
 vi.mock('components/UserDetails/UserTags', () => ({
@@ -148,6 +150,14 @@ describe('MemberDetail', () => {
     await userEvent.click(screen.getByTestId('tab-events'));
 
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
+    expect(screen.getByTestId('user-events')).toHaveAttribute(
+      'data-orgid',
+      '456',
+    );
+    expect(screen.getByTestId('user-events')).toHaveAttribute(
+      'data-userid',
+      '123',
+    );
     expect(screen.getByTestId('tab-events')).toHaveAttribute(
       'data-active',
       'true',
