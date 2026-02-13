@@ -176,7 +176,7 @@ describe('Calendar', () => {
       </MockedProvider>,
     );
     await wait();
-    const prevButton = screen.getByLabelText(/previousYear/i);
+    const prevButton = screen.getByLabelText(/Previous Year/i);
     const nextButton = screen.getByTestId('nextYear');
 
     // click previous year
@@ -499,9 +499,9 @@ describe('Calendar', () => {
     await wait();
     // Verify that the year view renders by checking for year navigation
     const prevYearButton = screen.getByRole('button', {
-      name: /previousYear/i,
+      name: /Previous Year/i,
     });
-    const nextYearButton = screen.getByRole('button', { name: /nextYear/i });
+    const nextYearButton = screen.getByRole('button', { name: /Next Year/i });
     expect(prevYearButton).toBeInTheDocument();
     expect(nextYearButton).toBeInTheDocument();
   });
