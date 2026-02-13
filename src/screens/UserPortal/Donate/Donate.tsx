@@ -121,7 +121,7 @@ export default function Donate(): JSX.Element {
     () => [
       {
         id: 'donor',
-        header: 'Donor',
+        header: t('donor'),
         accessor: 'donor',
         render: (value) => (
           <span data-testid="donationCard">{String(value)}</span>
@@ -132,15 +132,15 @@ export default function Donate(): JSX.Element {
         header: t('amount'),
         accessor: 'amount',
         render: (value) => {
-          const symbol =
-            currencySymbols[selectedCurrency as keyof typeof currencySymbols] ??
-            selectedCurrency;
+          const currencySymbol =
+            currencySymbols[selectedCurrency as keyof typeof currencySymbols];
+          const symbol = currencySymbol ?? selectedCurrency;
           return `${symbol}${Number(value)}`;
         },
       },
       {
         id: 'updatedAt',
-        header: 'Date',
+        header: t('date'),
         accessor: 'updatedAt',
         render: (value) => dayjs(String(value)).format('YYYY-MM-DD HH:mm'),
       },
@@ -167,7 +167,6 @@ export default function Donate(): JSX.Element {
   const handleCurrencyChange = (currency: string): void => {
     setSelectedCurrency(currency);
     setPage(0);
-    void refetch({ orgId: organizationId });
   };
 
   const shouldFallbackToLegacyDonationMutation = (error: unknown): boolean => {
@@ -184,13 +183,24 @@ export default function Donate(): JSX.Element {
       .join(' ')
       .toLowerCase();
 
-    return (
+    const shouldFallback =
       combinedMessage.includes('unknown argument "currencycode"') ||
       combinedMessage.includes('unknown type "iso4217currencycode"') ||
       combinedMessage.includes(
         'field "createdonation" argument "currencycode" is not defined',
-      )
-    );
+      );
+
+    if (shouldFallback) {
+      console.error(
+        'Currency-aware donation unsupported by backend, falling back to legacy mutation',
+        {
+          error,
+          combinedMessage,
+        },
+      );
+    }
+
+    return shouldFallback;
   };
 
   const donateToOrg = async (): Promise<void> => {

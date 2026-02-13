@@ -63,8 +63,7 @@
   flex-grow: 1;
   padding: var(--space-5);
   max-height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   background-color: var(--color-gray-50);
 }
 

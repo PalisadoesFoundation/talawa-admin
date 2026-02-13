@@ -624,6 +624,10 @@ export const DONATE_TO_ORGANIZATION = gql`
   }
 `;
 
+/**
+ * DONATE_TO_ORGANIZATION_WITH_CURRENCY is the currency-aware variant of DONATE_TO_ORGANIZATION for donations with explicit currency.
+ * Accepts an ISO 4217 `currencyCode` (Iso4217CurrencyCode) while preserving the same returned fields: `_id`, `amount`, `nameOfUser`, and `nameOfOrg`.
+ */
 export const DONATE_TO_ORGANIZATION_WITH_CURRENCY = gql`
   mutation donateWithCurrency(
     $userId: ID!

@@ -698,6 +698,28 @@ describe('Apollo Client Configuration', () => {
       getElementByIdSpy.mockRestore();
     });
 
+    const createOperation = (
+      operationName: string,
+      operationType: 'query' | 'subscription',
+    ): Operation =>
+      ({
+        operationName,
+        query: {
+          kind: 'Document',
+          definitions: [
+            {
+              kind: 'OperationDefinition',
+              operation: operationType,
+            },
+          ],
+        } as unknown as DocumentNode,
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      }) as unknown as Operation;
+
     it('should trigger refreshToken on unauthenticated error', async () => {
       await import('./index');
       expect(onErrorCallback).toBeDefined();
@@ -907,23 +929,10 @@ describe('Apollo Client Configuration', () => {
     it('should not show API unavailable toast for subscription network errors', async () => {
       await import('./index');
 
-      const subscriptionOperation = {
-        operationName: 'SubscriptionQuery',
-        query: {
-          kind: 'Document',
-          definitions: [
-            {
-              kind: 'OperationDefinition',
-              operation: 'subscription',
-            },
-          ],
-        } as unknown as DocumentNode,
-        variables: {},
-        extensions: {},
-        setContext: vi.fn(),
-        getContext: vi.fn(),
-        toKey: vi.fn(),
-      } as unknown as Operation;
+      const subscriptionOperation = createOperation(
+        'SubscriptionQuery',
+        'subscription',
+      );
 
       onErrorCallback({
         networkError: new Error('Network Error'),
@@ -937,23 +946,7 @@ describe('Apollo Client Configuration', () => {
     it('should not show API unavailable toast for aborted network errors', async () => {
       await import('./index');
 
-      const queryOperation = {
-        operationName: 'RegularQuery',
-        query: {
-          kind: 'Document',
-          definitions: [
-            {
-              kind: 'OperationDefinition',
-              operation: 'query',
-            },
-          ],
-        } as unknown as DocumentNode,
-        variables: {},
-        extensions: {},
-        setContext: vi.fn(),
-        getContext: vi.fn(),
-        toKey: vi.fn(),
-      } as unknown as Operation;
+      const queryOperation = createOperation('RegularQuery', 'query');
 
       const abortError = new Error('The operation was aborted');
       abortError.name = 'AbortError';
@@ -970,23 +963,7 @@ describe('Apollo Client Configuration', () => {
     it('should show API unavailable toast for query network errors', async () => {
       await import('./index');
 
-      const queryOperation = {
-        operationName: 'RegularQuery',
-        query: {
-          kind: 'Document',
-          definitions: [
-            {
-              kind: 'OperationDefinition',
-              operation: 'query',
-            },
-          ],
-        } as unknown as DocumentNode,
-        variables: {},
-        extensions: {},
-        setContext: vi.fn(),
-        getContext: vi.fn(),
-        toKey: vi.fn(),
-      } as unknown as Operation;
+      const queryOperation = createOperation('RegularQuery', 'query');
 
       onErrorCallback({
         networkError: new Error('Network Error'),
@@ -1005,23 +982,7 @@ describe('Apollo Client Configuration', () => {
     it('should not show API unavailable toast for 4xx query errors', async () => {
       await import('./index');
 
-      const queryOperation = {
-        operationName: 'RegularQuery',
-        query: {
-          kind: 'Document',
-          definitions: [
-            {
-              kind: 'OperationDefinition',
-              operation: 'query',
-            },
-          ],
-        } as unknown as DocumentNode,
-        variables: {},
-        extensions: {},
-        setContext: vi.fn(),
-        getContext: vi.fn(),
-        toKey: vi.fn(),
-      } as unknown as Operation;
+      const queryOperation = createOperation('RegularQuery', 'query');
 
       const badRequestError = new Error(
         'Response not successful: Received status code 400',
@@ -1040,23 +1001,7 @@ describe('Apollo Client Configuration', () => {
     it('should show API unavailable toast for 5xx query errors', async () => {
       await import('./index');
 
-      const queryOperation = {
-        operationName: 'RegularQuery',
-        query: {
-          kind: 'Document',
-          definitions: [
-            {
-              kind: 'OperationDefinition',
-              operation: 'query',
-            },
-          ],
-        } as unknown as DocumentNode,
-        variables: {},
-        extensions: {},
-        setContext: vi.fn(),
-        getContext: vi.fn(),
-        toKey: vi.fn(),
-      } as unknown as Operation;
+      const queryOperation = createOperation('RegularQuery', 'query');
 
       const serverError = new Error(
         'Response not successful: Received status code 503',
