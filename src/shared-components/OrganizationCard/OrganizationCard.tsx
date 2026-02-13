@@ -44,7 +44,8 @@ import styles from './OrganizationCard.module.css';
 import { Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import { ApolloError, useMutation } from '@apollo/client';
+import { ApolloError } from "@apollo/client/v4-migration";
+import { useMutation } from "@apollo/client/react";
 import {
   CANCEL_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,

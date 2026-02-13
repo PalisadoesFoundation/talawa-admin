@@ -39,7 +39,7 @@ import {
 import { BaseModal } from 'shared-components/BaseModal';
 import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,

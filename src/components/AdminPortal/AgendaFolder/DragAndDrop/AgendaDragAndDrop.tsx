@@ -9,7 +9,7 @@ import { Col, Row } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import styles from './AgendaDragAndDrop.module.css';
 import type { InterfaceAgendaDragAndDropProps } from 'types/AdminPortal/Agenda/interface';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import {
   UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
   UPDATE_AGENDA_FOLDER_MUTATION,

@@ -1,5 +1,6 @@
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -363,7 +364,7 @@ const MOCKS_ERROR = [
 
 const renderEventActionItems = (
   eventId: string = 'eventId1',
-  mocks: MockedResponse[] = MOCKS,
+  mocks: MockLink.MockedResponse[] = MOCKS,
 ): ReturnType<typeof render> => {
   return render(
     <MockedProvider mocks={mocks}>

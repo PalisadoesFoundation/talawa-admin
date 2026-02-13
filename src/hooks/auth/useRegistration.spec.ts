@@ -1,6 +1,7 @@
 import React from 'react';
 import { renderHook, act, waitFor, cleanup } from '@testing-library/react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import {
   useRegistration,
   RegistrationError,
@@ -8,7 +9,7 @@ import {
 } from './useRegistration';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
-const SUCCESS_MOCK: MockedResponse[] = [
+const SUCCESS_MOCK: MockLink.MockedResponse[] = [
   {
     request: {
       query: SIGNUP_MUTATION,
@@ -31,7 +32,7 @@ const SUCCESS_MOCK: MockedResponse[] = [
   },
 ];
 
-const ERROR_MOCK: MockedResponse[] = [
+const ERROR_MOCK: MockLink.MockedResponse[] = [
   {
     request: {
       query: SIGNUP_MUTATION,
@@ -46,14 +47,14 @@ const ERROR_MOCK: MockedResponse[] = [
   },
 ];
 
-const createWrapper = (mocks: MockedResponse[]) =>
-  function Wrapper({ children }: { children: React.ReactNode }) {
+const createWrapper = (mocks: MockLink.MockedResponse[]) =>
+  (function Wrapper({ children }: { children: React.ReactNode }) {
     return React.createElement(MockedProvider, {
       mocks,
       addTypename: false,
       children,
     });
-  };
+  });
 
 describe('useRegistration', () => {
   afterEach(() => {
@@ -279,7 +280,7 @@ describe('useRegistration', () => {
 
   it('should handle registration with organizationId correctly', async () => {
     const mockOnSuccess = vi.fn();
-    const orgMocks: MockedResponse[] = [
+    const orgMocks: MockLink.MockedResponse[] = [
       {
         request: {
           query: SIGNUP_MUTATION,
@@ -322,7 +323,7 @@ describe('useRegistration', () => {
   it('should pass valid organizationId to signup (no empty string)', async () => {
     const mockOnSuccess = vi.fn();
     const mockOnError = vi.fn();
-    const orgMocks: MockedResponse[] = [
+    const orgMocks: MockLink.MockedResponse[] = [
       {
         request: {
           query: SIGNUP_MUTATION,
@@ -366,7 +367,7 @@ describe('useRegistration', () => {
   it('should include recaptchaToken in signup variables when provided', async () => {
     const mockOnSuccess = vi.fn();
     const recaptchaToken = 'test-recaptcha-token-value';
-    const recaptchaMocks: MockedResponse[] = [
+    const recaptchaMocks: MockLink.MockedResponse[] = [
       {
         request: {
           query: SIGNUP_MUTATION,

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FormControl, InputGroup } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from "@apollo/client/react";
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';

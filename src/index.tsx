@@ -2,14 +2,11 @@ import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import type { NormalizedCacheObject } from '@apollo/client';
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  split,
-  Observable,
-  fromPromise,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, Observable, ApolloLink } from '@apollo/client';
+import { Defer20220824Handler } from "@apollo/client/incremental";
+import { LocalState } from "@apollo/client/local-state";
+import { fromPromise } from "@apollo/client/v4-migration";
+import { ApolloProvider } from "@apollo/client/react";
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
@@ -24,13 +21,12 @@ import 'react-toastify/dist/ReactToastify.css'; // React Toastify Styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import App from './App';
 import { store } from './state/store';
 import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
@@ -199,7 +195,7 @@ const httpLink = ApolloLink.from([
 ]);
 
 // The split function routes operations correctly
-const splitLink = split(
+const splitLink = ApolloLink.split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
@@ -214,7 +210,7 @@ const splitLink = split(
 // Simplified combined link
 const combinedLink = ApolloLink.from([errorLink, splitLink]);
 
-export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+export const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -253,7 +249,22 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       },
     },
   }),
+
   link: combinedLink,
+
+  /*
+  Inserted by Apollo Client 3->4 migration codemod.
+  If you are not using the `@client` directive in your application,
+  you can safely remove this option.
+  */
+  localState: new LocalState({}),
+
+  /*
+  Inserted by Apollo Client 3->4 migration codemod.
+  If you are not using the `@defer` directive in your application,
+  you can safely remove this option.
+  */
+  incrementalHandler: new Defer20220824Handler()
 });
 const fallbackLoader = <div className="loader"></div>;
 
@@ -279,3 +290,22 @@ root.render(
     </ApolloProvider>
   </Suspense>,
 );
+
+/*
+Start: Inserted by Apollo Client 3->4 migration codemod.
+Copy the contents of this block into a `.d.ts` file in your project to enable correct response types in your custom links.
+If you do not use the `@defer` directive in your application, you can safely remove this block.
+*/
+
+
+import "@apollo/client";
+import { Defer20220824Handler } from "@apollo/client/incremental";
+
+declare module "@apollo/client" {
+  export interface TypeOverrides extends Defer20220824Handler.TypeOverrides {}
+}
+
+/*
+End: Inserted by Apollo Client 3->4 migration codemod.
+*/
+

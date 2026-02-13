@@ -2,9 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
-import type { FetchResult } from '@apollo/client';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import { type MockedResponse } from '@apollo/client/testing';
+import type { ApolloLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { Defer20220824Handler } from "@apollo/client/incremental";
+import { LocalState } from "@apollo/client/local-state";
+import { ApolloProvider } from "@apollo/client/react";
+import { type MockLink } from '@apollo/client/testing';
 import UserSidebar from './UserSidebar';
 import type { InterfaceUserSidebarProps } from './UserSidebar';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
@@ -191,11 +194,11 @@ describe('UserSidebar', () => {
     },
   });
 
-  const createCommunityResponse = (): FetchResult => ({
+  const createCommunityResponse = (): ApolloLink.Result => ({
     data: buildCommunityData(),
   });
 
-  const createCommunityMocks = (): MockedResponse[] => [
+  const createCommunityMocks = (): MockLink.MockedResponse[] => [
     {
       request: {
         query: GET_COMMUNITY_DATA_PG,
@@ -208,6 +211,20 @@ describe('UserSidebar', () => {
     new ApolloClient({
       cache: new InMemoryCache(),
       link: new StaticMockLink(createCommunityMocks()),
+
+      /*
+      Inserted by Apollo Client 3->4 migration codemod.
+      If you are not using the `@client` directive in your application,
+      you can safely remove this option.
+      */
+      localState: new LocalState({}),
+
+      /*
+      Inserted by Apollo Client 3->4 migration codemod.
+      If you are not using the `@defer` directive in your application,
+      you can safely remove this option.
+      */
+      incrementalHandler: new Defer20220824Handler()
     });
 
   beforeEach(() => {
@@ -743,3 +760,22 @@ describe('UserSidebar', () => {
     });
   });
 });
+
+/*
+Start: Inserted by Apollo Client 3->4 migration codemod.
+Copy the contents of this block into a `.d.ts` file in your project to enable correct response types in your custom links.
+If you do not use the `@defer` directive in your application, you can safely remove this block.
+*/
+
+
+import "@apollo/client";
+import { Defer20220824Handler } from "@apollo/client/incremental";
+
+declare module "@apollo/client" {
+  export interface TypeOverrides extends Defer20220824Handler.TypeOverrides {}
+}
+
+/*
+End: Inserted by Apollo Client 3->4 migration codemod.
+*/
+

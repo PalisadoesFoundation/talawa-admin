@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type React from 'react';
-import type { QueryResult } from '@apollo/client';
+import type { useQuery } from "@apollo/client/react";
 import type { IColumnDef } from './column';
 import type { SortDirection, ISortState, Key, ISortChangeEvent } from './types';
 import type { InterfacePageInfo } from './pagination';
@@ -181,7 +181,7 @@ export type InterfaceDataTableProps<T> = {
   bulkActions?: ReadonlyArray<IBulkAction<T>>;
   actionableRows?: ReadonlySet<Key>;
   showViewMoreButton?: boolean;
-  refetch?: QueryResult<unknown>['refetch'];
+  refetch?: useQuery.Result<unknown>['refetch'];
   disableSort?: boolean;
   tableBodyClassName?: string;
   tableClassName?: string;

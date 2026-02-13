@@ -1,7 +1,6 @@
 import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
-import type { Operation, FetchResult } from '@apollo/client/core';
-import { Observable } from '@apollo/client/core';
-import { gql } from '@apollo/client';
+import type { ApolloLink } from "@apollo/client";
+import { gql, Observable } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { DocumentNode } from 'graphql';
@@ -24,7 +23,7 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Request Middleware', () => {
     it('should convert local date and time to UTC format in request variables', () => {
-      const operation: Operation = {
+      const operation: ApolloLink.Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {
@@ -38,7 +37,7 @@ describe('Date Time Middleware Tests', () => {
 
       const forward = vi.fn(
         (op) =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             expect(op.variables['startDate']).toBe(
               dayjs().format('YYYY-MM-DD'),
             );
@@ -60,13 +59,13 @@ describe('Date Time Middleware Tests', () => {
   describe('Response Middleware', () => {
     it('should convert UTC date and time to local format in response data', () => {
       const utcDate = dayjs.utc().hour(12).minute(0).second(0).millisecond(0);
-      const testResponse: FetchResult = {
+      const testResponse: ApolloLink.Result = {
         data: { createdAt: utcDate.toISOString() },
         extensions: {},
         context: {},
       };
 
-      const operation: Operation = {
+      const operation: ApolloLink.Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {},
@@ -77,7 +76,7 @@ describe('Date Time Middleware Tests', () => {
 
       const forward = vi.fn(
         () =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             observer.next(testResponse);
             observer.complete();
           }),
@@ -87,7 +86,7 @@ describe('Date Time Middleware Tests', () => {
       expect(observable).not.toBeNull();
       return new Promise<void>((resolve, reject) => {
         observable?.subscribe({
-          next: (response: FetchResult) => {
+          next: (response: ApolloLink.Result) => {
             if (!response.data) {
               reject(new Error('Expected response.data to be defined'));
               return;
@@ -107,7 +106,7 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Date Time Middleware Edge Cases', () => {
     it('should handle invalid date formats gracefully in request middleware', () => {
-      const operation: Operation = {
+      const operation: ApolloLink.Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: { startDate: 'not-a-date', startTime: '25:99:99' },
@@ -118,7 +117,7 @@ describe('Date Time Middleware Tests', () => {
 
       const forward = vi.fn(
         (op) =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             expect(op.variables['startDate']).toBe('not-a-date');
             expect(op.variables['startTime']).toBe('25:99:99');
             observer.complete();
@@ -133,13 +132,13 @@ describe('Date Time Middleware Tests', () => {
     });
 
     it('should not break when encountering invalid dates in response middleware', () => {
-      const testResponse: FetchResult = {
+      const testResponse: ApolloLink.Result = {
         data: { createdAt: 'invalid-date-time' },
         extensions: {},
         context: {},
       };
 
-      const operation: Operation = {
+      const operation: ApolloLink.Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {},
@@ -150,7 +149,7 @@ describe('Date Time Middleware Tests', () => {
 
       const forward = vi.fn(
         () =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             observer.next(testResponse);
             observer.complete();
           }),
@@ -161,7 +160,7 @@ describe('Date Time Middleware Tests', () => {
       expect(observable).not.toBeNull();
       return new Promise<void>((resolve, reject) => {
         observable?.subscribe({
-          next: (response: FetchResult) => {
+          next: (response: ApolloLink.Result) => {
             // Ensure there's always an assertion
             expect(response.data).toBeTruthy(); // This ensures `response.data` is defined and truthy
 
@@ -190,7 +189,7 @@ describe('Date Time Middleware Tests', () => {
         .format('YYYY-MM-DD')
         .concat('T08:00:00.000Z');
 
-      const operation: Operation = {
+      const operation: ApolloLink.Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {
@@ -213,7 +212,7 @@ describe('Date Time Middleware Tests', () => {
 
       const forward = vi.fn(
         (op) =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             expect(op.variables.event.startDate).toBe(today);
             expect(op.variables.event.startTime).toMatch(
               /\d{2}:\d{2}:\d{2}.\d{3}Z/,

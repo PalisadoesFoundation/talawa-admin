@@ -1,7 +1,8 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import * as ApolloClient from '@apollo/client';
@@ -26,7 +27,7 @@ const mockAgendaFolderId = 'folder123';
 const mockOnClose = vi.fn();
 const mockRefetchAgendaFolder = vi.fn();
 
-const MOCKS_SUCCESS: MockedResponse[] = [
+const MOCKS_SUCCESS: MockLink.MockedResponse[] = [
   {
     request: {
       query: DELETE_AGENDA_FOLDER_MUTATION,
@@ -44,7 +45,7 @@ const MOCKS_SUCCESS: MockedResponse[] = [
   },
 ];
 
-const MOCKS_ERROR: MockedResponse[] = [
+const MOCKS_ERROR: MockLink.MockedResponse[] = [
   {
     request: {
       query: DELETE_AGENDA_FOLDER_MUTATION,
@@ -56,7 +57,7 @@ const MOCKS_ERROR: MockedResponse[] = [
   },
 ];
 
-const MOCKS_GRAPHQL_ERROR: MockedResponse[] = [
+const MOCKS_GRAPHQL_ERROR: MockLink.MockedResponse[] = [
   {
     request: {
       query: DELETE_AGENDA_FOLDER_MUTATION,
@@ -71,7 +72,7 @@ const MOCKS_GRAPHQL_ERROR: MockedResponse[] = [
 ];
 
 const renderAgendaFolderDeleteModal = (
-  mocks: MockedResponse[] = MOCKS_SUCCESS,
+  mocks: MockLink.MockedResponse[] = MOCKS_SUCCESS,
   isOpen = true,
 ) => {
   return render(
@@ -415,7 +416,7 @@ describe('AgendaFolderDeleteModal', () => {
     });
 
     it('handles empty agendaFolderId gracefully', async () => {
-      const MOCKS_EMPTY_ID: MockedResponse[] = [
+      const MOCKS_EMPTY_ID: MockLink.MockedResponse[] = [
         {
           request: {
             query: DELETE_AGENDA_FOLDER_MUTATION,
@@ -456,7 +457,7 @@ describe('AgendaFolderDeleteModal', () => {
     });
 
     it('handles non-Error exceptions in catch block', async () => {
-      const MOCKS_NON_ERROR: MockedResponse[] = [
+      const MOCKS_NON_ERROR: MockLink.MockedResponse[] = [
         {
           request: {
             query: DELETE_AGENDA_FOLDER_MUTATION,

@@ -14,7 +14,8 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, afterEach, expect, it, beforeEach } from 'vitest';
 import styles from './EventAttendance.module.css';
-import { ApolloError, useLazyQuery } from '@apollo/client';
+import { ApolloError } from "@apollo/client/v4-migration";
+import { useLazyQuery } from "@apollo/client/react";
 import * as ApolloClientModule from '@apollo/client';
 
 // Mock chart.js to avoid canvas errors

@@ -35,7 +35,7 @@ import { Button } from '../../../../shared-components/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import {
   AGENDA_ITEM_CATEGORY_LIST,
   AGENDA_FOLDER_LIST,

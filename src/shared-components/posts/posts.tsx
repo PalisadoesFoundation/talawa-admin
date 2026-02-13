@@ -39,7 +39,9 @@
  * ```
  */
 
-import { useQuery } from '@apollo/client';
+
+
+import { useQuery } from "@apollo/client/react";
 import {
   ORGANIZATION_PINNED_POST_LIST,
   ORGANIZATION_POST_BY_ID,
@@ -410,7 +412,7 @@ export default function PostsPage() {
               {/* Posts List with Infinite Scroll */}
               {isFiltering ? (
                 // Display filtered posts without infinite scroll
-                <Box
+                (<Box
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -423,10 +425,10 @@ export default function PostsPage() {
                       {...formatPostForCard(post, t, refetch)}
                     />
                   ))}
-                </Box>
+                </Box>)
               ) : (
                 // Infinite scroll for regular posts
-                <InfiniteScroll
+                (<InfiniteScroll
                   dataLength={postsToDisplay.length}
                   next={loadMorePosts}
                   hasMore={hasMore && sortingOption === 'None'}
@@ -456,7 +458,7 @@ export default function PostsPage() {
                       />
                     ))}
                   </Box>
-                </InfiniteScroll>
+                </InfiniteScroll>)
               )}
 
               {/* Empty State */}
@@ -484,7 +486,6 @@ export default function PostsPage() {
           />
         </div>
       )}
-
       {/* Pinned Post Modal */}
       <PostViewModal
         show={postViewModal.isOpen}

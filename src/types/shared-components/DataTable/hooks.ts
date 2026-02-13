@@ -1,5 +1,6 @@
 import React from 'react';
-import type { QueryResult, NetworkStatus } from '@apollo/client';
+import type { NetworkStatus } from '@apollo/client';
+import type { useQuery } from "@apollo/client/react";
 import type { InterfacePageInfo } from './pagination';
 import type { IColumnDef } from './column';
 import type { Key } from './types';
@@ -71,12 +72,12 @@ export interface IUseTableDataResult<TRow, TData = unknown> {
    * Function to refetch the query with fresh data.
    * Typically used to refresh after mutations.
    */
-  refetch: QueryResult<TData>['refetch'];
+  refetch: useQuery.Result<TData>['refetch'];
   /**
    * Function to fetch additional pages or update pagination cursors.
    * Follows Apollo Client's fetchMore signature.
    */
-  fetchMore: QueryResult<TData>['fetchMore'];
+  fetchMore: useQuery.Result<TData>['fetchMore'];
   /**
    * Apollo Client network status code.
    * 1 = loading, 4 = setVariables, 6 = refetch, 7 = poll, 8 = ready, etc.

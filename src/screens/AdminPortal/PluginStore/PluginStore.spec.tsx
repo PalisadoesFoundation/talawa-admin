@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
-import { ApolloError } from '@apollo/client';
+import { MockedProvider } from "@apollo/client/testing/react";
+import { ApolloError } from "@apollo/client/v4-migration";
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import PluginStore from './PluginStore';
 import * as pluginHooks from 'plugin/hooks';

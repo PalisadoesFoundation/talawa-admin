@@ -1,6 +1,8 @@
 // This file will contain the utililities for organization tags
 
-import type { ApolloError } from '@apollo/client';
+
+
+import { ApolloError } from "@apollo/client/v4-migration";
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceQueryOrganizationUserTagsPG,

@@ -27,7 +27,7 @@ import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';

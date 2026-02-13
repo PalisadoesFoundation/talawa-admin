@@ -45,7 +45,7 @@ import { FaUserGroup } from 'react-icons/fa6';
 import { Stack } from '@mui/material';
 
 import useLocalStorage from 'utils/useLocalstorage';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from "@apollo/client/react";
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import { FaRegClock } from 'react-icons/fa';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -200,7 +200,6 @@ const Invitations = (): JSX.Element => {
         hasDropdowns={true}
         dropdowns={[sortDropdown, filterDropdown]}
       />
-
       {invitations.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no invitations are found */}
@@ -216,22 +215,22 @@ const Invitations = (): JSX.Element => {
               <div className="fw-bold" data-testid="inviteSubject">
                 {invite.group && invite.group.id ? (
                   // Group invitation
-                  <>
+                  (<>
                     {invite.event.recurrenceRule ? (
                       <>{t('groupInvitationRecurringSubject')}</>
                     ) : (
                       <>{t('groupInvitationSubject')}</>
                     )}
-                  </>
+                  </>)
                 ) : (
                   // Individual invitation
-                  <>
+                  (<>
                     {invite.event.recurrenceRule ? (
                       <>{t('eventInvitationRecurringSubject')}</>
                     ) : (
                       <>{t('eventInvitationSubject')}</>
                     )}
-                  </>
+                  </>)
                 )}
               </div>
               <div className="d-flex gap-3">

@@ -1,15 +1,15 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
-import type { Observer } from '@apollo/client';
+import { Observer } from "@apollo/client/v4-migration";
 import type { MockedResponse } from '@apollo/react-testing';
 import { gql, Observable } from '@apollo/client';
 import { print } from 'graphql';
-import type { FetchResult, Operation } from '@apollo/client/link/core';
+import type { ApolloLink } from "@apollo/client/link";
 import { equal } from '@wry/equality';
 
 class TestableStaticMockLink extends StaticMockLink {
   public setErrorHandler(
-    handler: (error: unknown, observer?: Observer<FetchResult>) => false | void,
+    handler: (error: unknown, observer?: Observer<ApolloLink.Result>) => false | void,
   ): void {
     this.onError = handler;
   }
@@ -39,7 +39,7 @@ const sampleQuery = gql`
     }
   }
 `;
-const operation: Operation = {
+const operation: ApolloLink.Operation = {
   query: sampleQuery,
   variables: { id: '2' },
   operationName: 'SampleQuery',
@@ -47,7 +47,7 @@ const operation: Operation = {
   setContext: () => {},
   getContext: () => ({}),
 };
-const oper: Operation = {
+const oper: ApolloLink.Operation = {
   query: sampleQuery,
   variables: { id: '1' },
   operationName: 'SampleQuery',
@@ -59,7 +59,7 @@ const oper: Operation = {
 function createOperation(
   query: import('graphql').DocumentNode,
   variables: Record<string, unknown> = {},
-): Operation {
+): ApolloLink.Operation {
   return {
     query,
     variables,
@@ -69,7 +69,7 @@ function createOperation(
     getContext: () => ({}),
   };
 }
-const operation2: Operation = {
+const operation2: ApolloLink.Operation = {
   query: gql`
     query TestQuery {
       field
@@ -758,7 +758,7 @@ describe('StaticMockLink variableMatcher', () => {
 
   function createMatcherOperation(
     variables: Record<string, unknown>,
-  ): Operation {
+  ): ApolloLink.Operation {
     return {
       query: MATCHER_QUERY,
       variables,

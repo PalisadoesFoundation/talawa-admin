@@ -11,7 +11,7 @@ import {
 } from 'shared-components/DateRangePicker';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import type { ApolloLink, DefaultOptions } from '@apollo/client';
+import type { ApolloLink, ApolloClient } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -70,7 +70,7 @@ const mockMissingData = new StaticMockLink(MOCKS_MISSING_DATA, true);
 const mockNoLocation = new StaticMockLink(MOCKS_NO_LOCATION, true);
 const mockInvalidDateTime = new StaticMockLink(MOCKS_INVALID_DATETIME, true);
 
-const defaultOptions: DefaultOptions = {
+const defaultOptions: ApolloClient.DefaultOptions = {
   watchQuery: {
     fetchPolicy: 'no-cache',
     errorPolicy: 'ignore',

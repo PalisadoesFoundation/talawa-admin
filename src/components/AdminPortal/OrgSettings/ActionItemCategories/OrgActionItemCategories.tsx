@@ -31,7 +31,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import styles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

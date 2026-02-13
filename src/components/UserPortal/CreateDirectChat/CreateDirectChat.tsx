@@ -23,7 +23,7 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
 import Button from 'shared-components/Button';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from "@apollo/client/react";
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,

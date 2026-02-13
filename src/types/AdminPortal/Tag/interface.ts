@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import type { ApolloError } from '@apollo/client';
+import { ApolloError } from "@apollo/client/v4-migration";
 
 export interface InterfaceMemberData {
   _id: string;

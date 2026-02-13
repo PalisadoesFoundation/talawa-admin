@@ -1,5 +1,5 @@
 import { PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import { calculateFileHash } from './filehash';
 
 interface InterfaceMinioUpload {

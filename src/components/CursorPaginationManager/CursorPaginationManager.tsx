@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import {
   type InterfaceConnectionData,
   type InterfaceCursorPaginationManagerProps,

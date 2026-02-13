@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';

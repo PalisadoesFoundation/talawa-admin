@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import OrganizationCard from './OrganizationCard';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import {
   SEND_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,

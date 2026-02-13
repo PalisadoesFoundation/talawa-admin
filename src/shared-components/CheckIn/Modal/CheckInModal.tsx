@@ -14,7 +14,7 @@
  * like `TableRow` for rendering check-in status.
  */
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import { EVENT_CHECKINS, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { TableRow } from './Row/TableRow';
 import type {
@@ -113,12 +113,12 @@ export const CheckInModal = ({
       width: 400,
       renderCell: (props) => (
         // Render a custom row component for check-in status
-        <TableRow
+        (<TableRow
           data={props.value}
           refetch={checkInRefetch}
           onCheckInUpdate={onCheckInUpdate}
           // isRecurring={isRecurring}
-        />
+        />)
       ),
     },
   ];

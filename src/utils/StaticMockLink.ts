@@ -2,16 +2,13 @@ import { print } from 'graphql';
 import { equal } from '@wry/equality';
 import { invariant } from 'ts-invariant';
 
-import type { Operation, FetchResult } from '@apollo/client/link/core';
-import { ApolloLink } from '@apollo/client/link/core';
+import { ApolloLink } from "@apollo/client/link";
 
-import {
-  Observable,
-  addTypenameToDocument,
-  removeClientSetsFromDocument,
-  removeConnectionDirectiveFromDocument,
-  cloneDeep,
-} from '@apollo/client/utilities';
+import { Observable, addTypenameToDocument } from '@apollo/client/utilities';
+
+import { removeClientSetsFromDocument, removeConnectionDirectiveFromDocument } from "@apollo/client/v4-migration";
+
+import { cloneDeep } from "@apollo/client/utilities/internal";
 
 import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
 
@@ -24,7 +21,7 @@ interface IMockedResponseWithMatcher extends MockedResponse {
 
 function requestToKey(
   request:
-    | Operation
+    | ApolloLink.Operation
     | import('@apollo/client/core').GraphQLRequest<Record<string, unknown>>,
   addTypename: boolean,
 ): string {
@@ -40,7 +37,7 @@ function requestToKey(
  * when it is used allowing it to be used in places like Storybook.
  */
 export class StaticMockLink extends ApolloLink {
-  public operation?: Operation;
+  public operation?: ApolloLink.Operation;
   public addTypename = true;
   private _mockedResponsesByKey: { [key: string]: MockedResponse[] } = {};
 
@@ -69,7 +66,7 @@ export class StaticMockLink extends ApolloLink {
     mockedResponses.push(normalizedMockedResponse);
   }
 
-  public request(operation: Operation): Observable<FetchResult> | null {
+  public request(operation: ApolloLink.Operation): Observable<ApolloLink.Result> | null {
     this.operation = operation;
     const key = requestToKey(operation, this.addTypename);
     let responseIndex = 0;
@@ -140,7 +137,7 @@ export class StaticMockLink extends ApolloLink {
               if (response.result) {
                 observer.next(
                   typeof response.result === 'function'
-                    ? (response.result as ResultFunction<FetchResult>)(
+                    ? (response.result as ResultFunction<ApolloLink.Result>)(
                         operation.variables,
                       )
                     : response.result,
@@ -186,7 +183,7 @@ export class StaticMockLink extends ApolloLink {
 }
 
 export interface InterfaceMockApolloLink extends ApolloLink {
-  operation?: Operation;
+  operation?: ApolloLink.Operation;
 }
 
 // Pass in multiple mocked responses, so that you can test flows that end up

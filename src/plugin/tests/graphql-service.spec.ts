@@ -12,12 +12,9 @@ import {
   useUpdatePlugin,
   useDeletePlugin,
 } from '../graphql-service';
-import {
-  type ApolloClient,
-  useQuery,
-  useMutation,
-  type QueryResult,
-} from '@apollo/client';
+import { type ApolloClient } from '@apollo/client';
+
+import { useMutation, useQuery } from "@apollo/client/react";
 
 // Mock Apollo client
 const mockApolloClient = {
@@ -56,7 +53,7 @@ describe('PluginGraphQLService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     graphqlService = new PluginGraphQLService(
-      mockApolloClient as unknown as ApolloClient<unknown>,
+      mockApolloClient as unknown as ApolloClient,
     );
   });
 
@@ -387,7 +384,7 @@ describe('GraphQL Hooks', () => {
       };
 
       vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as QueryResult,
+        mockQueryResult as unknown as useQuery.Result,
       );
 
       const { result } = renderHook(() => useGetAllPlugins());
@@ -410,7 +407,7 @@ describe('GraphQL Hooks', () => {
       };
 
       vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as QueryResult,
+        mockQueryResult as unknown as useQuery.Result,
       );
 
       const { result } = renderHook(() => useGetAllPlugins());
@@ -432,7 +429,7 @@ describe('GraphQL Hooks', () => {
       };
 
       vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as QueryResult,
+        mockQueryResult as unknown as useQuery.Result,
       );
 
       const { result } = renderHook(() => useGetAllPlugins());

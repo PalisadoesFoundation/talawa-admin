@@ -1,38 +1,28 @@
 import type {
   ApolloCache,
-  ApolloQueryResult,
   DefaultContext,
-  FetchResult,
-  MutationFunctionOptions,
   OperationVariables,
+  ObservableQuery,
+  ApolloLink,
 } from '@apollo/client';
+import type { useMutation } from "@apollo/client/react";
 import type { Chat } from 'types/UserPortal/Chat/interface';
 
 export type ChatsListRefetch = (
   variables?: Partial<{ id: string }> | undefined,
-) => Promise<ApolloQueryResult<unknown>>;
+) => Promise<ObservableQuery.Result<unknown>>;
 
 export type CreateChatMutation = (
   options?:
-    | MutationFunctionOptions<
-        unknown,
-        OperationVariables,
-        DefaultContext,
-        ApolloCache<unknown>
-      >
+    | useMutation.MutationFunctionOptions<unknown, OperationVariables, ApolloCache<unknown>>
     | undefined,
-) => Promise<FetchResult<unknown>>;
+) => Promise<ApolloLink.Result<unknown>>;
 
 export type CreateChatMembershipMutation = (
   options?:
-    | MutationFunctionOptions<
-        unknown,
-        OperationVariables,
-        DefaultContext,
-        ApolloCache<unknown>
-      >
+    | useMutation.MutationFunctionOptions<unknown, OperationVariables, ApolloCache<unknown>>
     | undefined,
-) => Promise<FetchResult<unknown>>;
+) => Promise<ApolloLink.Result<unknown>>;
 
 /**
  * Props for the CreateDirectChat modal.

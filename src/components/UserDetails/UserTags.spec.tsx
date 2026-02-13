@@ -7,12 +7,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { OperationVariables } from '@apollo/client/core/types';
 import * as apolloClient from '@apollo/client';
-import {
-  ApolloError,
-  ApolloClient,
-  NormalizedCacheObject,
-  ObservableQuery,
-} from '@apollo/client';
+import { ApolloClient, NormalizedCacheObject, ObservableQuery } from '@apollo/client';
+
+import { ApolloError } from "@apollo/client/v4-migration";
 
 dayjs.extend(utc);
 
@@ -204,7 +201,7 @@ describe('UserTags - loading and error states', () => {
       refetch: vi.fn(),
       networkStatus: 1,
       called: true,
-      client: {} as ApolloClient<NormalizedCacheObject>,
+      client: {} as ApolloClient,
       observable: {} as ObservableQuery<unknown, OperationVariables>,
       previousData: undefined,
       variables: undefined,
@@ -230,7 +227,7 @@ describe('UserTags - loading and error states', () => {
       refetch: vi.fn(),
       networkStatus: 8,
       called: true,
-      client: {} as ApolloClient<NormalizedCacheObject>,
+      client: {} as ApolloClient,
       observable: {} as ObservableQuery<unknown, OperationVariables>,
       previousData: undefined,
       variables: undefined,
@@ -256,7 +253,7 @@ describe('UserTags - loading and error states', () => {
       refetch: vi.fn(),
       networkStatus: 7,
       called: true,
-      client: {} as ApolloClient<NormalizedCacheObject>,
+      client: {} as ApolloClient,
       observable: {} as ObservableQuery<unknown, OperationVariables>,
       previousData: undefined,
       variables: undefined,

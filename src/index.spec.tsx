@@ -7,14 +7,9 @@ import {
   afterEach,
   type Mock,
 } from 'vitest';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloLink,
-  Observable,
-  type Operation,
-  type NextLink,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloLink, Observable } from '@apollo/client';
+import { Defer20220824Handler } from "@apollo/client/incremental";
+import { LocalState } from "@apollo/client/local-state";
 import { GraphQLError, type DocumentNode } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
@@ -121,6 +116,7 @@ describe('Apollo Client Configuration', () => {
   it('should create an Apollo Client with correct configuration', (): void => {
     const client = new ApolloClient({
       cache: new InMemoryCache(),
+
       link: ApolloLink.from([
         vi.fn() as unknown as ApolloLink,
         vi.fn() as unknown as ApolloLink,
@@ -128,6 +124,20 @@ describe('Apollo Client Configuration', () => {
         responseMiddleware,
         vi.fn() as unknown as ApolloLink,
       ]),
+
+      /*
+      Inserted by Apollo Client 3->4 migration codemod.
+      If you are not using the `@client` directive in your application,
+      you can safely remove this option.
+      */
+      localState: new LocalState({}),
+
+      /*
+      Inserted by Apollo Client 3->4 migration codemod.
+      If you are not using the `@defer` directive in your application,
+      you can safely remove this option.
+      */
+      incrementalHandler: new Defer20220824Handler()
     });
 
     expect(client).toBeInstanceOf(ApolloClient);
@@ -611,8 +621,8 @@ describe('Apollo Client Configuration', () => {
     let onErrorCallback: (error: {
       graphQLErrors?: readonly GraphQLError[];
       networkError?: Error | null;
-      operation: Operation;
-      forward: NextLink;
+      operation: ApolloLink.Operation;
+      forward: ApolloLink.ForwardFunction;
     }) => { subscribe: (observer: unknown) => void } | void;
     let splitPredicate: (args: { query: DocumentNode }) => boolean;
     let mockRefreshToken: Mock<() => Promise<boolean>>;
@@ -718,7 +728,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
 
       // Execute the error callback
       const observable = onErrorCallback({
@@ -774,7 +784,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
       const operation2 = {
         operationName: 'Query2',
         variables: {},
@@ -782,7 +792,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
 
       // 1. Trigger first error -> starts refresh
       const obs1 = onErrorCallback({
@@ -851,7 +861,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
 
       const obs = onErrorCallback({
         graphQLErrors: [
@@ -905,3 +915,22 @@ describe('Apollo Client Configuration', () => {
     });
   });
 });
+
+/*
+Start: Inserted by Apollo Client 3->4 migration codemod.
+Copy the contents of this block into a `.d.ts` file in your project to enable correct response types in your custom links.
+If you do not use the `@defer` directive in your application, you can safely remove this block.
+*/
+
+
+import "@apollo/client";
+import { Defer20220824Handler } from "@apollo/client/incremental";
+
+declare module "@apollo/client" {
+  export interface TypeOverrides extends Defer20220824Handler.TypeOverrides {}
+}
+
+/*
+End: Inserted by Apollo Client 3->4 migration codemod.
+*/
+

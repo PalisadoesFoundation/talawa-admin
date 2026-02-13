@@ -15,11 +15,9 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import {
-  type ApolloError,
-  type ApolloQueryResult,
-  useQuery,
-} from '@apollo/client';
+import { type ObservableQuery } from '@apollo/client';
+import { type ApolloError } from "@apollo/client/v4-migration";
+import { useQuery } from "@apollo/client/react";
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
@@ -57,7 +55,7 @@ const Pledges = (): JSX.Element => {
     close: closeDeleteModal,
   } = useModalState();
 
-  type PledgeQueryResult = ApolloQueryResult<{
+  type PledgeQueryResult = ObservableQuery.Result<{
     getPledgesByUserId: InterfacePledgeInfo[];
   }>;
   interface IPledgeRefetchFn {

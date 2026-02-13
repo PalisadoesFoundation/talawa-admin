@@ -6,7 +6,8 @@ import {
   cleanup,
 } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -370,13 +371,14 @@ const createMemberConnectionMock = (
   type MemberEdge = (typeof defaultData.organization.members.edges)[number];
 
   const withRole = (edge: MemberEdge): MemberEdge =>
-    ({
+    (({
       ...edge,
+
       node: {
         ...edge.node,
         role: edge.node.role ?? 'member',
-      },
-    }) as MemberEdge;
+      }
+    }) as MemberEdge);
 
   data.organization.members.edges =
     data.organization.members.edges.map(withRole);
@@ -398,7 +400,7 @@ const createMemberConnectionMock = (
 };
 
 type RenderConfig = {
-  mocks?: MockedResponse[];
+  mocks?: MockLink.MockedResponse[];
   link?: StaticMockLink;
   initialEntry?: string;
 };

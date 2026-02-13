@@ -49,7 +49,7 @@
 import React, { useEffect, useState } from 'react';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 

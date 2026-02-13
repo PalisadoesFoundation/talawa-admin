@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -711,7 +712,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const renderChatRoom = (mocks: MockedResponse[] = []) => {
+const renderChatRoom = (mocks: MockLink.MockedResponse[] = []) => {
   const defaultMocks = [
     CHAT_BY_ID_MOCK,
     UNREAD_CHATS_MOCK,
@@ -3148,7 +3149,7 @@ describe('ChatRoom Component', () => {
       const { setItem } = useLocalStorage();
       setItem('userId', 'user123');
 
-      const mocks: MockedResponse[] = [];
+      const mocks: MockLink.MockedResponse[] = [];
 
       render(
         <MockedProvider mocks={mocks}>
@@ -3182,7 +3183,7 @@ describe('ChatRoom Component', () => {
       const { setItem } = useLocalStorage();
       setItem('userId', 'user123');
 
-      const mocks: MockedResponse[] = [];
+      const mocks: MockLink.MockedResponse[] = [];
 
       render(
         <MockedProvider mocks={mocks}>
@@ -3214,7 +3215,7 @@ describe('ChatRoom Component', () => {
       setItem('userId', 'user123');
       const validChatId = '01960b81-bfed-7369-ae96-689dbd4281ba';
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: CHAT_BY_ID,
@@ -3367,7 +3368,7 @@ describe('ChatRoom Component', () => {
       setItem('userId', 'user123');
       const validChatId = 'chat123';
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         CHAT_BY_ID_MOCK,
         UNREAD_CHATS_MOCK,
         MARK_READ_MOCK,
@@ -3423,7 +3424,7 @@ describe('ChatRoom Component', () => {
       setItem('userId', 'user123');
       const validChatId = 'chat123';
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         CHAT_BY_ID_MOCK,
         UNREAD_CHATS_MOCK,
         MARK_READ_MOCK,
@@ -3465,7 +3466,7 @@ describe('ChatRoom Component', () => {
       const { setItem } = useLocalStorage();
       setItem('userId', 'user123');
 
-      const mocks: MockedResponse[] = [];
+      const mocks: MockLink.MockedResponse[] = [];
 
       render(
         <MockedProvider mocks={mocks}>

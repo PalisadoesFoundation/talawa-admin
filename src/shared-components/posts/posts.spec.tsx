@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { MemoryRouter, Route, Routes } from 'react-router';
 import PostsPage from './posts';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
@@ -375,7 +375,7 @@ const samplePosts = [
 ];
 
 // Mock for ORGANIZATION_POST_LIST_WITH_VOTES
-const orgPostListMock: MockedResponse = {
+const orgPostListMock: MockLink.MockedResponse = {
   request: {
     query: ORGANIZATION_POST_LIST_WITH_VOTES,
     variables: {
@@ -413,7 +413,7 @@ const orgPostListMock: MockedResponse = {
 };
 
 // Mock for ORGANIZATION_PINNED_POST_LIST
-const orgPinnedPostListMock: MockedResponse = {
+const orgPinnedPostListMock: MockLink.MockedResponse = {
   request: {
     query: ORGANIZATION_PINNED_POST_LIST,
     variables: {
@@ -450,7 +450,7 @@ const orgPinnedPostListMock: MockedResponse = {
 };
 
 // Empty pinned posts mock
-const emptyPinnedPostsMock: MockedResponse = {
+const emptyPinnedPostsMock: MockLink.MockedResponse = {
   request: {
     query: ORGANIZATION_PINNED_POST_LIST,
     variables: {
@@ -482,7 +482,7 @@ const emptyPinnedPostsMock: MockedResponse = {
 };
 
 // Error mock for org post list
-const orgPostListErrorMock: MockedResponse = {
+const orgPostListErrorMock: MockLink.MockedResponse = {
   request: {
     query: ORGANIZATION_POST_LIST_WITH_VOTES,
     variables: {
@@ -498,7 +498,7 @@ const orgPostListErrorMock: MockedResponse = {
 };
 
 // Error mock for pinned posts
-const pinnedPostsErrorMock: MockedResponse = {
+const pinnedPostsErrorMock: MockLink.MockedResponse = {
   request: {
     query: ORGANIZATION_PINNED_POST_LIST,
     variables: {
@@ -512,7 +512,7 @@ const pinnedPostsErrorMock: MockedResponse = {
 };
 
 // Error mock for preview post
-const previewPostErrorMock: MockedResponse = {
+const previewPostErrorMock: MockLink.MockedResponse = {
   request: {
     query: ORGANIZATION_POST_BY_ID,
     variables: {
@@ -525,7 +525,7 @@ const previewPostErrorMock: MockedResponse = {
 
 // Helper render function
 const renderComponent = (
-  mocks: MockedResponse[],
+  mocks: MockLink.MockedResponse[],
   path = '/admin/orgpost/123',
 ): RenderResult =>
   render(
@@ -595,7 +595,7 @@ describe('PostsPage Component', () => {
     });
 
     it('includes preview post loading state in main loading condition', async () => {
-      const previewPostLoadingMock: MockedResponse = {
+      const previewPostLoadingMock: MockLink.MockedResponse = {
         request: {
           query: ORGANIZATION_POST_BY_ID,
           variables: {
@@ -817,7 +817,7 @@ describe('PostsPage Component', () => {
 
   it('handles search error gracefully', async () => {
     // Create a component where search will fail by not providing proper initial data
-    const errorOrgPostListMock: MockedResponse = {
+    const errorOrgPostListMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
@@ -869,7 +869,7 @@ describe('Sorting Functionality', () => {
   });
 
   it('handles sorting when allPosts is empty', async () => {
-    const emptyPostsMock: MockedResponse = {
+    const emptyPostsMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
@@ -1061,7 +1061,7 @@ describe('Edge Cases', () => {
   });
 
   it('handles null page info', async () => {
-    const nullPageInfoMock: MockedResponse = {
+    const nullPageInfoMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
@@ -1109,7 +1109,7 @@ describe('Edge Cases', () => {
       caption: undefined,
     };
 
-    const mockWithUndefinedCaption: MockedResponse = {
+    const mockWithUndefinedCaption: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
@@ -1159,7 +1159,7 @@ describe('Edge Cases', () => {
   });
 
   it('loadMorePosts callback handles missing fetchMoreResult', async () => {
-    const noResultMock: MockedResponse = {
+    const noResultMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
@@ -1194,7 +1194,7 @@ describe('Edge Cases', () => {
   });
 
   it('shows error toast when fetchMore fails', async () => {
-    const fetchMoreErrorMock: MockedResponse = {
+    const fetchMoreErrorMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
@@ -1402,7 +1402,7 @@ describe('FetchMore Success Coverage', () => {
 
   it('covers successful fetchMore with pageInfo assignment', async () => {
     // Create a successful fetchMore mock that returns the pageInfo
-    const fetchMoreSuccessMock: MockedResponse = {
+    const fetchMoreSuccessMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {

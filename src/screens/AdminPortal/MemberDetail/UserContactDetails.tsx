@@ -27,7 +27,7 @@
  * ```
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from "@apollo/client/react";
 import { Button } from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';

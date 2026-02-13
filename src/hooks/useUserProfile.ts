@@ -5,7 +5,9 @@
  *
  * @returns An object containing user profile data and a logout function.
  */
-import { useMutation } from '@apollo/client';
+
+
+import { useMutation } from "@apollo/client/react";
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { MAX_NAME_LENGTH } from 'Constant/common';
 import { useTranslation } from 'react-i18next';

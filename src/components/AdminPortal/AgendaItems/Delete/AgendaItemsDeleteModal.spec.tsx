@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 
@@ -24,7 +25,7 @@ const mockRefetchAgendaFolder = vi.fn();
 
 const MOCK_AGENDA_ITEM_ID = 'item123';
 const mockTCommon = (key: string): string => key;
-const MOCKS_SUCCESS: MockedResponse[] = [
+const MOCKS_SUCCESS: MockLink.MockedResponse[] = [
   {
     request: {
       query: DELETE_AGENDA_ITEM_MUTATION,
@@ -44,7 +45,7 @@ const MOCKS_SUCCESS: MockedResponse[] = [
   },
 ];
 
-const MOCKS_ERROR: MockedResponse[] = [
+const MOCKS_ERROR: MockLink.MockedResponse[] = [
   {
     request: {
       query: DELETE_AGENDA_ITEM_MUTATION,
@@ -59,7 +60,7 @@ const MOCKS_ERROR: MockedResponse[] = [
 ];
 
 const renderModal = (
-  mocks: MockedResponse[] = [],
+  mocks: MockLink.MockedResponse[] = [],
   isOpen = true,
   agendaItemId = MOCK_AGENDA_ITEM_ID,
 ) => {
@@ -361,7 +362,7 @@ describe('AgendaItemsDeleteModal', () => {
     });
 
     it('should handle non-Error instance in catch block', async () => {
-      const MOCKS_NON_ERROR: MockedResponse[] = [
+      const MOCKS_NON_ERROR: MockLink.MockedResponse[] = [
         {
           request: {
             query: DELETE_AGENDA_ITEM_MUTATION,
@@ -445,7 +446,7 @@ describe('AgendaItemsDeleteModal', () => {
     it('should handle deletion with different agenda item ID', async () => {
       const differentItemId = 'different-item-456';
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: DELETE_AGENDA_ITEM_MUTATION,
@@ -622,7 +623,7 @@ describe('AgendaItemsDeleteModal', () => {
 
   describe('Edge Cases', () => {
     it('should handle empty agenda item ID', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: DELETE_AGENDA_ITEM_MUTATION,
@@ -658,7 +659,7 @@ describe('AgendaItemsDeleteModal', () => {
     it('should handle very long agenda item ID', async () => {
       const longId = 'a'.repeat(1000);
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: DELETE_AGENDA_ITEM_MUTATION,

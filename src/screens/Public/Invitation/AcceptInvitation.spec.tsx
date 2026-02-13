@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { MockedProvider } from '@apollo/client/testing';
-import type { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
+import type { MockLink } from '@apollo/client/testing';
 import {
   VERIFY_EVENT_INVITATION,
   ACCEPT_EVENT_INVITATION,
@@ -46,7 +46,7 @@ const mockUseLocalStorage = useLocalStorage as unknown as ReturnType<
 >;
 
 const renderComponent = (
-  mocks: MockedResponse[],
+  mocks: MockLink.MockedResponse[],
   initialRoute: string,
   authToken?: string,
   pendingToken?: string,

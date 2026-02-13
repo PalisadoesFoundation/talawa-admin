@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 
@@ -36,7 +37,7 @@ const mockFolderFormState: InterfaceAgendaFolderUpdateFormStateType = {
   },
 };
 
-const MOCKS_SUCCESS: MockedResponse[] = [
+const MOCKS_SUCCESS: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -60,7 +61,7 @@ const MOCKS_SUCCESS: MockedResponse[] = [
   },
 ];
 
-const MOCKS_SUCCESS_TRIMMED: MockedResponse[] = [
+const MOCKS_SUCCESS_TRIMMED: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -84,7 +85,7 @@ const MOCKS_SUCCESS_TRIMMED: MockedResponse[] = [
   },
 ];
 
-const MOCKS_SUCCESS_EMPTY_DESCRIPTION: MockedResponse[] = [
+const MOCKS_SUCCESS_EMPTY_DESCRIPTION: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -108,7 +109,7 @@ const MOCKS_SUCCESS_EMPTY_DESCRIPTION: MockedResponse[] = [
   },
 ];
 
-const MOCKS_ERROR: MockedResponse[] = [
+const MOCKS_ERROR: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -125,7 +126,7 @@ const MOCKS_ERROR: MockedResponse[] = [
 ];
 
 const renderAgendaFolderUpdateModal = (
-  mocks: MockedResponse[] = MOCKS_SUCCESS,
+  mocks: MockLink.MockedResponse[] = MOCKS_SUCCESS,
   isOpen = true,
   folderFormState: InterfaceAgendaFolderUpdateFormStateType = mockFolderFormState,
 ) => {
@@ -592,7 +593,7 @@ describe('AgendaFolderUpdateModal', () => {
     });
 
     it('handles GraphQL errors correctly', async () => {
-      const MOCKS_GRAPHQL_ERROR: MockedResponse[] = [
+      const MOCKS_GRAPHQL_ERROR: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -684,7 +685,7 @@ describe('AgendaFolderUpdateModal', () => {
     });
 
     it('handles empty agendaFolderId gracefully', async () => {
-      const MOCKS_EMPTY_ID: MockedResponse[] = [
+      const MOCKS_EMPTY_ID: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -735,7 +736,7 @@ describe('AgendaFolderUpdateModal', () => {
         name: longName,
       };
 
-      const MOCKS_LONG_NAME: MockedResponse[] = [
+      const MOCKS_LONG_NAME: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -782,7 +783,7 @@ describe('AgendaFolderUpdateModal', () => {
         description: '<script>alert("test")</script>',
       };
 
-      const MOCKS_SPECIAL_CHARS: MockedResponse[] = [
+      const MOCKS_SPECIAL_CHARS: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,

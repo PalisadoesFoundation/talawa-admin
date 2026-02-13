@@ -23,7 +23,7 @@ import { Navigate, useParams } from 'react-router';
 
 import { Groups, WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

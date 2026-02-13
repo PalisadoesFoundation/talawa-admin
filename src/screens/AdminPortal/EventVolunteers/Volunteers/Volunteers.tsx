@@ -52,7 +52,7 @@ import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
 import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type {
   GridCellParams,

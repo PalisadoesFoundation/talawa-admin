@@ -2,8 +2,9 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, renderHook } from '@testing-library/react';
 import { useTableData } from './useTableData';
-import type { QueryResult } from '@apollo/client';
-import { NetworkStatus, ApolloError } from '@apollo/client';
+import type { useQuery } from "@apollo/client/react";
+import { NetworkStatus } from '@apollo/client';
+import { ApolloError } from "@apollo/client/v4-migration";
 import type { Connection } from '../../../types/shared-components/DataTable/interface';
 
 type Node = { id: string; name: string };
@@ -13,7 +14,7 @@ type Row = { key: string; label: string };
  * Type for mock functions that return QueryResult promises.
  * Generic type variable allows flexibility for different data shapes.
  */
-type MockQueryResultFn<T = unknown> = () => Promise<QueryResult<T>>;
+type MockQueryResultFn<T = unknown> = () => Promise<useQuery.Result<T>>;
 
 /**
  * Test data shape for function path with array indexing via property access.
@@ -56,7 +57,7 @@ function Consumer<TData = unknown, TNode = Node, TRow = Row>({
   testId = 'out',
   onRows,
 }: {
-  result: Partial<QueryResult<TData>>;
+  result: Partial<useQuery.Result<TData>>;
   path: (string | number)[] | ((data: TData) => Connection<TNode> | undefined);
   transform?: (n: TNode) => TRow | null | undefined;
   deps?: ReadonlyArray<unknown>;
@@ -65,9 +66,9 @@ function Consumer<TData = unknown, TNode = Node, TRow = Row>({
 }) {
   // Create strongly-typed mock functions returning QueryResult promises
   const mockRefetch: MockQueryResultFn<TData> = () =>
-    Promise.resolve({} as QueryResult<TData>);
+    Promise.resolve({} as useQuery.Result<TData>);
   const mockFetchMore: MockQueryResultFn<TData> = () =>
-    Promise.resolve({} as QueryResult<TData>);
+    Promise.resolve({} as useQuery.Result<TData>);
 
   const r = {
     data: result.data ?? {},
@@ -76,7 +77,7 @@ function Consumer<TData = unknown, TNode = Node, TRow = Row>({
     refetch: result.refetch ?? mockRefetch,
     fetchMore: result.fetchMore ?? mockFetchMore,
     networkStatus: result.networkStatus ?? NetworkStatus.ready,
-  } as unknown as QueryResult<TData>;
+  } as unknown as useQuery.Result<TData>;
 
   const { rows, loading, loadingMore, pageInfo, error } = useTableData<
     TNode,
@@ -327,10 +328,10 @@ describe('useTableData', () => {
 
   it('passes through refetch and fetchMore functions', () => {
     const mockRefetch = vi.fn<MockQueryResultFn<unknown>>(() =>
-      Promise.resolve({} as QueryResult<unknown>),
+      Promise.resolve({} as useQuery.Result<unknown>),
     );
     const mockFetchMore = vi.fn<MockQueryResultFn<unknown>>(() =>
-      Promise.resolve({} as QueryResult<unknown>),
+      Promise.resolve({} as useQuery.Result<unknown>),
     );
 
     const data = {
@@ -347,7 +348,7 @@ describe('useTableData', () => {
       refetch: mockRefetch,
       fetchMore: mockFetchMore,
       networkStatus: NetworkStatus.ready,
-    } as unknown as QueryResult<unknown>;
+    } as unknown as useQuery.Result<unknown>;
 
     const { getByText } = render(
       React.createElement(() => {
@@ -693,7 +694,7 @@ describe('useTableData', () => {
       refetch: vi.fn(),
       fetchMore: vi.fn(),
       networkStatus: NetworkStatus.ready,
-    } as unknown as QueryResult<unknown>;
+    } as unknown as useQuery.Result<unknown>;
 
     render(
       React.createElement(() => {
@@ -1782,7 +1783,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['users'] },
         ),
       );
@@ -1801,7 +1802,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['users'] },
         ),
       );
@@ -1820,7 +1821,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['users', 'edges'] },
         ),
       );
@@ -1838,7 +1839,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['count'] },
         ),
       );
@@ -1858,7 +1859,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['users'] },
         ),
       );
@@ -1876,7 +1877,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['users'] },
         ),
       );
@@ -1894,7 +1895,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: (d: TestData) => d.users ?? undefined },
         ),
       );
@@ -1914,7 +1915,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['items', 0] },
         ),
       );
@@ -1940,7 +1941,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['users'] },
         ),
       );
@@ -1969,7 +1970,7 @@ describe('useTableData', () => {
             loading: false,
             error: undefined,
             networkStatus: NetworkStatus.ready,
-          } as unknown as QueryResult<TestData>,
+          } as unknown as useQuery.Result<TestData>,
           { path: ['users'] },
         ),
       );

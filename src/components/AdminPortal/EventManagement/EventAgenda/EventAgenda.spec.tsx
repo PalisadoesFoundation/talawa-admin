@@ -1,5 +1,6 @@
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -87,7 +88,7 @@ const mockAgendaFolders = {
   ],
 };
 
-const MOCKS_SUCCESS: MockedResponse[] = [
+const MOCKS_SUCCESS: MockLink.MockedResponse[] = [
   {
     request: {
       query: AGENDA_ITEM_CATEGORY_LIST,
@@ -108,7 +109,7 @@ const MOCKS_SUCCESS: MockedResponse[] = [
   },
 ];
 
-const MOCKS_LOADING: MockedResponse[] = [
+const MOCKS_LOADING: MockLink.MockedResponse[] = [
   {
     request: {
       query: AGENDA_ITEM_CATEGORY_LIST,
@@ -127,7 +128,7 @@ const MOCKS_LOADING: MockedResponse[] = [
   },
 ];
 
-const MOCKS_ERROR: MockedResponse[] = [
+const MOCKS_ERROR: MockLink.MockedResponse[] = [
   {
     request: {
       query: AGENDA_ITEM_CATEGORY_LIST,
@@ -144,7 +145,7 @@ const MOCKS_ERROR: MockedResponse[] = [
   },
 ];
 
-const renderEventAgenda = (mocks: MockedResponse[] = MOCKS_SUCCESS) => {
+const renderEventAgenda = (mocks: MockLink.MockedResponse[] = MOCKS_SUCCESS) => {
   return render(
     <MockedProvider mocks={mocks}>
       <BrowserRouter>
@@ -163,7 +164,7 @@ describe('EventAgenda', () => {
 
   describe('Loading state', () => {
     it('shows loader when only category query is loading', () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: AGENDA_ITEM_CATEGORY_LIST,
@@ -195,7 +196,7 @@ describe('EventAgenda', () => {
 
   describe('Error state', () => {
     it('renders fallback error message when error has no message', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: AGENDA_ITEM_CATEGORY_LIST,
@@ -286,7 +287,7 @@ describe('EventAgenda', () => {
 
   describe('Prop wiring & coverage edges', () => {
     it('renders error message when folder query fails', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: AGENDA_ITEM_CATEGORY_LIST,
@@ -311,7 +312,7 @@ describe('EventAgenda', () => {
     });
 
     it('handles undefined agendaFolderData safely', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: AGENDA_ITEM_CATEGORY_LIST,

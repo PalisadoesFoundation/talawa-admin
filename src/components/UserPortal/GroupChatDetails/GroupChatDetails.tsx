@@ -48,7 +48,7 @@ import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './GroupChatDetails.module.css';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from "@apollo/client/react";
 import {
   UPDATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,

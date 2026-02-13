@@ -1,4 +1,4 @@
-import { MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
 import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
@@ -67,8 +67,8 @@ const createMockResponse = <T extends Record<string, unknown> | undefined>(
   variables: T,
   resultData?: unknown,
   error?: Error,
-): MockedResponse => {
-  const response: MockedResponse = {
+): MockLink.MockedResponse => {
+  const response: MockLink.MockedResponse = {
     request: {
       query,
       variables,

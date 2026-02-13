@@ -1,5 +1,6 @@
 import React from 'react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import {
   render,
   screen,
@@ -466,7 +467,7 @@ describe('PostCard', () => {
   };
 
   const renderPostCardWithCustomMockAndProps = (
-    customMock: MockedResponse,
+    customMock: MockLink.MockedResponse,
     propsOverrides: Partial<InterfacePostCard> = {},
   ) => {
     const { setItem } = useLocalStorage();
@@ -507,7 +508,7 @@ describe('PostCard', () => {
     );
   };
 
-  const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
+  const renderPostCardWithCustomMock = (customMock: MockLink.MockedResponse) => {
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
     setItem('role', 'administrator'); // Set admin role for pin/unpin tests

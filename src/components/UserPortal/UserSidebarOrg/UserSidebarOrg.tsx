@@ -13,7 +13,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import { FaExchangeAlt } from 'react-icons/fa';
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';

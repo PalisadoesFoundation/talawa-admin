@@ -2,7 +2,8 @@ import React, { act } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { InMemoryCache } from '@apollo/client';
 import {
   CREATE_POST_MUTATION,
@@ -262,7 +263,7 @@ describe('CreatePostModal Integration Tests', () => {
 
   const renderComponent = (
     props = {},
-    mocks: MockedResponse[] = [createPostSuccessMock],
+    mocks: MockLink.MockedResponse[] = [createPostSuccessMock],
   ) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>

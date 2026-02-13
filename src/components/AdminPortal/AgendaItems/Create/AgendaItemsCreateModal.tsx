@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import DropDownButton from 'shared-components/DropDownButton';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import Button from 'shared-components/Button/Button';

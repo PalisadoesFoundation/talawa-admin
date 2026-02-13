@@ -19,8 +19,8 @@ import type { ChangeEvent } from 'react';
 import styles from './ChatRoom.module.css';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ApolloQueryResult } from '@apollo/client';
-import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import type { ObservableQuery } from '@apollo/client';
+import { useMutation, useQuery, useSubscription } from "@apollo/client/react";
 import {
   EDIT_CHAT_MESSAGE,
   MESSAGE_SENT_TO_CHAT,
@@ -49,7 +49,7 @@ interface IChatRoomProps {
           id: string;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<{ chatList: INewChat[] }>>;
+  ) => Promise<ObservableQuery.Result<{ chatList: INewChat[] }>>;
 }
 
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
@@ -498,7 +498,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 loading: false,
                 networkStatus: 7,
                 error: undefined,
-              } as ApolloQueryResult<{ chat: INewChat }>)
+              } as ObservableQuery.Result<{ chat: INewChat }>)
             }
           />
         )}

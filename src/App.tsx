@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
-import { useQuery, useApolloClient } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/AdminPortal/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';

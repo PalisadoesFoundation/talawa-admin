@@ -1,5 +1,6 @@
 import React, { act } from 'react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import {
   render,
   screen,
@@ -67,7 +68,7 @@ interface InterfaceOrganization {
   addressLine1?: string | null;
 }
 
-const createMocks = (): MockedResponse[] => [
+const createMocks = (): MockLink.MockedResponse[] => [
   {
     request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
     result: { data: { community: { inactivityTimeoutDuration: 3600 } } },
@@ -157,7 +158,7 @@ const createMocks3 = (
     communityData: InterfaceCommunity | null;
     organizationsData: InterfaceOrganization[];
   }> = {},
-): MockedResponse[] => {
+): MockLink.MockedResponse[] => {
   const defaults = {
     communityData: null,
     organizationsData: [
@@ -194,7 +195,7 @@ const createMocks3 = (
   ];
 };
 
-const createMocks4 = (): MockedResponse[] => [
+const createMocks4 = (): MockLink.MockedResponse[] => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -227,7 +228,7 @@ const createMocks4 = (): MockedResponse[] => [
 
 // Note: Avoid shared links; we'll create a fresh StaticMockLink per test
 
-const createMocksVerifiedEmail = (): MockedResponse[] => [
+const createMocksVerifiedEmail = (): MockLink.MockedResponse[] => [
   {
     request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
     result: { data: { community: { inactivityTimeoutDuration: 3600 } } },
@@ -1734,13 +1735,13 @@ describe('Talawa-API server fetch check', () => {
 
 // Helper functions to reduce code duplication
 const renderLoginPage = (
-  mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = createMocks(),
+  mocksOrLink: StaticMockLink | ReadonlyArray<MockLink.MockedResponse> = createMocks(),
 ): ReturnType<typeof render> => {
   const isLink = mocksOrLink instanceof StaticMockLink;
   const history = createMemoryHistory({ initialEntries: ['/'] });
   const link = isLink
     ? mocksOrLink
-    : new StaticMockLink(mocksOrLink as ReadonlyArray<MockedResponse>, true);
+    : new StaticMockLink(mocksOrLink as ReadonlyArray<MockLink.MockedResponse>, true);
 
   return render(
     <MockedProvider link={link}>
@@ -3052,7 +3053,7 @@ describe('Cookie-based authentication verification', () => {
   it.todo(
     'sets recaptcha token when recaptcha is completed (ReCAPTCHA deferred to Phase 2b)',
     async () => {
-      const RECAPTCHA_LOGIN_MOCKS: MockedResponse[] = [
+      const RECAPTCHA_LOGIN_MOCKS: MockLink.MockedResponse[] = [
         {
           request: {
             query: SIGNIN_QUERY,
@@ -3935,7 +3936,7 @@ describe('Cookie-based authentication verification (extra coverage)', () => {
     mockGetRecaptchaToken.mockResolvedValue('fake-recaptcha-token');
 
     // Create test-specific mock that matches the variables used in this test
-    const RECAPTCHA_LOGIN_MOCKS: MockedResponse[] = [
+    const RECAPTCHA_LOGIN_MOCKS: MockLink.MockedResponse[] = [
       {
         request: {
           query: SIGNIN_QUERY,

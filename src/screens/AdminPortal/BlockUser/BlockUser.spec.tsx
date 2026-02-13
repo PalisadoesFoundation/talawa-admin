@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { vi } from 'vitest';
 import BlockUser from './BlockUser';
 import {

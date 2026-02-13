@@ -34,8 +34,8 @@
  * ```
  */
 import React from 'react';
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import type { ReactNode } from 'react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
@@ -45,7 +45,7 @@ interface InterfaceTestWrapperProps {
   /** The React components to be wrapped */
   children: ReactNode;
   /** Optional Apollo GraphQL mocks for testing queries and mutations */
-  mocks?: MockedResponse[];
+  mocks?: MockLink.MockedResponse[];
 }
 
 export const TestWrapper = ({

@@ -2,13 +2,8 @@
  * GraphQL service for plugin operations
  */
 
-import {
-  useMutation,
-  useQuery,
-  type QueryResult,
-  type OperationVariables,
-  type ApolloClient,
-} from '@apollo/client';
+import { type OperationVariables, type ApolloClient } from '@apollo/client';
+import { useMutation, useQuery } from "@apollo/client/react";
 import { GET_ALL_PLUGINS } from '../GraphQl/Queries/PlugInQueries';
 import {
   CREATE_PLUGIN_MUTATION,
@@ -46,7 +41,7 @@ export interface IDeletePluginInput {
   id: string;
 }
 
-export const useGetAllPlugins = (): QueryResult<
+export const useGetAllPlugins = (): useQuery.Result<
   { getPlugins: IPlugin[] },
   OperationVariables
 > => {
@@ -80,9 +75,9 @@ export const useDeletePlugin = () => {
 };
 
 export class PluginGraphQLService {
-  private client: ApolloClient<unknown>;
+  private client: ApolloClient;
 
-  constructor(apolloClient: ApolloClient<unknown>) {
+  constructor(apolloClient: ApolloClient) {
     this.client = apolloClient;
   }
 

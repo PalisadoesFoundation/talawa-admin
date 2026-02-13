@@ -29,7 +29,7 @@
 import React from 'react';
 import type { InterfaceTableCheckIn } from 'types/shared-components/CheckIn/interface';
 import Button from '@mui/material/Button';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { generate } from '@pdfme/generator';

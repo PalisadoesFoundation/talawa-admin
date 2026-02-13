@@ -37,7 +37,7 @@ import styles from './MemberRequestCard.module.css';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'shared-components/Button';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,

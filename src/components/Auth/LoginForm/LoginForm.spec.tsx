@@ -1,8 +1,9 @@
 import React from 'react';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import { ApolloLink } from '@apollo/client/link/core';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
+import { ApolloLink } from "@apollo/client/link";
 import { Observable } from '@apollo/client/utilities';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { StaticMockLink } from '../../../utils/StaticMockLink';
@@ -35,7 +36,7 @@ vi.mock('utils/recaptcha', () => ({
   loadRecaptchaScript: vi.fn().mockResolvedValue(undefined),
 }));
 
-const mockSignInSuccess: MockedResponse = {
+const mockSignInSuccess: MockLink.MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
     variables: {
@@ -62,7 +63,7 @@ const mockSignInSuccess: MockedResponse = {
   },
 };
 
-const mockSignInAdminSuccess: MockedResponse = {
+const mockSignInAdminSuccess: MockLink.MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
     variables: {
@@ -89,7 +90,7 @@ const mockSignInAdminSuccess: MockedResponse = {
   },
 };
 
-const mockSignInWithRecaptcha: MockedResponse = {
+const mockSignInWithRecaptcha: MockLink.MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
     variables: {
@@ -117,7 +118,7 @@ const mockSignInWithRecaptcha: MockedResponse = {
   },
 };
 
-const mockSignInError: MockedResponse = {
+const mockSignInError: MockLink.MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
     variables: {
@@ -128,7 +129,7 @@ const mockSignInError: MockedResponse = {
   error: new Error('Invalid credentials'),
 };
 
-const mockSignInGraphQLError: MockedResponse = {
+const mockSignInGraphQLError: MockLink.MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
     variables: {
@@ -369,7 +370,7 @@ describe('LoginForm', () => {
 
     test('calls onError with "Not found" when signIn returns null', async () => {
       const onError = vi.fn();
-      const mockSignInNotFound: MockedResponse = {
+      const mockSignInNotFound: MockLink.MockedResponse = {
         request: {
           query: SIGNIN_QUERY,
           variables: {
@@ -405,7 +406,7 @@ describe('LoginForm', () => {
 
     test('calls onError with "Not found" when signIn data is explicitly null', async () => {
       const onError = vi.fn();
-      const mockSignInNullData: MockedResponse = {
+      const mockSignInNullData: MockLink.MockedResponse = {
         request: {
           query: SIGNIN_QUERY,
           variables: {
@@ -590,7 +591,7 @@ describe('LoginForm', () => {
   describe('Loading State', () => {
     test('submit button is disabled during loading', async () => {
       // Use a mock that delays the response
-      const delayedMock: MockedResponse = {
+      const delayedMock: MockLink.MockedResponse = {
         ...mockSignInSuccess,
         delay: 100,
       };
@@ -617,7 +618,7 @@ describe('LoginForm', () => {
     });
 
     test('form shows aria-busy during loading', async () => {
-      const delayedMock: MockedResponse = {
+      const delayedMock: MockLink.MockedResponse = {
         ...mockSignInSuccess,
         delay: 100,
       };

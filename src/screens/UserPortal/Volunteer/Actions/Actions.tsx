@@ -5,7 +5,7 @@ import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import styles from './Actions.module.css';

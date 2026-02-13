@@ -1,7 +1,8 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { type DropResult } from '@hello-pangea/dnd';
@@ -187,7 +188,7 @@ const mockDefaultFolder: InterfaceAgendaFolderInfo = {
   },
 };
 
-const MOCKS_SUCCESS_ITEM_SEQUENCE: MockedResponse[] = [
+const MOCKS_SUCCESS_ITEM_SEQUENCE: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
@@ -228,7 +229,7 @@ const MOCKS_SUCCESS_ITEM_SEQUENCE: MockedResponse[] = [
   },
 ];
 
-const MOCKS_SUCCESS_FOLDER_SEQUENCE: MockedResponse[] = [
+const MOCKS_SUCCESS_FOLDER_SEQUENCE: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -271,7 +272,7 @@ const MOCKS_SUCCESS_FOLDER_SEQUENCE: MockedResponse[] = [
   },
 ];
 
-const MOCKS_ERROR_ITEM_SEQUENCE: MockedResponse[] = [
+const MOCKS_ERROR_ITEM_SEQUENCE: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
@@ -305,7 +306,7 @@ const MOCKS_ERROR_ITEM_SEQUENCE: MockedResponse[] = [
   },
 ];
 
-const MOCKS_ERROR_FOLDER_SEQUENCE: MockedResponse[] = [
+const MOCKS_ERROR_FOLDER_SEQUENCE: MockLink.MockedResponse[] = [
   {
     request: {
       query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -341,7 +342,7 @@ const MOCKS_ERROR_FOLDER_SEQUENCE: MockedResponse[] = [
 ];
 
 const renderAgendaDragAndDrop = (
-  mocks: MockedResponse[] = [],
+  mocks: MockLink.MockedResponse[] = [],
   folders: InterfaceAgendaFolderInfo[] = createMockFolders(),
 ) => {
   return render(
@@ -1222,7 +1223,7 @@ describe('AgendaDragAndDrop', () => {
 
   describe('Complex drag scenarios', () => {
     it('handles multiple items with same folder after drag', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
@@ -1290,7 +1291,7 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('handles multiple folders drag operation', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -1362,7 +1363,7 @@ describe('AgendaDragAndDrop', () => {
 
   describe('handleDragEnd edge cases', () => {
     it('processes folder drag when indices differ even with different droppableIds', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -1457,7 +1458,7 @@ describe('AgendaDragAndDrop', () => {
         },
       ];
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
@@ -1513,7 +1514,7 @@ describe('AgendaDragAndDrop', () => {
         folder3,
       ];
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -1559,7 +1560,7 @@ describe('AgendaDragAndDrop', () => {
         { ...base[1], sequence: 1 },
       ];
 
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
@@ -1606,7 +1607,7 @@ describe('AgendaDragAndDrop', () => {
 
   describe('Error instance check coverage', () => {
     it('handles non-Error instance in item catch block', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
@@ -1665,7 +1666,7 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('handles non-Error instance in folder catch block', async () => {
-      const mocks: MockedResponse[] = [
+      const mocks: MockLink.MockedResponse[] = [
         {
           request: {
             query: UPDATE_AGENDA_FOLDER_MUTATION,

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { NetworkStatus } from '@apollo/client';
-import type { QueryResult } from '@apollo/client';
+import type { useQuery } from "@apollo/client/react";
 import type {
   Connection,
   Edge,
@@ -10,7 +10,7 @@ import type {
 
 /** Extract GraphQL connection data into table rows with optional node transform; filters null nodes. */
 export function useTableData<TNode = unknown, TRow = TNode, TData = unknown>(
-  result: QueryResult<TData>,
+  result: useQuery.Result<TData>,
   options: IUseTableDataOptions<TNode, TRow, TData>,
 ): IUseTableDataResult<TRow, TData> {
   const { data, loading, error, refetch, fetchMore, networkStatus } = result;

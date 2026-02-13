@@ -1,7 +1,7 @@
 import { renderHook, act, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import useUserProfile from './useUserProfile';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';

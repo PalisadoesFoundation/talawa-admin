@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from "@apollo/client/testing/react";
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { CursorPaginationManager } from './CursorPaginationManager';
 import { gql } from '@apollo/client';
