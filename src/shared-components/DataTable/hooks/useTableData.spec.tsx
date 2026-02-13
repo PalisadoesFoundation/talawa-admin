@@ -2,9 +2,9 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, renderHook } from '@testing-library/react';
 import { useTableData } from './useTableData';
-import type { useQuery } from "@apollo/client/react";
+import type { useQuery } from '@apollo/client/react';
 import { NetworkStatus } from '@apollo/client';
-import { ApolloError } from "@apollo/client/v4-migration";
+import { ApolloError } from '@apollo/client/v4-migration';
 import type { Connection } from '../../../types/shared-components/DataTable/interface';
 
 type Node = { id: string; name: string };

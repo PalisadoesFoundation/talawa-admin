@@ -39,8 +39,7 @@
  */
 // translation-check-keyPrefix: manageTag
 
-
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import type {
   GridCellParams,
   GridColDef,

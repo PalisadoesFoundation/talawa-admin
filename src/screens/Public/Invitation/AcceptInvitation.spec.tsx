@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockLink } from '@apollo/client/testing';
 import {
   VERIFY_EVENT_INVITATION,

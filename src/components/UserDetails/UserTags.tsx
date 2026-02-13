@@ -38,7 +38,7 @@ import styles from './UserTags.module.css';
 import { useTranslation } from 'react-i18next';
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 import { GET_USER_TAGS } from 'GraphQl/Queries/Queries';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import { InterfaceUserTagsProps } from 'types/AdminPortal/UserDetails/UserOrganization/UserEvent/type';
 import {
   InterfaceUserTag,

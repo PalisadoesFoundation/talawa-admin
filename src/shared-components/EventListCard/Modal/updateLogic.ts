@@ -1,7 +1,6 @@
 // translation-check-keyPrefix: eventListCard
 
-
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,

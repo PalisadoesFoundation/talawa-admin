@@ -28,7 +28,7 @@ import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link, useParams } from 'react-router-dom';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,

@@ -7,9 +7,14 @@ import {
   afterEach,
   type Mock,
 } from 'vitest';
-import { ApolloClient, InMemoryCache, ApolloLink, Observable } from '@apollo/client';
-import { Defer20220824Handler } from "@apollo/client/incremental";
-import { LocalState } from "@apollo/client/local-state";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  Observable,
+} from '@apollo/client';
+import { Defer20220824Handler } from '@apollo/client/incremental';
+import { LocalState } from '@apollo/client/local-state';
 import { GraphQLError, type DocumentNode } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
@@ -137,7 +142,7 @@ describe('Apollo Client Configuration', () => {
       If you are not using the `@defer` directive in your application,
       you can safely remove this option.
       */
-      incrementalHandler: new Defer20220824Handler()
+      incrementalHandler: new Defer20220824Handler(),
     });
 
     expect(client).toBeInstanceOf(ApolloClient);
@@ -922,15 +927,13 @@ Copy the contents of this block into a `.d.ts` file in your project to enable co
 If you do not use the `@defer` directive in your application, you can safely remove this block.
 */
 
+import '@apollo/client';
+import { Defer20220824Handler } from '@apollo/client/incremental';
 
-import "@apollo/client";
-import { Defer20220824Handler } from "@apollo/client/incremental";
-
-declare module "@apollo/client" {
+declare module '@apollo/client' {
   export interface TypeOverrides extends Defer20220824Handler.TypeOverrides {}
 }
 
 /*
 End: Inserted by Apollo Client 3->4 migration codemod.
 */
-

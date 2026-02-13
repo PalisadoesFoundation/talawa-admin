@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   ORGANIZATIONS_LIST_BASIC,
   ORGANIZATION_LIST,

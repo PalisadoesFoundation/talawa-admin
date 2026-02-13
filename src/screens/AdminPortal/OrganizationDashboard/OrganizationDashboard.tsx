@@ -25,8 +25,7 @@
 
  */
 
-
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import React, { useEffect, useState, JSX } from 'react';
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';

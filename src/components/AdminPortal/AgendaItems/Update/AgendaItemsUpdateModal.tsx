@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import Button from 'shared-components/Button/Button';

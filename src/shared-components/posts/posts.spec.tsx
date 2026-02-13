@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { MockLink } from '@apollo/client/testing';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import PostsPage from './posts';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';

@@ -33,7 +33,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from 'style/app-fixed.module.css';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';

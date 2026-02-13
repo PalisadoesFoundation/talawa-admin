@@ -57,7 +57,7 @@ import {
 import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
-import { useLazyQuery } from "@apollo/client/react";
+import { useLazyQuery } from '@apollo/client/react';
 import { exportToCSV } from 'utils/chartToPdf';
 import type { ChartOptions, TooltipItem } from 'chart.js';
 import type {

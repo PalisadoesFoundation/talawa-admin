@@ -39,7 +39,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 

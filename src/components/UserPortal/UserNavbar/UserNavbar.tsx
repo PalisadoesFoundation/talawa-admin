@@ -53,7 +53,7 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';

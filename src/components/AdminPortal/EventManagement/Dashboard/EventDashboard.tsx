@@ -30,7 +30,7 @@ import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Edit } from '@mui/icons-material';
 import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals';

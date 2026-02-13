@@ -1,7 +1,7 @@
 import type { ChangeEvent } from 'react';
 import React from 'react';
 
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';

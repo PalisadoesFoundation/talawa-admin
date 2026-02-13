@@ -7,9 +7,13 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { OperationVariables } from '@apollo/client/core/types';
 import * as apolloClient from '@apollo/client';
-import { ApolloClient, NormalizedCacheObject, ObservableQuery } from '@apollo/client';
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  ObservableQuery,
+} from '@apollo/client';
 
-import { ApolloError } from "@apollo/client/v4-migration";
+import { ApolloError } from '@apollo/client/v4-migration';
 
 dayjs.extend(utc);
 

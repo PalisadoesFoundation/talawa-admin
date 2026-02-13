@@ -3,7 +3,7 @@ import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import { errorHandler } from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {

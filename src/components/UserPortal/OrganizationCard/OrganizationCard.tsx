@@ -42,7 +42,7 @@
  */
 import React from 'react';
 import Button from 'shared-components/Button';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 

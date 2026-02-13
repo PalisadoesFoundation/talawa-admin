@@ -32,8 +32,7 @@
  */
 // translation-check-keyPrefix: manageTag
 
-
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';

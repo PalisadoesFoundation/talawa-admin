@@ -4,7 +4,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import {
   VERIFY_EVENT_INVITATION,
   ACCEPT_EVENT_INVITATION,

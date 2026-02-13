@@ -7,7 +7,7 @@ import type { InterfaceCreateVolunteerGroupData } from 'types/Volunteer/interfac
 import styles from './VolunteerGroupModal.module.css';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete } from '@mui/material';
 import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';

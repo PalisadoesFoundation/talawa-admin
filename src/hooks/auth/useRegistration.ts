@@ -1,4 +1,4 @@
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 /**

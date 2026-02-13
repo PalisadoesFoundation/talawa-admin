@@ -1,6 +1,6 @@
 import React from 'react';
 import type { NetworkStatus } from '@apollo/client';
-import type { useQuery } from "@apollo/client/react";
+import type { useQuery } from '@apollo/client/react';
 import type { InterfacePageInfo } from './pagination';
 import type { IColumnDef } from './column';
 import type { Key } from './types';

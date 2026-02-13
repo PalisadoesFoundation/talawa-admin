@@ -20,7 +20,7 @@
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

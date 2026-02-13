@@ -3,7 +3,7 @@
  */
 
 import { type OperationVariables, type ApolloClient } from '@apollo/client';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_ALL_PLUGINS } from '../GraphQl/Queries/PlugInQueries';
 import {
   CREATE_PLUGIN_MUTATION,

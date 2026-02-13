@@ -30,8 +30,7 @@
  */
 // translation-check-keyPrefix: manageTag
 
-
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
 import type {

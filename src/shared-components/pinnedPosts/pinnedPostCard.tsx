@@ -29,7 +29,7 @@
  */
 
 import React from 'react';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import {
   Card,

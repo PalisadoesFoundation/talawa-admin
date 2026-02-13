@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockLink } from '@apollo/client/testing';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import { InMemoryCache } from '@apollo/client';
 import {
   CREATE_POST_MUTATION,

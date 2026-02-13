@@ -13,7 +13,7 @@ import {
 import userEvent from '@testing-library/user-event';
 
 import type { MockLink } from '@apollo/client/testing';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import OrganizationDashboard from './OrganizationDashboard';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';

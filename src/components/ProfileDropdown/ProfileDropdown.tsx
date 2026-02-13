@@ -38,7 +38,7 @@ import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './ProfileDropdown.module.css';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';

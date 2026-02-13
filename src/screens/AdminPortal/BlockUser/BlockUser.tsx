@@ -41,8 +41,7 @@
  * - JSX.Element: A table displaying members or blocked users with options to block/unblock.
  */
 
-
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import React, { useEffect, useState, useCallback } from 'react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {

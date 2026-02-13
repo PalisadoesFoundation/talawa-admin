@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { type MockLink } from '@apollo/client/testing';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   render,
   screen,
@@ -1735,13 +1735,18 @@ describe('Talawa-API server fetch check', () => {
 
 // Helper functions to reduce code duplication
 const renderLoginPage = (
-  mocksOrLink: StaticMockLink | ReadonlyArray<MockLink.MockedResponse> = createMocks(),
+  mocksOrLink:
+    | StaticMockLink
+    | ReadonlyArray<MockLink.MockedResponse> = createMocks(),
 ): ReturnType<typeof render> => {
   const isLink = mocksOrLink instanceof StaticMockLink;
   const history = createMemoryHistory({ initialEntries: ['/'] });
   const link = isLink
     ? mocksOrLink
-    : new StaticMockLink(mocksOrLink as ReadonlyArray<MockLink.MockedResponse>, true);
+    : new StaticMockLink(
+        mocksOrLink as ReadonlyArray<MockLink.MockedResponse>,
+        true,
+      );
 
   return render(
     <MockedProvider link={link}>

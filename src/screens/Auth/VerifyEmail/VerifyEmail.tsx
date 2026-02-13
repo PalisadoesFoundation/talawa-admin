@@ -14,8 +14,7 @@
  * @returns The VerifyEmail component
  */
 
-
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

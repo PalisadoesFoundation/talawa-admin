@@ -2,7 +2,7 @@ import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockLink } from '@apollo/client/testing';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import * as ApolloClient from '@apollo/client';

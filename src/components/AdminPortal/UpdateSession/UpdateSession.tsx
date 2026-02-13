@@ -34,7 +34,7 @@ import { useTranslation } from 'react-i18next';
 import { Card } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';

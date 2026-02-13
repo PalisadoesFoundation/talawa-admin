@@ -20,8 +20,7 @@
  * @returns The rendered Requests component.
  */
 
-
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';

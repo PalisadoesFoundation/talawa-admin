@@ -16,8 +16,8 @@ import type {
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import { type ObservableQuery } from '@apollo/client';
-import { type ApolloError } from "@apollo/client/v4-migration";
-import { useQuery } from "@apollo/client/react";
+import { type ApolloError } from '@apollo/client/v4-migration';
+import { useQuery } from '@apollo/client/react';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {

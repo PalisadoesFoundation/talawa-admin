@@ -5,7 +5,7 @@ import type {
   ObservableQuery,
   ApolloLink,
 } from '@apollo/client';
-import type { useMutation } from "@apollo/client/react";
+import type { useMutation } from '@apollo/client/react';
 import type { Chat } from 'types/UserPortal/Chat/interface';
 
 export type ChatsListRefetch = (
@@ -14,13 +14,21 @@ export type ChatsListRefetch = (
 
 export type CreateChatMutation = (
   options?:
-    | useMutation.MutationFunctionOptions<unknown, OperationVariables, ApolloCache<unknown>>
+    | useMutation.MutationFunctionOptions<
+        unknown,
+        OperationVariables,
+        ApolloCache<unknown>
+      >
     | undefined,
 ) => Promise<ApolloLink.Result<unknown>>;
 
 export type CreateChatMembershipMutation = (
   options?:
-    | useMutation.MutationFunctionOptions<unknown, OperationVariables, ApolloCache<unknown>>
+    | useMutation.MutationFunctionOptions<
+        unknown,
+        OperationVariables,
+        ApolloCache<unknown>
+      >
     | undefined,
 ) => Promise<ApolloLink.Result<unknown>>;
 

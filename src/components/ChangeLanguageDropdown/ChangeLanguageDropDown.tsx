@@ -20,7 +20,7 @@ import { languages } from 'utils/languages';
 import styles from './ChangeLanguageDropDown.module.css';
 import cookies from 'js-cookie';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

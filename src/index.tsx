@@ -2,11 +2,16 @@ import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import type { NormalizedCacheObject } from '@apollo/client';
-import { ApolloClient, InMemoryCache, Observable, ApolloLink } from '@apollo/client';
-import { Defer20220824Handler } from "@apollo/client/incremental";
-import { LocalState } from "@apollo/client/local-state";
-import { fromPromise } from "@apollo/client/v4-migration";
-import { ApolloProvider } from "@apollo/client/react";
+import {
+  ApolloClient,
+  InMemoryCache,
+  Observable,
+  ApolloLink,
+} from '@apollo/client';
+import { Defer20220824Handler } from '@apollo/client/incremental';
+import { LocalState } from '@apollo/client/local-state';
+import { fromPromise } from '@apollo/client/v4-migration';
+import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
@@ -264,7 +269,7 @@ export const client: ApolloClient = new ApolloClient({
   If you are not using the `@defer` directive in your application,
   you can safely remove this option.
   */
-  incrementalHandler: new Defer20220824Handler()
+  incrementalHandler: new Defer20220824Handler(),
 });
 const fallbackLoader = <div className="loader"></div>;
 
@@ -297,15 +302,13 @@ Copy the contents of this block into a `.d.ts` file in your project to enable co
 If you do not use the `@defer` directive in your application, you can safely remove this block.
 */
 
+import '@apollo/client';
+import { Defer20220824Handler } from '@apollo/client/incremental';
 
-import "@apollo/client";
-import { Defer20220824Handler } from "@apollo/client/incremental";
-
-declare module "@apollo/client" {
+declare module '@apollo/client' {
   export interface TypeOverrides extends Defer20220824Handler.TypeOverrides {}
 }
 
 /*
 End: Inserted by Apollo Client 3->4 migration codemod.
 */
-

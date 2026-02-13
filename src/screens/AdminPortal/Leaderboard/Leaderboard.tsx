@@ -67,7 +67,7 @@ import {
 } from 'shared-components/DataGridWrapper';
 
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 
 enum TimeFrame {
   All = 'allTime',

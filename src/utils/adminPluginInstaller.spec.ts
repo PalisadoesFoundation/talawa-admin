@@ -261,8 +261,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       // Accept that only 'Admin' is installed (matches implementation)
@@ -293,8 +292,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       // Accept the actual error message thrown by the implementation
@@ -407,8 +405,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       expect(errorSpy).toHaveBeenCalled();
@@ -684,8 +681,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       expect(result.success).toBe(true);

@@ -19,7 +19,7 @@
  */
 
 import React, { useState, useEffect, useMemo, JSX } from 'react';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import styles from './OrganizationEvents.module.css';

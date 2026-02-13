@@ -14,7 +14,7 @@ import {
 } from '../graphql-service';
 import { type ApolloClient } from '@apollo/client';
 
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 
 // Mock Apollo client
 const mockApolloClient = {

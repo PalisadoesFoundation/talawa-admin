@@ -32,7 +32,7 @@
  * ```
  */
 import React, { useMemo, useState } from 'react';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import PeopleTabUserOrganizations from 'shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations';
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 import styles from './UserOrganizations.module.css';

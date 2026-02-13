@@ -35,7 +35,7 @@
  */
 import React, { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLazyQuery, useMutation, useQuery } from "@apollo/client/react";
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 import {
   EVENT_REGISTRANTS,
   EVENT_DETAILS,

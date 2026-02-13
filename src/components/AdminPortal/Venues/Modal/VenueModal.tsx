@@ -37,7 +37,7 @@ import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Button from 'shared-components/Button';
 import styles from './VenueModal.module.css';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,

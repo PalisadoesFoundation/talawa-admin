@@ -296,7 +296,7 @@ import {
   validateRecurrenceInput,
   formatRecurrenceForApi,
 } from 'utils/recurrenceUtils';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 
 const mockToast = {
   success: mockToastSuccess,

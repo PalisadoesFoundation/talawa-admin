@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockLink } from '@apollo/client/testing';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -145,7 +145,9 @@ const MOCKS_ERROR: MockLink.MockedResponse[] = [
   },
 ];
 
-const renderEventAgenda = (mocks: MockLink.MockedResponse[] = MOCKS_SUCCESS) => {
+const renderEventAgenda = (
+  mocks: MockLink.MockedResponse[] = MOCKS_SUCCESS,
+) => {
   return render(
     <MockedProvider mocks={mocks}>
       <BrowserRouter>

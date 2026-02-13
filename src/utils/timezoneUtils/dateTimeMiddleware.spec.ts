@@ -1,5 +1,5 @@
 import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
-import type { ApolloLink } from "@apollo/client";
+import type { ApolloLink } from '@apollo/client';
 import { gql, Observable } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

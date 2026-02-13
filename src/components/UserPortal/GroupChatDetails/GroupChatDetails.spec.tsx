@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, act, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GroupChatDetails from './GroupChatDetails';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';

@@ -2,13 +2,16 @@ import { print } from 'graphql';
 import { equal } from '@wry/equality';
 import { invariant } from 'ts-invariant';
 
-import { ApolloLink } from "@apollo/client/link";
+import { ApolloLink } from '@apollo/client/link';
 
 import { Observable, addTypenameToDocument } from '@apollo/client/utilities';
 
-import { removeClientSetsFromDocument, removeConnectionDirectiveFromDocument } from "@apollo/client/v4-migration";
+import {
+  removeClientSetsFromDocument,
+  removeConnectionDirectiveFromDocument,
+} from '@apollo/client/v4-migration';
 
-import { cloneDeep } from "@apollo/client/utilities/internal";
+import { cloneDeep } from '@apollo/client/utilities/internal';
 
 import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
 
@@ -66,7 +69,9 @@ export class StaticMockLink extends ApolloLink {
     mockedResponses.push(normalizedMockedResponse);
   }
 
-  public request(operation: ApolloLink.Operation): Observable<ApolloLink.Result> | null {
+  public request(
+    operation: ApolloLink.Operation,
+  ): Observable<ApolloLink.Result> | null {
     this.operation = operation;
     const key = requestToKey(operation, this.addTypename);
     let responseIndex = 0;

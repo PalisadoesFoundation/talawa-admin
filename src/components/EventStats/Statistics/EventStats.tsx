@@ -36,7 +36,7 @@ import { FeedbackStats } from './Feedback/Feedback';
 import { ReviewStats } from './Review/Review';
 import { AverageRating } from './AverageRating/AverageRating';
 import styles from './EventStats.module.css';
-import { useQuery } from "@apollo/client/react";
+import { useQuery } from '@apollo/client/react';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';

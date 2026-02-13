@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderHook, act, waitFor, cleanup } from '@testing-library/react';
 import { type MockLink } from '@apollo/client/testing';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   useRegistration,
   RegistrationError,
@@ -48,13 +48,13 @@ const ERROR_MOCK: MockLink.MockedResponse[] = [
 ];
 
 const createWrapper = (mocks: MockLink.MockedResponse[]) =>
-  (function Wrapper({ children }: { children: React.ReactNode }) {
+  function Wrapper({ children }: { children: React.ReactNode }) {
     return React.createElement(MockedProvider, {
       mocks,
       addTypename: false,
       children,
     });
-  });
+  };
 
 describe('useRegistration', () => {
   afterEach(() => {

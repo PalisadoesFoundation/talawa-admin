@@ -40,7 +40,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import Button from 'shared-components/Button';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   EVENT_ATTENDEES,
   MEMBERS_LIST,

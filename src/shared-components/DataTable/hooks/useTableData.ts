@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { NetworkStatus } from '@apollo/client';
-import type { useQuery } from "@apollo/client/react";
+import type { useQuery } from '@apollo/client/react';
 import type {
   Connection,
   Edge,

@@ -1,15 +1,18 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
-import { Observer } from "@apollo/client/v4-migration";
+import { Observer } from '@apollo/client/v4-migration';
 import type { MockedResponse } from '@apollo/react-testing';
 import { gql, Observable } from '@apollo/client';
 import { print } from 'graphql';
-import type { ApolloLink } from "@apollo/client/link";
+import type { ApolloLink } from '@apollo/client/link';
 import { equal } from '@wry/equality';
 
 class TestableStaticMockLink extends StaticMockLink {
   public setErrorHandler(
-    handler: (error: unknown, observer?: Observer<ApolloLink.Result>) => false | void,
+    handler: (
+      error: unknown,
+      observer?: Observer<ApolloLink.Result>,
+    ) => false | void,
   ): void {
     this.onError = handler;
   }

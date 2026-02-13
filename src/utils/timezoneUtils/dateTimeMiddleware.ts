@@ -1,4 +1,4 @@
-import { ApolloLink } from "@apollo/client";
+import { ApolloLink } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';

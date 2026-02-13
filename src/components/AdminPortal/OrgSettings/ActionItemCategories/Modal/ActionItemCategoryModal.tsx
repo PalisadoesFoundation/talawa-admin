@@ -6,7 +6,7 @@ import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModal
 import styles from './ActionItemCategoryModal.module.css';
 import { useTranslation } from 'react-i18next';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,

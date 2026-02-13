@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { useParams } from 'react-router';
 
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';

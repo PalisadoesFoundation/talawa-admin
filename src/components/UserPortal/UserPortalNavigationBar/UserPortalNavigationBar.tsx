@@ -13,7 +13,7 @@ import { Container, Navbar, Nav, Offcanvas } from 'react-bootstrap';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from '@apollo/client/react';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';

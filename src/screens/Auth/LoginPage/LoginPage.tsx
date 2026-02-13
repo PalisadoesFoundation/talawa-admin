@@ -11,9 +11,8 @@
  * ```
  */
 
-
-import { ApolloError } from "@apollo/client/v4-migration";
-import { useQuery } from "@apollo/client/react";
+import { ApolloError } from '@apollo/client/v4-migration';
+import { useQuery } from '@apollo/client/react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Button from 'shared-components/Button';
