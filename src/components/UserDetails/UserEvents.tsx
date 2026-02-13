@@ -42,8 +42,7 @@ import {
   InterfaceUserEvent,
   InterfaceGetUserTagsData,
 } from 'types/AdminPortal/UserDetails/UserEvent/interface';
-
-type PeopleTabUserEventsProps = { orgId?: string; userId?: string };
+import { PeopleTabUserEventsProps } from 'types/AdminPortal/UserDetails/UserEvent/type';
 
 const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
