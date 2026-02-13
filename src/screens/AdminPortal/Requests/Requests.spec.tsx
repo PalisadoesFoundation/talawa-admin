@@ -1,12 +1,11 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -747,6 +746,8 @@ describe('Testing Requests screen', () => {
   });
 
   test('should handle loading more requests with search term', async () => {
+    const user = userEvent.setup();
+
     render(
       <MockedProvider link={linkInfiniteScroll}>
         <BrowserRouter>
@@ -759,28 +760,25 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    const searchInput = await screen.findByTestId('searchByName');
 
-    const searchInput = screen.getByTestId('searchByName');
-    await userEvent.type(searchInput, 'User');
-    await wait(200);
+    await user.type(searchInput, 'User');
 
-    const requestsContainer = document.querySelector(
-      '[data-testid="requests-list"]',
-    );
-    if (requestsContainer) {
-      fireEvent.scroll(requestsContainer, {
-        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
-      });
-    } else {
-      fireEvent.scroll(window, {
-        target: { scrollY: document.documentElement.scrollHeight },
-      });
+    // Wait for grid to render
+    const grid = await screen.findByRole('grid');
+    expect(grid).toBeInTheDocument();
+
+    // Target MUI DataGrid virtual scroller
+    const scroller = document.querySelector('.MuiDataGrid-virtualScroller');
+
+    if (scroller) {
+      scroller.scrollTop = scroller.scrollHeight;
+      scroller.dispatchEvent(new Event('scroll'));
     }
 
-    await wait(500);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
   });
 
   test('should handle loading more requests when no previous data exists', async () => {
@@ -959,27 +957,24 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    const table = screen.getByRole('grid');
+    // Wait for table to render
+    const table = await screen.findByRole('grid');
     expect(table).toBeInTheDocument();
 
-    const requestsContainer = document.querySelector(
-      '[data-testid="requests-list"]',
-    );
+    const requestsContainer = screen.queryByTestId('requests-list');
+
     if (requestsContainer) {
-      fireEvent.scroll(requestsContainer, {
-        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
-      });
+      // Simulate scroll in JSDOM
+      requestsContainer.scrollTop = requestsContainer.scrollHeight;
+      requestsContainer.dispatchEvent(new Event('scroll'));
     } else {
-      fireEvent.scroll(window, {
-        target: { scrollY: document.documentElement.scrollHeight },
-      });
+      window.dispatchEvent(new Event('scroll'));
     }
 
-    await wait(200);
-
-    expect(table).toBeInTheDocument();
+    // Wait to ensure no crash or unexpected state change
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
   });
 
   test('should handle null membership requests in response', async () => {
@@ -1047,9 +1042,7 @@ describe('Testing Requests screen', () => {
   test('should handle null response in fetchMore correctly', async () => {
     const NULL_FETCH_MORE_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1062,14 +1055,10 @@ describe('Testing Requests screen', () => {
                 members: {
                   edges: [
                     {
-                      node: {
-                        id: 'user1',
-                      },
+                      node: { id: 'user1' },
                     },
                   ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
+                  pageInfo: { hasNextPage: false },
                 },
               },
             ],
@@ -1139,24 +1128,23 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for initial grid to render
+    const table = await screen.findByRole('grid');
+    expect(table).toBeInTheDocument();
 
-    const requestsContainer = document.querySelector(
-      '[data-testid="requests-list"]',
-    );
+    const requestsContainer = screen.queryByTestId('requests-list');
+
     if (requestsContainer) {
-      fireEvent.scroll(requestsContainer, {
-        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
-      });
+      requestsContainer.scrollTop = requestsContainer.scrollHeight;
+      requestsContainer.dispatchEvent(new Event('scroll'));
     } else {
-      fireEvent.scroll(window, {
-        target: { scrollY: document.documentElement.scrollHeight },
-      });
+      window.dispatchEvent(new Event('scroll'));
     }
 
-    await wait(500);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    // Wait to ensure component does not crash after null fetchMore response
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
   });
 
   test('should handle empty state when organization returns null', async () => {
@@ -1289,9 +1277,7 @@ describe('Testing Requests screen', () => {
   test('should handle loadMoreRequests when data is undefined or data.organization is undefined', async () => {
     const NO_DATA_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1302,16 +1288,8 @@ describe('Testing Requests screen', () => {
                 description: 'Test description',
                 avatarURL: null,
                 members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
+                  edges: [{ node: { id: 'user1' } }],
+                  pageInfo: { hasNextPage: false },
                 },
               },
             ],
@@ -1365,35 +1343,29 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for component to render
+    const component = await screen.findByTestId('testComp');
+    expect(component).toBeInTheDocument();
 
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    const requestsContainer = screen.queryByTestId('requests-list');
 
-    const requestsContainer = document.querySelector(
-      '[data-testid="requests-list"]',
-    );
     if (requestsContainer) {
-      fireEvent.scroll(requestsContainer, {
-        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
-      });
+      requestsContainer.scrollTop = requestsContainer.scrollHeight;
+      requestsContainer.dispatchEvent(new Event('scroll'));
     } else {
-      fireEvent.scroll(window, {
-        target: { scrollY: document.documentElement.scrollHeight },
-      });
+      window.dispatchEvent(new Event('scroll'));
     }
 
-    await wait(500);
-
-    // Verify component still renders properly
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    // Ensure component still renders after loadMore attempt
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('should render avatar with error handler for broken image URL', async () => {
     const AVATAR_ERROR_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1459,13 +1431,17 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
+    // Wait for avatar to render
     const avatarImg = await screen.findByTestId('display-img');
     expect(avatarImg).toBeInTheDocument();
 
-    fireEvent.error(avatarImg);
-    await wait(100);
+    // Simulate image load failure
+    avatarImg.dispatchEvent(new Event('error'));
+
+    // Optional: assert fallback behavior if your component changes src
+    await waitFor(() => {
+      expect(avatarImg).toBeInTheDocument();
+    });
   });
 
   test('should render Avatar component when avatarURL is not available', async () => {
