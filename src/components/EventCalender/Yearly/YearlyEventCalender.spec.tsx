@@ -316,7 +316,7 @@ describe('Calendar Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setMockOrgId('org1');
   });
 
@@ -366,6 +366,12 @@ describe('Calendar Component', () => {
 
     const weekdayHeaderRows = screen.getAllByTestId('weekday-header-row');
     expect(weekdayHeaderRows.length).toBe(12);
+
+    // Verify each header row has exactly 7 weekday cells
+    weekdayHeaderRows.forEach((row) => {
+      const cells = row.querySelectorAll('[data-testid="weekday-header-cell"]');
+      expect(cells.length).toBe(7);
+    });
   });
 
   it('handles year navigation correctly', async () => {
@@ -558,8 +564,8 @@ describe('Calendar Component', () => {
     const multiMonthEvents = [
       {
         ...mockEventData[0],
-        startAt: new Date(today.getFullYear(), 3, 15).toISOString(),
-        endAt: new Date(today.getFullYear(), 4, 15).toISOString(),
+        startAt: new Date(today.getFullYear(), 3, 15, 12, 0, 0).toISOString(),
+        endAt: new Date(today.getFullYear(), 4, 15, 12, 0, 0).toISOString(),
       },
     ];
 
@@ -595,7 +601,7 @@ describe('Calendar Component', () => {
       expect(buttons.length).toBeGreaterThan(0);
     });
 
-    const start = new Date(today.getFullYear(), 3, 15);
+    const start = new Date(today.getFullYear(), 3, 15, 12, 0, 0);
     await clickExpandForDate(container, start, user);
   });
 
