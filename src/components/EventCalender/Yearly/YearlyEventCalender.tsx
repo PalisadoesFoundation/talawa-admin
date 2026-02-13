@@ -340,7 +340,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             variant="outlined"
             className={styles.buttonEventCalendar}
             onClick={handlePrevYear}
-            aria-label={tCommon('previousYear')}
+            aria-label="previousYear"
           >
             <ChevronLeft />
           </Button>
@@ -350,7 +350,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             className={styles.buttonEventCalendar}
             onClick={handleNextYear}
             data-testid="nextYear"
-            aria-label={tCommon('nextYear')}
+            aria-label="nextYear"
           >
             <ChevronRight />
           </Button>
