@@ -168,6 +168,13 @@ describe('IconComponent sx color handling', () => {
     // CSS variables are passed through as-is to the sx prop
     expect(icon).toHaveStyle({ color: 'var(--bs-primary)' });
   });
+
+  it('applies fill color to Requests icon', () => {
+    render(<IconComponent name="Requests" fill="#FF00FF" />);
+    const icon = screen.getByTestId('Icon-Component-RequestsIcon');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveAttribute('fill', '#FF00FF');
+  });
 });
 describe('IconComponent Chat icon', () => {
   it('renders Chat icon with correct testId', () => {

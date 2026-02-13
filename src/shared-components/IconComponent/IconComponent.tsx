@@ -56,12 +56,7 @@ import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
 import type { JSX } from 'react';
 
-export interface IIconComponent {
-  name: string;
-  fill?: string;
-  height?: string;
-  width?: string;
-}
+import { IIconComponent } from 'types/shared-components/IconComponent/IIconComponent';
 
 const iconComponent = (props: IIconComponent): JSX.Element => {
   switch (props.name) {
