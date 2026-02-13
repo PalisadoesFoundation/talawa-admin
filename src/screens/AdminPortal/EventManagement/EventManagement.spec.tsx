@@ -123,16 +123,20 @@ describe('Event Management', () => {
         useParams: vi.fn(),
       };
     });
-    vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
-      __esModule: true,
-      default: () => <div data-testid="event-list-card-modals" />,
-    }));
+    vi.mock(
+      'shared-components/EventListCard/Modal/EventListCardModals',
+      () => ({
+        __esModule: true,
+        default: () => <div data-testid="event-list-card-modals" />,
+      }),
+    );
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
-    clearAllItems();
     cleanup();
+    clearAllItems();
+
+    vi.clearAllMocks();
   });
 
   describe('Navigation Tests', () => {

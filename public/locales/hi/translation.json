@@ -586,7 +586,8 @@
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
     "noTagsFound": "कोई टैग नहीं मिला",
     "addMember": "सदस्य जोड़ें",
-    "removeMember": "सदस्य हटाएँ"
+    "removeMember": "सदस्य हटाएँ",
+    "invalidTagName": "अमान्य टैग नाम"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -2003,7 +2004,8 @@
     "name": "नाम",
     "desc": "विवरण",
     "venueImagePreview": "स्थान की छवि का पूर्वावलोकन",
-    "sortVenues": "स्थानों को क्रमबद्ध करें"
+    "sortVenues": "स्थानों को क्रमबद्ध करें",
+    "closeImagePreview": "इमेज पूर्वावलोकन बंद करें"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -2443,7 +2445,21 @@
     "holidays": "छुट्टियाँ",
     "events": "इवेंट्स",
     "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
-    "today": "आज"
+    "today": "आज",
+    "viewLess": "कम देखें",
+    "viewAll": "सब देखें",
+    "noHolidaysAvailable": "कोई छुट्टियाँ उपलब्ध नहीं हैं",
+    "holidayNames": {
+      "mayDayLabourDay": "मई दिवस / श्रमिक दिवस",
+      "mothersDay": "मातृ दिवस",
+      "fathersDay": "पितृ दिवस",
+      "independenceDayUS": "स्वतंत्रता दिवस (अमेरिका)",
+      "oktoberfest": "ऑक्टोबरफेस्ट",
+      "halloween": "हैलोवीन",
+      "diwali": "दिवाली",
+      "remembranceDayVeteransDay": "स्मरण दिवस / वयोवृद्ध दिवस",
+      "christmasDay": "क्रिसमस दिवस"
+    }
   },
   "contact": {
     "card_aria": "संपर्क कार्ड"
@@ -2472,7 +2488,9 @@
     "clear": "साफ़ करें",
     "clearSelection": "चयन साफ़ करें",
     "loading": "लोड हो रहा है...",
-    "selectRow": "पंक्ति {{rowKey}} चुनें"
+    "selectRow": "पंक्ति {{rowKey}} चुनें",
+    "previousYear": "पिछला वर्ष",
+    "nextYear": "अगला वर्ष"
   },
   "donation": {
     "amount_label": "राशि",
@@ -2570,13 +2588,6 @@
         "failedToLoad": "घटक लोड करने में विफल"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "हाँ",
-    "no": "नहीं",
-    "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
-    "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
-    "numberOfAttendees": "उपस्थित लोगों की संख्या"
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"

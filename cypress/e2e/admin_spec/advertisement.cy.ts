@@ -4,7 +4,6 @@ interface InterfaceAdvertisementData {
   ad1: {
     name: string;
     description: string;
-    mediaPath: string;
     type: string;
   };
   ad2: {
@@ -15,15 +14,21 @@ interface InterfaceAdvertisementData {
 describe('Testing Admin Advertisement Management', () => {
   const adPage = new AdvertisementPage();
   let adData: InterfaceAdvertisementData;
+  let orgId = '';
 
   before(() => {
+    cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
+      ({ orgId: createdOrgId }) => {
+        orgId = createdOrgId;
+      },
+    );
+
     cy.fixture('admin/advertisements').then((data) => {
       const ad1 = data.advertisements?.[0];
       adData = {
         ad1: {
           name: ad1?.name ?? 'Advertisement 1',
           description: ad1?.description ?? 'This is a test advertisement',
-          mediaPath: 'cypress/fixtures/advertisement_banner.png',
           type: ad1?.type ?? 'Popup Ad',
         },
         ad2: {
@@ -35,6 +40,7 @@ describe('Testing Admin Advertisement Management', () => {
 
   beforeEach(() => {
     cy.loginByApi('admin');
+    cy.visit(`/admin/orgdash/${orgId}`);
     adPage.visitAdvertisementPage();
   });
 
@@ -42,7 +48,6 @@ describe('Testing Admin Advertisement Management', () => {
     adPage.createAdvertisement(
       adData.ad1.name,
       adData.ad1.description,
-      adData.ad1.mediaPath,
       adData.ad1.type,
     );
   });
@@ -58,5 +63,11 @@ describe('Testing Admin Advertisement Management', () => {
   afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+  });
+
+  after(() => {
+    if (orgId) {
+      cy.cleanupTestOrganization(orgId);
+    }
   });
 });

@@ -574,7 +574,8 @@
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
     "addMember": "Ajouter un membre",
-    "removeMember": "Supprimer un membre"
+    "removeMember": "Supprimer un membre",
+    "invalidTagName": "Nom de tag invalide"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -2008,7 +2009,8 @@
     "name": "Nom",
     "desc": "Description",
     "venueImagePreview": "Aperçu de l’image du lieu",
-    "sortVenues": "Trier les lieux"
+    "sortVenues": "Trier les lieux",
+    "closeImagePreview": "Fermer l'aperçu de l'image"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -2443,7 +2445,21 @@
     "holidays": "Jours fériés",
     "events": "Événements",
     "eventsCreatedByOrganization": "Événements créés par l'organisation",
-    "today": "Aujourd'hui"
+    "today": "Aujourd'hui",
+    "viewLess": "Voir moins",
+    "viewAll": "Voir tout",
+    "noHolidaysAvailable": "Aucun jour férié disponible",
+    "holidayNames": {
+      "mayDayLabourDay": "Fête du Travail",
+      "mothersDay": "Fête des Mères",
+      "fathersDay": "Fête des Pères",
+      "independenceDayUS": "Fête de l'Indépendance (États-Unis)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Jour du Souvenir / Jour des Anciens Combattants",
+      "christmasDay": "Jour de Noël"
+    }
   },
   "contact": {
     "card_aria": "Carte de contact"
@@ -2472,7 +2488,9 @@
     "clear": "Effacer",
     "clearSelection": "Effacer la sélection",
     "loading": "Chargement...",
-    "selectRow": "Sélectionner la ligne {{rowKey}}"
+    "selectRow": "Sélectionner la ligne {{rowKey}}",
+    "previousYear": "Année précédente",
+    "nextYear": "Année suivante"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2570,13 +2588,6 @@
         "failedToLoad": "Échec du chargement du composant"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "Oui",
-    "no": "Non",
-    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
-    "eventNotFound": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants"
   },
   "csv": {
     "demographics": "Démographie de {{category}}"

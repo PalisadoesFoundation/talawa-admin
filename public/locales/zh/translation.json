@@ -574,7 +574,8 @@
     "loadAssignedUsersError": "加载已分配用户时发生错误",
     "noTagsFound": "未找到标签",
     "addMember": "添加会员",
-    "removeMember": "删除会员"
+    "removeMember": "删除会员",
+    "invalidTagName": "无效的标签名称"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -2008,7 +2009,8 @@
     "name": "名称",
     "desc": "描述",
     "venueImagePreview": "场地图片预览",
-    "sortVenues": "排序场地"
+    "sortVenues": "排序场地",
+    "closeImagePreview": "关闭图片预览"
   },
   "addMember": {
     "title": "添加会员",
@@ -2443,7 +2445,21 @@
     "holidays": "节假日",
     "events": "活动",
     "eventsCreatedByOrganization": "组织创建的活动",
-    "today": "今天"
+    "today": "今天",
+    "viewLess": "查看更少",
+    "viewAll": "查看全部",
+    "noHolidaysAvailable": "没有可用的节假日",
+    "holidayNames": {
+      "mayDayLabourDay": "劳动节",
+      "mothersDay": "母亲节",
+      "fathersDay": "父亲节",
+      "independenceDayUS": "独立日（美国）",
+      "oktoberfest": "慕尼黑啤酒节",
+      "halloween": "万圣节",
+      "diwali": "排灯节",
+      "remembranceDayVeteransDay": "阵亡将士纪念日 / 退伍军人节",
+      "christmasDay": "圣诞节"
+    }
   },
   "contact": {
     "card_aria": "联系人卡片"
@@ -2472,7 +2488,9 @@
     "clear": "清除",
     "clearSelection": "清除选择",
     "loading": "加载中...",
-    "selectRow": "选择第 {{rowKey}} 行"
+    "selectRow": "选择第 {{rowKey}} 行",
+    "previousYear": "上一年",
+    "nextYear": "下一年"
   },
   "donation": {
     "amount_label": "金额",
@@ -2570,13 +2588,6 @@
         "failedToLoad": "加载组件失败"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "是",
-    "no": "否",
-    "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
-    "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数"
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
