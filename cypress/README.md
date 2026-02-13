@@ -26,16 +26,16 @@ pnpm run cy:run
 
 ```bash
 # Admin portal specs
-pnpm run cypress:run --spec "cypress/e2e/AdminPortal/**/*.cy.ts"
+pnpm run cy:run --spec "cypress/e2e/AdminPortal/**/*.cy.ts"
 
 # User portal specs
-pnpm run cypress:run --spec "cypress/e2e/UserPortal/**/*.cy.ts"
+pnpm run cy:run --spec "cypress/e2e/UserPortal/**/*.cy.ts"
 
 # Authentication specs
-pnpm run cypress:run --spec "cypress/e2e/Auth/**/*.cy.ts"
+pnpm run cy:run --spec "cypress/e2e/Auth/**/*.cy.ts"
 
 # Shared component and utility specs
-pnpm run cypress:run --spec "cypress/e2e/SharedComponents/**/*.cy.ts"
+pnpm run cy:run --spec "cypress/e2e/SharedComponents/**/*.cy.ts"
 ```
 
 ## Additional Guide

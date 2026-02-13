@@ -36,6 +36,11 @@ describe('Admin Login Functionality', () => {
       });
     });
   });
+
+  afterEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  });
 });
 
 describe('User Login Functionality', () => {
@@ -68,9 +73,9 @@ describe('User Login Functionality', () => {
       });
     });
   });
-});
 
-afterEach(() => {
-  cy.clearCookies();
-  cy.clearLocalStorage();
+  afterEach(() => {
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  });
 });
