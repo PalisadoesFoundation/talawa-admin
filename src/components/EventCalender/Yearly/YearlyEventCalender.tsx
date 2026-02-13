@@ -304,9 +304,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <h6 className={styles.cardHeaderYearlyEventCalender}>
               {months[monthIdx]}
             </h6>
-            <div className={styles.weekdayHeaderRow}>
+            <div
+              className={styles.weekdayHeaderRow}
+              data-testid="weekday-header-row"
+            >
               {weekdaysShorthand.map((weekday, idx) => (
-                <div key={idx} className={styles.weekdayHeaderCell}>
+                <div
+                  key={idx}
+                  className={styles.weekdayHeaderCell}
+                  data-testid="weekday-header-cell"
+                >
                   {weekday}
                 </div>
               ))}
