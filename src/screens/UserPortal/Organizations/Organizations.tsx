@@ -500,8 +500,9 @@ export default function Organizations(): React.JSX.Element {
             <table>
               <tbody>
                 <tr>
+                  {/* Use the real dataset size to avoid rendering phantom pages. */}
                   <PaginationList
-                    count={Math.max(organizations.length, rowsPerPage + 1)}
+                    count={organizations.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

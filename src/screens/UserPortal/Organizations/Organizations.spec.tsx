@@ -669,11 +669,9 @@ test('Pagination basic functionality works', async () => {
   expect(currentPage.textContent).toBe('0');
 
   const nextButton = screen.getByTestId('next-page');
+  expect(nextButton).toBeDisabled();
   await userEvent.click(nextButton);
-
-  await waitFor(() => {
-    expect(screen.getByTestId('current-page').textContent).toBe('1');
-  });
+  expect(screen.getByTestId('current-page').textContent).toBe('0');
 });
 
 test('should handle resize event and hide drawer on small screens', async () => {
@@ -1315,8 +1313,34 @@ test('should display organizations with complete data fields', async () => {
 });
 
 test('should reset page when changing rows per page', async () => {
+  const paginationOrgs = Array.from({ length: 6 }, (_, idx) =>
+    makeOrg({
+      id: `pagination-org-${idx + 1}`,
+      name: `Pagination Org ${idx + 1}`,
+      isMember: true,
+    }),
+  );
+  const paginationLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_VERIFIED_MOCK,
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: paginationOrgs,
+          },
+        },
+      },
+    ],
+    true,
+  );
+
   render(
-    <MockedProvider link={link}>
+    <MockedProvider link={paginationLink}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1333,6 +1357,7 @@ test('should reset page when changing rows per page', async () => {
 
   // Go to next page first
   const nextButton = screen.getByTestId('next-page');
+  expect(nextButton).not.toBeDisabled();
   await userEvent.click(nextButton);
 
   await waitFor(() => {
