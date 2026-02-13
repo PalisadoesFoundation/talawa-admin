@@ -80,7 +80,9 @@ const ForgotPassword = (): JSX.Element => {
     confirmNewPassword: '',
   });
 
-  const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
+  const [otp, { loading: otpLoading }] = useMutation<{
+    otp?: { otpToken?: string };
+  }>(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION,
   );

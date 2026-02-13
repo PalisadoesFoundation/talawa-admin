@@ -41,9 +41,9 @@ const useSession = (): UseSessionReturnType => {
   const navigate = useNavigate();
 
   const [logout] = useMutation(LOGOUT_MUTATION);
-  const { data, error: queryError } = useQuery(
-    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
-  );
+  const { data, error: queryError } = useQuery<{
+    community?: { inactivityTimeoutDuration?: number };
+  }>(GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG);
 
   const { clearAllItems } = useLocalStorage();
 
@@ -52,7 +52,7 @@ const useSession = (): UseSessionReturnType => {
       errorHandler(t, queryError as Error);
     } else {
       const sessionTimeoutData = data?.community;
-      if (sessionTimeoutData) {
+      if (sessionTimeoutData?.inactivityTimeoutDuration !== undefined) {
         setSessionTimeout(sessionTimeoutData.inactivityTimeoutDuration);
       }
     }

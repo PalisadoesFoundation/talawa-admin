@@ -123,7 +123,7 @@ function EventAttendance(): JSX.Element {
   }, [filteredAttendees]);
 
   const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery(EVENT_ATTENDEES, {
+    useLazyQuery<{ event?: { attendees?: InterfaceMember[] } }>(EVENT_ATTENDEES, {
       variables: { eventId: eventId },
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',

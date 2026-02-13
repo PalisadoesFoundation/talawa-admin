@@ -135,21 +135,25 @@ export default function Organizations(): React.JSX.Element {
   const [hasDismissed, setHasDismissed] = useState(false);
 
   // Fetch current user status to sync verification state
-  const { data: currentUserData } = useQuery(CURRENT_USER, {
+  const { data: currentUserData } = useQuery<{
+    currentUser?: { isEmailAddressVerified?: boolean };
+    user?: { isEmailAddressVerified?: boolean };
+  }>(CURRENT_USER, {
     fetchPolicy: 'network-only', // Ensure fresh data
   });
 
-  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
-    RESEND_VERIFICATION_EMAIL_MUTATION,
-  );
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation<{
+    sendVerificationEmail?: { success?: boolean };
+  }>(RESEND_VERIFICATION_EMAIL_MUTATION);
 
   // Check for email verification status on component mount and sync with backend
   useEffect(() => {
     if (hasDismissed) return;
 
     // Priority: API data > LocalStorage
-    if (currentUserData?.currentUser) {
-      if (currentUserData.currentUser.isEmailAddressVerified) {
+    const user = currentUserData?.currentUser ?? currentUserData?.user;
+    if (user) {
+      if (user.isEmailAddressVerified) {
         setShowEmailWarning(false);
         // Clean up legacy flags
         removeItem('emailNotVerified');
@@ -228,20 +232,21 @@ export default function Organizations(): React.JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-  } = useQuery(ORGANIZATION_FILTER_LIST, {
+  } = useQuery<{ organizations?: IOrgData[] }>(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     skip: mode !== 0,
     notifyOnNetworkStatusChange: true,
-    onError: (error) => console.error('All orgs error:', error),
   });
 
   const {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
+  } = useQuery<{
+    user?: { organizationsWhereMember?: { edges?: Array<{ node: IOrgData }> } };
+  }>(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
     variables: { id: userId, first: rowsPerPage, filter: filterName },
     skip: mode !== 1,
   });
@@ -250,7 +255,9 @@ export default function Organizations(): React.JSX.Element {
     data: createdOrganizationsData,
     loading: loadingCreated,
     refetch: refetchCreated,
-  } = useQuery(USER_CREATED_ORGANIZATIONS, {
+  } = useQuery<{
+    user?: { createdOrganizations?: IOrgData[] };
+  }>(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
     skip: mode !== 2,
   });
@@ -283,21 +290,39 @@ export default function Organizations(): React.JSX.Element {
             userRegistrationRequired: false,
             membershipRequests: [],
             isJoined: isMember,
+            address: {
+              city: '',
+              countryCode: '',
+              line1: org.addressLine1 || '',
+              postalCode: '',
+              state: '',
+            },
           };
         });
         setOrganizations(orgs);
       }
     } else if (mode === 1) {
       if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
+        const defaultAddress = {
+          city: '',
+          countryCode: '',
+          line1: '',
+          postalCode: '',
+          state: '',
+        };
         const orgs =
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
-            (edge: { node: IOrganization }) => {
-              const organization = edge.node;
+            (edge) => {
+              const organization = edge.node as IOrgData & Partial<IOrganization>;
               return {
                 ...organization,
                 membershipRequestStatus: 'accepted',
                 isJoined: true,
-              };
+                address: organization.address ?? defaultAddress,
+                admins: organization.admins ?? [],
+                membershipRequests: organization.membershipRequests ?? [],
+                userRegistrationRequired: organization.userRegistrationRequired ?? false,
+              } as IOrganization;
             },
           );
         setOrganizations(orgs);
@@ -306,12 +331,26 @@ export default function Organizations(): React.JSX.Element {
       }
     } else if (mode === 2) {
       if (createdOrganizationsData?.user?.createdOrganizations) {
+        const defaultAddress = {
+          city: '',
+          countryCode: '',
+          line1: '',
+          postalCode: '',
+          state: '',
+        };
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
-          (org: IOrganization) => ({
-            ...org,
-            membershipRequestStatus: 'created',
-            isJoined: true,
-          }),
+          (org) => {
+            const o = org as IOrgData & Partial<IOrganization>;
+            return {
+              ...org,
+              membershipRequestStatus: 'created',
+              isJoined: true,
+              address: o.address ?? defaultAddress,
+              admins: o.admins ?? [],
+              membershipRequests: o.membershipRequests ?? [],
+              userRegistrationRequired: o.userRegistrationRequired ?? false,
+            } as IOrganization;
+          },
         );
         setOrganizations(orgs);
       } else {

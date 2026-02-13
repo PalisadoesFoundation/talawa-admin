@@ -19,7 +19,6 @@ import type { ChangeEvent } from 'react';
 import styles from './ChatRoom.module.css';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ObservableQuery } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client/react';
 import {
   EDIT_CHAT_MESSAGE,
@@ -44,12 +43,8 @@ import MessageItem from './MessageItem';
 interface IChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
-  ) => Promise<ObservableQuery.Result<{ chatList: INewChat[] }>>;
+    variables?: Partial<{ id: string }> | undefined,
+  ) => Promise<unknown>;
 }
 
 export default function chatRoom(props: IChatRoomProps): JSX.Element {

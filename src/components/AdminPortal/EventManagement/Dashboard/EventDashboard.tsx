@@ -59,12 +59,23 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const userRole =
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
-  const { data: eventData, loading: eventInfoLoading } = useQuery(
-    EVENT_DETAILS,
-    {
-      variables: { eventId },
-    },
-  );
+  const { data: eventData, loading: eventInfoLoading } = useQuery<{
+    event?: {
+      id: string;
+      name: string;
+      description?: string;
+      startAt: string;
+      endAt: string;
+      allDay: boolean;
+      location?: string;
+      isPublic: boolean;
+      isRegisterable: boolean;
+      isInviteOnly?: boolean;
+      creator?: Partial<{ id: string; name: string }>;
+    };
+  }>(EVENT_DETAILS, {
+    variables: { eventId },
+  });
 
   const showViewModal = (): void => {
     open();

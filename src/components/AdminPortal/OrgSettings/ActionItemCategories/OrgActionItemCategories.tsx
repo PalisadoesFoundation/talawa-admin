@@ -103,14 +103,9 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     loading: catLoading,
     error: catError,
     refetch: refetchCategories,
-  }: {
-    data?: {
-      actionCategoriesByOrganization: IActionItemCategoryInfo[];
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_CATEGORY_LIST, {
+  } = useQuery<{
+    actionCategoriesByOrganization?: IActionItemCategoryInfo[];
+  }>(ACTION_ITEM_CATEGORY_LIST, {
     variables: {
       input: {
         organizationId: orgId,

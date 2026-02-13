@@ -346,7 +346,7 @@ const renderAgendaDragAndDrop = (
   folders: InterfaceAgendaFolderInfo[] = createMockFolders(),
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <I18nextProvider i18n={i18nForTest}>
         <AgendaDragAndDrop
           folders={folders}

@@ -67,7 +67,9 @@ function EventRegistrants(): JSX.Element {
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<{
+    event?: { recurrenceRule?: unknown };
+  }>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -83,44 +85,56 @@ function EventRegistrants(): JSX.Element {
     ? { recurringEventInstanceId: eventId }
     : { eventId: eventId };
 
-  const [getEventRegistrants] = useLazyQuery(EVENT_REGISTRANTS, {
+  const [getEventRegistrants, { data: registrantsData }] = useLazyQuery<{
+    getEventAttendeesByEventId?: Array<{
+      id: string;
+      user?: { id: string; name: string; emailAddress: string };
+      isRegistered: boolean;
+      createdAt: string;
+    }>;
+  }>(EVENT_REGISTRANTS, {
     variables: registrantVariables,
     fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
-      if (data?.getEventAttendeesByEventId) {
-        const mappedData = data.getEventAttendeesByEventId.map(
-          (attendee: {
-            id: string;
-            user: { id: string; name: string; emailAddress: string };
-            isRegistered: boolean;
-            createdAt: string;
-          }) => ({
-            id: attendee.id,
-            userId: attendee.user?.id,
-            isRegistered: attendee.isRegistered,
-            user: attendee.user,
-            createdAt: attendee.createdAt,
-            time: '', // Will be processed in useEffect
-          }),
-        );
-        setRegistrants(mappedData);
-      }
-    },
   });
 
   // Fetch check-in status
-  const [getEventCheckIns] = useLazyQuery(EVENT_CHECKINS, {
+  const [getEventCheckIns, { data: checkInData }] = useLazyQuery<{
+    event?: {
+      attendeesCheckInStatus?: Array<{
+        isCheckedIn: boolean;
+        user?: { id: string };
+      }>;
+    };
+  }>(EVENT_CHECKINS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
-      if (data?.event?.attendeesCheckInStatus) {
-        const checkedInUserIds = data.event.attendeesCheckInStatus
-          .filter((status: { isCheckedIn: boolean }) => status.isCheckedIn)
-          .map((status: { user: { id: string } }) => status.user.id);
-        setCheckedInUsers(checkedInUserIds);
-      }
-    },
   });
+
+  useEffect(() => {
+    if (registrantsData?.getEventAttendeesByEventId) {
+      const mappedData = registrantsData.getEventAttendeesByEventId.map(
+        (attendee) => ({
+          id: attendee.id,
+          userId: attendee.user?.id,
+          isRegistered: attendee.isRegistered,
+          user: attendee.user,
+          createdAt: attendee.createdAt,
+          time: '',
+        }),
+      );
+      setRegistrants(mappedData);
+    }
+  }, [registrantsData]);
+
+  useEffect(() => {
+    if (checkInData?.event?.attendeesCheckInStatus) {
+      const checkedInUserIds = checkInData.event.attendeesCheckInStatus
+        .filter((status) => status.isCheckedIn)
+        .map((status) => status.user?.id)
+        .filter((id): id is string => !!id);
+      setCheckedInUsers(checkedInUserIds);
+    }
+  }, [checkInData]);
   // callback function to refresh the data
   const refreshData = useCallback(() => {
     getEventRegistrants();

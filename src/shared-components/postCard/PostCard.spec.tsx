@@ -662,12 +662,12 @@ describe('PostCard', () => {
       .fn()
       .mockRejectedValue(new Error('Network error occurred'));
 
-    // Temporarily mock useMutation for this test only
-    const apolloMock = await import('@apollo/client');
-    const originalUseMutation = apolloMock.useMutation;
+    // Temporarily mock useMutation for this test only (useMutation is in @apollo/client/react)
+    const apolloReact = await import('@apollo/client/react');
+    const originalUseMutation = apolloReact.useMutation;
 
     // Override just for this test
-    apolloMock.useMutation = vi
+    (apolloReact as { useMutation: typeof apolloReact.useMutation }).useMutation = vi
       .fn()
       .mockReturnValue([mockLikePost, { loading: false }]);
 
@@ -691,7 +691,7 @@ describe('PostCard', () => {
       });
     } finally {
       // Always restore the original mock
-      apolloMock.useMutation = originalUseMutation;
+      (apolloReact as { useMutation: typeof apolloReact.useMutation }).useMutation = originalUseMutation;
     }
   });
 
@@ -701,12 +701,12 @@ describe('PostCard', () => {
       .fn()
       .mockRejectedValue(new Error('Network error occurred'));
 
-    // Temporarily mock useMutation for this test only
-    const apolloMock = await import('@apollo/client');
-    const originalUseMutation = apolloMock.useMutation;
+    // Temporarily mock useMutation for this test only (useMutation is in @apollo/client/react)
+    const apolloReact = await import('@apollo/client/react');
+    const originalUseMutation = apolloReact.useMutation;
 
     // Override just for this test to return the error mock for CREATE_COMMENT_POST
-    apolloMock.useMutation = vi.fn((mutation) => {
+    (apolloReact as { useMutation: typeof apolloReact.useMutation }).useMutation = vi.fn((mutation) => {
       if (mutation === CREATE_COMMENT_POST) {
         return [mockCreateComment, { loading: false }];
       }
@@ -738,7 +738,7 @@ describe('PostCard', () => {
       });
     } finally {
       // Always restore the original mock
-      apolloMock.useMutation = originalUseMutation;
+      (apolloReact as { useMutation: typeof apolloReact.useMutation }).useMutation = originalUseMutation;
     }
   });
 

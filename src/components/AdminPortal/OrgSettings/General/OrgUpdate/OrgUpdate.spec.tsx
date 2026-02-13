@@ -765,7 +765,7 @@ describe('OrgUpdate Component', () => {
       const user = userEvent.setup();
 
       render(
-        <MockedProvider mocks={emptyResponseMocks} addTypename={false}>
+        <MockedProvider mocks={emptyResponseMocks}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>

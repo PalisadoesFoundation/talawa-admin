@@ -10,14 +10,14 @@ import type { Chat } from 'types/UserPortal/Chat/interface';
 
 export type ChatsListRefetch = (
   variables?: Partial<{ id: string }> | undefined,
-) => Promise<ObservableQuery.Result<unknown>>;
+) => Promise<unknown>;
 
 export type CreateChatMutation = (
   options?:
     | useMutation.MutationFunctionOptions<
         unknown,
         OperationVariables,
-        ApolloCache<unknown>
+        ApolloCache
       >
     | undefined,
 ) => Promise<ApolloLink.Result<unknown>>;
@@ -27,7 +27,7 @@ export type CreateChatMembershipMutation = (
     | useMutation.MutationFunctionOptions<
         unknown,
         OperationVariables,
-        ApolloCache<unknown>
+        ApolloCache
       >
     | undefined,
 ) => Promise<ApolloLink.Result<unknown>>;

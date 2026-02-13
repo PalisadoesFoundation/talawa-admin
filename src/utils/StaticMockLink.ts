@@ -6,11 +6,6 @@ import { ApolloLink } from '@apollo/client/link';
 
 import { Observable, addTypenameToDocument } from '@apollo/client/utilities';
 
-import {
-  removeClientSetsFromDocument,
-  removeConnectionDirectiveFromDocument,
-} from '@apollo/client/v4-migration';
-
 import { cloneDeep } from '@apollo/client/utilities/internal';
 
 import type { MockedResponse, ResultFunction } from '@apollo/client/testing';
@@ -25,7 +20,7 @@ interface IMockedResponseWithMatcher extends MockedResponse {
 function requestToKey(
   request:
     | ApolloLink.Operation
-    | import('@apollo/client/core').GraphQLRequest<Record<string, unknown>>,
+    | import('@apollo/client/core').GraphQLRequest,
   addTypename: boolean,
 ): string {
   const queryString =
@@ -71,7 +66,8 @@ export class StaticMockLink extends ApolloLink {
 
   public request(
     operation: ApolloLink.Operation,
-  ): Observable<ApolloLink.Result> | null {
+    _forward?: ApolloLink.ForwardFunction,
+  ): Observable<ApolloLink.Result> {
     this.operation = operation;
     const key = requestToKey(operation, this.addTypename);
     let responseIndex = 0;
@@ -97,7 +93,7 @@ export class StaticMockLink extends ApolloLink {
       },
     );
 
-    let configError: Error;
+    let configError: Error | undefined;
 
     if (!response || typeof responseIndex === 'undefined') {
       configError = new Error(
@@ -106,13 +102,11 @@ export class StaticMockLink extends ApolloLink {
         )}, variables: ${JSON.stringify(operation.variables)}`,
       );
     } else {
-      const { newData } = response;
-      if (newData) {
-        response.result = newData(operation.variables);
-        this._mockedResponsesByKey[key].push(response);
-      }
+      const { result, error } = response;
+      // In v4, MockedResponse no longer has newData. 
+      // result can be a function which achieves the same purpose.
 
-      if (!response.result && !response.error) {
+      if (!result && !error) {
         configError = new Error(
           `Mocked response should contain either result or error: ${key}`,
         );
@@ -123,18 +117,7 @@ export class StaticMockLink extends ApolloLink {
       const timer = setTimeout(
         () => {
           if (configError) {
-            try {
-              // The onError function can return false to indicate that
-              // configError need not be passed to observer.error. For
-              // example, the default implementation of onError calls
-              // observer.error(configError) and then returns false to
-              // prevent this extra (harmless) observer.error call.
-              if (this.onError(configError, observer) !== false) {
-                throw configError;
-              }
-            } catch (error) {
-              observer.error(error);
-            }
+            observer.error(configError);
           } else if (response) {
             if (response.error) {
               observer.error(response.error);
@@ -142,9 +125,9 @@ export class StaticMockLink extends ApolloLink {
               if (response.result) {
                 observer.next(
                   typeof response.result === 'function'
-                    ? (response.result as ResultFunction<ApolloLink.Result>)(
-                        operation.variables,
-                      )
+                    ? (response.result as ResultFunction<ApolloLink.Result, any>)(
+                      operation.variables,
+                    )
                     : response.result,
                 );
               }
@@ -152,7 +135,7 @@ export class StaticMockLink extends ApolloLink {
             }
           }
         },
-        (response && response.delay) || 0,
+        typeof response?.delay === 'number' ? response.delay : 0,
       );
 
       return () => {
@@ -174,15 +157,10 @@ export class StaticMockLink extends ApolloLink {
       ).variableMatcher;
     }
 
-    const queryWithoutConnection = removeConnectionDirectiveFromDocument(
-      newMockedResponse.request.query,
-    );
-    invariant(queryWithoutConnection, 'query is required');
-    newMockedResponse.request.query = queryWithoutConnection;
-    const query = removeClientSetsFromDocument(newMockedResponse.request.query);
-    if (query) {
-      newMockedResponse.request.query = query;
-    }
+    // In Apollo 4, we don't need to manually remove connection/client directives
+    // as it's handled internally or by the matchers. 
+    // If we find matching issues, we can re-implement this using generic ast visitors.
+
     return newMockedResponse;
   }
 }

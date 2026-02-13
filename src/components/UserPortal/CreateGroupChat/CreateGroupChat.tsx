@@ -47,7 +47,6 @@ import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import type { ObservableQuery } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -74,7 +73,7 @@ interface InterfaceCreateGroupChatProps {
   createGroupChatModalisOpen: boolean;
   chatsListRefetch: (
     variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ObservableQuery.Result<unknown>>;
+  ) => Promise<unknown>;
 }
 
 const { getItem } = useLocalStorage();

@@ -6,6 +6,25 @@ import SecuredRoute from 'components/AdminPortal/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+
+interface CurrentUserData {
+  currentUser?: {
+    id?: string;
+    name?: string;
+    emailAddress?: string;
+    appUserProfile?: {
+      adminFor?: Array<{ _id: string }>;
+    };
+  };
+  user?: {
+    id?: string;
+    name?: string;
+    emailAddress?: string;
+    appUserProfile?: {
+      adminFor?: Array<{ _id: string }>;
+    };
+  };
+}
 import LoginPage from 'screens/Auth/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
@@ -136,7 +155,7 @@ const { setItem } = useLocalStorage();
  */
 
 function App(): React.ReactElement {
-  const { data, loading } = useQuery(CURRENT_USER);
+  const { data, loading } = useQuery<CurrentUserData>(CURRENT_USER);
 
   const { t } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -145,12 +164,11 @@ function App(): React.ReactElement {
 
   // Get user permissions and admin status (memoized to prevent infinite loops)
   const userPermissions = useMemo(() => {
-    return (
-      data?.currentUser?.appUserProfile?.adminFor?.map(
-        (org: { _id: string }) => org._id,
-      ) || []
-    );
-  }, [data?.currentUser?.appUserProfile?.adminFor]);
+    const adminFor =
+      data?.currentUser?.appUserProfile?.adminFor ??
+      data?.user?.appUserProfile?.adminFor;
+    return adminFor?.map((org: { _id: string }) => org._id) ?? [];
+  }, [data?.currentUser?.appUserProfile?.adminFor, data?.user?.appUserProfile?.adminFor]);
 
   // Get plugin routes
   const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
@@ -187,7 +205,7 @@ function App(): React.ReactElement {
       setItem('email', auth.emailAddress);
       // setItem('UserImage', auth.avatarURL|| "");
     }
-  }, [data, loading, setItem]);
+  }, [data?.currentUser, data?.user, loading, setItem]);
 
   return (
     <ErrorBoundaryWrapper

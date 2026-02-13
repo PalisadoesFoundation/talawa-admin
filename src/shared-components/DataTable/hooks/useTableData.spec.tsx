@@ -4,7 +4,6 @@ import { render, screen, renderHook } from '@testing-library/react';
 import { useTableData } from './useTableData';
 import type { useQuery } from '@apollo/client/react';
 import { NetworkStatus } from '@apollo/client';
-import { ApolloError } from '@apollo/client/v4-migration';
 import type { Connection } from '../../../types/shared-components/DataTable/interface';
 
 type Node = { id: string; name: string };
@@ -215,8 +214,8 @@ describe('useTableData', () => {
   });
 
   it('handles error state correctly', () => {
-    const error = new ApolloError({
-      errorMessage: 'Network error',
+    const error = Object.assign(new Error('Network error'), {
+      name: 'Error',
     });
     const data = {};
 

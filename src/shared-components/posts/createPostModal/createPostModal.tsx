@@ -52,7 +52,9 @@ function CreatePostModal({
   const [previewType, setPreviewType] = useState<'image' | 'video' | null>(
     null,
   );
-  const [editPost, { loading: isEditing }] = useMutation(UPDATE_POST_MUTATION);
+  const [editPost, { loading: isEditing }] = useMutation<{
+    updatePost?: { id?: string };
+  }>(UPDATE_POST_MUTATION);
   const [create, { loading: isCreating }] = useMutation<
     ICreatePostData,
     { input: ICreatePostInput }
@@ -192,7 +194,7 @@ function CreatePostModal({
             },
           },
         });
-        if (data.updatePost) {
+        if (data?.updatePost) {
           onSuccess('edited');
         }
       }

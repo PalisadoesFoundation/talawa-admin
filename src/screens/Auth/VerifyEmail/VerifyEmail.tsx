@@ -67,19 +67,16 @@ const VerifyEmail = (): JSX.Element => {
   const isMountedRef = useRef(true);
   const [isResending, setIsResending] = useState(false);
 
-  const [verifyEmail, { loading: verifyLoading }] = useMutation(
-    VERIFY_EMAIL_MUTATION,
-    {
-      // Prevent caching issues
-      fetchPolicy: 'no-cache',
-    },
-  );
-  const [resendVerification, { loading: resendLoading }] = useMutation(
-    RESEND_VERIFICATION_EMAIL_MUTATION,
-    {
-      fetchPolicy: 'no-cache',
-    },
-  );
+  const [verifyEmail, { loading: verifyLoading }] = useMutation<{
+    verifyEmail?: { success?: boolean; message?: string };
+  }>(VERIFY_EMAIL_MUTATION, {
+    fetchPolicy: 'no-cache',
+  });
+  const [resendVerification, { loading: resendLoading }] = useMutation<{
+    sendVerificationEmail?: { success?: boolean; message?: string };
+  }>(RESEND_VERIFICATION_EMAIL_MUTATION, {
+    fetchPolicy: 'no-cache',
+  });
 
   // Verify email on component mount
   useEffect(() => {

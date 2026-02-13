@@ -103,10 +103,12 @@ export default function Chat(): JSX.Element {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST, {
+  } = useQuery<{ chatsByUser?: ChatType[] }>(CHATS_LIST, {
     variables: { first: 10, after: cursor },
   });
-  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
+  const { refetch: unreadChatListRefetch } = useQuery<{
+    unreadChats?: ChatType[];
+  }>(UNREAD_CHATS);
 
   React.useEffect(() => {
     async function getChats(): Promise<void> {

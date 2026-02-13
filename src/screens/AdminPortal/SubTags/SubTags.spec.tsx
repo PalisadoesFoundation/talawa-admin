@@ -18,7 +18,7 @@ import {
   MOCKS_ERROR_SUB_TAGS,
 } from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import * as ApolloReact from '@apollo/client/react';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 // Mock react-infinite-scroll-component to easily trigger 'next'
@@ -460,7 +460,7 @@ describe('Organisation Tags Page', () => {
       stopPolling: vi.fn(),
       subscribeToMore: vi.fn(),
       updateQuery: vi.fn(),
-    } as unknown as ReturnType<typeof Apollo.useQuery>);
+    } as unknown as ReturnType<typeof ApolloReact.useQuery>);
 
     const user = userEvent.setup();
     render(

@@ -42,13 +42,15 @@ import { useTranslation } from 'react-i18next';
 const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
   const { t: tCommon } = useTranslation('common');
   const { orgId: currentOrg } = useParams();
-  const { data, loading, error } = useQuery(EVENT_DETAILS, {
+  const { data, loading, error } = useQuery<{
+    event?: { id: string; name: string };
+  }>(EVENT_DETAILS, {
     variables: { eventId: id },
     fetchPolicy: 'cache-first',
     errorPolicy: 'all',
   });
 
-  if (error || data?.error) {
+  if (error) {
     return <p>{tCommon('errorLoadingEventDetails')}</p>;
   }
 

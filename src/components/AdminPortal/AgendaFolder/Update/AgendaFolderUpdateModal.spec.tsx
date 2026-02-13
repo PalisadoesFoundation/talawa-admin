@@ -131,7 +131,7 @@ const renderAgendaFolderUpdateModal = (
   folderFormState: InterfaceAgendaFolderUpdateFormStateType = mockFolderFormState,
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <I18nextProvider i18n={i18nForTest}>
         <AgendaFolderUpdateModal
           isOpen={isOpen}
@@ -702,7 +702,7 @@ describe('AgendaFolderUpdateModal', () => {
       ];
 
       render(
-        <MockedProvider mocks={MOCKS_EMPTY_ID} addTypename={false}>
+        <MockedProvider mocks={MOCKS_EMPTY_ID}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderUpdateModal
               isOpen={true}
@@ -829,7 +829,7 @@ describe('AgendaFolderUpdateModal', () => {
       const mockTSpy = vi.fn((key: string) => key);
 
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderUpdateModal
               isOpen={true}
@@ -851,7 +851,7 @@ describe('AgendaFolderUpdateModal', () => {
       const mockTSpy = vi.fn((key: string) => key);
 
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderUpdateModal
               isOpen={true}

@@ -76,7 +76,7 @@ const LeaveOrganization = (): JSX.Element => {
     data: orgData,
     loading: orgLoading,
     error: orgError,
-  } = useQuery(ORGANIZATIONS_LIST_BASIC, { variables: { id: organizationId } });
+  } = useQuery<{ organizations: Array<{ name?: string; description?: string }> }>(ORGANIZATIONS_LIST_BASIC, { variables: { id: organizationId } });
 
   /**
    * Mutation to remove the member from the organization.
@@ -91,8 +91,8 @@ const LeaveOrganization = (): JSX.Element => {
       NotificationToast.success(t('leaveOrganization.leftOrganizationSuccess'));
       navigate(`/user/organizations`);
     },
-    onError: (err) => {
-      const isNetworkError = err.networkError !== null;
+    onError: (err: Error & { networkError?: Error | null }) => {
+      const isNetworkError = err.networkError != null;
       setError(
         isNetworkError
           ? t('leaveOrganization.networkError')

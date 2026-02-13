@@ -66,7 +66,14 @@ export default function Advertisements(): JSX.Element {
     data: orgCompletedAdvertisementListData,
     loading: completedLoading,
     error: completedError,
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  } = useQuery<{
+    organization?: {
+      advertisements?: {
+        edges?: Array<{ node: Advertisement }>;
+        pageInfo?: { endCursor?: string | null; hasNextPage?: boolean };
+      };
+    };
+  }>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: afterCompleted,
@@ -80,7 +87,14 @@ export default function Advertisements(): JSX.Element {
     data: orgActiveAdvertisementListData,
     loading: activeLoading,
     error: activeError,
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  } = useQuery<{
+    organization?: {
+      advertisements?: {
+        edges?: Array<{ node: Advertisement }>;
+        pageInfo?: { endCursor?: string | null; hasNextPage?: boolean };
+      };
+    };
+  }>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: afterActive,

@@ -76,7 +76,7 @@ const renderAgendaFolderDeleteModal = (
   isOpen = true,
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <I18nextProvider i18n={i18nForTest}>
         <AgendaFolderDeleteModal
           isOpen={isOpen}
@@ -429,7 +429,7 @@ describe('AgendaFolderDeleteModal', () => {
       ];
 
       render(
-        <MockedProvider mocks={MOCKS_EMPTY_ID} addTypename={false}>
+        <MockedProvider mocks={MOCKS_EMPTY_ID}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderDeleteModal
               isOpen={true}
@@ -492,7 +492,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('calls t function for modal title', () => {
       const mockTSpy = vi.fn((key: string) => key);
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderDeleteModal
               isOpen={true}
@@ -512,7 +512,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('calls t function for delete message', () => {
       const mockTSpy = vi.fn((key: string) => key);
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderDeleteModal
               isOpen={true}

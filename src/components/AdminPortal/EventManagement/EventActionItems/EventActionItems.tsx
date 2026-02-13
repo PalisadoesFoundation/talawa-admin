@@ -128,7 +128,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     loading: eventInfoLoading,
     error: eventInfoError,
     refetch: eventActionItemsRefetch,
-  } = useQuery(GET_EVENT_ACTION_ITEMS, {
+  } = useQuery<{
+    event?: {
+      actionItems?: { edges?: Array<{ node: IActionItemInfo }> };
+      recurrenceRule?: unknown;
+      baseEvent?: { id: string };
+    };
+  }>(GET_EVENT_ACTION_ITEMS, {
     variables: {
       input: {
         id: eventId,

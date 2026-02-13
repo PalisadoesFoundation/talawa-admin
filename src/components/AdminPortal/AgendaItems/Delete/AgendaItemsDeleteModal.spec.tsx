@@ -65,7 +65,7 @@ const renderModal = (
   agendaItemId = MOCK_AGENDA_ITEM_ID,
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <I18nextProvider i18n={i18nForTest}>
         <AgendaItemsDeleteModal
           isOpen={isOpen}
@@ -423,7 +423,7 @@ describe('AgendaItemsDeleteModal', () => {
       const customT = vi.fn((key: string) => `translated_${key}`);
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={true}
@@ -515,7 +515,7 @@ describe('AgendaItemsDeleteModal', () => {
 
     it('should update when isOpen prop changes', () => {
       const { rerender } = render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={false}
@@ -534,7 +534,7 @@ describe('AgendaItemsDeleteModal', () => {
       ).not.toBeInTheDocument();
 
       rerender(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={true}
@@ -584,7 +584,7 @@ describe('AgendaItemsDeleteModal', () => {
       const trackedRefetch = vi.fn(() => callOrder.push('refetch'));
 
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={true}

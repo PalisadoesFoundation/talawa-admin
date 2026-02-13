@@ -420,7 +420,7 @@ const BOUNDARY_MOCKS = [
 
 const renderDonate = (link: ApolloLink = new StaticMockLink(MOCKS, true)) => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

@@ -61,11 +61,14 @@ export default function Donate(): JSX.Element {
     data: donationData,
     loading,
     refetch,
-  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
-    variables: { orgId: organizationId },
-  });
+  } = useQuery<{ getDonationByOrgIdConnection?: InterfaceDonation[] }>(
+    ORGANIZATION_DONATION_CONNECTION_LIST,
+    { variables: { orgId: organizationId } },
+  );
 
-  const { data } = useQuery(ORGANIZATION_LIST, {
+  const { data } = useQuery<{
+    organizations?: Array<{ name: string }>;
+  }>(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 

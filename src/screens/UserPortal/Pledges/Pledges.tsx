@@ -16,7 +16,7 @@ import type {
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import { type ObservableQuery } from '@apollo/client';
-import { type ApolloError } from '@apollo/client/v4-migration';
+import type { ErrorLike } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -69,12 +69,7 @@ const Pledges = (): JSX.Element => {
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: IPledgeRefetchFn;
-  } = useQuery(USER_PLEDGES, {
+  } = useQuery<{ getPledgesByUserId: InterfacePledgeInfo[] }>(USER_PLEDGES, {
     skip: shouldSkip,
     variables: shouldSkip
       ? undefined
@@ -106,10 +101,10 @@ const Pledges = (): JSX.Element => {
     [openDeleteModal],
   );
 
+  const graphQLErrors = (pledgeError as ErrorLike & { graphQLErrors?: Array<{ extensions?: { code?: string } }> })?.graphQLErrors;
   const isNoPledgesFoundError =
-    pledgeError?.graphQLErrors.some((graphQLError) => {
-      const code = (graphQLError.extensions as { code?: string } | undefined)
-        ?.code;
+    graphQLErrors?.some((graphQLError) => {
+      const code = graphQLError.extensions?.code;
       return code === 'arguments_associated_resources_not_found';
     }) ?? false;
 
@@ -131,7 +126,7 @@ const Pledges = (): JSX.Element => {
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
-            {pledgeError.message}
+            {(pledgeError as ErrorLike).message}
           </h6>
         </div>
       </div>

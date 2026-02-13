@@ -101,8 +101,14 @@ export default function People(): React.JSX.Element {
   const modes = ['All Members', 'Admins'];
 
   // Query the current page of members
-  const { data, loading, fetchMore, refetch } = useQuery(
-    ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+  const { data, loading, fetchMore, refetch } = useQuery<{
+    organization?: {
+      members?: {
+        edges?: IMemberEdge[];
+        pageInfo?: { hasNextPage?: boolean; endCursor?: string };
+      };
+    };
+  }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
       variables: {
         orgId: organizationId,

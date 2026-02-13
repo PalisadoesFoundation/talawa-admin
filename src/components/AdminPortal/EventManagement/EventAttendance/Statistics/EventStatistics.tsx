@@ -107,9 +107,10 @@ export const AttendanceStatisticsModal: React.FC<
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 10;
-  const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);
+  const [loadEventDetails, { data: eventData }] =
+    useLazyQuery<{ event?: InterfaceEvent }>(EVENT_DETAILS);
   const [loadRecurringEvents, { data: recurringData }] =
-    useLazyQuery(RECURRING_EVENTS);
+    useLazyQuery<{ getRecurringEvents?: InterfaceEvent[] }>(RECURRING_EVENTS);
   const currentEventIndex = useMemo(() => {
     if (!recurringData?.getRecurringEvents || !eventId) return -1;
     return recurringData.getRecurringEvents.findIndex(

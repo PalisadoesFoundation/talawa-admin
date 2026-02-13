@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next';
-import { ApolloError } from '@apollo/client/v4-migration';
+import type { ErrorLike } from '@apollo/client';
 
 export interface InterfaceMemberData {
   _id: string;
@@ -38,7 +38,7 @@ export interface InterfacePaginationVariables {
 }
 export interface InterfaceBaseQueryResult {
   loading: boolean;
-  error?: ApolloError;
+  error?: ErrorLike;
   refetch?: () => void;
 }
 

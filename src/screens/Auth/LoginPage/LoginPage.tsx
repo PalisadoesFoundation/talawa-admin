@@ -11,7 +11,6 @@
  * ```
  */
 
-import { ApolloError } from '@apollo/client/v4-migration';
 import { useQuery } from '@apollo/client/react';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -102,11 +101,20 @@ const LoginPage = (): JSX.Element => {
     }
   }, [navigate, getItem, extendSession]);
 
-  const { data } = useQuery(GET_COMMUNITY_DATA_PG, {
+  const { data } = useQuery<{
+    community?: {
+      name?: string;
+      websiteURL?: string;
+      logoURL?: string;
+      [key: string]: string | undefined;
+    };
+  }>(GET_COMMUNITY_DATA_PG, {
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
+  const { data: orgData } = useQuery<{
+    organizations?: InterfaceQueryOrganizationListObject[];
+  }>(ORGANIZATION_LIST_NO_MEMBERS);
   useEffect(() => {
     if (orgData?.organizations) {
       const options: InterfaceOrgOption[] = orgData.organizations.map(
@@ -173,8 +181,9 @@ const LoginPage = (): JSX.Element => {
   };
 
   const handleLoginError = (error: Error): void => {
-    if (error instanceof ApolloError) {
-      const graphQLError = error.graphQLErrors?.[0];
+    const err = error as Error & { graphQLErrors?: Array<{ extensions?: { code?: string; retryAfter?: string | number | Date } }> };
+    if (err.graphQLErrors?.length) {
+      const graphQLError = err.graphQLErrors[0];
       const extensions = graphQLError?.extensions;
       const code = extensions?.code;
       const retryAfter = extensions?.retryAfter;

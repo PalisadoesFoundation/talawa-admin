@@ -51,7 +51,7 @@
 import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
-  ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_DATA_PG,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
 } from 'GraphQl/Queries/Queries';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
@@ -69,7 +69,7 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
+import type { IEventEdge, ICreateEventInput, IOrgList } from 'types/Event/interface';
 import styles from './Events.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -133,7 +133,7 @@ export default function Events(): JSX.Element {
     data,
     error: eventDataError,
     refetch,
-  } = useQuery(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
+  } = useQuery<{ organization?: { events?: { edges: IEventEdge[] } } }>(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
     variables: {
       id: organizationId,
       first: 100,
@@ -151,10 +151,24 @@ export default function Events(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  // Query to fetch organization details
-  const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: organizationId },
-  });
+  // Query to fetch organization with members (for EventCalendar visibility filtering)
+  type OrgQueryData = {
+    organization?: {
+      id: string;
+      members?: {
+        edges?: Array<{ node: { id: string; name: string; emailAddress?: string; role?: string }; cursor: string }>;
+        pageInfo?: { hasNextPage: boolean; endCursor: string };
+      };
+    };
+  };
+  const { data: orgQueryData } = useQuery<OrgQueryData>(
+    GET_ORGANIZATION_DATA_PG,
+    {
+      variables: { id: organizationId, first: 100 },
+      skip: !organizationId,
+    },
+  );
+  const orgData = orgQueryData?.organization as IOrgList | undefined;
 
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION, {
@@ -210,7 +224,7 @@ export default function Events(): JSX.Element {
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
-      const { data: createEventData, errors } = await create({
+      const { data: createEventData, error: createError } = await create({
         variables: { input },
       });
 
@@ -227,8 +241,8 @@ export default function Events(): JSX.Element {
         }
         setFormResetKey((prev) => prev + 1);
         createEventModal.close();
-      } else if (errors && errors.length > 0) {
-        throw new Error(errors[0].message);
+      } else if (createError) {
+        throw new Error((createError as Error).message);
       }
     } catch (error: unknown) {
       errorHandler(t, error);

@@ -74,7 +74,7 @@ const renderComponent = (
   customMocks: MockLink.MockedResponse[] = mocks as MockLink.MockedResponse[],
 ) => {
   return render(
-    <MockedProvider mocks={customMocks} addTypename={false}>
+    <MockedProvider mocks={customMocks}>
       <I18nextProvider i18n={i18nForTest}>
         <InviteByEmailModal {...defaultProps} {...props} />
       </I18nextProvider>
@@ -433,7 +433,7 @@ describe('InviteByEmailModal', () => {
       };
 
       render(
-        <MockedProvider mocks={[successMock]} addTypename={false}>
+        <MockedProvider mocks={[successMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <InviteByEmailModal {...minimalProps} />
           </I18nextProvider>

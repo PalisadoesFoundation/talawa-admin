@@ -44,7 +44,6 @@ import styles from './OrganizationCard.module.css';
 import { Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import { ApolloError } from '@apollo/client/v4-migration';
 import { useMutation } from '@apollo/client/react';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
@@ -127,8 +126,8 @@ function OrganizationCard({
         NotificationToast.success(t('users.orgJoined'));
       }
     } catch (error: unknown) {
-      if (error instanceof ApolloError) {
-        const apolloError = error;
+      if (error instanceof Error) {
+        const apolloError = error as Error & { graphQLErrors?: Array<{ extensions?: { code?: string } }> };
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
           NotificationToast.error(t('users.AlreadyJoined'));
