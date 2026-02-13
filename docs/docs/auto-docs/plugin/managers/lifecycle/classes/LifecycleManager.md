@@ -4,7 +4,7 @@
 
 # Class: LifecycleManager
 
-Defined in: [src/plugin/managers/lifecycle.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L13)
+Defined in: [src/plugin/managers/lifecycle.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L20)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:13](https://github.com/PalisadoesF
 
 > **new LifecycleManager**(`discoveryManager`, `extensionRegistry`, `eventManager`): `LifecycleManager`
 
-Defined in: [src/plugin/managers/lifecycle.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L16)
+Defined in: [src/plugin/managers/lifecycle.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L23)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:16](https://github.com/PalisadoesF
 
 > **activatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L142)
+Defined in: [src/plugin/managers/lifecycle.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L149)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:142](https://github.com/Palisadoes
 
 > **deactivatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L178)
+Defined in: [src/plugin/managers/lifecycle.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L185)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:178](https://github.com/Palisadoes
 
 > **getActivePluginCount**(): `number`
 
-Defined in: [src/plugin/managers/lifecycle.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L53)
+Defined in: [src/plugin/managers/lifecycle.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L60)
 
 #### Returns
 
@@ -86,7 +86,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:53](https://github.com/PalisadoesF
 
 > **getLoadedPlugin**(`pluginId`): [`ILoadedPlugin`](../../../types/interfaces/ILoadedPlugin.md)
 
-Defined in: [src/plugin/managers/lifecycle.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L26)
+Defined in: [src/plugin/managers/lifecycle.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L33)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:26](https://github.com/PalisadoesF
 
 > **getLoadedPlugins**(): [`ILoadedPlugin`](../../../types/interfaces/ILoadedPlugin.md)[]
 
-Defined in: [src/plugin/managers/lifecycle.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L22)
+Defined in: [src/plugin/managers/lifecycle.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L29)
 
 #### Returns
 
@@ -116,7 +116,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:22](https://github.com/PalisadoesF
 
 > **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{ \}\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L33)
+Defined in: [src/plugin/managers/lifecycle.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L40)
 
 #### Parameters
 
@@ -138,7 +138,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:33](https://github.com/PalisadoesF
 
 > **getPluginCount**(): `number`
 
-Defined in: [src/plugin/managers/lifecycle.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L49)
+Defined in: [src/plugin/managers/lifecycle.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L56)
 
 #### Returns
 
@@ -150,7 +150,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:49](https://github.com/PalisadoesF
 
 > **installPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L214)
+Defined in: [src/plugin/managers/lifecycle.ts:221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L221)
 
 #### Parameters
 
@@ -168,7 +168,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:214](https://github.com/Palisadoes
 
 > **loadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L59)
+Defined in: [src/plugin/managers/lifecycle.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L66)
 
 #### Parameters
 
@@ -186,7 +186,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:59](https://github.com/PalisadoesF
 
 > **togglePluginStatus**(`pluginId`, `status`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L131)
+Defined in: [src/plugin/managers/lifecycle.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L138)
 
 #### Parameters
 
@@ -208,7 +208,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:131](https://github.com/Palisadoes
 
 > **uninstallPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L268)
+Defined in: [src/plugin/managers/lifecycle.ts:275](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L275)
 
 #### Parameters
 
@@ -226,7 +226,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:268](https://github.com/Palisadoes
 
 > **unloadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L103)
+Defined in: [src/plugin/managers/lifecycle.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L110)
 
 #### Parameters
 

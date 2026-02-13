@@ -331,21 +331,6 @@ export const EVENT_DETAILS = gql`
   }
 `;
 
-export const EVENT_DETAILS_BASIC = gql`
-  query GetEventBasic($eventId: String!) {
-    event(input: { id: $eventId }) {
-      id
-      name
-      location
-      startAt
-      organization {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const RECURRING_EVENTS = gql`
   query RecurringEvents($baseRecurringEventId: ID!) {
     getRecurringEvents(baseRecurringEventId: $baseRecurringEventId) {

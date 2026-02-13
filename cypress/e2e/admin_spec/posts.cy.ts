@@ -1,14 +1,21 @@
 // SKIP_LOCALSTORAGE_CHECK
-import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { PostsPage } from '../../pageObjects/AdminPortal/PostPage';
 
 describe('Testing Posts Management in Admin Portal', () => {
-  const dashboard = new AdminDashboardPage();
   const postsPage = new PostsPage();
+  let orgId = '';
+
+  before(() => {
+    cy.setupTestEnvironment({ auth: { role: 'admin' } }).then(
+      ({ orgId: createdOrgId }) => {
+        orgId = createdOrgId;
+      },
+    );
+  });
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard.visit().verifyOnDashboard().openFirstOrganization();
+    cy.visit(`/admin/orgdash/${orgId}`);
     postsPage.visitPostsPage();
   });
 
@@ -27,5 +34,11 @@ describe('Testing Posts Management in Admin Portal', () => {
   afterEach(() => {
     cy.clearCookies();
     cy.clearLocalStorage();
+  });
+
+  after(() => {
+    if (orgId) {
+      cy.cleanupTestOrganization(orgId);
+    }
   });
 });
