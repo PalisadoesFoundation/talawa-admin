@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';

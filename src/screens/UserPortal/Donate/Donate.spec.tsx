@@ -1,6 +1,6 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { ApolloLink } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';

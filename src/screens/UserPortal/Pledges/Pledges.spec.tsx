@@ -1,6 +1,6 @@
 import React from 'react';
 import { GraphQLError } from 'graphql';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   LocalizationProvider,
   AdapterDayjs,

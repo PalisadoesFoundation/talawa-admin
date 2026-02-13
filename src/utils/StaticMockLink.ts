@@ -13,7 +13,7 @@ import {
 
 import { cloneDeep } from '@apollo/client/utilities/internal';
 
-import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
+import type { MockedResponse, ResultFunction } from '@apollo/client/testing';
 
 /**
  * Extended MockedResponse type that supports variableMatcher for flexible matching

@@ -1,4 +1,4 @@
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   LocalizationProvider,
   AdapterDayjs,

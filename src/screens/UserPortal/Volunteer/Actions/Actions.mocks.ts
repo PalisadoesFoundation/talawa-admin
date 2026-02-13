@@ -1,4 +1,4 @@
-import type { MockedResponse } from '@apollo/react-testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

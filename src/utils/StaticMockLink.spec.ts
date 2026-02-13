@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
 import { Observer } from '@apollo/client/v4-migration';
-import type { MockedResponse } from '@apollo/react-testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { gql, Observable } from '@apollo/client';
 import { print } from 'graphql';
 import type { ApolloLink } from '@apollo/client/link';

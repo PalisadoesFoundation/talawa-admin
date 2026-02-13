@@ -1,6 +1,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { act, render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
