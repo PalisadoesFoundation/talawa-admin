@@ -306,5 +306,7 @@
   "noTagsFound": "No tags found",
   "unknownMember": "Unknown Member",
   "searchTags": "Search Tags",
-  "sortBy": "Sort By"
+  "sortBy": "Sort By",
+  "previousYear": "Previous Year",
+  "nextYear": "Next Year"
 }

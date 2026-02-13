@@ -162,6 +162,8 @@ i18n.init({
         common: {
           none: 'None',
           close: 'Close',
+          previousYear: 'Previous Year',
+          nextYear: 'Next Year',
         },
         errors: {
           defaultErrorMessage: 'An error occurred',
@@ -228,9 +230,8 @@ describe('Calendar Component', () => {
     cleanup();
   });
   const mockRefetchEvents = vi.fn();
-  const fixedYear = 2026;
-  const today = new Date(fixedYear, 3, 15);
-  const todayISO = dayjs(today).toISOString();
+  const today = dayjs().month(3).date(15).hour(10).minute(0).second(0).toDate();
+  const todayISO = today.toISOString();
 
   const mockEventData = [
     {
@@ -1106,7 +1107,7 @@ describe('Calendar Component', () => {
   });
 
   test('processes multiple events for REGULAR user when user is a member', async () => {
-    const eventDate = dayjs().toISOString();
+    const eventDate = todayISO;
     const publicEvent: CalendarEventItem = {
       id: 'public-event',
       location: 'Public Location',
@@ -1133,8 +1134,8 @@ describe('Calendar Component', () => {
       location: 'Private Location 1',
       name: 'Private Event 1',
       description: 'Private Description 1',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '12:00:00',
       endTime: '13:00:00',
       allDay: false,
@@ -1154,8 +1155,8 @@ describe('Calendar Component', () => {
       location: 'Private Location 2',
       name: 'Private Event 2',
       description: 'Private Description 2',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '14:00:00',
       endTime: '15:00:00',
       allDay: false,

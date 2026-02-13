@@ -306,5 +306,7 @@
   "noTagsFound": "Aucune étiquette trouvée",
   "searchTags": "Rechercher des étiquettes",
   "sortBy": "Trier par",
-  "unknownMember": "Membre inconnu"
+  "unknownMember": "Membre inconnu",
+  "previousYear": "Année précédente",
+  "nextYear": "Année suivante"
 }

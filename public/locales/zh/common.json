@@ -306,5 +306,7 @@
   "noTagsFound": "未找到标签",
   "searchTags": "搜索标签",
   "sortBy": "排序方式",
-  "unknownMember": "未知成员"
+  "unknownMember": "未知成员",
+  "previousYear": "上一年",
+  "nextYear": "下一年"
 }
