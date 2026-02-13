@@ -287,7 +287,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
                   >
                     {tag.name}
-                    <button
+                    <Button
+                      variant="unstyled"
                       className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
                       onClick={() => deSelectTag(tag)}
                       data-testid={`clearSelectedTag${tag._id}`}

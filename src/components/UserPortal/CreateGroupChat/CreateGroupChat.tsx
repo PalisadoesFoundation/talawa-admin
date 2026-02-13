@@ -239,14 +239,14 @@ export default function CreateGroupChat({
             fallbackName={title}
             imageUrl={selectedImage}
           />
-          <button
-            type="button"
+          <Button
+            variant="unstyled"
             data-testid="editImageBtn"
             onClick={handleImageClick}
             className={styles.editImgBtn}
           >
             <FiEdit />
-          </button>
+          </Button>
         </div>
         <form>
           <div className="mb-3">

@@ -49,6 +49,7 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -56,7 +57,11 @@ function OrganizationTags(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
+  const {
+    isOpen: createTagModalIsOpen,
+    open: openCreateTagModal,
+    close: closeCreateTagModal,
+  } = useModalState();
 
   const [tagSearchName, setTagSearchName] = useState('');
   const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
@@ -68,11 +73,11 @@ function OrganizationTags(): JSX.Element {
 
   const showCreateTagModal = (): void => {
     setTagName('');
-    setCreateTagModalIsOpen(true);
+    openCreateTagModal();
   };
 
   const hideCreateTagModal = (): void => {
-    setCreateTagModalIsOpen(false);
+    closeCreateTagModal();
   };
 
   const {
@@ -139,7 +144,7 @@ function OrganizationTags(): JSX.Element {
         NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
-        setCreateTagModalIsOpen(false);
+        closeCreateTagModal();
       } else {
         NotificationToast.error(t('tagCreationFailed'));
       }
