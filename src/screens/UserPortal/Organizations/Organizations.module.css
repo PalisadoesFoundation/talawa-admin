@@ -86,6 +86,8 @@
 
 .organizationCard {
   margin-bottom: var(--space-7);
+  width: 50%;
+  flex: 0 0 auto;
 }
 
 .organizationsContainer {

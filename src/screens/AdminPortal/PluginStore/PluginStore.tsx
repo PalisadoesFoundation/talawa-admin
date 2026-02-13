@@ -111,10 +111,8 @@ export default function PluginStore() {
   // Close upload modal
   const closeUploadModal = async () => {
     closeUpload();
-    // Refresh plugin data after upload
+    // Re-fetch plugins to reflect any newly uploaded plugin
     await refetch();
-    // Reload the page to ensure all plugin states are properly updated
-    window.location.reload();
   };
 
   const pluginStoreDropdowns = [
@@ -136,7 +134,7 @@ export default function PluginStore() {
   const uploadPluginButton = (
     <Button
       className={`${styles.dropdown} ${styles.createorgdropdown}`}
-      onClick={() => openUpload()}
+      onClick={openUpload}
       data-testid="uploadPluginBtn"
     >
       <i className={`fa fa-plus ${styles.uploadPlugin} `} />

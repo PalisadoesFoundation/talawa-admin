@@ -9,6 +9,7 @@
 .name {
   margin-inline-start: var(--space-3);
 }
+
 .loadingHeading {
   font-weight: var(--font-weight-bold);
   color: var(--color-red-500);

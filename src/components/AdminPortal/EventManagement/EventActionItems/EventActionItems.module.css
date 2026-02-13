@@ -17,9 +17,9 @@
 .TableImage {
   object-fit: cover;
   margin-right: var(--space-3);
-  width: var(--table-image-size) !important;
-  height: var(--table-image-size) !important;
-  border-radius: 100% !important;
+  width: var(--logo-xs);
+  height: var(--logo-xs);
+  border-radius: var(--radius-full);
 }
 
 .assigneeCellContainer {
@@ -44,7 +44,7 @@
   border-color: var(--infoButton-border);
   color: var(--infoButton-color);
   margin-right: var(--space-3);
-  border-radius: var(--space-2);
+  border-radius: var(--radius-sm);
 }
 
 .infoButton:hover {

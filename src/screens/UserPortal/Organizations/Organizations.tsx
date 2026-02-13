@@ -460,7 +460,7 @@ export default function Organizations(): React.JSX.Element {
                         return (
                           <div
                             key={index}
-                            className={`col-md-6 ${styles.organizationCard}`}
+                            className={`${styles.organizationCol} ${styles.organizationCard}`}
                             data-testid="organization-card"
                             data-organization-name={organization.name}
                             data-membership-status={

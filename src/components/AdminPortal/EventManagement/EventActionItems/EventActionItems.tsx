@@ -52,7 +52,6 @@ import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdat
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -72,7 +71,6 @@ interface InterfaceEventActionItemsProps {
   orgActionItemsRefetch?: () => void;
 }
 
-const MIN_COLUMN_WIDTH = 100;
 const ROW_HEIGHT = 65;
 
 const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
@@ -87,9 +85,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   const { orgId } = useParams();
   const MIN_WIDTH_VALUE = 100;
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');

@@ -185,7 +185,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             id={`subTagsScrollableDiv${tag._id}`}
             // i18n-ignore-next-line
             data-testid={`subTagsScrollableDiv${tag._id}`}
-            className={styles.subtagsScrollableDiv}
+            className={styles.subTagsScrollableDiv}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}

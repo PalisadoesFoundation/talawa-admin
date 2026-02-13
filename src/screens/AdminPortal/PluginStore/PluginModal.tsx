@@ -384,15 +384,6 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)
                               }
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.preventDefault();
-                                  openScreenshotViewer(
-                                    details.screenshots,
-                                    idx,
-                                  );
-                                }
-                              }}
                               title={t('clickToViewFullSize')}
                             >
                               <img

@@ -151,13 +151,15 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-black), transparent 90%);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 90%);
 }
 
 .backButton:hover {
   background: var(--color-white);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-black), transparent 85%);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 85%);
 }
 
 .screenshotCounter {
@@ -171,7 +173,8 @@
   font-weight: var(--font-weight-semibold);
   border: var(--border-1) solid
     color-mix(in srgb, var(--color-black), transparent 90%);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-black), transparent 90%);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 90%);
 }
 
 .navigationButton {
@@ -200,7 +203,8 @@
 .navigationButton:hover {
   background: var(--color-white);
   transform: translateY(-50%) scale(1.05);
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--color-black), transparent 85%);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 85%);
 }
 
 .navigationButtonLeft {
@@ -229,8 +233,10 @@
   object-fit: contain;
   border-radius: var(--radius-md);
   box-shadow:
-    0 8px 32px color-mix(in srgb, var(--color-black), transparent 88%),
-    0 4px 16px color-mix(in srgb, var(--color-black), transparent 92%);
+    0 var(--shadow-offset-lg) var(--shadow-blur-2xl)
+      color-mix(in srgb, var(--color-black), transparent 88%),
+    0 var(--shadow-offset-md) var(--shadow-offset-xl)
+      color-mix(in srgb, var(--color-black), transparent 92%);
   background: var(--color-white);
   border: var(--border-1) solid var(--color-black);
   animation: imageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -292,7 +298,7 @@
   flex: 1;
   padding: var(--space-8) var(--space-9);
   min-height: var(--space-24);
-  max-height: 70vh;
+  max-height: var(--vh-70);
   overflow-y: auto;
   transition:
     min-height 0.2s,
