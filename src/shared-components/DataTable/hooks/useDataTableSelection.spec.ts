@@ -1,12 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useDataTableSelection } from '../../../hooks/useDataTableSelection';
-import type {
-  Key,
-  IBulkAction,
-  IUseDataTableSelectionOptions,
-} from '../../../types/shared-components/DataTable/interface';
 
+type Key = string;
+type IBulkAction = any;
+type IUseDataTableSelectionOptions = any;
 interface TestRow {
   id: string;
   name: string;
