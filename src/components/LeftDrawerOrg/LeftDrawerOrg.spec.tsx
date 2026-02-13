@@ -161,7 +161,7 @@ vi.mock('components/CollapsibleDropdown/CollapsibleDropdown', () => ({
   )),
 }));
 
-vi.mock('components/IconComponent/IconComponent', () => ({
+vi.mock('shared-components/IconComponent/IconComponent', () => ({
   default: vi.fn(({ name, fill }) => (
     <div data-testid="icon-component" data-name={name} data-fill={fill}>
       {name}Icon
