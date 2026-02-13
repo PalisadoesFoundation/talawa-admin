@@ -1167,10 +1167,18 @@ jobs:
 
       - name: Setup Devcontainer
         run: |
-          npm install -g @devcontainers/cli
+          set -euo pipefail
           cp envFiles/.env.devcontainer .env
-          devcontainer up --workspace-folder .
-          echo "Devcontainer started"
+
+          if [ -f ".devcontainer/devcontainer.json" ]; then
+            npm install -g @devcontainers/cli
+            devcontainer up --workspace-folder .
+            echo "Devcontainer started"
+          else
+            echo "No .devcontainer/devcontainer.json found; falling back to docker compose"
+            docker compose up -d
+            echo "Docker compose stack started"
+          fi
 
       - name: Wait for Postgres in devcontainer before migrations
         run: |
