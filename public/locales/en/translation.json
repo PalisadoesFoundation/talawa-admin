@@ -573,7 +573,8 @@
     "sortPeople": "Sort People",
     "noTagsFound": "No tags found",
     "addMember": "Add Member",
-    "removeMember": "Remove Member"
+    "removeMember": "Remove Member",
+    "invalidTagName": "Invalid tag name"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -1988,7 +1989,8 @@
     "name": "name",
     "desc": "desc",
     "venueImagePreview": "Preview of venue image",
-    "sortVenues": "Sort Venues"
+    "sortVenues": "Sort Venues",
+    "closeImagePreview": "Close image preview"
   },
   "addMember": {
     "title": "Add Member",
@@ -2483,7 +2485,9 @@
     "clear": "Clear",
     "clearSelection": "Clear selection",
     "loading": "Loading...",
-    "selectRow": "Select row {{rowKey}}"
+    "selectRow": "Select row {{rowKey}}",
+    "previousYear": "Previous Year",
+    "nextYear": "Next Year"
   },
   "donation": {
     "amount_label": "Amount",
@@ -2581,13 +2585,6 @@
         "failedToLoad": "Failed to load component"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "Yes",
-    "no": "No",
-    "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
-    "eventNotFound": "Event not found or has been deleted",
-    "numberOfAttendees": "Number of attendees"
   },
   "csv": {
     "demographics": "{{category}} Demographics"

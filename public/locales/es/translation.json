@@ -568,7 +568,8 @@
     "tagActions": "Acciones de etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
     "addMember": "Agregar miembro",
-    "removeMember": "Eliminar miembro"
+    "removeMember": "Eliminar miembro",
+    "invalidTagName": "Nombre de etiqueta no válido"
   },
   "userListCard": {
     "joined": "Unido",
@@ -1988,7 +1989,8 @@
     "name": "Nombre",
     "desc": "Descripción",
     "venueImagePreview": "Vista previa de la imagen del lugar",
-    "sortVenues": "Ordenar lugares"
+    "sortVenues": "Ordenar lugares",
+    "closeImagePreview": "Cerrar vista previa de imagen"
   },
   "addMember": {
     "title": "Agregar miembro",
@@ -2483,7 +2485,9 @@
     "clear": "Limpiar",
     "clearSelection": "Limpiar selección",
     "loading": "Cargando...",
-    "selectRow": "Seleccionar fila {{rowKey}}"
+    "selectRow": "Seleccionar fila {{rowKey}}",
+    "previousYear": "Año anterior",
+    "nextYear": "Siguiente año"
   },
   "donation": {
     "amount_label": "Cantidad",
@@ -2581,13 +2585,6 @@
         "failedToLoad": "Error al cargar el componente"
       }
     }
-  },
-  "memberActivity": {
-    "yes": "Sí",
-    "no": "No",
-    "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
-    "eventNotFound": "Evento no encontrado o ha sido eliminado",
-    "numberOfAttendees": "Número de asistentes"
   },
   "csv": {
     "demographics": "Demografía de {{category}}"
