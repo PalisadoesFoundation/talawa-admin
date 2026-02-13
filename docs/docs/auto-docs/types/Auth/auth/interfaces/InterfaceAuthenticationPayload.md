@@ -4,7 +4,9 @@
 
 # Interface: InterfaceAuthenticationPayload
 
-Defined in: [src/types/Auth/auth.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L9)
+Defined in: [src/types/Auth/auth.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L21)
+
+Payload returned after successful authentication.
 
 ## Properties
 
@@ -12,7 +14,9 @@ Defined in: [src/types/Auth/auth.ts:9](https://github.com/PalisadoesFoundation/t
 
 > **authenticationToken**: `string`
 
-Defined in: [src/types/Auth/auth.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L10)
+Defined in: [src/types/Auth/auth.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L23)
+
+Token used for authenticating API requests
 
 ***
 
@@ -20,7 +24,9 @@ Defined in: [src/types/Auth/auth.ts:10](https://github.com/PalisadoesFoundation/
 
 > `optional` **refreshToken**: `string`
 
-Defined in: [src/types/Auth/auth.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L11)
+Defined in: [src/types/Auth/auth.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L25)
+
+Optional token for refreshing the authentication token
 
 ***
 
@@ -28,11 +34,13 @@ Defined in: [src/types/Auth/auth.ts:11](https://github.com/PalisadoesFoundation/
 
 > **user**: `object`
 
-Defined in: [src/types/Auth/auth.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L12)
+Defined in: [src/types/Auth/auth.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L27)
 
-#### email
+Authenticated user information
 
-> **email**: `string`
+#### emailAddress
+
+> **emailAddress**: `string`
 
 #### id
 

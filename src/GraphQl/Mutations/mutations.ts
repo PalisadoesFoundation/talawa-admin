@@ -712,7 +712,7 @@ export const GET_FILE_PRESIGNEDURL = gql`
   }
 `;
 
-// to link OAuth account to existing user
+/** Links an OAuth provider account to the currently authenticated user. */
 export const LINK_OAUTH_ACCOUNT = gql`
   mutation LinkOAuthAccount($input: OAuthLoginInput!) {
     linkOAuthAccount(input: $input) {
@@ -731,7 +731,7 @@ export const LINK_OAUTH_ACCOUNT = gql`
   }
 `;
 
-// to unlink OAuth account from existing user
+/** Unlinks an OAuth provider account from the currently authenticated user. */
 export const UNLINK_OAUTH_ACCOUNT = gql`
   mutation UnlinkOAuthAccount($provider: OAuthProvider!) {
     unlinkOAuthAccount(provider: $provider) {
@@ -747,7 +747,7 @@ export const UNLINK_OAUTH_ACCOUNT = gql`
   }
 `;
 
-// to sign in with OAuth
+/** Authenticates a user using an OAuth provider and returns authentication tokens. */
 export const SIGN_IN_WITH_OAUTH = gql`
   mutation SignInWithOAuth($input: OAuthLoginInput!) {
     signInWithOAuth(input: $input) {
