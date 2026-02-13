@@ -24,6 +24,16 @@ Custom styles for the dropdown button.
 
 ***
 
+### containerClassName?
+
+> `optional` **containerClassName**: `string`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L43)
+
+Optional extra class name for the dropdown container (merged with existing classes).
+
+***
+
 ### menuClassName?
 
 > `optional` **menuClassName**: `string`
@@ -41,3 +51,13 @@ Custom class name for the dropdown menu.
 Defined in: [src/types/shared-components/DropDownButton/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L28)
 
 Custom styles for the parent container.
+
+***
+
+### toggleClassName?
+
+> `optional` **toggleClassName**: `string`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L48)
+
+Optional extra class name for the toggle button (merged with existing classes).

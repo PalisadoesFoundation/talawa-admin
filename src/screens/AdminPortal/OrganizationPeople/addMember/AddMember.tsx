@@ -52,7 +52,17 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
-function AddMember(): JSX.Element {
+interface IAddMemberProps {
+  rootClassName?: string;
+  containerClassName?: string;
+  toggleClassName?: string;
+}
+
+function AddMember({
+  rootClassName,
+  containerClassName,
+  toggleClassName,
+}: IAddMemberProps = {}): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
@@ -361,6 +371,7 @@ function AddMember(): JSX.Element {
   return (
     <>
       <PageHeader
+        rootClassName={rootClassName}
         sorting={[
           {
             title: translateOrgPeople('addMembers'),
@@ -374,6 +385,8 @@ function AddMember(): JSX.Element {
             selected: translateOrgPeople('addMembers'),
             onChange: (value) => handleSortChange(value.toString()),
             testIdPrefix: 'addMembers',
+            containerClassName,
+            toggleClassName,
           },
         ]}
       />

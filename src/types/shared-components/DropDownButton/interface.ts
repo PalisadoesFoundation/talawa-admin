@@ -36,6 +36,16 @@ export interface InterfaceDropDownProps {
    * Custom class name for the dropdown menu.
    */
   menuClassName?: string;
+
+  /**
+   * Optional extra class name for the dropdown container (merged with existing classes).
+   */
+  containerClassName?: string;
+
+  /**
+   * Optional extra class name for the toggle button (merged with existing classes).
+   */
+  toggleClassName?: string;
 }
 
 /**
