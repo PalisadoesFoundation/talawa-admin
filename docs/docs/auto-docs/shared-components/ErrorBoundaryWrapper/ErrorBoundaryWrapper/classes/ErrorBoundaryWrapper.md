@@ -4,7 +4,7 @@
 
 # Class: ErrorBoundaryWrapper
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L57)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L58)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx
 
 > **new ErrorBoundaryWrapper**(`props`): `ErrorBoundaryWrapper`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L62)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L63)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx
 
 > **componentDidCatch**(`error`, `errorInfo`): `void`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L89)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L90)
 
 Log error details after an error has been caught
 This lifecycle method is called during the commit phase (to log/ report)
@@ -67,7 +67,7 @@ This lifecycle method is called during the commit phase (to log/ report)
 
 > **handleReset**(): `void`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L116)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L117)
 
 Reset error boundary state to recover from error
 
@@ -81,7 +81,7 @@ Reset error boundary state to recover from error
 
 > **render**(): `ReactNode`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L135)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L136)
 
 #### Returns
 
@@ -97,7 +97,7 @@ Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx
 
 > `static` **getDerivedStateFromError**(`error`): `Partial`\<[`InterfaceErrorBoundaryWrapperState`](../../../../types/shared-components/ErrorBoundaryWrapper/interface/interfaces/InterfaceErrorBoundaryWrapperState.md)\>
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L75)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L76)
 
 Update state when an error is caught
 This lifecycle method is called during the render phase (to change UI)

@@ -53,6 +53,7 @@ import type {
 } from 'types/shared-components/ErrorBoundaryWrapper/interface';
 import styles from './ErrorBoundaryWrapper.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import Button from 'shared-components/Button';
 
 export class ErrorBoundaryWrapper extends React.Component<
   InterfaceErrorBoundaryWrapperProps,
@@ -168,14 +169,14 @@ export class ErrorBoundaryWrapper extends React.Component<
             <p className={styles.errorMessage}>
               {error?.message || fallbackErrorMessage}
             </p>
-            <button
+            <Button
               type="button"
               onClick={this.handleReset}
               className={styles.resetButton}
               aria-label={resetButtonAriaLabel}
             >
               {resetButtonText}
-            </button>
+            </Button>
           </div>
         </div>
       );
