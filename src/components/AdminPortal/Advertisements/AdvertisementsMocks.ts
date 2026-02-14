@@ -191,7 +191,9 @@ export const link = ApolloLink.from([authLink, httpLink]);
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
   link,
-  connectToDevTools: false,
+  devtools: {
+    enabled: false,
+  },
 });
 
 export async function wait(ms = 100): Promise<void> {
