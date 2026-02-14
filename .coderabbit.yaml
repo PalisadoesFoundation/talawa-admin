@@ -250,7 +250,7 @@ reviews:
           - Search for: `window.location =`, `window.* =`, `global.* =`, `process.env.* =`
           - Verify corresponding save/restore in beforeEach/afterEach
           - Flag missing restoration as CRITICAL for sharded CI
-  
+
         Anti-Pattern: Fixed Waits/Sleeps (CRITICAL for CI Flakiness):
         - ❌ CRITICAL: Flag ANY usage of fixed time delays in tests:
           ```typescript
