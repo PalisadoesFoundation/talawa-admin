@@ -1258,13 +1258,6 @@
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
   },
-  "membershipRequest": {
-    "joined": "Unido",
-    "accept": "Aceptar",
-    "reject": "Rechazar",
-    "memberAdded": "es aceptado",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
-  },
   "orgUpdate": {
     "name": "Nombre",
     "description": "Descripción",
@@ -1418,25 +1411,6 @@
     "role": "Rol",
     "loading": "Cargando...",
     "emailNotAvailable": "Correo electrónico no disponible"
-  },
-  "userRegister": {
-    "register": "Registro",
-    "firstName": "Nombre de pila",
-    "enterFirstName": "Ponga su primer nombre",
-    "lastName": "Apellido",
-    "enterLastName": "Ingresa tu apellido",
-    "emailAddress": "correo electrónico",
-    "enterEmail": "Ingrese su dirección de correo electrónico",
-    "password": "Contraseña",
-    "enterPassword": "Ingresa tu contraseña",
-    "confirmPassword": "confirmar Contraseña",
-    "enterConfirmPassword": "Ingrese su contraseña para confirmar",
-    "alreadyhaveAnAccount": "¿Ya tienes una cuenta?",
-    "login": "Acceso",
-    "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
-    "passwordNotMatch": "La contraseña no coincide. Confirme la contraseña y vuelva a intentarlo.",
-    "invalidDetailsMessage": "Ingrese detalles válidos.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
   },
   "userNavbar": {
     "talawa": "Talawa",
@@ -1646,9 +1620,7 @@
     "resetChanges": "Restablecer cambios",
     "saveChanges": "Guardar cambios",
     "profileDetails": "Detalles del perfil",
-    "deleteUserMessage": "Al hacer clic en el botón Eliminar usuario, su usuario se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
     "copyLink": "Copiar enlace del perfil",
-    "deleteUser": "Eliminar usuario",
     "otherSettings": "Otras configuraciones",
     "changeLanguage": "Cambiar idioma",
     "sgender": "Seleccionar género",
