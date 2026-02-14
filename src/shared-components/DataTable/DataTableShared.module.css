@@ -81,3 +81,12 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.dataLoadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  z-index: 1;
+}
