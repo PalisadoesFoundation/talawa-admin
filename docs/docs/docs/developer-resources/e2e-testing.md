@@ -24,17 +24,37 @@ Ensure your local development server is running on `http://localhost:4321`.
 
 The tests follow the Page Object Model pattern for maintainability.
 
-```
+```text
 cypress/
-├── e2e/                    # End-to-end test specifications
-│   └── example_spec/       # Related tests
-├── fixtures/               # Test data and mock files
-│   └── users.json         # User test data
-├── pageObjects/           # Page Object Model files
-│   ├── auth/              # Authentication page objects
-│   └── shared/            # Reusable page object utilities (modal/table/form/toast)
-└── support/               # Support files and custom commands
-    └── commands.ts        # Custom Cypress commands
+├── e2e/
+│   ├── Auth/
+│   ├── AdminPortal/
+│   │   ├── Dashboard/
+│   │   ├── Organizations/
+│   │   ├── People/
+│   │   ├── Events/
+│   │   ├── ActionItems/
+│   │   ├── Posts/
+│   │   ├── Advertisements/
+│   │   ├── Venues/
+│   │   └── Tags/
+│   ├── UserPortal/
+│   │   ├── Dashboard/
+│   │   ├── OrganizationDiscovery/
+│   │   ├── EventDiscovery/
+│   │   ├── VolunteerSignup/
+│   │   ├── Posts/
+│   │   ├── Profile/
+│   │   └── Transactions/
+│   ├── SharedComponents/
+│   ├── E2EFlows/
+│   ├── ErrorScenarios/
+│   ├── CascadingEffects/
+│   ├── MultiOrganization/
+│   └── Accessibility/
+├── fixtures/
+├── pageObjects/
+└── support/
 ```
 
 ### Key Components:
@@ -79,11 +99,17 @@ pnpm run cy:open
 For running specific tests in headless mode, first manually start your application at `http://localhost:4321`, then use the following commands:
 
 ```bash
-# Run tests in a specific folder
-pnpm run cypress:run --spec "cypress/e2e/dashboard_spec/**/*"
+# Run Admin Portal specs
+pnpm run cypress:run --spec "cypress/e2e/AdminPortal/**/*.cy.ts"
+
+# Run User Portal specs
+pnpm run cypress:run --spec "cypress/e2e/UserPortal/**/*.cy.ts"
+
+# Run Auth specs
+pnpm run cypress:run --spec "cypress/e2e/Auth/**/*.cy.ts"
 
 # Run a specific test file
-pnpm run cypress:run --spec "cypress/e2e/login_spec/login.cy.ts"
+pnpm run cypress:run --spec "cypress/e2e/AdminPortal/People/ManageMembers.cy.ts"
 ```
 
 ## Writing Tests

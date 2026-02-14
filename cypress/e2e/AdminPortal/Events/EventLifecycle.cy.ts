@@ -1,4 +1,4 @@
-import { AdminEventPage } from '../../pageObjects/AdminPortal/AdminEventPage';
+import { AdminEventPage } from '../../../pageObjects/AdminPortal/AdminEventPage';
 
 describe('Admin Event Tab', () => {
   const eventPage = new AdminEventPage();
