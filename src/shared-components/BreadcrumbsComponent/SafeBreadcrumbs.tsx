@@ -1,5 +1,5 @@
 import React from 'react';
-import { useInRouterContext } from 'react-router';
+import { useInRouterContext } from 'react-router-dom';
 import BreadcrumbsComponent from './BreadcrumbsComponent';
 import type { IBreadcrumbsComponentProps } from 'types/shared-components/BreadcrumbsComponent/interface';
 
