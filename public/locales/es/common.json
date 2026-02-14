@@ -306,5 +306,7 @@
   "noTagsFound": "No se encontraron etiquetas",
   "searchTags": "Buscar etiquetas",
   "sortBy": "Ordenar por",
-  "unknownMember": "Miembro desconocido"
+  "unknownMember": "Miembro desconocido",
+  "previousYear": "Año anterior",
+  "nextYear": "Siguiente año"
 }
