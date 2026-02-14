@@ -129,6 +129,8 @@ const SearchFilterBar: React.FC<InterfaceSearchFilterBarProps> = ({
                 buttonLabel={dropdown.label}
                 type={dropdown.type}
                 ariaLabel={`${translations.dropdownAriaLabel} ${dropdown.label}`}
+                containerClassName={dropdown.containerClassName}
+                toggleClassName={dropdown.toggleClassName}
               />
             ))}
           {additionalButtons}

@@ -2524,6 +2524,16 @@ type Mutation {
   ): OrganizationMembershipObject
 
   """
+  Link an OAuth provider to the current authenticated user.
+  """
+  linkOAuthAccount(
+    """
+    Input containing OAuth provider details and authorization code.
+    """
+    input: OAuthLoginInput!
+  ): User
+
+  """
   Mutation to mark a completed action item as pending
   """
   markActionItemAsPending(input: MarkActionItemAsPendingInput!): ActionItem
@@ -2559,6 +2569,16 @@ type Mutation {
   ): MembershipRequest
 
   """
+  Sign in or sign up using an OAuth provider. Exchanges an authorization code for tokens, creates/links user, and returns AuthenticationPayload.
+  """
+  signInWithOAuth(
+    """
+    Input containing OAuth provider details and authorization code.
+    """
+    input: OAuthLoginInput!
+  ): AuthenticationPayload
+
+  """
   Mutation field to sign up to talawa.
   """
   signUp(input: MutationSignUpInput!): AuthenticationPayload
@@ -2572,6 +2592,16 @@ type Mutation {
   Mutation field to unblock a user from an organization.
   """
   unblockUser(organizationId: ID!, userId: ID!): Boolean
+
+  """
+  Unlink an OAuth provider from the current authenticated user.
+  """
+  unlinkOAuthAccount(
+    """
+    The OAuth provider to unlink from the user account.
+    """
+    provider: OAuthProvider!
+  ): User
 
   """
   Mutation to update an action item
@@ -5825,6 +5855,34 @@ type Query {
   Query field to read a venue.
   """
   venue(input: QueryVenueInput!): Venue
+}
+
+"""
+Input for OAuth login and account linking.
+"""
+input OAuthLoginInput {
+  """
+  The authorization code received from the OAuth provider after user authorization.
+  """
+  authorizationCode: String!
+
+  """
+  The OAuth provider to authenticate with.
+  """
+  provider: OAuthProvider!
+
+  """
+  The redirect URI used in the OAuth flow. Must match the URI registered with the provider.
+  """
+  redirectUri: String!
+}
+
+"""
+OAuth providers supported by the platform.
+"""
+enum OAuthProvider {
+  GITHUB
+  GOOGLE
 }
 
 input QueryActionCategoriesByOrganizationInput {

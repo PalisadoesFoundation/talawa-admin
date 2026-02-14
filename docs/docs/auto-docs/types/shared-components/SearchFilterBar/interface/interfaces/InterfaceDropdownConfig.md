@@ -12,6 +12,16 @@ and is rendered using the SortingButton component.
 
 ## Properties
 
+### containerClassName?
+
+> `optional` **containerClassName**: `string`
+
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L113)
+
+Optional extra class for the dropdown container (e.g. from parent CSS module for styling).
+
+***
+
 ### dataTestIdPrefix
 
 > **dataTestIdPrefix**: `string`
@@ -161,6 +171,16 @@ Optional title attribute for the dropdown element.
 ```ts
 "Filter plugins", "Sort options"
 ```
+
+***
+
+### toggleClassName?
+
+> `optional` **toggleClassName**: `string`
+
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L118)
+
+Optional extra class for the dropdown toggle button (e.g. from parent CSS module for styling).
 
 ***
 

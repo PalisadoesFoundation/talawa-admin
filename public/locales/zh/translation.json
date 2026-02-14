@@ -1280,13 +1280,6 @@
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
-  "membershipRequest": {
-    "accept": "接受",
-    "reject": "拒绝",
-    "memberAdded": "它被接受",
-    "joined": "已加入",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
-  },
   "orgUpdate": {
     "city": "城市",
     "countryCode": "国家代码",
@@ -1435,25 +1428,6 @@
     "role": "角色",
     "loading": "加载中...",
     "emailNotAvailable": "邮箱不可用"
-  },
-  "userRegister": {
-    "enterFirstName": "输入您的名字",
-    "enterLastName": "输入您的姓氏",
-    "enterConfirmPassword": "输入您的密码进行确认",
-    "alreadyhaveAnAccount": "已经有帐户？",
-    "login": "登录",
-    "afterRegister": "注册成功。",
-    "passwordNotMatch": "密码不匹配。",
-    "invalidDetailsMessage": "请输入有效的详细信息。",
-    "register": "注册",
-    "firstName": "名字",
-    "lastName": "姓氏",
-    "emailAddress": "电子邮件地址",
-    "enterEmail": "输入电子邮件",
-    "password": "密码",
-    "enterPassword": "输入密码",
-    "confirmPassword": "确认密码",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "userNavbar": {
     "talawa": "塔拉瓦",
@@ -1657,9 +1631,7 @@
     "country": "国家",
     "resetChanges": "重置更改",
     "profileDetails": "个人资料详情",
-    "deleteUserMessage": "通过单击\"删除用户\"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
     "copyLink": "复制个人资料链接",
-    "deleteUser": "删除用户",
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
     "sgender": "选择性别",

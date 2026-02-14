@@ -73,6 +73,8 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   searchPlaceholder,
   showCaret = true,
   menuClassName,
+  containerClassName,
+  toggleClassName,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const resolvedSearchPlaceholder =
@@ -133,8 +135,11 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         className={[
           styles.dropdownContainer,
           parentContainerStyle || '',
+          containerClassName || '',
           isOpen ? styles.dropdownOpen : '',
-        ].join(' ')}
+        ]
+          .filter(Boolean)
+          .join(' ')}
         data-testid={`${dataTestIdPrefix}-container`}
       >
         <Dropdown.Toggle
@@ -156,7 +161,13 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
           placeholder={resolvedSearchPlaceholder}
           icon={icon}
           dataTestIdPrefix={dataTestIdPrefix}
-          className={`${styles.dropdownToggle} ${btnStyle || ''}`}
+          className={[
+            styles.dropdownToggle,
+            btnStyle || '',
+            toggleClassName || '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
         />
 
         <Dropdown.Menu
@@ -202,15 +213,24 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
       className={[
         styles.dropdownContainer,
         parentContainerStyle || '',
+        containerClassName || '',
         isOpen ? styles.dropdownOpen : '',
-      ].join(' ')}
+      ]
+        .filter(Boolean)
+        .join(' ')}
       data-testid={`${dataTestIdPrefix}-container`}
     >
       <Dropdown.Toggle
         id={id}
         variant={variant}
         disabled={disabled}
-        className={[styles.dropdownToggle, btnStyle || ''].join(' ')}
+        className={[
+          styles.dropdownToggle,
+          btnStyle || '',
+          toggleClassName || '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
         aria-label={ariaLabel}
         aria-expanded={isOpen}
         data-testid={`${dataTestIdPrefix}-toggle`}
