@@ -160,6 +160,8 @@ describe('RecurrenceDropdown', () => {
       />,
     );
 
+    const toggle = screen.getByTestId('recurrence-toggle');
+    expect(toggle).toHaveAttribute('aria-label', 'recurring');
     expect(mockT).toHaveBeenCalledWith('recurring');
   });
 
