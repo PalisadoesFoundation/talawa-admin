@@ -65,9 +65,12 @@ interface InterfacePageHeaderProps {
     selected: string | number;
     onChange: (value: string | number) => void;
     testIdPrefix: string;
+    containerClassName?: string;
+    toggleClassName?: string;
   }>;
   showEventTypeFilter?: boolean;
   actions?: React.ReactNode;
+  rootClassName?: string;
 }
 
 export default function PageHeader({
@@ -76,11 +79,14 @@ export default function PageHeader({
   sorting,
   showEventTypeFilter = false,
   actions,
+  rootClassName,
 }: InterfacePageHeaderProps) {
   const { t } = useTranslation('translation');
   return (
     <div
-      className={styles.calendarEventHeader}
+      className={[styles.calendarEventHeader, rootClassName]
+        .filter(Boolean)
+        .join(' ')}
       data-testid="calendarEventHeader"
     >
       <div className={styles.calendar__header}>
@@ -111,6 +117,8 @@ export default function PageHeader({
                 onSortChange={sort.onChange}
                 dataTestIdPrefix={sort.testIdPrefix}
                 className={styles.dropdown}
+                containerClassName={sort.containerClassName}
+                toggleClassName={sort.toggleClassName}
               />
             </div>
           ))}
