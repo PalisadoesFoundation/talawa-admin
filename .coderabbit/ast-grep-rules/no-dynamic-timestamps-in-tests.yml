@@ -1,0 +1,10 @@
+id: no-dynamic-timestamps-in-tests
+language: typescript
+rule:
+  any:
+    - pattern: dayjs()
+    - pattern: moment()
+    - pattern: DateTime.now()
+    - pattern: new Date()
+message: 'Non-deterministic timestamp in test - use fixed UTC string'
+severity: error
