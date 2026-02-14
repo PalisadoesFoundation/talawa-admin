@@ -89,8 +89,7 @@ export interface InterfaceCrudModalBaseProps {
  *
  * This is the foundation component that all specialized modal templates build upon.
  */
-export interface InterfaceCRUDModalTemplateProps
-  extends InterfaceCrudModalBaseProps {
+export interface InterfaceCRUDModalTemplateProps extends InterfaceCrudModalBaseProps {
   /**
    * Content to render inside the modal body
    */
@@ -319,8 +318,9 @@ export interface InterfaceUseModalStateReturn {
 /**
  * Return type for useFormModal hook
  */
-export interface InterfaceUseFormModalReturn<T>
-  extends InterfaceUseModalStateReturn {
+export interface InterfaceUseFormModalReturn<
+  T,
+> extends InterfaceUseModalStateReturn {
   /** Form data being edited */
   formData: T | null;
   /** Sets the form data and opens the modal */
