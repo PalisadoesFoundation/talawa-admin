@@ -108,8 +108,7 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    expect(await screen.findByTestId('testcomp')).toBeInTheDocument();
   });
 
   it(`Component should be rendered properly when user is not superAdmin

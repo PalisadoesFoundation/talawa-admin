@@ -20,7 +20,8 @@
  * @returns The rendered Requests component.
  */
 import { useQuery, useMutation } from '@apollo/client';
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { useSimpleTableData } from 'shared-components/DataTable/hooks/useSimpleTableData';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -100,7 +101,7 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const membershipRequestsResult =
+  const membershipRequestsQuery =
     useQuery<InterfaceMembershipRequestsQueryData>(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
@@ -113,17 +114,33 @@ const Requests = (): JSX.Element => {
       notifyOnNetworkStatusChange: true,
     });
 
-  const { data, loading, error, refetch } = membershipRequestsResult;
+  // Memoized path function for useSimpleTableData (stable reference required)
+  const extractRequests = useCallback(
+    (data: InterfaceMembershipRequestsQueryData) =>
+      data?.organization?.membershipRequests ?? [],
+    [],
+  );
+
+  const {
+    rows: allRequests,
+    loading,
+    error,
+    refetch,
+  } = useSimpleTableData<
+    InterfaceRequestsListItem,
+    InterfaceMembershipRequestsQueryData
+  >(membershipRequestsQuery, {
+    path: extractRequests,
+  });
 
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
 
   // Filter to show only pending requests
   const displayedRequests = useMemo(() => {
-    const requests = data?.organization?.membershipRequests ?? [];
-    return requests.filter(
+    return allRequests.filter(
       (req: InterfaceRequestsListItem) => req.status === 'pending',
     );
-  }, [data]);
+  }, [allRequests]);
 
   // Precompute request index map for O(1) serial number lookup
   const requestIndexMap = useMemo(() => {

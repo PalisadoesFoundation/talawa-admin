@@ -455,6 +455,134 @@ const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(res
 />;
 ```
 
+### Hook: useSimpleTableData
+
+:::note When to use useSimpleTableData
+Use `useSimpleTableData` for GraphQL queries that return **simple arrays** (not connection format).
+For queries with edges/pageInfo, use `useTableData` instead.
+:::
+
+The useSimpleTableData hook integrates array-based GraphQL queries with DataTable. It provides a consistent interface for data extraction, loading states, and error handling.
+
+**Use cases:**
+- Queries returning simple arrays: `data.organization.membershipRequests`
+- Small datasets without pagination
+- Legacy queries not yet migrated to connection format
+
+```ts
+import { useMemo } from 'react';
+import type { QueryResult, ApolloError } from '@apollo/client';
+
+export interface IUseSimpleTableDataOptions<TRow, TData> {
+  /**
+   * Path function to extract array data from GraphQL response.
+   * IMPORTANT: Must be memoized with useCallback for stable reference.
+   */
+  path: (data: TData) => TRow[] | undefined | null;
+}
+
+export interface IUseSimpleTableDataResult<TRow, TData> {
+  rows: TRow[];
+  loading: boolean;
+  error: ApolloError | undefined;
+  /**
+   * Function to refetch the query.
+   * Returns a Promise that resolves with Apollo query result.
+   */
+  refetch: QueryResult<TData>['refetch'];
+}
+
+export function useSimpleTableData<TRow = unknown, TData = unknown>(
+  result: QueryResult<TData>,
+  options: IUseSimpleTableDataOptions<TRow, TData>,
+): IUseSimpleTableDataResult<TRow, TData> {
+  const { data, loading, error, refetch } = result;
+  const { path } = options;
+
+  // Extract rows using the path function
+  // Note: path must be memoized by caller (useCallback) for stable reference
+  const rows = useMemo<TRow[]>(() => {
+    if (!data) return [];
+    const extracted = path(data);
+    return extracted ?? [];
+  }, [data, path]);
+
+  return { rows, loading, error, refetch };
+}
+```
+
+Example with array-based GraphQL query
+
+```tsx
+import { useQuery } from '@apollo/client';
+import { useCallback, useMemo } from 'react';
+import { useSimpleTableData } from 'src/shared-components/DataTable/hooks/useSimpleTableData';
+import { DataTable } from 'src/shared-components/DataTable/DataTable';
+
+interface InterfaceRequestsListItem {
+  membershipRequestId: string;
+  status: string;
+  user: {
+    id: string;
+    name: string;
+    emailAddress: string;
+  };
+}
+
+interface InterfaceMembershipRequestsQueryData {
+  organization?: {
+    membershipRequests?: InterfaceRequestsListItem[];
+  } | null;
+}
+
+// Query returns simple array, not connection format
+const result = useQuery<InterfaceMembershipRequestsQueryData>(MEMBERSHIP_REQUEST_PG, {
+  variables: { input: { id: orgId }, first: 10 },
+});
+
+// IMPORTANT: Memoize path function for stable reference (required)
+const extractRequests = useCallback(
+  (data: InterfaceMembershipRequestsQueryData) =>
+    data?.organization?.membershipRequests ?? [],
+  []
+);
+
+const { rows, loading, error, refetch } = useSimpleTableData<
+  InterfaceRequestsListItem,
+  InterfaceMembershipRequestsQueryData
+>(result, {
+  path: extractRequests,
+});
+
+// Optional: filter or transform rows
+const displayedRows = useMemo(() =>
+  rows.filter(req => req.status === 'pending'),
+  [rows]
+);
+
+<DataTable<InterfaceRequestsListItem>
+  data={displayedRows}
+  columns={columns}
+  rowKey="membershipRequestId"
+  loading={loading}
+  error={error}
+  emptyMessage="No pending requests"
+/>;
+```
+
+**Comparison: useTableData vs useSimpleTableData**
+
+| Feature | useTableData | useSimpleTableData |
+| --- | --- | --- |
+| **Query format** | Connection (edges/pageInfo) | Simple array |
+| **Pagination** | Server-side (cursor-based) | Client-side or none |
+| **Returns** | rows, pageInfo, loadingMore, fetchMore | rows, loading, error, refetch |
+| **Error type** | Error \| null | ApolloError \| undefined |
+| **Refetch type** | QueryResult refetch (Promise) | QueryResult refetch (Promise) |
+| **Path function** | Can be inline or memoized | **Must be memoized with useCallback** |
+| **Use case** | Large datasets, infinite scroll | Small datasets, simple lists |
+| **Example** | Users list with pagination | Membership requests |
+
 ## Pagination
 
 The DataTable supports both client-side and server-side pagination for consistent UX across screens.
