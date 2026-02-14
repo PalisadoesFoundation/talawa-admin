@@ -223,18 +223,18 @@ export default defineConfig({
     specPattern: 'cypress/e2e/**/*.cy.ts',
     supportFile: 'cypress/support/e2e.ts',
 
-    defaultCommandTimeout: 50000,
-    requestTimeout: 50000,
-    responseTimeout: 50000,
-    pageLoadTimeout: 50000,
+    defaultCommandTimeout: 30000,
+    requestTimeout: 30000,
+    responseTimeout: 30000,
+    pageLoadTimeout: 30000,
 
-    testIsolation: false, // Keep state between tests in same spec
+    testIsolation: true, // Reset browser context between tests
     experimentalRunAllSpecs: true,
 
     watchForFileChanges: true,
     chromeWebSecurity: false,
     retries: {
-      runMode: 3,
+      runMode: 2,
       openMode: 0,
     },
 
