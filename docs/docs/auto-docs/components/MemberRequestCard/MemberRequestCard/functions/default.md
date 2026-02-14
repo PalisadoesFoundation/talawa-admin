@@ -12,7 +12,7 @@ Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:52](https://
 
 ### \_\_namedParameters
 
-[`InterfaceMemberRequestCardProps`](../../../../types/Member/interface/interfaces/InterfaceMemberRequestCardProps.md)
+`InterfaceMemberRequestCardProps`
 
 ## Returns
 
