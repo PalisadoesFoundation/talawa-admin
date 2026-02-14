@@ -21,3 +21,7 @@ import '@cypress/code-coverage/support';
 Cypress.on('uncaught:exception', () => {
   return false;
 });
+
+afterEach(() => {
+  cy.clearAllGraphQLMocks();
+});
