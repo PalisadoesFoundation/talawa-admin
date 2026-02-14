@@ -6,6 +6,7 @@ export const testConfig = {
     'vitest-isolation': vitestIsolation,
   },
   rules: {
+    'react/no-multi-comp': 'off',
     'vitest-isolation/require-aftereach-cleanup': 'error',
     'no-restricted-syntax': [
       'error',

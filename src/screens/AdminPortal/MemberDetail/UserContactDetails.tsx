@@ -55,6 +55,7 @@ import {
 import dayjs from 'dayjs';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { validatePassword } from 'utils/passwordValidator';
+import { removeEmptyFields } from 'utils/userUpdateUtils';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { resolveAvatarFile } from './resolveAvatarFile';
@@ -179,14 +180,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     setNewAvatarUploaded(true);
   };
   const handleUserUpdate = async (): Promise<void> => {
-    const removeEmptyFields = <T extends Record<string, string | File | null>>(
-      obj: T,
-    ) =>
-      Object.fromEntries(
-        Object.entries(obj).filter(
-          ([, v]) => v != null && (typeof v !== 'string' || v.trim()),
-        ),
-      ) as Partial<T>;
     const passwordError = formState.password
       ? validatePassword(formState.password)
       : null;
