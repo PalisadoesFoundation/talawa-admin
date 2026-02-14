@@ -413,11 +413,14 @@ describe('Testing Users screen', () => {
 
     // Wait for the "no results" message
     expect(await screen.findByTestId('users-empty-state')).toBeInTheDocument();
-    const message = screen.getByTestId('users-empty-state-message');
 
-    expect(message).toHaveTextContent(
-      i18nForTest.t('common:noResultsFoundFor', { query: 'NonexistentName' }),
-    );
+    // Wait for the search state to update and display the correct message
+    await waitFor(() => {
+      const message = screen.getByTestId('users-empty-state-message');
+      expect(message).toHaveTextContent(
+        i18nForTest.t('common:noResultsFoundFor', { query: 'NonexistentName' }),
+      );
+    });
 
     expect(
       screen.getByTestId('users-empty-state-description'),

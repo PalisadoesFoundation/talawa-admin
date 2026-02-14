@@ -261,7 +261,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
     });
 
@@ -308,7 +308,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
 
       // Switch to blocked users view
@@ -329,7 +329,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No spammer found')).toBeInTheDocument();
       });
     });
 
@@ -351,7 +351,12 @@ describe('BlockUser Component', () => {
       await waitFor(() => {
         expect(screen.getByTestId('errorBlockedUsers')).toBeInTheDocument();
         expect(
-          screen.getByText(/errorLoadingBlockedUsers/i),
+          screen.getByText((content, element) => {
+            return (
+              element?.textContent ===
+              'Error occurred while loading blocked users dataFailed to fetch blocked users'
+            );
+          }),
         ).toBeInTheDocument();
       });
     });
@@ -373,7 +378,14 @@ describe('BlockUser Component', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('errorMembers')).toBeInTheDocument();
-        expect(screen.getByText(/errorLoadingMembers/i)).toBeInTheDocument();
+        expect(
+          screen.getByText((content, element) => {
+            return (
+              element?.textContent ===
+              'Error occurred while loading members dataFailed to fetch members'
+            );
+          }),
+        ).toBeInTheDocument();
       });
     });
   });
@@ -456,7 +468,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
     });
 
@@ -491,7 +503,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No spammer found')).toBeInTheDocument();
       });
     });
   });
@@ -684,7 +696,9 @@ describe('BlockUser Component', () => {
       // Wait for debounced search to complete
       await waitFor(
         () => {
-          expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+          expect(
+            screen.getByText('No results found for nonexistent'),
+          ).toBeInTheDocument();
         },
         { timeout: 500 },
       );
@@ -729,7 +743,9 @@ describe('BlockUser Component', () => {
       // Wait for debounced search to complete
       await waitFor(
         () => {
-          expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+          expect(
+            screen.getByText('No results found for nonexistent'),
+          ).toBeInTheDocument();
         },
         { timeout: 500 },
       );
@@ -806,14 +822,14 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
 
-      const blockButton = screen.getByTestId('blockUser1');
+      const blockButton = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
     });
@@ -849,14 +865,14 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
 
-      const unblockButton = screen.getByTestId('blockUser3');
+      const unblockButton = screen.getByTestId('unblockUserBtn-3');
       await act(async () => {
         fireEvent.click(unblockButton);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'Un-BlockedSuccessfully',
+          'User Un-Blocked successfully',
         );
       });
     });
@@ -880,7 +896,7 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
 
-      const blockButton = screen.getByTestId('blockUser1');
+      const blockButton = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton);
       });
@@ -921,7 +937,7 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
 
-      const unblockButton = screen.getByTestId('blockUser3');
+      const unblockButton = screen.getByTestId('unblockUserBtn-3');
       await act(async () => {
         fireEvent.click(unblockButton);
       });
@@ -952,26 +968,26 @@ describe('BlockUser Component', () => {
       });
 
       // Block first user
-      const blockButton1 = screen.getByTestId('blockUser1');
+      const blockButton1 = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton1);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
 
       // Block second user
-      const blockButton2 = screen.getByTestId('blockUser2');
+      const blockButton2 = screen.getByTestId('blockUserBtn-2');
       await act(async () => {
         fireEvent.click(blockButton2);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
 
@@ -982,7 +998,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
     });
 
@@ -1007,14 +1023,14 @@ describe('BlockUser Component', () => {
       });
 
       // Block John Doe
-      const blockButton = screen.getByTestId('blockUser1');
+      const blockButton = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
 
@@ -1056,7 +1072,7 @@ describe('BlockUser Component', () => {
         </I18nextProvider>,
       );
 
-      expect(document.title).toBe('title');
+      expect(document.title).toBe('Block/Unblock User');
     });
 
     it('renders table headers correctly', async () => {
@@ -1076,9 +1092,9 @@ describe('BlockUser Component', () => {
 
       // Check for table headers
       expect(screen.getByText('#')).toBeInTheDocument();
-      expect(screen.getByText('name')).toBeInTheDocument();
-      expect(screen.getByText('email')).toBeInTheDocument();
-      expect(screen.getByText('block_unblock')).toBeInTheDocument();
+      expect(screen.getByText('Name')).toBeInTheDocument();
+      expect(screen.getByText('Email')).toBeInTheDocument();
+      expect(screen.getByText('Block/Unblock')).toBeInTheDocument();
     });
   });
 });

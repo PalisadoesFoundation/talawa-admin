@@ -85,22 +85,32 @@ const removeItem = (key: string): void => {
 };
 
 // Mock window.location
-const mockLocation = {
-  href: 'http://localhost/',
-  assign: vi.fn(),
-  reload: vi.fn(),
-  pathname: '/',
-  search: '',
-  hash: '',
-  origin: 'http://localhost',
-};
+const mockAssign = vi.fn();
+const mockReload = vi.fn();
 
-// Store original location for restoration
+let mockHref = 'http://localhost/';
+
+// Save original location to restore later
 const originalLocation = window.location;
 
+delete (window as { location?: Location }).location;
 Object.defineProperty(window, 'location', {
-  value: mockLocation,
+  value: {
+    get href() {
+      return mockHref;
+    },
+    set href(value: string) {
+      mockHref = value;
+    },
+    assign: mockAssign,
+    reload: mockReload,
+    pathname: '/',
+    search: '',
+    hash: '',
+    origin: 'http://localhost',
+  },
   writable: true,
+  configurable: true,
 });
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -257,21 +267,36 @@ beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
   setItem('SuperAdmin', false);
+
+  // Reset location mocks
+  mockAssign.mockClear();
+  mockReload.mockClear();
+  mockHref = 'http://localhost/';
+
   vi.clearAllMocks();
 });
 
 afterEach(() => {
   for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
 
-  // Restore original window.location to prevent test pollution
+  // Reset location mocks
+  mockAssign.mockClear();
+  mockReload.mockClear();
+  mockHref = 'http://localhost/';
+
+  cleanup();
+
+  vi.clearAllMocks();
+});
+
+afterAll(() => {
+  // Restore original window.location
+  delete (window as { location?: Location }).location;
   Object.defineProperty(window, 'location', {
     value: originalLocation,
     writable: true,
+    configurable: true,
   });
-
-  // Clear all mocks to prevent test pollution in sharded environments
-  vi.restoreAllMocks();
-  cleanup();
 });
 
 describe('Testing Requests screen', () => {
@@ -387,7 +412,7 @@ describe('Testing Requests screen', () => {
     );
 
     await waitFor(() => {
-      expect(window.location.assign).toHaveBeenCalledWith('/admin/orglist');
+      expect(mockAssign).toHaveBeenCalledWith('/admin/orglist');
     });
   });
 

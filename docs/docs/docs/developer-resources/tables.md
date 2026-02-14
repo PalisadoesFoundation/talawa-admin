@@ -1199,3 +1199,366 @@ const columns: IColumnDef<IPeopleTableRow>[] = [
 5. **Pagination**: Keep external pagination controls (like PaginationList) when needed for server-side pagination.
 
 6. **Preserved test IDs**: Add `data-testid` attributes in render functions to maintain test compatibility.
+
+## Testing DataTable Components
+
+### Core Testing Principles
+
+When testing components that use DataTable, follow these patterns to ensure reliable, maintainable tests.
+
+#### 1. Always Use I18nextProvider
+
+DataTable components often use translated strings. Always wrap test renders with I18nextProvider to prevent translation errors.
+
+```tsx
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+
+it('renders user table', async () => {
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Users />
+        </BrowserRouter>
+      </MockedProvider>
+    </I18nextProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+  });
+});
+```
+
+**Why:** Missing I18nextProvider causes tests to fail with translation key errors like "Missing translation for key: users.title"
+
+#### 2. Avoid Fixed Waits - Use waitFor Instead
+
+❌ **Bad - Fixed waits are flaky:**
+```tsx
+await wait(500); // Arbitrary timeout, may fail in CI
+expect(screen.getByText('John Doe')).toBeInTheDocument();
+```
+
+✅ **Good - Use waitFor for assertions:**
+```tsx
+await waitFor(() => {
+  expect(screen.getByText('John Doe')).toBeInTheDocument();
+});
+```
+
+**Why:** Fixed waits create race conditions in sharded test environments. `waitFor` polls until the condition is met or times out, making tests reliable across different machine speeds.
+
+#### 3. TestID Naming Conventions
+
+Use descriptive, unique test IDs that clearly indicate the element's purpose.
+
+**Pattern for action buttons:**
+```tsx
+// ✅ Good - Distinct IDs for different actions
+<Button data-testid={`blockUser${userId}`}>Block</Button>
+<Button data-testid={`unblockUser${userId}`}>Unblock</Button>
+
+// ❌ Bad - Same ID for different actions
+<Button data-testid={`blockUser${userId}`}>
+  {isBlocked ? 'Unblock' : 'Block'}
+</Button>
+```
+
+**Pattern for table elements:**
+```tsx
+// Table container
+<div data-testid="datatable">
+
+// Empty state
+<div data-testid="users-empty-state">
+
+// Loading state
+<div data-testid="TableLoader">
+
+// Error state
+<div data-testid="errorMembers">
+```
+
+**Why:** Unique test IDs prevent selector ambiguity and make tests easier to debug when they fail.
+
+#### 4. Testing Loading States
+
+Test both initial loading and data-loaded states:
+
+```tsx
+it('shows loading state then data', async () => {
+  const delayedMocks = [
+    {
+      request: { query: USER_LIST },
+      result: { data: mockUsers },
+      delay: 100, // Simulate network delay
+    },
+  ];
+
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={delayedMocks}>
+        <Users />
+      </MockedProvider>
+    </I18nextProvider>,
+  );
+
+  // Assert loading state is shown
+  expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+
+  // Wait for loading to finish
+  await waitFor(() => {
+    expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+  });
+
+  // Assert data is displayed
+  await waitFor(() => {
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+});
+```
+
+#### 5. Testing Error States
+
+Test error handling with ErrorPanel:
+
+```tsx
+it('displays error panel when query fails', async () => {
+  const errorMocks = [
+    {
+      request: { query: USER_LIST },
+      error: new Error('Network error'),
+    },
+  ];
+
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={errorMocks}>
+        <Users />
+      </MockedProvider>
+    </I18nextProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    expect(screen.getByText(/Network error/i)).toBeInTheDocument();
+  });
+});
+```
+
+#### 6. Testing Empty States
+
+Test both "no data" and "no search results" scenarios:
+
+```tsx
+it('shows empty state when no users exist', async () => {
+  const emptyMocks = [
+    {
+      request: { query: USER_LIST },
+      result: {
+        data: {
+          allUsers: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  ];
+
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={emptyMocks}>
+        <Users />
+      </MockedProvider>
+    </I18nextProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('users-empty-state')).toBeInTheDocument();
+    expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
+  });
+});
+
+it('shows no results when search yields empty', async () => {
+  // Test search with no matches
+  const searchInput = await screen.findByTestId('searchByName');
+  await userEvent.type(searchInput, 'NonexistentName');
+  await userEvent.click(screen.getByTestId('searchButton'));
+
+  await waitFor(() => {
+    expect(screen.getByText(/no results found/i)).toBeInTheDocument();
+  });
+});
+```
+
+#### 7. Testing Async User Interactions
+
+When testing user interactions that trigger async operations, wrap assertions in `waitFor`:
+
+```tsx
+it('blocks a user successfully', async () => {
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={mocksWithMutation}>
+        <BlockUser />
+      </MockedProvider>
+    </I18nextProvider>,
+  );
+
+  // Wait for initial data load
+  await waitFor(() => {
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+
+  // Click block button
+  const blockButton = screen.getByTestId('blockUser1');
+  await userEvent.click(blockButton);
+
+  // Wait for mutation result
+  await waitFor(() => {
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      'blockedSuccessfully',
+    );
+  });
+});
+```
+
+#### 8. Mock Cleanup Best Practices
+
+Use `vi.restoreAllMocks()` in `afterEach` to prevent test pollution:
+
+```tsx
+afterEach(() => {
+  cleanup(); // Clean up React components
+  vi.restoreAllMocks(); // Restore all mocked functions
+});
+```
+
+**Why `vi.restoreAllMocks()` instead of `vi.clearAllMocks()`:**
+- `restoreAllMocks()` both clears mock history AND restores original implementations
+- `clearAllMocks()` only clears call history but keeps mocks active
+- Using `restoreAllMocks()` prevents mock leakage between tests in sharded environments
+
+### Testing Pagination
+
+#### Server-side Pagination (useTableData)
+
+Test infinite scroll behavior:
+
+```tsx
+it('loads more users on scroll', async () => {
+  const paginationMocks = [
+    {
+      request: {
+        query: USER_LIST,
+        variables: { first: 12, after: null },
+      },
+      result: {
+        data: {
+          allUsers: {
+            edges: mockUsers(12),
+            pageInfo: { hasNextPage: true, endCursor: 'cursor1' },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_LIST,
+        variables: { first: 12, after: 'cursor1' },
+      },
+      result: {
+        data: {
+          allUsers: {
+            edges: mockUsers(12, 12), // Next page
+            pageInfo: { hasNextPage: false, endCursor: 'cursor2' },
+          },
+        },
+      },
+    },
+  ];
+
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={paginationMocks}>
+        <Users />
+      </MockedProvider>
+    </I18nextProvider>,
+  );
+
+  // Wait for first page
+  await waitFor(() => {
+    expect(screen.getByText('User 1')).toBeInTheDocument();
+  });
+
+  // Trigger scroll
+  window.dispatchEvent(new Event('scroll'));
+  Object.defineProperty(window, 'scrollY', { value: 5000, writable: true });
+
+  // Wait for second page
+  await waitFor(() => {
+    expect(screen.getByText('User 13')).toBeInTheDocument();
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+  });
+});
+```
+
+#### Client-side Pagination
+
+Test page navigation:
+
+```tsx
+it('navigates between pages', async () => {
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={mocks}>
+        <UsersList />
+      </MockedProvider>
+    </I18nextProvider>,
+  );
+
+  // Verify first page
+  await waitFor(() => {
+    expect(screen.getByText('User 1')).toBeInTheDocument();
+    expect(screen.queryByText('User 11')).not.toBeInTheDocument();
+  });
+
+  // Click next page
+  await userEvent.click(screen.getByLabelText('Go to next page'));
+
+  // Verify second page
+  await waitFor(() => {
+    expect(screen.queryByText('User 1')).not.toBeInTheDocument();
+    expect(screen.getByText('User 11')).toBeInTheDocument();
+  });
+});
+```
+
+### Common Testing Pitfalls
+
+1. **Missing I18nextProvider**: Always wrap renders with I18nextProvider
+2. **Fixed waits**: Use `waitFor` instead of `await wait(ms)`
+3. **Inconsistent test IDs**: Use unique, descriptive test IDs
+4. **Not testing loading states**: Test both loading and loaded states
+5. **Not testing error states**: Test error handling with retry functionality
+6. **Incomplete mock cleanup**: Use `vi.restoreAllMocks()` in afterEach
+7. **Race conditions**: Wrap async assertions in `waitFor`
+
+### Testing Checklist
+
+When adding tests for DataTable components, ensure:
+
+- [ ] I18nextProvider wraps all renders
+- [ ] No fixed waits (`await wait(ms)`)
+- [ ] All assertions use `waitFor` when checking async updates
+- [ ] Unique test IDs for all interactive elements
+- [ ] Loading state is tested
+- [ ] Error state is tested (with retry if applicable)
+- [ ] Empty state is tested
+- [ ] Search/filter functionality is tested
+- [ ] Pagination is tested (if applicable)
+- [ ] `vi.restoreAllMocks()` is called in afterEach
+- [ ] Test coverage ≥95% for edited files
