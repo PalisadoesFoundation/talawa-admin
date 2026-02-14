@@ -250,6 +250,40 @@ reviews:
           - Search for: `window.location =`, `window.* =`, `global.* =`, `process.env.* =`
           - Verify corresponding save/restore in beforeEach/afterEach
           - Flag missing restoration as CRITICAL for sharded CI
+  
+        Anti-Pattern: Fixed Waits/Sleeps (CRITICAL for CI Flakiness):
+        - ❌ CRITICAL: Flag ANY usage of fixed time delays in tests:
+          ```typescript
+          // These cause flakiness in variable-latency CI:
+          await wait(200);
+          await wait(1000);
+          await sleep(500);
+          setTimeout(..., 1000);
+          await new Promise(resolve => setTimeout(resolve, 500));
+          ```
+        - ✅ REQUIRE: Condition-based async queries instead:
+          ```typescript
+          // Use findBy* (waits up to 1s by default):
+          const element = await screen.findByTestId('datatable');
+          
+          // Or waitFor with condition:
+          await waitFor(() => expect(mockFn).toHaveBeenCalled());
+          
+          // For debounce/throttle, use fake timers:
+          vi.useFakeTimers();
+          await userEvent.type(input, 'search');
+          vi.advanceTimersByTime(300); // DEBOUNCE_MS
+          await waitFor(() => expect(refetch).toHaveBeenCalled());
+          vi.useRealTimers();
+          ```
+        - Detection Pattern:
+          - Search for: `wait(`, `sleep(`, `setTimeout(`, `new Promise.*setTimeout`
+          - Exceptions: `waitFor(`, `findBy`, `findAllBy` (these are good)
+          - Flag every fixed-time wait as HIGH PRIORITY for refactoring
+        - Why This Matters:
+          - Fixed waits assume consistent response times
+          - CI sharding introduces variable latency
+          - Root cause of most test flakiness in distributed environments
 
         Structure:
         - No it.skip/describe.skip unless commented with reason + linked issue.
