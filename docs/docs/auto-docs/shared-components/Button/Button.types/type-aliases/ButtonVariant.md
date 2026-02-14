@@ -4,7 +4,7 @@
 
 # Type Alias: ButtonVariant
 
-> **ButtonVariant** = `BootstrapButtonVariant` \| `"outlined"` \| `"outline"` \| `string` & `object`
+> **ButtonVariant** = `BootstrapButtonVariant` \| `"outlined"` \| `"outline"` \| `"contained"` \| `"text"` \| `string` & `object`
 
 Defined in: [src/shared-components/Button/Button.types.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L19)
 

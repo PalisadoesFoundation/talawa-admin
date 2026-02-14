@@ -1,8 +1,9 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -12,6 +13,10 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('Button', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -38,14 +43,26 @@ describe('Button', () => {
     'outlined',
     'outline',
     'link',
+    'contained',
+    'text',
   ])('renders with variant %s', (variant) => {
     render(<Button variant={variant}>Variant</Button>);
     const button = screen.getByRole('button', { name: 'Variant' });
     const expectedClass =
       variant === 'outlined' || variant === 'outline'
         ? 'btn-outline-primary'
-        : `btn-${variant}`;
+        : variant === 'contained'
+          ? 'btn-primary'
+          : variant === 'text'
+            ? 'btn-link'
+            : `btn-${variant}`;
     expect(button).toHaveClass(expectedClass);
+  });
+
+  it('renders with primary variant for unknown variant strings', () => {
+    render(<Button variant="unknown-variant">Test</Button>);
+    const button = screen.getByRole('button', { name: 'Test' });
+    expect(button).toHaveClass('btn-primary');
   });
 
   it('renders all size options', () => {
@@ -79,10 +96,10 @@ describe('Button', () => {
     expect(button).toHaveClass('custom-class');
   });
 
-  it('calls onClick', () => {
+  it('calls onClick', async () => {
     const handleClick = vi.fn();
     render(<Button onClick={handleClick}>Click</Button>);
-    fireEvent.click(screen.getByRole('button', { name: 'Click' }));
+    await user.click(screen.getByRole('button', { name: 'Click' }));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
@@ -149,7 +166,7 @@ describe('Button', () => {
     expect(screen.getByTestId('button-spinner')).toBeInTheDocument();
   });
 
-  it('integrates with form submit', () => {
+  it('integrates with form submit', async () => {
     const onSubmit = vi.fn((e: React.FormEvent<HTMLFormElement>) =>
       e.preventDefault(),
     );
@@ -158,7 +175,7 @@ describe('Button', () => {
         <Button type="submit">Submit</Button>
       </form>,
     );
-    fireEvent.submit(screen.getByTestId('form'));
+    await user.click(screen.getByRole('button', { name: 'Submit' }));
     expect(onSubmit).toHaveBeenCalledTimes(1);
   });
 

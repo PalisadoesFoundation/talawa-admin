@@ -1,16 +1,15 @@
 /**
  * Interface for SidebarNavItem component props.
  *
- * @interface ISidebarNavItemProps
- * @property {string} to - Navigation target URL
- * @property {React.ReactNode} icon - Icon component or element
- * @property {string} label - Display label for the navigation item
- * @property {string} testId - Test ID for testing purposes
- * @property {boolean} hideDrawer - Whether the drawer is hidden/collapsed
- * @property {() => void} [onClick] - Optional click handler
- * @property {boolean} [useSimpleButton] - Use simple button style (for org drawers)
- * @property {'react-icon' | 'svg'} [iconType] - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
- * @property {string} [dataCy] - Cypress E2E test selector (data-cy attribute)
+ * @param to - Navigation target URL
+ * @param icon - Icon component or element
+ * @param label - Display label for the navigation item
+ * @param testId - Test ID for testing purposes
+ * @param hideDrawer - Whether the drawer is hidden/collapsed
+ * @param onClick - (Optional) Click handler
+ * @param useSimpleButton - (Optional) Use simple button style (for org drawers)
+ * @param iconType - (Optional) Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+ * @param dataCy - (Optional) Cypress E2E test selector (data-cy attribute)
  */
 export interface ISidebarNavItemProps {
   to: string;

@@ -4,11 +4,9 @@
 
 # Interface: InterfaceEmptyStateProps
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L7)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L4)
 
 Props interface for the EmptyState component.
-
- InterfaceEmptyStateProps
 
 ## Properties
 
@@ -16,7 +14,7 @@ Props interface for the EmptyState component.
 
 > `optional` **action**: `object`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L27)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L23)
 
 Action button configuration.
 
@@ -42,7 +40,7 @@ Action button configuration.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L36)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L32)
 
 Custom CSS class name.
 
@@ -52,7 +50,7 @@ Custom CSS class name.
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L41)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L37)
 
 Test identifier.
 
@@ -62,9 +60,9 @@ Test identifier.
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L17)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L13)
 
-Optional secondary description text.
+(Optional) Secondary description text.
 
 ***
 
@@ -72,7 +70,7 @@ Optional secondary description text.
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L22)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L18)
 
 Icon to display above the message.
 
@@ -82,8 +80,6 @@ Icon to display above the message.
 
 > **message**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L12)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EmptyState/interface.ts#L8)
 
-Primary message to display (i18n key or plain string).
-
-#### Required
+Primary message to display (i18n key or plain string) (Required).
