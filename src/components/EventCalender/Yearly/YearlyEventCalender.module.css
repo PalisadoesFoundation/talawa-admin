@@ -16,7 +16,6 @@
   padding: var(--space-2);
   text-align: center;
   height: var(--space-8);
-  margin: var(--size-1px);
 }
 
 .day__events {
@@ -33,7 +32,7 @@
   top: 0;
   left: 0;
   background-color: var(--expandListContainer-bg);
-  border: var(--border-1) solid var(--expandListContainer-border);
+  border: 1px solid var(--expandListContainer-border);
   border-radius: var(--space-2);
   margin: var(--space-2);
 }
@@ -112,7 +111,7 @@
 .cardYearlyEventCalender {
   padding: var(--space-5);
   text-align: center;
-  height: var(--space-30);
+  height: var(--space-21);
 }
 
 .cardHeaderYearlyEventCalender {
@@ -134,7 +133,6 @@
 .weekdayHeaderRow {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: var(--size-2px);
   margin-bottom: var(--space-3);
   padding: 0 var(--space-3);
 }
@@ -143,10 +141,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--weekdayYearly-bg);
   font-weight: var(--font-weight-semibold);
   padding: var(--space-2);
-  font-size: small;
+  font-size: var(--font-size-sm);
 }
 
 .yearlyCalendarHeader {
@@ -168,15 +165,10 @@
   margin: 0 var(--space-6);
 }
 
-.rowYearlyEventCalender {
-  margin: var(--size-1px) var(--size-n5px);
-}
-
 .rowYearlyEventCalender::after {
   content: '';
   display: table;
   clear: both;
-  margin: 0 var(--size-n5px);
 }
 
 .yearlyCalender {
@@ -188,5 +180,4 @@
   font-family: var(--font-family-sans, 'Outfit', sans-serif);
   padding: var(--space-6);
   background-color: var(--calendar-bg);
-  min-height: var(--size-80vh);
 }
