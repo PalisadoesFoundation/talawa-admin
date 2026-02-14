@@ -68,6 +68,14 @@ reviews:
         4. PATTERN: .catch(() => {}) without re-throw or assertion
           FLAG AS: "❌ SILENT ERROR - Add fallback assertion at file:line"
 
+        5. PATTERN: dayjs(), moment(), DateTime.now(), or new Date() without arguments in test data
+          FLAG AS: "❌ BLOCKING - Non-deterministic timestamp at file:line - Use fixed UTC string"
+          WHY: Captures current time, causes flakiness in sharded CI
+
+        6. PATTERN: expect(...) after await userEvent or await waitFor, not inside waitFor
+          FLAG AS: "❌ BLOCKING - Race condition at file:line - Move assertion inside waitFor"
+          WHY: State changes may not propagate before assertion runs
+
         ═══════════════════════════════════════════════════════════════
 
         Post a single, structured comment with these sections: Issue Goals, Tests (incl. Flakiness), Components/Policy, GraphQL, i18n & a11y, Security, Action Items.
@@ -81,8 +89,14 @@ reviews:
           - ✅ Use: `.getUTCDate()`, `.getUTCMonth()`, `.getUTCDay()`, `.getUTCHours()`, `.getUTCMinutes()`, `.getUTCSeconds()`
           - ❌ NEVER use: `.getDate()`, `.getMonth()`, `.getDay()`, `.getHours()`, `.getMinutes()`, `.getSeconds()`
         - All test dates must use fixed UTC timestamps (e.g., `"2025-01-01T10:00:00Z"`)
-        - Avoid `new Date()` without arguments (uses current time)
-        - Avoid `Date.now()` in tests (use fixed timestamps or mock timers)
+        - ❌ FORBIDDEN PATTERNS (capture current time):
+          - `dayjs()` without arguments (use `dayjs('2025-01-01T10:00:00Z')`)
+          - `moment()` without arguments (use `moment('2025-01-01T10:00:00Z')`)
+          - `DateTime.now()` (luxon) (use `DateTime.fromISO('2025-01-01T10:00:00Z')`)
+          - `new Date()` without arguments (use `new Date('2025-01-01T10:00:00.000Z')`)
+          - `Date.now()` (use fixed timestamp number or mock timers)
+        - Pattern to flag: `(dayjs|moment|DateTime\.now|new Date)\(\s*\)` in test data/mocks
+        - Report as "🔴 NON-DETERMINISTIC TIMESTAMP at file:line — Replace with fixed UTC string"
         - Flag ANY usage of local timezone methods as CRITICAL - these cause CI flakiness in non-UTC environments
 
         Test quality (Vitest + RTL):
@@ -116,13 +130,17 @@ reviews:
         - Exception: Only allow setTimeout in beforeEach/afterEach for test infrastructure setup (must have comment explaining why)
 
         Assertion placement (MANDATORY):
-        - ALL mock function assertions (toHaveBeenCalled, toHaveBeenCalledWith) MUST be inside waitFor blocks
-        - ALL state change assertions MUST be inside waitFor blocks
-        - Pattern to flag: "expect(.*).toHaveBeenCalled" outside waitFor scope
-        - Report as "🔴 RACE CONDITION at file:line — Assertion outside waitFor block"
-        - Valid pattern:
-          ✅ await waitFor(() => { expect(mockFn).toHaveBeenCalled(); });
+        - ALL assertions after async operations MUST be inside waitFor blocks.
+        - Patterns to flag as BLOCKING:
+          ❌ await userEvent.type(...); expect(...).toBeInTheDocument();
           ❌ await waitFor(() => ...); expect(mockFn).toHaveBeenCalled();
+          ❌ fireEvent.click(...); expect(...).toHaveAttribute(...);
+          ✅ await userEvent.type(...); await waitFor(() => expect(...).toBeInTheDocument());
+        - Specific patterns to search:
+          * `expect\([^)]+\)\.(toHaveBeenCalled|toBeInTheDocument|toHaveAttribute)` NOT inside `waitFor\(`
+          * Any `expect(` within 3 lines after `await userEvent.` or `fireEvent.` that's NOT in `waitFor`
+        - Report as "🔴 RACE CONDITION at file:line — Assertion outside waitFor block after async operation"
+        - Exception: Assertions before any async operations in test case are safe.
 
         Async patterns (NO RACE CONDITIONS):
         - NO hardcoded setTimeout or fixed delays; use waitFor with explicit assertions.
@@ -219,7 +237,6 @@ reviews:
         - No duplicate or conflicting operations; watch pagination params (first/last).
         - Components using these operations must handle loading and error states in UI.
 
-        # NEW: Schema validation
         Schema compliance (CRITICAL):
         - For each mutation/query, verify ALL input fields in the schema are used by components.
         - For each component form, verify ALL form fields are sent in the mutation variables.
@@ -227,6 +244,21 @@ reviews:
         - Report as "🔴 SCHEMA MISMATCH at file:line — Field '<name>' in form but not in mutation schema"
         - Flag any mutation accepting field X but component doesn't provide it.
         - Report as "⚠️ MISSING FIELD at file:line — Mutation expects '<name>' but component doesn't send it"
+
+        Query completeness (CRITICAL):
+        - For each GraphQL query, trace ALL components that use the query data.
+        - For each field accessed in component code (e.g., `event.fieldName`, `data.queryName[0].fieldName`):
+          MUST verify the field is fetched in the query.
+        - Common patterns to check:
+          * Object property access: `data.events.map(e => e.fieldName)`
+          * Destructuring: `const { fieldName } = event;`
+          * Optional chaining: `event?.fieldName`
+        - Flag if component accesses a field NOT in the query selection set.
+        - Report as "🔴 MISSING QUERY FIELD at file:line — Component uses 'fieldName' but query doesn't fetch it"
+        - Example violation:
+          ❌ Query: `{ id name }` but Component: `event.isRecurringEventTemplate`
+          ✅ Query: `{ id name isRecurringEventTemplate }`
+        - Check both direct usage and passed to child components as props.
 
     - path: '**/*.module.css'
       instructions: |
