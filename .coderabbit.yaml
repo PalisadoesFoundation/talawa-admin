@@ -177,6 +177,80 @@ reviews:
         - Example: handleChangeRowsPerPage calls refetch(...rowsPerPage...) BUT useEffect([rowsPerPage]) also refetches.
         - Report as "⚠️ DOUBLE REFETCH at file:line — Both handler and useEffect refetch on same state change".
 
+        I18n Provider Requirement:
+        - All component tests MUST wrap with I18nextProvider for consistent translation behavior
+        - ❌ Relying on key fallbacks causes brittle tests that break on i18n changes
+        - ✅ Wrap all renders:
+          ```typescript
+          import { I18nextProvider } from 'react-i18next';
+          import i18nForTest from 'utils/i18nForTest';
+          
+          render(
+            <I18nextProvider i18n={i18nForTest}>
+              <YourComponent />
+            </I18nextProvider>
+          );
+          ```
+        - Detection: If test file imports a component that uses `useTranslation()` or `t()`, verify I18nextProvider is present
+
+        Fake Timers for Debounce/Throttle Testing:
+        - ❌ When testing debounced/throttled logic (search inputs, auto-save, etc.), NEVER use real waits
+        - ✅ REQUIRE: `vi.useFakeTimers()` + `vi.advanceTimersByTime()` pattern
+        - **Detection:**
+          - If test involves "search" or "debounce" in description/comments
+          - AND contains `wait()` or `setTimeout()`
+          - Flag: "Use fake timers to control time progression deterministically"
+        - Cleanup:
+          - Every `vi.useFakeTimers()` must have corresponding `vi.useRealTimers()` in:
+            * Same test block (try/finally)
+            * afterEach hook
+            * Never leave fake timers active between tests
+            
+        Avoid Testing Implementation Details:
+        - ❌ Do not assert on internal constants, magic numbers, or implementation specifics:
+          ```typescript
+          // Brittle - breaks on refactors:
+          expect(PAGE_SIZE).toBe(10);
+          expect(DEBOUNCE_MS).toBe(300);
+          expect(component.state.internalCounter).toBe(5);
+          ```
+        - ✅ Assert observable behavior instead:
+          ```typescript
+          // Robust - tests actual behavior:
+          expect(mockRequest.variables.first).toBeGreaterThan(0);
+          expect(mockRequest).toHaveBeenCalledWith(expect.objectContaining({
+            variables: expect.objectContaining({ first: expect.any(Number) })
+          }));
+          ```
+        - Detection:
+          - Flag `expect(CONSTANT_NAME).toBe(...)` patterns
+          - Suggest: "Test behavior, not constants. Assert what the component does, not how."
+
+        Global State & Window/DOM Pollution:
+        - ❌ CRITICAL: Any modification to global objects MUST be restored in teardown:
+          ```typescript
+          // These cause cross-test pollution:
+          window.location = { ... };
+          window.localStorage.setItem(...);
+          process.env.NODE_ENV = 'test';
+          global.fetch = mockFetch;
+          document.body.innerHTML = '...';
+          ```
+        - ✅ REQUIRE: Save original and restore:
+          ```typescript
+          let originalLocation: Location;
+          beforeEach(() => {
+            originalLocation = window.location;
+          });
+          afterEach(() => {
+            window.location = originalLocation;
+          });
+          ```
+        - Detection Pattern:
+          - Search for: `window.location =`, `window.* =`, `global.* =`, `process.env.* =`
+          - Verify corresponding save/restore in beforeEach/afterEach
+          - Flag missing restoration as CRITICAL for sharded CI
+
         Structure:
         - No it.skip/describe.skip unless commented with reason + linked issue.
         - Wrap state updates in act() when needed.
@@ -186,7 +260,34 @@ reviews:
         - "❌ SILENT ERROR SWALLOW at file:line — .catch() without fallback"
         - "⏱️ TIMER CONFLICT at file:line — fake timers + user-event"
 
-    # 2) React components/screens/pages — enforce architecture & policy
+    # React screens — enforce architecture & policy
+    - path: 'src/screens/**/*.tsx'
+      instructions: |
+        ## Screen Component Architecture
+
+        **DataTable + useTableData Pattern (TableFix Migration):**
+        - All table-based screens migrating to DataTable MUST use useTableData hook:
+        - ❌ Do not use `useQuery` + manual `useMemo` for data transformation:
+          ```typescript
+          // Incorrect:
+          const { data } = useQuery(QUERY);
+          const rows = useMemo(() => data?.items ?? [], [data]);
+          ```
+        - ✅ Use useTableData wrapper:
+          ```typescript
+          // Correct:
+          const { rows, loading, error, refetch } = useTableData<ItemType, ...>(
+            useQuery(QUERY, { variables }),
+            { path: (data) => data?.items ?? [] }
+          );
+          ```
+        - **Detection:** 
+          - If file imports DataTable from shared-components
+          - AND imports useQuery from `@apollo/client`
+          - BUT does NOT import useTableData
+          - Flag: "Screens using DataTable should integrate with useTableData hook per migration standards"
+
+    # React components/screens/pages — enforce architecture & policy
     - path: 'src/{components,screens,pages}/**/*.{ts,tsx}'
       instructions: |
         Post a single, structured comment; reference file:line for each item.
@@ -224,7 +325,7 @@ reviews:
         - Report as "🔴 MISSING NULL GUARD at file:line — Add null check before mutation with optional property"
         - Apply to all mutation calls: create*, update*, delete*, archive*, etc.
 
-    # 3) GraphQL operations
+    # GraphQL operations
     - path: 'src/GraphQl/**/*.ts'
       instructions: |
         Post a single, structured comment; reference file:line.
