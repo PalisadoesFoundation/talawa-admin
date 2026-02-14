@@ -36,6 +36,8 @@ const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, string>,
 }));
 
+const BASE_DATE = new Date(Date.UTC(2025, 0, 1));
+
 // Mock useLocalStorage
 vi.mock('utils/useLocalstorage', () => {
   return {
@@ -184,7 +186,7 @@ const INFINITE_SCROLL_MOCKS = [
             .map((_, i) => ({
               membershipRequestId: `request${i + 1}`,
               createdAt: dayjs
-                .utc()
+                .utc(BASE_DATE)
                 .subtract(1, 'year')
                 .add(i, 'days')
                 .toISOString(),
@@ -220,7 +222,7 @@ const INFINITE_SCROLL_MOCKS = [
             .map((_, i) => ({
               membershipRequestId: `request${i + 11}`,
               createdAt: dayjs
-                .utc()
+                .utc(BASE_DATE)
                 .subtract(1, 'year')
                 .add(i + 10, 'days')
                 .toISOString(),
@@ -619,7 +621,7 @@ and or userId does not exists in localstorage`, async () => {
                 .map((_, i) => ({
                   membershipRequestId: `request${i + 1}`,
                   createdAt: dayjs
-                    .utc()
+                    .utc(BASE_DATE)
                     .subtract(1, 'year')
                     .add(i, 'days')
                     .toISOString(),
@@ -758,7 +760,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -996,7 +1001,10 @@ and or userId does not exists in localstorage`, async () => {
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `req${i + 1}`,
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     id: 'user1',
@@ -1324,7 +1332,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: 'http://invalid-url.com/avatar.jpg',
@@ -1406,7 +1417,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1484,7 +1498,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1605,7 +1622,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1726,7 +1746,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1822,7 +1845,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1916,7 +1942,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1992,7 +2021,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: 'null',
@@ -2068,7 +2100,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
 
                   status: 'pending',
                   user: {
@@ -2142,7 +2177,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
 
                   status: 'pending',
                   user: {
@@ -2309,7 +2347,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '456',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2411,7 +2452,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '789',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
 
                   status: 'pending',
                   user: {
@@ -2509,7 +2553,10 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '101',
-                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs
+                    .utc(BASE_DATE)
+                    .subtract(1, 'year')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
