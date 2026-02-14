@@ -97,6 +97,10 @@
   font-size: var(--font-size-md);
 }
 
+.orgPeopleGrid {
+  padding-right: var(--space-7);
+}
+
 .orgPeopleGrid [data-field='sl_no'],
 .orgPeopleGrid [data-field='profile'] {
   min-width: var(--space-10);
@@ -110,4 +114,40 @@
 .orgPeopleGrid [data-field='joined'],
 .orgPeopleGrid [data-field='action'] {
   min-width: var(--space-13);
+}
+
+.orgPeopleGrid .membersAddHeader {
+  width: auto;
+  flex-shrink: 0;
+}
+
+.orgPeopleGrid .membersAddToggle {
+  width: auto;
+  min-width: var(--space-16);
+}
+
+.orgPeopleGrid .membersSortContainer,
+.orgPeopleGrid .membersSortToggle,
+.orgPeopleGrid .membersAddContainer,
+.orgPeopleGrid .membersAddToggle {
+  background-color: var(--color-gray-50) !important;
+}
+
+.orgPeopleGrid .membersSortContainer:is(:hover, :active),
+.orgPeopleGrid .membersSortContainer:global(.show),
+.orgPeopleGrid .membersAddContainer:is(:hover, :active),
+.orgPeopleGrid .membersAddContainer:global(.show) {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.orgPeopleGrid .membersSortToggle:is(:hover, :active),
+.orgPeopleGrid .membersSortContainer:global(.show) .membersSortToggle,
+.orgPeopleGrid .membersAddToggle:is(:hover, :active),
+.orgPeopleGrid .membersAddContainer:global(.show) .membersAddToggle {
+  background-color: var(--color-gray-500) !important;
+  border: var(--border-1) solid var(--color-gray-500) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
 }
