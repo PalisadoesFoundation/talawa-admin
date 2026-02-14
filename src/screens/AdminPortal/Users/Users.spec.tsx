@@ -55,9 +55,6 @@ vi.mock('components/IconComponent/IconComponent', () => ({
   ),
 }));
 
-// Debounce duration used by SearchFilterBar component (default: 300ms)
-const SEARCH_DEBOUNCE_MS = 300;
-
 const link = new StaticMockLink(MOCKS, true);
 
 const createLink = (
@@ -68,14 +65,6 @@ const createLink = (
     | typeof MOCKS_NEW
     | typeof MOCKS_NEW_2,
 ) => new StaticMockLink(mocks, true);
-
-async function wait(ms = 1000): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const { setItem, removeItem, clearAllItems } = useLocalStorage();
 
@@ -115,7 +104,6 @@ describe('Testing Users screen', () => {
   and or userId does not exists in localstorage`, async () => {
     setItem('AdminFor', ['123']);
     removeItem('SuperAdmin');
-    await wait();
     setItem('id', '');
     render(
       <MockedProvider link={createLink(MOCKS)}>
@@ -128,13 +116,15 @@ describe('Testing Users screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
   });
 
   it(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
     removeItem('AdminFor');
     removeItem('SuperAdmin');
-    await wait();
     removeItem('id');
     render(
       <MockedProvider link={createLink(MOCKS)}>
@@ -147,7 +137,10 @@ describe('Testing Users screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
   });
 
   it('should NOT call fetchMore when hasNextPage is false', async () => {
@@ -210,7 +203,7 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => screen.getByText('User One'));
 
     Object.defineProperty(window, 'scrollY', { value: 6000, writable: true });
     window.dispatchEvent(new Event('scroll'));
@@ -344,7 +337,9 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
   });
 
   it('Testing seach by name functionality', async () => {
@@ -360,13 +355,14 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    const searchBtn = screen.getByTestId('searchButton');
+    const searchBtn = await screen.findByTestId('searchButton');
     const search1 = 'John';
     await userEvent.type(screen.getByTestId(/searchByName/i), search1);
     await userEvent.click(searchBtn);
-    await wait();
-    expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
+    });
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
     await userEvent.type(screen.getByTestId(/searchByName/i), search2);
@@ -382,7 +378,10 @@ describe('Testing Users screen', () => {
     await userEvent.type(screen.getByTestId(/searchByName/i), search5);
     await userEvent.clear(screen.getByTestId(/searchByName/i));
     await userEvent.click(searchBtn);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
   });
 
   it('testing search not found', async () => {
@@ -399,18 +398,14 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
-    await wait();
 
-    const searchBtn = screen.getByTestId('searchButton');
+    const searchBtn = await screen.findByTestId('searchButton');
     const searchInput = screen.getByTestId(/searchByName/i);
 
     await act(async () => {
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'NonexistentName');
     });
-
-    // Wait for debounced search to complete
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await act(async () => {
       await userEvent.click(searchBtn);
@@ -443,7 +438,7 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+
     expect(await screen.findByTestId('users-empty-state')).toBeInTheDocument();
     expect(screen.getByTestId('users-empty-state-message')).toHaveTextContent(
       /No User Found/i,
@@ -543,7 +538,10 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
+
     rerender(
       <MockedProvider link={createLink(MOCKS2)}>
         <BrowserRouter>
@@ -555,7 +553,10 @@ describe('Testing Users screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
   });
 
   it('Check if pressing enter key triggers search', async () => {
@@ -572,8 +573,8 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
-    await wait();
-    const searchInput = screen.getByTestId('searchByName');
+
+    const searchInput = await screen.findByTestId('searchByName');
 
     await act(async () => {
       await userEvent.type(searchInput, 'John');
@@ -652,8 +653,7 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait();
-      const errorMsg = screen.getByTestId('errorMsg');
+      const errorMsg = await screen.findByTestId('errorMsg');
 
       expect(errorMsg).toBeInTheDocument();
       expect(errorMsg).toHaveTextContent('Error occurred while loading Users');
@@ -673,20 +673,21 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait();
-
-      const searchInput = screen.getByTestId('searchByName');
+      const searchInput = await screen.findByTestId('searchByName');
       await userEvent.type(searchInput, 'John');
       await userEvent.click(screen.getByTestId('searchButton'));
 
-      await wait();
+      await waitFor(() => {
+        expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+      });
 
       // Clear search
       await userEvent.clear(searchInput);
       await userEvent.click(screen.getByTestId('searchButton'));
 
-      await wait();
-      expect(screen.queryByText(/no results found/i)).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText(/no results found/i)).not.toBeInTheDocument();
+      });
     });
 
     it('should set document title correctly', () => {
@@ -745,10 +746,11 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait();
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          expect.any(String),
+        );
+      });
     });
 
     it('should display end of results message when hasMore is false', async () => {
@@ -803,7 +805,10 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait();
+      await waitFor(() => {
+        expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+      });
+
       // Simulate full scroll to trigger endMessage
       Object.defineProperty(window, 'scrollY', {
         value: 10000,
@@ -829,15 +834,20 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait();
-      const searchInput = screen.getByTestId('searchByName');
+      const searchInput = await screen.findByTestId('searchByName');
       await userEvent.type(searchInput, 'John');
       await userEvent.click(screen.getByTestId('searchButton'));
-      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+      });
 
       // Same search again
       await userEvent.click(screen.getByTestId('searchButton'));
-      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+      });
     });
   });
 });
@@ -971,15 +981,15 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     const sortDropdown = await screen.findByTestId('sortUsers-toggle');
     await userEvent.click(sortDropdown);
 
-    const newest = screen.getByTestId('sortUsers-item-newest');
+    const newest = await screen.findByTestId('sortUsers-item-newest');
     await userEvent.click(newest);
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
+    });
 
     const rowsAfterFirstClick = screen.queryAllByRole('row');
     const firstUserAfterFirstSort = rowsAfterFirstClick[1]?.textContent;
@@ -988,7 +998,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     await userEvent.click(sortDropdown);
     await userEvent.click(newest);
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.queryAllByRole('row').length).toBeGreaterThan(1);
+    });
 
     const rowsAfterSecondClick = screen.queryAllByRole('row');
     const firstUserAfterSecondSort = rowsAfterSecondClick[1]?.textContent;
@@ -1101,10 +1113,10 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    await userEvent.click(screen.getByTestId('filterUsers-toggle'));
-    await userEvent.click(screen.getByTestId('filterUsers-item-user'));
+    const filterToggle = await screen.findByTestId('filterUsers-toggle');
+    await userEvent.click(filterToggle);
+    const filterItem = await screen.findByTestId('filterUsers-item-user');
+    await userEvent.click(filterItem);
 
     await waitFor(() => {
       const rows = screen.getAllByRole('row');
@@ -1124,15 +1136,15 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    const filterToggle = await screen.findByTestId('filterUsers-toggle');
+    await userEvent.click(filterToggle);
+    const cancelItem = await screen.findByTestId('filterUsers-item-cancel');
+    await userEvent.click(cancelItem);
 
-    await userEvent.click(screen.getByTestId('filterUsers-toggle'));
-    await userEvent.click(screen.getByTestId('filterUsers-item-cancel'));
-
-    await wait();
-
-    const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThan(1);
+    await waitFor(() => {
+      const rows = screen.getAllByRole('row');
+      expect(rows.length).toBeGreaterThan(1);
+    });
   });
 
   it('should actually sort users by newest date (real data validation)', async () => {
@@ -1202,10 +1214,10 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    await userEvent.click(screen.getByTestId('sortUsers-toggle'));
-    await userEvent.click(screen.getByTestId('sortUsers-item-newest'));
+    const sortToggle = await screen.findByTestId('sortUsers-toggle');
+    await userEvent.click(sortToggle);
+    const newestItem = await screen.findByTestId('sortUsers-item-newest');
+    await userEvent.click(newestItem);
 
     await waitFor(() => {
       const rows = screen.getAllByRole('row');
@@ -1224,15 +1236,15 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     const filterDropdown = await screen.findByTestId('filterUsers-toggle');
     await userEvent.click(filterDropdown);
 
-    const cancel = screen.getByTestId('filterUsers-item-cancel');
+    const cancel = await screen.findByTestId('filterUsers-item-cancel');
     await userEvent.click(cancel);
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.queryAllByRole('row').length).toBeGreaterThan(1);
+    });
 
     const rowsAfterFirstClick = screen.queryAllByRole('row').length;
 
@@ -1240,7 +1252,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     await userEvent.click(filterDropdown);
     await userEvent.click(cancel);
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.queryAllByRole('row').length).toBeGreaterThan(1);
+    });
 
     const rowsAfterSecondClick = screen.queryAllByRole('row').length;
 
@@ -1289,15 +1303,12 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const input = screen.getByTestId('searchByName');
+    const input = await screen.findByTestId('searchByName');
     await userEvent.type(input, 'zzzz');
-    await userEvent.click(screen.getByTestId('searchButton'));
+    const searchButton = await screen.findByTestId('searchButton');
+    await userEvent.click(searchButton);
 
-    await wait();
-
-    expect(screen.getByText(/no results found/i)).toBeInTheDocument();
+    expect(await screen.findByText(/no results found/i)).toBeInTheDocument();
   });
 
   it('should return early when search value is empty and already empty', async () => {
@@ -1311,14 +1322,15 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const input = screen.getByTestId('searchByName');
+    const input = await screen.findByTestId('searchByName');
 
     await userEvent.clear(input);
-    await userEvent.click(screen.getByTestId('searchButton'));
+    const searchButton = await screen.findByTestId('searchButton');
+    await userEvent.click(searchButton);
 
-    expect(input).toHaveValue('');
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
   });
 
   it('should return early from loadMoreUsers when isLoadingMore is already true', async () => {
@@ -1376,7 +1388,7 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByTestId('testcomp');
 
     Object.defineProperty(window, 'scrollY', { value: 5000, writable: true });
     window.dispatchEvent(new Event('scroll'));
@@ -1404,14 +1416,16 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    const rowsBefore = (await screen.findAllByRole('row')).length;
 
-    const rowsBefore = screen.queryAllByRole('row').length;
+    const filterToggle = await screen.findByTestId('filterUsers-toggle');
+    await userEvent.click(filterToggle);
+    const adminItem = await screen.findByTestId('filterUsers-item-admin');
+    await userEvent.click(adminItem);
 
-    await userEvent.click(screen.getByTestId('filterUsers-toggle'));
-    await userEvent.click(screen.getByTestId('filterUsers-item-admin'));
-
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
 
     const rowsAfter = screen.queryAllByRole('row').length;
 
@@ -1433,17 +1447,16 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const input = screen.getByTestId('searchByName');
+    const input = await screen.findByTestId('searchByName');
 
     await userEvent.type(input, 'John');
     await userEvent.clear(input);
-    await userEvent.click(screen.getByTestId('searchButton'));
+    const searchButton = await screen.findByTestId('searchButton');
+    await userEvent.click(searchButton);
 
-    await wait();
-
-    expect(input).toHaveValue('');
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
   });
 
   // SKIP: should block second fetchMore call when isLoadingMore is true
@@ -1472,15 +1485,15 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    const sortToggle = await screen.findByTestId('sortUsers-toggle');
+    await userEvent.click(sortToggle);
+    const oldestItem = await screen.findByTestId('sortUsers-item-oldest');
+    await userEvent.click(oldestItem);
 
-    await userEvent.click(screen.getByTestId('sortUsers-toggle'));
-    await userEvent.click(screen.getByTestId('sortUsers-item-oldest'));
-
-    await wait();
-
-    const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThan(1);
+    await waitFor(() => {
+      const rows = screen.getAllByRole('row');
+      expect(rows.length).toBeGreaterThan(1);
+    });
   });
 
   it('should clear search value on component unmount', async () => {
@@ -1494,9 +1507,7 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const input = screen.getByTestId('searchByName');
+    const input = await screen.findByTestId('searchByName');
     await userEvent.type(input, 'John');
 
     unmount();
@@ -1594,10 +1605,10 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Should not crash and should still render users
-    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    await waitFor(() => {
+      // Should not crash and should still render users
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
   });
 
   // SKIP: should show loading state when isLoadingMore is true
@@ -1646,16 +1657,16 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      // Component should render without crashing
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
 
-    // Component should render without crashing
-    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+      // Verify the "No User Found" message is displayed, confirming displayedUsers is empty
+      expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
 
-    // Verify the "No User Found" message is displayed, confirming displayedUsers is empty
-    expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
-
-    // Verify no user table rows are rendered
-    expect(screen.queryByTestId('user-row')).not.toBeInTheDocument();
+      // Verify no user table rows are rendered
+      expect(screen.queryByTestId('user-row')).not.toBeInTheDocument();
+    });
   });
 
   it('should show initial loading state then display user data after fetch completes', async () => {
@@ -1801,12 +1812,12 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Component should render without crashing even with empty usersData
-    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
-    // With empty usersData and no search term, "No User Found" should be shown
-    expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
+    await waitFor(() => {
+      // Component should render without crashing even with empty usersData
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+      // With empty usersData and no search term, "No User Found" should be shown
+      expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
+    });
   });
 
   it('should leave results unchanged for cancel/default filter option', async () => {
@@ -1860,10 +1871,10 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Users should be displayed
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      // Users should be displayed
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
   });
 
   it('should show "End of results" when initial response has no more pages', async () => {
@@ -1925,10 +1936,10 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Verify user is displayed
-    expect(screen.getByText('Single User')).toBeInTheDocument();
+    await waitFor(() => {
+      // Verify user is displayed
+      expect(screen.getByText('Single User')).toBeInTheDocument();
+    });
 
     // Trigger scroll - InfiniteScroll should not fetch more since hasNextPage is false
     Object.defineProperty(window, 'scrollY', { value: 6000, writable: true });
@@ -2020,18 +2031,24 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Both users should be visible initially
-    expect(screen.getByText('Newer User')).toBeInTheDocument();
-    expect(screen.getByText('Older User')).toBeInTheDocument();
+    await waitFor(() => {
+      // Both users should be visible initially
+      expect(screen.getByText('Newer User')).toBeInTheDocument();
+      expect(screen.getByText('Older User')).toBeInTheDocument();
+    });
 
     // Click sort dropdown and select oldest
     await userEvent.click(screen.getByTestId('sortUsers-toggle'));
-    await wait(50);
+    await waitFor(() => {
+      expect(screen.getByTestId('sortUsers-item-oldest')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('sortUsers-item-oldest'));
 
-    await wait();
+    await waitFor(() => {
+      // Verify both users are still visible after sorting
+      expect(screen.getByText('Older User')).toBeInTheDocument();
+      expect(screen.getByText('Newer User')).toBeInTheDocument();
+    });
 
     // Verify both users are still visible after sorting
     expect(screen.getByText('Older User')).toBeInTheDocument();
@@ -2128,22 +2145,24 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Both users should be displayed (cancel filter shows all)
-    expect(screen.getByText('Regular Person')).toBeInTheDocument();
-    expect(screen.getByText('Admin Person')).toBeInTheDocument();
+    await waitFor(() => {
+      // Both users should be displayed (cancel filter shows all)
+      expect(screen.getByText('Regular Person')).toBeInTheDocument();
+      expect(screen.getByText('Admin Person')).toBeInTheDocument();
+    });
 
     // Open filter dropdown and click cancel to set filter to 'cancel'
     await userEvent.click(screen.getByTestId('filterUsers-toggle'));
-    await wait(50);
+    await waitFor(() => {
+      expect(screen.getByTestId('filterUsers-item-cancel')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('filterUsers-item-cancel'));
 
-    await wait();
-
-    // After cancel filter, all users should still be displayed
-    expect(screen.getByText('Regular Person')).toBeInTheDocument();
-    expect(screen.getByText('Admin Person')).toBeInTheDocument();
+    await waitFor(() => {
+      // After cancel filter, all users should still be displayed
+      expect(screen.getByText('Regular Person')).toBeInTheDocument();
+      expect(screen.getByText('Admin Person')).toBeInTheDocument();
+    });
   });
 
   // SKIP: should handle loadMoreUsers when pageInfoState has no hasNextPage after second fetch
@@ -2197,10 +2216,8 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // With empty edges, usersData becomes [] and we should see "No User Found"
     await waitFor(() => {
+      // With empty edges, usersData becomes [] and we should see "No User Found"
       expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
     });
   });
@@ -2271,13 +2288,13 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      // User should be displayed
+      expect(screen.getByText('Only User')).toBeInTheDocument();
 
-    // User should be displayed
-    expect(screen.getByText('Only User')).toBeInTheDocument();
-
-    // With hasNextPage false, pagination is complete and "End of results" is shown
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+      // With hasNextPage false, pagination is complete and "End of results" is shown
+      expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    });
   });
 });
 

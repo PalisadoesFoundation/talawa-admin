@@ -279,7 +279,7 @@ const BlockUser = (): JSX.Element => {
             onClick={async (): Promise<void> => {
               await handleUnBlockUser(user);
             }}
-            data-testid={`blockUser${user.id}`}
+            data-testid={`unblockUserBtn-${user.id}`}
             aria-label={t('unblock') + ': ' + user.name}
           >
             <FontAwesomeIcon icon={faUserPlus} className={styles.unbanIcon} />
@@ -293,7 +293,7 @@ const BlockUser = (): JSX.Element => {
             onClick={async (): Promise<void> => {
               await handleBlockUser(user);
             }}
-            data-testid={`blockUser${user.id}`}
+            data-testid={`blockUserBtn-${user.id}`}
             aria-label={t('block') + ': ' + user.name}
           >
             <FontAwesomeIcon icon={faBan} className={styles.banIcon} />

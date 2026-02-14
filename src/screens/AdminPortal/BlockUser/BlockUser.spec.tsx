@@ -3,6 +3,8 @@ import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import BlockUser from './BlockUser';
 import {
   GET_ORGANIZATION_MEMBERS_PG,
@@ -220,11 +222,13 @@ describe('BlockUser Component', () => {
   describe('Initial Loading and Error States', () => {
     it('shows loading state when fetching data', async () => {
       render(
-        <MockedProvider mocks={createMocks({ delay: 50 })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ delay: 50 })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -238,11 +242,13 @@ describe('BlockUser Component', () => {
 
     it('handles null organization data gracefully', async () => {
       render(
-        <MockedProvider mocks={createMocks({ nullData: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ nullData: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       // Wait for loading to finish
@@ -283,11 +289,13 @@ describe('BlockUser Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={customMocks}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={customMocks}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       // Wait for loading to finish
@@ -327,11 +335,13 @@ describe('BlockUser Component', () => {
 
     it('displays error panel when blocked users query fails', async () => {
       render(
-        <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -348,11 +358,13 @@ describe('BlockUser Component', () => {
 
     it('displays error panel when members query fails', async () => {
       render(
-        <MockedProvider mocks={createMocks({ membersQueryError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ membersQueryError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -369,11 +381,13 @@ describe('BlockUser Component', () => {
   describe('View Switching', () => {
     it('displays all members initially', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -391,11 +405,13 @@ describe('BlockUser Component', () => {
 
     it('switches to blocked users view', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -423,11 +439,13 @@ describe('BlockUser Component', () => {
 
     it('displays empty state when no members are available', async () => {
       render(
-        <MockedProvider mocks={createMocks({ emptyMembers: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ emptyMembers: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -444,11 +462,13 @@ describe('BlockUser Component', () => {
 
     it('displays empty state with noSpammerFound message when blocked tab is selected and searchTerm is empty', async () => {
       render(
-        <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -479,11 +499,13 @@ describe('BlockUser Component', () => {
   describe('Search Functionality', () => {
     it('searches members by name', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -511,11 +533,13 @@ describe('BlockUser Component', () => {
 
     it('searches members by email address', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -545,11 +569,13 @@ describe('BlockUser Component', () => {
 
     it('searches blocked users by name', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -588,11 +614,13 @@ describe('BlockUser Component', () => {
 
     it('searches blocked users by email address', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -631,11 +659,13 @@ describe('BlockUser Component', () => {
 
     it('handles search with no results for members', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -662,11 +692,13 @@ describe('BlockUser Component', () => {
 
     it('handles search with no results for blocked users', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -705,11 +737,13 @@ describe('BlockUser Component', () => {
 
     it('clears search results when search term is empty', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -755,11 +789,13 @@ describe('BlockUser Component', () => {
   describe('Block/Unblock Actions', () => {
     it('blocks a user successfully', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -784,11 +820,13 @@ describe('BlockUser Component', () => {
 
     it('unblocks a user successfully', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -825,11 +863,13 @@ describe('BlockUser Component', () => {
 
     it('handles block user error', async () => {
       render(
-        <MockedProvider mocks={createMocks({ blockUserError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ blockUserError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -852,11 +892,13 @@ describe('BlockUser Component', () => {
 
     it('handles unblock user error', async () => {
       render(
-        <MockedProvider mocks={createMocks({ unblockUserError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ unblockUserError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -891,11 +933,13 @@ describe('BlockUser Component', () => {
 
     it('can block multiple users', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -944,11 +988,13 @@ describe('BlockUser Component', () => {
 
     it('shows blocked user in blocked users list after blocking', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -1001,11 +1047,13 @@ describe('BlockUser Component', () => {
   describe('Component Behavior', () => {
     it('updates document title on mount', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       expect(document.title).toBe('title');
@@ -1013,11 +1061,13 @@ describe('BlockUser Component', () => {
 
     it('renders table headers correctly', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
