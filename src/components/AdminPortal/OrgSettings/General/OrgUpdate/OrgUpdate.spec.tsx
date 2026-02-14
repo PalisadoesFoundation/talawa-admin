@@ -782,7 +782,9 @@ describe('OrgUpdate Component', () => {
     const fileInput = screen.getByTestId('organisationImage');
     await user.upload(fileInput, []);
 
-    expect(NotificationToast.error).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
   });
 
   it('clears file input value after successful save with avatar', async () => {
@@ -864,14 +866,11 @@ describe('OrgUpdate Component', () => {
     const saveButton = screen.getByTestId('save-org-changes-btn');
     await user.click(saveButton);
 
-    await waitFor(
-      () => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          i18nForTest.t('orgUpdate.successfulUpdated'),
-        );
-        expect(fileInput.value).toBe('');
-      },
-      { timeout: 3000 },
-    );
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        i18nForTest.t('orgUpdate.successfulUpdated'),
+      );
+      expect(fileInput.value).toBe('');
+    });
   });
 });
