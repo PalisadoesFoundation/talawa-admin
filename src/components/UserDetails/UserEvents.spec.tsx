@@ -2,12 +2,7 @@ import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import UserEvents from './UserEvents';
-import {
-  useQuery,
-  QueryResult,
-  OperationVariables,
-  ApolloError,
-} from '@apollo/client';
+import { useQuery, QueryResult, OperationVariables } from '@apollo/client';
 import {
   InterfacePeopleTabNavbarProps,
   InterfacePeopletabUserEventsProps,
@@ -400,5 +395,89 @@ describe('UserEvents', () => {
       expect(screen.getByText('React Workshop')).toBeInTheDocument();
       expect(screen.queryByText('Node.js Seminar')).not.toBeInTheDocument();
     });
+  });
+});
+
+it('shows loading indicator when query is loading', () => {
+  mockedUseQuery.mockReturnValue(
+    createMockQueryResult({
+      loading: true,
+    }),
+  );
+
+  render(<UserEvents orgId="org1" userId="user1" />);
+
+  expect(screen.getByText('loading')).toBeInTheDocument();
+});
+
+it('shows error UI when query fails', () => {
+  const { ApolloError } = require('@apollo/client');
+
+  mockedUseQuery.mockReturnValue(
+    createMockQueryResult({
+      error: new ApolloError({
+        errorMessage: 'Test error',
+      }),
+    }),
+  );
+
+  render(<UserEvents orgId="org1" userId="user1" />);
+
+  expect(screen.getByText('somethingWentWrong')).toBeInTheDocument();
+});
+
+it('shows empty state when API returns empty array', () => {
+  mockedUseQuery.mockReturnValue(
+    createMockQueryResult({
+      data: { eventsByOrganizationId: [] },
+    }),
+  );
+
+  render(<UserEvents orgId="org1" userId="user1" />);
+
+  expect(screen.getByText('noeventsAttended')).toBeInTheDocument();
+});
+
+/* ---------------- ISOLATED SORT TESTS ---------------- */
+
+it('sorts events ASC independently of filters', async () => {
+  mockedUseQuery.mockReturnValue(
+    createMockQueryResult({
+      data: { eventsByOrganizationId: mockEvents },
+    }),
+  );
+
+  render(<UserEvents orgId="org1" userId="user1" />);
+
+  const sortSelect = screen.getByTestId('eventsSort-select');
+  await userEvent.selectOptions(sortSelect, 'ASC');
+
+  await waitFor(() => {
+    const cards = screen.getAllByTestId('event-card');
+
+    expect(cards[0]).toHaveTextContent('Angular Bootcamp');
+    expect(cards[1]).toHaveTextContent('Node.js Seminar');
+    expect(cards[2]).toHaveTextContent('React Workshop');
+  });
+});
+
+it('sorts events DESC independently of filters', async () => {
+  mockedUseQuery.mockReturnValue(
+    createMockQueryResult({
+      data: { eventsByOrganizationId: mockEvents },
+    }),
+  );
+
+  render(<UserEvents orgId="org1" userId="user1" />);
+
+  const sortSelect = screen.getByTestId('eventsSort-select');
+  await userEvent.selectOptions(sortSelect, 'DESC');
+
+  await waitFor(() => {
+    const cards = screen.getAllByTestId('event-card');
+
+    expect(cards[0]).toHaveTextContent('React Workshop');
+    expect(cards[1]).toHaveTextContent('Node.js Seminar');
+    expect(cards[2]).toHaveTextContent('Angular Bootcamp');
   });
 });
