@@ -53,7 +53,6 @@ const defaultUpdateInput = {
   postalCode: '12345',
   countryCode: 'US',
   isUserRegistrationRequired: false,
-  isVisibleInSearch: false,
 };
 
 export const MOCKS = [
@@ -88,6 +87,7 @@ export const MOCKS = [
           countryCode: 'US',
           avatarMimeType: null,
           avatarURL: null,
+          isUserRegistrationRequired: false,
           updatedAt: FIXED_UTC_TIMESTAMP,
         },
       },

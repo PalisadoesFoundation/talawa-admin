@@ -365,7 +365,6 @@ describe('OrgUpdate Component', () => {
 
       await screen.findByDisplayValue('Test Org');
       const userRegSwitch = screen.getByTestId('user-reg-switch');
-      const visibilitySwitch = screen.getByTestId('visibility-switch');
 
       expect(userRegSwitch).toBeChecked();
       await user.click(userRegSwitch);
@@ -373,36 +372,6 @@ describe('OrgUpdate Component', () => {
 
       await user.click(userRegSwitch);
       expect(userRegSwitch).toBeChecked();
-
-      expect(visibilitySwitch).not.toBeChecked();
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).toBeChecked();
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).not.toBeChecked();
-    });
-
-    it('toggles visibility switch correctly', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <MockedProvider mocks={MOCKS}>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrgUpdate orgId="1" />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await screen.findByDisplayValue('Test Org');
-
-      const visibilitySwitch = screen.getByTestId('visibility-switch');
-
-      expect(visibilitySwitch).not.toBeChecked();
-
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).toBeChecked();
-
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).not.toBeChecked();
     });
   });
 
@@ -910,7 +879,6 @@ describe('OrgUpdate Component', () => {
               countryCode: 'US',
               avatar: file,
               isUserRegistrationRequired: false,
-              isVisibleInSearch: false,
             },
           },
         },
