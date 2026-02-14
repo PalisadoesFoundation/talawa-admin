@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import UserTags from './UserTags';
-import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { OperationVariables } from '@apollo/client/core/types';
@@ -58,31 +57,45 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
-  default: (props: InterfacePeopleTabNavbarProps) => (
+vi.mock('shared-components/SearchFilterBar/SearchFilterBar', () => ({
+  __esModule: true,
+  default: (props: {
+    searchPlaceholder: string;
+    searchValue: string;
+    onSearchChange: (value: string) => void;
+    searchInputTestId?: string;
+    hasDropdowns?: boolean;
+    dropdowns?: Array<{
+      dataTestIdPrefix: string;
+      options: Array<{ label: string; value: string }>;
+      selectedOption?: string;
+      onOptionChange: (value: string) => void;
+      label?: string;
+    }>;
+  }) => (
     <div>
-      {props.search && (
-        <input
-          data-testid={props.search.inputTestId}
-          placeholder={props.search.placeholder}
-          onChange={(e) => props.search?.onSearch(e.target.value)}
-        />
-      )}
+      <input
+        data-testid={props.searchInputTestId}
+        placeholder={props.searchPlaceholder}
+        value={props.searchValue}
+        onChange={(e) => props.onSearchChange(e.target.value)}
+      />
 
-      {props.sorting?.map((sort) => (
-        <select
-          key={sort.title}
-          data-testid={`${sort.testIdPrefix}-select`}
-          value={sort.selected}
-          onChange={(e) => sort.onChange(e.target.value)}
-        >
-          {sort.options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
-              {opt.label}
-            </option>
-          ))}
-        </select>
-      ))}
+      {props.hasDropdowns &&
+        props.dropdowns?.map((dropdown) => (
+          <select
+            key={dropdown.dataTestIdPrefix}
+            data-testid={`${dropdown.dataTestIdPrefix}-select`}
+            value={dropdown.selectedOption}
+            onChange={(e) => dropdown.onOptionChange(e.target.value)}
+          >
+            {dropdown.options.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        ))}
     </div>
   ),
 }));

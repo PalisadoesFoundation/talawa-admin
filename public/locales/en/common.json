@@ -303,5 +303,7 @@
   "searchPlaceholder": "Search...",
   "noOptionsFound": "No options found",
   "noUserId": "User ID not available",
-  "noTagsFound": "No tags found"
+  "noTagsFound": "No tags found",
+  "searchTags": "Search Tags",
+  "sortBy": "Sort By"
 }

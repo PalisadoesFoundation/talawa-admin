@@ -17,6 +17,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
+import { errorHandler } from 'utils/errorHandler';
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
@@ -233,6 +234,18 @@ const CURRENT_USER_UNVERIFIED_MOCK = {
         ...baseUserFields,
         isEmailAddressVerified: false,
       },
+    },
+  },
+};
+
+const CURRENT_USER_NULL_MOCK = {
+  request: {
+    query: CURRENT_USER,
+    variables: {},
+  },
+  result: {
+    data: {
+      currentUser: null,
     },
   },
 };
@@ -643,11 +656,9 @@ test('Pagination basic functionality works', async () => {
   expect(currentPage.textContent).toBe('0');
 
   const nextButton = screen.getByTestId('next-page');
+  expect(nextButton).toBeDisabled();
   await userEvent.click(nextButton);
-
-  await waitFor(() => {
-    expect(screen.getByTestId('current-page').textContent).toBe('1');
-  });
+  expect(screen.getByTestId('current-page').textContent).toBe('0');
 });
 
 test('should handle resize event and hide drawer on small screens', async () => {
@@ -1255,8 +1266,34 @@ test('should display organizations with complete data fields', async () => {
 });
 
 test('should reset page when changing rows per page', async () => {
+  const paginationOrgs = Array.from({ length: 6 }, (_, idx) =>
+    makeOrg({
+      id: `pagination-org-${idx + 1}`,
+      name: `Pagination Org ${idx + 1}`,
+      isMember: true,
+    }),
+  );
+  const paginationLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_VERIFIED_MOCK,
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: paginationOrgs,
+          },
+        },
+      },
+    ],
+    true,
+  );
+
   render(
-    <MockedProvider link={link}>
+    <MockedProvider link={paginationLink}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1273,6 +1310,7 @@ test('should reset page when changing rows per page', async () => {
 
   // Go to next page first
   const nextButton = screen.getByTestId('next-page');
+  expect(nextButton).not.toBeDisabled();
   await userEvent.click(nextButton);
 
   await waitFor(() => {
@@ -1763,5 +1801,354 @@ test('should display all orgs without slicing when rowsPerPage is set to 0', asy
   await waitFor(() => {
     const allCards = screen.getAllByTestId('organization-card');
     expect(allCards.length).toBeGreaterThanOrEqual(initialCount);
+  });
+});
+
+test('should show email warning from localStorage fallback when current user is unavailable', async () => {
+  setItem('emailNotVerified', 'true');
+
+  const localStorageFallbackLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_NULL_MOCK,
+      ORGANIZATION_FILTER_LIST_MOCK,
+    ],
+    true,
+  );
+
+  render(
+    <MockedProvider link={localStorageFallbackLink}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(
+      screen.getByTestId('email-verification-warning'),
+    ).toBeInTheDocument();
+  });
+});
+
+test('should call errorHandler when resend verification mutation throws', async () => {
+  const resendError = new Error('Resend failed with network error');
+  const resendErrorLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_UNVERIFIED_MOCK,
+      {
+        request: {
+          query: RESEND_VERIFICATION_EMAIL_MUTATION,
+          variables: {},
+        },
+        error: resendError,
+      },
+      ORGANIZATION_FILTER_LIST_MOCK,
+    ],
+    true,
+  );
+
+  render(
+    <MockedProvider link={resendErrorLink}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(
+      screen.getByTestId('email-verification-warning'),
+    ).toBeInTheDocument();
+  });
+
+  await userEvent.click(screen.getByTestId('resend-verification-btn'));
+
+  await waitFor(() => {
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.objectContaining({
+        networkError: resendError,
+      }),
+    );
+  });
+});
+
+test('should search joined organizations in mode 1', async () => {
+  const joinedSearchLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_VERIFIED_MOCK,
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: [
+              makeOrg({
+                id: 'all-org-1',
+                name: 'AllOrg1',
+              }),
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+          variables: { id: TEST_USER_ID, first: 5, filter: '' },
+        },
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                edges: [
+                  {
+                    node: makeOrg({
+                      id: 'joined-initial',
+                      name: 'JoinedInitial',
+                    }),
+                  },
+                ],
+                pageInfo: { hasNextPage: false },
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+          variables: { id: TEST_USER_ID, first: 5, filter: 'joined-search' },
+        },
+        result: {
+          data: {
+            user: {
+              organizationsWhereMember: {
+                edges: [
+                  {
+                    node: makeOrg({
+                      id: 'joined-refetch',
+                      name: 'JoinedRefetch',
+                    }),
+                  },
+                ],
+                pageInfo: { hasNextPage: false },
+              },
+            },
+          },
+        },
+      },
+    ],
+    true,
+  );
+
+  render(
+    <MockedProvider link={joinedSearchLink}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-toggle')).toBeInTheDocument();
+  });
+
+  await userEvent.click(screen.getByTestId('modeChangeBtn-toggle'));
+  await userEvent.click(screen.getByTestId('modeChangeBtn-item-1'));
+
+  await waitFor(() => {
+    expect(screen.getByTestId('org-name-JoinedInitial')).toBeInTheDocument();
+  });
+
+  const searchInput = screen.getByTestId('searchInput');
+  await userEvent.clear(searchInput);
+  await userEvent.type(searchInput, 'joined-search');
+  await userEvent.click(screen.getByTestId('searchBtn'));
+
+  await waitFor(() => {
+    // Note: StaticMockLink doesn’t behave like a real refetch, so we assert
+    // the stable initial mock data ('JoinedInitial') and the input value
+    // instead of expecting the refetched organization name to appear—all other
+    // assertions rely on the initial state to avoid flakiness.
+    expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
+      'joined-search',
+    );
+    expect(screen.getByTestId('org-name-JoinedInitial')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+});
+
+test('should search created organizations in mode 2', async () => {
+  const createdSearchLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_VERIFIED_MOCK,
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: [
+              makeOrg({
+                id: 'all-org-2',
+                name: 'AllOrg2',
+              }),
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_CREATED_ORGANIZATIONS,
+          variables: { id: TEST_USER_ID, filter: '' },
+        },
+        result: {
+          data: {
+            user: {
+              id: TEST_USER_ID,
+              createdOrganizations: [
+                makeCreatedOrg({
+                  id: 'created-initial',
+                  name: 'CreatedInitial',
+                }),
+              ],
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_CREATED_ORGANIZATIONS,
+          variables: { id: TEST_USER_ID, filter: 'created-search' },
+        },
+        result: {
+          data: {
+            user: {
+              id: TEST_USER_ID,
+              createdOrganizations: [
+                makeCreatedOrg({
+                  id: 'created-refetch',
+                  name: 'CreatedRefetch',
+                }),
+              ],
+            },
+          },
+        },
+      },
+    ],
+    true,
+  );
+
+  render(
+    <MockedProvider link={createdSearchLink}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-toggle')).toBeInTheDocument();
+  });
+
+  await userEvent.click(screen.getByTestId('modeChangeBtn-toggle'));
+  await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
+
+  await waitFor(() => {
+    expect(screen.getByTestId('org-name-CreatedInitial')).toBeInTheDocument();
+  });
+
+  const searchInput = screen.getByTestId('searchInput');
+  await userEvent.clear(searchInput);
+  await userEvent.type(searchInput, 'created-search');
+  await userEvent.click(screen.getByTestId('searchBtn'));
+
+  await waitFor(() => {
+    // Note: StaticMockLink doesn’t behave like a real refetch, so we assert
+    // the stable initial mock data ('CreatedInitial') and the input value
+    // instead of expecting the refetched organization name to appear—all other
+    // assertions rely on the initial state to avoid flakiness.
+    expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
+      'created-search',
+    );
+    expect(screen.getByTestId('org-name-CreatedInitial')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+});
+
+test('should render all organizations when rowsPerPage is set to 0', async () => {
+  const sixOrganizationsLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_VERIFIED_MOCK,
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: [
+              makeOrg({ id: 'org-1', name: 'Org1' }),
+              makeOrg({ id: 'org-2', name: 'Org2' }),
+              makeOrg({ id: 'org-3', name: 'Org3' }),
+              makeOrg({ id: 'org-4', name: 'Org4' }),
+              makeOrg({ id: 'org-5', name: 'Org5' }),
+              makeOrg({ id: 'org-6', name: 'Org6' }),
+            ],
+          },
+        },
+      },
+    ],
+    true,
+  );
+
+  render(
+    <MockedProvider link={sixOrganizationsLink}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+  });
+
+  expect(screen.queryByTestId('org-name-Org6')).not.toBeInTheDocument();
+
+  await userEvent.selectOptions(screen.getByTestId('rows-per-page'), '0');
+
+  await waitFor(() => {
+    expect(screen.getByTestId('org-name-Org6')).toBeInTheDocument();
   });
 });

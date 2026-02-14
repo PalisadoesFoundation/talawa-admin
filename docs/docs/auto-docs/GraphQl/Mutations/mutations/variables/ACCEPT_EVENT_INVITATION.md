@@ -6,4 +6,4 @@
 
 > `const` **ACCEPT\_EVENT\_INVITATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L195)
+Defined in: [src/GraphQl/Mutations/mutations.ts:196](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L196)
