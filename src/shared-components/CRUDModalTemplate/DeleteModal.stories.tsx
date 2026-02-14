@@ -156,25 +156,6 @@ export const RecurringEvent: Story = {
 };
 
 /**
- * DeleteModal for user deletion
- */
-export const DeleteUser: Story = {
-  args: {
-    title: 'Delete User',
-    entityName: 'John Doe',
-    showWarning: true,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'DeleteModal configured for user deletion with a warning about the irreversible action.',
-      },
-    },
-  },
-};
-
-/**
  * DeleteModal for organization deletion
  */
 export const DeleteOrganization: Story = {
