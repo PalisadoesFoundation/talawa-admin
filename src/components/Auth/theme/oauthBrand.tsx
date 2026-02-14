@@ -49,5 +49,5 @@ const providerBrands: Record<string, InterfaceProviderBrand> = {
 export function brandForProvider(
   provider: OAuthProviderKey,
 ): InterfaceProviderBrand {
-  return providerBrands[provider] ?? providerBrands.GOOGLE;
+  return providerBrands[provider];
 }
