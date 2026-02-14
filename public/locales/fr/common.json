@@ -305,5 +305,6 @@
   "noUserId": "ID utilisateur non disponible",
   "noTagsFound": "Aucune étiquette trouvée",
   "searchTags": "Rechercher des étiquettes",
-  "sortBy": "Trier par"
+  "sortBy": "Trier par",
+  "unknownMember": "Membre inconnu"
 }

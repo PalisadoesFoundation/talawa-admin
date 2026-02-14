@@ -32,6 +32,7 @@
  * - Optimize performance for large attendee lists.
  */
 import React, { useEffect, useMemo, useState } from 'react';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { Tooltip } from '@mui/material';
 import Button from 'shared-components/Button';
 import styles from './EventAttendance.module.css';
@@ -45,6 +46,14 @@ import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 import { DataGridWrapper, GridColDef } from 'shared-components/DataGridWrapper';
+
+const COLUMN_WIDTHS = {
+  INDEX: 70,
+  NAME: 200,
+  STATUS: 150,
+  EVENTS_ATTENDED: 180,
+  TASK_ASSIGNED: 200,
+};
 
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
@@ -149,7 +158,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'index',
         headerName: '#',
-        width: 70,
+        width: COLUMN_WIDTHS.INDEX,
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -158,23 +167,31 @@ function EventAttendance(): JSX.Element {
       {
         field: 'name',
         headerName: t('Member Name'),
-        width: 200,
+        width: COLUMN_WIDTHS.NAME,
         sortable: false,
         filterable: false,
         renderCell: (params) => (
-          <Link
-            to={`/admin/member/${currentUrl}/${params.row.id}`}
-            state={{ id: params.row.id }}
-            className={styles.membername}
-          >
-            {params.value}
-          </Link>
+          <div className="d-flex align-items-center">
+            <ProfileAvatarDisplay
+              imageUrl={params.row.avatarURL}
+              fallbackName={params.value || t('unknownMember')}
+              size="small"
+              enableEnlarge={true}
+            />
+            <Link
+              to={`/admin/member/${currentUrl}/${params.row.id}`}
+              state={{ id: params.row.id }}
+              className={`${styles.membername} ms-2`}
+            >
+              {params.value}
+            </Link>
+          </div>
         ),
       },
       {
         field: 'status',
         headerName: t('Status'),
-        width: 150,
+        width: COLUMN_WIDTHS.STATUS,
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -185,7 +202,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'eventsAttended',
         headerName: t('Events Attended'),
-        width: 180,
+        width: COLUMN_WIDTHS.EVENTS_ATTENDED,
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -196,12 +213,12 @@ function EventAttendance(): JSX.Element {
               tooltip: {
                 sx: {
                   backgroundColor: 'var(--bs-white)',
-                  fontSize: '2em',
-                  maxHeight: '170px',
+                  fontSize: 'var(--font-size-3xl)',
+                  maxHeight: 'var(--space-16)',
                   overflowY: 'scroll',
                   scrollbarColor: 'white',
                   border: 'var(--primary-border-solid)',
-                  borderRadius: '6px',
+                  borderRadius: 'var(--radius-md)',
                   boxShadow:
                     'var(--shadow-offset-sm) var(--shadow-blur-md) var(--shadow-spread-xs) rgba(var(--color-black), 0.1)',
                 },
@@ -230,7 +247,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'tagsAssignedWith',
         headerName: t('Task Assigned'),
-        width: 200,
+        width: COLUMN_WIDTHS.TASK_ASSIGNED,
         sortable: false,
         filterable: false,
         headerAlign: 'left',

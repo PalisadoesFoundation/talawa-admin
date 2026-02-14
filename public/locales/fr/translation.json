@@ -1565,6 +1565,7 @@
     "Admin": "Administrateur",
     "loading": "Chargement...",
     "noAttendees": "Aucun participant trouvé",
+    "unknownMember": "Membre inconnu",
     "attendeeCount": "Nombre de participants",
     "maleAttendees": "Participants masculins",
     "femaleAttendees": "Participantes féminines",

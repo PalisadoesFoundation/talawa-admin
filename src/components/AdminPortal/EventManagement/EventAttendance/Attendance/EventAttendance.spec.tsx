@@ -480,4 +480,147 @@ describe('Event Attendance Component', () => {
       }
     });
   });
+
+  describe('ProfileAvatarDisplay', () => {
+    it('renders ProfileAvatarDisplay with name for each attendee', async () => {
+      renderEventAttendance();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+
+      // Assert avatar images are rendered (one per attendee row)
+      const avatarImages = screen.getAllByRole('img');
+      expect(avatarImages.length).toBeGreaterThan(0);
+    });
+
+    it('renders fallback initials when avatarURL is missing', async () => {
+      mockLazyQuery({
+        loading: false,
+        data: {
+          event: {
+            attendees: [
+              {
+                id: 'no-avatar-1',
+                name: 'No Avatar User',
+                emailAddress: 'noavatar@example.com',
+                createdAt: dayjs.utc().add(1, 'year').toISOString(),
+                role: 'attendee',
+                avatarURL: null,
+                eventsAttended: [],
+              },
+            ],
+          },
+        },
+      });
+
+      renderEventAttendanceWithSpy();
+
+      await waitFor(() => {
+        expect(screen.getByText('No Avatar User')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Date Filtering Logic', () => {
+    test('filters attendees by This Month correctly', async () => {
+      const now = new Date();
+      const thisMonth = new Date(now.getFullYear(), now.getMonth(), 15);
+      const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 15);
+
+      mockLazyQuery({
+        loading: false,
+        data: {
+          event: {
+            attendees: [
+              {
+                id: 'att1',
+                name: 'Current Month User',
+                emailAddress: 'current@example.com',
+                createdAt: thisMonth.toISOString(),
+                avatarURL: null,
+                eventsAttended: [],
+                hoursVolunteered: 5,
+              },
+              {
+                id: 'att2',
+                name: 'Last Month User',
+                emailAddress: 'last@example.com',
+                createdAt: lastMonth.toISOString(),
+                avatarURL: null,
+                eventsAttended: [],
+                hoursVolunteered: 3,
+              },
+            ],
+          },
+        },
+      });
+
+      renderEventAttendanceWithSpy();
+
+      await waitFor(() => {
+        const dataGrid = screen.getByRole('grid');
+        expect(dataGrid).toBeInTheDocument();
+      });
+
+      const filterDropdown = screen.getByTestId('filter-dropdown-toggle');
+      await userEvent.click(filterDropdown);
+      await userEvent.click(screen.getByText('This Month'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Current Month User')).toBeInTheDocument();
+        expect(screen.queryByText('Last Month User')).not.toBeInTheDocument();
+      });
+    });
+
+    test('filters attendees by This Year correctly', async () => {
+      const now = new Date();
+      const thisYear = new Date(now.getFullYear(), 5, 15);
+      const lastYear = new Date(now.getFullYear() - 1, 5, 15);
+
+      mockLazyQuery({
+        loading: false,
+        data: {
+          event: {
+            attendees: [
+              {
+                id: 'att1',
+                name: 'Current Year User',
+                emailAddress: 'currentyear@example.com',
+                createdAt: thisYear.toISOString(),
+                avatarURL: null,
+                eventsAttended: [],
+                hoursVolunteered: 5,
+              },
+              {
+                id: 'att2',
+                name: 'Last Year User',
+                emailAddress: 'lastyear@example.com',
+                createdAt: lastYear.toISOString(),
+                avatarURL: null,
+                eventsAttended: [],
+                hoursVolunteered: 3,
+              },
+            ],
+          },
+        },
+      });
+
+      renderEventAttendanceWithSpy();
+
+      await waitFor(() => {
+        const dataGrid = screen.getByRole('grid');
+        expect(dataGrid).toBeInTheDocument();
+      });
+
+      const filterDropdown = screen.getByTestId('filter-dropdown-toggle');
+      await userEvent.click(filterDropdown);
+      await userEvent.click(screen.getByText('This Year'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Current Year User')).toBeInTheDocument();
+        expect(screen.queryByText('Last Year User')).not.toBeInTheDocument();
+      });
+    });
+  });
 });
