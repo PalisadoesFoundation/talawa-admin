@@ -1,4 +1,4 @@
-import { ActionItemPage } from '../../pageObjects/AdminPortal/ActionItemPage';
+import { ActionItemPage } from '../../../pageObjects/AdminPortal/ActionItemPage';
 
 describe('Admin Event Action Items Tab', () => {
   const actionItemPage = new ActionItemPage();
