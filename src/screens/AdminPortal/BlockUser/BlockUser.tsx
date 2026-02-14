@@ -57,9 +57,10 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
 import { useParams } from 'react-router';
 
-import type {
-  InterfaceUserPg,
-  InterfaceOrganizationPg,
+import {
+  type InterfaceUserPg,
+  type InterfaceOrganizationPg,
+  UserRole,
 } from 'utils/interfaces';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
@@ -149,8 +150,13 @@ const BlockUser = (): JSX.Element => {
           !blockedUsers.some((blockedUser) => blockedUser.id === member.id),
       );
 
-      setAllMembers(filteredMembers);
-      setFilteredAllMembers(filteredMembers);
+      //filter out administrators from the members list
+      const filteredMembersWithoutAdmins = filteredMembers.filter(
+        (member) => member.role !== UserRole.Administrator,
+      );
+
+      setAllMembers(filteredMembersWithoutAdmins);
+      setFilteredAllMembers(filteredMembersWithoutAdmins);
     }
   }, [memberData, blockedUsers]);
 

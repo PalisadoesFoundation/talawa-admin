@@ -66,6 +66,7 @@ interface InterfaceMockOptions {
   emptyMembers?: boolean;
   emptyBlockedUsers?: boolean;
   nullData?: boolean;
+  includeAdmin?: boolean;
   delay?: number;
 }
 
@@ -100,6 +101,7 @@ const createMocks = (
     emptyMembers = false,
     emptyBlockedUsers = false,
     nullData = false,
+    includeAdmin = true,
     delay = 0,
   } = options;
 
@@ -119,26 +121,41 @@ const createMocks = (
                 : {
                     organization: {
                       members: {
-                        edges: emptyMembers
-                          ? []
-                          : [
-                              {
-                                node: {
-                                  id: '1',
-                                  name: 'John Doe',
-                                  emailAddress: 'john@example.com',
-                                  role: 'regular',
+                        edges: (() => {
+                          const memberEdges = emptyMembers
+                            ? []
+                            : [
+                                {
+                                  node: {
+                                    id: '1',
+                                    name: 'John Doe',
+                                    emailAddress: 'john@example.com',
+                                    role: 'regular',
+                                  },
                                 },
-                              },
-                              {
-                                node: {
-                                  id: '2',
-                                  name: 'Jane Smith',
-                                  emailAddress: 'jane@example.com',
-                                  role: 'regular',
+                                {
+                                  node: {
+                                    id: '2',
+                                    name: 'Jane Smith',
+                                    emailAddress: 'jane@example.com',
+                                    role: 'regular',
+                                  },
                                 },
+                              ];
+
+                          if (includeAdmin) {
+                            memberEdges.push({
+                              node: {
+                                id: 'admin-1',
+                                name: 'Admin User',
+                                emailAddress: 'admin@example.com',
+                                role: 'administrator',
                               },
-                            ],
+                            });
+                          }
+
+                          return memberEdges;
+                        })(),
                         pageInfo: { hasNextPage: false, endCursor: null },
                       },
                     },
@@ -385,6 +402,26 @@ describe('BlockUser Component', () => {
         expect(johnDoe).toBeInTheDocument();
         expect(janeSmith).toBeInTheDocument();
         expect(screen.queryByText('Bob Johnson')).not.toBeInTheDocument();
+      });
+    });
+
+    it('does not render administrators in the members list', async () => {
+      render(
+        <MockedProvider mocks={createMocks({ includeAdmin: true })}>
+          <BrowserRouter>
+            <BlockUser />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+        expect(screen.queryByText('Admin User')).not.toBeInTheDocument();
       });
     });
 
