@@ -35,7 +35,6 @@ i18n.init({
           enterNameOrganization: 'Enter organization name',
           enterOrganizationDescription: 'Enter organization description',
           isUserRegistrationRequired: 'User registration required',
-          isVisibleInSearch: 'Is visible in search',
           'Is Public': 'Is Public',
           nameDescriptionRequired: 'Name and description are required',
           updateFailed: 'Failed to update organization',
@@ -103,7 +102,6 @@ describe('OrgUpdate Component', () => {
             postalCode: '12345',
             countryCode: 'US',
             isUserRegistrationRequired: false,
-            isVisibleInSearch: false,
           },
         },
       },
@@ -251,7 +249,6 @@ describe('OrgUpdate Component', () => {
             postalCode: '12345',
             countryCode: 'US',
             isUserRegistrationRequired: false,
-            isVisibleInSearch: false,
           },
         },
       },
@@ -459,7 +456,6 @@ describe('OrgUpdate Component', () => {
                 postalCode: '12345',
                 countryCode: 'US',
                 isUserRegistrationRequired: false,
-                isVisibleInSearch: false,
               },
             },
           },
@@ -569,7 +565,6 @@ describe('OrgUpdate Component', () => {
                 postalCode: '12345',
                 countryCode: 'US',
                 isUserRegistrationRequired: false,
-                isVisibleInSearch: false,
               },
             },
           },
@@ -639,7 +634,7 @@ describe('OrgUpdate Component', () => {
       vi.clearAllMocks();
     });
 
-    it('toggles user registration and visibility switches correctly', async () => {
+    it('toggles user registration switches correctly', async () => {
       const user = userEvent.setup();
 
       render(
@@ -652,7 +647,6 @@ describe('OrgUpdate Component', () => {
 
       await screen.findByDisplayValue('Test Org');
       const userRegSwitch = screen.getByTestId('user-reg-switch');
-      const visibilitySwitch = screen.getByTestId('visibility-switch');
 
       expect(userRegSwitch).toBeChecked();
       await user.click(userRegSwitch);
@@ -660,36 +654,6 @@ describe('OrgUpdate Component', () => {
 
       await user.click(userRegSwitch);
       expect(userRegSwitch).toBeChecked();
-
-      expect(visibilitySwitch).not.toBeChecked();
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).toBeChecked();
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).not.toBeChecked();
-    });
-
-    it('toggles visibility switch correctly', async () => {
-      const user = userEvent.setup();
-
-      render(
-        <MockedProvider mocks={mocks}>
-          <I18nextProvider i18n={i18n}>
-            <OrgUpdate orgId="1" />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await screen.findByDisplayValue('Test Org');
-
-      const visibilitySwitch = screen.getByTestId('visibility-switch');
-
-      expect(visibilitySwitch).not.toBeChecked();
-
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).toBeChecked();
-
-      await user.click(visibilitySwitch);
-      expect(visibilitySwitch).not.toBeChecked();
     });
   });
 
@@ -747,7 +711,6 @@ describe('OrgUpdate Component', () => {
               postalCode: '12345',
               countryCode: 'US',
               isUserRegistrationRequired: false,
-              isVisibleInSearch: false,
             },
           },
         },
@@ -939,7 +902,6 @@ describe('OrgUpdate Component', () => {
               countryCode: 'US',
               avatar: file,
               isUserRegistrationRequired: false,
-              isVisibleInSearch: false,
             },
           },
         },
@@ -1035,7 +997,6 @@ describe('OrgUpdate Component', () => {
               state: 'Test State',
               countryCode: 'US',
               isUserRegistrationRequired: false,
-              isVisibleInSearch: false,
             },
           },
         },

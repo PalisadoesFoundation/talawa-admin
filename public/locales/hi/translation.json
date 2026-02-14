@@ -1260,7 +1260,8 @@
     "longDelOrgMsg": "संगठन हटाएं बटन पर क्लिक करने से संगठन अपने ईवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
     "deleteSampleOrganization": "नमूना संगठन हटाएँ",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "successfullyDeletedOrganization": "संगठन सफलतापूर्वक हटा दिया गया"
   },
   "userUpdate": {
     "appLanguageCode": "डिफ़ॉल्ट भाषा",

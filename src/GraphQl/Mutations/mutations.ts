@@ -57,6 +57,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
       avatarMimeType
       avatarURL
       updatedAt
+      isUserRegistrationRequired
     }
   }
 `;

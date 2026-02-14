@@ -1265,7 +1265,8 @@
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
     "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "successfullyDeletedOrganization": "Organisation supprimée avec succès"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",

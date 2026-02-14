@@ -22,6 +22,7 @@ import {
   InterfaceOrganization,
   InterfaceMutationUpdateOrganizationInput,
 } from 'types/AdminPortal/OrgUpdate/interface';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 
 /**
  * Component for updating organization details.
@@ -68,7 +69,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
   const [userRegistrationRequiredChecked, setuserRegistrationRequiredChecked] =
     React.useState(false);
-  const [visiblechecked, setVisibleChecked] = React.useState(false);
 
   const [updateOrganization] = useMutation<
     { updateOrganization: { organization: InterfaceOrganization } },
@@ -115,7 +115,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       setuserRegistrationRequiredChecked(
         data.organization.isUserRegistrationRequired ?? false,
       );
-      setVisibleChecked(data.organization.isVisibleInSearch ?? false);
     }
     return () => {
       isMounted = false;
@@ -163,7 +162,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         countryCode: formState.address?.countryCode,
         ...(formState.avatar ? { avatar: formState.avatar } : {}),
         isUserRegistrationRequired: userRegistrationRequiredChecked,
-        isVisibleInSearch: visiblechecked,
       };
 
       // Filter out empty fields
@@ -220,42 +218,33 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             }}
           />
 
-          <FormFieldGroup
+          <FormTextField
             name="orgDescrip"
             label={tCommon('description')}
             required
-          >
-            <FormTextField
-              name="orgDescrip"
-              label={''}
-              as="textarea"
-              className={styles.descriptionTextField}
-              placeholder={t('enterOrganizationDescription')}
-              autoComplete="off"
-              value={formState.orgDescrip}
-              onChange={(value: string) => {
-                setFormState({ ...formState, orgDescrip: value });
-              }}
-            />
-          </FormFieldGroup>
+            as="textarea"
+            className={styles.descriptionTextField}
+            placeholder={t('enterOrganizationDescription')}
+            autoComplete="off"
+            value={formState.orgDescrip}
+            onChange={(value: string) => {
+              setFormState({ ...formState, orgDescrip: value });
+            }}
+          />
 
-          <FormFieldGroup
+          <FormTextField
             name="address.line1"
-            label={tCommon('Location')}
+            label={tCommon('location')}
             required
-          >
-            <FormTextField
-              name="address.line1"
-              label={''}
-              placeholder={tCommon('Enter Organization location')}
-              autoComplete="off"
-              className={styles.textFields}
-              value={formState.address.line1}
-              onChange={(value: string) => {
-                handleInputChange('line1', value);
-              }}
-            />
-          </FormFieldGroup>
+            placeholder={t('enterOrganizationLocation')}
+            autoComplete="off"
+            className={styles.textFields}
+            value={formState.address.line1}
+            onChange={(value: string) => {
+              handleInputChange('line1', value);
+            }}
+          />
+
           <FormFieldGroup name="photo" label={tCommon('displayImage')}>
             <input
               ref={fileInputRef}
@@ -283,41 +272,23 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             />
           </FormFieldGroup>
 
-          <Row>
-            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <FormFieldGroup
+          <Row className="mt-3">
+            <Col sm={6} className="d-flex align-items-center">
+              <FormCheckField
                 name="isPublic"
-                label={`${t('isPublic')}:`}
+                id="isPublic"
+                label={t('isPublic')}
+                type="checkbox"
+                data-testid="user-reg-switch"
+                // "Is Public" is the inverse of "user registration required"
+                checked={!userRegistrationRequiredChecked}
+                onChange={() =>
+                  setuserRegistrationRequiredChecked(
+                    !userRegistrationRequiredChecked,
+                  )
+                }
                 inline
-              >
-                <input
-                  id="isPublic"
-                  type="checkbox"
-                  data-testid="user-reg-switch"
-                  className="custom-switch"
-                  checked={!userRegistrationRequiredChecked}
-                  onChange={() =>
-                    setuserRegistrationRequiredChecked(
-                      !userRegistrationRequiredChecked,
-                    )
-                  }
-                />
-              </FormFieldGroup>
-            </Col>
-            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <FormFieldGroup
-                name="isVisibleInSearch"
-                label={`${t('isVisibleInSearch')}:`}
-                inline
-              >
-                <input
-                  type="checkbox"
-                  data-testid="visibility-switch"
-                  className="custom-switch"
-                  checked={visiblechecked}
-                  onChange={() => setVisibleChecked(!visiblechecked)}
-                />
-              </FormFieldGroup>
+              />
             </Col>
           </Row>
 
