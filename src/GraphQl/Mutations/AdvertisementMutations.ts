@@ -19,7 +19,7 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
     $startAt: DateTime!
     $endAt: DateTime!
     $description: String
-    $attachments: [Upload!]
+    $attachments: [FileMetadataInput!]
   ) {
     createAdvertisement(
       input: {

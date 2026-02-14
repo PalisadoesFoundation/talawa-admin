@@ -98,7 +98,12 @@ interface IAdvertisementEdge {
     name: string;
     startAt: string;
     type: string;
-    attachments: File[];
+    attachments: {
+      objectName: string;
+      fileHash: string;
+      mimeType: string;
+      previewUrl?: string;
+    }[];
   };
 }
 
@@ -143,7 +148,12 @@ const createAdvertisementNode = (
   startAt: string,
   endAt: string,
   type: string = 'banner',
-  attachments: File[] = [],
+  attachments: {
+    objectName: string;
+    fileHash: string;
+    mimeType: string;
+    previewUrl?: string;
+  }[] = [],
 ) => ({
   node: {
     id,
@@ -169,7 +179,13 @@ export const createAdFailMock = createMockResponse(
     startAt: '2022-12-31T18:30:00.000Z',
     endAt: '2023-01-31T18:30:00.000Z',
     description: 'advertisement',
-    attachments: [mockFile],
+    attachments: [
+      {
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimeType: 'image/jpeg',
+      },
+    ],
   },
   undefined,
   new Error('Invalid arguments for this action.'),

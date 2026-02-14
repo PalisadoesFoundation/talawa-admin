@@ -70,6 +70,7 @@ import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { BaseModal } from 'shared-components/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -88,6 +89,7 @@ function AdvertisementRegister({
 
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
+  const { uploadFileToMinio } = useMinioUpload();
 
   if (currentOrg === undefined) {
     return <PageNotFound />;
@@ -171,11 +173,39 @@ function AdvertisementRegister({
         }
       });
 
-      if (validFiles.length > 0) {
-        setFormState((prev) => ({
-          ...prev,
-          attachments: [...prev.attachments, ...validFiles],
-        }));
+      if (validFiles.length > 0 && currentOrg) {
+        const uploadedMetadata: {
+          objectName: string;
+          fileHash: string;
+          mimeType: string;
+          previewUrl: string;
+        }[] = [];
+        for (const file of validFiles) {
+          try {
+            const { objectName, fileHash } = await uploadFileToMinio(
+              file,
+              currentOrg,
+            );
+            uploadedMetadata.push({
+              objectName,
+              fileHash,
+              mimeType: file.type,
+              previewUrl: URL.createObjectURL(file),
+            });
+          } catch (error) {
+            console.error('Error uploading file:', error);
+            NotificationToast.error(
+              t('fileUploadError', { fileName: file.name }),
+            );
+          }
+        }
+
+        if (uploadedMetadata.length > 0) {
+          setFormState((prev) => ({
+            ...prev,
+            attachments: [...prev.attachments, ...uploadedMetadata],
+          }));
+        }
       }
     }
   };
@@ -233,7 +263,14 @@ function AdvertisementRegister({
         type: string;
         startAt: string;
         endAt: string;
-        attachments: File[] | undefined;
+        attachments:
+          | {
+              objectName: string;
+              fileHash: string;
+              mimeType: string;
+              previewUrl?: string;
+            }[]
+          | undefined;
         description?: string | null;
       } = {
         organizationId: currentOrg,
@@ -241,7 +278,9 @@ function AdvertisementRegister({
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: formState.attachments,
+        attachments: formState.attachments.map(
+          ({ previewUrl, ...rest }) => rest,
+        ),
       };
 
       if (formState.description !== null) {
@@ -463,11 +502,11 @@ function AdvertisementRegister({
               {/* Preview section */}
               {formState.attachments.map((file, index) => (
                 <div key={index}>
-                  {file.type.startsWith('video/') ? (
+                  {file.mimeType.startsWith('video/') ? (
                     <video
                       data-testid="mediaPreview"
                       controls
-                      src={encodeURI(URL.createObjectURL(file))}
+                      src={file.previewUrl}
                       className={styles.previewAdvertisementRegister}
                     >
                       <track
@@ -479,7 +518,7 @@ function AdvertisementRegister({
                   ) : (
                     <img
                       data-testid="mediaPreview"
-                      src={encodeURI(URL.createObjectURL(file))}
+                      src={file.previewUrl}
                       alt={t('preview')}
                       className={styles.previewAdvertisementRegister}
                     />

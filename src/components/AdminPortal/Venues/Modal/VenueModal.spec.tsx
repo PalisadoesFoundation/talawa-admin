@@ -1,7 +1,8 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -20,6 +21,20 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ApolloLink, Observable } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+// Mock useMinioUpload
+const { mockUploadFileToMinio } = vi.hoisted(() => {
+  const fn = vi.fn();
+  fn.mockResolvedValue({
+    objectName: 'test-obj',
+    fileHash: 'test-hash',
+    mimeType: 'image/png',
+  });
+  return { mockUploadFileToMinio: fn };
+});
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
+}));
 
 // Mock Setup
 const MOCKS = [
@@ -300,7 +315,12 @@ const renderVenueModal = (
 describe('VenueModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.resetModules();
+    // Configure MinIO upload mock
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'test-obj',
+      fileHash: 'test-hash',
+      mimeType: 'image/png',
+    });
   });
 
   test('creates a new venue successfully', async () => {
@@ -730,6 +750,15 @@ describe('Image Handling', () => {
 
 // Validation Tests
 describe('Validation', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'test-obj',
+      fileHash: 'test-hash',
+      mimeType: 'image/png',
+    });
+  });
+
   test('shows error when venue name is empty', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
@@ -995,6 +1024,15 @@ describe('Validation', () => {
 
   // Update Tests
   describe('Venue Updates', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      mockUploadFileToMinio.mockResolvedValue({
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimeType: 'image/png',
+      });
+    });
+
     test('shows success toast when an existing venue is updated', async () => {
       renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
 
@@ -2782,7 +2820,12 @@ describe('Validation', () => {
 
       // Verify attachments exist in the variables
       if (variables.attachments && variables.attachments.length > 0) {
-        expect(variables.attachments[0]).toBeInstanceOf(File);
+        // Verify it's metadata, not a File object
+        expect(variables.attachments[0]).toMatchObject({
+          objectName: 'test-obj',
+          fileHash: 'test-hash',
+          mimeType: 'image/png',
+        });
       }
 
       mutationSpy(variables);
@@ -2811,6 +2854,12 @@ describe('Validation', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
     await userEvent.upload(fileInput, file);
+
+    // Wait for upload to complete
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
 
     // Submit
     await act(async () => {
@@ -2897,7 +2946,12 @@ describe('Validation', () => {
       expect(vars.name).toBe('New Venue Name');
       expect(vars.capacity).toBe(100);
       expect(vars.attachments).toBeDefined();
-      expect(vars.attachments[0]).toBeInstanceOf(File);
+      // Verify it's metadata, not a File object
+      expect(vars.attachments[0]).toMatchObject({
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimeType: 'image/png',
+      });
 
       return mutationSpy();
     });
@@ -2919,6 +2973,12 @@ describe('Validation', () => {
     const fileInput = screen.getByTestId('venueImgUrl');
     await act(async () => {
       await userEvent.upload(fileInput, file);
+    });
+
+    // Wait for upload to complete
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+      expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     await act(async () => {
@@ -2959,7 +3019,12 @@ describe('Validation', () => {
       expect(vars.organizationId).toBe('orgId');
       expect(vars.attachments).toBeDefined();
       expect(vars.attachments.length).toBe(1);
-      expect(vars.attachments[0]).toBeInstanceOf(File);
+      // Verify it's metadata, not a File object
+      expect(vars.attachments[0]).toMatchObject({
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimeType: 'image/png',
+      });
 
       return mutationSpy();
     });
@@ -2987,6 +3052,12 @@ describe('Validation', () => {
     const fileInput = screen.getByTestId('venueImgUrl');
     await act(async () => {
       await userEvent.upload(fileInput, file);
+    });
+
+    // Wait for upload to complete
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+      expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     await act(async () => {

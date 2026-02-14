@@ -39,6 +39,15 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: vi.fn().mockResolvedValue({
+      objectName: 'mocked-logo-object-name',
+      fileHash: 'mocked-logo-file-hash',
+    }),
+  }),
+}));
+
 const MOCKS1 = [
   {
     request: {

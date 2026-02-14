@@ -16,7 +16,7 @@ export const CREATE_VENUE_MUTATION = gql`
     $description: String
     $organizationId: ID!
     $capacity: Int
-    $attachments: [Upload!]
+    $attachments: [FileMetadataInput!]
   ) {
     createVenue(
       input: {
@@ -47,7 +47,7 @@ export const UPDATE_VENUE_MUTATION = gql`
     $name: String
     $description: String
     $capacity: Int
-    $attachments: [Upload!]
+    $attachments: [FileMetadataInput!]
   ) {
     updateVenue(
       input: {

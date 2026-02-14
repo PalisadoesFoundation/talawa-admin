@@ -25,7 +25,12 @@ export interface InterfaceFormStateTypes {
   description: string | null; // Description of the advertisement
   endAt: Date; // End date of the advertisement
   organizationId?: string | undefined; // Organization ID
-  attachments: File[]; //File Array
+  attachments: {
+    objectName: string;
+    fileHash: string;
+    mimeType: string;
+    previewUrl?: string;
+  }[]; //File Array
   existingAttachments?: string | undefined; //Keep existing media URL for previews
 }
 

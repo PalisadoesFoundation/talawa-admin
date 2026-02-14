@@ -1843,6 +1843,7 @@
     "advertisementImageAlt": "Advertisement image #{{index}} for {{name}}",
     "invalidFileType": "Invalid file type: {{fileName}}",
     "fileTooLarge": "File too large: {{fileName}}",
+    "fileUploadError": "Error uploading file: {{fileName}}",
     "invalidArgumentsForAction": "Invalid arguments for this action.",
     "englishCaptions": "English captions",
     "preview": "Preview",

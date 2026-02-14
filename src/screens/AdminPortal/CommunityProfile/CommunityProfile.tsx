@@ -63,6 +63,7 @@ import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -108,11 +109,21 @@ const CommunityProfile = (): JSX.Element => {
     slackURL: '',
   });
 
-  // State for logo file (sent directly to mutation as Upload scalar)
-  const [logoFile, setLogoFile] = React.useState<File | null>(null);
+  // State for logo metadata (uploaded via MinIO presigned URL)
+  const [logoMetadata, setLogoMetadata] = React.useState<{
+    objectName: string;
+    fileHash: string;
+    mimeType: string;
+  } | null>(null);
+
+  // Track if logo upload is in progress
+  const [_isLogoUploading, setIsLogoUploading] = React.useState(false);
 
   // Ref for logo file input to keep DOM and state in sync
   const logoInputRef = React.useRef<HTMLInputElement>(null);
+
+  // MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   // Query to fetch community data
   const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
@@ -162,7 +173,7 @@ const CommunityProfile = (): JSX.Element => {
     try {
       await uploadPreLoginImagery({
         variables: {
-          logo: logoFile || undefined,
+          logo: logoMetadata || undefined,
           name: profileVariable.name,
           websiteURL: profileVariable.websiteURL,
           inactivityTimeoutDuration: data?.community?.inactivityTimeoutDuration,
@@ -201,7 +212,7 @@ const CommunityProfile = (): JSX.Element => {
         redditURL: '',
         slackURL: '',
       });
-      setLogoFile(null);
+      setLogoMetadata(null);
       // Clear the file input DOM element
       if (logoInputRef.current) {
         logoInputRef.current.value = '';
@@ -225,7 +236,7 @@ const CommunityProfile = (): JSX.Element => {
     if (
       profileVariable.name == '' &&
       profileVariable.websiteURL == '' &&
-      logoFile === null
+      logoMetadata === null
     ) {
       return true;
     } else {
@@ -280,9 +291,29 @@ const CommunityProfile = (): JSX.Element => {
                 className={`form-control mb-3 ${styles.inputField}`}
                 data-testid="fileInput"
                 ref={logoInputRef}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                   const file = e.target.files?.[0];
-                  setLogoFile(file || null);
+                  if (file) {
+                    try {
+                      setIsLogoUploading(true);
+                      const { objectName, fileHash } = await uploadFileToMinio(
+                        file,
+                        'community',
+                      );
+                      setLogoMetadata({
+                        objectName,
+                        fileHash,
+                        mimeType: file.type,
+                      });
+                    } catch (error) {
+                      console.error('Error uploading logo:', error);
+                      setLogoMetadata(null);
+                    } finally {
+                      setIsLogoUploading(false);
+                    }
+                  } else {
+                    setLogoMetadata(null);
+                  }
                 }}
                 autoComplete="off"
               />

@@ -26,6 +26,12 @@ import {
   updateAdFailMock,
 } from './AdvertisementRegisterMocks';
 
+// Mock useMinioUpload
+const mockUploadFileToMinio = vi.fn();
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -80,6 +86,10 @@ describe('Testing Advertisement Register Component', () => {
     mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'test-object',
+      fileHash: 'test-hash',
+    });
   });
   afterEach(() => {
     vi.clearAllMocks();
@@ -1605,6 +1615,77 @@ describe('Testing Advertisement Register Component', () => {
     expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
     expect(screen.getByTestId('advertisementNameInput')).toHaveValue('');
     expect(screen.getByTestId('advertisementDescriptionInput')).toHaveValue('');
+  });
+
+  it('Successfully creates advertisement with attachments', async () => {
+    const createMock = vi.fn().mockResolvedValue({
+      data: {
+        createAdvertisement: {
+          id: '123',
+        },
+      },
+    });
+    mockUseMutation.mockReturnValue([createMock]);
+
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
+
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Ad with Metadata',
+    );
+
+    // Upload file
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, mockFile);
+
+    // Wait for upload to complete and preview to appear
+    await waitFor(() => {
+      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByText(translations.register));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalled();
+      const call = createMock.mock.calls[0];
+      const variables = call[0].variables;
+
+      expect(variables).toEqual(
+        expect.objectContaining({
+          name: 'Ad with Metadata',
+        }),
+      );
+
+      const attachment = variables.attachments[0];
+      expect(attachment).toEqual({
+        objectName: 'test-object',
+        fileHash: 'test-hash',
+        mimeType: 'image/jpeg',
+      });
+
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        translations.advertisementCreated,
+      );
+    });
   });
 
   vi.useRealTimers();

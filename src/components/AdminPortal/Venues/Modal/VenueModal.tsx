@@ -33,8 +33,8 @@
  * ```
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './VenueModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -44,7 +44,8 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -60,7 +61,7 @@ interface InterfaceVenueFormState {
   description: string;
   capacity: string;
   objectName: string;
-  attachments?: File[];
+  attachments?: { objectName: string; fileHash: string; mimeType: string }[];
 }
 
 const VenueModal = ({
@@ -93,6 +94,9 @@ const VenueModal = ({
   const [mutate, { loading }] = useMutation(
     edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION,
   );
+
+  // MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   /**
    * Handles form submission to create or update a venue.
@@ -325,23 +329,44 @@ const VenueModal = ({
       const previewUrl = URL.createObjectURL(file);
       setImagePreviewUrl(previewUrl);
 
-      setFormState((prev) => ({
-        ...prev,
-        attachments: [file],
-      }));
+      // Upload to MinIO and store metadata
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(file, orgId);
+        setFormState((prev) => ({
+          ...prev,
+          attachments: [{ objectName, fileHash, mimeType: file.type }],
+        }));
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        NotificationToast.error({
+          key: 'imageUploadError',
+          namespace: 'errors',
+        });
+      }
     }
   };
   return (
-    <BaseModal
-      show={show}
-      onHide={onHide}
+    <CRUDModalTemplate
+      open={show}
+      onClose={onHide}
       title={t('venueDetails')}
-      showCloseButton
+      showFooter={true}
+      customFooter={
+        <Button
+          type="submit"
+          className={styles.addButton}
+          data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {edit ? t('editVenue') : t('createVenue')}
+        </Button>
+      }
     >
-      <Form data-testid="venueForm">
+      <div data-testid="venueForm">
         <label htmlFor="venuetitle">{t('venueName')}</label>
-        <Form.Control
-          type="title"
+        <input
+          type="text"
           id="venuetitle"
           placeholder={t('enterVenueName')}
           autoComplete="off"
@@ -353,10 +378,8 @@ const VenueModal = ({
           className={styles.inputField}
         />
         <label htmlFor="venuedescrip">{tCommon('description')}</label>
-        <Form.Control
-          type="text"
+        <textarea
           id="venuedescrip"
-          as="textarea"
           placeholder={t('enterVenueDesc')}
           autoComplete="off"
           required
@@ -368,7 +391,7 @@ const VenueModal = ({
           className={styles.inputField}
         />
         <label htmlFor="venuecapacity">{t('capacity')}</label>
-        <Form.Control
+        <input
           type="text"
           id="venuecapacity"
           placeholder={t('enterVenueCapacity')}
@@ -380,8 +403,8 @@ const VenueModal = ({
           }}
           className={styles.inputField}
         />
-        <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
-        <Form.Control
+        <label htmlFor="venueImg">{t('image')}</label>
+        <input
           accept="image/*"
           id="venueImgUrl"
           data-testid="venueImgUrl"
@@ -405,19 +428,8 @@ const VenueModal = ({
             </button>
           </div>
         )}
-
-        <Button
-          type="submit"
-          className={styles.addButton}
-          value={edit ? 'editVenue' : 'createVenue'}
-          data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {edit ? t('editVenue') : t('createVenue')}
-        </Button>
-      </Form>
-    </BaseModal>
+      </div>
+    </CRUDModalTemplate>
   );
 };
 

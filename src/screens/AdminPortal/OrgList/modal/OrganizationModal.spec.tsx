@@ -37,9 +37,10 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 const { mockUploadFileToMinio } = vi.hoisted(() => ({
-  mockUploadFileToMinio: vi
-    .fn()
-    .mockResolvedValue({ objectName: 'mocked-object-name' }),
+  mockUploadFileToMinio: vi.fn().mockResolvedValue({
+    objectName: 'mocked-object-name',
+    fileHash: 'mocked-file-hash',
+  }),
 }));
 
 vi.mock('utils/MinioUpload', () => ({
@@ -65,7 +66,7 @@ describe('OrganizationModal Component', () => {
   const formState = {
     addressLine1: '',
     addressLine2: '',
-    avatar: '',
+    avatar: null,
     city: '',
     countryCode: '',
     description: '',
@@ -79,6 +80,7 @@ describe('OrganizationModal Component', () => {
 
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'mocked-object-name',
+      fileHash: 'mocked-file-hash',
     });
   });
 
@@ -136,7 +138,7 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
+      avatar: null,
     };
 
     render(
@@ -171,7 +173,13 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, file);
     await waitFor(() =>
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
+        expect.objectContaining({
+          avatar: {
+            objectName: 'mocked-object-name',
+            fileHash: 'mocked-file-hash',
+            mimeType: 'image/png',
+          },
+        }),
       ),
     );
     expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
@@ -216,7 +224,7 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
+      avatar: null,
     };
 
     render(
@@ -456,7 +464,13 @@ describe('OrganizationModal Component', () => {
     // Use waitFor to handle async state updates after upload
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
+        expect.objectContaining({
+          avatar: {
+            objectName: 'mocked-object-name',
+            fileHash: 'mocked-file-hash',
+            mimeType: 'image/png',
+          },
+        }),
       );
     });
   });
@@ -586,7 +600,7 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
+      avatar: null,
     };
 
     render(
@@ -643,7 +657,13 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
+        expect.objectContaining({
+          avatar: {
+            objectName: 'mocked-object-name',
+            fileHash: 'mocked-file-hash',
+            mimeType: 'image/png',
+          },
+        }),
       );
     });
   });

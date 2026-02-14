@@ -10,9 +10,25 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:21](https://github
 
 ### attachments
 
-> **attachments**: `File`[]
+> **attachments**: `object`[]
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L28)
+
+#### fileHash
+
+> **fileHash**: `string`
+
+#### mimeType
+
+> **mimeType**: `string`
+
+#### objectName
+
+> **objectName**: `string`
+
+#### previewUrl?
+
+> `optional` **previewUrl**: `string`
 
 ***
 
@@ -36,7 +52,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:26](https://github
 
 > `optional` **existingAttachments**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L29)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L34)
 
 ***
 

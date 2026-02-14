@@ -41,11 +41,11 @@
 import React, { type ChangeEvent } from 'react';
 import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
 import styles from './OrganizationModal.module.css';
@@ -53,7 +53,7 @@ import styles from './OrganizationModal.module.css';
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: string | null;
+  avatar: { objectName: string; fileHash: string; mimeType: string } | null;
   city: string;
   countryCode: string;
   description: string;
@@ -92,13 +92,13 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
   return (
     <BaseModal
-      show={showModal}
-      onHide={toggleModal}
+      open={showModal}
+      onClose={toggleModal}
       title={t('createOrganization')}
-      headerClassName={styles.modalHeader}
-      dataTestId="modalOrganizationHeader"
+      className={styles.modalHeader}
+      data-testid="modalOrganizationHeader"
     >
-      <Form onSubmitCapture={createOrg}>
+      <form onSubmitCapture={createOrg}>
         <FormTextField
           name="orgname"
           label={tCommon('name')}
@@ -128,12 +128,11 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           data-testid="modalOrganizationDescription"
           autoComplete="off"
         />
-        <Form.Label>{tCommon('address')}</Form.Label>
+        <label>{tCommon('address')}</label>
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <select
               required
-              as="select"
               data-testid="modalOrganizationCountryCode"
               value={formState.countryCode}
               onChange={(e): void => {
@@ -155,7 +154,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   {country.label}
                 </option>
               ))}
-            </Form.Control>
+            </select>
           </Col>
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -241,46 +240,53 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           </Col>
         </Row>
         <Row className="mb-1"></Row>
-        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
-        <Form.Control
-          accept="image/*"
-          id="orgphoto"
-          className={`mb-3 ${styles.inputField}`}
-          name="photo"
-          type="file"
-          multiple={false}
-          onChange={async (e: React.ChangeEvent): Promise<void> => {
-            const target = e.target as HTMLInputElement;
-            const file = target.files && target.files[0];
+        <FormFieldGroup name="orgphoto" label={tCommon('displayImage')}>
+          <input
+            accept="image/*"
+            id="orgphoto"
+            className={`mb-3 ${styles.inputField}`}
+            name="photo"
+            type="file"
+            multiple={false}
+            onChange={async (
+              e: React.ChangeEvent<HTMLInputElement>,
+            ): Promise<void> => {
+              const file = e.target.files && e.target.files[0];
 
-            if (file) {
-              // Check file size (5MB limit)
-              const maxSize = 5 * 1024 * 1024;
-              if (file.size > maxSize) {
-                NotificationToast.error(tCommon('fileTooLarge'));
-                return;
-              }
+              if (file) {
+                // Check file size (5MB limit)
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                  NotificationToast.error(tCommon('fileTooLarge'));
+                  return;
+                }
 
-              // Check file type
-              const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-              if (!allowedTypes.includes(file.type)) {
-                NotificationToast.error(tCommon('invalidFileType'));
-                return;
-              }
+                // Check file type
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(file.type)) {
+                  NotificationToast.error(tCommon('invalidFileType'));
+                  return;
+                }
 
-              try {
-                const { objectName: avatarobjectName } =
-                  await uploadFileToMinio(file, 'organization');
-                setFormState({ ...formState, avatar: avatarobjectName });
-                NotificationToast.success(tCommon('imageUploadSuccess'));
-              } catch (error) {
-                console.error('Error uploading image:', error);
-                NotificationToast.error(tCommon('imageUploadError'));
+                try {
+                  const { objectName, fileHash } = await uploadFileToMinio(
+                    file,
+                    'organization',
+                  );
+                  setFormState({
+                    ...formState,
+                    avatar: { objectName, fileHash, mimeType: file.type },
+                  });
+                  NotificationToast.success(tCommon('imageUploadSuccess'));
+                } catch (error) {
+                  console.error('Error uploading image:', error);
+                  NotificationToast.error(tCommon('imageUploadError'));
+                }
               }
-            }
-          }}
-          data-testid="organisationImage"
-        />
+            }}
+            data-testid="organisationImage"
+          />
+        </FormFieldGroup>
         <Col className={styles.sampleOrgSection}>
           <Button
             className="addButton"
@@ -291,7 +297,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             {tCommon('createOrganization')}
           </Button>
         </Col>
-      </Form>
+      </form>
     </BaseModal>
   );
 };
