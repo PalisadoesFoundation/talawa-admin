@@ -2562,5 +2562,17 @@
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "expandDay": "展开日期"
   }
 }
