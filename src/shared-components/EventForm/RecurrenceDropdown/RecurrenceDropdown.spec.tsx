@@ -232,3 +232,40 @@ describe('RecurrenceDropdown', () => {
     });
   });
 });
+
+describe('RecurrenceDropdown Edge Cases', () => {
+  beforeEach(() => {
+    vi.resetModules();
+    vi.doMock('shared-components/DropDownButton', () => ({
+      __esModule: true,
+      default: ({ onSelect }: { onSelect: (value: string) => void }) => (
+        <button data-testid="trigger-invalid" onClick={() => onSelect('999')}>
+          Trigger Invalid
+        </button>
+      ),
+    }));
+  });
+
+  afterEach(() => {
+    vi.doUnmock('shared-components/DropDownButton');
+  });
+
+  it('does not call onSelect when an invalid option index is selected', async () => {
+    const user = userEvent.setup();
+    const { default: RecurrenceDropdown } =
+      await import('./RecurrenceDropdown');
+    const onSelect = vi.fn();
+    renderWithI18n(
+      <RecurrenceDropdown
+        recurrenceOptions={[]}
+        currentLabel="Test"
+        onSelect={onSelect}
+        t={mockT}
+      />,
+    );
+
+    await user.click(screen.getByTestId('trigger-invalid'));
+
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+});
