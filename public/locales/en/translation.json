@@ -1309,7 +1309,8 @@
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
     "deleteSampleOrganization": "Delete Sample Organization",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "successfullyDeletedOrganization": "Successfully deleted Organization"
   },
   "userUpdate": {
     "appLanguageCode": "Default Language",
@@ -1323,13 +1324,6 @@
     "displayImage": "displayImage",
     "saveChanges": "saveChanges",
     "cancel": "cancel"
-  },
-  "membershipRequest": {
-    "accept": "Accept",
-    "reject": "Reject",
-    "memberAdded": "it is accepted",
-    "joined": "joined",
-    "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "orgUpdate": {
     "city": "City",
@@ -1480,25 +1474,6 @@
     "register": "register",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
-  "userRegister": {
-    "enterFirstName": "Enter your first name",
-    "enterLastName": "Enter your last name",
-    "enterConfirmPassword": "Enter Password to confirm",
-    "alreadyhaveAnAccount": "Already have an account?",
-    "login": "Login",
-    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
-    "passwordNotMatch": "Password doesn't match. Confirm Password and try again.",
-    "invalidDetailsMessage": "Please enter valid details.",
-    "register": "register",
-    "firstName": "firstName",
-    "lastName": "lastName",
-    "emailAddress": "emailAddress",
-    "enterEmail": "enterEmail",
-    "password": "password",
-    "enterPassword": "enterPassword",
-    "confirmPassword": "confirmPassword",
-    "talawaApiUnavailable": "talawaApiUnavailable"
-  },
   "userNavbar": {
     "talawa": "Talawa",
     "home": "Home",
@@ -1639,9 +1614,7 @@
     "resetChanges": "Reset Changes",
     "profilePicture": "profile picture",
     "profileDetails": "Profile Details",
-    "deleteUserMessage": "By clicking on Delete User button your user will be permanently deleted along with its events, tags and all related data.",
     "copyLink": "Copy Profile Link",
-    "deleteUser": "Delete User",
     "otherSettings": "Other Settings",
     "changeLanguage": "Change Language",
     "sgender": "Select gender",

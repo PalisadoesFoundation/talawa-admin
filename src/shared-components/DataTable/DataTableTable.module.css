@@ -1,21 +1,50 @@
 .visuallyHidden {
-  composes: visuallyHidden from '../../style/app-fixed.module.css';
+  composes: visuallyHidden from './DataTableShared.module.css';
 }
+
 .selectCol {
-  composes: selectCol from '../../style/app-fixed.module.css';
+  composes: selectCol from './DataTableShared.module.css';
 }
+
 .sortable {
-  composes: sortable from '../../style/app-fixed.module.css';
+  cursor: pointer;
+  user-select: none;
+  outline: none;
 }
+
+.sortable:focus {
+  outline: var(--border-2) solid var(--color-blue-600);
+  outline-offset: var(--border-2);
+}
+
+.sortable:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-600);
+  outline-offset: var(--border-2);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-200);
+  background: var(--color-blue-100);
+}
+
+.sortable:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+  background: transparent;
+}
+
 .headerInner {
-  composes: headerInner from '../../style/app-fixed.module.css';
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
 }
+
 .sortIndicator {
-  composes: sortIndicator from '../../style/app-fixed.module.css';
+  font-size: var(--font-size-xs);
+  opacity: 0.5;
 }
+
 .active {
-  composes: active from '../../style/app-fixed.module.css';
+  opacity: 1;
 }
+
 .actionsCol {
-  composes: actionsCol from '../../style/app-fixed.module.css';
+  composes: actionsCol from './DataTableShared.module.css';
 }

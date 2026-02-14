@@ -165,7 +165,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:54](h
 
 Whether to show toast notification on error.
 
-#### Default
+#### Default Value
 
 ```ts
 true
