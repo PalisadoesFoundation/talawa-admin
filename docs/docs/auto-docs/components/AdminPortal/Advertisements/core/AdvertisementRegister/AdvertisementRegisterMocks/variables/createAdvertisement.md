@@ -6,4 +6,4 @@
 
 > `const` **createAdvertisement**: `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>[]
 
-Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L209)
+Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L191)
