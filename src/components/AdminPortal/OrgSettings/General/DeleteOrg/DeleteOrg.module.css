@@ -1,31 +1,65 @@
 .DeleteOrgCard {
-  composes: DeleteOrgCard from '../../../../../style/app-fixed.module.css';
+  --color-black-rgb: 0, 0, 0;
+  border-radius: var(--space-3);
+  box-shadow: 0 var(--space-1) var(--space-2)
+    rgba(var(--color-black-rgb), 0.075);
+  border: none;
+  height: var(--space-20) !important;
+  width: 98% !important;
 }
 
 .deleteCardHeader {
-  composes: deleteCardHeader from '../../../../../style/app-fixed.module.css';
+  background-color: var(--color-gray-100);
+  border-top-left-radius: var(--radius-sm) !important;
+  border-top-right-radius: var(--radius-sm) !important;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
 }
 
 .textBox {
-  composes: textBox from '../../../../../style/app-fixed.module.css';
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
 }
 
 .deleteButton {
-  composes: deleteButton from '../../../../../style/app-fixed.module.css';
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  border: var(--border-1) solid var(--color-red-500);
+  padding: var(--space-2) var(--space-10);
+  cursor: pointer;
+  display: block;
+  margin: var(--space-4) auto;
+  border-radius: var(--radius-sm);
+  height: var(--space-11);
+  text-align: center;
+}
+
+.deleteButton:hover,
+.deleteButton:active,
+.deleteButton:focus {
+  background-color: var(--color-red-100) !important;
+  color: var(--color-red-500);
+  box-shadow: var(--border-shadow-xs) var(--hover-shadow);
+  outline: none;
 }
 
 .icon {
-  composes: icon from '../../../../../style/app-fixed.module.css';
+  margin-right: var(--space-3);
 }
 
 .modalHeaderDelete {
-  composes: modalHeaderDelete from '../../../../../style/app-fixed.module.css';
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
 }
 
 .btnDelete {
-  composes: btnDelete from '../../../../../style/app-fixed.module.css';
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--active-item-color) !important;
+  color: var(--color-black);
 }
 
 .btnConfirmDelete {
-  composes: btnConfirmDelete from '../../../../../style/app-fixed.module.css';
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  border: none;
 }

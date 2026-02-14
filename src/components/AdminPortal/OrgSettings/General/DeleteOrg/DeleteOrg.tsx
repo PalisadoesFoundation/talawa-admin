@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import {
-  DELETE_ORGANIZATION_MUTATION,
-  REMOVE_SAMPLE_ORGANIZATION_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 /**
  * A component for deleting an organization.
@@ -26,7 +22,7 @@ import useLocalStorage from 'utils/useLocalstorage';
  *
  * @returns JSX.Element - The rendered component with delete functionality.
  */
-function deleteOrg(): JSX.Element {
+function DeleteOrg(): JSX.Element {
   // Translation hook for localization
   const { t } = useTranslation('translation', { keyPrefix: 'deleteOrg' });
   const { t: tCommon } = useTranslation('common');
@@ -35,58 +31,27 @@ function deleteOrg(): JSX.Element {
   const { orgId: currentUrl } = useParams();
   // Navigation hook for redirecting
   const navigate = useNavigate();
-  // State to control the visibility of the delete confirmation modal
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const { isOpen, toggle, close } = useModalState();
 
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
-  const canDelete = getItem('SuperAdmin') || true;
-
-  // Check if the user has super admin privileges
-  // const canDelete = getItem('SuperAdmin');
-  /**
-   * Toggles the visibility of the delete confirmation modal.
-   */
-  const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
+  const canDelete = Boolean(getItem('role') === 'administrator');
 
   // GraphQL mutations for deleting organizations
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
-  const [removeSampleOrganization] = useMutation(
-    REMOVE_SAMPLE_ORGANIZATION_MUTATION,
-  );
-
-  // Query to check if the organization is a sample organization
-  const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
-    variables: { id: currentUrl },
-  });
 
   /**
    * Deletes the organization. It handles both sample and regular organizations.
    * Displays success or error messages based on the operation result.
    */
   const deleteOrg = async (): Promise<void> => {
-    if (data && data.isSampleOrganization) {
-      // If it's a sample organization, use a specific mutation
-      removeSampleOrganization()
-        .then(() => {
-          NotificationToast.success(
-            t('successfullyDeletedSampleOrganization') as string,
-          );
-          setTimeout(() => {
-            navigate('/admin/orglist');
-          }, 1000);
-        })
-        .catch((error) => {
-          NotificationToast.error(error.message);
-        });
-    } else {
-      // For regular organizations, use a different mutation
-      try {
-        await del({ variables: { input: { id: currentUrl || '' } } });
-        navigate('/admin/orglist');
-      } catch (error) {
-        errorHandler(t, error);
-      }
+    try {
+      await del({ variables: { input: { id: currentUrl } } });
+      NotificationToast.success(t('successfullyDeletedOrganization') as string);
+      navigate('/admin/orglist');
+    } catch (error) {
+      errorHandler(t, error);
     }
   };
 
@@ -102,13 +67,12 @@ function deleteOrg(): JSX.Element {
             <Button
               variant="danger"
               className={styles.deleteButton}
-              onClick={toggleDeleteModal}
+              disabled={!currentUrl}
+              onClick={toggle}
               data-testid="openDeleteModalBtn"
             >
               <DeleteIcon className={styles.icon} />
-              {data?.isSampleOrganization
-                ? t('deleteSampleOrganization')
-                : t('delete')}
+              {t('delete')}
             </Button>
           </Card.Body>
         </Card>
@@ -116,15 +80,15 @@ function deleteOrg(): JSX.Element {
       {/* Delete Organization Modal */}
       {canDelete && (
         <BaseModal
-          show={showDeleteModal}
-          onHide={toggleDeleteModal}
+          show={isOpen}
+          onHide={toggle}
           title={t('deleteOrganization')}
           dataTestId="orgDeleteModal"
           headerClassName={styles.modalHeaderDelete}
           footer={
             <>
               <Button
-                onClick={toggleDeleteModal}
+                onClick={close}
                 data-testid="closeDelOrgModalBtn"
                 className={styles.btnDelete}
               >
@@ -147,4 +111,4 @@ function deleteOrg(): JSX.Element {
   );
 }
 
-export default deleteOrg;
+export default DeleteOrg;
