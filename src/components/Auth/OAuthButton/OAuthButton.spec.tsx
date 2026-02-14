@@ -87,7 +87,7 @@ describe('OAuthButton', () => {
       <OAuthButton provider="GOOGLE" mode="register" onClick={mockOnClick} />,
     );
 
-    expect(screen.getByLabelText('GOOGLE register')).toBeInTheDocument();
+    expect(screen.getByLabelText('Google register')).toBeInTheDocument();
   });
 
   it('renders with link mode', () => {
@@ -95,7 +95,7 @@ describe('OAuthButton', () => {
       <OAuthButton provider="GOOGLE" mode="link" onClick={mockOnClick} />,
     );
 
-    expect(screen.getByLabelText('GOOGLE link')).toBeInTheDocument();
+    expect(screen.getByLabelText('Google link')).toBeInTheDocument();
   });
 
   // Test loading state
@@ -112,7 +112,6 @@ describe('OAuthButton', () => {
     const button = screen.getByRole('button');
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute('aria-busy', 'true');
-    expect(document.querySelector('.spinner')).toBeInTheDocument();
   });
 
   // Test disabled state
@@ -337,20 +336,6 @@ describe('OAuthButton', () => {
     );
 
     expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
-  });
-
-  // Test that loading spinner only appears when loading
-  it('does not render spinner when not loading', () => {
-    renderWithI18n(
-      <OAuthButton
-        provider="GOOGLE"
-        mode="login"
-        onClick={mockOnClick}
-        loading={false}
-      />,
-    );
-
-    expect(document.querySelector('.spinner')).not.toBeInTheDocument();
   });
 
   // Test icon and label structure

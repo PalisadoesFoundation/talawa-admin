@@ -41,7 +41,7 @@
 }
 
 .disabled {
-  opacity: 0.6;
+  opacity: var(--bs-btn-disabled-opacity);
   cursor: not-allowed;
 }
 

@@ -79,8 +79,10 @@ export const OAuthButton: React.FC<Props> = ({
       className={`${cls} ${brand.className}`}
       onClick={onClick}
       disabled={isDisabled}
-      aria-busy={loading}
-      aria-label={ariaLabel ?? t('oauth.ariaLabel', { provider, mode })}
+      aria-busy={loading || undefined}
+      aria-label={
+        ariaLabel ?? t('oauth.ariaLabel', { provider: brand.displayName, mode })
+      }
       data-provider={provider}
       data-mode={mode}
     >

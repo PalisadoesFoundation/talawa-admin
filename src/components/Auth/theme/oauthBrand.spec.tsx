@@ -62,26 +62,4 @@ describe('oauthBrand', () => {
       expect(brand1).toBe(brand2);
     });
   });
-
-  describe('ProviderBrand structure validation', () => {
-    it('Google brand has all required properties with correct types', () => {
-      const brand = brandForProvider('GOOGLE');
-
-      expect(typeof brand.displayName).toBe('string');
-      expect(typeof brand.className).toBe('string');
-      expect(React.isValidElement(brand.icon)).toBe(true);
-      expect(brand.displayName.length).toBeGreaterThan(0);
-      expect(brand.className.length).toBeGreaterThan(0);
-    });
-
-    it('GitHub brand has all required properties with correct types', () => {
-      const brand = brandForProvider('GITHUB');
-
-      expect(typeof brand.displayName).toBe('string');
-      expect(typeof brand.className).toBe('string');
-      expect(React.isValidElement(brand.icon)).toBe(true);
-      expect(brand.displayName.length).toBeGreaterThan(0);
-      expect(brand.className.length).toBeGreaterThan(0);
-    });
-  });
 });

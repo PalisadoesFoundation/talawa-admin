@@ -17,7 +17,7 @@ interface InterfaceProviderBrand {
  * Configuration object containing branding information for supported OAuth providers.
  * Maps provider keys to their respective branding configuration.
  */
-const providerBrands: Record<string, InterfaceProviderBrand> = {
+const providerBrands: Record<OAuthProviderKey, InterfaceProviderBrand> = {
   GOOGLE: {
     get icon(): ReactElement {
       return <FcGoogle className={styles.logo} />;
