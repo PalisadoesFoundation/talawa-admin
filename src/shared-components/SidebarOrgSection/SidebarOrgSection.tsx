@@ -26,10 +26,10 @@ import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import Avatar from 'shared-components/Avatar/Avatar';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from './SidebarOrgSection.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/shared-components/SidebarOrgSection/interface';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface IOrganizationData {
   id: string;
@@ -52,7 +52,6 @@ const SidebarOrgSection = ({
   isProfilePage = false,
 }: ISidebarOrgSectionProps): React.ReactElement | null => {
   const { t: tErrors } = useTranslation('errors');
-  const { t: tCommon } = useTranslation('common');
 
   const { data, loading } = useQuery<{
     organization: IOrganizationData;
@@ -94,22 +93,13 @@ const SidebarOrgSection = ({
           data-testid="OrgBtn"
         >
           <div className={styles.imageContainer}>
-            {data.organization.avatarURL ? (
-              <img
-                crossOrigin="anonymous"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                decoding="async"
-                src={data.organization.avatarURL}
-                alt={`${data.organization.name}`}
-              />
-            ) : (
-              <Avatar
-                name={data.organization.name}
-                containerStyle={styles.avatarContainer}
-                alt={tCommon('picture', { name: data.organization.name })}
-              />
-            )}
+            <ProfileAvatarDisplay
+              imageUrl={data.organization.avatarURL}
+              fallbackName={data.organization.name}
+              size="medium"
+              crossOrigin="anonymous"
+              dataTestId="org-avatar"
+            />
           </div>
           <div className={styles.ProfileRightContainer}>
             <div className={styles.profileText}>

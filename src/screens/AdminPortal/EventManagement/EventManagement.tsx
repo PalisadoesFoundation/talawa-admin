@@ -46,17 +46,17 @@ import { BsPersonCheck } from 'react-icons/bs';
 import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-bootstrap';
 import Button from 'shared-components/Button';
+import DropDownButton from 'shared-components/DropDownButton';
 import styles from './EventManagement.module.css';
-
 import EventDashboard from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/AdminPortal/EventManagement/EventActionItems/EventActionItems';
 import VolunteerContainer from 'screens/AdminPortal/EventVolunteers/VolunteerContainer';
-import EventAgendaItems from 'components/AdminPortal/EventManagement/EventAgendaItems/EventAgendaItems';
+import EventAgenda from 'components/AdminPortal/EventManagement/EventAgenda/EventAgenda';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants';
+
 /**
  * Tab options for the event management component.
  */
@@ -142,7 +142,7 @@ const EventManagement = (): JSX.Element => {
       icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
       component: (
         <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2 mt-5">
-          <EventAgendaItems eventId={eventId} />
+          <EventAgenda eventId={eventId} />
         </div>
       ),
     },
@@ -235,32 +235,20 @@ const EventManagement = (): JSX.Element => {
             {eventDashboardTabs.map(renderButton)}
           </div>
 
-          <Dropdown
-            className="d-md-none"
-            data-testid="tabsDropdownContainer"
+          <DropDownButton
+            id="tabs-dropdown"
+            options={eventDashboardTabs.map(({ value }) => ({
+              value,
+              label: t(value),
+            }))}
+            selectedValue={tab}
+            onSelect={(value) => setTab(value as TabOptions)}
+            variant="success"
+            dataTestIdPrefix="tabs"
             drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              data-testid="tabsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {eventDashboardTabs.map(({ value, icon }, index) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={() => setTab(value)}
-                  className={`d-flex gap-2 ${tab === value ? 'text-secondary' : ''}`}
-                  data-testid={`${value}DropdownItem`}
-                >
-                  {icon} {t(value)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+            parentContainerStyle="d-md-none"
+            ariaLabel={t('selectTab')}
+          />
         </Col>
       </Row>
 

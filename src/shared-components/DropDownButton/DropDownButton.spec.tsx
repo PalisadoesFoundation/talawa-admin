@@ -16,6 +16,9 @@ import {
   mockOnSelect,
   noTestIdProps,
   dropUpProps,
+  searchableMinimalProps,
+  withIconSearchProps,
+  withNonStringLabelProps,
 } from './DropDownButton.mocks';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -148,6 +151,7 @@ describe('DropDownButton Component', () => {
     const button = screen.getByTestId('dropdown-toggle');
     expect(button).toBeInTheDocument();
   });
+
   it('opens dropdown menu upwards when drop up is provided', async () => {
     renderComponent(dropUpProps);
     const button = screen.getByTestId('test-dropdown-toggle');
@@ -155,7 +159,45 @@ describe('DropDownButton Component', () => {
     const menu = screen.getByTestId('test-dropdown-menu');
     expect(menu.parentElement).toHaveClass('dropup');
   });
+  it('does not show caret when showCaret is false', () => {
+    renderComponent({
+      ...baseProps,
+      showCaret: false,
+    });
+    const caret = screen.queryByText('▼');
+    expect(caret).not.toBeInTheDocument();
+  });
 
+  it('updates search term on option selection in searchable dropdown', async () => {
+    renderComponent(searchableMinimalProps);
+
+    const input = screen.getByTestId('test-dropdown-input');
+
+    await userEvent.click(input);
+    await screen.findByTestId('test-dropdown-menu');
+
+    const option = screen.getByTestId('test-dropdown-item-1');
+    await userEvent.click(option);
+    expect(input).toHaveValue('Apple');
+  });
+
+  it('shows noOptionsFound when all options filtered out', async () => {
+    renderComponent(searchableMinimalProps);
+
+    const input = screen.getByTestId('test-dropdown-input');
+
+    await userEvent.click(input);
+    await userEvent.type(input, 'Xyz');
+
+    const noOptionsMsg = await screen.findByText('No options found');
+    expect(noOptionsMsg).toBeInTheDocument();
+  });
+  it('renders icon in searchable toggle when icon prop is provided', () => {
+    renderComponent(withIconSearchProps);
+
+    const icon = screen.getByTestId('dropdown-icon');
+    expect(icon).toBeInTheDocument();
+  });
   describe('Searchable DropDownButton', () => {
     const searchableProps = {
       ...baseProps,
@@ -251,24 +293,27 @@ describe('DropDownButton Component', () => {
     it('navigates and selects options with keyboard (ArrowDown/Enter)', async () => {
       renderComponent(searchableProps);
       const input = screen.getByTestId('test-dropdown-input');
-
-      // Open menu
       await userEvent.click(input);
 
-      // Navigate down. React-Bootstrap usually focuses the first item on ArrowDown from toggle
-      // However, since our toggle is an input, focus logic might differ.
-      // If standard Bootstrap Dropdown, first ArrowDown focuses first item.
       await userEvent.keyboard('{ArrowDown}');
 
-      // We expect focus to move to the first option
-      // const option1 = screen.getByText('Option 1');
-      // expect(option1).toHaveFocus();
-
-      // Select it
       await userEvent.keyboard('{Enter}');
 
-      // Expect selection callback
       expect(mockOnSelect).toHaveBeenCalledWith('1');
+    });
+    it('filters non-string label options based on search term', async () => {
+      renderComponent(withNonStringLabelProps);
+
+      const input = screen.getByTestId('test-dropdown-input');
+      await userEvent.click(input);
+
+      expect(screen.getByTestId('icon-label')).toBeInTheDocument();
+      expect(screen.getByText('String Label Option')).toBeInTheDocument();
+
+      await userEvent.type(input, 'String');
+
+      expect(screen.queryByTestId('icon-label')).not.toBeInTheDocument();
+      expect(screen.getByText('String Label Option')).toBeInTheDocument();
     });
   });
 });

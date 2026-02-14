@@ -2,6 +2,8 @@
   "talawaApiUnavailable": "Le service Talawa-API n'est pas disponible !. ",
   "notFound": "Pas trouvé",
   "unknownError": "Une erreur inconnue est survenue.  {{msg}}",
+  "missingRegistrationFields": "Veuillez remplir tous les champs obligatoires.",
+  "missingOrganizationId": "Veuillez sélectionner une organisation.",
   "notAuthorised": "Désolé! ",
   "errorSendingMail": "Erreur lors de l'envoi du courrier",
   "emailNotRegistered": "Email non enregistré",

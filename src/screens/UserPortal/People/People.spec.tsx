@@ -462,7 +462,7 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable-loading')).toBeInTheDocument();
     await wait();
   });
 
@@ -793,8 +793,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
 
     // Verify member is rendered
     expect(screen.getByText('Test User No Email')).toBeInTheDocument();
-    // Verify emailNotAvailable translation is displayed
-    const emailElement = screen.getByTestId('people-email-user-null-email');
-    expect(emailElement).toHaveTextContent('Email not available');
+    // Verify emailNotAvailable translation is displayed (DataTable renders email in datatable-cell-email)
+    expect(screen.getByText('Email not available')).toBeInTheDocument();
   });
 });

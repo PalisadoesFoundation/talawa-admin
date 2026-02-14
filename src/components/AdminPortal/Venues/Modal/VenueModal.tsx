@@ -33,6 +33,7 @@
  * ```
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Button from 'shared-components/Button';
 import styles from './VenueModal.module.css';
 import { useTranslation } from 'react-i18next';
@@ -42,10 +43,10 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
 import { useMinioUpload } from 'utils/MinioUpload';
+import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -55,7 +56,6 @@ export interface InterfaceVenueModalProps {
   venueData?: InterfaceQueryVenueListItem | null;
   edit: boolean;
 }
-
 interface InterfaceVenueFormState {
   name: string;
   description: string;
@@ -346,89 +346,82 @@ const VenueModal = ({
     }
   };
   return (
-    <CRUDModalTemplate
-      open={show}
-      onClose={onHide}
-      title={t('venueDetails')}
-      showFooter={true}
-      customFooter={
-        <Button
-          type="submit"
-          className={styles.addButton}
-          data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {edit ? t('editVenue') : t('createVenue')}
-        </Button>
-      }
-    >
-      <div data-testid="venueForm">
+    <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
+      <form data-testid="venueForm">
         <label htmlFor="venuetitle">{t('venueName')}</label>
-        <input
-          type="text"
-          id="venuetitle"
+        <FormTextField
+          name="venueTitle"
+          label={t('venueName')}
           placeholder={t('enterVenueName')}
-          autoComplete="off"
-          required
           value={name}
-          onChange={(e): void => {
-            setFormState({ ...formState, name: e.target.value });
-          }}
+          required
+          onChange={(v) => setFormState((prev) => ({ ...prev, name: v }))}
           className={styles.inputField}
+          data-testid="venueTitleInput"
         />
+
         <label htmlFor="venuedescrip">{tCommon('description')}</label>
-        <textarea
-          id="venuedescrip"
+        <FormTextField
+          name="venueDescription"
+          label={tCommon('description')}
           placeholder={t('enterVenueDesc')}
-          autoComplete="off"
+          value={description}
           required
           maxLength={500}
-          value={description}
-          onChange={(e): void => {
-            setFormState({ ...formState, description: e.target.value });
-          }}
+          onChange={(v) =>
+            setFormState((prev) => ({ ...prev, description: v }))
+          }
           className={styles.inputField}
         />
+
         <label htmlFor="venuecapacity">{t('capacity')}</label>
-        <input
-          type="text"
-          id="venuecapacity"
+        <FormTextField
+          name="venueCapacity"
+          label={t('capacity')}
           placeholder={t('enterVenueCapacity')}
-          autoComplete="off"
-          required
           value={capacity}
-          onChange={(e): void => {
-            setFormState({ ...formState, capacity: e.target.value });
-          }}
+          required
+          onChange={(v) => setFormState((prev) => ({ ...prev, capacity: v }))}
           className={styles.inputField}
         />
-        <label htmlFor="venueImg">{t('image')}</label>
+        <label htmlFor="venueImgUrl">{t('image')}</label>
         <input
           accept="image/*"
           id="venueImgUrl"
           data-testid="venueImgUrl"
           name="venueImg"
           type="file"
-          placeholder={t('uploadVenueImage')}
           multiple={false}
           ref={fileInputRef}
           onChange={handleFileUpload}
           className={styles.inputField}
         />
+
         {imagePreviewUrl && (
           <div className={styles.previewVenueModal}>
             <img src={imagePreviewUrl} alt={t('venueImagePreview')} />
-            <button
+            <Button
               className={styles.closeButtonP}
               onClick={clearImageInput}
               data-testid="closeimage"
+              aria-label={t('closeImagePreview')}
             >
               <i className="fa fa-times"></i>
-            </button>
+            </Button>
           </div>
         )}
-      </div>
+
+        <Button
+          type="button"
+          className={styles.addButton}
+          value={edit ? 'editVenue' : 'createVenue'}
+          data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {edit ? t('editVenue') : t('createVenue')}
+        </Button>
+      </form>
     </CRUDModalTemplate>
   );
 };

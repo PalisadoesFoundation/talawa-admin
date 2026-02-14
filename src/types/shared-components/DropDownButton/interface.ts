@@ -10,7 +10,7 @@ export interface InterfaceDropDownOption {
   /**
    * The label of the option.
    */
-  label: string;
+  label: React.ReactNode;
 
   /**
    * Whether the option is disabled.
@@ -20,17 +20,44 @@ export interface InterfaceDropDownOption {
 
 /**
  * Interface for dropdown component props.
+ *
+ * Styling props:
+ * - **Base (component/default layout):** `parentContainerStyle` and `btnStyle` are applied first
+ *   (e.g. from SortingButton or Navbar defaults).
+ * - **Consumer overrides:** `containerClassName` and `toggleClassName` are merged with the base
+ *   so parent screens can add their own CSS module classes without replacing defaults.
  */
 export interface InterfaceDropDownProps {
   /**
-   * Custom styles for the parent container.
+   * Base class(es) for the dropdown container. Applied first; often set by the wrapping component
+   * (e.g. SortingButton, Navbar). Use this for default layout/theme.
    */
   parentContainerStyle?: string;
 
   /**
-   * Custom styles for the dropdown button.
+   * Base class(es) for the toggle button. Applied first; often set by the wrapping component.
+   * Use this for default button layout/theme.
    */
   btnStyle?: string;
+
+  /**
+   * Custom class name for the dropdown menu.
+   */
+  menuClassName?: string;
+
+  /**
+   * Consumer override: extra class name(s) for the dropdown container, merged with
+   * parentContainerStyle. Use from parent screens (e.g. CSS module classes) to style the
+   * container without coupling to test IDs.
+   */
+  containerClassName?: string;
+
+  /**
+   * Consumer override: extra class name(s) for the toggle button, merged with btnStyle.
+   * Use from parent screens (e.g. CSS module classes) to style the toggle without
+   * coupling to test IDs.
+   */
+  toggleClassName?: string;
 }
 
 /**
@@ -122,6 +149,11 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
    * Placeholder text for the search input.
    */
   searchPlaceholder?: string;
+
+  /** Whether to show the caret icon on the dropdown button.
+   * @defaultValue true
+   */
+  showCaret?: boolean;
 }
 
 /**

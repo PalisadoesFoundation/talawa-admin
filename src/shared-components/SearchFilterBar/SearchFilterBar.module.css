@@ -11,7 +11,7 @@
   height: var(--space-10);
 }
 
-.btnsContainerSearchBar .btnsBlockSearchBar {
+.btnsBlockSearchBar {
   display: flex;
   justify-content: center;
   align-items: center;

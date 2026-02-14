@@ -200,7 +200,6 @@ export const updateAdFailMock = createMockResponse(
     startAt: '2022-01-31T18:30:00.000Z',
     endAt: '2023-12-31T18:30:00.000Z',
     description: 'advertisement',
-    attachments: [],
   },
   undefined,
   new Error('Invalid arguments for this action.'),

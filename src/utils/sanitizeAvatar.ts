@@ -1,3 +1,10 @@
+/**
+ * Sanitizes a file-based or URL-based avatar source.
+ *
+ * @param file - An image File to create an object URL from, or null
+ * @param fallbackUrl - A URL string to validate and return if no file is provided
+ * @returns A safe blob: or https: URL, or an empty string
+ */
 export const sanitizeAvatars = (
   file: File | null,
   fallbackUrl: string,
@@ -29,4 +36,17 @@ export const sanitizeAvatars = (
   } catch {
     return '';
   }
+};
+
+/**
+ * Normalizes an avatar URL by converting null-like values to an empty string.
+ *
+ * @param url - The avatar URL to normalize
+ * @returns The original URL, or an empty string if the input is falsy or the literal string "null"
+ */
+export const sanitizeAvatarURL = (url: string | null | undefined): string => {
+  if (!url || url === 'null') {
+    return '';
+  }
+  return url;
 };

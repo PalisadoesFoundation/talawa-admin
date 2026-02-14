@@ -40,17 +40,12 @@
  */
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
-import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
-import localStyles from './ProfileCard.module.css';
-
-interface InterfaceProfileCardProps {
-  portal?: 'admin' | 'user';
-}
+import styles from './ProfileCard.module.css';
+import { InterfaceProfileCardProps } from 'types/shared-components/ProfileCard/interface';
 
 const ProfileCard = ({
   portal = 'admin',
@@ -77,11 +72,7 @@ const ProfileCard = ({
   });
 
   return (
-    <Dropdown
-      as={ButtonGroup}
-      variant="none"
-      className={localStyles.dropdownContainer}
-    >
+    <div className={styles.dropdownContainer}>
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           <ProfileAvatarDisplay
@@ -94,7 +85,7 @@ const ProfileCard = ({
         </div>
         <div className={styles.profileTextUserSidebarOrg}>
           <span
-            className={`${styles.primaryText} ${localStyles.displayName}`}
+            className={`${styles.primaryText} ${styles.displayName}`}
             data-testid="display-name"
           >
             {displayedName}
@@ -111,7 +102,7 @@ const ProfileCard = ({
           <ChevronRightIcon className={styles.chevronIcon} />
         </button>
       </div>
-    </Dropdown>
+    </div>
   );
 };
 

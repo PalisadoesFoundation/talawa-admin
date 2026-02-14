@@ -39,17 +39,65 @@ reviews:
     - '!*.html'
     - '!*.md'
     - '!*.svg'
+  tools:
+    ast-grep:
+      enabled: true
+      rule_dirs:
+        - .coderabbit/ast-grep-rules
+      essential_rules: true
 
   # Keep instructions concise and scoped by file patterns to stay far under limits
   path_instructions:
     # 1) Tests — Vitest + RTL + sharded stability
     - path: '**/*.{spec,test}.{ts,tsx}'
       instructions: |
+        ═══════════════════════════════════════════════════════════════
+        🚨 ANTI-PATTERNS TO FLAG IMMEDIATELY (Search for these first):
+        ═══════════════════════════════════════════════════════════════
+
+        1. PATTERN: vi.clearAllMocks() anywhere in test file
+          FLAG AS: "❌ BLOCKING - Use vi.restoreAllMocks() at file:line"
+          WHY: Incomplete cleanup causes sharded test failures
+
+        2. PATTERN: afterEach without both cleanup() AND vi.restoreAllMocks()
+          FLAG AS: "❌ BLOCKING - Missing required cleanup at file:line"
+          
+        3. PATTERN: setTimeout or hardcoded delays
+          FLAG AS: "⚠️ RACE CONDITION - Replace with waitFor at file:line"
+
+        4. PATTERN: .catch(() => {}) without re-throw or assertion
+          FLAG AS: "❌ SILENT ERROR - Add fallback assertion at file:line"
+
+        5. PATTERN: dayjs(), moment(), DateTime.now(), or new Date() without arguments in test data
+          FLAG AS: "❌ BLOCKING - Non-deterministic timestamp at file:line - Use fixed UTC string"
+          WHY: Captures current time, causes flakiness in sharded CI
+
+        6. PATTERN: expect(...) after await userEvent or await waitFor, not inside waitFor
+          FLAG AS: "❌ BLOCKING - Race condition at file:line - Move assertion inside waitFor"
+          WHY: State changes may not propagate before assertion runs
+
+        ═══════════════════════════════════════════════════════════════
+
         Post a single, structured comment with these sections: Issue Goals, Tests (incl. Flakiness), Components/Policy, GraphQL, i18n & a11y, Security, Action Items.
         Reference exact file:line for each finding.
 
         Issue goals (Priority `#1`):
         - Parse the first PR comment for "Fixes/Closes/Resolves #<id>". Confirm every acceptance criterion is tested; list gaps with file:line.
+
+        Timezone Safety & Test Determinism (CRITICAL):
+        - REQUIRED: Use UTC date methods in all test assertions:
+          - ✅ Use: `.getUTCDate()`, `.getUTCMonth()`, `.getUTCDay()`, `.getUTCHours()`, `.getUTCMinutes()`, `.getUTCSeconds()`
+          - ❌ NEVER use: `.getDate()`, `.getMonth()`, `.getDay()`, `.getHours()`, `.getMinutes()`, `.getSeconds()`
+        - All test dates must use fixed UTC timestamps (e.g., `"2025-01-01T10:00:00Z"`)
+        - ❌ FORBIDDEN PATTERNS (capture current time):
+          - `dayjs()` without arguments (use `dayjs('2025-01-01T10:00:00Z')`)
+          - `moment()` without arguments (use `moment('2025-01-01T10:00:00Z')`)
+          - `DateTime.now()` (luxon) (use `DateTime.fromISO('2025-01-01T10:00:00Z')`)
+          - `new Date()` without arguments (use `new Date('2025-01-01T10:00:00.000Z')`)
+          - `Date.now()` (use fixed timestamp number or mock timers)
+        - Pattern to flag: `(dayjs|moment|DateTime\.now|new Date)\(\s*\)` in test data/mocks
+        - Report as "🔴 NON-DETERMINISTIC TIMESTAMP at file:line — Replace with fixed UTC string"
+        - Flag ANY usage of local timezone methods as CRITICAL - these cause CI flakiness in non-UTC environments
 
         Test quality (Vitest + RTL):
         - Use vi.mock; prefer accessible queries (getByRole/LabelText); use user-event.
@@ -58,9 +106,41 @@ reviews:
 
         Flaky test guard (12 shards) — CRITICAL PATTERNS:
 
-        Cleanup (MANDATORY):
-        - Each file: afterEach(() => cleanup()); and vi.restoreAllMocks().
-        - Clear localStorage/sessionStorage/window state; tests must be independent.
+        # MANDATORY CHECKLIST - Flag violations as BLOCKING
+
+        ## 1. Cleanup (CRITICAL for sharded CI)
+        [ ] afterEach contains cleanup() from `@testing-library/react`
+        [ ] afterEach contains vi.restoreAllMocks() (NOT vi.clearAllMocks())
+        [ ] localStorage/sessionStorage cleared if used
+        [ ] window state reset if modified
+
+        ⚠️ FLAG: "INCOMPLETE CLEANUP at file:line - Missing vi.restoreAllMocks()"
+        ⚠️ FLAG: "INCORRECT CLEANUP at file:line - Uses vi.clearAllMocks() instead of vi.restoreAllMocks()"
+
+        RATIONALE: vi.clearAllMocks() only clears call history but keeps mock 
+        implementations. vi.restoreAllMocks() restores originals AND clears history.
+        This prevents mock leakage between tests in parallel shards.
+
+        # ENHANCED: More specific delay detection
+        Hardcoded delays (ABSOLUTELY FORBIDDEN):
+        - ❌ NEVER use: setTimeout, setInterval, delay(), sleep(), wait() helpers with fixed durations
+        - ❌ Pattern to flag: "await wait(", "setTimeout(", "delay("
+        - ✅ ONLY use: waitFor(() => expect(...), { timeout: ... }) with explicit assertions
+        - Report as "🔴 HARDCODED DELAY at file:line — Replace with waitFor assertion"
+        - Exception: Only allow setTimeout in beforeEach/afterEach for test infrastructure setup (must have comment explaining why)
+
+        Assertion placement (MANDATORY):
+        - ALL assertions after async operations MUST be inside waitFor blocks.
+        - Patterns to flag as BLOCKING:
+          ❌ await userEvent.type(...); expect(...).toBeInTheDocument();
+          ❌ await waitFor(() => ...); expect(mockFn).toHaveBeenCalled();
+          ❌ fireEvent.click(...); expect(...).toHaveAttribute(...);
+          ✅ await userEvent.type(...); await waitFor(() => expect(...).toBeInTheDocument());
+        - Specific patterns to search:
+          * `expect\([^)]+\)\.(toHaveBeenCalled|toBeInTheDocument|toHaveAttribute)` NOT inside `waitFor\(`
+          * Any `expect(` within 3 lines after `await userEvent.` or `fireEvent.` that's NOT in `waitFor`
+        - Report as "🔴 RACE CONDITION at file:line — Assertion outside waitFor block after async operation"
+        - Exception: Assertions before any async operations in test case are safe.
 
         Async patterns (NO RACE CONDITIONS):
         - NO hardcoded setTimeout or fixed delays; use waitFor with explicit assertions.
@@ -85,6 +165,126 @@ reviews:
         - Consider vi.useRealTimers() in beforeEach for tests with heavy user interaction.
         - Flag any test using both fake timers AND user-event without explicit timer management.
 
+        DataTable-specific testing (CRITICAL for this codebase):
+        - After finding datatable container (findByTestId('datatable')), MUST waitFor rows to populate:
+          ❌ BAD: await screen.findByTestId('datatable'); const rows = getDataTableBodyRows();
+          ✅ GOOD: await screen.findByTestId('datatable'); await waitFor(() => expect(getDataTableBodyRows()).toHaveLength(N));
+        - DataTable shows skeleton first, then data asynchronously — tests MUST wait for transition.
+        - Report as "⚠️ DATATABLE RACE CONDITION at file:line — Not waiting for rows after container".
+
+        Double network requests (AVOID):
+        - Flag if a handler (onClick, onChange) calls refetch() AND a useEffect also refetches with same dependency.
+        - Example: handleChangeRowsPerPage calls refetch(...rowsPerPage...) BUT useEffect([rowsPerPage]) also refetches.
+        - Report as "⚠️ DOUBLE REFETCH at file:line — Both handler and useEffect refetch on same state change".
+
+        I18n Provider Requirement:
+        - All component tests MUST wrap with I18nextProvider for consistent translation behavior
+        - ❌ Relying on key fallbacks causes brittle tests that break on i18n changes
+        - ✅ Wrap all renders:
+          ```typescript
+          import { I18nextProvider } from 'react-i18next';
+          import i18nForTest from 'utils/i18nForTest';
+          
+          render(
+            <I18nextProvider i18n={i18nForTest}>
+              <YourComponent />
+            </I18nextProvider>
+          );
+          ```
+        - Detection: If test file imports a component that uses `useTranslation()` or `t()`, verify I18nextProvider is present
+
+        Fake Timers for Debounce/Throttle Testing:
+        - ❌ When testing debounced/throttled logic (search inputs, auto-save, etc.), NEVER use real waits
+        - ✅ REQUIRE: `vi.useFakeTimers()` + `vi.advanceTimersByTime()` pattern
+        - **Detection:**
+          - If test involves "search" or "debounce" in description/comments
+          - AND contains `wait()` or `setTimeout()`
+          - Flag: "Use fake timers to control time progression deterministically"
+        - Cleanup:
+          - Every `vi.useFakeTimers()` must have corresponding `vi.useRealTimers()` in:
+            * Same test block (try/finally)
+            * afterEach hook
+            * Never leave fake timers active between tests
+            
+        Avoid Testing Implementation Details:
+        - ❌ Do not assert on internal constants, magic numbers, or implementation specifics:
+          ```typescript
+          // Brittle - breaks on refactors:
+          expect(PAGE_SIZE).toBe(10);
+          expect(DEBOUNCE_MS).toBe(300);
+          expect(component.state.internalCounter).toBe(5);
+          ```
+        - ✅ Assert observable behavior instead:
+          ```typescript
+          // Robust - tests actual behavior:
+          expect(mockRequest.variables.first).toBeGreaterThan(0);
+          expect(mockRequest).toHaveBeenCalledWith(expect.objectContaining({
+            variables: expect.objectContaining({ first: expect.any(Number) })
+          }));
+          ```
+        - Detection:
+          - Flag `expect(CONSTANT_NAME).toBe(...)` patterns
+          - Suggest: "Test behavior, not constants. Assert what the component does, not how."
+
+        Global State & Window/DOM Pollution:
+        - ❌ CRITICAL: Any modification to global objects MUST be restored in teardown:
+          ```typescript
+          // These cause cross-test pollution:
+          window.location = { ... };
+          window.localStorage.setItem(...);
+          process.env.NODE_ENV = 'test';
+          global.fetch = mockFetch;
+          document.body.innerHTML = '...';
+          ```
+        - ✅ REQUIRE: Save original and restore:
+          ```typescript
+          let originalLocation: Location;
+          beforeEach(() => {
+            originalLocation = window.location;
+          });
+          afterEach(() => {
+            window.location = originalLocation;
+          });
+          ```
+        - Detection Pattern:
+          - Search for: `window.location =`, `window.* =`, `global.* =`, `process.env.* =`
+          - Verify corresponding save/restore in beforeEach/afterEach
+          - Flag missing restoration as CRITICAL for sharded CI
+
+        Anti-Pattern: Fixed Waits/Sleeps (CRITICAL for CI Flakiness):
+        - ❌ CRITICAL: Flag ANY usage of fixed time delays in tests:
+          ```typescript
+          // These cause flakiness in variable-latency CI:
+          await wait(200);
+          await wait(1000);
+          await sleep(500);
+          setTimeout(..., 1000);
+          await new Promise(resolve => setTimeout(resolve, 500));
+          ```
+        - ✅ REQUIRE: Condition-based async queries instead:
+          ```typescript
+          // Use findBy* (waits up to 1s by default):
+          const element = await screen.findByTestId('datatable');
+          
+          // Or waitFor with condition:
+          await waitFor(() => expect(mockFn).toHaveBeenCalled());
+          
+          // For debounce/throttle, use fake timers:
+          vi.useFakeTimers();
+          await userEvent.type(input, 'search');
+          vi.advanceTimersByTime(300); // DEBOUNCE_MS
+          await waitFor(() => expect(refetch).toHaveBeenCalled());
+          vi.useRealTimers();
+          ```
+        - Detection Pattern:
+          - Search for: `wait(`, `sleep(`, `setTimeout(`, `new Promise.*setTimeout`
+          - Exceptions: `waitFor(`, `findBy`, `findAllBy` (these are good)
+          - Flag every fixed-time wait as HIGH PRIORITY for refactoring
+        - Why This Matters:
+          - Fixed waits assume consistent response times
+          - CI sharding introduces variable latency
+          - Root cause of most test flakiness in distributed environments
+
         Structure:
         - No it.skip/describe.skip unless commented with reason + linked issue.
         - Wrap state updates in act() when needed.
@@ -94,7 +294,7 @@ reviews:
         - "❌ SILENT ERROR SWALLOW at file:line — .catch() without fallback"
         - "⏱️ TIMER CONFLICT at file:line — fake timers + user-event"
 
-    # 2) React components/screens/pages — enforce architecture & policy
+    # React components/screens/pages — enforce architecture & policy
     - path: 'src/{components,screens,pages}/**/*.{ts,tsx}'
       instructions: |
         Post a single, structured comment; reference file:line for each item.
@@ -102,6 +302,30 @@ reviews:
 
         Issue goals:
         - Map changes to the linked issue’s acceptance criteria; flag unaddressed or out‑of‑scope work.
+
+        ## Screen-specific: DataTable + useTableData Pattern (TableFix Migration)
+        **Applies only to files in src/screens/** that import DataTable:**
+        - All table-based screens migrating to DataTable MUST use useTableData hook:
+        - ❌ Do not use `useQuery` + manual `useMemo` for data transformation:
+          ```typescript
+          // Incorrect:
+          const { data } = useQuery(QUERY);
+          const rows = useMemo(() => data?.items ?? [], [data]);
+          ```
+        - ✅ Use useTableData wrapper:
+          ```typescript
+          // Correct:
+          const { rows, loading, error, refetch } = useTableData<ItemType, ...>(
+            useQuery(QUERY, { variables }),
+            { path: (data) => data?.items ?? [] }
+          );
+          ```
+        - **Detection:** 
+          - If file path starts with `src/screens/`
+          - AND imports DataTable from shared-components
+          - AND imports useQuery from `@apollo/client`
+          - BUT does NOT import useTableData
+          - Flag: "Screens using DataTable should integrate with useTableData hook per migration standards"
 
         Reusable component policy (see: https://docs-admin.talawa.io/docs/developer-resources/reusable-components/):
         - Placement: Admin-only → src/components/AdminPortal/** (+ src/types/AdminPortal/**);
@@ -121,7 +345,18 @@ reviews:
         - No hardcoded UI strings; use useTranslation with keys; add new keys to all 5 locales (en, es, fr, hi, zh).
         - Ensure roles/ARIA (aria-label/aria-describedby/aria-live), keyboard navigation, and semantic markup.
 
-    # 3) GraphQL operations
+        # NEW: Null safety in mutations
+        Null guard enforcement (CRITICAL for GraphQL mutations):
+        - When calling mutations with variables containing optional properties (fund?.id, user?.id, etc.):
+          MUST add null guard BEFORE the mutation call.
+        - Pattern to flag: "variables.*: \{\s*id: \w+\?\.\w+" without preceding "if (!...?.id) return;"
+        - Valid pattern:
+          ✅ if (!fund?.id) return; await deleteFund({ variables: { id: fund.id } });
+          ❌ await deleteFund({ variables: { id: fund?.id } });
+        - Report as "🔴 MISSING NULL GUARD at file:line — Add null check before mutation with optional property"
+        - Apply to all mutation calls: create*, update*, delete*, archive*, etc.
+
+    # GraphQL operations
     - path: 'src/GraphQl/**/*.ts'
       instructions: |
         Post a single, structured comment; reference file:line.
@@ -133,6 +368,53 @@ reviews:
         Correctness & duplication:
         - No duplicate or conflicting operations; watch pagination params (first/last).
         - Components using these operations must handle loading and error states in UI.
+
+        Schema compliance (CRITICAL):
+        - For each mutation/query, verify ALL input fields in the schema are used by components.
+        - For each component form, verify ALL form fields are sent in the mutation variables.
+        - Flag any form field (input, select, checkbox) NOT present in the mutation schema.
+        - Report as "🔴 SCHEMA MISMATCH at file:line — Field '<name>' in form but not in mutation schema"
+        - Flag any mutation accepting field X but component doesn't provide it.
+        - Report as "⚠️ MISSING FIELD at file:line — Mutation expects '<name>' but component doesn't send it"
+
+        Query completeness (CRITICAL):
+        - For each GraphQL query, trace ALL components that use the query data.
+        - For each field accessed in component code (e.g., `event.fieldName`, `data.queryName[0].fieldName`):
+          MUST verify the field is fetched in the query.
+        - Common patterns to check:
+          * Object property access: `data.events.map(e => e.fieldName)`
+          * Destructuring: `const { fieldName } = event;`
+          * Optional chaining: `event?.fieldName`
+        - Flag if component accesses a field NOT in the query selection set.
+        - Report as "🔴 MISSING QUERY FIELD at file:line — Component uses 'fieldName' but query doesn't fetch it"
+        - Example violation:
+          ❌ Query: `{ id name }` but Component: `event.isRecurringEventTemplate`
+          ✅ Query: `{ id name isRecurringEventTemplate }`
+        - Check both direct usage and passed to child components as props.
+
+    - path: '**/*.module.css'
+      instructions: |
+        Post a single, structured comment; reference file:line.
+
+        Design token usage:
+        - Use CSS variables from design tokens (var(--space-*, --color-*, --radius-*, etc.))
+        - No hardcoded pixel values for spacing, colors, shadows, or border-radius
+        - Flag any hardcoded values that could be tokens
+
+        !important consistency (CRITICAL):
+        - If a base selector uses !important for a property, ALL state selectors (:hover, :active, :focus, :disabled) must also use !important for that property
+        - Pattern to flag:
+          ❌ .btn { color: red !important; }
+              .btn:hover { color: blue; }  /* Missing !important */
+          ✅ .btn { color: red !important; }
+              .btn:hover { color: blue !important; }
+        - Report as "🔴 CSS SPECIFICITY BUG at file:line — :state selector missing !important when base has it"
+        - Check properties: color, background, background-color, border, box-shadow, opacity
+
+        BEM/Module naming:
+        - Use camelCase for module class names
+        - Keep selectors flat; avoid deep nesting
+        - Use :global() sparingly and document why
 
   pre_merge_checks:
     # Enforce test file updates for modified source files
@@ -157,3 +439,27 @@ reviews:
           BLOCKING: All components follow reusable component policy.
           Verify: No inline interfaces, correct portal placement, wrapper usage.
           See: https://docs-admin.talawa.io/docs/developer-resources/reusable-components/
+
+      - name: 'i18n Key Completeness'
+        mode: 'error'
+        instructions: |
+          BLOCKING: All translation keys must exist in ALL 5 locales.
+
+          For each t('key') or tCommon('key') usage:
+          1. Extract the key name
+          2. Verify it exists in public/locales/{en,es,fr,hi,zh}/translation.json
+          3. Flag if missing from ANY locale
+
+          Common patterns to check:
+          - t('namespace.key')
+          - tCommon('key')
+          - useTranslation hook with namespace
+
+          Report format:
+          - "🔴 MISSING i18n KEY at file:line — 'key' not found in locales: [es, fr]"
+          - "🔴 NAMESPACE MISMATCH at file:line — Using 'common.required' but should be 'validation.required'"
+
+          Must check all 5 locales:
+          - public/locales/{en,es,fr,hi,zh}/translation.json
+          - public/locales/{en,es,fr,hi,zh}/common.json
+          - public/locales/{en,es,fr,hi,zh}/errors.json

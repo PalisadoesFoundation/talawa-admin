@@ -568,21 +568,12 @@
     "tagActions": "Acciones de etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
     "addMember": "Agregar miembro",
-    "removeMember": "Eliminar miembro"
+    "removeMember": "Eliminar miembro",
+    "invalidTagName": "Nombre de etiqueta no válido"
   },
   "userListCard": {
     "joined": "Unido",
     "addAdmin": "Agregar administrador",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
-  },
-  "orgAdminListCard": {
-    "joined": "Unido",
-    "remove": "Remover",
-    "removeAdmin": "Eliminar administrador",
-    "removeAdminMsg": "¿Quieres eliminar a este administrador?",
-    "no": "No",
-    "yes": "Sí",
-    "adminRemoved": "Se elimina el administrador.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "orgPeopleListCard": {
@@ -775,9 +766,38 @@
     "deleteAgendaCategory": "Eliminar categoría de la agenda",
     "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "Carpeta de la agenda actualizada exitosamente",
+    "agendaFolderDeleted": "Carpeta de la agenda eliminada exitosamente",
+    "deleteAgendaFolder": "Eliminar carpeta de la agenda",
+    "deleteAgendaFolderMsg": "¿Desea eliminar esta carpeta de la agenda?",
+    "updateAgendaFolder": "Actualizar carpeta de la agenda",
+    "folderNamePlaceholder": "Nombre de la carpeta",
+    "createAgendaFolder": "Crear sección de la agenda",
+    "folderName": "Carpeta",
+    "categoryName": "Categoría",
+    "noCategory": "Sin categoría",
+    "organizationRequired": "La organización es obligatoria",
+    "folder": "Carpeta de la agenda",
+    "notes": "Notas",
+    "enterNotes": "Introducir nota",
+    "agendaFolderDetails": "Detalles de la sección de la agenda",
+    "agendaFolderCreated": "Sección de la agenda creada exitosamente",
+    "attachmentPreviewAlt": "Vista previa del archivo adjunto",
+    "agendaFolderUpdateFailed": "Error al actualizar la carpeta de la agenda",
+    "removeUrl": "Eliminar URL",
+    "removeAttachment": "Eliminar archivo adjunto",
+    "itemSequenceUpdateSuccessMsg": "La secuencia del elemento se actualizó correctamente",
+    "sectionSequenceUpdateSuccessMsg": "La secuencia de la sección se actualizó correctamente",
+    "editFolder": "Editar carpeta",
+    "editItem": "Editar elemento",
+    "deleteItem": "Eliminar elemento",
+    "previewItem": "Vista previa del elemento",
+    "deleteFolder": "Eliminar carpeta",
+    "itemPreview": "Vista previa del elemento",
     "agendaItemDetails": "Detalles del punto del orden del día",
     "updateAgendaItem": "Actualizar punto del orden del día",
+    "fileUploadFailed": "La carga del archivo falló",
     "title": "Título",
     "enterTitle": "Ingresar título",
     "sequence": "Secuencia",
@@ -1152,7 +1172,9 @@
     "statistics": "Estadísticas",
     "to": "A",
     "volunteers": "Voluntarios",
-    "backToEvents": "Volver a Eventos"
+    "backToEvents": "Volver a Eventos",
+    "selectTab": "Seleccionar Pestaña",
+    "eventTabs": "Pestañas del evento"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -1221,7 +1243,8 @@
     "confirmDelete": "Confirmar eliminación",
     "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
     "deleteSampleOrganization": "Eliminar organización de muestra",
-    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
+    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente",
+    "successfullyDeletedOrganization": "Organización eliminada correctamente"
   },
   "userUpdate": {
     "firstName": "Primer nombre",
@@ -1235,25 +1258,6 @@
     "displayImage": "Mostrar imagen",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "Contraseña anterior",
-    "newPassword": "Nueva contraseña",
-    "confirmNewPassword": "Confirmar nueva contraseña",
-    "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar",
-    "passCantBeEmpty": "La contraseña no puede estar vacía",
-    "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
-  },
-  "orgDelete": {
-    "deleteOrg": "Eliminar organización"
-  },
-  "membershipRequest": {
-    "joined": "Unido",
-    "accept": "Aceptar",
-    "reject": "Rechazar",
-    "memberAdded": "es aceptado",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "orgUpdate": {
     "name": "Nombre",
@@ -1409,25 +1413,6 @@
     "loading": "Cargando...",
     "emailNotAvailable": "Correo electrónico no disponible"
   },
-  "userRegister": {
-    "register": "Registro",
-    "firstName": "Nombre de pila",
-    "enterFirstName": "Ponga su primer nombre",
-    "lastName": "Apellido",
-    "enterLastName": "Ingresa tu apellido",
-    "emailAddress": "correo electrónico",
-    "enterEmail": "Ingrese su dirección de correo electrónico",
-    "password": "Contraseña",
-    "enterPassword": "Ingresa tu contraseña",
-    "confirmPassword": "confirmar Contraseña",
-    "enterConfirmPassword": "Ingrese su contraseña para confirmar",
-    "alreadyhaveAnAccount": "¿Ya tienes una cuenta?",
-    "login": "Acceso",
-    "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
-    "passwordNotMatch": "La contraseña no coincide. Confirme la contraseña y vuelva a intentarlo.",
-    "invalidDetailsMessage": "Ingrese detalles válidos.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
-  },
   "userNavbar": {
     "talawa": "Talawa",
     "home": "Hogar",
@@ -1563,6 +1548,7 @@
     "Admin": "Administrador",
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes",
+    "unknownMember": "Miembro desconocido",
     "attendeeCount": "Número de asistentes",
     "maleAttendees": "Asistentes masculinos",
     "femaleAttendees": "Asistentes femeninas",
@@ -1636,9 +1622,7 @@
     "resetChanges": "Restablecer cambios",
     "saveChanges": "Guardar cambios",
     "profileDetails": "Detalles del perfil",
-    "deleteUserMessage": "Al hacer clic en el botón Eliminar usuario, su usuario se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
     "copyLink": "Copiar enlace del perfil",
-    "deleteUser": "Eliminar usuario",
     "otherSettings": "Otras configuraciones",
     "changeLanguage": "Cambiar idioma",
     "sgender": "Seleccionar género",
@@ -1705,7 +1689,8 @@
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
     "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
-    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
+    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}.",
+    "selectCurrency": "Seleccionar moneda"
   },
   "transactions": {
     "title": "Transacciones",
@@ -1872,7 +1857,6 @@
     "hash": "#",
     "description": "Descripción",
     "groupInfo": "Información del grupo",
-    "memberOptions": "Opciones de miembro",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
     "userNotFound": "Usuario no encontrado",
@@ -1903,7 +1887,8 @@
     "next": "Siguiente",
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
     "thisUser": "este usuario",
-    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?"
+    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?",
+    "memberActionsMenu": "Menú de acciones del miembro"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
@@ -1979,7 +1964,8 @@
     "name": "Nombre",
     "desc": "Descripción",
     "venueImagePreview": "Vista previa de la imagen del lugar",
-    "sortVenues": "Ordenar lugares"
+    "sortVenues": "Ordenar lugares",
+    "closeImagePreview": "Cerrar vista previa de imagen"
   },
   "addMember": {
     "title": "Agregar miembro",
@@ -2319,7 +2305,8 @@
     "invited": "Invitado",
     "groupsAvailable": "{{count}} grupos disponibles",
     "volunteersRequired": "Requerido",
-    "signedUp": "Registrado"
+    "signedUp": "Registrado",
+    "volunteerTabs": "Pestañas de voluntarios"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
@@ -2380,7 +2367,7 @@
     "installing": "Instalando ({{elapsed}})",
     "uploading": "Subiendo...",
     "screenshotCounter": "{{current}} de {{total}}",
-    "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
+    "uninstallPluginWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin",
     "failedToParsePluginZip": "Error al analizar el archivo ZIP del plugin",
     "pluginUploadedSuccess": "¡Plugin subido exitosamente! (componentes {{components}}) - Ahora puedes instalarlo desde la lista de plugins."
@@ -2430,7 +2417,21 @@
     "holidays": "Días festivos",
     "events": "Eventos",
     "eventsCreatedByOrganization": "Eventos creados por la organización",
-    "today": "Hoy"
+    "today": "Hoy",
+    "viewLess": "Ver menos",
+    "viewAll": "Ver todo",
+    "noHolidaysAvailable": "No hay días festivos disponibles",
+    "holidayNames": {
+      "mayDayLabourDay": "Día del Trabajo",
+      "mothersDay": "Día de la Madre",
+      "fathersDay": "Día del Padre",
+      "independenceDayUS": "Día de la Independencia (EE.UU.)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Día del Recuerdo / Día de los Veteranos",
+      "christmasDay": "Día de Navidad"
+    }
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"
@@ -2459,7 +2460,9 @@
     "clear": "Limpiar",
     "clearSelection": "Limpiar selección",
     "loading": "Cargando...",
-    "selectRow": "Seleccionar fila {{rowKey}}"
+    "selectRow": "Seleccionar fila {{rowKey}}",
+    "previousYear": "Año anterior",
+    "nextYear": "Siguiente año"
   },
   "donation": {
     "amount_label": "Cantidad",
@@ -2558,20 +2561,19 @@
       }
     }
   },
-  "memberActivity": {
-    "dateNA": "Fecha N/A",
-    "yes": "Sí",
-    "no": "No",
-    "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
-    "eventNotFound": "Evento no encontrado o ha sido eliminado",
-    "numberOfAttendees": "Número de asistentes",
-    "viewEventDetails": "Ver detalles del evento"
-  },
-  "promotedPost": {
-    "title": "Contenido Promocionado",
-    "promotedContent": "Contenido promocionado: {{title}}"
-  },
   "csv": {
     "demographics": "Demografía de {{category}}"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "L",
+      "tue": "M",
+      "wed": "X",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S",
+      "sun": "D"
+    },
+    "expandDay": "Expandir día"
   }
 }

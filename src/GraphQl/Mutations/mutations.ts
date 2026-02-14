@@ -57,6 +57,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
       avatarMimeType
       avatarURL
       updatedAt
+      isUserRegistrationRequired
     }
   }
 `;
@@ -125,30 +126,8 @@ export const UPDATE_USER_MUTATION = gql`
     }
   }
 `;
-// to update the password of user
-
-export const UPDATE_USER_PASSWORD_MUTATION = gql`
-  mutation UpdateUserPassword(
-    $previousPassword: String!
-    $newPassword: String!
-    $confirmNewPassword: String!
-  ) {
-    updateUserPassword(
-      data: {
-        previousPassword: $previousPassword
-        newPassword: $newPassword
-        confirmNewPassword: $confirmNewPassword
-      }
-    ) {
-      user {
-        _id
-      }
-    }
-  }
-`;
 
 // to sign up in the talawa admin
-
 export const SIGNUP_MUTATION = gql`
   mutation SignUp(
     $ID: ID!
@@ -421,15 +400,6 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// to remove an admin from an organization
-export const REMOVE_ADMIN_MUTATION = gql`
-  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
-    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      _id
-    }
-  }
-`;
-
 // to Remove member from an organization
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
@@ -448,17 +418,6 @@ export const REMOVE_MEMBER_MUTATION_PG = gql`
       input: { organizationId: $organizationId, memberId: $memberId }
     ) {
       id
-    }
-  }
-`;
-
-// to add the admin
-export const ADD_ADMIN_MUTATION = gql`
-  mutation CreateAdmin($orgid: ID!, $userid: ID!) {
-    createAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      user {
-        _id
-      }
     }
   }
 `;
@@ -679,10 +638,10 @@ export {
 } from './ActionItemMutations';
 
 export {
-  CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
-  DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
-  UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
-} from './AgendaCategoryMutations';
+  CREATE_AGENDA_FOLDER_MUTATION,
+  DELETE_AGENDA_FOLDER_MUTATION,
+  UPDATE_AGENDA_FOLDER_MUTATION,
+} from './AgendaFolderMutations';
 
 export {
   ADD_ADVERTISEMENT_MUTATION,
@@ -694,6 +653,7 @@ export {
   CREATE_AGENDA_ITEM_MUTATION,
   DELETE_AGENDA_ITEM_MUTATION,
   UPDATE_AGENDA_ITEM_MUTATION,
+  UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
 } from './AgendaItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
@@ -749,6 +709,56 @@ export const GET_FILE_PRESIGNEDURL = gql`
   mutation createGetfileUrl($input: MutationCreateGetfileUrlInput!) {
     createGetfileUrl(input: $input) {
       presignedUrl
+    }
+  }
+`;
+
+/** Links an OAuth provider account to the currently authenticated user. */
+export const LINK_OAUTH_ACCOUNT = gql`
+  mutation LinkOAuthAccount($input: OAuthLoginInput!) {
+    linkOAuthAccount(input: $input) {
+      id
+      name
+      emailAddress
+      isEmailAddressVerified
+      role
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Unlinks an OAuth provider account from the currently authenticated user. */
+export const UNLINK_OAUTH_ACCOUNT = gql`
+  mutation UnlinkOAuthAccount($provider: OAuthProvider!) {
+    unlinkOAuthAccount(provider: $provider) {
+      id
+      emailAddress
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Authenticates a user using an OAuth provider and returns authentication tokens. */
+export const SIGN_IN_WITH_OAUTH = gql`
+  mutation SignInWithOAuth($input: OAuthLoginInput!) {
+    signInWithOAuth(input: $input) {
+      authenticationToken
+      refreshToken
+      user {
+        id
+        name
+        emailAddress
+      }
     }
   }
 `;

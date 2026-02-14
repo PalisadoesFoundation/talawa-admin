@@ -2,14 +2,14 @@ import { render, screen, renderHook, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
-import { DataTable } from './DataTable';
+import { DataTable, defaultCompare } from './DataTable';
 import { TableLoader } from './TableLoader';
 import { useDataTableFiltering } from './hooks/useDataTableFiltering';
 import { useDataTableSelection } from './hooks/useDataTableSelection';
 
 describe('DataTable', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   /* ------------------------------------------------------------------
@@ -2213,5 +2213,611 @@ describe('defaultCompare boolean/date branches', () => {
     // Active sortable column gets aria-sort
     expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
     expect(statusHeader).not.toHaveAttribute('aria-sort');
+  });
+
+  it('uses custom sortFn when provided in column meta', async () => {
+    type Row = { id: string; priority: string };
+    // Custom sort order: high > medium > low
+    const priorityOrder: Record<string, number> = {
+      high: 3,
+      medium: 2,
+      low: 1,
+    };
+
+    const columns = [
+      {
+        id: 'id',
+        header: 'ID',
+        accessor: 'id' as const,
+      },
+      {
+        id: 'priority',
+        header: 'Priority',
+        accessor: 'priority' as const,
+        meta: {
+          sortable: true,
+          sortFn: (a: Row, b: Row) =>
+            priorityOrder[a.priority] - priorityOrder[b.priority],
+        },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', priority: 'medium' },
+      { id: '2', priority: 'high' },
+      { id: '3', priority: 'low' },
+    ];
+
+    render(<DataTable<Row> data={rows} columns={columns} rowKey="id" />);
+
+    const priorityHeader = screen.getByRole('button', { name: /priority/i });
+
+    // Click to sort ascending (low -> medium -> high)
+    await userEvent.click(priorityHeader);
+    expect(priorityHeader).toHaveAttribute('aria-sort', 'ascending');
+
+    let bodyRows = screen.getAllByRole('row').slice(1);
+    let ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['3', '1', '2']); // low, medium, high
+
+    // Click again to sort descending (high -> medium -> low)
+    await userEvent.click(priorityHeader);
+    expect(priorityHeader).toHaveAttribute('aria-sort', 'descending');
+
+    bodyRows = screen.getAllByRole('row').slice(1);
+    ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['2', '1', '3']); // high, medium, low
+  });
+
+  it('uses custom sortFn with nulls placed last', async () => {
+    type Row = { id: string; score: number | null };
+
+    const columns = [
+      {
+        id: 'id',
+        header: 'ID',
+        accessor: 'id' as const,
+      },
+      {
+        id: 'score',
+        header: 'Score',
+        accessor: 'score' as const,
+        meta: {
+          sortable: true,
+          sortFn: (a: Row, b: Row) => (a.score ?? 0) - (b.score ?? 0),
+        },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', score: 50 },
+      { id: '2', score: null },
+      { id: '3', score: 100 },
+    ];
+
+    render(<DataTable<Row> data={rows} columns={columns} rowKey="id" />);
+
+    const scoreHeader = screen.getByRole('button', { name: /score/i });
+
+    // Ascending sort - nulls should be last
+    await userEvent.click(scoreHeader);
+
+    let bodyRows = screen.getAllByRole('row').slice(1);
+    let ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['1', '3', '2']); // 50, 100, null (nulls last)
+
+    // Descending sort - nulls should still be last
+    await userEvent.click(scoreHeader);
+
+    bodyRows = screen.getAllByRole('row').slice(1);
+    ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['3', '1', '2']); // 100, 50, null (nulls last)
+  });
+
+  it('controlled sorting mode does not update internal state', async () => {
+    type Row = { id: string; name: string };
+    const onSortChange = vi.fn();
+
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', name: 'Charlie' },
+      { id: '2', name: 'Alice' },
+      { id: '3', name: 'Bob' },
+    ];
+
+    // Controlled mode: sortBy is an array
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        rowKey="id"
+        sortBy={[{ columnId: 'name', direction: 'asc' }]}
+        onSortChange={onSortChange}
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+
+    // Click to change sort - should call onSortChange but not change internal state
+    await userEvent.click(nameHeader);
+
+    expect(onSortChange).toHaveBeenCalledWith({
+      sortBy: [{ columnId: 'name', direction: 'desc' }],
+      sortDirection: 'desc',
+      column: expect.objectContaining({ id: 'name' }),
+    });
+
+    // Still shows ascending since parent controls the state
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+  });
+
+  it('clicking a non-sortable header does not trigger sort', async () => {
+    type Row = { id: string; name: string; status: string };
+    const onSortChange = vi.fn();
+
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: 'status' as const,
+        meta: { sortable: false },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', name: 'Alice', status: 'Active' },
+      { id: '2', name: 'Bob', status: 'Inactive' },
+    ];
+
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        rowKey="id"
+        onSortChange={onSortChange}
+      />,
+    );
+
+    const statusHeader = screen.getByRole('columnheader', { name: /status/i });
+
+    // Click the non-sortable header - should not have a button role
+    await userEvent.click(statusHeader);
+
+    // onSortChange should not be called
+    expect(onSortChange).not.toHaveBeenCalled();
+  });
+
+  it('stable sort maintains original order for equal values', async () => {
+    type Row = { id: string; name: string; group: string };
+
+    const columns = [
+      {
+        id: 'id',
+        header: 'ID',
+        accessor: 'id' as const,
+      },
+      {
+        id: 'group',
+        header: 'Group',
+        accessor: 'group' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    // Rows with same group value should maintain relative order
+    const rows: Row[] = [
+      { id: '1', name: 'First A', group: 'A' },
+      { id: '2', name: 'First B', group: 'B' },
+      { id: '3', name: 'Second A', group: 'A' },
+      { id: '4', name: 'Second B', group: 'B' },
+    ];
+
+    render(<DataTable<Row> data={rows} columns={columns} rowKey="id" />);
+
+    const groupHeader = screen.getByRole('button', { name: /group/i });
+
+    // Sort ascending by group
+    await userEvent.click(groupHeader);
+
+    let bodyRows = screen.getAllByRole('row').slice(1);
+    let ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    // All A's first, then B's - original order preserved within groups
+    expect(ids).toEqual(['1', '3', '2', '4']);
+
+    // Sort descending by group
+    await userEvent.click(groupHeader);
+
+    bodyRows = screen.getAllByRole('row').slice(1);
+    ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    // All B's first, then A's - original order preserved within groups
+    expect(ids).toEqual(['2', '4', '1', '3']);
+  });
+
+  it('does not sort when column has sortable explicitly set to false in sortedRows calculation', async () => {
+    type Row = { id: string; value: number };
+
+    const columns = [
+      {
+        id: 'value',
+        header: 'Value',
+        accessor: 'value' as const,
+        meta: { sortable: false },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', value: 30 },
+      { id: '2', value: 10 },
+      { id: '3', value: 20 },
+    ];
+
+    // Use initialSortBy to trigger the sortedRows path with a non-sortable column
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        rowKey="id"
+        initialSortBy="value"
+      />,
+    );
+
+    // Rows should remain in original order since column is not sortable
+    const bodyRows = screen.getAllByRole('row').slice(1);
+    const values = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(values).toEqual(['30', '10', '20']);
+  });
+
+  it('clicking on a new sortable column starts with ascending sort', async () => {
+    type Row = { id: string; name: string; age: number };
+
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'age',
+        header: 'Age',
+        accessor: 'age' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', name: 'Charlie', age: 30 },
+      { id: '2', name: 'Alice', age: 25 },
+      { id: '3', name: 'Bob', age: 35 },
+    ];
+
+    render(<DataTable<Row> data={rows} columns={columns} rowKey="id" />);
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    const ageHeader = screen.getByRole('button', { name: /age/i });
+
+    // Sort by name first
+    await userEvent.click(nameHeader);
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+
+    // Toggle to descending
+    await userEvent.click(nameHeader);
+    expect(nameHeader).toHaveAttribute('aria-sort', 'descending');
+
+    // Click on age column - should start with ascending
+    await userEvent.click(ageHeader);
+    expect(ageHeader).toHaveAttribute('aria-sort', 'ascending');
+    expect(nameHeader).not.toHaveAttribute('aria-sort');
+
+    // Verify sort order is correct (25, 30, 35)
+    const bodyRows = screen.getAllByRole('row').slice(1);
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Alice', 'Charlie', 'Bob']);
+  });
+
+  it('serverSort mode skips client-side sorting', async () => {
+    type Row = { id: string; name: string };
+    const onSortChange = vi.fn();
+
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    // Note: rows are not in alphabetical order
+    const rows: Row[] = [
+      { id: '1', name: 'Charlie' },
+      { id: '2', name: 'Alice' },
+      { id: '3', name: 'Bob' },
+    ];
+
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        rowKey="id"
+        serverSort
+        onSortChange={onSortChange}
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+
+    // Click to sort
+    await userEvent.click(nameHeader);
+
+    // onSortChange should be called
+    expect(onSortChange).toHaveBeenCalled();
+
+    // But rows should remain in original order (server handles sorting)
+    const bodyRows = screen.getAllByRole('row').slice(1);
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Charlie', 'Alice', 'Bob']);
+  });
+
+  it('sorts rows with equal boolean values (stable sort)', async () => {
+    type Row = { id: string; active: boolean };
+
+    const columns = [
+      {
+        id: 'id',
+        header: 'ID',
+        accessor: 'id' as const,
+      },
+      {
+        id: 'active',
+        header: 'Active',
+        accessor: 'active' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    // Multiple rows with same boolean value
+    const rows: Row[] = [
+      { id: '1', active: true },
+      { id: '2', active: true },
+      { id: '3', active: false },
+      { id: '4', active: false },
+    ];
+
+    render(<DataTable<Row> data={rows} columns={columns} rowKey="id" />);
+
+    const activeHeader = screen.getByRole('button', { name: /active/i });
+
+    // Sort ascending - all false first (in original order), then all true (in original order)
+    await userEvent.click(activeHeader);
+
+    let bodyRows = screen.getAllByRole('row').slice(1);
+    let ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['3', '4', '1', '2']); // stable sort: original order preserved within groups
+
+    // Sort descending - all true first, then false
+    await userEvent.click(activeHeader);
+
+    bodyRows = screen.getAllByRole('row').slice(1);
+    ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['1', '2', '3', '4']); // stable sort
+  });
+
+  it('controlled sort with missing direction defaults to asc', async () => {
+    type Row = { id: string; name: string };
+
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', name: 'Charlie' },
+      { id: '2', name: 'Alice' },
+      { id: '3', name: 'Bob' },
+    ];
+
+    // Controlled mode with sortBy array but missing direction property
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        rowKey="id"
+        sortBy={
+          [{ columnId: 'name' }] as unknown as Array<{
+            columnId: string;
+            direction: 'asc' | 'desc';
+          }>
+        }
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+
+    // Verify rows are sorted in ascending order
+    const bodyRows = screen.getAllByRole('row').slice(1);
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Alice', 'Bob', 'Charlie']);
+  });
+
+  it('handles sorting with multiple null/undefined values', async () => {
+    type Row = { id: string; value: string | null | undefined };
+
+    const columns = [
+      {
+        id: 'id',
+        header: 'ID',
+        accessor: 'id' as const,
+      },
+      {
+        id: 'value',
+        header: 'Value',
+        accessor: 'value' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', value: 'B' },
+      { id: '2', value: null },
+      { id: '3', value: 'A' },
+      { id: '4', value: undefined },
+      { id: '5', value: 'C' },
+    ];
+
+    render(<DataTable<Row> data={rows} columns={columns} rowKey="id" />);
+
+    const valueHeader = screen.getByRole('button', { name: /value/i });
+
+    // Sort ascending - non-null values first in order, then nulls/undefined last (stable)
+    await userEvent.click(valueHeader);
+
+    let bodyRows = screen.getAllByRole('row').slice(1);
+    let ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['3', '1', '5', '2', '4']); // A, B, C, null, undefined
+
+    // Sort descending - non-null values in reverse, nulls/undefined still last
+    await userEvent.click(valueHeader);
+
+    bodyRows = screen.getAllByRole('row').slice(1);
+    ids = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(ids).toEqual(['5', '1', '3', '2', '4']); // C, B, A, null, undefined
+  });
+
+  it('empty sortBy array in controlled mode defaults to asc on first click', async () => {
+    type Row = { id: string; name: string };
+    const onSortChange = vi.fn();
+
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+    ];
+
+    const rows: Row[] = [
+      { id: '1', name: 'Charlie' },
+      { id: '2', name: 'Alice' },
+      { id: '3', name: 'Bob' },
+    ];
+
+    // Empty sortBy array means controlled mode but with no initial sort
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        rowKey="id"
+        sortBy={[]}
+        onSortChange={onSortChange}
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+
+    // No initial sort - aria-sort should not be set
+    expect(nameHeader).not.toHaveAttribute('aria-sort');
+
+    // Click to sort
+    await userEvent.click(nameHeader);
+
+    // onSortChange called with ascending direction
+    expect(onSortChange).toHaveBeenCalledWith({
+      sortBy: [{ columnId: 'name', direction: 'asc' }],
+      sortDirection: 'asc',
+      column: expect.objectContaining({ id: 'name' }),
+    });
+  });
+});
+
+describe('defaultCompare function', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('returns 0 when both values are null', () => {
+    expect(defaultCompare(null, null)).toBe(0);
+  });
+
+  it('returns 0 when both values are undefined', () => {
+    expect(defaultCompare(undefined, undefined)).toBe(0);
+  });
+
+  it('returns 0 when one is null and other is undefined', () => {
+    expect(defaultCompare(null, undefined)).toBe(0);
+    expect(defaultCompare(undefined, null)).toBe(0);
+  });
+
+  it('returns 1 when first value is null and second is not', () => {
+    expect(defaultCompare(null, 'test')).toBe(1);
+    expect(defaultCompare(null, 42)).toBe(1);
+  });
+
+  it('returns 1 when first value is undefined and second is not', () => {
+    expect(defaultCompare(undefined, 'test')).toBe(1);
+    expect(defaultCompare(undefined, 42)).toBe(1);
+  });
+
+  it('returns -1 when second value is null and first is not', () => {
+    expect(defaultCompare('test', null)).toBe(-1);
+    expect(defaultCompare(42, null)).toBe(-1);
+  });
+
+  it('returns -1 when second value is undefined and first is not', () => {
+    expect(defaultCompare('test', undefined)).toBe(-1);
+    expect(defaultCompare(42, undefined)).toBe(-1);
+  });
+
+  it('compares numbers correctly', () => {
+    expect(defaultCompare(5, 10)).toBe(-5);
+    expect(defaultCompare(10, 5)).toBe(5);
+    expect(defaultCompare(5, 5)).toBe(0);
+  });
+
+  it('compares dates correctly', () => {
+    const date1 = dayjs().subtract(1, 'year').toDate();
+    const date2 = dayjs().toDate();
+    expect(defaultCompare(date1, date2)).toBeLessThan(0);
+    expect(defaultCompare(date2, date1)).toBeGreaterThan(0);
+    expect(defaultCompare(date1, date1)).toBe(0);
+  });
+
+  it('compares booleans correctly (false < true)', () => {
+    expect(defaultCompare(false, true)).toBe(-1);
+    expect(defaultCompare(true, false)).toBe(1);
+    expect(defaultCompare(true, true)).toBe(0);
+    expect(defaultCompare(false, false)).toBe(0);
+  });
+
+  it('compares strings using localeCompare', () => {
+    expect(defaultCompare('apple', 'banana')).toBeLessThan(0);
+    expect(defaultCompare('banana', 'apple')).toBeGreaterThan(0);
+    expect(defaultCompare('apple', 'apple')).toBe(0);
+  });
+
+  it('compares numeric strings naturally', () => {
+    expect(defaultCompare('2', '10')).toBeLessThan(0);
+    expect(defaultCompare('10', '2')).toBeGreaterThan(0);
   });
 });

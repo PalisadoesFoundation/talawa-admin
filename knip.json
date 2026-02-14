@@ -16,7 +16,9 @@
     "src/shared-components/BreadcrumbsComponent/**",
     "src/shared-components/DateRangePicker/index.ts",
     "src/types/shared-components/DateRangePicker/index.ts",
-    "src/shared-components/DropDownButton/index.ts"
+    "src/shared-components/DropDownButton/index.ts",
+    "src/types/Auth/auth.ts",
+    "src/GraphQl/Mutations/mutations.ts"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true

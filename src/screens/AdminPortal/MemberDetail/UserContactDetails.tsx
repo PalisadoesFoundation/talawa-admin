@@ -9,7 +9,7 @@
  * conditional update actions, and localized labels.
  *
  * @param props - Component props.
- * Optional {@link MemberDetailProps.id | id} may be provided to fetch
+ * Optional {@link InterfaceMemberDetailProps.id | id} may be provided to fetch
  * and update the corresponding member’s contact details.
  *
  * @returns The rendered UserContactDetails component.
@@ -56,10 +56,10 @@ import dayjs from 'dayjs';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { validatePassword } from 'utils/passwordValidator';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import { MemberDetailProps } from 'types/AdminPortal/MemberDetail/type';
+import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { resolveAvatarFile } from './resolveAvatarFile';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
-const UserContactDetails: React.FC<MemberDetailProps> = ({
+const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   id,
 }): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
@@ -286,7 +286,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       className={styles.userContactDetailContactAvatarUrl}
                       enableEnlarge={true}
                     />
-                    <button
+                    <Button
                       type="button"
                       className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${styles.userContactDetailContactAvatarEditIcon}`}
                       onClick={() => fileInputRef.current?.click()}

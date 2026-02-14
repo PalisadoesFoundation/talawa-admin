@@ -24,7 +24,7 @@
  *
  */
 // translation-check-keyPrefix: eventListCard
-import React, { useState } from 'react';
+import React from 'react';
 import type { JSX } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
@@ -33,11 +33,13 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Edit } from '@mui/icons-material';
-import EventListCardModals from 'components/EventListCard/Modal/EventListCardModals';
+import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
+import Button from 'shared-components/Button';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
@@ -46,7 +48,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     keyPrefix: 'eventListCard',
   });
 
-  const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
+  const { isOpen: eventModalIsOpen, open, close } = useModalState();
 
   // Get user information from local storage, similar to OrganizationEvents
   const { getItem } = useLocalStorage();
@@ -65,11 +67,11 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   );
 
   const showViewModal = (): void => {
-    setEventModalIsOpen(true);
+    open();
   };
 
   const hideViewModal = (): void => {
-    setEventModalIsOpen(false);
+    close();
   };
 
   if (eventInfoLoading) {
@@ -170,13 +172,14 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
         <Col>
           <div className={styles.eventContainer} data-testid="event-details">
             <div className={styles.eventDetailsBox}>
-              <button
+              <Button
                 className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
                 onClick={showViewModal}
                 data-testid="edit-event-button"
+                aria-label={tEventList('editEvent')}
               >
                 <Edit fontSize="medium" />
-              </button>
+              </Button>
               <h3 className={styles.titlename} data-testid="event-name">
                 {eventData.event.name}
               </h3>
