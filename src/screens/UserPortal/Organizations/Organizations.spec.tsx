@@ -1716,6 +1716,10 @@ test('should search joined organizations in mode 1', async () => {
   await userEvent.click(screen.getByTestId('searchBtn'));
 
   await waitFor(() => {
+    // Note: StaticMockLink doesn’t behave like a real refetch, so we assert
+    // the stable initial mock data ('JoinedInitial') and the input value
+    // instead of expecting the refetched organization name to appear—all other
+    // assertions rely on the initial state to avoid flakiness.
     expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
       'joined-search',
     );
@@ -1817,6 +1821,10 @@ test('should search created organizations in mode 2', async () => {
   await userEvent.click(screen.getByTestId('searchBtn'));
 
   await waitFor(() => {
+    // Note: StaticMockLink doesn’t behave like a real refetch, so we assert
+    // the stable initial mock data ('CreatedInitial') and the input value
+    // instead of expecting the refetched organization name to appear—all other
+    // assertions rely on the initial state to avoid flakiness.
     expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
       'created-search',
     );
