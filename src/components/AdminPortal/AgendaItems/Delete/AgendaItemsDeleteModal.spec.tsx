@@ -265,8 +265,9 @@ describe('AgendaItemsDeleteModal', () => {
     });
 
     it('does nothing when mutation throws non-Error value', async () => {
-      const { default: AgendaItemsDeleteModal } =
-        await import('./AgendaItemsDeleteModal');
+      const { default: AgendaItemsDeleteModal } = await import(
+        './AgendaItemsDeleteModal'
+      );
 
       render(
         <I18nextProvider i18n={i18nForTest}>
