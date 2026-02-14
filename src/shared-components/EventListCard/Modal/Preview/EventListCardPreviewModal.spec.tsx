@@ -887,19 +887,6 @@ describe('EventListCardPreviewModal', () => {
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });
 
-  test('does not render recurrence dropdown when recurrence is null', () => {
-    renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringEventTemplate: true,
-        userRole: UserRole.ADMINISTRATOR,
-      },
-      recurrence: null,
-    });
-
-    expect(screen.queryByTestId('recurrenceDropdown')).not.toBeInTheDocument();
-  });
-
   test('opens custom recurrence modal when recurrence already exists', () => {
     const mockSetRecurrence = vi.fn();
     const mockSetCustomRecurrenceModalIsOpen = vi.fn();

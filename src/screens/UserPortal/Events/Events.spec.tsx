@@ -1942,14 +1942,14 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await waitFor(() => {
-      expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('recurrence-toggle')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('recurrenceDropdown'));
+    await userEvent.click(screen.getByTestId('recurrence-toggle'));
     await waitFor(() => {
-      const options = screen.getAllByTestId(/recurrenceOption-/);
+      const options = screen.getAllByTestId(/recurrence-item-/);
       expect(options.length).toBeGreaterThan(2);
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await userEvent.click(options[2]);
 
     const form = screen.getByTestId('eventTitleInput').closest('form');

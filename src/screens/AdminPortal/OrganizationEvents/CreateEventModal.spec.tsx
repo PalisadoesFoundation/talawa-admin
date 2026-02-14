@@ -562,11 +562,11 @@ describe('CreateEventModal', () => {
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
     // Select a recurrence option by clicking dropdown
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     await userEvent.click(dropdown);
 
     // Click on "Daily" option (index 1)
-    const dailyOption = screen.getByTestId('recurrenceOption-1');
+    const dailyOption = screen.getByTestId('recurrence-item-1');
     await userEvent.click(dailyOption);
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
@@ -600,9 +600,9 @@ describe('CreateEventModal', () => {
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
     // Select a recurrence option
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-1'));
+    await userEvent.click(screen.getByTestId('recurrence-item-1'));
 
     // Mock validation to fail AFTER recurrence is set
     mockValidateRecurrenceInput.mockReturnValue({
@@ -636,11 +636,11 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     await userEvent.click(dropdown);
 
     // Click on "Custom..." option (index 6)
-    const customOption = screen.getByTestId('recurrenceOption-6');
+    const customOption = screen.getByTestId('recurrence-item-6');
     await userEvent.click(customOption);
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
@@ -814,14 +814,14 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
 
     // Open dropdown
     await userEvent.click(dropdown);
 
     // Verify dropdown options are visible
-    expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument();
-    expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-item-1')).toBeInTheDocument();
   });
 
   it('selects different recurrence options correctly', async () => {
@@ -837,15 +837,15 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
 
     // Select "Does not repeat"
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-0'));
+    await userEvent.click(screen.getByTestId('recurrence-item-0'));
 
     // Select "Daily"
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-1'));
+    await userEvent.click(screen.getByTestId('recurrence-item-1'));
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
@@ -982,11 +982,11 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     await userEvent.click(dropdown);
 
     // Click on a predefined option first
-    await userEvent.click(screen.getByTestId('recurrenceOption-2')); // Weekly
+    await userEvent.click(screen.getByTestId('recurrence-item-2')); // Weekly
 
     // Now manually create a custom rule that doesn't match any option
     mockCreateDefaultRecurrenceRule.mockReturnValue({
@@ -997,7 +997,7 @@ describe('CreateEventModal', () => {
 
     // Open custom modal to set custom rule
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await userEvent.click(screen.getByTestId('recurrence-item-6')); // Custom
 
     // Wait for modal to open and close it to apply the custom rule
     await waitFor(() => {
@@ -1033,15 +1033,15 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
 
     // Set a predefined recurrence first
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await userEvent.click(screen.getByTestId('recurrence-item-1')); // Daily
 
     // Now open custom modal - recurrence already exists
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await userEvent.click(screen.getByTestId('recurrence-item-6')); // Custom
 
     // Wait for modal to open
     await waitFor(() => {
@@ -1069,7 +1069,7 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     await userEvent.click(dropdown);
 
     // Verify the dynamically generated labels based on current date
@@ -1263,15 +1263,15 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     await userEvent.click(dropdown);
 
     // The recurrence options should include day and month names
     // This tests getDayName and getMonthName helper functions
-    const weeklyOption = screen.getByTestId('recurrenceOption-2');
+    const weeklyOption = screen.getByTestId('recurrence-item-2');
     expect(weeklyOption.textContent).toMatch(/Weekly on \w+/);
 
-    const annuallyOption = screen.getByTestId('recurrenceOption-4');
+    const annuallyOption = screen.getByTestId('recurrence-item-4');
     expect(annuallyOption.textContent).toMatch(/Annually on \w+ \d+/);
   });
 
@@ -1303,9 +1303,9 @@ describe('CreateEventModal', () => {
 
     // Step 4: Enable recurring and select recurrence
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-2')); // Weekly
+    await userEvent.click(screen.getByTestId('recurrence-item-2')); // Weekly
 
     // Step 5: Toggle visibility to organization
     await userEvent.click(screen.getByTestId('visibilityOrgRadio'));
@@ -1351,15 +1351,15 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
 
     // Set a recurrence to enable CustomRecurrenceModal
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await userEvent.click(screen.getByTestId('recurrence-item-1')); // Daily
 
     // Open custom modal
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await userEvent.click(screen.getByTestId('recurrence-item-6')); // Custom
 
     // Verify custom modal button is rendered (wait for state update)
     await waitFor(() => {
@@ -1390,15 +1390,15 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
 
     // Set recurrence to enable CustomRecurrenceModal
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await userEvent.click(screen.getByTestId('recurrence-item-1')); // Daily
 
     // Open custom modal
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await userEvent.click(screen.getByTestId('recurrence-item-6')); // Custom
 
     // Verify update button is rendered (wait for state update)
     await waitFor(() => {
@@ -1428,7 +1428,7 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
 
     // Initially, custom modal should not be visible (no recurrence selected yet)
     expect(
@@ -1437,7 +1437,7 @@ describe('CreateEventModal', () => {
 
     // Set a recurrence first (required before opening custom modal)
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await userEvent.click(screen.getByTestId('recurrence-item-1')); // Daily
 
     // Custom modal still not visible until we select "Custom"
     expect(
@@ -1446,7 +1446,7 @@ describe('CreateEventModal', () => {
 
     // Now open custom modal - recurrence exists so modal can render
     await userEvent.click(dropdown);
-    await userEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await userEvent.click(screen.getByTestId('recurrence-item-6')); // Custom
 
     // Now the custom modal should be visible
     expect(
