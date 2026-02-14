@@ -11,6 +11,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Button from 'shared-components/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks';
 import styles from './EventForm.module.css';
 import type {
   IEventFormProps,
@@ -78,9 +79,7 @@ const EventForm: React.FC<IEventFormProps> = ({
     );
   });
 
-  const [recurrenceDropdownOpen, setRecurrenceDropdownOpen] = useState(false);
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
+  const customRecurrenceModal = useModalState();
   const [recurrenceEnabled, setRecurrenceEnabled] = useState(
     !disableRecurrence &&
       (!!initialValues.recurrenceRule || !showRecurrenceToggle),
@@ -125,14 +124,13 @@ const EventForm: React.FC<IEventFormProps> = ({
           ),
         }));
       }
-      setCustomRecurrenceModalIsOpen(true);
+      customRecurrenceModal.open();
     } else {
       setFormState((prev) => ({
         ...prev,
         recurrenceRule: option.value as InterfaceRecurrenceRule | null,
       }));
     }
-    setRecurrenceDropdownOpen(false);
   };
 
   const currentRecurrenceLabel = (): string => {
@@ -479,8 +477,6 @@ const EventForm: React.FC<IEventFormProps> = ({
           <RecurrenceDropdown
             recurrenceOptions={recurrenceOptions}
             currentLabel={currentRecurrenceLabel()}
-            isOpen={recurrenceDropdownOpen}
-            onToggle={setRecurrenceDropdownOpen}
             onSelect={handleRecurrenceSelect}
             t={t}
           />
@@ -531,11 +527,21 @@ const EventForm: React.FC<IEventFormProps> = ({
               endDate: nextDate ?? prev.endDate,
             }));
           }}
-          customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-          hideCustomRecurrenceModal={(): void =>
-            setCustomRecurrenceModalIsOpen(false)
-          }
-          setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+          customRecurrenceModalIsOpen={customRecurrenceModal.isOpen}
+          hideCustomRecurrenceModal={customRecurrenceModal.close}
+          setCustomRecurrenceModalIsOpen={(
+            state: React.SetStateAction<boolean>,
+          ) => {
+            const v =
+              typeof state === 'function'
+                ? state(customRecurrenceModal.isOpen)
+                : state;
+            if (v) {
+              customRecurrenceModal.open();
+            } else {
+              customRecurrenceModal.close();
+            }
+          }}
           t={t}
           startDate={formState.startDate}
         />
