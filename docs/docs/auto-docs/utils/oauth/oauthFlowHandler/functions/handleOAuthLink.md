@@ -26,7 +26,7 @@ Apollo GraphQL client instance for making API requests
 
 [`OAuthProviderKey`](../../../../types/Auth/auth/type-aliases/OAuthProviderKey.md)
 
-OAuth provider to link (e.g., 'GOOGLE', 'FACEBOOK', 'GITHUB')
+OAuth provider to link (e.g., 'GOOGLE', 'GITHUB')
 
 ### authorizationCode
 

@@ -77,7 +77,7 @@ export async function handleOAuthLogin(
  * multiple OAuth providers or add additional sign-in methods to their account.
  *
  * @param client - Apollo GraphQL client instance for making API requests
- * @param provider - OAuth provider to link (e.g., 'GOOGLE', 'FACEBOOK', 'GITHUB')
+ * @param provider - OAuth provider to link (e.g., 'GOOGLE', 'GITHUB')
  * @param authorizationCode - Authorization code received from OAuth provider callback
  * @param redirectUri - Redirect URI used in the OAuth flow for validation
  *
@@ -119,7 +119,7 @@ export async function handleOAuthLink(
   });
   if (errors?.length) throw errors[0];
 
-  if (!data) {
+  if (!data?.linkOAuthAccount) {
     throw new Error(
       'OAuth account linking failed: No response data received from server',
     );

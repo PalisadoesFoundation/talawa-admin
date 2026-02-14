@@ -231,8 +231,8 @@ describe('oauthFlowHandler', () => {
         {
           provider: 'GOOGLE',
           email: 'john@example.com',
-          linkedAt: dayjs().subtract(1, 'day').toISOString(),
-          lastUsedAt: dayjs().toISOString(),
+          linkedAt: dayjs('2024-12-31T10:00:00.000Z').toISOString(),
+          lastUsedAt: dayjs('2025-01-01T10:00:00.000Z').toISOString(),
         },
       ],
     };
@@ -427,6 +427,21 @@ describe('oauthFlowHandler', () => {
       ).rejects.toThrow(
         'OAuth account linking failed: No response data received from server',
       );
+    });
+    it('should throw error when linkOAuthAccount is null', async () => {
+      mockClient.mutate.mockResolvedValueOnce({
+        data: { linkOAuthAccount: null },
+        errors: undefined,
+      });
+
+      await expect(
+        handleOAuthLink(
+          mockClient as unknown as ApolloClient<unknown>,
+          mockProvider,
+          mockAuthCode,
+          mockRedirectUri,
+        ),
+      ).rejects.toThrow();
     });
   });
 });
