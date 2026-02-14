@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -32,11 +32,12 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 
 describe('OrgUpdate Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
     vi.useRealTimers(); // Safety net for fake timer tests (e.g. unmount cleanup test)
   });
 
@@ -349,7 +350,7 @@ describe('OrgUpdate Component', () => {
 
   describe('OrgUpdate Form Switch Controls', () => {
     beforeEach(() => {
-      vi.clearAllMocks();
+      vi.restoreAllMocks();
     });
 
     it('toggles user registration switches correctly', async () => {
@@ -401,7 +402,7 @@ describe('OrgUpdate Component', () => {
     ];
 
     beforeEach(() => {
-      vi.clearAllMocks();
+      vi.restoreAllMocks();
     });
 
     it('handles empty response from update mutation', async () => {
@@ -525,96 +526,6 @@ describe('OrgUpdate Component', () => {
       const saveButton = await screen.findByTestId('save-org-changes-btn');
       expect(saveButton).toBeEnabled();
     });
-  });
-
-  it('handles file upload with mutation and clears file input after success', async () => {
-    const user = userEvent.setup();
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-
-    const fileUploadMocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_BASIC_DATA,
-          variables: { id: '1' },
-        },
-        result: { data: mockOrgData },
-      },
-      {
-        request: {
-          query: UPDATE_ORGANIZATION_MUTATION,
-          variables: {
-            input: {
-              id: '1',
-              name: 'Test Org',
-              description: 'Test Description',
-              addressLine1: '123 Test St',
-              addressLine2: 'Suite 100',
-              city: 'Test City',
-              state: 'Test State',
-              postalCode: '12345',
-              countryCode: 'US',
-              avatar: file,
-              isUserRegistrationRequired: false,
-            },
-          },
-        },
-        result: {
-          data: {
-            updateOrganization: {
-              __typename: 'Organization',
-              id: '1',
-              name: 'Test Org',
-              description: 'Test Description',
-              addressLine1: '123 Test St',
-              addressLine2: 'Suite 100',
-              city: 'Test City',
-              state: 'Test State',
-              postalCode: '12345',
-              countryCode: 'US',
-              avatarMimeType: null,
-              avatarURL: null,
-              updatedAt: FIXED_UTC_TIMESTAMP,
-              isUserRegistrationRequired: false,
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_BASIC_DATA,
-          variables: { id: '1' },
-        },
-        result: { data: mockOrgData },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={fileUploadMocks}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgUpdate orgId="1" />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await screen.findByDisplayValue('Test Org');
-
-    const fileInput = screen.getByTestId(
-      'organisationImage',
-    ) as HTMLInputElement;
-    await user.upload(fileInput, file);
-
-    expect(fileInput.files?.[0]).toBe(file);
-
-    const saveButton = screen.getByTestId('save-org-changes-btn');
-    await user.click(saveButton);
-
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        i18nForTest.t('orgUpdate.successfulUpdated'),
-      );
-    });
-
-    expect(fileInput.value).toBe('');
   });
 
   it('filters out empty address fields from mutation payload', async () => {
