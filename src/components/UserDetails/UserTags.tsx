@@ -36,8 +36,9 @@
 import React, { useState } from 'react';
 import styles from './UserTags.module.css';
 import { useTranslation } from 'react-i18next';
-import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { GET_USER_TAGS } from 'GraphQl/Queries/Queries';
+import Button from 'shared-components/Button/Button';
 import { useQuery } from '@apollo/client';
 import { InterfaceUserTagsProps } from 'types/AdminPortal/UserDetails/UserOrganization/UserEvent/type';
 import {
@@ -50,7 +51,7 @@ dayjs.extend(utc);
 
 const UserTags = ({ id }: InterfaceUserTagsProps) => {
   const { t: tCommon } = useTranslation('common');
-  const [sortBy, setSortBy] = useState('Sort');
+  const [sortBy, setSortBy] = useState<'latest' | 'oldest'>('latest');
   const [searchTerm, setSearchTerm] = useState('');
   const { data, loading, error } = useQuery<InterfaceGetUserTagsData>(
     GET_USER_TAGS,
@@ -86,7 +87,7 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
   const filterTags = (tags: InterfaceUserTag[]) => {
     if (!searchTerm) return tags;
 
-    const term = searchTerm.toLowerCase();
+    const term = searchTerm.trim().toLowerCase();
 
     return tags.filter(
       (tag) =>
@@ -115,28 +116,28 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
 
   return (
     <div className={styles.peopleTabUserTagContainer}>
-      {/* Controls */}
-      <PeopleTabNavbar
-        sorting={[
+      <SearchFilterBar
+        hasDropdowns={true}
+        searchPlaceholder={tCommon('searchTags')}
+        searchValue={searchTerm}
+        onSearchChange={(value) => setSearchTerm(value)}
+        searchInputTestId="tagsSearchInput"
+        searchButtonTestId="tagsSearchBtn"
+        dropdowns={[
           {
-            title: 'Sort By',
+            id: 'tags-sort',
+            label: tCommon('sortBy'),
+            type: 'sort',
             options: [
-              { label: 'Latest', value: 'latest' },
-              { label: 'Oldest', value: 'oldest' },
+              { label: tCommon('Latest'), value: 'latest' },
+              { label: tCommon('Oldest'), value: 'oldest' },
             ],
-            icon: '/images/svg/ri_arrow-up-down-line.svg',
-            selected: sortBy,
-            onChange: (value: string | number) =>
-              setSortBy(value as 'latest' | 'oldest'),
-            testIdPrefix: 'tagsSort',
+            selectedOption: sortBy,
+            onOptionChange: (value) => setSortBy(value as 'latest' | 'oldest'),
+            dataTestIdPrefix: 'tagsSort',
           },
         ]}
-        search={{
-          placeholder: 'Search tags',
-          onSearch: (value: string) => setSearchTerm(value),
-          inputTestId: 'tagsSearchInput',
-          buttonTestId: 'tagsSearchBtn',
-        }}
+        containerClassName={styles.peopleTabUserTagHeader}
       />
       {displayTags.length === 0 ? (
         <p className={styles.peopleTabUserTagNoResults}>
@@ -175,9 +176,9 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
                     {tag.createdOn}
                   </td>
                   <td className={styles.peopleTabUserTagTableCell}>
-                    <a className={styles.peopleTabUserTagCreatedByButton}>
+                    <Button className={styles.peopleTabUserTagCreatedByButton}>
                       {tag.createdBy}
-                    </a>
+                    </Button>
                   </td>
                 </tr>
               ))}
