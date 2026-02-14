@@ -31,8 +31,6 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: var(--expandListContainer-bg);
-  border: 1px solid var(--expandListContainer-border);
   border-radius: var(--space-2);
   margin: var(--space-2);
 }
