@@ -312,7 +312,8 @@ describe('Testing Requests screen', () => {
           id: variablesOverrides.input?.id ?? '',
           membershipRequests: requests.map((r) => ({
             membershipRequestId: r.membershipRequestId,
-            createdAt: r.createdAt ?? dayjs().subtract(1, 'year').toISOString(),
+            createdAt:
+              r.createdAt ?? dayjs.utc().subtract(1, 'year').toISOString(),
             status: r.status ?? 'pending',
             user: r.user,
           })),
@@ -554,8 +555,10 @@ and or userId does not exists in localstorage`, async () => {
     const table = await screen.findByRole('grid');
     expect(table).toBeInTheDocument();
 
-    const initialRows = screen.getAllByRole('row').length;
-    expect(initialRows).toBeGreaterThan(1);
+    await waitFor(() => {
+      const initialRows = screen.getAllByRole('row').length;
+      expect(initialRows).toBeGreaterThan(1);
+    });
 
     await waitFor(() => {
       expect(screen.getByText(/User1 Test/i)).toBeInTheDocument();
@@ -740,7 +743,7 @@ and or userId does not exists in localstorage`, async () => {
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 8,
+            first: 10,
             name_contains: '',
           },
         },
@@ -771,7 +774,7 @@ and or userId does not exists in localstorage`, async () => {
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 8,
+            first: 10,
             name_contains: 'NonExistent',
           },
         },
@@ -801,13 +804,14 @@ and or userId does not exists in localstorage`, async () => {
     await user.keyboard('{Enter}');
 
     await waitFor(() => {
-      const grid = screen.getByRole('grid');
-      expect(grid.getAttribute('aria-rowcount')).toBe('1');
+      expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      expect(input).toHaveValue('NonExistent');
-    });
+    expect(
+      screen.getByTestId('requests-search-empty-message'),
+    ).toHaveTextContent('No results found for NonExistent');
+
+    expect(input).toHaveValue('NonExistent');
   });
 
   test('renders loading skeleton while fetching first page', async () => {
@@ -1124,13 +1128,12 @@ and or userId does not exists in localstorage`, async () => {
     await waitFor(() => {
       expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
     });
-    // Verify the component renders without crashing
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
-
-    // Verify appropriate empty state or error handling
-    expect(
-      screen.getByTestId('requests-no-requests-empty'),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('requests-no-requests-empty'),
+      ).toBeInTheDocument();
+    });
   });
 
   test('Search functionality should handle special characters', async () => {
@@ -2726,11 +2729,10 @@ and or userId does not exists in localstorage`, async () => {
         expect(errorHandler).toHaveBeenCalled();
       });
 
-      // The request should still be present (no refetch removal)
-      expect(screen.getByText('Error User')).toBeInTheDocument();
-
-      // Optional: success toast should NOT be called
-      expect(NotificationToast.success).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(screen.getByText('Error User')).toBeInTheDocument();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      });
     });
 
     test('should call errorHandler when reject mutation fails', async () => {
