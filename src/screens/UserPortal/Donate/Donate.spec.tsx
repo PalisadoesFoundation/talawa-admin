@@ -677,6 +677,11 @@ describe('Donate Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('donationCard')).toBeInTheDocument();
     });
+
+    expect(screen.getByTestId('datatable-cell-amount')).toHaveTextContent('1');
+    expect(screen.getByTestId('datatable-cell-amount')).not.toHaveTextContent(
+      '$1',
+    );
   });
 
   test('switches to INR currency', async () => {

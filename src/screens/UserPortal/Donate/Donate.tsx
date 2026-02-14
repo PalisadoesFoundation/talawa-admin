@@ -26,7 +26,6 @@ import { InterfaceDonation } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
-import { currencySymbols } from 'utils/currency';
 
 const currencies = ['USD', 'INR', 'EUR'];
 const currencyOptions = currencies.map((currency) => ({
@@ -132,10 +131,9 @@ export default function Donate(): JSX.Element {
         header: t('amount'),
         accessor: 'amount',
         render: (value) => {
-          const currencySymbol =
-            currencySymbols[selectedCurrency as keyof typeof currencySymbols];
-          const symbol = currencySymbol ?? selectedCurrency;
-          return `${symbol}${Number(value)}`;
+          // ORGANIZATION_DONATION_CONNECTION_LIST does not yet return per-donation currencyCode.
+          // When it does, wire row currency formatting here (e.g., with `currencySymbols`) instead of `selectedCurrency`.
+          return Number(value);
         },
       },
       {
@@ -145,7 +143,7 @@ export default function Donate(): JSX.Element {
         render: (value) => dayjs(String(value)).format('YYYY-MM-DD HH:mm'),
       },
     ],
-    [selectedCurrency, t],
+    [t],
   );
 
   useEffect(() => {
@@ -204,10 +202,11 @@ export default function Donate(): JSX.Element {
   };
 
   const donateToOrg = async (): Promise<void> => {
-    if (!userId || organizationId == null) {
+    if (!userId || organizationId == null || !userName) {
       console.error('Missing required donation identifiers for mutation.', {
         userId,
         organizationId,
+        userName,
       });
       return;
     }

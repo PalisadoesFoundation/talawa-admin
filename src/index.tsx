@@ -172,8 +172,7 @@ const errorLink = onError(
         errorMessage.includes('abort') ||
         errorMessage.includes('cancel');
 
-      const statusCode =
-        (networkError as { statusCode?: number })?.statusCode ?? undefined;
+      const statusCode = (networkError as { statusCode?: number })?.statusCode;
       const isServerUnavailableError =
         errorMessage.includes('failed to fetch') ||
         errorMessage.includes('network error') ||

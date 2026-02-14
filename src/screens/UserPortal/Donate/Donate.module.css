@@ -92,7 +92,7 @@
       var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
       var(--color-gray-700);
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow var(--transition-fast) ease;
 }
 
 .box {
