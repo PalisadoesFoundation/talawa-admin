@@ -1,0 +1,75 @@
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-md);
+  border: var(--border-1) solid;
+  font-weight: var(--font-weight-medium);
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.sm {
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
+  padding-top: var(--space-2-5);
+  padding-bottom: var(--space-2-5);
+  font-size: var(--font-size-xs);
+}
+
+.md {
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
+  font-size: var(--font-size-md);
+}
+
+.lg {
+  padding-left: var(--space-6);
+  padding-right: var(--space-6);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+  font-size: var(--font-size-xl);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.icon {
+  display: inline-flex;
+  width: var(--space-6);
+  height: var(--space-6);
+}
+
+.label {
+  display: inline-flex;
+}
+
+.spinner {
+  display: inline-flex;
+  width: var(--space-5);
+  height: var(--space-5);
+  border-radius: var(--radius-full);
+  border: var(--border-2) solid currentColor;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

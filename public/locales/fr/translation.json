@@ -5,6 +5,9 @@
   "securedRoute": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
+  "oauth": {
+    "continueWith": "Continuer avec {{provider}}"
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",

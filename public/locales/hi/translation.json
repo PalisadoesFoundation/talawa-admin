@@ -5,6 +5,9 @@
   "securedRoute": {
     "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
   },
+  "oauth": {
+    "continueWith": "{{provider}} के साथ जारी रखें"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",

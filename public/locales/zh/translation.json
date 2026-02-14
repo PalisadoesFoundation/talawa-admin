@@ -5,6 +5,9 @@
   "securedRoute": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
+  "oauth": {
+    "continueWith": "继续使用 {{provider}}"
+  },
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",

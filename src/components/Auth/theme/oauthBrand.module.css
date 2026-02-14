@@ -1,0 +1,39 @@
+.logo {
+  width: var(--font-size-xl);
+  height: var(--font-size-xl);
+}
+
+.googleButton {
+  background-color: var(--color-white) !important;
+  color: var(--color-black);
+  border: var(--space-5) solid var(--color-white);
+}
+
+.googleButton:hover {
+  background-color: var(--color-white);
+  color: inherit !important;
+}
+
+.googleButton:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.githubButton {
+  background-color: var(--color-gray-900) !important;
+  color: var(--color-white);
+  border: var(--space-5) solid var(--color-black);
+}
+
+.githubButton:hover {
+  background-color: var(--color-black);
+}
+
+.githubButton:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.githubButton:active {
+  background-color: var(--color-black) !important;
+}
