@@ -27,11 +27,19 @@ const nycResult = runCommand('pnpm', [
 const cypressExitCode =
   typeof cypressResult.status === 'number'
     ? cypressResult.status
-    : cypressResult.error
+    : cypressResult.signal
       ? 1
-      : 0;
+      : cypressResult.error
+        ? 1
+        : 0;
 
 const nycExitCode =
-  typeof nycResult.status === 'number' ? nycResult.status : nycResult.error ? 1 : 0;
+  typeof nycResult.status === 'number'
+    ? nycResult.status
+    : nycResult.signal
+      ? 1
+      : nycResult.error
+        ? 1
+        : 0;
 
 process.exit(cypressExitCode !== 0 ? cypressExitCode : nycExitCode);
