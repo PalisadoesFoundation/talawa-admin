@@ -82,6 +82,11 @@ describe('RecurrenceDropdown', () => {
     );
 
     await user.click(screen.getByTestId('recurrence-toggle'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrence-item-1')).toBeInTheDocument();
+    });
+
     await user.click(screen.getByTestId('recurrence-item-1'));
 
     await waitFor(() => {
@@ -104,6 +109,11 @@ describe('RecurrenceDropdown', () => {
     );
 
     await user.click(screen.getByTestId('recurrence-toggle'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrence-item-2')).toBeInTheDocument();
+    });
+
     await user.click(screen.getByTestId('recurrence-item-2'));
 
     await waitFor(() => {
@@ -126,6 +136,11 @@ describe('RecurrenceDropdown', () => {
     );
 
     await user.click(screen.getByTestId('recurrence-toggle'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument();
+    });
+
     await user.click(screen.getByTestId('recurrence-item-0'));
 
     await waitFor(() => {
@@ -148,7 +163,7 @@ describe('RecurrenceDropdown', () => {
     expect(mockT).toHaveBeenCalledWith('recurring');
   });
 
-  it('highlights the currently selected option based on currentLabel', () => {
+  it('displays the selected option label on the toggle button', () => {
     renderWithI18n(
       <RecurrenceDropdown
         recurrenceOptions={mockOptions}
@@ -158,7 +173,8 @@ describe('RecurrenceDropdown', () => {
       />,
     );
 
-    expect(screen.getByText('Daily')).toBeInTheDocument();
+    const toggle = screen.getByTestId('recurrence-toggle');
+    expect(toggle).toHaveTextContent('Daily');
   });
 
   it('renders with empty options array', () => {
@@ -188,9 +204,17 @@ describe('RecurrenceDropdown', () => {
     );
 
     await user.click(screen.getByTestId('recurrence-toggle'));
+    await screen.findByTestId('recurrence-item-1');
+
     await user.click(screen.getByTestId('recurrence-item-1'));
 
+    await waitFor(() => {
+      expect(onSelect).toHaveBeenCalledTimes(1);
+    });
+
     await user.click(screen.getByTestId('recurrence-toggle'));
+    await screen.findByTestId('recurrence-item-2');
+
     await user.click(screen.getByTestId('recurrence-item-2'));
 
     await waitFor(() => {
