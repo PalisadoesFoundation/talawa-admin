@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -258,10 +258,10 @@ beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
   setItem('SuperAdmin', false);
-  vi.clearAllMocks();
 });
 
 afterEach(() => {
+  cleanup();
   for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
   // Restore all mocks
   vi.restoreAllMocks();
@@ -348,16 +348,15 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    const component = await screen.findByTestId('testComp');
+    expect(component).toBeInTheDocument();
 
-    // Verify basic page elements are rendered
     expect(screen.getByTestId('searchByName')).toBeInTheDocument();
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   test(`Component should be rendered properly when user is not Admin
-  and or userId does not exists in localstorage`, async () => {
+and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
     removeItem('AdminFor');
     removeItem('SuperAdmin');
@@ -375,9 +374,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(window.location.assign).toHaveBeenCalledWith('/admin/orglist');
+    await waitFor(() => {
+      expect(window.location.assign).toHaveBeenCalledWith('/admin/orglist');
+    });
   });
 
   test('Component should be rendered properly when user is Admin', async () => {
@@ -392,14 +391,13 @@ describe('Testing Requests screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait(200);
-
-    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    const searchInput = await screen.findByTestId('searchByName');
+    expect(searchInput).toBeInTheDocument();
   });
 
   test('Redirecting on error', async () => {
     setItem('SuperAdmin', true);
+
     render(
       <MockedProvider link={link5}>
         <BrowserRouter>
@@ -411,12 +409,13 @@ describe('Testing Requests screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait(200);
-    expect(window.location.href).toEqual('http://localhost/');
+    await waitFor(() => {
+      expect(window.location.href).toEqual('http://localhost/');
+    });
   });
 
   test('Testing Search requests functionality', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -429,39 +428,27 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
     const searchBtn = await screen.findByTestId('searchButton');
     const searchInput = await screen.findByTestId('searchByName');
 
-    const search1 = 'John';
-    await userEvent.type(searchInput, search1);
-    await userEvent.click(searchBtn);
-    await wait(200);
+    const searchTerms = ['John', 'Pete', 'Sam', 'P', 'Xe'];
 
-    await userEvent.clear(searchInput);
-    const search2 = 'Pete';
-    await userEvent.type(searchInput, search2);
-    await wait(100);
-    await userEvent.clear(searchInput);
+    for (const term of searchTerms) {
+      await user.clear(searchInput);
+      await user.type(searchInput, term);
 
-    const search3 = 'Sam';
-    await userEvent.type(searchInput, search3);
-    await wait(100);
-    await userEvent.clear(searchInput);
+      if (term === 'John' || term === 'Xe') {
+        await user.click(searchBtn);
+      }
 
-    const search4 = 'P';
-    await userEvent.type(searchInput, search4);
-    await wait(100);
-    await userEvent.clear(searchInput);
-
-    const search5 = 'Xe';
-    await userEvent.type(searchInput, search5);
-    await userEvent.clear(searchInput);
-    await userEvent.click(searchBtn);
-    await wait(200);
+      await waitFor(() => {
+        expect(searchInput).toHaveValue(term);
+      });
+    }
   });
 
   test('Testing search not found', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link3}>
         <BrowserRouter>
@@ -474,19 +461,18 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
     const searchInput = await screen.findByTestId('searchByName');
-    const search = 'hello';
-    await userEvent.type(searchInput, search);
-    await userEvent.keyboard('{Enter}');
-    await wait(200);
 
-    // When there are no requests at all, show "no requests found" message
-    const grid = screen.getByRole('grid');
+    await user.clear(searchInput);
+    await user.type(searchInput, 'hello{Enter}');
+
+    const grid = await screen.findByRole('grid');
     expect(grid).toBeInTheDocument();
 
-    const rows = grid.querySelectorAll('[role="row"]');
-    expect(rows.length).toBe(1);
+    await waitFor(() => {
+      const rows = grid.querySelectorAll('[role="row"]');
+      expect(rows.length).toBe(1);
+    });
   });
 
   test('Testing Request data is not present', async () => {
@@ -502,11 +488,8 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(
-      screen.getByTestId('requests-no-requests-empty'),
-    ).toBeInTheDocument();
+    const emptyState = await screen.findByTestId('requests-no-requests-empty');
+    expect(emptyState).toBeInTheDocument();
   });
 
   test('Should render warning alert when there are no organizations', async () => {
@@ -522,9 +505,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(500);
-
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    // Wait for component to render after async query
+    const component = await screen.findByTestId('testComp');
+    expect(component).toBeInTheDocument();
 
     expect(container).toBeInTheDocument();
   });
@@ -542,10 +525,11 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
+    await waitFor(() => {
+      expect(container.textContent).not.toMatch(
+        'Organizations not found, please create an organization through dashboard',
+      );
+    });
   });
 
   test('Should render properly when there are no organizations present in requestsData', async () => {
@@ -605,10 +589,12 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(NotificationToast.warning).toHaveBeenCalledWith(expect.any(String));
-    expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        expect.any(String),
+      );
+      expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
+    });
   });
 
   test('should handle loading more requests successfully', async () => {
@@ -623,10 +609,7 @@ describe('Testing Requests screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait(200);
-
-    const table = screen.getByRole('grid');
+    const table = await screen.findByRole('grid');
     expect(table).toBeInTheDocument();
 
     const initialRows = screen.getAllByRole('row').length;
@@ -646,12 +629,10 @@ describe('Testing Requests screen', () => {
     expect(paginationButtons.length).toBeGreaterThan(0);
   });
 
-  test('rows.length whould be greater than 9 when newRequests.length > perPageResult', async () => {
+  test('rows.length should be greater than 9 when newRequests.length > perPageResult', async () => {
     const CORRECT_STRUCTURE_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -662,16 +643,8 @@ describe('Testing Requests screen', () => {
                 description: 'Test description',
                 avatarURL: null,
                 members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
+                  edges: [{ node: { id: 'user1' } }],
+                  pageInfo: { hasNextPage: false },
                 },
               },
             ],
@@ -731,18 +704,14 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(500);
-
-    const initialRows = screen.getAllByRole('row').length;
-    expect(initialRows).toBeGreaterThan(1);
-
     await waitFor(() => {
       expect(screen.getByText(/User1 Test/i)).toBeInTheDocument();
       expect(screen.getByText(/User2 Test/i)).toBeInTheDocument();
     });
 
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThan(5);
+
+    expect(rows.length).toBeGreaterThan(9);
   });
 
   test('should handle loading more requests with search term', async () => {
@@ -780,6 +749,7 @@ describe('Testing Requests screen', () => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
   });
+
   test('should handle loading more requests when no previous data exists', async () => {
     render(
       <MockedProvider link={link3}>
@@ -793,19 +763,15 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    // With no previous data and no search term, component renders the empty state message
-    expect(
-      screen.getByTestId('requests-no-requests-empty'),
-    ).toBeInTheDocument();
+    const emptyState = await screen.findByTestId('requests-no-requests-empty');
+    expect(emptyState).toBeInTheDocument();
   });
 
   test('shows no results message when search returns no rows', async () => {
+    const user = userEvent.setup();
     const SEARCH_EMPTY_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -816,16 +782,8 @@ describe('Testing Requests screen', () => {
                 description: 'A community organization',
                 avatarURL: null,
                 members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
+                  edges: [{ node: { id: 'user1' } }],
+                  pageInfo: { hasNextPage: false },
                 },
               },
             ],
@@ -874,12 +832,7 @@ describe('Testing Requests screen', () => {
           },
         },
         result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [],
-            },
-          },
+          data: { organization: { id: '', membershipRequests: [] } },
         },
       },
     ];
@@ -898,19 +851,16 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
     const input = await screen.findByTestId('searchByName');
-    await userEvent.type(input, 'NonExistent');
-    await userEvent.keyboard('{Enter}');
-    await waitFor(
-      () => {
-        const grid = screen.getByRole('grid');
-        expect(grid.getAttribute('aria-rowcount')).toBe('1');
-      },
-      { timeout: 3000 },
-    );
 
-    // Verify the search input still contains the search term
+    await user.type(input, 'NonExistent');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      const grid = screen.getByRole('grid');
+      expect(grid.getAttribute('aria-rowcount')).toBe('1');
+    });
+
     expect(input).toHaveValue('NonExistent');
   });
 
@@ -989,8 +939,8 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    const component = await screen.findByTestId('testComp');
+    expect(component).toBeInTheDocument();
   });
 
   test('Component should be rendered properly when user is SuperAdmin', async () => {
@@ -1009,11 +959,13 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    const searchInput = await screen.findByTestId('searchByName');
+    expect(searchInput).toBeInTheDocument();
   });
 
   test('Search functionality should reset when empty string is provided', async () => {
+    const user = userEvent.setup();
+
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -1026,16 +978,24 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchInput = screen.getByTestId('searchByName');
+    // Wait for input to appear
+    const searchInput = await screen.findByTestId('searchByName');
 
-    await userEvent.type(searchInput, 'John');
-    await wait(100);
+    // Type search term
+    await user.type(searchInput, 'John');
 
-    await userEvent.clear(searchInput);
-    await wait(200);
+    // Wait for grid to update after search
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    // Clear input
+    await user.clear(searchInput);
+
+    // Wait for grid to reset
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
   });
 
   test('should handle null response in fetchMore correctly', async () => {
@@ -1078,16 +1038,18 @@ describe('Testing Requests screen', () => {
           data: {
             organization: {
               id: '',
-              membershipRequests: Array(10).fill({
-                membershipRequestId: '1',
-                createdAt: dayjs().subtract(1, 'year').toISOString(),
-                status: 'pending',
-                user: {
-                  id: 'user1',
-                  name: 'Test User',
-                  emailAddress: 'test@example.com',
-                },
-              }),
+              membershipRequests: Array(10)
+                .fill(null)
+                .map((_, i) => ({
+                  membershipRequestId: `req${i + 1}`,
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  status: 'pending',
+                  user: {
+                    id: 'user1',
+                    name: 'Test User',
+                    emailAddress: 'test@example.com',
+                  },
+                })),
             },
           },
         },
@@ -1226,6 +1188,8 @@ describe('Testing Requests screen', () => {
   });
 
   test('Search functionality should handle special characters', async () => {
+    const user = userEvent.setup();
+
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -1238,16 +1202,21 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchInput = screen.getByTestId('searchByName');
+    // Wait for input to appear
+    const searchInput = await screen.findByTestId('searchByName');
 
-    await userEvent.type(searchInput, '@#$%');
-    await wait(200);
+    // Type special characters
+    await user.type(searchInput, '@#$%');
 
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    // Wait for component to stabilize after search
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('Should handle rapid search input changes', async () => {
+    const user = userEvent.setup();
+
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -1260,17 +1229,19 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchInput = screen.getByTestId('searchByName');
+    // Wait for input to be ready
+    const searchInput = await screen.findByTestId('searchByName');
 
+    // Simulate rapid typing + clearing
     for (let i = 0; i < 5; i++) {
-      await userEvent.type(searchInput, 'test');
-      await userEvent.clear(searchInput);
+      await user.type(searchInput, 'test');
+      await user.clear(searchInput);
     }
 
-    await wait(200);
-
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    // Wait for UI to stabilize after rapid updates
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('should handle loadMoreRequests when data is undefined or data.organization is undefined', async () => {
@@ -1446,9 +1417,7 @@ describe('Testing Requests screen', () => {
   test('should render Avatar component when avatarURL is not available', async () => {
     const NO_AVATAR_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1514,20 +1483,19 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for data to load (Apollo resolves)
+    expect(await screen.findByText('John Doe')).toBeInTheDocument();
 
-    // Check that the component renders and has the grid with data
+    // Grid should now be rendered with data
     expect(screen.getByRole('grid')).toBeInTheDocument();
-    // Verify the user name is displayed, indicating the row is rendered
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
   test('should call handleAcceptUser when accept button is clicked', async () => {
+    const user = userEvent.setup();
+
     const ACCEPT_BUTTON_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1581,9 +1549,7 @@ describe('Testing Requests screen', () => {
         request: {
           query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
           variables: {
-            input: {
-              membershipRequestId: '1',
-            },
+            input: { membershipRequestId: '1' },
           },
         },
         result: {
@@ -1631,23 +1597,26 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     const acceptButton = await screen.findByTestId(
       'acceptMembershipRequestBtn1',
     );
     expect(acceptButton).toBeInTheDocument();
 
-    await userEvent.click(acceptButton);
-    await wait(200);
+    await user.click(acceptButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('membershipRequestRow1'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('should call handleRejectUser when reject button is clicked', async () => {
+    const user = userEvent.setup();
+
     const REJECT_BUTTON_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1701,9 +1670,7 @@ describe('Testing Requests screen', () => {
         request: {
           query: REJECT_ORGANIZATION_REQUEST_MUTATION,
           variables: {
-            input: {
-              membershipRequestId: '1',
-            },
+            input: { membershipRequestId: '1' },
           },
         },
         result: {
@@ -1751,23 +1718,26 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     const rejectButton = await screen.findByTestId(
       'rejectMembershipRequestBtn1',
     );
     expect(rejectButton).toBeInTheDocument();
 
-    await userEvent.click(rejectButton);
-    await wait(200);
+    await user.click(rejectButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('membershipRequestRow1'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('should handle accept mutation error gracefully', async () => {
+    const user = userEvent.setup();
+
     const ACCEPT_ERROR_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1821,9 +1791,7 @@ describe('Testing Requests screen', () => {
         request: {
           query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
           variables: {
-            input: {
-              membershipRequestId: '1',
-            },
+            input: { membershipRequestId: '1' },
           },
         },
         error: new Error('Failed to accept membership request'),
@@ -1844,21 +1812,28 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
+    // Wait for initial load
     const acceptButton = await screen.findByTestId(
       'acceptMembershipRequestBtn1',
     );
-    await userEvent.click(acceptButton);
-    await wait(200);
+
+    // Click accept
+    await user.click(acceptButton);
+
+    // Ensure button is still present (mutation failed, no removal)
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('acceptMembershipRequestBtn1'),
+      ).toBeInTheDocument();
+    });
   });
 
   test('should handle reject mutation error gracefully', async () => {
+    const user = userEvent.setup();
+
     const REJECT_ERROR_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -1912,9 +1887,7 @@ describe('Testing Requests screen', () => {
         request: {
           query: REJECT_ORGANIZATION_REQUEST_MUTATION,
           variables: {
-            input: {
-              membershipRequestId: '1',
-            },
+            input: { membershipRequestId: '1' },
           },
         },
         error: new Error('Failed to reject membership request'),
@@ -1935,21 +1908,26 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
+    // Wait for initial query resolution
     const rejectButton = await screen.findByTestId(
       'rejectMembershipRequestBtn1',
     );
-    await userEvent.click(rejectButton);
-    await wait(200);
+
+    // Trigger mutation
+    await user.click(rejectButton);
+
+    // Since mutation failed, button should still exist
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('rejectMembershipRequestBtn1'),
+      ).toBeInTheDocument();
+    });
   });
 
   test('should handle accept button with null membershipRequestId', async () => {
     const ACCEPT_NULL_ID_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -2015,17 +1993,17 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for data to load
+    expect(await screen.findByText('Test User')).toBeInTheDocument();
 
+    // Grid should render without crashing
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   test('should handle avatar with null string avatarURL', async () => {
     const NULL_URL_STRING_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -2091,18 +2069,17 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for async data resolution
+    expect(await screen.findByText('Test User')).toBeInTheDocument();
 
+    // Grid should render correctly
     expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
   test('should handle name with fallback when user.name is missing', async () => {
     const MISSING_NAME_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -2168,17 +2145,14 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    // Wait for data resolution
+    expect(await screen.findByRole('grid')).toBeInTheDocument();
   });
 
   test('should handle email with fallback when emailAddress is missing', async () => {
     const MISSING_EMAIL_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -2244,10 +2218,11 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    const grid = await screen.findByRole('grid');
+    expect(grid).toBeInTheDocument();
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    const userNameCell = await screen.findByText('Test User');
+    expect(userNameCell).toBeInTheDocument();
   });
 
   test('should verify accept button renders with all data present', async () => {
@@ -2280,16 +2255,21 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    const userName = await screen.findByText('Complete User');
+    expect(userName).toBeInTheDocument();
 
-    expect(screen.getByText('Complete User')).toBeInTheDocument();
-    expect(screen.getByText('complete@example.com')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('acceptMembershipRequestBtn123'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId('rejectMembershipRequestBtn123'),
-    ).toBeInTheDocument();
+    const userEmail = await screen.findByText('complete@example.com');
+    expect(userEmail).toBeInTheDocument();
+
+    const acceptBtn = await screen.findByTestId(
+      'acceptMembershipRequestBtn123',
+    );
+    expect(acceptBtn).toBeInTheDocument();
+
+    const rejectBtn = await screen.findByTestId(
+      'rejectMembershipRequestBtn123',
+    );
+    expect(rejectBtn).toBeInTheDocument();
   });
 
   test('should verify reject button renders with all data present', async () => {
@@ -2322,9 +2302,11 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for the user's name to appear
+    const userName = await screen.findByText('Reject Test User');
+    expect(userName).toBeInTheDocument();
 
-    expect(screen.getByText('Reject Test User')).toBeInTheDocument();
+    // Wait for the reject button to appear
     const rejectBtn = await screen.findByTestId(
       'rejectMembershipRequestBtn123',
     );
@@ -2332,11 +2314,11 @@ describe('Testing Requests screen', () => {
   });
 
   test('should handle accept mutation returning null data', async () => {
+    const user = userEvent.setup();
+
     const NULL_DATA_ACCEPT_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -2413,20 +2395,30 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for initial load
+    const acceptBtn = await screen.findByTestId(
+      'acceptMembershipRequestBtn456',
+    );
 
-    const acceptBtn = screen.getByTestId('acceptMembershipRequestBtn456');
-    await userEvent.click(acceptBtn);
+    // Click accept
+    await user.click(acceptBtn);
 
-    await wait(200);
+    // Since mutation returned null, request should still exist
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('acceptMembershipRequestBtn456'),
+      ).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Null Accept User')).toBeInTheDocument();
   });
 
   test('should handle reject mutation returning null data', async () => {
+    const user = userEvent.setup();
+
     const NULL_DATA_REJECT_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -2503,20 +2495,29 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for data to load
+    const rejectBtn = await screen.findByTestId(
+      'rejectMembershipRequestBtn789',
+    );
 
-    const rejectBtn = screen.getByTestId('rejectMembershipRequestBtn789');
-    await userEvent.click(rejectBtn);
+    // Click reject
+    await user.click(rejectBtn);
 
-    await wait(200);
+    // Since mutation returned null, the request should still exist
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('rejectMembershipRequestBtn789'),
+      ).toBeInTheDocument();
+    });
+
+    // Row should still be present
+    expect(screen.getByText('Null Reject User')).toBeInTheDocument();
   });
 
-  test('should handle accept button click with valid membershipRequestId', async () => {
+  test('should render accept button when membershipRequestId is valid', async () => {
     const VALID_ID_MOCKS = [
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: {
             organizations: [
@@ -2582,16 +2583,19 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    // Wait for data load properly
+    expect(await screen.findByText('Valid ID User')).toBeInTheDocument();
 
-    expect(screen.getByText('Valid ID User')).toBeInTheDocument();
+    // Accept button should exist
     expect(
-      screen.getByTestId('acceptMembershipRequestBtn101'),
+      await screen.findByTestId('acceptMembershipRequestBtn101'),
     ).toBeInTheDocument();
   });
 
   describe('Accept request - success flow', () => {
     test('should call NotificationToast.success and refetch after successful accept', async () => {
+      const user = userEvent.setup();
+
       const ACCEPT_SUCCESS_MOCKS = [
         makeOrgListMock(),
         makeMembershipRequestsMock([
@@ -2622,7 +2626,7 @@ describe('Testing Requests screen', () => {
             },
           },
         },
-        makeMembershipRequestsMock([]),
+        makeMembershipRequestsMock([]), // refetch result
       ];
 
       const acceptLink = new StaticMockLink(ACCEPT_SUCCESS_MOCKS, true);
@@ -2639,24 +2643,28 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
-
       const acceptBtn = await screen.findByTestId(
         'acceptMembershipRequestBtnreq123',
       );
-      await userEvent.click(acceptBtn);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalled();
-        },
-        { timeout: 3000 },
-      );
+      await user.click(acceptBtn);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('membershipRequestRowreq123'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 
   describe('Reject request - success flow', () => {
-    test('should call NotificationToast.success and refetch after successful reject', async () => {
+    test('should call NotificationToast.success and show empty state after successful reject', async () => {
+      const user = userEvent.setup();
+
       const REJECT_SUCCESS_MOCKS = [
         makeOrgListMock(),
         makeMembershipRequestsMock([
@@ -2673,16 +2681,12 @@ describe('Testing Requests screen', () => {
         {
           request: {
             query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-            variables: {
-              input: { membershipRequestId: 'req789' },
-            },
+            variables: { input: { membershipRequestId: 'req789' } },
           },
           result: {
             data: {
               rejectMembershipRequest: {
-                membershipRequest: {
-                  membershipRequestId: 'req789',
-                },
+                membershipRequest: { membershipRequestId: 'req789' },
               },
             },
           },
@@ -2704,25 +2708,29 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
-
       const rejectBtn = await screen.findByTestId(
         'rejectMembershipRequestBtnreq789',
       );
-      await userEvent.click(rejectBtn);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalled();
-        },
-        { timeout: 3000 },
-      );
+      await user.click(rejectBtn);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('membershipRequestRowreq789'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 
   describe('Error handling', () => {
     test('should call errorHandler when accept mutation fails', async () => {
+      const user = userEvent.setup();
       const { errorHandler } = await import('utils/errorHandler');
+
       const ACCEPT_ERROR_MOCKS = [
         makeOrgListMock(),
         makeMembershipRequestsMock([
@@ -2761,23 +2769,30 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
-
+      // Wait for initial load
       const acceptBtn = await screen.findByTestId(
         'acceptMembershipRequestBtnreqError1',
       );
-      await userEvent.click(acceptBtn);
 
-      await waitFor(
-        () => {
-          expect(errorHandler).toHaveBeenCalled();
-        },
-        { timeout: 3000 },
-      );
+      // Click accept
+      await user.click(acceptBtn);
+
+      // Error handler should be called
+      await waitFor(() => {
+        expect(errorHandler).toHaveBeenCalled();
+      });
+
+      // The request should still be present (no refetch removal)
+      expect(screen.getByText('Error User')).toBeInTheDocument();
+
+      // Optional: success toast should NOT be called
+      expect(NotificationToast.success).not.toHaveBeenCalled();
     });
 
     test('should call errorHandler when reject mutation fails', async () => {
+      const user = userEvent.setup();
       const { errorHandler } = await import('utils/errorHandler');
+
       const REJECT_ERROR_MOCKS = [
         makeOrgListMock(),
         makeMembershipRequestsMock([
@@ -2816,19 +2831,24 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
-
+      // Wait for initial load
       const rejectBtn = await screen.findByTestId(
         'rejectMembershipRequestBtnreqError2',
       );
-      await userEvent.click(rejectBtn);
 
-      await waitFor(
-        () => {
-          expect(errorHandler).toHaveBeenCalled();
-        },
-        { timeout: 3000 },
-      );
+      // Click reject
+      await user.click(rejectBtn);
+
+      // Error handler should be called
+      await waitFor(() => {
+        expect(errorHandler).toHaveBeenCalled();
+      });
+
+      // The request should still exist (no refetch removal)
+      expect(screen.getByText('Reject Error User')).toBeInTheDocument();
+
+      // Success toast should NOT fire
+      expect(NotificationToast.success).not.toHaveBeenCalled();
     });
   });
 
@@ -2846,21 +2866,25 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
+      // Wait for DataGrid to appear
+      const grid = await screen.findByRole('grid');
 
-      // Check that DataGrid columns exist by their data-field attributes
-      const columnHeaders = document.querySelectorAll('[data-field]');
+      // Query within grid
+      const columnHeaders = grid.querySelectorAll('[data-field]');
       const fields = Array.from(columnHeaders).map((el) =>
         el.getAttribute('data-field'),
       );
 
-      // Assert expected columns are present
-      expect(fields).toContain('sl_no');
-      expect(fields).toContain('profile');
-      expect(fields).toContain('name');
-      expect(fields).toContain('email');
-      expect(fields).toContain('accept');
-      expect(fields).toContain('reject');
+      expect(fields).toEqual(
+        expect.arrayContaining([
+          'sl_no',
+          'profile',
+          'name',
+          'email',
+          'accept',
+          'reject',
+        ]),
+      );
     });
 
     test('should render accept and reject buttons in action column', async () => {
@@ -2876,20 +2900,19 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
+      // Wait for grid to render (ensures data is loaded)
+      await screen.findByRole('grid');
 
-      // Verify accept and reject buttons exist
-      await waitFor(() => {
-        const acceptButtons = screen.getAllByTestId(
-          /acceptMembershipRequestBtn/i,
-        );
-        const rejectButtons = screen.getAllByTestId(
-          /rejectMembershipRequestBtn/i,
-        );
+      // Wait for buttons to appear
+      const acceptButtons = await screen.findAllByTestId(
+        /acceptMembershipRequestBtn/i,
+      );
+      const rejectButtons = await screen.findAllByTestId(
+        /rejectMembershipRequestBtn/i,
+      );
 
-        expect(acceptButtons.length).toBeGreaterThan(0);
-        expect(rejectButtons.length).toBeGreaterThan(0);
-      });
+      expect(acceptButtons.length).toBeGreaterThan(0);
+      expect(rejectButtons.length).toBeGreaterThan(0);
     });
   });
 
@@ -2924,11 +2947,11 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
+      // Wait for the first row user to render
+      await screen.findByText('First User');
 
-      await waitFor(() => {
-        expect(screen.getByText('1.')).toBeInTheDocument();
-      });
+      // Serial number should be visible
+      expect(await screen.findByText('1.')).toBeInTheDocument();
     });
   });
 
