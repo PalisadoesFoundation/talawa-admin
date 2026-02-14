@@ -2,7 +2,7 @@
  * Tests for RecurrenceDropdown sub-component.
  */
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import RecurrenceDropdown from './RecurrenceDropdown';
@@ -239,7 +239,11 @@ describe('RecurrenceDropdown Edge Cases', () => {
     vi.doMock('shared-components/DropDownButton', () => ({
       __esModule: true,
       default: ({ onSelect }: { onSelect: (value: string) => void }) => (
-        <button data-testid="trigger-invalid" onClick={() => onSelect('999')}>
+        <button
+          data-testid="trigger-invalid"
+          type="button"
+          onClick={() => onSelect('999')}
+        >
           Trigger Invalid
         </button>
       ),
@@ -248,6 +252,8 @@ describe('RecurrenceDropdown Edge Cases', () => {
 
   afterEach(() => {
     vi.doUnmock('shared-components/DropDownButton');
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('does not call onSelect when an invalid option index is selected', async () => {
@@ -266,6 +272,6 @@ describe('RecurrenceDropdown Edge Cases', () => {
 
     await user.click(screen.getByTestId('trigger-invalid'));
 
-    expect(onSelect).not.toHaveBeenCalled();
+    await waitFor(() => expect(onSelect).not.toHaveBeenCalled());
   });
 });
