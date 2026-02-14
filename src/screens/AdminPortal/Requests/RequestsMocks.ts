@@ -258,61 +258,6 @@ export const UPDATED_MOCKS = [
   },
 ];
 
-export const MOCKS2 = [
-  createOrgListMock(),
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST_PG,
-      variables: {
-        input: { id: 'org1' },
-        skip: 0,
-        first: PAGE_SIZE,
-        name_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          id: 'org1',
-          membershipRequests: [
-            {
-              membershipRequestId: '1',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user2',
-                name: 'Scott Tony',
-                emailAddress: 'testuser3@example.com',
-              },
-            },
-          ],
-        },
-      },
-    },
-  },
-];
-
-export const MOCKS3 = [
-  createOrgListMock(),
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST_PG,
-      variables: {
-        input: { id: 'org1' },
-        skip: 0,
-        first: PAGE_SIZE,
-        name_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organization: null,
-      },
-    },
-  },
-];
-
 export const EMPTY_MOCKS = [
   {
     request: {

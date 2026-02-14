@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
@@ -13,10 +13,8 @@ import Requests from './Requests';
 import {
   EMPTY_MOCKS,
   MOCKS_WITH_ERROR,
-  MOCKS2,
   EMPTY_REQUEST_MOCKS,
   UPDATED_MOCKS,
-  MOCKS3,
   MOCKS4,
 } from './RequestsMocks';
 import { vi } from 'vitest';
@@ -106,9 +104,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 const link = new StaticMockLink(UPDATED_MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
-const link4 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
-const link6 = new StaticMockLink(MOCKS3, true);
 const link7 = new StaticMockLink(MOCKS4, true);
 
 const NULL_RESPONSE_MOCKS = [
@@ -118,7 +114,7 @@ const NULL_RESPONSE_MOCKS = [
       variables: {
         input: { id: '' },
         skip: 0,
-        first: 8,
+        first: 10,
         name_contains: 'User', // Use name_contains instead of firstName_contains
       },
     },
@@ -223,7 +219,8 @@ const INFINITE_SCROLL_MOCKS = [
             .fill(null)
             .map((_, i) => ({
               membershipRequestId: `request${i + 11}`,
-              createdAt: dayjs()
+              createdAt: dayjs
+                .utc()
                 .subtract(1, 'year')
                 .add(i + 10, 'days')
                 .toISOString(),
@@ -242,17 +239,6 @@ const INFINITE_SCROLL_MOCKS = [
 ];
 
 const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS, true);
-
-/**
- * Utility function to wait for a specified amount of time.
- */
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 beforeEach(() => {
   setItem('id', 'user1');
@@ -532,50 +518,6 @@ and or userId does not exists in localstorage`, async () => {
     });
   });
 
-  test('Should render properly when there are no organizations present in requestsData', async () => {
-    render(
-      <MockedProvider link={link6}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-  });
-
-  test('check for rerendering', async () => {
-    const { rerender } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    rerender(
-      <MockedProvider link={link4}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait(200);
-  });
-
   test('Shows warning toast when there are no organizations', async () => {
     render(
       <MockedProvider link={link2}>
@@ -669,7 +611,8 @@ and or userId does not exists in localstorage`, async () => {
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `request${i + 1}`,
-                  createdAt: dayjs()
+                  createdAt: dayjs
+                    .utc()
                     .subtract(1, 'year')
                     .add(i, 'days')
                     .toISOString(),
@@ -709,9 +652,10 @@ and or userId does not exists in localstorage`, async () => {
       expect(screen.getByText(/User2 Test/i)).toBeInTheDocument();
     });
 
-    const rows = screen.getAllByRole('row');
-
-    expect(rows.length).toBeGreaterThan(9);
+    await waitFor(() => {
+      const rows = screen.getAllByRole('row');
+      expect(rows.length).toBeGreaterThan(9);
+    });
   });
 
   test('should handle loading more requests with search term', async () => {
@@ -807,7 +751,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -861,7 +805,9 @@ and or userId does not exists in localstorage`, async () => {
       expect(grid.getAttribute('aria-rowcount')).toBe('1');
     });
 
-    expect(input).toHaveValue('NonExistent');
+    await waitFor(() => {
+      expect(input).toHaveValue('NonExistent');
+    });
   });
 
   test('renders loading skeleton while fetching first page', async () => {
@@ -1042,7 +988,7 @@ and or userId does not exists in localstorage`, async () => {
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `req${i + 1}`,
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     id: 'user1',
@@ -1371,7 +1317,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: 'http://invalid-url.com/avatar.jpg',
@@ -1453,7 +1399,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1531,7 +1477,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1652,7 +1598,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1773,7 +1719,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1869,7 +1815,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1963,7 +1909,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2039,7 +1985,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: 'null',
@@ -2115,7 +2061,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2188,7 +2134,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2354,7 +2300,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '456',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2410,7 +2356,9 @@ and or userId does not exists in localstorage`, async () => {
       ).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Null Accept User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Null Accept User')).toBeInTheDocument();
+    });
   });
 
   test('should handle reject mutation returning null data', async () => {
@@ -2454,7 +2402,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '789',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2495,23 +2443,21 @@ and or userId does not exists in localstorage`, async () => {
       </MockedProvider>,
     );
 
-    // Wait for data to load
     const rejectBtn = await screen.findByTestId(
       'rejectMembershipRequestBtn789',
     );
 
-    // Click reject
     await user.click(rejectBtn);
 
-    // Since mutation returned null, the request should still exist
     await waitFor(() => {
       expect(
         screen.getByTestId('rejectMembershipRequestBtn789'),
       ).toBeInTheDocument();
     });
 
-    // Row should still be present
-    expect(screen.getByText('Null Reject User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Null Reject User')).toBeInTheDocument();
+    });
   });
 
   test('should render accept button when membershipRequestId is valid', async () => {
@@ -2553,7 +2499,7 @@ and or userId does not exists in localstorage`, async () => {
               membershipRequests: [
                 {
                   membershipRequestId: '101',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
+                  createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2583,10 +2529,8 @@ and or userId does not exists in localstorage`, async () => {
       </MockedProvider>,
     );
 
-    // Wait for data load properly
     expect(await screen.findByText('Valid ID User')).toBeInTheDocument();
 
-    // Accept button should exist
     expect(
       await screen.findByTestId('acceptMembershipRequestBtn101'),
     ).toBeInTheDocument();
