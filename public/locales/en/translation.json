@@ -5,7 +5,8 @@
     "id": "Plugin: <1>{{pluginId}}</1>"
   },
   "oauth": {
-    "continueWith": "Continue with {{provider}}"
+    "continueWith": "Continue with {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
   },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."

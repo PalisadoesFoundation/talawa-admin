@@ -2,6 +2,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { ReactElement } from 'react';
 import styles from './oauthBrand.module.css';
+import { OAuthProviderKey } from 'types/Auth/auth';
 
 /**
  * Represents the visual branding configuration for an OAuth provider.
@@ -45,6 +46,8 @@ const providerBrands: Record<string, InterfaceProviderBrand> = {
  * console.log(googleBrand.displayName); // 'Google'
  * ```
  */
-export function brandForProvider(provider: string): InterfaceProviderBrand {
+export function brandForProvider(
+  provider: OAuthProviderKey,
+): InterfaceProviderBrand {
   return providerBrands[provider] ?? providerBrands.GOOGLE;
 }

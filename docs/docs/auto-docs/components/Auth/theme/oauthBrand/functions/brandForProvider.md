@@ -6,7 +6,7 @@
 
 > **brandForProvider**(`provider`): `InterfaceProviderBrand`
 
-Defined in: [src/components/Auth/theme/oauthBrand.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/theme/oauthBrand.tsx#L48)
+Defined in: [src/components/Auth/theme/oauthBrand.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/theme/oauthBrand.tsx#L49)
 
 Retrieves the branding configuration for a specific OAuth provider.
 
@@ -14,7 +14,7 @@ Retrieves the branding configuration for a specific OAuth provider.
 
 ### provider
 
-`string`
+[`OAuthProviderKey`](../../../../../types/Auth/auth/type-aliases/OAuthProviderKey.md)
 
 The provider key (e.g., 'GOOGLE', 'GITHUB')
 

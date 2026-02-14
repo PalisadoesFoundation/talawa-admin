@@ -6,7 +6,8 @@
     "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
   },
   "oauth": {
-    "continueWith": "{{provider}} के साथ जारी रखें"
+    "continueWith": "{{provider}} के साथ जारी रखें",
+    "ariaLabel": "{{provider}} {{mode}}"
   },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",

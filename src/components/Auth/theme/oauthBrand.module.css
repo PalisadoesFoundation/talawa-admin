@@ -10,13 +10,8 @@
 }
 
 .googleButton:hover {
-  background-color: var(--color-white);
-  color: inherit !important;
-}
-
-.googleButton:focus {
-  outline: none !important;
-  box-shadow: none !important;
+  background-color: var(--color-white) !important;
+  color: var(--color-black) !important;
 }
 
 .githubButton {
@@ -26,12 +21,7 @@
 }
 
 .githubButton:hover {
-  background-color: var(--color-black);
-}
-
-.githubButton:focus {
-  outline: none !important;
-  box-shadow: none !important;
+  background-color: var(--color-black) !important;
 }
 
 .githubButton:active {

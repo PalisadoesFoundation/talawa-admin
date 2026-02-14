@@ -6,7 +6,8 @@
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
   "oauth": {
-    "continueWith": "Continuer avec {{provider}}"
+    "continueWith": "Continuer avec {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
   },
   "ends": "Prend fin",
   "occurrences": "Occurrences",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { OAuthButton } from './OAuthButton';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
@@ -31,7 +31,8 @@ vi.mock('./OAuthButton.module.css', () => ({
 }));
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
+  cleanup();
 });
 
 describe('OAuthButton', () => {
@@ -65,7 +66,9 @@ describe('OAuthButton', () => {
     );
 
     await userEvent.click(screen.getByRole('button'));
-    expect(mockOnClick).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(mockOnClick).toHaveBeenCalledTimes(1);
+    });
   });
 
   // Test different providers
@@ -140,7 +143,9 @@ describe('OAuthButton', () => {
     );
 
     await userEvent.click(screen.getByRole('button'));
-    expect(mockOnClick).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockOnClick).not.toHaveBeenCalled();
+    });
   });
 
   // Test that onClick is not called when loading
@@ -155,7 +160,9 @@ describe('OAuthButton', () => {
     );
 
     await userEvent.click(screen.getByRole('button'));
-    expect(mockOnClick).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockOnClick).not.toHaveBeenCalled();
+    });
   });
 
   // Test fullWidth
