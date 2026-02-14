@@ -38,4 +38,12 @@ export interface InterfaceAutocompleteMockProps {
   ) => void;
   inputValue?: string;
   noOptionsText?: string;
+  renderOption?: (
+    props: Record<string, unknown>,
+    option: { id: string; name?: string },
+    state: {
+      selected: boolean;
+    },
+  ) => JSX.Element;
+  getOptionLabel?: (option: { id: string; name?: string }) => string;
 }

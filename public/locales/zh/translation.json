@@ -1568,6 +1568,7 @@
     "Admin": "管理员",
     "loading": "加载中...",
     "noAttendees": "未找到参与者",
+    "unknownMember": "未知成员",
     "attendeeCount": "参与人数",
     "maleAttendees": "男性参与者",
     "femaleAttendees": "女性参与者",

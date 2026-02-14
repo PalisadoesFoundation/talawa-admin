@@ -1196,6 +1196,7 @@
     "Admin": "Admin",
     "loading": "Loading...",
     "noAttendees": "Attendees not Found",
+    "unknownMember": "Unknown Member",
     "attendeeCount": "Attendee Count",
     "maleAttendees": "Male Attendees",
     "femaleAttendees": "Female Attendees",
