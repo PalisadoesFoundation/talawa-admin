@@ -2,7 +2,7 @@
  * Tests for RecurrenceDropdown sub-component.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import RecurrenceDropdown from './RecurrenceDropdown';
@@ -62,9 +62,11 @@ describe('RecurrenceDropdown', () => {
 
     await user.click(screen.getByTestId('recurrence-toggle'));
 
-    expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument();
-    expect(screen.getByTestId('recurrence-item-1')).toBeInTheDocument();
-    expect(screen.getByTestId('recurrence-item-2')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument();
+      expect(screen.getByTestId('recurrence-item-1')).toBeInTheDocument();
+      expect(screen.getByTestId('recurrence-item-2')).toBeInTheDocument();
+    });
   });
 
   it('calls onSelect with the correct option when an option is clicked', async () => {
@@ -80,11 +82,13 @@ describe('RecurrenceDropdown', () => {
     );
 
     await user.click(screen.getByTestId('recurrence-toggle'));
-
     await user.click(screen.getByTestId('recurrence-item-1'));
-    expect(onSelect).toHaveBeenCalledWith(
-      expect.objectContaining({ label: 'Daily' }),
-    );
+
+    await waitFor(() => {
+      expect(onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({ label: 'Daily' }),
+      );
+    });
   });
 
   it('calls onSelect with the custom option', async () => {
@@ -100,11 +104,13 @@ describe('RecurrenceDropdown', () => {
     );
 
     await user.click(screen.getByTestId('recurrence-toggle'));
-
     await user.click(screen.getByTestId('recurrence-item-2'));
-    expect(onSelect).toHaveBeenCalledWith(
-      expect.objectContaining({ label: 'Custom', value: 'custom' }),
-    );
+
+    await waitFor(() => {
+      expect(onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({ label: 'Custom', value: 'custom' }),
+      );
+    });
   });
 
   it('calls onSelect with null value option', async () => {
@@ -120,11 +126,13 @@ describe('RecurrenceDropdown', () => {
     );
 
     await user.click(screen.getByTestId('recurrence-toggle'));
-
     await user.click(screen.getByTestId('recurrence-item-0'));
-    expect(onSelect).toHaveBeenCalledWith(
-      expect.objectContaining({ label: 'Does not repeat', value: null }),
-    );
+
+    await waitFor(() => {
+      expect(onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({ label: 'Does not repeat', value: null }),
+      );
+    });
   });
 
   it('renders correct aria-label from translation', () => {
@@ -185,14 +193,16 @@ describe('RecurrenceDropdown', () => {
     await user.click(screen.getByTestId('recurrence-toggle'));
     await user.click(screen.getByTestId('recurrence-item-2'));
 
-    expect(onSelect).toHaveBeenCalledTimes(2);
-    expect(onSelect).toHaveBeenNthCalledWith(
-      1,
-      expect.objectContaining({ label: 'Daily' }),
-    );
-    expect(onSelect).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({ label: 'Custom' }),
-    );
+    await waitFor(() => {
+      expect(onSelect).toHaveBeenCalledTimes(2);
+      expect(onSelect).toHaveBeenNthCalledWith(
+        1,
+        expect.objectContaining({ label: 'Daily' }),
+      );
+      expect(onSelect).toHaveBeenNthCalledWith(
+        2,
+        expect.objectContaining({ label: 'Custom' }),
+      );
+    });
   });
 });

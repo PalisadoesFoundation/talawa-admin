@@ -31,7 +31,7 @@ import {
   getVisibilityType,
   buildRecurrenceOptions,
 } from './utils';
-import type { EventVisibility } from './utils';
+import type { EventVisibility, InterfaceRecurrenceOption } from './utils';
 import VisibilitySelector from './VisibilitySelector/VisibilitySelector';
 import RecurrenceDropdown from './RecurrenceDropdown/RecurrenceDropdown';
 
@@ -110,10 +110,7 @@ const EventForm: React.FC<IEventFormProps> = ({
     [formState.startDate, t],
   );
 
-  const handleRecurrenceSelect = (option: {
-    label: string;
-    value: InterfaceRecurrenceRule | 'custom' | null;
-  }): void => {
+  const handleRecurrenceSelect = (option: InterfaceRecurrenceOption): void => {
     if (option.value === 'custom') {
       if (!formState.recurrenceRule) {
         setFormState((prev) => ({
