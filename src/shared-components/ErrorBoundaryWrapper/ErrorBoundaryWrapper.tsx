@@ -19,12 +19,15 @@
  *
  * @example
  * // Basic usage with default fallback
+ * ```jsx
  * <ErrorBoundaryWrapper>
  *   <YourComponent />
  * </ErrorBoundaryWrapper>
+ * ```
  *
  * @example
  * // With custom error message and logging
+ * ```jsx
  * <ErrorBoundaryWrapper
  *   errorMessage={translatedErrorMessage}
  *   onError={(error, info) => logToService(error, info)}
@@ -32,12 +35,15 @@
  * >
  *   <ComplexModal />
  * </ErrorBoundaryWrapper>
+ * ```
  *
  * @example
  * // With custom fallback component
+ * ```jsx
  * <ErrorBoundaryWrapper fallbackComponent={CustomModalError}>
  *   <Modal>...</Modal>
  * </ErrorBoundaryWrapper>
+ * ```
  */
 
 import React, { ReactNode, ErrorInfo } from 'react';
@@ -47,6 +53,7 @@ import type {
 } from 'types/shared-components/ErrorBoundaryWrapper/interface';
 import styles from './ErrorBoundaryWrapper.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import Button from 'shared-components/Button';
 
 export class ErrorBoundaryWrapper extends React.Component<
   InterfaceErrorBoundaryWrapperProps,
@@ -162,14 +169,14 @@ export class ErrorBoundaryWrapper extends React.Component<
             <p className={styles.errorMessage}>
               {error?.message || fallbackErrorMessage}
             </p>
-            <button
+            <Button
               type="button"
               onClick={this.handleReset}
               className={styles.resetButton}
               aria-label={resetButtonAriaLabel}
             >
               {resetButtonText}
-            </button>
+            </Button>
           </div>
         </div>
       );

@@ -40,6 +40,16 @@ Custom class name for the Dropdown
 
 ***
 
+### containerClassName?
+
+> `optional` **containerClassName**: `string`
+
+Defined in: [src/types/shared-components/SortingButton/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L38)
+
+Optional extra class for the dropdown container (e.g. from parent CSS module)
+
+***
+
 ### dataTestIdPrefix
 
 > **dataTestIdPrefix**: `string`
@@ -117,6 +127,16 @@ The list of sorting options to display in the Dropdown
 Defined in: [src/types/shared-components/SortingButton/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L16)
 
 The title attribute for the Dropdown
+
+***
+
+### toggleClassName?
+
+> `optional` **toggleClassName**: `string`
+
+Defined in: [src/types/shared-components/SortingButton/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L40)
+
+Optional extra class for the toggle button (e.g. from parent CSS module)
 
 ***
 
