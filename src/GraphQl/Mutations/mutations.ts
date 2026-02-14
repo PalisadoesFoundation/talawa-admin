@@ -757,6 +757,10 @@ export const SIGN_IN_WITH_OAUTH = gql`
         id
         name
         emailAddress
+        role
+        countryCode
+        avatarURL
+        isEmailAddressVerified
       }
     }
   }

@@ -1,3 +1,18 @@
+import { UserRole } from 'utils/interfaces';
+
+/**
+ * Authenticated user information returned from the server after successful login.
+ */
+interface InterfaceAuthUser {
+  id: string;
+  name?: string;
+  emailAddress: string;
+  role: UserRole;
+  countryCode?: string | null;
+  avatarURL?: string | null;
+  isEmailAddressVerified: boolean;
+}
+
 /**
  * Supported OAuth providers for authentication.
  */
@@ -24,5 +39,37 @@ export interface InterfaceAuthenticationPayload {
   /** Optional token for refreshing the authentication token */
   refreshToken?: string;
   /** Authenticated user information */
-  user: { id: string; name?: string; emailAddress: string };
+  user: InterfaceAuthUser;
+}
+
+/**
+ * Represents a linked OAuth account.
+ */
+export interface InterfaceOAuthAccount {
+  /** OAuth provider name */
+  provider: string;
+  /** Email address associated with the OAuth account */
+  email: string;
+  /** Date when the account was linked */
+  linkedAt: string;
+  /** Date when the account was last used for authentication */
+  lastUsedAt: string;
+}
+
+/**
+ * Response data returned from linking an OAuth account.
+ */
+export interface InterfaceOAuthLinkResponse {
+  /** User's unique identifier */
+  id: string;
+  /** User's full name */
+  name: string;
+  /** User's email address */
+  emailAddress: string;
+  /** Whether the user's email address has been verified */
+  isEmailAddressVerified: boolean;
+  /** User's role in the system */
+  role: UserRole;
+  /** List of linked OAuth accounts */
+  oauthAccounts: InterfaceOAuthAccount[];
 }
