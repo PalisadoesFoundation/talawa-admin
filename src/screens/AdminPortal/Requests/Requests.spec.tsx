@@ -318,8 +318,8 @@ describe('Testing Requests screen', () => {
           membershipRequests: requests.map((r) => ({
             membershipRequestId: r.membershipRequestId,
             createdAt:
-              r.createdAt ?? dayjs.utc().subtract(1, 'year').toISOString(),
-
+              r.createdAt ??
+              dayjs.utc(BASE_DATE).subtract(1, 'year').toISOString(),
             status: r.status ?? 'pending',
             user: r.user,
           })),
