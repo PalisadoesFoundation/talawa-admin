@@ -42,6 +42,24 @@ export const mockOrgDataWithNullUserReg = {
   },
 };
 
+/** Shared updateOrganization mutation response for test mocks; spread and override as needed. */
+export const mockUpdateOrgResponse = {
+  __typename: 'Organization' as const,
+  id: '1',
+  name: 'Test Org',
+  description: 'Test Description',
+  addressLine1: '123 Test St',
+  addressLine2: 'Suite 100',
+  city: 'Test City',
+  state: 'Test State',
+  postalCode: '12345',
+  countryCode: 'US',
+  avatarMimeType: null,
+  avatarURL: null,
+  updatedAt: FIXED_UTC_TIMESTAMP,
+  isUserRegistrationRequired: false,
+};
+
 const defaultUpdateInput = {
   id: '1',
   name: 'Updated Org',
@@ -75,20 +93,9 @@ export const MOCKS = [
     result: {
       data: {
         updateOrganization: {
-          __typename: 'Organization',
-          id: '1',
+          ...mockUpdateOrgResponse,
           name: 'Updated Org',
           description: 'Updated Description',
-          addressLine1: '123 Test St',
-          addressLine2: 'Suite 100',
-          city: 'Test City',
-          state: 'Test State',
-          postalCode: '12345',
-          countryCode: 'US',
-          avatarMimeType: null,
-          avatarURL: null,
-          isUserRegistrationRequired: false,
-          updatedAt: FIXED_UTC_TIMESTAMP,
         },
       },
     },
