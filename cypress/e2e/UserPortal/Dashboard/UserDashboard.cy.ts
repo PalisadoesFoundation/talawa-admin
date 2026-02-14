@@ -1,4 +1,4 @@
-import { UserDashboardPage } from '../../pageObjects/UserPortal/UserDashboard';
+import { UserDashboardPage } from '../../../pageObjects/UserPortal/UserDashboard';
 
 describe('User Dashboard', () => {
   const dashboard = new UserDashboardPage();

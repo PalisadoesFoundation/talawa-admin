@@ -1,5 +1,5 @@
 // SKIP_LOCALSTORAGE_CHECK
-import { PostsPage } from '../../pageObjects/AdminPortal/PostPage';
+import { PostsPage } from '../../../pageObjects/AdminPortal/PostPage';
 
 describe('Testing Posts Management in Admin Portal', () => {
   const postsPage = new PostsPage();
