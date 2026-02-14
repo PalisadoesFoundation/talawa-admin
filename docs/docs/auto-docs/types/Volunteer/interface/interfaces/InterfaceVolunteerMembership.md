@@ -4,11 +4,7 @@
 
 # Interface: InterfaceVolunteerMembership
 
-Defined in: [src/types/Volunteer/interface.ts:207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L207)
-
-InterfaceVolunteerMembership
-
-## Description
+Defined in: [src/types/Volunteer/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L174)
 
 Defines the structure for volunteer membership information.
 
@@ -18,7 +14,7 @@ Defines the structure for volunteer membership information.
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L210)
+Defined in: [src/types/Volunteer/interface.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L180)
 
 The creation date of the volunteer membership record.
 
@@ -28,17 +24,21 @@ The creation date of the volunteer membership record.
 
 > **createdBy**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L236)
+Defined in: [src/types/Volunteer/interface.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L225)
 
-The user who created this membership.
+The user object who created this membership.
 
 #### id
 
 > **id**: `string`
 
+The unique identifier of the creator
+
 #### name
 
 > **name**: `string`
+
+The name of the creator
 
 ***
 
@@ -46,21 +46,27 @@ The user who created this membership.
 
 > **event**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L212)
+Defined in: [src/types/Volunteer/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L184)
 
-The event associated with the volunteer membership.
+The event object associated with the volunteer membership.
 
 #### endAt
 
 > **endAt**: `string`
 
+The end of the event
+
 #### id
 
 > **id**: `string`
 
+The unique identifier of the event
+
 #### name
 
 > **name**: `string`
+
+The name of the event
 
 #### recurrenceRule?
 
@@ -74,23 +80,29 @@ The event associated with the volunteer membership.
 
 > **startAt**: `string`
 
+The start of the event
+
 ***
 
 ### group?
 
 > `optional` **group**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L232)
+Defined in: [src/types/Volunteer/interface.ts:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L218)
 
-The group associated with the membership.
+(Optional) The group object associated with the membership.
 
 #### id
 
 > **id**: `string`
 
+The unique identifier of the group
+
 #### name
 
 > **name**: `string`
+
+The name of the group
 
 ***
 
@@ -98,7 +110,7 @@ The group associated with the membership.
 
 > **id**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L208)
+Defined in: [src/types/Volunteer/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L176)
 
 The unique identifier of the volunteer membership.
 
@@ -108,7 +120,7 @@ The unique identifier of the volunteer membership.
 
 > **status**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L209)
+Defined in: [src/types/Volunteer/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L178)
 
 The status of the volunteer membership.
 
@@ -118,7 +130,7 @@ The status of the volunteer membership.
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L211)
+Defined in: [src/types/Volunteer/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L182)
 
 The last update date of the volunteer membership record.
 
@@ -128,17 +140,21 @@ The last update date of the volunteer membership record.
 
 > **updatedBy**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:240](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L240)
+Defined in: [src/types/Volunteer/interface.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L232)
 
-The user who last updated this membership.
+The user object who last updated this membership.
 
 #### id
 
 > **id**: `string`
 
+The unique identifier of the updater
+
 #### name
 
 > **name**: `string`
+
+The name of the updater
 
 ***
 
@@ -146,38 +162,54 @@ The user who last updated this membership.
 
 > **volunteer**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L221)
+Defined in: [src/types/Volunteer/interface.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L198)
 
-The volunteer associated with the membership.
+The volunteer object associated with the membership.
 
 #### hasAccepted
 
 > **hasAccepted**: `boolean`
 
+Whether the volunteer has accepted
+
 #### hoursVolunteered
 
 > **hoursVolunteered**: `number`
+
+Hours volunteered
 
 #### id
 
 > **id**: `string`
 
+The unique identifier of the volunteer
+
 #### user
 
 > **user**: `object`
+
+The user information of the volunteer
 
 ##### user.avatarURL?
 
 > `optional` **avatarURL**: `string`
 
+The avatar URL of the user (optional)
+
 ##### user.emailAddress
 
 > **emailAddress**: `string`
+
+The email address of the user
 
 ##### user.id
 
 > **id**: `string`
 
+The unique identifier of the user
+
 ##### user.name
 
 > **name**: `string`
+
+The name of the user
