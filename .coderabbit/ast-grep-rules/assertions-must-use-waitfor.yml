@@ -7,6 +7,9 @@ rule:
   regex: "expect\\("
   not:
     inside:
-      pattern: waitFor(() => { $$$ })
+      any:
+        - pattern: waitFor(() => { $$$ })
+        - pattern: waitFor(async () => { $$$ })
+        - pattern: waitFor(() => $$$)
 message: 'Assertion after async operation must be inside waitFor'
 severity: error
