@@ -1,7 +1,7 @@
 .dataLoadingOverlay {
-  composes: dataLoadingOverlay from '../../style/app-fixed.module.css';
+  composes: dataLoadingOverlay from './DataTableShared.module.css';
 }
 
 .dataSkeletonCell {
-  composes: dataSkeletonCell from '../../style/app-fixed.module.css';
+  composes: dataSkeletonCell from './DataTableShared.module.css';
 }
