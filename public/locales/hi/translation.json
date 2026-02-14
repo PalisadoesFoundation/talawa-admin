@@ -1263,7 +1263,8 @@
     "longDelOrgMsg": "संगठन हटाएं बटन पर क्लिक करने से संगठन अपने ईवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
     "deleteSampleOrganization": "नमूना संगठन हटाएँ",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "successfullyDeletedOrganization": "संगठन सफलतापूर्वक हटा दिया गया"
   },
   "userUpdate": {
     "appLanguageCode": "डिफ़ॉल्ट भाषा",
@@ -1277,13 +1278,6 @@
     "displayImage": "प्रदर्शन छवि",
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें"
-  },
-  "membershipRequest": {
-    "accept": "स्वीकार करना",
-    "reject": "अस्वीकार करना",
-    "memberAdded": "यह स्वीकृत है",
-    "joined": "शामिल हुए",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "orgUpdate": {
     "city": "शहर",
@@ -1432,25 +1426,6 @@
     "password": "पासवर्ड",
     "enterPassword": "पासवर्ड दर्ज करें",
     "register": "पंजीकरण करें",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
-  },
-  "userRegister": {
-    "enterFirstName": "अपना पहला नाम दर्ज करें",
-    "enterLastName": "अपना अंतिम नाम दर्ज करें",
-    "enterConfirmPassword": "पुष्टि करने के लिए अपना पासवर्ड दर्ज करें",
-    "alreadyhaveAnAccount": "क्या आपके पास पहले से एक खाता मौजूद है?",
-    "login": "लॉग इन करें",
-    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। ",
-    "passwordNotMatch": "पासवर्ड मेल नहीं खाता. ",
-    "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें.",
-    "register": "पंजीकरण करें",
-    "firstName": "प्रथम नाम",
-    "lastName": "अंतिम नाम",
-    "emailAddress": "ईमेल पता",
-    "enterEmail": "ईमेल दर्ज करें",
-    "password": "पासवर्ड",
-    "enterPassword": "पासवर्ड दर्ज करें",
-    "confirmPassword": "पासवर्ड की पुष्टि करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "userNavbar": {
@@ -1654,9 +1629,7 @@
     "country": "देश",
     "resetChanges": "परिवर्तन रीसेट करें",
     "profileDetails": "प्रोफ़ाइल विवरण",
-    "deleteUserMessage": "डिलीट यूजर बटन पर क्लिक करने से आपका यूजर अपने इवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
     "copyLink": "प्रोफ़ाइल लिंक कॉपी करें",
-    "deleteUser": "उपभोक्ता मिटायें",
     "otherSettings": "अन्य सेटिंग",
     "changeLanguage": "भाषा बदलें",
     "sgender": "लिंग चुनें",

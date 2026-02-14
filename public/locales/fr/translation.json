@@ -1268,7 +1268,8 @@
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
     "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "successfullyDeletedOrganization": "Organisation supprimée avec succès"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",
@@ -1282,13 +1283,6 @@
     "displayImage": "Image d'affichage",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
-  },
-  "membershipRequest": {
-    "accept": "Accepter",
-    "reject": "Rejeter",
-    "memberAdded": "c'est accepté",
-    "joined": "Rejoint",
-    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "orgUpdate": {
     "city": "Ville",
@@ -1437,25 +1431,6 @@
     "password": "Mot de passe",
     "enterPassword": "Entrer le mot de passe",
     "register": "Inscription",
-    "talawaApiUnavailable": "API Talawa non disponible"
-  },
-  "userRegister": {
-    "enterFirstName": "Entrez votre prénom",
-    "enterLastName": "Entrez votre nom de famille",
-    "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
-    "alreadyhaveAnAccount": "Vous avez déjà un compte?",
-    "login": "Se connecter",
-    "afterRegister": "Enregistré avec succès. ",
-    "passwordNotMatch": "Le mot de passe ne correspond pas. ",
-    "invalidDetailsMessage": "Veuillez saisir des informations valides.",
-    "register": "Inscription",
-    "firstName": "Prénom",
-    "lastName": "Nom de famille",
-    "emailAddress": "Adresse email",
-    "enterEmail": "Entrer l'email",
-    "password": "Mot de passe",
-    "enterPassword": "Entrer le mot de passe",
-    "confirmPassword": "Confirmer le mot de passe",
     "talawaApiUnavailable": "API Talawa non disponible"
   },
   "userNavbar": {
@@ -1659,9 +1634,7 @@
     "country": "Pays",
     "resetChanges": "Réinitialiser les modifications",
     "profileDetails": "Détails du profil",
-    "deleteUserMessage": "En cliquant sur le bouton Supprimer l'utilisateur, votre utilisateur sera définitivement supprimé ainsi que ses événements, balises et toutes les données associées.",
     "copyLink": "Copier le lien du profil",
-    "deleteUser": "Supprimer l'utilisateur",
     "otherSettings": "Autres réglages",
     "changeLanguage": "Changer de langue",
     "sgender": "Sélectionnez le sexe",

@@ -303,5 +303,7 @@
   "searchPlaceholder": "搜索...",
   "noOptionsFound": "未找到选项",
   "noUserId": "用户ID不可用",
-  "noTagsFound": "未找到标签"
+  "noTagsFound": "未找到标签",
+  "searchTags": "搜索标签",
+  "sortBy": "排序方式"
 }

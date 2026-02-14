@@ -4,11 +4,45 @@
 
 # Interface: ISidebarNavItemProps
 
-Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L15)
+Defined in: [src/types/SidebarNavItem/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L14)
 
 Interface for SidebarNavItem component props.
 
- ISidebarNavItemProps
+## Param
+
+Navigation target URL
+
+## Param
+
+Icon component or element
+
+## Param
+
+Display label for the navigation item
+
+## Param
+
+Test ID for testing purposes
+
+## Param
+
+Whether the drawer is hidden/collapsed
+
+## Param
+
+(Optional) Click handler
+
+## Param
+
+(Optional) Use simple button style (for org drawers)
+
+## Param
+
+(Optional) Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+
+## Param
+
+(Optional) Cypress E2E test selector (data-cy attribute)
 
 ## Properties
 
@@ -16,9 +50,7 @@ Interface for SidebarNavItem component props.
 
 > `optional` **dataCy**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L24)
-
-Cypress E2E test selector (data-cy attribute)
+Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L23)
 
 ***
 
@@ -26,9 +58,7 @@ Cypress E2E test selector (data-cy attribute)
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L20)
-
-Whether the drawer is hidden/collapsed
+Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L19)
 
 ***
 
@@ -36,9 +66,7 @@ Whether the drawer is hidden/collapsed
 
 > **icon**: `ReactNode`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L17)
-
-Icon component or element
+Defined in: [src/types/SidebarNavItem/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L16)
 
 ***
 
@@ -46,9 +74,7 @@ Icon component or element
 
 > `optional` **iconType**: `"svg"` \| `"react-icon"`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L23)
-
-Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+Defined in: [src/types/SidebarNavItem/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L22)
 
 ***
 
@@ -56,9 +82,7 @@ Type of icon being passed. Use 'react-icon' for icons from react-icons library, 
 
 > **label**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L18)
-
-Display label for the navigation item
+Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L17)
 
 ***
 
@@ -66,9 +90,7 @@ Display label for the navigation item
 
 > `optional` **onClick**: () => `void`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L21)
-
-Optional click handler
+Defined in: [src/types/SidebarNavItem/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L20)
 
 #### Returns
 
@@ -80,9 +102,7 @@ Optional click handler
 
 > **testId**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L19)
-
-Test ID for testing purposes
+Defined in: [src/types/SidebarNavItem/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L18)
 
 ***
 
@@ -90,9 +110,7 @@ Test ID for testing purposes
 
 > **to**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L16)
-
-Navigation target URL
+Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L15)
 
 ***
 
@@ -100,6 +118,4 @@ Navigation target URL
 
 > `optional` **useSimpleButton**: `boolean`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L22)
-
-Use simple button style (for org drawers)
+Defined in: [src/types/SidebarNavItem/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L21)
