@@ -1073,7 +1073,7 @@ describe('CreateEventModal', () => {
     await userEvent.click(dropdown);
 
     // Verify the dynamically generated labels based on current date
-    const options = screen.getAllByRole('button');
+    const options = screen.getAllByTestId(/recurrence-item-/);
 
     // Should include "Does not repeat", "Daily", "Weekly on [Day]", etc.
     expect(
