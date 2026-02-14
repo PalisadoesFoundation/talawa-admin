@@ -241,6 +241,8 @@ const INFINITE_SCROLL_MOCKS = [
 const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS, true);
 
 beforeEach(() => {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date(Date.UTC(2025, 0, 1)));
   setItem('id', 'user1');
   setItem('role', 'administrator');
   setItem('SuperAdmin', false);
@@ -248,8 +250,13 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
-  for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
-  // Restore all mocks
+
+  for (const key in mockLocalStorageStore) {
+    delete mockLocalStorageStore[key];
+  }
+
+  vi.useRealTimers();
+
   vi.restoreAllMocks();
 });
 
@@ -314,6 +321,7 @@ describe('Testing Requests screen', () => {
             membershipRequestId: r.membershipRequestId,
             createdAt:
               r.createdAt ?? dayjs.utc().subtract(1, 'year').toISOString(),
+
             status: r.status ?? 'pending',
             user: r.user,
           })),
@@ -2065,6 +2073,7 @@ and or userId does not exists in localstorage`, async () => {
                 {
                   membershipRequestId: '1',
                   createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2138,6 +2147,7 @@ and or userId does not exists in localstorage`, async () => {
                 {
                   membershipRequestId: '1',
                   createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2406,6 +2416,7 @@ and or userId does not exists in localstorage`, async () => {
                 {
                   membershipRequestId: '789',
                   createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+
                   status: 'pending',
                   user: {
                     avatarURL: null,
