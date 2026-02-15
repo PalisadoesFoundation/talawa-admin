@@ -4,7 +4,7 @@ import {
   OAUTH_PROVIDERS,
   getProviderConfig,
   getEnabledProviders,
-} from '../../../src/config/oauthProviders';
+} from 'config/oauthProviders';
 
 /**
  * NOTE:

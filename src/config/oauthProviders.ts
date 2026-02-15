@@ -1,7 +1,4 @@
-import type {
-  OAuthProviderKey,
-  IOAuthProviderConfig,
-} from '../../src/types/Auth/auth';
+import type { OAuthProviderKey, IOAuthProviderConfig } from 'types/Auth/auth';
 
 /**
  * Helper to check if provider is enabled
