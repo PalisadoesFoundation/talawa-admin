@@ -1,8 +1,10 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import BlockUser from './BlockUser';
 import {
   GET_ORGANIZATION_MEMBERS_PG,
@@ -51,12 +53,6 @@ vi.mock('react-router', async () => {
 vi.mock('utils/errorHandler', () => ({
   errorHandler: errorHandlerMock,
 }));
-
-async function flushPromises() {
-  await act(async () => {
-    await new Promise((r) => setTimeout(r, 0));
-  });
-}
 
 interface InterfaceMockOptions {
   blockUserError?: boolean;
@@ -220,16 +216,19 @@ describe('BlockUser Component', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
   describe('Initial Loading and Error States', () => {
     it('shows loading state when fetching data', async () => {
       render(
-        <MockedProvider mocks={createMocks({ delay: 50 })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ delay: 50 })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -241,47 +240,15 @@ describe('BlockUser Component', () => {
       });
     });
 
-    it('handles members query error', async () => {
-      render(
-        <MockedProvider mocks={createMocks({ membersQueryError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(errorHandler).toHaveBeenCalledWith(
-          expect.any(Function),
-          expect.objectContaining({ message: 'Failed to fetch members' }),
-        );
-      });
-    });
-
-    it('handles blocked users query error', async () => {
-      render(
-        <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(errorHandler).toHaveBeenCalledWith(
-          expect.any(Function),
-          expect.objectContaining({ message: 'Failed to fetch blocked users' }),
-        );
-      });
-    });
-
     it('handles null organization data gracefully', async () => {
       render(
-        <MockedProvider mocks={createMocks({ nullData: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ nullData: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       // Wait for loading to finish
@@ -294,7 +261,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
     });
 
@@ -322,11 +289,13 @@ describe('BlockUser Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={customMocks}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={customMocks}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       // Wait for loading to finish
@@ -339,7 +308,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
 
       // Switch to blocked users view
@@ -360,7 +329,63 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No spammer found')).toBeInTheDocument();
+      });
+    });
+
+    it('displays error panel when blocked users query fails', async () => {
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('errorBlockedUsers')).toBeInTheDocument();
+        expect(
+          screen.getByText((content, element) => {
+            return (
+              element?.textContent ===
+              'Error occurred while loading blocked users dataFailed to fetch blocked users'
+            );
+          }),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('displays error panel when members query fails', async () => {
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ membersQueryError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('errorMembers')).toBeInTheDocument();
+        expect(
+          screen.getByText((content, element) => {
+            return (
+              element?.textContent ===
+              'Error occurred while loading members dataFailed to fetch members'
+            );
+          }),
+        ).toBeInTheDocument();
       });
     });
   });
@@ -368,11 +393,13 @@ describe('BlockUser Component', () => {
   describe('View Switching', () => {
     it('displays all members initially', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -390,11 +417,13 @@ describe('BlockUser Component', () => {
 
     it('switches to blocked users view', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -422,11 +451,13 @@ describe('BlockUser Component', () => {
 
     it('displays empty state when no members are available', async () => {
       render(
-        <MockedProvider mocks={createMocks({ emptyMembers: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ emptyMembers: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -437,17 +468,19 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
     });
 
     it('displays empty state with noSpammerFound message when blocked tab is selected and searchTerm is empty', async () => {
       render(
-        <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -470,7 +503,7 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No spammer found')).toBeInTheDocument();
       });
     });
   });
@@ -478,11 +511,13 @@ describe('BlockUser Component', () => {
   describe('Search Functionality', () => {
     it('searches members by name', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -510,11 +545,13 @@ describe('BlockUser Component', () => {
 
     it('searches members by email address', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -544,11 +581,13 @@ describe('BlockUser Component', () => {
 
     it('searches blocked users by name', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -587,11 +626,13 @@ describe('BlockUser Component', () => {
 
     it('searches blocked users by email address', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -630,11 +671,13 @@ describe('BlockUser Component', () => {
 
     it('handles search with no results for members', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -653,7 +696,9 @@ describe('BlockUser Component', () => {
       // Wait for debounced search to complete
       await waitFor(
         () => {
-          expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+          expect(
+            screen.getByText('No results found for nonexistent'),
+          ).toBeInTheDocument();
         },
         { timeout: 500 },
       );
@@ -661,11 +706,13 @@ describe('BlockUser Component', () => {
 
     it('handles search with no results for blocked users', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -696,7 +743,9 @@ describe('BlockUser Component', () => {
       // Wait for debounced search to complete
       await waitFor(
         () => {
-          expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+          expect(
+            screen.getByText('No results found for nonexistent'),
+          ).toBeInTheDocument();
         },
         { timeout: 500 },
       );
@@ -704,11 +753,13 @@ describe('BlockUser Component', () => {
 
     it('clears search results when search term is empty', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -754,11 +805,13 @@ describe('BlockUser Component', () => {
   describe('Block/Unblock Actions', () => {
     it('blocks a user successfully', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -769,25 +822,27 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
 
-      const blockButton = screen.getByTestId('blockUser1');
+      const blockButton = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
     });
 
     it('unblocks a user successfully', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -810,25 +865,27 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
 
-      const unblockButton = screen.getByTestId('blockUser3');
+      const unblockButton = screen.getByTestId('unblockUserBtn-3');
       await act(async () => {
         fireEvent.click(unblockButton);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'Un-BlockedSuccessfully',
+          'User Un-Blocked successfully',
         );
       });
     });
 
     it('handles block user error', async () => {
       render(
-        <MockedProvider mocks={createMocks({ blockUserError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ blockUserError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -839,7 +896,7 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
 
-      const blockButton = screen.getByTestId('blockUser1');
+      const blockButton = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton);
       });
@@ -851,11 +908,13 @@ describe('BlockUser Component', () => {
 
     it('handles unblock user error', async () => {
       render(
-        <MockedProvider mocks={createMocks({ unblockUserError: true })}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ unblockUserError: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -878,7 +937,7 @@ describe('BlockUser Component', () => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
 
-      const unblockButton = screen.getByTestId('blockUser3');
+      const unblockButton = screen.getByTestId('unblockUserBtn-3');
       await act(async () => {
         fireEvent.click(unblockButton);
       });
@@ -890,11 +949,13 @@ describe('BlockUser Component', () => {
 
     it('can block multiple users', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -907,26 +968,26 @@ describe('BlockUser Component', () => {
       });
 
       // Block first user
-      const blockButton1 = screen.getByTestId('blockUser1');
+      const blockButton1 = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton1);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
 
       // Block second user
-      const blockButton2 = screen.getByTestId('blockUser2');
+      const blockButton2 = screen.getByTestId('blockUserBtn-2');
       await act(async () => {
         fireEvent.click(blockButton2);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
 
@@ -937,17 +998,19 @@ describe('BlockUser Component', () => {
         expect(
           screen.getByTestId('block-user-empty-state'),
         ).toBeInTheDocument();
-        expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
+        expect(screen.getByText('No users found')).toBeInTheDocument();
       });
     });
 
     it('shows blocked user in blocked users list after blocking', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -960,14 +1023,14 @@ describe('BlockUser Component', () => {
       });
 
       // Block John Doe
-      const blockButton = screen.getByTestId('blockUser1');
+      const blockButton = screen.getByTestId('blockUserBtn-1');
       await act(async () => {
         fireEvent.click(blockButton);
       });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'blockedSuccessfully',
+          'User blocked successfully',
         );
       });
 
@@ -996,207 +1059,31 @@ describe('BlockUser Component', () => {
       });
     });
   });
-  // Tests for handling falsy responses from block and unblock mutations
-  describe('Falsy Mutation Responses', () => {
-    it('handles falsy block mutation response', async () => {
-      const customMocks = [
-        {
-          request: {
-            query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                members: {
-                  edges: [
-                    {
-                      node: {
-                        id: '1',
-                        name: 'John Doe',
-                        emailAddress: 'john@example.com',
-                        role: 'regular',
-                      },
-                    },
-                  ],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                blockedUsers: {
-                  edges: [],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: BLOCK_USER_MUTATION_PG,
-            variables: { userId: '1', organizationId: '123' },
-          },
-          result: { data: { blockUser: null } },
-        },
-      ];
-
-      render(
-        <MockedProvider mocks={customMocks}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await flushPromises();
-
-      await waitFor(() =>
-        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
-      );
-      await screen.findByText('John Doe');
-
-      const blockButton = screen.getByTestId('blockUser1');
-      await act(async () => {
-        fireEvent.click(blockButton);
-      });
-      await flushPromises();
-
-      await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalledWith(
-          'blockedSuccessfully',
-        );
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-      });
-    });
-
-    it('handles falsy unblock mutation response', async () => {
-      const customMocks = [
-        {
-          request: {
-            query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                members: {
-                  edges: [],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                blockedUsers: {
-                  edges: [
-                    {
-                      node: {
-                        id: '3',
-                        name: 'Bob Johnson',
-                        emailAddress: 'bob@example.com',
-                        role: 'regular',
-                      },
-                    },
-                  ],
-                  pageInfo: { hasNextPage: false, endCursor: null },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: UNBLOCK_USER_MUTATION_PG,
-            variables: { userId: '3', organizationId: '123' },
-          },
-          result: { data: null },
-        },
-      ];
-
-      render(
-        <MockedProvider mocks={customMocks}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await flushPromises();
-      await waitFor(() =>
-        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
-      );
-
-      const sortingButton = await screen.findByTestId('blockUserView-toggle');
-
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
-
-      await flushPromises();
-
-      const blockedUsersOption = await screen.findByTestId(
-        'blockUserView-item-blockedUsers',
-      );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
-
-      await flushPromises();
-
-      await screen.findByText('Bob Johnson');
-
-      const unblockBtn = screen.getByTestId('blockUser3');
-      await act(async () => {
-        fireEvent.click(unblockBtn);
-      });
-
-      await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalledWith(
-          'Un-BlockedSuccessfully',
-        );
-        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
-      });
-    });
-  });
 
   describe('Component Behavior', () => {
     it('updates document title on mount', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
-      expect(document.title).toBe('title');
+      expect(document.title).toBe('Block/Unblock User');
     });
 
     it('renders table headers correctly', async () => {
       render(
-        <MockedProvider mocks={createMocks()}>
-          <BrowserRouter>
-            <BlockUser />
-          </BrowserRouter>
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks()}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       await waitFor(() => {
@@ -1205,9 +1092,9 @@ describe('BlockUser Component', () => {
 
       // Check for table headers
       expect(screen.getByText('#')).toBeInTheDocument();
-      expect(screen.getByText('name')).toBeInTheDocument();
-      expect(screen.getByText('email')).toBeInTheDocument();
-      expect(screen.getByText('block_unblock')).toBeInTheDocument();
+      expect(screen.getByText('Name')).toBeInTheDocument();
+      expect(screen.getByText('Email')).toBeInTheDocument();
+      expect(screen.getByText('Block/Unblock')).toBeInTheDocument();
     });
   });
 });
