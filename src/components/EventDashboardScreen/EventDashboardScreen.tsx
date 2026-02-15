@@ -72,6 +72,14 @@ const EventDashboardScreen = (): React.JSX.Element => {
     dispatch(updateTargets(orgId));
   }, [orgId]);
 
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [hideDrawer]);
+
   // Redirect to home if orgId is not present or if user is not logged in
   if (!orgId) {
     return <Navigate to={'/'} replace />;
@@ -114,14 +122,6 @@ const EventDashboardScreen = (): React.JSX.Element => {
   const toggleDrawer = (): void => {
     setHideDrawer(!hideDrawer);
   };
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [hideDrawer]);
 
   return (
     <>
