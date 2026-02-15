@@ -6,7 +6,7 @@
 
 > `const` **mockOrgDataWithNullUserReg**: `object`
 
-Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L38)
+Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L36)
 
 Variant with null isUserRegistrationRequired for switch default tests.
 
@@ -56,10 +56,6 @@ Variant with null isUserRegistrationRequired for switch default tests.
 
 > **isUserRegistrationRequired**: `any` = `null`
 
-#### organization.isVisibleInSearch
-
-> **isVisibleInSearch**: `boolean` = `false`
-
 #### organization.name
 
 > **name**: `string` = `'Test Org'`
@@ -71,7 +67,3 @@ Variant with null isUserRegistrationRequired for switch default tests.
 #### organization.state
 
 > **state**: `string` = `'Test State'`
-
-#### organization.updatedAt
-
-> **updatedAt**: `string` = `FIXED_UTC_TIMESTAMP`

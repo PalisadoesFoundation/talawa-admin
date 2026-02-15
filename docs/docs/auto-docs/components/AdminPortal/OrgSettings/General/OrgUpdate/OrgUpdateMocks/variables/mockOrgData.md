@@ -54,10 +54,6 @@ Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateM
 
 > **isUserRegistrationRequired**: `boolean` = `false`
 
-#### organization.isVisibleInSearch
-
-> **isVisibleInSearch**: `boolean` = `false`
-
 #### organization.name
 
 > **name**: `string` = `'Test Org'`
@@ -69,7 +65,3 @@ Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateM
 #### organization.state
 
 > **state**: `string` = `'Test State'`
-
-#### organization.updatedAt
-
-> **updatedAt**: `string` = `FIXED_UTC_TIMESTAMP`

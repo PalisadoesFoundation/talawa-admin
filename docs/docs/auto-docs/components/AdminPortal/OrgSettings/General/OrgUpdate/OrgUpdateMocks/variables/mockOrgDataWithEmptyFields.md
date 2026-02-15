@@ -6,7 +6,7 @@
 
 > `const` **mockOrgDataWithEmptyFields**: `object`
 
-Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L28)
+Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L26)
 
 Variant with empty address fields for mutation payload tests.
 
@@ -56,10 +56,6 @@ Variant with empty address fields for mutation payload tests.
 
 > **isUserRegistrationRequired**: `boolean` = `false`
 
-#### organization.isVisibleInSearch
-
-> **isVisibleInSearch**: `boolean` = `false`
-
 #### organization.name
 
 > **name**: `string` = `'Test Org'`
@@ -71,7 +67,3 @@ Variant with empty address fields for mutation payload tests.
 #### organization.state
 
 > **state**: `string` = `'Test State'`
-
-#### organization.updatedAt
-
-> **updatedAt**: `string` = `FIXED_UTC_TIMESTAMP`

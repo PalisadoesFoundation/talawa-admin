@@ -18,9 +18,7 @@ export const mockOrgData = {
     countryCode: 'US',
     avatarURL: null,
     createdAt: FIXED_UTC_TIMESTAMP,
-    updatedAt: FIXED_UTC_TIMESTAMP,
     isUserRegistrationRequired: false,
-    isVisibleInSearch: false,
   },
 };
 
