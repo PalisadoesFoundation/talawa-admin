@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAuthenticationPayload
 
-Defined in: [src/types/Auth/auth.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L21)
+Defined in: [src/types/Auth/auth.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L36)
 
 Payload returned after successful authentication.
 
@@ -14,7 +14,7 @@ Payload returned after successful authentication.
 
 > **authenticationToken**: `string`
 
-Defined in: [src/types/Auth/auth.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L23)
+Defined in: [src/types/Auth/auth.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L38)
 
 Token used for authenticating API requests
 
@@ -24,7 +24,7 @@ Token used for authenticating API requests
 
 > `optional` **refreshToken**: `string`
 
-Defined in: [src/types/Auth/auth.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L25)
+Defined in: [src/types/Auth/auth.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L40)
 
 Optional token for refreshing the authentication token
 
@@ -32,20 +32,8 @@ Optional token for refreshing the authentication token
 
 ### user
 
-> **user**: `object`
+> **user**: `InterfaceAuthUser`
 
-Defined in: [src/types/Auth/auth.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L27)
+Defined in: [src/types/Auth/auth.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L42)
 
 Authenticated user information
-
-#### emailAddress
-
-> **emailAddress**: `string`
-
-#### id
-
-> **id**: `string`
-
-#### name?
-
-> `optional` **name**: `string`
