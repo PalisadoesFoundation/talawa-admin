@@ -36,6 +36,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
         onChange={(e) => onSearch(e.target.value)}
       />
       <button
+        type="button"
         data-testid={buttonTestId ?? 'search-button'}
         onClick={() => onSearch('clicked')}
       >
@@ -53,6 +54,7 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
     ariaLabel,
     dataTestIdPrefix,
     buttonLabel,
+    icon,
   }: {
     options: { label: string; value: string | number }[];
     selectedValue: string | number;
@@ -60,15 +62,23 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
     ariaLabel: string;
     dataTestIdPrefix: string;
     buttonLabel?: string;
+    icon?: React.ReactNode;
   }) => {
     const selected = options.find((o) => o.value === selectedValue);
     const label = buttonLabel || selected?.label || 'Select';
     return (
       <div data-testid={`${dataTestIdPrefix}-dropdown`}>
         <span data-testid={`${dataTestIdPrefix}-label`}>{ariaLabel}</span>
-        <button data-testid={`${dataTestIdPrefix}-toggle`}>{label}</button>
+        <button type="button" data-testid={`${dataTestIdPrefix}-toggle`}>
+          {label}
+        </button>
+        <div data-testid={`${dataTestIdPrefix}-icon`}>{icon}</div>
         {options.map((opt) => (
-          <button key={opt.value} onClick={() => onSelect(opt.value)}>
+          <button
+            type="button"
+            key={opt.value}
+            onClick={() => onSelect(opt.value)}
+          >
             {opt.label}
           </button>
         ))}
@@ -132,6 +142,43 @@ describe('PageHeader Component', () => {
     expect(screen.getByText('Sort by Date')).toBeInTheDocument();
   });
 
+  it('renders custom icon when sort.icon is provided', () => {
+    const mockSort = vi.fn();
+    const sortingProps = [
+      {
+        title: 'Sort Custom',
+        options: [{ label: 'A', value: 'a' }],
+        selected: 'a',
+        onChange: mockSort,
+        testIdPrefix: 'sort-custom',
+        icon: 'custom-icon.png',
+      },
+    ];
+
+    render(<PageHeader sorting={sortingProps} />);
+    const iconContainer = screen.getByTestId('sort-custom-icon');
+    const img = iconContainer.querySelector('img');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', 'custom-icon.png');
+  });
+
+  it('renders default SortIcon when sort.icon is NOT provided', () => {
+    const mockSort = vi.fn();
+    const sortingProps = [
+      {
+        title: 'Sort Default',
+        options: [{ label: 'B', value: 'b' }],
+        selected: 'b',
+        onChange: mockSort,
+        testIdPrefix: 'sort-default',
+      },
+    ];
+
+    render(<PageHeader sorting={sortingProps} />);
+    const iconContainer = screen.getByTestId('sort-default-icon');
+    expect(iconContainer).toHaveTextContent('SortIcon');
+  });
+
   it('renders event type filter when showEventTypeFilter is true', () => {
     render(<PageHeader showEventTypeFilter={true} />);
     expect(screen.getByTestId('eventType-label')).toHaveTextContent(
@@ -176,10 +223,12 @@ describe('PageHeader Component', () => {
     expect(eventTypeButton).toBeInTheDocument();
 
     // 2. The mock renders options directly as buttons, so we can click them
-    const workshopsOption = screen.getByText('Workshops');
+    const workshopsOption = screen.getByText('workshops');
     expect(workshopsOption).toBeInTheDocument();
 
     // 3. Click the option (to ensure no errors occur)
-    await userEvent.click(workshopsOption);
+    await waitFor(async () => {
+      await userEvent.click(workshopsOption);
+    });
   });
 });

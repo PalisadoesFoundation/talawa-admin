@@ -103,7 +103,15 @@ export default function PageHeader({
                 containerClassName={sort.containerClassName}
                 toggleClassName={sort.toggleClassName}
                 icon={
-                  <SortIcon data-testid="sorting-icon" aria-hidden="true" />
+                  sort.icon ? (
+                    <img
+                      src={String(sort.icon)}
+                      alt={t('common:sortingIcon')}
+                      aria-hidden="true"
+                    />
+                  ) : (
+                    <SortIcon data-testid="sorting-icon" aria-hidden="true" />
+                  )
                 }
                 variant="outline-secondary"
               />

@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 /**
  * Interface for PageHeader component props.
  */
@@ -20,7 +22,6 @@ export interface InterfacePageHeaderProps {
     icon?: string;
   }>;
   showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
   rootClassName?: string;
-  alignmentClassName?: string;
 }

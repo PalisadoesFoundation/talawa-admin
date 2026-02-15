@@ -52,6 +52,7 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
     ariaLabel,
     dataTestIdPrefix,
     buttonLabel,
+    icon,
   }: {
     options: { label: string; value: string | number }[];
     selectedValue: string | number;
@@ -59,6 +60,7 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
     ariaLabel: string;
     dataTestIdPrefix: string;
     buttonLabel?: string;
+    icon?: React.ReactNode;
   }) => {
     const selected = options.find((o) => o.value === selectedValue);
     const label = buttonLabel || selected?.label || 'Select';
@@ -68,6 +70,7 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
         <button type="button" data-testid={`${dataTestIdPrefix}-toggle`}>
           {label}
         </button>
+        <div data-testid={`${dataTestIdPrefix}-icon`}>{icon}</div>
         {options.map((opt) => (
           <button
             type="button"
@@ -179,7 +182,59 @@ describe('PeopleTabNavbar', () => {
     expect(eventTypeSorting).toBeInTheDocument();
 
     await expect(
-      user.click(screen.getByText('Workshops')),
+      user.click(screen.getByText('workshops')),
     ).resolves.not.toThrow();
+  });
+
+  it('applies alignmentClassName when provided', () => {
+    const { container } = render(
+      <PeopleTabNavbar alignmentClassName="custom-alignment-class" />,
+    );
+    expect(
+      container.getElementsByClassName('custom-alignment-class').length,
+    ).toBe(1);
+  });
+
+  it('renders custom sort icon when provided', () => {
+    const onSortChange = vi.fn();
+    render(
+      <PeopleTabNavbar
+        sorting={[
+          {
+            title: 'Sort Custom',
+            options: [{ label: 'A', value: 'a' }],
+            selected: 'a',
+            onChange: onSortChange,
+            testIdPrefix: 'sort-custom',
+            icon: 'custom-icon.png',
+          },
+        ]}
+      />,
+    );
+
+    const iconContainer = screen.getByTestId('sort-custom-icon');
+    const img = iconContainer.querySelector('img');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', 'custom-icon.png');
+  });
+
+  it('renders default SortIcon when sort.icon is NOT provided', () => {
+    const onSortChange = vi.fn();
+    render(
+      <PeopleTabNavbar
+        sorting={[
+          {
+            title: 'Sort Default',
+            options: [{ label: 'B', value: 'b' }],
+            selected: 'b',
+            onChange: onSortChange,
+            testIdPrefix: 'sort-default',
+          },
+        ]}
+      />,
+    );
+
+    const iconContainer = screen.getByTestId('sort-default-icon');
+    expect(iconContainer).toHaveTextContent('SortIcon');
   });
 });

@@ -1,4 +1,5 @@
 {
+  "workshops": "Ateliers",
   "securedRouteForUser": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },

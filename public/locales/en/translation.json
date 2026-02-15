@@ -8,6 +8,7 @@
     "continueWith": "Continue with {{provider}}",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "workshops": "Workshops",
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },

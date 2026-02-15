@@ -1,4 +1,5 @@
 {
+  "workshops": "Talleres",
   "securedRouteForUser": {
     "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
   },

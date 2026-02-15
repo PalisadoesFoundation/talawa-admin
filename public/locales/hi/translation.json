@@ -1,4 +1,5 @@
 {
+  "workshops": "कार्यशालाएँ",
   "securedRouteForUser": {
     "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
   },

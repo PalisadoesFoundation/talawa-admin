@@ -1,4 +1,5 @@
 {
+  "workshops": "研讨会",
   "securedRouteForUser": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },

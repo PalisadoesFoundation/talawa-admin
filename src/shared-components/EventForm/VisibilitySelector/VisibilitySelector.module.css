@@ -5,6 +5,7 @@
 }
 
 /* Override Bootstrap .form-check-input defaults for vertical alignment with multi-line labels */
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown -- CSS Modules :global() */
 .visibilityOption :global(.form-check-input) {
   margin-top: var(--space-4);
   margin-right: var(--space-9);
@@ -12,6 +13,7 @@
 
 /* Override Bootstrap .form-check-label to stack label content vertically;
    negative margin offsets Bootstrap's default left padding on .form-check */
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown -- CSS Modules :global() */
 .visibilityOption :global(.form-check-label) {
   display: flex;
   flex-direction: column;

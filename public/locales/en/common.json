@@ -310,6 +310,7 @@
   "sortBy": "Sort By",
   "previousYear": "Previous Year",
   "nextYear": "Next Year",
+  "workshops": "Workshops",
   "navigateToProfile": "Navigate to profile",
   "loginSuccess": "Welcome!",
   "loginSuccessWithName": "Welcome, {{name}}!",
