@@ -7,6 +7,11 @@ sidebar_position: 70
 
 This project uses Cypress for comprehensive end-to-end testing to ensure the application works correctly from a user's perspective.
 
+## Additional Resources
+
+- Online docs: <https://docs-admin.talawa.io/docs/developer-resources/e2e-testing>
+- Cypress local quick reference: `cypress/README.md`
+
 ## Prerequisites
 
 Before running Cypress tests, ensure you have the following setup:
