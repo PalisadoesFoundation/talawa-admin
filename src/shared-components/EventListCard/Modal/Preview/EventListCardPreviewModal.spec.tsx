@@ -195,7 +195,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   beforeEach(() => {
-    vi.clearAllMocks();
     (CustomRecurrenceModal as Mock).mockImplementation(() => (
       <div data-testid="mock-custom-recurrence-modal" />
     ));
