@@ -284,11 +284,15 @@ const preferCrudModalTemplate = {
             node: node,
             messageId: 'preferCrud',
             fix: /** @type {(fixer: RuleFixer) => import('@typescript-eslint/utils').TSESLint.RuleFix} */ (fixer) => {
+              // Null-guard for importDecl
+              if (!importDecl) {
+                return null;
+              }
+
               const localName = elementName;
 
               // Check if import has multiple specifiers
-              const hasMultipleSpecifiers =
-                importDecl.specifiers.length > 1;
+              const hasMultipleSpecifiers = importDecl.specifiers.length > 1;
 
               if (hasMultipleSpecifiers) {
                 // Preserve other imports, only remove/replace the matched variant component
@@ -297,9 +301,7 @@ const preferCrudModalTemplate = {
                     if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
                       return spec.local.name !== elementName;
                     }
-                    if (
-                      spec.type === AST_NODE_TYPES.ImportDefaultSpecifier
-                    ) {
+                    if (spec.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
                       return spec.local.name !== elementName;
                     }
                     return true;
@@ -308,20 +310,6 @@ const preferCrudModalTemplate = {
 
                 // source.value is always a string here (guarded above in ImportDeclaration)
                 const originalImportPath = importDecl.source.value;
-                const preservedImports = otherSpecifiers
-                  .map((spec) => {
-                    if (
-                      spec.type === AST_NODE_TYPES.ImportDefaultSpecifier
-                    ) {
-                      return spec.local.name;
-                    }
-                    if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
-                      return specifierToString(spec);
-                    }
-                    // ImportNamespaceSpecifier
-                    return `* as ${spec.local.name}`;
-                  })
-                  .join(', ');
 
                 const hasDefault = otherSpecifiers.some(
                   (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
@@ -339,24 +327,27 @@ const preferCrudModalTemplate = {
                     (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
                   );
                   const namedSpecs = otherSpecifiers
-                    .filter(
-                      (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
-                    )
-                    .map((spec) =>
-                      specifierToString(spec),
-                    )
+                    .filter((s) => s.type === AST_NODE_TYPES.ImportSpecifier)
+                    .map((spec) => specifierToString(spec))
                     .join(', ');
                   preservedImportStmt = `import ${defaultSpec?.local.name}, { ${namedSpecs} } from '${originalImportPath}';`;
                 } else if (hasDefault) {
-                  preservedImportStmt = `import ${preservedImports} from '${originalImportPath}';`;
+                  const defaultSpec = otherSpecifiers.find(
+                    (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+                  );
+                  preservedImportStmt = `import ${defaultSpec?.local.name} from '${originalImportPath}';`;
                 } else if (hasNamespace && !hasNamed) {
                   const namespaceSpec = otherSpecifiers.find(
-                    (s) =>
-                      s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
+                    (s) => s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
                   );
-                  preservedImportStmt = `import * as ${namespaceSpec.local.name} from '${originalImportPath}';`;
+                  preservedImportStmt = `import * as ${namespaceSpec?.local.name} from '${originalImportPath}';`;
                 } else {
-                  preservedImportStmt = `import { ${preservedImports} } from '${originalImportPath}';`;
+                  // Only named specifiers remain (namespace cannot coexist with named)
+                  const namedSpecs = otherSpecifiers
+                    .filter((s) => s.type === AST_NODE_TYPES.ImportSpecifier)
+                    .map((spec) => specifierToString(spec))
+                    .join(', ');
+                  preservedImportStmt = `import { ${namedSpecs} } from '${originalImportPath}';`;
                 }
 
                 const newImport = `import { CRUDModalTemplate as ${localName} } from '${CRUD_IMPORT_PATH}';\n${preservedImportStmt}`;
