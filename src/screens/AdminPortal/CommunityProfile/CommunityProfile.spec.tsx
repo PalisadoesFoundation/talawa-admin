@@ -21,6 +21,15 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 
+// Hoist the mock function so it can be accessed in tests
+const { mockUploadFileToMinio } = vi.hoisted(() => ({
+  mockUploadFileToMinio: vi.fn().mockResolvedValue({
+    objectName: 'mocked-logo-object-name',
+    fileHash: 'mocked-logo-file-hash',
+    mimeType: 'image/png',
+  }),
+}));
+
 const { toastMocks, errorHandlerMock } = vi.hoisted(() => ({
   toastMocks: {
     success: vi.fn(),
@@ -41,10 +50,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: () => ({
-    uploadFileToMinio: vi.fn().mockResolvedValue({
-      objectName: 'mocked-logo-object-name',
-      fileHash: 'mocked-logo-file-hash',
-    }),
+    uploadFileToMinio: mockUploadFileToMinio,
   }),
 }));
 
@@ -949,6 +955,50 @@ describe('Testing Community Profile Screen', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+    });
+
+    test('handles logo upload error correctly', async () => {
+      // Mock upload failure
+      mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      render(
+        <MockedProvider mocks={MOCKS3} addTypename={false}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <CommunityProfile />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      // Trigger upload
+      const file = new File(['dummy content'], 'logo.png', {
+        type: 'image/png',
+      });
+      const input = screen.getByTestId('fileInput');
+
+      await userEvent.upload(input, file);
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Error uploading logo:',
+          expect.any(Error),
+        );
+        expect(toastMocks.error).toHaveBeenCalledWith({
+          key: 'imageUploadError',
+          namespace: 'errors',
+        });
+      });
+
+      consoleSpy.mockRestore();
     });
   });
 });

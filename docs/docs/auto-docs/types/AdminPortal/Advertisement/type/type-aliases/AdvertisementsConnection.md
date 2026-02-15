@@ -6,7 +6,7 @@
 
 > **AdvertisementsConnection** = `object`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L40)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L48)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/
 
 > `optional` **edges**: [`AdvertisementEdge`](AdvertisementEdge.md)[]
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L41)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L49)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/
 
 > `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L42)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L50)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:42](https://github.com/
 
 > `optional` **totalCount**: `number`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L43)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L51)

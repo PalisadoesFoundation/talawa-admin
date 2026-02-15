@@ -39,7 +39,11 @@ describe('Testing Admin Advertisement Management', () => {
         ad2: {
           updatedName: data.advertisements?.[1]?.name ?? 'Advertisement 2',
         },
-        mockPresignedUrl: data.mockPresignedUrl,
+        mockPresignedUrl: data.mockPresignedUrl ?? {
+          presignedUrl: 'http://localhost:9000/talawa/test-upload',
+          objectName: 'orgs/test-org/ads/default.png',
+          requiresUpload: true,
+        },
       };
     });
   });
@@ -60,7 +64,7 @@ describe('Testing Admin Advertisement Management', () => {
 
   it('create a new advertisement with file attachment', () => {
     adPage.createAdvertisementWithAttachment(
-      adData.ad1.name,
+      `${adData.ad1.name} with attachment`,
       adData.ad1.description,
       adData.ad1.type,
       'advertisement_banner.png',

@@ -138,6 +138,13 @@ function AdvertisementRegister({
   });
 
   const handleClose = (): void => {
+    // Revoke all blob URLs when closing/resetting form
+    formState.attachments.forEach((attachment) => {
+      if (attachment.previewUrl) {
+        URL.revokeObjectURL(attachment.previewUrl);
+      }
+    });
+
     setFormState({
       name: '',
       type: 'banner',
@@ -148,6 +155,17 @@ function AdvertisementRegister({
     });
     setShow(false);
   };
+
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      formState.attachments.forEach((attachment) => {
+        if (attachment.previewUrl) {
+          URL.revokeObjectURL(attachment.previewUrl);
+        }
+      });
+    };
+  }, [formState.attachments]);
 
   const handleShow = (): void => setShow(true); // Shows the modal
 
@@ -197,6 +215,9 @@ function AdvertisementRegister({
             NotificationToast.error(
               t('fileUploadError', { fileName: file.name }),
             );
+            // Revoke blob URL if created before failure
+            const previewUrl = URL.createObjectURL(file);
+            URL.revokeObjectURL(previewUrl);
           }
         }
 
@@ -212,10 +233,17 @@ function AdvertisementRegister({
 
   // Handle file removal
   const removeFile = (index: number): void => {
-    setFormState((prev) => ({
-      ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index),
-    }));
+    setFormState((prev) => {
+      // Revoke blob URL before removing attachment
+      const attachment = prev.attachments[index];
+      if (attachment?.previewUrl) {
+        URL.revokeObjectURL(attachment.previewUrl);
+      }
+      return {
+        ...prev,
+        attachments: prev.attachments.filter((_, i) => i !== index),
+      };
+    });
   };
 
   // Set form state if editing

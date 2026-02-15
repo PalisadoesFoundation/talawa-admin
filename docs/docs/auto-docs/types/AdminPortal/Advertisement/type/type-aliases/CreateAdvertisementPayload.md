@@ -6,7 +6,7 @@
 
 > **CreateAdvertisementPayload** = `object`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L56)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L64)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:56](https://github.com/
 
 > `optional` **advertisement**: [`Advertisement`](Advertisement.md)
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L57)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L65)

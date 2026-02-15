@@ -32,6 +32,14 @@ export type AdvertisementAttachment = {
   mimeType: string;
 };
 
+// File Metadata Attachment Type (for MinIO uploads)
+export type FileMetadataAttachment = {
+  objectName: string;
+  fileHash: string;
+  mimeType: string;
+  previewUrl?: string;
+};
+
 export type AdvertisementEdge = {
   cursor?: string;
   node?: Advertisement;

@@ -1644,7 +1644,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     await userEvent.type(

@@ -307,6 +307,10 @@ const CommunityProfile = (): JSX.Element => {
                       });
                     } catch (error) {
                       console.error('Error uploading logo:', error);
+                      NotificationToast.error({
+                        key: 'imageUploadError',
+                        namespace: 'errors',
+                      });
                       setLogoMetadata(null);
                     } finally {
                       setIsLogoUploading(false);

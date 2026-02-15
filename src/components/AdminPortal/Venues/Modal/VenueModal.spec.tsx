@@ -1,13 +1,13 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
 import type * as RouterTypes from 'react-router-dom';
 
 import type { InterfaceVenueModalProps } from './VenueModal';
@@ -314,13 +314,17 @@ const renderVenueModal = (
 
 describe('VenueModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Configure MinIO upload mock
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'test-obj',
       fileHash: 'test-hash',
       mimeType: 'image/png',
     });
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   test('creates a new venue successfully', async () => {
@@ -636,6 +640,34 @@ describe('Image Handling', () => {
 
     // Restore original
     vi.restoreAllMocks();
+  });
+
+  test('handles image upload error correctly', async () => {
+    // Mock upload failure
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+
+    await act(async () => {
+      await userEvent.upload(fileInput, file);
+    });
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error uploading file:',
+        expect.any(Error),
+      );
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'imageUploadError',
+        namespace: 'errors',
+      });
+    });
+
+    consoleSpy.mockRestore();
   });
 
   test('shows error when uploading file larger than 5MB', async () => {

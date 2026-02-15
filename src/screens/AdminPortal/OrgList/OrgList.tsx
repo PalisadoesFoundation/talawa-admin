@@ -547,7 +547,6 @@ function OrgList(): JSX.Element {
         setFormState={setFormState}
         createOrg={createOrg}
         t={t}
-        tCommon={tCommon}
       />
       {/* Plugin Notification Modal after Org is Created */}
       <BaseModal

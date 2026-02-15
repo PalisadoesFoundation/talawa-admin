@@ -100,7 +100,6 @@ describe('OrganizationModal Component', () => {
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
               t={(key) => key}
-              tCommon={(key) => key}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -152,7 +151,6 @@ describe('OrganizationModal Component', () => {
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
               t={(key) => key}
-              tCommon={(key) => key}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -238,7 +236,6 @@ describe('OrganizationModal Component', () => {
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
               t={(key) => key}
-              tCommon={(key) => key}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -384,7 +381,6 @@ describe('OrganizationModal Component', () => {
                 setFormState={mockSetFormState}
                 createOrg={mockCreateOrg}
                 t={(key) => key}
-                tCommon={(key) => key}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -540,7 +536,6 @@ describe('OrganizationModal Component', () => {
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
               t={(key) => key}
-              tCommon={(key) => key}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -562,7 +557,6 @@ describe('OrganizationModal Component', () => {
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
               t={(key) => key}
-              tCommon={(key) => key}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -614,7 +608,6 @@ describe('OrganizationModal Component', () => {
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
               t={(key) => key}
-              tCommon={(key) => key}
             />
           </I18nextProvider>
         </BrowserRouter>

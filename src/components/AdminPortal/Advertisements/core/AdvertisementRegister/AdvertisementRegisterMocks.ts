@@ -4,6 +4,7 @@ import {
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
+import type { FileMetadataAttachment } from 'types/AdminPortal/Advertisement/type';
 
 interface IPageInfo {
   startCursor: string | null;
@@ -98,12 +99,7 @@ interface IAdvertisementEdge {
     name: string;
     startAt: string;
     type: string;
-    attachments: {
-      objectName: string;
-      fileHash: string;
-      mimeType: string;
-      previewUrl?: string;
-    }[];
+    attachments: FileMetadataAttachment[];
   };
 }
 
@@ -148,12 +144,7 @@ const createAdvertisementNode = (
   startAt: string,
   endAt: string,
   type: string = 'banner',
-  attachments: {
-    objectName: string;
-    fileHash: string;
-    mimeType: string;
-    previewUrl?: string;
-  }[] = [],
+  attachments: FileMetadataAttachment[] = [],
 ) => ({
   node: {
     id,
