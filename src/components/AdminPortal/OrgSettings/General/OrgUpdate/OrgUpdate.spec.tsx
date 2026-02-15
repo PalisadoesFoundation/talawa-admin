@@ -349,10 +349,6 @@ describe('OrgUpdate Component', () => {
   });
 
   describe('OrgUpdate Form Switch Controls', () => {
-    beforeEach(() => {
-      vi.restoreAllMocks();
-    });
-
     it('toggles user registration switches correctly', async () => {
       const user = userEvent.setup();
 
@@ -400,10 +396,6 @@ describe('OrgUpdate Component', () => {
         result: { data: null },
       },
     ];
-
-    beforeEach(() => {
-      vi.restoreAllMocks();
-    });
 
     it('handles empty response from update mutation', async () => {
       const user = userEvent.setup();
@@ -610,6 +602,10 @@ describe('OrgUpdate Component', () => {
 
     expect(fileInput.files).toHaveLength(0);
 
+    await waitFor(() => {
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
     const saveButton = screen.getByTestId('save-org-changes-btn');
     expect(saveButton).toBeEnabled();
   });
@@ -749,27 +745,6 @@ describe('OrgUpdate Component', () => {
 
     vi.useRealTimers();
     consoleErrorSpy.mockRestore();
-  });
-
-  it('file input onChange with no file selected does not update state', async () => {
-    const user = userEvent.setup();
-
-    render(
-      <MockedProvider mocks={MOCKS}>
-        <I18nextProvider i18n={i18nForTest}>
-          <OrgUpdate orgId="1" />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await screen.findByDisplayValue('Test Org');
-
-    const fileInput = screen.getByTestId('organisationImage');
-    await user.upload(fileInput, []);
-
-    await waitFor(() => {
-      expect(NotificationToast.error).not.toHaveBeenCalled();
-    });
   });
 
   it('clears file input value after successful save with avatar', async () => {
