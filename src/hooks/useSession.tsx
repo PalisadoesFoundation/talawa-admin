@@ -2,13 +2,12 @@ import { useMutation, useQuery } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { t } from 'i18next';
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from './useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { toast } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
 
 type UseSessionReturnType = {
   startSession: () => void;
@@ -32,8 +31,8 @@ type UseSessionReturnType = {
 const useSession = (): UseSessionReturnType => {
   const { t: tCommon } = useTranslation('common');
 
-  let startTime: number;
-  let timeoutDuration: number;
+  const startTimeRef = useRef<number>(0);
+  const timeoutDurationRef = useRef<number>(0);
   const [sessionTimeout, setSessionTimeout] = useState<number>(30);
   // const sessionTimeout = 30;
   const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -63,25 +62,16 @@ const useSession = (): UseSessionReturnType => {
     if (warningTimerRef.current) clearTimeout(warningTimerRef.current);
   };
 
-  const endSession = (): void => {
-    resetTimers();
-    window.removeEventListener('mousemove', extendSession);
-    window.removeEventListener('keydown', extendSession);
-    document.removeEventListener('visibilitychange', handleVisibilityChange);
-  };
-
-  const handleLogout = async (): Promise<void> => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Error during logout:', error);
-      toast.error(tCommon('errorOccurred'));
-    }
-    clearAllItems();
-    endSession();
-    navigate('/');
-    NotificationToast.warning(tCommon('sessionLogOut'), { autoClose: false });
-  };
+  /*
+   * Refs used to create stable event listener callbacks.
+   * This ensures that addEventListener and removeEventListener always refer
+   * to the same function identity, preventing stale closure issues or
+   * failure to remove listeners.
+   */
+  const extendSessionRef = useRef<() => void>(() => {});
+  const handleVisibilityChangeRef = useRef<() => Promise<void>>(async () => {});
+  const mountedRef = useRef(true);
+  const throttledExtendSessionRef = useRef<NodeJS.Timeout | null>(null);
 
   const initializeTimers = (
     timeLeft?: number,
@@ -92,8 +82,8 @@ const useSession = (): UseSessionReturnType => {
       (timeLeft || sessionTimeout) * 60 * 1000;
     const warningTimeInMilliseconds = warningTime * 60 * 1000;
 
-    timeoutDuration = sessionTimeoutInMilliseconds;
-    startTime = Date.now();
+    timeoutDurationRef.current = sessionTimeoutInMilliseconds;
+    startTimeRef.current = Date.now();
 
     warningTimerRef.current = setTimeout(() => {
       NotificationToast.warning(tCommon('sessionWarning'));
@@ -109,31 +99,20 @@ const useSession = (): UseSessionReturnType => {
     initializeTimers();
   };
 
-  const startSession = (): void => {
-    resetTimers();
-    initializeTimers();
-    window.removeEventListener('mousemove', extendSession);
-    window.removeEventListener('keydown', extendSession);
-    document.removeEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('mousemove', extendSession);
-    window.addEventListener('keydown', extendSession);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-  };
-
   const handleVisibilityChange = async (): Promise<void> => {
     if (document.visibilityState === 'hidden') {
-      window.removeEventListener('mousemove', extendSession);
-      window.removeEventListener('keydown', extendSession);
+      window.removeEventListener('mousemove', stableExtendSession);
+      window.removeEventListener('keydown', stableExtendSession);
       resetTimers(); // Optionally reset timers to prevent them from running in the background
     } else if (document.visibilityState === 'visible') {
-      window.removeEventListener('mousemove', extendSession);
-      window.removeEventListener('keydown', extendSession); // Ensure no duplicates
-      window.addEventListener('mousemove', extendSession);
-      window.addEventListener('keydown', extendSession);
+      window.removeEventListener('mousemove', stableExtendSession);
+      window.removeEventListener('keydown', stableExtendSession); // Ensure no duplicates
+      window.addEventListener('mousemove', stableExtendSession);
+      window.addEventListener('keydown', stableExtendSession);
 
       // Calculate remaining time now that the tab is active again
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = timeoutDuration - elapsedTime;
+      const elapsedTime = Date.now() - startTimeRef.current;
+      const remainingTime = timeoutDurationRef.current - elapsedTime;
 
       const remainingSessionTime = Math.max(remainingTime, 0); // Ensures the remaining time is non-negative and measured in ms;
 
@@ -152,10 +131,79 @@ const useSession = (): UseSessionReturnType => {
   };
 
   useEffect(() => {
+    extendSessionRef.current = extendSession;
+    handleVisibilityChangeRef.current = handleVisibilityChange;
+  });
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      if (throttledExtendSessionRef.current) {
+        clearTimeout(throttledExtendSessionRef.current);
+      }
+    };
+  }, []);
+
+  const throttledExtendSession = useCallback(() => {
+    if (!throttledExtendSessionRef.current) {
+      extendSessionRef.current?.();
+      throttledExtendSessionRef.current = setTimeout(() => {
+        throttledExtendSessionRef.current = null;
+      }, 5000); // 5 seconds throttle
+    }
+  }, []);
+
+  const stableExtendSession = useCallback(() => {
+    // We utilize the throttled version for event listeners
+    throttledExtendSession();
+  }, [throttledExtendSession]);
+
+  const stableVisibilityChange = useCallback(() => {
+    handleVisibilityChangeRef.current?.();
+  }, []);
+
+  const endSession = useCallback((): void => {
+    resetTimers();
+    window.removeEventListener('mousemove', stableExtendSession);
+    window.removeEventListener('keydown', stableExtendSession);
+    document.removeEventListener('visibilitychange', stableVisibilityChange);
+  }, [stableExtendSession, stableVisibilityChange]);
+
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Error during logout:', error);
+      NotificationToast.error(tCommon('errorOccurred'));
+    }
+
+    if (!mountedRef.current) return;
+
+    clearAllItems();
+    endSession();
+    navigate('/');
+    NotificationToast.warning(tCommon('sessionLogOut'), { autoClose: false });
+  };
+
+  // Function definitions for stableExtendSession and stableVisibilityChange moved up to avoid hoisting issues/references before declaration
+
+  const startSession = (): void => {
+    resetTimers();
+    initializeTimers();
+    window.removeEventListener('mousemove', stableExtendSession);
+    window.removeEventListener('keydown', stableExtendSession);
+    document.removeEventListener('visibilitychange', stableVisibilityChange);
+    window.addEventListener('mousemove', stableExtendSession);
+    window.addEventListener('keydown', stableExtendSession);
+    document.addEventListener('visibilitychange', stableVisibilityChange);
+  };
+
+  useEffect(() => {
     return () => {
       endSession();
     };
-  }, []);
+  }, [endSession]);
 
   return {
     startSession,

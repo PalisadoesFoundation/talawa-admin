@@ -8,12 +8,12 @@ import type { Mock } from 'vitest';
 import { vi } from 'vitest';
 import SignOut from './SignOut';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
-import useSession from 'utils/useSession';
+import useSession from 'hooks/useSession';
 import useLocalStorage from 'utils/useLocalstorage';
 import i18n from 'utils/i18nForTest';
 
 // Mock dependencies
-vi.mock('utils/useSession', () => ({
+vi.mock('hooks/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
   })),

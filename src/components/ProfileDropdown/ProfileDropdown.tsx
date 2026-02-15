@@ -40,7 +40,7 @@ import styles from './ProfileDropdown.module.css';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import useSession from 'utils/useSession';
+import useSession from 'hooks/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import DropDownButton from 'shared-components/DropDownButton';

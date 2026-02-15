@@ -4,7 +4,7 @@ import useUserProfile from './useUserProfile';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import useSession from 'utils/useSession';
+import useSession from 'hooks/useSession';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 
@@ -28,7 +28,7 @@ vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(),
 }));
 
-vi.mock('utils/useSession', () => ({
+vi.mock('hooks/useSession', () => ({
   default: vi.fn(),
 }));
 
