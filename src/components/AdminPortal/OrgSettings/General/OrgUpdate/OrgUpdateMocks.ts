@@ -40,18 +40,10 @@ export const mockOrgDataWithNullUserReg = {
   },
 };
 
-/** Shared updateOrganization mutation response for test mocks; spread and override as needed. */
+/** Shared updateOrganization mutation response for test mocks; derives from mockOrgData.organization with mutation-specific fields. */
 export const mockUpdateOrgResponse = {
+  ...mockOrgData.organization,
   __typename: 'Organization' as const,
-  id: '1',
-  name: 'Test Org',
-  description: 'Test Description',
-  addressLine1: '123 Test St',
-  addressLine2: 'Suite 100',
-  city: 'Test City',
-  state: 'Test State',
-  postalCode: '12345',
-  countryCode: 'US',
   avatarMimeType: null,
   avatarURL: null,
   updatedAt: FIXED_UTC_TIMESTAMP,

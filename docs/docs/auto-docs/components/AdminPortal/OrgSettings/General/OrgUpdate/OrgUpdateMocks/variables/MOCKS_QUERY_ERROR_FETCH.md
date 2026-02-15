@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_QUERY\_ERROR\_FETCH**: `object`[]
 
-Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L114)
+Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L106)
 
 Query error with alternate message for "displays error message when query fails" test.
 

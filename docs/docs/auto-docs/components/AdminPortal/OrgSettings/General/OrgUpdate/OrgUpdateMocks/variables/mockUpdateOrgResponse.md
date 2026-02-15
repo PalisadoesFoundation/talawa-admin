@@ -8,7 +8,7 @@
 
 Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L44)
 
-Shared updateOrganization mutation response for test mocks; spread and override as needed.
+Shared updateOrganization mutation response for test mocks; derives from mockOrgData.organization with mutation-specific fields.
 
 ## Type Declaration
 
@@ -39,6 +39,10 @@ Shared updateOrganization mutation response for test mocks; spread and override 
 ### countryCode
 
 > **countryCode**: `string` = `'US'`
+
+### createdAt
+
+> **createdAt**: `string` = `FIXED_UTC_TIMESTAMP`
 
 ### description
 

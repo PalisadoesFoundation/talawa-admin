@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_QUERY\_ERROR**: `object`[]
 
-Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L103)
+Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L95)
 
 ## Type Declaration
 
