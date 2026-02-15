@@ -165,8 +165,10 @@ describe('OrgUpdate Component', () => {
 
     await userEvent.upload(fileInput, file);
 
-    expect(fileInput.files).toHaveLength(1);
-    expect(fileInput.files?.[0]).toBe(file);
+    await waitFor(() => {
+      expect(fileInput.files).toHaveLength(1);
+      expect(fileInput.files?.[0]).toBe(file);
+    });
 
     const saveButton = screen.getByTestId('save-org-changes-btn');
     expect(saveButton).toBeEnabled();
