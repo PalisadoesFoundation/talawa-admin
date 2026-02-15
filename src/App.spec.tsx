@@ -290,7 +290,7 @@ const MOCKS = [
     request: { query: CURRENT_USER },
     result: {
       data: {
-        currentUser: {
+        user: {
           id: '123',
           name: 'John Doe',
           createdAt: dayjs().subtract(1, 'year').toISOString(),
@@ -303,10 +303,7 @@ const MOCKS = [
           maritalStatus: 'SINGLE',
           address: { line1: 'line1', state: 'state', countryCode: 'IND' },
           phone: { mobile: '+8912313112' },
-          userType: 'USER',
-          appUserProfile: {
-            adminFor: [],
-          },
+          role: 'regular',
         },
       },
     },
@@ -318,14 +315,11 @@ const ADMIN_MOCKS = [
     request: { query: CURRENT_USER },
     result: {
       data: {
-        currentUser: {
+        user: {
           id: '456',
           name: 'Admin User',
           emailAddress: 'admin@example.com',
-          userType: 'ADMIN',
-          appUserProfile: {
-            adminFor: [{ _id: 'org1' }, { _id: 'org2' }],
-          },
+          role: 'administrator',
         },
       },
     },
@@ -337,14 +331,11 @@ const SUPER_ADMIN_MOCKS = [
     request: { query: CURRENT_USER },
     result: {
       data: {
-        currentUser: {
+        user: {
           id: '789',
           name: 'Super Admin',
           emailAddress: 'superadmin@example.com',
-          userType: 'SUPERADMIN',
-          appUserProfile: {
-            adminFor: [{ _id: 'org1' }, { _id: 'org2' }, { _id: 'org3' }],
-          },
+          role: 'administrator',
         },
       },
     },
@@ -469,16 +460,8 @@ describe('Testing the App Component', () => {
 
     await waitFor(() => {
       // Admin should have org permissions
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2'],
-        true,
-        false,
-      ); // adminGlobalPluginRoutes
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2'],
-        true,
-        true,
-      ); // adminOrgPluginRoutes
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, false); // adminGlobalPluginRoutes
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, true); // adminOrgPluginRoutes
     });
   });
 
@@ -489,16 +472,8 @@ describe('Testing the App Component', () => {
 
     await waitFor(() => {
       // Super admin should have org permissions
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2', 'org3'],
-        true,
-        false,
-      );
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2', 'org3'],
-        true,
-        true,
-      );
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, false);
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, true);
     });
   });
 
@@ -508,14 +483,11 @@ describe('Testing the App Component', () => {
         request: { query: CURRENT_USER },
         result: {
           data: {
-            currentUser: {
+            user: {
               id: '999',
               name: 'Regular User',
               emailAddress: 'user@example.com',
-              userType: 'USER',
-              appUserProfile: {
-                adminFor: null, // Test null case
-              },
+              role: 'regular',
             },
           },
         },
@@ -573,7 +545,7 @@ describe('Testing the App Component', () => {
         request: { query: CURRENT_USER },
         result: {
           data: {
-            currentUser: null,
+            user: null,
           },
         },
       },
@@ -585,35 +557,6 @@ describe('Testing the App Component', () => {
     // Should handle null user gracefully without crashing
     await screen.findByTestId('app-footer');
     // Verify plugin system is initialized even with null user
-    await waitFor(() => {
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-    });
-  });
-
-  it('should handle user without appUserProfile', async () => {
-    const noProfileMocks = [
-      {
-        request: { query: CURRENT_USER },
-        result: {
-          data: {
-            currentUser: {
-              id: '555',
-              name: 'No Profile User',
-              emailAddress: 'noprofile@example.com',
-              userType: 'USER',
-              // Missing appUserProfile
-            },
-          },
-        },
-      },
-    ];
-
-    const noProfileLink = new StaticMockLink(noProfileMocks, true);
-    renderApp(noProfileLink);
-
-    // Should handle missing appUserProfile gracefully
-    await screen.findByTestId('app-footer');
-    // Verify plugin system is initialized even without appUserProfile
     await waitFor(() => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
@@ -689,7 +632,7 @@ describe('Testing the App Component', () => {
     });
   });
 
-  it('should handle user with userType ADMIN correctly', async () => {
+  it('should handle user with role admin correctly', async () => {
     renderApp(adminLink);
 
     await waitFor(() => {

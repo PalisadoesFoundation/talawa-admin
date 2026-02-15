@@ -199,7 +199,7 @@ const baseUserFields = {
   natalSex: 'Male',
   naturalLanguageCode: 'en',
   postalCode: '12345',
-  role: 'user',
+  role: 'regular',
   state: 'State',
   updatedAt: '1234567890',
   workPhoneNumber: '1234567890',
@@ -213,7 +213,7 @@ const CURRENT_USER_VERIFIED_MOCK = {
   },
   result: {
     data: {
-      currentUser: {
+      user: {
         __typename: 'User',
         ...baseUserFields,
         isEmailAddressVerified: true,
@@ -229,7 +229,7 @@ const CURRENT_USER_UNVERIFIED_MOCK = {
   },
   result: {
     data: {
-      currentUser: {
+      user: {
         __typename: 'User',
         ...baseUserFields,
         isEmailAddressVerified: false,
@@ -245,7 +245,7 @@ const CURRENT_USER_NULL_MOCK = {
   },
   result: {
     data: {
-      currentUser: null,
+      user: null,
     },
   },
 };
@@ -1493,7 +1493,7 @@ describe('Email Verification Warning', () => {
         COMMUNITY_TIMEOUT_MOCK,
         {
           request: { query: CURRENT_USER, variables: {} },
-          result: { data: { currentUser: null } },
+          result: { data: { user: null } },
         },
         ORGANIZATION_FILTER_LIST_MOCK,
       ],
