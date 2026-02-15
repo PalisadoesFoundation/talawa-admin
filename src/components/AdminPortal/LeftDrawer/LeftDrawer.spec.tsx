@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
@@ -103,6 +103,7 @@ describe('LeftDrawer Component', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
   const TestWrapper = ({
@@ -130,7 +131,6 @@ describe('LeftDrawer Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
     // Reset to default super admin mock
     vi.mocked(useLocalStorage).mockImplementation(() => ({
       getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),

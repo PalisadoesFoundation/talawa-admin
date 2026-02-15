@@ -150,11 +150,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
       </div>
       <div
         className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
+          hideDrawer ? styles.expand : styles.contract
         } `}
         data-testid="mainpageright"
       >

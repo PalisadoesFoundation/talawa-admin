@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
@@ -324,7 +324,6 @@ describe('LeftDrawerOrg', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
     mockT = vi.fn(mockTImplementation);
     mockTErrors = vi.fn(mockTErrorsImplementation);
     mockGetItem = vi.fn((key: string) => {
@@ -342,6 +341,7 @@ describe('LeftDrawerOrg', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {

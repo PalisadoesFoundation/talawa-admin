@@ -1,12 +1,14 @@
 import React from 'react';
 import { describe, it, vi, expect, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import SidebarNavItem from './SidebarNavItem';
 import userEvent from '@testing-library/user-event';
 
 afterEach(() => {
-  vi.clearAllMocks();
+  window.history.pushState({}, '', '/');
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 // Mock icon element for testing
