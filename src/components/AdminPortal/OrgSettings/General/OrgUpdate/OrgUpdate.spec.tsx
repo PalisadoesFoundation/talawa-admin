@@ -15,7 +15,6 @@ import {
   mockOrgDataWithEmptyFields,
   mockOrgDataWithNullUserReg,
   mockUpdateOrgResponse,
-  FIXED_UTC_TIMESTAMP,
   MOCKS,
   MOCKS_QUERY_ERROR,
   MOCKS_QUERY_ERROR_FETCH,
