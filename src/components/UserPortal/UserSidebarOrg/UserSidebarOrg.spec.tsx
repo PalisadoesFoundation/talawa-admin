@@ -288,7 +288,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
   clearAllItems();
 });
 
@@ -297,7 +297,7 @@ const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 const linkAdmin = new StaticMockLink(MOCKS_ADMIN, true);
 // const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
-describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
+describe('Testing LeftDrawerOrg component for Administrator', () => {
   it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
     setItem('role', 'administrator');

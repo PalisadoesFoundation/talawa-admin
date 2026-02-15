@@ -104,6 +104,7 @@ describe('ProfileDropdown Component', () => {
 
   test('renders Admin', () => {
     setItem('AdminFor', ['123']);
+    setItem('role', 'administrator');
     render(
       <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
