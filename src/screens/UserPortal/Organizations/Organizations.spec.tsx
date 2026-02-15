@@ -503,10 +503,10 @@ test('Screen should be rendered properly', async () => {
 
   await waitFor(() => {
     expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
   });
-  expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-  expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 });
 
 test('should search organizations when pressing Enter key', async () => {
@@ -650,15 +650,22 @@ test('Pagination basic functionality works', async () => {
   expect(rowsPerPageSelect).toHaveValue('5');
 
   await userEvent.selectOptions(rowsPerPageSelect, '10');
-  expect(rowsPerPageSelect).toHaveValue('10');
+  await waitFor(() => {
+    expect(rowsPerPageSelect).toHaveValue('10');
+  });
 
   const currentPage = screen.getByTestId('current-page');
-  expect(currentPage.textContent).toBe('0');
-
+  await waitFor(() => {
+    expect(currentPage.textContent).toBe('0');
+  });
   const nextButton = screen.getByTestId('next-page');
-  expect(nextButton).toBeDisabled();
+  await waitFor(() => {
+    expect(nextButton).toBeDisabled();
+  });
   await userEvent.click(nextButton);
-  expect(screen.getByTestId('current-page').textContent).toBe('0');
+  await waitFor(() => {
+    expect(screen.getByTestId('current-page').textContent).toBe('0');
+  });
 });
 
 test('should handle resize event and hide drawer on small screens', async () => {
