@@ -3,6 +3,7 @@ export class AdvertisementPage {
   private readonly _adNameInput = '[data-cy="advertisementNameInput"]';
   private readonly _adDescriptionInput =
     '[data-cy="advertisementDescriptionInput"]';
+  private readonly _adMediaInput = '[data-cy="advertisementMediaInput"]';
   private readonly _adTypeSelect = '[data-cy="advertisementTypeSelect"]';
   private readonly _registerAdBtn = '[data-cy="registerAdvertisementButton"]';
   private readonly _leftDrawerAdBtn =
@@ -25,6 +26,50 @@ export class AdvertisementPage {
     cy.get(this._adNameInput).should('be.visible').type(name);
     cy.get(this._adDescriptionInput).should('be.visible').type(description);
     cy.get(this._adTypeSelect).should('be.visible').select(type);
+    cy.get(this._registerAdBtn).should('be.visible').click();
+    cy.assertToast('Advertisement created successfully.');
+    return this;
+  }
+
+  createAdvertisementWithAttachment(
+    name: string,
+    description: string,
+    type: string,
+    fixturePath: string,
+    mockPresignedUrl: {
+      presignedUrl: string;
+      objectName: string;
+      requiresUpload: boolean;
+    },
+  ) {
+    // 1. Mock the createPresignedUrl GraphQL mutation
+    cy.mockGraphQLOperation('createPresignedUrl', {
+      data: {
+        createPresignedUrl: mockPresignedUrl,
+      },
+    });
+
+    // 2. Mock the MinIO PUT upload (intercept any PUT to the presigned URL pattern)
+    cy.intercept('PUT', '**/talawa/**', {
+      statusCode: 200,
+      body: '',
+    }).as('minioUpload');
+
+    // 3. Open modal and fill form
+    cy.get(this._createAdBtn).should('be.visible').click();
+    cy.get(this._adNameInput).should('be.visible').type(name);
+    cy.get(this._adDescriptionInput).should('be.visible').type(description);
+    cy.get(this._adTypeSelect).should('be.visible').select(type);
+
+    // 4. Attach file
+    cy.get(this._adMediaInput).selectFile(`cypress/fixtures/${fixturePath}`, {
+      force: true,
+    });
+
+    // 5. Wait for mocked operations
+    cy.wait('@minioUpload');
+
+    // 6. Submit
     cy.get(this._registerAdBtn).should('be.visible').click();
     cy.assertToast('Advertisement created successfully.');
     return this;

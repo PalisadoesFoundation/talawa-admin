@@ -9,6 +9,11 @@ interface InterfaceAdvertisementData {
   ad2: {
     updatedName: string;
   };
+  mockPresignedUrl: {
+    presignedUrl: string;
+    objectName: string;
+    requiresUpload: boolean;
+  };
 }
 
 describe('Testing Admin Advertisement Management', () => {
@@ -34,6 +39,7 @@ describe('Testing Admin Advertisement Management', () => {
         ad2: {
           updatedName: data.advertisements?.[1]?.name ?? 'Advertisement 2',
         },
+        mockPresignedUrl: data.mockPresignedUrl,
       };
     });
   });
@@ -49,6 +55,16 @@ describe('Testing Admin Advertisement Management', () => {
       adData.ad1.name,
       adData.ad1.description,
       adData.ad1.type,
+    );
+  });
+
+  it('create a new advertisement with file attachment', () => {
+    adPage.createAdvertisementWithAttachment(
+      adData.ad1.name,
+      adData.ad1.description,
+      adData.ad1.type,
+      'advertisement_banner.png',
+      adData.mockPresignedUrl,
     );
   });
 
