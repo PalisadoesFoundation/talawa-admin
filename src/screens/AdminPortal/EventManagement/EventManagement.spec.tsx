@@ -172,6 +172,17 @@ describe('Event Management', () => {
         expect(userEventsScreen).toBeInTheDocument();
       });
     });
+    it('Testing back button navigation when userType is SUPERUSER', async () => {
+      setItem('role', 'superuser');
+
+      renderEventManagement();
+
+      const backButton = screen.getByTestId('backBtn');
+      await user.click(backButton);
+
+      const eventsScreen = screen.getByTestId('eventsScreen');
+      expect(eventsScreen).toBeInTheDocument();
+    });
     it('redirects to orglist when params are missing', async () => {
       vi.mocked(useParams).mockReturnValue({});
 

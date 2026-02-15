@@ -174,7 +174,10 @@ const Requests = (): JSX.Element => {
 
   // Check authorization
   useEffect(() => {
-    const isAdmin = userRole === 'administrator';
+    const userRole = getItem('role') as string | null;
+    const normalizedRole = userRole?.toLowerCase();
+    const isAdmin =
+      normalizedRole === 'administrator' || normalizedRole === 'superuser';
     if (!isAdmin) {
       window.location.assign('/admin/orglist');
     }

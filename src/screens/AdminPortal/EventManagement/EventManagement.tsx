@@ -96,9 +96,12 @@ const EventManagement = (): JSX.Element => {
   }
 
   // Determine user role based on local storage
-  // Determine user role based on local storage
-  const userRoleValue = getItem('role') as string;
-  const userRole = userRoleValue === 'administrator' ? 'ADMIN' : 'USER';
+  const userRoleValue = (getItem('role') as string | null) ?? '';
+  const normalizedRole = userRoleValue.toLowerCase();
+  const userRole =
+    normalizedRole === 'administrator' || normalizedRole === 'superuser'
+      ? 'ADMIN'
+      : 'USER';
 
   /**
    * List of tabs for the event dashboard.

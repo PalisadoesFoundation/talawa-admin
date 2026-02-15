@@ -6,7 +6,7 @@
  *
  * @remarks
  * - The component uses useLocalStorage to retrieve user details such as name, role, and profile image.
- * - The user's role is determined based on the presence of SuperAdmin or AdminFor in local storage.
+ * - The user's role is determined based on the presence of role or AdminFor in local storage.
  * - If the user's full name exceeds the maximum length, it is truncated and appended with ellipses.
  * - The profile image is displayed if available; otherwise, a default avatar is shown.
  * - Clicking the chevron button navigates the user to different routes based on their role.
@@ -46,6 +46,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 import styles from './ProfileCard.module.css';
 import { InterfaceProfileCardProps } from 'types/shared-components/ProfileCard/interface';
+import Button from 'shared-components/Button';
 
 const ProfileCard = ({
   portal = 'admin',
@@ -94,13 +95,13 @@ const ProfileCard = ({
             {`${userRole}`}
           </span>
         </div>
-        <button
+        <Button
           className={styles.chevronRightbtn}
           data-testid="profileBtn"
           onClick={() => navigate(profileDestination)}
         >
           <ChevronRightIcon className={styles.chevronIcon} />
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -426,7 +426,24 @@ describe('Testing Requests screen', () => {
     const searchByName = await screen.findByTestId('searchByName');
     expect(searchByName).toBeInTheDocument();
   });
+  test('Component should be rendered properly when user is SuperUser', async () => {
+    setItem('role', 'superuser');
 
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchByName = await screen.findByTestId('searchByName');
+    expect(searchByName).toBeInTheDocument();
+  });
   test('Redirecting on error', async () => {
     render(
       <MockedProvider link={link5}>
