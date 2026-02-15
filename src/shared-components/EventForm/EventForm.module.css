@@ -1,28 +1,28 @@
 .datedivEvents {
   display: flex;
   flex-direction: row;
-  margin-bottom: 15px;
+  margin-bottom: var(--space-6);
 }
 
 .dateboxEvents {
   width: 90%;
-  border-radius: 7px;
+  border-radius: var(--radius-md);
   border-color: var(--dateboxEvents-border, #e8e5e5);
   outline: none;
   box-shadow: none;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-right: 5px;
-  padding-left: 5px;
-  margin-right: 5px;
-  margin-left: 5px;
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+  padding-right: var(--space-3);
+  padding-left: var(--space-3);
+  margin-right: var(--space-3);
+  margin-left: var(--space-3);
 }
 
 .datediv {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 15px;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
 }
 
 .datediv > div {
@@ -37,32 +37,25 @@
   .datediv > div {
     width: 100%;
     margin-left: 0;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-4);
   }
 
   .datediv > div p {
-    margin-bottom: 5px;
+    margin-bottom: var(--space-3);
   }
 }
 
 .checkboxdivEvents {
   display: flex;
   flex-wrap: wrap;
-  --events-gap: 1rem;
-  gap: var(--events-gap, 1rem);
-}
-
-.checkboxdivEvents > label {
-  margin-right: 50px;
-}
-
-.checkboxdivEvents > label > input {
-  margin-left: 10px;
+  --events-gap: var(--space-5);
+  column-gap: var(--events-gap, 1rem);
 }
 
 .checkboxdivEvents > div {
   flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
-  min-width: 200px;
+  min-width: var(--space-17);
+  margin-bottom: var(--space-8);
 }
 
 .dispflexEvents {
@@ -73,22 +66,22 @@
 .dispflexEvents > input {
   border: none;
   box-shadow: none;
-  margin-top: 5px;
+  margin-top: var(--space-3);
 }
 
 /* Migrated from app-fixed.module.css */
 .inputField {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
   background-color: var(--inputField-bg, #fff);
-  border: 1px solid var(--inputField-border, #dddddd);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 7px;
+  border: var(--border-1) solid var(--inputField-border, #dddddd);
+  box-shadow: var(--drop-shadow);
+  border-radius: var(--radius-md);
   width: 100%;
 }
 
 .addButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-4);
   color: var(--addButton-font, #555555);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg, #a8c7fa);
@@ -115,6 +108,11 @@
 }
 
 /* Helper for bootstrap switch alignment */
+.switch {
+  padding-left: var(--space-13);
+}
+
 .switch :global(.form-check-input) {
-  margin-left: -2.5em;
+  margin-left: calc(-1 * var(--space-11));
+  margin-top: var(--space-4);
 }

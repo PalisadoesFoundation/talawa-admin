@@ -13,19 +13,6 @@ type SearchBarProps = {
   buttonTestId?: string;
 };
 
-type SortingOption = {
-  label: string;
-  value: string | number;
-};
-
-type SortingButtonProps = {
-  title: string;
-  sortingOptions: SortingOption[];
-  selectedOption: string | number;
-  onSortChange: (value: string | number) => void;
-  dataTestIdPrefix: string;
-};
-
 /* ------------------ Mocks ------------------ */
 
 vi.mock('react-i18next', () => ({
@@ -57,26 +44,40 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
   ),
 }));
 
-vi.mock('shared-components/SortingButton/SortingButton', () => ({
+vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
   default: ({
-    title,
-    sortingOptions,
-    selectedOption,
-    onSortChange,
+    options,
+    selectedValue,
+    onSelect,
+    ariaLabel,
     dataTestIdPrefix,
-  }: SortingButtonProps) => (
-    <div data-testid={`${dataTestIdPrefix}-sorting`}>
-      <span>{title}</span>
+    buttonLabel,
+  }: {
+    options: { label: string; value: string | number }[];
+    selectedValue: string | number;
+    onSelect: (value: string | number) => void;
+    ariaLabel: string;
+    dataTestIdPrefix: string;
+    buttonLabel?: string;
+  }) => {
+    const selected = options.find((o) => o.value === selectedValue);
+    const label = buttonLabel || selected?.label || 'Select';
+    return (
+      <div data-testid={`${dataTestIdPrefix}-dropdown`}>
+        <span data-testid={`${dataTestIdPrefix}-label`}>{ariaLabel}</span>
+        <button data-testid={`${dataTestIdPrefix}-toggle`}>{label}</button>
+        {options.map((opt) => (
+          <button key={opt.value} onClick={() => onSelect(opt.value)}>
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    );
+  },
+}));
 
-      {sortingOptions.map((opt) => (
-        <button key={opt.value} onClick={() => onSortChange(opt.value)}>
-          {opt.label}
-        </button>
-      ))}
-
-      <span>Selected: {selectedOption}</span>
-    </div>
-  ),
+vi.mock('@mui/icons-material/Sort', () => ({
+  default: () => <span data-testid="sort-icon">SortIcon</span>,
 }));
 
 /* ------------------ Tests ------------------ */
@@ -135,7 +136,8 @@ describe('PeopleTabNavbar', () => {
     );
 
     expect(screen.getByText('Sort By')).toBeInTheDocument();
-    expect(screen.getByText('Selected: DESC')).toBeInTheDocument();
+    // DropDownButton shows the label of the selected option, not the value
+    expect(screen.getByTestId('usersSort-toggle')).toHaveTextContent('Newest');
 
     await user.click(screen.getByText('Oldest'));
     expect(onSortChange).toHaveBeenCalledWith('ASC');
@@ -153,12 +155,12 @@ describe('PeopleTabNavbar', () => {
 
   it('renders event type filter when enabled', () => {
     render(<PeopleTabNavbar showEventTypeFilter />);
-    expect(screen.getByTestId('eventType-sorting')).toBeInTheDocument();
+    expect(screen.getByTestId('eventType-dropdown')).toBeInTheDocument();
   });
 
   it('does not render event type filter when disabled', () => {
     render(<PeopleTabNavbar showEventTypeFilter={false} />);
-    expect(screen.queryByTestId('eventType-sorting')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('eventType-dropdown')).not.toBeInTheDocument();
   });
 
   it('handles event type sort change safely when onSortChange is a no-op', async () => {
@@ -166,7 +168,7 @@ describe('PeopleTabNavbar', () => {
 
     render(<PeopleTabNavbar showEventTypeFilter />);
 
-    const eventTypeSorting = screen.getByTestId('eventType-sorting');
+    const eventTypeSorting = screen.getByTestId('eventType-dropdown');
     expect(eventTypeSorting).toBeInTheDocument();
 
     await expect(

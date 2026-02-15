@@ -120,7 +120,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/Palisa
 
 ### label
 
-> **label**: `string`
+> **label**: `ReactNode`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L6)
 

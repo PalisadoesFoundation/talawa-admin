@@ -9,6 +9,80 @@ afterEach(() => {
 });
 import PageHeader from './Navbar';
 
+/* ------------------ Mocks ------------------ */
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+vi.mock('shared-components/SearchBar/SearchBar', () => ({
+  default: ({
+    placeholder,
+    onSearch,
+    inputTestId,
+    buttonTestId,
+  }: {
+    placeholder: string;
+    onSearch: (value: string) => void;
+    inputTestId?: string;
+    buttonTestId?: string;
+  }) => (
+    <div>
+      <input
+        data-testid={inputTestId ?? 'search-input'}
+        placeholder={placeholder}
+        onChange={(e) => onSearch(e.target.value)}
+      />
+      <button
+        data-testid={buttonTestId ?? 'search-button'}
+        onClick={() => onSearch('clicked')}
+      >
+        Search
+      </button>
+    </div>
+  ),
+}));
+
+vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
+  default: ({
+    options,
+    selectedValue,
+    onSelect,
+    ariaLabel,
+    dataTestIdPrefix,
+    buttonLabel,
+  }: {
+    options: { label: string; value: string | number }[];
+    selectedValue: string | number;
+    onSelect: (value: string | number) => void;
+    ariaLabel: string;
+    dataTestIdPrefix: string;
+    buttonLabel?: string;
+  }) => {
+    const selected = options.find((o) => o.value === selectedValue);
+    const label = buttonLabel || selected?.label || 'Select';
+    return (
+      <div data-testid={`${dataTestIdPrefix}-dropdown`}>
+        <span data-testid={`${dataTestIdPrefix}-label`}>{ariaLabel}</span>
+        <button data-testid={`${dataTestIdPrefix}-toggle`}>{label}</button>
+        {options.map((opt) => (
+          <button key={opt.value} onClick={() => onSelect(opt.value)}>
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    );
+  },
+}));
+
+vi.mock('@mui/icons-material/Sort', () => ({
+  default: () => <span data-testid="sort-icon">SortIcon</span>,
+}));
+
+/* ------------------ Tests ------------------ */
+
 describe('PageHeader Component', () => {
   it('renders title when provided', () => {
     render(<PageHeader title="Test Title" />);
@@ -55,12 +129,14 @@ describe('PageHeader Component', () => {
     ];
 
     render(<PageHeader sorting={sortingProps} />);
-    expect(screen.getByLabelText('Sort by Date')).toBeInTheDocument();
+    expect(screen.getByText('Sort by Date')).toBeInTheDocument();
   });
 
   it('renders event type filter when showEventTypeFilter is true', () => {
     render(<PageHeader showEventTypeFilter={true} />);
-    expect(screen.getByText('eventType')).toBeInTheDocument();
+    expect(screen.getByTestId('eventType-label')).toHaveTextContent(
+      'eventType',
+    );
   });
 
   it('renders actions when provided', () => {
@@ -88,8 +164,8 @@ describe('PageHeader Component', () => {
     ];
 
     render(<PageHeader sorting={sortingProps} />);
-    expect(screen.getByLabelText('Sort 1')).toBeInTheDocument();
-    expect(screen.getByLabelText('Sort 2')).toBeInTheDocument();
+    expect(screen.getByText('Sort 1')).toBeInTheDocument();
+    expect(screen.getByText('Sort 2')).toBeInTheDocument();
   });
 
   it('renders event type options and allows selection', async () => {
@@ -99,14 +175,11 @@ describe('PageHeader Component', () => {
     const eventTypeButton = screen.getByTestId('eventType-toggle');
     expect(eventTypeButton).toBeInTheDocument();
 
-    // 2. Click it to open the menu
-    await userEvent.click(eventTypeButton);
-
-    // 3. Check if the "Workshops" option appears
+    // 2. The mock renders options directly as buttons, so we can click them
     const workshopsOption = screen.getByText('Workshops');
     expect(workshopsOption).toBeInTheDocument();
 
-    // 4. Click the option (to ensure no errors occur)
+    // 3. Click the option (to ensure no errors occur)
     await userEvent.click(workshopsOption);
   });
 });

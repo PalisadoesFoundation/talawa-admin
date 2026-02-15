@@ -170,6 +170,7 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
               testIdPrefix: 'eventsParticipationFilter',
             },
           ]}
+          alignmentClassName={styles.peopleTabNavbarAlignment}
         />
 
         <Card.Body className={`${styles.peoplePageUserEventCardBody}`}>

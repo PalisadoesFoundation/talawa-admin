@@ -1,11 +1,9 @@
-/**
- * VisibilitySelector - Sub-component for event visibility radio buttons.
- * Allows selection between PUBLIC, ORGANIZATION, and INVITE_ONLY visibility.
- */
 // translation-check-keyPrefix: common
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import type { InterfaceVisibilitySelectorProps } from 'types/shared-components/VisibilitySelector/interface';
+
+import styles from './VisibilitySelector.module.css';
 
 /**
  * Renders a radio button group for selecting event visibility.
@@ -19,9 +17,11 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
 }) => {
   return (
     <div className="mb-3">
-      <Form.Label>{tCommon('eventVisibility')}</Form.Label>
+      <label className={`form-label ${styles.visibilityLabel}`}>
+        {tCommon('eventVisibility')}
+      </label>
       <div className="ms-3">
-        <Form.Check
+        <FormCheckField
           type="radio"
           id="visibility-public"
           label={
@@ -35,10 +35,10 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           name="eventVisibility"
           checked={visibility === 'PUBLIC'}
           onChange={() => setVisibility('PUBLIC')}
-          className="mb-2"
+          className={styles.visibilityOption}
           data-testid="visibilityPublicRadio"
         />
-        <Form.Check
+        <FormCheckField
           type="radio"
           id="visibility-org"
           label={
@@ -52,10 +52,10 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           name="eventVisibility"
           checked={visibility === 'ORGANIZATION'}
           onChange={() => setVisibility('ORGANIZATION')}
-          className="mb-2"
+          className={styles.visibilityOption}
           data-testid="visibilityOrgRadio"
         />
-        <Form.Check
+        <FormCheckField
           type="radio"
           id="visibility-invite"
           label={
@@ -69,7 +69,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           name="eventVisibility"
           checked={visibility === 'INVITE_ONLY'}
           onChange={() => setVisibility('INVITE_ONLY')}
-          className="mb-2"
+          className={styles.visibilityOption}
           data-testid="visibilityInviteRadio"
         />
       </div>

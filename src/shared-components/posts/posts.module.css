@@ -28,8 +28,36 @@
   border: var(--border-1) solid var(--color-gray-400);
 }
 
+.dropdown {
+  background-color: var(--color-gray-50);
+  border: var(--border-1) solid var(--color-gray-600);
+  color: var(--color-gray-600);
+  position: relative;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-3);
+  width: auto;
+  height: var(--space-10);
+}
+
+.dropdown:is(:hover, :active),
+:global(.show).dropdown {
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--space-1) solid var(--color-blue-200);
+  outline-offset: var(--space-1);
+}
+
 .list_box {
-  height: 70vh;
   overflow-y: auto;
   width: auto;
 }

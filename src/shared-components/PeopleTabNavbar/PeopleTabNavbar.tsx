@@ -46,7 +46,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './PeopleTabNavbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'shared-components/SortingButton/SortingButton';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
+import SortIcon from '@mui/icons-material/Sort';
 import type { InterfacePeopleTabNavbarProps } from 'types/shared-components/PeopleTabNavbar/interface';
 
 export default function PeopleTabNavbar({
@@ -55,6 +56,7 @@ export default function PeopleTabNavbar({
   sorting,
   showEventTypeFilter = false,
   actions,
+  alignmentClassName,
 }: InterfacePeopleTabNavbarProps) {
   const { t: tCommon } = useTranslation('common');
 
@@ -65,7 +67,11 @@ export default function PeopleTabNavbar({
     >
       <div className={styles.calendar__header}>
         {title && <h2 className={styles.pageHeaderTitle}>{title}</h2>}
-        <div className={styles.peopleTabNavbarAlignment}>
+        <div
+          className={`${styles.peopleTabNavbarAlignment} ${
+            alignmentClassName || ''
+          }`}
+        >
           {/* ===== Action Buttons ===== */}
           {actions && (
             <div className={styles.btnsBlock}>
@@ -74,39 +80,52 @@ export default function PeopleTabNavbar({
           )}
           {/* ===== Sorting Props ===== */}
           {sorting &&
-            sorting.map(
-              (
-                sort: (typeof sorting)[0],
-                idx: React.Key | null | undefined,
-              ) => (
-                <div key={idx} className={styles.dropdownItemButton}>
-                  <SortingButton
-                    title={sort.title}
-                    sortingOptions={sort.options}
-                    selectedOption={sort.selected}
-                    onSortChange={sort.onChange}
-                    dataTestIdPrefix={sort.testIdPrefix}
-                    className={styles.dropdown}
-                    icon={sort.icon}
-                  />
-                </div>
-              ),
-            )}
+            sorting.map((sort, idx) => (
+              <div key={idx} className={styles.dropdownItemButton}>
+                <DropDownButton
+                  options={sort.options.map((opt) => ({
+                    label: opt.label,
+                    value: String(opt.value),
+                  }))}
+                  selectedValue={String(sort.selected)}
+                  onSelect={(val) => sort.onChange(val)}
+                  ariaLabel={sort.title}
+                  dataTestIdPrefix={sort.testIdPrefix}
+                  parentContainerStyle={styles.dropdown}
+                  icon={
+                    sort.icon ? (
+                      <img
+                        src={String(sort.icon)}
+                        alt={tCommon('sortingIcon')}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <SortIcon data-testid="sorting-icon" aria-hidden="true" />
+                    )
+                  }
+                  variant="outline-secondary"
+                />
+              </div>
+            ))}
 
           {/*  Optional Event Type dropdown */}
           {showEventTypeFilter && (
             <div className={styles.btnsBlock}>
-              <SortingButton
-                title={tCommon('eventType')}
-                sortingOptions={[
+              <DropDownButton
+                options={[
                   { label: 'Events', value: 'Events' },
                   { label: 'Workshops', value: 'Workshops' },
                 ]}
-                selectedOption={'Events'}
-                onSortChange={() => {}}
+                selectedValue={'Events'}
+                onSelect={() => {}}
+                ariaLabel={tCommon('eventType')}
                 dataTestIdPrefix="eventType"
-                className={styles.dropdown}
+                parentContainerStyle={styles.dropdown}
                 buttonLabel={tCommon('eventType')}
+                icon={
+                  <SortIcon data-testid="sorting-icon" aria-hidden="true" />
+                }
+                variant="outline-secondary"
               />
             </div>
           )}

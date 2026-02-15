@@ -49,7 +49,8 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Navbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'shared-components/SortingButton/SortingButton';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
+import SortIcon from '@mui/icons-material/Sort';
 
 interface InterfacePageHeaderProps {
   title?: string;
@@ -109,16 +110,23 @@ export default function PageHeader({
         {/* ===== Sorting Props ===== */}
         {sorting &&
           sorting.map((sort, idx) => (
-            <div key={idx} className={styles.space}>
-              <SortingButton
-                title={sort.title}
-                sortingOptions={sort.options}
-                selectedOption={sort.selected}
-                onSortChange={sort.onChange}
+            <div key={idx} className={styles.btnsBlock}>
+              <DropDownButton
+                options={sort.options.map((opt) => ({
+                  label: opt.label,
+                  value: String(opt.value),
+                }))}
+                selectedValue={String(sort.selected)}
+                onSelect={(val) => sort.onChange(val)}
+                ariaLabel={sort.title}
                 dataTestIdPrefix={sort.testIdPrefix}
-                className={styles.dropdown}
+                parentContainerStyle={styles.dropdown}
                 containerClassName={sort.containerClassName}
                 toggleClassName={sort.toggleClassName}
+                icon={
+                  <SortIcon data-testid="sorting-icon" aria-hidden="true" />
+                }
+                variant="outline-secondary"
               />
             </div>
           ))}
@@ -126,17 +134,19 @@ export default function PageHeader({
         {/*  Optional Event Type dropdown */}
         {showEventTypeFilter && (
           <div className={styles.btnsBlock}>
-            <SortingButton
-              title={t('eventType')}
-              sortingOptions={[
+            <DropDownButton
+              options={[
                 { label: 'Events', value: 'Events' },
                 { label: 'Workshops', value: 'Workshops' },
               ]}
-              selectedOption={'Events'}
-              onSortChange={() => {}}
+              selectedValue={'Events'}
+              onSelect={() => {}}
+              ariaLabel={t('eventType')}
               dataTestIdPrefix="eventType"
-              className={styles.dropdown}
+              parentContainerStyle={styles.dropdown}
               buttonLabel={t('eventType')}
+              icon={<SortIcon data-testid="sorting-icon" aria-hidden="true" />}
+              variant="outline-secondary"
             />
           </div>
         )}

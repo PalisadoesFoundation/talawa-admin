@@ -21,4 +21,5 @@ export interface InterfacePeopleTabNavbarProps {
   }>;
   showEventTypeFilter?: boolean;
   actions?: ReactNode;
+  alignmentClassName?: string;
 }

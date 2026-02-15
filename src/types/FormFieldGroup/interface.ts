@@ -3,7 +3,7 @@
  */
 export interface InterfaceFormFieldGroupProps {
   name: string;
-  label: string;
+  label: React.ReactNode;
   required?: boolean;
   helpText?: string;
   error?: string;

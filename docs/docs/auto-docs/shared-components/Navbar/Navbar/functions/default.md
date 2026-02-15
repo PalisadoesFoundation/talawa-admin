@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/Navbar/Navbar.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Navbar/Navbar.tsx#L76)
+Defined in: [src/shared-components/Navbar/Navbar.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Navbar/Navbar.tsx#L77)
 
 ## Parameters
 
