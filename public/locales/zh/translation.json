@@ -2461,7 +2461,8 @@
     "loading": "加载中...",
     "selectRow": "选择第 {{rowKey}} 行",
     "previousYear": "上一年",
-    "nextYear": "下一年"
+    "nextYear": "下一年",
+    "member": "成员"
   },
   "donation": {
     "amount_label": "金额",

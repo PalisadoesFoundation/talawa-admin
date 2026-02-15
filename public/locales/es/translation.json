@@ -2461,7 +2461,8 @@
     "loading": "Cargando...",
     "selectRow": "Seleccionar fila {{rowKey}}",
     "previousYear": "Año anterior",
-    "nextYear": "Siguiente año"
+    "nextYear": "Siguiente año",
+    "member": "Miembro"
   },
   "donation": {
     "amount_label": "Cantidad",
