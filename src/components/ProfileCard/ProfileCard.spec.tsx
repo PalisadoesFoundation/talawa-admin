@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileCard from './ProfileCard';
@@ -75,6 +75,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
+  cleanup();
   window.history.replaceState(null, '', '/');
   clearAllItems();
 });

@@ -54,7 +54,11 @@ const ProfileCard = ({
 }: InterfaceProfileCardProps): React.JSX.Element => {
   const { getItem } = useLocalStorage();
   const role = getItem<string>('role');
-  const userRole = role && role.toLowerCase() !== 'regular' ? 'Admin' : 'User';
+  const normalizedRole = role?.toLowerCase() ?? '';
+  const userRole =
+    normalizedRole === 'administrator' || normalizedRole === 'superuser'
+      ? 'Admin'
+      : 'User';
   const name = getItem<string>('name') || '';
   const nameParts = name?.split(' ') || [];
   const firstName = nameParts[0] || '';

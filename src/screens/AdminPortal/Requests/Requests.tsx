@@ -174,8 +174,9 @@ const Requests = (): JSX.Element => {
 
   // Check authorization
   useEffect(() => {
-    const userRole = (getItem('role') as string | null) ?? '';
-    const normalizedRole = userRole?.toLowerCase();
+    const normalizedRole = (
+      (getItem('role') as string | null) ?? ''
+    ).toLowerCase();
     const isAdmin =
       normalizedRole === 'administrator' || normalizedRole === 'superuser';
     if (!isAdmin) {

@@ -267,8 +267,6 @@ beforeEach(() => {
   mockAssign.mockClear();
   mockReload.mockClear();
   mockHref = 'http://localhost/';
-
-  vi.restoreAllMocks();
 });
 
 afterEach(() => {

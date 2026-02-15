@@ -4,7 +4,7 @@
  * @remarks
  * - Uses `useTranslation` for i18n.
  * - Automatically hides on screen widths ≤ 820px after clicking a link.
- * - Conditionally renders the "Users" section based on SuperAdmin status.
+ * - Conditionally renders the "Users" section based on Admin status.
  * - Includes dynamic plugin drawer items for admin routes.
  * - **REFACTORED**: Now uses shared SidebarBase, SidebarNavItem, and SidebarPluginSection components
  *
