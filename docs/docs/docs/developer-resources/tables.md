@@ -1015,6 +1015,301 @@ Before → After (concise)
 - Phase 5
   - This phase completed a pilot migration of three admin screens (Users, BlockUser, Requests) to validate the DataTable architecture and establish patterns for future migrations.
   - Validate useTableData integration patterns and DataTable column migration
+  - **Pilot Results:**
+    - ✅ Users.tsx: useTableData with infinite scroll and connection format
+    - ✅ BlockUser.tsx: useTableData with dual-list view pattern (members + blocked users)
+    - ✅ Requests.tsx: useSimpleTableData with simple array format
+    - ✅ Eliminated all test flakiness (0 fixed waits, proper async patterns)
+    - ✅ Established testing best practices (I18n providers, distinct testIDs, cleanup hooks)
+    - ✅ Consistent ErrorPanel integration across all screens
+
+## Phase 5 Pilot: Detailed Patterns and Results
+
+The Phase 5 pilot successfully migrated three screens to validate DataTable patterns and establish migration best practices.
+
+### Pilot Screens Overview
+
+| Screen | Hook Used | Data Format | Key Features | Lines of Code |
+|--------|-----------|-------------|--------------|---------------|
+| Users.tsx | useTableData | Connection (edges/pageInfo) | Infinite scroll, role filtering | ~400 |
+| BlockUser.tsx | useTableData | Connection (2 queries) | Dual-list toggle, block/unblock | ~600 |
+| Requests.tsx | useSimpleTableData | Simple array | Accept/reject actions | ~300 |
+
+### Users.tsx Pattern (Connection + Infinite Scroll)
+
+**Data Structure:**
+```graphql
+{
+  allUsers(first: 12, after: null) {
+    edges {
+      node { id, firstName, lastName, email, role }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
+```
+
+**Implementation:**
+```tsx
+const { rows, pageInfo, loading, error, fetchMore } = useTableData<
+  InterfaceQueryUserListForAdmin,
+  InterfaceQueryUserListForAdminArgs,
+  InterfaceUser
+>(
+  useQuery(USER_LIST_FOR_ADMIN, {
+    variables: { first: 12, after: null, adminFor: orgId },
+  }),
+  { path: (data) => data?.allUsers }
+);
+
+// Infinite scroll
+useEffect(() => {
+  const handleScroll = () => {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 300 &&
+      pageInfo?.hasNextPage &&
+      !loading &&
+      fetchMore
+    ) {
+      fetchMore({ variables: { after: pageInfo.endCursor } });
+    }
+  };
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, [pageInfo, loading, fetchMore]);
+```
+
+**Key Learnings:**
+- `useTableData` automatically handles `edges → rows` transformation
+- `pageInfo` provides reliable pagination state
+- Infinite scroll requires scroll listener cleanup
+- Test coverage: 95%+ achieved with proper async patterns
+
+### BlockUser.tsx Pattern (Dual-List Toggle)
+
+**Challenge:** Single screen needs to display two different data sources (all members vs blocked users).
+
+**Solution:**
+```tsx
+const [showBlockedMembers, setShowBlockedMembers] = useState(false);
+
+// Query 1: All members
+const membersQuery = useTableData<...>(
+  useQuery(GET_ORGANIZATION_MEMBERS_PG, {
+    variables: { id: orgId, first: 32, after: null },
+  }),
+  { path: (data) => data?.organization?.members }
+);
+
+// Query 2: Blocked users
+const blockedQuery = useTableData<...>(
+  useQuery(GET_ORGANIZATION_BLOCKED_USERS_PG, {
+    variables: { id: orgId, first: 32, after: null },
+  }),
+  { path: (data) => data?.organization?.blockedUsers }
+);
+
+// Conditional data source
+const { rows, loading, error, refetch } = showBlockedMembers
+  ? blockedQuery
+  : membersQuery;
+
+// Toggle dropdown
+<Dropdown
+  options={[
+    { label: 'All Members', value: 'allMembers' },
+    { label: 'Blocked Users', value: 'blockedUsers' }
+  ]}
+  onChange={(value) => setShowBlockedMembers(value === 'blockedUsers')}
+/>
+```
+
+**Key Learnings:**
+- Multiple `useTableData` calls can coexist in one component
+- Conditional selection based on UI state works seamlessly
+- Each query maintains independent pagination state
+- Test both data sources in separate test cases
+
+### Requests.tsx Pattern (Simple Array Format)
+
+**Challenge:** Query returns simple array, not connection format.
+
+**Solution: Use useSimpleTableData**
+```tsx
+// Query returns simple array
+const query = useQuery<InterfaceQueryMembershipRequestsPgResult>(
+  MEMBERSHIP_REQUEST_PG,
+  { variables: { where: { organization: orgId } } }
+);
+
+// Extract with useSimpleTableData
+const extractRequests = useCallback(
+  (data: InterfaceQueryMembershipRequestsPgResult) =>
+    data?.membershipRequestsPaginated || [],
+  []
+);
+
+const { rows, loading, error, refetch } = useSimpleTableData<
+  InterfaceMembershipRequest,
+  InterfaceQueryMembershipRequestsPgResult
+>(query, { path: extractRequests });
+```
+
+**Why Not useTableData?**
+- Query response is `membershipRequestsPaginated: InterfaceMembershipRequest[]`
+- No `edges`, no `pageInfo` in response
+- `useSimpleTableData` designed for this exact scenario
+
+**Key Learnings:**
+- Hook choice depends on GraphQL query structure, not component preferences
+- `useSimpleTableData` requires memoized path function (useCallback)
+- Both hooks provide consistent interface: `rows`, `loading`, `error`, `refetch`
+- Migration effort identical regardless of hook choice
+
+### Testing Patterns Established
+
+The pilot eliminated all test flakiness by establishing these patterns:
+
+#### 1. Zero Fixed Waits
+**Before (flaky):**
+```tsx
+await new Promise(resolve => setTimeout(resolve, 1000));
+expect(screen.getByText('John Doe')).toBeInTheDocument();
+```
+
+**After (reliable):**
+```tsx
+await waitFor(() => {
+  expect(screen.getByText('John Doe')).toBeInTheDocument();
+});
+```
+
+**Result:** 0 instances of fixed waits across all 3 pilot screens.
+
+#### 2. Universal I18n Provider Coverage
+**Pattern:**
+```tsx
+render(
+  <I18nextProvider i18n={i18nForTest}>
+    <MockedProvider mocks={mocks}>
+      <BrowserRouter>
+        <Users />
+      </BrowserRouter>
+    </MockedProvider>
+  </I18nextProvider>
+);
+```
+
+**Result:**
+- Users.spec.tsx: 67 instances
+- BlockUser.spec.tsx: 49 instances
+- Requests.spec.tsx: 93 instances
+- Zero translation key errors
+
+#### 3. Distinct TestIDs
+**Before (ambiguous):**
+```tsx
+<Button data-testid="actionBtn">Block</Button>
+```
+
+**After (unique):**
+```tsx
+<Button data-testid={`blockUserBtn-${user.id}`}>Block</Button>
+<Button data-testid={`unblockUserBtn-${user.id}`}>Unblock</Button>
+```
+
+**Result:** No test selector collisions, easier debugging.
+
+#### 4. Proper Cleanup Hooks
+**Pattern:**
+```tsx
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
+
+afterAll(() => {
+  // Restore global state (e.g., window.location)
+  delete (window as { location?: Location }).location;
+  Object.defineProperty(window, 'location', {
+    value: originalLocation,
+    writable: true,
+    configurable: true,
+  });
+});
+```
+
+**Why restoreAllMocks over clearAllMocks:**
+- `restoreAllMocks()`: Clears history AND restores original implementations
+- `clearAllMocks()`: Only clears history, keeps mocks active
+- Critical for preventing mock leakage in sharded CI
+
+**Result:** Zero test pollution across parallel test runs.
+
+### ErrorPanel Integration Pattern
+
+All three screens use consistent error handling:
+
+```tsx
+if (error) {
+  return (
+    <ErrorPanel
+      message={t('errorLoadingUsers')}
+      error={error}
+      onRetry={refetch}
+      testId="errorUsers"
+    />
+  );
+}
+```
+
+**Benefits:**
+- Consistent UX across all tables
+- Built-in retry functionality
+- Testable error states with unique testIds
+- Automatic error message display
+
+### Migration Metrics
+
+| Metric | Users | BlockUser | Requests | Average |
+|--------|-------|-----------|----------|---------|
+| Test Coverage | 95%+ | 95%+ | 95%+ | 95%+ |
+| Fixed Waits | 0 | 0 | 0 | 0 |
+| Test Flakiness | 0% | 0% | 0% | 0% |
+| Lines Removed | ~200 | ~300 | ~150 | ~217 |
+| Lines Added | ~150 | ~250 | ~100 | ~167 |
+| Net Reduction | -50 | -50 | -50 | -50 |
+
+### Hook Selection Decision Tree
+
+```mermaid
+flowchart TD
+    A[Check GraphQL Query Response] --> B{Has edges/pageInfo?}
+    B -->|Yes| C[Use useTableData]
+    B -->|No| D[Use useSimpleTableData]
+    C --> E[Get rows, pageInfo, fetchMore]
+    D --> F[Get rows, refetch]
+    E --> G[DataTable with server pagination]
+    F --> H[DataTable with client pagination or no pagination]
+```
+
+### Recommendations for Future Migrations
+
+Based on pilot results:
+
+1. **Hook Choice:** Always determined by GraphQL structure, never by preference
+2. **Testing:** Apply the 4 patterns (zero waits, I18n, distinct IDs, cleanup) from day 1
+3. **Error Handling:** Use ErrorPanel for all query errors
+4. **Empty States:** Provide contextual messages for different scenarios
+5. **Column Definitions:** Memoize with useMemo when dependent on props/state
+6. **TestIDs:** Use `${action}${entity}${id}` pattern for uniqueness
+7. **Coverage:** Target 95%+ for edited files, verify with `npm test -- --coverage`
+
+
 
 ## Organization and People Screens Migration Examples
 

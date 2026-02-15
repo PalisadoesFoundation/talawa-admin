@@ -20,10 +20,8 @@ import Requests from './Requests';
 import {
   EMPTY_MOCKS,
   MOCKS_WITH_ERROR,
-  MOCKS2,
   EMPTY_REQUEST_MOCKS,
   UPDATED_MOCKS,
-  MOCKS3,
   MOCKS4,
 } from './RequestsMocks';
 import { vi } from 'vitest';
@@ -126,9 +124,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 const link = new StaticMockLink(UPDATED_MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
-const link4 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
-const link6 = new StaticMockLink(MOCKS3, true);
 const link7 = new StaticMockLink(MOCKS4, true);
 
 const NULL_RESPONSE_MOCKS = [
@@ -509,7 +505,7 @@ describe('Testing Requests screen', () => {
 
   test('Should render properly when there are no organizations present in requestsData', async () => {
     render(
-      <MockedProvider link={link6}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -542,7 +538,7 @@ describe('Testing Requests screen', () => {
       expect(screen.getByTestId('testComp')).toBeInTheDocument();
     });
     rerender(
-      <MockedProvider link={link4}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
