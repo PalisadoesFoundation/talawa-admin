@@ -940,12 +940,15 @@ test('should not show created organizations option for user role', async () => {
   const modeButton = screen.getByTestId('modeChangeBtn-toggle');
   await userEvent.click(modeButton);
 
-  // Should have Mode 0 (All Organizations) and Mode 1 (Joined Organizations)
-  expect(screen.getByTestId('modeChangeBtn-item-0')).toBeInTheDocument();
-  expect(screen.getByTestId('modeChangeBtn-item-1')).toBeInTheDocument();
-
-  // Should NOT have Mode 2 (Created Organizations)
-  expect(screen.queryByTestId('modeChangeBtn-item-2')).not.toBeInTheDocument();
+  await waitFor(() => {
+    // Should have Mode 0 (All Organizations) and Mode 1 (Joined Organizations)
+    expect(screen.getByTestId('modeChangeBtn-item-0')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-item-1')).toBeInTheDocument();
+    // Should NOT have Mode 2 (Created Organizations)
+    expect(
+      screen.queryByTestId('modeChangeBtn-item-2'),
+    ).not.toBeInTheDocument();
+  });
 });
 
 test('should handle null user data in joined organizations', async () => {
