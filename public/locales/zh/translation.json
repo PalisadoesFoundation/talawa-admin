@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
+  "oauth": {
+    "continueWith": "继续使用 {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
@@ -2461,7 +2465,8 @@
     "loading": "加载中...",
     "selectRow": "选择第 {{rowKey}} 行",
     "previousYear": "上一年",
-    "nextYear": "下一年"
+    "nextYear": "下一年",
+    "member": "成员"
   },
   "donation": {
     "amount_label": "金额",
