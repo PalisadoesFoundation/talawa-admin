@@ -57,7 +57,7 @@ export default function PageHeader({
   title,
   search,
   sorting,
-  showEventTypeFilter = false,
+
   actions,
   rootClassName,
 }: InterfacePageHeaderProps) {
@@ -122,26 +122,6 @@ export default function PageHeader({
               </div>
             );
           })}
-
-        {/*  Optional Event Type dropdown */}
-        {showEventTypeFilter && (
-          <div className={styles.btnsBlock}>
-            <DropDownButton
-              options={[
-                { label: t('events'), value: 'Events' },
-                { label: t('workshops'), value: 'Workshops' },
-              ]}
-              selectedValue={'Events'}
-              onSelect={() => {}}
-              ariaLabel={t('eventType')}
-              dataTestIdPrefix="eventType"
-              parentContainerStyle={styles.dropdown}
-              buttonLabel={t('eventType')}
-              icon={<SortIcon data-testid="sorting-icon" aria-hidden="true" />}
-              variant="outline-secondary"
-            />
-          </div>
-        )}
 
         {/* ===== Action Buttons ===== */}
         {actions && (

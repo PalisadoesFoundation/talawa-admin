@@ -19,7 +19,7 @@ export interface InterfacePeopleTabNavbarProps {
     testIdPrefix: string;
     icon?: string | null;
   }>;
-  showEventTypeFilter?: boolean;
+
   actions?: ReactNode;
   alignmentClassName?: string;
 }

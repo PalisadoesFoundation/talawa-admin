@@ -54,7 +54,7 @@ export default function PeopleTabNavbar({
   title,
   search,
   sorting,
-  showEventTypeFilter = false,
+
   actions,
   alignmentClassName,
 }: InterfacePeopleTabNavbarProps) {
@@ -81,55 +81,41 @@ export default function PeopleTabNavbar({
           )}
           {/* ===== Sorting Props ===== */}
           {sorting &&
-            sorting.map((sort, idx) => (
-              <div key={idx} className={styles.dropdownItemButton}>
-                <DropDownButton
-                  options={sort.options.map((opt) => ({
-                    label: opt.label,
-                    value: String(opt.value),
-                  }))}
-                  selectedValue={String(sort.selected)}
-                  onSelect={(val) => sort.onChange(val)}
-                  ariaLabel={sort.title}
-                  dataTestIdPrefix={sort.testIdPrefix}
-                  parentContainerStyle={styles.dropdown}
-                  icon={
-                    sort.icon ? (
-                      <img
-                        src={String(sort.icon)}
-                        alt={tCommon('sortingIcon')}
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <SortIcon data-testid="sorting-icon" aria-hidden="true" />
-                    )
-                  }
-                  variant="outline-secondary"
-                />
-              </div>
-            ))}
-
-          {/*  Optional Event Type dropdown */}
-          {showEventTypeFilter && (
-            <div className={styles.btnsBlock}>
-              <DropDownButton
-                options={[
-                  { label: tCommon('events'), value: 'Events' },
-                  { label: tCommon('workshops'), value: 'Workshops' },
-                ]}
-                selectedValue={'Events'}
-                onSelect={() => {}}
-                ariaLabel={tCommon('eventType')}
-                dataTestIdPrefix="eventType"
-                parentContainerStyle={styles.dropdown}
-                buttonLabel={tCommon('eventType')}
-                icon={
-                  <SortIcon data-testid="sorting-icon" aria-hidden="true" />
-                }
-                variant="outline-secondary"
-              />
-            </div>
-          )}
+            sorting.map((sort, idx) => {
+              const valueMap = new Map(
+                sort.options.map((opt) => [String(opt.value), opt.value]),
+              );
+              return (
+                <div key={idx} className={styles.dropdownItemButton}>
+                  <DropDownButton
+                    options={sort.options.map((opt) => ({
+                      label: opt.label,
+                      value: String(opt.value),
+                    }))}
+                    selectedValue={String(sort.selected)}
+                    onSelect={(val) => sort.onChange(valueMap.get(val) ?? val)}
+                    ariaLabel={sort.title}
+                    dataTestIdPrefix={sort.testIdPrefix}
+                    parentContainerStyle={styles.dropdown}
+                    icon={
+                      sort.icon ? (
+                        <img
+                          src={String(sort.icon)}
+                          alt={tCommon('sortingIcon')}
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <SortIcon
+                          data-testid="sorting-icon"
+                          aria-hidden="true"
+                        />
+                      )
+                    }
+                    variant="outline-secondary"
+                  />
+                </div>
+              );
+            })}
         </div>
 
         {/* ===== Search Bar ===== */}

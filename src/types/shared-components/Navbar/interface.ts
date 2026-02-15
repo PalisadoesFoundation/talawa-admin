@@ -21,7 +21,7 @@ export interface InterfacePageHeaderProps {
     toggleClassName?: string;
     icon?: string;
   }>;
-  showEventTypeFilter?: boolean;
+
   actions?: ReactNode;
   rootClassName?: string;
 }

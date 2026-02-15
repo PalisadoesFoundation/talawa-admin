@@ -168,29 +168,6 @@ describe('PeopleTabNavbar', () => {
     expect(screen.getByTestId('add-user')).toBeInTheDocument();
   });
 
-  it('renders event type filter when enabled', () => {
-    render(<PeopleTabNavbar showEventTypeFilter />);
-    expect(screen.getByTestId('eventType-dropdown')).toBeInTheDocument();
-  });
-
-  it('does not render event type filter when disabled', () => {
-    render(<PeopleTabNavbar showEventTypeFilter={false} />);
-    expect(screen.queryByTestId('eventType-dropdown')).not.toBeInTheDocument();
-  });
-
-  it('handles event type sort change safely when onSortChange is a no-op', async () => {
-    const user = userEvent.setup();
-
-    render(<PeopleTabNavbar showEventTypeFilter />);
-
-    const eventTypeSorting = screen.getByTestId('eventType-dropdown');
-    expect(eventTypeSorting).toBeInTheDocument();
-
-    await expect(
-      user.click(screen.getByText('workshops')),
-    ).resolves.not.toThrow();
-  });
-
   it('applies alignmentClassName when provided', () => {
     render(<PeopleTabNavbar alignmentClassName="custom-alignment-class" />);
     const alignmentContainer = screen.getByTestId('people-tab-navbar');

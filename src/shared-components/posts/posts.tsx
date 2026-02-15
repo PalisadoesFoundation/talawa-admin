@@ -357,7 +357,6 @@ export default function PostsPage() {
                 testIdPrefix: 'sortpost',
               },
             ]}
-            showEventTypeFilter={false}
             actions={
               <Button
                 onClick={createPostModal.open}
