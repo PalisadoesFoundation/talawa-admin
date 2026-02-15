@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
   },
+  "oauth": {
+    "continueWith": "Continuar con {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "customRecurrence": "Recurrencia personalizada",
@@ -2464,7 +2468,8 @@
     "loading": "Cargando...",
     "selectRow": "Seleccionar fila {{rowKey}}",
     "previousYear": "Año anterior",
-    "nextYear": "Siguiente año"
+    "nextYear": "Siguiente año",
+    "member": "Miembro"
   },
   "donation": {
     "amount_label": "Cantidad",

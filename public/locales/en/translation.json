@@ -4,6 +4,10 @@
     "failedToLoad": "Failed to load component: <1>{{componentName}}</1>",
     "id": "Plugin: <1>{{pluginId}}</1>"
   },
+  "oauth": {
+    "continueWith": "Continue with {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
@@ -2464,7 +2468,8 @@
     "loading": "Loading...",
     "selectRow": "Select row {{rowKey}}",
     "previousYear": "Previous Year",
-    "nextYear": "Next Year"
+    "nextYear": "Next Year",
+    "member": "Member"
   },
   "donation": {
     "amount_label": "Amount",

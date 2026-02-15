@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
   },
+  "oauth": {
+    "continueWith": "{{provider}} के साथ जारी रखें",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
@@ -2464,7 +2468,8 @@
     "loading": "लोड हो रहा है...",
     "selectRow": "पंक्ति {{rowKey}} चुनें",
     "previousYear": "पिछला वर्ष",
-    "nextYear": "अगला वर्ष"
+    "nextYear": "अगला वर्ष",
+    "member": "सदस्य"
   },
   "donation": {
     "amount_label": "राशि",
