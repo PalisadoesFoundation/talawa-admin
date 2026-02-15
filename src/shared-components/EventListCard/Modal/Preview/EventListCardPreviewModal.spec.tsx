@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within, act } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -72,12 +72,24 @@ const mockEventListCardProps = {
   location: 'Test Location',
   startAt: dayjs
     .utc()
-    .add(10, 'days')
+    .year(2025)
+    .month(5) // June (0-indexed)
+    .date(15)
     .hour(10)
     .minute(0)
     .second(0)
+    .millisecond(0)
     .toISOString(),
-  endAt: dayjs.utc().add(10, 'days').hour(12).minute(0).second(0).toISOString(),
+  endAt: dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(12)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -112,8 +124,26 @@ const mockDefaultProps = {
   tCommon: mockTCommon,
   isRegistered: false,
   userId: 'user123',
-  eventStartDate: dayjs.utc().add(10, 'days').toDate(),
-  eventEndDate: dayjs.utc().add(10, 'days').toDate(),
+  eventStartDate: dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toDate(),
+  eventEndDate: dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toDate(),
   setEventStartDate: vi.fn(),
   setEventEndDate: vi.fn(),
   allDayChecked: false,
@@ -1560,85 +1590,41 @@ describe('EventListCardPreviewModal', () => {
   });
 
   it('updates endTime if new startTime is after current endTime', async () => {
-    let currentFormState = {
-      startTime: '09:00:00',
-      endTime: '10:00:00',
-      name: '',
-      eventDescription: '',
-      location: '',
-    };
+    const user = userEvent.setup();
+    const mockSetFormState = vi.fn();
 
-    const setFormState = vi.fn((newState) => {
-      currentFormState = { ...currentFormState, ...newState };
+    renderComponent({
+      setFormState: mockSetFormState,
+      formState: {
+        ...mockFormState,
+        startTime: '09:00:00',
+        endTime: '10:00:00',
+      },
     });
 
-    const startAt = dayjs().hour(9).minute(0).second(0).toISOString();
-    const endAt = dayjs().hour(10).minute(0).second(0).toISOString();
+    // Open the start time picker and select hour 11
+    const startTimeInput = getPickerInputByTestId('startTime');
+    const startTimePicker = startTimeInput.parentElement as HTMLElement;
+    const clockButton = within(startTimePicker).getByLabelText(/choose time/i);
+    await user.click(clockButton);
 
-    render(
-      <PreviewModal
-        eventListCardProps={{
-          id: 'event-1',
-          location: 'Test Location',
-          name: 'Test Event',
-          description: 'Test Description',
-          startAt,
-          endAt,
-          allDay: false,
-          isPublic: true,
-          isRegisterable: false,
-          isInviteOnly: false,
-          attendees: [],
-          creator: { id: '1' },
-          userRole: UserRole.REGULAR,
-          isRecurringEventTemplate: false,
-        }}
-        userId="1"
-        eventModalIsOpen={true}
-        hideViewModal={() => {}}
-        toggleDeleteModal={() => {}}
-        t={(key) => key}
-        tCommon={(key) => key}
-        isRegistered={false}
-        eventStartDate={new Date()}
-        eventEndDate={new Date()}
-        setEventStartDate={() => {}}
-        setEventEndDate={() => {}}
-        allDayChecked={false}
-        setAllDayChecked={() => {}}
-        publicChecked={true}
-        setPublicChecked={() => {}}
-        registerableChecked={false}
-        setRegisterableChecked={() => {}}
-        inviteOnlyChecked={false}
-        setInviteOnlyChecked={() => {}}
-        formState={currentFormState}
-        setFormState={setFormState}
-        registerEventHandler={async () => {}}
-        handleEventUpdate={async () => {}}
-        openEventDashboard={() => {}}
-        recurrence={null}
-        setRecurrence={() => {}}
-        customRecurrenceModalIsOpen={false}
-        setCustomRecurrenceModalIsOpen={() => {}}
-      />,
-    );
-
-    act(() => {
-      const newTime = dayjs('11:00:00', 'HH:mm:ss');
-
-      setFormState({
-        ...currentFormState,
-        startTime: newTime.format('HH:mm:ss'),
-        endTime: newTime.format('HH:mm:ss'),
-      });
+    await waitFor(() => {
+      expect(
+        screen.getByRole('listbox', { name: /select hours/i }),
+      ).toBeInTheDocument();
     });
 
-    expect(setFormState).toHaveBeenCalledWith(
-      expect.objectContaining({
-        startTime: '11:00:00',
-        endTime: '11:00:00',
-      }),
-    );
+    const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
+    const timeToSelect = within(hoursListbox).getByText('11');
+    await user.click(timeToSelect);
+
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          startTime: expect.stringContaining('11'),
+          endTime: expect.stringContaining('11'),
+        }),
+      );
+    });
   });
 });
