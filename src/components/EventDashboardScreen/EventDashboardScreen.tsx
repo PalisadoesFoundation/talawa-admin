@@ -60,6 +60,18 @@ const EventDashboardScreen = (): React.JSX.Element => {
   });
   const { orgId } = useParams();
 
+  const appRoutes: { targets: TargetsType[] } = useSelector(
+    (state: RootState) => state.appRoutes,
+  );
+  const { targets } = appRoutes;
+
+  const dispatch = useAppDispatch();
+
+  // Update targets when orgId changes
+  useEffect(() => {
+    dispatch(updateTargets(orgId));
+  }, [orgId]);
+
   // Redirect to home if orgId is not present or if user is not logged in
   if (!orgId) {
     return <Navigate to={'/'} replace />;
@@ -76,7 +88,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
-              <div className={styles.flex}>
+              <div className={styles.flexOne}>
                 <h1>{t('title')}</h1>
               </div>
               <Outlet />
@@ -86,19 +98,6 @@ const EventDashboardScreen = (): React.JSX.Element => {
       </>
     );
   }
-
-  // Access targets from Redux store
-  const appRoutes: { targets: TargetsType[] } = useSelector(
-    (state: RootState) => state.appRoutes,
-  );
-  const { targets } = appRoutes;
-
-  const dispatch = useAppDispatch();
-
-  // Update targets when orgId changes
-  useEffect(() => {
-    dispatch(updateTargets(orgId));
-  }, [orgId]);
 
   /**
    * Handles window resize events to toggle the visibility of the sidebar drawer.
@@ -160,7 +159,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div className={styles.flex}>
+          <div className={styles.flexOne}>
             <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown portal="admin" />

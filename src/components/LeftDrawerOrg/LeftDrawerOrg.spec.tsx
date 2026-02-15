@@ -616,14 +616,14 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerActiveButton');
+      expect(membersLink?.className).toContain('leftDrawerActiveButton');
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerInactiveButton');
+      expect(membersLink?.className).toContain('leftDrawerInactiveButton');
     });
 
     it('should render icon components with correct props', () => {
@@ -634,7 +634,7 @@ describe('LeftDrawerOrg', () => {
         (icon) => icon.getAttribute('data-name') === 'Dashboard',
       );
       expect(dashboardIcon).toHaveAttribute('data-name', 'Dashboard');
-      expect(dashboardIcon).toHaveAttribute('data-fill', 'var(--bs-black)');
+      expect(dashboardIcon).toHaveAttribute('data-fill', 'var(--color-black)');
     });
 
     it('should render inactive icon with correct fill color', () => {

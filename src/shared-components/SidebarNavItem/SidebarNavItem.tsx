@@ -86,8 +86,10 @@ const SidebarNavItem = ({
               ? 'var(--color-black)'
               : 'var(--bs-secondary)'
             : 'none',
-          width: 'var(--space-7)',
-          height: 'var(--space-7)',
+          style: {
+            width: 'var(--space-7)',
+            height: 'var(--space-7)',
+          },
           stroke: useSimpleButton
             ? undefined
             : isActive
