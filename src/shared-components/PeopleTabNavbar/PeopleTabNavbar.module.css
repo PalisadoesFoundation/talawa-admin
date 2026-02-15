@@ -29,7 +29,7 @@
   background-color: var(--dropdownItem-bg) !important;
   color: var(--dropdownItem-color) !important;
   border: none !important;
-  box-shadow: var(--dropdownItem-box-shadow);
+  box-shadow: var(--dropdownItem-box-shadow) !important;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -46,6 +46,7 @@
   filter: brightness(0) invert(1);
 }
 
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .dropdown :global(.dropdown-menu) {
   min-width: 100% !important;
   width: 100% !important;

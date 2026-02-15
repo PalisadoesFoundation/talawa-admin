@@ -7,7 +7,7 @@
  *
  * @remarks
  * - Used on pages that require filtering, sorting, or searching
- * - Uses SearchBar and SortingButton shared-components
+ * - Uses SearchBar and DropDownButton shared-components
  * - Layout adapts based on provided props
  *
  * @example
@@ -68,9 +68,9 @@ export default function PeopleTabNavbar({
       <div className={styles.calendar__header}>
         {title && <h2 className={styles.pageHeaderTitle}>{title}</h2>}
         <div
-          className={`${styles.peopleTabNavbarAlignment} ${
-            alignmentClassName || ''
-          }`}
+          className={[styles.peopleTabNavbarAlignment, alignmentClassName]
+            .filter(Boolean)
+            .join(' ')}
         >
           {/* ===== Action Buttons ===== */}
           {actions && (
@@ -113,8 +113,8 @@ export default function PeopleTabNavbar({
             <div className={styles.btnsBlock}>
               <DropDownButton
                 options={[
-                  { label: 'Events', value: 'Events' },
-                  { label: 'Workshops', value: 'Workshops' },
+                  { label: tCommon('events'), value: 'Events' },
+                  { label: tCommon('workshops'), value: 'Workshops' },
                 ]}
                 selectedValue={'Events'}
                 onSelect={() => {}}

@@ -360,7 +360,6 @@ export default function PostsPage() {
             showEventTypeFilter={false}
             actions={
               <Button
-                variant="success"
                 onClick={createPostModal.open}
                 disabled={!userId}
                 data-testid="createPostModalBtn"

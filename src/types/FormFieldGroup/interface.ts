@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react';
+
 /**
  * Props for FormFieldGroup component.
  */
 export interface InterfaceFormFieldGroupProps {
   name: string;
-  label: React.ReactNode;
+  label: ReactNode;
   required?: boolean;
   helpText?: string;
   error?: string;

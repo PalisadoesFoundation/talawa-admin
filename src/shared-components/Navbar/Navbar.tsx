@@ -7,7 +7,7 @@
  *
  * @remarks
  * - Primarily used for pages that require filtering, sorting, or search.
- * - Uses `SearchBar` and `SortingButton` shared-components for search and sorting functionality.
+ * - Uses `SearchBar` and `DropDownButton` shared-components for search and sorting functionality.
  * - Layout is responsive and adjusts based on provided props.
  *
  * @example
@@ -51,28 +51,7 @@ import styles from './Navbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import SortIcon from '@mui/icons-material/Sort';
-
-interface InterfacePageHeaderProps {
-  title?: string;
-  search?: {
-    placeholder: string;
-    onSearch: (value: string) => void;
-    inputTestId?: string;
-    buttonTestId?: string;
-  };
-  sorting?: Array<{
-    title: string;
-    options: { label: string; value: string | number }[];
-    selected: string | number;
-    onChange: (value: string | number) => void;
-    testIdPrefix: string;
-    containerClassName?: string;
-    toggleClassName?: string;
-  }>;
-  showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
-  rootClassName?: string;
-}
+import type { InterfacePageHeaderProps } from 'types/shared-components/Navbar/interface';
 
 export default function PageHeader({
   title,
@@ -136,8 +115,8 @@ export default function PageHeader({
           <div className={styles.btnsBlock}>
             <DropDownButton
               options={[
-                { label: 'Events', value: 'Events' },
-                { label: 'Workshops', value: 'Workshops' },
+                { label: t('events'), value: 'Events' },
+                { label: t('workshops'), value: 'Workshops' },
               ]}
               selectedValue={'Events'}
               onSelect={() => {}}

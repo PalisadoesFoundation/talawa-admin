@@ -48,6 +48,7 @@
 .checkboxdivEvents {
   display: flex;
   flex-wrap: wrap;
+
   --events-gap: var(--space-5);
   column-gap: var(--events-gap, 1rem);
 }
@@ -100,7 +101,8 @@
 .switch input:checked {
   background-color: var(--switch-bg-checked, #1778f2);
   border-color: var(--switch-border-checked, #1778f2);
-  box-shadow: 0 0 0.1rem 0.2rem var(--switch-box-shadow-checked, #a8c7fa);
+  box-shadow: 0 0 var(--shadow-blur-xs) var(--shadow-spread-sm)
+    var(--switch-box-shadow-checked, #a8c7fa);
 }
 
 .switch input:focus {
@@ -112,6 +114,7 @@
   padding-left: var(--space-13);
 }
 
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown -- CSS Modules :global() targets Bootstrap's .form-check-input */
 .switch :global(.form-check-input) {
   margin-left: calc(-1 * var(--space-11));
   margin-top: var(--space-4);

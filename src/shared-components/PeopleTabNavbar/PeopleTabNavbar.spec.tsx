@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import PeopleTabNavbar from './PeopleTabNavbar';
@@ -65,9 +65,15 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
     return (
       <div data-testid={`${dataTestIdPrefix}-dropdown`}>
         <span data-testid={`${dataTestIdPrefix}-label`}>{ariaLabel}</span>
-        <button data-testid={`${dataTestIdPrefix}-toggle`}>{label}</button>
+        <button type="button" data-testid={`${dataTestIdPrefix}-toggle`}>
+          {label}
+        </button>
         {options.map((opt) => (
-          <button key={opt.value} onClick={() => onSelect(opt.value)}>
+          <button
+            type="button"
+            key={opt.value}
+            onClick={() => onSelect(opt.value)}
+          >
             {opt.label}
           </button>
         ))}
@@ -84,7 +90,8 @@ vi.mock('@mui/icons-material/Sort', () => ({
 
 describe('PeopleTabNavbar', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders title when provided', () => {
@@ -108,10 +115,10 @@ describe('PeopleTabNavbar', () => {
     );
 
     await user.type(screen.getByTestId('search-input'), 'John');
-    expect(onSearch).toHaveBeenLastCalledWith('John');
+    await waitFor(() => expect(onSearch).toHaveBeenLastCalledWith('John'));
 
     await user.click(screen.getByTestId('search-button'));
-    expect(onSearch).toHaveBeenCalledWith('clicked');
+    await waitFor(() => expect(onSearch).toHaveBeenCalledWith('clicked'));
   });
 
   it('renders sorting dropdown and handles sort change', async () => {
@@ -140,7 +147,7 @@ describe('PeopleTabNavbar', () => {
     expect(screen.getByTestId('usersSort-toggle')).toHaveTextContent('Newest');
 
     await user.click(screen.getByText('Oldest'));
-    expect(onSortChange).toHaveBeenCalledWith('ASC');
+    await waitFor(() => expect(onSortChange).toHaveBeenCalledWith('ASC'));
   });
 
   it('renders action buttons when provided', () => {

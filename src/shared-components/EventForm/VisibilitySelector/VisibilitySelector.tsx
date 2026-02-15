@@ -16,10 +16,10 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
   tCommon,
 }) => {
   return (
-    <div className="mb-3">
-      <label className={`form-label ${styles.visibilityLabel}`}>
+    <fieldset className="mb-3">
+      <legend className={`form-label ${styles.visibilityLabel}`}>
         {tCommon('eventVisibility')}
-      </label>
+      </legend>
       <div className="ms-3">
         <FormCheckField
           type="radio"
@@ -73,7 +73,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           data-testid="visibilityInviteRadio"
         />
       </div>
-    </div>
+    </fieldset>
   );
 };
 

@@ -1,11 +1,11 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, afterEach } from 'vitest';
 
 afterEach(() => {
+  cleanup();
   vi.restoreAllMocks();
-  vi.clearAllMocks();
 });
 import PageHeader from './Navbar';
 
@@ -110,7 +110,7 @@ describe('PageHeader Component', () => {
     await userEvent.clear(input);
     await userEvent.type(input, 'hello');
     await userEvent.click(button);
-    expect(TestInterfaceMockSearch).toHaveBeenCalled();
+    await waitFor(() => expect(TestInterfaceMockSearch).toHaveBeenCalled());
   });
 
   it('renders sorting buttons correctly', () => {
