@@ -167,6 +167,19 @@ export default function Donate(): JSX.Element {
     setPage(0);
   };
 
+  /**
+   * Return true for backend responses that still require the legacy mutation.
+   * Performs case-insensitive matching on the combined error message because
+   * the server currently advertises currency awareness in free-form strings.
+   *
+   * Known patterns:
+   * - `unknown argument "currencycode"`
+   * - `unknown type "iso4217currencycode"`
+   * - `field "createdonation" argument "currencycode" is not defined`
+   *
+   * Once the backend schema explicitly supports `currencyCode` on
+   * `createDonation`, remove this fallback and its string checks.
+   */
   const shouldFallbackToLegacyDonationMutation = (error: unknown): boolean => {
     const apolloError = error as {
       graphQLErrors?: Array<{ message?: string }>;
