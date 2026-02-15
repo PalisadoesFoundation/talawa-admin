@@ -2,10 +2,9 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  align-items: center;
-  margin: var(--space-7) 0 var(--space-7) 0;
-  padding: 0 var(--space-8) 0 var(--space-3);
   align-items: stretch;
+  margin: var(--space-3) 0;
+  padding: 0;
   gap: var(--space-1);
   flex-wrap: wrap;
   min-height: var(--space-10);
