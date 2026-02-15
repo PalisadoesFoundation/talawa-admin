@@ -4,7 +4,7 @@
 
 # Interface: IOAuthProviderConfig
 
-Defined in: [src/types/Auth/auth.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L79)
+Defined in: [src/types/Auth/auth.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L77)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Auth/auth.ts:79](https://github.com/PalisadoesFoundation/
 
 > `optional` **clientId**: `string`
 
-Defined in: [src/types/Auth/auth.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L83)
+Defined in: [src/types/Auth/auth.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L81)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Auth/auth.ts:83](https://github.com/PalisadoesFoundation/
 
 > **displayName**: `string`
 
-Defined in: [src/types/Auth/auth.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L81)
+Defined in: [src/types/Auth/auth.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L79)
 
 ***
 
@@ -28,15 +28,15 @@ Defined in: [src/types/Auth/auth.ts:81](https://github.com/PalisadoesFoundation/
 
 > **enabled**: `boolean`
 
-Defined in: [src/types/Auth/auth.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L85)
+Defined in: [src/types/Auth/auth.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L83)
 
 ***
 
 ### id
 
-> **id**: [`ProviderKey`](../type-aliases/ProviderKey.md)
+> **id**: [`OAuthProviderKey`](../type-aliases/OAuthProviderKey.md)
 
-Defined in: [src/types/Auth/auth.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L80)
+Defined in: [src/types/Auth/auth.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L78)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Auth/auth.ts:80](https://github.com/PalisadoesFoundation/
 
 > `optional` **redirectUri**: `string`
 
-Defined in: [src/types/Auth/auth.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L84)
+Defined in: [src/types/Auth/auth.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L82)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/Auth/auth.ts:84](https://github.com/PalisadoesFoundation/
 
 > **scopes**: `string`[]
 
-Defined in: [src/types/Auth/auth.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L82)
+Defined in: [src/types/Auth/auth.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L80)

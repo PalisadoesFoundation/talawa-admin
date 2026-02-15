@@ -14,7 +14,7 @@ Get config for single provider
 
 ### provider
 
-[`ProviderKey`](../../../types/Auth/auth/type-aliases/ProviderKey.md)
+[`OAuthProviderKey`](../../../types/Auth/auth/type-aliases/OAuthProviderKey.md)
 
 ## Returns
 

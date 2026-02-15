@@ -74,10 +74,8 @@ export interface InterfaceOAuthLinkResponse {
   oauthAccounts: InterfaceOAuthAccount[];
 }
 
-export type ProviderKey = 'GOOGLE' | 'GITHUB';
-
 export interface IOAuthProviderConfig {
-  id: ProviderKey;
+  id: OAuthProviderKey;
   displayName: string;
   scopes: string[];
   clientId?: string;

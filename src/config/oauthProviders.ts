@@ -1,5 +1,5 @@
 import type {
-  ProviderKey,
+  OAuthProviderKey,
   IOAuthProviderConfig,
 } from '../../src/types/Auth/auth';
 
@@ -13,7 +13,7 @@ const isEnabled = (clientId?: string, redirectUri?: string): boolean => {
 /**
  * Central OAuth Provider Configuration
  */
-export const OAUTH_PROVIDERS: Record<ProviderKey, IOAuthProviderConfig> = {
+export const OAUTH_PROVIDERS: Record<OAuthProviderKey, IOAuthProviderConfig> = {
   GOOGLE: {
     id: 'GOOGLE',
     displayName: 'Google',
@@ -42,7 +42,7 @@ export const OAUTH_PROVIDERS: Record<ProviderKey, IOAuthProviderConfig> = {
 /**
  * Get config for single provider
  */
-export const getProviderConfig = (provider: ProviderKey) => {
+export const getProviderConfig = (provider: OAuthProviderKey) => {
   return OAUTH_PROVIDERS[provider];
 };
 
