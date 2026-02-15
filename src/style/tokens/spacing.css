@@ -30,4 +30,6 @@
   --space-27: 50rem;
   --space-28: 56.25rem;
   --space-29: 87.5rem;
+
+  --space-full-viewport: 100vh;
 }

@@ -1,0 +1,8 @@
+.checkInModalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.checkInDataGridContainer {
+  height: var(--space-25);
+  width: 100%;
+}

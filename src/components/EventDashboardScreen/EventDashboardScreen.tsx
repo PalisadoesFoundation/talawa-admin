@@ -40,10 +40,11 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventDashboardScreen.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
+import Button from 'shared-components/Button';
 
 const EventDashboardScreen = (): React.JSX.Element => {
   const { getItem } = useLocalStorage();
@@ -124,7 +125,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
 
   return (
     <>
-      <button
+      <Button
         className={
           hideDrawer ? styles.opendrawer : styles.collapseSidebarButton
         }
@@ -137,7 +138,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
           }
           aria-hidden="true"
         ></i>
-      </button>
+      </Button>
       <div className={styles.drawer}>
         <LeftDrawerOrg
           orgId={orgId}

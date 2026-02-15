@@ -1,0 +1,36 @@
+.leftDrawerActiveButton {
+  background-color: var(--leftDrawer-active-button-bg);
+  color: black;
+  font-weight: bold;
+}
+
+.leftDrawerInactiveButton {
+  background-color: var(--leftDrawer-inactive-button-bg);
+  color: black;
+
+  &:hover {
+    background-color: var(--leftDrawer-inactive-button-hover-bg);
+  }
+}
+
+.sidebarBtnActive {
+  background-color: var(--sidebar-option-bg);
+  color: var(--sidebar-option-text-active);
+  font-weight: bold;
+}
+
+.sidebarBtn {
+  background-color: transparent;
+  color: var(--sidebar-option-text-inactive);
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.iconWrapper {
+  position: relative;
+  height: var(--space-9);
+  width: var(--space-9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

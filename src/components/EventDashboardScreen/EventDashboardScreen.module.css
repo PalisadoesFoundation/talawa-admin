@@ -1,2 +1,63 @@
 /* Component-specific CSS module for EventDashboardScreen */
 /* Currently empty as the test file only imports the shared CSS without using specific classes */
+.containerHeightEventDash {
+  height: calc(100vh - 66px);
+}
+
+.mainContainerEventDashboard {
+  width: 50%;
+  flex-grow: 3;
+  padding: var(--spacing-lg);
+  max-height: 100%;
+  overflow: auto;
+}
+
+.colorLight {
+  background-color: var(--input-area-color);
+}
+
+.gap {
+  gap: var(--spacing-lg, 1.25rem);
+}
+
+.opendrawer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: var(--size-icon-lg);
+  height: var(--space-full-viewport);
+  z-index: 9999;
+  background-color: var(--color-surface-muted);
+  border: none;
+  border-radius: 0px;
+  margin-right: var(--spacing-lg);
+  color: black;
+}
+
+.collapseSidebarButton {
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+.drawer {
+  width: var(--space-7);
+}
+
+.pageContainer {
+  padding-left: var(--space-9);
+}
+
+.expand {
+  margin-left: var(--space-13);
+  padding-left: var(--space-11);
+  animation: moveLeft 0.9s ease-in-out;
+}
+
+.contract {
+  padding-left: calc(300px + 2rem + 1.5rem);
+  animation: moveRight 0.5s ease-in-out;
+}

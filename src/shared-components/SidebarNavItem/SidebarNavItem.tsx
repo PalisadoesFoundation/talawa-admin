@@ -4,18 +4,17 @@
  * A reusable navigation item component for sidebars with icon and label support.
  * Handles active/inactive states and adapts to drawer visibility.
  *
- * @component
- * @param {ISidebarNavItemProps} props - The props for the component
- * @param {string} props.to - Navigation target URL
- * @param {React.ReactNode} props.icon - Icon component or element
- * @param {string} props.label - Display label for the navigation item
- * @param {string} props.testId - Test ID for testing purposes
- * @param {boolean} props.hideDrawer - Whether the drawer is hidden/collapsed
- * @param {() => void} [props.onClick] - Optional click handler
- * @param {boolean} [props.useSimpleButton] - Use simple button style (for org drawers)
- * @param {'react-icon' | 'svg'} [props.iconType] - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+ * @param props - The props for the component
+ * @param to - Navigation target URL
+ * @param icon - Icon component or element
+ * @param label - Display label for the navigation item
+ * @param testId - Test ID for testing purposes
+ * @param hideDrawer - Whether the drawer is hidden/collapsed
+ * @param onClick - Optional click handler
+ * @param useSimpleButton - Use simple button style (for org drawers)
+ * @param iconType - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
  *
- * @returns {React.ReactElement} The rendered SidebarNavItem component
+ * @returns - The rendered SidebarNavItem component
  *
  * @example
  * ```tsx
@@ -42,7 +41,7 @@
 
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SidebarNavItem.module.css';
 import type { ISidebarNavItemProps } from '../../types/SidebarNavItem/interface';
 
 const SidebarNavItem = ({
@@ -71,8 +70,8 @@ const SidebarNavItem = ({
           icon as React.ReactElement<{ style?: React.CSSProperties }>,
           {
             style: {
-              fontSize: 25,
-              color: isActive ? '#000000' : 'var(--bs-secondary)',
+              fontSize: 'var(--font-size-2xl)',
+              color: isActive ? 'var(--color-black)' : 'var(--bs-secondary)',
             },
           },
         );
@@ -87,8 +86,8 @@ const SidebarNavItem = ({
               ? 'var(--bs-black)'
               : 'var(--bs-secondary)'
             : 'none',
-          width: 25,
-          height: 25,
+          width: 'var(--space-7)',
+          height: 'var(--space-7)',
           stroke: useSimpleButton
             ? undefined
             : isActive
@@ -115,7 +114,7 @@ const SidebarNavItem = ({
       }
       data-testid={testId}
       data-cy={dataCy}
-      style={useSimpleButton ? { height: '40px' } : undefined}
+      style={useSimpleButton ? { height: 'var(--space-9)' } : undefined}
     >
       {({ isActive }) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
