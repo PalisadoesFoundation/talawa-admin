@@ -54,6 +54,10 @@ cypress/
 │   └── Accessibility/
 ├── fixtures/
 ├── pageObjects/
+│   ├── base/
+│   ├── AdminPortal/
+│   ├── UserPortal/
+│   └── shared/
 └── support/
 ```
 
@@ -133,16 +137,22 @@ Follow these best practices when writing tests.
 
 This project follows the Page Object Model pattern for better test maintenance:
 
-```javascript
-// Example usage of page objects
-import { LoginPage } from '../pageObjects/auth/LoginPage';
+```ts
+// Example usage of a portal-aligned page object
+import { MemberManagementPage } from '../../../pageObjects/AdminPortal/MemberManagementPage';
 
-const loginPage = new LoginPage();
+const memberManagementPage = new MemberManagementPage();
 
-it('should login successfully', () => {
-  loginPage.verifyLoginPage().login(userData.email, userData.password);
+it('searches a member', () => {
+  memberManagementPage
+    .openFromDrawer()
+    .searchMemberByName('Wilt Shepherd')
+    .verifyMemberInList('Wilt Shepherd');
 });
 ```
+
+Use the base class in `cypress/pageObjects/base/BasePage.ts` when creating new
+portal page objects so helpers remain typed and chainable.
 
 ### Shared Page Object Utilities
 

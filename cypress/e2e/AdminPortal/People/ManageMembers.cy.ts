@@ -1,8 +1,8 @@
-import { PeoplePage } from '../../../pageObjects/AdminPortal/PeoplePage';
+import { MemberManagementPage } from '../../../pageObjects/AdminPortal/MemberManagementPage';
 
 type SeededUser = { name: string; userId?: string };
 
-const peoplePage = new PeoplePage();
+const memberManagementPage = new MemberManagementPage();
 
 describe('Admin People Tab', () => {
   let orgId = '';
@@ -35,24 +35,24 @@ describe('Admin People Tab', () => {
   beforeEach(() => {
     cy.loginByApi('admin');
     cy.visit(`/admin/orgdash/${orgId}`);
-    peoplePage.visitPeoplePage();
+    memberManagementPage.openFromDrawer();
   });
 
   it('should search a particular member and then reset to all members', () => {
-    peoplePage
+    memberManagementPage
       .searchMemberByName(wiltShepherd.name)
       .verifyMemberInList(wiltShepherd.name);
-    peoplePage.resetSearch();
-    peoplePage.verifyMemberInList(wiltShepherd.name).verifyMinRows(2);
+    memberManagementPage.resetSearch();
+    memberManagementPage.verifyMemberInList(wiltShepherd.name).verifyMinRows(2);
     // Verify that at least 2 members appear (Wilt + the admin who created the org).
     // We avoid hard-coding the admin's display name because it depends on CI seed data.
   });
 
   it('add an existing member to the organization', () => {
     const member = praiseNorris.name;
-    peoplePage.clickAddExistingMember();
-    peoplePage.searchAndSelectUser(member);
-    peoplePage.confirmAddUser(member);
+    memberManagementPage.clickAddExistingMember();
+    memberManagementPage.searchAndSelectUser(member);
+    memberManagementPage.confirmAddUser(member);
   });
 
   it('delete a member from the organization', () => {
@@ -61,7 +61,7 @@ describe('Admin People Tab', () => {
     }
 
     cy.reload();
-    peoplePage.deleteMember(praiseNorris.name);
+    memberManagementPage.deleteMember(praiseNorris.name);
   });
 
   afterEach(() => {

@@ -12,6 +12,13 @@ The canonical E2E spec layout is portal-based under `cypress/e2e/`:
 - `MultiOrganization/`
 - `Accessibility/`
 
+Page objects are organized under `cypress/pageObjects/`:
+
+- `base/` shared typed `BasePage` helpers
+- `AdminPortal/` admin portal page objects
+- `UserPortal/` user portal page objects
+- `shared/` reusable modal/table helpers
+
 ## Run Cypress
 
 ```bash
