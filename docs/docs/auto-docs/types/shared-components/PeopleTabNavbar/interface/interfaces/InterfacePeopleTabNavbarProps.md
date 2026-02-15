@@ -60,14 +60,6 @@ Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:8](https:/
 
 ***
 
-### showEventTypeFilter?
-
-> `optional` **showEventTypeFilter**: `boolean`
-
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L22)
-
-***
-
 ### sorting?
 
 > `optional` **sorting**: `object`[]

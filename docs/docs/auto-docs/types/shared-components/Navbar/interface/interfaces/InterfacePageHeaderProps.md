@@ -60,14 +60,6 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:8](https://github.c
 
 ***
 
-### showEventTypeFilter?
-
-> `optional` **showEventTypeFilter**: `boolean`
-
-Defined in: [src/types/shared-components/Navbar/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L24)
-
-***
-
 ### sorting?
 
 > `optional` **sorting**: `object`[]
