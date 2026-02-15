@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/EventDashboardScreen/EventDashboardScreen.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventDashboardScreen/EventDashboardScreen.tsx#L49)
+Defined in: [src/components/EventDashboardScreen/EventDashboardScreen.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventDashboardScreen/EventDashboardScreen.tsx#L43)
 
 ## Returns
 

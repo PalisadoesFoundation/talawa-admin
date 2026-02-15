@@ -18,12 +18,6 @@
  * - `useAppDispatch`: Dispatches actions to update Redux state.
  * - `useEffect`: Handles side effects such as updating targets and managing window resize events.
  *
- * Props:
- * - None
- *
- * State:
- * - `hideDrawer` (boolean | null): Tracks the visibility of the sidebar drawer.
- *
  * Dependencies:
  * - React Router for navigation and route management.
  * - Redux for state management.
@@ -66,6 +60,12 @@ const EventDashboardScreen = (): React.JSX.Element => {
   const { targets } = appRoutes;
 
   const dispatch = useAppDispatch();
+
+  const handleResize = (): void => {
+    if (window.innerWidth <= 820 && !hideDrawer) {
+      setHideDrawer(true);
+    }
+  };
 
   // Update targets when orgId changes
   useEffect(() => {
@@ -110,11 +110,6 @@ const EventDashboardScreen = (): React.JSX.Element => {
   /**
    * Handles window resize events to toggle the visibility of the sidebar drawer.
    */
-  const handleResize = (): void => {
-    if (window.innerWidth <= 820 && !hideDrawer) {
-      setHideDrawer(true);
-    }
-  };
 
   /**
    * Toggles the visibility of the sidebar drawer.
