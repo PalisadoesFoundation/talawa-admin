@@ -4,6 +4,10 @@
     "failedToLoad": "Failed to load component: <1>{{componentName}}</1>",
     "id": "Plugin: <1>{{pluginId}}</1>"
   },
+  "oauth": {
+    "continueWith": "Continue with {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
