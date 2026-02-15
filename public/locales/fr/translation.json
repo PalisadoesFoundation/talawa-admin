@@ -2465,7 +2465,8 @@
     "loading": "Chargement...",
     "selectRow": "Sélectionner la ligne {{rowKey}}",
     "previousYear": "Année précédente",
-    "nextYear": "Année suivante"
+    "nextYear": "Année suivante",
+    "member": "Membre"
   },
   "donation": {
     "amount_label": "Montant",

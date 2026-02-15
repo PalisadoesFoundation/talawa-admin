@@ -2465,7 +2465,8 @@
     "loading": "लोड हो रहा है...",
     "selectRow": "पंक्ति {{rowKey}} चुनें",
     "previousYear": "पिछला वर्ष",
-    "nextYear": "अगला वर्ष"
+    "nextYear": "अगला वर्ष",
+    "member": "सदस्य"
   },
   "donation": {
     "amount_label": "राशि",
