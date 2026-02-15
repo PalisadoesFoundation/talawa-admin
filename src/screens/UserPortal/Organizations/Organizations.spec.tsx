@@ -478,8 +478,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
   cleanup();
+  vi.restoreAllMocks();
   clearAllItems();
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
@@ -1478,16 +1478,18 @@ describe('Email Verification Warning', () => {
     const dismissBtn = screen.getByLabelText(/close/i);
     await userEvent.click(dismissBtn);
 
-    expect(
-      screen.queryByTestId('email-verification-warning'),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('email-verification-warning'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('should show warning from localStorage fallback when CURRENT_USER has no data', async () => {
     // Set the localStorage flag BEFORE rendering so the fallback branch fires
     setItem('emailNotVerified', 'true');
 
-    // Use a CURRENT_USER mock that returns null/undefined currentUser
+    // Use a CURRENT_USER mock that returns null user
     const noUserDataLink = new StaticMockLink(
       [
         COMMUNITY_TIMEOUT_MOCK,

@@ -78,12 +78,6 @@ vi.mock('shared-components/posts/posts', () => ({
   default: () => <div data-testid="mock-posts">Mock Posts</div>,
 }));
 
-vi.mock('components/AdminPortal/SuperAdminScreen/SuperAdminScreen', () => ({
-  default: () => (
-    <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
-  ),
-}));
-
 vi.mock('screens/AdminPortal/BlockUser/BlockUser', () => ({
   default: () => <div data-testid="mock-block-user">Mock Block User</div>,
 }));
@@ -326,22 +320,6 @@ const ADMIN_MOCKS = [
   },
 ];
 
-const SUPER_ADMIN_MOCKS = [
-  {
-    request: { query: CURRENT_USER },
-    result: {
-      data: {
-        user: {
-          id: '789',
-          name: 'Super Admin',
-          emailAddress: 'superadmin@example.com',
-          role: 'administrator',
-        },
-      },
-    },
-  },
-];
-
 const ERROR_MOCKS = [
   {
     request: { query: CURRENT_USER },
@@ -352,7 +330,6 @@ const ERROR_MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 const adminLink = new StaticMockLink(ADMIN_MOCKS, true);
-const superAdminLink = new StaticMockLink(SUPER_ADMIN_MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
 
 const renderApp = (mockLink = link, initialRoute = '/') => {
@@ -369,22 +346,15 @@ const renderApp = (mockLink = link, initialRoute = '/') => {
   );
 };
 
-let logSpy: ReturnType<typeof vi.spyOn> | undefined;
-let errorSpy: ReturnType<typeof vi.spyOn> | undefined;
-
 describe('Testing the App Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
     vi.restoreAllMocks();
-    logSpy?.mockRestore();
-    errorSpy?.mockRestore();
   });
 
   it('Regular user sees user portal when accessing admin routes', async () => {
@@ -453,7 +423,7 @@ describe('Testing the App Component', () => {
     });
   });
 
-  it('should handle admin user permissions correctly', async () => {
+  it('should handle administrator user permissions correctly', async () => {
     const { usePluginRoutes } = await import('./plugin');
 
     renderApp(adminLink);
@@ -462,18 +432,6 @@ describe('Testing the App Component', () => {
       // Admin should have org permissions
       expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, false); // adminGlobalPluginRoutes
       expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, true); // adminOrgPluginRoutes
-    });
-  });
-
-  it('should handle super admin user permissions correctly', async () => {
-    const { usePluginRoutes } = await import('./plugin');
-
-    renderApp(superAdminLink);
-
-    await waitFor(() => {
-      // Super admin should have org permissions
-      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, false);
-      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, true);
     });
   });
 
@@ -512,10 +470,9 @@ describe('Testing the App Component', () => {
     // Should not crash and should render something (either loading or login page)
     await screen.findByTestId('app-footer');
 
-    // The GraphQL error should not cause the app to crash
-    // We don't expect a specific console.error call since the error might be handled silently
-    // Instead, verify that the app continues to function normally
-    expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
+    });
   });
 
   it('should render plugin routes when provided', async () => {
@@ -621,15 +578,6 @@ describe('Testing the App Component', () => {
       // Restore original lazy
       React.lazy = originalLazy;
     }
-  });
-
-  it('should correctly determine isAdmin and isSuperAdmin flags', async () => {
-    renderApp(superAdminLink);
-
-    await waitFor(() => {
-      // Verify plugin system is initialized
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-    });
   });
 
   it('should handle user with role admin correctly', async () => {
