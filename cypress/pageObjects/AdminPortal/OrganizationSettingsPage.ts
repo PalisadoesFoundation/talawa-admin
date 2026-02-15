@@ -14,6 +14,8 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
   private readonly openDeleteModalButton = 'openDeleteModalBtn';
   private readonly confirmDeleteButton = 'deleteOrganizationBtn';
   private readonly closeDeleteModalButton = 'closeDelOrgModalBtn';
+  private readonly deleteOrganizationModal =
+    this.modalActions('[role="dialog"]');
 
   protected self(): OrganizationSettingsPage {
     return this;
@@ -87,17 +89,21 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
     this.byTestId(this.openDeleteModalButton, timeout)
       .should('be.visible')
       .click();
-    this.modalActions().waitVisible(timeout);
+    this.deleteOrganizationModal.waitVisible(timeout);
     return this;
   }
 
   closeDeleteOrganizationModal(timeout = 10000): this {
-    this.modalActions().clickByTestId(this.closeDeleteModalButton, { timeout });
+    this.deleteOrganizationModal.clickByTestId(this.closeDeleteModalButton, {
+      timeout,
+    });
     return this;
   }
 
   confirmDeleteOrganization(timeout = 10000): this {
-    this.modalActions().clickByTestId(this.confirmDeleteButton, { timeout });
+    this.deleteOrganizationModal.clickByTestId(this.confirmDeleteButton, {
+      timeout,
+    });
     return this;
   }
 }

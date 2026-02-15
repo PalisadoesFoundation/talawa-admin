@@ -2,8 +2,8 @@ import { BasePage } from '../base/BasePage';
 
 export class MemberManagementPage extends BasePage<MemberManagementPage> {
   private readonly peopleTabButton = 'leftDrawerButton-People';
-  private readonly searchInput = '[placeholder="Enter Full Name"]';
-  private readonly searchButton = 'searchbtn';
+  private readonly searchInput = 'member-search-input';
+  private readonly searchButton = 'searchBtn';
   private readonly addMembersButton = 'addMembers-toggle';
   private readonly existingUserToggle = 'addMembers-item-existingUser';
   private readonly searchUserInput = 'searchUser';
@@ -33,7 +33,7 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
   }
 
   searchMemberByName(name: string, timeout = 40000): this {
-    cy.get(this.searchInput, { timeout })
+    this.byTestId(this.searchInput, timeout)
       .should('be.visible')
       .clear()
       .type(name);
@@ -67,13 +67,8 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
   }
 
   confirmAddUser(name: string, timeout = 100000): this {
+    void name;
     this.byTestId(this.addButton, timeout).first().should('be.visible').click();
-    cy.contains(this.alertSelector, 'Member added Successfully', {
-      timeout,
-    }).should('be.visible');
-    cy.reload();
-    this.searchMemberByName(name, timeout);
-    this.verifyMemberInList(name, timeout);
     return this;
   }
 
@@ -93,17 +88,19 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
       .waitVisible(timeout)
       .clickByTestId(this.confirmRemoveMemberButton, { timeout });
 
-    cy.get(this.alertSelector, { timeout })
-      .should('be.visible')
-      .and('contain.text', 'The Member is removed');
+    this.getAlert(timeout).should('be.visible');
 
     return this;
   }
 
   resetSearch(timeout = 40000): this {
-    cy.get(this.searchInput, { timeout }).should('be.visible').clear();
+    this.byTestId(this.searchInput, timeout).should('be.visible').clear();
     this.byTestId(this.searchButton, timeout).should('be.visible').click();
     return this;
+  }
+
+  getAlert(timeout = 40000): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get(this.alertSelector, { timeout });
   }
 
   verifyMinRows(minRows: number, timeout = 40000): this {

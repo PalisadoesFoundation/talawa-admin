@@ -53,6 +53,12 @@ describe('Admin People Tab', () => {
     memberManagementPage.clickAddExistingMember();
     memberManagementPage.searchAndSelectUser(member);
     memberManagementPage.confirmAddUser(member);
+    memberManagementPage
+      .getAlert()
+      .should('be.visible')
+      .and('contain.text', 'Member added Successfully');
+    cy.reload();
+    memberManagementPage.searchMemberByName(member).verifyMemberInList(member);
   });
 
   it('delete a member from the organization', () => {
@@ -62,6 +68,10 @@ describe('Admin People Tab', () => {
 
     cy.reload();
     memberManagementPage.deleteMember(praiseNorris.name);
+    memberManagementPage
+      .getAlert()
+      .should('be.visible')
+      .and('contain.text', 'The Member is removed');
   });
 
   afterEach(() => {

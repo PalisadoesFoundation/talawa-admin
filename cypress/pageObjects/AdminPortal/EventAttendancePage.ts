@@ -62,8 +62,7 @@ export class EventAttendancePage extends BasePage<EventAttendancePage> {
       .should('be.visible')
       .click();
 
-    const optionLabel = period === 'All' ? 'All' : period;
-    cy.contains(`${this.filterMenu} [role="option"]`, optionLabel, {
+    cy.contains(`${this.filterMenu} [role="option"]`, period, {
       timeout,
     }).click();
 
