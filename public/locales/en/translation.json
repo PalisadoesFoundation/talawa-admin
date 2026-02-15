@@ -1452,6 +1452,8 @@
     "fileTooLarge": "File is too large. Maximum size is 5MB.",
     "ascendingOrder": "Ascending Order",
     "descendingOrder": "Descending Order",
+    "searchCreatedEvents": "Search created events",
+    "sortByName": "Sort by Name",
     "memberDetailNumberExample": "Ex. +1234567890",
     "memberDetailExampleLane": "Ex. Lane 2",
     "memberDetailPostalExample": "Ex. 12345",

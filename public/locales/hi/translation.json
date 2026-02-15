@@ -1401,6 +1401,8 @@
     "fileTooLarge": "फ़ाइल बहुत बड़ी है",
     "ascendingOrder": "आरोही क्रम",
     "descendingOrder": "अवरोही क्रम",
+    "searchCreatedEvents": "निर्मित कार्यक्रम खोजें",
+    "sortByName": "नाम के अनुसार छाँटें",
     "memberDetailNumberExample": "उदाहरण: 1234567890",
     "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
     "memberDetailPostalExample": "उदाहरण: 110001",

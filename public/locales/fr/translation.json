@@ -1406,6 +1406,8 @@
     "fileTooLarge": "Fichier trop volumineux",
     "ascendingOrder": "Ordre croissant",
     "descendingOrder": "Ordre décroissant",
+    "searchCreatedEvents": "Rechercher des événements créés",
+    "sortByName": "Trier par nom",
     "memberDetailNumberExample": "Exemple de numéro",
     "memberDetailExampleLane": "Exemple de rue",
     "memberDetailPostalExample": "Exemple de code postal",
