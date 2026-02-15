@@ -4,8 +4,8 @@
 
 # Variable: OAUTH\_PROVIDERS
 
-> `const` **OAUTH\_PROVIDERS**: `Record`\<[`ProviderKey`](../../../types/oauth/type-aliases/ProviderKey.md), [`IOAuthProviderConfig`](../../../types/oauth/interfaces/IOAuthProviderConfig.md)\>
+> `const` **OAUTH\_PROVIDERS**: `Record`\<[`ProviderKey`](../../../types/Auth/auth/type-aliases/ProviderKey.md), [`IOAuthProviderConfig`](../../../types/Auth/auth/interfaces/IOAuthProviderConfig.md)\>
 
-Defined in: [src/config/oauthProviders.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/config/oauthProviders.ts#L13)
+Defined in: [src/config/oauthProviders.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/config/oauthProviders.ts#L16)
 
 Central OAuth Provider Configuration

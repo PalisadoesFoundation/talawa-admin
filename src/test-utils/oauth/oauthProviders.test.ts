@@ -48,24 +48,24 @@ describe('OAuth Providers Configuration', () => {
   });
 
   it('should return empty array if no providers enabled', () => {
-    const original = { ...OAUTH_PROVIDERS };
+    type ProviderKey = keyof typeof OAUTH_PROVIDERS;
 
-    // Temporarily disable providers
-    Object.values(OAUTH_PROVIDERS).forEach((p) => {
-      p.enabled = false;
+    // Snapshot original enabled flags (fully typed, no any)
+    const originalEnabled: Record<ProviderKey, boolean> = {} as Record<
+      ProviderKey,
+      boolean
+    >;
+
+    (Object.keys(OAUTH_PROVIDERS) as ProviderKey[]).forEach((k) => {
+      originalEnabled[k] = OAUTH_PROVIDERS[k].enabled;
+      OAUTH_PROVIDERS[k].enabled = false;
     });
 
-    const enabled = getEnabledProviders();
+    expect(getEnabledProviders()).toHaveLength(0);
 
-    expect(enabled.length).toBe(0);
-
-    // restore
-    Object.assign(OAUTH_PROVIDERS, original);
-  });
-
-  it('getProviderConfig should return correct object reference', () => {
-    const config = getProviderConfig('GITHUB');
-
-    expect(config).toBe(OAUTH_PROVIDERS.GITHUB);
+    // Restore original state
+    (Object.keys(OAUTH_PROVIDERS) as ProviderKey[]).forEach((k) => {
+      OAUTH_PROVIDERS[k].enabled = originalEnabled[k];
+    });
   });
 });

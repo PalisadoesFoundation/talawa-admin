@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { IOAuthProviderConfig } from '../../../src/types/oauth';
+import type { IOAuthProviderConfig } from '../../../src/types/Auth/auth';
 
 describe('OAuth Types', () => {
   it('should allow valid OAuthProviderConfig structure', () => {
