@@ -1399,6 +1399,8 @@
     "tags": "टैग",
     "invalidFileType": "अमान्य फ़ाइल प्रकार",
     "fileTooLarge": "फ़ाइल बहुत बड़ी है",
+    "ascendingOrder": "आरोही क्रम",
+    "descendingOrder": "अवरोही क्रम",
     "memberDetailNumberExample": "उदाहरण: 1234567890",
     "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
     "memberDetailPostalExample": "उदाहरण: 110001",

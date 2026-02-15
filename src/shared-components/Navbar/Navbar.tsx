@@ -88,35 +88,40 @@ export default function PageHeader({
 
         {/* ===== Sorting Props ===== */}
         {sorting &&
-          sorting.map((sort, idx) => (
-            <div key={idx} className={styles.btnsBlock}>
-              <DropDownButton
-                options={sort.options.map((opt) => ({
-                  label: opt.label,
-                  value: String(opt.value),
-                }))}
-                selectedValue={String(sort.selected)}
-                onSelect={(val) => sort.onChange(val)}
-                ariaLabel={sort.title}
-                dataTestIdPrefix={sort.testIdPrefix}
-                parentContainerStyle={styles.dropdown}
-                containerClassName={sort.containerClassName}
-                toggleClassName={sort.toggleClassName}
-                icon={
-                  sort.icon ? (
-                    <img
-                      src={String(sort.icon)}
-                      alt={t('common:sortingIcon')}
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <SortIcon data-testid="sorting-icon" aria-hidden="true" />
-                  )
-                }
-                variant="outline-secondary"
-              />
-            </div>
-          ))}
+          sorting.map((sort, idx) => {
+            const valueMap = new Map(
+              sort.options.map((opt) => [String(opt.value), opt.value]),
+            );
+            return (
+              <div key={idx} className={styles.btnsBlock}>
+                <DropDownButton
+                  options={sort.options.map((opt) => ({
+                    label: opt.label,
+                    value: String(opt.value),
+                  }))}
+                  selectedValue={String(sort.selected)}
+                  onSelect={(val) => sort.onChange(valueMap.get(val) ?? val)}
+                  ariaLabel={sort.title}
+                  dataTestIdPrefix={sort.testIdPrefix}
+                  parentContainerStyle={styles.dropdown}
+                  containerClassName={sort.containerClassName}
+                  toggleClassName={sort.toggleClassName}
+                  icon={
+                    sort.icon ? (
+                      <img
+                        src={String(sort.icon)}
+                        alt={t('common:sortingIcon')}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <SortIcon data-testid="sorting-icon" aria-hidden="true" />
+                    )
+                  }
+                  variant="outline-secondary"
+                />
+              </div>
+            );
+          })}
 
         {/*  Optional Event Type dropdown */}
         {showEventTypeFilter && (

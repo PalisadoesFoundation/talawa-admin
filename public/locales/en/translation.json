@@ -1450,6 +1450,8 @@
     "tags": "Tags",
     "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
     "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "ascendingOrder": "Ascending Order",
+    "descendingOrder": "Descending Order",
     "memberDetailNumberExample": "Ex. +1234567890",
     "memberDetailExampleLane": "Ex. Lane 2",
     "memberDetailPostalExample": "Ex. 12345",

@@ -187,7 +187,7 @@ describe('PageHeader Component', () => {
   });
 
   it('renders actions when provided', () => {
-    render(<PageHeader actions={<button>Click Me</button>} />);
+    render(<PageHeader actions={<button type="button">Click Me</button>} />);
     expect(screen.getByText('Click Me')).toBeInTheDocument();
   });
 
@@ -227,8 +227,8 @@ describe('PageHeader Component', () => {
     expect(workshopsOption).toBeInTheDocument();
 
     // 3. Click the option (to ensure no errors occur)
-    await waitFor(async () => {
-      await userEvent.click(workshopsOption);
-    });
+    // Note: This is a smoke test to ensure the click doesn't throw,
+    // as the current onSelect handler is a no-op.
+    await userEvent.click(workshopsOption);
   });
 });

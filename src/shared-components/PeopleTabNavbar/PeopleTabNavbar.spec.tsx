@@ -35,6 +35,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
         onChange={(e) => onSearch(e.target.value)}
       />
       <button
+        type="button"
         data-testid={buttonTestId ?? 'search-button'}
         onClick={() => onSearch('clicked')}
       >
@@ -156,7 +157,11 @@ describe('PeopleTabNavbar', () => {
   it('renders action buttons when provided', () => {
     render(
       <PeopleTabNavbar
-        actions={<button data-testid="add-user">Add User</button>}
+        actions={
+          <button type="button" data-testid="add-user">
+            Add User
+          </button>
+        }
       />,
     );
 
@@ -187,12 +192,9 @@ describe('PeopleTabNavbar', () => {
   });
 
   it('applies alignmentClassName when provided', () => {
-    const { container } = render(
-      <PeopleTabNavbar alignmentClassName="custom-alignment-class" />,
-    );
-    expect(
-      container.getElementsByClassName('custom-alignment-class').length,
-    ).toBe(1);
+    render(<PeopleTabNavbar alignmentClassName="custom-alignment-class" />);
+    const alignmentContainer = screen.getByTestId('people-tab-navbar');
+    expect(alignmentContainer).toHaveClass('custom-alignment-class');
   });
 
   it('renders custom sort icon when provided', () => {

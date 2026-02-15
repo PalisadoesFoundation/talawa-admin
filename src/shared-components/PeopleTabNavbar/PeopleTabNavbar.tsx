@@ -71,6 +71,7 @@ export default function PeopleTabNavbar({
           className={[styles.peopleTabNavbarAlignment, alignmentClassName]
             .filter(Boolean)
             .join(' ')}
+          data-testid="people-tab-navbar"
         >
           {/* ===== Action Buttons ===== */}
           {actions && (

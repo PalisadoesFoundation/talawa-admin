@@ -50,6 +50,7 @@
   flex-wrap: wrap;
 
   --events-gap: var(--space-5);
+  /* stylelint-disable-next-line declaration-empty-line-before */
   column-gap: var(--events-gap, 1rem);
 }
 

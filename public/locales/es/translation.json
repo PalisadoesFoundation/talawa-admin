@@ -1382,6 +1382,8 @@
     "tags": "Etiquetas",
     "invalidFileType": "Tipo de archivo no válido",
     "fileTooLarge": "El archivo es demasiado grande",
+    "ascendingOrder": "Orden ascendente",
+    "descendingOrder": "Orden descendente",
     "memberDetailNumberExample": "Ejemplo de número",
     "memberDetailExampleLane": "Ejemplo de calle",
     "memberDetailPostalExample": "Ejemplo de código postal",

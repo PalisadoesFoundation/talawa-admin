@@ -24,6 +24,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
         <FormCheckField
           type="radio"
           id="visibility-public"
+          inline
           label={
             <div>
               <strong>{tCommon('publicEvent')}</strong>
