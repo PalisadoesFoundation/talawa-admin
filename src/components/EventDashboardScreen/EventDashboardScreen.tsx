@@ -53,6 +53,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
+  const { t: tCommon } = useTranslation('common');
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
@@ -75,7 +76,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
-              <div style={{ flex: 1 }}>
+              <div className={styles.flex}>
                 <h1>{t('title')}</h1>
               </div>
               <Outlet />
@@ -131,6 +132,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         }
         onClick={toggleDrawer}
         data-testid="toggleMenuBtn"
+        aria-label={tCommon('toggleSidebar')}
       >
         <i
           className={
@@ -158,7 +160,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
+          <div className={styles.flex}>
             <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown portal="admin" />

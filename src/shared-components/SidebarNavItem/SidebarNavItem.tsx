@@ -83,7 +83,7 @@ const SidebarNavItem = ({
         {
           fill: useSimpleButton
             ? isActive
-              ? 'var(--bs-black)'
+              ? 'var(--color-black)'
               : 'var(--bs-secondary)'
             : 'none',
           width: 'var(--space-7)',
@@ -117,7 +117,7 @@ const SidebarNavItem = ({
       style={useSimpleButton ? { height: 'var(--space-9)' } : undefined}
     >
       {({ isActive }) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className={styles.navItemContainer}>
           <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
           {!hideDrawer && label}
         </div>
