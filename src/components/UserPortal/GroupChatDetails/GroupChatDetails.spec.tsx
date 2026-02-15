@@ -1510,7 +1510,6 @@ describe('GroupChatDetails', () => {
     const orgId = filledMockChat.organization.id;
     const adminUserId = filledMockChat.members.edges[0].node.user.id;
 
-    filledMockChat.members.edges[0].node.role = 'ADMIN';
     useLocalStorage().setItem('userId', adminUserId);
 
     const fallbackMemberMock = {
@@ -1546,24 +1545,28 @@ describe('GroupChatDetails', () => {
     };
 
     render(
-      <MockedProvider
-        mocks={[fallbackMemberMock, fallbackMemberMock]}
-        cache={testCache}
-      >
-        <GroupChatDetails
-          toggleGroupChatDetailsModal={vi.fn()}
-          groupChatDetailsModalisOpen={true}
-          chat={withSafeChat(filledMockChat)}
-          chatRefetch={vi.fn()}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider
+          mocks={[fallbackMemberMock, fallbackMemberMock]}
+          cache={testCache}
+        >
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     await userEvent.click(await screen.findByTestId('addMembers'));
     await screen.findByTestId('addExistingUserModal');
 
-    const row = await screen.findByTestId('user');
-    expect(row).toHaveTextContent('No Role User');
-    expect(row).toHaveTextContent('Member');
+    await waitFor(() => {
+      const row = screen.getByTestId('user');
+      expect(row).toHaveTextContent('No Role User');
+      expect(row).toHaveTextContent('Member');
+    });
   });
 });
