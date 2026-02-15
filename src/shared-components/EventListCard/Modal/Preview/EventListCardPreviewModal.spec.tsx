@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor, within, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -1557,5 +1557,88 @@ describe('EventListCardPreviewModal', () => {
       expect(mockSetEventStartDate).toHaveBeenCalled();
       expect(mockSetEventEndDate).toHaveBeenCalled();
     });
+  });
+
+  it('updates endTime if new startTime is after current endTime', async () => {
+    let currentFormState = {
+      startTime: '09:00:00',
+      endTime: '10:00:00',
+      name: '',
+      eventDescription: '',
+      location: '',
+    };
+
+    const setFormState = vi.fn((newState) => {
+      currentFormState = { ...currentFormState, ...newState };
+    });
+
+    const startAt = dayjs().hour(9).minute(0).second(0).toISOString();
+    const endAt = dayjs().hour(10).minute(0).second(0).toISOString();
+
+    render(
+      <PreviewModal
+        eventListCardProps={{
+          id: 'event-1',
+          location: 'Test Location',
+          name: 'Test Event',
+          description: 'Test Description',
+          startAt,
+          endAt,
+          allDay: false,
+          isPublic: true,
+          isRegisterable: false,
+          isInviteOnly: false,
+          attendees: [],
+          creator: { id: '1' },
+          userRole: UserRole.REGULAR,
+          isRecurringEventTemplate: false,
+        }}
+        userId="1"
+        eventModalIsOpen={true}
+        hideViewModal={() => {}}
+        toggleDeleteModal={() => {}}
+        t={(key) => key}
+        tCommon={(key) => key}
+        isRegistered={false}
+        eventStartDate={new Date()}
+        eventEndDate={new Date()}
+        setEventStartDate={() => {}}
+        setEventEndDate={() => {}}
+        allDayChecked={false}
+        setAllDayChecked={() => {}}
+        publicChecked={true}
+        setPublicChecked={() => {}}
+        registerableChecked={false}
+        setRegisterableChecked={() => {}}
+        inviteOnlyChecked={false}
+        setInviteOnlyChecked={() => {}}
+        formState={currentFormState}
+        setFormState={setFormState}
+        registerEventHandler={async () => {}}
+        handleEventUpdate={async () => {}}
+        openEventDashboard={() => {}}
+        recurrence={null}
+        setRecurrence={() => {}}
+        customRecurrenceModalIsOpen={false}
+        setCustomRecurrenceModalIsOpen={() => {}}
+      />,
+    );
+
+    act(() => {
+      const newTime = dayjs('11:00:00', 'HH:mm:ss');
+
+      setFormState({
+        ...currentFormState,
+        startTime: newTime.format('HH:mm:ss'),
+        endTime: newTime.format('HH:mm:ss'),
+      });
+    });
+
+    expect(setFormState).toHaveBeenCalledWith(
+      expect.objectContaining({
+        startTime: '11:00:00',
+        endTime: '11:00:00',
+      }),
+    );
   });
 });
