@@ -96,7 +96,6 @@ const Requests = (): JSX.Element => {
 
   // Define constants and state variables
   const [searchByName, setSearchByName] = useState<string>('');
-  const userRole = getItem('role') as string;
   const { orgId = '' } = useParams();
   const organizationId = orgId;
 
@@ -182,7 +181,7 @@ const Requests = (): JSX.Element => {
     if (!isAdmin) {
       window.location.assign('/admin/orglist');
     }
-  }, [userRole]);
+  }, []);
 
   /**
    * Handles the search input change and updates the search term.
