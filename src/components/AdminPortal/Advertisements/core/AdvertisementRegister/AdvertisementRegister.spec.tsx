@@ -43,15 +43,6 @@ vi.mock('react-router', async () => {
 
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warning: vi.fn(),
-    info: vi.fn(),
-  },
-}));
-
 let mockUseMutation: ReturnType<typeof vi.fn>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
@@ -1689,6 +1680,63 @@ describe('Testing Advertisement Register Component', () => {
         translations.advertisementCreated,
       );
     });
+  });
+
+  it('should handle file upload error correctly', async () => {
+    // Mock console.error to suppress the error log
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const revokeSpy = vi.spyOn(URL, 'revokeObjectURL');
+
+    // Mock upload failure
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+    const { getByText, getByTestId } = render(
+      <MockedProvider>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Initial navigation
+    await userEvent.click(getByText(translations.createAdvertisement));
+
+    const mockFile = new File(['content'], 'fail.png', { type: 'image/png' });
+    const mediaInput = getByTestId('advertisementMedia');
+
+    // Trigger upload
+    // Spy on NotificationToast.error
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+    await userEvent.upload(mediaInput, mockFile);
+
+    await waitFor(() => {
+      // Check if upload was attempted
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+
+      // 1. Verify console error (Line 214)
+      expect(consoleErrorSpy).toHaveBeenCalled();
+
+      // 2. Verify Toast error (Line 215)
+      expect(toastErrorSpy).toHaveBeenCalledWith(expect.any(String));
+
+      // 3. Verify revoking blob URL (Line 220)
+      expect(revokeSpy).toHaveBeenCalled();
+    });
+
+    // Cleanup
+    consoleErrorSpy.mockRestore();
+    revokeSpy.mockRestore();
+    toastErrorSpy.mockRestore();
   });
 
   vi.useRealTimers();

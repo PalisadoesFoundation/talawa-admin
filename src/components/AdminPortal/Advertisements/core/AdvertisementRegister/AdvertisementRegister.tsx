@@ -306,9 +306,10 @@ function AdvertisementRegister({
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: formState.attachments.map(
-          ({ previewUrl, ...rest }) => rest,
-        ),
+        attachments:
+          formState.attachments.length > 0
+            ? formState.attachments.map(({ previewUrl, ...rest }) => rest)
+            : undefined,
       };
 
       if (formState.description !== null) {
