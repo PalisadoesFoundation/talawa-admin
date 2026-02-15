@@ -8,6 +8,7 @@
   align-items: stretch;
   gap: var(--space-1);
   flex-wrap: wrap;
+  min-height: var(--space-10);
 }
 
 .btnsBlockSearchBar {
