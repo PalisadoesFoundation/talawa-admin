@@ -169,8 +169,11 @@ describe('OrganizationModal Component', () => {
       type: 'image/png',
     });
     await userEvent.upload(fileInput, file);
-    await waitFor(() =>
-      expect(mockSetFormState).toHaveBeenCalledWith(
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+      const updater = mockSetFormState.mock.calls[0][0];
+      const result = updater(formState);
+      expect(result).toEqual(
         expect.objectContaining({
           avatar: {
             objectName: 'mocked-object-name',
@@ -178,8 +181,8 @@ describe('OrganizationModal Component', () => {
             mimeType: 'image/png',
           },
         }),
-      ),
-    );
+      );
+    });
     expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
   });
 
@@ -459,7 +462,10 @@ describe('OrganizationModal Component', () => {
 
     // Use waitFor to handle async state updates after upload
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith(
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+      const updater = mockSetFormState.mock.calls[0][0];
+      const result = updater(formState);
+      expect(result).toEqual(
         expect.objectContaining({
           avatar: {
             objectName: 'mocked-object-name',
@@ -488,7 +494,10 @@ describe('OrganizationModal Component', () => {
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
+      expect(toastMocks.error).toHaveBeenCalledWith({
+        key: 'invalidFileType',
+        namespace: 'errors',
+      });
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -633,7 +642,10 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('fileTooLarge');
+      expect(toastMocks.error).toHaveBeenCalledWith({
+        key: 'fileTooLarge',
+        namespace: 'errors',
+      });
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -649,7 +661,14 @@ describe('OrganizationModal Component', () => {
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
-      expect(mockSetFormState).toHaveBeenCalledWith(
+
+      // setFormState is called with a functional update for avatar
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+      // Execute the updater to verify the result
+      const updater = mockSetFormState.mock.calls[0][0];
+      // We pass the current formState to the updater
+      const result = updater(formState);
+      expect(result).toEqual(
         expect.objectContaining({
           avatar: {
             objectName: 'mocked-object-name',
@@ -671,7 +690,10 @@ describe('OrganizationModal Component', () => {
 
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(toastMocks.error).toHaveBeenCalledWith({
+        key: 'imageUploadError',
+        namespace: 'errors',
+      });
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
   });
