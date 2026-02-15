@@ -68,7 +68,7 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
-  setItem('SuperAdmin', false);
+  setItem('role', 'user');
   setItem('AdminFor', []);
   setItem('id', '123');
 });
@@ -245,9 +245,8 @@ describe('ProfileDropdown Component', () => {
 
 describe('Member screen routing testing', () => {
   test('member screen', async () => {
-    setItem('SuperAdmin', false);
+    setItem('role', 'user');
     setItem('AdminFor', []);
-    setItem('role', 'regular');
     render(
       <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
@@ -266,7 +265,6 @@ describe('Member screen routing testing', () => {
   });
 
   test('navigates to /user/settings for a user', async () => {
-    setItem('SuperAdmin', false);
     setItem('AdminFor', []);
     setItem('role', 'regular');
 
@@ -289,7 +287,7 @@ describe('Member screen routing testing', () => {
 
   test('navigates to /admin/profile for admin roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('role', 'administrator'); // Set as admin
     setItem('id', '123');
 
     render(

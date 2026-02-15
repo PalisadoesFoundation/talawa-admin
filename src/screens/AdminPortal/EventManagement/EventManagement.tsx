@@ -8,7 +8,7 @@
  * Features:
  * - Dynamically renders content based on the selected tab.
  * - Supports internationalization using the `useTranslation` hook.
- * - Determines user roles (SUPERADMIN, ADMIN, USER) based on local storage.
+ * - Determines user roles (ADMIN, USER) based on local storage.
  * - Redirects to the organization list if event or organization IDs are missing.
  * - Responsive design with buttons for desktop and dropdown for mobile views.
  *
@@ -96,13 +96,9 @@ const EventManagement = (): JSX.Element => {
   }
 
   // Determine user role based on local storage
-  const superAdmin = getItem('SuperAdmin');
-  const adminFor: string | string[] = getItem('AdminFor') || [];
-  const userRole = superAdmin
-    ? 'SUPERADMIN'
-    : adminFor?.length > 0
-      ? 'ADMIN'
-      : 'USER';
+  // Determine user role based on local storage
+  const userRoleValue = getItem('role') as string;
+  const userRole = userRoleValue === 'administrator' ? 'ADMIN' : 'USER';
 
   /**
    * List of tabs for the event dashboard.
