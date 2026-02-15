@@ -18,7 +18,7 @@
  * - `@mui/icons-material`: Provides the `ChevronRightIcon` for the navigation button.
  *
  * ### Local Storage Keys
- * - `SuperAdmin`: Boolean indicating if the user is a super admin.
+ * - `role`: String indicating the user's role (e.g., 'administrator', 'superuser', 'regular').
  * - `AdminFor`: Array or string indicating the organizations the user is an admin for.
  * - `FirstName`: The user's first name.
  * - `LastName`: The user's last name.
@@ -47,20 +47,21 @@ import { resolveProfileNavigation } from 'utils/profileNavigation';
 import styles from './ProfileCard.module.css';
 import { InterfaceProfileCardProps } from 'types/shared-components/ProfileCard/interface';
 import Button from 'shared-components/Button';
+import { useTranslation } from 'react-i18next';
 
 const ProfileCard = ({
   portal = 'admin',
 }: InterfaceProfileCardProps): React.JSX.Element => {
   const { getItem } = useLocalStorage();
   const role = getItem<string>('role');
-  const userRole = role != 'regular' ? 'Admin' : 'User';
+  const userRole = role && role.toLowerCase() !== 'regular' ? 'Admin' : 'User';
   const name = getItem<string>('name') || '';
   const nameParts = name?.split(' ') || [];
   const firstName = nameParts[0] || '';
   const lastName = nameParts.slice(1).join(' ') || '';
   const userImage = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
-
+  const { t: tCommon } = useTranslation('common');
   const MAX_NAME_LENGTH = 20;
   const fullName = `${firstName} ${lastName}`;
   const displayedName =
@@ -99,6 +100,7 @@ const ProfileCard = ({
           className={styles.chevronRightbtn}
           data-testid="profileBtn"
           onClick={() => navigate(profileDestination)}
+          aria-label={tCommon('navigateToProfile')}
         >
           <ChevronRightIcon className={styles.chevronIcon} />
         </Button>

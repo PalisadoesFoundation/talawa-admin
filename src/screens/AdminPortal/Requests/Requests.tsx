@@ -14,7 +14,7 @@
  *   `REJECT_ORGANIZATION_REQUEST_MUTATION`.
  *
  * @remarks
- * Only administrators can access this screen; others are redirected to
+ * Only administrators and superusers can access this screen; others are redirected to
  * `/admin/orglist`.
  *
  * @returns The rendered Requests component.
@@ -174,7 +174,7 @@ const Requests = (): JSX.Element => {
 
   // Check authorization
   useEffect(() => {
-    const userRole = getItem('role') as string | null;
+    const userRole = (getItem('role') as string | null) ?? '';
     const normalizedRole = userRole?.toLowerCase();
     const isAdmin =
       normalizedRole === 'administrator' || normalizedRole === 'superuser';

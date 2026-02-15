@@ -136,7 +136,7 @@ describe('Event Management', () => {
     cleanup();
     clearAllItems();
 
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Navigation Tests', () => {
@@ -180,8 +180,9 @@ describe('Event Management', () => {
       const backButton = screen.getByTestId('backBtn');
       await user.click(backButton);
 
-      const eventsScreen = screen.getByTestId('eventsScreen');
-      expect(eventsScreen).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('eventsScreen')).toBeInTheDocument();
+      });
     });
     it('redirects to orglist when params are missing', async () => {
       vi.mocked(useParams).mockReturnValue({});
