@@ -215,11 +215,12 @@ export default function Organizations(): React.JSX.Element {
   const [filterName, setFilterName] = React.useState('');
   const [searchText, setSearchText] = useState('');
   const [mode, setMode] = React.useState(0);
+  const role = getItem('role') == 'administrator' ? 'administrator' : 'user';
 
   const modes = [
     t('allOrganizations'),
     t('joinedOrganizations'),
-    t('createdOrganizations'),
+    ...(role === 'administrator' ? [t('createdOrganizations')] : []),
   ];
 
   const userId: string | null = getItem('userId');
@@ -342,7 +343,6 @@ export default function Organizations(): React.JSX.Element {
   };
 
   const isLoading = loadingAll || loadingJoined || loadingCreated;
-  const role = 'user';
 
   return (
     <>

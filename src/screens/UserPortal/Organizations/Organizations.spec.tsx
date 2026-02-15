@@ -568,6 +568,8 @@ test('should search organizations when clicking search button', async () => {
 });
 
 test('Mode dropdown switches list correctly', async () => {
+  setItem('role', 'administrator');
+
   render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -886,6 +888,8 @@ test('should handle mode switching to joined organizations', async () => {
 });
 
 test('should handle mode switching to created organizations', async () => {
+  setItem('role', 'administrator');
+
   render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -910,6 +914,38 @@ test('should handle mode switching to created organizations', async () => {
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
+});
+
+test('should not show created organizations option for user role', async () => {
+  // Don't set role or set it to 'user' - both should have the same effect
+  setItem('role', 'user');
+
+  render(
+    <MockedProvider link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
+
+  // Open the mode dropdown
+  const modeButton = screen.getByTestId('modeChangeBtn-toggle');
+  await userEvent.click(modeButton);
+
+  // Should have Mode 0 (All Organizations) and Mode 1 (Joined Organizations)
+  expect(screen.getByTestId('modeChangeBtn-item-0')).toBeInTheDocument();
+  expect(screen.getByTestId('modeChangeBtn-item-1')).toBeInTheDocument();
+
+  // Should NOT have Mode 2 (Created Organizations)
+  expect(screen.queryByTestId('modeChangeBtn-item-2')).not.toBeInTheDocument();
 });
 
 test('should handle null user data in joined organizations', async () => {
@@ -1043,6 +1079,8 @@ test('should handle missing organizationsWhereMember in joined organizations', a
 });
 
 test('should handle null createdOrganizations in created organizations', async () => {
+  setItem('role', 'administrator');
+
   const nullCreatedMocks = [
     COMMUNITY_TIMEOUT_MOCK,
     {
@@ -1108,6 +1146,8 @@ test('should handle null createdOrganizations in created organizations', async (
 });
 
 test('should handle missing createdOrganizations field', async () => {
+  setItem('role', 'administrator');
+
   const missingUserMocks = [
     COMMUNITY_TIMEOUT_MOCK,
     {
@@ -1662,6 +1702,8 @@ test('should search in joined mode (mode 1) via doSearch', async () => {
 });
 
 test('should search in created mode (mode 2) via doSearch', async () => {
+  setItem('role', 'administrator');
+
   const createdSearchMocks = [
     COMMUNITY_TIMEOUT_MOCK,
     CURRENT_USER_VERIFIED_MOCK,
@@ -1997,6 +2039,8 @@ test('should search joined organizations in mode 1', async () => {
 });
 
 test('should search created organizations in mode 2', async () => {
+  setItem('role', 'administrator');
+
   const createdSearchLink = new StaticMockLink(
     [
       COMMUNITY_TIMEOUT_MOCK,
