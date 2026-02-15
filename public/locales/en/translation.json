@@ -4,6 +4,10 @@
     "failedToLoad": "Failed to load component: <1>{{componentName}}</1>",
     "id": "Plugin: <1>{{pluginId}}</1>"
   },
+  "oauth": {
+    "continueWith": "Continue with {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
@@ -1193,6 +1197,7 @@
     "Admin": "Admin",
     "loading": "Loading...",
     "noAttendees": "Attendees not Found",
+    "unknownMember": "Unknown Member",
     "attendeeCount": "Attendee Count",
     "maleAttendees": "Male Attendees",
     "femaleAttendees": "Female Attendees",
@@ -2460,7 +2465,8 @@
     "loading": "Loading...",
     "selectRow": "Select row {{rowKey}}",
     "previousYear": "Previous Year",
-    "nextYear": "Next Year"
+    "nextYear": "Next Year",
+    "member": "Member"
   },
   "donation": {
     "amount_label": "Amount",
@@ -2561,5 +2567,17 @@
   },
   "csv": {
     "demographics": "{{category}} Demographics"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
+    },
+    "expandDay": "Expand day"
   }
 }

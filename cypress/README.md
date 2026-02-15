@@ -22,21 +22,32 @@ pnpm run cy:open
 pnpm run cy:run
 ```
 
+## Current E2E Defaults
+
+- `specPattern`: `cypress/e2e/**/*.cy.ts`
+- `testIsolation`: `true`
+- `retries`: `runMode: 2`, `openMode: 0`
+- `defaultCommandTimeout`: `30000`
+- `requestTimeout`, `responseTimeout`, `pageLoadTimeout`: `30000`
+
 ## Run Subsets by Folder
 
 ```bash
 # Admin portal specs
-pnpm run cy:run --spec "cypress/e2e/AdminPortal/**/*.cy.ts"
+pnpm run cy:run:admin
 
 # User portal specs
-pnpm run cy:run --spec "cypress/e2e/UserPortal/**/*.cy.ts"
+pnpm run cy:run:user
 
 # Authentication specs
-pnpm run cy:run --spec "cypress/e2e/Auth/**/*.cy.ts"
+pnpm run cy:run:auth
 
 # Shared component and utility specs
-pnpm run cy:run --spec "cypress/e2e/SharedComponents/**/*.cy.ts"
+pnpm run cy:run:shared
 ```
+
+For a single spec file, run `pnpm run cy:open` and select the spec in the
+interactive runner.
 
 ## Additional Guide
 

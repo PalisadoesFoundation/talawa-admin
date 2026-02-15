@@ -1,6 +1,6 @@
 import React from 'react';
 import Calendar from './EventCalender';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -103,7 +103,8 @@ describe('Calendar', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should render the current month and year', () => {
@@ -176,7 +177,7 @@ describe('Calendar', () => {
       </MockedProvider>,
     );
     await wait();
-    const prevButton = screen.getByLabelText(/previousYear/i);
+    const prevButton = screen.getByLabelText(/Previous Year/i);
     const nextButton = screen.getByTestId('nextYear');
 
     // click previous year
@@ -499,9 +500,9 @@ describe('Calendar', () => {
     await wait();
     // Verify that the year view renders by checking for year navigation
     const prevYearButton = screen.getByRole('button', {
-      name: /previousYear/i,
+      name: /Previous Year/i,
     });
-    const nextYearButton = screen.getByRole('button', { name: /nextYear/i });
+    const nextYearButton = screen.getByRole('button', { name: /Next Year/i });
     expect(prevYearButton).toBeInTheDocument();
     expect(nextYearButton).toBeInTheDocument();
   });
