@@ -248,7 +248,7 @@ describe('Apollo Client Configuration', () => {
       }: InterfaceErrorCallbackParams): void => {
         if (networkError) {
           NotificationToast.error(
-            'API server unavailable. Check your connection or try again later',
+            { key: 'talawaApiUnavailable', namespace: 'errors' },
             {
               toastId: 'apiServer',
             },
@@ -260,7 +260,7 @@ describe('Apollo Client Configuration', () => {
       errorCallback({ networkError: mockNetworkError });
 
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'API server unavailable. Check your connection or try again later',
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
         {
           toastId: 'apiServer',
         },
@@ -972,7 +972,7 @@ describe('Apollo Client Configuration', () => {
       });
 
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'API server unavailable. Check your connection or try again later',
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
         {
           toastId: 'apiServer',
         },
@@ -1015,7 +1015,7 @@ describe('Apollo Client Configuration', () => {
       });
 
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'API server unavailable. Check your connection or try again later',
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
         {
           toastId: 'apiServer',
         },

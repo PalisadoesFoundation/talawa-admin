@@ -61,7 +61,7 @@
 .mainContainer50 {
   width: 100%;
   flex-grow: 1;
-  padding: var(--space-5);
+  padding: var(--space-3) var(--space-5) var(--space-5);
   max-height: 100%;
   overflow: hidden auto;
   background-color: var(--color-gray-50);
@@ -71,13 +71,12 @@
   display: flex;
   align-items: stretch;
   width: 100%;
-  margin-bottom: var(--space-5);
+  margin-bottom: var(--space-2);
 }
 
 /* :global is required to override SearchFilterBar's scoped .searchBarContainer styles. */
 .donateSearchContainer :global(.searchBarContainer) {
   margin: 0;
-  max-width: 100%;
 }
 
 .inputContainer {
@@ -92,16 +91,16 @@
       var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
       var(--color-gray-700);
-  transition: box-shadow var(--transition-fast) ease;
 }
 
 .box {
   width: auto;
   background-color: var(--color-white);
-  margin-top: var(--space-5);
+  margin-top: 0;
   padding: var(--space-6);
   border: var(--border-1) solid var(--color-gray-100);
   border-radius: var(--space-4);
+  transition: box-shadow var(--transition-fast) ease;
 }
 
 .heading {
@@ -114,6 +113,7 @@
 
 .donateBtn {
   padding-inline: var(--space-5);
+  margin-top: var(--space-3);
   margin-left: auto;
   display: block;
 }

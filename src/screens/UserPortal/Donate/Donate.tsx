@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FormControl, InputGroup } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, type ApolloError } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +22,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { InterfaceDonation } from 'types/UserPortal/Donation/interface';
+import type {
+  InterfaceDonation,
+  IDonationTableRow,
+} from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
@@ -32,13 +35,6 @@ const currencyOptions = currencies.map((currency) => ({
   value: currency,
   label: currency,
 }));
-
-interface IDonationTableRow {
-  id: string;
-  donor: string;
-  amount: number;
-  updatedAt: string;
-}
 
 /**
  * Component for handling donations to an organization.
@@ -181,10 +177,7 @@ export default function Donate(): JSX.Element {
    * `createDonation`, remove this fallback and its string checks.
    */
   const shouldFallbackToLegacyDonationMutation = (error: unknown): boolean => {
-    const apolloError = error as {
-      graphQLErrors?: Array<{ message?: string }>;
-      message?: string;
-    };
+    const apolloError = error as ApolloError;
 
     const combinedMessage = [
       apolloError?.message,
@@ -277,7 +270,7 @@ export default function Donate(): JSX.Element {
   };
 
   return (
-    <div className="mt-4">
+    <div className="mt-2">
       <div className={styles.mainContainer50}>
         <SearchFilterBar
           searchPlaceholder={t('searchDonations')}
@@ -349,16 +342,18 @@ export default function Donate(): JSX.Element {
             <span>{t('nothingToShow')}</span>
           )}
 
-          <PaginationList
-            count={filteredDonationRows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={(_, p) => setPage(p)}
-            onRowsPerPageChange={(e) => {
-              setRowsPerPage(parseInt(e.target.value, 10));
-              setPage(0);
-            }}
-          />
+          {filteredDonationRows.length > 0 && (
+            <PaginationList
+              count={filteredDonationRows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={(_, p) => setPage(p)}
+              onRowsPerPageChange={(e) => {
+                setRowsPerPage(parseInt(e.target.value, 10));
+                setPage(0);
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

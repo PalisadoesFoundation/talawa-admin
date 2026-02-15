@@ -187,7 +187,7 @@ const errorLink = onError(
       }
 
       NotificationToast.error(
-        'API server unavailable. Check your connection or try again later',
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
         { toastId: 'apiServer' },
       );
     }

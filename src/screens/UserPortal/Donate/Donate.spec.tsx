@@ -550,9 +550,9 @@ describe('Donate Component', () => {
         'Missing required donation identifiers for mutation.',
         expect.objectContaining({ userId: null, organizationId: '' }),
       );
+      expect(mockToast.success).not.toHaveBeenCalled();
+      expect(mockErrorHandler).not.toHaveBeenCalled();
     });
-    expect(mockToast.success).not.toHaveBeenCalled();
-    expect(mockErrorHandler).not.toHaveBeenCalled();
   });
 
   test('aborts donation when organizationId is missing', async () => {
@@ -572,9 +572,9 @@ describe('Donate Component', () => {
         'Missing required donation identifiers for mutation.',
         expect.objectContaining({ userId: '123', organizationId: undefined }),
       );
+      expect(mockToast.success).not.toHaveBeenCalled();
+      expect(mockErrorHandler).not.toHaveBeenCalled();
     });
-    expect(mockToast.success).not.toHaveBeenCalled();
-    expect(mockErrorHandler).not.toHaveBeenCalled();
   });
 
   test('shows error toast for donation amount below minimum', async () => {
