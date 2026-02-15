@@ -28,11 +28,12 @@ const renderWithI18n = (ui: React.ReactElement) => {
 
 describe('RecurrenceDropdown', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders the dropdown with current label', () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, act, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import dayjs from 'dayjs';
@@ -220,7 +220,8 @@ const tCommon = (key: string) => key;
 describe('EventForm', () => {
   const user = userEvent.setup();
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
   test('submits with computed ISO dates for all-day event with future dates', async () => {
     const handleSubmit = vi.fn();
