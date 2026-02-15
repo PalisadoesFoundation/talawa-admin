@@ -14,7 +14,7 @@
  *   `REJECT_ORGANIZATION_REQUEST_MUTATION`.
  *
  * @remarks
- * Only administrators and superadmins can access this screen; others are redirected to
+ * Only administrators and superusers can access this screen; others are redirected to
  * `/admin/orglist`.
  *
  * @returns The rendered Requests component.
@@ -96,7 +96,6 @@ const Requests = (): JSX.Element => {
 
   // Define constants and state variables
   const [searchByName, setSearchByName] = useState<string>('');
-  const userRole = getItem('role') as string;
   const { orgId = '' } = useParams();
   const organizationId = orgId;
 
@@ -174,16 +173,15 @@ const Requests = (): JSX.Element => {
 
   // Check authorization
   useEffect(() => {
-    const rawSuperAdmin = getItem('SuperAdmin');
-    const isSuperAdmin =
-      rawSuperAdmin === true ||
-      rawSuperAdmin === 'true' ||
-      rawSuperAdmin === 'True';
-    const isAdmin = userRole?.toLowerCase() === 'administrator';
-    if (!(isAdmin || isSuperAdmin)) {
+    const normalizedRole = (
+      (getItem('role') as string | null) ?? ''
+    ).toLowerCase();
+    const isAdmin =
+      normalizedRole === 'administrator' || normalizedRole === 'superuser';
+    if (!isAdmin) {
       window.location.assign('/admin/orglist');
     }
-  }, [userRole]);
+  }, []);
 
   /**
    * Handles the search input change and updates the search term.
