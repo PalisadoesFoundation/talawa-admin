@@ -338,14 +338,14 @@ export default function GroupChatDetails({
             size="custom"
             customSize={150}
           />
-          <button
+          <Button
             type="button"
             data-testid="editImageBtn"
             onClick={handleImageClick}
             className={styles.editImgBtn}
           >
             <FiEdit />
-          </button>
+          </Button>
 
           {editChatTitle ? (
             <div className={styles.editChatNameContainer}>

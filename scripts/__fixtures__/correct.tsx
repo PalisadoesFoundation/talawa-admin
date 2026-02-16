@@ -1,22 +1,23 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from '../../src/shared-components/NotificationToast/NotificationToast';
+import Button from '../../src/shared-components/Button/Button.tsx';
 
 // Single component containing translated text, attrs, and toasts
 export function CorrectFixture() {
   const { t } = useTranslation();
 
   React.useEffect(() => {
-    toast.error(t('errors.somethingWrong'));
-    toast.success(t('success.operationCompleted'));
-    toast.warning(t('warnings.checkInput'));
-    toast.info(t('info.updateAvailable'));
+    NotificationToast.error(t('errors.somethingWrong'));
+    NotificationToast.success(t('success.operationCompleted'));
+    NotificationToast.warning(t('warnings.checkInput'));
+    NotificationToast.info(t('info.updateAvailable'));
   }, [t]);
 
   return (
     <div>
       <h1>{t('dashboard.welcome')}</h1>
-      <button>{t('common.clickMe')}</button>
+      <Button>{t('common.clickMe')}</Button>
       <p>{t('dashboard.description')}</p>
       <input
         placeholder={t('form.enterName')}

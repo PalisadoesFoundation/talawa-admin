@@ -4,18 +4,9 @@
  * A reusable navigation item component for sidebars with icon and label support.
  * Handles active/inactive states and adapts to drawer visibility.
  *
- * @component
- * @param {ISidebarNavItemProps} props - The props for the component
- * @param {string} props.to - Navigation target URL
- * @param {React.ReactNode} props.icon - Icon component or element
- * @param {string} props.label - Display label for the navigation item
- * @param {string} props.testId - Test ID for testing purposes
- * @param {boolean} props.hideDrawer - Whether the drawer is hidden/collapsed
- * @param {() => void} [props.onClick] - Optional click handler
- * @param {boolean} [props.useSimpleButton] - Use simple button style (for org drawers)
- * @param {'react-icon' | 'svg'} [props.iconType] - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+ * @param props - The props for the component
  *
- * @returns {React.ReactElement} The rendered SidebarNavItem component
+ * @returns React.ReactElement The rendered SidebarNavItem component
  *
  * @example
  * ```tsx
@@ -27,8 +18,10 @@
  *   testId="dashboardBtn"
  *   hideDrawer={false}
  * />
+ * ```
  *
  * // With react-icon
+ * ```tsx
  * <SidebarNavItem
  *   to="/notifications"
  *   icon={<FaBell />}
@@ -42,7 +35,7 @@
 
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SidebarNavItem.module.css';
 import type { ISidebarNavItemProps } from '../../types/SidebarNavItem/interface';
 
 const SidebarNavItem = ({

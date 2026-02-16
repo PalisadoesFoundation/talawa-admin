@@ -134,13 +134,13 @@ export default function MessageInput({
         }}
         data-testid="messageInput"
         startAdornment={
-          <button
+          <Button
             type="button"
             onClick={onAddAttachment}
             className={styles.addAttachmentBtn}
           >
             <GrAttachment />
-          </button>
+          </Button>
         }
         endAdornment={
           <Button

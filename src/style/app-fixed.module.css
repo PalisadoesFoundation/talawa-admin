@@ -2706,21 +2706,6 @@ form label,
 
 /* -- CollapsibleDropdown.tsx -- */
 
-.collapsibleDropdownIconWrapper {
-  width: 36px;
-}
-
-.collapsibleDropdownCollapseBtn {
-  height: 48px;
-}
-
-.collapsibleDropdownIconWrapperSm {
-  width: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 /* -- ContriStats.tsx -- */
 
 .fonts {
@@ -3774,22 +3759,6 @@ form label,
   display: flex;
   gap: 10px;
   align-items: center;
-}
-
-/* -- HolidayCard.tsx -- */
-
-.holidayCard {
-  color: var(--holidayCard-color);
-  background-color: var(--holidayCard-bg);
-  font-size: 10px;
-  font-weight: 400;
-  display: flex;
-  padding: 8px 4px;
-  border-radius: 5px;
-  margin-bottom: 4px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 /* -- IconComponent.tsx -- */

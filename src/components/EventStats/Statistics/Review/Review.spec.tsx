@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { ToastContainer } from 'react-toastify';
+import { NotificationToastContainer } from 'shared-components/NotificationToast/NotificationToast';
 import { describe, expect, it } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -69,7 +69,7 @@ describe('Testing Review Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <ReviewStats {...nonEmptyReviewProps} />
           </I18nextProvider>
         </Provider>
@@ -90,7 +90,7 @@ describe('Testing Review Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <ReviewStats {...emptyReviewProps} />
           </I18nextProvider>
         </Provider>

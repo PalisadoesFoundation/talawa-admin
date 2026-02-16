@@ -341,7 +341,7 @@ function SubTags(): JSX.Element {
                   <IconComponent name="Tag" />
                 </div>
 
-                <button
+                <Button
                   type="button"
                   onClick={() => navigate(`/admin/orgtags/${orgId}`)}
                   onKeyDown={(e) => {
@@ -358,10 +358,10 @@ function SubTags(): JSX.Element {
                 >
                   {t('tags')}
                   <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
-                </button>
+                </Button>
 
                 {orgUserTagAncestors?.map((tag, index) => (
-                  <button
+                  <Button
                     type="button"
                     key={index}
                     className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
@@ -385,7 +385,7 @@ function SubTags(): JSX.Element {
                         aria-hidden="true"
                       />
                     )}
-                  </button>
+                  </Button>
                 ))}
               </div>
               <div
