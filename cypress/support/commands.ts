@@ -607,7 +607,7 @@ Cypress.Commands.add(
           })
           .then((res) => ({
             categoryId: (res as { categoryId: string }).categoryId,
-            name: resolvedName
+            name: resolvedName,
           })),
       ) as Cypress.Chainable<{ categoryId: string; name?: string }>;
     }
