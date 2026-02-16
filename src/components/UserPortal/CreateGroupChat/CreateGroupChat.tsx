@@ -46,7 +46,6 @@ import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -64,14 +63,7 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-
-interface InterfaceCreateGroupChatProps {
-  toggleCreateGroupChatModal: () => void;
-  createGroupChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
-}
+import type { InterfaceCreateGroupChatProps } from 'types/UserPortal/CreateGroupChat/interface';
 
 const { getItem } = useLocalStorage();
 
