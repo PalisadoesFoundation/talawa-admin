@@ -49,30 +49,8 @@ vi.mock('react-toastify', () => ({
   toast: sharedMocks.toast,
 }));
 
-const mockIcon = (id: string) => {
-  const Icon = () => React.createElement('div', { 'data-testid': id });
-  return Icon;
-};
-
-const iconMocks = {
-  Circle: mockIcon('circle-icon'),
-  WarningAmberRounded: mockIcon('warning-icon'),
-  ExpandMore: mockIcon('expand-more-icon'),
-  Event: mockIcon('event-icon'),
-  IoLocationOutline: mockIcon('location-icon'),
-  IoIosHand: mockIcon('hand-icon'),
-  FaCheck: mockIcon('check-icon'),
-};
-
-const {
-  Circle,
-  WarningAmberRounded,
-  ExpandMore,
-  Event,
-  IoLocationOutline,
-  IoIosHand,
-  FaCheck,
-} = iconMocks;
+const mockIcon = (id: string) => () =>
+  React.createElement('div', { 'data-testid': id });
 
 vi.mock('@mui/icons-material', async () => {
   const actual = (await vi.importActual('@mui/icons-material')) as Record<
@@ -81,23 +59,23 @@ vi.mock('@mui/icons-material', async () => {
   >;
   return {
     ...actual,
-    Circle,
-    WarningAmberRounded,
-    ExpandMore,
-    Event,
+    Circle: mockIcon('circle-icon'),
+    WarningAmberRounded: mockIcon('warning-icon'),
+    ExpandMore: mockIcon('expand-more-icon'),
+    Event: mockIcon('event-icon'),
   };
 });
 
 vi.mock('react-icons/io5', () => ({
-  IoLocationOutline,
+  IoLocationOutline: mockIcon('location-icon'),
 }));
 
 vi.mock('react-icons/io', () => ({
-  IoIosHand,
+  IoIosHand: mockIcon('hand-icon'),
 }));
 
 vi.mock('react-icons/fa', () => ({
-  FaCheck,
+  FaCheck: mockIcon('check-icon'),
 }));
 
 vi.mock('react-router-dom', async () => {
