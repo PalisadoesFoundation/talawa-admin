@@ -1936,7 +1936,9 @@
       "resetButtonAriaLabel": "重试"
     },
     "messageActions": "消息操作",
-    "addAttachment": "添加附件"
+    "addAttachment": "添加附件",
+    "removeAttachment": "删除附件",
+    "closeReply": "关闭回复"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",

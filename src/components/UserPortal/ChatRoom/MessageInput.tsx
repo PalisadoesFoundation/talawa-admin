@@ -34,7 +34,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
-import { FormTextField } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { GrAttachment } from 'react-icons/gr';
 import SendIcon from '@mui/icons-material/Send';
 import { Close } from '@mui/icons-material';
@@ -102,6 +102,7 @@ export default function MessageInput({
             data-testid="closeReply"
             onClick={onCloseReply}
             className={styles.closeBtn}
+            aria-label={t('closeReply')}
           >
             <Close />
           </Button>
@@ -115,6 +116,7 @@ export default function MessageInput({
             data-testid="removeAttachment"
             onClick={onRemoveAttachment}
             className={styles.closeBtn}
+            aria-label={t('removeAttachment')}
           >
             <Close />
           </Button>
@@ -149,6 +151,7 @@ export default function MessageInput({
             variant="primary"
             id="button-send"
             data-testid="sendMessage"
+            aria-label={t('sendMessage')}
           >
             <SendIcon fontSize="small" />
           </Button>

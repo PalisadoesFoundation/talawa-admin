@@ -1931,7 +1931,9 @@
       "resetButtonAriaLabel": "फिर से प्रयास करें"
     },
     "messageActions": "संदेश क्रियाएं",
-    "addAttachment": "संलग्नक जोड़ें"
+    "addAttachment": "संलग्नक जोड़ें",
+    "removeAttachment": "संलग्नक हटाएँ",
+    "closeReply": "उत्तर बंद करें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

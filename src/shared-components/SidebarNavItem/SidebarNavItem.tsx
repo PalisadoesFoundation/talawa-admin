@@ -36,7 +36,9 @@
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './SidebarNavItem.module.css';
-import type { ISidebarNavItemProps } from '../../types/SidebarNavItem/interface';
+import type { ISidebarNavItemProps } from 'types/SidebarNavItem/interface';
+
+const ICON_SIZE = 25;
 
 const SidebarNavItem = ({
   to,
@@ -57,7 +59,6 @@ const SidebarNavItem = ({
 
       // Use explicit iconType prop for robust icon detection
       const isReactIcon = iconType === 'react-icon';
-      const iconSize = 25;
 
       if (isReactIcon) {
         // Handle React Icons with style prop
@@ -65,7 +66,7 @@ const SidebarNavItem = ({
           icon as React.ReactElement<{ style?: React.CSSProperties }>,
           {
             style: {
-              fontSize: iconSize,
+              fontSize: ICON_SIZE,
               color: isActive ? 'var(--bs-black)' : 'var(--bs-secondary)',
             },
           },
@@ -81,8 +82,8 @@ const SidebarNavItem = ({
               ? 'var(--bs-black)'
               : 'var(--bs-secondary)'
             : 'none',
-          width: iconSize,
-          height: iconSize,
+          width: ICON_SIZE,
+          height: ICON_SIZE,
           stroke: useSimpleButton
             ? undefined
             : isActive

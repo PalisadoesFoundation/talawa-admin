@@ -1936,7 +1936,9 @@
       "resetButtonAriaLabel": "Réessayer"
     },
     "messageActions": "Actions de message",
-    "addAttachment": "Ajouter une pièce jointe"
+    "addAttachment": "Ajouter une pièce jointe",
+    "removeAttachment": "Supprimer la pièce jointe",
+    "closeReply": "Fermer la réponse"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",

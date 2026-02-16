@@ -1919,7 +1919,9 @@
       "resetButtonAriaLabel": "Try again"
     },
     "messageActions": "Message actions",
-    "addAttachment": "Add Attachment"
+    "addAttachment": "Add Attachment",
+    "removeAttachment": "Remove Attachment",
+    "closeReply": "Close Reply"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

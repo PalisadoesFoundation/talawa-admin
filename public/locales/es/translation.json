@@ -1919,7 +1919,9 @@
       "resetButtonAriaLabel": "Intentar de nuevo"
     },
     "messageActions": "Acción del mensaje",
-    "addAttachment": "Agregar archivo adjunto"
+    "addAttachment": "Agregar archivo adjunto",
+    "removeAttachment": "Eliminar archivo adjunto",
+    "closeReply": "Cerrar Responder"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

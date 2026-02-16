@@ -11,7 +11,7 @@
 .sidebarBtn {
   background-color: transparent;
   color: var(--sidebar-option-text-inactive);
-  font-weight: normal;
+  font-weight: var(--font-weight-regular);
   cursor: pointer;
 }
 
@@ -23,7 +23,7 @@
 .sidebarBtnActive {
   background-color: var(--sidebar-option-bg);
   color: var(--sidebar-option-text-active);
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .iconWrapper {
