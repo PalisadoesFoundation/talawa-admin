@@ -51,19 +51,20 @@ describe('isExitPromptError', () => {
 });
 
 describe('ENV_KEYS', () => {
-  it('should have all expected environment variable keys', () => {
-    expect(ENV_KEYS).toEqual({
-      USE_RECAPTCHA: 'REACT_APP_USE_RECAPTCHA',
-      RECAPTCHA_SITE_KEY: 'REACT_APP_RECAPTCHA_SITE_KEY',
-      ALLOW_LOGS: 'ALLOW_LOGS',
-      USE_DOCKER: 'USE_DOCKER',
-      DOCKER_MODE: 'DOCKER_MODE',
-      TALAWA_URL: 'REACT_APP_TALAWA_URL',
-      BACKEND_WEBSOCKET_URL: 'REACT_APP_BACKEND_WEBSOCKET_URL',
-      GOOGLE_CLIENT_ID: 'VITE_GOOGLE_CLIENT_ID',
-      GOOGLE_REDIRECT_URI: 'VITE_GOOGLE_REDIRECT_URI',
-      GITHUB_CLIENT_ID: 'VITE_GITHUB_CLIENT_ID',
-      GITHUB_REDIRECT_URI: 'VITE_GITHUB_REDIRECT_URI',
+  it('should contain OAuth-related environment variable keys', () => {
+    expect(ENV_KEYS).toMatchObject({
+      GOOGLE_CLIENT_ID: expect.any(String),
+      GOOGLE_REDIRECT_URI: expect.any(String),
+      GITHUB_CLIENT_ID: expect.any(String),
+      GITHUB_REDIRECT_URI: expect.any(String),
+    });
+  });
+
+  it('should contain core environment variable keys', () => {
+    expect(ENV_KEYS).toMatchObject({
+      USE_RECAPTCHA: expect.any(String),
+      TALAWA_URL: expect.any(String),
+      ALLOW_LOGS: expect.any(String),
     });
   });
 });

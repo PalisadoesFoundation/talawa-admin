@@ -10,7 +10,7 @@ import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 import askAndSetOAuth from 'setup/oauthConfig/oauthConfig';
 import { pathToFileURL } from 'url';
-import { ENV_KEYS, isExitPromptError } from './utils';
+import { ENV_KEYS, isExitPromptError } from 'setup/utils';
 
 /**
  * Environment variable value constants

@@ -15,6 +15,49 @@ interface InterfaceOAuthProviderConfig {
 }
 
 /**
+ * Validates that a client ID is not empty or whitespace-only.
+ *
+ * @param value - The client ID value to validate
+ * @param provider - The OAuth provider name (e.g., "Google", "GitHub")
+ * @returns `true` if valid, or an error message string if invalid
+ */
+export const validateClientId = (
+  value: string,
+  provider: string,
+): boolean | string => {
+  if (!value.trim()) {
+    return `${provider} Client ID cannot be empty.`;
+  }
+  return true;
+};
+
+/**
+ * Validates that a redirect URI is not empty and is a valid http/https URL.
+ *
+ * @param value - The redirect URI value to validate
+ * @param provider - The OAuth provider name (e.g., "Google", "GitHub")
+ * @returns `true` if valid, or an error message string if invalid
+ */
+export const validateRedirectUri = (
+  value: string,
+  provider: string,
+): boolean | string => {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return `${provider} Redirect URI cannot be empty.`;
+  }
+  try {
+    const url = new URL(trimmed);
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      return 'Please enter a valid URL with http or https protocol.';
+    }
+    return true;
+  } catch {
+    return 'Please enter a valid URL with http or https protocol.';
+  }
+};
+
+/**
  * Configures a single OAuth provider by prompting for credentials and updating environment variables.
  *
  * @remarks
@@ -71,26 +114,14 @@ async function configureProvider(
       type: 'input',
       name: 'clientId',
       message: `Enter your ${config.name} OAuth Client ID:`,
-      validate: (input: string) =>
-        input.trim().length > 0 || `${config.name} Client ID cannot be empty.`,
+      validate: (input: string) => validateClientId(input, config.name),
     },
     {
       type: 'input',
       name: 'redirectUri',
       message: `Enter your ${config.name} OAuth Redirect URI:`,
       default: config.defaultRedirectUri,
-      validate: (input: string) => {
-        const trimmed = input.trim();
-        if (!trimmed) return `${config.name} Redirect URI cannot be empty.`;
-        try {
-          const url = new URL(trimmed);
-          if (url.protocol !== 'http:' && url.protocol !== 'https:')
-            return 'Please enter a valid URL with http or https protocol.';
-          return true;
-        } catch {
-          return 'Please enter a valid URL with http or https protocol.';
-        }
-      },
+      validate: (input: string) => validateRedirectUri(input, config.name),
     },
   ]);
 
