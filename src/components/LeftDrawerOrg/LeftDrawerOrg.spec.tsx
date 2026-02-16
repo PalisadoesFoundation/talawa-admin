@@ -616,14 +616,14 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass(/_leftDrawerActiveButton_/);
+      expect(membersLink).toHaveClass('leftDrawerActiveButton');
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass(/_leftDrawerInactiveButton_/);
+      expect(membersLink).toHaveClass('leftDrawerInactiveButton');
     });
 
     it('should render icon components with correct props', () => {

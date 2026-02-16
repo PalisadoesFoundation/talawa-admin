@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import Notification from './Notification';
@@ -151,7 +151,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 describe('Notification Component', () => {
@@ -358,8 +359,10 @@ describe('Pagination Visibility', () => {
       expect(screen.getByText(/you're all caught up!/i)).toBeInTheDocument();
     });
 
-    expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+    });
   });
 
   it('should hide pagination when there is exactly 1 notification and page is 0', async () => {
@@ -376,8 +379,10 @@ describe('Pagination Visibility', () => {
       expect(screen.getByText('Notification 1')).toBeInTheDocument();
     });
 
-    expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
-    expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+    });
   });
 
   it('should show pagination when there are more than 1 notifications', async () => {
@@ -394,8 +399,10 @@ describe('Pagination Visibility', () => {
       expect(screen.getByText('Notification 1')).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/prev/i)).toBeInTheDocument();
-    expect(screen.getByText(/next/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/prev/i)).toBeInTheDocument();
+      expect(screen.getByText(/next/i)).toBeInTheDocument();
+    });
   });
 
   it('should keep pagination visible when navigating beyond first page', async () => {
@@ -414,8 +421,10 @@ describe('Pagination Visibility', () => {
     await screen.findByText('Notification 7');
 
     // Pagination should still be visible
-    expect(screen.getByText(/prev/i)).toBeInTheDocument();
-    expect(screen.getByText(/next/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/prev/i)).toBeInTheDocument();
+      expect(screen.getByText(/next/i)).toBeInTheDocument();
+    });
   });
 
   it('should show pagination when there are exactly 2 notifications', async () => {
@@ -432,7 +441,9 @@ describe('Pagination Visibility', () => {
       expect(screen.getByText('Notification 1')).toBeInTheDocument();
     });
 
-    expect(screen.getByText(/prev/i)).toBeInTheDocument();
-    expect(screen.getByText(/next/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/prev/i)).toBeInTheDocument();
+      expect(screen.getByText(/next/i)).toBeInTheDocument();
+    });
   });
 });

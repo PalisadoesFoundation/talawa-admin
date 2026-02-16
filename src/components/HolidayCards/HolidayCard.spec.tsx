@@ -1,10 +1,14 @@
 import React from 'react';
 import { describe, test, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import HolidayCard from './HolidayCard';
 import styles from './HolidayCard.module.css';
 
 describe('HolidayCard Component', () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
   test('renders without crashing', () => {
     render(<HolidayCard holidayName="Christmas" />);
     expect(screen.getByTestId('holiday-card')).toBeDefined();

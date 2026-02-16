@@ -1,13 +1,14 @@
 import React from 'react';
 import { describe, it, vi, expect, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import SidebarNavItem from './SidebarNavItem';
 import styles from './SidebarNavItem.module.css';
 import userEvent from '@testing-library/user-event';
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 // Mock icon element for testing
@@ -78,10 +79,11 @@ describe('SidebarNavItem Component', () => {
       expect(handleClick).toHaveBeenCalled();
     });
 
-    it('does not call onClick if not provided', () => {
+    it('does not call onClick if not provided', async () => {
       renderComponent();
       const button = screen.getByTestId('testBtn');
-      expect(async () => await user.click(button)).not.toThrow();
+      await user.click(button);
+      // No error thrown — implicit pass
     });
   });
 

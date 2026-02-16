@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
@@ -13,7 +13,8 @@ import type { Location } from '@remix-run/router';
 import userEvent from '@testing-library/user-event';
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 let currentLocation: Location = {
