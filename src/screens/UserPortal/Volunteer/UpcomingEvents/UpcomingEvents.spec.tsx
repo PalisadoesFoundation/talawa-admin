@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import {
@@ -50,6 +49,11 @@ vi.mock('react-toastify', () => ({
   toast: sharedMocks.toast,
 }));
 
+const mockIcon = (id: string) => {
+  const Icon = () => React.createElement('div', { 'data-testid': id });
+  return Icon;
+};
+
 vi.mock('@mui/icons-material', async () => {
   const actual = (await vi.importActual('@mui/icons-material')) as Record<
     string,
@@ -57,26 +61,23 @@ vi.mock('@mui/icons-material', async () => {
   >;
   return {
     ...actual,
-    Circle: () => React.createElement('div', { 'data-testid': 'circle-icon' }),
-    WarningAmberRounded: () =>
-      React.createElement('div', { 'data-testid': 'warning-icon' }),
-    ExpandMore: () =>
-      React.createElement('div', { 'data-testid': 'expand-more-icon' }),
-    Event: () => React.createElement('div', { 'data-testid': 'event-icon' }),
+    Circle: mockIcon('circle-icon'),
+    WarningAmberRounded: mockIcon('warning-icon'),
+    ExpandMore: mockIcon('expand-more-icon'),
+    Event: mockIcon('event-icon'),
   };
 });
 
 vi.mock('react-icons/io5', () => ({
-  IoLocationOutline: () =>
-    React.createElement('div', { 'data-testid': 'location-icon' }),
+  IoLocationOutline: mockIcon('location-icon'),
 }));
 
 vi.mock('react-icons/io', () => ({
-  IoIosHand: () => React.createElement('div', { 'data-testid': 'hand-icon' }),
+  IoIosHand: mockIcon('hand-icon'),
 }));
 
 vi.mock('react-icons/fa', () => ({
-  FaCheck: () => React.createElement('div', { 'data-testid': 'check-icon' }),
+  FaCheck: mockIcon('check-icon'),
 }));
 
 vi.mock('react-router-dom', async () => {

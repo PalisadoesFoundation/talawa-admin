@@ -46,7 +46,7 @@ import styles from './LoginPage.module.css';
 import type { InterfaceSignInResult } from 'types/Auth/LoginForm/interface';
 import type { InterfaceOrgOption } from 'types/Auth/OrgSelector/interface';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
-import useSession from 'utils/useSession';
+import useSession from 'hooks/useSession';
 import i18n from 'utils/i18n';
 
 const LoginPage = (): JSX.Element => {

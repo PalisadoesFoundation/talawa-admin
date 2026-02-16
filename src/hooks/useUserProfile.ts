@@ -16,7 +16,7 @@ import {
 } from 'utils/profileNavigation';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
-import useSession from 'utils/useSession';
+import useSession from 'hooks/useSession';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 import { useMemo, useState, useRef, useEffect } from 'react';
 
