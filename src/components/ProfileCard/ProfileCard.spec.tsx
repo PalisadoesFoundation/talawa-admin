@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileCard from './ProfileCard';
 import { MockedProvider } from '@apollo/react-testing';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -16,7 +16,7 @@ const { setItem, clearAllItems } = useLocalStorage();
 let mockNavigate: ReturnType<typeof vi.fn>;
 
 // Mock useNavigate hook
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,

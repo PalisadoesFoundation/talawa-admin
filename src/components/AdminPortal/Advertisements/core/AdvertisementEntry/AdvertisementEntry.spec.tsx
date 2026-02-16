@@ -2,7 +2,7 @@ import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ApolloProvider } from '@apollo/client';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import AdvertisementEntry from './AdvertisementEntry';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -34,7 +34,7 @@ vi.mock('@apollo/client', async () => {
   };
 });
 
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,

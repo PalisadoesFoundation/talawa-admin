@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import OrgPeopleListCard from './OrgPeopleListCard';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
@@ -21,7 +21,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock react-router-dom
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,

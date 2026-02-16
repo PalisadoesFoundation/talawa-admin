@@ -1,0 +1,391 @@
+ WARN  Unsupported engine: wanted: {"node":">=24.x"} (current: {"node":"v22.20.0","pnpm":"10.4.1"})
+
+> talawa-admin@3.0.0 lint:check /home/h30s/Project/talawa-admin
+> eslint "**/*.{ts,tsx,graphql}" --max-warnings=0
+
+
+/home/h30s/Project/talawa-admin/scripts/__fixtures__/correct.tsx
+   3:1  error  'react-toastify' import is restricted from being used. Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/shared-components/NotificationToast/ instead  no-restricted-imports
+  19:7  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead                                                                                      no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/scripts/__fixtures__/violations.tsx
+   2:1  error  'react-toastify' import is restricted from being used. Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/shared-components/NotificationToast/ instead  no-restricted-imports
+  16:7  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead                                                                                      no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/AdminPortal/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx
+   80:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+  186:17  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead    no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/AdminPortal/ApplyToSelector/ApplyToSelector.tsx
+  2:10  error  'Form' import from 'react-bootstrap' is restricted. Do not import Form directly. Use the shared FormFieldGroup component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/AdminPortal/AssignmentTypeSelector/AssignmentTypeSelector.tsx
+  2:10  error  'Chip' import from '@mui/material' is restricted. Do not import Chip from @mui/material. Use the shared StatusBadge component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/AdminPortal/OrgSettings/ActionItemCategories/OrgActionItemCategories.tsx
+  92:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/AdminPortal/OrgSettings/General/GeneralSettings.tsx
+  2:21  error  'Form' import from 'react-bootstrap' is restricted. Do not import Form directly. Use the shared FormFieldGroup component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/AdminPortal/TagActions/TagActions.tsx
+  290:21  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/AdminPortal/Venues/Modal/VenueModal.spec.tsx
+  4:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/Auth/OrgSelector/OrgSelector.spec.tsx
+  2:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/Auth/OrgSelector/OrgSelector.tsx
+  2:10  error  'Form' import from 'react-bootstrap' is restricted. Do not import Form directly. Use the shared FormFieldGroup component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/CollapsibleDropdown/CollapsibleDropdown.tsx
+   75:7   error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  106:21  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/CursorPaginationManager/CursorPaginationManager.tsx
+  441:9   error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  494:13  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  524:13  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/EventDashboardScreen/EventDashboardScreen.tsx
+  128:7  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/EventStats/Statistics/Review/Review.spec.tsx
+  9:1  error  'react-toastify' import is restricted from being used. Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/shared-components/NotificationToast/ instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/HolidayCards/HolidayCard.tsx
+   5:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                               tsdoc/syntax
+   6:13  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                        tsdoc/syntax
+   6:25  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag  tsdoc/syntax
+  17:4   error  tsdoc-undefined-tag: The TSDoc tag "@category" is not defined in this configuration                                         tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/components/TableLoader/TableLoader.tsx
+   5:4   error  tsdoc-undefined-tag: The TSDoc tag "@component" is not defined in this configuration                                                                       tsdoc/syntax
+   7:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters                tsdoc/syntax
+   8:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters                tsdoc/syntax
+  10:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters                tsdoc/syntax
+  12:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters                tsdoc/syntax
+  14:12  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  14:18  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  20:4   error  tsdoc-html-tag-missing-string: The HTML element has an invalid attribute: Expecting an HTML string starting with a single-quote or double-quote character  tsdoc/syntax
+  20:26  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  20:28  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  20:43  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  20:71  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  20:74  error  tsdoc-escape-greater-than: The ">" character should be escaped using a backslash to avoid confusion with an HTML tag                                       tsdoc/syntax
+  24:4   error  tsdoc-html-tag-missing-string: The HTML element has an invalid attribute: Expecting an HTML string starting with a single-quote or double-quote character  tsdoc/syntax
+  24:26  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  24:28  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  24:39  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  24:41  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  24:44  error  tsdoc-escape-greater-than: The ">" character should be escaped using a backslash to avoid confusion with an HTML tag                                       tsdoc/syntax
+  33:10  error  'Table' import from 'react-bootstrap' is restricted. Do not import Table directly. Use the shared DataTable component instead                              no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/components/UserPortal/ChatRoom/MessageInput.tsx
+  137:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/UserPortal/ContactCard/ContactCard.tsx
+  92:7  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx
+  242:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/UserPortal/GroupChatDetails/GroupChatDetails.tsx
+  341:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/components/UserPortal/UserPortalCard/UserPortalCard.tsx
+  23:4   error  tsdoc-html-tag-missing-string: The HTML element has an invalid attribute: Expecting an HTML string starting with a single-quote or double-quote character  tsdoc/syntax
+  25:16  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  25:40  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  26:16  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  26:66  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  27:18  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  27:29  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  28:4   error  tsdoc-escape-greater-than: The ">" character should be escaped using a backslash to avoid confusion with an HTML tag                                       tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/components/UsersTableItem/UsersTableItem.tsx
+  41:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+  42:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/EventVolunteers/VolunteerGroups/VolunteerGroups.tsx
+  79:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx
+  12:10  error  'Autocomplete' import from '@mui/material' is restricted. Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx
+  115:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx
+  34:10  error  'Autocomplete' import from '@mui/material' is restricted. Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/FundCampaignPledge/FundCampaignPledge.tsx
+  54:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.spec.tsx
+  2:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx
+  44:10  error  'Autocomplete' import from '@mui/material' is restricted. Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/ManageTag/ManageTag.tsx
+  113:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+  115:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+  117:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+  118:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+  119:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/ManageTag/ManageTagMockComponents/MockAddPeopleToTag.tsx
+  55:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/ManageTag/ManageTagMockComponents/MockTagActions.tsx
+  50:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/Notification/Notification.tsx
+  172:13  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  179:13  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/OrgContribution/OrgContribution.spec.tsx
+  3:10  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx
+  44:1  error  'react-bootstrap/Form' import is restricted from being used. Do not import Form directly. Use the shared FormFieldGroup component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/OrganizationDashboard/OrganizationDashboard.tsx
+  322:19  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/OrganizationDashboard/components/DashboardStats.tsx
+  123:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  138:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  153:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  168:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  183:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  198:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx
+  90:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/OrganizationFunds/OrganizationFunds.tsx
+  113:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/OrganizationTags/OrganizationTags.tsx
+  59:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/PluginStore/PluginModal.tsx
+  258:15  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  280:17  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  289:17  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  318:21  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  345:17  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  384:29  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/PluginStore/PluginStore.tsx
+  21:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+  22:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/PluginStore/UploadPluginModal.tsx
+  153:9  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/PluginStore/components/tests/PluginList.test.tsx
+  4:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/PluginStore/hooks/usePluginActions.ts
+  22:10  error  Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/AdminPortal/SubTags/SubTags.tsx
+  344:17  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  364:19  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/screens/Public/Invitation/AcceptInvitation.spec.tsx
+  2:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/UserPortal/Campaigns/PledgeModal.tsx
+  16:10  error  'Autocomplete' import from '@mui/material' is restricted. Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.spec.tsx
+  60:26  error  Declare only one React component per file  react/no-multi-comp
+  62:17  error  Declare only one React component per file  react/no-multi-comp
+  64:12  error  Declare only one React component per file  react/no-multi-comp
+  69:22  error  Declare only one React component per file  react/no-multi-comp
+  74:14  error  Declare only one React component per file  react/no-multi-comp
+  78:12  error  Declare only one React component per file  react/no-multi-comp
+
+/home/h30s/Project/talawa-admin/src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx
+  67:1  error  '@mui/material/Autocomplete' import is restricted from being used. Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/Auth/PasswordField/PasswordField.tsx
+  48:5  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/BaseModal/BaseModal.spec.tsx
+  3:35  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead                   no-restricted-imports
+  5:10  error  'Button' import from 'react-bootstrap' is restricted. Direct imports of Button from react-bootstrap are not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/BreadcrumbsComponent/BreadcrumbsComponent.tsx
+  15:4   error  tsdoc-undefined-tag: The TSDoc tag "@component" is not defined in this configuration                                                                       tsdoc/syntax
+  17:4   error  tsdoc-html-tag-missing-string: The HTML element has an invalid attribute: Expecting an HTML string starting with a single-quote or double-quote character  tsdoc/syntax
+  18:12  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  19:8   error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  19:71  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  20:8   error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                                       tsdoc/syntax
+  20:61  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  21:7   error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                                 tsdoc/syntax
+  22:5   error  tsdoc-escape-greater-than: The ">" character should be escaped using a backslash to avoid confusion with an HTML tag                                       tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/CheckIn/Modal/Row/TableRow.tsx
+  31:1  error  '@mui/material/Button' import is restricted from being used. Direct imports of Button from @mui/material are not allowed. Use the shared Button component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/DataGridWrapper/DataGridErrorOverlay.tsx
+  7:4  error  tsdoc-undefined-tag: The TSDoc tag "@component" is not defined in this configuration  tsdoc/syntax
+  8:4  error  tsdoc-undefined-tag: The TSDoc tag "@category" is not defined in this configuration   tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/DataGridWrapper/DataGridLoadingOverlay.tsx
+  7:4  error  tsdoc-undefined-tag: The TSDoc tag "@component" is not defined in this configuration  tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/DataGridWrapper/DataGridWrapper.spec.tsx
+  1:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/DataGridWrapper/index.ts
+  6:24  error  tsdoc-characters-after-block-tag: The token "@mui" looks like a TSDoc tag but contains an invalid character "/"; if it is not a tag, use a backslash to escape the "@"  tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/DataTable/DataTable.tsx
+  475:15  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/DataTable/Pagination.tsx
+  18:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                               tsdoc/syntax
+  19:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                               tsdoc/syntax
+  20:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                               tsdoc/syntax
+  21:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                               tsdoc/syntax
+  22:13  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                        tsdoc/syntax
+  22:25  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag  tsdoc/syntax
+  50:7   error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead     no-restricted-syntax
+  64:7   error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead     no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/DataTable/SearchBar.tsx
+  36:9  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.spec.tsx
+  3:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/EventForm/VisibilitySelector/VisibilitySelector.tsx
+  7:10  error  'Form' import from 'react-bootstrap' is restricted. Do not import Form directly. Use the shared FormFieldGroup component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/LoadingState/LoadingState.tsx
+  7:4  error  tsdoc-undefined-tag: The TSDoc tag "@component" is not defined in this configuration  tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/PeopleTabNavbarButton/PeopleTabNavbarButton.spec.tsx
+  3:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/PeopleTabUserEvents/PeopleTabUserEvents.spec.tsx
+  3:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/PeopleTabUserEvents/PeopleTabUserEvents.tsx
+  99:17  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.spec.tsx
+  3:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.tsx
+  76:9  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/Recurrence/RecurrenceFrequencySection.tsx
+  2:10  error  'Dropdown' import from 'react-bootstrap' is restricted. Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/Recurrence/RecurrenceMonthlySection.tsx
+  2:10  error  'Dropdown' import from 'react-bootstrap' is restricted. Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/Recurrence/RecurrenceWeeklySection.spec.tsx
+  3:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/Recurrence/RecurrenceWeeklySection.tsx
+  41:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/SearchBar/SearchBar.tsx
+  223:13  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  240:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/SidebarBase/SidebarBase.tsx
+  68:9  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/SidebarNavItem/SidebarNavItem.spec.tsx
+  3:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/SidebarNavItem/SidebarNavItem.tsx
+   7:4   error  tsdoc-undefined-tag: The TSDoc tag "@component" is not defined in this configuration                                                         tsdoc/syntax
+   8:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+   9:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+   9:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+   9:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+   9:18  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  10:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+  10:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+  10:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  10:27  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  11:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+  11:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+  11:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  11:18  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  12:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+  12:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+  12:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  12:18  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  13:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+  13:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+  13:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  13:19  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  14:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+  14:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+  14:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  14:16  error  tsdoc-escape-greater-than: The ">" character should be escaped using a backslash to avoid confusion with an HTML tag                         tsdoc/syntax
+  14:22  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  15:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+  15:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+  15:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  15:19  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  16:4   error  tsdoc-param-tag-with-invalid-name: The @param block should be followed by a valid parameter name: The identifier cannot non-word characters  tsdoc/syntax
+  16:11  error  tsdoc-param-tag-with-invalid-type: The @param block should not include a JSDoc-style '{type}'                                                tsdoc/syntax
+  16:11  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  16:32  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+  18:13  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                                         tsdoc/syntax
+  18:32  error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag                   tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/SidebarOrgSection/SidebarOrgSection.tsx
+  70:9   error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  77:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  90:9   error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/StatusBadge/StatusBadge.tsx
+  17:10  error  'Chip' import from '@mui/material' is restricted. Do not import Chip from @mui/material. Use the shared StatusBadge component instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/pinnedPosts/pinnedPostsLayout.spec.tsx
+  5:3  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/pinnedPosts/pinnedPostsLayout.tsx
+   96:9  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  131:9  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/shared-components/postCard/PostCard.spec.tsx
+  7:3  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/posts/createPostModal/createPostModal.spec.tsx
+  2:26  error  'fireEvent' import from '@testing-library/react' is restricted. Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead  no-restricted-imports
+
+/home/h30s/Project/talawa-admin/src/shared-components/posts/createPostModal/createPostModal.tsx
+  207:7   error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  239:11  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  308:13  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  329:13  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+  357:15  error  Direct native <button> usage is not allowed. Use the shared Button component from src/shared-components/Button/ instead  no-restricted-syntax
+
+/home/h30s/Project/talawa-admin/src/test-utils/localStorageMock.ts
+  46:18  error  tsdoc-escape-greater-than: The ">" character should be escaped using a backslash to avoid confusion with an HTML tag        tsdoc/syntax
+  46:20  error  tsdoc-malformed-inline-tag: Expecting a TSDoc tag starting with "{@"                                                        tsdoc/syntax
+  48:4   error  tsdoc-escape-right-brace: The "}" character should be escaped using a backslash to avoid confusion with a TSDoc inline tag  tsdoc/syntax
+
+/home/h30s/Project/talawa-admin/src/utils/errorHandler.spec.tsx
+  2:1  error  'react-toastify' import is restricted from being used. Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/shared-components/NotificationToast/ instead  no-restricted-imports
+
+✖ 208 problems (208 errors, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.

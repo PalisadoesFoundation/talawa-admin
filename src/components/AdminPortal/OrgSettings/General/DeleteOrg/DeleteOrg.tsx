@@ -8,7 +8,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { DELETE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './DeleteOrg.module.css';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 

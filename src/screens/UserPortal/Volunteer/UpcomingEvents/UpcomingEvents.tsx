@@ -3,7 +3,7 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 import Button from 'shared-components/Button/Button';
 import styles from './UpcomingEvents.module.css';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { WarningAmberRounded, ExpandMore, Event } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';

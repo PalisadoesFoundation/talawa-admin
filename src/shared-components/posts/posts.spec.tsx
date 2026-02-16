@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import PostsPage from './posts';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import {
@@ -41,7 +41,7 @@ const localStorageMocks = vi.hoisted(() => ({
   getItem: vi.fn((): string | null => 'user-123'),
 }));
 
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return { ...actual, useParams: routerMocks.useParams };
 });

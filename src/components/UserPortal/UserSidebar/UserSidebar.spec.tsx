@@ -93,7 +93,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
   )),
 }));
 
-vi.mock('shared-components/SignOut/SignOut', () => ({
+vi.mock('components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out
@@ -102,7 +102,7 @@ vi.mock('shared-components/SignOut/SignOut', () => ({
 }));
 
 // Mock useSession to prevent router hook errors
-vi.mock('hooks/useSession', () => ({
+vi.mock('utils/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
   })),

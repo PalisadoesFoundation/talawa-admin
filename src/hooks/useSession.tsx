@@ -67,8 +67,8 @@ const useSession = (): UseSessionReturnType => {
    * to the same function identity, preventing stale closure issues or
    * failure to remove listeners.
    */
-  const extendSessionRef = useRef<() => void>(() => { });
-  const handleVisibilityChangeRef = useRef<() => Promise<void>>(async () => { });
+  const extendSessionRef = useRef<() => void>(() => {});
+  const handleVisibilityChangeRef = useRef<() => Promise<void>>(async () => {});
   const mountedRef = useRef(true);
   const throttledExtendSessionRef = useRef<NodeJS.Timeout | null>(null);
 

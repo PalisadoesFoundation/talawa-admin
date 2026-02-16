@@ -15,7 +15,7 @@
  * ```
  */
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './UserGlobalScreen.module.css';
 import { Button } from 'shared-components/Button';

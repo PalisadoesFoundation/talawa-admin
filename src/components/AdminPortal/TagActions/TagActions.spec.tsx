@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 
 import { store } from 'state/store';
@@ -104,7 +104,7 @@ const renderTagActionsModal = (
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => {
+    vi.mock('react-router', async () => {
       const actualModule = await vi.importActual('react-router');
       return {
         ...actualModule,

@@ -38,7 +38,7 @@ import {
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { BaseModal } from 'shared-components/BaseModal';
 import styles from './AddOnSpotAttendee.module.css';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import type {
   InterfaceAddOnSpotAttendeeProps,

@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';

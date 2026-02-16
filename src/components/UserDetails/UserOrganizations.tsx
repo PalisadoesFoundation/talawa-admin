@@ -39,7 +39,7 @@ import styles from './UserOrganizations.module.css';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import {
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
   USER_DETAILS,

@@ -8,7 +8,7 @@ import { cleanup, render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import type { ReactNode } from 'react';
 import { Observable } from '@apollo/client/utilities';

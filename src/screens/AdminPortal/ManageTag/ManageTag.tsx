@@ -56,7 +56,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'components/IconComponent/IconComponent';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router';
 import { Col } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Button from 'shared-components/Button/Button';

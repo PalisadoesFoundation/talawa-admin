@@ -19,7 +19,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 
 import { Groups, WarningAmberRounded } from '@mui/icons-material';
 

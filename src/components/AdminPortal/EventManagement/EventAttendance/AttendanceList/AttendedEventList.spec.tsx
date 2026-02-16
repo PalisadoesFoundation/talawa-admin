@@ -4,7 +4,7 @@ import { render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import AttendedEventList from './AttendedEventList';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { formatDate } from 'utils/dateFormatter';

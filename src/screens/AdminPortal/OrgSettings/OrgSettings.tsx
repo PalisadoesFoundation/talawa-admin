@@ -28,7 +28,7 @@ import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
 import OrgActionItemCategories from 'components/AdminPortal/OrgSettings/ActionItemCategories/OrgActionItemCategories';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import GeneralSettings from 'components/AdminPortal/OrgSettings/General/GeneralSettings';
 import Button from 'shared-components/Button';
 

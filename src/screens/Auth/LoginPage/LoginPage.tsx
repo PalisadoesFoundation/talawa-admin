@@ -18,7 +18,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { loadRecaptchaScript } from 'utils/recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   REACT_APP_USE_RECAPTCHA,
@@ -46,7 +46,7 @@ import styles from './LoginPage.module.css';
 import type { InterfaceSignInResult } from 'types/Auth/LoginForm/interface';
 import type { InterfaceOrgOption } from 'types/Auth/OrgSelector/interface';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
-import useSession from 'hooks/useSession';
+import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
 const LoginPage = (): JSX.Element => {

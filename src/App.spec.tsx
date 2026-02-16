@@ -2,7 +2,7 @@ import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import App from './App';
@@ -57,7 +57,7 @@ vi.mock('screens/AdminPortal/MemberDetail/MemberDetail', () => ({
 }));
 
 vi.mock('screens/UserPortal/UserScreen/UserScreen', async () => {
-  const { Outlet } = await import('react-router-dom');
+  const { Outlet } = await import('react-router');
   return {
     default: () => (
       <div data-testid="mock-user-screen">
@@ -348,9 +348,8 @@ const renderApp = (mockLink = link, initialRoute = '/') => {
 
 describe('Testing the App Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.spyOn(console, 'log').mockImplementation(() => { });
-    vi.spyOn(console, 'error').mockImplementation(() => { });
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -558,7 +557,7 @@ describe('Testing the App Component', () => {
       T extends React.ComponentType<unknown>,
     >(): React.LazyExoticComponent<T> => {
       const mockComponent = ((): React.ReactElement | null => {
-        throw new Promise(() => { }); // Never resolves to keep loading
+        throw new Promise(() => {}); // Never resolves to keep loading
       }) as unknown as React.LazyExoticComponent<T>;
 
       // Add the required _result property for TypeScript compliance

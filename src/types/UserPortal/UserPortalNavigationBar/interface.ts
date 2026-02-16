@@ -43,7 +43,7 @@
 
 import React from 'react';
 import { BrandingConfig, NavigationLink } from './types';
-import { NavigateFunction } from 'react-router-dom';
+import { NavigateFunction } from 'react-router';
 import { TFunction } from 'i18next';
 import { SvgIconTypeMap } from '@mui/material';
 import { OverridableComponent } from '@mui/material/OverridableComponent';

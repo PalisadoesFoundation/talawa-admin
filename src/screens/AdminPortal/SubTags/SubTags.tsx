@@ -12,7 +12,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router';
 import type { FormEvent } from 'react';
 import React, { useState } from 'react';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';

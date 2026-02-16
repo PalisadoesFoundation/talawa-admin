@@ -29,7 +29,7 @@
 import React, { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './EventListCard.module.css';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router';
 import EventListCardModals from './Modal/EventListCardModals';
 import type { IEventListCard } from 'types/Event/interface';
 import { useModalState } from 'shared-components/CRUDModalTemplate';

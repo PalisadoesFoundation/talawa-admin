@@ -6,7 +6,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -55,7 +55,7 @@ const translations = {
 
 let mockID: string | undefined = '1';
 
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return { ...actual, useParams: () => ({ orgId: mockID }) };
 });

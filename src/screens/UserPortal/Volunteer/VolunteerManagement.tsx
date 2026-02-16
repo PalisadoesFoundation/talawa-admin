@@ -35,7 +35,7 @@
 import React, { useState, useMemo } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';

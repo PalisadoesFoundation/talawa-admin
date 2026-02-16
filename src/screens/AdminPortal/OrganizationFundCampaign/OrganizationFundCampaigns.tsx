@@ -3,7 +3,7 @@ import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import TableLoader from 'components/TableLoader/TableLoader';

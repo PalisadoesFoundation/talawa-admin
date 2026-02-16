@@ -37,7 +37,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';

@@ -34,7 +34,7 @@ import styles from './OrgList.module.css';
 
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';

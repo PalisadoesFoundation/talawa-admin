@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { expect, vi } from 'vitest';
@@ -87,7 +87,7 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
 }));
 
 // Mock components to prevent router errors
-vi.mock('shared-components/SignOut/SignOut', () => ({
+vi.mock('components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out
@@ -95,7 +95,7 @@ vi.mock('shared-components/SignOut/SignOut', () => ({
   )),
 }));
 
-vi.mock('hooks/useSession', () => ({
+vi.mock('utils/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
     startSession: vi.fn(),

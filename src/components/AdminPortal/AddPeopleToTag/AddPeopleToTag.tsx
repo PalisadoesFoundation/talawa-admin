@@ -49,7 +49,7 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import styles from './AddPeopleToTag.module.css';
 import { Stack } from '@mui/material';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';

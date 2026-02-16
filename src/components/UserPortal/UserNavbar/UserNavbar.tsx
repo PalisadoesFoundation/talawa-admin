@@ -55,7 +55,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import DropDownButton from 'shared-components/DropDownButton';

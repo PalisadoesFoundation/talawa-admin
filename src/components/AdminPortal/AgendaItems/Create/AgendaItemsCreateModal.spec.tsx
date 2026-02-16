@@ -2,8 +2,8 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
-import * as ReactRouter from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
+import * as ReactRouter from 'react-router';
 import { vi } from 'vitest';
 import * as ApolloClient from '@apollo/client';
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
@@ -19,9 +19,9 @@ const toastMocks = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual =
-    await vi.importActual<typeof import('react-router-dom')>('react-router');
+    await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actual,
     useParams: vi.fn(() => ({ orgId: 'org-123' })),

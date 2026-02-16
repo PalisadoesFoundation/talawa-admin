@@ -60,7 +60,7 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import Button from 'shared-components/Button';
 // Extend dayjs with UTC plugin
 dayjs.extend(utc);
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import type {
   InterfaceAddOnRegisterProps,
   InterfaceFormStateTypes,

@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18n';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import VolunteerContainer from './VolunteerContainer';
@@ -49,9 +49,9 @@ vi.mock('react-i18next', async () => {
   };
 });
 
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual =
-    await vi.importActual<typeof import('react-router-dom')>('react-router');
+    await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actual,
     useParams: mockedUseParams,

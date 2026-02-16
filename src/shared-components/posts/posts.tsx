@@ -46,7 +46,7 @@ import {
 } from 'GraphQl/Queries/OrganizationQueries';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import {

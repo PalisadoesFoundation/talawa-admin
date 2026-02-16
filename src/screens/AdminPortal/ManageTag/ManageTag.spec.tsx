@@ -5,7 +5,7 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -164,7 +164,7 @@ describe('getManageTagErrorMessage', () => {
 
 describe('Manage Tag Page', () => {
   beforeEach(() => {
-    vi.mock('react-router-dom', async () => ({
+    vi.mock('react-router', async () => ({
       ...(await vi.importActual('react-router')),
     }));
   });

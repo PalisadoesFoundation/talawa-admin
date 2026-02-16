@@ -38,14 +38,14 @@ vi.mock('plugin', () => ({
 }));
 
 // Mock useSession hook
-vi.mock('hooks/useSession', () => ({
+vi.mock('utils/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
   })),
 }));
 
 // Mock the SignOut component to avoid Apollo Client dependencies
-vi.mock('shared-components/SignOut/SignOut', () => ({
+vi.mock('components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
     <div data-testid="sign-out-component" hidden={hideDrawer}>
       Sign Out Mock

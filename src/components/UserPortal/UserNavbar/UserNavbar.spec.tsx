@@ -3,7 +3,7 @@ import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -333,7 +333,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
    * @param logoutMock - The mock response for the logout mutation (error or GraphQL error).
    */
   const testLogoutError = async (logoutMock: MockedResponse) => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const { mockClearAllItems } = createMock();
 
     const mocks = [
@@ -381,9 +381,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
       expect.any(Error),
     );
     // Verify toast was shown
-    expect(NotificationToast.error).toHaveBeenCalledWith(
-      i18nForTest.t('errorOccurred', { ns: 'common' }),
-    );
+    expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
     // Verify cleanup still happens even on error
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');

@@ -9,7 +9,7 @@ import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import type { InterfaceDeletePledgeModal } from './PledgeDeleteModal';
 import PledgeDeleteModal from './PledgeDeleteModal';

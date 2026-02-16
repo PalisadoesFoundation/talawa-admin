@@ -41,7 +41,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';

@@ -55,7 +55,7 @@ import {
   Filler,
 } from 'chart.js';
 import { Bar, Line } from 'react-chartjs-2';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
 import { exportToCSV } from 'utils/chartToPdf';

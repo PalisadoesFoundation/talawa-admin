@@ -5,7 +5,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import UpdateSession from './UpdateSession';
 
 import i18n from 'utils/i18nForTest';

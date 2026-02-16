@@ -12,7 +12,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import VolunteerManagement from './VolunteerManagement';

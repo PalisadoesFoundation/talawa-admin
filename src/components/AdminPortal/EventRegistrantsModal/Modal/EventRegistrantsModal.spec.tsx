@@ -3,7 +3,7 @@ import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import * as ApolloClient from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';

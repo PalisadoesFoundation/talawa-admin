@@ -263,7 +263,7 @@ describe('useSession Hook', () => {
   test('should handle error when logout fails', async () => {
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const errorMocks = [
       {
@@ -644,7 +644,7 @@ describe('useSession Hook', () => {
   test('should handle event listener errors gracefully', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
     const mockError = new Error('Event listener error');
 
     const addEventListenerSpy = vi
@@ -793,7 +793,10 @@ describe('useSession Hook', () => {
     result.current.startSession();
 
     // Verify the handler was captured
-    expect(addEventListenerSpy).toHaveBeenCalledWith('mousemove', expect.any(Function));
+    expect(addEventListenerSpy).toHaveBeenCalledWith(
+      'mousemove',
+      expect.any(Function),
+    );
     expect(eventHandler).toBeDefined();
 
     // Clear initial calls

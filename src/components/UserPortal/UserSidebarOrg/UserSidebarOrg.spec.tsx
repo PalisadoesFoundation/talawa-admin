@@ -48,7 +48,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 }));
 
 // Mock SignOut component to avoid router hook errors
-vi.mock('shared-components/SignOut/SignOut', () => ({
+vi.mock('components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
     <div data-testid="sign-out-component" hidden={hideDrawer}>
       Sign Out Mock
@@ -57,7 +57,7 @@ vi.mock('shared-components/SignOut/SignOut', () => ({
 }));
 
 // Mock useSession to prevent router hook errors in SignOut component
-vi.mock('hooks/useSession', () => ({
+vi.mock('utils/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
   })),

@@ -44,7 +44,7 @@ import AgendaFolderDeleteModal from 'components/AdminPortal/AgendaFolder/Delete/
 import AgendaFolderUpdateModal from './Update/AgendaFolderUpdateModal';
 import AgendaDragAndDrop from './DragAndDrop/AgendaDragAndDrop';
 import { useMinioDownload } from 'utils/MinioDownload';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 function AgendaFolderContainer({
   agendaFolderConnection,

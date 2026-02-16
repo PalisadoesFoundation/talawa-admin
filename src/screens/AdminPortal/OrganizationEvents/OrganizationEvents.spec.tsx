@@ -4,7 +4,7 @@ import { act, render, screen, waitFor } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import {
   LocalizationProvider,

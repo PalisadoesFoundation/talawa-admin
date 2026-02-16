@@ -2,9 +2,9 @@ import { renderHook, act, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import useUserProfile from './useUserProfile';
 import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import useSession from 'hooks/useSession';
+import useSession from 'utils/useSession';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 
@@ -14,7 +14,7 @@ vi.mock('@apollo/client', () => ({
   gql: vi.fn((query) => query),
 }));
 
-vi.mock('react-router-dom', () => ({
+vi.mock('react-router', () => ({
   useNavigate: vi.fn(),
 }));
 
@@ -28,7 +28,7 @@ vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(),
 }));
 
-vi.mock('hooks/useSession', () => ({
+vi.mock('utils/useSession', () => ({
   default: vi.fn(),
 }));
 

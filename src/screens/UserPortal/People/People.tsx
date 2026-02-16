@@ -53,7 +53,7 @@ import { useQuery } from '@apollo/client';
 import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';

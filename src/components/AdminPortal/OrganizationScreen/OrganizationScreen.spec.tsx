@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen, { translationKeyMap } from './OrganizationScreen';
@@ -40,14 +40,14 @@ vi.mock('components/NotificationToast/NotificationToast', async () => {
 });
 
 // Mock the router hooks
-vi.mock('react-router-dom', async () => {
+vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useParams: () => mockUseParams(),
     useMatch: () => mockUseMatch(),
     useLocation: () => mockUseLocation(),
-    Navigate: (props: import('react-router-dom').NavigateProps) => {
+    Navigate: (props: import('react-router').NavigateProps) => {
       mockNavigate(props);
       return null;
     },
@@ -64,7 +64,7 @@ vi.mock('components/LeftDrawerOrg/LeftDrawerOrg', () => ({
 }));
 
 // Mock SignOut component to prevent useNavigate() error from Router context
-vi.mock('shared-components/SignOut/SignOut', () => ({
+vi.mock('components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out
@@ -73,7 +73,7 @@ vi.mock('shared-components/SignOut/SignOut', () => ({
 }));
 
 // Mock useSession to prevent router hook errors
-vi.mock('hooks/useSession', () => ({
+vi.mock('utils/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
     startSession: vi.fn(),

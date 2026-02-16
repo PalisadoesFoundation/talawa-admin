@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { I18nextProvider } from 'react-i18next';
 import Pagination from './Pagination';

@@ -9,14 +9,14 @@ import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { MAX_NAME_LENGTH } from 'Constant/common';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import {
   resolveProfileNavigation,
   type ProfilePortal,
 } from 'utils/profileNavigation';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
-import useSession from 'hooks/useSession';
+import useSession from 'utils/useSession';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 import { useMemo, useState, useRef, useEffect } from 'react';
 
