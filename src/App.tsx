@@ -92,7 +92,7 @@ const Events = lazy(() => import('screens/UserPortal/Events/Events'));
 const Organizations = lazy(
   () => import('screens/UserPortal/Organizations/Organizations'),
 );
-const People = lazy(() => import('screens/UserPortal/People/People'));
+
 const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
@@ -347,7 +347,10 @@ function App(): React.ReactElement {
               <Route path="/user/organizations" element={<Organizations />} />
               <Route path="/user/settings" element={<MemberDetail />} />
               <Route path="/user/organization/:orgId" element={<PostsPage />} />
-              <Route path="/user/people/:orgId" element={<People />} />
+              <Route
+                path="/user/people/:orgId"
+                element={<OrganizationPeople />}
+              />
               <Route path="/user/donate/:orgId" element={<Donate />} />
               <Route
                 path="/user/transactions/:orgId"

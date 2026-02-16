@@ -1,0 +1,219 @@
+
+ RUN  v3.2.4 /home/withnikhil/Desktop/OS/palasidoes/talawa-admin
+      Coverage enabled with istanbul
+
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+stderr | src/screens/AdminPortal/OrganizationPeople/OrganizationPeopleUser.spec.tsx > OrganizationPeople - User Portal Context > hides "Add Member" button in User Portal
+[InMemoryCache]: `addTypename` is deprecated and will be removed in Apollo Client 4.0. Please remove the `addTypename` option when initializing `InMemoryCache`.
+[useLazyQuery]: `onCompleted` is a deprecated hook option and will be removed in Apollo Client 4.0. If your `onCompleted` callback sets local state, switch to use derived state using `data` returned from the hook instead. Use `useEffect` to perform side-effects as a result of updates to `data`.
+[useLazyQuery]: `onCompleted` is a deprecated hook option and will be removed in Apollo Client 4.0. If your `onCompleted` callback sets local state, switch to use derived state using `data` returned from the hook instead. Use `useEffect` to perform side-effects as a result of updates to `data`.
+[cache.diff]: `canonizeResults` is deprecated and will be removed in Apollo Client 4.0. Please remove this option.
+
+stderr | src/screens/AdminPortal/OrganizationPeople/OrganizationPeopleUser.spec.tsx > OrganizationPeople - User Portal Context > hides "Add Member" button in User Portal
+[cache.diff]: `canonizeResults` is deprecated and will be removed in Apollo Client 4.0. Please remove this option.
+
+stderr | src/screens/AdminPortal/OrganizationPeople/OrganizationPeopleUser.spec.tsx > OrganizationPeople - User Portal Context > hides "Action" column in User Portal
+[InMemoryCache]: `addTypename` is deprecated and will be removed in Apollo Client 4.0. Please remove the `addTypename` option when initializing `InMemoryCache`.
+[useLazyQuery]: `onCompleted` is a deprecated hook option and will be removed in Apollo Client 4.0. If your `onCompleted` callback sets local state, switch to use derived state using `data` returned from the hook instead. Use `useEffect` to perform side-effects as a result of updates to `data`.
+[useLazyQuery]: `onCompleted` is a deprecated hook option and will be removed in Apollo Client 4.0. If your `onCompleted` callback sets local state, switch to use derived state using `data` returned from the hook instead. Use `useEffect` to perform side-effects as a result of updates to `data`.
+[cache.diff]: `canonizeResults` is deprecated and will be removed in Apollo Client 4.0. Please remove this option.
+
+stderr | src/screens/AdminPortal/OrganizationPeople/OrganizationPeopleUser.spec.tsx > OrganizationPeople - User Portal Context > hides "Action" column in User Portal
+[cache.diff]: `canonizeResults` is deprecated and will be removed in Apollo Client 4.0. Please remove this option.
+
+stderr | src/screens/AdminPortal/OrganizationPeople/OrganizationPeopleUser.spec.tsx > OrganizationPeople - User Portal Context > does not show "Users" filter option
+[InMemoryCache]: `addTypename` is deprecated and will be removed in Apollo Client 4.0. Please remove the `addTypename` option when initializing `InMemoryCache`.
+[useLazyQuery]: `onCompleted` is a deprecated hook option and will be removed in Apollo Client 4.0. If your `onCompleted` callback sets local state, switch to use derived state using `data` returned from the hook instead. Use `useEffect` to perform side-effects as a result of updates to `data`.
+[useLazyQuery]: `onCompleted` is a deprecated hook option and will be removed in Apollo Client 4.0. If your `onCompleted` callback sets local state, switch to use derived state using `data` returned from the hook instead. Use `useEffect` to perform side-effects as a result of updates to `data`.
+[cache.diff]: `canonizeResults` is deprecated and will be removed in Apollo Client 4.0. Please remove this option.
+
+stderr | src/screens/AdminPortal/OrganizationPeople/OrganizationPeopleUser.spec.tsx > OrganizationPeople - User Portal Context > does not show "Users" filter option
+[cache.diff]: `canonizeResults` is deprecated and will be removed in Apollo Client 4.0. Please remove this option.
+
+ ❯ src/screens/AdminPortal/OrganizationPeople/OrganizationPeopleUser.spec.tsx (3 tests | 1 failed) 831ms
+   ✓ OrganizationPeople - User Portal Context > hides "Add Member" button in User Portal  442ms
+   × OrganizationPeople - User Portal Context > hides "Action" column in User Portal 210ms
+     → Found multiple elements with the text: /name/i
+
+Here are the matching elements:
+
+Ignored nodes: comments, script, style
+[36m<span[39m
+  [33mclass[39m=[32m"_screenReaderOnly_d6b411"[39m
+  [33mid[39m=[32m"admin-search-desc"[39m
+[36m>[39m
+  [0mSearch by name...[0m
+[36m</span>[39m
+
+Ignored nodes: comments, script, style
+[36m<div[39m
+  [33mclass[39m=[32m"MuiDataGrid-columnHeaderTitle css-1gqmilo-MuiDataGrid-columnHeaderTitle"[39m
+  [33mdata-mui-internal-clone-element[39m=[32m"true"[39m
+[36m>[39m
+  [0mName[0m
+[36m</div>[39m
+
+(If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"_orgPeopleGrid_81c58d"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"_calendar__header_81c58d"[39m
+      [36m>[39m
+        [36m<span[39m
+          [33mclass[39m=[32m"_screenReaderOnly_d6b411"[39m
+          [33mid[39m=[32m"admin-search-desc"[39m
+        [36m>[39m
+          [0mSearch by name...[0m
+        [36m</span>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_searchBarContainer_d8535b _searchBarContainerWithButton_d8535b"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_searchBarInputWrapper_d8535b _searchBarInputWrapperWithButton_d8535b"[39m
+          [36m>[39m
+            [36m<input[39m
+              [33maria-describedby[39m=[32m"admin-search-desc"[39m
+              [33mautocomplete[39m=[32m"off"[39m
+              [33mclass[39m=[32m"_searchBarInput_d8535b _searchBarNoIcon_d8535b"[39m
+              [33mdata-testid[39m=[32m"searchbtn"[39m
+              [33mplaceholder[39m=[32m"Enter Full Name"[39m
+              [33mtype[39m=[32m"search"[39m
+              [33mvalue[39m=[32m""[39m
+            [36m/>[39m
+          [36m</div>[39m
+          [36m<button[39m
+            [33maria-label[39m=[32m"Search"[39m
+            [33mclass[39m=[32m"_searchBarButton_d8535b _searchBarIconButton_d8535b"[39m
+            [33mdata-testid[39m=[32m"searchBtn"[39m
+            [33mtype[39m=[32m"button"[39m
+          [36m>[39m
+            [36m<svg[39m
+              [33maria-hidden[39m=[32m"true"[39m
+              [33mclass[39m=[32m"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-120dh41-MuiSvgIcon-root"[39m
+              [33mdata-testid[39m=[32m"SearchIcon"[39m
+              [33mfocusable[39m=[32m"false"[39m
+              [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [36m>[39m
+              [36m<path[39m
+                [33md[39m=[32m"M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"[39m
+              [36m/>[39m
+            [36m</svg>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"_searchBarSrOnly_d8535b"[39m
+            [36m>[39m
+              [0mSearch[0m
+            [36m</span>[39m
+          [36m</button>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33maria-label[39m=[32m"Filter and sort options"[39m
+          [33mclass[39m=[32m"_btnsBlockSearchBar_d6b411"[39m
+          [33mrole[39m=[32m"toolbar"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"_dropdownContainer_564b84 _dropdown_11cd18 _membersSortContainer_81c58d dropdown"[39m
+            [33mdata-testid[39m=[32m"sort-container"[39m
+          [36m>[39m
+            [36m<button[39m
+              [33maria-expanded[39m=[32m"false"[39m
+              [33maria-label[39m=[32m"Toggle options Sort"[39m
+              [33mclass[39m=[32m"_dropdownToggle_564b84 _membersSortToggle_81c58d dropdown-toggle btn btn-outline-secondary"[39m
+              [33mdata-testid[39m=[32m"sort-toggle"[39m
+              [33mtype[39m=[32m"button"[39m
+            [36m>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_dropdownIcon_564b84"[39m
+                [33mdata-testid[39m=[32m"sort-icon"[39m
+              [36m>[39m
+                [36m<svg[39m
+                  [33maria-hidden[39m=[32m"true"[39m
+                  [33mclass[39m=[32m"MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1umw9bq-MuiSvgIcon-root"[39m
+                  [33mdata-icon-type[39m=[32m"sort"[39m
+                  [33mdata-testid[39m=[32m"sorting-icon"[39m
+                  [33mfocusable[39m=[32m"false"[39m
+                  [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [36m>[39m
+                  [36m<path[39m
+                    [33md[39m=[32m"M3 18h6v-2H3zM3 6v2h18V6zm0 7h12v-2H3z"[39m
+                  [36m/>[39m
+                [36m</svg>[39m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_buttonLabel_564b84"[39m
+              [36m>[39m
+                [0mSort[0m
+              [36m</span>[39m
+              [36m<span[39m
+                [33mclass[39m=[32m"_dropdownCaret_564b84"[39m
+              [36m>[39m
+                [0m▼[0m
+              [36m</span>[39m
+            [36m</button>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+      [36m<div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"_toolbar_75c65b"[39m
+        [36m/>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"MuiDataGrid-root MuiDataGrid-autoHeight MuiDataGrid-root--densityStandard MuiDataGrid-withBorderColor MuiDataGridVariables-3851315942 css-1vefv4w-MuiDataGrid-root"[39m
+          [33mstyle[39m=[32m"--DataGrid-hasScrollX: 0; --DataGrid-hasScrollY: 0; --DataGrid-scrollbarSize: 0px; --DataGrid-rowWidth: 0px; --DataGrid-columnsTotalWidth: 0px; --DataGrid-leftPinnedWidth: 0px; --DataGrid-rightPinnedWidth: 0px; --DataGrid-headerHeight: 56px; --DataGrid-headersTotalHeight: 56px; --DataGrid-topContainerHeight: 56px; --DataGrid-bottomContainerHeight: 0px; --height: 52px;"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"MuiDataGrid-mainContent"[39m
+            [33mrole[39m=[32m"presentation"[39m
+          [36m>[39m
+            [36m<div[39m
+              [33maria-colcount[39m=[32m"5"[39m
+              [33maria-multiselectable[39m=[32m"false"[39m
+              [33maria-rowcount[39m=[32m"2"[39m
+              [33mclass[39m=[32m"MuiDataGrid-main css-1bgckiu-MuiDataGrid-main"[39m
+              [33mrole[39m=[32m"grid"[39m
+              [33mtabindex[39m=[32m"-1"[39m
+            [36m>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"css-18l11qw"[39m
+                [33mdata-id[39m=[32m"gridPanelAnchor"[39m
+                [33mrole[39m=[32m"presentation"[39m
+              [36m/>[39m
+              [36m<div[39m
+                [33mclass[39m=[32m"MuiDataGrid-virtualScroller css-1vigakz-MuiDataGrid-virtualScroller"[39m
+                [33mrole[39m=[32m"presentation"[39m
+                [33mstyle[39m=[32m"overflow-x: hidden; overflow-y: hidden;"[39m
+              [36m>[39m
+                [36m<div[39m
+                  [33mclass[39m=[32m"MuiDataGrid-topContainer MuiDataGrid-container--top css-b1wygl"[39m
+                  [33mrole[39m=[32m"presentation"[39m
+                [36m>[39m
+                  [36m<div[39m
+                    [33mclass[39m=[32m"MuiDataGrid-columnHeaders css-1gtv474-MuiDataGrid-columnHeaders"[39m
+                    [33mrole[39m=[32...
+   ✓ OrganizationPeople - User Portal Context > does not show "Users" filter option 177ms
+
+<--- Last few GCs --->
+
+[7089:0x25c49000]    37495 ms: Mark-Compact 2047.7 (2051.1) -> 2046.6 (2051.9) MB, pooled: 0.0 MB, 452.80 / 0.00 ms (average mu = 0.093, current mu = 0.010) allocation failure; scavenge might not succeed
+
+FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
+----- Native stack trace -----
+
+ 1: 0x15ab7fb node::OOMErrorHandler(char const*, v8::OOMDetails const&) [node (vitest)]
+ 2: 0x187009a v8::internal::V8::FatalProcessOutOfMemory(v8::internal::Isolate*, char const*, v8::OOMDetails const&) [node (vitest)]
+ 3: 0x1ac0055  [node (vitest)]
+ 4: 0x1ac37c9  [node (vitest)]
+ 5: 0x1ad57f8  [node (vitest)]
+ 6: 0x1ad513f  [node (vitest)]
+ 7: 0x2467677  [node (vitest)]
+ 8: 0x1abdba1 v8::internal::Heap::CollectGarbage(v8::internal::AllocationSpace, v8::internal::GarbageCollectionReason, v8::GCCallbackFlags, v8::internal::PerformHeapLimitCheck) [node (vitest)]
+ 9: 0x1ab26b7  [node (vitest)]
+10: 0x1ab035d v8::internal::HeapAllocator::AllocateRawWithRetryOrFailSlowPath(int, v8::internal::AllocationType, v8::internal::AllocationOrigin, v8::internal::AllocationAlignment, v8::internal::AllocationHint) [node (vitest)]
+11: 0x1a8eb76 v8::internal::Factory::NewFillerObject(int, v8::internal::AllocationAlignment, v8::internal::AllocationType, v8::internal::AllocationOrigin) [node (vitest)]
+12: 0x1f3b561 v8::internal::Runtime_AllocateInYoungGeneration(int, unsigned long*, v8::internal::Isolate*) [node (vitest)]
+13: 0x7168f663aa36 
+Aborted (core dumped)
