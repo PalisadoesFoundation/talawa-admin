@@ -18,7 +18,6 @@ import {
 } from './GroupChatDetailsMocks';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 
 // Mock MinIO hooks used for uploading/downloading files
 vi.mock('utils/MinioUpload', () => ({
@@ -1328,72 +1327,6 @@ describe('GroupChatDetails', () => {
     });
   });
 
-  it('displays Member as fallback for add-user table when organization member has no role', async () => {
-    useLocalStorage().setItem('userId', 'user1');
-
-    const noRoleMemberMock = {
-      request: {
-        query: ORG_MEMBERS_QUERY,
-        variables: {
-          input: { id: 'org123' },
-          first: 20,
-          after: null,
-          where: {},
-        },
-      },
-      result: {
-        data: {
-          organization: {
-            members: {
-              edges: [
-                {
-                  cursor: 'cursor-no-role',
-                  node: {
-                    id: 'no-role-user-id',
-                    name: 'No Role User',
-                    avatarURL: undefined,
-                    role: null,
-                  },
-                },
-              ],
-              pageInfo: { hasNextPage: false, endCursor: null },
-            },
-          },
-        },
-      },
-    };
-
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={[noRoleMemberMock, ...mocks]} cache={testCache}>
-          <GroupChatDetails
-            toggleGroupChatDetailsModal={vi.fn()}
-            groupChatDetailsModalisOpen={true}
-            chat={withSafeChat(filledMockChat)}
-            chatRefetch={vi.fn()}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    await act(async () => {
-      await userEvent.click(await screen.findByTestId('addMembers'));
-    });
-
-    await screen.findByTestId('addExistingUserModal');
-
-    await waitFor(() => {
-      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
-      expect(rows.length).toBeGreaterThan(0);
-      const rowWithNoRoleUser = Array.from(rows).find((el) =>
-        el.textContent?.includes('No Role User'),
-      );
-      expect(rowWithNoRoleUser).toBeDefined();
-      expect(rowWithNoRoleUser).toHaveTextContent('No Role User');
-      expect(rowWithNoRoleUser).toHaveTextContent('Member');
-    });
-  });
-
   describe('LoadingState Behavior', () => {
     it('should show LoadingState spinner while chat details are loading', async () => {
       useLocalStorage().setItem('userId', 'user1');
@@ -1540,22 +1473,13 @@ describe('GroupChatDetails', () => {
   });
 
   it('renders "Member" fallback when organization member has no role', async () => {
-    if (!filledMockChat.organization) {
-      throw new Error('organization missing in mock');
-    }
+    useLocalStorage().setItem('userId', 'user1');
 
-    if (!filledMockChat.members?.edges?.length) {
-      throw new Error('members missing in mock');
-    }
-
-    const orgId = filledMockChat.organization.id;
-    const adminUserId = filledMockChat.members.edges[0].node.user.id;
-
-    useLocalStorage().setItem('userId', adminUserId);
+    const orgId = filledMockChat.organization?.id ?? 'org123';
 
     const fallbackMemberMock = {
       request: {
-        query: ORGANIZATION_MEMBERS,
+        query: ORG_MEMBERS_QUERY,
         variables: {
           input: { id: orgId },
           first: 20,
@@ -1588,7 +1512,7 @@ describe('GroupChatDetails', () => {
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider
-          mocks={[fallbackMemberMock, fallbackMemberMock]}
+          mocks={[fallbackMemberMock, ...mocks]}
           cache={testCache}
         >
           <GroupChatDetails
@@ -1601,13 +1525,21 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await userEvent.click(await screen.findByTestId('addMembers'));
+    await act(async () => {
+      await userEvent.click(await screen.findByTestId('addMembers'));
+    });
+
     await screen.findByTestId('addExistingUserModal');
 
     await waitFor(() => {
-      const row = screen.getByTestId('user');
-      expect(row).toHaveTextContent('No Role User');
-      expect(row).toHaveTextContent('Member');
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBeGreaterThan(0);
+      const rowWithNoRoleUser = Array.from(rows).find((el) =>
+        el.textContent?.includes('No Role User'),
+      );
+      expect(rowWithNoRoleUser).toBeDefined();
+      expect(rowWithNoRoleUser).toHaveTextContent('No Role User');
+      expect(rowWithNoRoleUser).toHaveTextContent('Member');
     });
   });
 });
