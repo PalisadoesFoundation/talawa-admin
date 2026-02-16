@@ -592,6 +592,7 @@ Cypress.Commands.add(
 
     if (kind === 'actionItemCategories') {
       const catPayload = payload as SeedActionItemCategoryPayload;
+      const resolvedName = catPayload.name || makeUniqueLabel('Category');
       return resolveAuthToken(catPayload.auth).then((token) =>
         cy
           .task('createTestActionItemCategory', {
@@ -599,14 +600,14 @@ Cypress.Commands.add(
             token,
             input: {
               orgId: catPayload.orgId,
-              name: catPayload.name || makeUniqueLabel('Category'),
+              name: resolvedName,
               description: catPayload.description || 'E2E Action Item Category',
               isDisabled: catPayload.isDisabled ?? false,
             },
           })
           .then((res) => ({
             categoryId: (res as { categoryId: string }).categoryId,
-            name: catPayload.name,
+            name: resolvedName
           })),
       ) as Cypress.Chainable<{ categoryId: string; name?: string }>;
     }
