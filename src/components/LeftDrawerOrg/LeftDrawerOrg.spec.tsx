@@ -212,7 +212,6 @@ vi.mock('utils/useLocalstorage', () => ({
   })),
 }));
 
-// Mock SVG imports
 vi.mock('assets/svgs/angleRight.svg?react', () => ({
   default: vi.fn(({ fill }) => (
     <div data-testid="angle-right-icon" data-fill={fill}>
