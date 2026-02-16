@@ -150,12 +150,13 @@ const EventDashboardScreen = (): React.JSX.Element => {
         />
       </div>
       <div
-        className={`${styles.pageContainer} ${hideDrawer === null
-          ? ''
-          : hideDrawer
-            ? styles.expand
-            : styles.contract
-          } `}
+        className={`${styles.pageContainer} ${
+          hideDrawer === null
+            ? ''
+            : hideDrawer
+              ? styles.expand
+              : styles.contract
+        } `}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">

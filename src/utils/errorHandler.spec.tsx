@@ -117,7 +117,10 @@ describe('Test if errorHandler is working properly', () => {
   it('should call NotificationToast.error with the error message if it is an instance of error but have not matched any error message patterns', () => {
     const error = new Error('Bandhan sent an error message');
     errorHandler(null, error);
-    expect(NotificationToast.error).toHaveBeenCalledWith(error.message, expect.any(Object));
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      error.message,
+      expect.any(Object),
+    );
   });
 
   it('should handle different types for the first parameter while still showing error messages', () => {
