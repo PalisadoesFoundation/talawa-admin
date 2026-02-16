@@ -8,6 +8,7 @@ import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
+import askAndSetOAuth from './oauthConfig/oauthConfig';
 import { pathToFileURL } from 'url';
 
 /**
@@ -29,6 +30,10 @@ export const ENV_KEYS = {
   DOCKER_MODE: 'DOCKER_MODE',
   TALAWA_URL: 'REACT_APP_TALAWA_URL',
   BACKEND_WEBSOCKET_URL: 'REACT_APP_BACKEND_WEBSOCKET_URL',
+  GOOGLE_CLIENT_ID: 'VITE_GOOGLE_CLIENT_ID',
+  GOOGLE_REDIRECT_URI: 'VITE_GOOGLE_REDIRECT_URI',
+  GITHUB_CLIENT_ID: 'VITE_GITHUB_CLIENT_ID',
+  GITHUB_REDIRECT_URI: 'VITE_GITHUB_REDIRECT_URI',
 } as const;
 
 const isExitPromptError = (error: unknown): boolean =>
@@ -138,7 +143,8 @@ export const askAndSetLogErrors = async (): Promise<void> => {
  * 3. Configures Docker options
  * 4. Sets up port (if not using Docker) and API URL
  * 5. Configures reCAPTCHA settings
- * 6. Configures error logging preferences
+ * 6. Configures OAuth providers (Google/GitHub)
+ * 7. Configures error logging preferences
  *
  * If any step fails, exits with error code 1.
  * Can be cancelled with CTRL+C (exits with code 130).
@@ -200,6 +206,7 @@ export async function main(): Promise<void> {
     await askAndUpdateTalawaApiUrl(useDocker);
 
     await askAndSetRecaptcha();
+    await askAndSetOAuth();
     await askAndSetLogErrors();
 
     console.log(
