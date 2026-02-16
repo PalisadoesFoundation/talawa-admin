@@ -413,7 +413,7 @@ function OrganizationPeople(): JSX.Element {
           searchPlaceholder={t('searchFullName')}
           searchValue={searchTerm}
           onSearchChange={(value) => setSearchTerm(value)}
-          searchInputTestId="searchbtn"
+          searchInputTestId="member-search-input"
           searchButtonTestId="searchBtn"
           containerClassName={styles.calendar__header}
           dropdowns={[

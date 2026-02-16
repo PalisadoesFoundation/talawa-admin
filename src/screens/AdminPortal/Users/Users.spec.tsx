@@ -70,7 +70,6 @@ const { setItem, removeItem, clearAllItems } = useLocalStorage();
 
 beforeEach(() => {
   setItem('id', '123');
-  setItem('SuperAdmin', true);
   setItem('name', 'John Doe');
   setItem('AdminFor', [{ name: 'adi', id: '1234', avatarURL: '' }]);
 });
@@ -103,7 +102,6 @@ describe('Testing Users screen', () => {
   it(`Component should be rendered properly when user is not superAdmin
   and or userId does not exists in localstorage`, async () => {
     setItem('AdminFor', ['123']);
-    removeItem('SuperAdmin');
     setItem('id', '');
     render(
       <MockedProvider link={createLink(MOCKS)}>
@@ -124,7 +122,6 @@ describe('Testing Users screen', () => {
 
   it(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
     removeItem('AdminFor');
-    removeItem('SuperAdmin');
     removeItem('id');
     render(
       <MockedProvider link={createLink(MOCKS)}>
