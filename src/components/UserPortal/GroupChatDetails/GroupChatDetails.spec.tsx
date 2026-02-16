@@ -15,7 +15,7 @@ import {
   failingMocks,
   delayedMocks,
 } from './GroupChatDetailsMocks';
-import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_MEMBERS as ORG_MEMBERS_QUERY } from 'GraphQl/Queries/OrganizationQueries';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
@@ -1333,7 +1333,7 @@ describe('GroupChatDetails', () => {
 
     const noRoleMemberMock = {
       request: {
-        query: ORGANIZATION_MEMBERS,
+        query: ORG_MEMBERS_QUERY,
         variables: {
           input: { id: 'org123' },
           first: 20,
