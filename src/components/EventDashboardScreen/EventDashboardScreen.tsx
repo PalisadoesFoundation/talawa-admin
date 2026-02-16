@@ -42,6 +42,7 @@ import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
 import itemStyles from './EventDashboardScreen.module.css';
+import Button from 'shared-components/Button/Button';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
@@ -125,12 +126,13 @@ const EventDashboardScreen = (): React.JSX.Element => {
 
   return (
     <>
-      <button
+      <Button
         className={
           hideDrawer ? styles.opendrawer : styles.collapseSidebarButton
         }
         onClick={toggleDrawer}
         data-testid="toggleMenuBtn"
+        variant="none"
       >
         <i
           className={
@@ -138,7 +140,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
           }
           aria-hidden="true"
         ></i>
-      </button>
+      </Button>
       <div className={styles.drawer}>
         <LeftDrawerOrg
           orgId={orgId}
@@ -148,13 +150,12 @@ const EventDashboardScreen = (): React.JSX.Element => {
         />
       </div>
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
-        } `}
+        className={`${styles.pageContainer} ${hideDrawer === null
+          ? ''
+          : hideDrawer
+            ? styles.expand
+            : styles.contract
+          } `}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
