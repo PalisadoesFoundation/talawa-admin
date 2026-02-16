@@ -4,7 +4,7 @@
 
 # Interface: InterfaceWeeklyEventCalenderProps
 
-Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L13)
+Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L47)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:13](htt
 
 > **currentDate**: `Date`
 
-Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L14)
+Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L48)
 
 ***
 
