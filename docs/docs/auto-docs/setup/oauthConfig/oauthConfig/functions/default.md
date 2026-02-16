@@ -6,7 +6,7 @@
 
 > **default**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/oauthConfig/oauthConfig.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L26)
+Defined in: [src/setup/oauthConfig/oauthConfig.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L122)
 
 Prompts user to configure OAuth settings and updates the .env file.
 

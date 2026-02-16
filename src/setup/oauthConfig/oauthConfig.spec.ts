@@ -12,18 +12,17 @@ vi.mock('inquirer', async () => {
   };
 });
 
-vi.mock('../updateEnvFile/updateEnvFile', () => ({
+vi.mock('setup/updateEnvFile/updateEnvFile', () => ({
   default: vi.fn(),
 }));
 
 // Import after mocking
 import askAndSetOAuth from './oauthConfig';
 import inquirer from 'inquirer';
-import updateEnvFile from '../updateEnvFile/updateEnvFile';
+import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
 
 describe('askAndSetOAuth', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
@@ -199,9 +198,11 @@ describe('askAndSetOAuth', () => {
       'https://github.com/settings/developers',
     );
     expect(console.log).toHaveBeenCalledWith('Make sure to:');
-    expect(console.log).toHaveBeenCalledWith('1. Create a new OAuth App');
     expect(console.log).toHaveBeenCalledWith(
-      '2. Set the correct Authorization callback URL',
+      '1. Go to GitHub Developer Settings > OAuth Apps',
+    );
+    expect(console.log).toHaveBeenCalledWith(
+      '2. Register a new application with the callback URL',
     );
   });
 
