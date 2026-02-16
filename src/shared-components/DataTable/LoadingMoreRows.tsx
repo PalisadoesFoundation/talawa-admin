@@ -71,5 +71,3 @@ export function LoadingMoreRows<T>({
     </>
   );
 }
-
-export default LoadingMoreRows;

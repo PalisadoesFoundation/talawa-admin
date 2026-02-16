@@ -82,6 +82,18 @@ describe('CSS_PATTERNS', () => {
       ]);
     });
 
+    test('matches width with vh values', () => {
+      expect('width: 100vh'.match(CSS_PATTERNS.spacingPx)).toEqual([
+        'width: 100vh',
+      ]);
+    });
+
+    test('matches height with vw values', () => {
+      expect('height: 50vw'.match(CSS_PATTERNS.spacingPx)).toEqual([
+        'height: 50vw',
+      ]);
+    });
+
     test('does not match padding or margin (handled by spacingShorthand)', () => {
       expect('padding: 8px'.match(CSS_PATTERNS.spacingPx)).toBeNull();
       expect('margin: 1rem'.match(CSS_PATTERNS.spacingPx)).toBeNull();
@@ -122,6 +134,18 @@ describe('CSS_PATTERNS', () => {
       expect(
         'padding: 8px 16px 8px'.match(CSS_PATTERNS.spacingShorthand),
       ).toEqual(['padding: 8px 16px 8px']);
+    });
+
+    test('matches margin with vh values', () => {
+      expect('margin: 5vh'.match(CSS_PATTERNS.spacingShorthand)).toEqual([
+        'margin: 5vh',
+      ]);
+    });
+
+    test('matches margin with vw values', () => {
+      expect('margin: 5vw'.match(CSS_PATTERNS.spacingShorthand)).toEqual([
+        'margin: 5vw',
+      ]);
     });
   });
 
@@ -194,6 +218,12 @@ describe('CSS_PATTERNS', () => {
       ).toEqual(['border-radius: 4px 8px 4px 8px']);
     });
 
+    test('matches border-radius with percentage', () => {
+      expect('border-radius: 50%'.match(CSS_PATTERNS.borderRadius)).toEqual([
+        'border-radius: 50%',
+      ]);
+    });
+
     test('does not match invalid border-radius values', () => {
       expect(
         'border-radius: inherit'.match(CSS_PATTERNS.borderRadius),
@@ -255,6 +285,33 @@ describe('CSS_PATTERNS', () => {
     });
   });
 
+  describe('boxShadowBare', () => {
+    test('matches box-shadow with single hardcoded value', () => {
+      expect('box-shadow: 6px'.match(CSS_PATTERNS.boxShadowBare)).toEqual([
+        'box-shadow: 6px',
+      ]);
+    });
+
+    test('matches box-shadow with multiple hardcoded values', () => {
+      expect('box-shadow: 2px 4px'.match(CSS_PATTERNS.boxShadowBare)).toEqual([
+        'box-shadow: 2px 4px',
+      ]);
+    });
+
+    test('does not match box-shadow: none', () => {
+      expect('box-shadow: none'.match(CSS_PATTERNS.boxShadowBare)).toBeNull();
+    });
+  });
+
+  describe('boxShadowMixed', () => {
+    test('matches box-shadow with mixed var() and hardcoded px values', () => {
+      const result = 'box-shadow: 0 var(--shadow-offset-md) 5px'.match(
+        CSS_PATTERNS.boxShadowMixed,
+      );
+      expect(result).toEqual(['box-shadow: 0 var(--shadow-offset-md) 5px']);
+    });
+  });
+
   describe('outlineWidth', () => {
     test('matches outline-width with px', () => {
       expect('outline-width: 2px'.match(CSS_PATTERNS.outlineWidth)).toEqual([
@@ -308,6 +365,18 @@ describe('TSX_PATTERNS', () => {
       expect(
         "marginInline: '1rem'".match(TSX_PATTERNS.spacingCamelCase),
       ).toEqual(["marginInline: '1rem'"]);
+    });
+
+    test('matches marginTop with vh value', () => {
+      expect("marginTop: '5vh'".match(TSX_PATTERNS.spacingCamelCase)).toEqual([
+        "marginTop: '5vh'",
+      ]);
+    });
+
+    test('matches paddingLeft with vw value', () => {
+      expect(
+        "paddingLeft: '10vw'".match(TSX_PATTERNS.spacingCamelCase),
+      ).toEqual(["paddingLeft: '10vw'"]);
     });
   });
 
@@ -384,6 +453,12 @@ describe('TSX_PATTERNS', () => {
       expect(
         "borderRadius: '4px'".match(TSX_PATTERNS.borderRadiusCamelCase),
       ).toEqual(["borderRadius: '4px'"]);
+    });
+
+    test('matches borderRadius with percentage value', () => {
+      expect(
+        "borderRadius: '50%'".match(TSX_PATTERNS.borderRadiusCamelCase),
+      ).toEqual(["borderRadius: '50%'"]);
     });
   });
 

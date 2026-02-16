@@ -1,0 +1,17 @@
+{
+  "organizations": [
+    {
+      "id": "org_001",
+      "name": "Example Org",
+      "description": "Primary for tests",
+      "createdAt": "2025-12-01T00:00:00.000Z"
+    },
+    {
+      "id": "org_002",
+      "name": "Long Name Organization — مرحبا 世界",
+      "description": "Edge case name",
+      "createdAt": "2025-12-02T00:00:00.000Z"
+    }
+  ],
+  "emptyOrganizations": []
+}

@@ -1396,6 +1396,26 @@ export interface InterfaceQueryBlockPageMemberListItem {
 }
 
 /**
+ * GraphQL response type for user list queries.
+ */
+export interface InterfaceUserListQueryResponse {
+  allUsers?: {
+    edges?:
+      | Array<
+          | {
+              cursor?: string;
+              node: InterfaceQueryUserListItem | null | undefined;
+            }
+          | null
+          | undefined
+        >
+      | null
+      | undefined;
+    pageInfo?: InterfacePageInfoPg | null;
+  } | null;
+}
+
+/**
  * Defines the structure for a user list item returned from a query.
  */
 export interface InterfaceQueryUserListItem {
@@ -1656,69 +1676,6 @@ export interface InterfaceQueryMembershipRequestsListItem {
       };
     }[];
   }[];
-}
-
-/**
- * Defines the structure for agenda item category information.
- */
-export interface InterfaceAgendaItemCategoryInfo {
-  _id: string;
-  name: string;
-  description: string;
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-}
-
-/**
- * Defines the structure for a list of agenda item categories by organization.
- */
-export interface InterfaceAgendaItemCategoryList {
-  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
-}
-
-/**
- * Defines the structure for agenda item information.
- */
-export interface InterfaceAgendaItemInfo {
-  _id: string;
-  title: string;
-  description: string;
-  duration: string;
-  attachments: string[];
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  urls: string[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  }[];
-  sequence: number;
-  categories: {
-    _id: string;
-    name: string;
-  }[];
-  organization: {
-    _id: string;
-    name: string;
-  };
-  relatedEvent: {
-    _id: string;
-    title: string;
-  };
-}
-
-/**
- * Defines the structure for a list of agenda items by event.
- */
-export interface InterfaceAgendaItemList {
-  agendaItemByEvent: InterfaceAgendaItemInfo[];
 }
 
 /**

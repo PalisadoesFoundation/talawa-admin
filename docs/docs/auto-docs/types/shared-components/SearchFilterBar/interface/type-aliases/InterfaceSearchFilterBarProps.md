@@ -6,7 +6,7 @@
 
 > **InterfaceSearchFilterBarProps** = [`InterfaceSearchFilterBarSimple`](../interfaces/InterfaceSearchFilterBarSimple.md) \| [`InterfaceSearchFilterBarAdvanced`](../interfaces/InterfaceSearchFilterBarAdvanced.md)
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:416](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L416)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:426](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L426)
 
 Main props interface for the SearchFilterBar component.
 

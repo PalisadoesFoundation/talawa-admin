@@ -19,6 +19,7 @@ export interface IMember {
   createdAt: string;
   name: string;
   emailAddress: `${string}@${string}.${string}`;
+  avatarURL?: string;
   natalSex: string;
   eventsAttended?: {
     id: string;
@@ -211,13 +212,6 @@ export interface IAttendanceStatisticsModalProps {
   t: (key: string, options?: Record<string, unknown>) => string;
 }
 
-export interface IEventsAttendedMemberModalProps {
-  eventsAttended: Partial<IEvent>[];
-  setShow: (show: boolean) => void;
-  show: boolean;
-  eventsPerPage?: number;
-}
-
 export interface IEventEdge {
   node: {
     id: string;
@@ -305,5 +299,3 @@ export type InterfaceEventEdge = IEventEdge;
 export type InterfaceUpdateEventModalProps = IUpdateEventModalProps;
 export type InterfaceAttendanceStatisticsModalProps =
   IAttendanceStatisticsModalProps;
-export type InterfaceEventsAttendedMemberModalProps =
-  IEventsAttendedMemberModalProps;

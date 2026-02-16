@@ -244,12 +244,56 @@ describe('validateFiles', () => {
     expect(result[0].type).toBe('border-radius');
   });
 
-  test('detects hardcoded box-shadow in CSS files', async () => {
+  test('detects hardcoded box-shadow in CSS files without duplicate box-shadow findings', async () => {
     readFileSyncMock.mockReturnValue('.test { box-shadow: 2px 4px 8px #000; }');
+
+    const result = await validateFiles('**/*.css', ['src/style/test.css']);
+    const boxShadowResults = result.filter((r) => r.type === 'box-shadow');
+
+    expect(boxShadowResults).toHaveLength(1);
+    expect(boxShadowResults[0].match).toBe('box-shadow: 2px 4px 8px #000');
+  });
+
+  test('detects bare hardcoded box-shadow values in CSS files', async () => {
+    readFileSyncMock.mockReturnValue('.test { box-shadow: 6px; }');
 
     const result = await validateFiles('**/*.css', ['src/style/test.css']);
 
     expect(result.some((r) => r.type === 'box-shadow')).toBe(true);
+  });
+
+  test('detects mixed var/hardcoded box-shadow values in CSS files', async () => {
+    readFileSyncMock.mockReturnValue(
+      '.test { box-shadow: 0 var(--shadow-offset-md) 5px; }',
+    );
+
+    const result = await validateFiles('**/*.css', ['src/style/test.css']);
+
+    expect(result.some((r) => r.type === 'box-shadow')).toBe(true);
+  });
+
+  test('detects border-radius with percentage values in CSS files', async () => {
+    readFileSyncMock.mockReturnValue('.test { border-radius: 50%; }');
+
+    const result = await validateFiles('**/*.css', ['src/style/test.css']);
+
+    expect(result.some((r) => r.type === 'border-radius')).toBe(true);
+  });
+
+  test('detects vh/vw spacing values in CSS files', async () => {
+    readFileSyncMock.mockReturnValue('.test { margin: 5vw; }');
+
+    const result = await validateFiles('**/*.css', ['src/style/test.css']);
+
+    expect(result.some((r) => r.type === 'spacing')).toBe(true);
+  });
+
+  test('allows margin with percentage values in CSS files', async () => {
+    readFileSyncMock.mockReturnValue('.test { margin: 5%; }');
+
+    const result = await validateFiles('**/*.css', ['src/style/test.css']);
+
+    expect(result.some((r) => r.type === 'spacing')).toBe(false);
   });
 
   test('detects hardcoded outline in CSS files', async () => {

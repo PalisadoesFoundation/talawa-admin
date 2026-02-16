@@ -97,7 +97,7 @@ describe('ChangeLanguageDropDown', () => {
     // Setup default mock implementations
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'TRUE';
         return null;
@@ -284,7 +284,7 @@ describe('ChangeLanguageDropDown', () => {
       // Mock userImage to be the specified invalid value
       (useLocalStorage as Mock).mockReturnValue({
         getItem: vi.fn((key: string) => {
-          if (key === 'id') return mockUserId;
+          if (key === 'userId') return mockUserId;
           if (key === 'UserImage') return userImage;
           if (key === 'IsLoggedIn') return 'TRUE';
           return null;
@@ -334,7 +334,7 @@ describe('ChangeLanguageDropDown', () => {
 
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return 'https://example.com/avatar.jpg';
         if (key === 'IsLoggedIn') return 'TRUE';
         return null;
@@ -358,7 +358,7 @@ describe('ChangeLanguageDropDown', () => {
     // Mock user as NOT logged in
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'FALSE'; // User NOT logged in
         return null;
@@ -414,7 +414,7 @@ describe('ChangeLanguageDropDown', () => {
     // Mock user as logged in
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'TRUE'; // User IS logged in
         return null;
@@ -466,7 +466,7 @@ describe('ChangeLanguageDropDown', () => {
     // Mock IsLoggedIn as null (user not logged in)
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return null; // Not set
         return null;

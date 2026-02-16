@@ -42,7 +42,6 @@ import TruncatedText from 'shared-components/TruncatedText/TruncatedText';
 import { useTranslation } from 'react-i18next';
 import styles from './OrganizationCard.module.css';
 import { Tooltip } from '@mui/material';
-import Avatar from 'shared-components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 import { ApolloError, useMutation } from '@apollo/client';
@@ -56,6 +55,7 @@ import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQuerie
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 import Button from 'shared-components/Button';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export interface InterfaceOrganizationCardPropsPG {
   data: InterfaceOrganizationCardProps;
@@ -171,22 +171,12 @@ function OrganizationCard({
         <div className={styles.innerContainer} data-cy="orgCardContainer">
           {/* Container for the organization image */}
           <div className={styles.orgImgContainer}>
-            {avatarURL ? (
-              <img
-                src={avatarURL}
-                alt={name}
-                crossOrigin="anonymous"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <Avatar
-                name={name}
-                alt={name}
-                dataTestId="emptyContainerForImage"
-              />
-            )}
+            <ProfileAvatarDisplay
+              fallbackName={name}
+              imageUrl={avatarURL}
+              dataTestId="emptyContainerForImage"
+              enableEnlarge
+            />
           </div>
           <div className={styles.content}>
             <div>

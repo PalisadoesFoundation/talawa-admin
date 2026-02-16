@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './BulkActionsBar.module.css';
 import type { InterfaceBulkActionsBarProps } from '../../types/shared-components/BulkActionsBar/interface';
 import { useTranslation } from 'react-i18next';
+import Button from 'shared-components/Button';
 
 // translation-check-keyPrefix: common
 
@@ -34,7 +35,7 @@ export function BulkActionsBar({
       </div>
       <div className={styles.bulkRight}>
         {children}
-        <button
+        <Button
           type="button"
           onClick={onClear}
           className={styles.bulkClear}
@@ -42,10 +43,8 @@ export function BulkActionsBar({
           data-testid="bulk-clear-btn"
         >
           {t('clear')}
-        </button>
+        </Button>
       </div>
     </section>
   );
 }
-
-export default BulkActionsBar;

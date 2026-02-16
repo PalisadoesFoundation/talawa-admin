@@ -1,18 +1,14 @@
 /**
  * Props interface for the EmptyState component.
- *
- * @interface InterfaceEmptyStateProps
- * @category Shared Components
  */
 export interface InterfaceEmptyStateProps {
   /**
-   * Primary message to display (i18n key or plain string).
-   * @required
+   * Primary message to display (i18n key or plain string) (Required).
    */
   message: string;
 
   /**
-   * Optional secondary description text.
+   * (Optional) Secondary description text.
    */
   description?: string;
 

@@ -106,6 +106,16 @@ export interface InterfaceDropdownConfig {
    * @example "filter", "sort", "timeFrame"
    */
   dropdownTestId?: string;
+
+  /**
+   * Optional extra class for the dropdown container (e.g. from parent CSS module for styling).
+   */
+  containerClassName?: string;
+
+  /**
+   * Optional extra class for the dropdown toggle button (e.g. from parent CSS module for styling).
+   */
+  toggleClassName?: string;
 }
 
 /**

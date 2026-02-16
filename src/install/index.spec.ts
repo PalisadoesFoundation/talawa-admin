@@ -44,6 +44,7 @@ describe('install/index', () => {
       stdout: '',
       stderr: '',
     });
+    vi.mocked(execModule.commandExists).mockResolvedValue(true);
   });
 
   afterEach(() => {
@@ -109,6 +110,167 @@ describe('install/index', () => {
           }),
         ]),
       );
+    });
+
+    it('should check rootless prerequisites when rootless mode is selected', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'linux',
+        distro: 'ubuntu',
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(execModule.commandExists).toHaveBeenCalledWith(
+        'dockerd-rootless-setuptool.sh',
+      );
+      expect(execModule.commandExists).toHaveBeenCalledWith('newuidmap');
+      expect(execModule.commandExists).toHaveBeenCalledWith('newgidmap');
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'DOCKER_HOST=unix:///run/user/$UID/docker.sock',
+        ),
+      );
+    });
+
+    it('should print missing prerequisite guidance for rootless mode', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'linux',
+        distro: 'ubuntu',
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+      vi.mocked(execModule.commandExists)
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('Missing rootless prerequisites:'),
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('docker-ce-rootless-extras'),
+      );
+      expect(process.exit).toHaveBeenCalledWith(1);
+      expect(packagesModule.installPackage).not.toHaveBeenCalled();
+    });
+
+    it('should print generic Linux rootless guidance and abort when prerequisites are missing on non-debian distros', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'linux',
+        distro: 'other',
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+      vi.mocked(execModule.commandExists)
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'Install rootless prerequisites for your distro (uidmap, slirp4netns, fuse-overlayfs, rootless extras).',
+        ),
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'https://docs.docker.com/engine/security/rootless/',
+        ),
+      );
+      expect(process.exit).toHaveBeenCalledWith(1);
+      expect(packagesModule.installPackage).not.toHaveBeenCalled();
+    });
+
+    it('should short-circuit Linux rootless prerequisite checks on non-linux platforms', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'macos',
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(execModule.commandExists).not.toHaveBeenCalled();
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'Rootless daemon prerequisites are primarily applicable to Linux/WSL environments.',
+        ),
+      );
+      expect(process.exit).not.toHaveBeenCalled();
+    });
+
+    it('should print WSL-specific rootless guidance and abort when prerequisites are missing', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'linux',
+        distro: 'ubuntu',
+        isWsl: true,
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+      vi.mocked(execModule.commandExists).mockResolvedValue(false);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'WSL recommendation: use Docker Desktop with WSL integration',
+        ),
+      );
+      expect(process.exit).toHaveBeenCalledWith(1);
     });
 
     it('should install selected packages', async () => {

@@ -23,18 +23,6 @@ export class LoginPage {
       .should('be.visible')
       .clear()
       .type(password);
-    if (Cypress.env('RECAPTCHA_SITE_KEY')) {
-      cy.get('iframe')
-        .first()
-        .then((recaptchaIframe) => {
-          const body = recaptchaIframe.contents();
-          cy.wrap(body)
-            .find('.recaptcha-checkbox-border')
-            .should('be.visible')
-            .click();
-        });
-      cy.wait(1000); // wait for 1 second to simulate recaptcha completion
-    }
     cy.get(this._loginButton, { timeout }).should('be.enabled').click();
     return this;
   }

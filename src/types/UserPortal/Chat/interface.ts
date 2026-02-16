@@ -1,6 +1,6 @@
 import type { ApolloQueryResult } from '@apollo/client';
 
-export type NewChatType = {
+export type Chat = {
   id: string;
   name: string;
   description?: string;
@@ -8,8 +8,7 @@ export type NewChatType = {
   avatarURL?: string;
   isGroup: boolean;
   createdAt: string;
-  updatedAt: string | null;
-  // Optional unread/computed fields (provided by unreadChats or when opting-in)
+  updatedAt?: string | null;
   unreadMessagesCount?: number;
   hasUnread?: boolean;
   firstUnreadMessageId?: string;
@@ -51,9 +50,9 @@ export type NewChatType = {
     avatarMimeType?: string;
     avatarURL?: string;
   };
-  members: {
+  members?: {
     edges: Array<{
-      cursor: string;
+      cursor?: string;
       node: {
         user: {
           id: string;
@@ -65,7 +64,7 @@ export type NewChatType = {
       };
     }>;
   };
-  messages: {
+  messages?: {
     edges: Array<{
       __typename?: string;
       node: {
@@ -100,7 +99,7 @@ export type NewChatType = {
 export interface InterfaceGroupChatDetailsProps {
   toggleGroupChatDetailsModal: () => void;
   groupChatDetailsModalisOpen: boolean;
-  chat: NewChatType;
+  chat: Chat;
   chatRefetch: (
     variables?:
       | Partial<{
@@ -111,9 +110,12 @@ export interface InterfaceGroupChatDetailsProps {
           beforeMessages?: string | null;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<{ chat: NewChatType }>>;
+  ) => Promise<ApolloQueryResult<{ chat: Chat }>>;
 }
 
+/**
+ * Props for ContactCard component.
+ */
 export interface InterfaceContactCardProps {
   id: string;
   title: string;
@@ -123,4 +125,40 @@ export interface InterfaceContactCardProps {
   isGroup: boolean;
   unseenMessages: number;
   lastMessage: string;
+}
+
+/**
+ * Organization member with their role.
+ */
+export interface InterfaceOrganizationMember {
+  id: string;
+  name: string;
+  avatarURL?: string;
+  role: string;
+}
+
+/**
+ * Interface representing a chat user structure.
+ * @internal
+ */
+export interface InterfaceChatUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  createdAt: Date;
+}
+
+/**
+ * Interface representing a mock message structure for testing purposes.
+ * @internal
+ */
+export interface InterfaceMockMessage {
+  _id: string;
+  createdAt: Date;
+  sender: InterfaceChatUser;
+  messageContent: string;
+  replyTo?: InterfaceMockMessage;
+  updatedAt: Date;
+  media?: string;
 }

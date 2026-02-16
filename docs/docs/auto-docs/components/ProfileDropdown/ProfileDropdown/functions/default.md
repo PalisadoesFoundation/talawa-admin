@@ -6,13 +6,13 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileDropdown/ProfileDropdown.tsx#L54)
+Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileDropdown/ProfileDropdown.tsx#L50)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`InterfaceProfileDropdownProps`
+[`InterfaceProfileDropdownProps`](../../../../types/shared-components/ProfileDropdown/interface/interfaces/InterfaceProfileDropdownProps.md)
 
 ## Returns
 
