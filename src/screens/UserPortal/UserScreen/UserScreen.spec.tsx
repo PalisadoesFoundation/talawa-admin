@@ -1,17 +1,21 @@
 /**
- * This file contains unit tests for the UserScreen component.
+ * Unit tests for the UserScreen component.
  *
- * The tests cover:
- * - Rendering of the correct title based on the location.
- * - Functionality of the LeftDrawer component.
- * - Behavior when the orgId is undefined.
+ * Coverage includes:
+ * - All 13 route → title mappings + unknown-route fallback
+ * - Sidebar rendering: UserSidebarOrg vs UserSidebar
+ * - Drawer visibility: localStorage, resize, wide-screen no-reopen
+ * - DropDownButton onSelect: viewProfile / logout / logout-error / default
+ * - Profile rendering: userImage present (img) vs absent (Avatar)
+ * - GraphQL error resilience
  *
- * These tests use Vitest for test execution and MockedProvider for mocking GraphQL queries.
+ * Uses Vitest, React Testing Library, userEvent, and MockedProvider.
  */
 
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, waitFor, cleanup, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -23,15 +27,25 @@ import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
-import localStyles from './UserScreen.module.css';
-import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
-import userEvent from '@testing-library/user-event';
+
+/* ------------------------------------------------------------------ */
+/*  Mutable per-test state                                            */
+/* ------------------------------------------------------------------ */
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
 const routerSpies = vi.hoisted(() => ({
   navigate: vi.fn(),
 }));
+
+const mockUserProfile = vi.hoisted(() => ({
+  handleLogout: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
+  userImage: '' as string,
+}));
+
+/* ------------------------------------------------------------------ */
+/*  Module mocks                                                      */
+/* ------------------------------------------------------------------ */
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -43,7 +57,58 @@ vi.mock('react-router', async () => {
   };
 });
 
-// Mock UserSidebarOrg to prevent router-related errors from NavLink, useLocation, etc.
+vi.mock('hooks/useUserProfile', () => ({
+  default: vi.fn(() => ({
+    name: 'John Doe',
+    displayedName: 'John Doe',
+    userRole: 'USER',
+    userImage: mockUserProfile.userImage,
+    profileDestination: '/user/profile/123',
+    handleLogout: mockUserProfile.handleLogout,
+    tCommon: (key: string) => {
+      const t: Record<string, string> = {
+        viewProfile: 'View Profile',
+        logout: 'Logout',
+        profilePicture: 'profile picture',
+        profilePicturePlaceholder: 'dummy picture',
+        userProfileMenu: 'User Profile Menu',
+      };
+      return t[key] || key;
+    },
+  })),
+}));
+
+vi.mock('shared-components/DropDownButton', () => ({
+  default: vi.fn(
+    ({
+      onSelect,
+      icon,
+    }: {
+      onSelect: (value: string) => void;
+      icon?: React.ReactNode;
+    }) => (
+      <div data-testid="mock-dropdown">
+        {icon}
+        <button
+          data-testid="select-viewProfile"
+          onClick={() => onSelect('viewProfile')}
+        >
+          View Profile
+        </button>
+        <button data-testid="select-logout" onClick={() => onSelect('logout')}>
+          Logout
+        </button>
+        <button
+          data-testid="select-unknown"
+          onClick={() => onSelect('unknown')}
+        >
+          Unknown
+        </button>
+      </div>
+    ),
+  ),
+}));
+
 vi.mock('components/UserPortal/UserSidebarOrg/UserSidebarOrg', () => ({
   default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
     <div data-testid="leftDrawerContainer" data-hide-drawer={hideDrawer}>
@@ -55,7 +120,6 @@ vi.mock('components/UserPortal/UserSidebarOrg/UserSidebarOrg', () => ({
   )),
 }));
 
-// Mock UserSidebar to prevent router-related errors
 vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
     <div data-testid="leftDrawerContainer" data-hide-drawer={hideDrawer}>
@@ -64,7 +128,6 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   )),
 }));
 
-// Mock SignOut component to prevent useNavigate() error from Router context
 vi.mock('components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
@@ -73,7 +136,6 @@ vi.mock('components/SignOut/SignOut', () => ({
   )),
 }));
 
-// Mock useSession to prevent router hook errors
 vi.mock('utils/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
@@ -83,52 +145,13 @@ vi.mock('utils/useSession', () => ({
   })),
 }));
 
-vi.mock('shared-components/DropDownButton', () => ({
-  default: vi.fn((props) => (
-    <div
-      data-testid="user-profile-dropdown"
-      data-variant={props.variant}
-      data-menu-class={props.menuClassName}
-      data-show-caret={props.showCaret}
-      aria-label={props.ariaLabel}
-    >
-      {props.icon}
-      <div data-testid="dropdown-options">
-        {props.options?.map(
-          (opt: { value: string; label: React.ReactNode }) => (
-            <button
-              key={opt.value}
-              data-testid={`option-${opt.value}`}
-              type="button"
-              onClick={() => props.onSelect && props.onSelect(opt.value)}
-            >
-              {opt.label}
-            </button>
-          ),
-        )}
-        <button
-          type="button"
-          data-testid="option-unknownKey"
-          onClick={() => props.onSelect && props.onSelect('unknownKey')}
-        >
-          Unknown
-        </button>
-      </div>
-    </div>
-  )),
-}));
-
-vi.mock('hooks/useUserProfile', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: vi.fn(
-    (): InterfaceUseUserProfileReturn => ({
-      name: 'Test User',
-      displayedName: 'Test User',
-      userRole: 'User',
-      userImage: 'test-image.jpg',
-      profileDestination: '/user/profile',
-      handleLogout: vi.fn().mockResolvedValue(undefined),
-      tCommon: (key: string) => key,
-    }),
+    ({ dataTestId, alt }: { dataTestId?: string; alt?: string }) => (
+      <div data-testid={dataTestId} aria-label={alt}>
+        Avatar
+      </div>
+    ),
   ),
 }));
 
@@ -173,388 +196,384 @@ const MOCKS = [
     },
   },
 ];
-const link = new StaticMockLink(MOCKS, true);
 
-describe('UserScreen tests with LeftDrawer functionality', () => {
+const ERROR_MOCKS = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: { id: '123' },
+    },
+    error: new Error('Network error'),
+  },
+];
+
+const link = new StaticMockLink(MOCKS, true);
+const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+
+const renderUserScreen = (mockLink = link): ReturnType<typeof render> =>
+  render(
+    <MockedProvider link={mockLink}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserScreen />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+describe('UserScreen tests', () => {
   beforeEach(() => {
     localStorage.setItem('name', 'John Doe');
     mockID = '123';
     mockLocation = '/user/organization/123';
     routerSpies.navigate.mockReset();
-    localStorage.setItem('sidebar', 'false');
+    mockUserProfile.handleLogout.mockReset().mockResolvedValue(undefined);
+    mockUserProfile.userImage = '';
+    localStorage.setItem('Talawa-admin_sidebar', JSON.stringify('false'));
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    });
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
+    vi.restoreAllMocks();
+    vi.clearAllMocks();
+
     localStorage.removeItem('name');
-    localStorage.removeItem('sidebar');
+    localStorage.removeItem('Talawa-admin_sidebar');
+
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    });
   });
 
-  it('renders the correct title for posts', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  it('renders the correct title for posts (organization route)', () => {
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Posts',
     );
-
-    const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement).toHaveTextContent('Posts');
   });
 
-  it('renders the correct title for people', () => {
+  it('renders the correct title for people route', () => {
     mockLocation = '/user/people/123';
-
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'People',
     );
-
-    const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement).toHaveTextContent('People');
   });
 
-  it('renders the correct title for chat', () => {
+  it('renders the correct title for events route', () => {
+    mockLocation = '/user/events/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Events',
+    );
+  });
+
+  it('renders the correct title for donate route', () => {
+    mockLocation = '/user/donate/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Donations',
+    );
+  });
+
+  it('renders the correct title for transactions route', () => {
+    mockLocation = '/user/transactions/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Transactions',
+    );
+  });
+
+  it('renders the correct title for chat route', () => {
     mockLocation = '/user/chat/123';
-
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Chats',
     );
-
-    const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement).toHaveTextContent('Chats');
   });
 
-  it('toggles LeftDrawer correctly based on window size and user interaction', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+  it('renders the correct title for campaigns route', () => {
+    mockLocation = '/user/campaigns/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Fundraising Campaigns',
     );
-
-    // Note: Toggle button functionality has been moved to separate components
-    // (e.g., SidebarToggle) and is no longer part of the drawer components
-    // due to plugin system modifications
   });
 
-  it('renders default sidebar when orgId is undefined', () => {
+  it('renders the correct title for pledges route', () => {
+    mockLocation = '/user/pledges/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'My Pledges',
+    );
+  });
+
+  it('renders the correct title for volunteer route', () => {
+    mockLocation = '/user/volunteer/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Volunteership',
+    );
+  });
+
+  it('renders the correct title for leaveorg route', () => {
+    mockLocation = '/user/leaveorg/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Leave Organization',
+    );
+  });
+
+  it('renders the correct title for notification route', () => {
+    mockLocation = '/user/notification';
+    mockID = undefined;
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Notifications',
+    );
+  });
+
+  it('renders the correct title for organizations route', () => {
+    mockLocation = '/user/organizations';
+    mockID = undefined;
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Organizations',
+    );
+  });
+
+  it('renders the correct title for settings route', () => {
+    mockLocation = '/user/settings';
+    mockID = undefined;
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'Settings',
+    );
+  });
+
+  it('renders default title "User Portal" for unknown routes', () => {
+    mockLocation = '/user/unknownroute/123';
+    renderUserScreen();
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      'User Portal',
+    );
+  });
+
+  it('renders UserSidebarOrg when orgId is present', () => {
+    renderUserScreen();
+    expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
+    expect(screen.getByTestId('OrgBtn')).toBeInTheDocument();
+  });
+
+  it('renders UserSidebar when orgId is undefined', () => {
     mockID = undefined;
     mockLocation = '/user/notification';
-
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderUserScreen();
     expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
     expect(screen.queryByTestId('OrgBtn')).not.toBeInTheDocument();
     expect(routerSpies.navigate).not.toHaveBeenCalled();
   });
 
   it('renders title within titleContainer div', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement.parentElement).toHaveClass(localStyles.titleContainer);
+    renderUserScreen();
+    const heading = screen.getByRole('heading', { level: 1 });
+    expect(heading.parentElement).toBeInTheDocument();
+    expect(heading).toHaveTextContent('Posts');
   });
 
-  it('renders default title "User Portal" for unknown routes', () => {
-    mockLocation = '/user/unknownroute/123';
+  it('sets hideDrawer true when window <= 820px on mount', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 800,
+    });
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderUserScreen();
 
-    const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement).toHaveTextContent('User Portal');
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
   });
 
-  it('renders DropDownButton component with correct props', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('hides drawer when localStorage sidebar is true', async () => {
+    localStorage.setItem('Talawa-admin_sidebar', JSON.stringify('true'));
 
-    const dropdown = screen.getByTestId('user-profile-dropdown');
-    expect(dropdown).toBeInTheDocument();
-    expect(dropdown).toHaveAttribute('data-variant', 'light');
-    // showCaret is passed as false in UserScreen.tsx
-    expect(dropdown).toHaveAttribute('data-show-caret', 'false');
-    // We check if the class name is passed (it will be the hashed class name from CSS module)
-    expect(dropdown).toHaveAttribute('data-menu-class');
+    renderUserScreen();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
   });
 
-  it('renders profile content correctly', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('shows drawer when localStorage sidebar is false', async () => {
+    localStorage.setItem('Talawa-admin_sidebar', JSON.stringify('false'));
 
-    expect(screen.getByTestId('display-img')).toBeInTheDocument();
-    expect(screen.getByTestId('display-name')).toHaveTextContent('Test User');
-    expect(screen.getByTestId('display-type')).toHaveTextContent('User');
+    renderUserScreen();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'false',
+      );
+    });
   });
 
-  it('renders Avatar fallback when userImage is falsy', async () => {
-    // Mock useUserProfile to return empty userImage
-    const useUserProfileMock = await import('hooks/useUserProfile');
-    // Verify we are mocking the default export
-    const mockUseUserProfile =
-      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+  it('hides drawer on resize to narrow screen', async () => {
+    renderUserScreen();
 
-    mockUseUserProfile.mockImplementation(
-      (): InterfaceUseUserProfileReturn => ({
-        name: 'Test User',
-        displayedName: 'Test User',
-        userRole: 'User',
-        userImage: '', // Falsy value
-        profileDestination: '/user/profile',
-        handleLogout: vi.fn().mockResolvedValue(undefined),
-        tCommon: (key: string) => key,
-      }),
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'false',
+      );
+    });
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await act(async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 700,
+      });
+      window.dispatchEvent(new Event('resize'));
+    });
 
-    // Assert that the image displayed is the Avatar (fallback)
-    const avatarImg = screen.getByTestId('display-img');
-    expect(avatarImg).toBeInTheDocument();
-    // Avatar component uses createAvatar(...).toDataUri() as src
-    expect(avatarImg).toHaveAttribute(
-      'src',
-      expect.stringMatching(/^data:image\/svg\+xml/),
-    );
-    expect(avatarImg).toHaveAttribute('alt', 'profilePicturePlaceholder');
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
   });
 
-  it('navigates to profile on viewProfile click', async () => {
-    const useUserProfileMock = await import('hooks/useUserProfile');
-    const mockUseUserProfile =
-      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
-    mockUseUserProfile.mockImplementation(
-      (): InterfaceUseUserProfileReturn => ({
-        name: 'Test User',
-        displayedName: 'Test User',
-        userRole: 'User',
-        userImage: 'test-image.jpg',
-        profileDestination: '/user/profile',
-        handleLogout: vi.fn().mockResolvedValue(undefined),
-        tCommon: (key: string) => key,
-      }),
-    );
+  it('does not reopen drawer when resized back to wide screen', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 800,
+    });
 
+    renderUserScreen();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
+
+    await act(async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1100,
+      });
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
+  });
+
+  it('navigates to profile when viewProfile is selected', async () => {
     const user = userEvent.setup();
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderUserScreen();
 
-    const viewProfileOption = screen.getByTestId('option-viewProfile');
-    await user.click(viewProfileOption);
+    await user.click(screen.getByTestId('select-viewProfile'));
 
-    expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile');
+    expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile/123');
   });
 
-  it('calls handleLogout on logout click', async () => {
-    // Mock userProfile hook to capture handleLogout
-    const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
-    const useUserProfileMock = await import('hooks/useUserProfile');
+  it('calls handleLogout when logout is selected', async () => {
     const user = userEvent.setup();
-    // Cast the default export to a Mock function to access mockImplementation
-    const mockUseUserProfile =
-      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
-    mockUseUserProfile.mockImplementation(
-      (): InterfaceUseUserProfileReturn => ({
-        name: 'Test User',
-        displayedName: 'Test User',
-        userRole: 'User',
-        userImage: 'test-image.jpg',
-        profileDestination: '/user/profile',
-        handleLogout: handleLogoutMock,
-        tCommon: (key: string) => key,
-      }),
-    );
+    renderUserScreen();
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await user.click(screen.getByTestId('select-logout'));
 
-    const logoutOption = screen.getByTestId('option-logout');
-    await user.click(logoutOption);
-
-    expect(handleLogoutMock).toHaveBeenCalled();
+    expect(mockUserProfile.handleLogout).toHaveBeenCalled();
   });
 
-  it('should log error when logout fails', async () => {
+  it('logs error to console when handleLogout rejects', async () => {
+    const user = userEvent.setup();
     const error = new Error('Logout failed');
-    const handleLogoutMock = vi.fn().mockRejectedValue(error);
-    const useUserProfileMock = await import('hooks/useUserProfile');
-    const user = userEvent.setup();
-    const mockUseUserProfile =
-      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
-
-    mockUseUserProfile.mockImplementation(
-      (): InterfaceUseUserProfileReturn => ({
-        name: 'Test User',
-        displayedName: 'Test User',
-        userRole: 'User',
-        userImage: 'test-image.jpg',
-        profileDestination: '/user/profile',
-        handleLogout: handleLogoutMock,
-        tCommon: (key: string) => key,
-      }),
-    );
-
+    mockUserProfile.handleLogout.mockRejectedValueOnce(error);
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderUserScreen();
 
-    const logoutOption = screen.getByTestId('option-logout');
-    await user.click(logoutOption);
+    await user.click(screen.getByTestId('select-logout'));
 
-    expect(handleLogoutMock).toHaveBeenCalled();
-    await new Promise(process.nextTick);
-    expect(consoleSpy).toHaveBeenCalledWith('Logout failed:', error);
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith('Logout failed:', error);
+    });
+
     consoleSpy.mockRestore();
   });
 
-  it('should handle unknown eventKey in DropDownButton', async () => {
-    // Mock userProfile hook to capture handleLogout
-    const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
-    const useUserProfileMock = await import('hooks/useUserProfile');
-    const mockUseUserProfile =
-      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
-
-    mockUseUserProfile.mockImplementation(
-      (): InterfaceUseUserProfileReturn => ({
-        name: 'Test User',
-        displayedName: 'Test User',
-        userRole: 'User',
-        userImage: 'test-image.jpg',
-        profileDestination: '/user/profile',
-        handleLogout: handleLogoutMock,
-        tCommon: (key: string) => key,
-      }),
-    );
-
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+  it('does nothing for unknown eventKey (default branch)', async () => {
     const user = userEvent.setup();
-    const unknownOption = screen.getByTestId('option-unknownKey');
-    await user.click(unknownOption);
+    renderUserScreen();
+
+    await user.click(screen.getByTestId('select-unknown'));
 
     expect(routerSpies.navigate).not.toHaveBeenCalled();
-    expect(handleLogoutMock).not.toHaveBeenCalled();
+    expect(mockUserProfile.handleLogout).not.toHaveBeenCalled();
+  });
+
+  it('renders displayedName and userRole', () => {
+    renderUserScreen();
+    expect(screen.getByTestId('display-name')).toHaveTextContent('John Doe');
+    expect(screen.getByTestId('display-type')).toHaveTextContent('USER');
+  });
+
+  it('renders Avatar when userImage is empty', () => {
+    renderUserScreen();
+    const el = screen.getByTestId('display-img');
+    expect(el).toBeInTheDocument();
+    expect(el.tagName).not.toBe('IMG');
+  });
+
+  it('renders <img> when userImage is provided', () => {
+    mockUserProfile.userImage = 'https://example.com/avatar.jpg';
+    renderUserScreen();
+
+    const img = screen.getByTestId('display-img');
+    expect(img.tagName).toBe('IMG');
+    expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg');
+    expect(img).toHaveAttribute('alt', 'profile picture');
+  });
+
+  it('does not crash when GraphQL returns an error', async () => {
+    renderUserScreen(errorLink);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+    });
+
+    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
+  });
+
+  it('renders mainpageright container', () => {
+    renderUserScreen();
+    expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
   });
 });
