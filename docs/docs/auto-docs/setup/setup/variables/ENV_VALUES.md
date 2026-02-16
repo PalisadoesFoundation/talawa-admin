@@ -6,7 +6,7 @@
 
 > `const` **ENV\_VALUES**: `object`
 
-Defined in: [src/setup/setup.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L17)
+Defined in: [src/setup/setup.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L18)
 
 Environment variable value constants
 

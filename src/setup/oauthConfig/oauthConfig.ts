@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
-import { ENV_KEYS, isExitPromptError } from 'setup/setup';
+import { ENV_KEYS, isExitPromptError } from 'setup/utils';
 
 /**
  * Configuration object for setting up an OAuth provider.
