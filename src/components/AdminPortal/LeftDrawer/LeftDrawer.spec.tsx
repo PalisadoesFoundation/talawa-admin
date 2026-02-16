@@ -23,6 +23,13 @@ vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
     collapsedDrawer: 'collapsedDrawer',
   },
 }));
+
+vi.mock('shared-components/SidebarNavItem/SidebarNavItem.module.css', () => ({
+  default: {
+    sidebarBtnActive: 'sidebarBtnActive',
+  },
+}));
+
 import { usePluginDrawerItems } from 'plugin';
 
 // Mock the local storage hook

@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import HolidayCard from './HolidayCard';
-import styles from 'style/app-fixed.module.css';
+import styles from './HolidayCard.module.css';
 
 describe('HolidayCard Component', () => {
   test('renders without crashing', () => {

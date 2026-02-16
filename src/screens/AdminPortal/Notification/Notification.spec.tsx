@@ -291,8 +291,8 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/prev/i)).toBeDisabled();
-      expect(screen.getByText(/next/i)).toBeDisabled();
+      expect(screen.getByTestId('prev-button')).toBeDisabled();
+      expect(screen.getByTestId('next-button')).toBeDisabled();
     });
   });
 

@@ -121,24 +121,26 @@ describe('Testing CollapsibleDropdown component', () => {
       </BrowserRouter>,
     );
     const parentDropdownBtn = screen.getByTestId('collapsible-dropdown');
-    const activeDropdownBtn = screen.getByText('SubCategory 1');
-    const nonActiveDropdownBtn = screen.getByText('SubCategory 2');
+    const activeDropdownBtn = screen.getByTestId('collapsible-dropdown-btn-0');
+    const nonActiveDropdownBtn = screen.getByTestId(
+      'collapsible-dropdown-btn-1',
+    );
 
     // Check if dropdown is rendered with correct classes
     await user.click(activeDropdownBtn);
     expect(parentDropdownBtn).toBeInTheDocument();
-    expect(parentDropdownBtn.className).toMatch(/^_leftDrawerActiveButton_/);
+    expect(parentDropdownBtn.className).toMatch(/_leftDrawerActiveButton_/);
 
     // Check if active dropdown is rendered with correct classes
     expect(activeDropdownBtn).toBeInTheDocument();
     expect(activeDropdownBtn.className).toMatch(
-      /^_leftDrawerCollapseActiveButton_/,
+      /_leftDrawerCollapseActiveButton_/,
     );
 
     // Check if inactive dropdown is rendered with correct classes
     expect(nonActiveDropdownBtn).toBeInTheDocument();
     expect(nonActiveDropdownBtn.className).toMatch(
-      /^_leftDrawerInactiveButton_/,
+      /_leftDrawerInactiveButton_/,
     );
 
     // Check if dropdown is collapsed after clicking on it

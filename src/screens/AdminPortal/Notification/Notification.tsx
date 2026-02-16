@@ -173,6 +173,7 @@ const Notification: React.FC = () => {
               className={styles.paginationButton}
               onClick={handlePrev}
               disabled={page === 0}
+              data-testid="prev-button"
             >
               {t('prev')}
             </Button>
@@ -180,6 +181,7 @@ const Notification: React.FC = () => {
               className={styles.paginationButton}
               onClick={handleNext}
               disabled={notifications.length < pageSize}
+              data-testid="next-button"
             >
               {t('next')}
             </Button>
