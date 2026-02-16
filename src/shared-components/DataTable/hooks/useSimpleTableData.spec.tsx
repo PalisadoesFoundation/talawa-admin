@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
-import { render, screen, renderHook } from '@testing-library/react';
+import { render, screen, renderHook, cleanup } from '@testing-library/react';
 import { useSimpleTableData } from './useSimpleTableData';
 import type { QueryResult } from '@apollo/client';
 import { NetworkStatus, ApolloError } from '@apollo/client';
@@ -73,6 +73,7 @@ function Consumer<TRow, TData>({
 
 describe('useSimpleTableData', () => {
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -217,7 +218,9 @@ describe('useSimpleTableData', () => {
         });
         return (
           <div>
-            <button onClick={() => refetch()}>Refetch</button>
+            <button type="button" onClick={() => refetch()}>
+              Refetch
+            </button>
           </div>
         );
       }),
