@@ -11,7 +11,7 @@ describe('HolidayCard Component', () => {
   });
   test('renders without crashing', () => {
     render(<HolidayCard holidayName="Christmas" />);
-    expect(screen.getByTestId('holiday-card')).toBeDefined();
+    expect(screen.getByTestId('holiday-card')).toBeInTheDocument();
   });
 
   test('displays the provided holiday name', () => {

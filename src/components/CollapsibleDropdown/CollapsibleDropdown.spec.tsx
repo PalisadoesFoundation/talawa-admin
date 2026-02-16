@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
@@ -157,7 +157,9 @@ describe('Testing CollapsibleDropdown component', () => {
 
     // Click on non-active dropdown button and check if it navigates to the correct URL
     await user.click(nonActiveDropdownBtn);
-    expect(window.location.pathname).toBe('/sub-category-2');
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/sub-category-2');
+    });
   });
 
   describe('useEffect location change logic', () => {
@@ -320,17 +322,23 @@ describe('Testing CollapsibleDropdown component', () => {
       // Navigate to first subTarget
       const subTarget1 = screen.getByText('SubCategory 1');
       await user.click(subTarget1);
-      expect(window.location.pathname).toBe('/sub-category-1');
+      await waitFor(() => {
+        expect(window.location.pathname).toBe('/sub-category-1');
+      });
 
       // Navigate to second subTarget
       const subTarget2 = screen.getByText('SubCategory 2');
       await user.click(subTarget2);
-      expect(window.location.pathname).toBe('/sub-category-2');
+      await waitFor(() => {
+        expect(window.location.pathname).toBe('/sub-category-2');
+      });
 
       // Navigate to third subTarget
       const subTarget3 = screen.getByText('SubCategory 3');
       await user.click(subTarget3);
-      expect(window.location.pathname).toBe('/sub-category-3');
+      await waitFor(() => {
+        expect(window.location.pathname).toBe('/sub-category-3');
+      });
     });
 
     test('renders subTargets with correct navigation links', () => {

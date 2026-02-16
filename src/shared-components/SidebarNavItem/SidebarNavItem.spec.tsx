@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, vi, expect, afterEach } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import SidebarNavItem from './SidebarNavItem';
 import styles from './SidebarNavItem.module.css';
@@ -76,7 +76,7 @@ describe('SidebarNavItem Component', () => {
       renderComponent({ onClick: handleClick });
       const button = screen.getByTestId('testBtn');
       await user.click(button);
-      expect(handleClick).toHaveBeenCalled();
+      await waitFor(() => expect(handleClick).toHaveBeenCalled());
     });
 
     it('does not call onClick if not provided', async () => {
@@ -250,7 +250,7 @@ describe('SidebarNavItem Component', () => {
       const link = screen.getByTestId('testBtn').closest('a');
       expect(link).not.toBeNull();
       await user.click(link as Element);
-      expect(handleClick).toHaveBeenCalled();
+      await waitFor(() => expect(handleClick).toHaveBeenCalled());
     });
 
     it('allows event propagation after onClick', async () => {
@@ -260,7 +260,7 @@ describe('SidebarNavItem Component', () => {
       expect(link).not.toBeNull();
       await user.click(link as Element);
       // Just verify that the onClick was called, navigation is handled by React Router
-      expect(handleClick).toHaveBeenCalled();
+      await waitFor(() => expect(handleClick).toHaveBeenCalled());
     });
   });
 });

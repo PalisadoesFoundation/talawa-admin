@@ -360,8 +360,8 @@ describe('Pagination Visibility', () => {
     });
 
     await waitFor(() => {
-      expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+      expect(screen.queryByTestId('prev-button')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('next-button')).not.toBeInTheDocument();
     });
   });
 
@@ -380,8 +380,8 @@ describe('Pagination Visibility', () => {
     });
 
     await waitFor(() => {
-      expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
-      expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+      expect(screen.queryByTestId('prev-button')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('next-button')).not.toBeInTheDocument();
     });
   });
 
@@ -400,8 +400,8 @@ describe('Pagination Visibility', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/prev/i)).toBeInTheDocument();
-      expect(screen.getByText(/next/i)).toBeInTheDocument();
+      expect(screen.getByTestId('prev-button')).toBeInTheDocument();
+      expect(screen.getByTestId('next-button')).toBeInTheDocument();
     });
   });
 
@@ -422,8 +422,8 @@ describe('Pagination Visibility', () => {
 
     // Pagination should still be visible
     await waitFor(() => {
-      expect(screen.getByText(/prev/i)).toBeInTheDocument();
-      expect(screen.getByText(/next/i)).toBeInTheDocument();
+      expect(screen.getByTestId('prev-button')).toBeInTheDocument();
+      expect(screen.getByTestId('next-button')).toBeInTheDocument();
     });
   });
 
@@ -442,8 +442,8 @@ describe('Pagination Visibility', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/prev/i)).toBeInTheDocument();
-      expect(screen.getByText(/next/i)).toBeInTheDocument();
+      expect(screen.getByTestId('prev-button')).toBeInTheDocument();
+      expect(screen.getByTestId('next-button')).toBeInTheDocument();
     });
   });
 });
