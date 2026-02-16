@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, cleanup } from '@testing-library/react';
 import { ReviewStats } from './Review';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -7,7 +7,7 @@ import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { NotificationToastContainer } from 'shared-components/NotificationToast/NotificationToast';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -64,6 +64,11 @@ const emptyReviewProps = {
 };
 
 describe('Testing Review Statistics Card', () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
   it('The component should be rendered and the reviews should be shown if present', async () => {
     const { queryByText } = render(
       <BrowserRouter>

@@ -38,7 +38,7 @@
  * - `react-bootstrap`
  * - `@apollo/client`
  * - `react-i18next`
- * - `react-toastify`
+ * - `NotificationToast` (shared-components)
  * - `react-icons`
  *
  */
@@ -343,6 +343,7 @@ export default function GroupChatDetails({
             data-testid="editImageBtn"
             onClick={handleImageClick}
             className={styles.editImgBtn}
+            aria-label={t('editImage')}
           >
             <FiEdit />
           </Button>

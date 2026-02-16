@@ -1,12 +1,12 @@
 .holidayCard {
   color: var(--holidayCard-color);
   background-color: var(--holidayCard-bg);
-  font-size: 10px;
-  font-weight: 400;
+  font-size: var(--font-size-10);
+  font-weight: var(--font-weight-regular);
   display: flex;
-  padding: 8px 4px;
-  border-radius: 5px;
-  margin-bottom: 4px;
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-5);
+  margin-bottom: var(--space-2);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

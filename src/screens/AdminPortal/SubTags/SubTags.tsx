@@ -213,11 +213,12 @@ function SubTags(): JSX.Element {
     </>
   );
 
+  const minColWidth = 100;
   const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: '#',
-      minWidth: 100,
+      minWidth: minColWidth,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -230,7 +231,7 @@ function SubTags(): JSX.Element {
       field: 'tagName',
       headerName: t('tagName'),
       flex: 1,
-      minWidth: 100,
+      minWidth: minColWidth,
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
@@ -252,7 +253,7 @@ function SubTags(): JSX.Element {
       headerName: t('totalSubTags'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: minColWidth,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -275,7 +276,7 @@ function SubTags(): JSX.Element {
       headerName: t('totalAssignedUsers'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: minColWidth,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -295,7 +296,7 @@ function SubTags(): JSX.Element {
       headerName: tCommon('actions'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: minColWidth,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,

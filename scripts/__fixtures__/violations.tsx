@@ -1,6 +1,6 @@
 import React from 'react';
 import { NotificationToast } from '../../src/shared-components/NotificationToast/NotificationToast';
-import Button from '../../src/shared-components/Button/Button.tsx';
+import Button from '../../src/shared-components/Button/Button';
 
 // Single component containing all violations (JSX text, attrs, toasts)
 export function ViolationsFixture() {

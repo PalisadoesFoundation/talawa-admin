@@ -18,7 +18,7 @@ import {
   validateAdminPluginZip,
   type IAdminPluginManifest,
   type IAdminPluginZipStructure,
-} from '../../../utils/adminPluginInstaller';
+} from 'utils/adminPluginInstaller';
 import { useTranslation } from 'react-i18next';
 
 interface IUploadPluginModalProps {

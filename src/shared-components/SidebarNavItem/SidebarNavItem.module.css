@@ -27,9 +27,18 @@
 }
 
 .iconWrapper {
-  width: 36px;
-  min-width: 36px;
+  width: var(--space-8-5);
+  min-width: var(--space-8-5);
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.simpleLinkVariant {
+  height: var(--space-9);
+}
+
+.linkContent {
+  display: flex;
   align-items: center;
 }

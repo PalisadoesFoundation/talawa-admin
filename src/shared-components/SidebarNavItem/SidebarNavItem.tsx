@@ -57,6 +57,7 @@ const SidebarNavItem = ({
 
       // Use explicit iconType prop for robust icon detection
       const isReactIcon = iconType === 'react-icon';
+      const iconSize = 25;
 
       if (isReactIcon) {
         // Handle React Icons with style prop
@@ -64,8 +65,8 @@ const SidebarNavItem = ({
           icon as React.ReactElement<{ style?: React.CSSProperties }>,
           {
             style: {
-              fontSize: 25,
-              color: isActive ? '#000000' : 'var(--bs-secondary)',
+              fontSize: iconSize,
+              color: isActive ? 'var(--bs-black)' : 'var(--bs-secondary)',
             },
           },
         );
@@ -80,8 +81,8 @@ const SidebarNavItem = ({
               ? 'var(--bs-black)'
               : 'var(--bs-secondary)'
             : 'none',
-          width: 25,
-          height: 25,
+          width: iconSize,
+          height: iconSize,
           stroke: useSimpleButton
             ? undefined
             : isActive
@@ -97,21 +98,24 @@ const SidebarNavItem = ({
     <NavLink
       to={to}
       onClick={onClick}
-      className={({ isActive }) =>
-        useSimpleButton
+      className={({ isActive }) => {
+        const baseClass = useSimpleButton
           ? isActive
             ? styles.leftDrawerActiveButton
             : styles.leftDrawerInactiveButton
           : isActive
             ? styles.sidebarBtnActive
-            : styles.sidebarBtn
-      }
+            : styles.sidebarBtn;
+
+        return useSimpleButton
+          ? `${baseClass} ${styles.simpleLinkVariant}`
+          : baseClass;
+      }}
       data-testid={testId}
       data-cy={dataCy}
-      style={useSimpleButton ? { height: '40px' } : undefined}
     >
       {({ isActive }) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className={styles.linkContent}>
           <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
           {!hideDrawer && label}
         </div>

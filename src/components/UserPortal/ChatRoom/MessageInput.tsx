@@ -33,7 +33,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from '../../../shared-components/Button';
+import Button from 'shared-components/Button';
 import { FormTextField } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
 import { GrAttachment } from 'react-icons/gr';
 import SendIcon from '@mui/icons-material/Send';
@@ -138,6 +138,7 @@ export default function MessageInput({
             type="button"
             onClick={onAddAttachment}
             className={styles.addAttachmentBtn}
+            aria-label={t('addAttachment')}
           >
             <GrAttachment />
           </Button>

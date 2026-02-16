@@ -1,11 +1,14 @@
 /**
  * Interface for SidebarNavItem component props.
  */
+
+import type { ReactNode } from 'react';
+
 export interface ISidebarNavItemProps {
   /* Navigation target URL */
   to: string;
   /* Icon component or element */
-  icon: React.ReactNode;
+  icon: ReactNode;
   /* Display label for the navigation item */
   label: string;
   /* Test ID for testing purposes */

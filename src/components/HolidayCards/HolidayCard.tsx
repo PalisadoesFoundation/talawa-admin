@@ -11,7 +11,7 @@
  * ```
  *
  * @remarks
- * - The component uses CSS modules for styling, with styles imported from `app-fixed.module.css`.
+ * - The component uses CSS modules for styling, with styles imported from `HolidayCard.module.css`.
  * - The `data-testid` attribute is included for testing purposes.
  */
 

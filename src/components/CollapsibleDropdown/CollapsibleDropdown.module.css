@@ -1,9 +1,9 @@
 .collapsibleDropdownIconWrapper {
-  width: 36px;
+  width: var(--space-8-5);
 }
 
 .collapsibleDropdownIconWrapperSm {
-  width: 36px;
+  width: var(--space-8-5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,5 +21,5 @@
 
 .leftDrawerCollapseActiveButton {
   background-color: var(--leftDrawer-collapse-active-button-bg);
-  color: black;
+  color: var(--bs-black);
 }
