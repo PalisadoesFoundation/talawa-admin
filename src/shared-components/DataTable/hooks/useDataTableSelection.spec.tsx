@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, cleanup } from '@testing-library/react';
 import { useDataTableSelection } from './useDataTableSelection';
 import type { IBulkAction } from 'types/shared-components/DataTable/hooks';
 
@@ -9,7 +9,8 @@ const keys = ['1', '2', '3'];
 const data: TestRow[] = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 describe('useDataTableSelection', () => {
@@ -94,7 +95,8 @@ describe('useDataTableSelection', () => {
     });
 
     await act(async () => {
-      await hook.result.current.runBulkAction(action);
+      hook.result.current.runBulkAction(action);
+      await new Promise((r) => setTimeout(r, 0));
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
