@@ -67,7 +67,6 @@ describe('useDataTableSelection', () => {
 
     expect(action.onClick).not.toHaveBeenCalled();
   });
-
   it('catches errors in async bulk actions', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
@@ -85,21 +84,16 @@ describe('useDataTableSelection', () => {
       id: 'delete',
       label: 'Delete',
       disabled: () => false,
-      onClick: async () => {
-        throw new Error('fail');
-      },
+      onClick: vi.fn().mockRejectedValue(new Error('fail')),
     };
 
     act(() => {
       hook.result.current.selectAllOnPage(true);
     });
 
-    const mockPromise = Promise.reject(new Error('fail'));
-    vi.spyOn(Promise, 'resolve').mockReturnValue(mockPromise);
-
     await act(async () => {
       hook.result.current.runBulkAction(action);
-      await mockPromise.catch(() => {});
+      await Promise.resolve();
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
