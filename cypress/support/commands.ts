@@ -579,8 +579,10 @@ Cypress.Commands.add(
               name: eventPayload.name || 'E2E Event',
               description: eventPayload.description || 'E2E event',
               organizationId: eventPayload.orgId,
-              startAt: eventPayload.startAt,
-              endAt: eventPayload.endAt,
+              startAt: eventPayload.startAt || new Date().toISOString(),
+              endAt:
+                eventPayload.endAt ||
+                new Date(Date.now() + 3600000).toISOString(),
               location: eventPayload.location ?? 'Virtual',
             },
           })
@@ -597,9 +599,9 @@ Cypress.Commands.add(
             token,
             input: {
               orgId: catPayload.orgId,
-              name: catPayload.name,
-              description: catPayload.description,
-              isDisabled: catPayload.isDisabled,
+              name: catPayload.name || makeUniqueLabel('Category'),
+              description: catPayload.description || 'E2E Action Item Category',
+              isDisabled: catPayload.isDisabled ?? false,
             },
           })
           .then((res) => ({
@@ -618,9 +620,9 @@ Cypress.Commands.add(
             token,
             input: {
               orgId: postPayload.orgId,
-              caption: postPayload.caption,
-              body: postPayload.body,
-              isPinned: postPayload.isPinned,
+              caption: postPayload.caption || 'E2E Post Caption',
+              body: postPayload.body || 'E2E Post Body',
+              isPinned: postPayload.isPinned ?? false,
             },
           })
           .then((res) => ({ postId: (res as CreatePostTaskResult).postId })),
@@ -707,14 +709,18 @@ Cypress.Commands.add(
           }
 
           // Wrap userIds, run tasks, then cast to Chainable<void>
-          return cy.wrap(userIds).each((userId) => {
-            return cy.task('deleteTestUser', {
-              apiUrl,
-              token,
-              userId,
-              allowNotFound: true,
-            });
-          }) as unknown as Cypress.Chainable<void>;
+          let chain = cy.wrap<void>(undefined);
+          for (const userId of userIds) {
+            chain = chain.then(() =>
+              cy.task('deleteTestUser', {
+                apiUrl,
+                token,
+                userId,
+                allowNotFound: true,
+              }),
+            );
+          }
+          return chain as unknown as Cypress.Chainable<void>;
         });
     });
   },
