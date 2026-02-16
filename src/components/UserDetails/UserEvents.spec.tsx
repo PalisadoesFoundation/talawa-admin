@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import UserEvents from './UserEvents';
@@ -191,7 +191,8 @@ const mockedUseQuery = vi.mocked(
 /* ---------------- TESTS ---------------- */
 describe('UserEvents', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('filters events using search by name', async () => {
