@@ -40,11 +40,11 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { GET_USER_TAGS } from 'GraphQl/Queries/Queries';
 import Button from 'shared-components/Button/Button';
 import { useQuery } from '@apollo/client';
-import { InterfaceUserTagsProps } from 'types/AdminPortal/UserDetails/UserOrganization/UserEvent/type';
+import { InterfaceUserTagsProps } from 'types/AdminPortal/UserDetails/UserTags/type';
 import {
   InterfaceUserTag,
   InterfaceGetUserTagsData,
-} from 'types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface';
+} from 'types/AdminPortal/UserDetails/UserTags/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
