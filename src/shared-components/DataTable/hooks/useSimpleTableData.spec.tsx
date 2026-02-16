@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, renderHook, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useSimpleTableData } from './useSimpleTableData';
 import type { QueryResult } from '@apollo/client';
 import { NetworkStatus, ApolloError } from '@apollo/client';
@@ -200,7 +201,8 @@ describe('useSimpleTableData', () => {
     expect(parsed.error).toBe(null);
   });
 
-  it('passes through refetch function', () => {
+  it('passes through refetch function', async () => {
+    const user = userEvent.setup();
     const mockRefetch = vi.fn<MockQueryResultFn<IItemsData>>(() =>
       Promise.resolve({} as QueryResult<IItemsData>),
     );
@@ -226,7 +228,7 @@ describe('useSimpleTableData', () => {
       }),
     );
 
-    screen.getByText('Refetch').click();
+    await user.click(screen.getByText('Refetch'));
     expect(mockRefetch).toHaveBeenCalledTimes(1);
   });
 
