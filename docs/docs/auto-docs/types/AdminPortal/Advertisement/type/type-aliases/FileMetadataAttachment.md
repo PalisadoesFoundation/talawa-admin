@@ -26,6 +26,14 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:39](https://github.com/
 
 ***
 
+### name
+
+> **name**: `string`
+
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L40)
+
+***
+
 ### objectName
 
 > **objectName**: `string`
@@ -38,4 +46,4 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:37](https://github.com/
 
 > `optional` **previewUrl**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L40)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L41)

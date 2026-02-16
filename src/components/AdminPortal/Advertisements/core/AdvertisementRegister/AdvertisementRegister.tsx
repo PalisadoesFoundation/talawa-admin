@@ -196,6 +196,7 @@ function AdvertisementRegister({
           objectName: string;
           fileHash: string;
           mimetype: string;
+          name: string;
           previewUrl: string;
         }[] = [];
         for (const file of validFiles) {
@@ -208,6 +209,7 @@ function AdvertisementRegister({
               objectName,
               fileHash,
               mimetype: file.type,
+              name: file.name,
               previewUrl: URL.createObjectURL(file),
             });
           } catch (error) {

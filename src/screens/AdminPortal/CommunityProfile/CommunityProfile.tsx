@@ -113,6 +113,7 @@ const CommunityProfile = (): JSX.Element => {
     objectName: string;
     fileHash: string;
     mimetype: string;
+    name: string;
   }
   // State for logo metadata (uploaded via MinIO presigned URL)
   const [logoMetadata, setLogoMetadata] =
@@ -306,6 +307,7 @@ const CommunityProfile = (): JSX.Element => {
                         objectName,
                         fileHash,
                         mimetype: file.type,
+                        name: file.name,
                       });
                     } catch (error) {
                       console.error('Error uploading logo:', error);

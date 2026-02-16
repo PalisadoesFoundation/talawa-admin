@@ -29,6 +29,7 @@ const { mockUploadFileToMinio } = vi.hoisted(() => {
     objectName: 'test-obj',
     fileHash: 'test-hash',
     mimetype: 'image/png',
+    name: 'test-image.png',
   });
   return { mockUploadFileToMinio: fn };
 });
@@ -320,6 +321,7 @@ describe('VenueModal', () => {
       objectName: 'test-obj',
       fileHash: 'test-hash',
       mimetype: 'image/png',
+      name: 'test-image.png',
     });
   });
 
@@ -788,6 +790,7 @@ describe('Validation', () => {
       objectName: 'test-obj',
       fileHash: 'test-hash',
       mimetype: 'image/png',
+      name: 'test-image.png',
     });
   });
 
@@ -1062,6 +1065,7 @@ describe('Validation', () => {
         objectName: 'test-obj',
         fileHash: 'test-hash',
         mimetype: 'image/png',
+        name: 'test-image.png',
       });
     });
 
@@ -2857,12 +2861,13 @@ describe('Validation', () => {
           objectName: 'test-obj',
           fileHash: 'test-hash',
           mimetype: 'image/png',
+          name: 'test-image.png',
         });
       }
 
       mutationSpy(variables);
       return Observable.of({
-        data: { createVenue: { id: 'newVenue' } },
+        data: { updateVenue: { id: 'venue1' } },
       });
     });
 
@@ -2883,7 +2888,7 @@ describe('Validation', () => {
     });
 
     // Upload a file
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
     await userEvent.upload(fileInput, file);
 
@@ -2954,7 +2959,7 @@ describe('Validation', () => {
   });
 
   test('updates venue with changed name and attachments', async () => {
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
 
     // Create a flexible mock using ApolloLink
     const mutationSpy = vi.fn().mockReturnValue(
@@ -2983,6 +2988,7 @@ describe('Validation', () => {
         objectName: 'test-obj',
         fileHash: 'test-hash',
         mimetype: 'image/png',
+        name: 'test-image.png',
       });
 
       return mutationSpy();
@@ -3026,7 +3032,7 @@ describe('Validation', () => {
   });
 
   test('creates venue with attachments successfully', async () => {
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
 
     const mutationSpy = vi.fn().mockReturnValue(
       Observable.of({
@@ -3056,6 +3062,7 @@ describe('Validation', () => {
         objectName: 'test-obj',
         fileHash: 'test-hash',
         mimetype: 'image/png',
+        name: 'test-image.png',
       });
 
       return mutationSpy();
@@ -3120,7 +3127,7 @@ describe('Validation', () => {
     );
 
     // Upload file to create blob URL
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
     await act(async () => {

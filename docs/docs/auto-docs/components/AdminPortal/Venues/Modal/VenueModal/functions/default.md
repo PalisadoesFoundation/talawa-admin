@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L67)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L72)
 
 ## Parameters
 

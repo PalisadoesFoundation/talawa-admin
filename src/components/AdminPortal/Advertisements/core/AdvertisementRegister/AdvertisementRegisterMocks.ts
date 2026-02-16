@@ -13,7 +13,7 @@ interface IPageInfo {
   hasPreviousPage: boolean;
 }
 
-export const mockFile = new File(['dummy content'], 'test.jpg', {
+export const mockFile = new File(['dummy content'], 'test-file.jpg', {
   type: 'image/jpeg',
 });
 
@@ -175,6 +175,7 @@ export const createAdFailMock = createMockResponse(
         objectName: 'test-obj',
         fileHash: 'test-hash',
         mimetype: 'image/jpeg',
+        name: 'test-file.jpg',
       },
     ],
   },

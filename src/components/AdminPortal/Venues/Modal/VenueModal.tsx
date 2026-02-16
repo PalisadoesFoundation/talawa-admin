@@ -61,7 +61,12 @@ interface InterfaceVenueFormState {
   description: string;
   capacity: string;
   objectName: string;
-  attachments?: { objectName: string; fileHash: string; mimetype: string }[];
+  attachments?: {
+    objectName: string;
+    fileHash: string;
+    mimetype: string;
+    name: string;
+  }[];
 }
 
 const VenueModal = ({
@@ -336,6 +341,7 @@ const VenueModal = ({
           objectName,
           fileHash,
           mimetype: file.type,
+          name: file.name,
         };
 
         setFormState((prev) => ({

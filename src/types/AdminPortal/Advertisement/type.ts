@@ -37,6 +37,7 @@ export type FileMetadataAttachment = {
   objectName: string;
   fileHash: string;
   mimetype: string;
+  name: string;
   previewUrl?: string;
 };
 

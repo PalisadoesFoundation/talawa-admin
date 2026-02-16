@@ -165,7 +165,7 @@ describe('OrganizationModal Component', () => {
   test('uploads image correctly', async () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
-    const file = new File(['dummy content'], 'example.png', {
+    const file = new File(['dummy content'], 'test-avatar.png', {
       type: 'image/png',
     });
     await userEvent.upload(fileInput, file);
@@ -173,15 +173,12 @@ describe('OrganizationModal Component', () => {
       expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
       const updater = mockSetFormState.mock.calls[0][0];
       const result = updater(formState);
-      expect(result).toEqual(
-        expect.objectContaining({
-          avatar: {
-            objectName: 'mocked-object-name',
-            fileHash: 'mocked-file-hash',
-            mimetype: 'image/png',
-          },
-        }),
-      );
+      expect(result.avatar).toEqual({
+        objectName: 'mocked-object-name',
+        fileHash: 'mocked-file-hash',
+        mimetype: 'image/png',
+        name: 'test-avatar.png',
+      });
     });
     expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
   });
@@ -455,7 +452,9 @@ describe('OrganizationModal Component', () => {
   });
   test('should handle valid image upload', async () => {
     setup();
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    const file = new File(['dummy content'], 'test-avatar.png', {
+      type: 'image/png',
+    });
     const fileInput = screen.getByTestId('organisationImage');
 
     await userEvent.upload(fileInput, file);
@@ -465,15 +464,12 @@ describe('OrganizationModal Component', () => {
       expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
       const updater = mockSetFormState.mock.calls[0][0];
       const result = updater(formState);
-      expect(result).toEqual(
-        expect.objectContaining({
-          avatar: {
-            objectName: 'mocked-object-name',
-            fileHash: 'mocked-file-hash',
-            mimetype: 'image/png',
-          },
-        }),
-      );
+      expect(result.avatar).toEqual({
+        objectName: 'mocked-object-name',
+        fileHash: 'mocked-file-hash',
+        mimetype: 'image/png',
+        name: 'test-avatar.png',
+      });
     });
   });
 
@@ -653,7 +649,9 @@ describe('OrganizationModal Component', () => {
 
   test('should show success toast on successful upload', async () => {
     setup();
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    const file = new File(['dummy content'], 'test-avatar.png', {
+      type: 'image/png',
+    });
     const fileInput = screen.getByTestId('organisationImage');
 
     await userEvent.upload(fileInput, file);
@@ -674,6 +672,7 @@ describe('OrganizationModal Component', () => {
             objectName: 'mocked-object-name',
             fileHash: 'mocked-file-hash',
             mimetype: 'image/png',
+            name: 'test-avatar.png',
           },
         }),
       );

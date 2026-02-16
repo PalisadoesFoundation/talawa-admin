@@ -1674,6 +1674,7 @@ describe('Testing Advertisement Register Component', () => {
         objectName: 'test-object',
         fileHash: 'test-hash',
         mimetype: 'image/jpeg',
+        name: 'test-file.jpg',
       });
 
       expect(toastSuccessSpy).toHaveBeenCalledWith(
