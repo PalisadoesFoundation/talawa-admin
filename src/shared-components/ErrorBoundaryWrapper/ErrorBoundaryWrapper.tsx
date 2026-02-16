@@ -18,31 +18,31 @@
  * - Clear recovery actions
  *
  * @example
- * // Basic usage with default fallback
- * ```jsx
- * <ErrorBoundaryWrapper>
- *   <YourComponent />
- * </ErrorBoundaryWrapper>
+ * Basic usage with default fallback
+ * ```tsx
+ * <ErrorBoundaryWrapper\>
+ *   <YourComponent /\>
+ * </ErrorBoundaryWrapper\>
  * ```
  *
  * @example
- * // With custom error message and logging
- * ```jsx
+ * With custom error message and logging
+ * ```tsx
  * <ErrorBoundaryWrapper
- *   errorMessage={translatedErrorMessage}
- *   onError={(error, info) => logToService(error, info)}
- *   onReset={() => navigate('/dashboard')}
- * >
- *   <ComplexModal />
- * </ErrorBoundaryWrapper>
+ *   errorMessage=\{translatedErrorMessage\}
+ *   onError=\{(error, info) =\> logToService(error, info)\}
+ *   onReset=\{() =\> navigate('/dashboard')\}
+ * \>
+ *   <ComplexModal /\>
+ * </ErrorBoundaryWrapper\>
  * ```
  *
  * @example
- * // With custom fallback component
- * ```jsx
- * <ErrorBoundaryWrapper fallbackComponent={CustomModalError}>
- *   <Modal>...</Modal>
- * </ErrorBoundaryWrapper>
+ * With custom fallback component
+ * ```tsx
+ * <ErrorBoundaryWrapper fallbackComponent=\{CustomModalError\}\>
+ *   <Modal\>...</Modal\>
+ * </ErrorBoundaryWrapper\>
  * ```
  */
 

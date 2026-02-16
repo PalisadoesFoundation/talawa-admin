@@ -34,7 +34,7 @@
  * />
  * ```
  */
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
 import { Card, Col, Row, Carousel } from 'react-bootstrap';
@@ -51,6 +51,7 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
 import { BaseModal } from 'shared-components/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 function AdvertisementEntry({
   advertisement,
@@ -70,14 +71,14 @@ function AdvertisementEntry({
   const { t: tErrors } = useTranslation('errors');
 
   // State for loading button
-  const [buttonLoading, setButtonLoading] = useState(false);
+  const [buttonLoading, setButtonLoading] = React.useState(false);
 
   // State for dropdown menu visibility
-  const [dropdown, setDropdown] = useState(false);
+  const [dropdown, setDropdown] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   // State for delete confirmation modal visibility
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const deleteModal = useModalState();
 
   // Mutation hook for deleting an advertisement
   const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {
@@ -110,7 +111,7 @@ function AdvertisementEntry({
   /**
    * Toggles the visibility of the delete confirmation modal.
    */
-  const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
+  const toggleShowDeleteModal = (): void => deleteModal.toggle();
 
   /**
    * Handles advertisement deletion.
@@ -183,14 +184,14 @@ function AdvertisementEntry({
           <Col key={idx}>
             <Card className={styles.addCard}>
               <div className={styles.dropdownContainer} ref={dropdownRef}>
-                <button
+                <Button
                   className={styles.dropdownButton}
                   onClick={() => setDropdown(!dropdown)}
                   data-testid="moreiconbtn"
                   data-cy="dropdownbtn"
                 >
                   <MoreVertIcon />
-                </button>
+                </Button>
                 {dropdown && (
                   <ul className={styles.dropdownmenu}>
                     <li>
@@ -343,7 +344,7 @@ function AdvertisementEntry({
                 </div>
 
                 <BaseModal
-                  show={showDeleteModal}
+                  show={deleteModal.isOpen}
                   onHide={toggleShowDeleteModal}
                   title={t('deleteAdvertisement')}
                   footer={deleteModalFooter}

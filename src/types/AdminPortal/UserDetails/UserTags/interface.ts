@@ -1,4 +1,4 @@
-/** UI-mapped representation of a user tag for table display. */
+/** UI-mapped representation of a user tag for table display.  */
 export interface InterfaceUserTag {
   id: string;
   name: string;

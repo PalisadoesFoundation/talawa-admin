@@ -36,7 +36,7 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
 import styles from './TagActions.module.css';
@@ -238,38 +238,17 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   return (
     <>
-      <BaseModal
-        show={tagActionsModalIsOpen}
-        onHide={hideTagActionsModal}
-        backdrop="static"
+      <CRUDModalTemplate
+        open={tagActionsModalIsOpen}
+        onClose={hideTagActionsModal}
         centered
         title={
           tagActionType === 'assignToTags'
             ? t('assignToTags')
             : t('removeFromTags')
         }
-        headerClassName={styles.modalHeader}
-        dataTestId="modalOrganizationHeader"
-        footer={
-          <>
-            <Button
-              className={`btn btn-danger ${styles.removeButton}`}
-              onClick={(): void => hideTagActionsModal()}
-              data-testid="closeTagActionsModalBtn"
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              value="add"
-              form="tagActionForm"
-              data-testid="tagActionSubmitBtn"
-              className={`btn ${styles.addButton}`}
-            >
-              {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
-            </Button>
-          </>
-        }
+        data-testid="modalOrganizationHeader"
+        showFooter={false}
       >
         <form id="tagActionForm" onSubmit={handleTagAction}>
           <div className="pb-0">
@@ -287,7 +266,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
                   >
                     {tag.name}
-                    <button
+                    <Button
                       className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
                       onClick={() => deSelectTag(tag)}
                       data-testid={`clearSelectedTag${tag._id}`}
@@ -381,7 +360,25 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             </ul>
           </div>
         </form>
-      </BaseModal>
+        <div className="d-flex justify-content-end gap-2 mt-3">
+          <Button
+            className={`btn btn-danger ${styles.removeButton}`}
+            onClick={(): void => hideTagActionsModal()}
+            data-testid="closeTagActionsModalBtn"
+          >
+            {tCommon('cancel')}
+          </Button>
+          <Button
+            type="submit"
+            value="add"
+            form="tagActionForm"
+            data-testid="tagActionSubmitBtn"
+            className={`btn ${styles.addButton}`}
+          >
+            {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
+          </Button>
+        </div>
+      </CRUDModalTemplate>
     </>
   );
 };

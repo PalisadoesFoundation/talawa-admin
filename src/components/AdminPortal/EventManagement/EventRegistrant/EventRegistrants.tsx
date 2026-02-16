@@ -49,9 +49,9 @@ import { CheckInWrapper } from 'shared-components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/shared-components/User/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import DataTable from 'shared-components/DataTable/DataTable';
+import Button from 'shared-components/Button/Button';
 import { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import Button from 'shared-components/Button/Button';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });

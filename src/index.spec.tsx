@@ -55,7 +55,7 @@ const getTestExpiredToken = (): string =>
 
 // Mock external dependencies
 vi.mock(
-  'components/NotificationToast/NotificationToast',
+  'shared-components/NotificationToast/NotificationToast',
   (): { NotificationToast: InterfaceNotificationToastMock } => ({
     NotificationToast: {
       error: vi.fn(),
