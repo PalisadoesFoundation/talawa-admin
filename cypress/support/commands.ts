@@ -298,12 +298,12 @@ Cypress.Commands.add('loginByApi', (role: string) => {
   const sessionName = `login-${resolvedRole}`;
   const loginPath = resolvedRole === 'user' ? '/' : '/admin';
   const currentUserQuery = `
-    query CurrentUser {
-      currentUser {
-        id
-      }
+  query CurrentUser {
+    user: currentUser {
+      id
     }
-  `;
+  }
+`;
   const storagePrefix = 'Talawa-admin';
   const roleValue =
     resolvedRole === 'superAdmin'
@@ -379,12 +379,10 @@ Cypress.Commands.add('loginByApi', (role: string) => {
                     `Login health check failed with status ${response.status}.`,
                   );
                 }
-                const currentUserId =
-                  response.body?.data?.currentUser?.id ||
-                  response.body?.data?.user?.id;
+                const currentUserId = response.body?.data?.user?.id;
                 if (!currentUserId) {
                   throw new Error(
-                    'Login health check failed: currentUser is missing.',
+                    'Login health check failed: user data is missing.',
                   );
                 }
               });
@@ -526,6 +524,40 @@ Cypress.Commands.add('createTestUser', (payload: CreateTestUserPayload) => {
  * Event and volunteer creation require org membership, not superAdmin privilege,
  * so those use the caller's role directly.
  */
+
+const createSeedUser = (userPayload: SeedUserPayload) => {
+  const email =
+    userPayload.email ||
+    `e2e-user-${Date.now()}-${getSecureRandomSuffix(8)}@example.com`;
+  const password = userPayload.password || DEFAULT_TEST_PASSWORD;
+  const name = userPayload.name || makeUniqueLabel('E2E User');
+  const role = userPayload.role ?? 'regular';
+  const userAuth =
+    (userPayload.auth?.role ?? 'admin') === 'admin'
+      ? { ...(userPayload.auth ?? {}), role: 'superAdmin' as const }
+      : userPayload.auth;
+
+  return resolveAuthToken(userAuth).then((token) =>
+    cy
+      .task('createTestUser', {
+        apiUrl: userPayload.auth?.apiUrl,
+        token,
+        input: {
+          name,
+          emailAddress: email,
+          password,
+          role,
+          isEmailAddressVerified: userPayload.isEmailAddressVerified ?? true,
+        },
+      })
+      .then((res) => {
+        const { userId } = res as CreateUserTaskResult;
+        if (!userId) throw new Error('createTestUser did not return userId.');
+        return { userId, email, password };
+      }),
+  );
+};
+
 Cypress.Commands.add(
   'seedTestData',
   (
@@ -538,156 +570,71 @@ Cypress.Commands.add(
   ) => {
     if (kind === 'events') {
       const eventPayload = payload as SeedEventPayload;
-      const defaultStart = new Date(Date.now() + 5 * 60 * 1000);
-      const startAt = eventPayload.startAt ?? defaultStart.toISOString();
-      const endAt =
-        eventPayload.endAt ??
-        new Date(defaultStart.getTime() + 60 * 60 * 1000).toISOString();
-      const name = eventPayload.name || makeUniqueLabel('E2E Event');
-      const createEvent = (token: string) => {
-        return cy
+      return resolveAuthToken(eventPayload.auth).then((token) =>
+        cy
           .task('createTestEvent', {
             apiUrl: eventPayload.auth?.apiUrl,
             token,
             input: {
-              name,
-              description: eventPayload.description ?? 'E2E event',
+              name: eventPayload.name || 'E2E Event',
+              description: eventPayload.description || 'E2E event',
               organizationId: eventPayload.orgId,
-              startAt,
-              endAt,
+              startAt: eventPayload.startAt,
+              endAt: eventPayload.endAt,
               location: eventPayload.location ?? 'Virtual',
-              isPublic: eventPayload.isPublic ?? true,
-              isRegisterable: eventPayload.isRegisterable ?? true,
             },
           })
-          .then((result) => {
-            const { eventId } = result as CreateEventTaskResult;
-            if (!eventId) {
-              throw new Error('seedTestData(events) did not return eventId.');
-            }
-            return { eventId };
-          });
-      };
-      return resolveAuthToken(eventPayload.auth).then((token) => {
-        return createEvent(token);
-      });
+          .then((res) => ({ eventId: (res as CreateEventTaskResult).eventId })),
+      ) as Cypress.Chainable<{ eventId: string }>;
     }
 
     if (kind === 'actionItemCategories') {
-      const categoryPayload = payload as SeedActionItemCategoryPayload;
-      const name =
-        categoryPayload.name || makeUniqueLabel('E2E Action Item Category');
-      const description =
-        categoryPayload.description ?? 'E2E Action Item Category';
-      const isDisabled = categoryPayload.isDisabled ?? false;
-      return resolveAuthToken(categoryPayload.auth).then((token) => {
-        return cy
+      const catPayload = payload as SeedActionItemCategoryPayload;
+      return resolveAuthToken(catPayload.auth).then((token) =>
+        cy
           .task('createTestActionItemCategory', {
-            apiUrl: categoryPayload.auth?.apiUrl,
+            apiUrl: catPayload.auth?.apiUrl,
             token,
-            input: {
-              name,
-              description,
-              isDisabled,
-              organizationId: categoryPayload.orgId,
-            },
+            input: { ...catPayload },
           })
-          .then((result) => {
-            const { categoryId } = result as {
-              categoryId?: string;
-              name?: string;
-            };
-            if (!categoryId) {
-              throw new Error(
-                'seedTestData(actionItemCategories) did not return categoryId.',
-              );
-            }
-            return { categoryId, name };
-          });
-      });
+          .then((res) => ({
+            categoryId: (res as { categoryId: string }).categoryId,
+            name: catPayload.name,
+          })),
+      ) as Cypress.Chainable<{ categoryId: string; name?: string }>;
     }
-
-    const createSeedUser = (userPayload: SeedUserPayload) => {
-      const email =
-        userPayload.email ||
-        `e2e-user-${Date.now()}-${getSecureRandomSuffix(8)}@example.com`;
-      const password = userPayload.password || DEFAULT_TEST_PASSWORD;
-      const name = userPayload.name || makeUniqueLabel('E2E User');
-      const role = userPayload.role ?? 'regular';
-      const userAuth =
-        (userPayload.auth?.role ?? 'admin') === 'admin'
-          ? { ...(userPayload.auth ?? {}), role: 'superAdmin' as const }
-          : userPayload.auth;
-      return resolveAuthToken(userAuth).then((token) => {
-        return cy
-          .task('createTestUser', {
-            apiUrl: userPayload.auth?.apiUrl,
-            token,
-            input: {
-              name,
-              emailAddress: email,
-              password,
-              role,
-              isEmailAddressVerified:
-                userPayload.isEmailAddressVerified ?? true,
-            },
-          })
-          .then((result) => {
-            const { userId } = result as CreateUserTaskResult;
-            if (!userId) {
-              throw new Error('createTestUser did not return userId.');
-            }
-            return { userId, email, password };
-          });
-      });
-    };
 
     if (kind === 'posts') {
       const postPayload = payload as SeedPostPayload;
-      const caption = postPayload.caption || makeUniqueLabel('E2E Post');
-      const body = postPayload.body ?? 'E2E post body';
-      const isPinned = postPayload.isPinned ?? false;
-      return resolveAuthToken(postPayload.auth).then((token) => {
-        return cy
+      return resolveAuthToken(postPayload.auth).then((token) =>
+        cy
           .task('createTestPost', {
             apiUrl: postPayload.auth?.apiUrl,
             token,
-            input: {
-              caption,
-              body,
-              organizationId: postPayload.orgId,
-              isPinned,
-            },
+            input: { ...postPayload },
           })
-          .then((result) => {
-            const { postId } = result as CreatePostTaskResult;
-            if (!postId) {
-              throw new Error('seedTestData(posts) did not return postId.');
-            }
-            return { postId };
-          });
-      });
+          .then((res) => ({ postId: (res as CreatePostTaskResult).postId })),
+      ) as Cypress.Chainable<{ postId: string }>;
     }
 
     if (kind === 'volunteers') {
-      const volunteerPayload = payload as SeedVolunteerPayload;
+      const volPayload = payload as SeedVolunteerPayload;
 
-      // Unified chain to guarantee consistent return type
       const ensureUser = (): Cypress.Chainable<{
         userId: string;
         email?: string;
         password?: string;
       }> => {
-        if (volunteerPayload.userId) {
-          return cy.wrap({
-            userId: volunteerPayload.userId,
-            email: undefined,
-            password: undefined,
+        if (volPayload.userId) {
+          return cy.wrap({ userId: volPayload.userId } as {
+            userId: string;
+            email?: string;
+            password?: string;
           });
         }
         return createSeedUser({
-          ...(volunteerPayload.user ?? {}),
-          auth: volunteerPayload.userAuth,
+          ...(volPayload.user ?? {}),
+          auth: volPayload.userAuth,
         }) as Cypress.Chainable<{
           userId: string;
           email?: string;
@@ -695,51 +642,41 @@ Cypress.Commands.add(
         }>;
       };
 
-      return ensureUser().then(
-        (userResult: { userId: string; email?: string; password?: string }) => {
-          const { userId, email, password } = userResult;
-          if (!userId) {
-            throw new Error('seedTestData(volunteers) missing userId.');
-          }
-          const createVolunteer = (token: string) => {
-            return cy
-              .task('createTestVolunteer', {
-                apiUrl: volunteerPayload.auth?.apiUrl,
-                token,
-                input: {
-                  eventId: volunteerPayload.eventId,
-                  userId,
-                  scope: volunteerPayload.scope,
-                  recurringEventInstanceId:
-                    volunteerPayload.recurringEventInstanceId,
-                },
-              })
-              .then((result) => {
-                const { volunteerId } = result as CreateVolunteerTaskResult;
-                if (!volunteerId) {
-                  throw new Error(
-                    'seedTestData(volunteers) did not return volunteerId.',
-                  );
-                }
-                return { volunteerId, userId, email, password };
-              });
-          };
-          return resolveAuthToken(volunteerPayload.auth).then((token) => {
-            return createVolunteer(token);
-          });
-        },
-      );
+      return ensureUser().then((user) => {
+        return resolveAuthToken(volPayload.auth).then((token) =>
+          cy
+            .task('createTestVolunteer', {
+              apiUrl: volPayload.auth?.apiUrl,
+              token,
+              input: {
+                eventId: volPayload.eventId,
+                userId: user.userId,
+                scope: volPayload.scope,
+              },
+            })
+            .then((res) => ({
+              volunteerId: (res as CreateVolunteerTaskResult).volunteerId,
+              userId: user.userId,
+              email: user.email,
+              password: user.password,
+            })),
+        );
+      }) as any;
     }
 
-    return cy.wrap(undefined);
+    throw new Error(`Unsupported seedTestData kind: ${kind}`);
   },
 );
 
 Cypress.Commands.add(
   'cleanupTestOrganization',
-  (orgId: string, options: CleanupTestOrganizationOptions = {}) => {
+  (
+    orgId: string,
+    options: CleanupTestOrganizationOptions = {},
+  ): Cypress.Chainable<void> => {
     return resolveAuthToken(options.auth).then((token) => {
       const apiUrl = options.auth?.apiUrl;
+
       return cy
         .task('deleteTestOrganization', {
           apiUrl,
@@ -750,19 +687,19 @@ Cypress.Commands.add(
         .then(() => {
           const userIds = options.userIds ?? [];
           if (userIds.length === 0) {
-            return undefined;
+            // just return a resolved void chain
+            return cy.wrap<void>(undefined);
           }
-          return cy
-            .wrap(userIds)
-            .each((userId) => {
-              return cy.task('deleteTestUser', {
-                apiUrl,
-                token,
-                userId,
-                allowNotFound: true,
-              });
-            })
-            .then(() => undefined) as Cypress.Chainable<void>;
+
+          // Wrap userIds, run tasks, then cast to Chainable<void>
+          return cy.wrap(userIds).each((userId) => {
+            return cy.task('deleteTestUser', {
+              apiUrl,
+              token,
+              userId,
+              allowNotFound: true,
+            });
+          }) as unknown as Cypress.Chainable<void>;
         });
     });
   },
