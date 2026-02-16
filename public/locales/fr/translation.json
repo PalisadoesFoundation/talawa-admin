@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
+  "oauth": {
+    "continueWith": "Continuer avec {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
@@ -331,7 +335,8 @@
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
     "placeholderAvatarAlt": "Avatar par défaut",
-    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici",
+    "errorLoadingRequests": "Erreur lors du chargement des demandes d'adhésion"
   },
   "users": {
     "membershipStatus": {
@@ -573,7 +578,8 @@
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
     "addMember": "Ajouter un membre",
-    "removeMember": "Supprimer un membre"
+    "removeMember": "Supprimer un membre",
+    "invalidTagName": "Nom de tag invalide"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -1163,7 +1169,9 @@
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "Error loading blocked users",
+    "errorLoadingMembers": "Error loading members"
   },
   "eventManagement": {
     "name": "Gestion d'événements",
@@ -1264,7 +1272,8 @@
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
     "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "successfullyDeletedOrganization": "Organisation supprimée avec succès"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",
@@ -1278,13 +1287,6 @@
     "displayImage": "Image d'affichage",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
-  },
-  "membershipRequest": {
-    "accept": "Accepter",
-    "reject": "Rejeter",
-    "memberAdded": "c'est accepté",
-    "joined": "Rejoint",
-    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "orgUpdate": {
     "city": "Ville",
@@ -1435,25 +1437,6 @@
     "register": "Inscription",
     "talawaApiUnavailable": "API Talawa non disponible"
   },
-  "userRegister": {
-    "enterFirstName": "Entrez votre prénom",
-    "enterLastName": "Entrez votre nom de famille",
-    "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
-    "alreadyhaveAnAccount": "Vous avez déjà un compte?",
-    "login": "Se connecter",
-    "afterRegister": "Enregistré avec succès. ",
-    "passwordNotMatch": "Le mot de passe ne correspond pas. ",
-    "invalidDetailsMessage": "Veuillez saisir des informations valides.",
-    "register": "Inscription",
-    "firstName": "Prénom",
-    "lastName": "Nom de famille",
-    "emailAddress": "Adresse email",
-    "enterEmail": "Entrer l'email",
-    "password": "Mot de passe",
-    "enterPassword": "Entrer le mot de passe",
-    "confirmPassword": "Confirmer le mot de passe",
-    "talawaApiUnavailable": "API Talawa non disponible"
-  },
   "userNavbar": {
     "talawa": "Talawa",
     "home": "Maison",
@@ -1589,6 +1572,7 @@
     "Admin": "Administrateur",
     "loading": "Chargement...",
     "noAttendees": "Aucun participant trouvé",
+    "unknownMember": "Membre inconnu",
     "attendeeCount": "Nombre de participants",
     "maleAttendees": "Participants masculins",
     "femaleAttendees": "Participantes féminines",
@@ -1655,9 +1639,7 @@
     "country": "Pays",
     "resetChanges": "Réinitialiser les modifications",
     "profileDetails": "Détails du profil",
-    "deleteUserMessage": "En cliquant sur le bouton Supprimer l'utilisateur, votre utilisateur sera définitivement supprimé ainsi que ses événements, balises et toutes les données associées.",
     "copyLink": "Copier le lien du profil",
-    "deleteUser": "Supprimer l'utilisateur",
     "otherSettings": "Autres réglages",
     "changeLanguage": "Changer de langue",
     "sgender": "Sélectionnez le sexe",
@@ -2005,7 +1987,8 @@
     "name": "Nom",
     "desc": "Description",
     "venueImagePreview": "Aperçu de l’image du lieu",
-    "sortVenues": "Trier les lieux"
+    "sortVenues": "Trier les lieux",
+    "closeImagePreview": "Fermer l'aperçu de l'image"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -2440,7 +2423,21 @@
     "holidays": "Jours fériés",
     "events": "Événements",
     "eventsCreatedByOrganization": "Événements créés par l'organisation",
-    "today": "Aujourd'hui"
+    "today": "Aujourd'hui",
+    "viewLess": "Voir moins",
+    "viewAll": "Voir tout",
+    "noHolidaysAvailable": "Aucun jour férié disponible",
+    "holidayNames": {
+      "mayDayLabourDay": "Fête du Travail",
+      "mothersDay": "Fête des Mères",
+      "fathersDay": "Fête des Pères",
+      "independenceDayUS": "Fête de l'Indépendance (États-Unis)",
+      "oktoberfest": "Oktoberfest",
+      "halloween": "Halloween",
+      "diwali": "Diwali",
+      "remembranceDayVeteransDay": "Jour du Souvenir / Jour des Anciens Combattants",
+      "christmasDay": "Jour de Noël"
+    }
   },
   "contact": {
     "card_aria": "Carte de contact"
@@ -2469,7 +2466,10 @@
     "clear": "Effacer",
     "clearSelection": "Effacer la sélection",
     "loading": "Chargement...",
-    "selectRow": "Sélectionner la ligne {{rowKey}}"
+    "selectRow": "Sélectionner la ligne {{rowKey}}",
+    "previousYear": "Année précédente",
+    "nextYear": "Année suivante",
+    "member": "Membre"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2568,14 +2568,19 @@
       }
     }
   },
-  "memberActivity": {
-    "yes": "Oui",
-    "no": "Non",
-    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
-    "eventNotFound": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants"
-  },
   "csv": {
     "demographics": "Démographie de {{category}}"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S",
+      "sun": "D"
+    },
+    "expandDay": "Développer le jour"
   }
 }

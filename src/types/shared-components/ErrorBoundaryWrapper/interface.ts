@@ -49,7 +49,7 @@ export interface InterfaceErrorBoundaryWrapperProps {
 
   /**
    * Whether to show toast notification on error.
-   * @default true
+   * @defaultValue true
    */
   showToast?: boolean;
 

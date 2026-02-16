@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.rootless.prod
+      args:
+        PNPM_VERSION: '${PNPM_VERSION:-10.4.1}'
+    ports:
+      - '${PORT:-4321}:8080'
+    env_file:
+      - ../.env
+    healthcheck:
+      test:
+        ['CMD-SHELL', 'wget -q -O /dev/null http://localhost:8080 || exit 1']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped

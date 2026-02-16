@@ -32,6 +32,7 @@
  * - Optimize performance for large attendee lists.
  */
 import React, { useEffect, useMemo, useState } from 'react';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { Tooltip } from '@mui/material';
 import Button from 'shared-components/Button';
 import styles from './EventAttendance.module.css';
@@ -165,13 +166,21 @@ function EventAttendance(): JSX.Element {
         sortable: false,
         filterable: false,
         renderCell: (params) => (
-          <Link
-            to={`/admin/member/${currentUrl}/${params.row.id}`}
-            state={{ id: params.row.id }}
-            className={styles.membername}
-          >
-            {params.value as string}
-          </Link>
+          <div className="d-flex align-items-center">
+            <ProfileAvatarDisplay
+              imageUrl={params.row.avatarURL}
+              fallbackName={params.row.name || t('unknownMember')}
+              size="small"
+              enableEnlarge={true}
+            />
+            <Link
+              to={`/admin/member/${currentUrl}/${params.row.id}`}
+              state={{ id: params.row.id }}
+              className={`${styles.membername} ms-2`}
+            >
+              {params.row.name}
+            </Link>
+          </div>
         ),
       },
       {
@@ -200,7 +209,7 @@ function EventAttendance(): JSX.Element {
                 sx: {
                   backgroundColor: 'var(--bs-white)',
                   fontSize: 'var(--font-size-3xl)',
-                  maxHeight: 'var(--space-19)',
+                  maxHeight: 'var(--space-16)',
                   overflowY: 'scroll',
                   scrollbarColor: 'white',
                   border: 'var(--primary-border-solid)',

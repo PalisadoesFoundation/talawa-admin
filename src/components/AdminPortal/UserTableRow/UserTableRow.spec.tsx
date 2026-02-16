@@ -436,7 +436,7 @@ describe('UserTableRow', () => {
       </RouterWrapper>,
     );
     const button = screen.getByTestId('compactBtn');
-    expect(button).toHaveClass('MuiButton-sizeSmall');
+    expect(button).toHaveAttribute('data-size', 'sm');
   });
 
   it('handles action button size in non-compact mode', () => {
@@ -458,7 +458,7 @@ describe('UserTableRow', () => {
       </RouterWrapper>,
     );
     const button = screen.getByTestId('regularBtn');
-    expect(button).toHaveClass('MuiButton-sizeMedium');
+    expect(button).toHaveAttribute('data-size', 'md');
   });
 
   it('handles avatar spacing based on compact mode', () => {

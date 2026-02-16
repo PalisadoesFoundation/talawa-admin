@@ -16,10 +16,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { loadRecaptchaScript } from 'utils/recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { REACT_APP_USE_RECAPTCHA, BACKEND_URL } from 'Constant/constant';
+import {
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+  BACKEND_URL,
+} from 'Constant/constant';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
   GET_COMMUNITY_DATA_PG,
@@ -56,6 +61,15 @@ const LoginPage = (): JSX.Element => {
   const { startSession, extendSession } = useSession();
 
   document.title = t('title');
+
+  // Load reCAPTCHA script on component mount if enabled
+  useEffect(() => {
+    if (REACT_APP_USE_RECAPTCHA === 'YES' && RECAPTCHA_SITE_KEY) {
+      loadRecaptchaScript(RECAPTCHA_SITE_KEY).catch((error) => {
+        console.error('Failed to load reCAPTCHA script:', error);
+      });
+    }
+  }, []);
 
   const [showTab, setShowTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [role, setRole] = useState<'admin' | 'user'>('user');
@@ -269,7 +283,9 @@ const LoginPage = (): JSX.Element => {
                     className={styles.palisadoes_logo}
                     data-testid="PalisadoesLogo"
                   />
-                  <p className="text-center">{t('fromPalisadoes')}</p>
+                  <p className="text-center" data-testid="app-footer">
+                    {t('fromPalisadoes')}
+                  </p>
                 </a>
               )}
             </div>

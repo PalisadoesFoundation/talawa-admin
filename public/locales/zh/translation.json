@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
+  "oauth": {
+    "continueWith": "继续使用 {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
@@ -326,7 +330,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "errorLoadingRequests": "加载会员申请时出错"
   },
   "users": {
     "membershipStatus": {
@@ -573,7 +578,8 @@
     "loadAssignedUsersError": "加载已分配用户时发生错误",
     "noTagsFound": "未找到标签",
     "addMember": "添加会员",
-    "removeMember": "删除会员"
+    "removeMember": "删除会员",
+    "invalidTagName": "无效的标签名称"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -1180,7 +1186,9 @@
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "noResultsFoundFor": "未找到结果",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "加载被阻止用户时发生错误",
+    "errorLoadingMembers": "加载成员时发生错误"
   },
   "eventManagement": {
     "name": "事件管理",
@@ -1264,7 +1272,8 @@
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
     "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
-    "cancel": "取消"
+    "cancel": "取消",
+    "successfullyDeletedOrganization": "组织已成功删除"
   },
   "userUpdate": {
     "appLanguageCode": "默认语言",
@@ -1278,13 +1287,6 @@
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消"
-  },
-  "membershipRequest": {
-    "accept": "接受",
-    "reject": "拒绝",
-    "memberAdded": "它被接受",
-    "joined": "已加入",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgUpdate": {
     "city": "城市",
@@ -1435,25 +1437,6 @@
     "loading": "加载中...",
     "emailNotAvailable": "邮箱不可用"
   },
-  "userRegister": {
-    "enterFirstName": "输入您的名字",
-    "enterLastName": "输入您的姓氏",
-    "enterConfirmPassword": "输入您的密码进行确认",
-    "alreadyhaveAnAccount": "已经有帐户？",
-    "login": "登录",
-    "afterRegister": "注册成功。",
-    "passwordNotMatch": "密码不匹配。",
-    "invalidDetailsMessage": "请输入有效的详细信息。",
-    "register": "注册",
-    "firstName": "名字",
-    "lastName": "姓氏",
-    "emailAddress": "电子邮件地址",
-    "enterEmail": "输入电子邮件",
-    "password": "密码",
-    "enterPassword": "输入密码",
-    "confirmPassword": "确认密码",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
-  },
   "userNavbar": {
     "talawa": "塔拉瓦",
     "home": "家",
@@ -1589,6 +1572,7 @@
     "Admin": "管理员",
     "loading": "加载中...",
     "noAttendees": "未找到参与者",
+    "unknownMember": "未知成员",
     "attendeeCount": "参与人数",
     "maleAttendees": "男性参与者",
     "femaleAttendees": "女性参与者",
@@ -1656,9 +1640,7 @@
     "country": "国家",
     "resetChanges": "重置更改",
     "profileDetails": "个人资料详情",
-    "deleteUserMessage": "通过单击\"删除用户\"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
     "copyLink": "复制个人资料链接",
-    "deleteUser": "删除用户",
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
     "sgender": "选择性别",
@@ -2005,7 +1987,8 @@
     "name": "名称",
     "desc": "描述",
     "venueImagePreview": "场地图片预览",
-    "sortVenues": "排序场地"
+    "sortVenues": "排序场地",
+    "closeImagePreview": "关闭图片预览"
   },
   "addMember": {
     "title": "添加会员",
@@ -2440,7 +2423,21 @@
     "holidays": "节假日",
     "events": "活动",
     "eventsCreatedByOrganization": "组织创建的活动",
-    "today": "今天"
+    "today": "今天",
+    "viewLess": "查看更少",
+    "viewAll": "查看全部",
+    "noHolidaysAvailable": "没有可用的节假日",
+    "holidayNames": {
+      "mayDayLabourDay": "劳动节",
+      "mothersDay": "母亲节",
+      "fathersDay": "父亲节",
+      "independenceDayUS": "独立日（美国）",
+      "oktoberfest": "慕尼黑啤酒节",
+      "halloween": "万圣节",
+      "diwali": "排灯节",
+      "remembranceDayVeteransDay": "阵亡将士纪念日 / 退伍军人节",
+      "christmasDay": "圣诞节"
+    }
   },
   "contact": {
     "card_aria": "联系人卡片"
@@ -2469,7 +2466,10 @@
     "clear": "清除",
     "clearSelection": "清除选择",
     "loading": "加载中...",
-    "selectRow": "选择第 {{rowKey}} 行"
+    "selectRow": "选择第 {{rowKey}} 行",
+    "previousYear": "上一年",
+    "nextYear": "下一年",
+    "member": "成员"
   },
   "donation": {
     "amount_label": "金额",
@@ -2568,14 +2568,19 @@
       }
     }
   },
-  "memberActivity": {
-    "yes": "是",
-    "no": "否",
-    "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
-    "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数"
-  },
   "csv": {
     "demographics": "{{category}} 人口统计"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "expandDay": "展开日期"
   }
 }

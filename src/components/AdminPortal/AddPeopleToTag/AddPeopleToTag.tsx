@@ -47,10 +47,10 @@ import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import Button from 'shared-components/Button';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
-import styles from 'style/app-fixed.module.css';
+import styles from './AddPeopleToTag.module.css';
 import { Stack } from '@mui/material';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -68,9 +68,10 @@ import {
   dataGridStyle,
 } from 'types/AdminPortal/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import componentStyles from './AddPeopleToTag.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+const GRID_COLUMN_MIN_WIDTH = 100;
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -233,7 +234,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     {
       field: 'id',
       headerName: '#',
-      minWidth: 100,
+      minWidth: GRID_COLUMN_MIN_WIDTH,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -246,7 +247,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       field: 'userName',
       headerName: t('userName'),
       flex: 2,
-      minWidth: 100,
+      minWidth: GRID_COLUMN_MIN_WIDTH,
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
@@ -262,7 +263,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       headerName: t('actions'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: GRID_COLUMN_MIN_WIDTH,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -278,7 +279,6 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             data-testid={
               isToBeAssigned ? 'deselectMemberBtn' : 'selectMemberBtn'
             }
-            // variant={!isToBeAssigned ? 'primary' : 'danger'}
             className={
               !isToBeAssigned ? styles.editButton : `btn btn-danger btn-sm`
             }
@@ -321,15 +321,14 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       resetButtonText={tErrors('resetButton')}
       onReset={hideAddPeopleToTagModal}
     >
-      <BaseModal
-        show={addPeopleToTagModalIsOpen}
-        onHide={hideAddPeopleToTagModal}
+      <CRUDModalTemplate
+        open={addPeopleToTagModalIsOpen}
+        onClose={hideAddPeopleToTagModal}
         title={t('addPeople')}
-        headerClassName={`bg-primary ${styles.modalHeader}`}
-        footer={modalFooter}
-        dataTestId="addPeopleToTagModal"
+        customFooter={modalFooter}
+        data-testId="addPeopleToTagModal"
       >
-        <Form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
+        <form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
           <div
             className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
           >
@@ -344,11 +343,12 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
                 >
                   {member.firstName} {member.lastName}
-                  <button
+                  <Button
                     type="button"
                     className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
                     onClick={() => removeMember(member._id)}
                     data-testid="clearSelectedMember"
+                    aria-label={t('removeMember')}
                   />
                 </div>
               ))
@@ -393,7 +393,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               <div
                 id="addPeopleToTagScrollableDiv"
                 data-testid="addPeopleToTagScrollableDiv"
-                className={componentStyles.dataGridContainer}
+                className={styles.dataGridContainer}
               >
                 <InfiniteScroll
                   dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
@@ -444,8 +444,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               </div>
             </>
           )}
-        </Form>
-      </BaseModal>
+        </form>
+      </CRUDModalTemplate>
     </ErrorBoundaryWrapper>
   );
 };
