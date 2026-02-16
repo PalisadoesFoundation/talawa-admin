@@ -458,7 +458,7 @@ describe('OrganizationPeople', () => {
     );
 
     // Search for "Jane"
-    const searchInput = screen.getByTestId('searchbtn');
+    const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'Jane');
 
     // Wait for debounced search (SearchFilterBar has 300ms debounce)
