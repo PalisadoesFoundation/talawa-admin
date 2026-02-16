@@ -16,7 +16,7 @@ import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import UserScreen from './UserScreen';
@@ -33,7 +33,7 @@ const routerSpies = vi.hoisted(() => ({
   navigate: vi.fn(),
 }));
 
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
@@ -65,7 +65,7 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
 }));
 
 // Mock SignOut component to prevent useNavigate() error from Router context
-vi.mock('components/SignOut/SignOut', () => ({
+vi.mock('shared-components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out

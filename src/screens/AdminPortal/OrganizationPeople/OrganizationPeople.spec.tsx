@@ -8,7 +8,7 @@ import userEvent, {
   PointerEventsCheckLevel,
 } from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter, Routes, Route } from 'react-router';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';

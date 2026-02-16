@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, MemoryRouter } from 'react-router';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
@@ -26,7 +26,7 @@ vi.mock('components/AdminPortal/LeftDrawer/LeftDrawer', () => ({
 }));
 
 // Mock SignOut component to prevent useNavigate() error from Router context
-vi.mock('components/SignOut/SignOut', () => ({
+vi.mock('shared-components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out

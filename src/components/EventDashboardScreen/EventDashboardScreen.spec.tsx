@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
@@ -31,7 +31,7 @@ Object.defineProperty(window, 'matchMedia', {
 
 let mockID: string | undefined = '123';
 
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
@@ -54,7 +54,7 @@ vi.mock('components/LeftDrawerOrg/LeftDrawerOrg', () => ({
 }));
 
 // Mock SignOut component to prevent useNavigate() error from Router context
-vi.mock('components/SignOut/SignOut', () => ({
+vi.mock('shared-components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out

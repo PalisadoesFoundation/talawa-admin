@@ -194,7 +194,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
   default: vi.fn(() => <div data-testid="profile-card">Profile Card</div>),
 }));
 
-vi.mock('components/SignOut/SignOut', () => ({
+vi.mock('shared-components/SignOut/SignOut', () => ({
   default: vi.fn(({ hideDrawer }: { hideDrawer?: boolean }) => (
     <div data-testid="sign-out" data-hide-drawer={hideDrawer}>
       Sign Out Component

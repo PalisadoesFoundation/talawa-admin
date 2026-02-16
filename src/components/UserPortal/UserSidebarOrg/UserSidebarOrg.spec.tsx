@@ -48,7 +48,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 }));
 
 // Mock SignOut component to avoid router hook errors
-vi.mock('components/SignOut/SignOut', () => ({
+vi.mock('shared-components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
     <div data-testid="sign-out-component" hidden={hideDrawer}>
       Sign Out Mock

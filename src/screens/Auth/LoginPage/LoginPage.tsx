@@ -18,7 +18,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { loadRecaptchaScript } from 'utils/recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   REACT_APP_USE_RECAPTCHA,

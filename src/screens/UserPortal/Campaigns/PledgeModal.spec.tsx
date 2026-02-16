@@ -16,7 +16,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -310,7 +310,7 @@ const localStorageMock = setupLocalStorageMock();
 
 describe('PledgeModal', () => {
   beforeAll(() => {
-    vi.mock('react-router', async () => {
+    vi.mock('react-router-dom', async () => {
       const actual = await vi.importActual('react-router');
       return {
         ...actual,

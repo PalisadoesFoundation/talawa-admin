@@ -34,7 +34,7 @@
  */
 import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './ProfileDropdown.module.css';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';

@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
@@ -152,7 +152,7 @@ const renderComponent = (
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
     // Mocking `react-router-dom` to return the actual module and override `useParams`
-    vi.mock('react-router', async () => {
+    vi.mock('react-router-dom', async () => {
       const actual = await vi.importActual('react-router'); // Import the actual module
       return {
         ...actual,

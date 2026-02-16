@@ -26,7 +26,7 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 
 import { WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';

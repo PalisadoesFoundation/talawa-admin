@@ -22,7 +22,7 @@ import type { Chat } from 'types/UserPortal/Chat/interface';
 import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,

@@ -38,7 +38,7 @@ const mockColumns: IColumnDef<IUser, unknown>[] = [
 describe('DataTable types', () => {
   beforeEach(() => {
     // No setup required for these type tests
-    vi.mock('react-router', async () => {
+    vi.mock('react-router-dom', async () => {
       const actual = await vi.importActual('react-router'); // Import the actual module
       return {
         ...actual,

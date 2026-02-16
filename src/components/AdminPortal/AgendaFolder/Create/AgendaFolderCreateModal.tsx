@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';

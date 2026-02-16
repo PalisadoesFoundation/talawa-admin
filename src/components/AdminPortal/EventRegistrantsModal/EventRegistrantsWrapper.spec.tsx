@@ -3,7 +3,7 @@ import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventRegistrantsWrapper } from './EventRegistrantsWrapper';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';

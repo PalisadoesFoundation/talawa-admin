@@ -6,7 +6,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';

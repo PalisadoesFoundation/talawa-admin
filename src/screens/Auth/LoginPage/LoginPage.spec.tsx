@@ -8,7 +8,7 @@ import {
   cleanup,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { Router } from 'react-router';
+import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -364,7 +364,7 @@ vi.mock('Constant/constant.ts', async () => ({
   BACKEND_URL: 'http://localhost:4000/graphql',
 }));
 
-vi.mock('react-router', async () => ({
+vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual('react-router')),
   useNavigate: () => routerMocks.navigate,
 }));

@@ -2,7 +2,7 @@ import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 import AgendaFolderContainer from './AgendaFolderContainer';
@@ -15,7 +15,7 @@ import i18nForTest from 'utils/i18nForTest';
 
 // Mock useParams
 let mockOrgId: string | undefined = 'org123';
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,

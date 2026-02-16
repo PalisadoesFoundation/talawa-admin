@@ -25,7 +25,7 @@ import {
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
   ORGANIZATIONS_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -116,7 +116,7 @@ vi.mock('shared-components/TimePicker', () => ({
   },
 }));
 
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,

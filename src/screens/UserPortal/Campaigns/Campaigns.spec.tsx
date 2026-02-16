@@ -9,7 +9,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -89,7 +89,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   beforeAll(() => {
-    vi.mock('react-router', async () => {
+    vi.mock('react-router-dom', async () => {
       const actual = await vi.importActual('react-router');
       return {
         ...actual,

@@ -29,7 +29,7 @@ import {
   useLocation,
   useParams,
   useMatch,
-} from 'react-router';
+} from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';

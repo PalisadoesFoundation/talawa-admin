@@ -39,7 +39,7 @@ vi.mock('react-router-dom', async () => ({
   useParams: mockUseParams,
 }));
 
-vi.mock('react-router', async () => ({
+vi.mock('react-router-dom', async () => ({
   ...(await vi.importActual('react-router')),
   useParams: mockUseParams,
 }));

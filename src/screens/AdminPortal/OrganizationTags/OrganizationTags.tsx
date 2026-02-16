@@ -22,7 +22,7 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import { useNavigate, useParams, Link } from 'react-router';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';

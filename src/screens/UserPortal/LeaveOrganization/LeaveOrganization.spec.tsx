@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import i18nForTest from 'utils/i18nForTest';
@@ -42,9 +42,9 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 // Mock useParams to return a test organization ID
 
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actualDom =
-    await vi.importActual<typeof import('react-router')>('react-router');
+    await vi.importActual<typeof import('react-router-dom')>('react-router');
   return {
     ...actualDom,
     useParams: routerMocks.params,

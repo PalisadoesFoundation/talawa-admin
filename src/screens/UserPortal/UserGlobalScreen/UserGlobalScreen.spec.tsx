@@ -109,7 +109,7 @@ const routerSpies = vi.hoisted(() => ({
 }));
 
 // Mock react-router Outlet
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,

@@ -37,7 +37,7 @@ import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import type { InterfaceTagData } from 'utils/interfaces';
 import styles from './TagActions.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';

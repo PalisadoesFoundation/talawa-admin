@@ -4,7 +4,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { t } from 'i18next';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -67,8 +67,8 @@ const useSession = (): UseSessionReturnType => {
    * to the same function identity, preventing stale closure issues or
    * failure to remove listeners.
    */
-  const extendSessionRef = useRef<() => void>(() => {});
-  const handleVisibilityChangeRef = useRef<() => Promise<void>>(async () => {});
+  const extendSessionRef = useRef<() => void>(() => { });
+  const handleVisibilityChangeRef = useRef<() => Promise<void>>(async () => { });
   const mountedRef = useRef(true);
   const throttledExtendSessionRef = useRef<NodeJS.Timeout | null>(null);
 

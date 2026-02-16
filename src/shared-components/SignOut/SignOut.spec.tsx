@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import type { Mock } from 'vitest';
 import { vi } from 'vitest';
@@ -31,7 +31,7 @@ vi.mock('react-i18next', () => ({
     },
   }),
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: { type: '3rdParty', init: () => {} },
+  initReactI18next: { type: '3rdParty', init: () => { } },
 }));
 
 vi.mock('utils/useLocalstorage', () => ({
@@ -45,12 +45,26 @@ vi.mock('utils/useLocalstorage', () => ({
 }));
 
 let mockNavigate: ReturnType<typeof vi.fn>;
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useNavigate: () => mockNavigate,
   };
+});
+
+const reloadMock = vi.fn();
+Object.defineProperty(window, 'location', {
+  value: { reload: reloadMock },
+  writable: true,
 });
 
 const createMock = () => {
@@ -76,7 +90,7 @@ const renderWithProviders = (
   return render(
     <MockedProvider {...mockProviderProps}>
       <I18nextProvider i18n={i18n}>
-        <BrowserRouter>{component}</BrowserRouter>
+        <MemoryRouter>{component}</MemoryRouter>
       </I18nextProvider>
     </MockedProvider>,
   );
@@ -134,7 +148,7 @@ describe('SignOut Component', () => {
   test('handles error during logout', async () => {
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
     const mockErrorLogout = {
       request: {
         query: LOGOUT_MUTATION,
@@ -180,7 +194,7 @@ describe('SignOut Component', () => {
 
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const mockEndSession = vi.fn();
     (useSession as Mock).mockReturnValue({
@@ -239,7 +253,7 @@ describe('SignOut Component', () => {
 
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const mockEndSession = vi.fn();
     (useSession as Mock).mockReturnValue({
@@ -296,7 +310,7 @@ describe('SignOut Component', () => {
 
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const mockEndSession = vi.fn();
     (useSession as Mock).mockReturnValue({
@@ -472,7 +486,7 @@ describe('SignOut Component', () => {
 
       const consoleErrorMock = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       const mockEndSession = vi.fn();
       (useSession as Mock).mockReturnValue({

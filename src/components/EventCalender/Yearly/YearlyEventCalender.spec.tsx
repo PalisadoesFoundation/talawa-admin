@@ -111,16 +111,16 @@ vi.mock('react-router-dom', async () => {
 });
 
 // Mock 'react-router' to satisfy hooks used inside EventListCard and its modals
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
+    await vi.importActual<typeof import('react-router-dom')>('react-router');
   const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
   return {
     ...actual,
     useParams: useParamsMock,
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     Navigate: () => null,
-  } as unknown as typeof import('react-router');
+  } as unknown as typeof import('react-router-dom');
 });
 
 // Initialize i18n for testing

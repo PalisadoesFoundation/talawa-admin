@@ -7,7 +7,7 @@ import useSession from './useSession';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
@@ -263,7 +263,7 @@ describe('useSession Hook', () => {
   test('should handle error when logout fails', async () => {
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const errorMocks = [
       {
@@ -644,7 +644,7 @@ describe('useSession Hook', () => {
   test('should handle event listener errors gracefully', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
     const mockError = new Error('Event listener error');
 
     const addEventListenerSpy = vi
@@ -766,9 +766,21 @@ describe('useSession Hook', () => {
 
     vi.useRealTimers();
   });
-
-  test('should throttle extend session calls via exported extendSession', async () => {
+  test('should throttle extend session calls on user activity', async () => {
     vi.useFakeTimers();
+
+    // Capture the event listener handler
+    let eventHandler: EventListener | null = null;
+    const addEventListenerSpy = vi
+      .spyOn(window, 'addEventListener')
+      .mockImplementation((event, handler) => {
+        if (event === 'mousemove') {
+          eventHandler = handler as EventListener;
+        }
+      });
+
+    // We use clearTimeout to verify if resetTimers was called (which happens in extendSession)
+    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
@@ -780,32 +792,33 @@ describe('useSession Hook', () => {
 
     result.current.startSession();
 
-    // Advance to just before the warning time (14 minutes)
-    vi.advanceTimersByTime(14 * 60 * 1000);
+    // Verify the handler was captured
+    expect(addEventListenerSpy).toHaveBeenCalledWith('mousemove', expect.any(Function));
+    expect(eventHandler).toBeDefined();
 
-    // No warning yet
-    expect(NotificationToast.warning).not.toHaveBeenCalled();
+    // Clear initial calls
+    clearTimeoutSpy.mockClear();
 
-    // Extend session — this resets all timers
-    result.current.extendSession();
+    // 1. Trigger first activity - manually call the handler
+    if (eventHandler) (eventHandler as EventListener)(new Event('mousemove'));
 
-    // Advance another 1 minute — warning would have fired at 15m without extension
-    vi.advanceTimersByTime(1 * 60 * 1000);
+    // Should have called clearTimeout (inside resetTimers)
+    expect(clearTimeoutSpy).toHaveBeenCalled();
+    clearTimeoutSpy.mockClear();
 
-    // Warning should NOT appear because session was extended at T+14m
-    expect(NotificationToast.warning).not.toHaveBeenCalled();
+    // 2. Trigger immediate subsequent activity - should be throttled
+    if (eventHandler) (eventHandler as EventListener)(new Event('mousemove'));
 
-    // Rapidly extend multiple times — should all succeed without error
-    result.current.extendSession();
-    result.current.extendSession();
-    result.current.extendSession();
+    // Should NOT have called clearTimeout again immediately (extendSession skipped)
+    expect(clearTimeoutSpy).not.toHaveBeenCalled();
 
-    // Now advance to the new warning time (15 minutes from last extension)
-    vi.advanceTimersByTime(15 * 60 * 1000);
+    // 3. Advance time just past the 5s window
+    // default throttle is 5000ms.
+    vi.advanceTimersByTime(5100);
 
-    await vi.waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledWith('sessionWarning');
-    });
+    // Trigger activity again - should now extend session
+    if (eventHandler) (eventHandler as EventListener)(new Event('mousemove'));
+    expect(clearTimeoutSpy).toHaveBeenCalled();
 
     vi.useRealTimers();
   });

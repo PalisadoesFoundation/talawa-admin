@@ -93,7 +93,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
   )),
 }));
 
-vi.mock('components/SignOut/SignOut', () => ({
+vi.mock('shared-components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out

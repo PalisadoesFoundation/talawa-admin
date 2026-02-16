@@ -60,7 +60,7 @@ vi.mock('@apollo/client', async () => {
 });
 
 // Mock useLocation
-vi.mock('react-router', () => ({
+vi.mock('react-router-dom', () => ({
   useLocation: () => ({ state: { id: '123' } }),
 }));
 
