@@ -28,7 +28,7 @@ const { mockUploadFileToMinio } = vi.hoisted(() => {
   fn.mockResolvedValue({
     objectName: 'test-obj',
     fileHash: 'test-hash',
-    mimeType: 'image/png',
+    mimetype: 'image/png',
   });
   return { mockUploadFileToMinio: fn };
 });
@@ -319,7 +319,7 @@ describe('VenueModal', () => {
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'test-obj',
       fileHash: 'test-hash',
-      mimeType: 'image/png',
+      mimetype: 'image/png',
     });
   });
 
@@ -787,7 +787,7 @@ describe('Validation', () => {
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'test-obj',
       fileHash: 'test-hash',
-      mimeType: 'image/png',
+      mimetype: 'image/png',
     });
   });
 
@@ -1061,7 +1061,7 @@ describe('Validation', () => {
       mockUploadFileToMinio.mockResolvedValue({
         objectName: 'test-obj',
         fileHash: 'test-hash',
-        mimeType: 'image/png',
+        mimetype: 'image/png',
       });
     });
 
@@ -2856,7 +2856,7 @@ describe('Validation', () => {
         expect(variables.attachments[0]).toMatchObject({
           objectName: 'test-obj',
           fileHash: 'test-hash',
-          mimeType: 'image/png',
+          mimetype: 'image/png',
         });
       }
 
@@ -2982,7 +2982,7 @@ describe('Validation', () => {
       expect(vars.attachments[0]).toMatchObject({
         objectName: 'test-obj',
         fileHash: 'test-hash',
-        mimeType: 'image/png',
+        mimetype: 'image/png',
       });
 
       return mutationSpy();
@@ -3055,7 +3055,7 @@ describe('Validation', () => {
       expect(vars.attachments[0]).toMatchObject({
         objectName: 'test-obj',
         fileHash: 'test-hash',
-        mimeType: 'image/png',
+        mimetype: 'image/png',
       });
 
       return mutationSpy();

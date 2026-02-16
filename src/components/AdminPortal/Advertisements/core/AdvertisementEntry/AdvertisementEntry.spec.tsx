@@ -67,7 +67,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'Advert1',
                   createdAt: new Date(),
                   organization: {
@@ -160,7 +160,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'Test Ad',
                   createdAt: new Date(),
                   organization: {
@@ -213,7 +213,7 @@ describe('Testing Advertisement Entry Component', () => {
           endAt: new Date(),
           startAt: new Date(),
           id: '1',
-          attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+          attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
           name: 'Advert1',
           createdAt: new Date(),
           organization: {
@@ -260,7 +260,7 @@ describe('Testing Advertisement Entry Component', () => {
           endAt: mockEndDate,
           startAt: mockStartDate,
           id: '1',
-          attachments: [{ url: mockMediaUrl, mimeType: mockMediaType }],
+          attachments: [{ url: mockMediaUrl, mimetype: mockMediaType }],
           name: mockName,
           createdAt: mockCreatedAt,
           organization: {
@@ -631,11 +631,11 @@ describe('Testing Advertisement Entry Component', () => {
                     attachments: [
                       {
                         url: 'test1.jpg',
-                        mimeType: 'image/jpeg',
+                        mimetype: 'image/jpeg',
                       },
                       {
                         url: 'test2.jpg',
-                        mimeType: 'image/jpeg',
+                        mimetype: 'image/jpeg',
                       },
                     ],
                     name: 'Advert1',
@@ -697,11 +697,11 @@ describe('Testing Advertisement Entry Component', () => {
                     attachments: [
                       {
                         url: 'test1.jpg',
-                        mimeType: 'image/jpeg',
+                        mimetype: 'image/jpeg',
                       },
                       {
                         url: 'test2.jpg',
-                        mimeType: 'image/jpeg',
+                        mimetype: 'image/jpeg',
                       },
                     ],
                     name: 'Advert1',
@@ -753,7 +753,7 @@ describe('Testing Advertisement Entry Component', () => {
                   startAt: new Date(),
                   id: '1',
                   attachments: [
-                    { url: 'test-video.mp4', mimeType: 'video/mp4' },
+                    { url: 'test-video.mp4', mimetype: 'video/mp4' },
                   ],
                   name: 'Video Ad',
                   createdAt: new Date(),
@@ -824,7 +824,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'No Description Ad',
                   description: '',
                   createdAt: new Date(),
@@ -859,7 +859,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'Ad with Description',
                   description: testDescription,
                   createdAt: new Date(),
@@ -893,7 +893,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: null as unknown as Date,
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'Ad with no start date',
                   createdAt: new Date(),
                   organization: {
@@ -926,7 +926,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: null as unknown as Date,
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'Ad with no end date',
                   createdAt: new Date(),
                   organization: {
@@ -959,7 +959,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'Popup Ad',
                   createdAt: new Date(),
                   organization: {
@@ -992,7 +992,7 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
                   name: 'No Description Ad',
                   description: undefined,
                   createdAt: new Date(),
@@ -1027,8 +1027,8 @@ describe('Testing Advertisement Entry Component', () => {
                   startAt: new Date(),
                   id: '1',
                   attachments: [
-                    { url: 'test1.jpg', mimeType: 'image/jpeg' },
-                    { url: 'test2.jpg', mimeType: 'image/jpeg' },
+                    { url: 'test1.jpg', mimetype: 'image/jpeg' },
+                    { url: 'test2.jpg', mimetype: 'image/jpeg' },
                   ],
                   name: null as unknown as string,
                   createdAt: new Date(),

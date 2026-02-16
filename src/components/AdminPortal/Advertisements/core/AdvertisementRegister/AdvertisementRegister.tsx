@@ -195,7 +195,7 @@ function AdvertisementRegister({
         const uploadedMetadata: {
           objectName: string;
           fileHash: string;
-          mimeType: string;
+          mimetype: string;
           previewUrl: string;
         }[] = [];
         for (const file of validFiles) {
@@ -207,7 +207,7 @@ function AdvertisementRegister({
             uploadedMetadata.push({
               objectName,
               fileHash,
-              mimeType: file.type,
+              mimetype: file.type,
               previewUrl: URL.createObjectURL(file),
             });
           } catch (error) {
@@ -295,7 +295,7 @@ function AdvertisementRegister({
           | {
               objectName: string;
               fileHash: string;
-              mimeType: string;
+              mimetype: string;
               previewUrl?: string;
             }[]
           | undefined;
@@ -531,7 +531,7 @@ function AdvertisementRegister({
               {/* Preview section */}
               {formState.attachments.map((file, index) => (
                 <div key={index}>
-                  {file.mimeType.startsWith('video/') ? (
+                  {file.mimetype.startsWith('video/') ? (
                     <video
                       data-testid="mediaPreview"
                       controls

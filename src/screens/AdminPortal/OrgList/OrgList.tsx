@@ -48,7 +48,7 @@ import { useModalState } from 'shared-components/CRUDModalTemplate';
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: { objectName: string; fileHash: string; mimeType: string } | null;
+  avatar?: { objectName: string; fileHash: string; mimetype: string } | null;
   city: string;
   countryCode: string;
   description: string;

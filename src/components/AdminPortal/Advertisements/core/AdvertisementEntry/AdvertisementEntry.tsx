@@ -38,6 +38,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
 import { Card, Col, Row, Carousel } from 'react-bootstrap';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import Button from 'shared-components/Button/Button';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -77,7 +78,11 @@ function AdvertisementEntry({
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   // State for delete confirmation modal visibility
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const {
+    isOpen: showDeleteModal,
+    open: openDeleteModal,
+    close: closeDeleteModal,
+  } = useModalState();
 
   // Mutation hook for deleting an advertisement
   const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {
@@ -110,7 +115,13 @@ function AdvertisementEntry({
   /**
    * Toggles the visibility of the delete confirmation modal.
    */
-  const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
+  const toggleShowDeleteModal = (): void => {
+    if (showDeleteModal) {
+      closeDeleteModal();
+    } else {
+      openDeleteModal();
+    }
+  };
 
   /**
    * Handles advertisement deletion.
@@ -183,14 +194,14 @@ function AdvertisementEntry({
           <Col key={idx}>
             <Card className={styles.addCard}>
               <div className={styles.dropdownContainer} ref={dropdownRef}>
-                <button
+                <Button
                   className={styles.dropdownButton}
                   onClick={() => setDropdown(!dropdown)}
                   data-testid="moreiconbtn"
                   data-cy="dropdownbtn"
                 >
                   <MoreVertIcon />
-                </button>
+                </Button>
                 {dropdown && (
                   <ul className={styles.dropdownmenu}>
                     <li>
@@ -219,7 +230,7 @@ function AdvertisementEntry({
                   </ul>
                 )}
               </div>
-              {advertisement.attachments?.[0]?.mimeType?.includes('video') ? (
+              {advertisement.attachments?.[0]?.mimetype?.includes('video') ? (
                 <video
                   muted
                   className={`${styles.admedia} ${styles.mediaContainer}`}

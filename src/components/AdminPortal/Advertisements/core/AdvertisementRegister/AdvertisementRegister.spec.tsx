@@ -1673,7 +1673,7 @@ describe('Testing Advertisement Register Component', () => {
       expect(attachment).toEqual({
         objectName: 'test-object',
         fileHash: 'test-hash',
-        mimeType: 'image/jpeg',
+        mimetype: 'image/jpeg',
       });
 
       expect(toastSuccessSpy).toHaveBeenCalledWith(

@@ -52,7 +52,7 @@ import { useTranslation } from 'react-i18next';
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: { objectName: string; fileHash: string; mimeType: string } | null;
+  avatar?: { objectName: string; fileHash: string; mimetype: string } | null;
   city: string;
   countryCode: string;
   description: string;
@@ -122,7 +122,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         );
         setFormState((prev) => ({
           ...prev,
-          avatar: { objectName, fileHash, mimeType: file.type },
+          avatar: { objectName, fileHash, mimetype: file.type },
         }));
         NotificationToast.success(tCommon('imageUploadSuccess'));
       } catch (error) {

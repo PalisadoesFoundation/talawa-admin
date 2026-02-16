@@ -61,7 +61,7 @@ interface InterfaceVenueFormState {
   description: string;
   capacity: string;
   objectName: string;
-  attachments?: { objectName: string; fileHash: string; mimeType: string }[];
+  attachments?: { objectName: string; fileHash: string; mimetype: string }[];
 }
 
 const VenueModal = ({
@@ -326,15 +326,21 @@ const VenueModal = ({
       if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
         URL.revokeObjectURL(imagePreviewUrl);
       }
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreviewUrl(previewUrl);
+      const newPreviewUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(newPreviewUrl);
 
       // Upload to MinIO and store metadata
       try {
         const { objectName, fileHash } = await uploadFileToMinio(file, orgId);
+        const fileMetadata = {
+          objectName,
+          fileHash,
+          mimetype: file.type,
+        };
+
         setFormState((prev) => ({
           ...prev,
-          attachments: [{ objectName, fileHash, mimeType: file.type }],
+          attachments: [...(prev.attachments || []), fileMetadata],
         }));
       } catch (error) {
         console.error('Error uploading file:', error);

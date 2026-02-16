@@ -174,7 +174,7 @@ export const createAdFailMock = createMockResponse(
       {
         objectName: 'test-obj',
         fileHash: 'test-hash',
-        mimeType: 'image/jpeg',
+        mimetype: 'image/jpeg',
       },
     ],
   },

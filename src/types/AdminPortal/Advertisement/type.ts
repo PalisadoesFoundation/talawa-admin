@@ -29,14 +29,14 @@ export type Advertisement = {
 // Advertisement Attachment Type
 export type AdvertisementAttachment = {
   url: string;
-  mimeType: string;
+  mimetype: string;
 };
 
 // File Metadata Attachment Type (for MinIO uploads)
 export type FileMetadataAttachment = {
   objectName: string;
   fileHash: string;
-  mimeType: string;
+  mimetype: string;
   previewUrl?: string;
 };
 

@@ -178,7 +178,7 @@ describe('OrganizationModal Component', () => {
           avatar: {
             objectName: 'mocked-object-name',
             fileHash: 'mocked-file-hash',
-            mimeType: 'image/png',
+            mimetype: 'image/png',
           },
         }),
       );
@@ -470,7 +470,7 @@ describe('OrganizationModal Component', () => {
           avatar: {
             objectName: 'mocked-object-name',
             fileHash: 'mocked-file-hash',
-            mimeType: 'image/png',
+            mimetype: 'image/png',
           },
         }),
       );
@@ -673,7 +673,7 @@ describe('OrganizationModal Component', () => {
           avatar: {
             objectName: 'mocked-object-name',
             fileHash: 'mocked-file-hash',
-            mimeType: 'image/png',
+            mimetype: 'image/png',
           },
         }),
       );

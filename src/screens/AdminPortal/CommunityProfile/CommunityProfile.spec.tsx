@@ -26,7 +26,7 @@ const { mockUploadFileToMinio } = vi.hoisted(() => ({
   mockUploadFileToMinio: vi.fn().mockResolvedValue({
     objectName: 'mocked-logo-object-name',
     fileHash: 'mocked-logo-file-hash',
-    mimeType: 'image/png',
+    mimetype: 'image/png',
   }),
 }));
 

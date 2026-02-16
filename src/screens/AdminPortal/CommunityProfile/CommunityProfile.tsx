@@ -109,12 +109,14 @@ const CommunityProfile = (): JSX.Element => {
     slackURL: '',
   });
 
-  // State for logo metadata (uploaded via MinIO presigned URL)
-  const [logoMetadata, setLogoMetadata] = React.useState<{
+  interface InterfaceLogoMetadata {
     objectName: string;
     fileHash: string;
-    mimeType: string;
-  } | null>(null);
+    mimetype: string;
+  }
+  // State for logo metadata (uploaded via MinIO presigned URL)
+  const [logoMetadata, setLogoMetadata] =
+    React.useState<InterfaceLogoMetadata | null>(null);
 
   // Track if logo upload is in progress
   const [_isLogoUploading, setIsLogoUploading] = React.useState(false);
@@ -303,7 +305,7 @@ const CommunityProfile = (): JSX.Element => {
                       setLogoMetadata({
                         objectName,
                         fileHash,
-                        mimeType: file.type,
+                        mimetype: file.type,
                       });
                     } catch (error) {
                       console.error('Error uploading logo:', error);
