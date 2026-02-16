@@ -324,6 +324,7 @@ describe('CreateGroupChat', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     for (const key in mockLocalStorageStore) {
       delete mockLocalStorageStore[key];
     }

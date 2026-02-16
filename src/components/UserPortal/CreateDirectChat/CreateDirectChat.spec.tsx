@@ -198,6 +198,7 @@ describe('CreateDirectChatModal', () => {
   const chatsListRefetch = vi.fn();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     setItem('userId', '1');
   });
 
@@ -225,15 +226,14 @@ describe('CreateDirectChatModal', () => {
     renderComponent();
 
     await waitFor(() => {
-      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
-      expect(rows.length).toBe(2);
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
+      expect(userRows.length).toBe(2);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
+      expect(userRows[1]).toHaveTextContent('Test User 3');
+      expect(screen.queryByText('Current User')).not.toBeInTheDocument();
     });
-    const userRows = document.querySelectorAll(
-      '[data-testid^="datatable-row-"]',
-    );
-    expect(userRows[0]).toHaveTextContent('Test User 2');
-    expect(userRows[1]).toHaveTextContent('Test User 3');
-    expect(screen.queryByText('Current User')).not.toBeInTheDocument();
 
     const addButtons = await screen.findAllByTestId('addBtn');
     await user.click(addButtons[0]);
@@ -303,16 +303,14 @@ describe('CreateDirectChatModal', () => {
     renderComponent();
 
     await waitFor(() => {
-      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
-      expect(rows.length).toBe(2);
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
+      expect(userRows.length).toBe(2);
+      const lastRow = userRows[userRows.length - 1];
+      expect(lastRow).toHaveTextContent('Test User 3');
+      expect(lastRow).toHaveTextContent('Member');
     });
-    const userRows = document.querySelectorAll(
-      '[data-testid^="datatable-row-"]',
-    );
-    const lastRow = userRows[userRows.length - 1];
-
-    expect(lastRow).toHaveTextContent('Test User 3');
-    expect(lastRow).toHaveTextContent('Member');
   });
 
   test('should prevent creating a duplicate chat', async () => {
@@ -346,13 +344,12 @@ describe('CreateDirectChatModal', () => {
     renderComponent({ chats: existingChats });
 
     await waitFor(() => {
-      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
-      expect(rows.length).toBeGreaterThanOrEqual(1);
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
+      expect(userRows.length).toBeGreaterThanOrEqual(1);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
     });
-    const userRows = document.querySelectorAll(
-      '[data-testid^="datatable-row-"]',
-    );
-    expect(userRows[0]).toHaveTextContent('Test User 2');
 
     const addButtons = await screen.findAllByTestId('addBtn');
     await user.click(addButtons[0]);
