@@ -324,7 +324,7 @@ describe('useDataTableSelection', () => {
 
     const { result } = renderHook(() =>
       useDataTableSelection<TestRow>({
-        paginatedData: data,
+        paginatedData: [{ id: '1' }, { id: '2' }],
         keysOnPage: ['1', '2'],
         selectable: true,
         initialSelectedKeys: new Set(['1', '3']),
@@ -339,5 +339,63 @@ describe('useDataTableSelection', () => {
 
     expect(selectedKeys).toEqual(['1']);
     expect(rows).toHaveLength(1);
+  });
+
+  it('does not run bulk action when disabled is true (boolean)', () => {
+    const actionFn = vi.fn();
+
+    const action: IBulkAction<TestRow> = {
+      id: 'delete',
+      label: 'Delete',
+      disabled: true,
+      onClick: actionFn,
+    };
+
+    const { result } = renderHook(() =>
+      useDataTableSelection<TestRow>({
+        paginatedData: data,
+        keysOnPage: keys,
+        selectable: true,
+        initialSelectedKeys: new Set(['1']),
+      }),
+    );
+
+    act(() => {
+      result.current.runBulkAction(action);
+    });
+
+    expect(actionFn).not.toHaveBeenCalled();
+  });
+
+  it('does not update selection in controlled mode without onSelectionChange', () => {
+    const { result } = renderHook(() =>
+      useDataTableSelection<TestRow>({
+        paginatedData: data,
+        keysOnPage: keys,
+        selectable: true,
+        selectedKeys: new Set(['1']),
+      }),
+    );
+
+    act(() => {
+      result.current.toggleRowSelection('2');
+    });
+
+    expect(result.current.currentSelection.has('1')).toBe(true);
+    expect(result.current.currentSelection.has('2')).toBe(false);
+  });
+
+  it('allSelectedOnPage and someSelectedOnPage are false when selectable is false', () => {
+    const { result } = renderHook(() =>
+      useDataTableSelection<TestRow>({
+        paginatedData: data,
+        keysOnPage: keys,
+        selectable: false,
+        initialSelectedKeys: new Set(['1', '2', '3']),
+      }),
+    );
+
+    expect(result.current.allSelectedOnPage).toBe(false);
+    expect(result.current.someSelectedOnPage).toBe(false);
   });
 });
