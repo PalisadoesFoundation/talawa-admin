@@ -57,7 +57,7 @@ vi.mock('components/SignOut/SignOut', () => ({
 }));
 
 // Mock useSession to prevent router hook errors in SignOut component
-vi.mock('utils/useSession', () => ({
+vi.mock('hooks/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
   })),

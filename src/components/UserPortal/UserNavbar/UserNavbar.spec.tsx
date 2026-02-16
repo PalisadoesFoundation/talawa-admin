@@ -381,7 +381,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
       expect.any(Error),
     );
     // Verify toast was shown
-    expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('common:errorOccurred'),
+    );
     // Verify cleanup still happens even on error
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');

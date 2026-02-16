@@ -95,7 +95,7 @@ vi.mock('components/SignOut/SignOut', () => ({
   )),
 }));
 
-vi.mock('utils/useSession', () => ({
+vi.mock('hooks/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
     startSession: vi.fn(),

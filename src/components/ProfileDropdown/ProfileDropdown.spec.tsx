@@ -23,9 +23,14 @@ beforeAll(() => {
 
 let mockNavigate: ReturnType<typeof vi.fn>;
 
-// Mock useNavigate hook
+// Mock useNavigate hook from both react-router and react-router-dom
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
+  return { ...actual, useNavigate: () => mockNavigate };
+});
+
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return { ...actual, useNavigate: () => mockNavigate };
 });
 

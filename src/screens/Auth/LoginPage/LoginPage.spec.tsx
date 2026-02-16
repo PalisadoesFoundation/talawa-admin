@@ -369,6 +369,16 @@ vi.mock('react-router', async () => ({
   useNavigate: () => routerMocks.navigate,
 }));
 
+// Mock useSession hook
+vi.mock('hooks/useSession', () => ({
+  default: vi.fn(() => ({
+    startSession: vi.fn(),
+    endSession: vi.fn(),
+    handleLogout: vi.fn(),
+    extendSession: vi.fn(),
+  })),
+}));
+
 // Mock reCAPTCHA V3 utilities
 vi.mock('utils/recaptcha', () => ({
   getRecaptchaToken: vi.fn().mockResolvedValue('mock-recaptcha-token'),

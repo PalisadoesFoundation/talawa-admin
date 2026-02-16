@@ -38,7 +38,7 @@ vi.mock('plugin', () => ({
 }));
 
 // Mock useSession hook
-vi.mock('utils/useSession', () => ({
+vi.mock('hooks/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
   })),
