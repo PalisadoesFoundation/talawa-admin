@@ -15,6 +15,7 @@ import {
   failingMocks,
   delayedMocks,
 } from './GroupChatDetailsMocks';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
@@ -1324,6 +1325,72 @@ describe('GroupChatDetails', () => {
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to add user');
       expect(consoleError).toHaveBeenCalled();
+    });
+  });
+
+  it('renders "Member" fallback when organization member has no role', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const noRoleMemberMock = {
+      request: {
+        query: ORGANIZATION_MEMBERS,
+        variables: {
+          input: { id: 'org123' },
+          first: 20,
+          after: null,
+          where: {},
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  cursor: 'cursor-no-role',
+                  node: {
+                    id: 'no-role-user-id',
+                    name: 'No Role User',
+                    avatarURL: undefined,
+                    role: null,
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[noRoleMemberMock, ...mocks]} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(await screen.findByTestId('addMembers'));
+    });
+
+    await screen.findByTestId('addExistingUserModal');
+
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBeGreaterThan(0);
+      const rowWithNoRoleUser = Array.from(rows).find((el) =>
+        el.textContent?.includes('No Role User'),
+      );
+      expect(rowWithNoRoleUser).toBeDefined();
+      expect(rowWithNoRoleUser).toHaveTextContent('No Role User');
+      expect(rowWithNoRoleUser).toHaveTextContent('Member');
     });
   });
 
