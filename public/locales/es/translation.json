@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
   },
+  "oauth": {
+    "continueWith": "Continuar con {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "customRecurrence": "Recurrencia personalizada",
@@ -317,6 +321,7 @@
     "email": "Correo electrónico",
     "accept": "Aceptar",
     "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
+    "errorLoadingRequests": "Error al cargar las solicitudes",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
@@ -1159,7 +1164,9 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "sortOrganizations": "Sort Organizations",
     "noSpammerFound": "No se encontró ningún spammer",
-    "noUsersFound": "No se encontraron usuarios"
+    "noUsersFound": "No se encontraron usuarios",
+    "errorLoadingBlockedUsers": "Error al cargar los datos de los usuarios bloqueados",
+    "errorLoadingMembers": "Error al cargar los datos de los miembros"
   },
   "eventManagement": {
     "name": "Gestión de eventos",
@@ -1243,7 +1250,8 @@
     "confirmDelete": "Confirmar eliminación",
     "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
     "deleteSampleOrganization": "Eliminar organización de muestra",
-    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
+    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente",
+    "successfullyDeletedOrganization": "Organización eliminada correctamente"
   },
   "userUpdate": {
     "firstName": "Primer nombre",
@@ -1547,6 +1555,7 @@
     "Admin": "Administrador",
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes",
+    "unknownMember": "Miembro desconocido",
     "attendeeCount": "Número de asistentes",
     "maleAttendees": "Asistentes masculinos",
     "femaleAttendees": "Asistentes femeninas",
@@ -2459,7 +2468,8 @@
     "loading": "Cargando...",
     "selectRow": "Seleccionar fila {{rowKey}}",
     "previousYear": "Año anterior",
-    "nextYear": "Siguiente año"
+    "nextYear": "Siguiente año",
+    "member": "Miembro"
   },
   "donation": {
     "amount_label": "Cantidad",
@@ -2560,5 +2570,17 @@
   },
   "csv": {
     "demographics": "Demografía de {{category}}"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "L",
+      "tue": "M",
+      "wed": "X",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S",
+      "sun": "D"
+    },
+    "expandDay": "Expandir día"
   }
 }

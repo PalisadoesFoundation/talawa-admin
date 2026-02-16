@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
+  "oauth": {
+    "continueWith": "Continuer avec {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
@@ -331,7 +335,8 @@
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
     "placeholderAvatarAlt": "Avatar par défaut",
-    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici",
+    "errorLoadingRequests": "Erreur lors du chargement des demandes d'adhésion"
   },
   "users": {
     "membershipStatus": {
@@ -1164,7 +1169,9 @@
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "Error loading blocked users",
+    "errorLoadingMembers": "Error loading members"
   },
   "eventManagement": {
     "name": "Gestion d'événements",
@@ -1265,7 +1272,8 @@
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
     "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "successfullyDeletedOrganization": "Organisation supprimée avec succès"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",
@@ -1564,6 +1572,7 @@
     "Admin": "Administrateur",
     "loading": "Chargement...",
     "noAttendees": "Aucun participant trouvé",
+    "unknownMember": "Membre inconnu",
     "attendeeCount": "Nombre de participants",
     "maleAttendees": "Participants masculins",
     "femaleAttendees": "Participantes féminines",
@@ -2459,7 +2468,8 @@
     "loading": "Chargement...",
     "selectRow": "Sélectionner la ligne {{rowKey}}",
     "previousYear": "Année précédente",
-    "nextYear": "Année suivante"
+    "nextYear": "Année suivante",
+    "member": "Membre"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2560,5 +2570,17 @@
   },
   "csv": {
     "demographics": "Démographie de {{category}}"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S",
+      "sun": "D"
+    },
+    "expandDay": "Développer le jour"
   }
 }

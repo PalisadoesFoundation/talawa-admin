@@ -1,59 +1,80 @@
 .peopleTabUserTagContainer {
   width: 100%;
 }
+
+.peopleTabUserTagHeader {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--space-5);
+}
+
 .peopleTabUserTagComponentSection {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
+
 .peopleTabUserTagTable {
   width: 100%;
 }
+
 .peopleTabUserTagTableHeader {
-  background-color: #f9fafb;
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-  border-color: #e5e7eb;
+  background-color: var(--color-gray-50);
+  border-top-width: var(--border-1);
+  border-bottom-width: var(--border-1);
+  border-color: var(--color-gray-100);
   border-style: solid;
 }
+
 .peopleTabUserTagColumnHeader {
-  background: #dddddd;
-  border: 1px solid #ddd;
+  background: var(--color-gray-200);
+  border: var(--border-1) solid var(--color-gray-200);
 }
+
 .peopleTabUserTagTableHeaderCell {
-  padding: 0.75rem 1.5rem;
+  padding: var(--space-4) var(--space-7);
   text-align: left;
-  font-size: 0.9rem;
-  color: #000000;
+  font-size: var(--font-size-15);
+  color: var(--color-black);
   text-transform: uppercase;
-  height: 4rem;
+  height: var(--space-11);
 }
+
 .peopleTabUserTagTableBody {
-  background: #ffffff;
-  border: 1px solid #ddd;
+  background: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-200);
 }
+
 .peopleTabUserTagTableCell {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding: var(--space-5) var(--space-7);
   white-space: nowrap;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
+  font-size: var(--font-size-sm);
+  line-height: var(--space-6);
 }
+
 .peopleTabUserTagCreatedByButton {
-  color: #2563eb;
+  color: var(--color-blue-600);
   cursor: pointer;
   transition: 0.2s ease;
-  text-decoration: underline #5f5fd9;
+  text-decoration: underline var(--color-blue-500);
 }
 
 .peopleTabUserTagCreatedByButton:hover {
   text-decoration: underline;
-  color: #1d4ed8;
+  color: var(--color-blue-700);
 }
 
 .peopleTabUserTagTableRow:hover {
-  background-color: #f9fafb;
+  background-color: var(--color-gray-50);
+}
+
+.peopleTabUserTagNoResults {
+  text-align: center;
+  padding: var(--space-10);
+  color: var(--color-gray-500);
+  font-size: var(--font-size-md);
 }

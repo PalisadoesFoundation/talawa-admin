@@ -4,6 +4,10 @@
     "failedToLoad": "Failed to load component: <1>{{componentName}}</1>",
     "id": "Plugin: <1>{{pluginId}}</1>"
   },
+  "oauth": {
+    "continueWith": "Continue with {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
@@ -323,7 +327,8 @@
     "email": "email",
     "profilePictureAlt": "Profile picture of {{name}}",
     "placeholderAvatarAlt": "Placeholder avatar",
-    "newMembersWillAppearHere": "New membership requests will appear here"
+    "newMembersWillAppearHere": "New membership requests will appear here",
+    "errorLoadingRequests": "Error occurred while loading Membership Requests"
   },
   "users": {
     "membershipStatus": {
@@ -1164,7 +1169,9 @@
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "noResultsFoundFor": "noResultsFoundFor",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "Error occurred while loading blocked users data",
+    "errorLoadingMembers": "Error occurred while loading members data"
   },
   "eventManagement": {
     "name": "Event Management Dashboard",
@@ -1193,6 +1200,7 @@
     "Admin": "Admin",
     "loading": "Loading...",
     "noAttendees": "Attendees not Found",
+    "unknownMember": "Unknown Member",
     "attendeeCount": "Attendee Count",
     "maleAttendees": "Male Attendees",
     "femaleAttendees": "Female Attendees",
@@ -1309,7 +1317,8 @@
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
     "deleteSampleOrganization": "Delete Sample Organization",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "successfullyDeletedOrganization": "Successfully deleted Organization"
   },
   "userUpdate": {
     "appLanguageCode": "Default Language",
@@ -2459,7 +2468,8 @@
     "loading": "Loading...",
     "selectRow": "Select row {{rowKey}}",
     "previousYear": "Previous Year",
-    "nextYear": "Next Year"
+    "nextYear": "Next Year",
+    "member": "Member"
   },
   "donation": {
     "amount_label": "Amount",
@@ -2560,5 +2570,17 @@
   },
   "csv": {
     "demographics": "{{category}} Demographics"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "M",
+      "tue": "T",
+      "wed": "W",
+      "thu": "T",
+      "fri": "F",
+      "sat": "S",
+      "sun": "S"
+    },
+    "expandDay": "Expand day"
   }
 }

@@ -7,6 +7,11 @@ sidebar_position: 70
 
 This project uses Cypress for comprehensive end-to-end testing to ensure the application works correctly from a user's perspective.
 
+## Additional Resources
+
+- [Online docs](https://docs-admin.talawa.io/docs/developer-resources/e2e-testing)
+- Cypress local quick reference: `cypress/README.md`
+
 ## Prerequisites
 
 Before running Cypress tests, ensure you have the following setup:
@@ -54,6 +59,10 @@ cypress/
 │   └── Accessibility/
 ├── fixtures/
 ├── pageObjects/
+│   ├── base/
+│   ├── AdminPortal/
+│   ├── UserPortal/
+│   └── shared/
 └── support/
 ```
 
@@ -82,6 +91,16 @@ pnpm run cy:open
 pnpm run cy:run
 ```
 
+### Cypress Configuration Defaults
+
+The E2E configuration in `cypress.config.ts` is:
+
+- `specPattern`: `cypress/e2e/**/*.cy.ts`
+- `testIsolation`: `true`
+- `retries`: `runMode: 2`, `openMode: 0`
+- `defaultCommandTimeout`: `30000`
+- `requestTimeout`, `responseTimeout`, `pageLoadTimeout`: `30000`
+
 ### Running Specific Tests
 
 There are multiple testing modes.
@@ -96,21 +115,24 @@ pnpm run cy:open
 
 #### Headless Mode
 
-For running specific tests in headless mode, first manually start your application at `http://localhost:4321`, then use the following commands:
+For running specific tests in headless mode, use the subset scripts below. These commands start the app server automatically before executing Cypress:
 
 ```bash
 # Run Admin Portal specs
-pnpm run cypress:run --spec "cypress/e2e/AdminPortal/**/*.cy.ts"
+pnpm run cy:run:admin
 
 # Run User Portal specs
-pnpm run cypress:run --spec "cypress/e2e/UserPortal/**/*.cy.ts"
+pnpm run cy:run:user
 
 # Run Auth specs
-pnpm run cypress:run --spec "cypress/e2e/Auth/**/*.cy.ts"
+pnpm run cy:run:auth
 
-# Run a specific test file
-pnpm run cypress:run --spec "cypress/e2e/AdminPortal/People/ManageMembers.cy.ts"
+# Run Shared Components specs
+pnpm run cy:run:shared
 ```
+
+For a single spec file, use `pnpm run cy:open` and select the spec in the
+interactive runner.
 
 ## Writing Tests
 
@@ -120,16 +142,22 @@ Follow these best practices when writing tests.
 
 This project follows the Page Object Model pattern for better test maintenance:
 
-```javascript
-// Example usage of page objects
-import { LoginPage } from '../pageObjects/auth/LoginPage';
+```ts
+// Example usage of a portal-aligned page object
+import { MemberManagementPage } from '../../../pageObjects/AdminPortal/MemberManagementPage';
 
-const loginPage = new LoginPage();
+const memberManagementPage = new MemberManagementPage();
 
-it('should login successfully', () => {
-  loginPage.verifyLoginPage().login(userData.email, userData.password);
+it('searches a member', () => {
+  memberManagementPage
+    .openFromDrawer()
+    .searchMemberByName('Wilt Shepherd')
+    .verifyMemberInList('Wilt Shepherd');
 });
 ```
+
+Use the base class in `cypress/pageObjects/base/BasePage.ts` when creating new
+portal page objects so helpers remain typed and chainable.
 
 ### Shared Page Object Utilities
 
@@ -211,9 +239,9 @@ cy.waitForGraphQLOperation('OrganizationListBasic');
 
 #### Mock cleanup and test isolation
 
-Because `testIsolation` is set to `false`, Cypress intercepts can persist
-between tests in the same spec. Always clear GraphQL mocks after each test to
-avoid leaking intercepts across tests or shards:
+Because `testIsolation` is set to `true`, Cypress resets browser state between
+tests. Keep GraphQL mock cleanup in `afterEach` so custom intercepts stay scoped
+and predictable across specs and shards:
 
 ```ts
 afterEach(() => {
@@ -237,11 +265,11 @@ it('mocks a successful query', () => {
 
 Best practices:
 
-- Prefer `testIsolation: true` for new specs when possible.
-- In parallel/sharded runs, mocks can race if not cleared; keep mocks scoped per
-  test and always reset intercepts after each test.
-- If multiple mocks target the same operation, ensure explicit cleanup between
-  them or scope each mock to a single test to avoid collisions.
+- Keep `testIsolation: true` as the default for E2E reliability.
+- In parallel/sharded runs, keep mocks scoped per test and reset intercepts
+  after each test.
+- If multiple mocks target the same operation, explicitly clean up between them
+  or scope each mock to a single test.
 
 ### Test Data
 

@@ -304,5 +304,11 @@
   "noOptionsFound": "Aucune option trouvée",
   "noUserId": "ID utilisateur non disponible",
   "noOrgId": "ID d'organisation non disponible",
-  "noTagsFound": "Aucune étiquette trouvée"
+  "noTagsFound": "Aucune étiquette trouvée",
+  "searchTags": "Rechercher des étiquettes",
+  "sortBy": "Trier par",
+  "unknownMember": "Membre inconnu",
+  "previousYear": "Année précédente",
+  "nextYear": "Année suivante",
+  "navigateToProfile": "Naviguer vers le profil"
 }

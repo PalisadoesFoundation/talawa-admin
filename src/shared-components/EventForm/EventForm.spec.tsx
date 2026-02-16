@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, act, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import dayjs from 'dayjs';
@@ -220,7 +220,8 @@ const tCommon = (key: string) => key;
 describe('EventForm', () => {
   const user = userEvent.setup();
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
   test('submits with computed ISO dates for all-day event with future dates', async () => {
     const handleSubmit = vi.fn();
@@ -469,9 +470,9 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists, so dropdown is visible
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -624,11 +625,11 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists, so dropdown is visible
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
 
     // Select daily option (index 1)
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[1]);
     });
@@ -1088,9 +1089,9 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -1134,9 +1135,9 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -1180,9 +1181,9 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -1224,9 +1225,9 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -1263,9 +1264,9 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -1304,9 +1305,9 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -1384,7 +1385,9 @@ describe('EventForm', () => {
       />,
     );
 
-    expect(screen.queryByTestId('recurrenceDropdown')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('recurrence-container'),
+    ).not.toBeInTheDocument();
   });
 
   test('does not allow toggling recurrence when disabled', async () => {
@@ -1504,7 +1507,7 @@ describe('EventForm', () => {
     );
 
     // Should still render without crashing
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-toggle')).toBeInTheDocument();
   });
 
   test('currentRecurrenceLabel returns matching preset label', async () => {
@@ -1525,7 +1528,7 @@ describe('EventForm', () => {
     );
 
     // Recurrence is already enabled when rule exists, so dropdown is visible
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     expect(dropdown).toBeInTheDocument();
   });
 
@@ -1625,10 +1628,10 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 2 is weekly
     await act(async () => {
       await user.click(options[2]);
@@ -1667,10 +1670,10 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 3 is monthly
     await act(async () => {
       await user.click(options[3]);
@@ -1709,10 +1712,10 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 4 is annually
     await act(async () => {
       await user.click(options[4]);
@@ -1751,10 +1754,10 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 5 is every weekday
     await act(async () => {
       await user.click(options[5]);
@@ -1830,9 +1833,9 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
       await user.click(options[options.length - 1]); // Custom...
     });
@@ -1918,10 +1921,10 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Select custom option
     await act(async () => {
       await user.click(options[options.length - 1]);
@@ -2016,10 +2019,10 @@ describe('EventForm', () => {
 
     // Click dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await user.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Select custom option (last option)
     await act(async () => {
       await user.click(options[options.length - 1]);

@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: var(--space-17);
+  padding: var(--space-8) var(--space-5);
+}
+
+.message {
+  text-align: center;
+  max-width: var(--space-26);
+}
+
+.errorIcon {
+  color: var(--bs-danger, #dc3545);
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--space-5);
+}
