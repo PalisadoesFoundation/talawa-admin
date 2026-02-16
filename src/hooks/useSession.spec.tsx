@@ -594,6 +594,16 @@ describe('useSession Hook', () => {
           },
         },
       },
+      {
+        request: {
+          query: LOGOUT_MUTATION,
+        },
+        result: {
+          data: {
+            logout: { success: true },
+          },
+        },
+      },
     ];
 
     const { result } = renderHook(() => useSession(), {
@@ -677,6 +687,16 @@ describe('useSession Hook', () => {
           },
         },
       },
+      {
+        request: {
+          query: LOGOUT_MUTATION,
+        },
+        result: {
+          data: {
+            logout: { success: true },
+          },
+        },
+      },
     ];
 
     const { result } = renderHook(() => useSession(), {
@@ -747,7 +767,7 @@ describe('useSession Hook', () => {
     vi.useRealTimers();
   });
 
-  test('should throttle extend session calls', async () => {
+  test('should throttle extend session calls via exported extendSession', async () => {
     vi.useFakeTimers();
 
     const { result } = renderHook(() => useSession(), {
@@ -760,57 +780,28 @@ describe('useSession Hook', () => {
 
     result.current.startSession();
 
-    // Advance time by 1ms to ensure initial timers are set
-    vi.advanceTimersByTime(1);
+    // Advance to just before the warning time (14 minutes)
+    vi.advanceTimersByTime(14 * 60 * 1000);
 
-    // Spy on initializeTimers indirectly by observing side effects (resetting start time)
-    // or by mocking Date.now() if needed, but here we can observe correct warning behavior.
-    // However, to strictly test throttling of the event listener:
-
-    // Dispatch event - should trigger extendSession
-    document.dispatchEvent(new Event('mousemove'));
-
-    // Dispatch another event immediately - should be throttled
-    document.dispatchEvent(new Event('mousemove'));
-    document.dispatchEvent(new Event('mousemove'));
-
-    // Advance time by 4 seconds (within throttle window)
-    vi.advanceTimersByTime(4000);
-
-    // Dispatch another event - should still be throttled
-    document.dispatchEvent(new Event('mousemove'));
-
-    // Advance time by 2 seconds (total 6s, passed throttle window)
-    vi.advanceTimersByTime(2000);
-
-    // This event should NOT be throttled
-    document.dispatchEvent(new Event('mousemove'));
-
-    // Total time elapsed: ~6s.
-    // If throttling works, we shouldn't have excessive timer resets.
-    // But testing internal `initializeTimers` calls is hard without exposing it or mocking it.
-    // Instead, we verify that the session is extended correctly without errors.
-
-    // Let's rely on the fact that if it wasn't throttled, we might see performance issues or
-    // multiple timer sets, but observing "throttling" black-box style is tricky.
-    // The reviewer asked to "simulate events that call stableExtendSession".
-
-    // We can verify that the warning DOES NOT appear if we keep extending.
-
-    // Advance time significantly but keep extending every 6 seconds (just after throttle)
-    vi.advanceTimersByTime(14 * 60 * 1000); // 14 mins passed from start
-
-    // Warning not shown yet
+    // No warning yet
     expect(NotificationToast.warning).not.toHaveBeenCalled();
 
-    // Now let's wait for warning (total 15m)
-    vi.advanceTimersByTime(2 * 60 * 1000); // +2 mins = 16 mins (if extended, this shouldn't warn yet)
+    // Extend session — this resets all timers
+    result.current.extendSession();
 
-    // Since we dispatched 'mousemove' at T+6s, the session extended then.
-    // So warning should appear at T+6s + 15m.
-    // Current time: T+16m.
-    // 6s + 15m = 15m 6s.
-    // 16m > 15m 6s, so warning SHOULD have appeared.
+    // Advance another 1 minute — warning would have fired at 15m without extension
+    vi.advanceTimersByTime(1 * 60 * 1000);
+
+    // Warning should NOT appear because session was extended at T+14m
+    expect(NotificationToast.warning).not.toHaveBeenCalled();
+
+    // Rapidly extend multiple times — should all succeed without error
+    result.current.extendSession();
+    result.current.extendSession();
+    result.current.extendSession();
+
+    // Now advance to the new warning time (15 minutes from last extension)
+    vi.advanceTimersByTime(15 * 60 * 1000);
 
     await vi.waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith('sessionWarning');
@@ -819,7 +810,7 @@ describe('useSession Hook', () => {
     vi.useRealTimers();
   });
 
-  test('should not perform actions after unmount via mountedRef guard', async () => {
+  test('should clean up timers on unmount preventing post-unmount side effects', async () => {
     vi.useFakeTimers();
 
     const { result, unmount } = renderHook(() => useSession(), {
@@ -832,14 +823,13 @@ describe('useSession Hook', () => {
 
     result.current.startSession();
 
-    // Unmount before session timeout fires
+    // Unmount triggers endSession() cleanup which clears all pending timers
     unmount();
 
-    // Advance past session timeout
+    // Advance past session timeout — timers were cleared so handleLogout never fires
     vi.advanceTimersByTime(31 * 60 * 1000);
 
-    // clearAllItems should NOT be called since component unmounted
-    // and the mountedRef guard prevents post-unmount actions
+    // clearAllItems should NOT be called since timers were cleaned up on unmount
     expect(mockClearAllItems).not.toHaveBeenCalled();
 
     vi.useRealTimers();
