@@ -1,27 +1,26 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-
-import {
-  OAUTH_PROVIDERS,
-  getProviderConfig,
-  getEnabledProviders,
-} from 'config/oauthProviders';
-
-/**
- * NOTE:
- * import.meta.env is static in Vite, so we mock it using vi.stubGlobal
- */
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('OAuth Providers Configuration', () => {
   beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
     vi.unstubAllGlobals();
   });
 
-  it('should contain GOOGLE and GITHUB providers', () => {
+  it('should contain GOOGLE and GITHUB providers', async () => {
+    const { OAUTH_PROVIDERS } = await import('config/oauthProviders');
+
     expect(OAUTH_PROVIDERS.GOOGLE).toBeDefined();
     expect(OAUTH_PROVIDERS.GITHUB).toBeDefined();
   });
 
-  it('should return correct provider config', () => {
+  it('should return correct provider config', async () => {
+    const { getProviderConfig } = await import('config/oauthProviders');
+
     const google = getProviderConfig('GOOGLE');
 
     expect(google.id).toBe('GOOGLE');
@@ -29,43 +28,44 @@ describe('OAuth Providers Configuration', () => {
     expect(google.scopes).toContain('email');
   });
 
-  it('should mark provider enabled when env vars exist', () => {
-    const provider = OAUTH_PROVIDERS.GOOGLE;
+  it('should enable provider when env vars are set', async () => {
+    vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'test-id');
+    vi.stubEnv('VITE_GOOGLE_REDIRECT_URI', 'http://localhost/callback');
 
-    if (provider.clientId && provider.redirectUri) {
-      expect(provider.enabled).toBe(true);
-    }
+    const { OAUTH_PROVIDERS } = await import('config/oauthProviders');
+
+    expect(OAUTH_PROVIDERS.GOOGLE.enabled).toBe(true);
   });
 
-  it('should return only enabled providers', () => {
+  it('should disable provider when env vars are missing', async () => {
+    vi.stubEnv('VITE_GOOGLE_CLIENT_ID', '');
+    vi.stubEnv('VITE_GOOGLE_REDIRECT_URI', '');
+
+    const { OAUTH_PROVIDERS } = await import('config/oauthProviders');
+
+    expect(OAUTH_PROVIDERS.GOOGLE.enabled).toBe(false);
+  });
+
+  it('should return only enabled providers', async () => {
+    vi.stubEnv('VITE_GOOGLE_CLIENT_ID', 'id');
+    vi.stubEnv('VITE_GOOGLE_REDIRECT_URI', 'uri');
+
+    const { getEnabledProviders } = await import('config/oauthProviders');
+
     const enabled = getEnabledProviders();
 
-    expect(Array.isArray(enabled)).toBe(true);
-
-    enabled.forEach((provider) => {
-      expect(provider.enabled).toBe(true);
-    });
+    expect(enabled.length).toBeGreaterThan(0);
+    enabled.forEach((p) => expect(p.enabled).toBe(true));
   });
 
-  it('should return empty array if no providers enabled', () => {
-    type ProviderKey = keyof typeof OAUTH_PROVIDERS;
+  it('should return empty array if no providers enabled', async () => {
+    vi.stubEnv('VITE_GOOGLE_CLIENT_ID', '');
+    vi.stubEnv('VITE_GOOGLE_REDIRECT_URI', '');
+    vi.stubEnv('VITE_GITHUB_CLIENT_ID', '');
+    vi.stubEnv('VITE_GITHUB_REDIRECT_URI', '');
 
-    // Snapshot original enabled flags (fully typed, no any)
-    const originalEnabled: Record<ProviderKey, boolean> = {} as Record<
-      ProviderKey,
-      boolean
-    >;
-
-    (Object.keys(OAUTH_PROVIDERS) as ProviderKey[]).forEach((k) => {
-      originalEnabled[k] = OAUTH_PROVIDERS[k].enabled;
-      OAUTH_PROVIDERS[k].enabled = false;
-    });
+    const { getEnabledProviders } = await import('config/oauthProviders');
 
     expect(getEnabledProviders()).toHaveLength(0);
-
-    // Restore original state
-    (Object.keys(OAUTH_PROVIDERS) as ProviderKey[]).forEach((k) => {
-      OAUTH_PROVIDERS[k].enabled = originalEnabled[k];
-    });
   });
 });
