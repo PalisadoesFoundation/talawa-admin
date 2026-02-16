@@ -129,10 +129,14 @@ const useSession = (): UseSessionReturnType => {
     }
   };
 
-  // This useEffect intentionally has no dependency array.
-  // It must run after every render to keep the refs pointing to the latest
-  // versions of extendSession and handleVisibilityChange, implementing the
-  // "latest ref" pattern. Do NOT add a dependency array (e.g. []).
+  /**
+   * This useEffect intentionally has no dependency array.
+   * It must run after every render to keep the refs pointing to the latest
+   * versions of extendSession and handleVisibilityChange, implementing the
+   * "latest ref" pattern. This ensures event listeners always call the most
+   * recent function versions without needing to re-register listeners.
+   * Do NOT add a dependency array (e.g. []).
+   */
   useEffect(() => {
     extendSessionRef.current = extendSession;
     handleVisibilityChangeRef.current = handleVisibilityChange;

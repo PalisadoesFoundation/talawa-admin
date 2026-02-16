@@ -82,7 +82,7 @@ const MOCKS = [
 ];
 describe('useSession Hook', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
     vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
   });
