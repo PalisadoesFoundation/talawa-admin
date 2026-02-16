@@ -595,7 +595,12 @@ Cypress.Commands.add(
           .task('createTestActionItemCategory', {
             apiUrl: catPayload.auth?.apiUrl,
             token,
-            input: { ...catPayload },
+            input: {
+              orgId: catPayload.orgId,
+              name: catPayload.name,
+              description: catPayload.description,
+              isDisabled: catPayload.isDisabled,
+            },
           })
           .then((res) => ({
             categoryId: (res as { categoryId: string }).categoryId,
@@ -611,7 +616,12 @@ Cypress.Commands.add(
           .task('createTestPost', {
             apiUrl: postPayload.auth?.apiUrl,
             token,
-            input: { ...postPayload },
+            input: {
+              orgId: postPayload.orgId,
+              caption: postPayload.caption,
+              body: postPayload.body,
+              isPinned: postPayload.isPinned,
+            },
           })
           .then((res) => ({ postId: (res as CreatePostTaskResult).postId })),
       ) as Cypress.Chainable<{ postId: string }>;
@@ -661,7 +671,12 @@ Cypress.Commands.add(
               password: user.password,
             })),
         );
-      }) as any;
+      }) as unknown as Cypress.Chainable<{
+        volunteerId: string;
+        userId?: string;
+        email?: string;
+        password?: string;
+      }>;
     }
 
     throw new Error(`Unsupported seedTestData kind: ${kind}`);
