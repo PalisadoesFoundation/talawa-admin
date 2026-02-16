@@ -218,10 +218,6 @@ vi.mock('screens/UserPortal/Organizations/Organizations', () => ({
   ),
 }));
 
-vi.mock('screens/UserPortal/People/People', () => ({
-  default: () => <div data-testid="mock-user-people">Mock User People</div>,
-}));
-
 vi.mock('screens/UserPortal/Chat/Chat', () => ({
   default: () => <div data-testid="mock-chat">Mock Chat</div>,
 }));

@@ -23,6 +23,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { useLazyQuery } from '@apollo/client';
 import {
   DataGridWrapper,
@@ -38,7 +39,7 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
-import Avatar from 'shared-components/Avatar/Avatar';
+
 import AddMember from './addMember/AddMember';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { errorHandler } from 'utils/errorHandler';
@@ -128,10 +129,16 @@ function OrganizationPeople(): JSX.Element {
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
 
+  // Detect if we're in the User Portal (vs Admin Portal)
+  const isUserPortal = location.pathname.startsWith('/user/');
+
   // State
   const [state, setState] = useState(() => {
     const r = role?.role;
-    return r === 0 || r === 1 || r === 2 ? r : 0;
+    // Standard role validation
+    const validRole = r === 0 || r === 1 || r === 2 ? r : 0;
+    // Guard: If in User Portal, we shouldn't allow 'users' (2) tab
+    return isUserPortal && validRole === 2 ? 0 : validRole;
   });
   const [searchTerm, setSearchTerm] = useState('');
   const {
@@ -264,8 +271,8 @@ function OrganizationPeople(): JSX.Element {
     setState(OPTION_TO_STATE[value] ?? 0);
   };
 
-  // Column definitions
-  const columns: GridColDef[] = [
+  // Column definitions — filter out admin-only columns in User Portal
+  const allColumns: GridColDef[] = [
     {
       field: 'sl_no',
       headerName: tCommon('sl_no'),
@@ -291,35 +298,16 @@ function OrganizationPeople(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.4, 40);
-        // Construct CSS value to avoid i18n linting errors
-        const avatarSizeValue = String(imageSize) + 'px';
         return (
           <div
             className={`${styles.flexCenter} ${styles.flexColumn} ${styles.fullWidthHeight}`}
           >
-            {params.row?.image ? (
-              <img
-                src={params.row.image}
-                alt={tCommon('avatar')}
-                className={styles.avatarImage}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
-                crossOrigin="anonymous"
-              />
-            ) : (
-              <div
-                className={`${styles.flexCenter} ${styles.avatarPlaceholder} ${styles.avatarPlaceholderSize}`}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
-                data-testid="avatar"
-              >
-                <Avatar name={params.row.name} />
-              </div>
-            )}
+            <ProfileAvatarDisplay
+              imageUrl={params.row.image}
+              fallbackName={params.row.name}
+              size="small"
+              dataTestId={`org-people-avatar-${params.row.id}`} // i18n-ignore-line
+            />
           </div>
         );
       },
@@ -335,7 +323,7 @@ function OrganizationPeople(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <Link
-            to={`/admin/member/${currentUrl}/${params.row.id}`}
+            to={`${isUserPortal ? '/user' : '/admin'}/member/${currentUrl}/${params.row.id}`}
             state={{ id: params.row.id }}
             className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
           >
@@ -405,6 +393,23 @@ function OrganizationPeople(): JSX.Element {
     },
   ];
 
+  // Remove 'action' column for User Portal
+  const columns = isUserPortal
+    ? allColumns.filter((col) => col.field !== 'action')
+    : allColumns;
+
+  // Filter options — hide 'users' tab for User Portal
+  const sortOptions = isUserPortal
+    ? [
+        { label: tCommon('members'), value: 'members' },
+        { label: tCommon('admin'), value: 'admin' },
+      ]
+    : [
+        { label: tCommon('members'), value: 'members' },
+        { label: tCommon('admin'), value: 'admin' },
+        { label: tCommon('users'), value: 'users' },
+      ];
+
   return (
     <>
       <div className={styles.orgPeopleGrid}>
@@ -421,11 +426,7 @@ function OrganizationPeople(): JSX.Element {
               id: 'organization-people-sort',
               label: tCommon('sort'),
               type: 'sort',
-              options: [
-                { label: tCommon('members'), value: 'members' },
-                { label: tCommon('admin'), value: 'admin' },
-                { label: tCommon('users'), value: 'users' },
-              ],
+              options: sortOptions,
               selectedOption: STATE_TO_OPTION[state] ?? 'members',
               onOptionChange: (value) => handleSortChange(value.toString()),
               dataTestIdPrefix: 'sort',
@@ -434,11 +435,13 @@ function OrganizationPeople(): JSX.Element {
             },
           ]}
           additionalButtons={
-            <AddMember
-              rootClassName={styles.membersAddHeader}
-              containerClassName={styles.membersAddContainer}
-              toggleClassName={styles.membersAddToggle}
-            />
+            !isUserPortal ? (
+              <AddMember
+                rootClassName={styles.membersAddHeader}
+                containerClassName={styles.membersAddContainer}
+                toggleClassName={styles.membersAddToggle}
+              />
+            ) : undefined
           }
         />
 
