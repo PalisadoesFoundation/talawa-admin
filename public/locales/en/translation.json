@@ -1699,6 +1699,7 @@
     "date": "Date",
     "yourPreviousDonations": "Your Previous Donations",
     "donate": "Donate",
+    "loading": "Loading...",
     "nothingToShow": "Nothing to show here.",
     "success": "Donation Successful",
     "invalidAmount": "Please enter a numerical value for the donation amount.",

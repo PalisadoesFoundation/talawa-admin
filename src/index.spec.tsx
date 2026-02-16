@@ -7,6 +7,7 @@ import {
   afterEach,
   type Mock,
 } from 'vitest';
+import { cleanup } from '@testing-library/react';
 import {
   ApolloClient,
   InMemoryCache,
@@ -109,13 +110,14 @@ vi.mock('./utils/i18n', () => ({
 
 describe('Apollo Client Configuration', () => {
   beforeEach((): void => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Reset localStorage mock with default test token
     createLocalStorageMock('valid');
   });
 
   afterEach(() => {
-    vi.clearAllMocks(); // Only module mocks, no spies
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should create an Apollo Client with correct configuration', (): void => {
@@ -271,8 +273,13 @@ describe('Apollo Client Configuration', () => {
   describe('Token Refresh Error Link', () => {
     let mockLocalStorageData: Record<string, string>;
     let mockClear: ReturnType<typeof vi.fn>;
+    let originalLocation: Location;
+    let originalLocalStorage: Storage;
 
     beforeEach(() => {
+      originalLocation = window.location;
+      originalLocalStorage = window.localStorage;
+
       mockLocalStorageData = {
         token: 'test-token',
         refreshToken: 'test-refresh-token',
@@ -314,8 +321,21 @@ describe('Apollo Client Configuration', () => {
         configurable: true,
         writable: true,
       });
+    });
 
-      vi.clearAllMocks();
+    afterEach(() => {
+      cleanup();
+      vi.restoreAllMocks();
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        configurable: true,
+        writable: true,
+      });
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        configurable: true,
+        writable: true,
+      });
     });
 
     it('should skip token refresh for SignIn operations', () => {
@@ -556,7 +576,8 @@ describe('Apollo Client Configuration', () => {
     });
 
     afterEach(() => {
-      vi.clearAllMocks();
+      cleanup();
+      vi.restoreAllMocks();
       getComputedStyleSpy.mockRestore();
       if (getElementByIdSpy) {
         getElementByIdSpy.mockRestore();
@@ -693,7 +714,8 @@ describe('Apollo Client Configuration', () => {
     });
 
     afterEach(() => {
-      vi.clearAllMocks();
+      cleanup();
+      vi.restoreAllMocks();
       getComputedStyleSpy.mockRestore();
       getElementByIdSpy.mockRestore();
     });

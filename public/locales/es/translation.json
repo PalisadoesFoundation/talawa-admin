@@ -1700,6 +1700,7 @@
     "date": "Fecha",
     "yourPreviousDonations": "Tus donaciones anteriores",
     "donate": "Donar",
+    "loading": "Cargando...",
     "nothingToShow": "Nada que mostrar aquí.",
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",

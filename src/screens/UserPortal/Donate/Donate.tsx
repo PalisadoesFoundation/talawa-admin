@@ -143,7 +143,7 @@ export default function Donate(): JSX.Element {
   );
 
   useEffect(() => {
-    if (data?.organizations) {
+    if (data?.organizations?.length) {
       setOrganizationDetails(data.organizations[0]);
     }
   }, [data]);
@@ -329,7 +329,7 @@ export default function Donate(): JSX.Element {
 
           {loading ? (
             <div data-testid="loading-state">
-              <HourglassBottomIcon /> Loading...
+              <HourglassBottomIcon /> {t('loading')}
             </div>
           ) : filteredDonationRows.length > 0 ? (
             <DataTable<IDonationTableRow>

@@ -463,14 +463,18 @@ describe('Donate Component', () => {
     // Wait for initial render to complete
     await screen.findByTestId('searchInput');
 
-    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-    expect(screen.getByTestId('currency-dropdown-toggle')).toBeInTheDocument();
-    expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
-    expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
-    expect(
-      screen.queryByTestId('organization-sidebar'),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+      expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('currency-dropdown-toggle'),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
+      expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('organization-sidebar'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('search input updates value when typed into', async () => {
@@ -479,7 +483,9 @@ describe('Donate Component', () => {
     const searchInput = await screen.findByTestId('searchInput');
     await userEvent.type(searchInput, 'test search');
 
-    expect(searchInput).toHaveValue('test search');
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('test search');
+    });
   });
 
   test('currency switch works correctly', async () => {
@@ -678,10 +684,14 @@ describe('Donate Component', () => {
       expect(screen.getByTestId('donationCard')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('datatable-cell-amount')).toHaveTextContent('1');
-    expect(screen.getByTestId('datatable-cell-amount')).not.toHaveTextContent(
-      '$1',
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable-cell-amount')).toHaveTextContent(
+        '1',
+      );
+      expect(screen.getByTestId('datatable-cell-amount')).not.toHaveTextContent(
+        '$1',
+      );
+    });
   });
 
   test('switches to INR currency', async () => {
@@ -925,15 +935,17 @@ describe('Donate Component', () => {
       expect(screen.getByTestId('currency-dropdown-menu')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('currency-dropdown-item-USD')).toHaveTextContent(
-      'USD',
-    );
-    expect(screen.getByTestId('currency-dropdown-item-INR')).toHaveTextContent(
-      'INR',
-    );
-    expect(screen.getByTestId('currency-dropdown-item-EUR')).toHaveTextContent(
-      'EUR',
-    );
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('currency-dropdown-item-USD'),
+      ).toHaveTextContent('USD');
+      expect(
+        screen.getByTestId('currency-dropdown-item-INR'),
+      ).toHaveTextContent('INR');
+      expect(
+        screen.getByTestId('currency-dropdown-item-EUR'),
+      ).toHaveTextContent('EUR');
+    });
   });
 
   test('handles pagination with multiple donations', async () => {
@@ -1047,13 +1059,19 @@ describe('Donate Component', () => {
     )) as HTMLInputElement;
 
     await userEvent.type(amountInput, '500');
-    expect(amountInput.value).toBe('500');
+    await waitFor(() => {
+      expect(amountInput.value).toBe('500');
+    });
 
     await userEvent.clear(amountInput);
-    expect(amountInput.value).toBe('');
+    await waitFor(() => {
+      expect(amountInput.value).toBe('');
+    });
 
     await userEvent.type(amountInput, '1000');
-    expect(amountInput.value).toBe('1000');
+    await waitFor(() => {
+      expect(amountInput.value).toBe('1000');
+    });
   });
 
   test('renders donation card with correct props', async () => {
