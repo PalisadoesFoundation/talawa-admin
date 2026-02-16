@@ -14,8 +14,8 @@ import {
   incompleteMockChat,
   failingMocks,
   delayedMocks,
+  ORGANIZATION_MEMBERS as ORG_MEMBERS_QUERY,
 } from './GroupChatDetailsMocks';
-import { ORGANIZATION_MEMBERS as ORG_MEMBERS_QUERY } from 'GraphQl/Queries/OrganizationQueries';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
@@ -1328,7 +1328,7 @@ describe('GroupChatDetails', () => {
     });
   });
 
-  it('renders "Member" fallback when organization member has no role', async () => {
+  it('displays Member as fallback for add-user table when organization member has no role', async () => {
     useLocalStorage().setItem('userId', 'user1');
 
     const noRoleMemberMock = {
