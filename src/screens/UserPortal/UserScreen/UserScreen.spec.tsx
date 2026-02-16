@@ -28,9 +28,7 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
 
-/* ------------------------------------------------------------------ */
-/*  Mutable per-test state                                            */
-/* ------------------------------------------------------------------ */
+
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -42,11 +40,7 @@ const mockUserProfile = vi.hoisted(() => ({
   handleLogout: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
   userImage: '' as string,
 }));
-
-/* ------------------------------------------------------------------ */
-/*  Module mocks                                                      */
-/* ------------------------------------------------------------------ */
-
+const mainContainer = screen.queryByTestId('mainpageright');
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -259,6 +253,17 @@ describe('UserScreen tests', () => {
     renderUserScreen();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Posts',
+  it('renders the correct title for posts', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
   });
 
@@ -419,6 +424,7 @@ describe('UserScreen tests', () => {
         'true',
       );
     });
+    expect(mainContainer).toBeInTheDocument();
   });
 
   it('shows drawer when localStorage sidebar is false', async () => {
@@ -575,5 +581,6 @@ describe('UserScreen tests', () => {
   it('renders mainpageright container', () => {
     renderUserScreen();
     expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+    expect(mainContainer).toBeInTheDocument();
   });
 });
