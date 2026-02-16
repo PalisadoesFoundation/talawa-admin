@@ -94,6 +94,7 @@ describe('useDataTableSelection', () => {
     await act(async () => {
       hook.result.current.runBulkAction(action);
       await Promise.resolve();
+      await Promise.resolve();
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -214,7 +215,7 @@ describe('useDataTableSelection', () => {
       result.current.toggleRowSelection('1');
     });
 
-    expect(onSelectionChange).toHaveBeenCalled();
+    expect(onSelectionChange).toHaveBeenCalledWith(new Set(['1']));
   });
 
   it('normalizes selection when page changes', () => {
@@ -335,6 +336,7 @@ describe('useDataTableSelection', () => {
       result.current.runBulkAction(action);
     });
 
+    expect(actionFn).toHaveBeenCalledTimes(1);
     const [rows, selectedKeys] = actionFn.mock.calls[0];
 
     expect(selectedKeys).toEqual(['1']);
