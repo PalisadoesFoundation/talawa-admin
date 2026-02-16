@@ -2,7 +2,7 @@ import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import App from './App';
@@ -57,7 +57,7 @@ vi.mock('screens/AdminPortal/MemberDetail/MemberDetail', () => ({
 }));
 
 vi.mock('screens/UserPortal/UserScreen/UserScreen', async () => {
-  const { Outlet } = await import('react-router');
+  const { Outlet } = await import('react-router-dom');
   return {
     default: () => (
       <div data-testid="mock-user-screen">
