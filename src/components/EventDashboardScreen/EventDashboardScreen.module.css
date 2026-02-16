@@ -28,7 +28,7 @@
   top: 0;
   left: 0;
   width: var(--space-10);
-  height: var(--space-full-viewport);
+  height: var(--space-28);
   z-index: 9999;
   background-color: var(--color-gray-50);
   border: none;
