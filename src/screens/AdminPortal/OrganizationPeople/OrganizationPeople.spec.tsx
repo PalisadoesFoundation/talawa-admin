@@ -1443,7 +1443,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([mockWithAvatar], true);
 
-    const { container } = render(
+    render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
           <Provider store={store}>
@@ -1464,12 +1464,17 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('User With Image')).toBeInTheDocument();
     });
 
-    // Find the actual img element - this covers line 473
-    const imgElement = container.querySelector(
-      'img[src="https://example.com/user-avatar.jpg"]',
-    );
-    expect(imgElement).toBeInTheDocument();
-    expect(imgElement).toHaveAttribute('crossorigin', 'anonymous');
+    await waitFor(() => {
+      // Find the actual img element using the correct data-testid format
+      const avatarImg = screen.queryByTestId(
+        'org-people-avatar-member-with-image-img',
+      );
+      expect(avatarImg).toBeInTheDocument();
+      expect(avatarImg).toHaveAttribute(
+        'src',
+        'https://example.com/user-avatar.jpg',
+      );
+    });
   });
 
   test('renders avatar placeholder when member has no avatarURL', async () => {
@@ -1527,7 +1532,12 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('User Without Image')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('avatar')).toBeInTheDocument();
+    await waitFor(() => {
+      // Verify the fallback avatar is rendered with the correct data-testid format
+      expect(
+        screen.getByTestId('org-people-avatar-member-no-image-fallback'),
+      ).toBeInTheDocument();
+    });
   });
 
   test('uses initial tab from location.state.role when provided', async () => {

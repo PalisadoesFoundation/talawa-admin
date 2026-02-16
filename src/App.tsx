@@ -353,6 +353,10 @@ function App(): React.ReactElement {
               />
               <Route path="/user/donate/:orgId" element={<Donate />} />
               <Route
+                path="/user/member/:orgId/:userId"
+                element={<MemberDetail />}
+              />
+              <Route
                 path="/user/transactions/:orgId"
                 element={<Transactions />}
               />
