@@ -110,10 +110,12 @@
 /* Helper for bootstrap switch alignment */
 .switch {
   padding-left: var(--space-13);
+  white-space: nowrap;
 }
 
 /* stylelint-disable-next-line selector-pseudo-class-no-unknown -- CSS Modules :global() targets Bootstrap's .form-check-input */
 .switch :global(.form-check-input) {
   margin-left: calc(-1 * var(--space-11));
   margin-top: var(--space-4);
+  flex-shrink: 0;
 }
