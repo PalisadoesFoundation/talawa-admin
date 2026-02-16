@@ -199,7 +199,7 @@ const baseUserFields = {
   natalSex: 'Male',
   naturalLanguageCode: 'en',
   postalCode: '12345',
-  role: 'user',
+  role: 'regular',
   state: 'State',
   updatedAt: '1234567890',
   workPhoneNumber: '1234567890',
@@ -213,7 +213,7 @@ const CURRENT_USER_VERIFIED_MOCK = {
   },
   result: {
     data: {
-      currentUser: {
+      user: {
         __typename: 'User',
         ...baseUserFields,
         isEmailAddressVerified: true,
@@ -229,7 +229,7 @@ const CURRENT_USER_UNVERIFIED_MOCK = {
   },
   result: {
     data: {
-      currentUser: {
+      user: {
         __typename: 'User',
         ...baseUserFields,
         isEmailAddressVerified: false,
@@ -245,7 +245,7 @@ const CURRENT_USER_NULL_MOCK = {
   },
   result: {
     data: {
-      currentUser: null,
+      user: null,
     },
   },
 };
@@ -478,9 +478,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.restoreAllMocks();
-  vi.clearAllMocks();
   cleanup();
+  vi.restoreAllMocks();
   clearAllItems();
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
@@ -504,10 +503,10 @@ test('Screen should be rendered properly', async () => {
 
   await waitFor(() => {
     expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
   });
-  expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-  expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 });
 
 test('should search organizations when pressing Enter key', async () => {
@@ -653,15 +652,22 @@ test('Pagination basic functionality works', async () => {
   expect(rowsPerPageSelect).toHaveValue('5');
 
   await userEvent.selectOptions(rowsPerPageSelect, '10');
-  expect(rowsPerPageSelect).toHaveValue('10');
+  await waitFor(() => {
+    expect(rowsPerPageSelect).toHaveValue('10');
+  });
 
   const currentPage = screen.getByTestId('current-page');
-  expect(currentPage.textContent).toBe('0');
-
+  await waitFor(() => {
+    expect(currentPage.textContent).toBe('0');
+  });
   const nextButton = screen.getByTestId('next-page');
-  expect(nextButton).toBeDisabled();
+  await waitFor(() => {
+    expect(nextButton).toBeDisabled();
+  });
   await userEvent.click(nextButton);
-  expect(screen.getByTestId('current-page').textContent).toBe('0');
+  await waitFor(() => {
+    expect(screen.getByTestId('current-page').textContent).toBe('0');
+  });
 });
 
 test('should handle resize event and hide drawer on small screens', async () => {
@@ -1522,22 +1528,24 @@ describe('Email Verification Warning', () => {
     const dismissBtn = screen.getByLabelText(/close/i);
     await userEvent.click(dismissBtn);
 
-    expect(
-      screen.queryByTestId('email-verification-warning'),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('email-verification-warning'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('should show warning from localStorage fallback when CURRENT_USER has no data', async () => {
     // Set the localStorage flag BEFORE rendering so the fallback branch fires
     setItem('emailNotVerified', 'true');
 
-    // Use a CURRENT_USER mock that returns null/undefined currentUser
+    // Use a CURRENT_USER mock that returns null user
     const noUserDataLink = new StaticMockLink(
       [
         COMMUNITY_TIMEOUT_MOCK,
         {
           request: { query: CURRENT_USER, variables: {} },
-          result: { data: { currentUser: null } },
+          result: { data: { user: null } },
         },
         ORGANIZATION_FILTER_LIST_MOCK,
       ],
