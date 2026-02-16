@@ -28,7 +28,7 @@
  * <UserEvents />
  * ```
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './UserEvents.module.css';
@@ -41,6 +41,7 @@ import { GET_EVENTS_BY_ORGANIZATION_ID } from 'GraphQl/Queries/Queries';
 import {
   InterfaceUserEvent,
   InterfaceGetUserEventsData,
+  ParticipationFilter,
 } from 'types/AdminPortal/UserDetails/UserEvent/interface';
 import { PeopleTabUserEventsProps } from 'types/AdminPortal/UserDetails/UserEvent/type';
 import dayjs from 'dayjs';
@@ -53,18 +54,17 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
 
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState('Sort');
-  type ParticipationFilter = 'ALL' | 'ADMIN_CREATOR';
 
   const [participationFilter, setParticipationFilter] =
     useState<ParticipationFilter>('ALL');
 
-  const splitDateTime = (dateTime: string) => {
+  const splitDateTime = useCallback((dateTime: string) => {
     const d = dayjs.utc(dateTime);
     return {
       date: d.format('YYYY-MM-DD'),
       time: d.format('HH:mm'),
     };
-  };
+  }, []);
 
   const { data, loading, error } = useQuery<InterfaceGetUserEventsData>(
     GET_EVENTS_BY_ORGANIZATION_ID,
@@ -76,8 +76,10 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
     },
   );
 
-  const userEvents: InterfaceUserEvent[] =
-    data?.eventsByOrganizationId.map((event) => {
+  const userEvents: InterfaceUserEvent[] = useMemo(() => {
+    if (!data?.eventsByOrganizationId) return [];
+
+    return data.eventsByOrganizationId.map((event) => {
       const start = splitDateTime(event.startAt);
       const end = splitDateTime(event.endAt);
 
@@ -91,34 +93,31 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
         endTime: end.time,
         creatorId: event.creator.id,
       };
-    }) ?? [];
+    });
+  }, [data]);
 
   const filteredEvents = useMemo(() => {
-    let filtered = userEvents;
+    const search = searchValue.toLowerCase();
 
-    //  Search
-    filtered = filtered.filter(
+    let filtered = userEvents.filter(
       (event) =>
-        event.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchValue.toLowerCase()),
+        event.name.toLowerCase().includes(search) ||
+        event.description.toLowerCase().includes(search),
     );
 
-    //  Participation filter
     if (participationFilter === 'ADMIN_CREATOR') {
       filtered = filtered.filter((event) => event.creatorId === userId);
     }
 
-    //  Sorting
-    filtered = [...filtered].sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       const nameA = a.name.toLowerCase();
       const nameB = b.name.toLowerCase();
-      return sortOption === 'ASC'
-        ? nameA.localeCompare(nameB)
-        : nameB.localeCompare(nameA);
-    });
 
-    return filtered;
-  }, [userEvents, searchValue, sortOption, participationFilter, orgId]);
+      if (sortOption === 'ASC') return nameA.localeCompare(nameB);
+      if (sortOption === 'DESC') return nameB.localeCompare(nameA);
+      return 0;
+    });
+  }, [userEvents, searchValue, sortOption, participationFilter, userId]);
 
   if (loading) {
     return (

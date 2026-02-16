@@ -1300,27 +1300,8 @@ export const GET_EVENTS_BY_ORGANIZATION_ID = gql`
       description
       startAt
       endAt
-      allDay
-      location
-      isPublic
-      isRegisterable
-      createdAt
-      updatedAt
-      attendees {
-        id
-        name
-      }
       creator {
         id
-        name
-        eventsAttended {
-          id
-        }
-      }
-
-      organization {
-        id
-        name
       }
     }
   }

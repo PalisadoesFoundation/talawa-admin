@@ -68,3 +68,5 @@ export interface InterfaceUserEventsGQL {
 
   organization: InterfaceGQLOrganization;
 }
+
+export type ParticipationFilter = 'ALL' | 'ADMIN_CREATOR';
