@@ -16,15 +16,6 @@ vi.mock('../updateEnvFile/updateEnvFile', () => ({
   default: vi.fn(),
 }));
 
-vi.mock('../setup', () => ({
-  ENV_KEYS: {
-    GOOGLE_CLIENT_ID: 'VITE_GOOGLE_CLIENT_ID',
-    GOOGLE_REDIRECT_URI: 'VITE_GOOGLE_REDIRECT_URI',
-    GITHUB_CLIENT_ID: 'VITE_GITHUB_CLIENT_ID',
-    GITHUB_REDIRECT_URI: 'VITE_GITHUB_REDIRECT_URI',
-  },
-}));
-
 // Import after mocking
 import askAndSetOAuth from './oauthConfig';
 import inquirer from 'inquirer';
@@ -32,7 +23,7 @@ import updateEnvFile from '../updateEnvFile/updateEnvFile';
 
 describe('askAndSetOAuth', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });

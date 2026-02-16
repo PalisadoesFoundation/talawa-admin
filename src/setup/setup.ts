@@ -8,7 +8,7 @@ import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
-import askAndSetOAuth from './oauthConfig/oauthConfig';
+import askAndSetOAuth from 'setup/oauthConfig/oauthConfig';
 import { pathToFileURL } from 'url';
 
 /**
@@ -36,7 +36,10 @@ export const ENV_KEYS = {
   GITHUB_REDIRECT_URI: 'VITE_GITHUB_REDIRECT_URI',
 } as const;
 
-const isExitPromptError = (error: unknown): boolean =>
+/**
+ * Checks if an error is an ExitPromptError (user cancelled with CTRL+C)
+ */
+export const isExitPromptError = (error: unknown): boolean =>
   typeof error === 'object' &&
   error !== null &&
   'name' in error &&

@@ -1,21 +1,6 @@
 import inquirer from 'inquirer';
-import updateEnvFile from '../updateEnvFile/updateEnvFile';
-
-const ENV_KEYS = {
-  GOOGLE_CLIENT_ID: 'VITE_GOOGLE_CLIENT_ID',
-  GOOGLE_REDIRECT_URI: 'VITE_GOOGLE_REDIRECT_URI',
-  GITHUB_CLIENT_ID: 'VITE_GITHUB_CLIENT_ID',
-  GITHUB_REDIRECT_URI: 'VITE_GITHUB_REDIRECT_URI',
-} as const;
-
-/**
- * Checks if an error is an ExitPromptError (user cancelled with CTRL+C)
- */
-const isExitPromptError = (error: unknown): boolean =>
-  typeof error === 'object' &&
-  error !== null &&
-  'name' in error &&
-  (error as { name: string }).name === 'ExitPromptError';
+import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
+import { ENV_KEYS, isExitPromptError } from 'setup/setup';
 
 /**
  * Prompts user to configure OAuth settings and updates the .env file.

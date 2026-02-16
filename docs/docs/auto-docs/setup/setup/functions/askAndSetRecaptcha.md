@@ -6,7 +6,7 @@
 
 > **askAndSetRecaptcha**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L63)
+Defined in: [src/setup/setup.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L66)
 
 Prompts user to configure reCAPTCHA settings and updates the .env file.
 
