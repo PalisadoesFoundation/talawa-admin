@@ -1,6 +1,12 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
-import { render, screen, renderHook, cleanup } from '@testing-library/react';
+import {
+  render,
+  screen,
+  renderHook,
+  cleanup,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { useSimpleTableData } from './useSimpleTableData';
 import type { QueryResult } from '@apollo/client';
@@ -229,7 +235,9 @@ describe('useSimpleTableData', () => {
     );
 
     await user.click(screen.getByText('Refetch'));
-    expect(mockRefetch).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(mockRefetch).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('exposes refetch as a function in the Consumer', () => {
