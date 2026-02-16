@@ -71,6 +71,7 @@ function EventHeader({
             title={t('viewType')}
             sortingOptions={[
               { label: t('selectMonth'), value: ViewType.MONTH },
+              { label: t('selectWeek'), value: ViewType.WEEK },
               { label: t('selectDay'), value: ViewType.DAY },
               { label: t('selectYear'), value: ViewType.YEAR },
             ]}

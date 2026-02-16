@@ -44,6 +44,7 @@ import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEve
 import HolidayCard from '../../HolidayCards/HolidayCard';
 import { holidays, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
+import WeeklyEventCalender from '../Weekly/WeeklyEventCalender';
 import type {
   InterfaceEvent,
   InterfaceCalendarProps,
@@ -179,7 +180,11 @@ const Calendar: React.FC<
   };
 
   const handlePrevDate = (): void => {
-    if (currentDate > 1) {
+    if (viewType === ViewType.WEEK) {
+      const newDate = new Date(currentYear, currentMonth, currentDate - 7);
+      setCurrentDate(newDate.getDate());
+      onMonthChange(newDate.getMonth(), newDate.getFullYear());
+    } else if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
     } else {
       const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
@@ -191,18 +196,24 @@ const Calendar: React.FC<
   };
 
   const handleNextDate = (): void => {
-    const lastDayOfCurrentMonth = new Date(
-      currentYear,
-      currentMonth + 1,
-      0,
-    ).getDate();
-    if (currentDate < lastDayOfCurrentMonth) {
-      setCurrentDate(currentDate + 1);
+    if (viewType === ViewType.WEEK) {
+      const newDate = new Date(currentYear, currentMonth, currentDate + 7);
+      setCurrentDate(newDate.getDate());
+      onMonthChange(newDate.getMonth(), newDate.getFullYear());
     } else {
-      const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-      const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-      setCurrentDate(1);
-      onMonthChange(newMonth, newYear);
+      const lastDayOfCurrentMonth = new Date(
+        currentYear,
+        currentMonth + 1,
+        0,
+      ).getDate();
+      if (currentDate < lastDayOfCurrentMonth) {
+        setCurrentDate(currentDate + 1);
+      } else {
+        const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+        const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+        setCurrentDate(1);
+        onMonthChange(newMonth, newYear);
+      }
     }
   };
 
@@ -555,7 +566,9 @@ const Calendar: React.FC<
                   variant="outlined"
                   className={styles.buttonEventCalendar}
                   onClick={
-                    viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
+                    viewType === ViewType.DAY || viewType === ViewType.WEEK
+                      ? handlePrevDate
+                      : handlePrevMonth
                   }
                   data-testid="prevmonthordate"
                 >
@@ -566,7 +579,9 @@ const Calendar: React.FC<
                   variant="outlined"
                   className={styles.buttonEventCalendar}
                   onClick={
-                    viewType === ViewType.DAY ? handleNextDate : handleNextMonth
+                    viewType === ViewType.DAY || viewType === ViewType.WEEK
+                      ? handleNextDate
+                      : handleNextMonth
                   }
                   data-testid="nextmonthordate"
                 >
@@ -616,6 +631,15 @@ const Calendar: React.FC<
               orgData={orgData}
               userRole={userRole}
               userId={userId}
+            />
+          ) : viewType === ViewType.WEEK ? (
+            <WeeklyEventCalender
+              eventData={eventData}
+              refetchEvents={refetchEvents}
+              orgData={orgData}
+              userRole={userRole}
+              userId={userId}
+              currentDate={new Date(currentYear, currentMonth, currentDate)}
             />
           ) : (
             <div className={styles.calendar__hours}>{renderHours()}</div>

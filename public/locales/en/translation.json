@@ -665,7 +665,8 @@
     "Workshops": "Workshops",
     "selectMonth": "Select Month",
     "selectDay": "Select Day",
-    "selectYear": "Select Year"
+    "selectYear": "Select Year",
+    "selectWeek": "Select Week"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",

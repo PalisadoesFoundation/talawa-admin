@@ -677,7 +677,8 @@
     "Workshops": "कार्यशालाएँ",
     "selectMonth": "महीना चुनें",
     "selectDay": "दिन चुनें",
-    "selectYear": "वर्ष चुनें"
+    "selectYear": "वर्ष चुनें",
+    "selectWeek": "सप्ताह चुनें"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",

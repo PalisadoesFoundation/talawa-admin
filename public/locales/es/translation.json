@@ -660,7 +660,8 @@
     "Workshops": "Talleres",
     "selectMonth": "Seleccionar mes",
     "selectDay": "Seleccionar día",
-    "selectYear": "Seleccionar año"
+    "selectYear": "Seleccionar año",
+    "selectWeek": "Seleccionar semana"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
