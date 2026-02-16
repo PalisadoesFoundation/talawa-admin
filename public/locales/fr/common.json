@@ -309,5 +309,6 @@
   "unknownMember": "Membre inconnu",
   "previousYear": "Année précédente",
   "nextYear": "Année suivante",
-  "navigateToProfile": "Naviguer vers le profil"
+  "navigateToProfile": "Naviguer vers le profil",
+  "errorOccurred": "Une erreur s'est produite. Veuillez réessayer."
 }

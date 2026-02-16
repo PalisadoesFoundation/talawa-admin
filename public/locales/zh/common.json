@@ -309,5 +309,6 @@
   "unknownMember": "未知成员",
   "previousYear": "上一年",
   "nextYear": "下一年",
-  "navigateToProfile": "导航到个人资料"
+  "navigateToProfile": "导航到个人资料",
+  "errorOccurred": "发生错误,请重试"
 }

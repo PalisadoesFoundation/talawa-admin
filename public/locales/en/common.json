@@ -309,5 +309,6 @@
   "sortBy": "Sort By",
   "previousYear": "Previous Year",
   "nextYear": "Next Year",
-  "navigateToProfile": "Navigate to profile"
+  "navigateToProfile": "Navigate to profile",
+  "errorOccurred": "An error occurred. Please try again"
 }

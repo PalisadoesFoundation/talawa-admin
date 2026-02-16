@@ -34,7 +34,6 @@ const useSession = (): UseSessionReturnType => {
   const startTimeRef = useRef<number>(0);
   const timeoutDurationRef = useRef<number>(0);
   const [sessionTimeout, setSessionTimeout] = useState<number>(30);
-  // const sessionTimeout = 30;
   const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
   const warningTimerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
@@ -130,6 +129,10 @@ const useSession = (): UseSessionReturnType => {
     }
   };
 
+  // This useEffect intentionally has no dependency array.
+  // It must run after every render to keep the refs pointing to the latest
+  // versions of extendSession and handleVisibilityChange, implementing the
+  // "latest ref" pattern. Do NOT add a dependency array (e.g. []).
   useEffect(() => {
     extendSessionRef.current = extendSession;
     handleVisibilityChangeRef.current = handleVisibilityChange;
@@ -165,6 +168,10 @@ const useSession = (): UseSessionReturnType => {
 
   const endSession = useCallback((): void => {
     resetTimers();
+    if (throttledExtendSessionRef.current) {
+      clearTimeout(throttledExtendSessionRef.current);
+      throttledExtendSessionRef.current = null;
+    }
     window.removeEventListener('mousemove', stableExtendSession);
     window.removeEventListener('keydown', stableExtendSession);
     document.removeEventListener('visibilitychange', stableVisibilityChange);
@@ -176,6 +183,7 @@ const useSession = (): UseSessionReturnType => {
     } catch (error) {
       console.error('Error during logout:', error);
       NotificationToast.error(tCommon('errorOccurred'));
+      return;
     }
 
     if (!mountedRef.current) return;
@@ -185,8 +193,6 @@ const useSession = (): UseSessionReturnType => {
     navigate('/');
     NotificationToast.warning(tCommon('sessionLogOut'), { autoClose: false });
   };
-
-  // Function definitions for stableExtendSession and stableVisibilityChange moved up to avoid hoisting issues/references before declaration
 
   const startSession = (): void => {
     resetTimers();

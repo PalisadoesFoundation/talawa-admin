@@ -309,5 +309,6 @@
   "unknownMember": "अज्ञानी सदस्य",
   "previousYear": "पिछला वर्ष",
   "nextYear": "अगला वर्ष",
-  "navigateToProfile": "प्रोफ़ाइल पर जाएं"
+  "navigateToProfile": "प्रोफ़ाइल पर जाएं",
+  "errorOccurred": "एक त्रुटि हुई। कृपया पुनः प्रयास करें"
 }

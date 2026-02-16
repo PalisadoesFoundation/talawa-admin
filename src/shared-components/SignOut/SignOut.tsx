@@ -43,12 +43,11 @@ import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfaceSignOutProps } from 'types/shared-components/SignOut/interface';
 
-interface ISignOutProps {
-  hideDrawer?: boolean; // Optional prop to conditionally render the button
-}
-
-const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
+const SignOut = ({
+  hideDrawer = false,
+}: InterfaceSignOutProps): React.JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'common' });
   const { endSession } = useSession();
   const [logout] = useMutation(LOGOUT_MUTATION);

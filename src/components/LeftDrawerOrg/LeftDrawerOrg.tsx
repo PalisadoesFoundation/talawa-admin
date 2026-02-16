@@ -40,7 +40,7 @@ import styles from './LeftDrawerOrg.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
-import SignOut from 'components/SignOut/SignOut';
+import SignOut from 'shared-components/SignOut/SignOut';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
