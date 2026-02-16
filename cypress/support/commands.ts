@@ -50,6 +50,8 @@ type SeedEventPayload = {
   location?: string;
   isPublic?: boolean;
   isRegisterable?: boolean;
+  latitude?: number;
+  longitude?: number;
   auth?: AuthOptions;
 };
 
@@ -116,6 +118,10 @@ type CreateUserTaskResult = {
 };
 type CreateVolunteerTaskResult = { volunteerId: string };
 type CreatePostTaskResult = { postId: string };
+type CreateActionItemCategoryTaskResult = {
+  categoryId: string;
+  name?: string;
+};
 
 type CredentialRecord = { email: string; password: string };
 type CredentialFixture = Record<AuthRole, CredentialRecord>;
