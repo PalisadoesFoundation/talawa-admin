@@ -40,8 +40,7 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from 'style/app-fixed.module.css';
-import itemStyles from './EventDashboardScreen.module.css';
+import styles from './EventDashboardScreen.module.css';
 import Button from 'shared-components/Button/Button';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -76,7 +75,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
-              <div className={itemStyles.flex1}>
+              <div className={styles.flex1}>
                 <h1>{t('title')}</h1>
               </div>
               <Outlet />
@@ -160,7 +159,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div className={itemStyles.flex1}>
+          <div className={styles.flex1}>
             <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown portal="admin" />

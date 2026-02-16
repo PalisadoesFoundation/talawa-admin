@@ -19,7 +19,7 @@
  * - `react-router-dom`: Navigation.
  *
  * ### CSS Modules
- * - `style/app-fixed.module.css`: Styles for the component.
+ * - `./SignOut.module.css`: Styles for the component.
  * ### Props
  * - `hideDrawer`: State to determine the visibility of the sidebar. `true` hides it, and `false` shows it.
  *

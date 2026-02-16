@@ -36,7 +36,7 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
 import styles from './TagActions.module.css';
@@ -239,18 +239,15 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   return (
     <>
       <BaseModal
-        show={tagActionsModalIsOpen}
-        onHide={hideTagActionsModal}
-        backdrop="static"
+        open={tagActionsModalIsOpen}
+        onClose={hideTagActionsModal}
         centered
         title={
           tagActionType === 'assignToTags'
             ? t('assignToTags')
             : t('removeFromTags')
         }
-        headerClassName={styles.modalHeader}
-        dataTestId="modalOrganizationHeader"
-        footer={
+        customFooter={
           <>
             <Button
               className={`btn btn-danger ${styles.removeButton}`}
@@ -287,8 +284,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
                   >
                     {tag.name}
-                    <button
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
+                    <Button
+                      variant="link"
+                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent p-0`}
                       onClick={() => deSelectTag(tag)}
                       data-testid={`clearSelectedTag${tag._id}`}
                       aria-label={t('remove')}

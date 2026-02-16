@@ -1,7 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
-import { t } from 'i18next';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -29,6 +28,7 @@ type UseSessionReturnType = {
  * @returns UseSessionReturnType - An object with methods to start and end the session, and to handle logout.
  */
 const useSession = (): UseSessionReturnType => {
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const startTimeRef = useRef<number>(0);
@@ -186,7 +186,7 @@ const useSession = (): UseSessionReturnType => {
       await logout();
     } catch (error) {
       console.error('Error during logout:', error);
-      NotificationToast.error(tCommon('errorOccurred'));
+      NotificationToast.error(t('users.errorOccurred'));
       return;
     }
 

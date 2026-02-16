@@ -41,11 +41,10 @@
 import React, { type ChangeEvent } from 'react';
 import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
 import styles from './OrganizationModal.module.css';
@@ -92,13 +91,12 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
   return (
     <BaseModal
-      show={showModal}
-      onHide={toggleModal}
+      open={showModal}
+      onClose={toggleModal}
       title={t('createOrganization')}
-      headerClassName={styles.modalHeader}
-      dataTestId="modalOrganizationHeader"
+      data-testid="modalOrganizationHeader"
     >
-      <Form onSubmitCapture={createOrg}>
+      <form onSubmitCapture={createOrg}>
         <FormTextField
           name="orgname"
           label={tCommon('name')}
@@ -128,12 +126,11 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           data-testid="modalOrganizationDescription"
           autoComplete="off"
         />
-        <Form.Label>{tCommon('address')}</Form.Label>
+        <label className="form-label">{tCommon('address')}</label>
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <select
               required
-              as="select"
               data-testid="modalOrganizationCountryCode"
               value={formState.countryCode}
               onChange={(e): void => {
@@ -142,7 +139,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   setFormState({ ...formState, countryCode: e.target.value });
                 }
               }}
-              className={`mb-3 ${styles.inputField}`}
+              className={`mb-3 form-select ${styles.inputField}`}
             >
               <option value="" disabled>
                 {tCommon('selectACountry')}
@@ -155,7 +152,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   {country.label}
                 </option>
               ))}
-            </Form.Control>
+            </select>
           </Col>
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -241,11 +238,13 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           </Col>
         </Row>
         <Row className="mb-1"></Row>
-        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
-        <Form.Control
+        <label className="form-label" htmlFor="orgphoto">
+          {tCommon('displayImage')}
+        </label>
+        <input
           accept="image/*"
           id="orgphoto"
-          className={`mb-3 ${styles.inputField}`}
+          className={`mb-3 form-control ${styles.inputField}`}
           name="photo"
           type="file"
           multiple={false}
@@ -291,7 +290,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             {tCommon('createOrganization')}
           </Button>
         </Col>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

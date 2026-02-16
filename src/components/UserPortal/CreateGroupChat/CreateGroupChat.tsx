@@ -45,7 +45,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
@@ -216,13 +216,13 @@ export default function CreateGroupChat({
       onReset={chatsListRefetch}
     >
       <BaseModal
-        show={createGroupChatModalisOpen}
-        onHide={() => {
+        open={createGroupChatModalisOpen}
+        onClose={() => {
           toggleCreateGroupChatModal();
           reset();
         }}
         title={t('newGroup', { defaultValue: 'New Group' })}
-        dataTestId="createGroupChatModal"
+        data-testid="createGroupChatModal"
         className={styles.modalContent}
       >
         <input
@@ -239,14 +239,14 @@ export default function CreateGroupChat({
             fallbackName={title}
             imageUrl={selectedImage}
           />
-          <button
+          <Button
             type="button"
             data-testid="editImageBtn"
             onClick={handleImageClick}
             className={styles.editImgBtn}
           >
             <FiEdit />
-          </button>
+          </Button>
         </div>
         <form>
           <div className="mb-3">
@@ -304,12 +304,12 @@ export default function CreateGroupChat({
         </form>
       </BaseModal>
       <BaseModal
-        show={addUserModalisOpen}
-        onHide={toggleAddUserModal}
+        open={addUserModalisOpen}
+        onClose={toggleAddUserModal}
         title={t('chat', { defaultValue: 'Chat' })}
-        dataTestId="addExistingUserModal"
+        data-testid="addExistingUserModal"
         className={styles.modalContent}
-        footer={
+        customFooter={
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"

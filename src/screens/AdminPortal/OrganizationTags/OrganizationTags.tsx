@@ -30,8 +30,9 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
 import Button from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
 import {
@@ -56,7 +57,11 @@ function OrganizationTags(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
+  const {
+    isOpen: createTagModalIsOpen,
+    open: openCreateTagModal,
+    close: hideCreateTagModal,
+  } = useModalState();
 
   const [tagSearchName, setTagSearchName] = useState('');
   const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
@@ -68,11 +73,7 @@ function OrganizationTags(): JSX.Element {
 
   const showCreateTagModal = (): void => {
     setTagName('');
-    setCreateTagModalIsOpen(true);
-  };
-
-  const hideCreateTagModal = (): void => {
-    setCreateTagModalIsOpen(false);
+    openCreateTagModal();
   };
 
   const {
@@ -139,7 +140,7 @@ function OrganizationTags(): JSX.Element {
         NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
-        setCreateTagModalIsOpen(false);
+        hideCreateTagModal();
       } else {
         NotificationToast.error(t('tagCreationFailed'));
       }
@@ -191,7 +192,7 @@ function OrganizationTags(): JSX.Element {
       field: 'id',
       headerName: tCommon('sl_no'),
       flex: 0.5,
-      minWidth: 60,
+      minWidth: Number(60),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -206,7 +207,7 @@ function OrganizationTags(): JSX.Element {
       field: 'name',
       headerName: t('tagName'),
       flex: 2,
-      minWidth: 150,
+      minWidth: Number(150),
       align: 'left',
       headerAlign: 'left',
       sortable: false,
@@ -243,7 +244,7 @@ function OrganizationTags(): JSX.Element {
       field: 'totalSubTags',
       headerName: t('totalSubTags'),
       flex: 1,
-      minWidth: 120,
+      minWidth: Number(120),
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -260,7 +261,7 @@ function OrganizationTags(): JSX.Element {
       field: 'totalAssignedUsers',
       headerName: t('totalAssignedUsers'),
       flex: 1,
-      minWidth: 120,
+      minWidth: Number(120),
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -277,7 +278,7 @@ function OrganizationTags(): JSX.Element {
       field: 'actions',
       headerName: tCommon('actions'),
       flex: 1,
-      minWidth: 120,
+      minWidth: Number(120),
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -406,14 +407,11 @@ function OrganizationTags(): JSX.Element {
 
       {/* Create Tag Modal */}
       <BaseModal
-        show={createTagModalIsOpen}
-        onHide={hideCreateTagModal}
-        backdrop="static"
+        open={createTagModalIsOpen}
+        onClose={hideCreateTagModal}
         centered
         title={t('tagDetails')}
-        headerClassName={styles.tableHeader}
-        headerTestId="modalOrganizationHeader"
-        footer={
+        customFooter={
           <>
             <Button
               variant="secondary"

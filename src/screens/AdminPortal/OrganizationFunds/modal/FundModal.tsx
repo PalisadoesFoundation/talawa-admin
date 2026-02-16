@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button } from 'shared-components/Button';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';
@@ -170,15 +170,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   return (
     <BaseModal
       className={styles.fundModal}
-      show={isOpen}
-      onHide={hide}
-      headerContent={
-        <div className="d-flex justify-content-between align-items-center">
-          <p className={styles.titlemodal} data-testid="modalTitle">
-            {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-          </p>
-        </div>
-      }
+      open={isOpen}
+      onClose={hide}
+      title={t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
     >
       <form
         onSubmitCapture={

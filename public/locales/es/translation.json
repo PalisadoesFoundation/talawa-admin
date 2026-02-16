@@ -382,7 +382,7 @@
     "orgJoined": "Unido a la organización exitosamente",
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
-    "errorOccurred": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
+    "errorOccurred": "Se produjo un error. Por favor, inténtalo de nuevo",
     "UserIdNotFound": "ID de usuario no encontrada",
     "MembershipRequestNotFound": "Solicitud de membresía no encontrada",
     "MembershipRequestWithdrawn": "Solicitud de membresía retirada exitosamente",

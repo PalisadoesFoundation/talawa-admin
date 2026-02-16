@@ -36,7 +36,7 @@ import {
   FormTextField,
   FormSelectField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
@@ -132,11 +132,9 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       resetButtonText={tErrors('resetButton')}
     >
       <BaseModal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
+        open={show}
+        onClose={handleClose}
         centered={true}
-        headerClassName={styles.modalHeader}
         title={t('title')}
       >
         <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">

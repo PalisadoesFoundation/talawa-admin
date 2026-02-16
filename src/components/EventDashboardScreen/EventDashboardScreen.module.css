@@ -2,3 +2,97 @@
 .flex1 {
   flex: 1;
 }
+
+.containerHeightEventDash {
+  height: calc(100vh - var(--space-9) - var(--space-7));
+  /* approx calc for 66px might need adjustment if 66px is critical */
+}
+
+.colorLight {
+  background-color: var(--input-area-color);
+}
+
+.mainContainerEventDashboard {
+  width: 50%;
+  flex-grow: 3;
+  padding: var(--space-6);
+  max-height: 100%;
+  overflow: auto;
+}
+
+.gap {
+  gap: var(--spacing-lg, 1.25rem);
+}
+
+.opendrawer {
+  width: var(--space-7);
+}
+
+.contract,
+.expand {
+  animation: none;
+}
+
+.collapseSidebarButton {
+  position: fixed;
+  height: var(--space-9);
+  bottom: var(--space-0);
+  z-index: 9999;
+  width: var(--space-20);
+  background-color: var(--collapseSidebarButton-bg);
+  color: black;
+  border: none;
+  border-radius: var(--space-0);
+}
+
+.collapseSidebarButton:active,
+.opendrawer:active {
+  background-color: var(--collapseSidebarButton-od-bg-active) !important;
+}
+
+.collapseSidebarButton:hover,
+.opendrawer:hover {
+  opacity: 1;
+  color: var(--csb-od-color-hover) !important;
+}
+
+.collapseSidebarButton:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--csb-od-bg-hover);
+}
+
+@media (max-width: 820px) {
+  .pageContainer {
+    padding-left: var(--space-9);
+  }
+
+  .opendrawer {
+    width: var(--space-7);
+  }
+
+  .contract,
+  .expand {
+    animation: none;
+  }
+
+  .collapseSidebarButton {
+    width: 100%;
+    left: var(--space-0);
+    right: var(--space-0);
+  }
+}
+
+@media (max-height: 650px) {
+  .pageContainer {
+    padding: var(--space-5) var(--space-7) var(--space-0) var(--space-19);
+  }
+
+  .collapseSidebarButton {
+    width: var(--space-18);
+    height: var(--space-6);
+  }
+
+  .opendrawer {
+    width: var(--space-8);
+  }
+}
