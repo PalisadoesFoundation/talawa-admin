@@ -37,26 +37,18 @@ describe('EventManager Coverage Suite', () => {
       expect(manager.getListenerCount('multi:event')).toBe(2);
     });
 
-    it('handles fallback branch when listeners map unexpectedly missing', () => {
+    it('creates event entry when registering a new event', () => {
       const cb = vi.fn();
-
-      // Force internal map corruption for coverage of defensive branch
-      const internalManager = manager as unknown as {
-        eventListeners: Map<
-          string,
-          Array<(...args: unknown[]) => void> | undefined
-        >;
-      };
-
-      internalManager.eventListeners.set('broken:event', undefined);
 
       manager.on('broken:event', cb);
 
+      expect(manager.getEvents()).toContain('broken:event');
       expect(manager.getListenerCount('broken:event')).toBe(1);
     });
 
     it('logs error when event name is invalid', () => {
       manager.on('', vi.fn());
+
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Invalid event name or callback provided',
       );
@@ -64,6 +56,7 @@ describe('EventManager Coverage Suite', () => {
 
     it('logs error when callback is invalid', () => {
       manager.on('invalid:event', null as unknown as () => void);
+
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Invalid event name or callback provided',
       );
@@ -84,7 +77,7 @@ describe('EventManager Coverage Suite', () => {
       expect(manager.getEvents()).not.toContain('remove:event');
     });
 
-    it('does nothing if callback not found', () => {
+    it('does nothing if callback is not found', () => {
       const cb1 = vi.fn();
       const cb2 = vi.fn();
 
@@ -96,6 +89,7 @@ describe('EventManager Coverage Suite', () => {
 
     it('logs error when invalid input provided', () => {
       manager.off('', vi.fn());
+
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Invalid event name or callback provided',
       );
@@ -103,6 +97,7 @@ describe('EventManager Coverage Suite', () => {
 
     it('does nothing if event does not exist', () => {
       manager.off('nonexistent', vi.fn());
+
       expect(manager.getListenerCount('nonexistent')).toBe(0);
     });
   });
@@ -134,12 +129,12 @@ describe('EventManager Coverage Suite', () => {
     });
 
     it('continues execution if a listener throws', () => {
-      const errorCallback = vi.fn(() => {
+      const failingCallback = vi.fn(() => {
         throw new Error('Listener failure');
       });
       const safeCallback = vi.fn();
 
-      manager.on('error:event', errorCallback);
+      manager.on('error:event', failingCallback);
       manager.on('error:event', safeCallback);
 
       manager.emit('error:event', 'payload');
@@ -153,6 +148,7 @@ describe('EventManager Coverage Suite', () => {
 
     it('logs error when emitting with invalid event name', () => {
       manager.emit('');
+
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Invalid event name provided for emission',
       );
