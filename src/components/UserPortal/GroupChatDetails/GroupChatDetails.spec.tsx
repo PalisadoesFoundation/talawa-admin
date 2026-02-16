@@ -1328,7 +1328,7 @@ describe('GroupChatDetails', () => {
     });
   });
 
-  it('displays Member as fallback for add-user table when organization member has no role', async () => {
+  it('renders "Member" fallback when organization member has no role', async () => {
     useLocalStorage().setItem('userId', 'user1');
 
     const noRoleMemberMock = {
