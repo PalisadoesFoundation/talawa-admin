@@ -573,18 +573,18 @@ Cypress.Commands.add(
       return resolveAuthToken(eventPayload.auth).then((token) =>
         cy
           .task('createTestEvent', {
-            apiUrl: eventPayload.auth?.apiUrl,
             token,
-            input: {
-              name: eventPayload.name || 'E2E Event',
-              description: eventPayload.description || 'E2E event',
-              organizationId: eventPayload.orgId,
-              startAt: eventPayload.startAt || new Date().toISOString(),
-              endAt:
-                eventPayload.endAt ||
-                new Date(Date.now() + 3600000).toISOString(),
-              location: eventPayload.location ?? 'Virtual',
-            },
+            orgId: eventPayload.orgId,
+            name: eventPayload.name || 'E2E Event',
+            description: eventPayload.description || 'E2E Event Description',
+            startAt: eventPayload.startAt || new Date().toISOString(),
+            endAt:
+              eventPayload.endAt ||
+              new Date(Date.now() + 3600000).toISOString(), // +1 hour
+            isPublic: eventPayload.isPublic,
+            isRegisterable: eventPayload.isRegisterable,
+            latitude: eventPayload.latitude,
+            longitude: eventPayload.longitude,
           })
           .then((res) => ({ eventId: (res as CreateEventTaskResult).eventId })),
       ) as Cypress.Chainable<{ eventId: string }>;
@@ -592,24 +592,22 @@ Cypress.Commands.add(
 
     if (kind === 'actionItemCategories') {
       const catPayload = payload as SeedActionItemCategoryPayload;
-      const resolvedName = catPayload.name || makeUniqueLabel('Category');
       return resolveAuthToken(catPayload.auth).then((token) =>
         cy
           .task('createTestActionItemCategory', {
-            apiUrl: catPayload.auth?.apiUrl,
             token,
             input: {
               orgId: catPayload.orgId,
-              name: resolvedName,
+              name: catPayload.name || makeUniqueLabel('Category'),
               description: catPayload.description || 'E2E Action Item Category',
               isDisabled: catPayload.isDisabled ?? false,
             },
           })
-          .then((res) => ({
-            categoryId: (res as { categoryId: string }).categoryId,
-            name: resolvedName,
-          })),
-      ) as Cypress.Chainable<{ categoryId: string; name?: string }>;
+          .then((res) => {
+            const result = res as CreateActionItemCategoryTaskResult;
+            return { categoryId: result.categoryId, name: result.name };
+          }),
+      ) as Cypress.Chainable<{ categoryId: string; name: string }>;
     }
 
     if (kind === 'posts') {
@@ -617,7 +615,6 @@ Cypress.Commands.add(
       return resolveAuthToken(postPayload.auth).then((token) =>
         cy
           .task('createTestPost', {
-            apiUrl: postPayload.auth?.apiUrl,
             token,
             input: {
               orgId: postPayload.orgId,
