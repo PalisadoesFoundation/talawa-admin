@@ -1,3 +1,37 @@
+/**
+ * Weekly Event Calendar Component
+ *
+ * This component renders a weekly calendar view with events displayed
+ * for each day and time slot. It allows users to view events scheduled
+ * for the current week, filtered by organization and user role.
+ *
+ * @param props - The props for the calendar component.
+ * @param eventData - Array of event data to display in the weekly view.
+ * @param refetchEvents - Function to refetch events.
+ * @param orgData - Organization data for filtering events.
+ * @param userRole - Role of the user for access control.
+ * @param userId - ID of the user for filtering events they are attending.
+ * @param currentDate - The current date to determine the week to display.
+ *
+ * @returns JSX.Element The rendered weekly calendar component.
+ *
+ * @remarks
+ * - The calendar supports filtering events based on user role, organization data, and user ID.
+ * - Displays a grid for each day of the week with time slots.
+ * - Events are positioned based on their start time and duration.
+ *
+ * @example
+ * ```tsx
+ * <WeeklyEventCalender
+ *   eventData={eventData}
+ *   refetchEvents={refetchEvents}
+ *   orgData={orgData}
+ *   userRole={UserRole.ADMINISTRATOR}
+ *   userId="12345"
+ *   currentDate={new Date()}
+ * />
+ * ```
+ */
 import React, { useState, useEffect, type JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
