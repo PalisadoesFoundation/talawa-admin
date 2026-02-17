@@ -20,6 +20,7 @@ import styles from './UserPortalCard.module.css';
  * - aria-label provided by consumer (i18n required)
  *
  * @example
+ * ```tsx
  * <UserPortalCard
  *   variant="compact"
  *   ariaLabel={t('donation.card_aria')}
@@ -28,6 +29,7 @@ import styles from './UserPortalCard.module.css';
  * >
  *   <CardContent />
  * </UserPortalCard>
+ * ```
  */
 const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
   imageSlot,

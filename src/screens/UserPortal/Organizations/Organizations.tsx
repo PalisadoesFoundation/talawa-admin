@@ -148,8 +148,8 @@ export default function Organizations(): React.JSX.Element {
     if (hasDismissed) return;
 
     // Priority: API data > LocalStorage
-    if (currentUserData?.currentUser) {
-      if (currentUserData.currentUser.isEmailAddressVerified) {
+    if (currentUserData?.user) {
+      if (currentUserData.user.isEmailAddressVerified) {
         setShowEmailWarning(false);
         // Clean up legacy flags
         removeItem('emailNotVerified');
