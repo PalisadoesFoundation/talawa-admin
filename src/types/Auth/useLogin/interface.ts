@@ -1,4 +1,4 @@
-import type { InterfaceSignInResult } from '../LoginForm/interface';
+import type { InterfaceSignInResult } from 'types/Auth/LoginForm/interface';
 
 /**
  * Credentials required for login.

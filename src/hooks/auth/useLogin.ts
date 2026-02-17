@@ -15,6 +15,7 @@ import type {
  * @returns Object containing login function, loading state, and error state
  */
 export const useLogin = (opts?: IUseLoginOptions) => {
+  // Manual loading state provides synchronous control before query fires
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [signin] = useLazyQuery(SIGNIN_QUERY, { fetchPolicy: 'network-only' });
