@@ -115,6 +115,7 @@ const mockTImplementation = (key: string) => {
     'Action Items': 'Action Items',
     Posts: 'Posts',
     switchToUserPortal: 'Switch to User Portal',
+    'leftDrawer.notAvailable': 'N/A',
   };
   return translations[key] || key;
 };
