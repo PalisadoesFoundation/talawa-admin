@@ -136,7 +136,9 @@ describe('RecurrenceFrequencySection', () => {
     await user.click(
       screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
     );
-    expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY);
+    await waitFor(() =>
+      expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY),
+    );
   });
 
   it('calls onFrequencyChange for daily frequency', async () => {

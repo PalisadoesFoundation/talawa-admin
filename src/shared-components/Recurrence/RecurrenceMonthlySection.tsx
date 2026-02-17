@@ -26,10 +26,6 @@ export const RecurrenceMonthlySection: React.FC<
   startDate,
   t,
 }) => {
-  if (frequency !== Frequency.MONTHLY) {
-    return null;
-  }
-
   const monthlyOptions = getMonthlyOptions(startDate);
 
   const options = useMemo(
@@ -57,6 +53,10 @@ export const RecurrenceMonthlySection: React.FC<
       }));
     }
   };
+
+  if (frequency !== Frequency.MONTHLY) {
+    return null;
+  }
 
   return (
     <div className="mb-4">

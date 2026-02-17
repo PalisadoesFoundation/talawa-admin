@@ -169,7 +169,7 @@ describe('RecurrenceMonthlySection', () => {
       );
       await user.click(byDateOption);
 
-      expect(setRecurrenceRuleState).toHaveBeenCalled();
+      await waitFor(() => expect(setRecurrenceRuleState).toHaveBeenCalled());
       const callArg = setRecurrenceRuleState.mock.calls[0][0];
 
       // Verify it's a function that updates state correctly
@@ -211,7 +211,7 @@ describe('RecurrenceMonthlySection', () => {
       );
       await user.click(byDateOption);
 
-      expect(setRecurrenceRuleState).toHaveBeenCalled();
+      await waitFor(() => expect(setRecurrenceRuleState).toHaveBeenCalled());
     });
   });
 
