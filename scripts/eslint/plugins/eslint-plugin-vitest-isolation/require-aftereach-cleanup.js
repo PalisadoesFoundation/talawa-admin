@@ -190,21 +190,42 @@ module.exports = {
                                 if (callback.body && callback.body.type === 'BlockStatement') {
                                     // Insert afterEach at the beginning of describe block
                                     const describeBody = callback.body.body;
-                                    // Always insert after the opening brace to ensure consistent behavior
-                                    const insertPosition = callback.body.range[0] + 1;
+
+                                    let insertPosition;
+                                    let insertionNewline = '';
+
+                                    if (describeBody.length > 0) {
+                                        // Insert before the first statement (after any leading comments)
+                                        const node = describeBody[0];
+                                        // Check for comments before the node to ensure we insert after them
+                                        const comments = sourceCode.getCommentsBefore(node);
+                                        if (comments.length > 0) {
+                                            insertPosition = comments[comments.length - 1].range[1];
+                                            insertionNewline = '\n\n';
+                                        } else {
+                                            const firstToken = sourceCode.getFirstToken(node);
+                                            insertPosition = firstToken.range[0];
+                                        }
+                                    } else {
+                                        insertPosition = callback.body.range[0] + 1;
+                                    }
 
                                     // Detect indentation from the first statement or describe block
                                     let baseIndent = '  '; // Default to 2 spaces
+                                    let nextItemIndent = '';
+                                    let leadingText = '';
 
                                     if (describeBody.length > 0) {
                                         // Get indentation from first statement in describe
                                         const firstStmt = describeBody[0];
+
                                         const lineStart = sourceCode.getIndexFromLoc({ line: firstStmt.loc.start.line, column: 0 });
                                         const stmtStart = firstStmt.range[0];
-                                        const leadingText = sourceCode.text.substring(lineStart, stmtStart);
+                                        leadingText = sourceCode.text.substring(lineStart, stmtStart);
                                         const match = leadingText.match(/^(\s+)/);
                                         if (match) {
                                             baseIndent = match[1];
+                                            nextItemIndent = match[1];
                                         }
                                     } else {
                                         // Get indentation from describe callback opening brace
@@ -214,13 +235,49 @@ module.exports = {
                                             const leadingMatch = sourceCode.text.substring(nextLineStart).match(/^(\s+)/);
                                             if (leadingMatch) {
                                                 baseIndent = leadingMatch[1];
+
+                                                // If the next line is the closing brace/parenthesis, we've captured the outer indentation.
+                                                // We need to add one level of indentation for the inner content.
+                                                const nextLineEnd = sourceCode.text.indexOf('\n', nextLineStart);
+                                                const lineContent = sourceCode.text.substring(nextLineStart, nextLineEnd !== -1 ? nextLineEnd : undefined).trim();
+
+                                                if (lineContent.startsWith('}') || lineContent.startsWith('})')) {
+                                                    baseIndent += '  ';
+                                                }
                                             }
                                         }
                                     }
 
                                     // Build properly indented afterEach block
                                     // i18n-ignore-next-line: code template, not user-facing text
-                                    const afterEachCode = `\n${baseIndent}afterEach(() => {\n${baseIndent}  vi.clearAllMocks();\n${baseIndent}});\n`;
+                                    let afterEachCode;
+
+                                    if (describeBody.length > 0) {
+                                        // When inserting before content, don't start with newline (as we follow indentation),
+                                        // but end with double newline and restore indentation for the next item.
+
+                                        let prefix = '';
+                                        if (insertionNewline) {
+                                            prefix = insertionNewline + baseIndent;
+                                        } else if (leadingText.length === 0) {
+                                            prefix = baseIndent;
+                                        }
+
+                                        // If we are inserting after a comment (insertionNewline is set), we are at the end of a line,
+                                        // so the existing newline will follow our insertion. We only need one newline at the end of our block
+                                        // to combine with the existing one to create an empty line.
+                                        // If we are inserting at the start of a statement (no comment), we consume the indentation but not a newline,
+                                        // so we need two newlines to create an empty line.
+                                        const suffix = insertionNewline ? '\n' : '\n\n';
+
+                                        // If using insertionNewline, we rely on existing indentation of the next line, so no trailing indent needed.
+                                        const trailingIndent = insertionNewline ? '' : nextItemIndent;
+
+                                        afterEachCode = `${prefix}afterEach(() => {\n${baseIndent}  vi.clearAllMocks();\n${baseIndent}});${suffix}${trailingIndent}`;
+                                    } else {
+                                        // When inserting into empty block, start with newline and end with single newline (as existing closing brace logic adds one).
+                                        afterEachCode = `\n${baseIndent}afterEach(() => {\n${baseIndent}  vi.clearAllMocks();\n${baseIndent}});\n`;
+                                    }
 
                                     return fixer.insertTextBeforeRange([insertPosition, insertPosition], afterEachCode);
                                 }
@@ -291,7 +348,27 @@ module.exports = {
                                         braceIndent = '\n' + parentIndent;
                                     }
 
-                                    return fixer.insertTextBeforeRange([closingBrace, closingBrace], `\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                    const lastStmt = bodyStatements[bodyStatements.length - 1];
+                                    const rangeStart = lastStmt.range[1];
+                                    const rangeEnd = closingBrace;
+                                    const textBetween = sourceCode.text.substring(rangeStart, rangeEnd);
+
+                                    // If there are comments or non-whitespace between last statement and closing brace,
+                                    // we should append instead of replace to avoid deleting comments.
+                                    if (textBetween.trim().length > 0) {
+                                        return fixer.insertTextBeforeRange([closingBrace, closingBrace], `\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                    } else {
+                                        // Replace the whitespace to ensure clean formatting (avoid double newlines)
+                                        // Preserve any trailing spaces on the same line as the statement
+                                        const matchPrefix = textBetween.match(/^([^\n\r]*)/);
+                                        const prefix = matchPrefix ? matchPrefix[1] : '';
+
+                                        // Preserve vertical limits (blank lines)
+                                        const newlineCount = (textBetween.match(/\n/g) || []).length;
+                                        const separator = newlineCount >= 1 ? '\n\n' : '\n';
+
+                                        return fixer.replaceTextRange([rangeStart, rangeEnd], `${prefix}${separator}${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                    }
                                 } else {
                                     // Single expression arrow function - would need to convert to block
                                     // For now, skip autofix for this case as it's more complex
