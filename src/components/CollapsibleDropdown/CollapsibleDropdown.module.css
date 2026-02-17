@@ -20,6 +20,6 @@
 }
 
 .leftDrawerCollapseActiveButton {
-  background-color: var(--leftDrawer-collapse-active-button-bg);
-  color: var(--bs-black);
+  background-color: var(--color-gray-200);
+  color: var(--color-black);
 }
