@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceWeeklySection } from './RecurrenceWeeklySection';
 import { Frequency, WeekDays, Days } from '../../utils/recurrenceUtils';
@@ -14,8 +14,9 @@ const defaultProps = {
 };
 
 describe('RecurrenceWeeklySection', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
-    vi.restoreAllMocks();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -123,7 +124,6 @@ describe('RecurrenceWeeklySection', () => {
 
   describe('User Interactions', () => {
     it('should call onDayClick when a day button is clicked', async () => {
-      const user = userEvent.setup();
       const onDayClick = vi.fn();
 
       render(
@@ -133,11 +133,12 @@ describe('RecurrenceWeeklySection', () => {
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       await user.click(dayButtons[0]); // Click Sunday
 
-      expect(onDayClick).toHaveBeenCalledWith(Days[0]);
+      await waitFor(() => {
+        expect(onDayClick).toHaveBeenCalledWith(Days[0]);
+      });
     });
 
     it('should call onDayClick for each day when clicked', async () => {
-      const user = userEvent.setup();
       const onDayClick = vi.fn();
 
       render(
@@ -210,7 +211,6 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should call onWeekdayKeyDown for other keys', async () => {
-      const user = userEvent.setup();
       const onWeekdayKeyDown = vi.fn();
 
       render(
@@ -221,8 +221,11 @@ describe('RecurrenceWeeklySection', () => {
       );
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
-      await user.click(dayButtons[0]); // focus the first button
-      await user.keyboard('{ArrowRight}');
+
+      // Focus the button first
+      await user.click(dayButtons[0]);
+      // Simulate key down with ArrowRight
+      await user.keyboard(`{ArrowRight}`);
 
       expect(onWeekdayKeyDown).toHaveBeenCalled();
       const callArgs = onWeekdayKeyDown.mock.calls[0];

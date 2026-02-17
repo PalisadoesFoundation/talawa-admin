@@ -1,23 +1,33 @@
 /* Component-specific CSS module for EventDashboardScreen */
-/* Currently empty as the test file only imports the shared CSS without using specific classes */
-.containerHeightEventDash {
-  height: calc(100vh - var(--nav-height));
-}
 
-.mainContainerEventDashboard {
-  width: 50%;
-  flex-grow: 3;
-  padding: var(--space-8);
-  max-height: 100%;
-  overflow: auto;
+.containerHeightEventDash {
+  height: calc(var(--vh-100) - var(--space-16));
 }
 
 .colorLight {
   background-color: var(--color-gray-50);
 }
 
+.mainContainerEventDashboard {
+  width: 50%;
+  flex-grow: 3;
+  padding: var(--space-6);
+  max-height: 100%;
+  overflow: auto;
+}
+
 .gap {
   gap: var(--space-6);
+}
+
+.drawer {
+  position: relative;
+}
+
+.collapseSidebarButton:hover,
+.opendrawer:hover {
+  opacity: 1;
+  color: black !important;
 }
 
 .opendrawer {
@@ -27,28 +37,95 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: var(--space-10);
-  height: var(--space-28);
+  width: var(--space-9);
+  height: var(--vh-100);
   z-index: 9999;
-  background-color: var(--color-gray-50);
+  background-color: rgba(245, 245, 245);
   border: none;
-  border-radius: 0;
+  border-radius: var(--radius-none);
   margin-right: var(--space-6);
   color: var(--color-black);
 }
 
+.opendrawer:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--color-gray-100);
+}
+
+.collapseSidebarButton:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--color-gray-100);
+}
+
+@media (max-width: 1120px) {
+  .collapseSidebarButton {
+    width: calc(var(--space-18));
+  }
+}
+
+@media (max-height: 650px) {
+  .collapseSidebarButton {
+    width: var(--space-18);
+    height: var(--space-6);
+  }
+
+  .opendrawer {
+    width: var(--space-8);
+  }
+}
+
+/* For tablets */
+@media (max-width: 820px) {
+  .contract,
+  .expand {
+    animation: none;
+  }
+
+  .opendrawer {
+    width: var(--space-7);
+  }
+
+  .collapseSidebarButton {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
 .collapseSidebarButton {
-  width: 100%;
-  left: 0;
-  right: 0;
+  position: fixed;
+  height: var(--space-9);
+  bottom: 0;
+  z-index: 9999;
+  width: calc(var(--space-20) + var(--space-8));
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  border: none;
+  border-radius: var(--radius-none);
 }
 
-.drawer {
-  width: var(--space-7);
+.collapseSidebarButton:hover,
+.opendrawer:hover {
+  opacity: 1;
+  color: var(--color-black) !important;
 }
 
-.pageContainer {
-  padding-left: var(--space-9);
+.collapseSidebarButton:hover {
+  transition: background-color 0.5s ease;
+  background-color: var(--color-gray-100);
+}
+
+@media (max-height: 900px) {
+  .collapseSidebarButton {
+    height: var(--space-8);
+    width: calc(var(--space-20) + var(--space-5));
+  }
+}
+
+@media (max-width: 1120px) {
+  .collapseSidebarButton {
+    width: calc(var(--space-18));
+  }
 }
 
 .expand {

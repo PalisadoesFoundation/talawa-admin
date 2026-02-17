@@ -39,9 +39,10 @@
  */
 
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './PeopleTabUserEvents.module.css';
 import { InterfacePeopletabUserEventsProps } from 'types/PeopleTab/interface';
 import { useTranslation } from 'react-i18next';
+import Button from 'shared-components/Button';
 
 const PeopleTabUserEvents: React.FC<InterfacePeopletabUserEventsProps> = ({
   startTime,
@@ -96,12 +97,12 @@ const PeopleTabUserEvents: React.FC<InterfacePeopletabUserEventsProps> = ({
 
             {actionName && (
               <div className={styles.peopleTabUserEventAction}>
-                <button className={styles.peopleTabUserEventActionButton}>
+                <Button className={styles.peopleTabUserEventActionButton}>
                   {actionIcon && (
                     <span className={styles.actionIcon}>{actionIcon}</span>
                   )}
                   <span>{actionName}</span>
-                </button>
+                </Button>
               </div>
             )}
           </div>

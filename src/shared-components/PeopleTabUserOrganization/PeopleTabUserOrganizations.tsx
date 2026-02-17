@@ -37,7 +37,8 @@
  */
 
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './PeopleTabUserOrganizations.module.css';
 import { InterfacePeopleTabUserOrganizationProps } from 'types/PeopleTab/interface';
 
 const PeopleTabUserOrganizations: React.FC<
@@ -73,10 +74,10 @@ const PeopleTabUserOrganizations: React.FC<
         </div>
       </div>
       <div className={styles.peopleTabUserOrganizationsCardAction}>
-        <button className={styles.peopleTabUserOrganizationsEditButton}>
+        <Button className={styles.peopleTabUserOrganizationsEditButton}>
           {actionIcon}
           {actionName}
-        </button>
+        </Button>
       </div>
     </div>
   );

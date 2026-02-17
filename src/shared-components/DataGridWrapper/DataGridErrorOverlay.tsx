@@ -3,9 +3,6 @@
  *
  * A custom error overlay component for the DataGrid that displays error messages
  * in a consistent manner with other overlays (loading, empty state).
- *
- * @component
- * @category Shared Components
  */
 import React from 'react';
 import { Stack, Typography } from '@mui/material';

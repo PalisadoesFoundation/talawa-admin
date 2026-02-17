@@ -118,3 +118,7 @@
     background-position: var(--skeleton-bg-pos-end);
   }
 }
+
+.loadingItem {
+  height: 30px;
+}

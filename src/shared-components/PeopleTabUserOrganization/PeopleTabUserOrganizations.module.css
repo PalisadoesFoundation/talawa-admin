@@ -1,0 +1,86 @@
+.peopleTabUserOrganizationsCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  height: 230px;
+  width: 660x;
+  align-items: center;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardContent {
+  display: flex;
+  gap: 3rem;
+}
+
+.peopleTabUserOrganizationsCardImage {
+  width: 140px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #eaebef;
+  border: 2px solid #eaebef;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.peopleTabUserOrganizationsCardText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.peopleTabUserOrganizationsCardDescription {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.peopleTabUserOrganizationsCardStats {
+  font-size: 0.875rem;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.peopleTabUserOrganizationsCardAction {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+.peopleTabUserOrganizationsEditButton {
+  padding: 0.4rem 0.8rem;
+  background-color: #92b5f5;
+  border: none;
+  border-radius: 8px;
+  color: #555555;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 7.3rem;
+  height: 2.5rem;
+}
+
+.peopleTabUserOrganizationsEditButton:hover {
+  background-color: #90c1ff;
+}

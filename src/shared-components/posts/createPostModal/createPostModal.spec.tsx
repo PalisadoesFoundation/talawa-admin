@@ -1,5 +1,5 @@
-import React, { act } from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import React from 'react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -246,8 +246,8 @@ afterEach(() => {
   } else {
     Reflect.deleteProperty(HTMLInputElement.prototype, 'accept');
   }
-
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 describe('CreatePostModal Integration Tests', () => {
@@ -604,9 +604,7 @@ describe('CreatePostModal Integration Tests', () => {
       // Mock empty file selection
       Object.defineProperty(fileInput, 'files', { value: null });
 
-      await act(async () => {
-        fireEvent.change(fileInput);
-      });
+      await user.upload(fileInput, []);
 
       // Should not show any preview
       expect(screen.queryByAltText('Selected')).not.toBeInTheDocument();
