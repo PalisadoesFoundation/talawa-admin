@@ -311,14 +311,19 @@ describe('useLogin', () => {
 
       expect(result.current.loading).toBe(false);
 
+      let loginPromise: Promise<InterfaceSignInResult>;
       act(() => {
-        result.current.login({
+        loginPromise = result.current.login({
           email: 'test@example.com',
           password: 'password123',
         });
       });
 
       expect(result.current.loading).toBe(true);
+
+      await act(async () => {
+        await loginPromise;
+      });
 
       await waitFor(() => expect(result.current.loading).toBe(false));
     });

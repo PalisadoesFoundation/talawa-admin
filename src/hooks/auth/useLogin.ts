@@ -2,21 +2,17 @@ import { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { SIGNIN_QUERY } from 'GraphQl/Queries/Queries';
 import type { InterfaceSignInResult } from 'types/Auth/LoginForm/interface';
-
-export interface ILoginCredentials {
-  email: string;
-  password: string;
-  recaptchaToken?: string | null;
-}
-
-export interface IUseLoginOptions {
-  onSuccess?: (result: InterfaceSignInResult) => void;
-  onError?: (error: Error) => void;
-}
+import type {
+  ILoginCredentials,
+  IUseLoginOptions,
+} from 'types/Auth/useLogin/interface';
 
 /**
  * Custom hook for user login.
  * Encapsulates login GraphQL logic with consistent error/success handling.
+ *
+ * @param opts - Optional callbacks for success and error handling
+ * @returns Object containing login function, loading state, and error state
  */
 export const useLogin = (opts?: IUseLoginOptions) => {
   const [loading, setLoading] = useState(false);
@@ -47,7 +43,9 @@ export const useLogin = (opts?: IUseLoginOptions) => {
       opts?.onSuccess?.(result);
       return result;
     } catch (e: unknown) {
-      const err = new Error((e as Error)?.message ?? 'Login failed');
+      const err = new Error((e as Error)?.message ?? 'Login failed', {
+        cause: e,
+      });
       setError(err);
       opts?.onError?.(err);
       throw err;

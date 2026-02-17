@@ -6,7 +6,7 @@
 
 > **useLogin**(`opts?`): `object`
 
-Defined in: [src/hooks/auth/useLogin.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useLogin.ts#L21)
+Defined in: [src/hooks/auth/useLogin.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useLogin.ts#L17)
 
 Custom hook for user login.
 Encapsulates login GraphQL logic with consistent error/success handling.
@@ -15,11 +15,15 @@ Encapsulates login GraphQL logic with consistent error/success handling.
 
 ### opts?
 
-[`IUseLoginOptions`](../interfaces/IUseLoginOptions.md)
+[`IUseLoginOptions`](../../../../types/Auth/useLogin/interface/interfaces/IUseLoginOptions.md)
+
+Optional callbacks for success and error handling
 
 ## Returns
 
 `object`
+
+Object containing login function, loading state, and error state
 
 ### error
 
@@ -37,7 +41,7 @@ Encapsulates login GraphQL logic with consistent error/success handling.
 
 ##### credentials
 
-[`ILoginCredentials`](../interfaces/ILoginCredentials.md)
+[`ILoginCredentials`](../../../../types/Auth/useLogin/interface/interfaces/ILoginCredentials.md)
 
 #### Returns
 
