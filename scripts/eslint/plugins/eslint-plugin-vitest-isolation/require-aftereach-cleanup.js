@@ -348,15 +348,33 @@ module.exports = {
                                         braceIndent = '\n' + parentIndent;
                                     }
 
-                                    const lastStmt = bodyStatements[bodyStatements.length - 1];
-                                    const rangeStart = lastStmt.range[1];
+                                    let rangeStart;
+                                    let textBetween;
+
+                                    if (bodyStatements.length > 0) {
+                                        const lastStmt = bodyStatements[bodyStatements.length - 1];
+                                        rangeStart = lastStmt.range[1];
+                                        textBetween = sourceCode.text.substring(rangeStart, closingBrace);
+                                    } else {
+                                        // If no statements, rangeStart is after the opening brace
+                                        rangeStart = bodyNode.range[0] + 1;
+                                        textBetween = sourceCode.text.substring(rangeStart, closingBrace);
+                                    }
+
                                     const rangeEnd = closingBrace;
-                                    const textBetween = sourceCode.text.substring(rangeStart, rangeEnd);
 
                                     // If there are comments or non-whitespace between last statement and closing brace,
                                     // we should append instead of replace to avoid deleting comments.
                                     if (textBetween.trim().length > 0) {
-                                        return fixer.insertTextBeforeRange([closingBrace, closingBrace], `\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                        // Check for trailing whitespace (indentation before closing brace)
+                                        const matchTrailing = textBetween.match(/(\s+)$/);
+                                        if (matchTrailing) {
+                                            // Replace the trailing whitespace with our new code
+                                            const whitespaceStart = closingBrace - matchTrailing[1].length;
+                                            return fixer.replaceTextRange([whitespaceStart, closingBrace], `\n\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                        } else {
+                                            return fixer.insertTextBeforeRange([closingBrace, closingBrace], `\n\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                        }
                                     } else {
                                         // Replace the whitespace to ensure clean formatting (avoid double newlines)
                                         // Preserve any trailing spaces on the same line as the statement

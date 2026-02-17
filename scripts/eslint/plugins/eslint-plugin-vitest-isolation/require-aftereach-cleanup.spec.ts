@@ -158,6 +158,33 @@ ruleTester.run('require-aftereach-cleanup', rule, {
           });
         `,
     },
+    {
+      code: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => {
+              // just a comment
+            });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => {
+              // just a comment
+
+              vi.clearAllMocks();
+            });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+    },
     // vi.resetAllMocks() usage (discouraged)
     {
       code: `
