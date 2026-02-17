@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
@@ -23,6 +23,13 @@ vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
     collapsedDrawer: 'collapsedDrawer',
   },
 }));
+
+vi.mock('shared-components/SidebarNavItem/SidebarNavItem.module.css', () => ({
+  default: {
+    sidebarBtnActive: 'sidebarBtnActive',
+  },
+}));
+
 import { usePluginDrawerItems } from 'plugin';
 
 // Mock the local storage hook
@@ -97,13 +104,21 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 
 describe('LeftDrawer Component', () => {
   let user: ReturnType<typeof userEvent.setup>;
+  let originalInnerWidth: number;
 
   beforeEach(() => {
     user = userEvent.setup();
+    originalInnerWidth = window.innerWidth;
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: originalInnerWidth,
+    });
   });
   const TestWrapper = ({
     initialHideDrawer = false,
@@ -130,7 +145,6 @@ describe('LeftDrawer Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
     // Reset to default super admin mock
     vi.mocked(useLocalStorage).mockImplementation(() => ({
       getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
