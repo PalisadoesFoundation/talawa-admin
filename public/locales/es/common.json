@@ -310,5 +310,10 @@
   "unknownMember": "Miembro desconocido",
   "previousYear": "Año anterior",
   "nextYear": "Siguiente año",
-  "navigateToProfile": "Navegar al perfil"
+  "navigateToProfile": "Navegar al perfil",
+  "loginSuccess": "¡Bienvenido!",
+  "loginSuccessWithName": "¡Bienvenido, {{name}}!",
+  "signupSuccess": "¡Registro exitoso!",
+  "authError": "Error de autenticación",
+  "networkError": "Error de red"
 }
