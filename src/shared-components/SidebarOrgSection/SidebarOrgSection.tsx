@@ -31,16 +31,16 @@ import styles from './SidebarOrgSection.module.css';
 import type {
   ISidebarOrgSectionProps,
   IOrganizationData,
-} from '../../types/shared-components/SidebarOrgSection/interface';
+} from 'types/shared-components/SidebarOrgSection/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import Button from 'shared-components/Button';
-const { t } = useTranslation();
 
 const SidebarOrgSection = ({
   orgId,
   hideDrawer,
   isProfilePage = false,
 }: ISidebarOrgSectionProps): React.ReactElement | null => {
+  const { t } = useTranslation();
   const { t: tErrors } = useTranslation('errors');
 
   const { data, loading } = useQuery<{
@@ -97,7 +97,7 @@ const SidebarOrgSection = ({
                 {data.organization.name}
               </span>
               <span className={styles.secondaryText}>
-                {data.organization.city || t('notAvailable')}
+                {data.organization.city || t('leftDrawer.notAvailable')}
               </span>
             </div>
             <div className={styles.ArrowIcon}>
