@@ -3,10 +3,10 @@ import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { RegistrationForm } from './RegistrationForm';
-import { useRegistration } from '../../../hooks/auth/useRegistration';
-import i18nForTest from '../../../utils/i18nForTest';
+import { useRegistration } from 'hooks/auth/useRegistration';
+import i18nForTest from 'utils/i18nForTest';
 
-vi.mock('../../../hooks/auth/useRegistration');
+vi.mock('hooks/auth/useRegistration');
 
 vi.mock('Constant/constant', async () => ({
   ...(await vi.importActual<object>('Constant/constant')),

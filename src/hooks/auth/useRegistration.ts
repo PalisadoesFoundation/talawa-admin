@@ -68,6 +68,23 @@ export const useRegistration = ({
   const [signup, { loading }] = useMutation(SIGNUP_MUTATION);
   const [error, setError] = useState<Error | null>(null);
 
+  const normalizeError = (caughtError: unknown): Error => {
+    if (caughtError instanceof Error) {
+      return caughtError;
+    }
+
+    if (
+      typeof caughtError === 'object' &&
+      caughtError !== null &&
+      'message' in caughtError &&
+      typeof caughtError.message === 'string'
+    ) {
+      return new Error(caughtError.message);
+    }
+
+    return new Error(String(caughtError));
+  };
+
   const register = async (data: IRegisterInput): Promise<void> => {
     setError(null);
     try {
@@ -98,15 +115,20 @@ export const useRegistration = ({
         },
       });
 
-      if (signUpData?.signUp) {
-        onSuccess?.({
-          signUp: signUpData.signUp,
-          name: data.name,
-          email: data.email,
-        });
+      if (!signUpData?.signUp) {
+        const err = new Error('Sign-up returned no data');
+        setError(err);
+        onError?.(err);
+        return;
       }
+
+      onSuccess?.({
+        signUp: signUpData.signUp,
+        name: data.name,
+        email: data.email,
+      });
     } catch (caughtError) {
-      const err = caughtError as Error;
+      const err = normalizeError(caughtError);
       setError(err);
       onError?.(err);
     }

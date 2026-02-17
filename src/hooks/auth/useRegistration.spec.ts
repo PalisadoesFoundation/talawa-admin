@@ -5,7 +5,7 @@ import {
   useRegistration,
   RegistrationError,
   RegistrationErrorCode,
-} from './useRegistration';
+} from 'hooks/auth/useRegistration';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const SUCCESS_MOCK: MockedResponse[] = [
@@ -58,7 +58,7 @@ const createWrapper = (mocks: MockedResponse[]) =>
 describe('useRegistration', () => {
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should handle successful registration', async () => {
@@ -88,9 +88,9 @@ describe('useRegistration', () => {
       expect(call.signUp.user.id).toBe('user-1');
       expect(call.name).toBe('Test User');
       expect(call.email).toBe('test@example.com');
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeNull();
     });
-    expect(result.current.loading).toBe(false);
-    expect(result.current.error).toBeNull();
   });
 
   it('should handle registration error and set error state', async () => {
@@ -113,9 +113,9 @@ describe('useRegistration', () => {
 
     await waitFor(() => {
       expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeInstanceOf(Error);
     });
-    expect(result.current.loading).toBe(false);
-    expect(result.current.error).toBeInstanceOf(Error);
   });
 
   it('should handle registration without callbacks', async () => {
@@ -153,8 +153,8 @@ describe('useRegistration', () => {
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeInstanceOf(Error);
     });
-    expect(result.current.error).toBeInstanceOf(Error);
   });
 
   it('should set loading state during registration', async () => {
@@ -196,14 +196,16 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(1);
-    const err0 = mockOnError.mock.calls[0][0];
-    expect(err0).toBeInstanceOf(RegistrationError);
-    expect((err0 as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
-    );
-    expect(result.current.loading).toBe(false);
-    expect(result.current.error).toBeInstanceOf(RegistrationError);
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(1);
+      const err0 = mockOnError.mock.calls[0][0];
+      expect(err0).toBeInstanceOf(RegistrationError);
+      expect((err0 as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+      );
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeInstanceOf(RegistrationError);
+    });
 
     await act(async () => {
       await result.current.register({
@@ -214,13 +216,16 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(2);
-    const err1 = mockOnError.mock.calls[1][0];
-    expect(err1).toBeInstanceOf(RegistrationError);
-    expect((err1 as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
-    );
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(2);
+      const err1 = mockOnError.mock.calls[1][0];
+      expect(err1).toBeInstanceOf(RegistrationError);
+      expect((err1 as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+      );
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeInstanceOf(RegistrationError);
+    });
 
     await act(async () => {
       await result.current.register({
@@ -231,13 +236,16 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(3);
-    const err2 = mockOnError.mock.calls[2][0];
-    expect(err2).toBeInstanceOf(RegistrationError);
-    expect((err2 as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
-    );
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(3);
+      const err2 = mockOnError.mock.calls[2][0];
+      expect(err2).toBeInstanceOf(RegistrationError);
+      expect((err2 as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+      );
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeInstanceOf(RegistrationError);
+    });
   });
 
   it('should call onError with RegistrationError (MISSING_ORGANIZATION_ID) when organizationId is missing or empty', async () => {
@@ -256,13 +264,16 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(1);
-    const err = mockOnError.mock.calls[0][0];
-    expect(err).toBeInstanceOf(RegistrationError);
-    expect((err as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_ORGANIZATION_ID,
-    );
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(1);
+      const err = mockOnError.mock.calls[0][0];
+      expect(err).toBeInstanceOf(RegistrationError);
+      expect((err as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_ORGANIZATION_ID,
+      );
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeInstanceOf(RegistrationError);
+    });
 
     await act(async () => {
       await result.current.register({
@@ -273,13 +284,16 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(2);
-    const err2 = mockOnError.mock.calls[1][0];
-    expect(err2).toBeInstanceOf(RegistrationError);
-    expect((err2 as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_ORGANIZATION_ID,
-    );
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(2);
+      const err2 = mockOnError.mock.calls[1][0];
+      expect(err2).toBeInstanceOf(RegistrationError);
+      expect((err2 as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_ORGANIZATION_ID,
+      );
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeInstanceOf(RegistrationError);
+    });
   });
 
   it('should handle registration with organizationId correctly', async () => {
@@ -320,8 +334,10 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+      expect(result.current.loading).toBe(false);
+    });
   });
 
   it('should pass valid organizationId to signup (no empty string)', async () => {
@@ -363,9 +379,11 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
-    expect(mockOnError).not.toHaveBeenCalled();
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+      expect(mockOnError).not.toHaveBeenCalled();
+      expect(result.current.loading).toBe(false);
+    });
   });
 
   it('should include recaptchaToken in signup variables when provided', async () => {
@@ -411,8 +429,8 @@ describe('useRegistration', () => {
 
     await waitFor(() => {
       expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+      expect(result.current.loading).toBe(false);
     });
-    expect(result.current.loading).toBe(false);
   });
 
   it('should clear error state on subsequent register call', async () => {
@@ -431,7 +449,9 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(result.current.error).toBeInstanceOf(RegistrationError);
+    await waitFor(() => {
+      expect(result.current.error).toBeInstanceOf(RegistrationError);
+    });
 
     await act(async () => {
       await result.current.register({
