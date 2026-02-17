@@ -1,8 +1,8 @@
-import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import React, { useMemo } from 'react';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { Frequency, frequencies } from '../../utils/recurrenceUtils';
 import styles from './RecurrenceFrequencySection.module.css';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 
 import { InterfaceRecurrenceFrequencySectionProps } from 'types/shared-components/Recurrence/interface';
 /**
@@ -11,9 +11,16 @@ import { InterfaceRecurrenceFrequencySectionProps } from 'types/shared-component
 export const RecurrenceFrequencySection: React.FC<
   InterfaceRecurrenceFrequencySectionProps
 > = ({ frequency, localInterval, onIntervalChange, onFrequencyChange, t }) => {
+  const frequencyOptions = useMemo(() => {
+    return Object.values(Frequency).map((freq) => ({
+      value: freq,
+      label: frequencies[freq],
+    }));
+  }, []);
+
   return (
-    <div className="mb-4">
-      <span className="fw-semibold text-secondary">{t('repeatsEvery')}</span>{' '}
+    <div className={styles.sectionContainer}>
+      <span className={styles.label}>{t('repeatsEvery')}</span>{' '}
       <FormTextField
         name="recurrenceInterval"
         type="number"
@@ -33,55 +40,24 @@ export const RecurrenceFrequencySection: React.FC<
         }}
         required
         placeholder="1"
-        className={`${styles.recurrenceRuleNumberInput} ms-2 d-inline-block py-2`}
+        className={styles.recurrenceRuleNumberInput}
         data-testid="customRecurrenceIntervalInput"
         data-cy="customRecurrenceIntervalInput"
         aria-label={t('repeatsEvery')}
         label={t('repeatsEvery')}
       />
-      <Dropdown className="ms-3 d-inline-block">
-        <Dropdown.Toggle
-          className={`${styles.dropdown}`}
-          variant="outline-secondary"
-          id="dropdown-basic"
-          data-testid="customRecurrenceFrequencyDropdown"
-          data-cy="customRecurrenceFrequencyDropdown"
-          aria-label={t('frequency')}
-        >
-          {frequencies[frequency]}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.DAILY)}
-            data-testid="customDailyRecurrence"
-            data-cy="customDailyRecurrence"
-          >
-            {t('day')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.WEEKLY)}
-            data-testid="customWeeklyRecurrence"
-            data-cy="customWeeklyRecurrence"
-          >
-            {t('week')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.MONTHLY)}
-            data-testid="customMonthlyRecurrence"
-            data-cy="customMonthlyRecurrence"
-          >
-            {t('month')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.YEARLY)}
-            data-testid="customYearlyRecurrence"
-            data-cy="customYearlyRecurrence"
-          >
-            {t('year')}
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <DropDownButton
+        id="dropdown-basic"
+        options={frequencyOptions}
+        selectedValue={frequency}
+        onSelect={(value) => onFrequencyChange(value as Frequency)}
+        variant="outline-secondary"
+        dataTestIdPrefix="customRecurrenceFrequencyDropdown"
+        ariaLabel={t('frequency')}
+        btnStyle="w-100 d-flex justify-content-between align-items-center"
+        menuClassName={styles.dropdownMenu}
+        parentContainerStyle={styles.dropdown}
+      />
     </div>
   );
 };

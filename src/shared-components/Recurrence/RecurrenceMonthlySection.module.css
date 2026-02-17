@@ -1,0 +1,16 @@
+.dropdown {
+  min-width: calc(var(--space-13) + var(--space-2));
+}
+
+.dropdown button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: calc(-1 * (var(--space-2) + var(--space-1)));
+}
+
+.dropdownMenu {
+  width: 100%;
+  min-width: unset;
+}

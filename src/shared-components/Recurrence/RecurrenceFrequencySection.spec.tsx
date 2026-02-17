@@ -29,14 +29,14 @@ describe('RecurrenceFrequencySection', () => {
       screen.getByTestId('customRecurrenceIntervalInput'),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     ).toBeInTheDocument();
   });
 
   it('shows correct frequency label', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     ).toHaveTextContent('Daily');
   });
 
@@ -78,12 +78,22 @@ describe('RecurrenceFrequencySection', () => {
     const user = userEvent.setup();
     render(<RecurrenceFrequencySection {...defaultProps} />);
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
 
-    expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customWeeklyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customMonthlyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customYearlyRecurrence')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
+    ).toBeInTheDocument();
   });
 
   it('selects interval text on double click', async () => {
@@ -101,7 +111,9 @@ describe('RecurrenceFrequencySection', () => {
 
   it('applies aria-label to frequency dropdown', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
-    const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
+    const dropdown = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-toggle',
+    );
     expect(dropdown).toHaveAttribute('aria-label', 'frequency');
   });
 
@@ -115,8 +127,12 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY);
   });
 
@@ -130,8 +146,12 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customDailyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+    );
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.DAILY);
   });
 
@@ -145,8 +165,12 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customMonthlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+    );
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.MONTHLY);
   });
 
@@ -160,8 +184,12 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customYearlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
+    );
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.YEARLY);
   });
 
