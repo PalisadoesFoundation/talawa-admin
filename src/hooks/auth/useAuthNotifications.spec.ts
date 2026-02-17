@@ -1,6 +1,6 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook, cleanup } from '@testing-library/react';
 import type { TFunction } from 'i18next';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { useAuthNotifications } from './useAuthNotifications';
 import type { InterfaceToastConfig } from './useAuthNotifications';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
@@ -28,11 +28,8 @@ const mockT = vi.fn((key: string, opts?: Record<string, unknown>) => {
 
 describe('useAuthNotifications', () => {
   afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   describe('default configuration', () => {
@@ -159,21 +156,32 @@ describe('useAuthNotifications', () => {
   });
 
   describe('showAuthError', () => {
-    it('should show error message from Error object', () => {
+    it('should show generic translated message with safe suffix from Error object', () => {
       const { result } = renderHook(() => useAuthNotifications(mockT));
       const error = new Error('Invalid credentials');
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
 
       result.current.showAuthError(error);
 
+      expect(mockT).toHaveBeenCalledWith('authError');
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Invalid credentials',
+        'Authentication error: Invalid credentials',
         expect.any(Object),
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Authentication error:',
+        error,
       );
     });
 
     it('should show translated fallback when error has empty message', () => {
       const { result } = renderHook(() => useAuthNotifications(mockT));
       const error = new Error('');
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
 
       result.current.showAuthError(error);
 
@@ -181,6 +189,30 @@ describe('useAuthNotifications', () => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         'Authentication error',
         expect.any(Object),
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Authentication error:',
+        error,
+      );
+    });
+
+    it('should not surface sensitive error details in toast message', () => {
+      const { result } = renderHook(() => useAuthNotifications(mockT));
+      const error = new Error('authorization: Bearer secret-token-value');
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      result.current.showAuthError(error);
+
+      expect(mockT).toHaveBeenCalledWith('authError');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Authentication error',
+        expect.any(Object),
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Authentication error:',
+        error,
       );
     });
   });

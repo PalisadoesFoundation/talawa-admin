@@ -6,9 +6,12 @@
 
 > **useAuthNotifications**(`t`, `config`): `object`
 
-Defined in: [src/hooks/auth/useAuthNotifications.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useAuthNotifications.ts#L18)
+Defined in: [src/hooks/auth/useAuthNotifications.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useAuthNotifications.ts#L55)
 
 Hook providing standardized toast notifications for auth flows with i18n support.
+
+Uses the `use` prefix to follow the auth hooks naming convention (`useRegistration`,
+`useAuthNotifications`, etc.).
 
 ## Parameters
 
