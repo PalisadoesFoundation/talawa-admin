@@ -311,6 +311,7 @@
   "previousYear": "Previous Year",
   "nextYear": "Next Year",
   "navigateToProfile": "Navigate to profile",
+  "monthlyOn": "Monthly on",
   "loginSuccess": "Welcome!",
   "loginSuccessWithName": "Welcome, {{name}}!",
   "signupSuccess": "Registration successful!",

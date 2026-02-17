@@ -1769,7 +1769,6 @@
     "doesNotRepeat": "पुनरावृत्ति नहीं होती",
     "daily": "दैनिक",
     "weeklyOn": "हर सप्ताह {{day}} को",
-    "monthlyOn": "हर माह",
     "monthlyOnDay": "हर माह की {{day}} तारीख को",
     "annuallyOn": "प्रतिवर्ष {{day}} {{month}} को",
     "everyWeekday": "हर कार्यदिवस (सोम–शुक्र)",
