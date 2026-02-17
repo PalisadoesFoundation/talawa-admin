@@ -3,6 +3,7 @@ import type {
   GridColDef,
   GridCellParams,
 } from 'shared-components/DataGridWrapper';
+import type { SpacingToken } from '../../utils/tokenValues';
 
 export type ReportingRow = Record<string, unknown>;
 type ReportingCellParams = GridCellParams<ReportingRow, ReportingRow, string>;
@@ -12,13 +13,19 @@ type ReportingCellParams = GridCellParams<ReportingRow, ReportingRow, string>;
  * App-level column shape used across the app. It's a thin composition over
  * MUI's `GridColDef` exposing the props we use commonly in screen files.
  */
-export type ReportingTableColumn = Partial<GridColDef> & {
+export type ReportingTableColumn = Partial<
+  Omit<GridColDef, 'width' | 'minWidth' | 'maxWidth'>
+> & {
   /** Unique field id for the column (required) */
   field: string;
   /** Header name for the column */
   headerName?: string;
-  /** Minimum width for the column */
-  minWidth?: number;
+  /** Column width - accepts number (pixels) or spacing token name */
+  width?: number | SpacingToken;
+  /** Minimum width for the column - accepts number (pixels) or spacing token name */
+  minWidth?: number | SpacingToken;
+  /** Maximum width for the column - accepts number (pixels) or spacing token name */
+  maxWidth?: number | SpacingToken;
   /** Alignment for the column content */
   align?: 'left' | 'center' | 'right';
   /** Alignment for the column header */

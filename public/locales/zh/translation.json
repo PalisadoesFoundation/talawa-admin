@@ -196,7 +196,8 @@
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
-    "logout": "登出"
+    "logout": "登出",
+    "notAvailable": "不可用"
   },
   "leftDrawerOrg": {
     "Dashboard": "仪表板",

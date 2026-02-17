@@ -201,7 +201,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
     "users": "Users",
-    "logout": "logout"
+    "logout": "logout",
+    "notAvailable": "N/A"
   },
   "leftDrawerOrg": {
     "Dashboard": "Dashboard",
