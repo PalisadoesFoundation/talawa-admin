@@ -37,13 +37,19 @@ describe('EventManager Coverage Suite', () => {
       expect(manager.getListenerCount('multi:event')).toBe(2);
     });
 
-    it('creates event entry when registering a new event', () => {
-      const cb = vi.fn();
+    it('registers multiple distinct events and tracks them independently', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
 
-      manager.on('broken:event', cb);
+      manager.on('broken:event', cb1);
+      manager.on('another:event', cb2);
 
-      expect(manager.getEvents()).toContain('broken:event');
+      const events = manager.getEvents();
+
+      expect(events).toContain('broken:event');
+      expect(events).toContain('another:event');
       expect(manager.getListenerCount('broken:event')).toBe(1);
+      expect(manager.getListenerCount('another:event')).toBe(1);
     });
 
     it('logs error when event name is invalid', () => {
