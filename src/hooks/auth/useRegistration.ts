@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
@@ -65,20 +66,26 @@ export const useRegistration = ({
   onError,
 }: IUseRegistrationProps) => {
   const [signup, { loading }] = useMutation(SIGNUP_MUTATION);
+  const [error, setError] = useState<Error | null>(null);
 
   const register = async (data: IRegisterInput): Promise<void> => {
+    setError(null);
     try {
       if (!data.name?.trim() || !data.email?.trim() || !data.password?.trim()) {
-        onError?.(
-          new RegistrationError(RegistrationErrorCode.MISSING_REQUIRED_FIELDS),
+        const err = new RegistrationError(
+          RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
         );
+        setError(err);
+        onError?.(err);
         return;
       }
       const organizationId = data.organizationId?.trim();
       if (!organizationId) {
-        onError?.(
-          new RegistrationError(RegistrationErrorCode.MISSING_ORGANIZATION_ID),
+        const err = new RegistrationError(
+          RegistrationErrorCode.MISSING_ORGANIZATION_ID,
         );
+        setError(err);
+        onError?.(err);
         return;
       }
       const { data: signUpData } = await signup({
@@ -98,10 +105,12 @@ export const useRegistration = ({
           email: data.email,
         });
       }
-    } catch (error) {
-      onError?.(error as Error);
+    } catch (caughtError) {
+      const err = caughtError as Error;
+      setError(err);
+      onError?.(err);
     }
   };
 
-  return { register, loading };
+  return { register, loading, error };
 };

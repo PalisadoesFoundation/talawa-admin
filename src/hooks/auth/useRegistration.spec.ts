@@ -71,6 +71,7 @@ describe('useRegistration', () => {
     );
 
     expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
 
     await act(async () => {
       await result.current.register({
@@ -89,9 +90,10 @@ describe('useRegistration', () => {
       expect(call.email).toBe('test@example.com');
     });
     expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeNull();
   });
 
-  it('should handle registration error', async () => {
+  it('should handle registration error and set error state', async () => {
     const mockOnError = vi.fn();
     const { result } = renderHook(
       () => useRegistration({ onError: mockOnError }),
@@ -113,6 +115,7 @@ describe('useRegistration', () => {
       expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
     });
     expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeInstanceOf(Error);
   });
 
   it('should handle registration without callbacks', async () => {
@@ -134,7 +137,7 @@ describe('useRegistration', () => {
     });
   });
 
-  it('should handle error without onError callback', async () => {
+  it('should set error state even without onError callback', async () => {
     const { result } = renderHook(() => useRegistration({}), {
       wrapper: createWrapper(ERROR_MOCK),
     });
@@ -151,6 +154,7 @@ describe('useRegistration', () => {
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
+    expect(result.current.error).toBeInstanceOf(Error);
   });
 
   it('should set loading state during registration', async () => {
@@ -199,6 +203,7 @@ describe('useRegistration', () => {
       RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
     );
     expect(result.current.loading).toBe(false);
+    expect(result.current.error).toBeInstanceOf(RegistrationError);
 
     await act(async () => {
       await result.current.register({
@@ -408,5 +413,37 @@ describe('useRegistration', () => {
       expect(mockOnSuccess).toHaveBeenCalledTimes(1);
     });
     expect(result.current.loading).toBe(false);
+  });
+
+  it('should clear error state on subsequent register call', async () => {
+    const mockOnError = vi.fn();
+    const { result } = renderHook(
+      () => useRegistration({ onError: mockOnError }),
+      { wrapper: createWrapper(SUCCESS_MOCK) },
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: '',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(result.current.error).toBeInstanceOf(RegistrationError);
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.error).toBeNull();
+    });
   });
 });

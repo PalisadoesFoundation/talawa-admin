@@ -38,6 +38,7 @@ describe('RegistrationForm', () => {
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegister,
       loading: false,
+      error: null,
     });
     vi.resetModules();
   });
@@ -180,6 +181,7 @@ describe('RegistrationForm', () => {
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegister,
       loading: true,
+      error: null,
     });
 
     renderComponent();
@@ -256,6 +258,7 @@ describe('RegistrationForm', () => {
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegisterWithCallback,
       loading: false,
+      error: null,
     });
 
     renderComponent({ onSuccess: mockCallback });
@@ -333,6 +336,7 @@ describe('RegistrationForm', () => {
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegister,
       loading: false,
+      error: null,
     });
 
     renderComponent({ onError: mockOnError });
