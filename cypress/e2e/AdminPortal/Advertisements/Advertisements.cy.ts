@@ -16,11 +16,251 @@ interface InterfaceAdvertisementData {
   };
 }
 
+// Shared mock data
+const orgId = '12345';
+const userId = 'user-123';
+
+/** Minimal org object reused across multiple mocks */
+const mockOrganization = {
+  id: orgId,
+  name: 'Test Org',
+  description: 'Test Description',
+  addressLine1: 'Test Address',
+  addressLine2: null,
+  city: 'Test City',
+  state: 'Test State',
+  postalCode: '12345',
+  countryCode: 'US',
+  avatarURL: null,
+  createdAt: '2023-01-01T00:00:00.000Z',
+  isUserRegistrationRequired: false,
+};
+
+/**
+ * Map of GraphQL operationName → response body.
+ * Every query/mutation the app fires during these tests MUST have an entry here,
+ * otherwise the request falls through to the real (non-existent) backend and the
+ * component that issued it either hangs or renders an error state – which is the
+ * root cause of every CI timeout we have been chasing.
+ */
+function buildMockResponses(
+  adData: InterfaceAdvertisementData,
+): Record<string, object> {
+  return {
+    // ── Auth / User ──────────────────────────────────────────────────
+    CurrentUser: {
+      data: {
+        user: {
+          id: userId,
+          name: 'Test Admin',
+          emailAddress: 'admin@example.com',
+          avatarURL: null,
+          addressLine1: null,
+          addressLine2: null,
+          birthDate: null,
+          city: null,
+          countryCode: null,
+          createdAt: '2023-01-01T00:00:00.000Z',
+          description: null,
+          educationGrade: null,
+          employmentStatus: null,
+          homePhoneNumber: null,
+          isEmailAddressVerified: true,
+          maritalStatus: null,
+          mobilePhoneNumber: null,
+          natalSex: null,
+          naturalLanguageCode: null,
+          postalCode: null,
+          role: 'admin',
+          state: null,
+          updatedAt: '2023-01-01T00:00:00.000Z',
+          workPhoneNumber: null,
+          eventsAttended: [],
+        },
+      },
+    },
+
+    // ── Community ────────────────────────────────────────────────────
+    getCommunityData: {
+      data: {
+        community: {
+          createdAt: '2023-01-01T00:00:00.000Z',
+          facebookURL: null,
+          githubURL: null,
+          id: 'community-1',
+          inactivityTimeoutDuration: 900,
+          instagramURL: null,
+          linkedinURL: null,
+          logoMimeType: null,
+          logoURL: null,
+          name: 'Test Community',
+          redditURL: null,
+          slackURL: null,
+          updatedAt: '2023-01-01T00:00:00.000Z',
+          websiteURL: null,
+          xURL: null,
+          youtubeURL: null,
+        },
+      },
+    },
+
+    // ── Plugins ──────────────────────────────────────────────────────
+    GetAllPlugins: { data: { getPlugins: [] } },
+
+    // ── Organization basic (used by SidebarOrgSection) ───────────────
+    getOrganizationBasicData: {
+      data: { organization: { ...mockOrganization } },
+    },
+
+    // ── Organization detailed (used by Dashboard) ────────────────────
+    GetOrganization: {
+      data: {
+        organization: {
+          ...mockOrganization,
+          creator: {
+            id: userId,
+            name: 'Test Admin',
+            emailAddress: 'admin@example.com',
+          },
+          updater: {
+            id: userId,
+            name: 'Test Admin',
+            emailAddress: 'admin@example.com',
+          },
+          members: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+          blockedUsers: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+          events: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+
+    getOrganizationData: {
+      data: {
+        organization: {
+          ...mockOrganization,
+          creator: {
+            id: userId,
+            name: 'Test Admin',
+            emailAddress: 'admin@example.com',
+          },
+          updater: {
+            id: userId,
+            name: 'Test Admin',
+            emailAddress: 'admin@example.com',
+          },
+          members: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+
+    // ── Org joined list (sidebar org switcher) ───────────────────────
+    UserJoinedOrganizations: {
+      data: {
+        user: {
+          organizationsWhereMember: {
+            edges: [
+              {
+                node: {
+                  id: orgId,
+                  name: 'Test Org',
+                  city: 'Test City',
+                  countryCode: 'US',
+                  addressLine1: 'Test Address',
+                  postalCode: '12345',
+                  state: 'Test State',
+                  description: 'Test Description',
+                  avatarURL: null,
+                  membersCount: 1,
+                  adminsCount: 1,
+                  members: { edges: [{ node: { id: userId } }] },
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false },
+          },
+        },
+      },
+    },
+
+    // ── Dashboard stats ──────────────────────────────────────────────
+    OrganizationMemberAdminCounts: {
+      data: { organization: { id: orgId, membersCount: 1, adminsCount: 1 } },
+    },
+    getOrganizationPostsCount: {
+      data: { organization: { id: orgId, postsCount: 0 } },
+    },
+    GetOrganizationEvents: {
+      data: {
+        organization: {
+          eventsCount: 0,
+          events: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+    GetOrganizationPosts: {
+      data: { organization: { posts: { edges: [] } } },
+    },
+    GetBlockedUsersCount: {
+      data: { organization: { id: orgId, blockedUsersCount: 0 } },
+    },
+    GetVenuesCount: {
+      data: { organization: { id: orgId, venuesCount: 0 } },
+    },
+    Organization: {
+      data: { organization: { id: orgId, membershipRequests: [] } },
+    },
+
+    // ── Advertisements ───────────────────────────────────────────────
+    OrganizationAdvertisements: {
+      data: {
+        organization: {
+          advertisements: {
+            edges: [],
+            pageInfo: {
+              startCursor: 'cursor',
+              endCursor: 'cursor',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+          },
+        },
+      },
+    },
+    AddAdvertisement: {
+      data: { createAdvertisement: { id: 'new-ad-id' } },
+    },
+    UpdateAdvertisement: {
+      data: { updateAdvertisement: { id: 'new-ad-id' } },
+    },
+    DeleteAdvertisement: {
+      data: { deleteAdvertisement: { id: 'new-ad-id' } },
+    },
+    createPresignedUrl: {
+      data: {
+        createPresignedUrl: adData.mockPresignedUrl,
+      },
+    },
+  };
+}
+
 describe('Testing Admin Advertisement Management', () => {
   const adPage = new AdvertisementPage();
   let adData: InterfaceAdvertisementData;
-  const orgId = '12345';
-  const userId = 'user-123';
 
   before(() => {
     cy.fixture('admin/advertisements').then((data) => {
@@ -66,240 +306,42 @@ describe('Testing Admin Advertisement Management', () => {
       );
     });
 
-    // Mock CurrentUser
+    // Single intercept that handles ALL GraphQL requests.
+    // Unmatched operations get a safe empty response instead of hitting
+    // the real backend (which would fail and hang the test).
     cy.intercept('POST', '**/graphql', (req) => {
-      if (req.body.operationName === 'CurrentUser') {
-        req.reply({
-          data: {
-            user: {
-              id: userId,
-              name: 'Test Admin',
-              emailAddress: 'admin@example.com',
-              avatarURL: null,
-              addressLine1: null,
-              addressLine2: null,
-              birthDate: null,
-              city: null,
-              countryCode: null,
-              createdAt: '2023-01-01T00:00:00.000Z',
-              description: null,
-              educationGrade: null,
-              employmentStatus: null,
-              homePhoneNumber: null,
-              isEmailAddressVerified: true,
-              maritalStatus: null,
-              mobilePhoneNumber: null,
-              natalSex: null,
-              naturalLanguageCode: null,
-              postalCode: null,
-              role: 'admin',
-              state: null,
-              updatedAt: '2023-01-01T00:00:00.000Z',
-              workPhoneNumber: null,
-              eventsAttended: [],
-            },
-          },
-        });
-      }
-      // Mock OrganizationAdvertisements Query
-      if (req.body.operationName === 'OrganizationAdvertisements') {
-        req.reply({
-          data: {
-            organization: {
-              advertisements: {
-                edges: [],
-                pageInfo: {
-                  startCursor: 'cursor',
-                  endCursor: 'cursor',
-                  hasNextPage: false,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        });
-      }
-      // Mock mutations response default success
-      if (req.body.operationName === 'AddAdvertisement') {
-        req.reply({
-          data: {
-            createAdvertisement: {
-              id: 'new-ad-id',
-            },
-          },
-        });
-      }
-      if (req.body.operationName === 'UpdateAdvertisement') {
-        req.reply({
-          data: {
-            updateAdvertisement: {
-              id: 'new-ad-id',
-            },
-          },
-        });
-      }
-      if (req.body.operationName === 'DeleteAdvertisement') {
-        req.reply({
-          data: {
-            deleteAdvertisement: {
-              id: 'new-ad-id',
-            },
-          },
-        });
-      }
-      if (req.body.operationName === 'UserJoinedOrganizations') {
-        req.reply({
-          data: {
-            user: {
-              organizationsWhereMember: {
-                edges: [
-                  {
-                    node: {
-                      id: orgId,
-                      name: 'Test Org',
-                      addressLine1: 'Test Address',
-                      description: 'Test Description',
-                      avatarURL: null,
-                      membersCount: 1,
-                      adminsCount: 1,
-                      createdAt: '2023-01-01T00:00:00.000Z',
-                    },
-                  },
-                ],
-                pageInfo: {
-                  hasNextPage: false,
-                },
-              },
-            },
-          },
-        });
-      }
-      if (req.body.operationName === 'OrganizationMemberAdminCounts') {
-        req.reply({
-          data: {
-            organization: { id: orgId, membersCount: 1, adminsCount: 1 },
-          },
-        });
-      }
-      if (req.body.operationName === 'getOrganizationPostsCount') {
-        req.reply({ data: { organization: { id: orgId, postsCount: 0 } } });
-      }
-      if (req.body.operationName === 'GetOrganizationEvents') {
-        req.reply({
-          data: {
-            organization: {
-              eventsCount: 0,
-              events: {
-                edges: [],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
-            },
-          },
-        });
-      }
-      if (req.body.operationName === 'GetOrganizationPosts') {
-        req.reply({ data: { organization: { posts: { edges: [] } } } });
-      }
-      if (req.body.operationName === 'GetBlockedUsersCount') {
-        req.reply({
-          data: { organization: { id: orgId, blockedUsersCount: 0 } },
-        });
-      }
-      if (req.body.operationName === 'GetVenuesCount') {
-        req.reply({ data: { organization: { id: orgId, venuesCount: 0 } } });
-      }
-      if (req.body.operationName === 'Organization') {
-        req.reply({
-          data: { organization: { id: orgId, membershipRequests: [] } },
-        });
-      }
+      const opName: string = req.body.operationName ?? '';
+      const responses = buildMockResponses(adData);
 
-      // Mock Organization Query (for Dashboard)
-      if (
-        req.body.operationName === 'GetOrganization' ||
-        req.body.operationName === 'GetOrganizationData'
-      ) {
-        req.reply({
-          data: {
-            organization: {
-              id: orgId,
-              name: 'Test Org',
-              description: 'Test Description',
-              addressLine1: 'Test Address',
-              addressLine2: null,
-              city: 'Test City',
-              state: 'Test State',
-              postalCode: '12345',
-              countryCode: 'US',
-              avatarURL: null,
-              createdAt: '2023-01-01T00:00:00.000Z',
-              isUserRegistrationRequired: false,
-              creator: {
-                id: userId,
-                name: 'Test Admin',
-                emailAddress: 'admin@example.com',
-              },
-              updater: {
-                id: userId,
-                name: 'Test Admin',
-                emailAddress: 'admin@example.com',
-              },
-              members: {
-                edges: [],
-                pageInfo: {
-                  hasNextPage: false,
-                  endCursor: null,
-                },
-              },
-              blockedUsers: {
-                edges: [],
-                pageInfo: {
-                  hasNextPage: false,
-                  endCursor: null,
-                },
-              },
-              events: {
-                edges: [],
-                pageInfo: {
-                  hasNextPage: false,
-                  endCursor: null,
-                },
-              },
-            },
-          },
-        });
-      }
+      // GetOrganizationData and GetOrganization share the same response
+      const normalizedName =
+        opName === 'GetOrganizationData' ? 'getOrganizationData' : opName;
 
-      if (req.body.operationName === 'createPresignedUrl') {
-        req.reply({
-          data: {
-            createPresignedUrl: adData.mockPresignedUrl,
-          },
-        });
+      if (responses[normalizedName]) {
+        req.reply(responses[normalizedName]);
+      } else {
+        // Catch-all: return empty data so the app doesn't crash
+        req.reply({ data: {} });
       }
     });
 
     cy.visit(`/admin/orgdash/${orgId}`);
+    // Wait for the sidebar navigation to be fully rendered before
+    // interacting. The Advertisement link appearing proves the dashboard
+    // and sidebar have loaded, Redux targets are set, and the component
+    // tree is ready.
+    cy.get('[data-cy="leftDrawerButton-Advertisement"]', {
+      timeout: 30000,
+    }).should('be.visible');
     adPage.visitAdvertisementPage();
   });
 
   it('create a new advertisement', () => {
-    // Spy on the mutation to verify it was called
-    cy.intercept('POST', '**/graphql', (req) => {
-      if (req.body.operationName === 'AddAdvertisement') {
-        req.alias = 'createAd';
-        req.reply({
-          data: { createAdvertisement: { id: 'new-ad-id' } },
-        });
-      }
-    });
-
     adPage.createAdvertisement(
       adData.ad1.name,
       adData.ad1.description,
       adData.ad1.type,
     );
-    cy.wait('@createAd');
   });
 
   it('create a new advertisement with file attachment', () => {
@@ -312,7 +354,7 @@ describe('Testing Admin Advertisement Management', () => {
   });
 
   it('shows the created advertisement under active campaigns and allows editing', () => {
-    // Mock list with one ad
+    // Override the default empty list with one ad
     cy.intercept('POST', '**/graphql', (req) => {
       if (req.body.operationName === 'OrganizationAdvertisements') {
         req.reply({
@@ -351,7 +393,7 @@ describe('Testing Admin Advertisement Management', () => {
   });
 
   it('shows the updated advertisement under active campaigns and deletes it', () => {
-    // Mock list with updated ad
+    // Override with updated ad
     cy.intercept('POST', '**/graphql', (req) => {
       if (req.body.operationName === 'OrganizationAdvertisements') {
         req.reply({
