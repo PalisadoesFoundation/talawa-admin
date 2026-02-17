@@ -28,6 +28,7 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Button from 'shared-components/Button';
 import type { InterfaceAddPeopleToTagProps } from 'types/AdminPortal/Tag/interface';
 
 const TEST_IDS = {
@@ -52,14 +53,14 @@ const MockAddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           <h2 id="modal-title" className="sr-only">
             {t('addPeopleToTag')}
           </h2>
-          <button
+          <Button
             type="button"
             data-testid={TEST_IDS.CLOSE_BUTTON}
             onClick={hideAddPeopleToTagModal}
             aria-label={tCommon('closeModal')}
           >
             {tCommon('close')}
-          </button>
+          </Button>
         </div>
       )}
     </>
