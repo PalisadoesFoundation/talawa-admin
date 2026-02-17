@@ -30,21 +30,8 @@ import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from './SidebarOrgSection.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/shared-components/SidebarOrgSection/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-
-interface IOrganizationData {
-  id: string;
-  name: string;
-  description?: string | null;
-  addressLine1?: string | null;
-  addressLine2?: string | null;
-  city?: string | null;
-  state?: string | null;
-  postalCode?: string | null;
-  countryCode?: string | null;
-  avatarURL?: string | null;
-  createdAt: string;
-  isUserRegistrationRequired?: boolean;
-}
+import { IOrganizationData } from '../../types/shared-components/SidebarOrgSection/interface';
+import Button from 'shared-components/Button';
 
 const SidebarOrgSection = ({
   orgId,
@@ -67,14 +54,14 @@ const SidebarOrgSection = ({
   return (
     <div className={`${styles.organizationContainer} pe-3`}>
       {loading ? (
-        <button
+        <Button
           className={`${styles.profileContainer} shimmer`}
           data-testid="orgBtn"
           type="button"
         />
       ) : !data?.organization ? (
         !isProfilePage && (
-          <button
+          <Button
             type="button"
             className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
             disabled
@@ -84,10 +71,10 @@ const SidebarOrgSection = ({
               <WarningAmberOutlined />
             </div>
             {tErrors('errorLoading', { entity: 'Organization' })}
-          </button>
+          </Button>
         )
       ) : (
-        <button
+        <Button
           type="button"
           className={styles.profileContainer}
           data-testid="OrgBtn"
@@ -114,7 +101,7 @@ const SidebarOrgSection = ({
               <AngleRightIcon fill={'var(--bs-secondary)'} />
             </div>
           </div>
-        </button>
+        </Button>
       )}
     </div>
   );
