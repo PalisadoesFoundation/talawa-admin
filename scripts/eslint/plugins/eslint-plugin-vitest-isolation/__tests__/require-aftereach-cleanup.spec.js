@@ -255,9 +255,9 @@ vi.fn();`,
       errors: [{ messageId: 'missingAfterEach' }],
       output: `
     describe('empty', () => {
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
+      afterEach(() => {
+        vi.clearAllMocks();
+      });
 
     });
     vi.fn();

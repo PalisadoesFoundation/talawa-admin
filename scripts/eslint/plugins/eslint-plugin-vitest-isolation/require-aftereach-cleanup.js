@@ -229,20 +229,31 @@ module.exports = {
                                         }
                                     } else {
                                         // Get indentation from describe callback opening brace
-                                        const descLineStart = sourceCode.getIndexFromLoc({ line: callback.body.loc.start.line + 1, column: 0 });
+                                        // For empty describe blocks, we need to determine the proper indentation
                                         const nextLineStart = sourceCode.text.indexOf('\n', callback.body.range[0]) + 1;
                                         if (nextLineStart > 0 && nextLineStart < sourceCode.text.length) {
                                             const leadingMatch = sourceCode.text.substring(nextLineStart).match(/^(\s+)/);
                                             if (leadingMatch) {
                                                 baseIndent = leadingMatch[1];
 
-                                                // If the next line is the closing brace/parenthesis, we've captured the outer indentation.
-                                                // We need to add one level of indentation for the inner content.
+                                                // Check if the closing brace is at the parent's indentation level
+                                                // (indicating the block is empty and improperly formatted)
                                                 const nextLineEnd = sourceCode.text.indexOf('\n', nextLineStart);
                                                 const lineContent = sourceCode.text.substring(nextLineStart, nextLineEnd !== -1 ? nextLineEnd : undefined).trim();
 
                                                 if (lineContent.startsWith('}') || lineContent.startsWith('})')) {
-                                                    baseIndent += '  ';
+                                                    // Get the indentation of the describe line itself
+                                                    const describeLineStart = sourceCode.getIndexFromLoc({ line: firstDescribe.loc.start.line, column: 0 });
+                                                    const describeStart = firstDescribe.range[0];
+                                                    const describeLeadingText = sourceCode.text.substring(describeLineStart, describeStart);
+                                                    const describeMatch = describeLeadingText.match(/^(\s+)/);
+                                                    const describeIndent = describeMatch ? describeMatch[1] : '';
+
+                                                    // If closing brace indentation matches describe indentation,
+                                                    // we need to add one level of indentation for inner content
+                                                    if (baseIndent === describeIndent) {
+                                                        baseIndent += '  ';
+                                                    }
                                                 }
                                             }
                                         }
@@ -371,21 +382,37 @@ module.exports = {
                                         if (matchTrailing) {
                                             // Replace the trailing whitespace with our new code
                                             const whitespaceStart = closingBrace - matchTrailing[1].length;
-                                            return fixer.replaceTextRange([whitespaceStart, closingBrace], `\n\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                            // Check if there's a single space (inline block) - preserve it
+                                            const isInlineBlock = matchTrailing[1] === ' ';
+                                            if (isInlineBlock) {
+                                                // For inline blocks, insert before the space, keeping it intact
+                                                // This preserves "statement; " and adds "\ncleanup;\n}"
+                                                return fixer.replaceTextRange([whitespaceStart, closingBrace], ` \n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                            } else {
+                                                // For multiline blocks, replace trailing whitespace with blank line
+                                                return fixer.replaceTextRange([whitespaceStart, closingBrace], `\n\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                            }
                                         } else {
                                             return fixer.insertTextBeforeRange([closingBrace, closingBrace], `\n\n${stmtIndent}vi.clearAllMocks();${braceIndent}`);
                                         }
                                     } else {
-                                        // Replace the whitespace to ensure clean formatting (avoid double newlines)
-                                        // Preserve any trailing spaces on the same line as the statement
-                                        const matchPrefix = textBetween.match(/^([^\n\r]*)/);
-                                        const prefix = matchPrefix ? matchPrefix[1] : '';
+                                        // Replace the whitespace to ensure clean formatting
+                                        // Extract just the indentation part from braceIndent (without the leading newline)
+                                        const braceIndentOnly = braceIndent.replace(/^\n/, '');
+                                        
+                                        let replacement;
+                                        if (bodyStatements.length > 0 && !textBetween.includes('\n')) {
+                                            // Inline block (e.g. `{ stmt; }`) - preserve trailing whitespace, single newline
+                                            replacement = `${textBetween}\n${stmtIndent}vi.clearAllMocks();${braceIndent}`;
+                                        } else if (bodyStatements.length > 0) {
+                                            // Multiline block with statements - add a blank line before cleanup
+                                            replacement = `\n${braceIndentOnly}\n${stmtIndent}vi.clearAllMocks();${braceIndent}`;
+                                        } else {
+                                            // Empty body - just add the cleanup without a blank line
+                                            replacement = `\n${stmtIndent}vi.clearAllMocks();${braceIndent}`;
+                                        }
 
-                                        // Preserve vertical limits (blank lines)
-                                        const newlineCount = (textBetween.match(/\n/g) || []).length;
-                                        const separator = newlineCount >= 1 ? '\n\n' : '\n';
-
-                                        return fixer.replaceTextRange([rangeStart, rangeEnd], `${prefix}${separator}${stmtIndent}vi.clearAllMocks();${braceIndent}`);
+                                        return fixer.replaceTextRange([rangeStart, rangeEnd], replacement);
                                     }
                                 } else {
                                     // Single expression arrow function - would need to convert to block

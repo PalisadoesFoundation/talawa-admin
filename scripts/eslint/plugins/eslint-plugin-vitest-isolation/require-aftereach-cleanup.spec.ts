@@ -149,7 +149,7 @@ ruleTester.run('require-aftereach-cleanup', rule, {
           describe('test', () => {
             afterEach(() => {
               console.log('cleanup');
-
+            
               vi.clearAllMocks();
             });
             it('should work', () => {
