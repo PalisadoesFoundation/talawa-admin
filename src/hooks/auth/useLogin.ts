@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { SIGNIN_QUERY } from 'GraphQl/Queries/Queries';
 import type { InterfaceSignInResult } from 'types/Auth/LoginForm/interface';
@@ -33,6 +33,12 @@ export const useLogin = (opts?: IUseLoginOptions) => {
     signIn: InterfaceSignInResult;
   }>(SIGNIN_QUERY, { fetchPolicy: 'network-only' });
 
+  // Stabilize callbacks with ref to prevent login recreation on every render
+  const optsRef = useRef(opts);
+  useEffect(() => {
+    optsRef.current = opts;
+  }, [opts]);
+
   const login = useCallback(
     async (credentials: ILoginCredentials): Promise<InterfaceSignInResult> => {
       setLoading(true);
@@ -53,20 +59,20 @@ export const useLogin = (opts?: IUseLoginOptions) => {
         }
 
         const result: InterfaceSignInResult = data.signIn;
-        opts?.onSuccess?.(result);
+        optsRef.current?.onSuccess?.(result);
         return result;
       } catch (e: unknown) {
         const err = new Error((e as Error)?.message ?? 'Login failed', {
           cause: e,
         });
         setError(err);
-        opts?.onError?.(err);
+        optsRef.current?.onError?.(err);
         throw err;
       } finally {
         setLoading(false);
       }
     },
-    [signin, opts],
+    [signin],
   );
 
   return { login, loading, error };
