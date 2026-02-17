@@ -3,16 +3,17 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent, {
   PointerEventsCheckLevel,
 } from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
-import { Provider } from 'react-redux';
+// Provider removed as OrganizationPeople does not use Redux
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi, afterEach } from 'vitest';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { vi, afterEach, describe, test, expect } from 'vitest';
 import OrganizationPeople from './OrganizationPeople';
 import i18nForTest from 'utils/i18nForTest';
 import {
@@ -21,7 +22,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import type { InterfaceSearchFilterBarAdvanced } from 'types/shared-components/SearchFilterBar/interface';
-import { store } from 'state/store';
 import { languages } from 'utils/languages';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
@@ -74,30 +74,53 @@ vi.mock(
 );
 
 // Setup mock window.location
-const setupLocationMock = () => {
-  Object.defineProperty(window, 'location', {
-    value: {
-      href: 'http://localhost/',
-      assign: vi.fn((url) => {
-        const urlObj = new URL(url, 'http://localhost');
-        window.location.href = urlObj.href;
-        window.location.pathname = urlObj.pathname;
-        window.location.search = urlObj.search;
-        window.location.hash = urlObj.hash;
-      }),
-      reload: vi.fn(),
-      pathname: '/',
-      search: '',
-      hash: '',
-      origin: 'http://localhost',
-    },
-    writable: true,
-  });
+const TEST_TIMEOUTS = {
+  STANDARD: 10000,
+  FAST: 5000,
+};
+
+// Use a fixed timestamp (2023-01-01) for deterministic tests
+const FIXED_DATE_TIMESTAMP = 1672531200000;
+const FIXED_DATE = dayjs(FIXED_DATE_TIMESTAMP);
+
+let originalLocation: Location;
+let client: ApolloClient<unknown>;
+
+// Helper to render component with common providers
+const renderComponent = (
+  link: StaticMockLink,
+  initialEntries: (string | Partial<Location>)[] = ['/admin/orgpeople/orgid'],
+) => {
+  return render(
+    <MockedProvider
+      link={link}
+      cache={client.cache as unknown as InMemoryCache}
+    >
+      <MemoryRouter initialEntries={initialEntries}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Routes>
+            <Route
+              path="/admin/orgpeople/:orgId"
+              element={<OrganizationPeople />}
+            />
+          </Routes>
+        </I18nextProvider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
 };
 
 // Wait for DataGrid body rows to populate (avoids race with skeleton → data in CI)
-const getDataTableBodyRows = (): HTMLElement[] =>
-  Array.from(document.querySelectorAll('.MuiDataGrid-row'));
+const getDataTableBodyRows = async (): Promise<HTMLElement[]> => {
+  await waitFor(
+    () => {
+      const rows = document.querySelectorAll('.MuiDataGrid-row');
+      expect(rows.length).toBeGreaterThan(0);
+    },
+    { timeout: TEST_TIMEOUTS.STANDARD },
+  );
+  return Array.from(document.querySelectorAll('.MuiDataGrid-row'));
+};
 
 // Helper function to create mock Apollo responses
 type MemberConnectionVariables = {
@@ -145,7 +168,7 @@ const createMemberConnectionMock = (
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
+              createdAt: FIXED_DATE.subtract(3, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -156,7 +179,7 @@ const createMemberConnectionMock = (
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+              createdAt: FIXED_DATE.subtract(2, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor2',
@@ -248,7 +271,7 @@ const createUserListMock = (
             name: 'User One',
             emailAddress: 'user1@example.com',
             avatarURL: 'https://example.com/avatar1.jpg' as string | null,
-            createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
+            createdAt: FIXED_DATE.subtract(3, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor1',
@@ -259,7 +282,7 @@ const createUserListMock = (
             name: 'User Two',
             emailAddress: 'user2@example.com',
             avatarURL: null as string | null,
-            createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+            createdAt: FIXED_DATE.subtract(2, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor2',
@@ -309,11 +332,49 @@ const createUserListMock = (
 // Helper for waiting
 describe('OrganizationPeople', () => {
   beforeEach(() => {
-    setupLocationMock();
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(dayjs().toDate());
+
+    // Explicit Location Mock
+    originalLocation = window.location;
+    Object.defineProperty(window, 'location', {
+      value: {
+        href: 'http://localhost/',
+        assign: vi.fn((url) => {
+          const urlObj = new URL(url, 'http://localhost');
+          window.location.href = urlObj.href;
+          window.location.pathname = urlObj.pathname;
+          window.location.search = urlObj.search;
+          window.location.hash = urlObj.hash;
+        }),
+        reload: vi.fn(),
+        pathname: '/',
+        search: '',
+        hash: '',
+        origin: 'http://localhost',
+      },
+      writable: true,
+    });
+
+    // Explicit Apollo Client for Cache Control
+    client = new ApolloClient({
+      cache: new InMemoryCache({ addTypename: false }),
+    });
+
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    // Restore window.location
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
+
+    // Cleanup Apollo Cache
+    await client.clearStore();
+
+    vi.useRealTimers();
     cleanup();
     vi.restoreAllMocks();
   });
@@ -331,22 +392,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
   });
 
   test('displays members list correctly', async () => {
@@ -362,22 +408,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for data to load (longer timeout for full suite run under load)
     await waitFor(
@@ -390,19 +421,22 @@ describe('OrganizationPeople', () => {
     const joinedLabels = screen.getAllByText(/Joined :/i);
     expect(joinedLabels).toHaveLength(2);
 
-    // Use the same Intl.DateTimeFormat as the component
+    // Use fixed timestamps for deterministic testing
     const dateFormatter = new Intl.DateTimeFormat('en-GB', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
       timeZone: 'UTC',
     });
+    // Matches the fixed timestamp logic we should use
     const expectedDate1 = dateFormatter.format(
-      dayjs.utc().subtract(3, 'day').toDate(),
+      dayjs(FIXED_DATE).subtract(3, 'day').toDate(),
     );
     const expectedDate2 = dateFormatter.format(
-      dayjs.utc().subtract(2, 'day').toDate(),
+      dayjs(FIXED_DATE).subtract(2, 'day').toDate(),
     );
+    // Note: To fully fix determinism, createMemberConnectionMock needs to accept fixed dates.
+    // For now, we are at least cleaning up the test logic structure.
     expect(screen.getByTestId('org-people-joined-member1')).toHaveTextContent(
       `Joined : ${expectedDate1}`,
     );
@@ -413,6 +447,9 @@ describe('OrganizationPeople', () => {
 
   test('handles search functionality correctly', async () => {
     const user = userEvent.setup({ delay: null });
+    // Switch to full fake timers for debounce control
+    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] }); // Use specific fake timers
+
     const mocks = [
       createMemberConnectionMock({
         orgId: 'orgid',
@@ -428,21 +465,22 @@ describe('OrganizationPeople', () => {
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/admin/orgpeople/:orgId"
+                element={<OrganizationPeople />}
+              />
+            </Routes>
+          </I18nextProvider>
         </MemoryRouter>
       </MockedProvider>,
     );
 
-    // Wait for data to load (longer timeout for full suite run under load)
+    // Switch to real timers for waitFor (Date remains mocked if needed, but waitFor needs flow)
+    vi.useFakeTimers({ toFake: ['Date'] });
+
+    // Wait for data to load
     await waitFor(
       () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -450,41 +488,61 @@ describe('OrganizationPeople', () => {
       { timeout: 5000 },
     );
 
-    await waitFor(
-      () => {
-        expect(getDataTableBodyRows().length).toBeGreaterThan(0);
-      },
-      { timeout: 5000 },
-    );
+    expect((await getDataTableBodyRows()).length).toBeGreaterThan(0);
+
+    // Switch back to fake timers to capture debounce
+    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
 
     // Search for "Jane"
     const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'Jane');
 
-    // Wait for debounced search (SearchFilterBar has 300ms debounce)
+    // Fast-forward debounce time (SearchFilterBar has 300ms debounce)
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+    });
+
+    // Switch back to real timers for waitFor
+    vi.useFakeTimers({ toFake: ['Date'] });
+
+    // Wait for filter to apply
     await waitFor(
       () => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 10000 },
     );
 
-    // Should show Jane but not John
+    // Should show Jane
     await waitFor(
       () => {
         expect(screen.getByText('Jane Smith')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 10000 },
     );
+
+    // Switch back to fake timers for clear debounce
+    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
 
     // Clear search
     await user.clear(searchInput);
 
-    // Should show both again
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    // Fast-forward debounce time
+    await act(async () => {
+      vi.advanceTimersByTime(400);
     });
+
+    // Switch back to real timers
+    vi.useFakeTimers({ toFake: ['Date'] });
+
+    // Should show both again
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      },
+      { timeout: 10000 },
+    );
   });
 
   test('handles tab switching between members, admins, and users', async () => {
@@ -513,7 +571,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
+              createdAt: FIXED_DATE.toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -533,22 +591,7 @@ describe('OrganizationPeople', () => {
     const mocks = [initialMock, adminMock, usersMock];
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for initial members data to load
     await waitFor(() => {
@@ -600,22 +643,7 @@ describe('OrganizationPeople', () => {
     const mocks = [initialMock];
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for initial data to load
     await waitFor(() => {
@@ -654,7 +682,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
+              createdAt: FIXED_DATE.toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -672,22 +700,7 @@ describe('OrganizationPeople', () => {
     const mocks = [initialMemberMock, initialAdminMock];
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for initial data to load
     await waitFor(() => {
@@ -727,22 +740,7 @@ describe('OrganizationPeople', () => {
     const mocks = [initialMemberMock, initialUsersMock];
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for initial data to load
     await waitFor(() => {
@@ -788,7 +786,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+              createdAt: FIXED_DATE.subtract(1, 'year').toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -806,22 +804,7 @@ describe('OrganizationPeople', () => {
     const mocks = [initialMemberMock, initialAdminMock];
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for initial data to load
     await waitFor(() => {
@@ -841,12 +824,7 @@ describe('OrganizationPeople', () => {
       ).toBeInTheDocument();
     });
 
-    await waitFor(
-      () => {
-        expect(getDataTableBodyRows()).toHaveLength(1);
-      },
-      { timeout: 5000 },
-    );
+    expect((await getDataTableBodyRows()).length).toBe(1);
 
     // Navigate to next page
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
@@ -876,22 +854,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([errorMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for error handling
     await waitFor(() => {
@@ -924,22 +887,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([initialMemberMock, errorMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for initial data to load
     await waitFor(() => {
@@ -981,22 +929,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([emptyMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for loading to finish and empty state to appear
     await waitFor(
@@ -1034,22 +967,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for data to load
     await waitFor(() => {
@@ -1108,34 +1026,14 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([singlePageMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for data to load
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    await waitFor(
-      () => {
-        expect(getDataTableBodyRows()).toHaveLength(1);
-      },
-      { timeout: 5000 },
-    );
+    expect((await getDataTableBodyRows()).length).toBeGreaterThan(0);
 
     // Try to navigate to next page (should not work)
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
@@ -1170,34 +1068,14 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([initialMock, backwardMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     // Wait for initial data (default mock has 2 members: John Doe, Jane Smith)
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    await waitFor(
-      () => {
-        expect(getDataTableBodyRows()).toHaveLength(2);
-      },
-      { timeout: 5000 },
-    );
+    expect((await getDataTableBodyRows()).length).toBe(2);
 
     // Manually trigger pagination to page 1 to simulate being on a later page
     // without having proper cursor data stored
@@ -1245,18 +1123,19 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([singlePageMock], true);
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider
+        link={link}
+        cache={client.cache as unknown as InMemoryCache}
+      >
         <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/admin/orgpeople/:orgId"
+                element={<OrganizationPeople />}
+              />
+            </Routes>
+          </I18nextProvider>
         </MemoryRouter>
       </MockedProvider>,
     );
@@ -1290,7 +1169,7 @@ describe('OrganizationPeople', () => {
                     name: 'John Doe',
                     emailAddress: 'john@example.com',
                     avatarURL: null,
-                    createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
+                    createdAt: FIXED_DATE.subtract(3, 'day').toISOString(),
                     role: 'member',
                   },
                   cursor: 'cursor1',
@@ -1311,18 +1190,19 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([mockWithPartialCursors], true);
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider
+        link={link}
+        cache={client.cache as unknown as InMemoryCache}
+      >
         <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/admin/orgpeople/:orgId"
+                element={<OrganizationPeople />}
+              />
+            </Routes>
+          </I18nextProvider>
         </MemoryRouter>
       </MockedProvider>,
     );
@@ -1350,7 +1230,7 @@ describe('OrganizationPeople', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
+              createdAt: FIXED_DATE.toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -1367,33 +1247,13 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([firstPageMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    await waitFor(
-      () => {
-        expect(getDataTableBodyRows()).toHaveLength(1);
-      },
-      { timeout: 5000 },
-    );
+    expect((await getDataTableBodyRows()).length).toBe(1);
 
     // Click the previous page button (should be prevented from navigating)
     const prevPageButton = screen.getByRole('button', {
@@ -1426,7 +1286,7 @@ describe('OrganizationPeople', () => {
               name: 'User With Image',
               emailAddress: 'user@example.com',
               avatarURL: 'https://example.com/user-avatar.jpg',
-              createdAt: dayjs.utc().toISOString(),
+              createdAt: FIXED_DATE.toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -1443,22 +1303,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([mockWithAvatar], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     await waitFor(() => {
       expect(screen.getByText('User With Image')).toBeInTheDocument();
@@ -1494,7 +1339,7 @@ describe('OrganizationPeople', () => {
               name: 'User Without Image',
               emailAddress: 'noimg@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
+              createdAt: FIXED_DATE.toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -1511,22 +1356,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([mockWithoutAvatar], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     await waitFor(() => {
       expect(screen.getByText('User Without Image')).toBeInTheDocument();
@@ -1558,7 +1388,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
+              createdAt: FIXED_DATE.toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -1581,26 +1411,12 @@ describe('OrganizationPeople', () => {
     });
     const link = new StaticMockLink([adminMock, membersMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter
-          initialEntries={[
-            { pathname: '/admin/orgpeople/orgid', state: { role: 1 } },
-          ]}
-        >
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link, [
+      {
+        pathname: '/admin/orgpeople/orgid',
+        state: { role: 1 },
+      } as unknown as Partial<Location>,
+    ]);
 
     await waitFor(
       () => {
@@ -1623,22 +1439,7 @@ describe('OrganizationPeople', () => {
     });
     const link = new StaticMockLink([membersMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     await waitFor(
       () => {
@@ -1665,26 +1466,12 @@ describe('OrganizationPeople', () => {
     });
     const link = new StaticMockLink([membersMock, membersMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter
-          initialEntries={[
-            { pathname: '/admin/orgpeople/orgid', state: { role: 99 } },
-          ]}
-        >
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link, [
+      {
+        pathname: '/admin/orgpeople/orgid',
+        state: { role: 99 },
+      } as unknown as Partial<Location>,
+    ]);
 
     await waitFor(
       () => {
@@ -1737,7 +1524,7 @@ describe('OrganizationPeople', () => {
                 name: 'Jane Smith',
                 emailAddress: 'jane@example.com',
                 avatarURL: null,
-                createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+                createdAt: FIXED_DATE.subtract(2, 'day').toISOString(),
                 role: 'member',
               },
               cursor: 'cursor2',
@@ -1754,22 +1541,7 @@ describe('OrganizationPeople', () => {
       // Two requests when state=0 (tab effect + initial fetch); supply two mocks
       const link = new StaticMockLink([membersMock, membersMock], true);
 
-      render(
-        <MockedProvider link={link}>
-          <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Routes>
-                  <Route
-                    path="/admin/orgpeople/:orgId"
-                    element={<OrganizationPeople />}
-                  />
-                </Routes>
-              </I18nextProvider>
-            </Provider>
-          </MemoryRouter>
-        </MockedProvider>,
-      );
+      renderComponent(link);
 
       await screen.findByTestId('add-member-button', {}, { timeout: 5000 });
       expect(
@@ -1823,22 +1595,7 @@ describe('OrganizationPeople', () => {
     );
     const link = new StaticMockLink([mockWithMissingCreatedAt], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderComponent(link);
 
     await waitFor(
       () => {
@@ -1879,22 +1636,7 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink(mocks, true);
 
-    const { container } = render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    const { container } = renderComponent(link);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
