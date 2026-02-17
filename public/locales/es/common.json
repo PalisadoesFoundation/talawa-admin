@@ -303,6 +303,7 @@
   "searchPlaceholder": "Buscar...",
   "noOptionsFound": "No se encontraron opciones",
   "noUserId": "ID de usuario no disponible",
+  "noOrgId": "Id de organización no disponible",
   "noTagsFound": "No se encontraron etiquetas",
   "searchTags": "Buscar etiquetas",
   "sortBy": "Ordenar por",

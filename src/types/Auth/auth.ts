@@ -73,3 +73,12 @@ export interface InterfaceOAuthLinkResponse {
   /** List of linked OAuth accounts */
   oauthAccounts: InterfaceOAuthAccount[];
 }
+
+export interface IOAuthProviderConfig {
+  id: OAuthProviderKey;
+  displayName: string;
+  scopes: string[];
+  clientId?: string;
+  redirectUri?: string;
+  enabled: boolean;
+}
