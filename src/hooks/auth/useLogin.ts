@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { SIGNIN_QUERY } from 'GraphQl/Queries/Queries';
 import type { InterfaceSignInResult } from 'types/Auth/LoginForm/interface';
@@ -35,9 +35,7 @@ export const useLogin = (opts?: IUseLoginOptions) => {
 
   // Stabilize callbacks with ref to prevent login recreation on every render
   const optsRef = useRef(opts);
-  useEffect(() => {
-    optsRef.current = opts;
-  }, [opts]);
+  optsRef.current = opts;
 
   const login = useCallback(
     async (credentials: ILoginCredentials): Promise<InterfaceSignInResult> => {
