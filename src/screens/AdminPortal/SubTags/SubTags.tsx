@@ -342,7 +342,7 @@ function SubTags(): JSX.Element {
                 </div>
 
                 <Button
-                  variant="link"
+                  type="button"
                   onClick={() => navigate(`/admin/orgtags/${orgId}`)}
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                   data-testid="allTagsBtn"
@@ -354,7 +354,7 @@ function SubTags(): JSX.Element {
 
                 {orgUserTagAncestors?.map((tag, index) => (
                   <Button
-                    variant="link"
+                    type="button"
                     key={index}
                     className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                     onClick={() => redirectToSubTags(tag._id as string)}
