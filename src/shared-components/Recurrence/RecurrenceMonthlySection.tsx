@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
-import { Frequency, getMonthlyOptions } from '../../utils/recurrenceUtils';
-import type { InterfaceRecurrenceRule } from '../../utils/recurrenceUtils';
+import { Frequency, getMonthlyOptions } from 'utils/recurrenceUtils';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import styles from './RecurrenceMonthlySection.module.css';
 
 interface InterfaceRecurrenceMonthlySectionProps {

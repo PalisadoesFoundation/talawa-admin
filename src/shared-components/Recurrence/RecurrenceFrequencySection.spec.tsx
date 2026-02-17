@@ -83,26 +83,20 @@ describe('RecurrenceFrequencySection', () => {
       screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     );
 
-    await waitFor(() =>
+    await waitFor(() => {
       expect(
         screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
-      ).toBeInTheDocument(),
-    );
-    await waitFor(() =>
+      ).toBeInTheDocument();
       expect(
         screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
-      ).toBeInTheDocument(),
-    );
-    await waitFor(() =>
+      ).toBeInTheDocument();
       expect(
         screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
-      ).toBeInTheDocument(),
-    );
-    await waitFor(() =>
+      ).toBeInTheDocument();
       expect(
         screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
-      ).toBeInTheDocument(),
-    );
+      ).toBeInTheDocument();
+    });
   });
 
   it('selects interval text on double click', async () => {
