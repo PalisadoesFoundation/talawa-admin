@@ -1,41 +1,64 @@
-.leftDrawerActiveButton {
-  background-color: var(--leftDrawer-active-button-bg);
-  color: var(--color-black);
-  font-weight: bold;
-}
-
+.leftDrawerActiveButton,
 .leftDrawerInactiveButton {
-  background-color: var(--leftDrawer-inactive-button-bg);
-  color: var(--color-black);
+  position: relative;
+  transition: all 0.2s ease;
 
-  &:hover {
-    background-color: var(--leftDrawer-inactive-button-hover-bg);
+  &:active {
+    transform: scale(0.98);
   }
 }
 
-.sidebarBtnActive {
-  background-color: var(--sidebar-option-bg);
-  color: var(--sidebar-option-text-active);
-  font-weight: bold;
+.leftDrawerActiveButton {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
+}
+
+.leftDrawerActiveButton:hover :global(.arrow-indicator) {
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.leftDrawerInactiveButton {
+  background-color: transparent;
+  color: var(--color-black);
+}
+
+.leftDrawerInactiveButton:hover {
+  background-color: var(--color-gray-100);
 }
 
 .sidebarBtn {
   background-color: transparent;
-  color: var(--sidebar-option-text-inactive);
-  font-weight: normal;
+  color: var(--color-black);
+  font-weight: var(--font-weight-regular);
   cursor: pointer;
 }
 
+.sidebarBtn:hover {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+}
+
+.sidebarBtnActive {
+  background-color: var(--color-gray-200);
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
+}
+
 .iconWrapper {
-  position: relative;
-  height: var(--space-9);
-  width: var(--space-9);
+  width: var(--space-8);
+  min-width: var(--space-8);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.navItemContainer {
+.simpleLinkVariant {
+  height: var(--space-9);
+}
+
+.linkContent {
   display: flex;
   align-items: center;
 }

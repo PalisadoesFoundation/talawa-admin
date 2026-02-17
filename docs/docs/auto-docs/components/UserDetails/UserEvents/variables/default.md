@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`PeopleTabUserEventsProps`\>
+> `const` **default**: `React.FC`\<[`PeopleTabUserEventsProps`](../../../../types/AdminPortal/UserDetails/UserEvent/type/type-aliases/PeopleTabUserEventsProps.md)\>
 
-Defined in: [src/components/UserDetails/UserEvents.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserDetails/UserEvents.tsx#L42)
+Defined in: [src/components/UserDetails/UserEvents.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserDetails/UserEvents.tsx#L51)

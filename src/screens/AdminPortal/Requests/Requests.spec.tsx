@@ -262,14 +262,11 @@ const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS, true);
 beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
-  setItem('SuperAdmin', false);
 
   // Reset location mocks
   mockAssign.mockClear();
   mockReload.mockClear();
   mockHref = 'http://localhost/';
-
-  vi.clearAllMocks();
 });
 
 afterEach(() => {
@@ -282,7 +279,7 @@ afterEach(() => {
 
   cleanup();
 
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 afterAll(() => {
@@ -392,7 +389,6 @@ describe('Testing Requests screen', () => {
   and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
     removeItem('AdminFor');
-    removeItem('SuperAdmin');
     setItem('role', 'user');
 
     render(
@@ -428,9 +424,25 @@ describe('Testing Requests screen', () => {
     const searchByName = await screen.findByTestId('searchByName');
     expect(searchByName).toBeInTheDocument();
   });
+  test('Component should be rendered properly when user is SuperUser', async () => {
+    setItem('role', 'superuser');
 
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchByName = await screen.findByTestId('searchByName');
+    expect(searchByName).toBeInTheDocument();
+  });
   test('Redirecting on error', async () => {
-    setItem('SuperAdmin', true);
     render(
       <MockedProvider link={link5}>
         <BrowserRouter>
@@ -793,26 +805,6 @@ describe('Testing Requests screen', () => {
 
     const testComp = await screen.findByTestId('testComp');
     expect(testComp).toBeInTheDocument();
-  });
-
-  test('Component should be rendered properly when user is SuperAdmin', async () => {
-    setItem('SuperAdmin', true);
-    removeItem('AdminFor');
-
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const searchByName = await screen.findByTestId('searchByName');
-    expect(searchByName).toBeInTheDocument();
   });
 
   test('Search functionality should reset when empty string is provided', async () => {

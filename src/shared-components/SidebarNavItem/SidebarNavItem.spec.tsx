@@ -1,12 +1,12 @@
 import React from 'react';
 import { describe, it, vi, expect, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import SidebarNavItem from './SidebarNavItem';
+import styles from './SidebarNavItem.module.css';
 import userEvent from '@testing-library/user-event';
 
 afterEach(() => {
-  window.history.pushState({}, '', '/');
   cleanup();
   vi.restoreAllMocks();
 });
@@ -22,6 +22,10 @@ const mockSvgElement = (
 );
 
 describe('SidebarNavItem Component', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   const defaultProps = {
     to: '/test-route',
     icon: mockIconElement,
@@ -68,19 +72,18 @@ describe('SidebarNavItem Component', () => {
     });
 
     it('handles click events', async () => {
-      const user = userEvent.setup();
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const button = screen.getByTestId('testBtn');
       await user.click(button);
-      expect(handleClick).toHaveBeenCalled();
+      await waitFor(() => expect(handleClick).toHaveBeenCalled());
     });
 
-    it('does not call onClick if not provided', () => {
-      const user = userEvent.setup();
+    it('does not call onClick if not provided', async () => {
       renderComponent();
       const button = screen.getByTestId('testBtn');
-      expect(async () => await user.click(button)).not.toThrow();
+      await user.click(button);
+      // No error thrown — implicit pass
     });
   });
 
@@ -119,7 +122,7 @@ describe('SidebarNavItem Component', () => {
     it('applies height style when using simple button', () => {
       renderComponent({ useSimpleButton: true });
       const button = screen.getByTestId('testBtn');
-      expect(button.style.height).toBe('var(--space-9)');
+      expect(button).toHaveClass(styles.simpleLinkVariant);
     });
   });
 
@@ -242,24 +245,22 @@ describe('SidebarNavItem Component', () => {
 
   describe('Click Handler Integration', () => {
     it('calls onClick before navigation', async () => {
-      const user = userEvent.setup();
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const link = screen.getByTestId('testBtn').closest('a');
       expect(link).not.toBeNull();
       await user.click(link as Element);
-      expect(handleClick).toHaveBeenCalled();
+      await waitFor(() => expect(handleClick).toHaveBeenCalled());
     });
 
     it('allows event propagation after onClick', async () => {
-      const user = userEvent.setup();
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const link = screen.getByTestId('testBtn').closest('a');
       expect(link).not.toBeNull();
       await user.click(link as Element);
       // Just verify that the onClick was called, navigation is handled by React Router
-      expect(handleClick).toHaveBeenCalled();
+      await waitFor(() => expect(handleClick).toHaveBeenCalled());
     });
   });
 });

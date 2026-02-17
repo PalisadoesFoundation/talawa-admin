@@ -5,16 +5,8 @@
  * Handles active/inactive states and adapts to drawer visibility.
  *
  * @param props - The props for the component
- * @param to - Navigation target URL
- * @param icon - Icon component or element
- * @param label - Display label for the navigation item
- * @param testId - Test ID for testing purposes
- * @param hideDrawer - Whether the drawer is hidden/collapsed
- * @param onClick - Optional click handler
- * @param useSimpleButton - Use simple button style (for org drawers)
- * @param iconType - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
  *
- * @returns - The rendered SidebarNavItem component
+ * @returns React.ReactElement The rendered SidebarNavItem component
  *
  * @example
  * ```tsx
@@ -26,8 +18,10 @@
  *   testId="dashboardBtn"
  *   hideDrawer={false}
  * />
+ * ```
  *
  * // With react-icon
+ * ```tsx
  * <SidebarNavItem
  *   to="/notifications"
  *   icon={<FaBell />}
@@ -42,7 +36,9 @@
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './SidebarNavItem.module.css';
-import type { ISidebarNavItemProps } from '../../types/SidebarNavItem/interface';
+import type { ISidebarNavItemProps } from 'types/SidebarNavItem/interface';
+
+const ICON_SIZE = 25;
 
 const SidebarNavItem = ({
   to,
@@ -70,8 +66,8 @@ const SidebarNavItem = ({
           icon as React.ReactElement<{ style?: React.CSSProperties }>,
           {
             style: {
-              fontSize: 'var(--font-size-2xl)',
-              color: isActive ? 'var(--color-black)' : 'var(--bs-secondary)',
+              fontSize: ICON_SIZE,
+              color: isActive ? 'var(--bs-black)' : 'var(--bs-secondary)',
             },
           },
         );
@@ -86,10 +82,8 @@ const SidebarNavItem = ({
               ? 'var(--color-black)'
               : 'var(--bs-secondary)'
             : 'none',
-          style: {
-            width: 'var(--space-7)',
-            height: 'var(--space-7)',
-          },
+          width: ICON_SIZE,
+          height: ICON_SIZE,
           stroke: useSimpleButton
             ? undefined
             : isActive
@@ -105,21 +99,24 @@ const SidebarNavItem = ({
     <NavLink
       to={to}
       onClick={onClick}
-      className={({ isActive }) =>
-        useSimpleButton
+      className={({ isActive }) => {
+        const baseClass = useSimpleButton
           ? isActive
             ? styles.leftDrawerActiveButton
             : styles.leftDrawerInactiveButton
           : isActive
             ? styles.sidebarBtnActive
-            : styles.sidebarBtn
-      }
+            : styles.sidebarBtn;
+
+        return useSimpleButton
+          ? `${baseClass} ${styles.simpleLinkVariant}`
+          : baseClass;
+      }}
       data-testid={testId}
       data-cy={dataCy}
-      style={useSimpleButton ? { height: 'var(--space-9)' } : undefined}
     >
       {({ isActive }) => (
-        <div className={styles.navItemContainer}>
+        <div className={styles.linkContent}>
           <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
           {!hideDrawer && label}
         </div>

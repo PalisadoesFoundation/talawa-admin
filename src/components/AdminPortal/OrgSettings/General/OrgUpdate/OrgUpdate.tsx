@@ -71,7 +71,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     React.useState(false);
 
   const [updateOrganization] = useMutation<
-    { updateOrganization: { organization: InterfaceOrganization } },
+    { updateOrganization: InterfaceOrganization },
     { input: InterfaceMutationUpdateOrganizationInput }
   >(UPDATE_ORGANIZATION_MUTATION);
 
@@ -174,11 +174,11 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       });
 
       if (data) {
-        refetch({ id: orgId });
         NotificationToast.success(t('successfulUpdated') as string);
-        // Clear avatar from state and file input after successful upload
+        // Clear avatar and file input before refetch so input ref is still mounted
         setFormState((prev) => ({ ...prev, avatar: undefined }));
         if (fileInputRef.current) fileInputRef.current.value = '';
+        refetch({ id: orgId });
       } else {
         NotificationToast.error(t('updateFailed') as string);
       }

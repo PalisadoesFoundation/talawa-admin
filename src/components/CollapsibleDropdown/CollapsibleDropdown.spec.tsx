@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
@@ -13,7 +13,8 @@ import type { Location } from '@remix-run/router';
 import userEvent from '@testing-library/user-event';
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 let currentLocation: Location = {
@@ -121,24 +122,26 @@ describe('Testing CollapsibleDropdown component', () => {
       </BrowserRouter>,
     );
     const parentDropdownBtn = screen.getByTestId('collapsible-dropdown');
-    const activeDropdownBtn = screen.getByText('SubCategory 1');
-    const nonActiveDropdownBtn = screen.getByText('SubCategory 2');
+    const activeDropdownBtn = screen.getByTestId('collapsible-dropdown-btn-0');
+    const nonActiveDropdownBtn = screen.getByTestId(
+      'collapsible-dropdown-btn-1',
+    );
 
     // Check if dropdown is rendered with correct classes
     await user.click(activeDropdownBtn);
     expect(parentDropdownBtn).toBeInTheDocument();
-    expect(parentDropdownBtn.className).toMatch(/^_leftDrawerActiveButton_/);
+    expect(parentDropdownBtn.className).toMatch(/_leftDrawerActiveButton_/);
 
     // Check if active dropdown is rendered with correct classes
     expect(activeDropdownBtn).toBeInTheDocument();
     expect(activeDropdownBtn.className).toMatch(
-      /^_leftDrawerCollapseActiveButton_/,
+      /_leftDrawerCollapseActiveButton_/,
     );
 
     // Check if inactive dropdown is rendered with correct classes
     expect(nonActiveDropdownBtn).toBeInTheDocument();
     expect(nonActiveDropdownBtn.className).toMatch(
-      /^_leftDrawerInactiveButton_/,
+      /_leftDrawerInactiveButton_/,
     );
 
     // Check if dropdown is collapsed after clicking on it
@@ -154,7 +157,9 @@ describe('Testing CollapsibleDropdown component', () => {
 
     // Click on non-active dropdown button and check if it navigates to the correct URL
     await user.click(nonActiveDropdownBtn);
-    expect(window.location.pathname).toBe('/sub-category-2');
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/sub-category-2');
+    });
   });
 
   describe('useEffect location change logic', () => {
@@ -317,17 +322,23 @@ describe('Testing CollapsibleDropdown component', () => {
       // Navigate to first subTarget
       const subTarget1 = screen.getByText('SubCategory 1');
       await user.click(subTarget1);
-      expect(window.location.pathname).toBe('/sub-category-1');
+      await waitFor(() => {
+        expect(window.location.pathname).toBe('/sub-category-1');
+      });
 
       // Navigate to second subTarget
       const subTarget2 = screen.getByText('SubCategory 2');
       await user.click(subTarget2);
-      expect(window.location.pathname).toBe('/sub-category-2');
+      await waitFor(() => {
+        expect(window.location.pathname).toBe('/sub-category-2');
+      });
 
       // Navigate to third subTarget
       const subTarget3 = screen.getByText('SubCategory 3');
       await user.click(subTarget3);
-      expect(window.location.pathname).toBe('/sub-category-3');
+      await waitFor(() => {
+        expect(window.location.pathname).toBe('/sub-category-3');
+      });
     });
 
     test('renders subTargets with correct navigation links', () => {

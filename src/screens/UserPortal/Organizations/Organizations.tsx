@@ -12,7 +12,7 @@
  *
  * @remarks
  * - The component dynamically adjusts its layout based on the screen size, toggling a sidebar for smaller screens.
- * - It supports three modes: viewing all organizations, joined organizations, and created organizations.
+ * - It supports three modes: viewing all organizations, joined organizations, and created organizations (administrators only).
  * - The search functionality is debounced to reduce unnecessary GraphQL query calls.
  * - Pagination is implemented to handle large datasets efficiently.
  *
@@ -148,8 +148,8 @@ export default function Organizations(): React.JSX.Element {
     if (hasDismissed) return;
 
     // Priority: API data > LocalStorage
-    if (currentUserData?.currentUser) {
-      if (currentUserData.currentUser.isEmailAddressVerified) {
+    if (currentUserData?.user) {
+      if (currentUserData.user.isEmailAddressVerified) {
         setShowEmailWarning(false);
         // Clean up legacy flags
         removeItem('emailNotVerified');
@@ -215,11 +215,12 @@ export default function Organizations(): React.JSX.Element {
   const [filterName, setFilterName] = React.useState('');
   const [searchText, setSearchText] = useState('');
   const [mode, setMode] = React.useState(0);
+  const role = getItem('role') === 'administrator' ? 'administrator' : 'user';
 
   const modes = [
     t('allOrganizations'),
     t('joinedOrganizations'),
-    t('createdOrganizations'),
+    ...(role === 'administrator' ? [t('createdOrganizations')] : []),
   ];
 
   const userId: string | null = getItem('userId');
@@ -342,7 +343,6 @@ export default function Organizations(): React.JSX.Element {
   };
 
   const isLoading = loadingAll || loadingJoined || loadingCreated;
-  const role = 'user';
 
   return (
     <>
