@@ -24,6 +24,7 @@ All token files live under `src/style/tokens/`:
 | `typography.css` | Font sizes, line heights, font weights, and letter spacing |
 | `borders.css` | Border widths, border-radius scale, shadow offsets, blur, and spread |
 | `logosizes.css` | Standard logo dimension tokens |
+| `layout.css` | Viewport-relative layout tokens (`vh` and `vw` values for heights, widths, and positioning) |
 | `index.css` | Barrel file that imports all of the above |
 
 Token files are imported globally via `src/index.tsx`, so every token is available everywhere without any additional imports.
@@ -46,6 +47,8 @@ Token files are imported globally via `src/index.tsx`, so every token is availab
 | **Shadow blur** | `--shadow-blur-<size>` | `--shadow-blur-sm`, `--shadow-blur-lg` |
 | **Shadow spread** | `--shadow-spread-<size>` | `--shadow-spread-none`, `--shadow-spread-sm` |
 | **Logo sizes** | `--logo-<size>` | `--logo-xs`, `--logo-lg` |
+| **Viewport height** | `--vh-<value>` | `--vh-100`, `--vh-70`, `--vh-2` |
+| **Viewport width** | `--vw-<value>` | `--vw-80`, `--vw-13`, `--vw-8` |
 
 Follow the existing scale order and units in each file when adding new tokens.
 
