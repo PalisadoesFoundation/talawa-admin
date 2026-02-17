@@ -232,12 +232,11 @@ vi.fn();`,
       errors: [{ messageId: 'missingAfterEach' }],
       output: `
     describe('x', () => {
-      
       afterEach(() => {
         vi.clearAllMocks();
       });
 
-vi.mock('y');
+      vi.mock('y');
     });
   `,
       languageOptions: {
@@ -259,7 +258,6 @@ vi.mock('y');
     afterEach(() => {
       vi.clearAllMocks();
     });
-
 
     });
     vi.fn();
@@ -283,7 +281,8 @@ vi.mock('y');
     afterEach(() => {
       console.log('no cleanup');
     
-      vi.clearAllMocks();});
+      vi.clearAllMocks();
+    });
     vi.mock('x');
   `,
       languageOptions: {
@@ -304,7 +303,8 @@ vi.mock('y');
       output: `
     describe('x', () => {
       afterEach(() => {
-    vi.clearAllMocks();});
+        vi.clearAllMocks();
+      });
     });
     jest.spyOn(obj, 'x');
   `,
@@ -412,7 +412,8 @@ vi.mock('y');
         afterEach(function() {
           console.log('no cleanup');
         
-          vi.clearAllMocks();});
+          vi.clearAllMocks();
+        });
         vi.fn();
       `,
       languageOptions: {
@@ -430,7 +431,8 @@ vi.mock('y');
       errors: [{ messageId: 'missingCleanup' }],
       output: `
         afterEach(function() {
-    vi.clearAllMocks();});
+          vi.clearAllMocks();
+        });
         vi.fn();
       `,
       languageOptions: {
@@ -465,12 +467,11 @@ vi.mock('y');
       errors: [{ messageId: 'missingAfterEach' }],
       output: `
     describe('outer', () => {
-      
       afterEach(() => {
         vi.clearAllMocks();
       });
 
-describe('inner', () => {
+      describe('inner', () => {
         vi.fn();
       });
     });
@@ -488,7 +489,6 @@ vi.mock('y');
 });`,
       errors: [{ messageId: 'missingAfterEach' }],
       output: `describe('x', () => {
-
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -511,7 +511,8 @@ vi.fn();`,
       output: `afterEach(() => {
 console.log('no cleanup');
 
-    vi.clearAllMocks();});
+    vi.clearAllMocks();
+});
 vi.fn();`,
       languageOptions: {
         ecmaVersion: 2020,
