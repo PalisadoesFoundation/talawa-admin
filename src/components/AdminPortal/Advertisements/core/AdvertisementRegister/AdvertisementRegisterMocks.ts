@@ -24,19 +24,13 @@ export const mockBigFile = new File(
     type: 'image/jpeg',
   },
 );
-
 export const dateConstants = {
   create: {
-    startAtISO: dayjs().endOf('year').hour(18).minute(30).toISOString(),
+    startAtISO: '2025-12-31T18:30:00.000Z',
     endAtISO: '2030-02-01T18:30:00.000Z',
-    startAtCalledWith: dayjs().endOf('year').startOf('day').toISOString(),
+    startAtCalledWith: '2025-12-31T00:00:00.000Z',
     endAtCalledWith: '2030-02-01T00:00:00.000Z',
-    startISOReceived: dayjs()
-      .endOf('year')
-      .subtract(1, 'day')
-      .hour(18)
-      .minute(30)
-      .toISOString(),
+    startISOReceived: '2025-12-30T18:30:00.000Z',
     endISOReceived: '2030-01-31T18:30:00.000Z',
     endBeforeStartISO: '2010-02-01T18:30:00.000Z',
     endBeforeStartCalledWith: '2010-02-01T00:00:00.000Z',
@@ -47,12 +41,7 @@ export const dateConstants = {
     endAtISO: '2040-02-01T18:30:00.000Z',
     startAtCalledWith: '2020-12-31T00:00:00.000Z',
     endAtCalledWith: '2040-02-01T00:00:00.000Z',
-    startISOReceived: dayjs()
-      .endOf('year')
-      .subtract(1, 'day')
-      .hour(18)
-      .minute(30)
-      .toISOString(),
+    startISOReceived: '2020-12-30T18:30:00.000Z',
     endISOReceived: '2040-01-31T18:30:00.000Z',
     endBeforeStartISO: '2010-02-01T18:30:00.000Z',
     endBeforeStartCalledWith: '2010-02-01T00:00:00.000Z',
@@ -61,7 +50,6 @@ export const dateConstants = {
 };
 
 import { DocumentNode } from 'graphql';
-import dayjs from 'dayjs';
 
 const createMockResponse = <T extends Record<string, unknown> | undefined>(
   query: DocumentNode,
@@ -148,7 +136,7 @@ const createAdvertisementNode = (
 ) => ({
   node: {
     id,
-    createdAt: new Date().toISOString(),
+    createdAt: '2023-01-01T00:00:00.000Z',
     description,
     endAt,
     organization: {

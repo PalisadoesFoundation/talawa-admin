@@ -6,7 +6,7 @@
 
 > `const` **dateConstants**: `object`
 
-Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L28)
+Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L27)
 
 ## Type Declaration
 
@@ -40,15 +40,15 @@ Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegiste
 
 #### create.startAtCalledWith
 
-> **startAtCalledWith**: `string`
+> **startAtCalledWith**: `string` = `'2025-12-31T00:00:00.000Z'`
 
 #### create.startAtISO
 
-> **startAtISO**: `string`
+> **startAtISO**: `string` = `'2025-12-31T18:30:00.000Z'`
 
 #### create.startISOReceived
 
-> **startISOReceived**: `string`
+> **startISOReceived**: `string` = `'2025-12-30T18:30:00.000Z'`
 
 ### update
 
@@ -88,4 +88,4 @@ Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegiste
 
 #### update.startISOReceived
 
-> **startISOReceived**: `string`
+> **startISOReceived**: `string` = `'2020-12-30T18:30:00.000Z'`

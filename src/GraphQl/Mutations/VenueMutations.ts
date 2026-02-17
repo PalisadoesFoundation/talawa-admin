@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
  * @param name - Name of the venue.
  * @param capacity - Ineteger representing capacity of venue.
  * @param description - Description of the venue.
- * @param file - Image file for the venue.
+ * @param attachments - Image file metadata for the venue.
  * @param organizationId - Organization to which the ActionItemCategory belongs.
  */
 

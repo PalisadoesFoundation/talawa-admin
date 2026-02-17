@@ -75,7 +75,6 @@ export interface InterfaceOrganizationModalProps {
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
 }
 
 /**
@@ -88,10 +87,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   formState,
   setFormState,
   createOrg,
-  t,
 }) => {
   const { uploadFileToMinio } = useMinioUpload();
-  const { t: tCommon } = useTranslation('translation');
+  const { t: tCommon } = useTranslation('common');
 
   const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
@@ -149,7 +147,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
     <BaseModal
       open={showModal}
       onClose={toggleModal}
-      title={t('createOrganization')}
+      title={tCommon('createOrganization')}
       className={styles.modalHeader}
       data-testid="modalOrganizationHeader"
     >
@@ -157,7 +155,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         <FormTextField
           name="orgname"
           label={tCommon('name')}
-          placeholder={t('enterName')}
+          placeholder={tCommon('enterName')}
           value={formState.name}
           onChange={(val) => {
             if (val.length <= 50) {

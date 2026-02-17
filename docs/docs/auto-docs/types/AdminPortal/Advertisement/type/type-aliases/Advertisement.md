@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:12](https://github.com/
 
 ### attachments?
 
-> `optional` **attachments**: [`AdvertisementAttachment`](AdvertisementAttachment.md)[]
+> `optional` **attachments**: [`FileMetadataAttachment`](FileMetadataAttachment.md)[]
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L26)
 

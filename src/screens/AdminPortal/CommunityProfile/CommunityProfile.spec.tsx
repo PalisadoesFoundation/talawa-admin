@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -145,8 +145,8 @@ const MOCKS3 = [
     result: {
       data: {
         community: {
-          createdAt: dayjs.utc().toISOString(),
-          updatedAt: dayjs.utc().toISOString(),
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          updatedAt: dayjs().subtract(1, 'month').toISOString(),
           id: 'communityId',
           name: 'testName',
           logoURL: 'http://logo.com',
@@ -335,20 +335,19 @@ const profileVariables = {
   }),
 };
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 describe('Testing Community Profile Screen', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'mocked-logo-object-name',
+      fileHash: 'mocked-logo-file-hash',
+      mimetype: 'image/png',
+    });
   });
 
   afterEach(() => {
+    cleanup();
+
     vi.clearAllMocks();
   });
 
@@ -364,9 +363,11 @@ describe('Testing Community Profile Screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-
-    expect(screen.getByPlaceholderText(/Community Name/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(/Community Name/i),
+      ).toBeInTheDocument();
+    });
     expect(screen.getByPlaceholderText(/Website Link/i)).toBeInTheDocument();
     expect(screen.getByTestId(/facebook/i)).toBeInTheDocument();
     expect(screen.getByTestId(/instagram/i)).toBeInTheDocument();
@@ -396,7 +397,11 @@ describe('Testing Community Profile Screen', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(/Community Name/i),
+      ).toBeInTheDocument();
+    });
 
     const communityName = screen.getByPlaceholderText(/Community Name/i);
     const websiteLink = screen.getByPlaceholderText(/Website Link/i);
@@ -441,10 +446,11 @@ describe('Testing Community Profile Screen', () => {
     expect(slack).toHaveValue(profileVariables.socialURL);
     expect(saveChangesBtn).not.toBeDisabled();
     expect(resetChangeBtn).not.toBeDisabled();
-    await wait();
 
     await userEvent.click(saveChangesBtn);
-    await wait();
+    await waitFor(() => {
+      // expect(saveChangesBtn).toBeDisabled(); // Button does not disable on submit
+    });
   });
 
   test('If the queried data has some fields null then the input field should be empty', async () => {
@@ -457,9 +463,9 @@ describe('Testing Community Profile Screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-
-    expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue('');
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue('');
+    });
     expect(screen.getByPlaceholderText(/Website Link/i)).toHaveValue('');
     expect(screen.getByTestId(/facebook/i)).toHaveValue('');
     expect(screen.getByTestId(/instagram/i)).toHaveValue('');
@@ -481,11 +487,16 @@ describe('Testing Community Profile Screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
+    });
 
     const resetChangesBtn = screen.getByTestId('resetChangesBtn');
     await userEvent.click(resetChangesBtn);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue('');
+    });
 
     expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue('');
     expect(screen.getByPlaceholderText(/Website Link/i)).toHaveValue('');
@@ -549,10 +560,11 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     const nameInput = screen.getByPlaceholderText(/Community Name/i);
     const websiteInput = screen.getByPlaceholderText(/Website Link/i);
+    await waitFor(() => {
+      expect(websiteInput).toBeInTheDocument();
+    });
     const logoInput = screen.getByTestId('fileInput');
 
     await userEvent.type(nameInput, 'Test Name');
@@ -561,7 +573,9 @@ describe('Testing Community Profile Screen', () => {
     const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
     await userEvent.upload(logoInput, mockFile);
 
-    await wait();
+    await waitFor(() => {
+      expect((logoInput as HTMLInputElement).files?.[0]).toBe(mockFile);
+    });
 
     const submitButton = screen.getByTestId('saveChangesBtn');
     await userEvent.click(submitButton);
@@ -582,7 +596,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('fileInput')).toBeInTheDocument();
+    });
 
     const mockFile = new File(['test content'], 'test.png', {
       type: 'image/png',
@@ -607,7 +623,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('fileInput')).toBeInTheDocument();
+    });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
@@ -617,7 +635,9 @@ describe('Testing Community Profile Screen', () => {
       configurable: true,
     });
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();
+    });
 
     // Should not crash and buttons should still be disabled if no other fields filled
     expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();
@@ -684,7 +704,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
+    });
 
     const resetButton = screen.getByTestId('resetChangesBtn');
     await userEvent.click(resetButton);
@@ -705,7 +727,11 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(/Community Name/i),
+      ).toBeInTheDocument();
+    });
 
     const nameInput = screen.getByPlaceholderText(/Community Name/i);
     await userEvent.type(nameInput, 'Test');
@@ -728,7 +754,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Website Link/i)).toBeInTheDocument();
+    });
 
     const websiteInput = screen.getByPlaceholderText(/Website Link/i);
     await userEvent.type(websiteInput, 'https://test.com');
@@ -751,13 +779,19 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('fileInput')).toBeInTheDocument();
+    });
 
     const logoInput = screen.getByTestId('fileInput');
     const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
     await userEvent.upload(logoInput, mockFile);
 
     // Wait for state to update after file selection
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+    });
+
     await waitFor(() => {
       const saveButton = screen.getByTestId('saveChangesBtn');
       expect(saveButton).not.toBeDisabled();
@@ -781,9 +815,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    expect(document.title).toBeTruthy();
+    await waitFor(() => {
+      expect(document.title).toBeTruthy();
+    });
   });
 
   test('should populate form with existing community data', async () => {
@@ -797,11 +831,11 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue(
-      'testName',
-    );
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/Community Name/i)).toHaveValue(
+        'testName',
+      );
+    });
     expect(screen.getByPlaceholderText(/Website Link/i)).toHaveValue(
       'http://websitelink.com',
     );
@@ -821,7 +855,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('fileInput')).toBeInTheDocument();
+    });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     // Simulate clearing file input by setting value to empty
@@ -831,7 +867,9 @@ describe('Testing Community Profile Screen', () => {
     });
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
-    await wait();
+    await waitFor(() => {
+      expect(fileInput.files?.length).toBe(0);
+    });
 
     // Should not crash and maintain empty state
     expect(fileInput.files?.length).toBe(0);
@@ -860,7 +898,9 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('fileInput')).toBeInTheDocument();
+    });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
@@ -892,13 +932,20 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('fileInput')).toBeInTheDocument();
+    });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
 
     // Upload file
     await userEvent.upload(fileInput, mockFile);
+
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+    });
+
     await waitFor(() => {
       expect(screen.getByTestId('saveChangesBtn')).not.toBeDisabled();
     });
@@ -913,7 +960,9 @@ describe('Testing Community Profile Screen', () => {
       configurable: true,
     });
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();
+    });
 
     // After clearing, if no other fields are filled, buttons should be disabled
     expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();

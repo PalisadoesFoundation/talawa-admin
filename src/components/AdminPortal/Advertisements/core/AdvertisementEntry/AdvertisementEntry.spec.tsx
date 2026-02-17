@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router';
@@ -52,6 +52,7 @@ describe('Testing Advertisement Entry Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
+    cleanup();
   });
 
   it('Testing rendering and deleting of advertisement', async () => {
@@ -64,10 +65,18 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
                 advertisement={{
-                  endAt: new Date(),
-                  startAt: new Date(),
+                  endAt: dayjs().subtract(1, 'day').toDate(),
+                  startAt: dayjs().subtract(10, 'days').toDate(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'Advert1',
                   createdAt: new Date(),
                   organization: {
@@ -157,18 +166,26 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
                 advertisement={{
-                  endAt: new Date(),
-                  startAt: new Date(),
+                  endAt: dayjs().add(1, 'day').toDate(),
+                  startAt: dayjs().subtract(1, 'day').toDate(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'Test Ad',
-                  createdAt: new Date(),
+                  createdAt: dayjs().subtract(1, 'month').toDate(),
                   organization: {
                     id: '12',
                   },
                   orgId: '1',
                   type: AdvertisementType.Banner,
-                  updatedAt: new Date(),
+                  updatedAt: dayjs().subtract(1, 'month').toDate(),
                 }}
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
@@ -208,24 +225,40 @@ describe('Testing Advertisement Entry Component', () => {
 
   it('should use default props when none are provided', () => {
     render(
-      <AdvertisementEntry
-        advertisement={{
-          endAt: new Date(),
-          startAt: new Date(),
-          id: '1',
-          attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
-          name: 'Advert1',
-          createdAt: new Date(),
-          organization: {
-            id: '12',
-          },
-          orgId: '1',
-          type: AdvertisementType.Banner,
-          updatedAt: new Date(),
-        }}
-        setAfterActive={vi.fn()}
-        setAfterCompleted={vi.fn()}
-      />,
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
+                  name: 'Advert1',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
     );
 
     const elements = screen.getAllByText('');
@@ -255,24 +288,40 @@ describe('Testing Advertisement Entry Component', () => {
     const mockOrganizationId = 'org123';
 
     const { getByText } = render(
-      <AdvertisementEntry
-        advertisement={{
-          endAt: mockEndDate,
-          startAt: mockStartDate,
-          id: '1',
-          attachments: [{ url: mockMediaUrl, mimetype: mockMediaType }],
-          name: mockName,
-          createdAt: mockCreatedAt,
-          organization: {
-            id: mockOrganizationId,
-          },
-          orgId: '1',
-          type: mockType,
-          updatedAt: mockUpdatedAt,
-        }}
-        setAfterActive={vi.fn()}
-        setAfterCompleted={vi.fn()}
-      />,
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: mockEndDate,
+                  startAt: mockStartDate,
+                  id: '1',
+                  attachments: [
+                    {
+                      objectName: mockMediaUrl,
+                      fileHash: 'hash',
+                      mimetype: mockMediaType,
+                      name: mockMediaUrl,
+                      previewUrl: mockMediaUrl,
+                    },
+                  ],
+                  name: mockName,
+                  createdAt: mockCreatedAt,
+                  organization: {
+                    id: mockOrganizationId,
+                  },
+                  orgId: '1',
+                  type: mockType,
+                  updatedAt: mockUpdatedAt,
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
     );
 
     expect(screen.getByText(mockName)).toBeInTheDocument();
@@ -291,18 +340,18 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
                 advertisement={{
-                  endAt: new Date(),
-                  startAt: new Date(),
+                  endAt: dayjs().add(1, 'day').toDate(),
+                  startAt: dayjs().subtract(1, 'day').toDate(),
                   id: '1',
                   attachments: [],
                   name: 'Advert1',
-                  createdAt: new Date(),
+                  createdAt: dayjs().subtract(1, 'month').toDate(),
                   organization: {
                     id: '12',
                   },
                   orgId: '1',
                   type: AdvertisementType.Banner,
-                  updatedAt: new Date(),
+                  updatedAt: dayjs().subtract(1, 'month').toDate(),
                 }}
                 setAfterActive={vi.fn()}
                 setAfterCompleted={vi.fn()}
@@ -630,12 +679,18 @@ describe('Testing Advertisement Entry Component', () => {
                     id: '1',
                     attachments: [
                       {
-                        url: 'test1.jpg',
+                        objectName: 'test1.jpg',
+                        fileHash: 'hash',
                         mimetype: 'image/jpeg',
+                        name: 'test1.jpg',
+                        previewUrl: 'test1.jpg',
                       },
                       {
-                        url: 'test2.jpg',
+                        objectName: 'test2.jpg',
+                        fileHash: 'hash',
                         mimetype: 'image/jpeg',
+                        name: 'test2.jpg',
+                        previewUrl: 'test2.jpg',
                       },
                     ],
                     name: 'Advert1',
@@ -696,12 +751,18 @@ describe('Testing Advertisement Entry Component', () => {
                     id: '1',
                     attachments: [
                       {
-                        url: 'test1.jpg',
+                        objectName: 'test1.jpg',
+                        fileHash: 'hash',
                         mimetype: 'image/jpeg',
+                        name: 'test1.jpg',
+                        previewUrl: 'test1.jpg',
                       },
                       {
-                        url: 'test2.jpg',
+                        objectName: 'test2.jpg',
+                        fileHash: 'hash',
                         mimetype: 'image/jpeg',
+                        name: 'test2.jpg',
+                        previewUrl: 'test2.jpg',
                       },
                     ],
                     name: 'Advert1',
@@ -753,7 +814,13 @@ describe('Testing Advertisement Entry Component', () => {
                   startAt: new Date(),
                   id: '1',
                   attachments: [
-                    { url: 'test-video.mp4', mimetype: 'video/mp4' },
+                    {
+                      objectName: 'test-video.mp4',
+                      fileHash: 'hash',
+                      mimetype: 'video/mp4',
+                      name: 'test-video.mp4',
+                      previewUrl: 'test-video.mp4',
+                    },
                   ],
                   name: 'Video Ad',
                   createdAt: new Date(),
@@ -824,7 +891,15 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'No Description Ad',
                   description: '',
                   createdAt: new Date(),
@@ -859,7 +934,15 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'Ad with Description',
                   description: testDescription,
                   createdAt: new Date(),
@@ -893,7 +976,15 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: null as unknown as Date,
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'Ad with no start date',
                   createdAt: new Date(),
                   organization: {
@@ -926,7 +1017,15 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: null as unknown as Date,
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'Ad with no end date',
                   createdAt: new Date(),
                   organization: {
@@ -959,7 +1058,15 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'Popup Ad',
                   createdAt: new Date(),
                   organization: {
@@ -992,7 +1099,15 @@ describe('Testing Advertisement Entry Component', () => {
                   endAt: new Date(),
                   startAt: new Date(),
                   id: '1',
-                  attachments: [{ url: 'test.jpg', mimetype: 'image/jpeg' }],
+                  attachments: [
+                    {
+                      objectName: 'test.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test.jpg',
+                      previewUrl: 'test.jpg',
+                    },
+                  ],
                   name: 'No Description Ad',
                   description: undefined,
                   createdAt: new Date(),
@@ -1027,8 +1142,20 @@ describe('Testing Advertisement Entry Component', () => {
                   startAt: new Date(),
                   id: '1',
                   attachments: [
-                    { url: 'test1.jpg', mimetype: 'image/jpeg' },
-                    { url: 'test2.jpg', mimetype: 'image/jpeg' },
+                    {
+                      objectName: 'test1.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test1.jpg',
+                      previewUrl: 'test1.jpg',
+                    },
+                    {
+                      objectName: 'test2.jpg',
+                      fileHash: 'hash',
+                      mimetype: 'image/jpeg',
+                      name: 'test2.jpg',
+                      previewUrl: 'test2.jpg',
+                    },
                   ],
                   name: null as unknown as string,
                   createdAt: new Date(),

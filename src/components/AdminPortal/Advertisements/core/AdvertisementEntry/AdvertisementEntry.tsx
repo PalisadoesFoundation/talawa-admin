@@ -241,7 +241,7 @@ function AdvertisementEntry({
                   crossOrigin="anonymous"
                 >
                   <source
-                    src={advertisement.attachments[0].url}
+                    src={advertisement.attachments[0].previewUrl}
                     type="video/mp4"
                   />
                 </video>
@@ -256,7 +256,7 @@ function AdvertisementEntry({
                             <div className={styles.imageWrapper}>
                               <img
                                 className={`d-block w-100 ${styles.cardImage}`}
-                                src={attachment.url}
+                                src={attachment.previewUrl}
                                 alt={t('advertisementImageAlt', {
                                   index: index + 1,
                                   name: advertisement.name ?? 'ad',
@@ -272,7 +272,7 @@ function AdvertisementEntry({
                       <div className={styles.imageWrapper}>
                         <img
                           className={`d-block w-100 ${styles.cardImage}`}
-                          src={advertisement.attachments[0].url}
+                          src={advertisement.attachments[0].previewUrl}
                           alt={t('advertisementMedia')}
                           data-testid="media"
                           crossOrigin="anonymous"

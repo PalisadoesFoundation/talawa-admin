@@ -1,14 +1,46 @@
 import React from 'react';
-import { render, screen, waitFor, RenderResult } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  RenderResult,
+  cleanup,
+} from '@testing-library/react';
 
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from '../../../../state/store'; // Update path based on your project structure
-import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
-import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on your project structure
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: { [key: string]: string } = {
+        name: 'Name',
+        description: 'Description',
+        createOrganization: 'Create Organization',
+        updateOrganization: 'Update Organization',
+        imageUploadSuccess: 'Image uploaded successfully',
+        create: 'Create',
+        update: 'Update',
+        cancel: 'Cancel',
+        close: 'Close',
+        register: 'Register',
+        saveChanges: 'Save Changes',
+        remove: 'Remove',
+        edit: 'Edit',
+      };
+      return translations[key] || key;
+    },
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
+}));
 
 /**
  * Helper to set input value natively (simulates paste behavior).
@@ -86,22 +118,20 @@ describe('OrganizationModal Component', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    cleanup();
   });
 
   const setup = (): RenderResult => {
     return render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={formState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={formState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -143,16 +173,13 @@ describe('OrganizationModal Component', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={validFormState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={validFormState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -228,16 +255,13 @@ describe('OrganizationModal Component', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={validFormState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={validFormState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -373,16 +397,13 @@ describe('OrganizationModal Component', () => {
       return render(
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationModal
-                showModal={true}
-                toggleModal={mockToggleModal}
-                formState={completeFormState}
-                setFormState={mockSetFormState}
-                createOrg={mockCreateOrg}
-                t={(key) => key}
-              />
-            </I18nextProvider>
+            <OrganizationModal
+              showModal={true}
+              toggleModal={mockToggleModal}
+              formState={completeFormState}
+              setFormState={mockSetFormState}
+              createOrg={mockCreateOrg}
+            />
           </BrowserRouter>
         </Provider>,
       );
@@ -533,16 +554,13 @@ describe('OrganizationModal Component', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={formState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={formState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -554,16 +572,13 @@ describe('OrganizationModal Component', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={false}
-              toggleModal={mockToggleModal}
-              formState={formState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={false}
+            toggleModal={mockToggleModal}
+            formState={formState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -605,16 +620,13 @@ describe('OrganizationModal Component', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={validFormState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={validFormState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -658,7 +670,9 @@ describe('OrganizationModal Component', () => {
 
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(toastMocks.success).toHaveBeenCalledWith(
+        'Image uploaded successfully',
+      );
 
       // setFormState is called with a functional update for avatar
       expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));

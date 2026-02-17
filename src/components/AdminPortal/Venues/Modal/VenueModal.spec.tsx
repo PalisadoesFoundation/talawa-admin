@@ -263,13 +263,6 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
 // Helper Functions
-async function wait(ms = 100): Promise<void> {
-  await act(async () => {
-    await new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const defaultProps: InterfaceVenueModalProps = {
   show: true,
@@ -315,7 +308,6 @@ const renderVenueModal = (
 
 describe('VenueModal', () => {
   beforeEach(() => {
-    vi.restoreAllMocks();
     // Configure MinIO upload mock
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'test-obj',
@@ -326,6 +318,7 @@ describe('VenueModal', () => {
   });
 
   afterEach(() => {
+    vi.restoreAllMocks();
     cleanup();
   });
 
@@ -417,8 +410,9 @@ describe('VenueModal', () => {
     await userEvent.upload(fileInput, file);
 
     fireEvent.click(screen.getByTestId('closeimage'));
-
-    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    });
   });
 });
 
@@ -438,10 +432,12 @@ describe('Rendering', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  test('calls onHide when close button is clicked', () => {
+  test('calls onHide when close button is clicked', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
     fireEvent.click(screen.getByTestId('modalCloseBtn'));
-    expect(defaultProps.onHide).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(defaultProps.onHide).toHaveBeenCalled();
+    });
   });
 });
 
@@ -1175,7 +1171,6 @@ describe('Validation', () => {
 
       await act(async () => {
         fireEvent.click(screen.getByTestId('updateVenueBtn'));
-        await wait(0);
       });
 
       await waitFor(() => {
@@ -1189,7 +1184,6 @@ describe('Validation', () => {
 
       await act(async () => {
         fireEvent.click(screen.getByTestId('updateVenueBtn'));
-        await wait(0);
       });
 
       await waitFor(() => {
@@ -1410,7 +1404,10 @@ describe('Validation', () => {
             </BrowserRouter>
           </MockedProvider>,
         );
-        await wait(100);
+      });
+      await waitFor(() => {
+        const nameInput = screen.queryByPlaceholderText('Enter Venue Name');
+        expect(nameInput).not.toBeInTheDocument();
       });
 
       // Mount fresh component
@@ -2211,13 +2208,19 @@ describe('Validation', () => {
 
         test('handles URL creation error in useEffect', async () => {
           // Mock URL constructor to throw an error
-          const originalURL = global.URL;
-          global.URL = class extends URL {
-            constructor() {
-              super('about:blank');
+          // Spy on URL constructor to throw an error
+          const urlSpy = vi
+            .spyOn(global, 'URL')
+            .mockImplementation((url: string | URL, _base?: string | URL) => {
+              if (url === 'about:blank') {
+                // Return a valid URL object for the super call simulation if needed,
+                // but since we are mocking implementation, we just throw.
+                // However, the component calls `new URL(image, minioBaseUrl)`.
+                throw new Error('Invalid URL');
+              }
+              // For other calls (if any), we might want default behavior, but here we want to trigger error.
               throw new Error('Invalid URL');
-            }
-          } as unknown as typeof URL;
+            });
 
           const propsWithInvalidImage = {
             ...editProps,
@@ -2244,8 +2247,8 @@ describe('Validation', () => {
             });
           });
 
-          // Restore original URL
-          global.URL = originalURL;
+          // Restore spy
+          urlSpy.mockRestore();
         });
 
         test('handles file upload with invalid file type', async () => {
@@ -2258,9 +2261,11 @@ describe('Validation', () => {
             fireEvent.change(fileInput, { target: { files: [file] } });
           });
 
-          expect(NotificationToast.error).toHaveBeenCalledWith({
-            key: 'invalidFileType',
-            namespace: 'errors',
+          await waitFor(() => {
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'invalidFileType',
+              namespace: 'errors',
+            });
           });
         });
 

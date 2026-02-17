@@ -120,7 +120,7 @@ const CommunityProfile = (): JSX.Element => {
     React.useState<InterfaceLogoMetadata | null>(null);
 
   // Track if logo upload is in progress
-  const [_isLogoUploading, setIsLogoUploading] = React.useState(false);
+  const [isLogoUploading, setIsLogoUploading] = React.useState(false);
 
   // Ref for logo file input to keep DOM and state in sync
   const logoInputRef = React.useRef<HTMLInputElement>(null);
@@ -173,6 +173,11 @@ const CommunityProfile = (): JSX.Element => {
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    if (isLogoUploading) {
+      return;
+    }
+
     try {
       await uploadPreLoginImagery({
         variables: {
@@ -237,9 +242,10 @@ const CommunityProfile = (): JSX.Element => {
    */
   const isDisabled = (): boolean => {
     if (
-      profileVariable.name == '' &&
-      profileVariable.websiteURL == '' &&
-      logoMetadata === null
+      (profileVariable.name == '' &&
+        profileVariable.websiteURL == '' &&
+        logoMetadata === null) ||
+      isLogoUploading
     ) {
       return true;
     } else {

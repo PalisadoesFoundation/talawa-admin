@@ -91,9 +91,6 @@ function AdvertisementRegister({
   const [show, setShow] = useState(false);
   const { uploadFileToMinio } = useMinioUpload();
 
-  if (currentOrg === undefined) {
-    return <PageNotFound />;
-  }
   /*
    * Mutation to add advertisement and refetch the advertisement list
    */
@@ -137,6 +134,12 @@ function AdvertisementRegister({
     attachments: [],
   });
 
+  // Ref to track attachments for cleanup on unmount
+  const attachmentsRef = React.useRef(formState.attachments);
+  useEffect(() => {
+    attachmentsRef.current = formState.attachments;
+  }, [formState.attachments]);
+
   const handleClose = (): void => {
     // Revoke all blob URLs when closing/resetting form
     formState.attachments.forEach((attachment) => {
@@ -159,13 +162,13 @@ function AdvertisementRegister({
   // Cleanup blob URLs on unmount
   useEffect(() => {
     return () => {
-      formState.attachments.forEach((attachment) => {
+      attachmentsRef.current.forEach((attachment) => {
         if (attachment.previewUrl) {
           URL.revokeObjectURL(attachment.previewUrl);
         }
       });
     };
-  }, [formState.attachments]);
+  }, []);
 
   const handleShow = (): void => setShow(true); // Shows the modal
 
@@ -298,19 +301,27 @@ function AdvertisementRegister({
               objectName: string;
               fileHash: string;
               mimetype: string;
+              name: string;
               previewUrl?: string;
             }[]
           | undefined;
         description?: string | null;
       } = {
-        organizationId: currentOrg,
+        organizationId: currentOrg ?? '',
         name: formState.name as string,
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
         attachments:
           formState.attachments.length > 0
-            ? formState.attachments.map(({ previewUrl, ...rest }) => rest)
+            ? formState.attachments.map(
+                ({ objectName, fileHash, mimetype, name }) => ({
+                  objectName,
+                  fileHash,
+                  mimetype,
+                  name: name || '',
+                }),
+              )
             : undefined,
       };
 
@@ -453,6 +464,10 @@ function AdvertisementRegister({
   const modalTitle =
     formStatus === 'register' ? t('addNew') : t('editAdvertisement');
 
+  if (currentOrg === undefined) {
+    return <PageNotFound />;
+  }
+
   return (
     //If register show register button else show edit button
     <ErrorBoundaryWrapper
@@ -559,6 +574,7 @@ function AdvertisementRegister({
                     data-testid="closePreview"
                     className={styles.removeButton}
                     onClick={() => removeFile(index)}
+                    aria-label={tCommon('remove')}
                   >
                     <FaTrashCan />
                   </Button>

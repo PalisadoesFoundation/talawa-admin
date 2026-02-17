@@ -1,5 +1,6 @@
 import React, { act } from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+
+import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
 import AdvertisementRegister from './AdvertisementRegister';
 import { Provider } from 'react-redux';
@@ -9,10 +10,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { vi, it } from 'vitest';
-import {
-  client,
-  wait,
-} from 'components/AdminPortal/Advertisements/AdvertisementsMocks';
+import { client } from 'components/AdminPortal/Advertisements/AdvertisementsMocks';
 import { UPDATE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
@@ -85,6 +83,7 @@ describe('Testing Advertisement Register Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
+    cleanup();
   });
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(
@@ -164,6 +163,42 @@ describe('Testing Advertisement Register Component', () => {
     expect(setTimeoutSpy).toHaveBeenCalled();
   });
 
+  test('Shows error toast when image upload fails', async () => {
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+    const { getByText, getByTestId } = render(
+      <MockedProvider>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await userEvent.click(getByText(translations.createAdvertisement));
+    await userEvent.type(getByTestId('advertisementNameInput'), 'Ad1');
+
+    const mediaFile = new File(['media content'], 'test.png', {
+      type: 'image/png',
+    });
+    const mediaInput = getByTestId('advertisementMedia');
+
+    await userEvent.upload(mediaInput, mediaFile);
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Error uploading file'),
+      );
+    });
+  });
+
   test('Throws error at creation when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
@@ -233,7 +268,6 @@ describe('Testing Advertisement Register Component', () => {
       'End Date should be greater than Start Date',
     );
     expect(setTimeoutSpy).toHaveBeenCalled();
-    vi.useRealTimers();
   });
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
@@ -260,7 +294,6 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('editBtn')).toBeInTheDocument();
     });
-    vi.useRealTimers();
   });
 
   test('Opens and closes modals on button click', async () => {
@@ -291,7 +324,6 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       expect(queryByText(translations.close)).not.toBeInTheDocument();
     });
-    vi.useRealTimers();
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
@@ -365,7 +397,6 @@ describe('Testing Advertisement Register Component', () => {
         'End Date should be greater than Start Date',
       );
     });
-    vi.useRealTimers();
   });
 
   test('Media preview renders correctly', async () => {
@@ -426,10 +457,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
-    expect(
-      screen.getByText(translations.createAdvertisement),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
 
     await act(async () => {
       await userEvent.click(screen.getByText(translations.createAdvertisement));
@@ -494,7 +526,6 @@ describe('Testing Advertisement Register Component', () => {
       });
       expect(creationFailedText).toBeNull();
     });
-    vi.useRealTimers();
   });
 
   it('update advertisement', async () => {
@@ -688,9 +719,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
-
-    expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     const descriptionField = screen.getByTestId(
@@ -750,10 +781,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
-    expect(
-      screen.getByText(translations.createAdvertisement),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
 
     await act(async () => {
       await userEvent.click(screen.getByText(translations.createAdvertisement));
@@ -775,7 +807,6 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(toastErrorSpy).toHaveBeenCalledWith('File too large: test.jpg');
     expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
-    vi.useRealTimers();
   });
 
   it('upload valid files successfully', async () => {
@@ -796,10 +827,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
-    expect(
-      screen.getByText(translations.createAdvertisement),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
 
     await act(async () => {
       await userEvent.click(screen.getByText(translations.createAdvertisement));
@@ -821,7 +853,6 @@ describe('Testing Advertisement Register Component', () => {
     await userEvent.upload(mediaInput, mockFile);
 
     expect(screen.queryByTestId('mediaPreview')).toBeInTheDocument();
-    vi.useRealTimers();
   });
 
   it('Validates file types during upload', async () => {
@@ -912,7 +943,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     const mediaPreview = await screen.queryByTestId('mediaPreview');
@@ -958,7 +991,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     const endDateField = screen.getByTestId('advertisementEndDate');
@@ -1005,7 +1040,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     await userEvent.clear(screen.getByTestId('advertisementNameInput'));
@@ -1057,7 +1096,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     await userEvent.clear(screen.getByTestId('advertisementNameInput'));
@@ -1103,7 +1146,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     const nameField = screen.getByTestId('advertisementNameInput');
@@ -1158,7 +1203,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     const startDateField = screen.getByTestId('advertisementStartDate');
@@ -1210,7 +1257,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     const nameField = screen.getByTestId('advertisementNameInput');
@@ -1257,7 +1306,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     const mediaInput = screen.getByTestId('advertisementMedia');
@@ -1292,7 +1345,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('404')).toBeInTheDocument();
+    });
 
     expect(screen.getByText('404')).toBeInTheDocument();
     expect(
@@ -1319,6 +1374,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     const mediaInput = screen.getByTestId('advertisementMedia');
@@ -1349,7 +1409,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     await userEvent.type(
@@ -1396,7 +1460,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     await userEvent.clear(screen.getByTestId('advertisementNameInput'));
@@ -1459,7 +1527,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     await userEvent.clear(screen.getByTestId('advertisementNameInput'));
@@ -1517,7 +1589,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     await userEvent.type(
@@ -1560,7 +1634,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     await userEvent.type(
@@ -1599,7 +1675,9 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('editBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('editBtn'));
 
     expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
@@ -1739,6 +1817,4 @@ describe('Testing Advertisement Register Component', () => {
     revokeSpy.mockRestore();
     toastErrorSpy.mockRestore();
   });
-
-  vi.useRealTimers();
 });
