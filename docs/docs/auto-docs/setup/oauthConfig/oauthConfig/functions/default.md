@@ -6,7 +6,7 @@
 
 > **default**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/oauthConfig/oauthConfig.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L153)
+Defined in: [src/setup/oauthConfig/oauthConfig.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L144)
 
 Prompts user to configure OAuth settings and updates the .env file.
 
@@ -20,10 +20,11 @@ Prompts user to configure OAuth settings and updates the .env file.
 
 This function handles the interactive setup for OAuth configuration:
 - Asks if user wants to set up OAuth
-- If yes, asks which OAuth provider(s) to set up (Google, GitHub, or both)
-- For each selected provider, prompts for Client ID and Redirect URI
+- If yes, asks for a base URL (default: http://localhost:4321)
+- Asks which OAuth provider(s) to set up (Google, GitHub, or both)
+- For each selected provider, prompts for Client ID
+- Constructs redirect URIs as `{baseUrl}/auth/callback` for all providers
 - Provides helpful instructions on where to obtain OAuth credentials
-- Validates redirect URIs as proper URLs
 - Updates the corresponding VITE_*_CLIENT_ID and VITE_*_REDIRECT_URI in .env
 
 ## Example

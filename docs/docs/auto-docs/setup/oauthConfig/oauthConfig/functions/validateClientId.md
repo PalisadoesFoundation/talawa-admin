@@ -6,7 +6,7 @@
 
 > **validateClientId**(`value`, `provider`): `string` \| `boolean`
 
-Defined in: [src/setup/oauthConfig/oauthConfig.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L24)
+Defined in: [src/setup/oauthConfig/oauthConfig.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L23)
 
 Validates that a client ID is not empty or whitespace-only.
 

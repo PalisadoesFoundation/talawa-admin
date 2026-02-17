@@ -19,7 +19,7 @@ vi.mock('setup/updateEnvFile/updateEnvFile', () => ({
 // Import after mocking
 import askAndSetOAuth, {
   validateClientId,
-  validateRedirectUri,
+  validateBaseUrl,
 } from './oauthConfig';
 import inquirer from 'inquirer';
 import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
@@ -55,11 +55,13 @@ describe('askAndSetOAuth', () => {
         shouldSetupOAuth: true,
       })
       .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321',
+      })
+      .mockResolvedValueOnce({
         oauthProvider: 'google',
       })
       .mockResolvedValueOnce({
         clientId: 'google-client-id-123',
-        redirectUri: 'http://localhost:5173/user/oauth/google/callback',
       });
 
     await askAndSetOAuth();
@@ -73,7 +75,7 @@ describe('askAndSetOAuth', () => {
     );
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GOOGLE_REDIRECT_URI',
-      'http://localhost:5173/user/oauth/google/callback',
+      'http://localhost:4321/auth/callback',
     );
     expect(updateEnvFile).toHaveBeenCalledWith('VITE_GITHUB_CLIENT_ID', '');
     expect(updateEnvFile).toHaveBeenCalledWith('VITE_GITHUB_REDIRECT_URI', '');
@@ -88,11 +90,13 @@ describe('askAndSetOAuth', () => {
         shouldSetupOAuth: true,
       })
       .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321',
+      })
+      .mockResolvedValueOnce({
         oauthProvider: 'github',
       })
       .mockResolvedValueOnce({
         clientId: 'github-client-id-456',
-        redirectUri: 'http://localhost:5173/user/oauth/github/callback',
       });
 
     await askAndSetOAuth();
@@ -108,7 +112,7 @@ describe('askAndSetOAuth', () => {
     );
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GITHUB_REDIRECT_URI',
-      'http://localhost:5173/user/oauth/github/callback',
+      'http://localhost:4321/auth/callback',
     );
   });
 
@@ -118,15 +122,16 @@ describe('askAndSetOAuth', () => {
         shouldSetupOAuth: true,
       })
       .mockResolvedValueOnce({
+        baseUrl: 'https://example.com',
+      })
+      .mockResolvedValueOnce({
         oauthProvider: 'both',
       })
       .mockResolvedValueOnce({
         clientId: 'google-client-id-123',
-        redirectUri: 'https://example.com/auth/google',
       })
       .mockResolvedValueOnce({
         clientId: 'github-client-id-456',
-        redirectUri: 'https://example.com/auth/github',
       });
 
     await askAndSetOAuth();
@@ -143,7 +148,7 @@ describe('askAndSetOAuth', () => {
     );
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GOOGLE_REDIRECT_URI',
-      'https://example.com/auth/google',
+      'https://example.com/auth/callback',
     );
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GITHUB_CLIENT_ID',
@@ -151,7 +156,7 @@ describe('askAndSetOAuth', () => {
     );
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GITHUB_REDIRECT_URI',
-      'https://example.com/auth/github',
+      'https://example.com/auth/callback',
     );
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining('OAuth provider configuration completed!'),
@@ -164,11 +169,13 @@ describe('askAndSetOAuth', () => {
         shouldSetupOAuth: true,
       })
       .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321',
+      })
+      .mockResolvedValueOnce({
         oauthProvider: 'google',
       })
       .mockResolvedValueOnce({
         clientId: 'test-client-id',
-        redirectUri: 'http://localhost:5173/callback',
       });
 
     await askAndSetOAuth();
@@ -189,11 +196,13 @@ describe('askAndSetOAuth', () => {
         shouldSetupOAuth: true,
       })
       .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321',
+      })
+      .mockResolvedValueOnce({
         oauthProvider: 'github',
       })
       .mockResolvedValueOnce({
         clientId: 'test-client-id',
-        redirectUri: 'http://localhost:5173/callback',
       });
 
     await askAndSetOAuth();
@@ -248,66 +257,72 @@ describe('askAndSetOAuth', () => {
     );
   });
 
-  it('should accept custom redirect URIs with valid URLs', async () => {
+  it('should accept custom base URLs with valid URLs', async () => {
     (inquirer.prompt as unknown as Mock)
       .mockResolvedValueOnce({
         shouldSetupOAuth: true,
+      })
+      .mockResolvedValueOnce({
+        baseUrl: 'https://custom-domain.com',
       })
       .mockResolvedValueOnce({
         oauthProvider: 'google',
       })
       .mockResolvedValueOnce({
         clientId: 'custom-client-id',
-        redirectUri: 'https://custom-domain.com/oauth/callback',
       });
 
     await askAndSetOAuth();
 
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GOOGLE_REDIRECT_URI',
-      'https://custom-domain.com/oauth/callback',
+      'https://custom-domain.com/auth/callback',
     );
   });
 
-  it('should use default redirect URI for Google', async () => {
+  it('should use default base URL', async () => {
     (inquirer.prompt as unknown as Mock)
       .mockResolvedValueOnce({
         shouldSetupOAuth: true,
+      })
+      .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321',
       })
       .mockResolvedValueOnce({
         oauthProvider: 'google',
       })
       .mockResolvedValueOnce({
         clientId: 'test-id',
-        redirectUri: 'http://localhost:5173/user/oauth/google/callback',
       });
 
     await askAndSetOAuth();
 
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GOOGLE_REDIRECT_URI',
-      'http://localhost:5173/user/oauth/google/callback',
+      'http://localhost:4321/auth/callback',
     );
   });
 
-  it('should use default redirect URI for GitHub', async () => {
+  it('should remove trailing slash from base URL', async () => {
     (inquirer.prompt as unknown as Mock)
       .mockResolvedValueOnce({
         shouldSetupOAuth: true,
+      })
+      .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321/',
       })
       .mockResolvedValueOnce({
         oauthProvider: 'github',
       })
       .mockResolvedValueOnce({
         clientId: 'test-id',
-        redirectUri: 'http://localhost:5173/user/oauth/github/callback',
       });
 
     await askAndSetOAuth();
 
     expect(updateEnvFile).toHaveBeenCalledWith(
       'VITE_GITHUB_REDIRECT_URI',
-      'http://localhost:5173/user/oauth/github/callback',
+      'http://localhost:4321/auth/callback',
     );
   });
 });
@@ -337,55 +352,42 @@ describe('validateClientId', () => {
   });
 });
 
-describe('validateRedirectUri', () => {
+describe('validateBaseUrl', () => {
   it('should return error message for empty string', () => {
-    expect(validateRedirectUri('', 'Google')).toBe(
-      'Google Redirect URI cannot be empty.',
-    );
+    expect(validateBaseUrl('')).toBe('Base URL cannot be empty.');
   });
 
   it('should return error message for whitespace-only string', () => {
-    expect(validateRedirectUri('   ', 'Google')).toBe(
-      'Google Redirect URI cannot be empty.',
-    );
+    expect(validateBaseUrl('   ')).toBe('Base URL cannot be empty.');
   });
 
   it('should return error message for invalid URL', () => {
-    expect(validateRedirectUri('not-a-url', 'Google')).toBe(
+    expect(validateBaseUrl('not-a-url')).toBe(
       'Please enter a valid URL with http or https protocol.',
     );
   });
 
   it('should return error message for URL with invalid protocol', () => {
-    expect(validateRedirectUri('ftp://invalid.com/path', 'Google')).toBe(
+    expect(validateBaseUrl('ftp://invalid.com/path')).toBe(
       'Please enter a valid URL with http or https protocol.',
     );
-    expect(validateRedirectUri('file://path/to/file', 'GitHub')).toBe(
+    expect(validateBaseUrl('file://path/to/file')).toBe(
       'Please enter a valid URL with http or https protocol.',
     );
   });
 
   it('should return true for valid http URL', () => {
-    expect(validateRedirectUri('http://valid.com/path', 'Google')).toBe(true);
-    expect(
-      validateRedirectUri('http://localhost:5173/callback', 'GitHub'),
-    ).toBe(true);
+    expect(validateBaseUrl('http://valid.com')).toBe(true);
+    expect(validateBaseUrl('http://localhost:5173')).toBe(true);
   });
 
   it('should return true for valid https URL', () => {
-    expect(validateRedirectUri('https://valid.com/path', 'Google')).toBe(true);
-    expect(validateRedirectUri('https://github.com/callback', 'GitHub')).toBe(
-      true,
-    );
+    expect(validateBaseUrl('https://valid.com')).toBe(true);
+    expect(validateBaseUrl('http://localhost:4321')).toBe(true);
   });
 
-  it('should work with different provider names', () => {
-    expect(validateRedirectUri('', 'GitHub')).toBe(
-      'GitHub Redirect URI cannot be empty.',
-    );
-    expect(validateRedirectUri('https://example.com/oauth', 'GitHub')).toBe(
-      true,
-    );
+  it('should handle URLs with paths', () => {
+    expect(validateBaseUrl('https://example.com/path')).toBe(true);
   });
 });
 
@@ -396,13 +398,16 @@ describe('validate callbacks in configureProvider', () => {
         shouldSetupOAuth: true,
       })
       .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321',
+      })
+      .mockResolvedValueOnce({
         oauthProvider: 'google',
       })
       .mockImplementationOnce(
         (
           questions: Array<{ validate?: (input: string) => boolean | string }>,
         ) => {
-          // Test the validate callback for clientId (line 117)
+          // Test the validate callback for clientId
           const clientIdQuestion = questions.find(
             (q) => 'name' in q && q.name === 'clientId',
           );
@@ -421,30 +426,8 @@ describe('validate callbacks in configureProvider', () => {
             expect(clientIdQuestion.validate('valid-client-id')).toBe(true);
           }
 
-          // Test the validate callback for redirectUri (line 124)
-          const redirectUriQuestion = questions.find(
-            (q) => 'name' in q && q.name === 'redirectUri',
-          );
-          expect(redirectUriQuestion).toBeDefined();
-
-          if (redirectUriQuestion?.validate) {
-            // Test empty input
-            expect(redirectUriQuestion.validate('')).toBe(
-              'Google Redirect URI cannot be empty.',
-            );
-            // Test invalid URL
-            expect(redirectUriQuestion.validate('not-a-url')).toBe(
-              'Please enter a valid URL with http or https protocol.',
-            );
-            // Test valid URL
-            expect(
-              redirectUriQuestion.validate('https://example.com/callback'),
-            ).toBe(true);
-          }
-
           return Promise.resolve({
             clientId: 'test-client-id',
-            redirectUri: 'https://example.com/callback',
           });
         },
       );
@@ -456,6 +439,9 @@ describe('validate callbacks in configureProvider', () => {
     (inquirer.prompt as unknown as Mock)
       .mockResolvedValueOnce({
         shouldSetupOAuth: true,
+      })
+      .mockResolvedValueOnce({
+        baseUrl: 'http://localhost:4321',
       })
       .mockResolvedValueOnce({
         oauthProvider: 'github',
@@ -477,27 +463,56 @@ describe('validate callbacks in configureProvider', () => {
             expect(clientIdQuestion.validate('valid-id')).toBe(true);
           }
 
-          // Test the validate callback for redirectUri with GitHub provider name
-          const redirectUriQuestion = questions.find(
-            (q) => 'name' in q && q.name === 'redirectUri',
-          );
-
-          if (redirectUriQuestion?.validate) {
-            // Verify provider name is passed correctly
-            expect(redirectUriQuestion.validate('')).toBe(
-              'GitHub Redirect URI cannot be empty.',
-            );
-            expect(
-              redirectUriQuestion.validate('http://localhost:3000/callback'),
-            ).toBe(true);
-          }
-
           return Promise.resolve({
             clientId: 'test-client-id',
-            redirectUri: 'http://localhost:3000/callback',
           });
         },
       );
+
+    await askAndSetOAuth();
+  });
+
+  it('should validate base URL with correct validation function', async () => {
+    (inquirer.prompt as unknown as Mock)
+      .mockResolvedValueOnce({
+        shouldSetupOAuth: true,
+      })
+      .mockImplementationOnce(
+        (
+          questions: Array<{ validate?: (input: string) => boolean | string }>,
+        ) => {
+          // Test the validate callback for base URL
+          const baseUrlQuestion = questions.find(
+            (q) => 'name' in q && q.name === 'baseUrl',
+          );
+          expect(baseUrlQuestion).toBeDefined();
+
+          if (baseUrlQuestion?.validate) {
+            // Test empty input
+            expect(baseUrlQuestion.validate('')).toBe(
+              'Base URL cannot be empty.',
+            );
+            // Test invalid URL
+            expect(baseUrlQuestion.validate('not-a-url')).toBe(
+              'Please enter a valid URL with http or https protocol.',
+            );
+            // Test valid URL
+            expect(baseUrlQuestion.validate('http://localhost:4321')).toBe(
+              true,
+            );
+          }
+
+          return Promise.resolve({
+            baseUrl: 'http://localhost:4321',
+          });
+        },
+      )
+      .mockResolvedValueOnce({
+        oauthProvider: 'google',
+      })
+      .mockResolvedValueOnce({
+        clientId: 'test-client-id',
+      });
 
     await askAndSetOAuth();
   });
