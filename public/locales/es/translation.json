@@ -196,7 +196,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menú",
     "users": "usuarios",
-    "logout": "cerrar sesión"
+    "logout": "cerrar sesión",
+    "notAvailable": "No disponible"
   },
   "leftDrawerOrg": {
     "Dashboard": "Panel de control",

@@ -196,7 +196,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
-    "logout": "लॉगआउट"
+    "logout": "लॉगआउट",
+    "notAvailable": "उपलब्ध नहीं"
   },
   "leftDrawerOrg": {
     "Dashboard": "डैशबोर्ड",
