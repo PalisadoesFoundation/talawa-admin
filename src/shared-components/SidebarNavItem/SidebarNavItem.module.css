@@ -9,8 +9,8 @@
 }
 
 .leftDrawerActiveButton {
-  background-color: var(--leftDrawer-active-button-bg);
-  color: var(--leftDrawer-button-text-color);
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
   font-weight: var(--font-weight-bold);
 }
 
@@ -20,35 +20,35 @@
 }
 
 .leftDrawerInactiveButton {
-  background-color: var(--leftDrawer-inactive-button-bg);
-  color: var(--leftDrawer-button-text-color);
+  background-color: transparent;
+  color: var(--color-black);
 }
 
 .leftDrawerInactiveButton:hover {
-  background-color: var(--leftDrawer-inactive-button-hover-bg);
+  background-color: var(--color-gray-100);
 }
 
 .sidebarBtn {
   background-color: transparent;
-  color: var(--sidebar-option-text-inactive);
+  color: var(--color-black);
   font-weight: var(--font-weight-regular);
   cursor: pointer;
 }
 
 .sidebarBtn:hover {
-  background-color: var(--sidebar-option-bg-hover);
-  color: var(--sidebar-option-text-active);
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
 }
 
 .sidebarBtnActive {
-  background-color: var(--sidebar-option-bg);
-  color: var(--sidebar-option-text-active);
+  background-color: var(--color-gray-200);
+  color: var(--color-black);
   font-weight: var(--font-weight-bold);
 }
 
 .iconWrapper {
-  width: var(--space-8-5);
-  min-width: var(--space-8-5);
+  width: var(--space-8);
+  min-width: var(--space-8);
   display: flex;
   justify-content: center;
   align-items: center;

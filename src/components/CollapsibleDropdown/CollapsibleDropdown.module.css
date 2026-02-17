@@ -1,9 +1,9 @@
 .collapsibleDropdownIconWrapper {
-  width: var(--space-8-5);
+  width: var(--space-8);
 }
 
 .collapsibleDropdownIconWrapperSm {
-  width: var(--space-8-5);
+  width: var(--space-8);
   display: flex;
   justify-content: center;
   align-items: center;
