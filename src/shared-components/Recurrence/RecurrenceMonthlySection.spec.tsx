@@ -184,6 +184,43 @@ describe('RecurrenceMonthlySection', () => {
       }
     });
 
+    it('should call setRecurrenceRuleState when WEEKDAY option is selected', async () => {
+      const user = userEvent.setup();
+      const setRecurrenceRuleState = vi.fn();
+
+      render(
+        <RecurrenceMonthlySection
+          {...defaultProps}
+          setRecurrenceRuleState={setRecurrenceRuleState}
+        />,
+      );
+
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
+
+      const weekdayOption = screen.getByTestId(
+        'monthlyRecurrenceDropdown-item-WEEKDAY',
+      );
+      await user.click(weekdayOption);
+
+      await waitFor(() => expect(setRecurrenceRuleState).toHaveBeenCalled());
+      const callArg = setRecurrenceRuleState.mock.calls[0][0];
+
+      // Verify it's a function that updates state correctly (else branch)
+      if (typeof callArg === 'function') {
+        const prevState: InterfaceRecurrenceRule = {
+          ...defaultRecurrenceRule,
+          byMonthDay: [15],
+          byDay: undefined,
+        };
+        const newState = callArg(prevState);
+        expect(newState.byDay).toBeDefined();
+        expect(newState.byMonthDay).toBeUndefined();
+      }
+    });
+
     it('should update state correctly when switching to byDate', async () => {
       const user = userEvent.setup();
       const setRecurrenceRuleState = vi.fn();
