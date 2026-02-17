@@ -1,4 +1,5 @@
 import React from 'react';
+import * as ApolloClient from '@apollo/client';
 import { renderHook, act, waitFor, cleanup } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
@@ -116,6 +117,43 @@ describe('useRegistration', () => {
       expect(result.current.loading).toBe(false);
       expect(result.current.error).toBeInstanceOf(Error);
     });
+  });
+
+  it('should normalize thrown object errors with a message property', async () => {
+    const mockOnError = vi.fn();
+    const mockSignup = vi
+      .fn()
+      .mockRejectedValue({ message: 'Registration failed from object' });
+    const mockedMutationTuple = [
+      mockSignup,
+      { loading: false },
+    ] as unknown as ReturnType<typeof ApolloClient.useMutation>;
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue(mockedMutationTuple);
+
+    const { result } = renderHook(() =>
+      useRegistration({ onError: mockOnError }),
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockSignup).toHaveBeenCalledTimes(1);
+    expect(mockOnError).toHaveBeenCalledTimes(1);
+    expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
+    expect((mockOnError.mock.calls[0][0] as Error).message).toBe(
+      'Registration failed from object',
+    );
+    expect(result.current.error).toBeInstanceOf(Error);
+    expect(result.current.error?.message).toBe(
+      'Registration failed from object',
+    );
   });
 
   it('should handle registration without callbacks', async () => {
@@ -248,6 +286,56 @@ describe('useRegistration', () => {
     });
   });
 
+  it('should treat whitespace-only name, email, and password as missing required fields', async () => {
+    const mockOnError = vi.fn();
+    const { result } = renderHook(
+      () => useRegistration({ onError: mockOnError }),
+      { wrapper: createWrapper(SUCCESS_MOCK) },
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: '   ',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(1);
+    expect((mockOnError.mock.calls[0][0] as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: '   ',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(2);
+    expect((mockOnError.mock.calls[1][0] as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: '   ',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(3);
+    expect((mockOnError.mock.calls[2][0] as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+    );
+  });
+
   it('should call onError with RegistrationError (MISSING_ORGANIZATION_ID) when organizationId is missing or empty', async () => {
     const mockOnError = vi.fn();
     const { result } = renderHook(
@@ -337,6 +425,52 @@ describe('useRegistration', () => {
     await waitFor(() => {
       expect(mockOnSuccess).toHaveBeenCalledTimes(1);
       expect(result.current.loading).toBe(false);
+    });
+  });
+
+  it('should call onError when signUp is missing from the mutation response', async () => {
+    const mockOnError = vi.fn();
+    const noSignUpMock: MockedResponse[] = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: '1',
+            name: 'Test User',
+            email: 'test@example.com',
+            password: 'password123',
+          },
+        },
+        result: {
+          data: { signUp: null },
+        },
+      },
+    ];
+
+    const { result } = renderHook(
+      () => useRegistration({ onError: mockOnError }),
+      {
+        wrapper: createWrapper(noSignUpMock),
+      },
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(1);
+      expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
+      expect((mockOnError.mock.calls[0][0] as Error).message).toBe(
+        'Sign-up returned no data',
+      );
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe('Sign-up returned no data');
     });
   });
 

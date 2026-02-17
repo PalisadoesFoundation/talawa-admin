@@ -329,7 +329,7 @@ describe('RegistrationForm', () => {
     });
   });
 
-  it('calls onError callback when registration fails', async () => {
+  it('initializes hook with onSuccess and onError callbacks', async () => {
     const mockOnError = vi.fn();
     const mockRegister = vi.fn().mockResolvedValue(undefined);
 
