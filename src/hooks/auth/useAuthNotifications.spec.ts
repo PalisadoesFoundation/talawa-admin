@@ -196,6 +196,45 @@ describe('useAuthNotifications', () => {
       );
     });
 
+    it('should show fallback when error message is only whitespace', () => {
+      const { result } = renderHook(() => useAuthNotifications(mockT));
+      const error = new Error('   ');
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      result.current.showAuthError(error);
+
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Authentication error',
+        expect.any(Object),
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Authentication error:',
+        error,
+      );
+    });
+
+    it('should truncate long error messages to 120 characters', () => {
+      const { result } = renderHook(() => useAuthNotifications(mockT));
+      const longMessage = 'Something went wrong '.repeat(10).trim();
+      const error = new Error(longMessage);
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      result.current.showAuthError(error);
+
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        `Authentication error: ${longMessage.slice(0, 120)}...`,
+        expect.any(Object),
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Authentication error:',
+        error,
+      );
+    });
+
     it('should not surface sensitive error details in toast message', () => {
       const { result } = renderHook(() => useAuthNotifications(mockT));
       const error = new Error('authorization: Bearer secret-token-value');
