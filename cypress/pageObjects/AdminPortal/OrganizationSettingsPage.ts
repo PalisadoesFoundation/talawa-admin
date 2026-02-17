@@ -10,6 +10,7 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
   private readonly organizationDescriptionInput = '[name="orgDescrip"]';
   private readonly organizationLocationInput = '[name="address.line1"]';
   private readonly isPublicSwitch = 'user-reg-switch';
+  private readonly organizationImageInput = 'organisationImage';
   private readonly saveChangesButton = 'save-org-changes-btn';
   private readonly openDeleteModalButton = 'openDeleteModalBtn';
   private readonly confirmDeleteButton = 'deleteOrganizationBtn';
@@ -77,6 +78,24 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
 
   toggleIsPublic(timeout = 10000): this {
     this.byTestId(this.isPublicSwitch, timeout).should('be.visible').click();
+    return this;
+  }
+
+  uploadDisplayImageFromFixture(fixturePath: string, timeout = 10000): this {
+    this.byTestId(this.organizationImageInput, timeout)
+      .should('be.visible')
+      .selectFile(`cypress/fixtures/${fixturePath}`, { force: true });
+    return this;
+  }
+
+  assertSelectedDisplayImage(fileName: string, timeout = 10000): this {
+    this.byTestId(this.organizationImageInput, timeout)
+      .should('be.visible')
+      .should(($input) => {
+        const files = ($input[0] as HTMLInputElement).files;
+        expect(files?.length).to.eq(1);
+        expect(files?.[0]?.name).to.eq(fileName);
+      });
     return this;
   }
 

@@ -2,6 +2,12 @@ import { MemberManagementPage } from '../../../pageObjects/AdminPortal/MemberMan
 import { OrganizationSettingsPage } from '../../../pageObjects/AdminPortal/OrganizationSettingsPage';
 import { OrganizationSetupPage } from '../../../pageObjects/AdminPortal/OrganizationSetupPage';
 
+const clearTestState = () => {
+  cy.clearAllGraphQLMocks();
+  cy.clearCookies();
+  cy.clearLocalStorage();
+};
+
 describe('Organization setup workflow', () => {
   const setupPage = new OrganizationSetupPage();
   const organizationSettingsPage = new OrganizationSettingsPage();
@@ -14,9 +20,7 @@ describe('Organization setup workflow', () => {
   });
 
   afterEach(() => {
-    cy.clearAllGraphQLMocks();
-    cy.clearCookies();
-    cy.clearLocalStorage();
+    clearTestState();
   });
 
   after(() => {
@@ -25,7 +29,7 @@ describe('Organization setup workflow', () => {
     }
   });
 
-  it('creates, configures, and invites members for an organization', () => {
+  it('creates, configures, applies branding input, and invites members', () => {
     const uniqueSuffix = Date.now();
     const orgName = `E2E Setup Org ${uniqueSuffix}`;
     const updatedOrgName = `${orgName} Updated`;
@@ -103,6 +107,11 @@ describe('Organization setup workflow', () => {
     });
     cy.assertToast(/updated/i);
 
+    // Branding step: validate organization image input behavior.
+    organizationSettingsPage
+      .uploadDisplayImageFromFixture('advertisement_banner.png')
+      .assertSelectedDisplayImage('advertisement_banner.png');
+
     cy.createTestUser({ name: inviteeName }).then(({ userId }) => {
       userIds.push(userId);
     });
@@ -135,5 +144,113 @@ describe('Organization setup workflow', () => {
     memberManagementPage
       .searchMemberByName(inviteeName)
       .verifyMemberInList(inviteeName);
+  });
+
+  it('shows an error for duplicate organization names', () => {
+    const duplicateOrgName = `E2E Duplicate Org ${Date.now()}`;
+
+    cy.mockGraphQLOperation('OrganizationFilterList', (req) => {
+      req.continue();
+    });
+    cy.mockGraphQLOperation(
+      'createOrganization',
+      'api/graphql/createOrganization.error.conflict.json',
+    );
+
+    setupPage.visitOrgList();
+    cy.waitForGraphQLOperation('OrganizationFilterList');
+
+    setupPage
+      .openCreateOrganizationModal()
+      .fillCreateOrganizationForm({
+        name: duplicateOrgName,
+        description: 'Conflict path validation',
+        countryCode: 'us',
+        state: 'California',
+        city: 'San Francisco',
+        addressLine1: '123 Conflict Ave',
+        postalCode: '94105',
+      })
+      .submitCreateOrganizationForm();
+
+    cy.waitForGraphQLOperation('createOrganization')
+      .its('response.body.errors.0.message')
+      .should('eq', 'Organization name already exists');
+    cy.assertToast(/already exists/i);
+  });
+});
+
+describe('Organization setup permissions', () => {
+  const setupPage = new OrganizationSetupPage();
+
+  afterEach(() => {
+    clearTestState();
+  });
+
+  it('blocks regular users from admin organization setup routes', () => {
+    cy.loginByApi('user');
+    cy.visit('/admin/orglist');
+    cy.url().should('include', '/admin/orglist');
+    setupPage.assertPageNotFound().assertCreateOrganizationButtonNotVisible();
+  });
+});
+
+describe('Organization switching workflow', () => {
+  const setupPage = new OrganizationSetupPage();
+  const uniqueSuffix = Date.now();
+  const firstOrgName = `E2E Switch Org A ${uniqueSuffix}`;
+  const secondOrgName = `E2E Switch Org B ${uniqueSuffix}`;
+  let firstOrgId = '';
+  let secondOrgId = '';
+
+  before(() => {
+    cy.setupTestEnvironment({
+      orgName: firstOrgName,
+      auth: { role: 'admin' },
+    })
+      .then(({ orgId }) => {
+        firstOrgId = orgId;
+        return cy.setupTestEnvironment({
+          orgName: secondOrgName,
+          auth: { role: 'admin' },
+        });
+      })
+      .then(({ orgId }) => {
+        secondOrgId = orgId;
+      });
+  });
+
+  beforeEach(() => {
+    cy.loginByApi('admin');
+    cy.mockGraphQLOperation('OrganizationFilterList', (req) => {
+      req.continue();
+    });
+  });
+
+  afterEach(() => {
+    clearTestState();
+  });
+
+  after(() => {
+    if (firstOrgId) {
+      cy.cleanupTestOrganization(firstOrgId, { allowNotFound: true });
+    }
+    if (secondOrgId) {
+      cy.cleanupTestOrganization(secondOrgId, { allowNotFound: true });
+    }
+  });
+
+  it('switches between organizations from the org list', () => {
+    setupPage.visitOrgList();
+    cy.waitForGraphQLOperation('OrganizationFilterList');
+
+    setupPage.openOrganizationDashboardByName(firstOrgName);
+    cy.url().should('include', `/admin/orgdash/${firstOrgId}`);
+
+    setupPage.visitOrgList();
+    cy.waitForGraphQLOperation('OrganizationFilterList');
+
+    setupPage.openOrganizationDashboardByName(secondOrgName);
+    cy.url().should('include', `/admin/orgdash/${secondOrgId}`);
   });
 });
