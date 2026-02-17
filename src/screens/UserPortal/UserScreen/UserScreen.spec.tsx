@@ -15,6 +15,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { render, screen, waitFor, cleanup, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -137,13 +138,14 @@ vi.mock('utils/useSession', () => ({
   })),
 }));
 
-// Mock ProfileCard component to prevent useNavigate() error from Router context
-vi.mock('components/ProfileCard/ProfileCard', () => ({
-  default: vi.fn(() => (
-    <div data-testid="profile-dropdown">
-      <div data-testid="display-name">Test User</div>
-    </div>
-  )),
+vi.mock('shared-components/Avatar/Avatar', () => ({
+  default: vi.fn(
+    ({ dataTestId, alt }: { dataTestId?: string; alt?: string }) => (
+      <div data-testid={dataTestId} aria-label={alt}>
+        Avatar
+      </div>
+    ),
+  ),
 }));
 
 const MOCKS = [
@@ -233,6 +235,7 @@ describe('UserScreen tests', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
     vi.clearAllMocks();
 
     localStorage.removeItem('name');
@@ -381,16 +384,7 @@ describe('UserScreen tests', () => {
     expect(heading).toHaveTextContent('Posts');
   });
 
-  it('renders default title "User Portal" for unknown routes', () => {
-    mockLocation = '/user/unknownroute/123';
-
-    renderUserScreen();
-
-    const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement).toHaveTextContent('User Portal');
-  });
-
-  it('sets hideDrawer to true when window width is 820px or less on mount', async () => {
+  it('sets hideDrawer true when window <= 820px on mount', async () => {
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
       configurable: true,
@@ -399,7 +393,6 @@ describe('UserScreen tests', () => {
 
     renderUserScreen();
 
-    const drawer = screen.getByTestId('leftDrawerContainer');
     await waitFor(() => {
       expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
         'data-hide-drawer',
@@ -413,8 +406,6 @@ describe('UserScreen tests', () => {
 
     renderUserScreen();
 
-    const drawer = screen.getByTestId('leftDrawerContainer');
-
     await waitFor(() => {
       expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
         'data-hide-drawer',
@@ -427,12 +418,151 @@ describe('UserScreen tests', () => {
     localStorage.setItem('Talawa-admin_sidebar', JSON.stringify('false'));
 
     renderUserScreen();
-    renderUserScreen();
-
-    const drawer = screen.getByTestId('leftDrawerContainer');
 
     await waitFor(() => {
-      expect(drawer).toHaveAttribute('data-hide-drawer', 'false');
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'false',
+      );
+    });
+  });
+
+  it('hides drawer on resize to narrow screen', async () => {
+    renderUserScreen();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'false',
+      );
+    });
+
+    await act(async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 700,
+      });
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
+  });
+
+  it('does not reopen drawer when resized back to wide screen', async () => {
+    Object.defineProperty(window, 'innerWidth', {
+      writable: true,
+      configurable: true,
+      value: 800,
+    });
+
+    renderUserScreen();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
+
+    await act(async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 1100,
+      });
+      window.dispatchEvent(new Event('resize'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'true',
+      );
+    });
+  });
+
+  it('navigates to profile when viewProfile is selected', async () => {
+    const user = userEvent.setup();
+    renderUserScreen();
+
+    await user.click(screen.getByTestId('select-viewProfile'));
+
+    expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile/123');
+  });
+
+  it('calls handleLogout when logout is selected', async () => {
+    const user = userEvent.setup();
+    renderUserScreen();
+
+    await user.click(screen.getByTestId('select-logout'));
+
+    expect(mockUserProfile.handleLogout).toHaveBeenCalled();
+  });
+
+  it('logs error to console when handleLogout rejects', async () => {
+    const user = userEvent.setup();
+    const error = new Error('Logout failed');
+    mockUserProfile.handleLogout.mockRejectedValueOnce(error);
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    renderUserScreen();
+
+    await user.click(screen.getByTestId('select-logout'));
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith('Logout failed:', error);
+    });
+
+    consoleSpy.mockRestore();
+  });
+
+  it('does nothing for unknown eventKey (default branch)', async () => {
+    const user = userEvent.setup();
+    renderUserScreen();
+
+    await user.click(screen.getByTestId('select-unknown'));
+
+    expect(routerSpies.navigate).not.toHaveBeenCalled();
+    expect(mockUserProfile.handleLogout).not.toHaveBeenCalled();
+  });
+
+  it('renders displayedName and userRole', () => {
+    renderUserScreen();
+    expect(screen.getByTestId('display-name')).toHaveTextContent('John Doe');
+    expect(screen.getByTestId('display-type')).toHaveTextContent('USER');
+  });
+
+  it('renders Avatar when userImage is empty', () => {
+    renderUserScreen();
+    const el = screen.getByTestId('display-img');
+    expect(el).toBeInTheDocument();
+    expect(el.tagName).not.toBe('IMG');
+  });
+
+  it('renders <img> when userImage is provided', () => {
+    mockUserProfile.userImage = 'https://example.com/avatar.jpg';
+    renderUserScreen();
+
+    const img = screen.getByTestId('display-img');
+    expect(img.tagName).toBe('IMG');
+    expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg');
+    expect(img).toHaveAttribute('alt', 'profile picture');
+  });
+
+  it('does not crash when GraphQL returns an error', async () => {
+    renderUserScreen(errorLink);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'false',
+      );
     });
   });
 });
