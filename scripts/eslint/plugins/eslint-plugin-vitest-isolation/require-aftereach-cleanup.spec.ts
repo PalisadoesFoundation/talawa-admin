@@ -370,6 +370,55 @@ vi.fn();
 });
 `,
     },
+    // afterEach with inline comment block (covers isInlineBlock path in textBetween.trim > 0)
+    {
+      code: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => { /* comment */ });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => { /* comment */ 
+              vi.clearAllMocks();
+            });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+    },
+    // afterEach with comment flush against closing brace (covers !matchTrailing path)
+    {
+      code: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => {/* comment */});
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => {/* comment */
+
+              vi.clearAllMocks();
+            });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+    },
     // Empty describe block followed by other code (regression test for regex bug)
     {
       code: `

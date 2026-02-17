@@ -484,6 +484,45 @@ vi.fn();`,
     },
 
     {
+      code: `
+        afterEach(() => { /* comment */ });
+        vi.fn();
+      `,
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
+        afterEach(() => { /* comment */ 
+          vi.clearAllMocks();
+        });
+        vi.fn();
+      `,
+      languageOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        globals: { vi: 'readonly', afterEach: 'readonly' },
+      },
+    },
+
+    {
+      code: `
+        afterEach(() => {/* comment */});
+        vi.fn();
+      `,
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
+        afterEach(() => {/* comment */
+
+          vi.clearAllMocks();
+        });
+        vi.fn();
+      `,
+      languageOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        globals: { vi: 'readonly', afterEach: 'readonly' },
+      },
+    },
+
+    {
       code: `describe('x', () => {
 vi.mock('y');
 });`,
