@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceMonthlySection } from './RecurrenceMonthlySection';
 import { Frequency, WeekDays } from '../../utils/recurrenceUtils';
@@ -19,7 +19,14 @@ const defaultProps = {
   frequency: Frequency.MONTHLY,
   recurrenceRuleState: defaultRecurrenceRule,
   setRecurrenceRuleState: vi.fn(),
-  startDate: dayjs().year(2024).month(6).date(15).toDate(), // July 15, 2024 (3rd Monday)
+  startDate: dayjs()
+    .year(2024)
+    .month(6)
+    .date(15)
+    .hour(10)
+    .minute(0)
+    .second(0)
+    .toDate(),
   t: (key: string) => key,
 };
 
@@ -29,6 +36,7 @@ describe('RecurrenceMonthlySection', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -119,18 +127,25 @@ describe('RecurrenceMonthlySection', () => {
   });
 
   describe('User Interactions', () => {
-    it('should open dropdown when clicked', async () => {
+    it('should render the dropdown with correct options', async () => {
       const user = userEvent.setup();
-
       render(<RecurrenceMonthlySection {...defaultProps} />);
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
-      await user.click(dropdown);
+      // Open dropdown
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
 
-      // Check that dropdown menu item is available
-      expect(
-        screen.getByTestId('monthlyRecurrenceDropdown-item-monthlyByDate'),
-      ).toBeInTheDocument();
+      // Check that dropdown menu items are available
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByTestId('monthlyRecurrenceDropdown-item-WEEKDAY'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('should call setRecurrenceRuleState when byDate option is selected', async () => {
@@ -144,11 +159,13 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
-      await user.click(dropdown);
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
 
       const byDateOption = screen.getByTestId(
-        'monthlyRecurrenceDropdown-item-monthlyByDate',
+        'monthlyRecurrenceDropdown-item-DATE',
       );
       await user.click(byDateOption);
 
@@ -184,11 +201,13 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
-      await user.click(dropdown);
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
 
       const byDateOption = screen.getByTestId(
-        'monthlyRecurrenceDropdown-item-monthlyByDate',
+        'monthlyRecurrenceDropdown-item-DATE',
       );
       await user.click(byDateOption);
 

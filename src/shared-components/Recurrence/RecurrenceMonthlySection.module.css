@@ -13,4 +13,29 @@
 .dropdownMenu {
   width: 100%;
   min-width: unset;
+  padding: var(--space-3) 0;
+  border-radius: var(--radius-2xl);
+  border: var(--border-1) solid var(--color-gray-200);
+  background: var(--color-white);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    var(--color-gray-600);
+  max-height: var(--space-17);
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-800);
+}
+
+.dropdownItem:hover,
+.dropdownItem:focus {
+  background: var(--color-blue-100);
+}
+
+.dropdownItemSelected {
+  background: var(--color-blue-100);
+  color: var(--color-blue-500);
+  font-weight: var(--font-weight-semibold);
 }

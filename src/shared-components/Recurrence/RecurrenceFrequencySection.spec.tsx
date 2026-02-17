@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceFrequencySection } from './RecurrenceFrequencySection';
 import { Frequency } from '../../utils/recurrenceUtils';
@@ -19,7 +19,8 @@ describe('RecurrenceFrequencySection', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders all required elements', () => {
@@ -53,7 +54,7 @@ describe('RecurrenceFrequencySection', () => {
     const input = screen.getByTestId('customRecurrenceIntervalInput');
     await user.clear(input);
     await user.type(input, '5');
-    expect(onIntervalChange).toHaveBeenCalled();
+    await waitFor(() => expect(onIntervalChange).toHaveBeenCalled());
   });
 
   it('prevents invalid keys in interval input', async () => {
@@ -82,18 +83,26 @@ describe('RecurrenceFrequencySection', () => {
       screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     );
 
-    expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+      ).toBeInTheDocument(),
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+      ).toBeInTheDocument(),
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+      ).toBeInTheDocument(),
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
+      ).toBeInTheDocument(),
+    );
   });
 
   it('selects interval text on double click', async () => {

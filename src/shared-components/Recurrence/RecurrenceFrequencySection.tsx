@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import { Frequency, frequencies } from '../../utils/recurrenceUtils';
+import { Frequency, frequencies } from 'utils/recurrenceUtils';
 import styles from './RecurrenceFrequencySection.module.css';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 
@@ -54,7 +54,6 @@ export const RecurrenceFrequencySection: React.FC<
         variant="outline-secondary"
         dataTestIdPrefix="customRecurrenceFrequencyDropdown"
         ariaLabel={t('frequency')}
-        btnStyle="w-100 d-flex justify-content-between align-items-center"
         menuClassName={styles.dropdownMenu}
         parentContainerStyle={styles.dropdown}
       />

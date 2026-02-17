@@ -27,6 +27,7 @@
   margin-right: var(--space-6);
 }
 
+/* :global needed to override Bootstrap's .form-check-input margins */
 .radioLabel :global(.form-check-input) {
   margin-right: var(--space-4);
   margin-top: var(--space-1);

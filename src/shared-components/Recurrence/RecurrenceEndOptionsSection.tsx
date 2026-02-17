@@ -1,7 +1,7 @@
 import React from 'react';
-import { FormCheckField } from '../FormFieldGroup/FormCheckField';
-import { FormTextField } from '../FormFieldGroup/FormTextField';
-import DatePicker from '../DatePicker';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import DatePicker from 'shared-components/DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import {
@@ -10,7 +10,7 @@ import {
   endsNever,
   endsOn,
   recurrenceEndOptions,
-} from '../../utils/recurrenceUtils';
+} from 'utils/recurrenceUtils';
 import styles from './RecurrenceEndOptionsSection.module.css';
 
 import { InterfaceRecurrenceEndOptionsSectionProps } from 'types/shared-components/Recurrence/interface';
