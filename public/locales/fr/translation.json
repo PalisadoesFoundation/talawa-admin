@@ -1774,6 +1774,7 @@
     "doesNotRepeat": "Ne se répète pas",
     "daily": "Quotidien",
     "weeklyOn": "Hebdomadaire le {{day}}",
+    "monthlyOn": "Mensuel le",
     "monthlyOnDay": "Mensuel le jour {{day}}",
     "annuallyOn": "Annuel le {{day}} {{month}}",
     "everyWeekday": "Chaque jour de semaine (lun–ven)",

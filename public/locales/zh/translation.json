@@ -1774,6 +1774,7 @@
     "doesNotRepeat": "不重复",
     "daily": "每天",
     "weeklyOn": "每周 {{day}}",
+    "monthlyOn": "每月",
     "monthlyOnDay": "每月第 {{day}} 天",
     "annuallyOn": "每年 {{month}} {{day}} 日",
     "everyWeekday": "每个工作日（周一至周五）",
