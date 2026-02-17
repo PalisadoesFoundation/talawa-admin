@@ -1,18 +1,8 @@
 import React, { useMemo } from 'react';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { Frequency, getMonthlyOptions } from 'utils/recurrenceUtils';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import type { InterfaceRecurrenceMonthlySectionProps } from 'types/shared-components/Recurrence/interface';
 import styles from './RecurrenceMonthlySection.module.css';
-
-interface InterfaceRecurrenceMonthlySectionProps {
-  frequency: Frequency;
-  recurrenceRuleState: InterfaceRecurrenceRule;
-  setRecurrenceRuleState: (
-    state: React.SetStateAction<InterfaceRecurrenceRule>,
-  ) => void;
-  startDate: Date;
-  t: (key: string) => string;
-}
 
 /**
  * Monthly recurrence options section
@@ -26,7 +16,10 @@ export const RecurrenceMonthlySection: React.FC<
   startDate,
   t,
 }) => {
-  const monthlyOptions = getMonthlyOptions(startDate);
+  const monthlyOptions = useMemo(
+    () => getMonthlyOptions(startDate),
+    [startDate],
+  );
 
   const options = useMemo(
     () => [

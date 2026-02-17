@@ -47,7 +47,7 @@ export const RecurrenceFrequencySection: React.FC<
         label={t('repeatsEvery')}
       />
       <DropDownButton
-        id="dropdown-basic"
+        id="customRecurrenceFrequencyDropdown"
         options={frequencyOptions}
         selectedValue={frequency}
         onSelect={(value) => onFrequencyChange(value as Frequency)}

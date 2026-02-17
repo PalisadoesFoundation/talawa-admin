@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
@@ -107,7 +107,7 @@ const renderModal = (
     setCustomRecurrenceModalIsOpen,
     t: (key: string) => key,
     // Use dynamic future date to avoid test staleness
-    startDate: dayjs().add(30, 'days').toDate(),
+    startDate: dayjs.utc().add(7, 'days').toDate(),
     ...override,
   };
 
@@ -130,7 +130,8 @@ describe('CustomRecurrenceModal – full coverage', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders modal and core controls', () => {
@@ -330,7 +331,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: new Date(),
+        endDate: dayjs.utc().add(7, 'days').toDate(),
       },
     });
 
@@ -357,7 +358,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: new Date(),
+        endDate: dayjs.utc().add(7, 'days').toDate(),
       },
     });
 
@@ -372,7 +373,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         ...baseRecurrenceRule,
         never: false,
         count: undefined,
-        endDate: new Date(),
+        endDate: dayjs.utc().add(30, 'days').toDate(),
       },
     });
 
@@ -511,7 +512,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         recurrenceRuleState: {
           ...baseRecurrenceRule,
           never: false,
-          endDate: new Date(),
+          endDate: dayjs.utc().add(30, 'days').toDate(),
         },
       });
 

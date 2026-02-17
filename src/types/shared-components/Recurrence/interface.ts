@@ -44,3 +44,21 @@ export interface InterfaceRecurrenceFrequencySectionProps {
   /** Translation function. */
   t: (key: string) => string;
 }
+
+/**
+ * Props for the RecurrenceMonthlySection component.
+ */
+export interface InterfaceRecurrenceMonthlySectionProps {
+  /** The selected frequency. */
+  frequency: Frequency;
+  /** The current state of the recurrence rule being built. */
+  recurrenceRuleState: InterfaceRecurrenceRule;
+  /** State setter for the recurrence rule. */
+  setRecurrenceRuleState: (
+    state: React.SetStateAction<InterfaceRecurrenceRule>,
+  ) => void;
+  /** The start date of the recurrence. */
+  startDate: Date;
+  /** Translation function. */
+  t: (key: string) => string;
+}
