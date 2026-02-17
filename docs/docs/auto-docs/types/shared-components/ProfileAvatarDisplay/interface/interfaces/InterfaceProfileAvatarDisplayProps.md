@@ -174,7 +174,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:11](h
 
 ### size?
 
-> `optional` **size**: `"small"` \| `"custom"` \| `"medium"` \| `"large"`
+> `optional` **size**: `"custom"` \| `"small"` \| `"medium"` \| `"large"`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L9)
 
