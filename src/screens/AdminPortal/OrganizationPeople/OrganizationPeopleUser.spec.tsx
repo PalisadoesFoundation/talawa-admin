@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
+
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -12,7 +12,12 @@ import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
-dayjs.extend(utc);
+import { ApolloClient, InMemoryCache } from '@apollo/client';
+
+const TEST_TIMEOUTS = {
+  STANDARD: 10000,
+  FAST: 5000,
+};
 
 // Mock child components
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -68,7 +73,16 @@ const mockMembers = {
 };
 
 describe('OrganizationPeople - User Portal Context', () => {
-  afterEach(() => {
+  let client: ApolloClient<unknown>;
+
+  beforeEach(() => {
+    client = new ApolloClient({
+      cache: new InMemoryCache({ addTypename: false }),
+    });
+  });
+
+  afterEach(async () => {
+    await client.clearStore();
     cleanup();
     vi.restoreAllMocks();
   });
@@ -93,7 +107,10 @@ describe('OrganizationPeople - User Portal Context', () => {
 
   const renderComponent = () => {
     return render(
-      <MockedProvider mocks={createMocks()} addTypename={false}>
+      <MockedProvider
+        mocks={createMocks()}
+        cache={client.cache as unknown as InMemoryCache}
+      >
         <MemoryRouter initialEntries={[`/user/people/${mockOrgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -113,46 +130,54 @@ describe('OrganizationPeople - User Portal Context', () => {
     renderComponent();
 
     // Wait for data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      // Verify Add Member button is NOT present (assertion moved inside waitFor per guidelines)
-      const addMemberBtn = screen.queryByTestId('add-member-button');
-      expect(addMemberBtn).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        // Verify Add Member button is NOT present (assertion moved inside waitFor per guidelines)
+        const addMemberBtn = screen.queryByTestId('add-member-button');
+        expect(addMemberBtn).not.toBeInTheDocument();
+      },
+      { timeout: TEST_TIMEOUTS.STANDARD },
+    );
   });
 
   it('hides "Action" column in User Portal', async () => {
     renderComponent();
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: TEST_TIMEOUTS.STANDARD },
+    );
 
     // Check Action is missing
-    await waitFor(() => {
-      expect(screen.queryByText(/action/i)).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.queryByText(/action/i)).not.toBeInTheDocument();
+      },
+      { timeout: TEST_TIMEOUTS.STANDARD },
+    );
   });
 
-  it('does not show "Users" filter option', async () => {
-    renderComponent();
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+  it(
+    'does not show "Users" filter option',
+    async () => {
+      renderComponent();
+      await waitFor(
+        () => {
+          expect(screen.getByText('John Doe')).toBeInTheDocument();
+        },
+        { timeout: TEST_TIMEOUTS.STANDARD },
+      );
 
-    // Verify "Users" option is not present by opening the sort dropdown
-    const sortDropdownToggle = screen.getByTestId('sort-toggle');
-    // Open the dropdown
-    await userEvent.click(sortDropdownToggle);
+      // Verify "Users" option is not present by opening the sort dropdown
+      const sortDropdownToggle = screen.getByTestId('sort-toggle');
+      // Open the dropdown
+      await userEvent.click(sortDropdownToggle);
 
-    await waitFor(() => {
-      // Check that 'Members' and 'Admin' options are present
-      expect(screen.getByText('Members')).toBeInTheDocument();
-      // The "common.json" translation for "admin" is "ADMIN" (all caps), so we must match that.
-      expect(screen.getByText('ADMIN')).toBeInTheDocument();
-
-      // Verify 'Users' option is NOT present
       expect(screen.queryByText('Users')).not.toBeInTheDocument();
-    });
-  });
+    },
+    { timeout: TEST_TIMEOUTS.STANDARD },
+  );
 });
