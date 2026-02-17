@@ -58,11 +58,21 @@ vi.mock('react-i18next', async () => {
         if (key === 'profileAvatar.altText') {
           return options?.name || 'Avatar';
         }
-        return options?.entity ? `Error loading ${options.entity}` : key;
+
+        if (key === 'leftDrawer.notAvailable') {
+          return 'N/A';
+        }
+
+        if (options?.entity) {
+          return `Error loading ${options.entity}`;
+        }
+
+        return key;
       },
     }),
   };
 });
+
 describe('SidebarOrgSection Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -267,6 +277,7 @@ describe('SidebarOrgSection Component', () => {
 
     it('renders N/A when city is null', async () => {
       renderComponent({}, noCityMocks);
+
       await waitFor(() => {
         expect(screen.getByText('N/A')).toBeInTheDocument();
       });
