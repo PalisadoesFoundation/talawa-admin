@@ -12,14 +12,15 @@
  * - Accessibility support with nav landmark and aria-current
  * - No hardcoded strings; fully translation-driven
  *
- * @component
  * @example
+ * ```tsx
  * <BreadcrumbsComponent
  *   items={[
  *     { translationKey: 'common.organizations', to: '/organizations' },
  *     { translationKey: 'dashboard.title', isCurrent: true }
  *   ]}
  * />
+ * ```
  *
  * @remarks
  * - Requires i18n key `breadcrumbs` in the `common` namespace for aria-label.
