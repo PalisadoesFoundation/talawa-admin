@@ -33,6 +33,7 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   private readonly organizationSearchButton = 'searchBtn';
   private readonly organizationCardContainer = '[data-cy="orgCardContainer"]';
   private readonly organizationManageButton = '[data-cy="manageBtn"]';
+  private readonly pageNotFoundSelector = 'h1';
 
   protected self(): OrganizationSetupPage {
     return this;
@@ -139,6 +140,20 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
           .click();
       });
     this.assertUrlMatch(/\/admin\/orgdash\/[a-f0-9-]+/, timeout);
+    return this;
+  }
+
+  assertCreateOrganizationButtonNotVisible(timeout = 10000): this {
+    cy.get('body', { timeout })
+      .find(`[data-testid="${this.createOrganizationButton}"]`)
+      .should('not.exist');
+    return this;
+  }
+
+  assertPageNotFound(timeout = 10000): this {
+    cy.get(this.pageNotFoundSelector, { timeout })
+      .should('be.visible')
+      .and('contain.text', '404');
     return this;
   }
 }
