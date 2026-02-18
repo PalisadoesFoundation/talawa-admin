@@ -45,15 +45,10 @@ import AttendedEventList from '../AttendanceList/AttendedEventList';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
-import { DataGridWrapper, GridColDef } from 'shared-components/DataGridWrapper';
-
-const COLUMN_WIDTHS = {
-  INDEX: 70,
-  NAME: 200,
-  STATUS: 150,
-  EVENTS_ATTENDED: 180,
-  TASK_ASSIGNED: 200,
-};
+import {
+  DataGridWrapper,
+  type TokenAwareGridColDef,
+} from 'shared-components/DataGridWrapper';
 
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
@@ -153,12 +148,12 @@ function EventAttendance(): JSX.Element {
     getEventAttendees();
   }, [eventId, getEventAttendees]);
 
-  const columns: GridColDef<InterfaceMember & { index: number }>[] = useMemo(
+  const columns: TokenAwareGridColDef[] = useMemo(
     () => [
       {
         field: 'index',
         headerName: '#',
-        width: COLUMN_WIDTHS.INDEX,
+        width: 'space-11',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -167,14 +162,14 @@ function EventAttendance(): JSX.Element {
       {
         field: 'name',
         headerName: t('Member Name'),
-        width: COLUMN_WIDTHS.NAME,
+        width: 'space-17',
         sortable: false,
         filterable: false,
         renderCell: (params) => (
           <div className="d-flex align-items-center">
             <ProfileAvatarDisplay
               imageUrl={params.row.avatarURL}
-              fallbackName={params.value || t('unknownMember')}
+              fallbackName={params.row.name || t('unknownMember')}
               size="small"
               enableEnlarge={true}
             />
@@ -183,7 +178,7 @@ function EventAttendance(): JSX.Element {
               state={{ id: params.row.id }}
               className={`${styles.membername} ms-2`}
             >
-              {params.value}
+              {params.row.name}
             </Link>
           </div>
         ),
@@ -191,7 +186,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'status',
         headerName: t('Status'),
-        width: COLUMN_WIDTHS.STATUS,
+        width: 'space-15',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -202,7 +197,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'eventsAttended',
         headerName: t('Events Attended'),
-        width: COLUMN_WIDTHS.EVENTS_ATTENDED,
+        width: 'space-16',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -247,7 +242,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'tagsAssignedWith',
         headerName: t('Task Assigned'),
-        width: COLUMN_WIDTHS.TASK_ASSIGNED,
+        width: 'space-17',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
