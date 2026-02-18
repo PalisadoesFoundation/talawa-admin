@@ -15,6 +15,7 @@
   "customRecurrence": "自定义重复",
   "frequency": "频率",
   "repeatsEvery": "每重复一次",
+  "repeatsOn": "重复开启",
   "day": "天",
   "week": "周",
   "month": "月",
