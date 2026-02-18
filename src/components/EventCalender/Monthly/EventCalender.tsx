@@ -42,15 +42,13 @@ import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
-import { holidays, weekdays } from 'types/Event/utils';
+import { holidays, weekdays, filterEvents } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
 import WeeklyEventCalender from '../Weekly/WeeklyEventCalender';
 import type {
   InterfaceEvent,
   InterfaceCalendarProps,
-  InterfaceIOrgList,
 } from 'types/Event/interface';
-import { UserRole } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
@@ -89,60 +87,8 @@ const Calendar: React.FC<
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const filterData = (
-    eventData: InterfaceEvent[],
-    orgData?: InterfaceIOrgList,
-    userRole?: string,
-    userId?: string,
-  ): InterfaceEvent[] => {
-    // If no user info, only show public events
-    if (!userRole || !userId) {
-      return eventData.filter((event) => event.isPublic);
-    }
-
-    // Admins see everything
-    if (userRole === UserRole.ADMINISTRATOR) {
-      return eventData;
-    }
-
-    // For regular users:
-    // - Backend already filters Organization Members events based on membership
-    // - We need to check Invite Only events for creator OR attendee status
-    // - All other events returned by backend should be shown
-    return eventData.filter((event) => {
-      // Creator always sees their own events
-      if (event.creator && event.creator.id === userId) {
-        return true;
-      }
-
-      // Public events - always visible (backend returns them)
-      if (event.isPublic) {
-        return true;
-      }
-
-      // Invite Only events - visible to creator OR attendees
-      if (event.isInviteOnly) {
-        const isCreator = event.creator && event.creator.id === userId;
-        const isAttendee = event.attendees?.some(
-          (attendee) => attendee.id === userId,
-        );
-        return isCreator || isAttendee;
-      }
-
-      // Organization Members events - check membership
-      // If not public and not invite-only, it must be an organization event
-      // Check if user is a member of the organization
-      const isMember =
-        orgData?.members?.edges?.some((edge) => edge.node.id === userId) ||
-        !orgData?.members ||
-        false;
-
-      return isMember || false;
-    });
-  };
-
   useEffect(() => {
-    const filteredEvents = filterData(
+    const filteredEvents = filterEvents(
       eventData || [],
       orgData,
       userRole,

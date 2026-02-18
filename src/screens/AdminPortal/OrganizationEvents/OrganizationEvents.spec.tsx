@@ -856,6 +856,26 @@ describe('Organisation Events Page', () => {
     });
   });
 
+  test('should switch to week view when ViewType.WEEK is selected', async () => {
+    const { container } = renderWithLink(defaultLink);
+
+    await wait();
+
+    expect(container.textContent).toMatch('Month');
+
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
+    await userEvent.click(viewTypeDropdown);
+
+    const weekOption = await screen.findByTestId(
+      'selectViewType-item-Week View',
+    );
+    await userEvent.click(weekOption);
+
+    await waitFor(() => {
+      expect(container.textContent).toMatch('Week View');
+    });
+  });
+
   test('handleChangeView ignores null values', async () => {
     const { container } = renderWithLink(defaultLink);
 

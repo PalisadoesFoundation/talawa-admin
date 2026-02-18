@@ -69,11 +69,11 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
   );
 
   const nextHour = new Date(now);
-  nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+  const nextHourValue = Math.min(now.getHours() + 1, 23);
+  nextHour.setHours(nextHourValue, 0, 0, 0);
   const twoHoursLater = new Date(nextHour);
-  // Cap at 23:59 to prevent rolling into the next calendar day
-  const endHour = Math.min(nextHour.getHours() + 2, 23);
-  twoHoursLater.setHours(endHour, endHour === 23 ? 59 : 0, 0, 0);
+  const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
+  twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
 
   const defaultValues: IEventFormValues = {
     name: '',

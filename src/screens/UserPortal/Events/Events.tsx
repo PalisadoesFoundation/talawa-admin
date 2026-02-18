@@ -169,9 +169,11 @@ export default function Events(): JSX.Element {
   const buildDefaultEventValues = (): IEventFormValues => {
     const now = new Date();
     const nextHour = new Date(now);
-    nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+    const nextHourValue = Math.min(now.getHours() + 1, 23);
+    nextHour.setHours(nextHourValue, 0, 0, 0);
     const twoHoursLater = new Date(nextHour);
-    twoHoursLater.setHours(nextHour.getHours() + 1, 0, 0, 0); // 1h after nextHour → 2h after now
+    const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
+    twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
     return {
       name: '',
       description: '',

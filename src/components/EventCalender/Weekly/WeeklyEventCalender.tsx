@@ -38,67 +38,18 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 // Parse event times as UTC to match how EventForm stores them
 import styles from './WeeklyEventCalender.module.css';
-import { UserRole } from 'types/Event/interface';
 dayjs.extend(utc);
 import EventListCard from 'shared-components/EventListCard/EventListCard';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { filterEvents } from 'types/Event/utils';
 import type {
   InterfaceEvent,
   InterfaceCalendarProps,
-  InterfaceIOrgList,
 } from 'types/Event/interface';
 
 export interface InterfaceWeeklyEventCalenderProps extends InterfaceCalendarProps {
   currentDate: Date;
 }
-
-const filterData = (
-  data: InterfaceEvent[],
-  organization?: InterfaceIOrgList,
-  role?: string,
-  uid?: string, // user id
-): InterfaceEvent[] => {
-  if (!data) return [];
-
-  if (!role || !uid) {
-    return data.filter((event) => event.isPublic);
-  }
-
-  if (role === UserRole.ADMINISTRATOR) {
-    return data;
-  }
-
-  return data.filter((event) => {
-    // Creator always sees their own events
-    if (event.creator && event.creator.id === uid) {
-      return true;
-    }
-
-    // Public events - always visible
-    if (event.isPublic) {
-      return true;
-    }
-
-    // Invite Only events - visible to creator OR attendees
-    if (event.isInviteOnly) {
-      const isCreator = event.creator && event.creator.id === uid;
-      const isAttendee = event.attendees?.some(
-        (attendee) => attendee.id === uid,
-      );
-      return isCreator || isAttendee;
-    }
-
-    // Organization Members events - check membership
-    // If not public and not invite-only, it must be an organization event
-    // Check if user is a member of the organization
-    const isMember =
-      organization?.members?.edges?.some((edge) => edge.node.id === uid) ||
-      !organization?.members ||
-      false;
-
-    return isMember || false;
-  });
-};
 
 const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
   eventData,
@@ -123,7 +74,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
   );
 
   const events = useMemo(
-    () => filterData(eventData || [], orgData, userRole, userId),
+    () => filterEvents(eventData || [], orgData, userRole, userId),
     [eventData, orgData, userRole, userId],
   );
 

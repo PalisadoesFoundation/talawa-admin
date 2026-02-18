@@ -231,6 +231,7 @@ const TEST_DATE = dayjs()
   .minute(0)
   .second(0)
   .millisecond(0)
+  .utc()
   .toISOString();
 const dateObj = new Date(TEST_DATE);
 const currentMonth = dateObj.getMonth();
