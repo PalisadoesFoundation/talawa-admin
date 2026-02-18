@@ -303,6 +303,7 @@
   "searchPlaceholder": "搜索...",
   "noOptionsFound": "未找到选项",
   "noUserId": "用户ID不可用",
+  "noOrgId": "组织 ID 不可用",
   "noTagsFound": "未找到标签",
   "searchTags": "搜索标签",
   "sortBy": "排序方式",
@@ -310,5 +311,10 @@
   "previousYear": "上一年",
   "nextYear": "下一年",
   "navigateToProfile": "导航到个人资料",
-  "errorOccurred": "发生错误,请重试"
+  "errorOccurred": "发生错误,请重试",
+  "loginSuccess": "欢迎！",
+  "loginSuccessWithName": "欢迎，{{name}}！",
+  "signupSuccess": "注册成功！",
+  "authError": "认证错误",
+  "networkError": "网络错误"
 }

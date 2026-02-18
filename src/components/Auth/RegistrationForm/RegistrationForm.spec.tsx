@@ -3,10 +3,10 @@ import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { RegistrationForm } from './RegistrationForm';
-import { useRegistration } from '../../../hooks/auth/useRegistration';
-import i18nForTest from '../../../utils/i18nForTest';
+import { useRegistration } from 'hooks/auth/useRegistration';
+import i18nForTest from 'utils/i18nForTest';
 
-vi.mock('../../../hooks/auth/useRegistration');
+vi.mock('hooks/auth/useRegistration');
 
 vi.mock('Constant/constant', async () => ({
   ...(await vi.importActual<object>('Constant/constant')),
@@ -38,6 +38,7 @@ describe('RegistrationForm', () => {
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegister,
       loading: false,
+      error: null,
     });
     vi.resetModules();
   });
@@ -120,7 +121,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('validates email field', async () => {
@@ -132,7 +135,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('validates password field', async () => {
@@ -144,7 +149,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('validates password confirmation field', async () => {
@@ -160,7 +167,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('updates form state on input changes', async () => {
@@ -180,6 +189,7 @@ describe('RegistrationForm', () => {
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegister,
       loading: true,
+      error: null,
     });
 
     renderComponent();
@@ -256,6 +266,7 @@ describe('RegistrationForm', () => {
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegisterWithCallback,
       loading: false,
+      error: null,
     });
 
     renderComponent({ onSuccess: mockCallback });
@@ -326,25 +337,18 @@ describe('RegistrationForm', () => {
     });
   });
 
-  it('calls onError callback when registration fails', async () => {
+  it('initializes hook with onSuccess and onError callbacks', () => {
     const mockOnError = vi.fn();
     const mockRegister = vi.fn().mockResolvedValue(undefined);
 
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegister,
       loading: false,
+      error: null,
     });
 
     renderComponent({ onError: mockOnError });
 
-    await user.type(screen.getByLabelText('First Name'), 'John Doe');
-    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
-    await user.type(screen.getByLabelText('Password'), 'Password123!');
-    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
-
-    await user.click(screen.getByRole('button', { name: /register/i }));
-
-    // Verify the hook was initialized with onSuccess and onError callbacks
     expect(useRegistration).toHaveBeenCalledWith({
       onSuccess: expect.any(Function),
       onError: expect.any(Function),

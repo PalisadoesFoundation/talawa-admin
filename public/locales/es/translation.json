@@ -196,7 +196,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menú",
     "users": "usuarios",
-    "logout": "cerrar sesión"
+    "logout": "cerrar sesión",
+    "notAvailable": "No disponible"
   },
   "leftDrawerOrg": {
     "Dashboard": "Panel de control",
@@ -1894,7 +1895,8 @@
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
     "thisUser": "este usuario",
     "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?",
-    "memberActionsMenu": "Menú de acciones del miembro"
+    "memberActionsMenu": "Menú de acciones del miembro",
+    "editImage": "Editar imagen"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
@@ -1917,7 +1919,10 @@
       "resetButton": "Intentar de nuevo",
       "resetButtonAriaLabel": "Intentar de nuevo"
     },
-    "messageActions": "Acción del mensaje"
+    "messageActions": "Acción del mensaje",
+    "addAttachment": "Agregar archivo adjunto",
+    "removeAttachment": "Eliminar archivo adjunto",
+    "closeReply": "Cerrar Responder"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

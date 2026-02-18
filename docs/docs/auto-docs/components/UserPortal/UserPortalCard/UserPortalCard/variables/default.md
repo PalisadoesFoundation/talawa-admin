@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceUserPortalCardProps`](../../../../../types/UserPortal/UserPortalCard/interface/interfaces/InterfaceUserPortalCardProps.md)\>
 
-Defined in: [src/components/UserPortal/UserPortalCard/UserPortalCard.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalCard/UserPortalCard.tsx#L32)
+Defined in: [src/components/UserPortal/UserPortalCard/UserPortalCard.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalCard/UserPortalCard.tsx#L34)
 
 UserPortalCard
 
@@ -26,7 +26,7 @@ Accessibility:
 
 ## Example
 
-```ts
+```tsx
 <UserPortalCard
   variant="compact"
   ariaLabel={t('donation.card_aria')}

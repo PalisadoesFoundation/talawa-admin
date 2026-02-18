@@ -38,7 +38,7 @@
  * - `react-bootstrap`
  * - `@apollo/client`
  * - `react-i18next`
- * - `react-toastify`
+ * - `NotificationToast` (shared-components)
  * - `react-icons`
  *
  */
@@ -338,14 +338,15 @@ export default function GroupChatDetails({
             size="custom"
             customSize={150}
           />
-          <button
+          <Button
             type="button"
             data-testid="editImageBtn"
             onClick={handleImageClick}
             className={styles.editImgBtn}
+            aria-label={t('editImage')}
           >
             <FiEdit />
-          </button>
+          </Button>
 
           {editChatTitle ? (
             <div className={styles.editChatNameContainer}>
