@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceWeeklyEventCalenderProps`](../interfaces/InterfaceWeeklyEventCalenderProps.md)\>
 
-Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L103)
+Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L54)
