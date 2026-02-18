@@ -10,7 +10,15 @@ from pathlib import Path
 
 
 def get_keys(data: dict, prefix: str = "") -> set[str]:
-    """Flatten nested translation JSON into dot-notation keys."""
+    """Flatten nested translation JSON into dot-notation keys.
+
+    Args:
+        data: Parsed JSON dictionary containing translation keys.
+        prefix: Prefix used for nested key traversal.
+
+    Returns:
+        keys: A set of flattened translation keys.
+    """
     keys: set[str] = set()
     for key, value in data.items():
         if isinstance(value, dict):
@@ -21,12 +29,29 @@ def get_keys(data: dict, prefix: str = "") -> set[str]:
 
 
 def get_translation_keys(data: dict) -> set[str]:
-    """Extract translation keys from parsed locale JSON."""
+    """Extract translation keys from parsed locale JSON.
+
+    Args:
+        data: Parsed JSON dictionary.
+
+    Returns:
+        translation_keys: A set of translation keys.
+    """
     return get_keys(data)
 
 
 def load_locale_keys(locales_dir: str | Path) -> set[str]:
-    """Load all valid translation keys from locale JSON files."""
+    """Load all valid translation keys from locale JSON files.
+
+    Args:
+        locales_dir: Path to the locale directory.
+
+    Returns:
+        keys: A set of all valid translation keys.
+
+    Raises:
+        FileNotFoundError: If the locale directory does not exist.
+    """
     base = Path(locales_dir)
     if not base.exists():
         raise FileNotFoundError(locales_dir)
@@ -61,8 +86,16 @@ def find_translation_tags(source: str | Path) -> set[str]:
     Handles keyPrefix option in useTranslation calls by prefixing
     the extracted keys with the keyPrefix value.
 
-    Direct `t()` usage requires useTranslation().
+    This function enforces that direct `t()` calls must come from
+    useTranslation(). Using `t` as a prop is not allowed.
+
     `i18n.t()` usage is allowed.
+
+    Args:
+        source: File path or raw source string.
+
+    Returns:
+        found_tags: A set of detected translation keys.
     """
     if isinstance(source, Path):
         try:
@@ -124,7 +157,19 @@ def get_target_files(
     directories: list[str] | None = None,
     exclude: list[str] | None = None,
 ) -> list[Path]:
-    """Resolve target source files for translation validation."""
+    """Resolve target source files for translation validation.
+
+    Args:
+        files: Explicit list of files to scan.
+        directories: Directories to recursively scan.
+        exclude: Filename patterns to exclude.
+
+    Returns:
+        target_files: A list of source file paths.
+
+    Raises:
+        FileNotFoundError: If the default src directory is missing.
+    """
     exclude = exclude or []
     targets: list[Path] = []
 
@@ -167,7 +212,15 @@ def get_target_files(
 
 
 def check_file(path: Path, valid_keys: set[str]) -> list[str]:
-    """Check a file for missing translation keys."""
+    """Check a file for missing translation keys.
+
+    Args:
+        path: File path to check.
+        valid_keys: Set of valid translation keys.
+
+    Returns:
+        missing_keys: A sorted list of missing translation keys.
+    """
     try:
         tags = find_translation_tags(path)
     except ValueError as exc:
@@ -177,7 +230,16 @@ def check_file(path: Path, valid_keys: set[str]) -> list[str]:
 
 
 def main() -> None:
-    """CLI entry point for translation validation."""
+    """CLI entry point for translation validation.
+
+    This function parses command-line arguments, loads translation keys,
+    validates translation tag usage across source files, and exits with
+    appropriate status codes based on the results.
+
+    Raises:
+        SystemExit: Exits with status code 0 on success, 1 if missing
+            translation keys are found, or 2 for configuration errors.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
     parser.add_argument("--directories", nargs="*", default=[])
