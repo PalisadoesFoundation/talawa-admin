@@ -312,6 +312,7 @@
   "previousYear": "Año anterior",
   "nextYear": "Siguiente año",
   "navigateToProfile": "Navegar al perfil",
+  "monthlyOn": "Mensual el",
   "loginSuccess": "¡Bienvenido!",
   "loginSuccessWithName": "¡Bienvenido, {{name}}!",
   "signupSuccess": "¡Registro exitoso!",
