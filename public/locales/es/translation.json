@@ -1784,7 +1784,9 @@
     "presetThisMonth": "Este Mes",
     "presetNext7Days": "Próximos 7 Días",
     "presetNext30Days": "Próximos 30 Días",
-    "presetNextMonth": "Próximo Mes"
+    "presetNextMonth": "Próximo Mes",
+    "repeatsOn": "Se repite en",
+    "select": "Seleccionar"
   },
   "userEventCard": {
     "failedToRegister": "Error al registrarse para el evento",
@@ -2592,9 +2594,5 @@
       "sun": "D"
     },
     "expandDay": "Expandir día"
-  },
-  "recurrenceWeeklySection": {
-    "repeatsOn": "Se repite en",
-    "select": "Seleccionar"
   }
 }

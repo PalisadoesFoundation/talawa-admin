@@ -1801,7 +1801,9 @@
     "presetThisMonth": "Ce Mois",
     "presetNext7Days": "7 Prochains Jours",
     "presetNext30Days": "30 Prochains Jours",
-    "presetNextMonth": "Mois Prochain"
+    "presetNextMonth": "Mois Prochain",
+    "repeatsOn": "Répétition activée",
+    "select": "Sélectionner"
   },
   "userEventCard": {
     "failedToRegister": "Échec de l'inscription à l'événement",
@@ -2592,9 +2594,5 @@
       "sun": "D"
     },
     "expandDay": "Développer le jour"
-  },
-  "recurrenceWeeklySection": {
-    "repeatsOn": "Répétition activée",
-    "select": "Sélectionner"
   }
 }

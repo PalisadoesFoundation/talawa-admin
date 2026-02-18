@@ -1796,7 +1796,9 @@
     "presetThisMonth": "इस महीने",
     "presetNext7Days": "अगले 7 दिन",
     "presetNext30Days": "अगले 30 दिन",
-    "presetNextMonth": "अगले महीने"
+    "presetNextMonth": "अगले महीने",
+    "repeatsOn": "पर दोहराता है",
+    "select": "चुनें"
   },
   "userEventCard": {
     "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",
@@ -2592,9 +2594,5 @@
       "sun": "रवि"
     },
     "expandDay": "दिन विस्तारित करें"
-  },
-  "recurrenceWeeklySection": {
-    "repeatsOn": "पर दोहराता है",
-    "select": "चुनें"
   }
 }

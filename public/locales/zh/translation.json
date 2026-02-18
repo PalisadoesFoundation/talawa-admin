@@ -1801,7 +1801,9 @@
     "presetThisMonth": "本月",
     "presetNext7Days": "未来 7 天",
     "presetNext30Days": "未来 30 天",
-    "presetNextMonth": "下个月"
+    "presetNextMonth": "下个月",
+    "repeatsOn": "重复开启",
+    "select": "请选择"
   },
   "userEventCard": {
     "failedToRegister": "无法注册该活动",
@@ -2592,9 +2594,5 @@
       "sun": "日"
     },
     "expandDay": "展开日期"
-  },
-  "recurrenceWeeklySection": {
-    "repeatsOn": "重复开启",
-    "select": "请选择"
   }
 }

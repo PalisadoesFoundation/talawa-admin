@@ -15,6 +15,22 @@ const defaultProps = {
   t: (key: string) => key,
 };
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          repeatsOn: 'Repeats On',
+          select: 'Select',
+        };
+        return translations[key] || key;
+      },
+    }),
+  };
+});
+
 const renderWithI18n = (ui: React.ReactElement) =>
   render(<I18nextProvider i18n={i18nForTest}>{ui}</I18nextProvider>);
 
@@ -33,7 +49,7 @@ describe('RecurrenceWeeklySection', () => {
     it('should render when frequency is WEEKLY', () => {
       renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
-      expect(screen.getByText('Repeats On')).toBeInTheDocument();
+      expect(screen.getByText('repeatsOn')).toBeInTheDocument();
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       expect(dayButtons).toHaveLength(7);
     });
@@ -77,7 +93,7 @@ describe('RecurrenceWeeklySection', () => {
       renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const group = screen.getByRole('group');
-      expect(group).toHaveAttribute('aria-label', 'Repeats On');
+      expect(group).toHaveAttribute('aria-label', 'repeatsOn');
     });
   });
 
@@ -247,7 +263,7 @@ describe('RecurrenceWeeklySection', () => {
       dayButtons.forEach((button) => {
         expect(button).toHaveAttribute(
           'aria-label',
-          expect.stringContaining('Select'),
+          expect.stringContaining('select'),
         );
       });
     });
@@ -306,7 +322,7 @@ describe('RecurrenceWeeklySection', () => {
         <RecurrenceWeeklySection {...defaultProps} />,
       );
 
-      expect(screen.getByText('Repeats On')).toBeInTheDocument();
+      expect(screen.getByText('repeatsOn')).toBeInTheDocument();
 
       rerender(
         <RecurrenceWeeklySection
@@ -315,7 +331,7 @@ describe('RecurrenceWeeklySection', () => {
         />,
       );
 
-      expect(screen.queryByText('Repeats On')).not.toBeInTheDocument();
+      expect(screen.queryByText('repeatsOn')).not.toBeInTheDocument();
     });
   });
 

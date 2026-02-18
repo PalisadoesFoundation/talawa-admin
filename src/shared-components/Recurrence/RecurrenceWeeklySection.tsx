@@ -1,42 +1,27 @@
 import React from 'react';
-import { Frequency, Days, daysOptions, WeekDays } from 'utils/recurrenceUtils';
+import { Frequency, Days, daysOptions } from 'utils/recurrenceUtils';
 import styles from './RecurrenceWeeklySection.module.css';
 import Button from 'shared-components/Button';
-import { useTranslation } from 'react-i18next';
-
-interface InterfaceRecurrenceWeeklySectionProps {
-  frequency: Frequency;
-  byDay?: WeekDays[];
-  onDayClick: (day: WeekDays) => void;
-  onWeekdayKeyDown: (
-    e: React.KeyboardEvent<HTMLButtonElement>,
-    currentIndex: number,
-  ) => void;
-  t: (key: string) => string;
-}
+import { InterfaceRecurrenceWeeklySectionProps } from 'types/shared-components/Recurrence/interface';
 
 /**
  * Weekly recurrence day selection section
  */
 export const RecurrenceWeeklySection: React.FC<
   InterfaceRecurrenceWeeklySectionProps
-> = ({ frequency, byDay, onDayClick, onWeekdayKeyDown }) => {
-  const { t: tr } = useTranslation('translation', {
-    keyPrefix: 'recurrenceWeeklySection',
-  });
-
+> = ({ frequency, byDay, onDayClick, onWeekdayKeyDown, t }) => {
   if (frequency !== Frequency.WEEKLY) {
     return null;
   }
 
   return (
     <div className="mb-4">
-      <span className="fw-semibold text-secondary">{tr('repeatsOn')}</span>
+      <span className="fw-semibold text-secondary">{t('repeatsOn')}</span>
       <br />
       <div
         className="mx-2 mt-3 d-flex gap-1"
         role="group"
-        aria-label={tr('repeatsOn')}
+        aria-label={t('repeatsOn')}
       >
         {daysOptions.map((day, index) => (
           <Button
@@ -55,7 +40,7 @@ export const RecurrenceWeeklySection: React.FC<
             data-testid="recurrenceWeekDay"
             data-cy={`recurrenceWeekDay-${index}`}
             aria-pressed={byDay?.includes(Days[index])}
-            aria-label={`${tr('select')} ${day}`}
+            aria-label={`${t('select')} ${day}`}
             tabIndex={0}
           >
             <span>{day}</span>
