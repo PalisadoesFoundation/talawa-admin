@@ -226,7 +226,7 @@ def check_file(path: Path, valid_keys: set[str]) -> tuple | None:
     # Detect if 't' is passed as a prop or defined in function params
     # Matches: props.t, t= (JSX), ({ t }), (..., t, ...), (t: any)
     uses_prop_t = re.search(
-        r"\bprops\.t\b|\bt\s*=|([({,]\s*\bt\b\s*[:},)])", content
+        r"\bprops\.t\b|\bt\s*=(?![=>])|([({,]\s*\bt\b\s*[:},)])", content
     )
 
     if uses_standalone_t and not uses_i18n_t and not uses_use_translation:
