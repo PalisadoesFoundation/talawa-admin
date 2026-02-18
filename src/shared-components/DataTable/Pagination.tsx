@@ -1,7 +1,8 @@
 import React from 'react';
-import type { IPaginationControlsProps } from '../../types/shared-components/DataTable/interface';
-import styles from 'style/app-fixed.module.css';
+import type { IPaginationControlsProps } from 'types/shared-components/DataTable/interface';
+import styles from './Pagination.module.css';
 import { useTranslation } from 'react-i18next';
+import Button from 'shared-components/Button';
 
 /**
  * PaginationControls component for navigating through paginated data.
@@ -15,11 +16,11 @@ import { useTranslation } from 'react-i18next';
  * - totalItems: comes from (totalItems ?? data.length), both numeric
  * - No URL/form-based string-to-number coercion needed (type safety enforced)
  *
- * @param {number} page - Current page number (1-indexed)
- * @param {number} pageSize - Number of items per page
- * @param {number} totalItems - Total number of items across all pages
- * @param {Function} onPageChange - Callback function invoked when page changes
- * @returns {JSX.Element} Pagination navigation controls
+ * @param page - Current page number (1-indexed)
+ * @param pageSize - Number of items per page
+ * @param totalItems - Total number of items across all pages
+ * @param onPageChange - Callback function invoked when page changes
+ * @returns JSX Element Pagination navigation controls
  */
 export function PaginationControls({
   page,
@@ -47,7 +48,7 @@ export function PaginationControls({
       role="navigation"
       aria-label={tCommon('tablePagination')}
     >
-      <button
+      <Button
         type="button"
         onClick={() => onPageChange(safePage - 1)}
         className={styles.pageBtn}
@@ -55,13 +56,13 @@ export function PaginationControls({
         aria-label={tCommon('paginationPrevLabel')}
       >
         {tCommon('paginationPrev')}
-      </button>
+      </Button>
 
       <span className={styles.paginationRange} aria-live="polite">
         {startItem}–{endItem} of {safeTotalItems}
       </span>
 
-      <button
+      <Button
         type="button"
         className={styles.pageBtn}
         onClick={() => onPageChange(safePage + 1)}
@@ -69,7 +70,7 @@ export function PaginationControls({
         aria-label={tCommon('paginationNextLabel')}
       >
         {tCommon('paginationNext')}
-      </button>
+      </Button>
     </div>
   );
 }
