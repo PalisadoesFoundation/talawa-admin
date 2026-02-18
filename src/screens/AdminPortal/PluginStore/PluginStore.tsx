@@ -113,6 +113,7 @@ export default function PluginStore() {
     closeUpload();
     // Re-fetch plugins to reflect any newly uploaded plugin
     await refetch();
+    location.reload();
   };
 
   const pluginStoreDropdowns = [
