@@ -1266,9 +1266,21 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(startTimeInput).not.toBeDisabled();
     expect(endTimeInput).not.toBeDisabled();
 
+    // Calculate expected dynamic default times (next hour start, +2 hours end)
+    // Use current hour to avoid race condition between test execution and component initialization
+    const now = new Date();
+    const currentHour = now.getHours();
+    const nextHour = new Date(now);
+    nextHour.setHours(currentHour + 1, 0, 0, 0);
+    const twoHoursLater = new Date(nextHour);
+    twoHoursLater.setHours(currentHour + 2, 0, 0, 0);
+
+    const expectedStartTime = nextHour.toTimeString().split(' ')[0];
+    const expectedEndTime = twoHoursLater.toTimeString().split(' ')[0];
+
     // Optional sanity: values unchanged
-    expect(startTimeInput.value).toBe('08:00:00');
-    expect(endTimeInput.value).toBe('10:00:00');
+    expect(startTimeInput.value).toBe(expectedStartTime);
+    expect(endTimeInput.value).toBe(expectedEndTime);
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {

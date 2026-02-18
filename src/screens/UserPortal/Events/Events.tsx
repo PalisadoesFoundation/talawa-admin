@@ -166,13 +166,12 @@ export default function Events(): JSX.Element {
   const storedRole = getItem('role') as string | null;
   const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
 
-  const defaultEventValues = React.useMemo<IEventFormValues>(() => {
+  const buildDefaultEventValues = (): IEventFormValues => {
     const now = new Date();
     const nextHour = new Date(now);
     nextHour.setHours(now.getHours() + 1, 0, 0, 0);
     const twoHoursLater = new Date(nextHour);
-    twoHoursLater.setHours(nextHour.getHours() + 2);
-
+    twoHoursLater.setHours(nextHour.getHours() + 1, 0, 0, 0); // 1h after nextHour → 2h after now
     return {
       name: '',
       description: '',
@@ -188,7 +187,10 @@ export default function Events(): JSX.Element {
       recurrenceRule: null,
       createChat: false,
     };
-  }, []);
+  };
+
+  const [defaultEventValues, setDefaultEventValues] =
+    React.useState<IEventFormValues>(buildDefaultEventValues);
   const [formResetKey, setFormResetKey] = React.useState(0);
 
   const handleCreateEvent = async (
@@ -309,6 +311,7 @@ export default function Events(): JSX.Element {
    */
 
   const showInviteModal = (): void => {
+    setDefaultEventValues(buildDefaultEventValues());
     createEventModal.open();
   };
 

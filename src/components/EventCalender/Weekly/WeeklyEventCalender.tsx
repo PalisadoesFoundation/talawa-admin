@@ -36,10 +36,9 @@ import React, { type JSX, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+// Parse event times as UTC to match how EventForm stores them
 import styles from './WeeklyEventCalender.module.css';
 import { UserRole } from 'types/Event/interface';
-
-// Parse event times as UTC to match how EventForm stores them
 dayjs.extend(utc);
 import EventListCard from 'shared-components/EventListCard/EventListCard';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -175,7 +174,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
   ): Map<string, { colIndex: number; colCount: number }> => {
     // Sort by start time
     const sorted = [...evts].sort((a, b) =>
-      dayjs.utc(a.startAt).diff(dayjs.utc(b.startAt)),
+      dayjs(a.startAt).diff(dayjs(b.startAt)),
     );
 
     // Each "cluster" is a group of events that all overlap with at least one other
@@ -184,8 +183,8 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
     const columns: number[] = [];
 
     for (const evt of sorted) {
-      const start = dayjs.utc(evt.startAt).valueOf();
-      const end = dayjs.utc(evt.endAt).valueOf();
+      const start = dayjs(evt.startAt).valueOf();
+      const end = dayjs(evt.endAt).valueOf();
 
       // Find the first column whose last event ends at or before this event starts
       let placed = false;
@@ -278,6 +277,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
               };
               return (
                 <div
+                  key={event.id}
                   className={styles.eventContainer}
                   style={getEventStyle(
                     event.startAt,
@@ -287,7 +287,6 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
                   )}
                 >
                   <EventListCard
-                    key={event.id}
                     {...event}
                     refetchEvents={refetchEvents}
                     userRole={userRole}
