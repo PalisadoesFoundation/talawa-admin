@@ -166,24 +166,29 @@ export default function Events(): JSX.Element {
   const storedRole = getItem('role') as string | null;
   const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
 
-  const defaultEventValues = React.useMemo<IEventFormValues>(
-    () => ({
+  const defaultEventValues = React.useMemo<IEventFormValues>(() => {
+    const now = new Date();
+    const nextHour = new Date(now);
+    nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+    const twoHoursLater = new Date(nextHour);
+    twoHoursLater.setHours(nextHour.getHours() + 2);
+
+    return {
       name: '',
       description: '',
       location: '',
       startDate: new Date(),
       endDate: new Date(),
-      startTime: '08:00:00',
-      endTime: '10:00:00',
+      startTime: nextHour.toTimeString().split(' ')[0],
+      endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,
       isPublic: false,
       isInviteOnly: true,
       isRegisterable: true,
       recurrenceRule: null,
       createChat: false,
-    }),
-    [],
-  );
+    };
+  }, []);
   const [formResetKey, setFormResetKey] = React.useState(0);
 
   const handleCreateEvent = async (
