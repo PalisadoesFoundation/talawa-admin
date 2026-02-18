@@ -177,10 +177,12 @@ describe('RecurrenceMonthlySection', () => {
         const prevState: InterfaceRecurrenceRule = {
           ...defaultRecurrenceRule,
           byDay: [WeekDays.MO],
+          bySetPos: [3],
         };
         const newState = callArg(prevState);
         expect(newState.byMonthDay).toEqual([15]);
         expect(newState.byDay).toBeUndefined();
+        expect(newState.bySetPos).toBeUndefined();
       }
     });
 
@@ -218,6 +220,10 @@ describe('RecurrenceMonthlySection', () => {
         const newState = callArg(prevState);
         expect(newState.byDay).toBeDefined();
         expect(newState.byMonthDay).toBeUndefined();
+        // bySetPos should be set to the nth occurrence of the weekday
+        expect(newState.bySetPos).toBeDefined();
+        expect(Array.isArray(newState.bySetPos)).toBe(true);
+        expect(newState.bySetPos?.length).toBe(1);
       }
     });
 

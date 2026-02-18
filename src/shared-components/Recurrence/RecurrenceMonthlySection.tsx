@@ -37,11 +37,13 @@ export const RecurrenceMonthlySection: React.FC<
         ...prev,
         byMonthDay: [monthlyOptions.dateValue],
         byDay: undefined,
+        bySetPos: undefined,
       }));
     } else {
       setRecurrenceRuleState((prev) => ({
         ...prev,
         byDay: [monthlyOptions.weekdayValue.day],
+        bySetPos: [monthlyOptions.weekdayValue.week],
         byMonthDay: undefined,
       }));
     }

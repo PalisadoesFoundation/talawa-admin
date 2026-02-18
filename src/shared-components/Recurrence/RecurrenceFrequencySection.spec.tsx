@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceFrequencySection } from './RecurrenceFrequencySection';
-import { Frequency } from '../../utils/recurrenceUtils';
+import { Frequency } from 'utils/recurrenceUtils';
 
 const defaultProps = {
   frequency: Frequency.DAILY,
@@ -15,7 +15,7 @@ const defaultProps = {
 
 describe('RecurrenceFrequencySection', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {

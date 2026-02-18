@@ -58,7 +58,6 @@ export const RecurrenceEndOptionsSection: React.FC<
                 {option === endsOn && (
                   <DatePicker
                     name="recurrenceEndDate"
-                    label={t('endDate')}
                     data-testid="customRecurrenceEndDatePicker"
                     data-cy="customRecurrenceEndDatePicker"
                     className={`${styles.recurrenceRuleDateBox} ${styles.datePickerWrapper}`}

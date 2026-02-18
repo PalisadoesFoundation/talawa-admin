@@ -107,7 +107,7 @@ const renderModal = (
     setCustomRecurrenceModalIsOpen,
     t: (key: string) => key,
     // Use dynamic future date to avoid test staleness
-    startDate: dayjs.utc().add(7, 'days').toDate(),
+    startDate: dayjs.utc().add(30, 'days').startOf('day').hour(10).toDate(),
     ...override,
   };
 
@@ -126,7 +126,7 @@ const renderModal = (
 
 describe('CustomRecurrenceModal – full coverage', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -1120,7 +1120,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     // Test with date in 3rd week (e.g., 15th of a month)
     // Using a dynamic date that falls on the 15th of a future month
-    const thirdWeekDate = dayjs().add(30, 'days').date(15).toDate();
+    const thirdWeekDate = dayjs
+      .utc()
+      .add(2, 'months')
+      .date(15)
+      .hour(10)
+      .toDate();
     renderModal({
       startDate: thirdWeekDate,
       recurrenceRuleState: {

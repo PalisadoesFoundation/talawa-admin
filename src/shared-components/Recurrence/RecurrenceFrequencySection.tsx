@@ -20,43 +20,46 @@ export const RecurrenceFrequencySection: React.FC<
 
   return (
     <div className={styles.sectionContainer}>
-      <span className={styles.label}>{t('repeatsEvery')}</span>{' '}
-      <FormTextField
-        name="recurrenceInterval"
-        type="number"
-        value={localInterval.toString()}
-        onChange={(value) =>
-          onIntervalChange({
-            target: { value },
-          } as React.ChangeEvent<HTMLInputElement>)
-        }
-        onDoubleClick={(e: React.MouseEvent<HTMLInputElement>) => {
-          (e.currentTarget as HTMLInputElement).select();
-        }}
-        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (['-', '+', 'e', 'E'].includes(e.key)) {
-            e.preventDefault();
+      <div className={styles.inlineRow}>
+        <span className={styles.label}>{t('repeatsEvery')}</span>
+        <FormTextField
+          name="recurrenceInterval"
+          type="number"
+          value={localInterval.toString()}
+          onChange={(value) =>
+            onIntervalChange({
+              target: { value },
+            } as React.ChangeEvent<HTMLInputElement>)
           }
-        }}
-        required
-        placeholder="1"
-        className={styles.recurrenceRuleNumberInput}
-        data-testid="customRecurrenceIntervalInput"
-        data-cy="customRecurrenceIntervalInput"
-        aria-label={t('repeatsEvery')}
-        label={t('repeatsEvery')}
-      />
-      <DropDownButton
-        id="customRecurrenceFrequencyDropdown"
-        options={frequencyOptions}
-        selectedValue={frequency}
-        onSelect={(value) => onFrequencyChange(value as Frequency)}
-        variant="outline-secondary"
-        dataTestIdPrefix="customRecurrenceFrequencyDropdown"
-        ariaLabel={t('frequency')}
-        menuClassName={styles.dropdownMenu}
-        parentContainerStyle={styles.dropdown}
-      />
+          onDoubleClick={(e: React.MouseEvent<HTMLInputElement>) => {
+            (e.currentTarget as HTMLInputElement).select();
+          }}
+          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (['-', '+', 'e', 'E'].includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
+          required
+          placeholder="1"
+          className={styles.recurrenceRuleNumberInput}
+          data-testid="customRecurrenceIntervalInput"
+          data-cy="customRecurrenceIntervalInput"
+          aria-label={t('repeatsEvery')}
+          label={t('repeatsEvery')}
+          hideLabel
+        />
+        <DropDownButton
+          id="customRecurrenceFrequencyDropdown"
+          options={frequencyOptions}
+          selectedValue={frequency}
+          onSelect={(value) => onFrequencyChange(value as Frequency)}
+          variant="outline-secondary"
+          dataTestIdPrefix="customRecurrenceFrequencyDropdown"
+          ariaLabel={t('frequency')}
+          menuClassName={styles.dropdownMenu}
+          parentContainerStyle={styles.dropdown}
+        />
+      </div>
     </div>
   );
 };

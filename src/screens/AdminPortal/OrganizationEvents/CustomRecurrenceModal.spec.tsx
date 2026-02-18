@@ -67,19 +67,21 @@ const theme = createTheme({
   },
 });
 
+const baseDate = dayjs.utc().add(30, 'days').startOf('day').hour(10);
+
 const mockProps = {
   recurrenceRuleState: createDefaultRecurrenceRule(
-    dayjs.utc().add(7, 'days').toDate(),
+    baseDate.toDate(),
     Frequency.WEEKLY,
   ),
   setRecurrenceRuleState: vi.fn(),
-  endDate: dayjs.utc().add(14, 'days').toDate(),
+  endDate: baseDate.add(7, 'days').toDate(),
   setEndDate: vi.fn(),
   customRecurrenceModalIsOpen: true,
   hideCustomRecurrenceModal: vi.fn(),
   setCustomRecurrenceModalIsOpen: vi.fn(),
   t: (key: string) => key,
-  startDate: dayjs.utc().add(7, 'days').toDate(),
+  startDate: baseDate.toDate(),
 };
 
 const renderComponent = (props = mockProps) => {
@@ -98,7 +100,7 @@ const renderComponent = (props = mockProps) => {
 
 describe('CustomRecurrenceModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -131,7 +133,7 @@ describe('CustomRecurrenceModal', () => {
     });
 
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
-    expect(hideModal).toHaveBeenCalled();
+    await waitFor(() => expect(hideModal).toHaveBeenCalled());
   });
 
   test('renders frequency dropdown and handles frequency change', async () => {
@@ -149,7 +151,9 @@ describe('CustomRecurrenceModal', () => {
     );
     await userEvent.click(dailyOption);
 
-    expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled();
+    await waitFor(() =>
+      expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled(),
+    );
   });
 
   test('displays weekly day selection when frequency is weekly', async () => {
@@ -297,7 +301,7 @@ describe('CustomRecurrenceModal', () => {
     renderComponent({
       ...mockProps,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().add(7, 'days').toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
@@ -410,7 +414,7 @@ describe('CustomRecurrenceModal', () => {
     renderComponent({
       ...mockProps,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().add(7, 'days').toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
@@ -546,7 +550,7 @@ describe('CustomRecurrenceModal', () => {
       ...mockProps,
       setRecurrenceRuleState: mockSetRecurrenceRuleState,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().add(7, 'days').toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
@@ -572,7 +576,7 @@ describe('CustomRecurrenceModal', () => {
       ...mockProps,
       setRecurrenceRuleState: mockSetRecurrenceRuleState,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().add(7, 'days').toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
