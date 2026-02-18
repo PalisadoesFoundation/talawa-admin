@@ -14,6 +14,9 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import LoadingState from './LoadingState';
 import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
+import CustomLoader from './__test-utils__/CustomLoader';
+import ComplexLoader from './__test-utils__/ComplexLoader';
+import CustomDashboardLoader from './__test-utils__/CustomDashboardLoader';
 
 // Mock TableLoader component
 vi.mock('shared-components/TableLoader/TableLoader', () => ({
@@ -440,13 +443,8 @@ describe('LoadingState Component', () => {
     });
   });
 
-  /* eslint-disable react/no-multi-comp */
   describe('Custom Variant', () => {
     it('should render provided customLoader when loading', () => {
-      const CustomLoader = () => (
-        <div data-testid="custom-loader">Custom Loading...</div>
-      );
-
       render(
         <LoadingState
           isLoading={true}
@@ -462,8 +460,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should have proper accessibility attributes', () => {
-      const CustomLoader = () => <div>Loading...</div>;
-
       render(
         <LoadingState
           isLoading={true}
@@ -480,8 +476,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should respect data-testid prop', () => {
-      const CustomLoader = () => <div>Loading...</div>;
-
       render(
         <LoadingState
           isLoading={true}
@@ -497,8 +491,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should properly translate aria-label via i18next', () => {
-      const CustomLoader = () => <div>Loading...</div>;
-
       render(
         <LoadingState
           isLoading={true}
@@ -515,8 +507,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should render children when not loading in custom variant', () => {
-      const CustomLoader = () => <div>Loading...</div>;
-
       render(
         <LoadingState
           isLoading={false}
@@ -532,14 +522,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should handle complex custom loaders', () => {
-      const ComplexLoader = () => (
-        <div data-testid="complex-loader">
-          <div className="shimmer">Skeleton 1</div>
-          <div className="shimmer">Skeleton 2</div>
-          <div className="shimmer">Skeleton 3</div>
-        </div>
-      );
-
       render(
         <LoadingState
           isLoading={true}
@@ -556,16 +538,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should integrate properly with LoadingState wrapper', () => {
-      const CustomDashboardLoader = () => (
-        <>
-          {[...Array(6)].map((_, index) => (
-            <div key={index} data-testid={`loader-${index}`}>
-              Loading card {index + 1}
-            </div>
-          ))}
-        </>
-      );
-
       render(
         <LoadingState
           isLoading={true}
@@ -586,10 +558,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should toggle between loading and not loading states', () => {
-      const CustomLoader = () => (
-        <div data-testid="custom-loader">Loading...</div>
-      );
-
       const { rerender } = render(
         <LoadingState
           isLoading={true}
@@ -618,8 +586,6 @@ describe('LoadingState Component', () => {
     });
 
     it('should verify aria-label translation value', () => {
-      const CustomLoader = () => <div>Loading...</div>;
-
       render(
         <LoadingState
           isLoading={true}
@@ -636,5 +602,4 @@ describe('LoadingState Component', () => {
       expect(ariaLabel).toMatch(/loading/i);
     });
   });
-  /* eslint-enable react/no-multi-comp */
 });
