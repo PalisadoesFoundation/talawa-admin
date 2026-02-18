@@ -100,7 +100,7 @@ describe('AcceptInvitation', () => {
     vi.restoreAllMocks();
   });
 
-  it('should show loader while verifying', () => {
+  it('should show loader while verifying', async () => {
     const mocks = [
       {
         request: {
@@ -121,12 +121,15 @@ describe('AcceptInvitation', () => {
             },
           },
         },
-        delay: 100, // Add delay to ensure loading state is visible
       },
     ];
     renderComponent(mocks, '/invitation/test-token');
-    // This should hit the early return with LoadingState showing the loading spinner
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
   });
 
   it('should show error for invalid token', async () => {
@@ -297,6 +300,11 @@ describe('AcceptInvitation', () => {
   it('should display all invitation metadata fields correctly', async () => {
     const expiryDate = dayjs.utc(FIXED_BASE_DATE).add(2, 'years').toISOString();
 
+    const expectedExpiryText = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(2, 'years')
+      .format('D/M/YYYY, h:mm:ss a');
+
     const mocks = [
       {
         request: {
@@ -316,14 +324,17 @@ describe('AcceptInvitation', () => {
         },
       },
     ];
+
     renderComponent(mocks, '/invitation/test-token', 'auth-token');
+
     await waitFor(() => {
       expect(screen.getByText('test@example.com')).toBeInTheDocument();
       expect(screen.getByText('org-1')).toBeInTheDocument();
       expect(screen.getByText('event-1')).toBeInTheDocument();
+
       expect(
         screen.getByText((content, element) => {
-          return element?.tagName === 'DD' && content.includes('2028');
+          return element?.tagName === 'DD' && content === expectedExpiryText;
         }),
       ).toBeInTheDocument();
     });
