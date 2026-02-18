@@ -243,8 +243,8 @@ export default function Events(): JSX.Element {
 
       name: edge.node.name || '',
       description: edge.node.description || '',
-      startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
-      endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+      startAt: edge.node.startAt,
+      endAt: edge.node.endAt,
       startTime: edge.node.allDay
         ? null
         : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),

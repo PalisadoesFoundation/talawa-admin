@@ -189,12 +189,21 @@ function EventListCardModals({
     open: openCustomRecurrenceModal,
   } = useModalState();
 
+  // Derive startTime/endTime from startAt/endAt when the API fields are absent.
+  // This ensures the TimePicker shows the same time as the calendar grid position.
+  const deriveLocalTime = (isoString: string): string =>
+    dayjs(isoString).format('HH:mm:ss');
+
   const [formState, setFormState] = useState({
     name: eventListCardProps.name,
     eventDescription: eventListCardProps.description,
     location: eventListCardProps.location,
-    startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
-    endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
+    startTime:
+      eventListCardProps.startTime?.split('.')[0] ||
+      deriveLocalTime(eventListCardProps.startAt),
+    endTime:
+      eventListCardProps.endTime?.split('.')[0] ||
+      deriveLocalTime(eventListCardProps.endAt),
   });
 
   // Automatically switch to "following" option when recurrence rule changes

@@ -3,26 +3,6 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--space-5);
-  background-color: var(--color-gray-50);
-  border-bottom: var(--border-1) solid var(--color-gray-200);
-}
-
-.currentMonth {
-  font-size: var(--font-size-xl);
-  font-weight: bold;
-}
-
-.weeklyCalendar {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
   overflow: auto;
 }
 
@@ -43,7 +23,7 @@
 }
 
 .timeSlot {
-  height: var(--space-11);
+  height: var(--space-12);
   position: relative;
   text-align: right;
   padding-right: var(--space-3);
@@ -68,7 +48,7 @@
 }
 
 .dayHeader {
-  height: var(--space-10);
+  height: var(--space-11);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,41 +92,48 @@
 }
 
 .gridCell {
-  height: var(--space-11);
+  height: var(--space-12);
   border-bottom: var(--border-1) solid var(--color-gray-50);
 }
 
 .eventContainer {
   position: absolute;
-  width: 95%;
-  left: 2.5%;
-  background-color: var(--color-white);
+  /* width and left are set inline by getEventStyle based on collision columns */
+  background-color: var(--color-blue-100);
+  border-left: 3px solid var(--color-blue-500);
   border-radius: var(--radius-sm);
   overflow: hidden;
   pointer-events: auto;
   z-index: 1;
+  /* height is set inline by getEventStyle — do NOT override it here */
 }
 
-/* Override EventListCard styles to fit small container */
+/* Inner EventListCard fills the full block height */
 .eventContainer > div {
   height: 100%;
-  padding: var(--space-2) !important;
+  padding: var(--space-2) var(--space-3) !important;
   box-shadow: none !important;
-  background-color: var(--color-blue-100) !important;
-  border: var(--border-1) solid var(--color-blue-500) !important;
-  border-radius: var(--radius-sm);
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0;
   cursor: pointer;
   min-height: 0 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  transform: none !important;
+  transition: none !important;
 }
 
 .eventContainer h2 {
   font-size: var(--font-size-xs) !important;
   color: var(--color-blue-700) !important;
-  margin: 0 !important;
+  margin: 0 0 var(--space-1) 0 !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 !important;
+  font-weight: var(--font-weight-medium);
 }
 
 .weeklyEvents {

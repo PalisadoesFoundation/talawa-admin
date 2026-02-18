@@ -14,6 +14,8 @@ import {
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 i18n.use(initReactI18next).init({
   lng: 'en',
@@ -174,14 +176,15 @@ describe('WeeklyEventCalender Component', () => {
     // We can find it by finding the parent of the event-list-card
     const eventContainer = eventCard.parentElement;
 
-    // Calculate expected top and height
-    const startDate = dayjs(todayISO);
-    const endDate = dayjs(todayISO).add(1, 'hour');
+    // Calculate expected top and height using UTC (matches component's dayjs.utc() parsing)
+    const startDate = dayjs.utc(todayISO);
+    const endDate = dayjs.utc(todayISO).add(1, 'hour');
     const startHour = startDate.hour();
     const startMinute = startDate.minute();
     const durationMinutes = endDate.diff(startDate, 'minute');
-    const expectedTop = (startHour + startMinute / 60) * 60;
-    const expectedHeight = (durationMinutes / 60) * 60;
+    const CELL_HEIGHT_PX = 80; // matches --space-12 in CSS
+    const expectedTop = (startHour + startMinute / 60) * CELL_HEIGHT_PX;
+    const expectedHeight = (durationMinutes / 60) * CELL_HEIGHT_PX;
 
     expect(eventContainer).toHaveStyle(`top: ${expectedTop}px`);
     expect(eventContainer).toHaveStyle(`height: ${expectedHeight}px`);
@@ -286,5 +289,116 @@ describe('WeeklyEventCalender Component', () => {
     });
 
     expect(screen.getByText('Private Event')).toBeInTheDocument();
+  });
+  it('shows private events for creator (non-member)', async () => {
+    const privateEventData = [
+      {
+        ...mockEventData[0],
+        id: '4',
+        name: 'Creator Private Event',
+        isPublic: false,
+        creator: {
+          id: 'creator1',
+          name: 'Creator User',
+        },
+      },
+    ];
+
+    renderComponent({
+      eventData: privateEventData,
+      orgData: mockOrgData,
+      userRole: UserRole.REGULAR,
+      userId: 'creator1', // User IS the creator
+      currentDate: today,
+    });
+
+    expect(screen.getByText('Creator Private Event')).toBeInTheDocument();
+  });
+
+  it('shows invite-only events for attendees', async () => {
+    const inviteOnlyEventData = [
+      {
+        ...mockEventData[0],
+        id: '5',
+        name: 'Invite Only Event',
+        isPublic: false,
+        isInviteOnly: true,
+        attendees: [
+          {
+            id: 'attendee1',
+            name: 'Attendee User',
+            email: 'attendee@example.com',
+          },
+        ],
+      },
+    ];
+
+    renderComponent({
+      eventData: inviteOnlyEventData,
+      orgData: mockOrgData,
+      userRole: UserRole.REGULAR,
+      userId: 'attendee1', // User IS an attendee
+      currentDate: today,
+    });
+
+    expect(screen.getByText('Invite Only Event')).toBeInTheDocument();
+  });
+
+  it('hides invite-only events for non-attendees', async () => {
+    const inviteOnlyEventData = [
+      {
+        ...mockEventData[0],
+        id: '6',
+        name: 'Hidden Invite Only Event',
+        isPublic: false,
+        isInviteOnly: true,
+        attendees: [
+          {
+            id: 'attendee1',
+            name: 'Attendee User',
+            email: 'attendee@example.com',
+          },
+        ],
+      },
+    ];
+
+    renderComponent({
+      eventData: inviteOnlyEventData,
+      orgData: mockOrgData,
+      userRole: UserRole.REGULAR,
+      userId: 'outsider1', // User is NOT an attendee
+      currentDate: today,
+    });
+
+    expect(
+      screen.queryByText('Hidden Invite Only Event'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('shows events when organization members are NOT provided (User Portal fallback)', async () => {
+    // Simulate User Portal scenario where orgData.members is likely undefined or partial
+    const userPortalOrgData: InterfaceIOrgList = {
+      id: 'org1',
+      // members intentionally omitted or undefined to simulate User Portal structure
+    } as InterfaceIOrgList;
+
+    const eventData = [
+      {
+        ...mockEventData[0],
+        id: '7',
+        name: 'User Portal Event',
+        isPublic: false, // Non-public event
+      },
+    ];
+
+    renderComponent({
+      eventData: eventData,
+      orgData: userPortalOrgData,
+      userRole: UserRole.REGULAR,
+      userId: 'someUser',
+      currentDate: today,
+    });
+
+    expect(screen.getByText('User Portal Event')).toBeInTheDocument();
   });
 });

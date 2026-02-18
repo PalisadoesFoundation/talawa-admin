@@ -32,10 +32,15 @@
  * />
  * ```
  */
-import React, { useState, useEffect, type JSX } from 'react';
+import React, { type JSX, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import styles from './WeeklyEventCalender.module.css';
+import { UserRole } from 'types/Event/interface';
+
+// Parse event times as UTC to match how EventForm stores them
+dayjs.extend(utc);
 import EventListCard from 'shared-components/EventListCard/EventListCard';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import type {
@@ -52,7 +57,7 @@ const filterData = (
   data: InterfaceEvent[],
   organization?: InterfaceIOrgList,
   role?: string,
-  uid?: string,
+  uid?: string, // user id
 ): InterfaceEvent[] => {
   if (!data) return [];
 
@@ -60,15 +65,38 @@ const filterData = (
     return data.filter((event) => event.isPublic);
   }
 
-  if (role === 'ADMINISTRATOR') {
+  if (role === UserRole.ADMINISTRATOR) {
     return data;
   }
 
   return data.filter((event) => {
-    if (event.isPublic) return true;
-    const isMember = organization?.members?.edges?.some(
-      (edge) => edge.node.id === uid,
-    );
+    // Creator always sees their own events
+    if (event.creator && event.creator.id === uid) {
+      return true;
+    }
+
+    // Public events - always visible
+    if (event.isPublic) {
+      return true;
+    }
+
+    // Invite Only events - visible to creator OR attendees
+    if (event.isInviteOnly) {
+      const isCreator = event.creator && event.creator.id === uid;
+      const isAttendee = event.attendees?.some(
+        (attendee) => attendee.id === uid,
+      );
+      return isCreator || isAttendee;
+    }
+
+    // Organization Members events - check membership
+    // If not public and not invite-only, it must be an organization event
+    // Check if user is a member of the organization
+    const isMember =
+      organization?.members?.edges?.some((edge) => edge.node.id === uid) ||
+      !organization?.members ||
+      false;
+
     return isMember || false;
   });
 };
@@ -83,9 +111,6 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
 }) => {
   const { t: tErrors } = useTranslation('errors');
 
-  const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
-
-  // Helper to get week start (Sunday)
   const getWeekStart = React.useCallback((date: Date): Date => {
     const d = new Date(date);
     const day = d.getDay();
@@ -93,40 +118,99 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
     return new Date(d.setDate(diff));
   }, []);
 
-  const [weekStart, setWeekStart] = useState(getWeekStart(currentDate));
+  const weekStart = useMemo(
+    () => getWeekStart(currentDate),
+    [currentDate, getWeekStart],
+  );
 
-  useEffect(() => {
-    const newWeekStart = getWeekStart(currentDate);
-    setWeekStart(newWeekStart);
-  }, [currentDate, getWeekStart]);
-
-  useEffect(() => {
-    const filteredEvents = filterData(
-      eventData || [],
-      orgData,
-      userRole,
-      userId,
-    );
-    setEvents(filteredEvents);
-  }, [eventData, orgData, userRole, userId]);
+  const events = useMemo(
+    () => filterData(eventData || [], orgData, userRole, userId),
+    [eventData, orgData, userRole, userId],
+  );
 
   // Generate 24-hour time slots
   const timeSlots = Array.from({ length: 24 }, (_, i) => i);
 
-  const getEventStyle = (start: string, end: string) => {
-    const startDate = dayjs(start);
-    const endDate = dayjs(end);
+  const CELL_HEIGHT_PX = 80; // matches --space-12 (5rem = 80px) in CSS
+
+  const getEventStyle = (
+    start: string,
+    end: string,
+    colIndex = 0,
+    colCount = 1,
+  ) => {
+    // Use dayjs.utc() so hours/minutes match the UTC values stored by EventForm
+    const startDate = dayjs.utc(start);
+    const endDate = dayjs.utc(end);
+    // Clamp to current day boundaries
     const startHour = startDate.hour();
     const startMinute = startDate.minute();
-    const durationMinutes = endDate.diff(startDate, 'minute');
+    const endOfDay = startDate.endOf('day');
+    const clampedEnd = endDate.isAfter(endOfDay) ? endOfDay : endDate;
+    const durationMinutes = Math.max(clampedEnd.diff(startDate, 'minute'), 15); // minimum 15min visibility
 
-    const top = (startHour + startMinute / 60) * 60; // 60px per hour
-    const height = (durationMinutes / 60) * 60;
+    const top = (startHour + startMinute / 60) * CELL_HEIGHT_PX;
+    const height = Math.max((durationMinutes / 60) * CELL_HEIGHT_PX, 20); // min 20px so tiny events are visible
+
+    // Divide the column width evenly; leave a small gap between columns
+    const GAP = 2; // px gap between side-by-side events
+    const totalWidth = 95; // % of day column used
+    const colWidth = (totalWidth - GAP * (colCount - 1)) / colCount;
+    const left = colIndex * (colWidth + GAP) + 2.5; // 2.5% left margin
 
     return {
       top: `${top}px`,
       height: `${height}px`,
+      width: `${colWidth}%`,
+      left: `${left}%`,
     };
+  };
+
+  /**
+   * Groups events that overlap in time and assigns each a column index.
+   * @returns a Map from event id → `{ colIndex, colCount }`.
+   */
+  const computeColumns = (
+    evts: InterfaceEvent[],
+  ): Map<string, { colIndex: number; colCount: number }> => {
+    // Sort by start time
+    const sorted = [...evts].sort((a, b) =>
+      dayjs.utc(a.startAt).diff(dayjs.utc(b.startAt)),
+    );
+
+    // Each "cluster" is a group of events that all overlap with at least one other
+    const result = new Map<string, { colIndex: number; colCount: number }>();
+    // columns[i] = end time of the last event placed in column i
+    const columns: number[] = [];
+
+    for (const evt of sorted) {
+      const start = dayjs.utc(evt.startAt).valueOf();
+      const end = dayjs.utc(evt.endAt).valueOf();
+
+      // Find the first column whose last event ends at or before this event starts
+      let placed = false;
+      for (let c = 0; c < columns.length; c++) {
+        if (columns[c] <= start) {
+          columns[c] = end;
+          result.set(evt.id, { colIndex: c, colCount: 0 }); // colCount filled later
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        columns.push(end);
+        result.set(evt.id, { colIndex: columns.length - 1, colCount: 0 });
+      }
+    }
+
+    // colCount = total number of columns in use (all events in the same cluster share it)
+    // Simple approach: colCount = columns.length for all events in this day
+    const colCount = columns.length;
+    for (const [id, info] of result) {
+      result.set(id, { ...info, colCount });
+    }
+
+    return result;
   };
 
   const renderTimeColumn = (): JSX.Element => {
@@ -151,12 +235,21 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
     for (let i = 0; i < 7; i++) {
       const tempDate = new Date(currentWeekStart);
       tempDate.setDate(currentWeekStart.getDate() + i);
-      const dateKey = dayjs(tempDate).format('YYYY-MM-DD');
 
       const eventsForDate =
-        events?.filter(
-          (event) => dayjs(event.startAt).format('YYYY-MM-DD') === dateKey,
-        ) || [];
+        events?.filter((event) => {
+          const eventStart = dayjs(event.startAt).startOf('day');
+          const eventEnd = dayjs(event.endAt).startOf('day');
+          const current = dayjs(tempDate).startOf('day');
+          return (
+            current.isSame(eventStart) ||
+            current.isSame(eventEnd) ||
+            (current.isAfter(eventStart) && current.isBefore(eventEnd))
+          );
+        }) || [];
+
+      // Compute side-by-side column layout for overlapping events
+      const columnMap = computeColumns(eventsForDate);
 
       days.push(
         <div key={i} className={styles.dayColumn}>
@@ -178,21 +271,31 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
             {timeSlots.map((hour) => (
               <div key={hour} className={styles.gridCell}></div>
             ))}
-            {eventsForDate.map((event) => (
-              <div
-                key={event.id}
-                className={styles.eventContainer}
-                style={getEventStyle(event.startAt, event.endAt)}
-              >
-                <EventListCard
-                  key={event.id}
-                  {...event}
-                  refetchEvents={refetchEvents}
-                  userRole={userRole}
-                  userId={userId}
-                />
-              </div>
-            ))}
+            {eventsForDate.map((event) => {
+              const col = columnMap.get(event.id) ?? {
+                colIndex: 0,
+                colCount: 1,
+              };
+              return (
+                <div
+                  className={styles.eventContainer}
+                  style={getEventStyle(
+                    event.startAt,
+                    event.endAt,
+                    col.colIndex,
+                    col.colCount,
+                  )}
+                >
+                  <EventListCard
+                    key={event.id}
+                    {...event}
+                    refetchEvents={refetchEvents}
+                    userRole={userRole}
+                    userId={userId}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>,
       );
