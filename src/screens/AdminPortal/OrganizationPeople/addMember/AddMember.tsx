@@ -25,6 +25,7 @@ import {
   GET_ORGANIZATION_BASIC_DATA,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import type { ChangeEvent } from 'react';
 import React, {
   useCallback,
@@ -41,7 +42,6 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from './AddMember.module.css';
-import Avatar from 'shared-components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -298,27 +298,14 @@ function AddMember({
           header: translateAddMember('addMember.profile'),
           accessor: 'avatarURL',
           render: (value, row) => {
-            const displayName =
-              row.name?.trim() ||
-              (tCommon('avatar') as string) ||
-              'User avatar';
             return (
               <div data-testid="profileImage" className={styles.profileCell}>
-                {value ? (
-                  <img
-                    src={value as string}
-                    alt={`${displayName} ${tCommon('avatar')}`}
-                    className={styles.TableImage}
-                    crossOrigin="anonymous"
-                    loading="lazy"
-                  />
-                ) : (
-                  <Avatar
-                    avatarStyle={styles.TableImage}
-                    name={displayName}
-                    dataTestId="avatarImage"
-                  />
-                )}
+                <ProfileAvatarDisplay
+                  imageUrl={value as string}
+                  fallbackName={row.name}
+                  size="small"
+                  dataTestId="avatarImage"
+                />
               </div>
             );
           },
