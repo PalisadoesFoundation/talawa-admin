@@ -293,27 +293,23 @@ function navigateToAdsPage(adEdges: object[] = []): void {
   visitWithAuth(`/admin/orgads/${orgId}`);
 
   // 1. Container mounted
-  cy.get('[data-testid="advertisements"]', { timeout: 30000 }).should('exist');
+  cy.get('[data-testid="advertisements"]').should('exist');
 
   // 2. Tabs rendered → loading is DONE → no more DOM shifts
   //    The default active tab is "archivedAds".  We MUST switch to
   //    "Active Campaigns" during setup so the tab content renders NOW,
   //    not later when the page-object clicks it again (which is a no-op).
-  cy.contains('Active Campaigns', { timeout: 30000 })
-    .should('be.visible')
-    .click();
+  cy.contains('Active Campaigns').should('be.visible').click();
 
   // 3. Button is ready (it re-renders when loading finishes)
-  cy.get('[data-testid="createAdvertisement"]', { timeout: 30000 }).should(
-    'be.visible',
-  );
+  cy.get('[data-testid="createAdvertisement"]').should('be.visible');
 
   // 4. If we expect ads, wait for at least one ad card to be rendered.
   //    This proves the GraphQL response was processed and React finished
   //    rendering the list.  Without this the test body might race ahead
   //    of the useEffect that populates activeAdvertisements state.
   if (adEdges.length > 0) {
-    cy.get('[data-testid="AdEntry"]', { timeout: 30000 }).should('exist');
+    cy.get('[data-testid="AdEntry"]').should('exist');
   }
 }
 
