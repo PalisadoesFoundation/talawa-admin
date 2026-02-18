@@ -81,6 +81,21 @@ ruleTester.run('require-aftereach-cleanup', rule, {
           });
         `,
     },
+    // Sparse array (covers null traversal guards)
+    {
+      code: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          const arr = [,,];
+          describe('test', () => {
+            afterEach(() => {
+              vi.clearAllMocks();
+            });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+    },
   ],
 
   invalid: [
@@ -439,6 +454,30 @@ vi.fn();
 
           });
           export const foo = 'bar';
+        `,
+    },
+    // Empty afterEach block coverage
+    {
+      code: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => {});
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => {
+              vi.clearAllMocks();
+            });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
         `,
     },
   ],

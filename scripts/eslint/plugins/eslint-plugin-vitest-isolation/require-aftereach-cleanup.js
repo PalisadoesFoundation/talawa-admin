@@ -81,15 +81,10 @@ module.exports = {
                     cleanupMethods[cleanupMethod] = true;
                 }
 
-                // Recursively walk children
-                /* istanbul ignore next */
-                const keys = Object.keys(node).filter(key =>
-                    key !== 'parent' && key !== 'tokens' && key !== 'loc' &&
-                    key !== 'range' && key !== 'start' && key !== 'end' &&
-                    key !== 'comments'
-                );
+                // Recursively walk children using visitor keys
+                const visitorKeys = sourceCode.visitorKeys[node.type] || [];
 
-                for (const key of keys) {
+                for (const key of visitorKeys) {
                     const child = node[key];
                     if (Array.isArray(child)) {
                         child.forEach(walk);
@@ -443,9 +438,7 @@ module.exports = {
             const visited = new WeakSet();
 
             function traverse(n) {
-                if (!n || typeof n !== 'object' || visited.has(n)) {
-                    return;
-                }
+                // No guard needed as we only call traverse on valid objects
                 visited.add(n);
 
                 if (n.type === 'CallExpression' &&
@@ -455,17 +448,12 @@ module.exports = {
                     return;
                 }
 
-                /* istanbul ignore next */
-                const keys = Object.keys(n).filter(key =>
-                    key !== 'parent' && key !== 'tokens' && key !== 'loc' &&
-                    key !== 'range' && key !== 'start' && key !== 'end' &&
-                    key !== 'comments'
-                );
+                const visitorKeys = sourceCode.visitorKeys[n.type] || [];
 
-                for (const key of keys) {
+                for (const key of visitorKeys) {
                     const child = n[key];
                     if (Array.isArray(child)) {
-                        child.forEach(traverse);
+                        child.forEach(c => c && traverse(c));
                     } else if (child && typeof child === 'object') {
                         traverse(child);
                     }
@@ -484,10 +472,7 @@ module.exports = {
             const visited = new WeakSet();
 
             function traverse(n) {
-                // Prevent infinite recursion from circular references
-                if (!n || typeof n !== 'object' || visited.has(n)) {
-                    return;
-                }
+                // No guard needed as we only call traverse on valid objects
                 visited.add(n);
 
                 if (n.type === 'CallExpression' &&
@@ -497,18 +482,13 @@ module.exports = {
                     return;
                 }
 
-                // Use filtered keys to avoid non-AST properties
-                /* istanbul ignore next */
-                const keys = Object.keys(n).filter(key =>
-                    key !== 'parent' && key !== 'tokens' && key !== 'loc' &&
-                    key !== 'range' && key !== 'start' && key !== 'end' &&
-                    key !== 'comments'
-                );
+                // Use visitor keys to traverse
+                const visitorKeys = sourceCode.visitorKeys[n.type] || [];
 
-                for (const key of keys) {
+                for (const key of visitorKeys) {
                     const child = n[key];
                     if (Array.isArray(child)) {
-                        child.forEach(traverse);
+                        child.forEach(c => c && traverse(c));
                     } else if (child && typeof child === 'object') {
                         traverse(child);
                     }
