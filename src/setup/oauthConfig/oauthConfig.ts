@@ -113,7 +113,6 @@ async function configureProvider(
   ]);
 
   const redirectUri = `${baseUrl}/auth/callback`;
-  console.log(`Redirect URI will be set to: ${redirectUri}`);
 
   updateEnvFile(config.envClientId, answers.clientId.trim());
   updateEnvFile(config.envRedirectUri, redirectUri);
@@ -174,6 +173,8 @@ async function askAndSetOAuth(): Promise<void> {
     ]);
 
     const trimmedBaseUrl = baseUrl.trim().replace(/\/$/, ''); // Remove trailing slash if present
+    const redirectUri = `${trimmedBaseUrl}/auth/callback`;
+    console.log(`Redirect URI will be set to: ${redirectUri}`);
 
     // Then ask which providers to configure
     const { oauthProvider } = await inquirer.prompt([
