@@ -7,6 +7,7 @@ import {
 } from '../../utils/recurrenceUtils';
 import styles from './RecurrenceWeeklySection.module.css';
 import Button from 'shared-components/Button';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceRecurrenceWeeklySectionProps {
   frequency: Frequency;
@@ -25,18 +26,22 @@ interface InterfaceRecurrenceWeeklySectionProps {
 export const RecurrenceWeeklySection: React.FC<
   InterfaceRecurrenceWeeklySectionProps
 > = ({ frequency, byDay, onDayClick, onWeekdayKeyDown, t }) => {
+  const { t: tr } = useTranslation('translation', {
+    keyPrefix: 'recurrenceWeeklySection',
+  });
+
   if (frequency !== Frequency.WEEKLY) {
     return null;
   }
 
   return (
     <div className="mb-4">
-      <span className="fw-semibold text-secondary">{t('repeatsOn')}</span>
+      <span className="fw-semibold text-secondary">{tr('repeatsOn')}</span>
       <br />
       <div
         className="mx-2 mt-3 d-flex gap-1"
         role="group"
-        aria-label={t('repeatsOn')}
+        aria-label={tr('repeatsOn')}
       >
         {daysOptions.map((day, index) => (
           <Button

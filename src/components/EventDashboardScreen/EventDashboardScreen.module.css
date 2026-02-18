@@ -27,7 +27,7 @@
 .collapseSidebarButton:hover,
 .opendrawer:hover {
   opacity: 1;
-  color: black !important;
+  color: var(--color-black) !important;
 }
 
 .opendrawer {
@@ -40,7 +40,7 @@
   width: var(--space-9);
   height: var(--vh-100);
   z-index: 9999;
-  background-color: rgba(245, 245, 245);
+  background-color: rgba(245, 245, 245, 1);
   border: none;
   border-radius: var(--radius-none);
   margin-right: var(--space-6);
@@ -87,8 +87,8 @@
 
   .collapseSidebarButton {
     width: 100%;
-    left: 0;
-    right: 0;
+    left: var(--space-0);
+    right: var(--space-0);
   }
 }
 

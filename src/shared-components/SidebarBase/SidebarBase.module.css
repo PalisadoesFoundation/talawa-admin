@@ -1,34 +1,34 @@
 .leftDrawer {
-  width: calc(300px + 2rem);
+  width: calc(var(--space-23) + var(--space-8));
   min-height: 100%;
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
+  top: var(--space-0);
+  left: var(--space-0);
+  bottom: var(--space-0);
   z-index: 100;
   display: flex;
   flex-direction: column;
-  padding: 0.8rem 1rem 0 1rem;
-  background-color: var(--leftDrawer-fixedModule-bg) !important;
+  padding: var(--space-4) var(--space-5) var(--space-0) var(--space-5);
+  background-color: var(--color-white) !important;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
   overflow-x: hidden !important;
 }
 
 .activeDrawer {
-  width: calc(300px + 2rem);
+  width: calc(var(--space-23) + var(--space-8));
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
+  top: var(--space-0);
+  left: var(--space-0);
+  bottom: var(--space-0);
   animation: comeToRightBigScreen 0.5s ease-in-out;
 }
 
 .inactiveDrawer {
   position: fixed;
-  top: 0;
-  left: calc(-300px - 2rem);
-  bottom: 0;
+  top: var(--space-0);
+  left: calc(-1 * (var(--space-23) + var(--space-8)));
+  bottom: var(--space-0);
   animation: goToLeftBigScreen 0.5s ease-in-out;
 }
 
@@ -42,7 +42,7 @@
   justify-content: flex-start;
   align-items: center;
   margin-right: auto;
-  padding-left: 5px;
+  padding-left: var(--space-2);
 }
 
 .sidebarBrandingContainerHidden {
@@ -50,8 +50,8 @@
 }
 
 .talawaLogo {
-  width: 65px;
-  height: 60px;
+  width: var(--space-12);
+  height: var(--space-11);
 }
 
 .talawaLogoContainer {
@@ -61,22 +61,22 @@
 }
 
 .talawaText {
-  font-size: 20px;
+  font-size: var(--space-8);
   font-weight: 500;
 }
 
 .titleHeader {
-  font-size: 23px;
+  font-size: var(--space-9);
   line-height: normal;
   font-weight: bolder;
-  padding: 10px;
+  padding: var(--space-6);
 }
 
 .optionList {
   overflow-y: hidden;
   overflow-x: hidden !important;
   scrollbar-width: thin;
-  scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
+  scrollbar-color: var(--color-gray-100) transparent;
   transition: overflow 0.3s ease-in-out;
 }
 
@@ -85,7 +85,7 @@
 }
 
 .optionList::-webkit-scrollbar {
-  width: 1px;
+  width: var(--border-1);
 }
 
 .optionList::-webkit-scrollbar-track {
@@ -94,11 +94,11 @@
 
 .optionList::-webkit-scrollbar-thumb {
   background-color: transparent;
-  border-radius: 30px;
+  border-radius: var(--radius-pill);
 }
 
 .optionList::-webkit-scrollbar-thumb:hover {
-  background-color: var(--leftDrawer-optionList-bg);
+  background-color: var(--color-white);
 }
 
 .optionList button,
@@ -109,29 +109,29 @@
   max-width: 100%;
   text-align: start;
   text-decoration: none;
-  margin-bottom: 0.8rem;
-  border-radius: 12px;
-  font-size: 16px;
-  padding: 0.6rem;
-  padding-left: 0.8rem;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--space-7);
+  padding: var(--space-4);
+  padding-left: var(--space-4);
   outline: none;
   border: none;
   overflow: hidden;
 }
 
 .collapseBtn {
-  height: 48px;
+  height: var(--space-10);
   border: none;
 }
 
 .profileContainer {
   border: none;
   width: 100%;
-  height: 52px;
-  border-radius: 16px;
+  height: var(--space-11);
+  border-radius: var(--radius-2xl);
   display: flex;
   align-items: center;
-  background-color: var(--leftDrawer-profileContainer-bg);
+  background-color: var(--color-white);
 }
 
 .profileContainer:focus {
@@ -139,20 +139,20 @@
 }
 
 .profileContainer:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--color-blue-700);
+  outline-offset: var(--space-2);
 }
 
 .imageContainer {
-  width: 68px;
-  margin-right: 8px;
-  margin-bottom: 10px;
+  width: var(--space-12);
+  margin-right: var(--space-4);
+  margin-bottom: var(--space-6);
 }
 
 .profileContainer img {
-  height: 52px;
-  width: 52px;
-  border-radius: 50%;
+  height: var(--space-11);
+  width: var(--space-11);
+  border-radius: var(--radius-full);
 }
 
 .profileTextUserSidebarOrg {
@@ -162,7 +162,7 @@
 }
 
 .primaryText {
-  font-size: 1.1rem;
+  font-size: var(--space-6);
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
@@ -174,9 +174,9 @@
 }
 
 .secondaryText {
-  font-size: 0.8rem;
+  font-size: var(--space-4);
   font-weight: 400;
-  color: var(--leftDrawer-secondaryText-color);
+  color: var(--color-gray-600);
   display: block;
   text-transform: capitalize;
 }
@@ -193,8 +193,8 @@
 }
 
 .leftDrawerActiveButton {
-  background-color: var(--leftDrawer-active-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
   font-weight: bold;
 }
 
@@ -205,135 +205,135 @@
 
 .leftDrawerInactiveButton {
   background-color: var(--leftDrawer-inactive-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
+  color: var(--color-black);
 }
 
 .leftDrawerInactiveButton:hover {
-  background-color: var(--leftDrawer-inactive-button-hover-bg);
+  background-color: var(--color-gray-100);
 }
 
 .leftDrawerCollapseActiveButton {
-  background-color: var(--leftDrawer-collapse-active-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
+  background-color: var(--color-gray-200);
+  color: var(--color-black);
 }
 
 .userSidebarOrgFooter {
-  margin-top: 60px !important;
+  margin-top: var(--space-13) !important;
 }
 
 .hamburgerIcon {
   cursor: pointer;
-  color: var(--primaryText-color);
+  color: var(--color-black);
   transition: transform 0.3s ease;
-  height: 38px;
+  height: var(--space-9);
 }
 
 .hamburgerIconExpanded {
-  margin-left: 10px;
+  margin-left: var(--space-6);
 }
 
 .hamburgerIconCollapsed {
-  margin-left: 0;
+  margin-left: var(--space-0);
 }
 
 .collapsedDrawer {
-  width: var(--sidebar-collapsed-width);
-  min-width: var(--sidebar-collapsed-width);
-  max-width: var(--sidebar-collapsed-width);
+  width: var(--space-12);
+  min-width: var(--space-12);
+  max-width: var(--space-12);
   overflow-x: hidden !important;
 }
 
 .leftDrawer.collapsedDrawer {
-  width: var(--sidebar-collapsed-width) !important;
-  max-width: var(--sidebar-collapsed-width);
+  width: var(--space-12) !important;
+  max-width: var(--space-12);
 }
 
 .sidebarText {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--primaryText-color);
+  color: var(--color-black);
 }
 
 .expandedDrawer {
-  width: var(--sidebar-expanded-width);
+  width: var(--space-22);
   overflow-x: hidden !important;
 }
 
 @media (max-width: 1120px) {
   .leftDrawer {
-    width: calc(250px + 2rem);
-    padding: 1rem 1rem 0 1rem;
+    width: calc(var(--space-21) + var(--space-8));
+    padding: var(--space-5) var(--space-5) var(--space-0) var(--space-5);
   }
 }
 
 @media (max-height: 900px) {
   .leftDrawer {
-    width: calc(300px + 1rem);
+    width: calc(var(--space-23) + var(--space-5));
   }
 
   .talawaLogo {
-    width: 38px;
-    height: 38px;
-    margin-right: 0.4rem;
+    width: var(--space-8);
+    height: var(--space-8);
+    margin-right: var(--space-3);
   }
 
   .talawaText {
-    font-size: 1rem;
+    font-size: var(--space-5);
   }
 
   .optionList button {
-    margin-bottom: 0.05rem;
-    font-size: 16px;
-    padding-left: 0.8rem;
+    margin-bottom: var(--space-1);
+    font-size: var(--space-7);
+    padding-left: var(--space-4);
   }
 
   .primaryText {
-    font-size: 1rem;
+    font-size: var(--space-5);
   }
 
   .secondaryText {
-    font-size: 0.8rem;
+    font-size: var(--space-4);
   }
 }
 
 @media (max-height: 650px) {
   .leftDrawer {
-    padding: 0.5rem 0.8rem 0 0.8rem;
-    width: calc(250px);
+    padding: var(--space-3) var(--space-4) var(--space-0) var(--space-4);
+    width: var(--space-21);
   }
 
   .talawaText {
-    font-size: 0.8rem;
+    font-size: var(--space-4);
   }
 
   .titleHeader {
-    font-size: 16px;
+    font-size: var(--space-7);
   }
 
   .optionList button {
-    margin-bottom: 0.05rem;
-    font-size: 14px;
-    padding: 0.4rem;
-    padding-left: 0.8rem;
+    margin-bottom: var(--space-1);
+    font-size: var(--space-6);
+    padding: var(--space-3);
+    padding-left: var(--space-4);
   }
 
   .primaryText {
-    font-size: 0.8rem;
+    font-size: var(--space-4);
   }
 
   .secondaryText {
-    font-size: 0.6rem;
+    font-size: var(--space-3);
   }
 
   .imageContainer {
-    width: 40px;
-    margin-left: 5px;
-    margin-right: 10px;
+    width: var(--space-8);
+    margin-left: var(--space-2);
+    margin-right: var(--space-5);
   }
 
   .imageContainer img {
-    width: 40px;
+    width: var(--space-8);
     height: 100%;
   }
 }
@@ -341,8 +341,8 @@
 @media (max-width: 820px) {
   .leftDrawer.expandedDrawer {
     width: 100%;
-    left: 0;
-    right: 0;
+    left: var(--space-0);
+    right: var(--space-0);
   }
 
   .collapsedDrawer {
@@ -354,7 +354,7 @@
 
   .inactiveDrawer {
     opacity: 0;
-    left: 0;
+    left: var(--space-0);
     z-index: -1;
     animation: closeDrawer 0.2s ease-in-out;
   }
@@ -366,13 +366,13 @@
   }
 
   100% {
-    left: 0;
+    left: var(--space-0);
   }
 }
 
 @keyframes goToLeftBigScreen {
   0% {
-    left: 0;
+    left: var(--space-0);
   }
 
   100% {

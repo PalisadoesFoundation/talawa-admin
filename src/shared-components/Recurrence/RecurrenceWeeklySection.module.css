@@ -1,21 +1,21 @@
 .recurrenceDayButton {
-  width: 33px;
-  height: 33px;
-  border: 1px solid var(--color-gray-400);
+  width: var(--space-7);
+  height: var(--space-7);
+  border: var(--border-1) solid var(--color-gray-400);
   cursor: pointer;
   transition: background-color 0.3s;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  margin-right: 0.5rem;
-  border-radius: 50%;
+  margin-right: var(--space-3);
+  border-radius: var(--radius-full);
   position: relative;
   outline: none;
 }
 
 .recurrenceDayButton:focus-visible {
-  outline: 2px solid var(--color-blue-700);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--color-blue-700);
+  outline-offset: var(--space-2);
 }
 
 .recurrenceDayButton:hover {
@@ -24,7 +24,7 @@
 
 .recurrenceDayButton span {
   color: var(--color-gray-400);
-  padding: 0.25rem;
+  padding: var(--space-2);
   text-align: center;
 }
 

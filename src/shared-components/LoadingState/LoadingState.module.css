@@ -39,9 +39,11 @@
 
 .loadingOverlay {
   position: absolute;
-  inset: 0;
-  background-color: var(--color-white);
-  opacity: 0.8;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-gray-50);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,5 +122,5 @@
 }
 
 .loadingItem {
-  height: 30px;
+  height: var(--space-8);
 }
