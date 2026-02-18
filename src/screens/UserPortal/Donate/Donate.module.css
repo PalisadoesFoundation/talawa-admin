@@ -60,6 +60,7 @@
 
 .mainContainer50 {
   width: 100%;
+  box-sizing: border-box;
   flex-grow: 1;
   padding: var(--space-3) var(--space-5) var(--space-5);
   max-height: 100%;
@@ -104,6 +105,10 @@
 }
 
 .heading {
+  display: flex;
+  align-items: center;
+  min-height: var(--space-6);
+  margin-bottom: var(--space-2);
   font-size: var(--font-size-md);
 }
 

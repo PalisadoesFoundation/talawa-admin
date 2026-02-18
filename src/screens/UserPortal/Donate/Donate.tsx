@@ -331,15 +331,14 @@ export default function Donate(): JSX.Element {
             <div data-testid="loading-state">
               <HourglassBottomIcon /> {t('loading')}
             </div>
-          ) : filteredDonationRows.length > 0 ? (
+          ) : (
             <DataTable<IDonationTableRow>
               data={paginatedDonationRows}
               columns={donationColumns}
               rowKey="id"
               paginationMode="none"
+              emptyMessage={t('nothingToShow')}
             />
-          ) : (
-            <span>{t('nothingToShow')}</span>
           )}
 
           {filteredDonationRows.length > 0 && (

@@ -621,7 +621,7 @@ describe('Donate Component', () => {
     // Wait for organization data to load
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
@@ -642,7 +642,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
@@ -1000,7 +1000,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
   });
@@ -1088,7 +1088,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
@@ -1108,7 +1108,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
