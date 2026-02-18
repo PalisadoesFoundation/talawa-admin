@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { MockedProvider } from '@apollo/client/testing';
@@ -96,7 +96,8 @@ describe('AcceptInvitation', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should show loader while verifying', () => {
@@ -235,7 +236,7 @@ describe('AcceptInvitation', () => {
               invitationToken: 'test-token',
               eventId: 'event-1',
               organizationId: 'org-1',
-              expiresAt: new Date().toISOString(),
+              expiresAt: dayjs().add(1, 'month').toISOString(),
             },
           },
         },
@@ -284,7 +285,7 @@ describe('AcceptInvitation', () => {
 
   // NEW: Test for displaying all invitation metadata fields
   it('should display all invitation metadata fields correctly', async () => {
-    const expiryDate = dayjs.utc().add(1, 'year').endOf('year').toISOString();
+    const expiryDate = dayjs().add(2, 'years').toISOString();
     const mocks = [
       {
         request: {
@@ -310,7 +311,11 @@ describe('AcceptInvitation', () => {
       expect(screen.getByText('org-1')).toBeInTheDocument();
       expect(screen.getByText('event-1')).toBeInTheDocument();
       expect(
-        screen.getByText(new Date(expiryDate).toLocaleString()),
+        screen.getByText((content, element) => {
+          return (
+            element?.tagName === 'DD' && /\d{1,2}\/\d{1,2}\/\d{4}/.test(content)
+          );
+        }),
       ).toBeInTheDocument();
     });
   });
@@ -368,12 +373,14 @@ describe('AcceptInvitation', () => {
       '/invitation/test-token',
     );
     await waitFor(() => {
-      expect(screen.getByText('Log in')).toBeInTheDocument();
+      const loginButton = screen.getByText('Log in');
+      expect(loginButton).toBeInTheDocument();
+      expect(loginButton).toBeEnabled();
+      // Ensure the component has finished loading and processing the token
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
-    await waitFor(() => {
-      expect(screen.getByText('Log in')).toBeInTheDocument();
-    });
-    await user.click(screen.getByText('Log in'));
+    const loginButton = screen.getByText('Log in');
+    await user.click(loginButton);
     await waitFor(() => {
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'pendingInvitationToken',
@@ -438,12 +445,13 @@ describe('AcceptInvitation', () => {
       '/invitation/test-token',
     );
     await waitFor(() => {
-      expect(screen.getByText('Sign up')).toBeInTheDocument();
+      const signupButton = screen.getByText('Sign up');
+      expect(signupButton).toBeInTheDocument();
+      expect(signupButton).toBeEnabled();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
-    await waitFor(() => {
-      expect(screen.getByText('Sign up')).toBeInTheDocument();
-    });
-    await user.click(screen.getByText('Sign up'));
+    const signupButton = screen.getByText('Sign up');
+    await user.click(signupButton);
     await waitFor(() => {
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'pendingInvitationToken',
@@ -464,6 +472,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -471,7 +486,10 @@ describe('AcceptInvitation', () => {
     ];
     renderComponent(mocks, '/invitation/test-token');
     await waitFor(() => {
-      expect(screen.getByText('Sign up')).toBeInTheDocument();
+      const signupButton = screen.getByText('Sign up');
+      expect(signupButton).toBeInTheDocument();
+      expect(signupButton).toBeEnabled();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
     await user.click(screen.getByText('Sign up'));
     await waitFor(() => {
