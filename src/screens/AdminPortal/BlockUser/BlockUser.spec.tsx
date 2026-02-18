@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
@@ -266,6 +266,7 @@ describe('BlockUser Component', () => {
     });
 
     it('handles both queries returning null data', async () => {
+      const user = userEvent.setup();
       // Create custom mocks with both queries returning null data
       const customMocks = [
         {
@@ -313,16 +314,12 @@ describe('BlockUser Component', () => {
 
       // Switch to blocked users view
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       // Should show empty state for blocked users
       await waitFor(() => {
@@ -416,6 +413,7 @@ describe('BlockUser Component', () => {
     });
 
     it('switches to blocked users view', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -431,16 +429,12 @@ describe('BlockUser Component', () => {
       });
 
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       await waitFor(() => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
@@ -473,6 +467,7 @@ describe('BlockUser Component', () => {
     });
 
     it('displays empty state with noSpammerFound message when blocked tab is selected and searchTerm is empty', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
@@ -488,16 +483,12 @@ describe('BlockUser Component', () => {
       });
 
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       await waitFor(() => {
         expect(
@@ -510,6 +501,7 @@ describe('BlockUser Component', () => {
 
   describe('Search Functionality', () => {
     it('searches members by name', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -530,7 +522,7 @@ describe('BlockUser Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'John' } });
+        await user.type(searchInput, 'John');
       });
 
       // Wait for debounced search to complete
@@ -544,6 +536,7 @@ describe('BlockUser Component', () => {
     });
 
     it('searches members by email address', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -564,9 +557,7 @@ describe('BlockUser Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
       await act(async () => {
-        fireEvent.change(searchInput, {
-          target: { value: 'jane@example.com' },
-        });
+        await user.type(searchInput, 'jane@example.com');
       });
 
       // Wait for debounced search to complete
@@ -580,6 +571,7 @@ describe('BlockUser Component', () => {
     });
 
     it('searches blocked users by name', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -595,16 +587,12 @@ describe('BlockUser Component', () => {
       });
 
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       await waitFor(() => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
@@ -612,7 +600,7 @@ describe('BlockUser Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'Bob' } });
+        await user.type(searchInput, 'Bob');
       });
 
       // Wait for debounced search to complete
@@ -625,6 +613,7 @@ describe('BlockUser Component', () => {
     });
 
     it('searches blocked users by email address', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -640,16 +629,12 @@ describe('BlockUser Component', () => {
       });
 
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       await waitFor(() => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
@@ -657,7 +642,7 @@ describe('BlockUser Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'bob@example.com' } });
+        await user.type(searchInput, 'bob@example.com');
       });
 
       // Wait for debounced search to complete
@@ -670,6 +655,7 @@ describe('BlockUser Component', () => {
     });
 
     it('handles search with no results for members', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -690,7 +676,7 @@ describe('BlockUser Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
+        await user.type(searchInput, 'nonexistent');
       });
 
       // Wait for debounced search to complete
@@ -705,6 +691,7 @@ describe('BlockUser Component', () => {
     });
 
     it('handles search with no results for blocked users', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -720,16 +707,12 @@ describe('BlockUser Component', () => {
       });
 
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       await waitFor(() => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
@@ -737,7 +720,7 @@ describe('BlockUser Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
+        await user.type(searchInput, 'nonexistent');
       });
 
       // Wait for debounced search to complete
@@ -752,6 +735,7 @@ describe('BlockUser Component', () => {
     });
 
     it('clears search results when search term is empty', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -774,7 +758,7 @@ describe('BlockUser Component', () => {
       // First search for something
       const searchInput = screen.getByTestId('searchByName');
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'John' } });
+        await user.type(searchInput, 'John');
       });
 
       // Wait for debounced search to complete
@@ -788,7 +772,7 @@ describe('BlockUser Component', () => {
 
       // Then clear the search
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: '' } });
+        await user.clear(searchInput);
       });
 
       // Wait for debounced clear to complete
@@ -804,6 +788,7 @@ describe('BlockUser Component', () => {
 
   describe('Block/Unblock Actions', () => {
     it('blocks a user successfully', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -823,10 +808,7 @@ describe('BlockUser Component', () => {
       });
 
       const blockButton = screen.getByTestId('blockUserBtn-1');
-      await act(async () => {
-        fireEvent.click(blockButton);
-      });
-
+      await user.click(blockButton);
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
           'User blocked successfully',
@@ -835,6 +817,7 @@ describe('BlockUser Component', () => {
     });
 
     it('unblocks a user successfully', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -850,25 +833,19 @@ describe('BlockUser Component', () => {
       });
 
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       await waitFor(() => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
 
       const unblockButton = screen.getByTestId('unblockUserBtn-3');
-      await act(async () => {
-        fireEvent.click(unblockButton);
-      });
+      await user.click(unblockButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -878,6 +855,7 @@ describe('BlockUser Component', () => {
     });
 
     it('handles block user error', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks({ blockUserError: true })}>
@@ -897,9 +875,7 @@ describe('BlockUser Component', () => {
       });
 
       const blockButton = screen.getByTestId('blockUserBtn-1');
-      await act(async () => {
-        fireEvent.click(blockButton);
-      });
+      await user.click(blockButton);
 
       await waitFor(() => {
         expect(errorHandler).toHaveBeenCalled();
@@ -907,6 +883,7 @@ describe('BlockUser Component', () => {
     });
 
     it('handles unblock user error', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks({ unblockUserError: true })}>
@@ -922,25 +899,19 @@ describe('BlockUser Component', () => {
       });
 
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       await waitFor(() => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
 
       const unblockButton = screen.getByTestId('unblockUserBtn-3');
-      await act(async () => {
-        fireEvent.click(unblockButton);
-      });
+      await user.click(unblockButton);
 
       await waitFor(() => {
         expect(errorHandler).toHaveBeenCalled();
@@ -948,6 +919,7 @@ describe('BlockUser Component', () => {
     });
 
     it('can block multiple users', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -969,9 +941,7 @@ describe('BlockUser Component', () => {
 
       // Block first user
       const blockButton1 = screen.getByTestId('blockUserBtn-1');
-      await act(async () => {
-        fireEvent.click(blockButton1);
-      });
+      await user.click(blockButton1);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -981,9 +951,7 @@ describe('BlockUser Component', () => {
 
       // Block second user
       const blockButton2 = screen.getByTestId('blockUserBtn-2');
-      await act(async () => {
-        fireEvent.click(blockButton2);
-      });
+      await user.click(blockButton2);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -1003,6 +971,7 @@ describe('BlockUser Component', () => {
     });
 
     it('shows blocked user in blocked users list after blocking', async () => {
+      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -1024,10 +993,7 @@ describe('BlockUser Component', () => {
 
       // Block John Doe
       const blockButton = screen.getByTestId('blockUserBtn-1');
-      await act(async () => {
-        fireEvent.click(blockButton);
-      });
-
+      await user.click(blockButton);
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
           'User blocked successfully',
@@ -1036,16 +1002,12 @@ describe('BlockUser Component', () => {
 
       // Switch to blocked users view
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
-      await act(async () => {
-        fireEvent.click(sortingButton);
-      });
+      await user.click(sortingButton);
 
       const blockedUsersOption = await screen.findByTestId(
         'blockUserView-item-blockedUsers',
       );
-      await act(async () => {
-        fireEvent.click(blockedUsersOption);
-      });
+      await user.click(blockedUsersOption);
 
       // Verify John Doe is now in the blocked users list
       // Note: In a real scenario, we would need to update the mock for the blocked users query
