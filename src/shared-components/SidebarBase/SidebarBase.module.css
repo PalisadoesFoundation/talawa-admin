@@ -62,13 +62,13 @@
 
 .talawaText {
   font-size: var(--space-8);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
 }
 
 .titleHeader {
   font-size: var(--space-9);
-  line-height: normal;
-  font-weight: bolder;
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-bold);
   padding: var(--space-6);
 }
 
@@ -163,7 +163,7 @@
 
 .primaryText {
   font-size: var(--space-6);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -175,7 +175,7 @@
 
 .secondaryText {
   font-size: var(--space-4);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   color: var(--color-gray-600);
   display: block;
   text-transform: capitalize;
@@ -195,7 +195,7 @@
 .leftDrawerActiveButton {
   background-color: var(--color-gray-100);
   color: var(--color-black);
-  font-weight: bold;
+  font-weight: var(--font-weight-medium);
 }
 
 .leftDrawerActiveButton:hover .arrow-indicator {

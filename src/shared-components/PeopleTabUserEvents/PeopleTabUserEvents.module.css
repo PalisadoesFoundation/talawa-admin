@@ -44,7 +44,7 @@
 .dateText {
   margin: 0;
   font-size: var(--space-4);
-  color: #6b7280;
+  color: var(--color-gray-600);
 }
 
 .peopleTabUserEventInfo {
@@ -61,7 +61,7 @@
 .peopleTabUserOrganizationEventPageEventDescription {
   margin: 0;
   font-size: var(--space-5);
-  color: #6b7280;
+  color: var(--color-gray-600);
   overflow-wrap: anywhere;
   white-space: normal;
 }

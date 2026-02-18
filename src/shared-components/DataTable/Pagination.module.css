@@ -9,7 +9,7 @@
 
 .paginationRange {
   font-size: var(--space-4);
-  color: var(--row-color);
+  color: var(--color-gray-600);
   min-width: var(--space-14);
   text-align: center;
 }

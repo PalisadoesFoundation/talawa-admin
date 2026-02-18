@@ -39,7 +39,7 @@
 
 .peopleTabUserOrganizationsCardTitle {
   font-size: var(--space-5);
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   margin: var(--space-0);
 }
 
@@ -72,7 +72,7 @@
   border: none;
   border-radius: var(--radius-lg);
   color: var(--color-gray-500);
-  font-weight: 500;
+  font-weight: var();
   cursor: pointer;
   display: flex;
   align-items: center;
