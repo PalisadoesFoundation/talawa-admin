@@ -38,7 +38,7 @@ import CreateEventModal from './CreateEventModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
-import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -105,9 +105,6 @@ function organizationEvents(): JSX.Element {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
-
-  const showCreateEventModal = (): void => createEventModal.open();
-  const hideCreateEventModal = (): void => createEventModal.close();
 
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
@@ -263,7 +260,7 @@ function organizationEvents(): JSX.Element {
               actions={
                 <Button
                   className={styles.dropdown}
-                  onClick={showCreateEventModal}
+                  onClick={createEventModal.open}
                   data-testid="createEventModalBtn"
                   data-cy="createEventModalBtn"
                 >
@@ -290,7 +287,7 @@ function organizationEvents(): JSX.Element {
 
         <CreateEventModal
           isOpen={createEventModal.isOpen}
-          onClose={hideCreateEventModal}
+          onClose={createEventModal.close}
           onEventCreated={refetchEvents}
           currentUrl={currentUrl || ''}
         />

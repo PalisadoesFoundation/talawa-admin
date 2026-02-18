@@ -19,16 +19,8 @@ import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 export default function PluginStore() {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
-  const {
-    isOpen: isMainOpen,
-    open: openMain,
-    close: closeMain,
-  } = useModalState();
-  const {
-    isOpen: isUploadOpen,
-    open: openUpload,
-    close: closeUpload,
-  } = useModalState();
+  const pluginModal = useModalState();
+  const uploadModal = useModalState();
   const [selectedPluginId, setSelectedPluginId] = useState<string | null>(null);
   const [selectedPluginMeta, setSelectedPluginMeta] =
     useState<IPluginMeta | null>(null);
@@ -98,22 +90,20 @@ export default function PluginStore() {
   const openPlugin = (plugin: IPluginMeta) => {
     setSelectedPluginId(plugin.id);
     setSelectedPluginMeta(plugin);
-    openMain();
+    pluginModal.open();
   };
 
   // Close modal
-  const closeModal = () => {
-    closeMain();
+  const closePluginModal = () => {
+    pluginModal.close();
     setSelectedPluginId(null);
     setSelectedPluginMeta(null);
   };
 
   // Close upload modal
   const closeUploadModal = async () => {
-    closeUpload();
-    // Re-fetch plugins to reflect any newly uploaded plugin
+    uploadModal.close();
     await refetch();
-    location.reload();
   };
 
   const pluginStoreDropdowns = [
@@ -135,10 +125,10 @@ export default function PluginStore() {
   const uploadPluginButton = (
     <Button
       className={`${styles.dropdown} ${styles.createorgdropdown}`}
-      onClick={openUpload}
+      onClick={uploadModal.open}
       data-testid="uploadPluginBtn"
     >
-      <i className={`fa fa-plus ${styles.uploadPlugin} `} />
+      <i className={'fa fa-plus me-2'} />
       {t('uploadPlugin')}
     </Button>
   );
@@ -182,8 +172,8 @@ export default function PluginStore() {
       </div>
       {/* Plugin Details Modal */}
       <PluginModal
-        show={isMainOpen}
-        onHide={closeModal}
+        show={pluginModal.isOpen}
+        onHide={closePluginModal}
         pluginId={selectedPluginId}
         meta={selectedPluginMeta}
         loading={loading || pluginLoading}
@@ -196,7 +186,7 @@ export default function PluginStore() {
       />
       {/* Upload Plugin Modal */}
       <UploadPluginModal
-        show={isUploadOpen}
+        show={uploadModal.isOpen}
         onHide={closeUploadModal}
         data-testid="upload-plugin-modal"
       />
