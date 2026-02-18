@@ -310,5 +310,10 @@
   "unknownMember": "अज्ञानी सदस्य",
   "previousYear": "पिछला वर्ष",
   "nextYear": "अगला वर्ष",
-  "navigateToProfile": "प्रोफ़ाइल पर जाएं"
+  "navigateToProfile": "प्रोफ़ाइल पर जाएं",
+  "loginSuccess": "स्वागत है!",
+  "loginSuccessWithName": "स्वागत है, {{name}}!",
+  "signupSuccess": "पंजीकरण सफल!",
+  "authError": "प्रमाणीकरण त्रुटि",
+  "networkError": "नेटवर्क त्रुटि"
 }

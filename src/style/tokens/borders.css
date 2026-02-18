@@ -24,6 +24,9 @@
   --shadow-offset-xs: 1px;
   --shadow-offset-sm: 2px;
   --shadow-offset-md: 4px;
+  --shadow-offset-lg: 8px;
+  --shadow-blur-xl: 16px;
+  --shadow-blur-2xl: 32px;
 
   --shadow-blur-xs: 2px;
   --shadow-blur-sm: 3px;

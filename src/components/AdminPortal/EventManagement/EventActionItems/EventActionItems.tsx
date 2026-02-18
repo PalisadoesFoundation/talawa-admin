@@ -77,10 +77,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   const { orgId } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -202,6 +198,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
+
   if (eventInfoLoading) {
     return (
       <LoadingState isLoading={eventInfoLoading} variant="spinner">
@@ -236,17 +236,14 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         const volunteerGroup = params.row.volunteerGroup;
 
         let displayName = t('noAssignment');
-        let avatarKey = 'no-assignment';
         let isAssigned = false;
         let isGroup = false;
 
         if (volunteer?.user) {
           displayName = volunteer.user.name || t('unknownVolunteer');
-          avatarKey = volunteer.id;
           isAssigned = true;
         } else if (volunteerGroup) {
           displayName = volunteerGroup.name;
-          avatarKey = volunteerGroup.id;
           isAssigned = true;
           isGroup = true;
         }
@@ -257,7 +254,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             data-testid="assigneeName"
           >
             <div className={styles.TableImage}>
-              <Avatar key={avatarKey} name={displayName} alt={displayName} />
+              <Avatar name={displayName} alt={displayName} />
             </div>
             <span className={!isAssigned ? 'text-muted' : ''}>
               {displayName}

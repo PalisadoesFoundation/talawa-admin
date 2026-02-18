@@ -310,5 +310,10 @@
   "sortBy": "Sort By",
   "previousYear": "Previous Year",
   "nextYear": "Next Year",
-  "navigateToProfile": "Navigate to profile"
+  "navigateToProfile": "Navigate to profile",
+  "loginSuccess": "Welcome!",
+  "loginSuccessWithName": "Welcome, {{name}}!",
+  "signupSuccess": "Registration successful!",
+  "authError": "Authentication error",
+  "networkError": "Network error"
 }
