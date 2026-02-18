@@ -27,12 +27,9 @@ import { useQuery } from '@apollo/client';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
+import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { debounce, Stack } from '@mui/material';
+import DataGridWrapper from 'components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -47,24 +44,6 @@ enum ModalState {
   DELETE = 'delete',
   VIEW = 'view',
 }
-
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 /**
  * Component for managing volunteer groups for an event.
@@ -384,7 +363,7 @@ function volunteerGroups(): JSX.Element {
       </div>
 
       {/* Table with Volunteer Groups */}
-      <DataGrid
+      <DataGridWrapper
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
@@ -396,7 +375,6 @@ function volunteerGroups(): JSX.Element {
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}

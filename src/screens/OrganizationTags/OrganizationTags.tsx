@@ -10,7 +10,7 @@
  * @remarks
  * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
  * - Implements infinite scrolling for loading tags in chunks.
- * - Uses Material-UI's `DataGrid` for displaying tags in a tabular format.
+ * - Uses `DataGridWrapper` (MUI DataGrid) for displaying tags in a tabular format.
  * - Includes a modal for creating new tags.
  *
  *
@@ -52,7 +52,6 @@ import type {
   InterfaceTagData,
 } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceOrganizationTagsQuery,
   SortedByType,
@@ -60,6 +59,7 @@ import type {
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
+import DataGridWrapper from 'components/DataGridWrapper/DataGridWrapper';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -404,7 +404,7 @@ function OrganizationTags(): JSX.Element {
                   scrollableTarget="orgUserTagsScrollableDiv"
                   data-testid="infinite-scroll"
                 >
-                  <DataGrid
+                  <DataGridWrapper
                     disableColumnMenu
                     columnBufferPx={7}
                     hideFooter={true}
@@ -419,29 +419,6 @@ function OrganizationTags(): JSX.Element {
                           {t('noTagsFound')}
                         </Stack>
                       ),
-                    }}
-                    sx={{
-                      borderRadius: 'var(--table-head-radius)',
-                      backgroundColor: 'var(--grey-bg-color)',
-                      '& .MuiDataGrid-row': {
-                        backgroundColor: 'var(--tablerow-bg-color)',
-                        '&:focus-within': {
-                          outline: '2px solid #000',
-                          outlineOffset: '-2px',
-                        },
-                      },
-                      '& .MuiDataGrid-row:hover': {
-                        backgroundColor: 'var(--grey-bg-color)',
-                        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-                      },
-                      '& .MuiDataGrid-row.Mui-hovered': {
-                        backgroundColor: 'var(--grey-bg-color)',
-                        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-                      },
-                      '& .MuiDataGrid-cell:focus': {
-                        outline: '2px solid #000',
-                        outlineOffset: '-2px',
-                      },
                     }}
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
