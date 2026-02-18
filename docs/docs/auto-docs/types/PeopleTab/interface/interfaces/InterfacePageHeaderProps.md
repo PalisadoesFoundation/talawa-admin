@@ -50,14 +50,6 @@ Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/PalisadoesFo
 
 ***
 
-### showEventTypeFilter?
-
-> `optional` **showEventTypeFilter**: `boolean`
-
-Defined in: [src/types/PeopleTab/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L20)
-
-***
-
 ### sorting?
 
 > `optional` **sorting**: `object`[]

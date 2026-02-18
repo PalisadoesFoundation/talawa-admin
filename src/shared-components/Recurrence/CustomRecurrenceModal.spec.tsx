@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
@@ -107,7 +107,7 @@ const renderModal = (
     setCustomRecurrenceModalIsOpen,
     t: (key: string) => key,
     // Use dynamic future date to avoid test staleness
-    startDate: dayjs().add(30, 'days').toDate(),
+    startDate: dayjs.utc().add(30, 'days').startOf('day').hour(10).toDate(),
     ...override,
   };
 
@@ -126,11 +126,12 @@ const renderModal = (
 
 describe('CustomRecurrenceModal – full coverage', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders modal and core controls', () => {
@@ -141,7 +142,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       screen.getByTestId('customRecurrenceIntervalInput'),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     ).toBeInTheDocument();
   });
 
@@ -185,9 +186,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click weekly option
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
 
     // Verify the frequency change was called
     await waitFor(() => {
@@ -224,9 +229,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click daily option
-    await user.click(screen.getByTestId('customDailyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -238,9 +247,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click monthly option
-    await user.click(screen.getByTestId('customMonthlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -252,9 +265,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click yearly option
-    await user.click(screen.getByTestId('customYearlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -271,13 +288,17 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Verify the dropdown is rendered
-    expect(screen.getByTestId('monthlyRecurrenceDropdown')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
+    ).toBeInTheDocument();
 
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    await user.click(screen.getByTestId('monthlyByDate'));
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'));
 
     // Verify the dropdown is still rendered after clicking
-    expect(screen.getByTestId('monthlyRecurrenceDropdown')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
+    ).toBeInTheDocument();
   });
 
   it('renders monthly by-weekday option (branch coverage)', () => {
@@ -310,7 +331,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: new Date(),
+        endDate: dayjs.utc().add(7, 'days').toDate(),
       },
     });
 
@@ -337,7 +358,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: new Date(),
+        endDate: dayjs.utc().add(7, 'days').toDate(),
       },
     });
 
@@ -352,7 +373,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         ...baseRecurrenceRule,
         never: false,
         count: undefined,
-        endDate: new Date(),
+        endDate: dayjs.utc().add(30, 'days').toDate(),
       },
     });
 
@@ -491,7 +512,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         recurrenceRuleState: {
           ...baseRecurrenceRule,
           never: false,
-          endDate: new Date(),
+          endDate: dayjs.utc().add(30, 'days').toDate(),
         },
       });
 
@@ -1099,7 +1120,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     // Test with date in 3rd week (e.g., 15th of a month)
     // Using a dynamic date that falls on the 15th of a future month
-    const thirdWeekDate = dayjs().add(30, 'days').date(15).toDate();
+    const thirdWeekDate = dayjs
+      .utc()
+      .add(2, 'months')
+      .date(15)
+      .hour(10)
+      .toDate();
     renderModal({
       startDate: thirdWeekDate,
       recurrenceRuleState: {
@@ -1109,8 +1135,10 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open monthly dropdown to trigger getMonthlyOptions
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('covers helper functions with 1st week date and byWeekday', async () => {
@@ -1128,8 +1156,10 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open monthly dropdown
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('covers helper functions with 5th week date (edge case)', async () => {
@@ -1146,8 +1176,10 @@ describe('CustomRecurrenceModal – full coverage', () => {
       },
     });
 
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('covers handleDayClick when byDay is undefined', async () => {
@@ -1161,8 +1193,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open frequency dropdown and ensure weekly is selected
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
 
     // Wait for weekday buttons
     const weekdayButtons = screen.getAllByTestId('recurrenceWeekDay');
@@ -1409,8 +1445,10 @@ describe('CustomRecurrenceModal – full coverage', () => {
     // The getOrdinalString function has a fallback: `return ordinals[num] || 'last';`
     // To test this, we'd need to pass a number > 5, but getWeekOfMonth only returns 1-5
     // However, the code has the fallback, so we verify the function exists and works
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('handles handleWeekdayKeyDown when button is not found', async () => {
@@ -1531,8 +1569,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Test daily frequency (default case)
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customDailyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -1543,8 +1585,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     const { setRecurrenceRuleState } = renderModal();
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();

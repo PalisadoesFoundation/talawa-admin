@@ -14,6 +14,8 @@ export interface InterfaceRecurrenceRule {
   byDay?: WeekDays[];
   byMonth?: number[];
   byMonthDay?: number[];
+  /** RFC 5545 BYSETPOS: which occurrence of byDay within the month (e.g. [3] = 3rd Monday) */
+  bySetPos?: number[];
 }
 
 // Recurrence frequency enum

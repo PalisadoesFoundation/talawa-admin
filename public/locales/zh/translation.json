@@ -1,4 +1,5 @@
 {
+  "workshops": "研讨会",
   "securedRouteForUser": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
@@ -1403,6 +1404,10 @@
     "tags": "标签",
     "invalidFileType": "无效的文件类型",
     "fileTooLarge": "文件过大",
+    "ascendingOrder": "升序",
+    "descendingOrder": "降序",
+    "searchCreatedEvents": "搜索已创建的活动",
+    "sortByName": "按名称排序",
     "memberDetailNumberExample": "例如: 1234",
     "memberDetailExampleLane": "例如: 街道名称",
     "memberDetailPostalExample": "例如: 邮政编码",
