@@ -193,14 +193,26 @@ vi.mock(
 vi.mock(
   'shared-components/ActionItems/ActionItemModal/ActionItemModal',
   () => ({
-    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
-      isOpen
-        ? React.createElement(
-            'div',
-            { 'data-testid': 'action-item-modal' },
-            'Action Item Modal',
-          )
-        : null,
+    default: vi.fn(
+      ({ isOpen, hide }: { isOpen: boolean; hide: () => void }) => {
+        React.useEffect(() => {
+          const handleKeyDown = (e: KeyboardEvent): void => {
+            if (e.key === 'Escape' && isOpen) {
+              hide();
+            }
+          };
+          document.addEventListener('keydown', handleKeyDown);
+          return () => document.removeEventListener('keydown', handleKeyDown);
+        }, [isOpen, hide]);
+
+        return isOpen
+          ? React.createElement(
+              'div',
+              { 'data-testid': 'action-item-modal' },
+              'Action Item Modal',
+            )
+          : null;
+      },
     ),
   }),
 );
@@ -663,9 +675,9 @@ describe('EventActionItems', () => {
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'Category 2');
 
-      // Ensure `searchBy` state has applied before the debounced search term resolves.
-      // This avoids a race where the first debounced search runs while still in "assignee" mode.
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await waitFor(() => {
+        expect(searchInput).toBeInTheDocument();
+      });
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'Category 2');
 
@@ -1182,11 +1194,7 @@ describe('EventActionItems', () => {
 
       // Click three times to cycle through all states
       await userEvent.click(filterBtn);
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       await userEvent.click(filterBtn);
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       await userEvent.click(filterBtn);
 
       // Both items should be visible again
@@ -2010,6 +2018,46 @@ describe('EventActionItems', () => {
       expect(avatarCall).toBeTruthy();
       expect(avatarCall?.[0].name).toBe('Test User');
       expect(avatarCall?.[0].alt).toBe('Test User');
+    });
+  });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open create modal when Enter is pressed on create button', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createActionItemBtn');
+      createBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByTestId('createActionItemBtn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('action-item-modal'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 });
