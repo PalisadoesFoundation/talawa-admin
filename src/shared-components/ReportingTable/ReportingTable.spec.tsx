@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import ReportingTable, { adjustColumnsForCompactMode } from './ReportingTable';
+import { convertTokenColumns } from 'shared-components/DataGridWrapper';
 import type {
   ReportingTableColumn,
   ReportingRow,
@@ -9,7 +10,6 @@ import type {
   InfiniteScrollProps,
 } from '../../types/ReportingTable/interface';
 
-// DataGrid column config property (not CSS) - using constant to avoid lint false positive
 const COL_MIN_WIDTH = 'minWidth' as const;
 
 const sampleColumns: ReportingTableColumn[] = [
@@ -33,6 +33,91 @@ describe('ReportingTable', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument();
     const rows = screen.getAllByRole('row');
     expect(rows.length).toBeGreaterThanOrEqual(3); // header + 2 data rows
+  });
+
+  it('converts spacing token in width property', () => {
+    const columnsWithTokenWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', width: 'space-15', sortable: false },
+    ];
+
+    // Verify convertTokenColumns converts 'space-15' to 150
+    const converted = convertTokenColumns(columnsWithTokenWidth);
+    expect(converted[0].width).toBe(150);
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithTokenWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('passes through numeric width property unchanged', () => {
+    const columnsWithNumericWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', width: 100, sortable: false },
+    ];
+
+    // Verify convertTokenColumns passes through numeric width unchanged
+    const converted = convertTokenColumns(columnsWithNumericWidth);
+    expect(converted[0].width).toBe(100);
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithNumericWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('converts spacing token in maxWidth property', () => {
+    const columnsWithTokenMaxWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', maxWidth: 'space-17', sortable: false },
+    ];
+
+    // Verify convertTokenColumns converts 'space-17' to 220
+    const converted = convertTokenColumns(columnsWithTokenMaxWidth);
+    expect(converted[0].maxWidth).toBe(220);
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithTokenMaxWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('passes through numeric maxWidth property unchanged', () => {
+    const columnsWithNumericMaxWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', maxWidth: 200, sortable: false },
+    ];
+
+    // Verify convertTokenColumns passes through numeric maxWidth unchanged
+    const converted = convertTokenColumns(columnsWithNumericMaxWidth);
+    expect(converted[0].maxWidth).toBe(200);
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithNumericMaxWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('converts spacing token in minWidth property', () => {
+    const columnsWithTokenMinWidth: ReportingTableColumn[] = [
+      {
+        field: 'id',
+        headerName: 'ID',
+        [COL_MIN_WIDTH]: 'space-10',
+        sortable: false,
+      },
+    ];
+
+    // Verify convertTokenColumns converts 'space-10' to 48
+    const converted = convertTokenColumns(columnsWithTokenMinWidth);
+    expect(converted[0].minWidth).toBe(48);
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithTokenMinWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('passes through gridProps (noRowsOverlay when rows empty)', () => {
@@ -114,14 +199,14 @@ describe('ReportingTable', () => {
       expect(result).toBe(sampleColumns); // Should return the same reference
     });
 
-    it('adjusts first column to flex: 0.5 and minWidth: 50 when compactMode is true', () => {
+    it('adjusts first column to flex: 0.5 and minWidth: space-10 when compactMode is true', () => {
       const result = adjustColumnsForCompactMode(sampleColumns, true);
 
       expect(result[0]).toEqual({
         field: 'id',
         headerName: '#',
         flex: 0.5,
-        [COL_MIN_WIDTH]: 50,
+        [COL_MIN_WIDTH]: 'space-10',
         sortable: false,
       });
     });
@@ -204,7 +289,7 @@ describe('ReportingTable', () => {
       const result = adjustColumnsForCompactMode(singleColumn, true);
 
       expect(result[0].flex).toBe(0.5);
-      expect(result[0][COL_MIN_WIDTH]).toBe(50);
+      expect(result[0][COL_MIN_WIDTH]).toBe('space-10');
     });
 
     it('handles two column array', () => {
@@ -228,7 +313,7 @@ describe('ReportingTable', () => {
       const result = adjustColumnsForCompactMode(twoColumns, true);
 
       expect(result[0].flex).toBe(0.5);
-      expect(result[0][COL_MIN_WIDTH]).toBe(50);
+      expect(result[0][COL_MIN_WIDTH]).toBe('space-10');
       expect(result[1].flex).toBe(1.5); // Capped from 3
     });
   });

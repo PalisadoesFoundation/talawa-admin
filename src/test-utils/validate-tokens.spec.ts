@@ -80,6 +80,18 @@ describe('shouldSkipFile', () => {
     ).toBe(true);
   });
 
+  test('skips .spec.ts files', () => {
+    expect(shouldSkipFile('src/components/Button.spec.ts')).toBe(true);
+    expect(shouldSkipFile('src/utils/helpers.spec.ts')).toBe(true);
+  });
+
+  test('skips .spec.tsx files', () => {
+    expect(shouldSkipFile('src/components/Button.spec.tsx')).toBe(true);
+    expect(shouldSkipFile('src/shared-components/DataGrid.spec.tsx')).toBe(
+      true,
+    );
+  });
+
   test('does not skip regular source files', () => {
     expect(shouldSkipFile('src/components/Button.tsx')).toBe(false);
     expect(shouldSkipFile('src/style/button.module.css')).toBe(false);

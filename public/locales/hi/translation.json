@@ -196,7 +196,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
-    "logout": "लॉगआउट"
+    "logout": "लॉगआउट",
+    "notAvailable": "उपलब्ध नहीं"
   },
   "leftDrawerOrg": {
     "Dashboard": "डैशबोर्ड",
@@ -1906,7 +1907,8 @@
     "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
     "thisUser": "इस उपयोगकर्ता",
     "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
-    "memberActionsMenu": "सदस्य क्रियाएं मेनू"
+    "memberActionsMenu": "सदस्य क्रियाएं मेनू",
+    "editImage": "संपादित छवि"
   },
   "userChatRoom": {
     "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",
@@ -1929,7 +1931,10 @@
       "resetButton": "फिर से प्रयास करें",
       "resetButtonAriaLabel": "फिर से प्रयास करें"
     },
-    "messageActions": "संदेश क्रियाएं"
+    "messageActions": "संदेश क्रियाएं",
+    "addAttachment": "संलग्नक जोड़ें",
+    "removeAttachment": "संलग्नक हटाएँ",
+    "closeReply": "उत्तर बंद करें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

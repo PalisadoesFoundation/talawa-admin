@@ -115,6 +115,7 @@ const mockTImplementation = (key: string) => {
     'Action Items': 'Action Items',
     Posts: 'Posts',
     switchToUserPortal: 'Switch to User Portal',
+    'leftDrawer.notAvailable': 'N/A',
   };
   return translations[key] || key;
 };
@@ -616,14 +617,14 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerActiveButton');
+      expect(membersLink).toHaveClass(/_leftDrawerActiveButton_/);
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerInactiveButton');
+      expect(membersLink).toHaveClass(/_leftDrawerInactiveButton_/);
     });
 
     it('should render icon components with correct props', () => {
