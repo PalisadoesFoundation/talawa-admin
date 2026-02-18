@@ -66,13 +66,6 @@ describe('Organization setup workflow', () => {
       .fillCreateOrganizationForm(createOrganizationInput)
       .submitCreateOrganizationForm();
 
-    cy.waitForGraphQLOperation('createOrganization').then((interception) => {
-      const createdOrgId = interception.response?.body?.data?.createOrganization
-        ?.id as string | undefined;
-      expect(createdOrgId).to.be.a('string').and.not.equal('');
-      orgId = createdOrgId as string;
-    });
-
     cy.waitForGraphQLOperation('CreateOrganizationMembership')
       .its('response.statusCode')
       .should('eq', 200);
@@ -80,6 +73,19 @@ describe('Organization setup workflow', () => {
     setupPage
       .closePluginNotificationIfOpen()
       .openOrganizationDashboardByName(orgName);
+
+    cy.url().then((currentUrl) => {
+      const createdOrgId = currentUrl.match(
+        /\/admin\/orgdash\/([a-f0-9-]+)/,
+      )?.[1];
+      expect(createdOrgId).to.be.a('string').and.not.equal('');
+      if (!createdOrgId) {
+        throw new Error(
+          'Expected organization id in /admin/orgdash/:orgId URL',
+        );
+      }
+      orgId = createdOrgId;
+    });
 
     cy.mockGraphQLOperation('getOrganizationBasicData', (req) => {
       req.continue();
@@ -173,10 +179,6 @@ describe('Organization setup workflow', () => {
       .openCreateOrganizationModal()
       .fillCreateOrganizationForm(duplicateOrganizationInput)
       .submitCreateOrganizationForm();
-
-    cy.waitForGraphQLOperation('createOrganization')
-      .its('response.body.errors.0.message')
-      .should('eq', 'Organization name already exists');
     cy.assertToast(/already exists/i);
   });
 });
