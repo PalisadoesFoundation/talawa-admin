@@ -206,9 +206,7 @@ def get_target_files(
     ]
 
 
-def check_file(
-    path: Path, valid_keys: set[str]
-) -> tuple[str, str | list[str]] | None:
+def check_file(path: Path, valid_keys: set[str]) -> tuple | None:
     """Check a source file for translation violations.
 
     Args:
