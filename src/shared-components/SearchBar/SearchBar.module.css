@@ -32,7 +32,7 @@
 
 .searchBarContainer:focus-within {
   border-color: var(--color-blue-300);
-  box-shadow: 0 0 0 2px var(--color-gray-800);
+  box-shadow: 0 0 0 var(--border-2) var(--color-gray-800);
 }
 
 .searchBarInputWrapper {
@@ -145,7 +145,7 @@
 
 .searchBarClearButton:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-blue-300);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-300);
   border-radius: var(--radius-full);
 }
 
@@ -164,7 +164,7 @@
   transition:
     background-color 0.2s ease,
     transform 0.1s ease;
-  border-left: var(--border-1) solid rgba(255, 255, 255, 0.4);
+  border-left: var(--border-1) solid var(--color-gray-400);
 }
 
 .searchBarButton:hover:not(:disabled) {

@@ -60,10 +60,6 @@ describe('getPledgeColumns', () => {
     handleDeleteClick: mockHandleDeleteClick,
   };
 
-  beforeEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('should return 5 column definitions', () => {
     const columns = getPledgeColumns(defaultProps);
     expect(columns).toHaveLength(5);

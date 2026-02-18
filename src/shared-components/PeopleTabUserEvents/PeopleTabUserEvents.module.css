@@ -76,7 +76,7 @@
 .peopleTabUserEventActionButton {
   background-color: var(--color-blue-200);
   border: none;
-  border-radius: var(--space-2);
+  border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
   cursor: pointer;
   display: flex;
