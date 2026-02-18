@@ -14,9 +14,9 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import LoadingState from './LoadingState';
 import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
-import CustomLoader from './__test-utils__/CustomLoader';
-import ComplexLoader from './__test-utils__/ComplexLoader';
-import CustomDashboardLoader from './__test-utils__/CustomDashboardLoader';
+import CustomLoader from '../../test-utils/CustomLoader';
+import ComplexLoader from '../../test-utils/ComplexLoader';
+import CustomDashboardLoader from '../../test-utils/CustomDashboardLoader';
 
 // Mock TableLoader component
 vi.mock('shared-components/TableLoader/TableLoader', () => ({

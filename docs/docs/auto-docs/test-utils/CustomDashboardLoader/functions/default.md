@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/shared-components/LoadingState/\_\_test-utils\_\_/CustomDashboardLoader.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/LoadingState/__test-utils__/CustomDashboardLoader.tsx#L11)
+Defined in: [src/test-utils/CustomDashboardLoader.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/CustomDashboardLoader.tsx#L11)
 
 CustomDashboardLoader test utility component.
 

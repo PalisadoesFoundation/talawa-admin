@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/shared-components/LoadingState/\_\_test-utils\_\_/CustomLoader.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/LoadingState/__test-utils__/CustomLoader.tsx#L11)
+Defined in: [src/test-utils/CustomLoader.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/CustomLoader.tsx#L11)
 
 CustomLoader test utility component.
 
