@@ -31,8 +31,8 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   private readonly closePluginNotificationButton = 'enableEverythingForm';
   private readonly organizationSearchInput = 'searchInput';
   private readonly organizationSearchButton = 'searchBtn';
-  private readonly organizationCardContainer = '[data-cy="orgCardContainer"]';
-  private readonly organizationManageButton = '[data-cy="manageBtn"]';
+  private readonly organizationCardContainer = 'orgCardContainer';
+  private readonly organizationManageButton = 'manageBtn';
   private readonly pageNotFoundHeading = 'page-not-found-heading';
 
   protected self(): OrganizationSetupPage {
@@ -105,16 +105,15 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   }
 
   closePluginNotificationIfOpen(timeout = 15000): this {
-    cy.get(`[data-testid="${this.pluginNotificationModal}"]`, { timeout }).then(
-      ($modal) => {
-        if ($modal.length === 0) {
-          return;
-        }
+    cy.get('body', { timeout }).then(($body) => {
+      if (
+        $body.find(`[data-testid="${this.pluginNotificationModal}"]`).length > 0
+      ) {
         this.byTestId(this.closePluginNotificationButton, timeout)
           .should('be.visible')
           .click();
-      },
-    );
+      }
+    });
     return this;
   }
 
@@ -131,10 +130,11 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
 
   openOrganizationDashboardByName(name: string, timeout = 30000): this {
     this.searchOrganizationByName(name, timeout);
-    cy.contains(this.organizationCardContainer, name, { timeout })
+    this.byDataCy(this.organizationCardContainer, timeout)
+      .contains(name, { timeout })
       .should('be.visible')
       .within(() => {
-        cy.get(this.organizationManageButton, { timeout })
+        this.byDataCy(this.organizationManageButton, timeout)
           .should('be.visible')
           .click();
       });
