@@ -24,6 +24,7 @@ import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import Button from 'shared-components/Button';
 
 function CreatePostModal({
   show,
@@ -196,7 +197,7 @@ function CreatePostModal({
   const customFooter = (
     <div className={styles.modalFooter}>
       <div className={styles.mediaActions}>
-        <button
+        <Button
           type="button"
           className={styles.mediaButton}
           aria-label={t('createPostModal.addAttachment')}
@@ -216,8 +217,8 @@ function CreatePostModal({
             hidden
             onChange={handleImageSelect}
           />
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           className={styles.mediaButton}
           aria-label={
@@ -237,12 +238,12 @@ function CreatePostModal({
           <PushPin
             className={isPinned ? styles.pinIconActive : styles.pinIcon}
           />
-        </button>
+        </Button>
       </div>
 
       <div className={styles.postActions}>
         <form onSubmit={createPostHandler}>
-          <button
+          <Button
             className={`${styles.postButton} ${
               isPostDisabled || isLoading ? styles.postButtonDisabled : ''
             }`}
@@ -257,7 +258,7 @@ function CreatePostModal({
             ) : (
               t('createPostModal.saveChanges')
             )}
-          </button>
+          </Button>
         </form>
       </div>
     </div>
