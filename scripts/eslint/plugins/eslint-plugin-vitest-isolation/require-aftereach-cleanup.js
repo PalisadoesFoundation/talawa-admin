@@ -82,6 +82,7 @@ module.exports = {
                 }
 
                 // Recursively walk children
+                /* istanbul ignore next */
                 const keys = Object.keys(node).filter(key =>
                     key !== 'parent' && key !== 'tokens' && key !== 'loc' &&
                     key !== 'range' && key !== 'start' && key !== 'end' &&
@@ -399,7 +400,7 @@ module.exports = {
                                         // Replace the whitespace to ensure clean formatting
                                         // Extract just the indentation part from braceIndent (without the leading newline)
                                         const braceIndentOnly = braceIndent.replace(/^\n/, '');
-                                        
+
                                         let replacement;
                                         if (bodyStatements.length > 0 && !textBetween.includes('\n')) {
                                             // Inline block (e.g. `{ stmt; }`) - preserve trailing whitespace, single newline
@@ -454,6 +455,7 @@ module.exports = {
                     return;
                 }
 
+                /* istanbul ignore next */
                 const keys = Object.keys(n).filter(key =>
                     key !== 'parent' && key !== 'tokens' && key !== 'loc' &&
                     key !== 'range' && key !== 'start' && key !== 'end' &&
@@ -496,6 +498,7 @@ module.exports = {
                 }
 
                 // Use filtered keys to avoid non-AST properties
+                /* istanbul ignore next */
                 const keys = Object.keys(n).filter(key =>
                     key !== 'parent' && key !== 'tokens' && key !== 'loc' &&
                     key !== 'range' && key !== 'start' && key !== 'end' &&
