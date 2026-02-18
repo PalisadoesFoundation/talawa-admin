@@ -1,0 +1,57 @@
+.containerAdvertisements {
+  background-color: var(--containerAdvertisemens-bg);
+  border-radius: var(--radius-2xl);
+  width: auto;
+  margin-inline-start: var(--space-4);
+}
+
+.pMessageAdvertisement {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  padding-bottom: var(--space-7);
+}
+
+.justifyspAdvertisements {
+  display: grid;
+  width: 100%;
+  margin-top: var(--space-8);
+  grid-template-rows: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: var(--space-4) var(--space-2);
+}
+
+@media (max-width: 1024px) {
+  .justifyspAdvertisements {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.rowAdvertisements {
+  margin-top: var(--space-6);
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  /* grid-template-columns: repeat(2, 1fr); */
+  grid-gap: var(--space-4) var(--space-2);
+  overflow: hidden;
+}
+
+.colAdvertisements {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-3);
+}
+
+.listBoxAdvertisements {
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: var(--space-4) var(--space-2);
+}

@@ -17,9 +17,10 @@
  * @returns The rendered volunteer groups management component.
  */
 import React, { useMemo, useState, useEffect } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 
 import { Groups, WarningAmberRounded } from '@mui/icons-material';
 
@@ -29,7 +30,7 @@ import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type {
   GridCellParams,
-  GridColDef,
+  TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -76,13 +77,21 @@ function VolunteerGroups(): JSX.Element {
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-  });
+  const {
+    isOpen: sameModalOpen,
+    open: openSameModal,
+    close: closeSameModal,
+  } = useModalState();
+  const {
+    isOpen: deleteModalOpen,
+    open: openDeleteModal,
+    close: closeDeleteModal,
+  } = useModalState();
+  const {
+    isOpen: viewModalOpen,
+    open: openViewModal,
+    close: closeViewModal,
+  } = useModalState();
 
   /**
    * Query to fetch event and volunteer groups for the event.
@@ -112,11 +121,17 @@ function VolunteerGroups(): JSX.Element {
     },
   });
 
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+  const openModal = (modal: ModalState): void => {
+    if (modal === ModalState.SAME) openSameModal();
+    if (modal === ModalState.DELETE) openDeleteModal();
+    if (modal === ModalState.VIEW) openViewModal();
+  };
 
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+  const closeModal = (modal: ModalState): void => {
+    if (modal === ModalState.SAME) closeSameModal();
+    if (modal === ModalState.DELETE) closeDeleteModal();
+    if (modal === ModalState.VIEW) closeViewModal();
+  };
 
   const handleModalClick = (
     group: InterfaceVolunteerGroupInfo | null,
@@ -189,13 +204,13 @@ function VolunteerGroups(): JSX.Element {
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'group',
       headerName: t('eventVolunteers.groupHeader'),
       flex: 1,
       align: 'left',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -215,7 +230,7 @@ function VolunteerGroups(): JSX.Element {
       headerName: t('eventVolunteers.leaderHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -270,7 +285,7 @@ function VolunteerGroups(): JSX.Element {
       headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -401,7 +416,7 @@ function VolunteerGroups(): JSX.Element {
         />
 
         <VolunteerGroupModal
-          isOpen={modalState[ModalState.SAME]}
+          isOpen={sameModalOpen}
           hide={() => closeModal(ModalState.SAME)}
           refetchGroups={refetchGroups}
           eventId={eventId}
@@ -416,13 +431,13 @@ function VolunteerGroups(): JSX.Element {
         {group && (
           <>
             <VolunteerGroupViewModal
-              isOpen={modalState[ModalState.VIEW]}
+              isOpen={viewModalOpen}
               hide={() => closeModal(ModalState.VIEW)}
               group={group}
             />
 
             <VolunteerGroupDeleteModal
-              isOpen={modalState[ModalState.DELETE]}
+              isOpen={deleteModalOpen}
               hide={() => closeModal(ModalState.DELETE)}
               refetchGroups={refetchGroups}
               group={group}

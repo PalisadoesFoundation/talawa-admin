@@ -3,7 +3,7 @@ import { render, waitFor } from '@testing-library/react';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, expect, it, vi } from 'vitest';

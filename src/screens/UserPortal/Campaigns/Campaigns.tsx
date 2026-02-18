@@ -9,7 +9,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { Campaign, WarningAmberRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import Button from 'shared-components/Button/Button';

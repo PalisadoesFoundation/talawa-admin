@@ -27,7 +27,7 @@ vi.mock('react-i18next', () => ({
   I18nextProvider,
 }));
 
-vi.mock('react-router', () => ({
+vi.mock('react-router-dom', () => ({
   BrowserRouter: MockBrowserRouter,
 }));
 

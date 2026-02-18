@@ -8,7 +8,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import EventListCard from './EventListCard';
 import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import {
@@ -107,8 +107,8 @@ describe('Testing Event List Card', () => {
     vi.restoreAllMocks();
   });
   beforeAll(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
     }));
   });
 

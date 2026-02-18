@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen, { translationKeyMap } from './OrganizationScreen';
@@ -40,8 +40,8 @@ vi.mock('components/NotificationToast/NotificationToast', async () => {
 });
 
 // Mock the router hooks
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => mockUseParams(),

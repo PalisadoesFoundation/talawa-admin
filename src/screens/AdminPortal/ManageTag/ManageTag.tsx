@@ -56,7 +56,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'components/IconComponent/IconComponent';
-import { useNavigate, useParams, Link } from 'react-router';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Col } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Button from 'shared-components/Button/Button';
@@ -66,8 +66,9 @@ import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from './ManageTag.module.css';
 import {
   DataGrid,
+  convertTokenColumns,
   type GridCellParams,
-  type GridColDef,
+  type TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceTagAssignedMembersQuery,
@@ -93,6 +94,7 @@ import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -110,14 +112,28 @@ function ManageTag(): JSX.Element {
   const { orgId, tagId: currentTagId } = useParams();
   const navigate = useNavigate();
 
-  const [unassignUserTagModalIsOpen, setUnassignUserTagModalIsOpen] =
-    useState(false);
-  const [addPeopleToTagModalIsOpen, setAddPeopleToTagModalIsOpen] =
-    useState(false);
-  const [tagActionsModalIsOpen, setTagActionsModalIsOpen] = useState(false);
-  const [editUserTagModalIsOpen, setEditUserTagModalIsOpen] = useState(false);
-  const [removeUserTagModalIsOpen, setRemoveUserTagModalIsOpen] =
-    useState(false);
+  const {
+    isOpen: unassignUserTagModalIsOpen,
+    open: openUnassignUserTagModal,
+    close: closeUnassignUserTagModal,
+  } = useModalState();
+  const {
+    isOpen: addPeopleToTagModalIsOpen,
+    open: showAddPeopleToTagModal,
+    close: hideAddPeopleToTagModal,
+  } = useModalState();
+  const {
+    isOpen: tagActionsModalIsOpen,
+    open: showTagActionsModal,
+    close: hideTagActionsModal,
+  } = useModalState();
+  const {
+    isOpen: editUserTagModalIsOpen,
+    open: showEditUserTagModal,
+    close: hideEditUserTagModal,
+  } = useModalState();
+  const { isOpen: removeUserTagModalIsOpen, toggle: toggleRemoveUserTagModal } =
+    useModalState();
   const [unassignUserId, setUnassignUserId] = useState(null);
   const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
     useState('');
@@ -130,28 +146,6 @@ function ManageTag(): JSX.Element {
   // a state to specify whether we're assigning to tags or removing from tags
   const [tagActionType, setTagActionType] =
     useState<TagActionType>('assignToTags');
-
-  const toggleRemoveUserTagModal = (): void => {
-    setRemoveUserTagModalIsOpen(!removeUserTagModalIsOpen);
-  };
-  const showAddPeopleToTagModal = (): void => {
-    setAddPeopleToTagModalIsOpen(true);
-  };
-  const hideAddPeopleToTagModal = (): void => {
-    setAddPeopleToTagModalIsOpen(false);
-  };
-  const showTagActionsModal = (): void => {
-    setTagActionsModalIsOpen(true);
-  };
-  const hideTagActionsModal = (): void => {
-    setTagActionsModalIsOpen(false);
-  };
-  const showEditUserTagModal = (): void => {
-    setEditUserTagModalIsOpen(true);
-  };
-  const hideEditUserTagModal = (): void => {
-    setEditUserTagModalIsOpen(false);
-  };
 
   const {
     data: userTagAssignedMembersData,
@@ -271,7 +265,7 @@ function ManageTag(): JSX.Element {
         namespace: 'translation',
       });
       userTagAssignedMembersRefetch();
-      setEditUserTagModalIsOpen(false);
+      hideEditUserTagModal();
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
       NotificationToast.error(errorMessage);
@@ -329,8 +323,10 @@ function ManageTag(): JSX.Element {
   const toggleUnassignUserTagModal = (): void => {
     if (unassignUserTagModalIsOpen) {
       setUnassignUserId(null);
+      closeUnassignUserTagModal();
+    } else {
+      openUnassignUserTagModal();
     }
-    setUnassignUserTagModalIsOpen(!unassignUserTagModalIsOpen);
   };
 
   const getFullName = (
@@ -342,11 +338,11 @@ function ManageTag(): JSX.Element {
       .join(' ');
   };
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'id',
       headerName: '#',
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -359,7 +355,7 @@ function ManageTag(): JSX.Element {
       field: 'userName',
       headerName: tCommon('userName'),
       flex: 2,
-      minWidth: 100,
+      minWidth: 'space-13',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
@@ -375,7 +371,7 @@ function ManageTag(): JSX.Element {
       headerName: tCommon('actions'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -541,7 +537,7 @@ function ManageTag(): JSX.Element {
                           ...assignedMembers,
                         }),
                       )}
-                      columns={columns}
+                      columns={convertTokenColumns(columns)}
                       isRowSelectable={() => false}
                     />
                   </InfiniteScroll>

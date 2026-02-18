@@ -112,8 +112,7 @@ vi.mock('react-router-dom', async () => {
 
 // Mock 'react-router' to satisfy hooks used inside EventListCard and its modals
 vi.mock('react-router', async () => {
-  const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
+  const actual = await vi.importActual('react-router-dom');
   const useParamsMock = vi.fn(() => ({ orgId: sharedRouterState.orgId }));
   return {
     ...actual,

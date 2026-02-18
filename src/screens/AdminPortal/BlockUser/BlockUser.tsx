@@ -51,7 +51,7 @@ import TableLoader from 'shared-components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './BlockUser.module.css';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import type {
   InterfaceUserPg,

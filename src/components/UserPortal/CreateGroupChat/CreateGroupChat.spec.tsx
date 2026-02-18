@@ -16,8 +16,8 @@ import {
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import userEvent from '@testing-library/user-event';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({

@@ -5,8 +5,9 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
@@ -51,9 +52,16 @@ const fundCampaignPledge = (): JSX.Element => {
     currency: '',
   });
 
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
+  const {
+    isOpen: sameModalOpen,
+    open: openSameModal,
+    close: closeSameModal,
+  } = useModalState();
+  const {
+    isOpen: deleteModalOpen,
+    open: openDeleteModal,
+    close: closeDeleteModal,
+  } = useModalState();
 
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
@@ -169,11 +177,13 @@ const fundCampaignPledge = (): JSX.Element => {
   }, [sortBy, refetchPledge]);
 
   const openModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+    if (modal === ModalState.SAME) openSameModal();
+    if (modal === ModalState.DELETE) openDeleteModal();
   };
 
   const closeModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+    if (modal === ModalState.SAME) closeSameModal();
+    if (modal === ModalState.DELETE) closeDeleteModal();
   };
 
   const handleOpenModal = useCallback(
@@ -408,7 +418,7 @@ const fundCampaignPledge = (): JSX.Element => {
           }}
         />
         <PledgeModal
-          isOpen={modalState[ModalState.SAME]}
+          isOpen={sameModalOpen}
           hide={() => closeModal(ModalState.SAME)}
           campaignId={fundCampaignId}
           orgId={orgId}
@@ -418,7 +428,7 @@ const fundCampaignPledge = (): JSX.Element => {
           mode={pledgeModalMode}
         />
         <PledgeDeleteModal
-          isOpen={modalState[ModalState.DELETE]}
+          isOpen={deleteModalOpen}
           hide={() => closeModal(ModalState.DELETE)}
           pledge={pledge}
           refetchPledge={refetchPledge}

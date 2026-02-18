@@ -13,7 +13,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import {
   LocalizationProvider,
@@ -307,8 +307,8 @@ const NO_CHANGE_MOCK = {
 
 describe('PledgeModal', () => {
   beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
       return {
         ...actual,
         useParams: () => ({ orgId: 'orgId', fundCampaignId: 'fundCampaignId' }),

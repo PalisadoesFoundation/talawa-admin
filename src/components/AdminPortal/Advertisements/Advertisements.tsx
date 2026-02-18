@@ -32,14 +32,14 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Advertisement } from 'types/AdminPortal/Advertisement/type';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

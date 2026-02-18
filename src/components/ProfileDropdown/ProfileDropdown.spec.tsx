@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
 import { MAX_NAME_LENGTH } from 'Constant/common';
 import { MockedProvider } from '@apollo/react-testing';
@@ -24,11 +24,6 @@ beforeAll(() => {
 let mockNavigate: ReturnType<typeof vi.fn>;
 
 // Mock useNavigate hook from both react-router and react-router-dom
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
-  return { ...actual, useNavigate: () => mockNavigate };
-});
-
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return { ...actual, useNavigate: () => mockNavigate };

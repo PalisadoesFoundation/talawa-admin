@@ -89,14 +89,6 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useParams: sharedMocks.useParams,
-  };
-});
-
 const { setItem, clearAllItems } = useLocalStorage();
 
 const renderUpcomingEvents = (link: ApolloLink): RenderResult => {

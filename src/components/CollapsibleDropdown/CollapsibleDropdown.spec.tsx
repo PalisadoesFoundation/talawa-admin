@@ -25,7 +25,7 @@ let currentLocation: Location = {
   hash: '',
 };
 
-vi.mock('react-router', async (importOriginal) => {
+vi.mock('react-router-dom', async (importOriginal) => {
   const mod = (await importOriginal()) as object;
 
   return {

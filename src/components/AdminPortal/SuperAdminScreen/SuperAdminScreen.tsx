@@ -24,7 +24,7 @@
 import LeftDrawer from 'components/AdminPortal/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation } from 'react-router-dom';
 import styles from './SuperAdminScreen.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 

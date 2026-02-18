@@ -2,9 +2,9 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
-import * as ReactRouter from 'react-router';
+import * as ReactRouter from 'react-router-dom';
 import AgendaItemsUpdateModal from './AgendaItemsUpdateModal';
 import { UPDATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
@@ -28,9 +28,9 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
+    await vi.importActual<typeof import('react-router')>('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: 'org-123' }),

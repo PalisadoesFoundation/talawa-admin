@@ -44,7 +44,7 @@ import UsersIcon from 'assets/svgs/users.svg?react';
 import CardItem from 'components/AdminPortal/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import DashBoardCard from 'components/AdminPortal/OrganizationDashCards/DashboardCard';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import DashboardStats from './components/DashboardStats';

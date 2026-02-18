@@ -45,7 +45,7 @@
  */
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 import gold from 'assets/images/gold.png';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/react-testing';
@@ -28,9 +28,9 @@ vi.mock('@mui/x-date-pickers', async () => {
   };
 });
 
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
+    await vi.importActual<typeof import('react-router')>('react-router-dom');
   return {
     ...actual,
     useParams: routerMocks.useParams,

@@ -3,7 +3,7 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
 import { render, act, waitFor, screen, cleanup } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import {
   LocalizationProvider,
@@ -91,8 +91,8 @@ async function wait(ms = 500): Promise<void> {
 
 const mockID = 'event123';
 let user: ReturnType<typeof userEvent.setup>;
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
 }));
 
 const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {

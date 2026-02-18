@@ -5,7 +5,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
 import { store } from 'state/store';
@@ -71,8 +71,8 @@ function mockLazyQuery(returned: {
 
 describe('Event Attendance Component', () => {
   beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
       useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
     }));
   });

@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { MockedProvider } from '@apollo/client/testing';
 import type { MockedResponse } from '@apollo/client/testing';
 import {
@@ -354,9 +355,8 @@ describe('AcceptInvitation', () => {
       mocks,
       '/invitation/test-token',
     );
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Log in'));
-    });
+    const loginButton = await screen.findByText('Log in');
+    await userEvent.click(loginButton);
     await waitFor(() => {
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'pendingInvitationToken',
@@ -383,9 +383,8 @@ describe('AcceptInvitation', () => {
       },
     ];
     renderComponent(mocks, '/invitation/test-token');
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Log in'));
-    });
+    const loginBtn = await screen.findByText('Log in');
+    await userEvent.click(loginBtn);
     await waitFor(() => {
       expect(screen.getByText('Login Page')).toBeInTheDocument();
     });
@@ -412,9 +411,8 @@ describe('AcceptInvitation', () => {
       mocks,
       '/invitation/test-token',
     );
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Sign up'));
-    });
+    const signupButton = await screen.findByText('Sign up');
+    await userEvent.click(signupButton);
     await waitFor(() => {
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'pendingInvitationToken',
@@ -441,9 +439,8 @@ describe('AcceptInvitation', () => {
       },
     ];
     renderComponent(mocks, '/invitation/test-token');
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Sign up'));
-    });
+    const signupButton = await screen.findByText('Sign up');
+    await userEvent.click(signupButton);
     await waitFor(() => {
       expect(screen.getByText('Signup Page')).toBeInTheDocument();
     });
@@ -501,7 +498,8 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      const acceptButton = await screen.findByTestId('accept-invite-btn');
+      await userEvent.click(acceptButton);
       await waitFor(() => {
         expect(screen.getByText('Event Page')).toBeInTheDocument();
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -544,7 +542,8 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      const acceptButton = await screen.findByTestId('accept-invite-btn');
+      await userEvent.click(acceptButton);
       await waitFor(() => {
         expect(screen.getByText('Organizations Page')).toBeInTheDocument();
       });
@@ -570,7 +569,8 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      const acceptButton = await screen.findByTestId('accept-invite-btn');
+      await userEvent.click(acceptButton);
       await waitFor(() => {
         expect(screen.queryByText('Event Page')).not.toBeInTheDocument();
         expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -594,7 +594,8 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      const acceptButton = await screen.findByTestId('accept-invite-btn');
+      await userEvent.click(acceptButton);
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Acceptance failed',
@@ -620,7 +621,7 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      await userEvent.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         // Apollo Client returns "Error message not found." for empty error messages
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -641,11 +642,8 @@ describe('AcceptInvitation', () => {
         expect(screen.getByTestId('accept-invite-btn')).toBeInTheDocument();
       });
 
-      await waitFor(() => {
-        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
-      });
-      const button = screen.getByTestId('accept-invite-btn');
-      fireEvent.click(button);
+      const button = await screen.findByTestId('accept-invite-btn');
+      await userEvent.click(button);
 
       // Wait for the loading state to appear
       await waitFor(() => {
@@ -680,13 +678,13 @@ describe('AcceptInvitation', () => {
         '/invitation/test-token',
         'auth-token',
       );
-      await waitFor(() => {
+      await waitFor(async () => {
         const acceptButton = screen.getByTestId('accept-invite-btn');
         expect(acceptButton).toBeDisabled();
         const checkbox = screen.getByLabelText(
           'I confirm the email address of my account matches the invited address (shown above).',
         );
-        fireEvent.click(checkbox);
+        await userEvent.click(checkbox);
         expect(acceptButton).not.toBeDisabled();
       });
     });
@@ -743,8 +741,9 @@ describe('AcceptInvitation', () => {
         '/invitation/test-token',
         'auth-token',
       );
-      await waitFor(() => {
-        fireEvent.click(screen.getByText('Sign in as a different user'));
+      await waitFor(async () => {
+        const signBtn = screen.getByText('Sign in as a different user');
+        await userEvent.click(signBtn);
       });
       await waitFor(() => {
         expect(screen.getByText('Login Page')).toBeInTheDocument();
@@ -789,15 +788,15 @@ describe('AcceptInvitation', () => {
         '/invitation/test-token',
         'auth-token',
       );
-      await waitFor(() => {
+      await waitFor(async () => {
         const checkbox = screen.getByLabelText(
           'I confirm the email address of my account matches the invited address (shown above).',
         );
-        fireEvent.click(checkbox); // Check
+        await userEvent.click(checkbox); // Check
         const acceptButton = screen.getByTestId('accept-invite-btn');
         expect(acceptButton).not.toBeDisabled();
 
-        fireEvent.click(checkbox); // Uncheck
+        await userEvent.click(checkbox); // Uncheck
         expect(acceptButton).toBeDisabled();
       });
     });

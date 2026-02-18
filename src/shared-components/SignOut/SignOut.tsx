@@ -54,9 +54,11 @@ const SignOut = ({
   const navigate = useNavigate();
   const { clearAllItems } = useLocalStorage();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const lock = React.useRef(false);
 
   const handleLogout = async (): Promise<void> => {
-    if (isLoggingOut) return; // Prevent multiple clicks
+    if (lock.current) return;
+    lock.current = true;
     setIsLoggingOut(true);
 
     const handleSignOut = (): void => {
@@ -87,6 +89,7 @@ const SignOut = ({
     } finally {
       // Reset loading state if component is still mounted (e.g., navigation failed)
       setIsLoggingOut(false);
+      lock.current = false;
     }
   };
 
@@ -94,7 +97,7 @@ const SignOut = ({
     <div
       className={`${styles.signOutContainer} ${isLoggingOut ? styles.signOutDisabled : ''}`}
       onClick={() => {
-        if (isLoggingOut) return; // Early-return when disabled
+        if (lock.current || isLoggingOut) return; // Early-return when disabled
         handleLogout();
       }}
       onKeyDown={(e) => {

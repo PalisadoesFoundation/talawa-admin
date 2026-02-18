@@ -16,7 +16,7 @@ import type { RenderResult } from '@testing-library/react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationVenues from './OrganizationVenues';
 import { store } from 'state/store';

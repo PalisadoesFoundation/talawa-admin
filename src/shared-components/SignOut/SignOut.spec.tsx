@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { MemoryRouter } from 'react-router-dom';
@@ -44,17 +44,12 @@ vi.mock('utils/useLocalstorage', () => ({
   })),
 }));
 
-let mockNavigate: ReturnType<typeof vi.fn>;
+const { mockNavigate } = vi.hoisted(() => ({
+  mockNavigate: vi.fn(),
+}));
+
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
-  return {
-    ...actual,
-    useNavigate: () => mockNavigate,
-  };
-});
-
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
   return {
     ...actual,
     useNavigate: () => mockNavigate,
@@ -111,7 +106,7 @@ describe('SignOut Component', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
-    mockNavigate = vi.fn();
+    mockNavigate.mockClear();
     user = userEvent.setup();
   });
 
@@ -532,7 +527,7 @@ describe('SignOut Component', () => {
       result: {
         data: { logout: { success: true } },
       },
-      delay: 1000, // 1 second delay
+      delay: 50, // 50ms delay is enough for testing spam prevention
     };
 
     test('button shows disabled state when logout is in progress', async () => {
@@ -558,6 +553,7 @@ describe('SignOut Component', () => {
     });
 
     test('prevents multiple clicks during logout', async () => {
+      vi.useFakeTimers();
       const mockEndSession = vi.fn();
       (useSession as Mock).mockReturnValue({
         endSession: mockEndSession,
@@ -568,15 +564,22 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
 
       // Click multiple times rapidly
-      await user.click(signOutButton);
-      await user.click(signOutButton);
-      await user.click(signOutButton);
+      userEvent.click(signOutButton);
+      userEvent.click(signOutButton);
+      userEvent.click(signOutButton);
+
+      // Advance timers to trigger the delayed mutation result
+      await act(async () => {
+        vi.advanceTimersByTime(100);
+      });
 
       await waitFor(() => {
         // Verify logout was only called once
         expect(mockEndSession).toHaveBeenCalledTimes(1);
         expect(mockNavigate).toHaveBeenCalledTimes(1);
       });
+
+      vi.useRealTimers();
     });
 
     test('button style prevents pointer events when disabled', async () => {

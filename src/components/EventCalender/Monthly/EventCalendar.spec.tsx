@@ -13,7 +13,7 @@ import {
   MemoryRouter,
   Routes,
   Route,
-} from 'react-router';
+} from 'react-router-dom';
 import { vi, describe, it, expect, afterEach, test } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

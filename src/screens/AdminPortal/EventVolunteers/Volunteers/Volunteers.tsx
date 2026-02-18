@@ -47,16 +47,17 @@
  * - Displays a loader while fetching data and handles errors gracefully.
  */
 import React, { useMemo, useState, useEffect } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type {
   GridCellParams,
-  GridColDef,
+  TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -112,20 +113,32 @@ function Volunteers(): JSX.Element {
   const [status, setStatus] = useState<VolunteerStatus>(VolunteerStatus.All);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.ADD]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-  });
+  const {
+    isOpen: addModalOpen,
+    open: openAddModal,
+    close: closeAddModal,
+  } = useModalState();
+  const {
+    isOpen: deleteModalOpen,
+    open: openDeleteModal,
+    close: closeDeleteModal,
+  } = useModalState();
+  const {
+    isOpen: viewModalOpen,
+    open: openViewModal,
+    close: closeViewModal,
+  } = useModalState();
 
   const openModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+    if (modal === ModalState.ADD) openAddModal();
+    if (modal === ModalState.DELETE) openDeleteModal();
+    if (modal === ModalState.VIEW) openViewModal();
   };
 
   const closeModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+    if (modal === ModalState.ADD) closeAddModal();
+    if (modal === ModalState.DELETE) closeDeleteModal();
+    if (modal === ModalState.VIEW) closeViewModal();
   };
 
   const handleOpenModal = (
@@ -238,13 +251,13 @@ function Volunteers(): JSX.Element {
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'volunteer',
       headerName: t('eventVolunteers.volunteerHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -284,7 +297,7 @@ function Volunteers(): JSX.Element {
       headerName: t('eventVolunteers.statusHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -343,7 +356,7 @@ function Volunteers(): JSX.Element {
       headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -463,7 +476,7 @@ function Volunteers(): JSX.Element {
         />
 
         <VolunteerCreateModal
-          isOpen={modalState[ModalState.ADD]}
+          isOpen={addModalOpen}
           hide={() => closeModal(ModalState.ADD)}
           eventId={eventId}
           orgId={orgId}
@@ -476,12 +489,12 @@ function Volunteers(): JSX.Element {
         {volunteer && (
           <>
             <VolunteerViewModal
-              isOpen={modalState[ModalState.VIEW]}
+              isOpen={viewModalOpen}
               hide={() => closeModal(ModalState.VIEW)}
               volunteer={volunteer}
             />
             <VolunteerDeleteModal
-              isOpen={modalState[ModalState.DELETE]}
+              isOpen={deleteModalOpen}
               hide={() => closeModal(ModalState.DELETE)}
               volunteer={volunteer}
               refetchVolunteers={refetchVolunteers}

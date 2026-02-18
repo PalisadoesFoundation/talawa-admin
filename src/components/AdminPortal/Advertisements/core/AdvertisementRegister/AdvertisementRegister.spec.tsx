@@ -16,7 +16,7 @@ import {
 import { UPDATE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
-import * as router from 'react-router';
+import * as router from 'react-router-dom';
 import {
   createAdFailMock,
   createAdvertisement,
@@ -26,8 +26,8 @@ import {
   updateAdFailMock,
 } from './AdvertisementRegisterMocks';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: '1' }),

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserOrganizations from './UserOrganizations';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
 import {
   InterfacePeopleTabNavbarProps,
@@ -16,7 +16,7 @@ import { DocumentNode } from 'graphql';
 import { OperationVariables } from '@apollo/client/core/types';
 import { QueryHookOptions } from '@apollo/client/react/types/types';
 
-vi.mock('react-router', async (importOriginal) => {
+vi.mock('react-router-dom', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-router')>();
   return {
     ...actual,

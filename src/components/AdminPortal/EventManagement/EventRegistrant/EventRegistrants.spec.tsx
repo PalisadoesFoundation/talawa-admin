@@ -7,7 +7,7 @@ import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import type { MockedResponse } from '@apollo/react-testing';
 import EventRegistrants from './EventRegistrants';
@@ -71,8 +71,8 @@ let mockParams: { eventId?: string; orgId?: string } = {
 
 const mockNavigate = vi.fn();
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
 
   return {
     ...actual,

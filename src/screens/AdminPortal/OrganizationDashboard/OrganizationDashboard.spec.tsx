@@ -14,7 +14,7 @@ import userEvent from '@testing-library/user-event';
 
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrganizationDashboard from './OrganizationDashboard';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';
 import { MOCKS_ORG2 } from './OrganizationDashboardSecondaryMocks';
@@ -46,8 +46,8 @@ const { routerMocks, toastMocks } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useNavigate: () => routerMocks.navigate,

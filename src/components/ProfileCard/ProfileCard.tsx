@@ -40,7 +40,7 @@
  */
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';

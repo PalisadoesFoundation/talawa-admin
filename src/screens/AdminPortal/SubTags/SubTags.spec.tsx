@@ -5,7 +5,7 @@ import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -122,8 +122,8 @@ const renderSubTags = (link: ApolloLink): RenderResult => {
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
+    vi.mock('react-router-dom', async () => ({
+      ...(await vi.importActual('react-router-dom')),
       useParams: () => ({ orgId: '123', tagId: '1' }),
     }));
     cache.reset();

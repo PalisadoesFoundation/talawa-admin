@@ -17,12 +17,13 @@ import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import styles from './UsersTableItem.module.css';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 type Props = {
   user: InterfaceQueryUserListItemForAdmin;
@@ -35,11 +36,26 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
   const { user, index, resetAndRefetch } = props;
-  const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
-  const [showBlockedOrganizations, setShowBlockedOrganizations] =
-    useState(false);
-  const [showRemoveUserModal, setShowRemoveUserModal] = useState(false);
-  const [showBlockedUserModal, setShowBlockedUserModal] = useState(false);
+  const {
+    isOpen: showJoinedOrganizations,
+    open: openJoinedOrganizations,
+    close: closeJoinedOrganizations,
+  } = useModalState();
+  const {
+    isOpen: showBlockedOrganizations,
+    open: openBlockedOrganizations,
+    close: closeBlockedOrganizations,
+  } = useModalState();
+  const {
+    isOpen: showRemoveUserModal,
+    open: openRemoveUserModal,
+    close: closeRemoveUserModal,
+  } = useModalState();
+  const {
+    isOpen: showBlockedUserModal,
+    open: openBlockedUserModal,
+    close: closeBlockedUserModal,
+  } = useModalState();
   const [removeUserProps, setremoveUserProps] = useState<{
     orgName: string;
     orgId: string;
@@ -74,7 +90,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           tCommon('removedSuccessfully', { item: 'User' }) as string,
         );
         resetAndRefetch();
-        setShowRemoveUserModal(false);
+        closeRemoveUserModal();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -91,8 +107,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
           tCommon('unblockedSuccessfully', { item: 'User' }) as string,
         );
         resetAndRefetch();
-        setShowBlockedUserModal(false);
-        setShowBlockedOrganizations(true);
+        closeBlockedUserModal();
+        openBlockedOrganizations();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -154,19 +170,28 @@ const UsersTableItem = (props: Props): JSX.Element => {
     }
   };
 
-  function onHideRemoveUserModal(): void {
-    setShowRemoveUserModal(false);
+  const onHideJoinedOrganizations = (): void => {
+    closeJoinedOrganizations();
+    setSearchByNameJoinedOrgs('');
+    setJoinedOrgs(memberOrgs);
+  };
+  const onHideBlockedOrganizations = (): void => {
+    closeBlockedOrganizations();
+    setSearchByNameBlockedOrgs('');
+    setBlockedUsers(blockedOrgs);
+  };
+  const onHideRemoveUserModal = (): void => {
     if (removeUserProps.setShowOnCancel === 'JOINED') {
-      setShowJoinedOrganizations(true);
+      openJoinedOrganizations();
     }
-  }
-
-  function onHideBlockUserModal(): void {
-    setShowBlockedUserModal(false);
+    closeRemoveUserModal();
+  };
+  const onHideBlockUserModal = (): void => {
     if (removeUserProps.setShowOnCancel === 'Blocked') {
-      setShowBlockedOrganizations(true);
+      openBlockedOrganizations();
     }
-  }
+    closeBlockedUserModal();
+  };
 
   // If there is a super admin notion, adapt this logic to your API.
   const isAdmin = user.role === 'administrator';
@@ -180,7 +205,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>
           <Button
             className={`btn ${styles.editButton}`}
-            onClick={() => setShowJoinedOrganizations(true)}
+            onClick={openJoinedOrganizations}
             data-testid={`showJoinedOrgsBtn${user.id}`}
           >
             {t('view')} ({memberOrgs.length})
@@ -189,7 +214,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>
           <Button
             className={`btn ${styles.removeButton}`}
-            onClick={() => setShowBlockedOrganizations(true)}
+            onClick={openBlockedOrganizations}
             data-testid={`showBlockedOrgsBtn${user.id}`}
           >
             {t('view')} ({blockedUsers.length})
@@ -201,7 +226,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         key={`modal-joined-org-${index}`}
         size="xl"
         dataTestId={`modal-joined-org-${user.id}`} // i18n-ignore-line
-        onHide={() => setShowJoinedOrganizations(false)}
+        onHide={onHideJoinedOrganizations}
         headerClassName={styles.modalHeader}
         title={
           <span className="text-white">
@@ -211,7 +236,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         footer={
           <Button
             variant="secondary"
-            onClick={() => setShowJoinedOrganizations(false)}
+            onClick={onHideJoinedOrganizations}
             data-testid={`closeJoinedOrgsBtn${user.id}`}
           >
             {tCommon('close')}
@@ -347,8 +372,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                                 orgName: org.name,
                                 setShowOnCancel: 'JOINED',
                               });
-                              setShowJoinedOrganizations(false);
-                              setShowRemoveUserModal(true);
+                              closeJoinedOrganizations();
+                              openRemoveUserModal();
                             }}
                           >
                             {tCommon('removeUser')}
@@ -406,7 +431,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         key={`modal-blocked-org-${index}`}
         size="xl"
         dataTestId={`modal-blocked-org-${user.id}`} // i18n-ignore-line
-        onHide={() => setShowBlockedOrganizations(false)}
+        onHide={onHideBlockedOrganizations}
         headerClassName={styles.modalHeader}
         title={
           <span className="text-white">
@@ -416,7 +441,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         footer={
           <Button
             variant="secondary"
-            onClick={() => setShowBlockedOrganizations(false)}
+            onClick={onHideBlockedOrganizations}
             data-testid={`closeUnblockOrgsBtn${user.id}`}
           >
             {tCommon('close')}
@@ -511,8 +536,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                                 orgName: org.organization.creator.name,
                                 setShowOnCancel: 'Blocked',
                               });
-                              setShowBlockedOrganizations(false);
-                              setShowBlockedUserModal(true);
+                              closeBlockedOrganizations();
+                              openBlockedUserModal();
                             }}
                           >
                             {tCommon('unblock')}

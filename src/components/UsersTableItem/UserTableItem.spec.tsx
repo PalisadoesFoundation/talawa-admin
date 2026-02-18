@@ -10,14 +10,14 @@ import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 
 import userEvent from '@testing-library/user-event';
 import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
-import type * as RouterTypes from 'react-router';
+import type * as RouterTypes from 'react-router-dom';
 
 dayjs.extend(utc);
 
@@ -47,8 +47,10 @@ Object.defineProperty(window, 'location', {
 
 let mockNavigatePush: ReturnType<typeof vi.fn>;
 
-vi.mock('react-router', async () => {
-  const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
+vi.mock('react-router-dom', async () => {
+  const actual = (await vi.importActual(
+    'react-router-dom',
+  )) as typeof RouterTypes;
   return {
     ...actual,
     useNavigate: () => mockNavigatePush,

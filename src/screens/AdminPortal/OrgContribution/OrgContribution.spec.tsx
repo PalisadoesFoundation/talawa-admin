@@ -1,8 +1,9 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { vi, describe, test, expect } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import OrgContribution from './OrgContribution';
@@ -70,15 +71,13 @@ describe('Organisation Contribution Page', () => {
     expect(screen.getByText('johndoexyz@gmail.com')).toBeInTheDocument();
   });
 
-  test('updates org name and transaction filter when typing in search', () => {
+  test('updates org name and transaction filter when typing in search', async () => {
     renderComponent();
 
     const orgInput = screen.getByTestId('filterOrgName');
-    fireEvent.input(orgInput, { target: { value: 'Test Org' } });
-    fireEvent.keyDown(orgInput, { key: 'Enter' });
+    await userEvent.type(orgInput, 'Test Org{enter}');
     const txnInput = screen.getByTestId('filterTransaction');
-    fireEvent.input(txnInput, { target: { value: 'TXN123' } });
-    fireEvent.keyDown(txnInput, { key: 'Enter' });
+    await userEvent.type(txnInput, 'TXN123{enter}');
     expect(orgInput).toHaveValue('Test Org');
     expect(txnInput).toHaveValue('TXN123');
   });

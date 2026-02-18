@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 import type { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 import TableLoader from './TableLoader';

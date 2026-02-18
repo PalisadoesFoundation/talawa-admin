@@ -9,7 +9,7 @@ import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { MAX_NAME_LENGTH } from 'Constant/common';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import {
   resolveProfileNavigation,
   type ProfilePortal,
