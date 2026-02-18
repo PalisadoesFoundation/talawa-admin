@@ -37,20 +37,23 @@ import {
   ERROR_MOCKS,
 } from './UpcomingEvents.mocks';
 
-const sharedMocks = vi.hoisted(() => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-  useParams: vi.fn(() => ({ orgId: 'orgId' })),
-}));
+const sharedMocks = vi.hoisted(() => {
+  const mockIcon = (id: string) => () =>
+    React.createElement('div', { 'data-testid': id });
+
+  return {
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+    },
+    useParams: vi.fn(() => ({ orgId: 'orgId' })),
+    mockIcon,
+  };
+});
 
 vi.mock('react-toastify', () => ({
   toast: sharedMocks.toast,
 }));
-
-const mockIcon = (id: string) => () =>
-  React.createElement('div', { 'data-testid': id });
 
 vi.mock('@mui/icons-material', async () => {
   const actual = (await vi.importActual('@mui/icons-material')) as Record<
@@ -59,23 +62,23 @@ vi.mock('@mui/icons-material', async () => {
   >;
   return {
     ...actual,
-    Circle: mockIcon('circle-icon'),
-    WarningAmberRounded: mockIcon('warning-icon'),
-    ExpandMore: mockIcon('expand-more-icon'),
-    Event: mockIcon('event-icon'),
+    Circle: sharedMocks.mockIcon('circle-icon'),
+    WarningAmberRounded: sharedMocks.mockIcon('warning-icon'),
+    ExpandMore: sharedMocks.mockIcon('expand-more-icon'),
+    Event: sharedMocks.mockIcon('event-icon'),
   };
 });
 
 vi.mock('react-icons/io5', () => ({
-  IoLocationOutline: mockIcon('location-icon'),
+  IoLocationOutline: sharedMocks.mockIcon('location-icon'),
 }));
 
 vi.mock('react-icons/io', () => ({
-  IoIosHand: mockIcon('hand-icon'),
+  IoIosHand: sharedMocks.mockIcon('hand-icon'),
 }));
 
 vi.mock('react-icons/fa', () => ({
-  FaCheck: mockIcon('check-icon'),
+  FaCheck: sharedMocks.mockIcon('check-icon'),
 }));
 
 vi.mock('react-router-dom', async () => {

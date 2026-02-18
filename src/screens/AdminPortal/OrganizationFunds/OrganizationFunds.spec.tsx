@@ -162,26 +162,7 @@ describe('OrganizationFunds Screen =>', () => {
     mockedUseParams.mockReturnValue({
       orgId: undefined,
     });
-    render(
-      <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/admin/orgfunds/']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/"
-                  element={<div data-testid="paramsError"></div>}
-                />
-                <Route
-                  path="/admin/orgfunds/"
-                  element={<OrganizationFunds />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderOrganizationFunds(link1);
     await waitFor(() => {
       expect(window.location.pathname).toBe('/');
     });

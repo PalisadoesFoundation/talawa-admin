@@ -31,8 +31,8 @@ Object.defineProperty(window, 'matchMedia', {
 
 let mockID: string | undefined = '123';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: mockID }),
