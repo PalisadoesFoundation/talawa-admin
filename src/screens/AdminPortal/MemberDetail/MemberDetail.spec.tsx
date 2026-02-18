@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MemberDetail from './MemberDetail';
 import { ReactNode } from 'react';
@@ -7,8 +7,9 @@ import { ReactNode } from 'react';
 /* -------------------- mocks -------------------- */
 
 // mock react-router params - default mock
-const mockUseParams = vi.fn((): { userId?: string } => ({
+const mockUseParams = vi.fn((): { userId?: string; orgId?: string } => ({
   userId: '123',
+  orgId: '456',
 }));
 
 vi.mock('react-router-dom', () => ({
@@ -42,7 +43,9 @@ vi.mock('components/UserDetails/UserOrganizations', () => ({
 }));
 
 vi.mock('components/UserDetails/UserEvents', () => ({
-  default: () => <div data-testid="user-events" />,
+  default: ({ orgId, userId }: { orgId?: string; userId?: string }) => (
+    <div data-testid="user-events" data-orgid={orgId} data-userid={userId} />
+  ),
 }));
 
 vi.mock('components/UserDetails/UserTags', () => ({
@@ -77,13 +80,15 @@ vi.mock(
 
 describe('MemberDetail', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders noUserId message when userId is not provided', () => {
     // Override the mock to return no userId
     mockUseParams.mockReturnValueOnce({
       userId: undefined,
+      orgId: undefined,
     });
 
     render(<MemberDetail />);
@@ -92,6 +97,25 @@ describe('MemberDetail', () => {
     expect(screen.getByText('noUserId')).toBeInTheDocument();
 
     // Should NOT render any tabs or content
+    expect(screen.queryByTestId('tab-overview')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('user-contact-details'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders noOrgId message when orgId is not provided', () => {
+    // Override params → userId exists but orgId missing
+    mockUseParams.mockReturnValueOnce({
+      userId: '123',
+      orgId: undefined,
+    });
+
+    render(<MemberDetail />);
+
+    // Should render the noOrgId message
+    expect(screen.getByText('noOrgId')).toBeInTheDocument();
+
+    // Should NOT render tabs or member content
     expect(screen.queryByTestId('tab-overview')).not.toBeInTheDocument();
     expect(
       screen.queryByTestId('user-contact-details'),
@@ -126,6 +150,14 @@ describe('MemberDetail', () => {
     await userEvent.click(screen.getByTestId('tab-events'));
 
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
+    expect(screen.getByTestId('user-events')).toHaveAttribute(
+      'data-orgid',
+      '456',
+    );
+    expect(screen.getByTestId('user-events')).toHaveAttribute(
+      'data-userid',
+      '123',
+    );
     expect(screen.getByTestId('tab-events')).toHaveAttribute(
       'data-active',
       'true',

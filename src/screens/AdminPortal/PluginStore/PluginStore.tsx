@@ -15,11 +15,20 @@ import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 export default function PluginStore() {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  const {
+    isOpen: isMainOpen,
+    open: openMain,
+    close: closeMain,
+  } = useModalState();
+  const {
+    isOpen: isUploadOpen,
+    open: openUpload,
+    close: closeUpload,
+  } = useModalState();
   const [selectedPluginId, setSelectedPluginId] = useState<string | null>(null);
   const [selectedPluginMeta, setSelectedPluginMeta] =
     useState<IPluginMeta | null>(null);
@@ -89,23 +98,22 @@ export default function PluginStore() {
   const openPlugin = (plugin: IPluginMeta) => {
     setSelectedPluginId(plugin.id);
     setSelectedPluginMeta(plugin);
-    setShowModal(true);
+    openMain();
   };
 
   // Close modal
   const closeModal = () => {
-    setShowModal(false);
+    closeMain();
     setSelectedPluginId(null);
     setSelectedPluginMeta(null);
   };
 
   // Close upload modal
   const closeUploadModal = async () => {
-    setShowUploadModal(false);
-    // Refresh plugin data after upload
+    closeUpload();
+    // Re-fetch plugins to reflect any newly uploaded plugin
     await refetch();
-    // Reload the page to ensure all plugin states are properly updated
-    window.location.reload();
+    location.reload();
   };
 
   const pluginStoreDropdowns = [
@@ -127,10 +135,10 @@ export default function PluginStore() {
   const uploadPluginButton = (
     <Button
       className={`${styles.dropdown} ${styles.createorgdropdown}`}
-      onClick={() => setShowUploadModal(true)}
+      onClick={openUpload}
       data-testid="uploadPluginBtn"
     >
-      <i className={'fa fa-plus me-2'} />
+      <i className={`fa fa-plus ${styles.uploadPlugin} `} />
       {t('uploadPlugin')}
     </Button>
   );
@@ -174,7 +182,7 @@ export default function PluginStore() {
       </div>
       {/* Plugin Details Modal */}
       <PluginModal
-        show={showModal}
+        show={isMainOpen}
         onHide={closeModal}
         pluginId={selectedPluginId}
         meta={selectedPluginMeta}
@@ -188,7 +196,7 @@ export default function PluginStore() {
       />
       {/* Upload Plugin Modal */}
       <UploadPluginModal
-        show={showUploadModal}
+        show={isUploadOpen}
         onHide={closeUploadModal}
         data-testid="upload-plugin-modal"
       />

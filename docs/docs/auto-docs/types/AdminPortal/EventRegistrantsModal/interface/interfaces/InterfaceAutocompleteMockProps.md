@@ -10,6 +10,30 @@ Props for Autocomplete mock component used in tests.
 
 ## Properties
 
+### getOptionLabel()?
+
+> `optional` **getOptionLabel**: (`option`) => `string`
+
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L48)
+
+#### Parameters
+
+##### option
+
+###### id
+
+`string`
+
+###### name?
+
+`string`
+
+#### Returns
+
+`string`
+
+***
+
 ### inputValue?
 
 > `optional` **inputValue**: `string`
@@ -107,6 +131,40 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:28](https:
 ##### params
 
 `Record`\<`string`, `unknown`\>
+
+#### Returns
+
+`Element`
+
+***
+
+### renderOption()?
+
+> `optional` **renderOption**: (`props`, `option`, `state`) => `Element`
+
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L41)
+
+#### Parameters
+
+##### props
+
+`Record`\<`string`, `unknown`\>
+
+##### option
+
+###### id
+
+`string`
+
+###### name?
+
+`string`
+
+##### state
+
+###### selected
+
+`boolean`
 
 #### Returns
 

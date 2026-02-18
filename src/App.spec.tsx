@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { MemoryRouter } from 'react-router';
@@ -76,12 +76,6 @@ vi.mock('components/AdminPortal/OrganizationScreen/OrganizationScreen', () => ({
 
 vi.mock('shared-components/posts/posts', () => ({
   default: () => <div data-testid="mock-posts">Mock Posts</div>,
-}));
-
-vi.mock('components/AdminPortal/SuperAdminScreen/SuperAdminScreen', () => ({
-  default: () => (
-    <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
-  ),
 }));
 
 vi.mock('screens/AdminPortal/BlockUser/BlockUser', () => ({
@@ -290,7 +284,7 @@ const MOCKS = [
     request: { query: CURRENT_USER },
     result: {
       data: {
-        currentUser: {
+        user: {
           id: '123',
           name: 'John Doe',
           createdAt: dayjs().subtract(1, 'year').toISOString(),
@@ -303,10 +297,7 @@ const MOCKS = [
           maritalStatus: 'SINGLE',
           address: { line1: 'line1', state: 'state', countryCode: 'IND' },
           phone: { mobile: '+8912313112' },
-          userType: 'USER',
-          appUserProfile: {
-            adminFor: [],
-          },
+          role: 'regular',
         },
       },
     },
@@ -318,33 +309,11 @@ const ADMIN_MOCKS = [
     request: { query: CURRENT_USER },
     result: {
       data: {
-        currentUser: {
+        user: {
           id: '456',
           name: 'Admin User',
           emailAddress: 'admin@example.com',
-          userType: 'ADMIN',
-          appUserProfile: {
-            adminFor: [{ _id: 'org1' }, { _id: 'org2' }],
-          },
-        },
-      },
-    },
-  },
-];
-
-const SUPER_ADMIN_MOCKS = [
-  {
-    request: { query: CURRENT_USER },
-    result: {
-      data: {
-        currentUser: {
-          id: '789',
-          name: 'Super Admin',
-          emailAddress: 'superadmin@example.com',
-          userType: 'SUPERADMIN',
-          appUserProfile: {
-            adminFor: [{ _id: 'org1' }, { _id: 'org2' }, { _id: 'org3' }],
-          },
+          role: 'administrator',
         },
       },
     },
@@ -361,7 +330,6 @@ const ERROR_MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 const adminLink = new StaticMockLink(ADMIN_MOCKS, true);
-const superAdminLink = new StaticMockLink(SUPER_ADMIN_MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
 
 const renderApp = (mockLink = link, initialRoute = '/') => {
@@ -378,43 +346,46 @@ const renderApp = (mockLink = link, initialRoute = '/') => {
   );
 };
 
-async function wait(ms = 100): Promise<void> {
-  await new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
-let logSpy: ReturnType<typeof vi.spyOn> | undefined;
-let errorSpy: ReturnType<typeof vi.spyOn> | undefined;
-
 describe('Testing the App Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
-    logSpy?.mockRestore();
-    errorSpy?.mockRestore();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
-  it('Component should be rendered properly and user is logged in', async () => {
+  it('Regular user sees user portal when accessing admin routes', async () => {
     renderApp(link, '/admin/orglist');
 
-    await wait();
+    await waitFor(
+      () => {
+        // User should see user portal, not admin portal
+        expect(
+          screen.getByTestId('mock-user-organizations'),
+        ).toBeInTheDocument();
+        expect(screen.queryByTestId('mock-org-list')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+  });
 
-    expect(
-      screen.getByText(
-        'An open source application by Palisadoes Foundation volunteers',
-      ),
-    ).toBeTruthy();
+  it('Login page shows footer for unauthenticated users', async () => {
+    renderApp(link2, '/');
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('app-footer')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Component should be rendered properly and user is logged out', async () => {
     renderApp(link2);
-    await wait();
+    await screen.findByTestId('app-footer');
   });
 
   it('should initialize plugin system on app startup', async () => {
@@ -452,43 +423,15 @@ describe('Testing the App Component', () => {
     });
   });
 
-  it('should handle admin user permissions correctly', async () => {
+  it('should handle administrator user permissions correctly', async () => {
     const { usePluginRoutes } = await import('./plugin');
 
     renderApp(adminLink);
 
     await waitFor(() => {
       // Admin should have org permissions
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2'],
-        true,
-        false,
-      ); // adminGlobalPluginRoutes
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2'],
-        true,
-        true,
-      ); // adminOrgPluginRoutes
-    });
-  });
-
-  it('should handle super admin user permissions correctly', async () => {
-    const { usePluginRoutes } = await import('./plugin');
-
-    renderApp(superAdminLink);
-
-    await waitFor(() => {
-      // Super admin should have org permissions
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2', 'org3'],
-        true,
-        false,
-      );
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2', 'org3'],
-        true,
-        true,
-      );
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, false); // adminGlobalPluginRoutes
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, true); // adminOrgPluginRoutes
     });
   });
 
@@ -498,14 +441,11 @@ describe('Testing the App Component', () => {
         request: { query: CURRENT_USER },
         result: {
           data: {
-            currentUser: {
+            user: {
               id: '999',
               name: 'Regular User',
               emailAddress: 'user@example.com',
-              userType: 'USER',
-              appUserProfile: {
-                adminFor: null, // Test null case
-              },
+              role: 'regular',
             },
           },
         },
@@ -515,10 +455,8 @@ describe('Testing the App Component', () => {
     const noAdminLink = new StaticMockLink(noAdminMocks, true);
     renderApp(noAdminLink);
 
-    await wait();
-
     // Should handle null adminFor gracefully
-    expect(document.body).toBeInTheDocument();
+    await screen.findByTestId('app-footer');
     // Verify plugin system is initialized even with null adminFor
     await waitFor(() => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
@@ -529,15 +467,12 @@ describe('Testing the App Component', () => {
     // Test that the app doesn't crash with error mocks
     renderApp(errorLink);
 
-    await wait();
-
     // Should not crash and should render something (either loading or login page)
-    expect(document.body).toBeInTheDocument();
+    await screen.findByTestId('app-footer');
 
-    // The GraphQL error should not cause the app to crash
-    // We don't expect a specific console.error call since the error might be handled silently
-    // Instead, verify that the app continues to function normally
-    expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
+    });
   });
 
   it('should render plugin routes when provided', async () => {
@@ -567,7 +502,7 @@ describe('Testing the App Component', () => {
         request: { query: CURRENT_USER },
         result: {
           data: {
-            currentUser: null,
+            user: null,
           },
         },
       },
@@ -576,42 +511,9 @@ describe('Testing the App Component', () => {
     const emptyLink = new StaticMockLink(emptyMocks, true);
     renderApp(emptyLink);
 
-    await wait();
-
     // Should handle null user gracefully without crashing
-    expect(document.body).toBeInTheDocument();
+    await screen.findByTestId('app-footer');
     // Verify plugin system is initialized even with null user
-    await waitFor(() => {
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-    });
-  });
-
-  it('should handle user without appUserProfile', async () => {
-    const noProfileMocks = [
-      {
-        request: { query: CURRENT_USER },
-        result: {
-          data: {
-            currentUser: {
-              id: '555',
-              name: 'No Profile User',
-              emailAddress: 'noprofile@example.com',
-              userType: 'USER',
-              // Missing appUserProfile
-            },
-          },
-        },
-      },
-    ];
-
-    const noProfileLink = new StaticMockLink(noProfileMocks, true);
-    renderApp(noProfileLink);
-
-    await wait();
-
-    // Should handle missing appUserProfile gracefully
-    expect(document.body).toBeInTheDocument();
-    // Verify plugin system is initialized even without appUserProfile
     await waitFor(() => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
@@ -678,16 +580,7 @@ describe('Testing the App Component', () => {
     }
   });
 
-  it('should correctly determine isAdmin and isSuperAdmin flags', async () => {
-    renderApp(superAdminLink);
-
-    await waitFor(() => {
-      // Verify plugin system is initialized
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-    });
-  });
-
-  it('should handle user with userType ADMIN correctly', async () => {
+  it('should handle user with role admin correctly', async () => {
     renderApp(adminLink);
 
     await waitFor(() => {

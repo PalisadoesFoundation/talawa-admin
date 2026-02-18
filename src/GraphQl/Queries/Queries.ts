@@ -331,21 +331,6 @@ export const EVENT_DETAILS = gql`
   }
 `;
 
-export const EVENT_DETAILS_BASIC = gql`
-  query GetEventBasic($eventId: String!) {
-    event(input: { id: $eventId }) {
-      id
-      name
-      location
-      startAt
-      organization {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const RECURRING_EVENTS = gql`
   query RecurringEvents($baseRecurringEventId: ID!) {
     getRecurringEvents(baseRecurringEventId: $baseRecurringEventId) {
@@ -394,6 +379,7 @@ export const EVENT_REGISTRANTS = gql`
         id
         name
         emailAddress
+        avatarURL
       }
       isRegistered
       isInvited
@@ -568,6 +554,10 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
+            attendees {
+              id
+              name
+            }
             baseEvent {
               id
               name
@@ -1298,6 +1288,21 @@ export const GET_USER_TAGS = gql`
       creator {
         id
         name
+      }
+    }
+  }
+`;
+
+export const GET_EVENTS_BY_ORGANIZATION_ID = gql`
+  query GetEventsByOrganizationId($organizationId: ID!) {
+    eventsByOrganizationId(input: { organizationId: $organizationId }) {
+      id
+      name
+      description
+      startAt
+      endAt
+      creator {
+        id
       }
     }
   }

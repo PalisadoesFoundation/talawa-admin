@@ -7,6 +7,11 @@ sidebar_position: 70
 
 This project uses Cypress for comprehensive end-to-end testing to ensure the application works correctly from a user's perspective.
 
+## Additional Resources
+
+- [Online docs](https://docs-admin.talawa.io/docs/developer-resources/e2e-testing)
+- Cypress local quick reference: `cypress/README.md`
+
 ## Prerequisites
 
 Before running Cypress tests, ensure you have the following setup:
@@ -24,16 +29,41 @@ Ensure your local development server is running on `http://localhost:4321`.
 
 The tests follow the Page Object Model pattern for maintainability.
 
-```
+```text
 cypress/
-├── e2e/                    # End-to-end test specifications
-│   └── example_spec/       # Related tests
-├── fixtures/               # Test data and mock files
-│   └── users.json         # User test data
-├── pageObjects/           # Page Object Model files
-│   └── auth/              # Authentication page objects
-└── support/               # Support files and custom commands
-    └── commands.ts        # Custom Cypress commands
+├── e2e/
+│   ├── Auth/
+│   ├── AdminPortal/
+│   │   ├── Dashboard/
+│   │   ├── Organizations/
+│   │   ├── People/
+│   │   ├── Events/
+│   │   ├── ActionItems/
+│   │   ├── Posts/
+│   │   ├── Advertisements/
+│   │   ├── Venues/
+│   │   └── Tags/
+│   ├── UserPortal/
+│   │   ├── Dashboard/
+│   │   ├── OrganizationDiscovery/
+│   │   ├── EventDiscovery/
+│   │   ├── VolunteerSignup/
+│   │   ├── Posts/
+│   │   ├── Profile/
+│   │   └── Transactions/
+│   ├── SharedComponents/
+│   ├── E2EFlows/
+│   ├── ErrorScenarios/
+│   ├── CascadingEffects/
+│   ├── MultiOrganization/
+│   └── Accessibility/
+├── fixtures/
+├── pageObjects/
+│   ├── base/
+│   ├── AdminPortal/
+│   ├── UserPortal/
+│   └── shared/
+└── support/
 ```
 
 ### Key Components:
@@ -61,6 +91,16 @@ pnpm run cy:open
 pnpm run cy:run
 ```
 
+### Cypress Configuration Defaults
+
+The E2E configuration in `cypress.config.ts` is:
+
+- `specPattern`: `cypress/e2e/**/*.cy.ts`
+- `testIsolation`: `true`
+- `retries`: `runMode: 2`, `openMode: 0`
+- `defaultCommandTimeout`: `30000`
+- `requestTimeout`, `responseTimeout`, `pageLoadTimeout`: `30000`
+
 ### Running Specific Tests
 
 There are multiple testing modes.
@@ -75,15 +115,24 @@ pnpm run cy:open
 
 #### Headless Mode
 
-For running specific tests in headless mode, first manually start your application at `http://localhost:4321`, then use the following commands:
+For running specific tests in headless mode, use the subset scripts below. These commands start the app server automatically before executing Cypress:
 
 ```bash
-# Run tests in a specific folder
-pnpm run cypress:run --spec "cypress/e2e/dashboard_spec/**/*"
+# Run Admin Portal specs
+pnpm run cy:run:admin
 
-# Run a specific test file
-pnpm run cypress:run --spec "cypress/e2e/login_spec/login.cy.ts"
+# Run User Portal specs
+pnpm run cy:run:user
+
+# Run Auth specs
+pnpm run cy:run:auth
+
+# Run Shared Components specs
+pnpm run cy:run:shared
 ```
+
+For a single spec file, use `pnpm run cy:open` and select the spec in the
+interactive runner.
 
 ## Writing Tests
 
@@ -93,20 +142,69 @@ Follow these best practices when writing tests.
 
 This project follows the Page Object Model pattern for better test maintenance:
 
-```javascript
-// Example usage of page objects
-import { LoginPage } from '../pageObjects/auth/LoginPage';
+```ts
+// Example usage of a portal-aligned page object
+import { MemberManagementPage } from '../../../pageObjects/AdminPortal/MemberManagementPage';
 
-const loginPage = new LoginPage();
+const memberManagementPage = new MemberManagementPage();
 
-it('should login successfully', () => {
-  loginPage.verifyLoginPage().login(userData.email, userData.password);
+it('searches a member', () => {
+  memberManagementPage
+    .openFromDrawer()
+    .searchMemberByName('Wilt Shepherd')
+    .verifyMemberInList('Wilt Shepherd');
 });
 ```
 
+Use the base class in `cypress/pageObjects/base/BasePage.ts` when creating new
+portal page objects so helpers remain typed and chainable.
+
+### Shared Page Object Utilities
+
+Use shared helpers in `cypress/pageObjects/shared/` to avoid repeating common
+modal and table interactions across page objects.
+
+```ts
+import { ModalActions } from '../shared/ModalActions';
+import { TableActions } from '../shared/TableActions';
+
+const table = new TableActions('.MuiDataGrid-root');
+const modal = new ModalActions('[role="dialog"]');
+
+table
+  .waitVisible()
+  .clickRowActionByText(
+    'Praise Norris',
+    '[data-testid="removeMemberModalBtn"]',
+  );
+
+modal.waitVisible().clickByTestId('removeMemberBtn');
+```
+
+Guidelines:
+
+- Prefer `data-testid` selectors first, then role/semantic selectors.
+- Keep helper methods typed and chainable.
+- Keep network mocking in specs or support utilities; page object helpers should
+  only perform UI interactions.
+
 ### Custom Commands
 
-Custom Cypress commands are defined in `cypress/support/commands.ts` to provide reusable functionality across tests.
+Common commands defined in `cypress/support/commands.ts`:
+
+- **`cy.loginByApi(role)`**:
+  Logs in programmatically via GraphQL mutation (bypassing UI).
+  - Roles: `'admin'`, `'superAdmin'`, `'user'`.
+  - Usage: `cy.loginByApi('admin')`.
+
+- **`cy.assertToast(message)`**:
+  Waits for a toast notification and asserts its text.
+  - Usage: `cy.assertToast('Organization created successfully')`.
+
+- **`cy.clearAllGraphQLMocks()`**:
+  Resets all GraphQL request interceptors.
+
+See [API-driven test data management](#api-driven-test-data-management) for data setup commands like `createTestOrganization`.
 
 ### GraphQL Utilities
 
@@ -141,9 +239,9 @@ cy.waitForGraphQLOperation('OrganizationListBasic');
 
 #### Mock cleanup and test isolation
 
-Because `testIsolation` is set to `false`, Cypress intercepts can persist
-between tests in the same spec. Always clear GraphQL mocks after each test to
-avoid leaking intercepts across tests or shards:
+Because `testIsolation` is set to `true`, Cypress resets browser state between
+tests. Keep GraphQL mock cleanup in `afterEach` so custom intercepts stay scoped
+and predictable across specs and shards:
 
 ```ts
 afterEach(() => {
@@ -167,11 +265,11 @@ it('mocks a successful query', () => {
 
 Best practices:
 
-- Prefer `testIsolation: true` for new specs when possible.
-- In parallel/sharded runs, mocks can race if not cleared; keep mocks scoped per
-  test and always reset intercepts after each test.
-- If multiple mocks target the same operation, ensure explicit cleanup between
-  them or scope each mock to a single test to avoid collisions.
+- Keep `testIsolation: true` as the default for E2E reliability.
+- In parallel/sharded runs, keep mocks scoped per test and reset intercepts
+  after each test.
+- If multiple mocks target the same operation, explicitly clean up between them
+  or scope each mock to a single test.
 
 ### Test Data
 
@@ -219,6 +317,79 @@ cy.mockGraphQLOperation(
   'api/graphql/createOrganization.error.conflict.json',
 );
 ```
+
+### API-driven test data management
+
+When a spec needs real data against talawa-api (instead of mocks), use the
+custom Cypress commands backed by Node tasks in `cypress/support/commands.ts`.
+These helpers keep setup/cleanup consistent and avoid leaking state between
+specs:
+
+- `cy.setupTestEnvironment(options?)` → creates an organization and returns
+  `{ orgId }`.
+- `cy.createTestOrganization(payload)` → creates an organization and returns
+  `{ orgId }`.
+- `cy.seedTestData('events' | 'volunteers' | 'posts', payload)` → creates
+  events, volunteers, or posts and returns IDs for reuse.
+- `cy.cleanupTestOrganization(orgId, options?)` → deletes the org and (optionally)
+  any test users you created.
+
+The Node tasks handle GraphQL requests directly, so they can be used even when
+tests are running headless in CI. Credentials are resolved from env vars first,
+then from fixtures:
+
+- `CYPRESS_E2E_ADMIN_EMAIL` / `CYPRESS_E2E_ADMIN_PASSWORD`
+- `CYPRESS_E2E_SUPERADMIN_EMAIL` / `CYPRESS_E2E_SUPERADMIN_PASSWORD`
+- `CYPRESS_E2E_USER_EMAIL` / `CYPRESS_E2E_USER_PASSWORD`
+
+Example usage:
+
+```ts
+let orgId = '';
+const userIds: string[] = [];
+
+before(() => {
+  cy.setupTestEnvironment().then(({ orgId: createdOrgId }) => {
+    orgId = createdOrgId;
+  });
+});
+
+after(() => {
+  if (orgId) {
+    cy.cleanupTestOrganization(orgId, { userIds });
+  }
+});
+
+it('seeds event data', () => {
+  cy.seedTestData('events', { orgId }).then(({ eventId }) => {
+    expect(eventId).to.be.a('string').and.not.equal('');
+  });
+});
+
+it('seeds post data', () => {
+  cy.seedTestData('posts', { orgId }).then(({ postId }) => {
+    expect(postId).to.be.a('string').and.not.equal('');
+  });
+});
+
+it('seeds volunteer data', () => {
+  cy.seedTestData('events', { orgId }).then(({ eventId }) => {
+    cy.seedTestData('volunteers', { eventId }).then(({ userId }) => {
+      if (userId) {
+        userIds.push(userId);
+      }
+    });
+  });
+});
+```
+
+Best practices:
+
+- Keep data creation inside `before`/`beforeEach`, and cleanup in `after`/`afterEach`.
+- Use unique names to avoid collisions (`E2E Org ${Date.now()}`, etc.).
+- If you seed volunteers without supplying `userId`, a user is created for you.
+  Pass those IDs to `cleanupTestOrganization` via `options.userIds` to avoid
+  leaking accounts.
 
 Example usage with JSON fixtures:
 

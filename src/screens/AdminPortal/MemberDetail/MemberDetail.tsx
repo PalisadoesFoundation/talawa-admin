@@ -51,11 +51,14 @@ import UserTags from 'components/UserDetails/UserTags';
 import { useParams } from 'react-router-dom';
 
 const MemberDetail: React.FC = (): JSX.Element => {
-  const { userId } = useParams<{ userId: string }>();
+  const { userId, orgId } = useParams<{ userId: string; orgId: string }>();
   const { t: tCommon } = useTranslation('common');
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
   if (!userId) {
     return <div>{tCommon('noUserId')}</div>;
+  }
+  if (!orgId) {
+    return <div>{tCommon('noOrgId')}</div>;
   }
   return (
     <div className={styles.peopleTabComponent}>
@@ -92,7 +95,9 @@ const MemberDetail: React.FC = (): JSX.Element => {
             <UserContactDetails id={userId} />
           )}
           {activeTab === tCommon('organizations') && <UserOrganizations />}
-          {activeTab === tCommon('events') && <UserEvents />}
+          {activeTab === tCommon('events') && (
+            <UserEvents orgId={orgId} userId={userId} />
+          )}
           {activeTab === tCommon('tags') && <UserTags id={userId} />}
         </div>
       </LocalizationProvider>

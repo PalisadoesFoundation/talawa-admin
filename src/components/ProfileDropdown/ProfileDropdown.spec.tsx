@@ -53,7 +53,7 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
-  setItem('SuperAdmin', false);
+  setItem('role', 'user');
   setItem('AdminFor', []);
   setItem('id', '123');
 });
@@ -216,7 +216,7 @@ describe('ProfileDropdown Component', () => {
   test('navigates to /admin/profile for admin roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
 
-    setItem('SuperAdmin', true); // Admin role
+    setItem('role', 'administrator'); // Admin role
     setItem('id', '123');
 
     render(

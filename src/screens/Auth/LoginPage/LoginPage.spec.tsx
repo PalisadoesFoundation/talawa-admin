@@ -13,6 +13,7 @@ import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { getRecaptchaToken } from 'utils/recaptcha';
 import LoginPage from './LoginPage';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
@@ -271,7 +272,7 @@ const createMocksVerifiedEmail = (): MockedResponse[] => [
 ];
 // For verified email scenarios, instantiate a fresh link within the test
 
-const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
+const { toastMocks, routerMocks } = vi.hoisted(() => {
   const warning = vi.fn();
   return {
     toastMocks: {
@@ -285,7 +286,6 @@ const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
     routerMocks: {
       navigate: vi.fn(),
     },
-    resetReCAPTCHA: vi.fn(),
   };
 });
 
@@ -330,7 +330,6 @@ const originalLocation = window.location;
 beforeEach(() => {
   vi.clearAllMocks();
   routerMocks.navigate.mockReset();
-  resetReCAPTCHA.mockClear();
   mockUseLocalStorage.getItem.mockReset();
   mockUseLocalStorage.setItem.mockReset();
   mockUseLocalStorage.removeItem.mockReset();
@@ -340,12 +339,13 @@ beforeEach(() => {
   );
   // Avoid real network health-check fetch errors influencing toast assertions
   vi.spyOn(global, 'fetch').mockResolvedValue({} as Response);
+  vi.resetModules();
 });
 
 afterEach(() => {
   cleanup();
-  vi.clearAllMocks();
-  // Restore original window.location to prevent cross-test bleed
+  vi.clearAllMocks(); // Preserves module-level mocks
+  // Restore original window.location
   Object.defineProperty(window, 'location', {
     configurable: true,
     writable: true,
@@ -369,44 +369,11 @@ vi.mock('react-router', async () => ({
   useNavigate: () => routerMocks.navigate,
 }));
 
-vi.mock('react-google-recaptcha', async () => {
-  const react = await vi.importActual<typeof React>('react');
-  const recaptcha = react.forwardRef(
-    (
-      props: {
-        onChange: (value: string) => void;
-      } & React.InputHTMLAttributes<HTMLInputElement>,
-      ref: React.LegacyRef<HTMLInputElement> | undefined,
-    ): JSX.Element => {
-      const { onChange, ...otherProps } = props;
-
-      Object.defineProperty(ref, 'current', {
-        value: { reset: resetReCAPTCHA },
-      });
-
-      const handleChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-      ): void => {
-        if (onChange) {
-          onChange(event.target.value);
-        }
-      };
-
-      return (
-        <>
-          <input
-            type="text"
-            data-testid="mock-recaptcha"
-            {...otherProps}
-            onChange={handleChange}
-            ref={ref}
-          />
-        </>
-      );
-    },
-  );
-  return { __esModule: true, default: recaptcha };
-});
+// Mock reCAPTCHA V3 utilities
+vi.mock('utils/recaptcha', () => ({
+  getRecaptchaToken: vi.fn().mockResolvedValue('mock-recaptcha-token'),
+  loadRecaptchaScript: vi.fn().mockResolvedValue(undefined),
+}));
 
 let user!: ReturnType<typeof userEvent.setup>;
 
@@ -1915,6 +1882,56 @@ describe('Extra coverage for 100 %', () => {
     expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
+  it('logs error when reCAPTCHA script fails to load', async () => {
+    // Spy on console.error
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    // Set up reCAPTCHA enabled environment
+    setLocationPath('/');
+    vi.resetModules();
+    vi.doMock('Constant/constant.ts', async () => ({
+      ...(await vi.importActual('Constant/constant.ts')),
+      REACT_APP_USE_RECAPTCHA: 'YES',
+      RECAPTCHA_SITE_KEY: 'test-site-key',
+    }));
+
+    // Mock loadRecaptchaScript to throw an error
+    vi.doMock('utils/recaptcha', () => ({
+      getRecaptchaToken: vi.fn().mockResolvedValue('mock-recaptcha-token'),
+      loadRecaptchaScript: vi
+        .fn()
+        .mockRejectedValue(new Error('Failed to load script')),
+    }));
+
+    // Import fresh component with mocked dependencies
+    const { default: LoginPageFresh } = await import('./LoginPage');
+    const history = createMemoryHistory({ initialEntries: ['/'] });
+    render(
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPageFresh />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
+
+    // Wait for the useEffect to execute
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to load reCAPTCHA script:',
+        expect.any(Error),
+      );
+    });
+
+    // Clean up
+    consoleErrorSpy.mockRestore();
+  });
+
   it.todo(
     'shows toast for invalid name during registration (RegistrationForm shows inline errors)',
     async () => {
@@ -2266,11 +2283,12 @@ describe('Extra coverage for 100 %', () => {
       );
       await user.type(screen.getByTestId('passwordField'), 'Johndoe@123');
       await user.type(screen.getByTestId('cpassword'), 'Johndoe@123');
-      // reCAPTCHA is now integrated directly in the mutation
+      // reCAPTCHA V3 is now integrated directly in the mutation
       await user.click(screen.getByTestId('registrationBtn'));
       await wait();
 
-      expect(resetReCAPTCHA).toHaveBeenCalled();
+      // Test passes if no errors occur (reCAPTCHA V3 works silently)
+      expect(screen.getByTestId('registrationBtn')).toBeInTheDocument();
     },
   );
 
@@ -3912,6 +3930,10 @@ describe('Cookie-based authentication verification (extra coverage)', () => {
   });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
+    // Mock the reCAPTCHA V3 function to return our expected token
+    const mockGetRecaptchaToken = vi.mocked(getRecaptchaToken);
+    mockGetRecaptchaToken.mockResolvedValue('fake-recaptcha-token');
+
     // Create test-specific mock that matches the variables used in this test
     const RECAPTCHA_LOGIN_MOCKS: MockedResponse[] = [
       {
@@ -3959,11 +3981,6 @@ describe('Cookie-based authentication verification (extra coverage)', () => {
         </MockedProvider>,
       );
 
-      // Target the login form's recaptcha (mock uses data-testid="mock-recaptcha")
-      const loginForm = screen.getByTestId('login-form');
-      const loginRecaptcha = within(loginForm).getByTestId('mock-recaptcha');
-      await user.type(loginRecaptcha, 'fake-recaptcha-token');
-
       await user.type(
         screen.getByTestId('login-form-email'),
         'testadmin2@example.com',
@@ -3974,6 +3991,14 @@ describe('Cookie-based authentication verification (extra coverage)', () => {
       );
 
       await user.click(screen.getByTestId('login-form-submit'));
+
+      await waitFor(() => {
+        // Verify that getRecaptchaToken was called with the correct parameters
+        expect(mockGetRecaptchaToken).toHaveBeenCalledWith(
+          'xxx', // RECAPTCHA_SITE_KEY from mock
+          'login',
+        );
+      });
 
       await waitFor(() => {
         expect(localLink.operation?.variables?.recaptchaToken).toBe(

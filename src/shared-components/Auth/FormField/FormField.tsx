@@ -90,5 +90,3 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
     </Form.Group>
   );
 };
-
-export default FormField;

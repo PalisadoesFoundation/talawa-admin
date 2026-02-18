@@ -29,56 +29,11 @@ vi.mock('Constant/constant', async () => ({
   RECAPTCHA_SITE_KEY: 'test-recaptcha-site-key',
 }));
 
-const recaptchaResetSpy = vi.fn();
-vi.mock('react-google-recaptcha', async () => {
-  const React = await import('react');
-  return {
-    __esModule: true,
-    default: React.default.forwardRef(
-      (
-        props: {
-          onChange?: (token: string) => void;
-          onExpired?: () => void;
-        } & Record<string, unknown>,
-        ref: React.Ref<{ reset: () => void }>,
-      ) => {
-        React.default.useImperativeHandle(ref, () => ({
-          reset: recaptchaResetSpy,
-        }));
-        return React.default.createElement(
-          'div',
-          { 'data-testid': 'mock-recaptcha-reset' as const, ...props },
-          React.default.createElement('input', {
-            'data-testid': 'mock-recaptcha-input',
-            'aria-label': 'Complete reCAPTCHA',
-            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-              props.onChange?.(String(e.target.value)),
-          }),
-          React.default.createElement(
-            'button',
-            {
-              type: 'button',
-              'data-testid': 'mock-recaptcha-complete',
-              'aria-label': 'Complete reCAPTCHA',
-              onClick: () => props.onChange?.('token'),
-            },
-            'Complete',
-          ),
-          React.default.createElement(
-            'button',
-            {
-              type: 'button',
-              'data-testid': 'mock-recaptcha-expire',
-              'aria-label': 'Expire reCAPTCHA',
-              onClick: () => props.onExpired?.(),
-            },
-            'Expire',
-          ),
-        );
-      },
-    ),
-  };
-});
+// Mock reCAPTCHA V3 utilities
+vi.mock('utils/recaptcha', () => ({
+  getRecaptchaToken: vi.fn().mockResolvedValue('mock-recaptcha-token'),
+  loadRecaptchaScript: vi.fn().mockResolvedValue(undefined),
+}));
 
 const mockSignInSuccess: MockedResponse = {
   request: {
@@ -134,6 +89,34 @@ const mockSignInAdminSuccess: MockedResponse = {
   },
 };
 
+const mockSignInWithRecaptcha: MockedResponse = {
+  request: {
+    query: SIGNIN_QUERY,
+    variables: {
+      email: 'test@example.com',
+      password: 'password123',
+      recaptchaToken: 'mock-recaptcha-token',
+    },
+  },
+  result: {
+    data: {
+      signIn: {
+        user: {
+          id: '1',
+          name: 'Test User',
+          emailAddress: 'test@example.com',
+          role: 'user',
+          countryCode: 'US',
+          avatarURL: null,
+          isEmailAddressVerified: true,
+        },
+        authenticationToken: 'test-auth-token',
+        refreshToken: 'test-refresh-token',
+      },
+    },
+  },
+};
+
 const mockSignInError: MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
@@ -167,11 +150,13 @@ describe('LoginForm', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
+    vi.resetModules();
   });
 
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -382,7 +367,79 @@ describe('LoginForm', () => {
       expect(onError).toHaveBeenCalledTimes(1);
     });
 
-    test('on error with recaptcha enabled, resets reCAPTCHA and calls onError', async () => {
+    test('calls onError with "Not found" when signIn returns null', async () => {
+      const onError = vi.fn();
+      const mockSignInNotFound: MockedResponse = {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: {
+            email: 'notfound@example.com',
+            password: 'password123',
+          },
+        },
+        result: {
+          data: null, // This will trigger the "Not found" path
+        },
+      };
+
+      render(
+        <MockedProvider link={new StaticMockLink([mockSignInNotFound], true)}>
+          <LoginForm {...defaultProps} onError={onError} />
+        </MockedProvider>,
+      );
+
+      const emailInput = screen.getByTestId('login-form-email');
+      const passwordInput = screen.getByTestId('login-form-password');
+      const submitButton = screen.getByTestId('login-form-submit');
+
+      await user.type(emailInput, 'notfound@example.com');
+      await user.type(passwordInput, 'password123');
+      await user.click(submitButton);
+
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalled();
+      });
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect((onError.mock.calls[0][0] as Error).message).toBe('Not found');
+    });
+
+    test('calls onError with "Not found" when signIn data is explicitly null', async () => {
+      const onError = vi.fn();
+      const mockSignInNullData: MockedResponse = {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: {
+            email: 'nulldata@example.com',
+            password: 'password123',
+          },
+        },
+        result: {
+          data: { signIn: null }, // This will also trigger the "Not found" path
+        },
+      };
+
+      render(
+        <MockedProvider link={new StaticMockLink([mockSignInNullData], true)}>
+          <LoginForm {...defaultProps} onError={onError} />
+        </MockedProvider>,
+      );
+
+      const emailInput = screen.getByTestId('login-form-email');
+      const passwordInput = screen.getByTestId('login-form-password');
+      const submitButton = screen.getByTestId('login-form-submit');
+
+      await user.type(emailInput, 'nulldata@example.com');
+      await user.type(passwordInput, 'password123');
+      await user.click(submitButton);
+
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalled();
+      });
+      expect(onError).toHaveBeenCalledTimes(1);
+      expect((onError.mock.calls[0][0] as Error).message).toBe('Not found');
+    });
+
+    test('on error with recaptcha enabled, calls onError', async () => {
       const onError = vi.fn();
       const link = new ApolloLink(
         () =>
@@ -401,9 +458,6 @@ describe('LoginForm', () => {
         </MockedProvider>,
       );
 
-      const completeButton = screen.getByTestId('mock-recaptcha-complete');
-      await user.click(completeButton);
-
       await user.type(
         screen.getByTestId('login-form-email'),
         'test@example.com',
@@ -413,7 +467,6 @@ describe('LoginForm', () => {
 
       await waitFor(() => {
         expect(onError).toHaveBeenCalledWith(expect.any(Error));
-        expect(recaptchaResetSpy).toHaveBeenCalled();
       });
       expect((onError.mock.calls[0][0] as Error).message).toBe(
         'Network failed',
@@ -452,7 +505,7 @@ describe('LoginForm', () => {
       });
     });
 
-    test('AbortError in catch: returns early without resetting reCAPTCHA or calling onError', async () => {
+    test('AbortError in catch: returns early without calling onError', async () => {
       const onError = vi.fn();
       const link = new ApolloLink(
         () =>
@@ -471,8 +524,6 @@ describe('LoginForm', () => {
         </MockedProvider>,
       );
 
-      const completeButton = screen.getByTestId('mock-recaptcha-complete');
-      await user.click(completeButton);
       await user.type(
         screen.getByTestId('login-form-email'),
         'test@example.com',
@@ -482,7 +533,6 @@ describe('LoginForm', () => {
 
       await waitFor(() => {
         expect(onError).not.toHaveBeenCalled();
-        expect(recaptchaResetSpy).not.toHaveBeenCalled();
       });
     });
 
@@ -607,66 +657,55 @@ describe('LoginForm', () => {
     });
   });
 
-  describe('reCAPTCHA gating', () => {
-    test('submit button is disabled when enableRecaptcha is true and no token', () => {
+  describe('reCAPTCHA V3 integration', () => {
+    test('submit button is not disabled with reCAPTCHA V3 enabled', () => {
       render(
         <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} enableRecaptcha={true} />
         </MockedProvider>,
       );
-
-      const submitButton = screen.getByTestId('login-form-submit');
-      expect(submitButton).toBeDisabled();
-    });
-
-    test('handleSubmit returns early when enableRecaptcha is true and no token (no signin call)', async () => {
-      const link = new StaticMockLink([], true);
-
-      render(
-        <MockedProvider link={link}>
-          <LoginForm {...defaultProps} enableRecaptcha={true} />
-        </MockedProvider>,
-      );
-
-      const form = screen.getByTestId('login-form') as HTMLFormElement;
-      form.requestSubmit();
-
-      await waitFor(() => {
-        expect(link.operation).toBeUndefined();
-      });
-    });
-
-    test('calls onExpired and disables submit when reCAPTCHA expires', async () => {
-      render(
-        <MockedProvider link={new StaticMockLink([], true)}>
-          <LoginForm {...defaultProps} enableRecaptcha={true} />
-        </MockedProvider>,
-      );
-
-      const completeButton = screen.getByTestId('mock-recaptcha-complete');
-      await user.click(completeButton);
 
       const submitButton = screen.getByTestId('login-form-submit');
       expect(submitButton).not.toBeDisabled();
-
-      const expireButton = screen.getByTestId('mock-recaptcha-expire');
-      await user.click(expireButton);
-
-      expect(submitButton).toBeDisabled();
     });
 
-    // TODO: Re-enable when Apollo QueryManager canonicalStringify (HTMLInputElement ref) is resolved. Track: https://github.com/apollographql/apollo-client/issues
-    test.todo(
-      'when enableRecaptcha is true and signIn returns null, calls onError with "Not found" and resets reCAPTCHA',
-    );
+    test('form submission works with reCAPTCHA V3 enabled', async () => {
+      const onSuccess = vi.fn();
 
-    test.todo(
-      'with recaptcha token in variables, on success calls onSuccess with signIn payload',
-    );
+      // Ensure the reCAPTCHA mock is properly set up for this test
+      const { getRecaptchaToken } = await import('utils/recaptcha');
+      vi.mocked(getRecaptchaToken).mockResolvedValue('mock-recaptcha-token');
 
-    test.todo(
-      'with recaptcha token in variables, on error calls onError and resets reCAPTCHA',
-    );
+      render(
+        <MockedProvider
+          link={new StaticMockLink([mockSignInWithRecaptcha], true)}
+        >
+          <LoginForm
+            {...defaultProps}
+            onSuccess={onSuccess}
+            enableRecaptcha={true}
+          />
+        </MockedProvider>,
+      );
+
+      await user.type(
+        screen.getByTestId('login-form-email'),
+        'test@example.com',
+      );
+      await user.type(screen.getByTestId('login-form-password'), 'password123');
+      await user.click(screen.getByTestId('login-form-submit'));
+
+      // Wait for the form submission to complete and verify the result
+      await waitFor(() => {
+        const expected = (
+          mockSignInWithRecaptcha.result as
+            | { data?: { signIn: unknown } }
+            | undefined
+        )?.data?.signIn;
+        expect(onSuccess).toHaveBeenCalledWith(expected);
+      });
+      expect(onSuccess).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('Callback Handling', () => {

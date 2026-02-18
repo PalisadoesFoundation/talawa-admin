@@ -34,4 +34,8 @@ export interface InterfaceSortingButtonProps {
   ariaLabel?: string;
   /** Optional custom icon to display in the button */
   icon?: string | null;
+  /** Optional extra class for the dropdown container (e.g. from parent CSS module) */
+  containerClassName?: string;
+  /** Optional extra class for the toggle button (e.g. from parent CSS module) */
+  toggleClassName?: string;
 }

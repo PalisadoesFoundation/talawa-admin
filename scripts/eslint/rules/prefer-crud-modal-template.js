@@ -212,14 +212,12 @@ const preferCrudModalTemplate = {
 
         // Check for CRUD-related handler props using configured keywords
         const hasCrudHandler = node.attributes.some((attr) => {
-          if (attr.type === AST_NODE_TYPES.JSXAttribute) {
-            const attrName =
-              attr.name.type === AST_NODE_TYPES.JSXIdentifier
-                ? attr.name.name
-                : null;
-            return attrName && keywords.includes(attrName);
-          }
-          return false;
+          if (attr.type !== AST_NODE_TYPES.JSXAttribute) return false;
+          const attrName =
+            attr.name.type === AST_NODE_TYPES.JSXIdentifier
+              ? attr.name.name
+              : null;
+          return attrName !== null && keywords.includes(attrName);
         });
 
         /** @type {(expr: Expression) => boolean} */
@@ -285,101 +283,81 @@ const preferCrudModalTemplate = {
           context.report({
             node: node,
             messageId: 'preferCrud',
-            fix: importDecl
-              ? /** @type {(fixer: RuleFixer) => import('@typescript-eslint/utils').TSESLint.RuleFix} */ (fixer) => {
-                  const localName = elementName;
+            fix: /** @type {(fixer: RuleFixer) => import('@typescript-eslint/utils').TSESLint.RuleFix} */ (fixer) => {
+              // Null-guard for importDecl
+              if (!importDecl) {
+                return null;
+              }
 
-                  // Check if import has multiple specifiers
-                  const hasMultipleSpecifiers =
-                    importDecl.specifiers.length > 1;
+              const localName = elementName;
 
-                  if (hasMultipleSpecifiers) {
-                    // Preserve other imports, only remove/replace the matched variant component
-                    const otherSpecifiers = importDecl.specifiers.filter(
-                      (spec) => {
-                        if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
-                          return spec.local.name !== elementName;
-                        }
-                        if (
-                          spec.type === AST_NODE_TYPES.ImportDefaultSpecifier
-                        ) {
-                          return spec.local.name !== elementName;
-                        }
-                        return true;
-                      },
-                    );
+              // Check if import has multiple specifiers
+              const hasMultipleSpecifiers = importDecl.specifiers.length > 1;
 
-                    // Build new import preserving other specifiers
-                    const rawImportSource = importDecl.source.value;
-                    const originalImportPath =
-                      typeof rawImportSource === 'string'
-                        ? rawImportSource
-                        : String(rawImportSource);
-                    const preservedImports = otherSpecifiers
-                      .map((spec) => {
-                        if (
-                          spec.type === AST_NODE_TYPES.ImportDefaultSpecifier
-                        ) {
-                          return spec.local.name;
-                        }
-                        if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
-                          return specifierToString(spec);
-                        }
-                        if (
-                          spec.type === AST_NODE_TYPES.ImportNamespaceSpecifier
-                        ) {
-                          return `* as ${spec.local.name}`;
-                        }
-                        return '';
-                      })
-                      .filter(Boolean)
-                      .join(', ');
-
-                    const hasDefault = otherSpecifiers.some(
-                      (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
-                    );
-                    const hasNamed = otherSpecifiers.some(
-                      (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
-                    );
-                    const hasNamespace = otherSpecifiers.some(
-                      (s) => s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
-                    );
-
-                    let preservedImportStmt = '';
-                    if (hasDefault && hasNamed) {
-                      const defaultSpec = otherSpecifiers.find(
-                        (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
-                      );
-                      const namedSpecs = otherSpecifiers
-                        .filter(
-                          (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
-                        )
-                        .map((spec) =>
-                          specifierToString(spec),
-                        )
-                        .join(', ');
-                      preservedImportStmt = `import ${defaultSpec?.local.name}, { ${namedSpecs} } from '${originalImportPath}';`;
-                    } else if (hasDefault) {
-                      preservedImportStmt = `import ${preservedImports} from '${originalImportPath}';`;
-                    } else if (hasNamespace && !hasNamed) {
-                      const namespaceSpec = otherSpecifiers.find(
-                        (s) =>
-                          s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
-                      );
-                      preservedImportStmt = `import * as ${namespaceSpec.local.name} from '${originalImportPath}';`;
-                    } else {
-                      preservedImportStmt = `import { ${preservedImports} } from '${originalImportPath}';`;
+              if (hasMultipleSpecifiers) {
+                // Preserve other imports, only remove/replace the matched variant component
+                const otherSpecifiers = importDecl.specifiers.filter(
+                  (spec) => {
+                    if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
+                      return spec.local.name !== elementName;
                     }
+                    if (spec.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
+                      return spec.local.name !== elementName;
+                    }
+                    return true;
+                  },
+                );
 
-                    const newImport = `import { CRUDModalTemplate as ${localName} } from '${CRUD_IMPORT_PATH}';\n${preservedImportStmt}`;
-                    return fixer.replaceText(importDecl, newImport);
-                  } else {
-                    // Single specifier: replace entire import
-                    const newImport = `import { CRUDModalTemplate as ${localName} } from '${CRUD_IMPORT_PATH}';`;
-                    return fixer.replaceText(importDecl, newImport);
-                  }
+                // source.value is always a string here (guarded above in ImportDeclaration)
+                const originalImportPath = importDecl.source.value;
+
+                const hasDefault = otherSpecifiers.some(
+                  (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+                );
+                const hasNamed = otherSpecifiers.some(
+                  (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
+                );
+                const hasNamespace = otherSpecifiers.some(
+                  (s) => s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
+                );
+
+                let preservedImportStmt = '';
+                if (hasDefault && hasNamed) {
+                  const defaultSpec = otherSpecifiers.find(
+                    (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+                  );
+                  const namedSpecs = otherSpecifiers
+                    .filter((s) => s.type === AST_NODE_TYPES.ImportSpecifier)
+                    .map((spec) => specifierToString(spec))
+                    .join(', ');
+                  preservedImportStmt = `import ${defaultSpec?.local.name}, { ${namedSpecs} } from '${originalImportPath}';`;
+                } else if (hasDefault) {
+                  const defaultSpec = otherSpecifiers.find(
+                    (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+                  );
+                  preservedImportStmt = `import ${defaultSpec?.local.name} from '${originalImportPath}';`;
+                } else if (hasNamespace && !hasNamed) {
+                  const namespaceSpec = otherSpecifiers.find(
+                    (s) => s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
+                  );
+                  preservedImportStmt = `import * as ${namespaceSpec?.local.name} from '${originalImportPath}';`;
+                } else {
+                  // Only named specifiers remain (namespace cannot coexist with named)
+                  const namedSpecs = otherSpecifiers
+                    .filter((s) => s.type === AST_NODE_TYPES.ImportSpecifier)
+                    .map((spec) => specifierToString(spec))
+                    .join(', ');
+                  preservedImportStmt = `import { ${namedSpecs} } from '${originalImportPath}';`;
                 }
-              : undefined,
+
+                const newImport = `import { CRUDModalTemplate as ${localName} } from '${CRUD_IMPORT_PATH}';\n${preservedImportStmt}`;
+                return fixer.replaceText(importDecl, newImport);
+              } else {
+                // Single specifier: replace entire import
+                const newImport = `import { CRUDModalTemplate as ${localName} } from '${CRUD_IMPORT_PATH}';`;
+                return fixer.replaceText(importDecl, newImport);
+              }
+            },
           });
         }
       },
