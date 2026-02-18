@@ -172,7 +172,7 @@ const fundCampaignPledge = (): JSX.Element => {
       setPledgeModalMode(mode);
       pledgeModal.open();
     },
-    [pledgeModal],
+    [],
   );
 
   const handleDeleteClick = useCallback(
@@ -180,7 +180,7 @@ const fundCampaignPledge = (): JSX.Element => {
       setPledge(selectedPledge);
       deleteModal.open();
     },
-    [deleteModal],
+    [],
   );
 
   const handleClick = (

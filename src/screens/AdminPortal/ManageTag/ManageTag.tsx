@@ -560,7 +560,7 @@ function ManageTag(): JSX.Element {
                     {tCommon('edit')}
                   </div>
                   <div
-                    onClick={removeUserTagModal.toggle}
+                    onClick={removeUserTagModal.open}
                     className="mb-2 btn btn-danger btn-sm w-75"
                     data-testid="removeTag"
                   >
@@ -608,7 +608,7 @@ function ManageTag(): JSX.Element {
       {/* Remove User Tag Modal */}
       <RemoveUserTagModal
         removeUserTagModalIsOpen={removeUserTagModal.isOpen}
-        toggleRemoveUserTagModal={removeUserTagModal.toggle}
+        toggleRemoveUserTagModal={removeUserTagModal.close}
         handleRemoveUserTag={handleRemoveUserTag}
       />
     </>

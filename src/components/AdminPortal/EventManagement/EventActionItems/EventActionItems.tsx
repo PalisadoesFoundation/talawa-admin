@@ -419,7 +419,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           placeholder={tCommon('searchBy', {
             item:
               searchBy === 'assignee'
-                ? 'Assigned To'
+                ? tCommon('assignedTo')
                 : searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}
           onSearch={(value) => {

@@ -103,10 +103,7 @@ export default function PluginStore() {
   // Close upload modal
   const closeUploadModal = async () => {
     uploadModal.close();
-    // Refresh plugin data after upload
     await refetch();
-    // Reload the page to ensure all plugin states are properly updated
-    window.location.reload();
   };
 
   const pluginStoreDropdowns = [
