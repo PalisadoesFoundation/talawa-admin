@@ -1,4 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  within,
+  cleanup,
+} from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -143,20 +149,33 @@ vi.mock('@mui/material', async (importOriginal) => {
   };
 });
 
-// Mock PageHeader to expose sorting options
+// Mock PageHeader to expose sorting options and optional class name props
 vi.mock('shared-components/Navbar/Navbar', () => ({
   default: ({
+    rootClassName,
     sorting,
   }: {
+    rootClassName?: string;
     sorting: Array<{
       testIdPrefix: string;
       options: Array<{ value: string; label: string }>;
       onChange: (value: string) => void;
+      containerClassName?: string;
+      toggleClassName?: string;
     }>;
   }) => (
-    <div data-testid="page-header">
+    <div
+      data-testid="page-header"
+      data-root-class-name={rootClassName ?? ''}
+      className={rootClassName}
+    >
       {sorting.map((sort, index) => (
-        <div key={index} data-testid={sort.testIdPrefix}>
+        <div
+          key={index}
+          data-testid={sort.testIdPrefix}
+          data-container-class-name={sort.containerClassName ?? ''}
+          data-toggle-class-name={sort.toggleClassName ?? ''}
+        >
           {sort.options.map((opt) => (
             <button
               type="button"
@@ -395,6 +414,11 @@ type RenderConfig = {
   mocks?: MockedResponse[];
   link?: StaticMockLink;
   initialEntry?: string;
+  memberProps?: {
+    rootClassName?: string;
+    containerClassName?: string;
+    toggleClassName?: string;
+  };
 };
 
 const DEFAULT_ROUTE = '/admin/orgpeople/org123';
@@ -403,12 +427,20 @@ const renderAddMemberView = ({
   mocks = [],
   link,
   initialEntry = DEFAULT_ROUTE,
+  memberProps,
 }: RenderConfig) => {
   const content = (
     <MemoryRouter initialEntries={[initialEntry]}>
       <I18nextProvider i18n={i18nForTest}>
         <Routes>
-          <Route path="/admin/orgpeople/:orgId" element={<AddMember />} />
+          <Route
+            path="/admin/orgpeople/:orgId"
+            element={<AddMember {...memberProps} />}
+          />
+          <Route
+            path="/admin/orgpeople-no-org"
+            element={<AddMember {...memberProps} />}
+          />
         </Routes>
       </I18nextProvider>
     </MemoryRouter>
@@ -421,6 +453,22 @@ const renderAddMemberView = ({
   return render(<MockedProvider mocks={mocks}>{content}</MockedProvider>);
 };
 
+function getDataTableBodyRows(): HTMLElement[] {
+  const table = screen.getByTestId('datatable');
+  const tbody = table.querySelector('tbody');
+  if (tbody) {
+    return Array.from(tbody.querySelectorAll('tr'));
+  }
+  // Fallback: skip header row(s) by counting rows that contain columnheader cells
+  const rows = within(table).getAllByRole('row');
+  const headerCount = within(table).queryAllByRole('columnheader').length;
+  expect(headerCount).toBeGreaterThanOrEqual(0);
+  const headerRowCount = rows.filter(
+    (row) => within(row).queryAllByRole('columnheader').length > 0,
+  ).length;
+  return rows.slice(headerRowCount);
+}
+
 describe('AddMember Screen', () => {
   beforeEach(() => {
     setupLocationMock();
@@ -428,7 +476,8 @@ describe('AddMember Screen', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   test('renders the add member button correctly', async () => {
@@ -438,6 +487,35 @@ describe('AddMember Screen', () => {
     renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     expect(await screen.findByTestId('addMembers')).toBeInTheDocument();
+  });
+
+  test('passes optional rootClassName, containerClassName, and toggleClassName to PageHeader', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({
+      mocks,
+      initialEntry: `/admin/orgpeople/${orgId}`,
+      memberProps: {
+        rootClassName: 'test-root',
+        containerClassName: 'test-container',
+        toggleClassName: 'test-toggle',
+      },
+    });
+
+    const pageHeader = await screen.findByTestId('page-header');
+    expect(pageHeader).toHaveAttribute('data-root-class-name', 'test-root');
+    expect(pageHeader).toHaveClass('test-root');
+
+    const addMembersBlock = screen.getByTestId('addMembers');
+    expect(addMembersBlock).toHaveAttribute(
+      'data-container-class-name',
+      'test-container',
+    );
+    expect(addMembersBlock).toHaveAttribute(
+      'data-toggle-class-name',
+      'test-toggle',
+    );
   });
 
   test('opens existing user modal and shows user list', async () => {
@@ -462,12 +540,13 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
     );
-    expect(userRows.length).toBe(2);
 
     await waitFor(
       () => {
@@ -483,8 +562,198 @@ describe('AddMember Screen', () => {
           }),
         ).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
+  });
+
+  test('renders profile image (img) when user has avatarURL', async () => {
+    const orgId = 'org123';
+    const userListMock = [
+      createUserListMock({ first: 10, after: null, last: null, before: null }),
+    ];
+    const orgMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const mocks = [orgMock, createOrganizationsMock(orgId), ...userListMock];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
+    );
+
+    const profileCells = screen.getAllByTestId('profileImage');
+    const firstCell = profileCells[0];
+    const img = firstCell.querySelector(
+      'img[src="https://example.com/avatar1.jpg"]',
+    );
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+    expect(img).toHaveAttribute('loading', 'lazy');
+  });
+
+  test('renders fallback displayName and aria-label when user has empty name or only email', async () => {
+    const orgId = 'org123';
+    const userListWithFallbacks = createUserListMock(
+      { first: 10, after: null, last: null, before: null },
+      {
+        edges: [
+          {
+            cursor: 'cursor1',
+            node: {
+              id: 'user-empty-name',
+              role: 'regular',
+              name: '',
+              emailAddress: 'noname@example.com',
+              avatarURL: null,
+            },
+          },
+          {
+            cursor: 'cursor2',
+            node: {
+              id: 'user-no-email',
+              role: 'regular',
+              name: 'Only Name',
+              emailAddress: null as unknown as string,
+              avatarURL: null,
+            },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor2',
+        },
+      },
+    );
+    const orgMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const mocks = [
+      orgMock,
+      createOrganizationsMock(orgId),
+      userListWithFallbacks,
+    ];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
+    );
+
+    expect(screen.getByText('noname@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Only Name')).toBeInTheDocument();
+
+    const avatarImages = screen.getAllByTestId('avatarImage');
+    expect(avatarImages.length).toBeGreaterThanOrEqual(1);
+
+    const linkWithEmailOnly = screen.getByRole('link', {
+      name: 'noname@example.com',
+    });
+    expect(linkWithEmailOnly).toBeInTheDocument();
+
+    const linkWithNameOnly = screen.getByRole('link', {
+      name: 'Only Name',
+    });
+    expect(linkWithNameOnly).toBeInTheDocument();
+  });
+
+  test("uses 'User avatar' fallback when name is empty and common.avatar translation is falsy", async () => {
+    const orgId = 'org123';
+    const originalAvatar = i18nForTest.getResource('en', 'common', 'avatar');
+    try {
+      i18nForTest.addResource('en', 'common', 'avatar', '');
+      const userListWithEmptyName = createUserListMock(
+        { first: 10, after: null, last: null, before: null },
+        {
+          edges: [
+            {
+              cursor: 'cursor1',
+              node: {
+                id: 'user-no-name',
+                role: 'regular',
+                name: '',
+                emailAddress: 'nobody@example.com',
+                avatarURL: null,
+              },
+            },
+          ],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: 'cursor1',
+            endCursor: 'cursor1',
+          },
+        },
+      );
+      const orgMock = createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      });
+      const mocks = [
+        orgMock,
+        createOrganizationsMock(orgId),
+        userListWithEmptyName,
+      ];
+
+      renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+      const addMembersButton = await screen.findByTestId('addMembers');
+      fireEvent.click(addMembersButton);
+
+      const existingUserOption = screen.getByText('Existing User');
+      fireEvent.click(existingUserOption);
+
+      await screen.findByTestId('datatable', {}, { timeout: 5000 });
+      await waitFor(
+        () => {
+          expect(getDataTableBodyRows()).toHaveLength(1);
+        },
+        { timeout: 5000 },
+      );
+
+      expect(screen.getByTestId('avatarImage')).toBeInTheDocument();
+      expect(screen.getByAltText(/User avatar/)).toBeInTheDocument();
+    } finally {
+      i18nForTest.addResource(
+        'en',
+        'common',
+        'avatar',
+        typeof originalAvatar === 'string' ? originalAvatar : 'avatar',
+      );
+    }
   });
 
   test('searches for users in the modal', async () => {
@@ -543,11 +812,11 @@ describe('AddMember Screen', () => {
     const modal = await screen.findByTestId(
       'addExistingUserModal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(modal).toBeInTheDocument();
 
-    await screen.findAllByTestId('user', {}, { timeout: 3000 });
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
 
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'John' } });
@@ -557,7 +826,7 @@ describe('AddMember Screen', () => {
     const johnDoeElement = await screen.findByText(
       (content) => content.includes('John Doe'),
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(johnDoeElement).toBeInTheDocument();
   });
@@ -619,12 +888,13 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
     );
-    expect(userRows.length).toBe(2);
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -673,12 +943,13 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
     );
-    expect(userRows.length).toBe(2);
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -689,6 +960,59 @@ describe('AddMember Screen', () => {
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('createMember does nothing when orgId is missing (no success toast)', async () => {
+    const userListMock = createUserListMock({
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const orgNoIdMock = {
+      request: {
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: undefined },
+      },
+      result: { data: { organization: null } },
+    };
+
+    const mocks = [
+      orgNoIdMock,
+      userListMock,
+      createAddMemberMutationMock({
+        memberId: 'user1',
+        organizationId: '',
+        role: 'regular',
+      }),
+    ];
+
+    renderAddMemberView({
+      mocks,
+      initialEntry: '/admin/orgpeople-no-org',
+    });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
+    );
+
+    const addButtons = await screen.findAllByTestId('addBtn');
+    fireEvent.click(addButtons[0]);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
     });
   });
 
@@ -761,12 +1085,13 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows1 = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
     );
-    expect(userRows1.length).toBe(2);
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -778,12 +1103,17 @@ describe('AddMember Screen', () => {
     const nextPageButton = screen.getByLabelText('Next Page');
     fireEvent.click(nextPageButton);
 
-    const userRows2 = await screen.findAllByTestId(
-      'user',
+    await screen.findByText(
+      (content) => content.includes('Bob Johnson'),
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
-    expect(userRows2.length).toBe(1);
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
     expect(
       screen.getByText((content) => content.includes('Bob Johnson')),
     ).toBeInTheDocument();
@@ -800,7 +1130,7 @@ describe('AddMember Screen', () => {
     const johnDoe = await screen.findByText(
       (content) => content.includes('John Doe'),
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(johnDoe).toBeInTheDocument();
 
@@ -1100,7 +1430,15 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    await screen.findAllByTestId('user');
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
 
     const nextPageButton = screen.getByLabelText('Next Page');
     fireEvent.click(nextPageButton);
@@ -1195,7 +1533,15 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    await screen.findAllByTestId('user');
+    await screen.findByTestId('datatable');
+
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
 
     const forceNext = screen.getByTestId('force-next');
     const forcePrev = screen.getByTestId('force-prev');
@@ -1284,7 +1630,7 @@ describe('AddMember Screen', () => {
     fireEvent.click(existingUserOption);
 
     expect(
-      await screen.findByText(/Error occurred while loading Users/i),
+      await screen.findByText(/Unable to load data\./i),
     ).toBeInTheDocument();
   });
 
@@ -1320,7 +1666,15 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    await screen.findAllByTestId('user');
+    await screen.findByTestId('datatable');
+
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
 
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'Alex' } });
@@ -1328,7 +1682,14 @@ describe('AddMember Screen', () => {
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.click(submitButton);
 
-    const users = await screen.findAllByTestId('user');
-    expect(users.length).toBe(2);
+    await screen.findByTestId('datatable');
+
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
   });
 });

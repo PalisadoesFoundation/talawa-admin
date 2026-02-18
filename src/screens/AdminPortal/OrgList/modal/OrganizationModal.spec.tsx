@@ -5,10 +5,26 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
-import { store } from 'state/store';
+import { store } from '../../../../state/store'; // Update path based on your project structure
 import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
-import i18nForTest from 'utils/i18nForTest';
+import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on your project structure
+
+/**
+ * Helper to set input value natively (simulates paste behavior).
+ * This avoids userEvent.type() which triggers onChange per character.
+ */
+const setNativeInputValue = (
+  input: HTMLInputElement | HTMLTextAreaElement,
+  value: string,
+): void => {
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+    Object.getPrototypeOf(input),
+    'value',
+  )?.set;
+  nativeInputValueSetter?.call(input, value);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+};
 
 // Mock toast
 const toastMocks = vi.hoisted(() => ({
@@ -16,7 +32,7 @@ const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
 }));
 
-vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 
@@ -70,15 +86,6 @@ describe('OrganizationModal Component', () => {
     vi.restoreAllMocks();
   });
 
-  vi.mock('utils/convertToBase64', () => ({
-    default: vi.fn((file) => {
-      if (file.size > 5000000) {
-        return Promise.reject(new Error('File too large'));
-      }
-      return Promise.resolve('mockBase64String');
-    }),
-  }));
-
   const setup = (): RenderResult => {
     return render(
       <Provider store={store}>
@@ -101,19 +108,20 @@ describe('OrganizationModal Component', () => {
 
   test('renders OrganizationModal correctly', () => {
     setup();
+    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
-    expect(screen.getByTestId('modal-submit-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('submitOrganizationForm')).toBeInTheDocument();
   });
 
   test('updates input fields correctly', async () => {
     setup();
     const nameInput = screen.getByTestId('modalOrganizationName');
-    await userEvent.clear(nameInput);
-    await userEvent.type(nameInput, 'T');
+    setNativeInputValue(nameInput as HTMLInputElement, 'Test Organization');
 
+    // Use waitFor to handle potential React batched updates
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'T' }),
+        expect.objectContaining({ name: 'Test Organization' }),
       );
     });
   });
@@ -149,7 +157,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    const submitButton = screen.getByTestId('modal-submit-btn');
+    const submitButton = screen.getByTestId('submitOrganizationForm');
     await userEvent.click(submitButton);
     expect(mockCreateOrg).toHaveBeenCalled();
   });
@@ -229,7 +237,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
     expect(mockCreateOrg).toHaveBeenCalled();
   });
 
@@ -239,33 +247,32 @@ describe('OrganizationModal Component', () => {
       {
         testId: 'modalOrganizationDescription',
         key: 'description',
-        value: 'A',
+        value: 'A sample description',
       },
-      { testId: 'modalOrganizationCity', key: 'city', value: 'S' },
-      { testId: 'modalOrganizationState', key: 'state', value: 'S' },
+      { testId: 'modalOrganizationCity', key: 'city', value: 'Sample City' },
+      { testId: 'modalOrganizationState', key: 'state', value: 'Sample State' },
       {
         testId: 'modalOrganizationPostalCode',
         key: 'postalCode',
-        value: '1',
+        value: '123456',
       },
       {
         testId: 'modalOrganizationAddressLine1',
         key: 'addressLine1',
-        value: '1',
+        value: '123 Street',
       },
       {
         testId: 'modalOrganizationAddressLine2',
         key: 'addressLine2',
-        value: 'A',
+        value: 'Apt 456',
       },
     ];
 
     for (const { testId, key, value } of fields) {
-      mockSetFormState.mockClear();
       const input = screen.getByTestId(testId);
-      await userEvent.clear(input);
-      await userEvent.type(input, value);
+      setNativeInputValue(input as HTMLInputElement, value);
 
+      // Use waitFor to handle potential React batched updates
       await waitFor(() => {
         expect(mockSetFormState).toHaveBeenCalledWith(
           expect.objectContaining({ [key]: value }),
@@ -284,22 +291,13 @@ describe('OrganizationModal Component', () => {
     // Clear any previous calls
     mockSetFormState.mockClear();
 
-    // Type text that exceeds the limit
-    await userEvent.type(descInput, longText);
+    // Use native setter to test the validation logic (simulates paste)
+    setNativeInputValue(descInput, longText);
 
-    // Should not call setFormState with text exceeding the limit
-    // The component's onChange handler prevents setting values > 200 chars
+    // Use waitFor to ensure React has processed any potential state updates
     await waitFor(() => {
-      const calls = mockSetFormState.mock.calls;
-      // If there are calls, ensure none have description length > 200
-      if (calls.length > 0) {
-        calls.forEach((call) => {
-          const state = call[0];
-          if (state.description) {
-            expect(state.description.length).toBeLessThanOrEqual(200);
-          }
-        });
-      }
+      // Should not call setFormState when input exceeds limit
+      expect(mockSetFormState).not.toHaveBeenCalled();
     });
   });
 
@@ -310,11 +308,9 @@ describe('OrganizationModal Component', () => {
     ) as HTMLSelectElement;
     await userEvent.selectOptions(countrySelect, 'us');
 
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ countryCode: 'us' }),
-      );
-    });
+    expect(mockSetFormState).toHaveBeenCalledWith(
+      expect.objectContaining({ countryCode: 'us' }),
+    );
   });
 
   test('country code should not update if value length exceeds 50 characters', async () => {
@@ -333,9 +329,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.selectOptions(countrySelect, longCode);
 
     // Expect setFormState NOT to be called because 51 > 50
-    await waitFor(() => {
-      expect(mockSetFormState).not.toHaveBeenCalled();
-    });
+    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('country select should have default disabled option', () => {
@@ -401,7 +395,7 @@ describe('OrganizationModal Component', () => {
     };
 
     setup();
-    const submitButton = screen.getByTestId('modal-submit-btn');
+    const submitButton = screen.getByTestId('submitOrganizationForm');
 
     await userEvent.click(submitButton);
     expect(mockCreateOrg).toHaveBeenCalled();
@@ -442,21 +436,13 @@ describe('OrganizationModal Component', () => {
       // Clear any previous calls
       mockSetFormState.mockClear();
 
-      // Type text that exceeds the limit
-      await userEvent.type(input, longText);
+      // Use native setter to test validation logic (simulates paste)
+      setNativeInputValue(input as HTMLInputElement, longText);
 
-      // The component's onChange handler prevents setting values exceeding maxLength
+      // Use waitFor to ensure React has processed any potential state updates
       await waitFor(() => {
-        const calls = mockSetFormState.mock.calls;
-        // If there are calls, ensure none exceed the max length for this field
-        if (calls.length > 0) {
-          calls.forEach((call) => {
-            const state = call[0];
-            if (state[formKey]) {
-              expect(state[formKey].length).toBeLessThanOrEqual(maxLength);
-            }
-          });
-        }
+        // Should not call setFormState when input exceeds limit
+        expect(mockSetFormState).not.toHaveBeenCalled();
       });
     });
   });
@@ -467,40 +453,47 @@ describe('OrganizationModal Component', () => {
 
     await userEvent.upload(fileInput, file);
 
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
-    );
+    // Use waitFor to handle async state updates after upload
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
+      );
+    });
   });
 
   test('should handle invalid file type', async () => {
     setup();
-    // Use a file with an image extension but invalid MIME type to bypass accept attribute
-    const invalidFile = new File(['content'], 'test.pdf', {
-      type: 'application/pdf',
+    const invalidFile = new File(['content'], 'test.txt', {
+      type: 'text/plain',
     });
     const fileInput = screen.getByTestId(
       'organisationImage',
     ) as HTMLInputElement;
 
-    // Manually trigger the change event since accept="image/*" may filter
+    // Use Object.defineProperty to set files directly (bypasses accept filter)
     Object.defineProperty(fileInput, 'files', {
       value: [invalidFile],
-      writable: false,
+      writable: true,
     });
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+      expect(mockSetFormState).not.toHaveBeenCalled();
     });
-    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
-    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('should handle null file selection', async () => {
     setup();
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
 
-    // userEvent.upload doesn't support null, so we test that no upload occurs
-    // when the input has no files selected (initial state)
+    // Simulate null files using native property setter
+    Object.defineProperty(fileInput, 'files', { value: null, writable: true });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+    // Use waitFor to ensure React has processed any potential state updates
     await waitFor(() => {
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -508,8 +501,14 @@ describe('OrganizationModal Component', () => {
 
   test('should handle empty file selection', async () => {
     setup();
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
 
-    // Test that no upload occurs when no file is selected
+    // Simulate empty files using native property setter
+    Object.defineProperty(fileInput, 'files', { value: [], writable: true });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+    // Use waitFor to ensure React has processed any potential state updates
     await waitFor(() => {
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -534,7 +533,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    expect(screen.getByTestId('modalOrganizationName')).toBeVisible();
+    expect(screen.getByTestId('modalOrganizationHeader')).toBeVisible();
   });
 
   test('should not show modal when showModal is false', () => {
@@ -557,7 +556,7 @@ describe('OrganizationModal Component', () => {
     );
 
     expect(
-      screen.queryByTestId('modalOrganizationName'),
+      screen.queryByTestId('modalOrganizationHeader'),
     ).not.toBeInTheDocument();
   });
 
@@ -608,9 +607,10 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    const submitButton = screen.getByTestId('modal-submit-btn');
+    const form = screen.getByTestId('submitOrganizationForm').closest('form');
+    expect(form).toBeInTheDocument();
 
-    await userEvent.click(submitButton);
+    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
     expect(mockCreateOrg).toHaveBeenCalled();
   });
 
@@ -639,12 +639,13 @@ describe('OrganizationModal Component', () => {
 
     await userEvent.upload(fileInput, file);
 
+    // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
+      );
     });
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
-    );
   });
 
   test('should show error toast on upload failure', async () => {
@@ -655,9 +656,10 @@ describe('OrganizationModal Component', () => {
 
     await userEvent.upload(fileInput, file);
 
+    // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(mockSetFormState).not.toHaveBeenCalled();
     });
-    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 });

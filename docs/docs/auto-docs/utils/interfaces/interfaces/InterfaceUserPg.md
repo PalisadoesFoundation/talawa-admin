@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:540](https://github.com/PalisadoesFoundatio
 
 ### educationGrade
 
-> **educationGrade**: `UserEducationGrade`
+> **educationGrade**: [`UserEducationGrade`](../enumerations/UserEducationGrade.md)
 
 Defined in: [src/utils/interfaces.ts:541](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L541)
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:542](https://github.com/PalisadoesFoundatio
 
 ### employmentStatus
 
-> **employmentStatus**: `UserEmploymentStatus`
+> **employmentStatus**: [`UserEmploymentStatus`](../enumerations/UserEmploymentStatus.md)
 
 Defined in: [src/utils/interfaces.ts:543](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L543)
 
@@ -140,7 +140,7 @@ Defined in: [src/utils/interfaces.ts:546](https://github.com/PalisadoesFoundatio
 
 ### maritalStatus
 
-> **maritalStatus**: `UserMaritalStatus`
+> **maritalStatus**: [`UserMaritalStatus`](../enumerations/UserMaritalStatus.md)
 
 Defined in: [src/utils/interfaces.ts:547](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L547)
 
@@ -164,7 +164,7 @@ Defined in: [src/utils/interfaces.ts:549](https://github.com/PalisadoesFoundatio
 
 ### natalSex
 
-> **natalSex**: `UserNatalSex`
+> **natalSex**: [`UserNatalSex`](../enumerations/UserNatalSex.md)
 
 Defined in: [src/utils/interfaces.ts:550](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L550)
 
@@ -188,7 +188,7 @@ Defined in: [src/utils/interfaces.ts:551](https://github.com/PalisadoesFoundatio
 
 ### role
 
-> **role**: `UserRole`
+> **role**: [`UserRole`](../enumerations/UserRole.md)
 
 Defined in: [src/utils/interfaces.ts:552](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L552)
 

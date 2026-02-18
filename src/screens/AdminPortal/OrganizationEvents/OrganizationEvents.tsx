@@ -38,6 +38,7 @@ import CreateEventModal from './CreateEventModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -98,15 +99,15 @@ function organizationEvents(): JSX.Element {
   useEffect(() => {
     document.title = t('title');
   }, [t]);
-  const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
+  const createEventModal = useModalState();
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
 
-  const showInviteModal = (): void => setCreateEventmodalisOpen(true);
-  const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
+  const showCreateEventModal = (): void => createEventModal.open();
+  const hideCreateEventModal = (): void => createEventModal.close();
 
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
@@ -259,11 +260,10 @@ function organizationEvents(): JSX.Element {
                   testIdPrefix: 'selectViewType',
                 },
               ]}
-              showEventTypeFilter={true}
               actions={
                 <Button
                   className={styles.dropdown}
-                  onClick={showInviteModal}
+                  onClick={showCreateEventModal}
                   data-testid="createEventModalBtn"
                   data-cy="createEventModalBtn"
                 >
@@ -289,7 +289,7 @@ function organizationEvents(): JSX.Element {
         />
 
         <CreateEventModal
-          isOpen={createEventmodalisOpen}
+          isOpen={createEventModal.isOpen}
           onClose={hideCreateEventModal}
           onEventCreated={refetchEvents}
           currentUrl={currentUrl || ''}

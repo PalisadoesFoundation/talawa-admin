@@ -439,10 +439,10 @@ describe('Organisation Events Page', () => {
 
     expect(container.textContent).toMatch('Month');
 
-    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
     await userEvent.click(viewTypeDropdown);
     // Find and click the "Day" option in the dropdown
-    const dayOption = await screen.findByText('Day');
+    const dayOption = await screen.findByTestId('selectViewType-item-Day');
     await userEvent.click(dayOption);
 
     await waitFor(() => {
@@ -831,11 +831,13 @@ describe('Organisation Events Page', () => {
 
     expect(container.textContent).toMatch('Month');
 
-    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
     await userEvent.click(viewTypeDropdown);
 
     // Find and click the "Year View" option
-    const yearOption = await screen.findByText('Year View');
+    const yearOption = await screen.findByTestId(
+      'selectViewType-item-Year View',
+    );
     await userEvent.click(yearOption);
 
     await waitFor(() => {
@@ -853,7 +855,7 @@ describe('Organisation Events Page', () => {
 
     // Simulate handleChangeView being called with null
     // This should not change the viewType
-    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
     await userEvent.click(viewTypeDropdown);
 
     // Close dropdown without selecting (simulating null)

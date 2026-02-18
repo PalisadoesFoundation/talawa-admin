@@ -37,5 +37,3 @@ export function useInstallTimer(loading: boolean): string {
 
   return installElapsed;
 }
-
-export default useInstallTimer;

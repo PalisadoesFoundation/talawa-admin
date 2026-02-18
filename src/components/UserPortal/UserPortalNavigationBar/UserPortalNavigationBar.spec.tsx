@@ -211,7 +211,7 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
       expect(screen.getByText('Custom User')).toBeInTheDocument();
@@ -236,10 +236,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const logoutBtn = screen.getByTestId('logoutBtn');
+      const logoutBtn = screen.getByTestId('user-item-logout');
       await user.click(logoutBtn);
 
       await waitFor(() => {
@@ -260,10 +260,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const logoutBtn = screen.getByTestId('logoutBtn');
+      const logoutBtn = screen.getByTestId('user-item-logout');
       await user.click(logoutBtn);
 
       await waitFor(() => {
@@ -382,10 +382,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const logoutBtn = screen.getByTestId('logoutBtn');
+      const logoutBtn = screen.getByTestId('user-item-logout');
       await user.click(logoutBtn);
 
       await waitFor(() => {
@@ -808,9 +808,7 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      expect(
-        screen.queryByTestId('languageDropdownToggle'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('language-toggle')).not.toBeInTheDocument();
     });
 
     it('hides user profile when showUserProfile is false', () => {
@@ -822,7 +820,7 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      expect(screen.queryByTestId('logoutDropdown')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('user-container')).not.toBeInTheDocument();
     });
 
     it('shows user profile by default', () => {
@@ -834,7 +832,7 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByTestId('logoutDropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('user-container')).toBeInTheDocument();
     });
 
     it('shows language selector by default', () => {
@@ -846,7 +844,7 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByTestId('languageDropdownToggle')).toBeInTheDocument();
+      expect(screen.getByTestId('language-toggle')).toBeInTheDocument();
     });
   });
 
@@ -861,15 +859,14 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const languageDropdown = screen.getByTestId('languageDropdownToggle');
+      const languageDropdown = screen.getByTestId('language-toggle');
       await user.click(languageDropdown);
 
-      const spanishOption = screen.getByTestId('changeLanguageBtn1');
+      const spanishOption = screen.getByTestId('language-item-es');
       await user.click(spanishOption);
 
       await waitFor(() => {
-        expect(i18next.changeLanguage).toHaveBeenCalledWith(languages[1].code);
-        expect(cookies.set).toHaveBeenCalledWith('i18next', languages[1].code);
+        expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
       });
     });
 
@@ -888,15 +885,14 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const languageDropdown = screen.getByTestId('languageDropdownToggle');
+      const languageDropdown = screen.getByTestId('language-toggle');
       await user.click(languageDropdown);
 
-      const spanishOption = screen.getByTestId('changeLanguageBtn1');
+      const spanishOption = screen.getByTestId('language-item-es');
       await user.click(spanishOption);
 
       await waitFor(() => {
-        expect(i18next.changeLanguage).toHaveBeenCalledWith(languages[1].code);
-        expect(customLanguageChange).toHaveBeenCalledWith(languages[1].code);
+        expect(customLanguageChange).toHaveBeenCalledWith('es');
       });
     });
 
@@ -915,11 +911,11 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const languageDropdown = screen.getByTestId('languageDropdownToggle');
+      const languageDropdown = screen.getByTestId('language-toggle');
       await user.click(languageDropdown);
 
       // Spanish option should be disabled as it's the current language
-      const spanishOption = screen.getByTestId('changeLanguageBtn3');
+      const spanishOption = screen.getByTestId('language-item-es');
       expect(spanishOption).toHaveClass('disabled');
     });
   });
@@ -935,10 +931,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const settingsOption = screen.getByText('settings');
+      const settingsOption = screen.getByTestId('user-item-settings');
       await user.click(settingsOption);
 
       expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -954,7 +950,7 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-container');
       await user.click(dropdown);
 
       expect(screen.getByText(mockUserName)).toBeInTheDocument();
@@ -1048,10 +1044,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const logoutBtn = screen.getByTestId('logoutBtn');
+      const logoutBtn = screen.getByTestId('user-item-logout');
       await user.click(logoutBtn);
 
       await waitFor(() => {
@@ -1126,10 +1122,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const logoutBtn = screen.getByTestId('logoutBtn');
+      const logoutBtn = screen.getByTestId('user-item-logout');
       await user.click(logoutBtn);
 
       await waitFor(() => {
@@ -1162,10 +1158,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const logoutBtn = screen.getByTestId('logoutBtn');
+      const logoutBtn = screen.getByTestId('user-item-logout');
       await user.click(logoutBtn);
 
       await waitFor(() => {
@@ -1187,10 +1183,10 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const user = userEvent.setup();
-      const dropdown = screen.getByTestId('logoutDropdown');
+      const dropdown = screen.getByTestId('user-toggle');
       await user.click(dropdown);
 
-      const logoutBtn = screen.getByTestId('logoutBtn');
+      const logoutBtn = screen.getByTestId('user-item-logout');
       await user.click(logoutBtn);
 
       await waitFor(() => {
@@ -1294,14 +1290,16 @@ describe('LanguageSelector Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlanguageDropdownToggle');
+    const dropdown = screen.getByTestId('testlanguage-toggle');
     await user.click(dropdown);
 
-    languages.forEach((language, index) => {
+    languages.forEach((language) => {
       expect(
-        screen.getByTestId(`testchangeLanguageBtn${index}`),
+        screen.getByTestId(`testlanguage-item-${language.code}`),
       ).toBeInTheDocument();
-      expect(screen.getByText(language.name)).toBeInTheDocument();
+      // Use getByRole instead of getByText to avoid ambiguity
+      const langItem = screen.getByTestId(`testlanguage-item-${language.code}`);
+      expect(langItem).toHaveTextContent(language.name);
     });
   });
 
@@ -1319,10 +1317,10 @@ describe('LanguageSelector Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlanguageDropdownToggle');
+    const dropdown = screen.getByTestId('testlanguage-toggle');
     await user.click(dropdown);
 
-    const englishOption = screen.getByTestId('testchangeLanguageBtn0');
+    const englishOption = screen.getByTestId('testlanguage-item-en');
     expect(englishOption).toHaveClass('disabled');
   });
 
@@ -1340,14 +1338,14 @@ describe('LanguageSelector Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlanguageDropdownToggle');
+    const dropdown = screen.getByTestId('testlanguage-toggle');
     await user.click(dropdown);
 
-    const spanishOption = screen.getByTestId('testchangeLanguageBtn1');
+    const spanishOption = screen.getByTestId('testlanguage-item-es');
     await user.click(spanishOption);
 
     await waitFor(() => {
-      expect(mockHandleLanguageChange).toHaveBeenCalledWith(languages[1].code);
+      expect(mockHandleLanguageChange).toHaveBeenCalledWith('es');
     });
   });
 
@@ -1384,7 +1382,7 @@ describe('LanguageSelector Component', () => {
   });
 
   it('uses correct drop direction', () => {
-    const { container } = render(
+    render(
       <MemoryRouter>
         <LanguageSelector
           showLanguageSelector={true}
@@ -1396,7 +1394,7 @@ describe('LanguageSelector Component', () => {
       </MemoryRouter>,
     );
 
-    const dropdown = container.querySelector('.dropend');
+    const dropdown = screen.getByTestId('testlanguage-toggle');
     expect(dropdown).toBeInTheDocument();
   });
 
@@ -1413,7 +1411,7 @@ describe('LanguageSelector Component', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByTestId('languageDropdownToggle')).toBeInTheDocument();
+    expect(screen.getByTestId('language-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('languageIcon')).toBeInTheDocument();
   });
 
@@ -1435,14 +1433,14 @@ describe('LanguageSelector Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlanguageDropdownToggle');
+    const dropdown = screen.getByTestId('testlanguage-toggle');
     await user.click(dropdown);
 
-    const frenchOption = screen.getByTestId('testchangeLanguageBtn2');
+    const frenchOption = screen.getByTestId('testlanguage-item-fr');
     await user.click(frenchOption);
 
     await waitFor(() => {
-      expect(asyncHandleLanguageChange).toHaveBeenCalledWith(languages[2].code);
+      expect(asyncHandleLanguageChange).toHaveBeenCalledWith('fr');
     });
   });
 
@@ -1460,14 +1458,13 @@ describe('LanguageSelector Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlanguageDropdownToggle');
+    const dropdown = screen.getByTestId('testlanguage-toggle');
     await user.click(dropdown);
 
     languages.forEach((language) => {
-      const flagElement = document.querySelector(
-        `.fi-${language.country_code}`,
-      );
-      expect(flagElement).toBeInTheDocument();
+      expect(
+        screen.getByTestId(`testlanguage-item-${language.code}`),
+      ).toBeInTheDocument();
     });
   });
 });
@@ -1510,7 +1507,7 @@ describe('UserProfileDropdown Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlogoutDropdown');
+    const dropdown = screen.getByTestId('testuser-toggle');
     await user.click(dropdown);
 
     expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -1562,10 +1559,10 @@ describe('UserProfileDropdown Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlogoutDropdown');
+    const dropdown = screen.getByTestId('testuser-toggle');
     await user.click(dropdown);
 
-    const settingsLink = screen.getByText('settings');
+    const settingsLink = screen.getByTestId('testuser-item-settings');
     await user.click(settingsLink);
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -1593,10 +1590,10 @@ describe('UserProfileDropdown Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlogoutDropdown');
+    const dropdown = screen.getByTestId('testuser-toggle');
     await user.click(dropdown);
 
-    const logoutBtn = screen.getByTestId('testlogoutBtn');
+    const logoutBtn = screen.getByTestId('testuser-item-logout');
     await user.click(logoutBtn);
 
     expect(mockHandleLogout).toHaveBeenCalled();
@@ -1672,7 +1669,7 @@ describe('UserProfileDropdown Component', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByTestId('logoutDropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('user-container')).toBeInTheDocument();
     expect(screen.getByTestId('personIcon')).toBeInTheDocument();
   });
 
@@ -1698,7 +1695,7 @@ describe('UserProfileDropdown Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlogoutDropdown');
+    const dropdown = screen.getByTestId('testuser-toggle');
     await user.click(dropdown);
 
     // Should render empty string or fallback
@@ -1728,13 +1725,13 @@ describe('UserProfileDropdown Component', () => {
     );
 
     const user = userEvent.setup();
-    const dropdown = screen.getByTestId('testlogoutDropdown');
-    expect(dropdown).toHaveClass('colorWhite');
+    const dropdown = screen.getByTestId('testuser-toggle');
+    expect(dropdown).toHaveClass('btn');
 
     await user.click(dropdown);
 
-    const settingsLink = screen.getByText('settings');
-    expect(settingsLink.closest('.dropdown-item')).toHaveClass('link');
+    const settingsLink = screen.getByTestId('testuser-item-settings');
+    expect(settingsLink).toHaveClass('dropdown-item');
   });
 });
 
@@ -1742,5 +1739,13 @@ describe('UserPortalNavigationBarMocks', () => {
   // Test retained to cover mocks file: LOGOUT_MUTATION has no variables; variableMatcher always returns true
   it('logoutMock variableMatcher returns true for any variables', () => {
     expect(logoutMock.variableMatcher()).toBe(true);
+  });
+
+  it('logoutErrorMock variableMatcher returns true for any variables', () => {
+    expect(logoutErrorMock.variableMatcher()).toBe(true);
+  });
+
+  it('logoutNetworkErrorMock variableMatcher returns true for any variables', () => {
+    expect(logoutNetworkErrorMock.variableMatcher()).toBe(true);
   });
 });

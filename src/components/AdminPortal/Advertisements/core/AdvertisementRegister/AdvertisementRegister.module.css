@@ -72,13 +72,10 @@
   border: 1px solid var(--previewAdvertisementRegister-border);
 }
 
-.previewAdvertisementRegister img {
-  width: 400px;
-  height: auto;
-  object-fit: cover;
-}
-
+.previewAdvertisementRegister img,
 .previewAdvertisementRegister video {
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
   height: auto;
+  object-fit: cover; /* keep for images */
 }

@@ -217,5 +217,3 @@ export function DataTableTable<T>({
     </Table>
   );
 }
-
-export default DataTableTable;

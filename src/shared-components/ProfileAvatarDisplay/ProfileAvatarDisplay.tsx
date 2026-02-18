@@ -189,6 +189,7 @@ export const ProfileAvatarDisplay = ({
             crossOrigin={crossOrigin}
             decoding={decoding}
             loading={loading}
+            data-testid={dataTestId ? `${dataTestId}-img` : undefined}
           />
         </div>
         {enableEnlarge && renderModal()}

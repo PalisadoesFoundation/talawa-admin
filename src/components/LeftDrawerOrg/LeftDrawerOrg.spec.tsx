@@ -115,6 +115,7 @@ const mockTImplementation = (key: string) => {
     'Action Items': 'Action Items',
     Posts: 'Posts',
     switchToUserPortal: 'Switch to User Portal',
+    'leftDrawer.notAvailable': 'N/A',
   };
   return translations[key] || key;
 };
@@ -175,6 +176,19 @@ vi.mock('shared-components/Avatar/Avatar', () => ({
       Avatar: {name}
     </div>
   )),
+}));
+
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: vi.fn(({ imageUrl, fallbackName, dataTestId }) => {
+    if (imageUrl && imageUrl !== 'null') {
+      return <img src={imageUrl} alt={fallbackName} data-testid={dataTestId} />;
+    }
+    return (
+      <div data-testid={dataTestId || 'avatar'} data-name={fallbackName}>
+        Avatar: {fallbackName}
+      </div>
+    );
+  }),
 }));
 
 vi.mock('components/ProfileCard/ProfileCard', () => ({
@@ -458,11 +472,9 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, mocksWithoutAvatar);
 
       await waitFor(() => {
-        const avatars = screen.getAllByTestId('avatar');
-        const orgAvatar = avatars.find(
-          (avatar) => avatar.getAttribute('data-name') === 'Test Organization',
-        );
+        const orgAvatar = screen.getByTestId('org-avatar');
         expect(orgAvatar).toBeInTheDocument();
+        expect(orgAvatar).toHaveAttribute('data-name', 'Test Organization');
         expect(orgAvatar).toHaveTextContent('Avatar: Test Organization');
       });
     });
@@ -605,14 +617,14 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerActiveButton');
+      expect(membersLink).toHaveClass(/_leftDrawerActiveButton_/);
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerInactiveButton');
+      expect(membersLink).toHaveClass(/_leftDrawerInactiveButton_/);
     });
 
     it('should render icon components with correct props', () => {

@@ -4,7 +4,7 @@
  * @remarks
  * - Uses `useTranslation` for i18n.
  * - Automatically hides on screen widths ≤ 820px after clicking a link.
- * - Conditionally renders the "Users" section based on SuperAdmin status.
+ * - Conditionally renders the "Users" section based on Admin status.
  * - Includes dynamic plugin drawer items for admin routes.
  * - **REFACTORED**: Now uses shared SidebarBase, SidebarNavItem, and SidebarPluginSection components
  *
@@ -26,6 +26,7 @@ import SignOut from 'components/SignOut/SignOut';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 export interface ILeftDrawerProps {
   hideDrawer: boolean;
@@ -37,6 +38,7 @@ const LeftDrawer = ({
   setHideDrawer,
 }: ILeftDrawerProps): React.ReactElement => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
+  const { t: tErrors } = useTranslation('errors');
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
@@ -113,36 +115,45 @@ const LeftDrawer = ({
   );
 
   return (
-    <SidebarBase
-      hideDrawer={hideDrawer}
-      setHideDrawer={setHideDrawer}
-      portalType="admin"
-      footerContent={
-        <>
-          <div className={styles.switchPortalWrapper}>
-            <SidebarNavItem
-              to="/user/organizations"
-              icon={<FaExchangeAlt />}
-              label={t('switchToUserPortal')}
-              testId="switchToUserPortalBtn"
-              hideDrawer={hideDrawer}
-              onClick={handleLinkClick}
-              iconType="react-icon"
-            />
-          </div>
-          <div
-            className={
-              hideDrawer ? styles.profileCardHidden : styles.profileCardWrapper
-            }
-          >
-            <ProfileCard />
-          </div>
-          <SignOut hideDrawer={hideDrawer} />
-        </>
-      }
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      {drawerContent}
-    </SidebarBase>
+      <SidebarBase
+        hideDrawer={hideDrawer}
+        setHideDrawer={setHideDrawer}
+        portalType="admin"
+        footerContent={
+          <>
+            <div className={styles.switchPortalWrapper}>
+              <SidebarNavItem
+                to="/user/organizations"
+                icon={<FaExchangeAlt />}
+                label={t('switchToUserPortal')}
+                testId="switchToUserPortalBtn"
+                hideDrawer={hideDrawer}
+                onClick={handleLinkClick}
+                iconType="react-icon"
+              />
+            </div>
+            <div
+              className={
+                hideDrawer
+                  ? styles.profileCardHidden
+                  : styles.profileCardWrapper
+              }
+            >
+              <ProfileCard />
+            </div>
+            <SignOut hideDrawer={hideDrawer} />
+          </>
+        }
+      >
+        {drawerContent}
+      </SidebarBase>
+    </ErrorBoundaryWrapper>
   );
 };
 

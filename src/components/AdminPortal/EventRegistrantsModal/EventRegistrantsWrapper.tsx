@@ -7,12 +7,8 @@
  * @param eventId - The unique identifier for the event.
  * @param orgId - The unique identifier for the organization.
  * @param onUpdate - Optional callback function to be executed
- * @param eventId - The unique identifier for the event.
- * @param orgId - The unique identifier for the organization.
- * @param onUpdate - Optional callback function to be executed
  * after the modal is closed.
  *
- * @returns A button to open the modal and the modal itself when visible.
  * @returns A button to open the modal and the modal itself when visible.
  *
  * @example
@@ -25,33 +21,32 @@
  * ```
  *
  * @remarks
- * - The modal is displayed conditionally based on the `showModal` state.
+ * - The modal visibility is derived from `modalState.isOpen` via `useModalState`.
  * - The `onUpdate` callback is invoked after the modal is closed, if provided.
- * - The button uses a custom style from `app-fixed.module.css`.
+ * - The button uses a custom style from EventRegistrantsWrapper.module.css.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
-import { Button } from 'react-bootstrap';
-import style from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import style from './EventRegistrantsWrapper.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
-
-type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
+import type { InterfaceEventRegistrantsWrapperProps } from 'types/AdminPortal/EventRegistrantsWrapper/interface';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 export const EventRegistrantsWrapper = ({
   eventId,
   orgId,
   onUpdate,
-}: PropType): JSX.Element => {
+}: InterfaceEventRegistrantsWrapperProps): JSX.Element => {
   const { t: tErrors } = useTranslation('errors');
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventRegistrantsModal',
   });
-  // State to control the visibility of the modal
-  const [showModal, setShowModal] = useState(false);
+  const modalState = useModalState();
+
   const handleClose = (): void => {
-    setShowModal(false);
-    // Call onUpdate after modal is closed
+    modalState.close();
     if (onUpdate) {
       onUpdate();
     }
@@ -64,27 +59,22 @@ export const EventRegistrantsWrapper = ({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      {/* Button to open the event registrants modal */}
       <Button
         data-testid="filter-button"
-        className={`border-1 mx-4 ${style.createButton}`}
+        className={style.createButton}
         aria-label={t('registerMember')}
-        onClick={(): void => {
-          setShowModal(true); // Show the modal when button is clicked
-        }}
+        onClick={modalState.open}
       >
         {t('registerMember')}
       </Button>
 
       {/* Render the EventRegistrantsModal if showModal is true */}
-      {showModal && (
-        <EventRegistrantsModal
-          show={showModal}
-          handleClose={handleClose}
-          eventId={eventId}
-          orgId={orgId}
-        />
-      )}
+      <EventRegistrantsModal
+        show={modalState.isOpen}
+        handleClose={handleClose}
+        eventId={eventId}
+        orgId={orgId}
+      />
     </ErrorBoundaryWrapper>
   );
 };

@@ -249,8 +249,8 @@ describe('Organisation Venues', () => {
     expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
     expect(screen.getByText('Updated Venue 2')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('searchByButton'));
-    await userEvent.click(screen.getByTestId('desc'));
+    await userEvent.click(screen.getByTestId('searchByButton-toggle'));
+    await userEvent.click(screen.getByTestId('searchByButton-item-desc'));
 
     const searchInput = screen.getByTestId('searchInput');
     await userEvent.clear(searchInput);
@@ -272,8 +272,8 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    await userEvent.click(screen.getByTestId('sortVenues'));
-    await userEvent.click(screen.getByTestId('lowest'));
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-lowest'));
     await waitFor(() => {
       // Since sorting might not be working with current query structure,
       // just verify the list is rendered
@@ -287,8 +287,8 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    await userEvent.click(screen.getByTestId('sortVenues'));
-    await userEvent.click(screen.getByTestId('highest'));
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-highest'));
     await waitFor(() => {
       // Since sorting might not be working with current query structure,
       // just verify the list is rendered

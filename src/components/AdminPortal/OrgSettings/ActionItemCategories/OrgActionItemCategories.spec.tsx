@@ -93,15 +93,15 @@ describe('Testing Organisation Action Item Categories', () => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
     });
 
-    const sortBtn = screen.getByTestId('sort');
+    const sortBtn = screen.getByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by createdAt_DESC
     await user.click(sortBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('createdAt_DESC')).toBeInTheDocument();
-    });
-    await user.click(screen.getByTestId('createdAt_DESC'));
+    expect(
+      await screen.findByTestId('sort-item-createdAt_DESC'),
+    ).toBeInTheDocument();
+    await user.click(screen.getByTestId('sort-item-createdAt_DESC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('categoryName')[0]).toHaveTextContent(
         'Category 1',
@@ -111,9 +111,9 @@ describe('Testing Organisation Action Item Categories', () => {
     // Sort by createdAt_ASC
     await user.click(sortBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('createdAt_ASC')).toBeInTheDocument();
+      expect(screen.getByTestId('sort-item-createdAt_ASC')).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('createdAt_ASC'));
+    await user.click(screen.getByTestId('sort-item-createdAt_ASC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('categoryName')[0]).toHaveTextContent(
         'Category 2',
@@ -129,15 +129,15 @@ describe('Testing Organisation Action Item Categories', () => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
     });
 
-    const filterBtn = screen.getByTestId('filter');
+    const filterBtn = screen.getByTestId('filter-toggle');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by All
     await user.click(filterBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('all')).toBeInTheDocument();
+    await waitFor(async () => {
+      expect(await screen.findByTestId('filter-item-all')).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('all'));
+    await user.click(screen.getByTestId('filter-item-all'));
 
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -147,9 +147,9 @@ describe('Testing Organisation Action Item Categories', () => {
     // Filter by Disabled
     await user.click(filterBtn);
     await waitFor(() => {
-      expect(screen.getByTestId('disabled')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-item-disabled')).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('disabled'));
+    await user.click(screen.getByTestId('filter-item-disabled'));
     await waitFor(() => {
       expect(screen.queryByText('Category 1')).toBeNull();
       expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -168,14 +168,13 @@ describe('Testing Organisation Action Item Categories', () => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
     });
 
-    const filterBtn = screen.getByTestId('filter');
+    const filterBtn = screen.getByTestId('filter-toggle');
     expect(filterBtn).toBeInTheDocument();
 
     await user.click(filterBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('active')).toBeInTheDocument();
-    });
-    await user.click(screen.getByTestId('active'));
+    const activeOption = await screen.findByTestId('filter-item-active');
+    expect(activeOption).toBeInTheDocument();
+    await user.click(screen.getByTestId('filter-item-active'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -357,8 +356,8 @@ describe('Testing Organisation Action Item Categories', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-        expect(screen.getByTestId('sort')).toBeInTheDocument();
-        expect(screen.getByTestId('filter')).toBeInTheDocument();
+        expect(screen.getByTestId('sort-container')).toBeInTheDocument();
+        expect(screen.getByTestId('filter-container')).toBeInTheDocument();
       });
     });
 

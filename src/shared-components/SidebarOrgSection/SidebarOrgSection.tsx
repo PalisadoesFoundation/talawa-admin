@@ -26,33 +26,22 @@ import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import Avatar from 'shared-components/Avatar/Avatar';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from './SidebarOrgSection.module.css';
-import type { ISidebarOrgSectionProps } from '../../types/shared-components/SidebarOrgSection/interface';
-
-interface IOrganizationData {
-  id: string;
-  name: string;
-  description?: string | null;
-  addressLine1?: string | null;
-  addressLine2?: string | null;
-  city?: string | null;
-  state?: string | null;
-  postalCode?: string | null;
-  countryCode?: string | null;
-  avatarURL?: string | null;
-  createdAt: string;
-  isUserRegistrationRequired?: boolean;
-}
+import type {
+  ISidebarOrgSectionProps,
+  IOrganizationData,
+} from 'types/shared-components/SidebarOrgSection/interface';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import Button from 'shared-components/Button';
 
 const SidebarOrgSection = ({
   orgId,
   hideDrawer,
   isProfilePage = false,
 }: ISidebarOrgSectionProps): React.ReactElement | null => {
+  const { t } = useTranslation();
   const { t: tErrors } = useTranslation('errors');
-  const { t: tCommon } = useTranslation('common');
 
   const { data, loading } = useQuery<{
     organization: IOrganizationData;
@@ -68,14 +57,14 @@ const SidebarOrgSection = ({
   return (
     <div className={`${styles.organizationContainer} pe-3`}>
       {loading ? (
-        <button
+        <Button
           className={`${styles.profileContainer} shimmer`}
           data-testid="orgBtn"
           type="button"
         />
       ) : !data?.organization ? (
         !isProfilePage && (
-          <button
+          <Button
             type="button"
             className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
             disabled
@@ -85,31 +74,22 @@ const SidebarOrgSection = ({
               <WarningAmberOutlined />
             </div>
             {tErrors('errorLoading', { entity: 'Organization' })}
-          </button>
+          </Button>
         )
       ) : (
-        <button
+        <Button
           type="button"
           className={styles.profileContainer}
           data-testid="OrgBtn"
         >
           <div className={styles.imageContainer}>
-            {data.organization.avatarURL ? (
-              <img
-                crossOrigin="anonymous"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                decoding="async"
-                src={data.organization.avatarURL}
-                alt={`${data.organization.name}`}
-              />
-            ) : (
-              <Avatar
-                name={data.organization.name}
-                containerStyle={styles.avatarContainer}
-                alt={tCommon('picture', { name: data.organization.name })}
-              />
-            )}
+            <ProfileAvatarDisplay
+              imageUrl={data.organization.avatarURL}
+              fallbackName={data.organization.name}
+              size="medium"
+              crossOrigin="anonymous"
+              dataTestId="org-avatar"
+            />
           </div>
           <div className={styles.ProfileRightContainer}>
             <div className={styles.profileText}>
@@ -117,14 +97,14 @@ const SidebarOrgSection = ({
                 {data.organization.name}
               </span>
               <span className={styles.secondaryText}>
-                {data.organization.city || 'N/A'}
+                {data.organization.city || t('leftDrawer.notAvailable')}
               </span>
             </div>
             <div className={styles.ArrowIcon}>
               <AngleRightIcon fill={'var(--bs-secondary)'} />
             </div>
           </div>
-        </button>
+        </Button>
       )}
     </div>
   );

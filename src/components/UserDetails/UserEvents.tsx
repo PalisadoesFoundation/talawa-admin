@@ -28,7 +28,7 @@
  * <UserEvents />
  * ```
  */
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './UserEvents.module.css';
@@ -36,109 +36,104 @@ import PeopleTabUserEvents from 'shared-components/PeopleTabUserEvents/PeopleTab
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import { useQuery } from '@apollo/client';
+import { GET_EVENTS_BY_ORGANIZATION_ID } from 'GraphQl/Queries/Queries';
+import {
+  InterfaceUserEvent,
+  InterfaceGetUserEventsData,
+  ParticipationFilter,
+} from 'types/AdminPortal/UserDetails/UserEvent/interface';
+import { PeopleTabUserEventsProps } from 'types/AdminPortal/UserDetails/UserEvent/type';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
-type PeopleTabUserEventsProps = { id?: string };
-
-const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
+const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
+  const { t: tCommon } = useTranslation('common');
 
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState('Sort');
 
-  // Example dummy events
-  const dummyEvents = [
-    {
-      startTime: '10:00',
-      endTime: '12:00',
-      startDate: '2025-12-10',
-      endDate: '2025-12-10',
-      eventName: 'React Workshop',
-      eventDescription: 'Learn React basics and advanced patterns.',
-      actionIcon: '⭐',
-      actionName: 'Join',
-    },
-    {
-      startTime: '14:00',
-      endTime: '16:00',
-      startDate: '2025-12-12',
-      endDate: '2025-12-12',
-      eventName: 'Node.js Seminar',
-      eventDescription: 'Deep dive into Node.js performance.',
-      actionIcon: '🔗',
-      actionName: 'Register',
-    },
-    {
-      startTime: '14:00',
-      endTime: '16:00',
-      startDate: '2025-12-12',
-      endDate: '2025-12-12',
-      eventName: 'Node.js Seminar',
-      eventDescription: 'Deep dive into Node.js performance.',
-      actionIcon: '🔗',
-      actionName: 'Register',
-    },
-    {
-      startTime: '14:00',
-      endTime: '16:00',
-      startDate: '2025-12-12',
-      endDate: '2025-12-12',
-      eventName: 'Node.js Seminar',
-      eventDescription: 'Deep dive into Node.js performance.',
-      actionIcon: '🔗',
-      actionName: 'Register',
-    },
-    {
-      startTime: '14:00',
-      endTime: '16:00',
-      startDate: '2025-12-12',
-      endDate: '2025-12-12',
-      eventName: 'Node.js Seminar',
-      eventDescription: 'Deep dive into Node.js performance.',
-      actionIcon: '🔗',
-      actionName: 'Register',
-    },
-    {
-      startTime: '14:00',
-      endTime: '16:00',
-      startDate: '2025-12-12',
-      endDate: '2025-12-12',
-      eventName: 'Node.js Seminar',
-      eventDescription: 'Deep dive into Node.js performance.',
-      actionIcon: '🔗',
-      actionName: 'Register',
-    },
-    {
-      startTime: '14:00',
-      endTime: '16:00',
-      startDate: '2025-12-12',
-      endDate: '2025-12-12',
-      eventName: 'Node.js Seminar',
-      eventDescription: 'Deep dive into Node.js performance.',
-      actionIcon: '🔗',
-      actionName: 'Register',
-    },
-  ];
+  const [participationFilter, setParticipationFilter] =
+    useState<ParticipationFilter>('ALL');
 
-  // ===== Filter & Sort Before Rendering =====
+  const splitDateTime = useCallback((dateTime: string) => {
+    const d = dayjs.utc(dateTime);
+    return {
+      date: d.format('YYYY-MM-DD'),
+      time: d.format('HH:mm'),
+    };
+  }, []);
+
+  const { data, loading, error } = useQuery<InterfaceGetUserEventsData>(
+    GET_EVENTS_BY_ORGANIZATION_ID,
+    {
+      variables: {
+        organizationId: orgId,
+      },
+      skip: !orgId,
+    },
+  );
+
+  const userEvents: InterfaceUserEvent[] = useMemo(() => {
+    if (!data?.eventsByOrganizationId) return [];
+
+    return data.eventsByOrganizationId.map((event) => {
+      const start = splitDateTime(event.startAt);
+      const end = splitDateTime(event.endAt);
+
+      return {
+        id: event.id,
+        name: event.name,
+        description: event.description ?? '',
+        startDate: start.date,
+        startTime: start.time,
+        endDate: end.date,
+        endTime: end.time,
+        creatorId: event.creator.id,
+      };
+    });
+  }, [data]);
+
   const filteredEvents = useMemo(() => {
-    let filtered = dummyEvents.filter(
+    const search = searchValue.toLowerCase();
+
+    let filtered = userEvents.filter(
       (event) =>
-        event.eventName.toLowerCase().includes(searchValue.toLowerCase()) ||
-        event.eventDescription
-          .toLowerCase()
-          .includes(searchValue.toLowerCase()),
+        event.name.toLowerCase().includes(search) ||
+        event.description.toLowerCase().includes(search),
     );
 
-    filtered.sort((a, b) => {
-      const nameA = a.eventName.toLowerCase();
-      const nameB = b.eventName.toLowerCase();
-      return sortOption === 'ASC'
-        ? nameA.localeCompare(nameB)
-        : nameB.localeCompare(nameA);
-    });
+    if (participationFilter === 'ADMIN_CREATOR') {
+      filtered = filtered.filter((event) => event.creatorId === userId);
+    }
 
-    return filtered;
-  }, [dummyEvents, searchValue, sortOption]);
+    return [...filtered].sort((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+
+      if (sortOption === 'ASC') return nameA.localeCompare(nameB);
+      if (sortOption === 'DESC') return nameB.localeCompare(nameA);
+      return 0;
+    });
+  }, [userEvents, searchValue, sortOption, participationFilter, userId]);
+
+  if (loading) {
+    return (
+      <div>
+        <p>{tCommon('loading')}</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div>
+        <p>{tCommon('somethingWentWrong')}</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -162,6 +157,18 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
                 setSortOption(value as 'ASC' | 'DESC'),
               testIdPrefix: 'eventsSort',
             },
+            {
+              title: 'Event Participation',
+              options: [
+                { label: 'Admin / Creator of Events', value: 'ADMIN_CREATOR' },
+                { label: 'All', value: 'ALL' },
+              ],
+              icon: '/images/svg/ri_arrow-up-down-line.svg',
+              selected: participationFilter,
+              onChange: (value: string | number) =>
+                setParticipationFilter(value as ParticipationFilter),
+              testIdPrefix: 'eventsParticipationFilter',
+            },
           ]}
         />
 
@@ -180,8 +187,8 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
                 endTime={event.endTime}
                 startDate={event.startDate}
                 endDate={event.endDate}
-                eventName={event.eventName}
-                eventDescription={event.eventDescription}
+                eventName={event.name}
+                eventDescription={event.description}
                 actionIcon={
                   <IconButton size="small">
                     <EditIcon />

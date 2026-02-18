@@ -1,0 +1,34 @@
+.agendaItemRow {
+  border: var(--border-1) solid var(--agendaItemRow-border);
+  transition: box-shadow 0.2s ease;
+  background-color: var(--agendaItemRow-bg);
+}
+
+.agendaItemRow:hover {
+  background-color: var(--agendaItemRow-bg-hover);
+}
+
+.dragging {
+  box-shadow: var(--shadow-offset-none) var(--shadow-offset-md)
+    var(--shadow-blur-lg) var(--dragging-box-shadow);
+  z-index: 1000;
+  background-color: var(--dragging-bg);
+}
+
+.categoryChip {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--categoryChip-bg);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-0) var(--space-6);
+  font-size: var(--font-size-sm);
+  height: var(--space-8);
+  white-space: nowrap;
+  margin: var(--space-4);
+}
+
+.tableHeadAgendaItems {
+  background-color: var(--tableHeadAgendaItems-bg) !important;
+  color: var(--tableHeadAgendaItems-color);
+  padding: var(--space-8);
+}

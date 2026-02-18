@@ -138,13 +138,13 @@ describe('Testing Volunteers Screen', () => {
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    let sortBtn = await screen.findByTestId('sort');
+    let sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by hoursVolunteered_DESC
     await userEvent.click(sortBtn);
     const hoursVolunteeredDESC = await screen.findByTestId(
-      'hoursVolunteered_DESC',
+      'sort-item-hoursVolunteered_DESC',
     );
     expect(hoursVolunteeredDESC).toBeInTheDocument();
     await userEvent.click(hoursVolunteeredDESC);
@@ -153,11 +153,11 @@ describe('Testing Volunteers Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
 
     // Sort by hoursVolunteered_ASC
-    sortBtn = await screen.findByTestId('sort');
+    sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
     await userEvent.click(sortBtn);
     const hoursVolunteeredASC = await screen.findByTestId(
-      'hoursVolunteered_ASC',
+      'sort-item-hoursVolunteered_ASC',
     );
     expect(hoursVolunteeredASC).toBeInTheDocument();
     await userEvent.click(hoursVolunteeredASC);
@@ -205,16 +205,16 @@ describe('Testing Volunteers Screen', () => {
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 
-    const filterBtn = await screen.findByTestId('filter');
+    const filterBtn = await screen.findByTestId('filter-toggle');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by All
     await userEvent.click(filterBtn);
 
     await waitFor(() => {
-      expect(screen.getByTestId('all')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-item-all')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('all'));
+    await userEvent.click(screen.getByTestId('filter-item-all'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName).toHaveLength(3); // volunteer1, volunteer2, volunteer3
@@ -225,16 +225,16 @@ describe('Testing Volunteers Screen', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
-    const filterBtn = await screen.findByTestId('filter');
+    const filterBtn = await screen.findByTestId('filter-toggle');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Pending
     await userEvent.click(filterBtn);
 
     await waitFor(() => {
-      expect(screen.getByTestId('pending')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-item-pending')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('pending'));
+    await userEvent.click(screen.getByTestId('filter-item-pending'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Bruce Graza');
@@ -245,16 +245,16 @@ describe('Testing Volunteers Screen', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
-    const filterBtn = await screen.findByTestId('filter');
+    const filterBtn = await screen.findByTestId('filter-toggle');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Accepted
     await userEvent.click(filterBtn);
 
     await waitFor(() => {
-      expect(screen.getByTestId('accepted')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-item-accepted')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('accepted'));
+    await userEvent.click(screen.getByTestId('filter-item-accepted'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
@@ -477,15 +477,15 @@ describe('Testing Volunteers Screen', () => {
       });
 
       // Trigger rejected status filter
-      const filterBtn = await screen.findByTestId('filter');
+      const filterBtn = await screen.findByTestId('filter-toggle');
       await userEvent.click(filterBtn);
 
       await waitFor(() => {
-        const rejectedOption = screen.getByTestId('rejected');
+        const rejectedOption = screen.getByTestId('filter-item-rejected');
         expect(rejectedOption).toBeInTheDocument();
       });
 
-      await userEvent.click(screen.getByTestId('rejected'));
+      await userEvent.click(screen.getByTestId('filter-item-rejected'));
 
       // This should trigger the volunteers useMemo recalculation with:
       // } else if (status === VolunteerStatus.Rejected) {
@@ -509,15 +509,15 @@ describe('Testing Volunteers Screen', () => {
       });
 
       // Trigger accepted status filter
-      const filterBtn = await screen.findByTestId('filter');
+      const filterBtn = await screen.findByTestId('filter-toggle');
       await userEvent.click(filterBtn);
 
       await waitFor(() => {
-        const acceptedOption = screen.getByTestId('accepted');
+        const acceptedOption = screen.getByTestId('filter-item-accepted');
         expect(acceptedOption).toBeInTheDocument();
       });
 
-      await userEvent.click(screen.getByTestId('accepted'));
+      await userEvent.click(screen.getByTestId('filter-item-accepted'));
 
       // This should trigger the volunteers useMemo recalculation with:
       // } else if (status === VolunteerStatus.Accepted) {

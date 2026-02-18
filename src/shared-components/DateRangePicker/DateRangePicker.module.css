@@ -1,41 +1,120 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 15px;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
 }
 
 .controlsRow {
   display: flex;
   flex-direction: row;
-  gap: 0.75rem;
+  gap: var(--space-4);
   align-items: flex-end;
   flex-wrap: wrap;
+  margin-top: calc(var(--space-2) * -2.5);
 }
 
 .controlsRow > div {
   flex: 1;
-  min-width: 240px;
+  min-width: var(--space-18);
 }
 
 .presetRow {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
-  margin-top: 0.5rem;
+  margin-top: var(--space-3);
 }
 
 .presetButton {
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: transparent;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  border: var(--border-2) solid var(--color-gray-200) !important;
+  background: transparent !important;
+  color: var(--color-gray-800) !important;
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
+}
+
+.presetButton:hover {
+  color: var(--color-gray-800) !important;
+  background-color: var(--color-gray-100) !important;
+  border-color: var(--color-gray-300) !important;
 }
 
 .presetButtonActive {
-  background: var(--bs-primary, #0d6efd);
-  color: white;
-  border-color: var(--bs-primary, #0d6efd);
+  background: var(--color-blue-600) !important;
+  color: var(--color-blue-600) !important;
+  border-color: var(--color-blue-600) !important;
+}
+
+/* Input Group styling */
+.inputGroup {
+  display: flex !important;
+  align-items: stretch;
+  /* Ensure equal height */
+  border: var(--border-1) solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  padding: 0;
+  margin-bottom: var(--space-5);
+  background-color: var(--color-white);
+  font-size: var(--font-size-sm);
+}
+
+/* Target the Bootstrap Form.Label within our group */
+.inputGroup > :global(.form-label) {
+  margin-bottom: 0 !important;
+  padding: var(--space-2) var(--space-4);
+  /* 0.375rem -> 6px (use space-2=4px), 0.75rem -> space-4 */
+  background-color: var(--color-gray-100) !important;
+  /* Slightly darker to distinguish */
+  border-right: var(--border-1) solid var(--color-gray-200);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-weight: var(--font-weight-medium);
+  /* Slightly bolder */
+  color: var(--color-blue-600);
+  min-height: var(--space-9);
+  /* Standard bootstrap input height */
+}
+
+/* Hide any nested form-labels (from inner DatePicker) */
+.inputGroup :global(.form-group) :global(.form-label) {
+  display: none !important;
+}
+
+/* Target the wrapper div of DatePicker (inner FormGroup) */
+.inputGroup > div {
+  flex: 1;
+  margin-bottom: 0 !important;
+  display: flex;
+}
+
+/* Remove border from the actual input to seamlessly blend it */
+.inputGroup :global(.form-control) {
+  border: none !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  height: 100% !important;
+  min-height: var(--space-9);
+  background-color: transparent;
+}
+
+/* Ensure the inner wrapper handles full height */
+.inputGroup :global(.MuiFormControl-root) {
+  height: 100%;
+  width: 100%;
+}
+
+.inputGroup :global(.MuiInputBase-root) {
+  height: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+/* Remove MUI default fieldset border */
+.inputGroup :global(fieldset) {
+  border: none !important;
 }

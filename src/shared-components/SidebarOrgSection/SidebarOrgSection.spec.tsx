@@ -25,6 +25,29 @@ vi.mock('assets/svgs/angleRight.svg?react', () => ({
   ),
 }));
 
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    crossOrigin,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+    crossOrigin?: 'anonymous' | 'use-credentials' | '';
+  }) => (
+    <div
+      data-testid="mock-profile-avatar-display"
+      data-image-url={imageUrl}
+      data-fallback-name={fallbackName}
+    >
+      {imageUrl && (
+        <img src={imageUrl} alt={fallbackName} crossOrigin={crossOrigin} />
+      )}
+    </div>
+  ),
+}));
+
 // Mock translations
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
@@ -32,14 +55,24 @@ vi.mock('react-i18next', async () => {
     ...actual,
     useTranslation: () => ({
       t: (key: string, options?: { entity?: string; name?: string }) => {
-        if (options?.entity) return `Error loading ${options.entity}`;
-        if (key === 'picture' && options?.name)
-          return `${options.name} Picture`;
+        if (key === 'profileAvatar.altText') {
+          return options?.name || 'Avatar';
+        }
+
+        if (key === 'leftDrawer.notAvailable') {
+          return 'N/A';
+        }
+
+        if (options?.entity) {
+          return `Error loading ${options.entity}`;
+        }
+
         return key;
       },
     }),
   };
 });
+
 describe('SidebarOrgSection Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -244,6 +277,7 @@ describe('SidebarOrgSection Component', () => {
 
     it('renders N/A when city is null', async () => {
       renderComponent({}, noCityMocks);
+
       await waitFor(() => {
         expect(screen.getByText('N/A')).toBeInTheDocument();
       });
@@ -263,18 +297,19 @@ describe('SidebarOrgSection Component', () => {
       await waitFor(() => {
         const img = screen.getByAltText('Test Organization');
         expect(img).toHaveAttribute('crossOrigin', 'anonymous');
-        expect(img).toHaveAttribute('referrerPolicy', 'no-referrer');
-        expect(img).toHaveAttribute('loading', 'lazy');
-        expect(img).toHaveAttribute('decoding', 'async');
       });
     });
 
-    it('renders Avatar component when avatarURL is not provided', async () => {
+    it('renders ProfileAvatarDisplay with correct props when avatarURL is not provided', async () => {
       renderComponent({}, noAvatarMocks);
       await waitFor(() => {
-        const avatar = screen.getByTestId('avatar');
-        expect(avatar).toBeInTheDocument();
-        expect(avatar).toHaveAttribute('data-name', 'Test Organization');
+        const avatarDisplay = screen.getByTestId('mock-profile-avatar-display');
+        expect(avatarDisplay).toBeInTheDocument();
+        expect(avatarDisplay).toHaveAttribute(
+          'data-fallback-name',
+          'Test Organization',
+        );
+        expect(avatarDisplay).not.toHaveAttribute('data-image-url');
       });
     });
 

@@ -30,12 +30,13 @@
  * ```
  */
 
-import { Dropdown } from 'react-bootstrap';
 import { MoreVert } from '@mui/icons-material';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from './MessageItem.module.css';
 import type { INewChat } from './types';
 import MessageImage from './MessageImage';
+import DropDownButton from 'shared-components/DropDownButton';
+import { useMemo, useCallback } from 'react';
 
 interface IMessageItemProps {
   message: INewChat['messages']['edges'][0]['node'];
@@ -65,6 +66,47 @@ export default function MessageItem({
 }: IMessageItemProps): JSX.Element {
   const isOwnMessage = message.creator.id === currentUserId;
   const isFile = message.body.startsWith('uploads/');
+
+  const messageOptions = useMemo(() => {
+    const opts = [
+      {
+        value: 'reply',
+        label: t('reply'),
+      },
+    ];
+
+    if (isOwnMessage) {
+      if (!isFile) {
+        opts.push({
+          value: 'edit',
+          label: t('edit'),
+        });
+      }
+      opts.push({
+        value: 'delete',
+        label: t('delete'),
+      });
+    }
+
+    return opts;
+  }, [isOwnMessage, isFile, t]);
+
+  const handleMessageAction = useCallback(
+    (action: string): void => {
+      switch (action) {
+        case 'reply':
+          onReply(message);
+          break;
+        case 'edit':
+          onEdit(message);
+          break;
+        case 'delete':
+          onDelete(message.id);
+          break;
+      }
+    },
+    [message, onReply, onEdit, onDelete],
+  );
 
   return (
     <div
@@ -114,45 +156,17 @@ export default function MessageItem({
           )}
         </span>
         <div className={styles.messageAttributes}>
-          <Dropdown data-testid="moreOptions" className={styles.dropdownCursor}>
-            <Dropdown.Toggle
-              className={styles.customToggle}
-              data-testid={'dropdown'}
-            >
-              <MoreVert />
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item
-                onClick={() => {
-                  onReply(message);
-                }}
-                data-testid="replyBtn"
-              >
-                {t('reply')}
-              </Dropdown.Item>
-              {isOwnMessage && (
-                <>
-                  {!message.body.startsWith('uploads/') && (
-                    <Dropdown.Item
-                      onClick={() => {
-                        onEdit(message);
-                      }}
-                      data-testid="replyToMessage"
-                    >
-                      {t('edit')}
-                    </Dropdown.Item>
-                  )}
-                  <Dropdown.Item
-                    onClick={() => onDelete(message.id)}
-                    data-testid="deleteMessage"
-                    className={styles.deleteMenuItem}
-                  >
-                    {t('delete')}
-                  </Dropdown.Item>
-                </>
-              )}
-            </Dropdown.Menu>
-          </Dropdown>
+          <DropDownButton
+            id={`message-${message.id}-dropdown`}
+            options={messageOptions}
+            onSelect={handleMessageAction}
+            dataTestIdPrefix="more-options"
+            variant="outline-secondary"
+            btnStyle={styles.customToggle}
+            icon={<MoreVert />}
+            placeholder=""
+            ariaLabel={t('messageActions')}
+          />
           <span className={styles.messageTime}>
             {new Date(message?.createdAt).toLocaleTimeString('it-IT', {
               hour: '2-digit',

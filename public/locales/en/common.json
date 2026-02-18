@@ -259,6 +259,7 @@
   "organizationEvent": "Organization Members",
   "organizationEventDescription": "Visible to all members of the organization",
   "inviteOnlyEvent": "Invite Only",
+  "inviteOnlyEventAriaLabel": "Invite only event",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
   "noCategory": "No Category",
   "sortingIcon": "sorting-icon",
@@ -297,5 +298,18 @@
   "unavailable": "Unavailable",
   "clearSelection": "Clear selection",
   "toggleSidebar": "Toggle sidebar",
-  "picture": "{{name}} Picture"
+  "picture": "{{name}} Picture",
+  "optionsSuffix": "options",
+  "userMenu": "User menu",
+  "searchPlaceholder": "Search...",
+  "noOptionsFound": "No options found",
+  "noUserId": "User ID not available",
+  "noOrgId": "Org Id not available",
+  "noTagsFound": "No tags found",
+  "unknownMember": "Unknown Member",
+  "searchTags": "Search Tags",
+  "sortBy": "Sort By",
+  "previousYear": "Previous Year",
+  "nextYear": "Next Year",
+  "navigateToProfile": "Navigate to profile"
 }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi, afterEach } from 'vitest';
 
 afterEach(() => {
@@ -14,7 +15,7 @@ describe('PageHeader Component', () => {
     expect(screen.getByText('Test Title')).toBeInTheDocument();
   });
 
-  it('renders search bar when search props are provided', () => {
+  it('renders search bar when search props are provided', async () => {
     const TestInterfaceMockSearch = vi.fn();
     render(
       <PageHeader
@@ -32,8 +33,9 @@ describe('PageHeader Component', () => {
     expect(input).toBeInTheDocument();
     expect(button).toBeInTheDocument();
 
-    fireEvent.change(input, { target: { value: 'hello' } });
-    fireEvent.click(button);
+    await userEvent.clear(input);
+    await userEvent.type(input, 'hello');
+    await userEvent.click(button);
     expect(TestInterfaceMockSearch).toHaveBeenCalled();
   });
 
@@ -53,7 +55,7 @@ describe('PageHeader Component', () => {
     ];
 
     render(<PageHeader sorting={sortingProps} />);
-    expect(screen.getByTitle('Sort by Date')).toBeInTheDocument();
+    expect(screen.getByLabelText('Sort by Date')).toBeInTheDocument();
   });
 
   it('renders event type filter when showEventTypeFilter is true', () => {
@@ -86,25 +88,25 @@ describe('PageHeader Component', () => {
     ];
 
     render(<PageHeader sorting={sortingProps} />);
-    expect(screen.getByTitle('Sort 1')).toBeInTheDocument();
-    expect(screen.getByTitle('Sort 2')).toBeInTheDocument();
+    expect(screen.getByLabelText('Sort 1')).toBeInTheDocument();
+    expect(screen.getByLabelText('Sort 2')).toBeInTheDocument();
   });
 
-  it('renders event type options and allows selection', () => {
+  it('renders event type options and allows selection', async () => {
     render(<PageHeader showEventTypeFilter={true} />);
 
     // 1. Check if the main button exists
-    const eventTypeButton = screen.getByTestId('eventType');
+    const eventTypeButton = screen.getByTestId('eventType-toggle');
     expect(eventTypeButton).toBeInTheDocument();
 
     // 2. Click it to open the menu
-    fireEvent.click(eventTypeButton);
+    await userEvent.click(eventTypeButton);
 
     // 3. Check if the "Workshops" option appears
     const workshopsOption = screen.getByText('Workshops');
     expect(workshopsOption).toBeInTheDocument();
 
     // 4. Click the option (to ensure no errors occur)
-    fireEvent.click(workshopsOption);
+    await userEvent.click(workshopsOption);
   });
 });

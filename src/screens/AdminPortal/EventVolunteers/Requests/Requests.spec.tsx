@@ -138,12 +138,12 @@ describe('Testing Requests Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    let sortBtn = await screen.findByTestId('sort');
+    let sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by createdAt_DESC
     await user.click(sortBtn);
-    const createdAtDESC = await screen.findByTestId('createdAt_DESC');
+    const createdAtDESC = await screen.findByTestId('sort-item-createdAt_DESC');
     expect(createdAtDESC).toBeInTheDocument();
     await user.click(createdAtDESC);
 
@@ -151,10 +151,10 @@ describe('Testing Requests Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
 
     // Sort by createdAt_ASC
-    sortBtn = await screen.findByTestId('sort');
+    sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
     await user.click(sortBtn);
-    const createdAtASC = await screen.findByTestId('createdAt_ASC');
+    const createdAtASC = await screen.findByTestId('sort-item-createdAt_ASC');
     expect(createdAtASC).toBeInTheDocument();
     await user.click(createdAtASC);
 
@@ -284,11 +284,13 @@ describe('Testing Requests Screen', () => {
     expect(volunteerNames).toHaveLength(3);
 
     // Click filter button
-    const filterBtn = await screen.findByTestId('filter');
+    const filterBtn = await screen.findByTestId('filter-toggle');
     await user.click(filterBtn);
 
     // Select individual filter
-    const individualFilter = await screen.findByTestId('individual');
+    const individualFilter = await screen.findByTestId(
+      'filter-item-individual',
+    );
     await user.click(individualFilter);
 
     await waitFor(() => {
@@ -312,11 +314,11 @@ describe('Testing Requests Screen', () => {
     expect(volunteerNames).toHaveLength(3);
 
     // Click filter button
-    const filterBtn = await screen.findByTestId('filter');
+    const filterBtn = await screen.findByTestId('filter-toggle');
     await user.click(filterBtn);
 
     // Select group filter
-    const groupFilter = await screen.findByTestId('group');
+    const groupFilter = await screen.findByTestId('filter-item-group');
     await user.click(groupFilter);
 
     await waitFor(() => {
@@ -335,11 +337,13 @@ describe('Testing Requests Screen', () => {
     });
 
     // Click filter button
-    const filterBtn = await screen.findByTestId('filter');
+    const filterBtn = await screen.findByTestId('filter-toggle');
     await user.click(filterBtn);
 
     // First set to individual filter
-    const individualFilter = await screen.findByTestId('individual');
+    const individualFilter = await screen.findByTestId(
+      'filter-item-individual',
+    );
     await user.click(individualFilter);
 
     await waitFor(() => {
@@ -348,11 +352,11 @@ describe('Testing Requests Screen', () => {
     });
 
     // Now click filter button again
-    const filterBtnAgain = await screen.findByTestId('filter');
+    const filterBtnAgain = await screen.findByTestId('filter-toggle');
     await user.click(filterBtnAgain);
 
     // Select 'all' filter to show all requests again
-    const allFilter = await screen.findByTestId('all');
+    const allFilter = await screen.findByTestId('filter-item-all');
     await user.click(allFilter);
 
     await waitFor(() => {
@@ -384,7 +388,7 @@ describe('Requests Component CSS Styling', () => {
     const hasDataGrid = container.querySelector('.MuiDataGrid-root');
     expect(hasDataGrid).toBeInTheDocument();
 
-    const sortButton = await screen.findByTestId('sort');
+    const sortButton = await screen.findByTestId('sort-toggle');
     expect(sortButton).toBeInTheDocument();
   });
 });

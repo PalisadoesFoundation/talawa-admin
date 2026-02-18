@@ -103,6 +103,7 @@ describe('Testing Advertisement Component', () => {
     });
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -593,7 +594,6 @@ describe('Testing Advertisement Component', () => {
         organizationId: '1',
         name: 'Ad1',
         type: 'banner',
-        attachments: [],
       });
       expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
       expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);

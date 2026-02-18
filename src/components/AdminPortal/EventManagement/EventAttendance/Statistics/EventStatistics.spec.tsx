@@ -517,9 +517,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: 'exportData' }),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('export-container')).toBeInTheDocument();
     });
 
     // Switch to age category first
@@ -528,15 +526,11 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       await userEvent.click(ageButton);
     });
 
-    await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'exportData' });
-      await userEvent.click(exportButton);
-    });
+    const exportButton = screen.getByTestId('export-toggle');
+    await userEvent.click(exportButton);
 
-    await act(async () => {
-      const demographicsExport = screen.getByTestId('demographics-export');
-      await userEvent.click(demographicsExport);
-    });
+    const demographicsExport = screen.getByTestId('export-item-demographics');
+    await userEvent.click(demographicsExport);
 
     expect(mockExportToCSV).toHaveBeenCalledWith(
       expect.arrayContaining([['Age', 'Count']]),
@@ -561,20 +555,14 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: 'exportData' }),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('export-container')).toBeInTheDocument();
     });
 
-    await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'exportData' });
-      await userEvent.click(exportButton);
-    });
+    const exportButton = screen.getByTestId('export-toggle');
+    await userEvent.click(exportButton);
 
-    await act(async () => {
-      const demographicsExport = screen.getByTestId('demographics-export');
-      await userEvent.click(demographicsExport);
-    });
+    const demographicsExport = screen.getByTestId('export-item-demographics');
+    await userEvent.click(demographicsExport);
 
     expect(mockExportToCSV).toHaveBeenCalled();
   });
@@ -603,15 +591,15 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     });
 
     // Click the export dropdown to open it
-    const exportButton = screen.getByRole('button', { name: 'exportData' });
+    const exportButton = screen.getByTestId('export-toggle');
     await userEvent.click(exportButton);
 
     // Now wait for and click the trends export option
     await waitFor(() => {
-      expect(screen.getByTestId('trends-export')).toBeInTheDocument();
+      expect(screen.getByTestId('export-item-trends')).toBeInTheDocument();
     });
 
-    const trendsExport = screen.getByTestId('trends-export');
+    const trendsExport = screen.getByTestId('export-item-trends');
     await userEvent.click(trendsExport);
 
     expect(mockExportToCSV).toHaveBeenCalled();
@@ -646,15 +634,15 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     });
 
     // Click the export dropdown to open it
-    const exportButton = screen.getByRole('button', { name: 'exportData' });
+    const exportButton = screen.getByTestId('export-toggle');
     await userEvent.click(exportButton);
 
     // Now wait for and click the trends export option
     await waitFor(() => {
-      expect(screen.getByTestId('trends-export')).toBeInTheDocument();
+      expect(screen.getByTestId('export-item-trends')).toBeInTheDocument();
     });
 
-    const trendsExport = screen.getByTestId('trends-export');
+    const trendsExport = screen.getByTestId('export-item-trends');
     await userEvent.click(trendsExport);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -686,20 +674,14 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: 'exportData' }),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('export-container')).toBeInTheDocument();
     });
 
-    await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'exportData' });
-      await userEvent.click(exportButton);
-    });
+    const exportButton = screen.getByTestId('export-toggle');
+    await userEvent.click(exportButton);
 
-    await act(async () => {
-      const demographicsExport = screen.getByTestId('demographics-export');
-      await userEvent.click(demographicsExport);
-    });
+    const demographicsExport = screen.getByTestId('export-item-demographics');
+    await userEvent.click(demographicsExport);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Failed to export demographics:',
@@ -722,12 +704,12 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('export-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('export-container')).toBeInTheDocument();
     });
 
     // This test verifies the dropdown renders correctly
     // The default case in handleExport is tested implicitly through other test cases
-    const dropdown = screen.getByTestId('export-dropdown');
+    const dropdown = screen.getByTestId('export-container');
     expect(dropdown).toBeInTheDocument();
   });
 
@@ -1705,14 +1687,12 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByTestId('export-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('export-container')).toBeInTheDocument();
     });
 
     // Open and close the dropdown without selecting - verifies dropdown handling
-    await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'exportData' });
-      await userEvent.click(exportButton);
-    });
+    const exportButton = screen.getByTestId('export-toggle');
+    await userEvent.click(exportButton);
 
     // Click elsewhere to close
     await act(async () => {
@@ -1873,15 +1853,11 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     });
 
     // Export demographics to exercise the export path with age data
-    await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'exportData' });
-      await userEvent.click(exportButton);
-    });
+    const exportButton = screen.getByTestId('export-toggle');
+    await userEvent.click(exportButton);
 
-    await act(async () => {
-      const demographicsExport = screen.getByTestId('demographics-export');
-      await userEvent.click(demographicsExport);
-    });
+    const demographicsExport = screen.getByTestId('export-item-demographics');
+    await userEvent.click(demographicsExport);
 
     expect(exportToCSV).toHaveBeenCalled();
   });

@@ -1,0 +1,19 @@
+{
+  "posts": [
+    {
+      "id": "post_001",
+      "title": "Welcome post",
+      "body": "Welcome to the community.",
+      "authorName": "Admin User",
+      "createdAt": "2026-01-02T00:00:00.000Z"
+    },
+    {
+      "id": "post_002",
+      "title": "Long Post — مرحبا 世界",
+      "body": "Edge case content.",
+      "authorName": "Long Name Member — 世界",
+      "createdAt": "2026-01-03T00:00:00.000Z"
+    }
+  ],
+  "emptyPosts": []
+}

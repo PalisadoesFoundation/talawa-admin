@@ -97,7 +97,7 @@ describe('ChangeLanguageDropDown', () => {
     // Setup default mock implementations
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'TRUE';
         return null;
@@ -141,10 +141,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -163,10 +165,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -184,13 +188,13 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
     await waitFor(() => {
       languages.forEach((language) => {
         const option = screen.getByTestId(
-          `change-language-btn-${language.code}`,
+          `language-dropdown-item-${language.code}`,
         );
         expect(option).toBeInTheDocument();
       });
@@ -221,11 +225,12 @@ describe('ChangeLanguageDropDown', () => {
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
-
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -255,10 +260,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -277,7 +284,7 @@ describe('ChangeLanguageDropDown', () => {
       // Mock userImage to be the specified invalid value
       (useLocalStorage as Mock).mockReturnValue({
         getItem: vi.fn((key: string) => {
-          if (key === 'id') return mockUserId;
+          if (key === 'userId') return mockUserId;
           if (key === 'UserImage') return userImage;
           if (key === 'IsLoggedIn') return 'TRUE';
           return null;
@@ -303,10 +310,12 @@ describe('ChangeLanguageDropDown', () => {
         </MockedProvider>,
       );
 
-      const dropdown = screen.getByTestId('language-dropdown-btn');
+      const dropdown = screen.getByTestId('language-dropdown-toggle');
       await userEvent.click(dropdown);
 
-      const spanishOption = await screen.findByTestId('change-language-btn-es');
+      const spanishOption = await screen.findByTestId(
+        'language-dropdown-item-es',
+      );
       await userEvent.click(spanishOption);
 
       await waitFor(() => {
@@ -325,7 +334,7 @@ describe('ChangeLanguageDropDown', () => {
 
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return 'https://example.com/avatar.jpg';
         if (key === 'IsLoggedIn') return 'TRUE';
         return null;
@@ -340,14 +349,16 @@ describe('ChangeLanguageDropDown', () => {
 
     // The component should render without errors even when cookies.get returns null
     // This tests the fallback branch: cookies.get('i18next') || 'en'
-    expect(screen.getByTestId('language-dropdown-btn')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('language-dropdown-container'),
+    ).toBeInTheDocument();
   });
 
   it('changes language locally without calling mutation when user is not logged in', async () => {
     // Mock user as NOT logged in
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'FALSE'; // User NOT logged in
         return null;
@@ -377,10 +388,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -401,7 +414,7 @@ describe('ChangeLanguageDropDown', () => {
     // Mock user as logged in
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'TRUE'; // User IS logged in
         return null;
@@ -431,10 +444,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -451,7 +466,7 @@ describe('ChangeLanguageDropDown', () => {
     // Mock IsLoggedIn as null (user not logged in)
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key: string) => {
-        if (key === 'id') return mockUserId;
+        if (key === 'userId') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return null; // Not set
         return null;
@@ -480,10 +495,10 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const frenchOption = await screen.findByTestId('change-language-btn-fr');
+    const frenchOption = await screen.findByTestId('language-dropdown-item-fr');
     await userEvent.click(frenchOption);
 
     await waitFor(() => {
