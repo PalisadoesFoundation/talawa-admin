@@ -1,0 +1,13 @@
+.holidayCard {
+  color: var(--color-black);
+  background-color: var(--color-black);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  display: flex;
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
