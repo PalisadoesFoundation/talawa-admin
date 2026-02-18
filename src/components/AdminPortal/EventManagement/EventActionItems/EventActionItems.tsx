@@ -104,32 +104,23 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       setActionItem(item);
       itemModal.open();
     },
-    [itemModal],
+    [],
   );
 
-  const handleOpenViewModal = useCallback(
-    (item: IActionItemInfo): void => {
-      setActionItem(item);
-      viewModal.open();
-    },
-    [viewModal],
-  );
+  const handleOpenViewModal = useCallback((item: IActionItemInfo): void => {
+    setActionItem(item);
+    viewModal.open();
+  }, []);
 
-  const handleOpenDeleteModal = useCallback(
-    (item: IActionItemInfo): void => {
-      setActionItem(item);
-      deleteModal.open();
-    },
-    [deleteModal],
-  );
+  const handleOpenDeleteModal = useCallback((item: IActionItemInfo): void => {
+    setActionItem(item);
+    deleteModal.open();
+  }, []);
 
-  const handleOpenStatusModal = useCallback(
-    (item: IActionItemInfo): void => {
-      setActionItem(item);
-      statusModal.open();
-    },
-    [statusModal],
-  );
+  const handleOpenStatusModal = useCallback((item: IActionItemInfo): void => {
+    setActionItem(item);
+    statusModal.open();
+  }, []);
 
   const {
     data: eventData,
