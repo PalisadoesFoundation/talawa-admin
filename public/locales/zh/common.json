@@ -312,6 +312,7 @@
   "previousYear": "上一年",
   "nextYear": "下一年",
   "navigateToProfile": "导航到个人资料",
+  "monthlyOn": "每月",
   "loginSuccess": "欢迎！",
   "loginSuccessWithName": "欢迎，{{name}}！",
   "signupSuccess": "注册成功！",
