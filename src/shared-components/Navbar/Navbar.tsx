@@ -7,7 +7,7 @@
  *
  * @remarks
  * - Primarily used for pages that require filtering, sorting, or search.
- * - Uses `SearchBar` and `SortingButton` shared-components for search and sorting functionality.
+ * - Uses `SearchBar` and `DropDownButton` shared-components for search and sorting functionality.
  * - Layout is responsive and adjusts based on provided props.
  *
  * @example
@@ -49,35 +49,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './Navbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'shared-components/SortingButton/SortingButton';
-
-interface InterfacePageHeaderProps {
-  title?: string;
-  search?: {
-    placeholder: string;
-    onSearch: (value: string) => void;
-    inputTestId?: string;
-    buttonTestId?: string;
-  };
-  sorting?: Array<{
-    title: string;
-    options: { label: string; value: string | number }[];
-    selected: string | number;
-    onChange: (value: string | number) => void;
-    testIdPrefix: string;
-    containerClassName?: string;
-    toggleClassName?: string;
-  }>;
-  showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
-  rootClassName?: string;
-}
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
+import SortIcon from '@mui/icons-material/Sort';
+import type { InterfacePageHeaderProps } from 'types/shared-components/Navbar/interface';
 
 export default function PageHeader({
   title,
   search,
   sorting,
-  showEventTypeFilter = false,
+
   actions,
   rootClassName,
 }: InterfacePageHeaderProps) {
@@ -108,38 +88,40 @@ export default function PageHeader({
 
         {/* ===== Sorting Props ===== */}
         {sorting &&
-          sorting.map((sort, idx) => (
-            <div key={idx} className={styles.space}>
-              <SortingButton
-                title={sort.title}
-                sortingOptions={sort.options}
-                selectedOption={sort.selected}
-                onSortChange={sort.onChange}
-                dataTestIdPrefix={sort.testIdPrefix}
-                className={styles.dropdown}
-                containerClassName={sort.containerClassName}
-                toggleClassName={sort.toggleClassName}
-              />
-            </div>
-          ))}
-
-        {/*  Optional Event Type dropdown */}
-        {showEventTypeFilter && (
-          <div className={styles.btnsBlock}>
-            <SortingButton
-              title={t('eventType')}
-              sortingOptions={[
-                { label: 'Events', value: 'Events' },
-                { label: 'Workshops', value: 'Workshops' },
-              ]}
-              selectedOption={'Events'}
-              onSortChange={() => {}}
-              dataTestIdPrefix="eventType"
-              className={styles.dropdown}
-              buttonLabel={t('eventType')}
-            />
-          </div>
-        )}
+          sorting.map((sort, idx) => {
+            const valueMap = new Map(
+              sort.options.map((opt) => [String(opt.value), opt.value]),
+            );
+            return (
+              <div key={idx} className={styles.btnsBlock}>
+                <DropDownButton
+                  options={sort.options.map((opt) => ({
+                    label: opt.label,
+                    value: String(opt.value),
+                  }))}
+                  selectedValue={String(sort.selected)}
+                  onSelect={(val) => sort.onChange(valueMap.get(val) ?? val)}
+                  ariaLabel={sort.title}
+                  dataTestIdPrefix={sort.testIdPrefix}
+                  parentContainerStyle={styles.dropdown}
+                  containerClassName={sort.containerClassName}
+                  toggleClassName={sort.toggleClassName}
+                  icon={
+                    sort.icon ? (
+                      <img
+                        src={String(sort.icon)}
+                        alt={t('common:sortingIcon')}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <SortIcon data-testid="sorting-icon" aria-hidden="true" />
+                    )
+                  }
+                  variant="outline-secondary"
+                />
+              </div>
+            );
+          })}
 
         {/* ===== Action Buttons ===== */}
         {actions && (

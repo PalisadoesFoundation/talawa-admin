@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import PeopleTabNavbar from './PeopleTabNavbar';
@@ -11,19 +11,6 @@ type SearchBarProps = {
   onSearch: (value: string) => void;
   inputTestId?: string;
   buttonTestId?: string;
-};
-
-type SortingOption = {
-  label: string;
-  value: string | number;
-};
-
-type SortingButtonProps = {
-  title: string;
-  sortingOptions: SortingOption[];
-  selectedOption: string | number;
-  onSortChange: (value: string | number) => void;
-  dataTestIdPrefix: string;
 };
 
 /* ------------------ Mocks ------------------ */
@@ -48,6 +35,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
         onChange={(e) => onSearch(e.target.value)}
       />
       <button
+        type="button"
         data-testid={buttonTestId ?? 'search-button'}
         onClick={() => onSearch('clicked')}
       >
@@ -57,33 +45,57 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
   ),
 }));
 
-vi.mock('shared-components/SortingButton/SortingButton', () => ({
+vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
   default: ({
-    title,
-    sortingOptions,
-    selectedOption,
-    onSortChange,
+    options,
+    selectedValue,
+    onSelect,
+    ariaLabel,
     dataTestIdPrefix,
-  }: SortingButtonProps) => (
-    <div data-testid={`${dataTestIdPrefix}-sorting`}>
-      <span>{title}</span>
-
-      {sortingOptions.map((opt) => (
-        <button key={opt.value} onClick={() => onSortChange(opt.value)}>
-          {opt.label}
+    buttonLabel,
+    icon,
+  }: {
+    options: { label: string; value: string | number }[];
+    selectedValue: string | number;
+    onSelect: (value: string | number) => void;
+    ariaLabel: string;
+    dataTestIdPrefix: string;
+    buttonLabel?: string;
+    icon?: React.ReactNode;
+  }) => {
+    const selected = options.find((o) => o.value === selectedValue);
+    const label = buttonLabel || selected?.label || 'Select';
+    return (
+      <div data-testid={`${dataTestIdPrefix}-dropdown`}>
+        <span data-testid={`${dataTestIdPrefix}-label`}>{ariaLabel}</span>
+        <button type="button" data-testid={`${dataTestIdPrefix}-toggle`}>
+          {label}
         </button>
-      ))}
+        <div data-testid={`${dataTestIdPrefix}-icon`}>{icon}</div>
+        {options.map((opt) => (
+          <button
+            type="button"
+            key={opt.value}
+            onClick={() => onSelect(opt.value)}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    );
+  },
+}));
 
-      <span>Selected: {selectedOption}</span>
-    </div>
-  ),
+vi.mock('@mui/icons-material/Sort', () => ({
+  default: () => <span data-testid="sort-icon">SortIcon</span>,
 }));
 
 /* ------------------ Tests ------------------ */
 
 describe('PeopleTabNavbar', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders title when provided', () => {
@@ -107,10 +119,10 @@ describe('PeopleTabNavbar', () => {
     );
 
     await user.type(screen.getByTestId('search-input'), 'John');
-    expect(onSearch).toHaveBeenLastCalledWith('John');
+    await waitFor(() => expect(onSearch).toHaveBeenLastCalledWith('John'));
 
     await user.click(screen.getByTestId('search-button'));
-    expect(onSearch).toHaveBeenCalledWith('clicked');
+    await waitFor(() => expect(onSearch).toHaveBeenCalledWith('clicked'));
   });
 
   it('renders sorting dropdown and handles sort change', async () => {
@@ -135,42 +147,73 @@ describe('PeopleTabNavbar', () => {
     );
 
     expect(screen.getByText('Sort By')).toBeInTheDocument();
-    expect(screen.getByText('Selected: DESC')).toBeInTheDocument();
+    // DropDownButton shows the label of the selected option, not the value
+    expect(screen.getByTestId('usersSort-toggle')).toHaveTextContent('Newest');
 
     await user.click(screen.getByText('Oldest'));
-    expect(onSortChange).toHaveBeenCalledWith('ASC');
+    await waitFor(() => expect(onSortChange).toHaveBeenCalledWith('ASC'));
   });
 
   it('renders action buttons when provided', () => {
     render(
       <PeopleTabNavbar
-        actions={<button data-testid="add-user">Add User</button>}
+        actions={
+          <button type="button" data-testid="add-user">
+            Add User
+          </button>
+        }
       />,
     );
 
     expect(screen.getByTestId('add-user')).toBeInTheDocument();
   });
 
-  it('renders event type filter when enabled', () => {
-    render(<PeopleTabNavbar showEventTypeFilter />);
-    expect(screen.getByTestId('eventType-sorting')).toBeInTheDocument();
+  it('applies alignmentClassName when provided', () => {
+    render(<PeopleTabNavbar alignmentClassName="custom-alignment-class" />);
+    const alignmentContainer = screen.getByTestId('people-tab-navbar');
+    expect(alignmentContainer).toHaveClass('custom-alignment-class');
   });
 
-  it('does not render event type filter when disabled', () => {
-    render(<PeopleTabNavbar showEventTypeFilter={false} />);
-    expect(screen.queryByTestId('eventType-sorting')).not.toBeInTheDocument();
+  it('renders custom sort icon when provided', () => {
+    const onSortChange = vi.fn();
+    render(
+      <PeopleTabNavbar
+        sorting={[
+          {
+            title: 'Sort Custom',
+            options: [{ label: 'A', value: 'a' }],
+            selected: 'a',
+            onChange: onSortChange,
+            testIdPrefix: 'sort-custom',
+            icon: 'custom-icon.png',
+          },
+        ]}
+      />,
+    );
+
+    const iconContainer = screen.getByTestId('sort-custom-icon');
+    const img = iconContainer.querySelector('img');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', 'custom-icon.png');
   });
 
-  it('handles event type sort change safely when onSortChange is a no-op', async () => {
-    const user = userEvent.setup();
+  it('renders default SortIcon when sort.icon is NOT provided', () => {
+    const onSortChange = vi.fn();
+    render(
+      <PeopleTabNavbar
+        sorting={[
+          {
+            title: 'Sort Default',
+            options: [{ label: 'B', value: 'b' }],
+            selected: 'b',
+            onChange: onSortChange,
+            testIdPrefix: 'sort-default',
+          },
+        ]}
+      />,
+    );
 
-    render(<PeopleTabNavbar showEventTypeFilter />);
-
-    const eventTypeSorting = screen.getByTestId('eventType-sorting');
-    expect(eventTypeSorting).toBeInTheDocument();
-
-    await expect(
-      user.click(screen.getByText('Workshops')),
-    ).resolves.not.toThrow();
+    const iconContainer = screen.getByTestId('sort-default-icon');
+    expect(iconContainer).toHaveTextContent('SortIcon');
   });
 });

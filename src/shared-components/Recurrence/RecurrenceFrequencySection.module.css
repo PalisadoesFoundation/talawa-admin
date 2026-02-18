@@ -1,12 +1,44 @@
+.sectionContainer {
+  margin-bottom: var(--space-4);
+}
+
+.inlineRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.label {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
+}
+
 .recurrenceRuleNumberInput {
-  width: 70px;
+  width: var(--space-12);
+  display: inline-block;
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-2);
+}
+
+.dropdownButton {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* Migrated from app-fixed.module.css */
-.dropdown.dropdown {
+.dropdown {
   background-color: var(--dropdown-bg);
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
+  min-width: var(--space-14);
   color: var(--dropdown-font-color);
   position: relative;
+  display: inline-block;
+  margin-left: var(--space-1);
+}
+
+.dropdownMenu {
+  width: 100%;
+  min-width: unset;
 }

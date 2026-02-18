@@ -7,7 +7,7 @@
  *
  * @remarks
  * - Used on pages that require filtering, sorting, or searching
- * - Uses SearchBar and SortingButton shared-components
+ * - Uses SearchBar and DropDownButton shared-components
  * - Layout adapts based on provided props
  *
  * @example
@@ -46,15 +46,17 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './PeopleTabNavbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'shared-components/SortingButton/SortingButton';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
+import SortIcon from '@mui/icons-material/Sort';
 import type { InterfacePeopleTabNavbarProps } from 'types/shared-components/PeopleTabNavbar/interface';
 
 export default function PeopleTabNavbar({
   title,
   search,
   sorting,
-  showEventTypeFilter = false,
+
   actions,
+  alignmentClassName,
 }: InterfacePeopleTabNavbarProps) {
   const { t: tCommon } = useTranslation('common');
 
@@ -65,7 +67,12 @@ export default function PeopleTabNavbar({
     >
       <div className={styles.calendar__header}>
         {title && <h2 className={styles.pageHeaderTitle}>{title}</h2>}
-        <div className={styles.peopleTabNavbarAlignment}>
+        <div
+          className={[styles.peopleTabNavbarAlignment, alignmentClassName]
+            .filter(Boolean)
+            .join(' ')}
+          data-testid="people-tab-navbar"
+        >
           {/* ===== Action Buttons ===== */}
           {actions && (
             <div className={styles.btnsBlock}>
@@ -74,42 +81,41 @@ export default function PeopleTabNavbar({
           )}
           {/* ===== Sorting Props ===== */}
           {sorting &&
-            sorting.map(
-              (
-                sort: (typeof sorting)[0],
-                idx: React.Key | null | undefined,
-              ) => (
+            sorting.map((sort, idx) => {
+              const valueMap = new Map(
+                sort.options.map((opt) => [String(opt.value), opt.value]),
+              );
+              return (
                 <div key={idx} className={styles.dropdownItemButton}>
-                  <SortingButton
-                    title={sort.title}
-                    sortingOptions={sort.options}
-                    selectedOption={sort.selected}
-                    onSortChange={sort.onChange}
+                  <DropDownButton
+                    options={sort.options.map((opt) => ({
+                      label: opt.label,
+                      value: String(opt.value),
+                    }))}
+                    selectedValue={String(sort.selected)}
+                    onSelect={(val) => sort.onChange(valueMap.get(val) ?? val)}
+                    ariaLabel={sort.title}
                     dataTestIdPrefix={sort.testIdPrefix}
-                    className={styles.dropdown}
-                    icon={sort.icon}
+                    parentContainerStyle={styles.dropdown}
+                    icon={
+                      sort.icon ? (
+                        <img
+                          src={String(sort.icon)}
+                          alt={tCommon('sortingIcon')}
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <SortIcon
+                          data-testid="sorting-icon"
+                          aria-hidden="true"
+                        />
+                      )
+                    }
+                    variant="outline-secondary"
                   />
                 </div>
-              ),
-            )}
-
-          {/*  Optional Event Type dropdown */}
-          {showEventTypeFilter && (
-            <div className={styles.btnsBlock}>
-              <SortingButton
-                title={tCommon('eventType')}
-                sortingOptions={[
-                  { label: 'Events', value: 'Events' },
-                  { label: 'Workshops', value: 'Workshops' },
-                ]}
-                selectedOption={'Events'}
-                onSortChange={() => {}}
-                dataTestIdPrefix="eventType"
-                className={styles.dropdown}
-                buttonLabel={tCommon('eventType')}
-              />
-            </div>
-          )}
+              );
+            })}
         </div>
 
         {/* ===== Search Bar ===== */}
