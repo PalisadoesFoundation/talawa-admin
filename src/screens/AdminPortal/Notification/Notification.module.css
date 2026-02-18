@@ -1,0 +1,179 @@
+.container {
+  padding: var(--space-6);
+}
+
+.title {
+  margin-bottom: var(--space-6);
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  background: var(--color-white);
+  border-bottom: var(--border-2) solid var(--color-gray-100);
+  margin: var(--space-3) var(--space-0);
+  padding: var(--space-4) var(--space-5);
+  max-width: var(--space-28); /* Limit width */
+  max-height: var(--space-11);
+}
+
+.unread {
+  background-color: var(--color-gray-50);
+}
+
+.notificationLink {
+  text-decoration: none;
+  color: inherit;
+}
+
+.notificationTitle {
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: var(--space-22);
+}
+
+.notificationBody {
+  color: var(--color-gray-700);
+}
+
+/* Update notificationItem styles */
+.notificationItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-white);
+  border-bottom: var(--border-2) solid var(--color-gray-100);
+  margin: var(--space-3) var(--space-0);
+  padding: var(--space-4) var(--space-5);
+  max-width: var(--space-27); /* Limit width */
+  min-height: var(--space-11);
+}
+
+/* Add profile placeholder and vertical divider */
+.profileSection {
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-full);
+  margin-right: var(--space-5);
+  background: var(--color-gray-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: var(--border-1-5) solid var(--color-gray-100);
+}
+
+.notificationTitle {
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: var(--space-22);
+}
+
+.notificationBody {
+  color: var(--color-gray-700);
+  font-size: var(--font-size-15);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: var(--space-26);
+}
+
+.notificationContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertically center text block */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.markButton {
+  margin-left: var(--space-4);
+  align-self: center; /* vertical center inside the item */
+  background-color: var(--color-blue-200) !important;
+  border-color: var(--color-blue-200) !important;
+  color: var(--color-gray-800) !important;
+}
+
+/* Pagination footer */
+.paginationFooter {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center;
+  gap: var(--space-3); /* low distance between buttons */
+  margin-top: var(--space-7);
+  padding-bottom: var(--space-4);
+  width: 100%;
+  max-width: var(--space-27); /* match notification item width */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.listWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center children */
+}
+
+.listWrapper .list-group {
+  width: 100%;
+  max-width: var(--space-27); /* same as notification items */
+}
+
+.paginationButton {
+  background-color: var(--color-blue-200); /* bluish base similar to site */
+  color: var(--color-black); /* text dark */
+  border: var(--border-1) solid var(--color-blue-200);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    transform 0.08s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: var(--color-blue-200); /* darker bluish on hover */
+  transform: translateY(-1px);
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Skeleton loading styles */
+.skeletonTitle {
+  height: var(--space-5);
+  width: 60%;
+  background: linear-gradient(90deg, var(--color-gray-50), var(--color-white));
+  border-radius: 6px;
+  margin-bottom: var(--space-3);
+}
+
+.skeletonBody {
+  height: var(--space-4);
+  width: 90%;
+  background: linear-gradient(90deg, var(--color-gray-50), var(--color-white));
+  border-radius: 6px;
+}
+
+.buttonSpacer {
+  width: var(--space-13);
+}
+
+.notificationLinkContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.userIconWrapper {
+  color: var(--bs-secondary, var(--color-blue-200));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

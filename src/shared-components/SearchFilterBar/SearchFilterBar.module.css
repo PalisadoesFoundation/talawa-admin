@@ -1,0 +1,31 @@
+.btnsContainerSearchBar {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--space-7) 0 var(--space-7) 0;
+  padding: 0 var(--space-8) 0 var(--space-3);
+  align-items: stretch;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+  min-height: var(--space-10);
+}
+
+.btnsBlockSearchBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.screenReaderOnly {
+  position: absolute;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: calc(-1 * var(--space-5));
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -1,0 +1,21 @@
+.modalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+}
+
+.addButton:disabled {
+  margin-bottom: 10px;
+  background-color: var(--disabled-btn);
+}

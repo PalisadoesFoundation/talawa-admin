@@ -1,4 +1,4 @@
-import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import type { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import type { Dispatch, SetStateAction } from 'react';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 
@@ -19,6 +19,7 @@ export interface IMember {
   createdAt: string;
   name: string;
   emailAddress: `${string}@${string}.${string}`;
+  avatarURL?: string;
   natalSex: string;
   eventsAttended?: {
     id: string;
@@ -49,8 +50,17 @@ export interface IEvent {
   endTime?: string | null;
   allDay: boolean;
   userId?: string;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
   isPublic: boolean;
   isRegisterable: boolean;
+  /**
+   * Determines if the event is restricted to invited participants only.
+   * When true, only invited users can see and access the event.
+   */
+  isInviteOnly: boolean;
   attendees: Partial<User>[];
   creator: Partial<User>;
   averageFeedbackScore?: number;
@@ -116,7 +126,13 @@ export interface IEventHeaderProps {
   showInviteModal: () => void;
 }
 
-interface IEventListCard extends IEvent {
+/**
+ * Props for EventListCard component.
+ *
+ * `@remarks` Extends IEvent and adds optional refetchEvents callback.
+ */
+export interface IEventListCard extends IEvent {
+  /** Optional callback to refresh the events list after modifications. */
   refetchEvents?: () => void;
 }
 
@@ -124,7 +140,7 @@ export interface IDeleteEventModalProps {
   eventListCardProps: IEventListCard;
   eventDeleteModalIsOpen: boolean;
   toggleDeleteModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   deleteEventHandler: (
     deleteOption?: 'single' | 'following' | 'all',
@@ -136,7 +152,7 @@ export interface IPreviewEventModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   toggleDeleteModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   isRegistered?: boolean;
   userId: string;
@@ -144,22 +160,24 @@ export interface IPreviewEventModalProps {
   eventEndDate: Date;
   setEventStartDate: Dispatch<SetStateAction<Date>>;
   setEventEndDate: Dispatch<SetStateAction<Date>>;
-  alldaychecked: boolean;
+  allDayChecked: boolean;
   setAllDayChecked: Dispatch<SetStateAction<boolean>>;
-  publicchecked: boolean;
+  publicChecked: boolean;
   setPublicChecked: Dispatch<SetStateAction<boolean>>;
-  registrablechecked: boolean;
-  setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
+  registerableChecked: boolean;
+  setRegisterableChecked: Dispatch<SetStateAction<boolean>>;
+  inviteOnlyChecked: boolean;
+  setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
     name: string;
-    eventdescrip: string;
+    eventDescription: string;
     location: string;
     startTime: string;
     endTime: string;
   };
   setFormState: (state: {
     name: string;
-    eventdescrip: string;
+    eventDescription: string;
     location: string;
     startTime: string;
     endTime: string;
@@ -177,7 +195,7 @@ export interface IUpdateEventModalProps {
   eventListCardProps: IEventListCard;
   recurringEventUpdateModalIsOpen: boolean;
   toggleRecurringEventUpdateModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   updateEventHandler: () => Promise<void>;
 }
@@ -191,14 +209,7 @@ export interface IAttendanceStatisticsModalProps {
     attendanceRate: number;
   };
   memberData: IMember[];
-  t: (key: string) => string;
-}
-
-export interface IEventsAttendedMemberModalProps {
-  eventsAttended: Partial<IEvent>[];
-  setShow: (show: boolean) => void;
-  show: boolean;
-  eventsPerPage?: number;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }
 
 export interface IEventEdge {
@@ -210,8 +221,17 @@ export interface IEventEdge {
     endAt: string;
     allDay: boolean;
     location?: string | null;
+    /**
+     * Determines if the event is visible to the entire community.
+     * Often referred to as "Community Visible" in the UI.
+     */
     isPublic: boolean;
     isRegisterable: boolean;
+    /**
+     * Determines if the event is restricted to invited participants only.
+     * When true, only invited users, the creator, and admins can see and access the event.
+     */
+    isInviteOnly: boolean;
     // Recurring event fields
     isRecurringEventTemplate?: boolean;
     baseEvent?: {
@@ -229,8 +249,41 @@ export interface IEventEdge {
       id: string;
       name: string;
     };
+    attendees?: {
+      id: string;
+      name: string;
+    }[];
   };
   cursor: string;
+}
+
+/**
+ * Input interface for creating events via CREATE_EVENT_MUTATION.
+ * Used by both Admin Portal (CreateEventModal) and User Portal (Events).
+ *
+ * Note: The recurrence property type matches the return type of
+ * formatRecurrenceForPayload from EventForm.tsx
+ */
+export interface ICreateEventInput {
+  name: string;
+  startAt: string;
+  endAt: string;
+  organizationId: string | undefined;
+  allDay: boolean;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
+  isPublic: boolean;
+  isRegisterable: boolean;
+  isInviteOnly: boolean;
+  description?: string;
+  location?: string;
+  recurrence?:
+    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+        endDate?: string;
+      })
+    | null;
 }
 
 // Legacy interface exports for backward compatibility
@@ -246,5 +299,3 @@ export type InterfaceEventEdge = IEventEdge;
 export type InterfaceUpdateEventModalProps = IUpdateEventModalProps;
 export type InterfaceAttendanceStatisticsModalProps =
   IAttendanceStatisticsModalProps;
-export type InterfaceEventsAttendedMemberModalProps =
-  IEventsAttendedMemberModalProps;

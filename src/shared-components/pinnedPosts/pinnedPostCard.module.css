@@ -1,0 +1,51 @@
+.postCardContainer {
+  width: 340px;
+  height: 380px;
+}
+
+.card {
+  width: 340px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cardHeader {
+  height: 49px;
+}
+
+.pushPin {
+  font-size: 20px;
+}
+
+.creatorName {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.moreOptionsButton {
+  font-size: 20px;
+}
+
+.postMedia {
+  height: 195px;
+  width: 100%;
+}
+
+.cardContent {
+  height: 136px;
+}
+
+/* Scoped button styles with parent class for proper specificity */
+.postCardContainer .viewPostButton {
+  background-color: #a8c7fa;
+  color: black;
+  text-transform: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.postCardContainer .viewPostButton:hover {
+  background-color: #8bb5e8;
+}

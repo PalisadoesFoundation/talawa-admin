@@ -1,0 +1,127 @@
+/**
+ * CRUD Modal Template Styles
+ *
+ * These styles provide consistent appearance for all modal templates.
+ * Where possible, global CSS classes from app-fixed.module.css are used.
+ */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  border-radius: 0.3rem;
+}
+
+.loadingSpinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loadingText {
+  color: #555555;
+  font-size: 0.875rem;
+}
+
+.errorAlert {
+  margin-bottom: 1rem;
+}
+
+.modalBody {
+  position: relative;
+  min-height: 100px;
+}
+
+.deleteWarningIcon {
+  font-size: 3rem;
+  color: #dc3545;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.deleteMessage {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.entityName {
+  font-weight: 600;
+  color: #dc3545;
+}
+
+.recurringOptions {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+  border: 1px solid #dee2e6;
+}
+
+.viewModalField {
+  margin-bottom: 1rem;
+}
+
+.formContainer {
+  padding: 1rem;
+}
+
+.contentContainer {
+  padding: 1rem;
+}
+
+.footerButtons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.focusVisible:focus-visible {
+  outline: 2px solid #1778f2;
+  outline-offset: 2px;
+}
+
+/* Button style for add/create actions (primary variant) */
+.addButton {
+  background-color: var(--addButton-bg, #a8c7fa);
+  border: 1px solid var(--addButton-border, #eaebef);
+  color: var(--addButton-font, #555555);
+}
+
+.addButton:hover {
+  background-color: var(--addButton-bg-hover, #1778f2);
+  border-color: var(--addButton-border-hover, #555555);
+}
+
+/* Button style for remove/delete actions (danger variant) */
+.removeButton {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.removeButton:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}

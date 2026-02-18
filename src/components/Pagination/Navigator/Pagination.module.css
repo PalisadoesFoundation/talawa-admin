@@ -1,0 +1,4 @@
+.container {
+  flex-shrink: 0;
+  margin-inline-start: 20px;
+}

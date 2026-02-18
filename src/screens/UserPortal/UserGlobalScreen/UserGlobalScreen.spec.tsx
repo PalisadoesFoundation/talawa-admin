@@ -1,7 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
-import { MemoryRouter, Outlet } from 'react-router-dom';
+import { render, screen, act, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
+import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 import UserGlobalScreen from './UserGlobalScreen';
+
+// Mock Avatar
+vi.mock('shared-components/Avatar/Avatar', () => ({
+  default: vi.fn(({ dataTestId, alt, src }) => (
+    <img data-testid={dataTestId} alt={alt} src={src || 'mock-avatar-src'} />
+  )),
+}));
 
 // Mock the child components
 vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
@@ -15,14 +24,74 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   )),
 }));
 
-vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
-  default: vi.fn(() => (
-    <div data-testid="profile-dropdown">ProfileDropdown</div>
+vi.mock('shared-components/DropDownButton', () => ({
+  default: vi.fn((props) => (
+    <div
+      data-testid="user-profile-dropdown"
+      data-variant={props.variant}
+      data-menu-class={props.menuClassName}
+      data-show-caret={props.showCaret}
+      role="menu"
+      aria-label={props.ariaLabel}
+    >
+      {props.icon}
+      <div data-testid="dropdown-options">
+        {props.options?.map(
+          (opt: { value: string; label: React.ReactNode }) => (
+            <button
+              key={opt.value}
+              data-testid={`option-${opt.value}`}
+              type="button"
+              onClick={() => props.onSelect && props.onSelect(opt.value)}
+            >
+              {opt.label}
+            </button>
+          ),
+        )}
+        <button
+          type="button"
+          data-testid="option-unknownKey"
+          onClick={() => props.onSelect && props.onSelect('unknownKey')}
+        >
+          Unknown
+        </button>
+      </div>
+    </div>
   )),
 }));
 
+vi.mock('hooks/useUserProfile', () => ({
+  default: vi.fn(
+    (): InterfaceUseUserProfileReturn => ({
+      name: 'Test User',
+      displayedName: 'Test User',
+      userRole: 'User',
+      userImage: 'test-image.jpg',
+      profileDestination: '/user/profile',
+      handleLogout: vi.fn().mockResolvedValue(undefined),
+      tCommon: (key: string) => key,
+    }),
+  ),
+}));
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: (namespace?: string, options?: { keyPrefix?: string }) => {
+    const keyPrefix = options?.keyPrefix || '';
+    return {
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          globalFeatures: 'Global Features',
+        };
+        const fullKey = keyPrefix ? `${keyPrefix}.${key}` : key;
+        return translations[key] || fullKey;
+      },
+    };
+  },
+}));
+
 // Mock CSS modules
-vi.mock('style/app-fixed.module.css', () => ({
+vi.mock('./UserGlobalScreen.module.css', () => ({
   default: {
     opendrawer: 'opendrawer',
     collapseSidebarButton: 'collapseSidebarButton',
@@ -30,7 +99,13 @@ vi.mock('style/app-fixed.module.css', () => ({
     pageContainer: 'pageContainer',
     expand: 'expand',
     contract: 'contract',
+    titleFlex: 'titleFlex',
+    profileDropdownMenu: 'profileDropdownMenu',
   },
+}));
+
+const routerSpies = vi.hoisted(() => ({
+  navigate: vi.fn(),
 }));
 
 // Mock react-router Outlet
@@ -39,6 +114,7 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     Outlet: vi.fn(() => <div data-testid="outlet">Outlet Content</div>),
+    useNavigate: () => routerSpies.navigate,
   };
 });
 
@@ -56,7 +132,8 @@ describe('UserGlobalScreen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
+    cleanup();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
@@ -73,12 +150,33 @@ describe('UserGlobalScreen', () => {
     );
   };
 
+  const overrideUserProfile = async (
+    overrides: Partial<InterfaceUseUserProfileReturn> = {},
+  ) => {
+    const useUserProfileMock = await import('hooks/useUserProfile');
+    const mockUseUserProfile =
+      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+
+    mockUseUserProfile.mockImplementation(
+      (): InterfaceUseUserProfileReturn => ({
+        name: 'Test User',
+        displayedName: 'Test User',
+        userRole: 'User',
+        userImage: 'test-image.jpg', // Default valid image
+        profileDestination: '/user/profile',
+        handleLogout: vi.fn().mockResolvedValue(undefined),
+        tCommon: (key: string) => key,
+        ...overrides,
+      }),
+    );
+  };
+
   describe('Component Rendering', () => {
     it('should render all required components', () => {
       renderComponent();
 
       expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
       expect(screen.getByTestId('outlet')).toBeInTheDocument();
       expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
       expect(screen.getByText('Global Features')).toBeInTheDocument();
@@ -89,25 +187,91 @@ describe('UserGlobalScreen', () => {
 
       const sidebar = screen.getByTestId('user-sidebar');
       expect(sidebar).toBeInTheDocument();
-      // The sidebar should initially show hideDrawer as null/false for desktop
+      // The sidebar should initially show hideDrawer as false for desktop
     });
 
-    it('should render ProfileDropdown component', () => {
+    it('should render DropDownButton component with correct props', () => {
       renderComponent();
 
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      const dropdown = screen.getByTestId('user-profile-dropdown');
+      expect(dropdown).toBeInTheDocument();
+      expect(dropdown).toHaveAttribute('data-variant', 'light');
+      expect(dropdown).toHaveAttribute('data-show-caret', 'false');
+      expect(dropdown).toHaveAttribute('data-menu-class');
     });
 
-    it('should render Outlet for nested routes', () => {
+    it('should render Avatar fallback when userImage is falsy', async () => {
+      // Mock useUserProfile to return empty userImage
+      await overrideUserProfile({ userImage: '' });
+
       renderComponent();
 
-      expect(screen.getByTestId('outlet')).toBeInTheDocument();
+      // Assert that the image displayed is the Avatar (fallback)
+      const avatarImg = screen.getByTestId('display-img');
+      expect(avatarImg).toBeInTheDocument();
+      expect(avatarImg).toHaveAttribute('alt', 'profilePicturePlaceholder');
     });
 
-    it('should render Global Features heading', () => {
+    it('should navigate to profile when viewProfile is selected', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
-      expect(screen.getByText('Global Features')).toBeInTheDocument();
+      const viewProfileOption = screen.getByTestId('option-viewProfile');
+      await user.click(viewProfileOption);
+
+      expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile');
+    });
+
+    it('should call handleLogout when logout is selected', async () => {
+      const user = userEvent.setup();
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
+
+      renderComponent();
+
+      const logoutOption = screen.getByTestId('option-logout');
+      await user.click(logoutOption);
+
+      expect(handleLogoutMock).toHaveBeenCalled();
+    });
+
+    it('should log error when logout fails', async () => {
+      const user = userEvent.setup();
+      const error = new Error('Logout failed');
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn().mockRejectedValue(error);
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      renderComponent();
+
+      const logoutOption = screen.getByTestId('option-logout');
+      await user.click(logoutOption);
+
+      expect(handleLogoutMock).toHaveBeenCalled();
+      // Wait for promise rejection handling
+      await new Promise(process.nextTick);
+      expect(consoleSpy).toHaveBeenCalledWith('Logout failed:', error);
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle unknown eventKey in DropDownButton', async () => {
+      const user = userEvent.setup();
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn();
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
+
+      renderComponent();
+
+      const unknownOption = screen.getByTestId('option-unknownKey');
+      await user.click(unknownOption);
+
+      // Assert that nothing happened
+      expect(routerSpies.navigate).not.toHaveBeenCalled();
+      expect(handleLogoutMock).not.toHaveBeenCalled();
     });
   });
 
@@ -125,52 +289,56 @@ describe('UserGlobalScreen', () => {
       expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
     });
 
-    it('should toggle to open menu button when close button is clicked', () => {
+    it('should toggle to open menu button when close button is clicked', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       expect(screen.getByTestId('openMenu')).toBeInTheDocument();
       expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
     });
 
-    it('should toggle back to close menu button when open button is clicked', () => {
+    it('should toggle back to close menu button when open button is clicked', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // First click to show open button
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       // Then click open button to show close button again
       const openButton = screen.getByTestId('openMenu');
-      fireEvent.click(openButton);
+      await user.click(openButton);
 
       expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
       expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
     });
 
-    it('should pass correct hideDrawer state to UserSidebar', () => {
+    it('should pass correct hideDrawer state to UserSidebar', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
-      // Initially hideDrawer should be null (first render)
+      // Initially hideDrawer should be false (first render)
       expect(screen.getByText(/UserSidebar - Hide:/)).toBeInTheDocument();
 
       // Click to hide drawer
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       // Now hideDrawer should be true - check within the sidebar
       const sidebar = screen.getByTestId('user-sidebar');
       expect(sidebar.textContent).toContain('true');
     });
 
-    it('should allow UserSidebar to toggle drawer state', () => {
+    it('should allow UserSidebar to toggle drawer state', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Click the mock sidebar toggle button
       const sidebarToggle = screen.getByText('Mock Sidebar Toggle');
-      fireEvent.click(sidebarToggle);
+      await user.click(sidebarToggle);
 
       // State should change
       expect(screen.getByTestId('openMenu')).toBeInTheDocument();
@@ -299,8 +467,8 @@ describe('UserGlobalScreen', () => {
         window.dispatchEvent(new Event('resize'));
       });
 
-      // Should still show open menu since resize to > 820px doesn't toggle
-      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+      // Should show close menu since resize to > 820px
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
     });
   });
 
@@ -314,40 +482,43 @@ describe('UserGlobalScreen', () => {
       expect(mainContainer).toHaveClass('pageContainer');
     });
 
-    it('should apply expand class when drawer is hidden', () => {
+    it('should apply expand class when drawer is hidden', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Hide the drawer
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       const mainContainer = screen.getByTestId('mainpageright');
       expect(mainContainer).toHaveClass('pageContainer', 'expand');
     });
 
-    it('should apply contract class when drawer is shown', () => {
+    it('should apply contract class when drawer is shown', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Hide drawer first
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       // Then show drawer again
       const openButton = screen.getByTestId('openMenu');
-      fireEvent.click(openButton);
+      await user.click(openButton);
 
       const mainContainer = screen.getByTestId('mainpageright');
       expect(mainContainer).toHaveClass('pageContainer', 'contract');
     });
 
-    it('should apply correct button classes', () => {
+    it('should apply correct button classes', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       const closeButton = screen.getByTestId('closeMenu');
       expect(closeButton).toHaveClass('collapseSidebarButton');
 
       // Toggle to open button
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       const openButton = screen.getByTestId('openMenu');
       expect(openButton).toHaveClass('opendrawer');
@@ -355,13 +526,14 @@ describe('UserGlobalScreen', () => {
   });
 
   describe('Initial State Handling', () => {
-    it('should handle null initial state correctly', () => {
+    it('should handle initial false state correctly ', () => {
       renderComponent();
 
       const mainContainer = screen.getByTestId('mainpageright');
 
-      // With null initial state, should not have expand or contract classes
+      // With initial state set to false, should have contract class
       expect(mainContainer).toHaveClass('pageContainer');
+      expect(mainContainer).toHaveClass('contract');
       expect(mainContainer).not.toHaveClass('expand');
     });
 
@@ -380,15 +552,16 @@ describe('UserGlobalScreen', () => {
   });
 
   describe('Edge Cases', () => {
-    it('should handle rapid successive button clicks', () => {
+    it('should handle rapid successive button clicks', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       const closeButton = screen.getByTestId('closeMenu');
 
       // Rapid clicks
-      fireEvent.click(closeButton);
-      fireEvent.click(screen.getByTestId('openMenu'));
-      fireEvent.click(screen.getByTestId('closeMenu'));
+      await user.click(closeButton);
+      await user.click(screen.getByTestId('openMenu'));
+      await user.click(screen.getByTestId('closeMenu'));
 
       // Should end up with open menu button
       expect(screen.getByTestId('openMenu')).toBeInTheDocument();

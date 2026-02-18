@@ -1,0 +1,9 @@
+.createButton {
+  background-color: var(--createButton-bg);
+  color: var(--createButton-color);
+  border: 1px solid var(--createButton-border);
+  margin: 5px 10px;
+  min-width: 10rem;
+  width: fit-content;
+  height: 3rem;
+}

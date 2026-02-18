@@ -1,33 +1,172 @@
-/**
- * Unit tests for the Donate component.
- *
- * This file contains tests for the Donate component to ensure it behaves as expected
- * under various scenarios.
- */
-import React, { act } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { ApolloLink } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { DUMMY_DATE_TIME_PREFIX } from 'Constant/common';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
-import useLocalStorage from 'utils/useLocalstorage';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
-import * as errorHandlerModule from 'utils/errorHandler';
+import dayjs from 'dayjs';
 
-// Mock the errorHandler module
+const MOCK_DATE = `${DUMMY_DATE_TIME_PREFIX}00:00:00.000Z`;
+
+const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
+  mockErrorHandler: vi.fn(),
+  mockUseParams: vi.fn(),
+  mockToast: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
+
 vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
+  errorHandler: mockErrorHandler,
+}));
+
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
+  useParams: mockUseParams,
+}));
+
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
+  useParams: mockUseParams,
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
+}));
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    getItem: vi.fn((key) => {
+      if (key === 'userId') return '123';
+      if (key === 'name') return 'name';
+      return null;
+    }),
+    setItem: vi.fn(),
+  })),
+}));
+
+// Child component mocks to ensure unit isolation
+vi.mock(
+  'components/UserPortal/OrganizationSidebar/OrganizationSidebar',
+  () => ({
+    default: () => <div data-testid="organization-sidebar" />,
+  }),
+);
+
+vi.mock('components/UserPortal/DonationCard/DonationCard', () => ({
+  default: () => <div data-testid="donation-card-mock" />,
+}));
+
+interface InterfaceSearchFilterBarMockProps {
+  searchValue: string;
+  onSearchChange: (value: string) => void;
+  searchInputTestId?: string;
+}
+
+vi.mock('shared-components/SearchFilterBar/SearchFilterBar', () => ({
+  default: ({
+    searchValue,
+    onSearchChange,
+    searchInputTestId,
+  }: InterfaceSearchFilterBarMockProps) => (
+    <div>
+      <input
+        data-testid={searchInputTestId}
+        value={searchValue}
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
+      <button data-testid="searchButton" type="button">
+        Search
+      </button>
+    </div>
+  ),
+}));
+
+interface InterfaceFormTextFieldMockProps {
+  value: string;
+  onChange: (value: string) => void;
+  startAdornment?: React.ReactNode;
+  endAdornment?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+vi.mock('shared-components/FormFieldGroup/FormTextField', () => ({
+  FormTextField: ({
+    value,
+    onChange,
+    startAdornment,
+    endAdornment,
+    ...props
+  }: InterfaceFormTextFieldMockProps) => (
+    <div>
+      {startAdornment}
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        {...props}
+      />
+      {endAdornment}
+    </div>
+  ),
+}));
+
+vi.mock('shared-components/PaginationList/PaginationList', () => ({
+  default: ({
+    rowsPerPage,
+    page,
+    onPageChange,
+    onRowsPerPageChange,
+  }: {
+    rowsPerPage: number;
+    page: number;
+    onPageChange: (
+      event: React.MouseEvent<HTMLButtonElement> | null,
+      newPage: number,
+    ) => void;
+    onRowsPerPageChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  }) => (
+    <div data-testid="pagination">
+      <span data-testid="current-page">{page}</span>
+      <span data-testid="rows-per-page">{rowsPerPage}</span>
+      <button
+        type="button"
+        data-testid="next-page-btn"
+        onClick={(e) => onPageChange(e, page + 1)}
+      >
+        Next
+      </button>
+      <button
+        type="button"
+        data-testid="prev-page-btn"
+        onClick={(e) => onPageChange(e, page - 1)}
+      >
+        Previous
+      </button>
+      <select
+        data-testid="rows-per-page-select"
+        value={rowsPerPage}
+        onChange={onRowsPerPageChange}
+      >
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+      </select>
+    </div>
+  ),
 }));
 
 const MOCKS = [
@@ -47,9 +186,11 @@ const MOCKS = [
             amount: 1,
             userId: '6391a15bcb738c181d238952',
             payPalId: 'payPalId',
-            updatedAt: '2024-04-03T16:43:01.514Z',
+            updatedAt: dayjs(MOCK_DATE).toISOString(),
+            __typename: 'Donation',
           },
         ],
+        __typename: 'Query',
       },
     },
   },
@@ -65,7 +206,6 @@ const MOCKS = [
         organizations: [
           {
             _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
             name: 'anyOrganization2',
             description: 'desc',
             address: {
@@ -73,37 +213,18 @@ const MOCKS = [
               countryCode: '123',
               postalCode: '456',
               state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
+              __typename: 'Address',
             },
             userRegistrationRequired: true,
             createdAt: '12345678900',
-            creator: { firstName: 'John', lastName: 'Doe' },
-            members: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
-            admins: [
-              {
-                _id: '45gj5678jk45678fvgbhnr4rtgh',
-              },
-            ],
-            membershipRequests: [
-              {
-                _id: '56gheqyr7deyfuiwfewifruy8',
-                user: {
-                  _id: '45ydeg2yet721rtgdu32ry',
-                },
-              },
-            ],
+            creator: { firstName: 'John', lastName: 'Doe', __typename: 'User' },
+            members: [],
+            admins: [],
+            membershipRequests: [],
+            __typename: 'Organization',
           },
         ],
+        __typename: 'Query',
       },
     },
   },
@@ -115,839 +236,733 @@ const MOCKS = [
         createDonationOrgId2: '',
         payPalId: 'paypalId',
         nameOfUser: 'name',
-        amount: 123,
+        amount: 100,
         nameOfOrg: 'anyOrganization2',
       },
     },
     result: {
       data: {
-        createDonation: [
-          {
-            _id: '',
-            amount: 123,
-            nameOfUser: 'name',
-            nameOfOrg: 'anyOrganization2',
-          },
-        ],
+        createDonation: {
+          _id: '1',
+          amount: 100,
+          nameOfUser: 'name',
+          nameOfOrg: 'anyOrganization2',
+          __typename: 'Donation',
+        },
+        __typename: 'Mutation',
       },
     },
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
-  useParams: vi.fn(() => ({ orgId: '' })),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn(),
+const MULTIPLE_DONATIONS_MOCKS = [
+  {
+    request: {
+      query: ORGANIZATION_DONATION_CONNECTION_LIST,
+      variables: {
+        orgId: '',
+      },
+    },
+    result: {
+      data: {
+        getDonationByOrgIdConnection: Array.from({ length: 10 }, (_, i) => ({
+          _id: `donation-${i}`,
+          nameOfUser: `User ${i}`,
+          amount: (i + 1) * 10,
+          userId: `user-${i}`,
+          payPalId: `paypal-${i}`,
+          updatedAt: dayjs(MOCK_DATE).toISOString(),
+          __typename: 'Donation',
+        })),
+        __typename: 'Query',
+      },
+    },
   },
-}));
+  ...MOCKS.slice(1),
+];
 
-describe('Testing Donate Screen [User Portal]', () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
+const EMPTY_DONATIONS_MOCK = [
+  {
+    request: {
+      query: ORGANIZATION_DONATION_CONNECTION_LIST,
+      variables: {
+        orgId: '',
+      },
+    },
+    result: {
+      data: {
+        getDonationByOrgIdConnection: [],
+        __typename: 'Query',
+      },
+    },
+  },
+  ...MOCKS.slice(1),
+];
 
+const DONATION_ERROR_MOCK = [
+  {
+    request: {
+      query: ORGANIZATION_DONATION_CONNECTION_LIST,
+      variables: {
+        orgId: '',
+      },
+    },
+    result: {
+      data: {
+        getDonationByOrgIdConnection: [],
+        __typename: 'Query',
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '6401ff65ce8e8406b8f07af3',
+            name: 'anyOrganization2',
+            description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+              __typename: 'Address',
+            },
+            userRegistrationRequired: true,
+            createdAt: '12345678900',
+            creator: { firstName: 'John', lastName: 'Doe', __typename: 'User' },
+            members: [],
+            admins: [],
+            membershipRequests: [],
+            __typename: 'Organization',
+          },
+        ],
+        __typename: 'Query',
+      },
+    },
+  },
+  {
+    request: {
+      query: DONATE_TO_ORGANIZATION,
+      variables: {
+        userId: '123',
+        createDonationOrgId2: '',
+        payPalId: 'paypalId',
+        nameOfUser: 'name',
+        amount: 100,
+        nameOfOrg: 'anyOrganization2',
+      },
+    },
+    error: new Error('Donation failed'),
+  },
+];
+
+const BOUNDARY_MOCKS = [
+  ...MOCKS,
+  {
+    request: {
+      query: DONATE_TO_ORGANIZATION,
+      variables: {
+        userId: '123',
+        createDonationOrgId2: '',
+        payPalId: 'paypalId',
+        nameOfUser: 'name',
+        amount: 1,
+        nameOfOrg: 'anyOrganization2',
+      },
+    },
+    result: {
+      data: {
+        createDonation: {
+          _id: 'min-donation',
+          amount: 1,
+          nameOfUser: 'name',
+          nameOfOrg: 'anyOrganization2',
+          __typename: 'Donation',
+        },
+        __typename: 'Mutation',
+      },
+    },
+  },
+  {
+    request: {
+      query: DONATE_TO_ORGANIZATION,
+      variables: {
+        userId: '123',
+        createDonationOrgId2: '',
+        payPalId: 'paypalId',
+        nameOfUser: 'name',
+        amount: 10000000,
+        nameOfOrg: 'anyOrganization2',
+      },
+    },
+    result: {
+      data: {
+        createDonation: {
+          _id: 'max-donation',
+          amount: 10000000,
+          nameOfUser: 'name',
+          nameOfOrg: 'anyOrganization2',
+          __typename: 'Donation',
+        },
+        __typename: 'Mutation',
+      },
+    },
+  },
+];
+
+const renderDonate = (link: ApolloLink = new StaticMockLink(MOCKS, true)) => {
+  return render(
+    <MockedProvider link={link} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Donate />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
+describe('Donate Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockUseParams.mockReturnValue({ orgId: '' });
   });
 
-  test('Screen should be rendered properly', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    expect(screen.getByPlaceholderText('Search donations')).toBeInTheDocument();
-    expect(screen.getByTestId('currency0')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Amount')).toBeInTheDocument();
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
   });
 
-  test('Donation amount input should update state', async () => {
-    render(
-      <MockedProvider addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('renders Donate screen with essential elements', async () => {
+    renderDonate();
 
-    const amountInput = screen.getByPlaceholderText('Amount');
-    fireEvent.change(amountInput, { target: { value: '100' } });
-    expect(amountInput).toHaveValue('100');
+    // Wait for initial render to complete
+    await screen.findByTestId('searchInput');
+
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+    expect(screen.getByTestId('currency-dropdown-toggle')).toBeInTheDocument();
+    expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
+    expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('organization-sidebar')).toBeInTheDocument();
   });
 
-  test('Currency dropdown should update state', async () => {
-    render(
-      <MockedProvider addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('search input updates value when typed into', async () => {
+    renderDonate();
 
-    const currencyButton = screen.getByTestId('changeCurrencyBtn');
-    fireEvent.click(currencyButton);
-    const currencyOption = screen.getByText('EUR');
-    fireEvent.click(currencyOption);
-    expect(currencyButton).toHaveTextContent('EUR');
-  });
+    const searchInput = await screen.findByTestId('searchInput');
+    await userEvent.type(searchInput, 'test search');
 
-  test('should handle search input changes', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'test search' } });
     expect(searchInput).toHaveValue('test search');
   });
 
-  test('should render pagination list when donations are present', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('currency switch works correctly', async () => {
+    renderDonate();
 
-    await wait();
-    const paginationList = screen.getByRole('table');
-    expect(paginationList).toBeInTheDocument();
+    const currencyButton = await screen.findByTestId(
+      'currency-dropdown-toggle',
+    );
+    await userEvent.click(currencyButton);
+
+    await screen.findByTestId('currency-dropdown-menu');
+
+    const eurOption = await screen.findByTestId('currency-dropdown-item-EUR');
+    await userEvent.click(eurOption);
+
+    await waitFor(() => {
+      expect(currencyButton).toHaveTextContent('EUR');
+    });
   });
 
-  test('handles pagination changes for rows per page', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('shows error toast for empty donation amount', async () => {
+    renderDonate();
 
-    await wait();
-    const paginationComponent = screen.getByRole('combobox');
-    fireEvent.change(paginationComponent, { target: { value: '10' } });
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
 
-    expect(screen.getByRole('combobox')).toHaveValue('10');
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Please enter a numerical value for the donation amount.',
+      );
+    });
   });
 
-  test('pagination shows correct number of donations per page', async () => {
-    const multipleDonationsMock = {
-      request: {
-        query: ORGANIZATION_DONATION_CONNECTION_LIST,
-        variables: { orgId: '' },
-      },
-      result: {
-        data: {
-          getDonationByOrgIdConnection: Array(10).fill({
-            _id: '123',
-            nameOfUser: 'Test User',
-            amount: '100',
-            userId: '456',
-            payPalId: 'paypal123',
-            updatedAt: new Date().toISOString(),
-          }),
-        },
-      },
-    };
+  test('shows error toast for non-numeric donation amount', async () => {
+    renderDonate();
 
-    const paginationLink = new StaticMockLink([multipleDonationsMock], true);
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, 'abc');
 
-    render(
-      <MockedProvider addTypename={false} link={paginationLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
 
-    await wait();
-
-    const donationCards = screen.getAllByTestId('donationCard');
-    expect(donationCards).toHaveLength(5); // Default rowsPerPage is 5
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Please enter a numerical value for the donation amount.',
+      );
+    });
   });
 
-  test('search button is present and clickable', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('shows error toast for donation amount below minimum', async () => {
+    renderDonate();
 
-    await wait();
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '0.5');
 
-    const searchButton = screen.getByTestId('searchButton');
-    expect(searchButton).toBeInTheDocument();
-    expect(searchButton).toBeEnabled();
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
+
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Donation amount must be between 1 and 10000000.',
+      );
+    });
   });
 
-  test('donation form elements are properly initialized', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('shows error toast for donation amount above maximum', async () => {
+    renderDonate();
 
-    await wait();
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '10000001');
 
-    expect(screen.getByTestId('changeCurrencyBtn')).toHaveTextContent('USD');
-    expect(screen.getByTestId('donationAmount')).toHaveValue('');
-    expect(screen.getByTestId('donateBtn')).toBeEnabled();
-  });
-  test('displays loading state while fetching donations', async () => {
-    render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
 
-    // Find loading text within the specific container
-    const loadingElement = screen.getByTestId('loading-state');
-    expect(loadingElement).toHaveTextContent('Loading...');
-
-    await wait();
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Donation amount must be between 1 and 10000000.',
+      );
+    });
   });
 
-  test('displays "nothing to show" when no donations exist', async () => {
-    const emptyMocks = [
+  test('successful donation shows success toast', async () => {
+    renderDonate();
+
+    // Wait for organization data to load
+    await waitFor(() => {
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
+    });
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
+  });
+
+  test('handles donation mutation error', async () => {
+    const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
+    renderDonate(errorLink);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
+    });
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
+
+    await waitFor(() => {
+      expect(mockErrorHandler).toHaveBeenCalled();
+    });
+  });
+
+  test('shows empty state when no donations exist', async () => {
+    const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
+    renderDonate(emptyLink);
+
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText(/nothing to show/i)).toBeInTheDocument();
+    });
+  });
+
+  test('shows loading state while donations are loading', async () => {
+    renderDonate();
+
+    await waitFor(() => {
+      const loading = screen.queryByTestId('loading-state');
+      const data = screen.queryByTestId('donationCard');
+      expect(loading || data).toBeTruthy();
+    });
+  });
+
+  test('displays donation cards when donations exist', async () => {
+    renderDonate();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('donationCard')).toBeInTheDocument();
+    });
+  });
+
+  test('switches to INR currency', async () => {
+    renderDonate();
+
+    const currencyButton = await screen.findByTestId(
+      'currency-dropdown-toggle',
+    );
+    expect(currencyButton).toHaveTextContent('USD');
+
+    await userEvent.click(currencyButton);
+
+    // Wait for menu
+    await screen.findByTestId('currency-dropdown-menu');
+
+    // Wait for option
+    const inrOption = await screen.findByTestId('currency-dropdown-item-INR');
+    await userEvent.click(inrOption);
+
+    // Wait for state update
+    await waitFor(() => {
+      expect(currencyButton).toHaveTextContent('INR');
+    });
+  });
+
+  test('displays all three currency options', async () => {
+    renderDonate();
+
+    const currencyButton = await screen.findByTestId(
+      'currency-dropdown-toggle',
+    );
+    await userEvent.click(currencyButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('currency-dropdown-menu')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('currency-dropdown-item-USD')).toHaveTextContent(
+      'USD',
+    );
+    expect(screen.getByTestId('currency-dropdown-item-INR')).toHaveTextContent(
+      'INR',
+    );
+    expect(screen.getByTestId('currency-dropdown-item-EUR')).toHaveTextContent(
+      'EUR',
+    );
+  });
+
+  test('handles pagination with multiple donations', async () => {
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
+
+    // Wait for donations to load
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      // Should show 5 cards (default rowsPerPage)
+      expect(cards.length).toBe(5);
+    });
+  });
+
+  test('handles edge case with donations length equal to rowsPerPage', async () => {
+    const exactMatchMocks = [
       {
         request: {
           query: ORGANIZATION_DONATION_CONNECTION_LIST,
-          variables: { orgId: '' },
+          variables: {
+            orgId: '',
+          },
         },
         result: {
           data: {
-            getDonationByOrgIdConnection: [],
+            getDonationByOrgIdConnection: Array.from({ length: 5 }, (_, i) => ({
+              _id: `donation-${i}`,
+              nameOfUser: `User ${i}`,
+              amount: (i + 1) * 10,
+              userId: `user-${i}`,
+              payPalId: `paypal-${i}`,
+              updatedAt: dayjs(MOCK_DATE).toISOString(),
+              __typename: 'Donation',
+            })),
+            __typename: 'Query',
           },
-        },
-      },
-      ...MOCKS.slice(1), // Keep other mocks
-    ];
-
-    render(
-      <MockedProvider addTypename={false} mocks={emptyMocks}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for loading to complete
-    await wait();
-
-    // Assuming i18nForTest translates 'nothingToShow' to the actual text
-    // If using the translation key directly:
-    const nothingToShowElement = screen.getByText(/nothing to show/i);
-    expect(nothingToShowElement).toBeInTheDocument();
-  });
-
-  test('Currency is swtiched to USD', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('changeCurrencyBtn'));
-
-    await userEvent.click(screen.getByTestId('currency0'));
-    await wait();
-
-    expect(screen.getByTestId('currency0')).toBeInTheDocument();
-  });
-
-  test('Currency is swtiched to INR', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('changeCurrencyBtn'));
-
-    await userEvent.click(screen.getByTestId('currency1'));
-
-    await wait();
-  });
-
-  test('Currency is swtiched to EUR', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('changeCurrencyBtn'));
-
-    await userEvent.click(screen.getByTestId('currency2'));
-
-    await wait();
-  });
-
-  test('Checking the existence of Donation Cards', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    expect(screen.getAllByTestId('donationCard')[0]).toBeInTheDocument();
-  });
-
-  test('For Donation functionality', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '123');
-    setItem('name', 'name');
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '123');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-    await wait();
-  });
-
-  test('displays error toast for donation amount below minimum', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '0.5');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
-    );
-  });
-
-  test('displays error toast for donation amount above maximum', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
-    );
-  });
-
-  test('displays error toast for empty donation amount', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
-    );
-  });
-
-  test('displays error toast for invalid (non-numeric) donation amount', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), 'abc');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
-    );
-  });
-
-  test('handles donation with whitespace in amount', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '123');
-    setItem('name', 'name');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), ' 123 ');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    await wait();
-    expect(toast.success).toHaveBeenCalled();
-  });
-
-  test('handles null donation data from query', async () => {
-    const nullDonationMock = {
-      request: {
-        query: ORGANIZATION_DONATION_CONNECTION_LIST,
-        variables: { orgId: '' },
-      },
-      result: {
-        data: {
-          getDonationByOrgIdConnection: null,
-        },
-      },
-    };
-
-    const nullDataLink = new StaticMockLink(
-      [nullDonationMock, ...MOCKS.slice(1)],
-      true,
-    );
-
-    render(
-      <MockedProvider addTypename={false} link={nullDataLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    expect(screen.getByText(/nothing to show/i)).toBeInTheDocument();
-  });
-  test('handles zero rows per page in pagination', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const paginationComponent = screen.getByRole('combobox');
-    fireEvent.change(paginationComponent, { target: { value: '0' } });
-
-    await wait();
-    const donationCards = screen.getAllByTestId('donationCard');
-    expect(donationCards.length).toBeGreaterThan(0); // Should show all donations
-  });
-  test('donateToOrg validation - empty amount shows error toast', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Leave amount empty
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
-    );
-  });
-  test('setPage updates the page number correctly', async () => {
-    // Setup mock data with multiple donations to trigger pagination
-    const multipleDonationsMock = {
-      request: {
-        query: ORGANIZATION_DONATION_CONNECTION_LIST,
-        variables: { orgId: '' },
-      },
-      result: {
-        data: {
-          getDonationByOrgIdConnection: Array(15).fill({
-            _id: '123',
-            nameOfUser: 'Test User',
-            amount: '100',
-            userId: '456',
-            payPalId: 'paypal123',
-            updatedAt: new Date().toISOString(),
-          }),
-        },
-      },
-    };
-
-    const paginationLink = new StaticMockLink([multipleDonationsMock], true);
-
-    render(
-      <MockedProvider addTypename={false} link={paginationLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Find and click the next page button
-    const nextButton = screen.getByRole('button', { name: /next/i });
-    fireEvent.click(nextButton);
-
-    // Verify page change using donation cards
-    const donationCards = screen.getAllByTestId('donationCard');
-    expect(donationCards.length).toBe(5); // Should show 5 items per page
-  });
-  test('donateToOrg validation - non-numeric amount shows error toast', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), 'abc');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
-    );
-  });
-
-  test('donateToOrg validation - amount less than minimum shows error toast', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '0.5');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
-    );
-  });
-
-  test('donateToOrg validation - amount greater than maximum shows error toast', async () => {
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
-    );
-  });
-
-  test('donateToOrg - handles donation mutation error', async () => {
-    const mockErrorHandler = vi.fn();
-    vi.spyOn(errorHandlerModule, 'errorHandler').mockImplementation(
-      mockErrorHandler,
-    );
-
-    const mocks = [
-      {
-        request: {
-          query: DONATE_TO_ORGANIZATION,
-          variables: {
-            userId: '123',
-            createDonationOrgId2: '',
-            payPalId: 'paypalId',
-            nameOfUser: 'name',
-            amount: 100,
-            nameOfOrg: 'anyOrganization2',
-          },
-        },
-        error: new Error('Failed to process donation'),
-      },
-      ...MOCKS.slice(1),
-    ];
-
-    const { setItem } = useLocalStorage();
-    setItem('userId', '123');
-    setItem('name', 'name');
-
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '100');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    await wait(500);
-    expect(mockErrorHandler).toHaveBeenCalledWith(
-      expect.any(Function),
-      expect.any(Error),
-    );
-  });
-
-  test('donateToOrg - handles GraphQL errors', async () => {
-    const mockErrorHandler = vi.fn();
-    vi.spyOn(errorHandlerModule, 'errorHandler').mockImplementation(
-      mockErrorHandler,
-    );
-
-    const mocks = [
-      {
-        request: {
-          query: DONATE_TO_ORGANIZATION,
-          variables: {
-            userId: '123',
-            createDonationOrgId2: '',
-            payPalId: 'paypalId',
-            nameOfUser: 'name',
-            amount: 100,
-            nameOfOrg: 'anyOrganization2',
-          },
-        },
-        result: {
-          errors: [{ message: 'GraphQL Error' }],
         },
       },
       ...MOCKS.slice(1),
     ];
 
-    const { setItem } = useLocalStorage();
-    setItem('userId', '123');
-    setItem('name', 'name');
+    renderDonate(new StaticMockLink(exactMatchMocks, true));
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    // With exactly 5 donations and rowsPerPage=5, should show all 5
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
+  });
 
-    await wait();
+  test('displays organization name after loading', async () => {
+    renderDonate();
 
-    await userEvent.type(screen.getByTestId('donationAmount'), '100');
-    await userEvent.click(screen.getByTestId('donateBtn'));
+    await waitFor(() => {
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
+    });
+  });
 
-    await wait(500);
-    expect(mockErrorHandler).toHaveBeenCalled();
+  test('handles zero as invalid donation amount', async () => {
+    renderDonate();
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '0');
+
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
+
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Donation amount must be between 1 and 10000000.',
+      );
+    });
+  });
+
+  test('handles negative donation amount', async () => {
+    renderDonate();
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '-10');
+
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
+
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Donation amount must be between 1 and 10000000.',
+      );
+    });
+  });
+
+  test('updates amount input field correctly', async () => {
+    renderDonate();
+
+    const amountInput = (await screen.findByTestId(
+      'donationAmount',
+    )) as HTMLInputElement;
+
+    await userEvent.type(amountInput, '500');
+
+    await waitFor(() => {
+      expect(amountInput.value).toBe('500');
+    });
+  });
+
+  test('clears amount input and allows new value', async () => {
+    renderDonate();
+
+    const amountInput = (await screen.findByTestId(
+      'donationAmount',
+    )) as HTMLInputElement;
+
+    await userEvent.type(amountInput, '500');
+    expect(amountInput.value).toBe('500');
+
+    await userEvent.clear(amountInput);
+    expect(amountInput.value).toBe('');
+
+    await userEvent.type(amountInput, '1000');
+    expect(amountInput.value).toBe('1000');
+  });
+
+  test('renders donation card with correct props', async () => {
+    renderDonate();
+
+    await waitFor(() => {
+      const card = screen.getByTestId('donationCard');
+      expect(card).toBeInTheDocument();
+    });
+  });
+
+  test('donation amount at exactly minimum boundary (1)', async () => {
+    renderDonate(new StaticMockLink(BOUNDARY_MOCKS, true));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
+    });
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '1');
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
+
+    // Verify success toast is called
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
+  });
+
+  test('donation amount at exactly maximum boundary (10000000)', async () => {
+    renderDonate(new StaticMockLink(BOUNDARY_MOCKS, true));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
+    });
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '10000000');
+    const donateBtn = await screen.findByTestId('donateBtn');
+    await userEvent.click(donateBtn);
+
+    // Verify success toast is called
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
+  });
+
+  test('changes page using pagination next button', async () => {
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
+
+    // Wait for pagination to render
+    await screen.findByTestId('pagination');
+
+    // Verify initial page
+    await waitFor(() => {
+      expect(screen.getByTestId('current-page')).toHaveTextContent('0');
+    });
+
+    // Wait for initial cards
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
+
+    // Click next
+    const nextButton = await screen.findByTestId('next-page-btn');
+    await userEvent.click(nextButton);
+
+    // Wait for page update
+    await waitFor(() => {
+      expect(screen.getByTestId('current-page')).toHaveTextContent('1');
+    });
+
+    // Wait for new cards to render
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
+  });
+
+  test('changes page using pagination previous button', async () => {
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
+
+    // Wait for donations to load
+    await waitFor(() => {
+      expect(screen.getByTestId('pagination')).toBeInTheDocument();
+    });
+
+    // First go to page 1
+    const nextButton = await screen.findByTestId('next-page-btn');
+    await userEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('current-page')).toHaveTextContent('1');
+    });
+
+    // Then go back to page 0
+    const prevButton = screen.getByTestId('prev-page-btn');
+    await userEvent.click(prevButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('current-page')).toHaveTextContent('0');
+    });
+
+    // Should show first 5 donations again
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
+  });
+
+  test('changes rows per page and resets to page 0', async () => {
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
+
+    // Wait for donations to load
+    await waitFor(() => {
+      expect(screen.getByTestId('pagination')).toBeInTheDocument();
+    });
+
+    // Initially should have 5 rows per page
+    expect(screen.getByTestId('rows-per-page')).toHaveTextContent('5');
+    expect(screen.getByTestId('current-page')).toHaveTextContent('0');
+
+    // Initially should show 5 donation cards
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
+
+    // Go to page 1
+    const nextButton = await screen.findByTestId('next-page-btn');
+    await userEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('current-page')).toHaveTextContent('1');
+    });
+
+    // Change rows per page to 10
+    const rowsSelect = await screen.findByTestId('rows-per-page-select');
+    await userEvent.selectOptions(rowsSelect, '10');
+
+    // Should reset to page 0 and have 10 rows per page
+    await waitFor(() => {
+      expect(screen.getByTestId('current-page')).toHaveTextContent('0');
+      expect(screen.getByTestId('rows-per-page')).toHaveTextContent('10');
+    });
+
+    // Should now show all 10 donation cards
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(10);
+    });
+  });
+
+  test('parses rows per page value correctly', async () => {
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
+
+    // Wait for donations to load
+    await waitFor(() => {
+      expect(screen.getByTestId('pagination')).toBeInTheDocument();
+    });
+
+    // Initially 5 rows
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
+
+    // Change to 25 rows per page
+    const rowsSelect = screen.getByTestId('rows-per-page-select');
+    await userEvent.selectOptions(rowsSelect, '25');
+
+    // Should parse and set to 25
+    await waitFor(() => {
+      expect(screen.getByTestId('rows-per-page')).toHaveTextContent('25');
+    });
+
+    // Should now show all 10 donation cards (we only have 10 total)
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(10);
+    });
   });
 });

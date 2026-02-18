@@ -1,6 +1,7 @@
 import {
   REMOVE_MEMBER_MUTATION,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
+  UNBLOCK_USER_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 
 const MOCKS = [
@@ -37,6 +38,20 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: UNBLOCK_USER_MUTATION_PG,
+      variables: {
+        organizationId: 'ghi',
+        userId: '123',
+      },
+    },
+    result: {
+      data: {
+        unblockUser: true,
+      },
+    },
+  },
 ];
 
 const MOCKS2 = [
@@ -49,6 +64,27 @@ const MOCKS2 = [
       },
     },
     error: new Error('Failed to remove member'),
+  },
+  {
+    request: {
+      query: UNBLOCK_USER_MUTATION_PG,
+      variables: {
+        organizationId: 'ghi',
+        userId: '123',
+      },
+    },
+    error: new Error('Failed to unblock user'),
+  },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        userId: '123',
+        organizationId: 'abc',
+        role: 'ADMIN',
+      },
+    },
+    error: new Error('Failed to update user role in organization'),
   },
 ];
 

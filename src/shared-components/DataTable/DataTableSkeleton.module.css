@@ -1,0 +1,19 @@
+.dataTableWrapper {
+  composes: dataTableWrapper from './DataTableShared.module.css';
+}
+
+.visuallyHidden {
+  composes: visuallyHidden from './DataTableShared.module.css';
+}
+
+.selectCol {
+  composes: selectCol from './DataTableShared.module.css';
+}
+
+.dataSkeletonCell {
+  composes: dataSkeletonCell from './DataTableShared.module.css';
+}
+
+.actionsCol {
+  composes: actionsCol from './DataTableShared.module.css';
+}

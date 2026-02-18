@@ -1,36 +1,30 @@
-import React, { act } from 'react'; // Import act for async testing
-import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import EventHeader from './EventHeader';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
   let handleChangeView: ReturnType<typeof vi.fn>;
   let showInviteModal: ReturnType<typeof vi.fn>;
-  let consoleSpy: ReturnType<typeof vi.spyOn>;
+  let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
-    /**
-     * Mock function to handle view type changes.
-     */
     handleChangeView = vi.fn();
-
-    /**
-     * Mock function to handle the display of the invite modal.
-     */
     showInviteModal = vi.fn();
-
-    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    user = userEvent.setup();
   });
 
   afterEach(() => {
-    consoleSpy.mockRestore();
+    vi.clearAllMocks();
+    vi.restoreAllMocks(); // Restores all spies including consoleSpy
   });
 
-  it('renders correctly', () => {
+  it('renders correctly with all elements', () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -41,32 +35,47 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
+    expect(getByTestId('calendarEventHeader')).toBeInTheDocument();
     expect(getByTestId('searchEvent')).toBeInTheDocument();
+    expect(getByTestId('searchButton')).toBeInTheDocument();
     expect(getByTestId('createEventModalBtn')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
-  it('calls handleChangeView with selected view type', async () => {
-    // Add async keyword
+  it('renders with correct initial viewType', () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
-          viewType={viewType}
+          viewType={ViewType.MONTH}
           handleChangeView={handleChangeView}
           showInviteModal={showInviteModal}
         />
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('selectViewType'));
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
+  });
 
-    await act(async () => {
-      fireEvent.click(getByTestId('Day'));
-    });
+  it('calls handleChangeView with MONTH view type', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={ViewType.DAY}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
 
-    // Expect handleChangeView to be called with the new view type
+    await user.click(getByTestId('selectViewType-toggle'));
+
+    await user.click(getByTestId('selectViewType-item-Month View'));
+
+    expect(handleChangeView).toHaveBeenCalledWith(ViewType.MONTH);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
   });
-  it('logs selected event type without calling handleChangeView', async () => {
+
+  it('calls handleChangeView with DAY view type', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -77,17 +86,15 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('eventType'));
+    await user.click(getByTestId('selectViewType-toggle'));
 
-    await act(async () => {
-      fireEvent.click(getByTestId('Events'));
-    });
+    await user.click(getByTestId('selectViewType-item-Day'));
 
-    expect(handleChangeView).not.toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalledWith('Selected: Events');
+    expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
+    expect(handleChangeView).toHaveBeenCalledTimes(1);
   });
 
-  it('calls showInviteModal when create event button is clicked', () => {
+  it('calls handleChangeView with YEAR view type', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -98,10 +105,46 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('createEventModalBtn'));
-    expect(showInviteModal).toHaveBeenCalled();
+    await user.click(getByTestId('selectViewType-toggle'));
+
+    await user.click(getByTestId('selectViewType-item-Year View'));
+
+    expect(handleChangeView).toHaveBeenCalledWith(ViewType.YEAR);
+    expect(handleChangeView).toHaveBeenCalledTimes(1);
   });
-  it('updates the input value when changed', () => {
+
+  it('calls showInviteModal when create event button is clicked', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    await user.click(getByTestId('createEventModalBtn'));
+    expect(showInviteModal).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls showInviteModal multiple times when clicked repeatedly', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    await user.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
+    expect(showInviteModal).toHaveBeenCalledTimes(2);
+  });
+
+  it('updates the search input value when changed', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -113,8 +156,146 @@ describe('EventHeader Component', () => {
     );
 
     const input = getByTestId('searchEvent') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: 'test event' } });
+    await user.clear(input);
+    await user.type(input, 'test event');
 
     expect(input.value).toBe('test event');
+  });
+
+  it('allows search to be performed', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    const input = getByTestId('searchEvent') as HTMLInputElement;
+    const searchButton = getByTestId('searchButton');
+
+    await user.clear(input);
+    await user.type(input, 'conference');
+    await user.click(searchButton);
+
+    expect(input.value).toBe('conference');
+  });
+
+  it('allows search with no input', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    const searchButton = getByTestId('searchButton');
+    await user.click(searchButton);
+
+    expect(searchButton).toBeInTheDocument();
+  });
+
+  it('renders Create button with AddIcon and text', () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    const createButton = getByTestId('createEventModalBtn');
+    expect(createButton).toHaveTextContent(/create/i);
+  });
+
+  it('renders with ViewType.DAY as initial viewType', () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={ViewType.DAY}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
+  });
+
+  it('renders with ViewType.YEAR as initial viewType', () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={ViewType.YEAR}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
+  });
+
+  it('handles rapid successive interactions correctly', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    // Rapid clicks on create button
+    await user.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
+
+    expect(showInviteModal).toHaveBeenCalledTimes(3);
+  });
+
+  it('search input accepts special characters', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    const input = getByTestId('searchEvent') as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, '@#$%^&*()');
+
+    expect(input.value).toBe('@#$%^&*()');
+  });
+
+  it('search input handles long strings', async () => {
+    const { getByTestId } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <EventHeader
+          viewType={viewType}
+          handleChangeView={handleChangeView}
+          showInviteModal={showInviteModal}
+        />
+      </I18nextProvider>,
+    );
+
+    const longString = 'a'.repeat(100);
+    const input = getByTestId('searchEvent') as HTMLInputElement;
+    await user.clear(input);
+    await user.type(input, longString);
+
+    expect(input.value).toBe(longString);
   });
 });

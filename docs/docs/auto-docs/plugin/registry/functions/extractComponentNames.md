@@ -6,7 +6,7 @@
 
 > **extractComponentNames**(`manifest`): `Set`\<`string`\>
 
-Defined in: [src/plugin/registry.tsx:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L139)
+Defined in: [src/plugin/registry.tsx:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L131)
 
 Extract component names from plugin manifest
 

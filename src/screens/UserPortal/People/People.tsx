@@ -13,6 +13,7 @@
  * - Supports filtering between "All Members" and "Admins" via a dropdown menu.
  * - Implements pagination to display users in manageable chunks.
  * - Provides a search bar to find members by first name.
+ * - Uses the DataTable shared component for consistent table rendering.
  *
  * **Dependencies**
  * - Core libraries:
@@ -21,12 +22,12 @@
  *   - `@apollo/client`
  *   - `@mui/icons-material`
  * - Custom components:
- *   - `components/UserPortal/PeopleCard/PeopleCard`
- *   - `components/Pagination/PaginationList/PaginationList`
+ *   - `shared-components/DataTable/DataTable`
+ *   - `shared-components/PaginationList/PaginationList`
  * - GraphQL queries:
  *   - `GraphQl/Queries/Queries`
  * - Styles:
- *   - `style/app-fixed.module.css`
+ *   - `./People.module.css`
  * - Types:
  *   - `types/User/interface`
  *
@@ -46,17 +47,17 @@
  * @param organizationId - The ID of the organization extracted from URL parameters.
  */
 import React, { useEffect, useState } from 'react';
-import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import { Dropdown, Form, Button } from 'react-bootstrap';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { FilterAltOutlined } from '@mui/icons-material';
-import styles from 'style/app-fixed.module.css';
+import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+
 import { useParams } from 'react-router';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import Avatar from 'shared-components/Avatar/Avatar';
 
 interface IMemberNode {
   id: string;
@@ -76,13 +77,14 @@ interface IMemberWithUserType extends IMemberEdge {
   userType: string;
 }
 
-interface IOrganizationCardProps {
+// Type for DataTable rows
+interface IPeopleTableRow {
   id: string;
   name: string;
-  image: string;
   email: string;
+  image: string;
   role: string;
-  sno: string;
+  sno: number;
 }
 
 export default function People(): React.JSX.Element {
@@ -189,22 +191,6 @@ export default function People(): React.JSX.Element {
     });
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputValue =
-      (document.getElementById('searchPeople') as HTMLInputElement)?.value ||
-      '';
-    handleSearch(inputValue);
-  };
-
   useEffect(() => {
     // When mode changes, refetch from first page
     setPageCursors(['']);
@@ -217,109 +203,118 @@ export default function People(): React.JSX.Element {
     });
   }, [mode, organizationId, rowsPerPage]); // intentionally not including searchTerm (it's handled above)
 
+  // Transform members data for DataTable
+  const tableData: IPeopleTableRow[] = React.useMemo(() => {
+    return members.map((member, index) => ({
+      id: member.node.id,
+      name: member.node.name,
+      email: member.node.emailAddress ?? t('emailNotAvailable'),
+      image: member.node.avatarURL ?? '',
+      role: member.userType,
+      sno: index + 1 + currentPage * rowsPerPage,
+    }));
+  }, [members, currentPage, rowsPerPage, t]);
+
+  // Column definitions for DataTable
+  const columns: IColumnDef<IPeopleTableRow>[] = [
+    {
+      id: 'sno',
+      header: t('sNo'),
+      accessor: 'sno',
+      meta: { width: 'var(--space-11)' },
+    },
+    {
+      id: 'avatar',
+      header: t('avatar'),
+      accessor: 'image',
+      meta: { width: 'var(--space-12)' },
+      render: (value, row) => (
+        <div className={styles.avatarCell}>
+          {value ? (
+            <img
+              src={value as string}
+              alt={row.name}
+              className={styles.avatarImage}
+            />
+          ) : (
+            <Avatar name={row.name} alt={row.name} size={40} />
+          )}
+        </div>
+      ),
+    },
+    {
+      id: 'name',
+      header: t('name'),
+      accessor: 'name',
+    },
+    {
+      id: 'email',
+      header: t('email'),
+      accessor: 'email',
+    },
+    {
+      id: 'role',
+      header: t('role'),
+      accessor: 'role',
+    },
+  ];
+
   return (
     <>
       <div className={`${styles.mainContainer_people}`}>
-        <div className={styles.people__header}>
-          <div className={styles.input}>
-            <Form.Control
-              placeholder={t('searchUsers')}
-              id="searchPeople"
-              type="text"
-              className={styles.inputField}
-              onKeyUp={handleSearchByEnter}
-              data-testid="searchInput"
-            />
-
-            <Button
-              className={styles.searchButton}
-              data-testid="searchBtn"
-              style={{ cursor: 'pointer' }}
-              onClick={handleSearchByBtnClick}
-            >
-              <SearchOutlinedIcon />
-            </Button>
-          </div>
-
-          <Dropdown drop="down-centered">
-            <Dropdown.Toggle
-              className={styles.dropdown}
-              id="dropdown-basic"
-              data-testid={`modeChangeBtn`}
-            >
-              <FilterAltOutlined
-                sx={{
-                  fontSize: '25px',
-                  marginBottom: '2px',
-                  marginRight: '2px',
-                }}
-              />
-              {tCommon('filter')}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {modes.map((value, index) => {
-                return (
-                  <Dropdown.Item
-                    key={index}
-                    data-testid={`modeBtn${index}`}
-                    onClick={(): void => setMode(index)}
-                  >
-                    {value}
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
-        <div className={styles.people_content}>
-          <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>S.No</span>
-              <span style={{ flex: '1' }}>Avatar</span>
-            </span>
-            <span style={{ flex: '2' }}>Name</span>
-            <span style={{ flex: '2' }}>Email</span>
-            <span style={{ flex: '2' }}>Role</span>
-          </div>
-
-          <div className={styles.people_card_main_container}>
-            {loading ? (
-              <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>Loading...</span>
-              </div>
-            ) : (
-              <>
-                {members && members.length > 0 ? (
-                  members.map((member: IMemberWithUserType, index) => {
-                    const name = `${member.node.name}`;
-                    const cardProps: IOrganizationCardProps = {
-                      name,
-                      image: member.node.avatarURL ?? '',
-                      id: member.node.id ?? '',
-                      email:
-                        member.node.emailAddress ?? '***********************',
-                      role: member.userType ?? '',
-                      sno: (index + 1 + currentPage * rowsPerPage).toString(),
-                    };
-                    return <PeopleCard key={index} {...cardProps} />;
-                  })
-                ) : (
-                  <span>{t('nothingToShow')}</span>
-                )}
-              </>
-            )}
-          </div>
-          <PaginationList
-            count={
-              pageInfo?.hasNextPage
-                ? (currentPage + 1) * rowsPerPage + 1
-                : currentPage * rowsPerPage + members.length
-            }
-            rowsPerPage={rowsPerPage}
-            page={currentPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+        {/* Refactored Header Structure */}
+        <div className={styles.calendar__header}>
+          <SearchFilterBar
+            searchPlaceholder={t('searchUsers')}
+            searchValue={searchTerm}
+            onSearchChange={handleSearch}
+            searchInputTestId="searchInput"
+            searchButtonTestId="searchBtn"
+            hasDropdowns={true}
+            dropdowns={[
+              {
+                id: 'people-filter',
+                label: tCommon('filter'),
+                type: 'filter',
+                options: modes.map((value, index) => ({
+                  label: value,
+                  value: index,
+                })),
+                selectedOption: mode,
+                onOptionChange: (value) => setMode(value as number),
+                dataTestIdPrefix: 'modeChangeBtn',
+              },
+            ]}
           />
+        </div>
+
+        <div className={styles.people_content}>
+          <DataTable<IPeopleTableRow>
+            data={tableData}
+            columns={columns}
+            loading={loading}
+            emptyMessage={t('nothingToShow')}
+            rowKey="id"
+            tableClassName={styles.peopleTable}
+            skeletonRows={rowsPerPage}
+          />
+          <table>
+            <tfoot>
+              <tr>
+                <PaginationList
+                  count={
+                    pageInfo?.hasNextPage
+                      ? (currentPage + 1) * rowsPerPage + 1
+                      : currentPage * rowsPerPage + members.length
+                  }
+                  rowsPerPage={rowsPerPage}
+                  page={currentPage}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
     </>

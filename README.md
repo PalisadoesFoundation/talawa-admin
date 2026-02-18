@@ -48,8 +48,9 @@ Core features include:
     1. Our code of conduct documentation in the [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file.
     1. How we handle the processing of new and existing issues in our [ISSUE_GUIDELINES.md](ISSUE_GUIDELINES.md) file.
     1. The methodologies we use to manage our pull requests in our [PR_GUIDELINES.md](PR_GUIDELINES.md) file.
+    1. Our security guidelines and linting rules in [docs/docs/docs/developer-resources/security.md](docs/docs/docs/developer-resources/security.md).
 1. The `talawa` documentation can be found at our [docs.talawa.io](https://docs.talawa.io) site.
-    1. It is automatically generated from the markdown files stored in our [Talawa-Docs GitHub repository](https://github.com/PalisadoesFoundation/talawa-docs). This makes it easy for you to update our documenation.
+    1. It is automatically generated from the markdown files stored in our [Talawa-Docs GitHub repository](https://github.com/PalisadoesFoundation/talawa-docs). This makes it easy for you to update our documentation.
 
 #  Videos
 

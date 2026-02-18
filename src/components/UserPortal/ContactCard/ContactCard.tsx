@@ -3,17 +3,15 @@
  * This component displays a contact's avatar, name, last message,
  * and the count of unseen messages. It also highlights the selected contact.
  *
- * @component
- * @param {InterfaceContactCardProps} props - The properties for the contact card.
- * @param {string} props.id - The unique identifier for the contact.
- * @param {string} props.title - The name or title of the contact.
- * @param {string} [props.image] - The URL of the contact's avatar image.
- * @param {string} [props.lastMessage] - The last message sent or received from the contact.
- * @param {number} [props.unseenMessages] - The count of unseen messages for the contact.
- * @param {string} props.selectedContact - The ID of the currently selected contact.
- * @param {(id: string) => void} props.setSelectedContact - Callback to update the selected contact.
+ * @param id - The unique identifier for the contact.
+ * @param title - The name or title of the contact.
+ * @param image - The URL of the contact's avatar image.
+ * @param lastMessage - The last message sent or received from the contact.
+ * @param unseenMessages - The count of unseen messages for the contact.
+ * @param selectedContact - The ID of the currently selected contact.
+ * @param setSelectedContact - Callback to update the selected contact.
  *
- * @returns {JSX.Element} A styled contact card component.
+ * @returns A styled contact card component.
  *
  * @remarks
  * - The component uses `React.useState` to manage the selection state of the contact.
@@ -35,60 +33,90 @@
  * ```
  */
 import React from 'react';
-import styles from './ContactCard.module.css';
-import Avatar from 'components/Avatar/Avatar';
 import { Badge } from 'react-bootstrap';
-import type { InterfaceContactCardProps } from 'types/Chat/interface';
+import { useTranslation } from 'react-i18next';
 
-function contactCard(props: InterfaceContactCardProps): JSX.Element {
-  const handleSelectedContactChange = (): void => {
-    props.setSelectedContact(props.id);
+import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
+import type { InterfaceContactCardProps } from 'types/UserPortal/Chat/interface';
+
+import styles from './ContactCard.module.css';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import Button from 'shared-components/Button';
+
+const ContactCard: React.FC<InterfaceContactCardProps> = ({
+  id,
+  title,
+  image,
+  lastMessage,
+  unseenMessages = 0,
+  selectedContact,
+  setSelectedContact,
+}) => {
+  const { t } = useTranslation();
+
+  const isSelected = selectedContact === id;
+
+  const handleSelect = (): void => {
+    setSelectedContact(id);
   };
-  const [isSelected, setIsSelected] = React.useState(
-    props.selectedContact === props.id,
+
+  const imageSlot = (
+    <ProfileAvatarDisplay
+      fallbackName={title}
+      className={styles.contactImage}
+      size="medium"
+      imageUrl={image}
+      enableEnlarge
+    />
   );
 
-  // Update selection state when the selected contact changes
-  React.useEffect(() => {
-    setIsSelected(props.selectedContact === props.id);
-  }, [props.selectedContact]);
+  const actionsSlot =
+    unseenMessages > 0 ? (
+      <Badge
+        pill
+        className={styles.unseenBadge}
+        data-testid={`contact-unseen-${id}`}
+      >
+        {unseenMessages}
+      </Badge>
+    ) : undefined;
 
   return (
-    <>
-      <div
-        className={`${styles.contact} ${
-          isSelected ? styles.bgGreen : styles.bgWhite
+    <UserPortalCard
+      variant="compact"
+      dataTestId={'contact-card-' + id}
+      ariaLabel={t('contact.card_aria', 'Contact card')}
+      imageSlot={imageSlot}
+      actionsSlot={actionsSlot}
+      className={styles.contactCardWrapper}
+    >
+      <Button
+        type="button"
+        onClick={handleSelect}
+        data-testid={`contact-container-${id}`}
+        aria-pressed={isSelected}
+        data-selected={String(isSelected)}
+        className={`${styles.contentInner} ${
+          isSelected ? styles.selected : ''
         }`}
-        onClick={handleSelectedContactChange}
-        data-testid="contactContainer"
       >
-        {props.image ? (
-          <img
-            src={props.image}
-            alt={props.title}
-            className={styles.contactImage}
-          />
-        ) : (
-          <Avatar
-            name={props.title}
-            alt={props.title}
-            avatarStyle={styles.contactImage}
-          />
-        )}
-        <div className={styles.contactNameContainer}>
-          <div>
-            <b>{props.title}</b>{' '}
-            <p className={styles.lastMessage}>{props.lastMessage}</p>
-          </div>
-          {!!props.unseenMessages && (
-            <Badge className={styles.unseenMessagesCount}>
-              {props.unseenMessages}
-            </Badge>
-          )}
-        </div>
-      </div>
-    </>
-  );
-}
+        <div className={styles.titleRow}>
+          <div className={styles.titleText} data-testid={`contact-title-${id}`}>
+            <b>{title}</b>
 
-export default contactCard;
+            {lastMessage && (
+              <div
+                className={styles.lastMessage}
+                data-testid={`contact-lastMessage-${id}`}
+              >
+                {lastMessage}
+              </div>
+            )}
+          </div>
+        </div>
+      </Button>
+    </UserPortalCard>
+  );
+};
+
+export default ContactCard;

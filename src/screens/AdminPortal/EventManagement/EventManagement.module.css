@@ -1,0 +1,25 @@
+/* -- EventManagement.tsx -- */
+
+.eventManagementSelectedBtn {
+  color: var(--color-gray-700);
+  background-color: var(--color-gray-100) !important;
+  border: var(--border-1) solid var(--color-gray-400) !important;
+  height: var(--space-9);
+}
+
+.eventManagementSelectedBtn:hover {
+  color: var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-400);
+}
+
+.eventManagementBtn {
+  color: var(--color-gray-400);
+  background-color: var(--color-white) !important;
+  border-color: var(--color-gray-100) !important;
+  height: var(--space-9);
+}
+
+.eventManagementBtn:hover {
+  color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-100);
+}

@@ -1,0 +1,79 @@
+.replyTo {
+  border-left: var(--space-2) solid pink;
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-gray-50);
+  padding: var(--space-3) var(--space-0) var(--space-2) var(--space-2);
+  border-radius: var(--space-3) var(--space-3) var(--space-3) var(--space-3);
+}
+
+.replyToMessageContainer {
+  padding-left: var(--space-2);
+}
+
+.replyToMessageContainer p {
+  margin: var(--space-2) var(--space-0) var(--space-0);
+}
+
+.userDetails {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  gap: var(--space-3);
+}
+
+.userDetails .userImage {
+  height: var(--space-6);
+  width: var(--space-6);
+}
+
+.closeBtn svg {
+  color: var(--color-black);
+  font-size: var(--font-size-lg);
+}
+
+.closeBtn {
+  padding: var(--space-1) var(--space-4);
+}
+
+.closeBtn:hover {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.customToggle,
+.closeBtn {
+  padding: 0;
+  background: none;
+  border: none;
+  --bs-btn-active-bg: none;
+}
+
+.customToggle::after,
+.closeBtn::after {
+  content: none;
+}
+
+.attachment {
+  padding: var(--space-4);
+  background-color: var(--color-gray-200);
+  height: var(--space-12);
+  display: flex;
+  align-items: flex-start;
+  border-radius: var(--space-4);
+}
+
+.attachment img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: var(--space-3);
+}
+
+.addAttachmentBtn {
+  border: none;
+  outline: none;
+  margin: var(--space-0) var(--space-4);
+  background-color: var(--color-white);
+  font-size: var(--font-size-xl);
+}

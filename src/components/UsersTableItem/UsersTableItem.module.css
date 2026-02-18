@@ -1,0 +1,23 @@
+.editButton {
+  composes: editButton from '../../style/app-fixed.module.css';
+}
+
+.removeButton {
+  composes: removeButton from '../../style/app-fixed.module.css';
+}
+
+.modalHeader {
+  composes: modalHeader from '../../style/app-fixed.module.css';
+}
+
+.notJoined {
+  composes: notJoined from '../../style/app-fixed.module.css';
+}
+
+.modalTable {
+  composes: modalTable from '../../style/app-fixed.module.css';
+}
+
+.divider {
+  margin: 0;
+}

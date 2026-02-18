@@ -4,10 +4,7 @@
  * first, previous, next, and last pages.
  *
  * @param props - The properties required for the pagination component.
- * @param props.count - The total number of items in the dataset.
- * @param props.page - The current page index (zero-based).
- * @param props.rowsPerPage - The number of rows displayed per page.
- * @param props.onPageChange - A callback function triggered when the page changes.
+ *
  * It receives the click event and the new page index as arguments.
  *
  * @returns A JSX element containing the pagination controls.
@@ -26,11 +23,9 @@
  *   onPageChange={(event, newPage) => console.log(newPage)}
  * />
  * ```
- *
- * @component
- * @category Pagination
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
@@ -38,6 +33,8 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
+
+import styles from './Pagination.module.css';
 
 interface InterfaceTablePaginationActionsProps {
   count: number;
@@ -49,8 +46,9 @@ interface InterfaceTablePaginationActionsProps {
   ) => void;
 }
 
-function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
+function Pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   const theme = useTheme();
+  const { t } = useTranslation('translation');
   const { count, page, rowsPerPage, onPageChange } = props;
 
   /**
@@ -103,11 +101,11 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box className={styles.container}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
-        aria-label="first page"
+        aria-label={t('paginationList.firstPage')}
         data-testid="firstPage"
       >
         {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
@@ -115,7 +113,7 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
-        aria-label="previous page"
+        aria-label={t('paginationList.previousPage')}
         data-testid="previousPage"
       >
         {theme.direction === 'rtl' ? (
@@ -127,7 +125,7 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
+        aria-label={t('paginationList.nextPage')}
         data-testid="nextPage"
       >
         {theme.direction === 'rtl' ? (
@@ -139,7 +137,7 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
+        aria-label={t('paginationList.lastPage')}
         data-testid="lastPage"
       >
         {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
@@ -148,4 +146,4 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   );
 }
 
-export default pagination;
+export default Pagination;

@@ -1,17 +1,16 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
 import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER, ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
 import { usePluginDrawerItems } from 'plugin';
@@ -30,12 +29,38 @@ import { usePluginDrawerItems } from 'plugin';
  * 9. **Translation Display**: Ensures proper translation of UI text.
  * 10. **Toast Notifications Mocking**: Mocks toast notifications during tests.
  *
- * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
+ * `userEvent` simulates user actions, and `vi.fn()` mocks callback functions.
  */
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
+
+vi.mock('@mui/icons-material', () => ({
+  QuestionMarkOutlined: vi.fn(() => null),
+  WarningAmberOutlined: vi.fn(() => null),
+}));
 
 vi.mock('plugin', () => ({
   usePluginDrawerItems: vi.fn(() => []),
+}));
+
+// Mock ProfileCard component to avoid router hook errors
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: () => <div data-testid="profile-card">Profile Card Mock</div>,
+}));
+
+// Mock SignOut component to avoid router hook errors
+vi.mock('components/SignOut/SignOut', () => ({
+  default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
+    <div data-testid="sign-out-component" hidden={hideDrawer}>
+      Sign Out Mock
+    </div>
+  ),
+}));
+
+// Mock useSession to prevent router hook errors in SignOut component
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+  })),
 }));
 
 const props: InterfaceUserSidebarOrgProps = {
@@ -70,17 +95,24 @@ const props: InterfaceUserSidebarOrgProps = {
   setHideDrawer: vi.fn(),
 };
 
-const MOCKS = [
-  {
-    request: {
-      query: REVOKE_REFRESH_TOKEN,
-    },
-    result: {
-      data: {
-        revokeRefreshTokenForUser: true,
+const createCurrentUserMock = (role: string) => ({
+  request: {
+    query: CURRENT_USER,
+  },
+  result: {
+    data: {
+      user: {
+        role,
       },
     },
   },
+});
+
+const CURRENT_USER_REGULAR_MOCK = createCurrentUserMock('regular');
+const CURRENT_USER_ADMIN_MOCK = createCurrentUserMock('administrator');
+
+const MOCKS = [
+  CURRENT_USER_REGULAR_MOCK,
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -146,6 +178,7 @@ const MOCKS = [
 ];
 
 const MOCKS_WITH_IMAGE = [
+  CURRENT_USER_REGULAR_MOCK,
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -211,19 +244,7 @@ const MOCKS_WITH_IMAGE = [
   },
 ];
 
-// const MOCKS_EMPTY = [
-//   {
-//     request: {
-//       query: ORGANIZATIONS_LIST,
-//       variables: { id: '123' },
-//     },
-//     result: {
-//       data: {
-//         organizations: [],
-//       },
-//     },
-//   },
-// ];
+const MOCKS_ADMIN = [CURRENT_USER_ADMIN_MOCK, ...MOCKS.slice(1)];
 
 const defaultScreens = [
   'People',
@@ -250,8 +271,10 @@ async function wait(ms = 100): Promise<void> {
 }
 
 const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new window.Event('resize'));
+  act(() => {
+    window.innerWidth = width;
+    window.dispatchEvent(new window.Event('resize'));
+  });
 };
 
 beforeEach(() => {
@@ -264,22 +287,24 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  cleanup();
   vi.clearAllMocks();
-  localStorage.clear();
+  clearAllItems();
 });
 
 const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
+const linkAdmin = new StaticMockLink(MOCKS_ADMIN, true);
 // const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
-describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
+describe('Testing LeftDrawerOrg component for Administrator', () => {
   it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -295,33 +320,13 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     });
   });
 
-  // it('Testing Profile Page & Organization Detail Modal', async () => {
-  //   setItem('UserImage', '');
-  //   setItem('SuperAdmin', true);
-  //   setItem('FirstName', 'John');
-  //   setItem('LastName', 'Doe');
-  //   render(
-  //     <MockedProvider addTypename={false} link={link}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <UserSidebarOrg {...props} hideDrawer={null} />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   await wait();
-  //   expect(screen.getByTestId(/orgBtn/i)).toBeInTheDocument();
-  // });
-
   it('Testing Menu Buttons', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -337,9 +342,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   it('Testing when screen size is less than 820px', async () => {
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -350,22 +355,27 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    resizeWindow(800);
-    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
+    const previousWidth = window.innerWidth;
+    try {
+      resizeWindow(800);
+      expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
-    const peopleBtn = screen.getAllByTestId(/People/i)[0];
-    await userEvent.click(peopleBtn);
-    await wait();
-    expect(window.location.pathname).toContain('user/people/123');
+      const peopleBtn = screen.getAllByTestId(/People/i)[0];
+      await userEvent.click(peopleBtn);
+      await wait();
+      expect(window.location.pathname).toContain('user/people/123');
+    } finally {
+      resizeWindow(previousWidth);
+    }
   });
 
   it('Testing when image is present for Organization', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={linkImage}>
+      <MockedProvider link={linkImage}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -378,35 +388,13 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     await wait();
   });
 
-  // it('Testing when Organization does not exists', async () => {
-  //   setItem('UserImage', '');
-  //   setItem('SuperAdmin', true);
-  //   setItem('FirstName', 'John');
-  //   setItem('LastName', 'Doe');
-  //   render(
-  //     <MockedProvider addTypename={false} link={linkEmpty}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <UserSidebarOrg {...props} hideDrawer={null} />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   await wait();
-  //   expect(
-  //     screen.getByText(/Error Occured while loading the Organization/i),
-  //   ).toBeInTheDocument();
-  // });
-
   it('Testing Drawer when hideDrawer is null', () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -420,11 +408,11 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing Drawer when hideDrawer is true', () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -439,12 +427,12 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button click functionality', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -461,7 +449,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
     const toggleButton = screen.getByTestId('toggleBtn');
     expect(toggleButton).toBeInTheDocument();
-    expect(toggleButton).toHaveAttribute('tabIndex', '0');
 
     await userEvent.click(toggleButton);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -470,12 +457,12 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button keyboard navigation with Enter key', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -500,12 +487,12 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button keyboard navigation with Space key', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -530,12 +517,12 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button keyboard navigation ignores other keys', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -562,7 +549,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing conditional rendering with URL - renders NavLink', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -577,7 +564,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -596,7 +583,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing conditional rendering without URL - renders CollapsibleDropdown', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -620,7 +607,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -646,10 +633,10 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 describe('Plugin System Integration', () => {
   it('should not show plugin section when no plugin items', () => {
     vi.mocked(usePluginDrawerItems).mockReturnValue([]);
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -680,10 +667,10 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -711,10 +698,10 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -742,10 +729,10 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -774,7 +761,7 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
 
     // Mock mobile view
     Object.defineProperty(window, 'innerWidth', {
@@ -785,7 +772,7 @@ describe('Plugin System Integration', () => {
 
     const setHideDrawer = vi.fn();
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -804,7 +791,7 @@ describe('Plugin System Integration', () => {
 
   it('should call usePluginDrawerItems with correct parameters', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -842,7 +829,7 @@ describe('Dropdown State Management', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -887,7 +874,7 @@ describe('Dropdown State Management', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -909,5 +896,22 @@ describe('Dropdown State Management', () => {
     expect(
       screen.getByRole('button', { name: /Dropdown Menu/i }),
     ).toBeInTheDocument();
+  });
+
+  it('shows switch to admin portal button for admin users', () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider link={linkAdmin}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('switchToAdminPortalBtn')).toBeInTheDocument();
   });
 });

@@ -11,6 +11,7 @@ describe('EventManager', () => {
   afterEach(() => {
     // Clean up any remaining listeners
     eventManager.removeAllListeners();
+    vi.restoreAllMocks();
   });
 
   describe('Constructor', () => {

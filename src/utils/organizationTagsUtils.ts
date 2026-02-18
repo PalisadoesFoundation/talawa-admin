@@ -3,6 +3,7 @@
 import type { ApolloError } from '@apollo/client';
 import type {
   InterfaceQueryOrganizationUserTags,
+  InterfaceQueryOrganizationUserTagsPG,
   InterfaceQueryUserTagChildTags,
   InterfaceQueryUserTagsAssignedMembers,
   InterfaceQueryUserTagsMembersToAssignTo,
@@ -74,8 +75,7 @@ interface InterfaceBaseFetchMoreOptions<T> {
 }
 
 // 4. Query interfaces
-export interface InterfaceOrganizationTagsQuery
-  extends InterfaceBaseQueryResult {
+export interface InterfaceOrganizationTagsQuery extends InterfaceBaseQueryResult {
   data?: {
     organizations: InterfaceQueryOrganizationUserTags[];
   };
@@ -86,8 +86,18 @@ export interface InterfaceOrganizationTagsQuery
   ) => void;
 }
 
-export interface InterfaceOrganizationSubTagsQuery
-  extends InterfaceBaseQueryResult {
+export interface InterfaceOrganizationTagsQueryPG extends InterfaceBaseQueryResult {
+  data?: {
+    organization: InterfaceQueryOrganizationUserTagsPG;
+  };
+  fetchMore: (
+    options: InterfaceBaseFetchMoreOptions<{
+      organization: InterfaceQueryOrganizationUserTagsPG;
+    }>,
+  ) => void;
+}
+
+export interface InterfaceOrganizationSubTagsQuery extends InterfaceBaseQueryResult {
   data?: {
     getChildTags: InterfaceQueryUserTagChildTags;
   };
@@ -98,8 +108,7 @@ export interface InterfaceOrganizationSubTagsQuery
   ) => void;
 }
 
-export interface InterfaceTagAssignedMembersQuery
-  extends InterfaceBaseQueryResult {
+export interface InterfaceTagAssignedMembersQuery extends InterfaceBaseQueryResult {
   data?: {
     getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
   };
@@ -110,8 +119,7 @@ export interface InterfaceTagAssignedMembersQuery
   ) => void;
 }
 
-export interface InterfaceTagUsersToAssignToQuery
-  extends InterfaceBaseQueryResult {
+export interface InterfaceTagUsersToAssignToQuery extends InterfaceBaseQueryResult {
   data?: {
     getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
   };

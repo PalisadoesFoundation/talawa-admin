@@ -1,0 +1,141 @@
+.btnsContainer {
+  display: flex;
+  margin: var(--space-9) 0;
+  align-items: center;
+  gap: var(--space-5);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 var(--space-21);
+  min-width: var(--space-18);
+  max-width: 100%;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.btnsContainer .btnsBlock button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: var(--space-5);
+    margin-right: 0;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: var(--space-5);
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: var(--space-7) 0;
+  }
+
+  .btnsContainer > div {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin: var(--space-7) 0 0 0;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: var(--space-5);
+    margin-right: 0;
+    width: 100%;
+    max-width: var(--space-27);
+    margin-left: 0;
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: var(--space-7);
+  }
+
+  .btnsContainer .input {
+    width: 100%;
+  }
+}
+
+.dropdown {
+  background-color: var(--color-gray-50);
+  min-width: var(--space-15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown:is(
+  :hover,
+  :focus,
+  :active,
+  :focus-visible,
+  .show,
+  :disabled,
+  :checked
+) {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--border-2) solid var(--color-blue-200);
+}
+
+.mainpageright > hr {
+  margin-top: var(--space-8);
+  width: 100%;
+  margin-left: calc(var(--space-5) * -1);
+  margin-right: calc(var(--space-5) * -1);
+  margin-bottom: var(--space-8);
+}
+
+@media screen and (max-width: 575.5px) {
+  .mainpageright {
+    width: 98%;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .mainpageright {
+    width: 100%;
+  }
+}
+
+.list_box {
+  height: auto;
+  overflow-y: auto;
+  width: 100%;
+}

@@ -36,4 +36,4 @@ Custom information about the advertisement.
 
 ## Param
 
-Attachments of the advertisement.
+Attachments of the advertisement (FileMetadataInput from MinIO presigned upload).

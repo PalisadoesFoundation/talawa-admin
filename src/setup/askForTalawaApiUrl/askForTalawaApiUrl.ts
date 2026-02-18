@@ -1,7 +1,9 @@
 import inquirer from 'inquirer';
 
-export async function askForTalawaApiUrl(): Promise<string> {
-  const defaultEndpoint = 'http://localhost:4000/graphql';
+export async function askForTalawaApiUrl(useDocker = false): Promise<string> {
+  const defaultEndpoint = useDocker
+    ? 'http://host.docker.internal:4000/graphql'
+    : 'http://localhost:4000/graphql';
 
   const { endpoint } = await inquirer.prompt<{ endpoint: string }>([
     {

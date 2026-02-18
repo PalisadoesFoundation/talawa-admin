@@ -1,0 +1,56 @@
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icon {
+  margin: var(--space-0-5);
+}
+
+.leaderboardContainer {
+  margin-top: var(--space-7);
+  margin-left: var(--space-3);
+  margin-right: var(--space-3);
+  background-color: var(--color-white);
+  padding: var(--space-5);
+  padding-top: var(--space-3);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 var(--space-1) var(--space-2) rgba(0, 0, 0, 0.075);
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: calc(var(--space-1) * -1);
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: calc(var(--space-1) * -1);
+}
+
+.dataGridStyle .MuiDataGrid-row:hover {
+  background-color: var(--color-gray-50);
+}
+
+.dataGridStyle .MuiDataGrid-row.Mui-hovered {
+  background-color: var(--color-gray-50);
+}
+
+.dataGridStyle .MuiDataGrid-root {
+  border-radius: var(--radius-md);
+}
+
+.dataGridStyle .MuiDataGrid-main {
+  border-radius: var(--radius-md);
+}
+
+.volunteerCell {
+  display: flex;
+  font-weight: var(--font-weight-bold);
+  align-items: center;
+  margin-left: var(--space-6);
+  cursor: pointer;
+}

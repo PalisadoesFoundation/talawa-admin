@@ -1,0 +1,11 @@
+.dropdown {
+  position: relative;
+  display: inline-block;
+  background-color: var(--color-gray-100) !important;
+  color: var(--color-gray-700) !important;
+  font-weight: var(--font-weight-heavy) !important;
+}
+
+.iconRightMargin {
+  margin-left: var(--space-4);
+}

@@ -1,0 +1,30 @@
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--shadow-offset-sm);
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-400) !important;
+}
+
+.noOutline input:disabled:focus-visible {
+  outline: var(--border-2) solid var(--color-gray-400);
+  outline-offset: var(--shadow-offset-sm);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-400) !important;
+}
+
+.noOutline:focus-within {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--shadow-offset-sm);
+}
+
+.noOutline:is(:hover, :active, .show):not(:focus-within) {
+  outline: none;
+}

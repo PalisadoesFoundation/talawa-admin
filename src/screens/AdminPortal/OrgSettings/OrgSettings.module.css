@@ -1,0 +1,59 @@
+.headerBtn:global(.btn) {
+  background: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-400);
+  border-radius: var(--border-8);
+  height: auto;
+  padding: var(--space-5);
+  padding-left: var(--space-8);
+  padding-right: var(--space-8);
+  color: var(--color-gray-400);
+}
+
+.headerBtn:global(.btn):active {
+  background: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-400);
+  border-radius: var(--border-8);
+  height: auto;
+  width: auto;
+  padding-left: var(--space-8);
+  padding-right: var(--space-8);
+  color: var(--color-gray-400);
+}
+
+.activeTabBtn:global(.btn) {
+  background: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-700);
+  border-radius: var(--border-8);
+  color: var(--color-gray-700);
+}
+
+.activeTabBtn:global(.btn):active {
+  background: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+}
+
+.settingsTabs {
+  display: flex;
+  gap: var(--space-4);
+  background-color: var(--color-white);
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-xl);
+}
+
+.headerBtn:global(.btn):hover {
+  border: var(--border-1) solid var(--color-gray-400);
+  background: var(--color-white);
+  border-radius: var(--border-8);
+  box-shadow: var(--border-1-5) var(--border-1-5) var(--border-1-5)
+    var(--shadow-spread-none) rgba(0, 0, 0, 0.3);
+  color: var(--color-gray-400);
+}
+
+.activeTabBtn:global(.btn):hover {
+  box-shadow: var(--border-1-5) var(--border-1-5) var(--border-1-5)
+    var(--shadow-spread-none) rgba(0, 0, 0, 0.3);
+  background: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+}

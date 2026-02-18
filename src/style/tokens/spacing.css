@@ -1,0 +1,33 @@
+:root {
+  --space-0: 0;
+  --space-0-5: 0.0625rem;
+  --space-1: 0.125rem;
+  --space-2: 0.25rem;
+  --space-3: 0.5rem;
+  --space-4: 0.75rem;
+  --space-5: 1rem;
+  --space-6: 1.25rem;
+  --space-7: 1.5rem;
+  --space-8: 2rem;
+  --space-9: 2.5rem;
+  --space-10: 3rem;
+  --space-11: 4rem;
+  --space-12: 5rem;
+  --space-13: 6rem;
+  --space-14: 7.5rem;
+  --space-15: 9.375rem;
+  --space-16: 10rem;
+  --space-17: 13.75rem;
+  --space-18: 15.625rem;
+  --space-19: 17rem;
+  --space-20: 18.75rem;
+  --space-21: 20rem;
+  --space-22: 21.875rem;
+  --space-23: 25rem;
+  --space-24: 26.25rem;
+  --space-25: 31.25rem;
+  --space-26: 40rem;
+  --space-27: 50rem;
+  --space-28: 56.25rem;
+  --space-29: 87.5rem;
+}

@@ -1,0 +1,35 @@
+.volunteerModal {
+  max-width: 80vw;
+  margin: 2vh auto;
+}
+
+.titlemodal {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
+  width: 65%;
+  margin-bottom: var(--space-0);
+}
+
+.radioFieldset {
+  border: 0;
+  padding: 0;
+}
+
+.radioLegend {
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

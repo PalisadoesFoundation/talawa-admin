@@ -4,8 +4,7 @@
  * This component renders a table of volunteer groups for a specific organization and event.
  * It provides functionalities such as searching, sorting, and viewing/editing group details.
  *
- * @component
- * @returns {JSX.Element} The rendered Groups component.
+ * @returns The rendered Groups component.
  *
  * @remarks
  * - Uses `@apollo/client` to fetch volunteer group data from the GraphQL API.
@@ -13,29 +12,29 @@
  * - Displays a loader while data is being fetched and an error message if the query fails.
  * - Integrates modals for viewing and editing group details.
  *
- * @requires
+ * requires
  * - `react`, `react-i18next` for translations.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for rendering the data grid.
  * - `react-bootstrap` for UI components.
  * - Custom components: `Loader`, `Avatar`, `GroupModal`, `VolunteerGroupViewModal`, `SearchBar`, `SortingButton`.
  *
- * @enum {ModalState}
+ * enum [ModalState]
  * - `EDIT`: Represents the edit modal state.
  * - `VIEW`: Represents the view modal state.
  *
- * @state
+ * state
  * - `group`: Stores the currently selected group for modal interactions.
  * - `searchTerm`: Stores the search input value.
  * - `sortBy`: Stores the sorting criteria for volunteer groups.
  * - `searchBy`: Determines whether to search by group name or leader name.
  * - `modalState`: Tracks the visibility of the edit and view modals.
  *
- * @query
+ * query
  * - `EVENT_VOLUNTEER_GROUP_LIST`: Fetches the list of volunteer groups based on filters and sorting.
  *
- * @param {string} orgId - The organization ID retrieved from the URL parameters.
- * @param {string} userId - The user ID retrieved from local storage.
+ * @param  orgId - The organization ID retrieved from the URL parameters.
+ * @param  userId - The user ID retrieved from local storage.
  *
  * @example
  * ```tsx
@@ -43,76 +42,67 @@
  * ```
  */
 import React, { useCallback, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
-import { debounce, Stack } from '@mui/material';
-
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import Loader from 'components/Loader/Loader';
 import {
-  DataGrid,
   type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
-import Avatar from 'components/Avatar/Avatar';
-import styles from 'style/app-fixed.module.css';
+  type TokenAwareGridColDef,
+  DataGridWrapper,
+} from 'shared-components/DataGridWrapper';
+import Avatar from 'shared-components/Avatar/Avatar';
+import styles from './Groups.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
-import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
+import VolunteerGroupViewModal from 'shared-components/VolunteerGroupViewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
 
-enum ModalState {
-  EDIT = 'edit',
-  VIEW = 'view',
-}
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
-function groups(): JSX.Element {
+function Groups(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
-
-  // Get the organization ID from URL parameters
   const { orgId } = useParams();
-
-  if (!orgId || !userId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<
-    'volunteers_ASC' | 'volunteers_DESC' | null
-  >(null);
-  const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({ [ModalState.EDIT]: false, [ModalState.VIEW]: false });
-
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
+  const [sortBy, setSortBy] = useState<'volunteers_ASC' | 'volunteers_DESC'>(
+    'volunteers_DESC',
   );
+  const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
+  const {
+    isOpen: isEditModalOpen,
+    open: openEditModal,
+    close: closeEditModal,
+  } = useModalState();
+  const {
+    isOpen: isViewModalOpen,
+    open: openViewModal,
+    close: closeViewModal,
+  } = useModalState();
+
+  const userId = getItem('userId');
+
+  // Build where variables conditionally (omit if empty string)
+  const whereVariables = useMemo(() => {
+    if (!userId || !orgId) return {};
+
+    const vars: Record<string, unknown> = {
+      userId,
+      orgId,
+    };
+    if (searchBy === 'leader' && searchTerm.trim() !== '') {
+      vars.leaderName = searchTerm.trim();
+    }
+    if (searchBy === 'group' && searchTerm.trim() !== '') {
+      vars.name_contains = searchTerm.trim();
+    }
+    return vars;
+  }, [userId, orgId, searchBy, searchTerm]);
 
   /**
    * Query to fetch the list of volunteer groups for the event.
@@ -129,58 +119,63 @@ function groups(): JSX.Element {
     refetch: () => void;
   } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
     variables: {
-      where: {
-        eventId: undefined,
-        userId,
-        orgId,
-        leaderName: searchBy === 'leader' ? searchTerm : undefined,
-        name_contains: searchBy === 'group' ? searchTerm : undefined,
-      },
+      where: whereVariables,
       orderBy: sortBy,
     },
+    skip: !userId || !orgId,
   });
 
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-
-  const handleModalClick = useCallback(
-    (group: InterfaceVolunteerGroupInfo | null, modal: ModalState): void => {
+  const handleEditClick = useCallback(
+    (group: InterfaceVolunteerGroupInfo | null): void => {
       setGroup(group);
-      openModal(modal);
+      openEditModal();
     },
-    [openModal],
+    [openEditModal],
   );
+
+  const handleViewClick = useCallback(
+    (group: InterfaceVolunteerGroupInfo | null): void => {
+      setGroup(group);
+      openViewModal();
+    },
+    [openViewModal],
+  );
+
+  const handleSearchChange = useCallback((term: string, _searchBy?: string) => {
+    setSearchTerm(term);
+  }, []);
+
+  const handleSearchByChange = useCallback((searchBy: string) => {
+    setSearchBy(searchBy as 'leader' | 'group');
+  }, []);
 
   const groups = useMemo(
     () => groupsData?.getEventVolunteerGroups || [],
     [groupsData],
   );
 
-  if (groupsLoading) {
-    return <Loader size="xl" />;
+  // Early return after all hooks
+  if (!orgId || !userId) {
+    return <Navigate to={'/'} replace />;
   }
 
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded className={styles.icon} />
         <h6 className="fw-bold text-danger text-center">
-          {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
+          {tErrors('errorLoading', { entity: t('volunteerGroups') })}
         </h6>
       </div>
     );
   }
-
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'group',
-      headerName: 'Group',
+      headerName: t('groupHeader'),
       flex: 1,
       align: 'left',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -197,10 +192,10 @@ function groups(): JSX.Element {
     },
     {
       field: 'leader',
-      headerName: 'Leader',
+      headerName: t('leaderHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -214,16 +209,16 @@ function groups(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="Assignee"
+                alt={t('leader')}
                 data-testid={`image${id + 1}`}
-                className={styles.TableImage}
+                className={styles.tableImage}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={id + '1'}
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
+                  avatarStyle={styles.tableImage}
                   name={name}
                   alt={name}
                 />
@@ -236,7 +231,7 @@ function groups(): JSX.Element {
     },
     {
       field: 'volunteers',
-      headerName: 'No. of Volunteers',
+      headerName: t('numVolunteersHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -252,10 +247,10 @@ function groups(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('optionsHeader'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -265,10 +260,10 @@ function groups(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`${styles.groupsViewButton} me-2 rounded`}
               data-testid="viewGroupBtn"
-              onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              onClick={() => handleViewClick(params.row)}
+              aria-label={t('viewGroup')}
             >
               <i className="fa fa-info" />
             </Button>
@@ -278,7 +273,8 @@ function groups(): JSX.Element {
                 size="sm"
                 className="me-2 rounded"
                 data-testid="editGroupBtn"
-                onClick={() => handleModalClick(params.row, ModalState.EDIT)}
+                onClick={() => handleEditClick(params.row)}
+                aria-label={t('editGroup')}
               >
                 <i className="fa fa-edit" />
               </Button>
@@ -291,77 +287,51 @@ function groups(): JSX.Element {
 
   return (
     <div>
-      {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-          })}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('leader'), value: 'leader' },
-                { label: t('group'), value: 'group' },
-              ]}
-              selectedOption={searchBy}
-              onSortChange={(value) => setSearchBy(value as 'leader' | 'group')}
-              dataTestIdPrefix="searchByToggle"
-              buttonLabel={tCommon('searchBy', { item: '' })}
-            />
-            <SortingButton
-              sortingOptions={[
-                { label: t('mostVolunteers'), value: 'volunteers_DESC' },
-                { label: t('leastVolunteers'), value: 'volunteers_ASC' },
-              ]}
-              onSortChange={(value) =>
-                setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Table with Volunteer Groups */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteerGroups')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
+      <DataGridWrapper
         rows={groups}
         columns={columns}
-        isRowSelectable={() => false}
+        loading={groupsLoading}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchTerm: searchTerm,
+          searchByOptions: [
+            { label: t('group'), value: 'group' },
+            { label: t('leader'), value: 'leader' },
+          ],
+          selectedSearchBy: searchBy,
+          onSearchChange: handleSearchChange,
+          onSearchByChange: handleSearchByChange,
+          searchInputTestId: 'searchByInput',
+          placeholder: tCommon('searchBy', { item: t('groupOrLeader') }),
+          debounceMs: 300,
+        }}
+        sortConfig={{
+          sortingOptions: [
+            { label: t('mostVolunteers'), value: 'volunteers_desc' },
+            { label: t('leastVolunteers'), value: 'volunteers_asc' },
+          ],
+          selectedSort:
+            sortBy === 'volunteers_ASC' ? 'volunteers_asc' : 'volunteers_desc',
+          onSortChange: (value: string | number) =>
+            setSortBy(
+              value === 'volunteers_asc' ? 'volunteers_ASC' : 'volunteers_DESC',
+            ),
+        }}
+        emptyStateMessage={t('noVolunteerGroups')}
       />
-
       {group && (
         <>
           <GroupModal
-            isOpen={modalState[ModalState.EDIT]}
-            hide={() => closeModal(ModalState.EDIT)}
+            isOpen={isEditModalOpen}
+            hide={closeEditModal}
             refetchGroups={refetchGroups}
             group={group}
             eventId={group.event.id}
           />
           <VolunteerGroupViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
+            isOpen={isViewModalOpen}
+            hide={closeViewModal}
             group={group}
           />
         </>
@@ -370,4 +340,4 @@ function groups(): JSX.Element {
   );
 }
 
-export default groups;
+export default Groups;

@@ -1,0 +1,48 @@
+.cardItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* Vertically centers the items */
+  justify-content: flex-start;
+  height: 6rem;
+  padding: 0.75rem;
+  gap: 1.5rem;
+  background-color: #f7f8fa;
+  border: 1px solid var(--cardItem-border);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.cardItem .iconWrapper {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.themeOverlay {
+  background: var(--cardItem-iconWrapper-bg);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.12;
+  border-radius: 50%;
+}
+
+.title {
+  font-size: 1rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 3px;
+}
+
+.titlePlaceholder {
+  --card-item-loading-height: 1.5rem;
+  display: inline-block;
+  height: var(--card-item-loading-height);
+}

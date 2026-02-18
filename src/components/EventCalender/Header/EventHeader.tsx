@@ -5,24 +5,17 @@
  * functionality for searching, sorting, and creating events. It is designed
  * to be used within the organization events page.
  *
- * @param {InterfaceEventHeaderProps} props - The props for the EventHeader component.
- * @param {ViewType} props.viewType - The current view type of the calendar (e.g., Month, Day, Year).
- * @param {(viewType: ViewType) => void} props.handleChangeView - Callback function to handle changes in the calendar view type.
- * @param {() => void} props.showInviteModal - Callback function to display the modal for creating a new event.
+ * @param viewType - The current view type of the calendar (e.g., Month, Day, Year).
+ * @param handleChangeView - Callback function to handle changes in the calendar view type.
+ * @param showInviteModal - Callback function to display the modal for creating a new event.
  *
- * @returns {JSX.Element} The rendered EventHeader component.
+ * @returns The rendered EventHeader component.
  *
  * @remarks
- * - This component uses `SearchBar` for searching events by name.
- * - It includes two `SortingButton` components for selecting the calendar view type and event type.
- * - A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
- *
- * @dependencies
- * - `react-bootstrap` for the `Button` component.
- * - `@mui/icons-material` for the `AddIcon`.
- * - `react-i18next` for translations.
- * - Custom styles from `style/app-fixed.module.css`.
- * - Subcomponents: `SortingButton` and `SearchBar`.
+ * - Uses `SearchBar` for searching events by name.
+ * - Uses `SortingButton` for selecting calendar view type.
+ * - Uses `AddIcon` from MUI for the create event button.
+ * - Styles from `EventHeader.module.css`.
  *
  * @example
  * ```tsx
@@ -33,17 +26,18 @@
  * />
  * ```
  */
+
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
-import styles from 'style/app-fixed.module.css';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import styles from './EventHeader.module.css';
+import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type { InterfaceEventHeaderProps } from 'types/Event/interface';
 
-function eventHeader({
+function EventHeader({
   viewType,
   handleChangeView,
   showInviteModal,
@@ -51,71 +45,54 @@ function eventHeader({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
-
+  const { t: tCommon } = useTranslation('common');
   return (
     <div
       className={styles.calendarEventHeader}
       data-testid="calendarEventHeader"
     >
       <div className={styles.calendar__header}>
-        <SearchBar
-          placeholder={t('searchEventName')}
-          onSearch={(term) => console.log(`Search term: ${term}`)}
-          inputTestId="searchEvent"
-          buttonTestId="searchButton"
-        />
-        <div className={styles.space}>
+        <div className={styles.calendar__search}>
+          <SearchBar
+            placeholder={t('searchEventName')}
+            onSearch={() => {}}
+            inputTestId="searchEvent"
+            buttonTestId="searchButton"
+            showSearchButton={true}
+            showLeadingIcon={true}
+            showClearButton={true}
+            buttonAriaLabel={t('search')}
+          />
+        </div>
+
+        {/* 2. Controls Section: Wrapped in btnsBlock for alignment */}
+        <div className={styles.btnsBlock}>
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
-              { label: 'Select Month', value: ViewType.MONTH },
-              { label: 'Select Day', value: ViewType.DAY },
-              { label: 'Select Year', value: ViewType.YEAR },
+              { label: t('selectMonth'), value: ViewType.MONTH },
+              { label: t('selectDay'), value: ViewType.DAY },
+              { label: t('selectYear'), value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
-            onSortChange={handleChangeView}
+            onSortChange={(value) => handleChangeView(value as ViewType)}
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
-        </div>
-        <div className={styles.btnsBlock}>
-          <SortingButton
-            title={t('eventType')}
-            sortingOptions={[
-              { label: 'Events', value: 'Events' },
-              { label: 'Workshops', value: 'Workshops' },
-            ]}
-            selectedOption={t('eventType')}
-            onSortChange={(value) => console.log(`Selected: ${value}`)}
-            dataTestIdPrefix="eventType"
+          <Button
+            variant="outline-secondary"
             className={styles.dropdown}
-            buttonLabel={t('eventType')}
-          />
-        </div>
-        <div className={styles.btnsBlock}>
-          <div className={styles.selectTypeEventHeader}>
-            <Button
-              className={styles.dropdown}
-              onClick={showInviteModal}
-              data-testid="createEventModalBtn"
-              data-cy="createEventModalBtn"
-            >
-              <div className="">
-                <AddIcon
-                  sx={{
-                    fontSize: '25px',
-                    marginBottom: '2px',
-                    marginRight: '2px',
-                  }}
-                />
-                <span>Create</span>
-              </div>
-            </Button>
-          </div>
+            onClick={showInviteModal}
+            data-testid="createEventModalBtn"
+            data-cy="createEventModalBtn"
+          >
+            <AddIcon className={styles.addButtonIcon} />
+            <span>{tCommon('createEvent')}</span>
+          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-export default eventHeader;
+export default EventHeader;

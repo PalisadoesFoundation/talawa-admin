@@ -1,0 +1,80 @@
+.volunteerCreateModal {
+  max-width: 80vw;
+  margin: 2vh auto;
+}
+
+.modalCloseBtn {
+  width: var(--space-9);
+  height: var(--space-9);
+  padding: var(--space-5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titlemodal {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
+  width: 65%;
+  margin-bottom: var(--space-0);
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-400);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-400);
+  opacity: 1;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none;
+}
+
+.regBtn {
+  margin-top: var(--space-5);
+  border: var(--border-1) solid var(--color-gray-200);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-xs)
+    var(--color-gray-200);
+  padding: var(--space-4) var(--space-4);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-blue-700);
+  width: 100%;
+  font-size: var(--font-size-md);
+  color: var(--color-white);
+  outline: none;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.radioFieldset {
+  border: 0;
+  padding: 0;
+}
+
+.radioLegend {
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

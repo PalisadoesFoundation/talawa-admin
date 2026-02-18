@@ -1,9 +1,9 @@
 .colorWhite {
-  color: white;
+  color: var(--colorWhite, #fff);
 }
 
 .glassMenu {
-  background: rgb(255, 255, 255) !important;
+  background: var(--modalHeader-bg, #fff) !important;
   backdrop-filter: blur(8px);
   border-radius: 5px;
   min-width: 250px !important;
@@ -26,16 +26,21 @@
   text-overflow: ellipsis;
   background: transparent;
   transition: background 0.2s;
+  cursor: default;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .notificationItem:hover {
-  background: rgba(154, 151, 151, 0.15);
+  background: var(--sidebar-option-bg-hover, rgba(154, 151, 151, 0.15));
 }
 
 .notificationDot {
   width: 10px;
   height: 10px;
-  background: #0a0a0a;
+  background: var(--primaryText-color, #0a0a0a);
   border-radius: 50%;
   margin-right: 8px;
   flex-shrink: 0;
@@ -46,7 +51,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.97em;
-  color: #222;
+  color: var(--primaryText-color, #222);
 }
 
 .iconButton {
@@ -63,12 +68,22 @@
   outline: none !important;
   padding: 0 !important;
 }
+
 .iconButton:focus,
 .iconButton:active {
   background: none !important;
   border: none !important;
   box-shadow: none !important;
   outline: none !important;
+}
+
+.iconContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.bellIcon {
+  color: var(--primaryText-color, #3b3b3b);
 }
 
 .unreadBadge {
@@ -78,13 +93,14 @@
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  background: #d63031; /* red badge */
-  color: #fff;
+  background: var(--errorIcon-color, #d63031);
+  color: var(--colorWhite, #fff);
   border-radius: 12px;
   font-size: 11px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 0 2px var(--colorWhite, #fff);
+  /* Simulated outline */
 }

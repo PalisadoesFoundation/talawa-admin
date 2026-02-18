@@ -1,17 +1,17 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileCard from './ProfileCard';
 import { MockedProvider } from '@apollo/react-testing';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 let mockNavigate: ReturnType<typeof vi.fn>;
 
@@ -27,11 +27,11 @@ vi.mock('react-router', async () => {
 const MOCKS = [
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
     result: {
       data: {
-        revokeRefreshTokenForUser: true,
+        logout: { success: true },
       },
     },
   },
@@ -68,21 +68,23 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
-  setItem('SuperAdmin', false);
+  setItem('role', 'user');
   setItem('AdminFor', []);
   setItem('id', '123');
 });
 
 afterEach(() => {
-  vi.restoreAllMocks();
-  localStorage.clear();
+  vi.clearAllMocks();
+  cleanup();
+  window.history.replaceState(null, '', '/');
+  clearAllItems();
 });
 
 describe('ProfileDropdown Component', () => {
   test('renders with user information', () => {
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -95,13 +97,16 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
     expect(screen.getByTestId('display-type')).toBeInTheDocument();
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    expect(
+      screen.getByAltText('Profile picture of John Doe'),
+    ).toBeInTheDocument();
   });
 
   test('renders Admin', () => {
     setItem('AdminFor', ['123']);
+    setItem('role', 'administrator');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileCard />
         </BrowserRouter>
@@ -113,7 +118,7 @@ describe('ProfileDropdown Component', () => {
   test('handles image load error', () => {
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -122,20 +127,24 @@ describe('ProfileDropdown Component', () => {
       </MockedProvider>,
     );
 
-    const image = screen.getByAltText('profile picture');
+    const image = screen.getByAltText('Profile picture of John Doe');
+
+    // Trigger image error which will cause ProfileAvatarDisplay to show fallback
     act(() => {
       image.dispatchEvent(new Event('error'));
     });
 
-    // Verify the broken image is hidden from view
-    expect(image).not.toBeVisible();
+    // After error, the ProfileAvatarDisplay swaps to Avatar fallback
+    // The fallback avatar should be visible with a different testid
+    const fallbackAvatar = screen.getByTestId('display-img-fallback');
+    expect(fallbackAvatar).toBeInTheDocument();
   });
 
   test('renders Avatar when userImage is null string', () => {
     setItem('UserImage', 'null');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -144,15 +153,16 @@ describe('ProfileDropdown Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
-    expect(screen.queryByAltText('profile picture')).not.toBeInTheDocument();
+    // Verify fallback avatar is displayed when userImage is 'null' string
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
   });
 
   test('truncates long names', () => {
     setItem('name', 'This is a very long name that should be truncated');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -175,7 +185,7 @@ describe('ProfileDropdown Component', () => {
     setItem('name', null);
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -187,7 +197,8 @@ describe('ProfileDropdown Component', () => {
     const displayName = screen.getByTestId('display-name');
     expect(displayName.textContent).toBe(' ');
     // Verify other component elements still render correctly
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
   });
 
@@ -195,7 +206,7 @@ describe('ProfileDropdown Component', () => {
     setItem('name', '');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -207,7 +218,8 @@ describe('ProfileDropdown Component', () => {
     const displayName = screen.getByTestId('display-name');
     expect(displayName.textContent).toBe(' ');
     // Verify other component elements still render correctly
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
   });
 
@@ -215,7 +227,7 @@ describe('ProfileDropdown Component', () => {
     setItem('name', 'John');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -227,18 +239,18 @@ describe('ProfileDropdown Component', () => {
     const displayName = screen.getByTestId('display-name');
     expect(displayName.textContent).toBe('John ');
     // Verify other component elements still render correctly
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
   });
 });
 
 describe('Member screen routing testing', () => {
   test('member screen', async () => {
-    setItem('SuperAdmin', false);
+    setItem('role', 'user');
     setItem('AdminFor', []);
-    setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -255,12 +267,11 @@ describe('Member screen routing testing', () => {
   });
 
   test('navigates to /user/settings for a user', async () => {
-    setItem('SuperAdmin', false);
     setItem('AdminFor', []);
     setItem('role', 'regular');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -276,37 +287,13 @@ describe('Member screen routing testing', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
-  test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
-    window.history.pushState({}, 'Test page', '/orglist');
-    setItem('SuperAdmin', true); // Set as admin
-    setItem('id', '123');
-
-    render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Routes>
-              <Route path="/orglist" element={<ProfileCard />} />
-            </Routes>
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
-    });
-
-    expect(mockNavigate).toHaveBeenCalledWith('/member/');
-  });
-
-  test('navigates to /member/:userID for non-user roles', async () => {
+  test('navigates to /admin/profile for admin roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('role', 'administrator'); // Set as admin
     setItem('id', '123');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -321,6 +308,25 @@ describe('Member screen routing testing', () => {
       await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member/321');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/profile');
+  });
+
+  test('navigates to /user/settings when admin is in user portal', async () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard portal="user" />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 });

@@ -1,44 +1,15 @@
-/**
- * A modal dialog for creating or editing a volunteer group.
- *
- * @param isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param eventId - The ID of the event associated with volunteer group.
- * @param orgId - The ID of the organization associated with volunteer group.
- * @param group - The volunteer group object to be edited.
- * @param refetchGroups - Function to refetch the volunteer groups after creation or update.
- * @returns The rendered modal component.
- *
- * The `VolunteerGroupModal` component displays a form within a modal dialog for creating or editing a Volunteer Group.
- * It includes fields for entering the group name, description, volunteersRequired, and selecting volunteers/leaders.
- *
- * The modal includes:
- * - A header with a title indicating the current mode (create or edit) and a close button.
- * - A form with:
- *   - An input field for entering the group name.
- *   - A textarea for entering the group description.
- *   - An input field for entering the number of volunteers required.
- * - A submit button to create or update the pledge.
- *
- * On form submission, the component either:
- * - Calls `updateVoluneerGroup` mutation to update an existing group, or
- *
- * Success or error messages are displayed using toast notifications based on the result of the mutation.
- */
-import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,
   InterfaceVolunteerMembership,
 } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './GroupModal.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import {
-  FormControl,
   Paper,
   Stack,
   Table,
@@ -47,7 +18,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
 } from '@mui/material';
 import {
   UPDATE_VOLUNTEER_GROUP,
@@ -56,9 +26,14 @@ import {
 import { PiUserListBold } from 'react-icons/pi';
 import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import Avatar from 'components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import Button from 'shared-components/Button/Button';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
+/**
+ * Props for the GroupModal component.
+ */
 export interface InterfaceGroupModal {
   isOpen: boolean;
   hide: () => void;
@@ -67,6 +42,31 @@ export interface InterfaceGroupModal {
   refetchGroups: () => void;
 }
 
+/**
+ * A modal dialog for editing a volunteer group.
+ *
+ * @param isOpen - Indicates whether the modal is open.
+ * @param hide - Function to close the modal.
+ * @param eventId - The ID of the event associated with the volunteer group.
+ * @param group - The volunteer group object to be edited.
+ * @param refetchGroups - Function to refetch the volunteer groups after an update.
+ * @returns The rendered modal component.
+ *
+ * The `GroupModal` component displays a form within a modal dialog for editing a Volunteer Group.
+ * It includes fields for entering the group name, description, and volunteersRequired.
+ *
+ * The modal includes:
+ * - A toggle to switch between "details" and "requests" views.
+ * - A form with:
+ *   - An input field for entering the group name.
+ *   - A textarea for entering the group description.
+ *   - An input field for entering the number of volunteers required.
+ *   - A submit button to update the group.
+ * - A requests view showing pending membership requests with accept/reject actions.
+ *
+ * On form submission, the component calls `updateVolunteerGroup` mutation to update the group.
+ * Success or error messages are displayed using toast notifications based on the result of the mutation.
+ */
 const GroupModal: React.FC<InterfaceGroupModal> = ({
   isOpen,
   hide,
@@ -87,6 +87,21 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
     volunteersRequired: group.volunteersRequired ?? null,
   });
+  const [volunteersRequiredError, setVolunteersRequiredError] =
+    useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [touched, setTouched] = useState<{
+    name: boolean;
+    volunteersRequired: boolean;
+  }>({
+    name: false,
+    volunteersRequired: false,
+  });
+
+  const { name, description, volunteersRequired } = formState;
+  const nameError =
+    touched.name && !name.trim() ? tCommon('nameRequired') : undefined;
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
@@ -102,20 +117,17 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           status: status,
         },
       });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
         ) as string,
       );
       refetchRequests();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
-  /**
-   * Query to fetch volunteer Membership requests for the event.
-   */
   const {
     data: requestsData,
     refetch: refetchRequests,
@@ -147,14 +159,19 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
       volunteersRequired: group.volunteersRequired ?? null,
     });
+    setVolunteersRequiredError(false);
   }, [group]);
 
-  const { name, description, volunteersRequired } = formState;
-
   const updateGroupHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
+      if (isSubmitting) return;
 
+      if (volunteersRequiredError || nameError) {
+        return;
+      }
+
+      setIsSubmitting(true);
       const updatedFields: {
         [key: string]: number | string | undefined | null;
       } = {};
@@ -175,233 +192,251 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('volunteerGroupUpdated'));
+        NotificationToast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
-        console.log(error);
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
+      } finally {
+        setIsSubmitting(false);
       }
     },
-    [formState, group],
+    [formState, group, volunteersRequiredError, nameError, isSubmitting],
   );
 
   return (
-    <Modal className={styles.groupModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>{t('manageGroup')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseBtn}
-          data-testid="modalCloseBtn"
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={hide}
+      title={t('manageGroup')}
+      className={styles.groupModal}
+      loading={isSubmitting}
+      showFooter={false}
+    >
+      <fieldset
+        className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
+      >
+        <legend className="visually-hidden">{t('viewToggle')}</legend>
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="detailsRadio"
+          checked={modalType === 'details'}
+          onChange={() => setModalType('details')}
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="detailsRadio"
         >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <div
-          className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
-          role="group"
+          <TbListDetails className="me-2" />
+          {t('details')}
+        </label>
+
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="groupsRadio"
+          onChange={() => setModalType('requests')}
+          checked={modalType === 'requests'}
+          data-testid="requestsRadio"
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="groupsRadio"
         >
-          <input
-            type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
-            name="btnradio"
-            id="detailsRadio"
-            checked={modalType === 'details'}
-            onChange={() => setModalType('details')}
-          />
-          <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
-            htmlFor="detailsRadio"
-          >
-            <TbListDetails className="me-2" />
-            {t('details')}
-          </label>
+          <PiUserListBold className="me-2" size={21} />
+          {t('requests')}
+        </label>
+      </fieldset>
 
-          <input
-            type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
-            name="btnradio"
-            id="groupsRadio"
-            onChange={() => setModalType('requests')}
-            checked={modalType === 'requests'}
-          />
-          <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
-            htmlFor="groupsRadio"
+      {modalType === 'details' ? (
+        <form
+          data-testid="groupForm"
+          onSubmit={updateGroupHandler}
+          className="p-3"
+        >
+          {/* Input field to enter the group name */}
+          <FormFieldGroup
+            name="name"
+            label={tCommon('name')}
+            required
+            touched={touched.name}
+            error={nameError}
           >
-            <PiUserListBold className="me-2" size={21} />
-            {t('requests')}
-          </label>
-        </div>
+            <input
+              id="name"
+              type="text"
+              aria-label={tCommon('name')}
+              required
+              className={`form-control ${styles.noOutline}`}
+              value={name}
+              data-testid="nameInput"
+              onChange={(e) =>
+                setFormState({ ...formState, name: e.target.value })
+              }
+              onBlur={() => setTouched({ ...touched, name: true })}
+            />
+          </FormFieldGroup>
 
-        {modalType === 'details' ? (
-          <Form
-            data-testid="pledgeForm"
-            onSubmitCapture={updateGroupHandler}
-            className="p-3"
+          {/* Input field to enter the group description */}
+          <FormFieldGroup name="description" label={tCommon('description')}>
+            <textarea
+              id="description"
+              aria-label={tCommon('description')}
+              rows={3}
+              className={`form-control ${styles.noOutline}`}
+              value={description ?? ''}
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  description: e.target.value,
+                })
+              }
+            />
+          </FormFieldGroup>
+
+          <FormFieldGroup
+            name="volunteersRequired"
+            label={t('volunteersRequired')}
+            touched={touched.volunteersRequired}
+            error={volunteersRequiredError ? t('invalidNumber') : undefined}
           >
-            {/* Input field to enter the group name */}
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  required
-                  label={tCommon('name')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={name}
-                  data-testid="nameInput"
-                  onChange={(e) =>
-                    setFormState({ ...formState, name: e.target.value })
+            <input
+              id="volunteersRequired"
+              type="number"
+              min="1"
+              aria-label={t('volunteersRequired')}
+              className={`form-control ${styles.noOutline}`}
+              value={volunteersRequired !== null ? volunteersRequired : ''}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === '') {
+                  setFormState({
+                    ...formState,
+                    volunteersRequired: null,
+                  });
+                  setVolunteersRequiredError(false);
+                } else {
+                  const parsed = parseInt(val, 10);
+                  if (Number.isNaN(parsed) || parsed < 1) {
+                    setVolunteersRequiredError(true);
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: null,
+                    });
+                  } else {
+                    setVolunteersRequiredError(false);
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: parsed,
+                    });
                   }
-                />
-              </FormControl>
-            </Form.Group>
-            {/* Input field to enter the group description */}
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  multiline
-                  rows={3}
-                  label={tCommon('description')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={description}
-                  onChange={(e) =>
-                    setFormState({ ...formState, description: e.target.value })
-                  }
-                />
-              </FormControl>
-            </Form.Group>
+                }
+              }}
+              onBlur={() =>
+                setTouched({ ...touched, volunteersRequired: true })
+              }
+            />
+          </FormFieldGroup>
 
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  label={t('volunteersRequired')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={volunteersRequired ?? ''}
-                  onChange={(e) => {
-                    if (parseInt(e.target.value) > 0) {
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: parseInt(e.target.value),
-                      });
-                    } else if (e.target.value === '') {
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: null,
-                      });
-                    }
-                  }}
-                />
-              </FormControl>
-            </Form.Group>
-
-            {/* Button to submit the pledge form */}
-            <Button
-              type="submit"
-              className={styles.regBtn}
-              data-testid="submitBtn"
+          <Button
+            type="submit"
+            className={styles.regBtn}
+            data-testid="submitBtn"
+            disabled={volunteersRequiredError || !!nameError || isSubmitting}
+          >
+            {t('updateGroup')}
+          </Button>
+        </form>
+      ) : (
+        <div className="px-3">
+          {requests.length === 0 ? (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              {t('noRequests')}
+            </Stack>
+          ) : (
+            <TableContainer
+              component={Paper}
+              variant="outlined"
+              className={styles.modalTable}
             >
-              {t('updateGroup')}
-            </Button>
-          </Form>
-        ) : (
-          <div className="px-3">
-            {requests.length === 0 ? (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('noRequests')}
-              </Stack>
-            ) : (
-              <TableContainer
-                component={Paper}
-                variant="outlined"
-                className={styles.modalTable}
-              >
-                <Table aria-label="group table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="fw-bold">Name</TableCell>
-                      <TableCell className="fw-bold">Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {requests.map((request, index) => {
-                      const { id, name, avatarURL } = request.volunteer.user;
-                      return (
-                        <TableRow
-                          key={index + 1}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
+              <Table aria-label={t('groupTable')}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="fw-bold">
+                      {t('volunteerName')}
+                    </TableCell>
+                    <TableCell className="fw-bold">
+                      {t('volunteerActions')}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {requests.map((request, _index) => {
+                    const { id, name, avatarURL } = request.volunteer.user;
+                    return (
+                      <TableRow
+                        key={request.id}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          className="d-flex gap-1 align-items-center"
+                          data-testid="userName"
                         >
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className="d-flex gap-1 align-items-center"
-                            data-testid="userName"
-                          >
-                            {avatarURL ? (
-                              <img
-                                src={avatarURL}
-                                alt="volunteer"
-                                data-testid={`image${id + 1}`}
-                                className={styles.TableImage}
-                              />
-                            ) : (
-                              <div className={styles.avatarContainer}>
-                                <Avatar
-                                  key={id + '1'}
-                                  containerStyle={styles.imageContainer}
-                                  avatarStyle={styles.TableImage}
-                                  name={name}
-                                  alt={name}
-                                />
-                              </div>
-                            )}
-                            {name}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            <div className="d-flex gap-2">
-                              <Button
-                                variant="success"
-                                size="sm"
-                                style={{ minWidth: '32px' }}
-                                className="me-2 rounded"
-                                data-testid={`acceptBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'accepted')
-                                }
-                              >
-                                <i className="fa fa-check" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="danger"
-                                className="rounded"
-                                data-testid={`rejectBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'rejected')
-                                }
-                              >
-                                <FaXmark size={18} fontWeight={900} />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </div>
-        )}
-      </Modal.Body>
-    </Modal>
+                          <ProfileAvatarDisplay
+                            key={id}
+                            imageUrl={avatarURL}
+                            fallbackName={name}
+                            dataTestId={'image-' + id}
+                            className={styles.TableImage}
+                          />
+                          {name}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <div className="d-flex gap-2">
+                            <Button
+                              variant="success"
+                              size="sm"
+                              className="me-2 rounded"
+                              data-testid={`acceptBtn`}
+                              aria-label={t('acceptRequest')}
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'accepted')
+                              }
+                            >
+                              <i className="fa fa-check" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              className="rounded"
+                              data-testid={`rejectBtn`}
+                              aria-label={t('rejectRequest')}
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'rejected')
+                              }
+                            >
+                              <FaXmark size={18} className="fw-bold" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </div>
+      )}
+    </CRUDModalTemplate>
   );
 };
+
 export default GroupModal;

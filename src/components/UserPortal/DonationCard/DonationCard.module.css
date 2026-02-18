@@ -1,0 +1,30 @@
+.donationAvatar {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--color-white);
+  border-radius: var(--radius-full);
+}
+
+.donationDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.donationRow {
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+.donationRow:last-child {
+  margin-bottom: 0;
+}
+
+.donorName {
+  font-weight: var(--font-weight-bold);
+}
+
+.donationMeta {
+  font-size: var(--font-size-sm);
+  color: var(--color-blue-500);
+}

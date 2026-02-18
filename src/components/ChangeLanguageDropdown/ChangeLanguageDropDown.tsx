@@ -5,55 +5,50 @@
  * It integrates with i18next for internationalization and updates the user's language preference
  * on the server using a GraphQL mutation.
  *
- * @param props - The properties passed to the component.
- * @param props.btnTextStyle - Optional CSS class for styling the button text.
- *
- * @returns A JSX.Element representing the language selection dropdown.
- *
+ * @param props - Props for the dropdown, see {@link InterfaceDropDownProps}
+ * @returns JSX.Element
  * @remarks
- * - The component uses `react-bootstrap` for the dropdown UI.
+ * - The component uses shared `DropDownButton` for the dropdown UI.
  * - The current language is determined using a cookie (`i18next`).
  * - Updates the user's language preference on the server using the `UPDATE_CURRENT_USER_MUTATION`.
  * - If a user avatar exists in localStorage, it is processed and included in the mutation.
  * - Displays a toast notification if the user ID is not found.
- *
- * @example
- * ```tsx
- * <ChangeLanguageDropDown btnTextStyle="custom-style" />
- * ```
- *
- * @dependencies
- * - `react-bootstrap` for dropdown UI.
- * - `i18next` for language management.
- * - `js-cookie` for managing cookies.
- * - `react-toastify` for displaying notifications.
- * - `@apollo/client` for GraphQL mutation.
- *
  */
-import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import React, { useMemo } from 'react';
 import i18next from 'i18next';
 import { languages } from 'utils/languages';
-import styles from 'style/app-fixed.module.css';
+import styles from './ChangeLanguageDropDown.module.css';
 import cookies from 'js-cookie';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 import { urlToFile } from 'utils/urlToFile';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
+import DropDownButton from 'shared-components/DropDownButton';
+import type { InterfaceDropDownProps } from 'types/shared-components/DropDownButton/interface';
 
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const { getItem } = useLocalStorage();
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
 
-  const userId = getItem('id');
+  const userId = getItem('userId');
   const userImage = getItem('UserImage');
+  const isLoggedIn = getItem('IsLoggedIn') === 'TRUE';
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
 
   const changeLanguage = async (languageCode: string): Promise<void> => {
+    if (!isLoggedIn) {
+      await i18next.changeLanguage(languageCode);
+      cookies.set('i18next', languageCode);
+      return;
+    }
+
     if (!userId) {
-      toast.error('User not found');
+      NotificationToast.error(tCommon('userNotFound'));
       return;
     }
 
@@ -66,7 +61,8 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
           avatarFile = await urlToFile(userImage);
         }
       } catch (error) {
-        console.log('Error processing avatar:', error);
+        NotificationToast.error(tCommon('avatarProcessingError'));
+        console.error('Error processing avatar:', error);
       }
     }
     const input = {
@@ -78,49 +74,49 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
       await updateUser({
         variables: { input },
       });
-
+    } catch (error) {
+      console.error('Error in changing language', error);
+    } finally {
       await i18next.changeLanguage(languageCode);
       cookies.set('i18next', languageCode);
-    } catch (error) {
-      console.log('Error in changing language', error);
     }
   };
 
+  // Build dropdown options from languages
+  const languageOptions = useMemo(
+    () =>
+      languages.map((language) => ({
+        value: language.code,
+        label: language.name,
+      })),
+    [],
+  );
+
   return (
-    <Dropdown title="Change Language" data-testid="language-dropdown-container">
-      <Dropdown.Toggle
-        className={styles.changeLanguageBtn}
-        data-testid="language-dropdown-btn"
-      >
-        {languages.map((language, index: number) => (
-          <span
-            key={`dropdown-btn-${index}`}
-            data-testid={`dropdown-btn-${index}`}
-          >
-            {currentLanguageCode === language.code ? (
-              <span className={`${props?.btnTextStyle ?? ''}`}>
-                <span className={`fi fi-${language.country_code} me-2`}></span>
-                {language.name}
-              </span>
-            ) : null}
-          </span>
-        ))}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {languages.map((language, index: number) => (
-          <Dropdown.Item
-            key={`dropdown-item-${index}`}
-            className="dropdown-item"
-            onClick={async (): Promise<void> => changeLanguage(language.code)}
-            disabled={currentLanguageCode === language.code}
-            data-testid={`change-language-btn-${language.code}`}
-          >
-            <span className={`fi fi-${language.country_code} me-2`}></span>
-            {language.name}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <DropDownButton
+        id="language-dropdown"
+        options={languageOptions}
+        selectedValue={currentLanguageCode}
+        onSelect={changeLanguage}
+        ariaLabel={tCommon('changeLanguage')}
+        dataTestIdPrefix="language-dropdown"
+        parentContainerStyle={props?.parentContainerStyle}
+        btnStyle={`${styles.changeLanguageBtn} ${props?.btnStyle ?? ''}`}
+        icon={
+          languages.find((lang) => lang.code === currentLanguageCode) && (
+            <span
+              className={`fi fi-${languages.find((lang) => lang.code === currentLanguageCode)?.country_code} me-2`}
+            ></span>
+          )
+        }
+      />
+    </ErrorBoundaryWrapper>
   );
 };
 

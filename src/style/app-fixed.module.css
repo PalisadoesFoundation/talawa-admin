@@ -32,10 +32,16 @@
  *   `.subtleBlueGrey` (for blue Text)
  *   `.activeTab` (for tabs which are active)
  *   `.inActiveTab` (for tabs which are not selected)
+ *   `.dataTableBase` (for styling data tables)
+ *   `.dataEmptyState` (for empty state displays)
+ *   `.dataErrorState` (for error state displays)
+ *   `.visuallyHidden` (for accessibility, hides content visually but keeps it accessible to screen readers)
  *
  */
 :root {
+  --errorState-border: #f5c2c7;
   --primary-theme-color: #1778f2;
+  --success-green-color: #31bb6b;
 
   --addButton-font: #555555;
   --addButton-border: #eaebef;
@@ -43,6 +49,17 @@
   --addButton-bg-hover: #1778f2;
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
+
+  /** pagination styles **/
+  --pagination-btn-color: var(--addButton-font, #555555);
+  --pagination-btn-bg: var(--addButton-bg, #a8c7fa);
+  --pagination-btn-border: var(--addButton-border, #eaebef);
+  --pagination-btn-bg-hover: var(--addButton-bg-hover, #1778f2);
+  --pagination-btn-border-hover: var(--addButton-border-hover, #555555);
+  --pagination-btn-bg-disabled: var(--disabled-btn, #e7f0fe);
+  --pagination-btn-bg-focus: var(--primary-theme-color, #1778f2);
+  --pagination-btn-color-hover: #ffffff;
+  --pagination-border-top: #e5e7eb;
 
   --sidebar-option-text-inactive: #000000;
   --sidebar-option-bg-hover: #eaebef;
@@ -122,6 +139,7 @@
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
+  --tableHeader-success-bg: var(--success-green-color);
 
   --LoginToggle-button-color: #555555;
   --LoginToggle-button-bg: #eaebef;
@@ -178,6 +196,15 @@
   --register-button-border-active: #eaebef;
   --register-button-color: #555555;
   --register-button-color-hover: #555555;
+
+  /* Progress indicator colors */
+  --progress-track-color: #e0e0e0;
+  --progress-complete-color: #4caf50;
+  --progress-half-color: #ff9800;
+  --progress-low-color: #2196f3;
+
+  /* Row hover background */
+  --row-hover-bg: #f0f0f0;
 
   --row-bg: #fff;
   --row-bg-scroll: #00000029;
@@ -305,7 +332,8 @@
   --colorWhite: #555555;
 
   --errorIcon-color: #ff4d4f;
-
+  --errorState-color: #b00020;
+  --errorState-bg: #f8d7da;
   --tagsBreadCrumbs-color-hover: #0000ff;
   --tagsBreadCrumbs-color: #808080;
 
@@ -349,6 +377,10 @@
   --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
+
+  /* Skeleton loading theme variables */
+  --skeleton-base: #e0e0e0;
+  --skeleton-highlight: #f0f0f0;
 
   --pledgeContainer-bg: #31bb6b33;
   --popup-border: #e2e8f0;
@@ -587,10 +619,6 @@
 
   --fonts-color: #707070;
 
-  --dropwdownToggle-bg: #f1f3f6;
-  --dropwdownToggle-color: #000000;
-  --dropwdownToggle-outline: #9ca3af;
-
   --createButtonEventHeader-bg: #eaebef;
   --createButtonEventHeader-color: #555555;
   --createButtonEventHeader-border: #555555;
@@ -761,10 +789,6 @@
   --titlemodalCustomRecurrenceModal-color: #707070;
   --titlemodalCustomRecurrenceModal-border: #7c9beb;
 
-  --memberfontcreatedbtnUserListCard-border: #286fe0;
-  --memberfontcreatedbtnUserListCard-bg: #286fe0;
-  --memberfontcreatedbtnUserListCard-color: #ffffff;
-
   --recurrenceDayButton-border: #808080;
   --recurrenceDayButton-outline-focus: #0056b3;
   --recurrenceDayButton-bg-hover: #808080;
@@ -845,6 +869,43 @@
   --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
+
+  --peopleTabUserTagTableHeaderCell-color: #000000;
+
+  --empty-state-bg: #ffffff;
+  --empty-state-border-color: #e7e7e7;
+  --empty-state-bg: #fafafa;
+  --empty-state-border-color: #eeeeee;
+
+  /* OrgSelector Component */
+  --orgSelector-dropdown-bg: #ffffff;
+  --orgSelector-dropdown-border: #dee2e6;
+  --orgSelector-dropdown-shadow: rgba(0, 0, 0, 0.075);
+  --orgSelector-option-hover-bg: #f8f9fa;
+  --orgSelector-option-selected-bg: rgba(13, 110, 253, 0.1);
+  --orgSelector-no-results-color: #6c757d;
+}
+
+/* Action Item Category Status Styles */
+.actionItemCategoryStatusIcon {
+  font-size: 0.8rem;
+  margin-right: 8px;
+}
+
+.statusIconActive {
+  color: var(--bs-success, #31bb6b);
+}
+
+.statusIconDisabled {
+  color: var(--bs-danger, #dc3545);
+}
+
+.statusTextActive {
+  color: var(--bs-success, #31bb6b);
+}
+
+.statusTextDisabled {
+  color: var(--bs-danger, #dc3545);
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -973,6 +1034,237 @@
   color: var(--inActiveTab-color-hover);
   border-color: var(--inActiveTab-border-hover) !important;
   align-items: center;
+}
+
+/* Search Bar */
+
+.searchBarContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--search-border-color, #d0d5dd);
+  border-radius: 8px;
+  background-color: var(--search-background-color, #fcfcfc);
+  box-shadow: 0 4px 6px rgba(149, 156, 202, 0.1);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  overflow: hidden;
+  flex-grow: 1;
+  flex-shrink: 1;
+  width: auto;
+  min-width: 200px;
+  max-width: 100%;
+  height: 57px;
+  margin: 2.5rem 0;
+  align-items: center;
+  max-width: 775px;
+  margin: 2.5rem 0;
+  gap: 0.75rem;
+}
+
+.searchBarContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
+}
+
+.searchBarContainerWithButton {
+  padding-right: 0;
+}
+
+.searchBarContainer:focus-within {
+  border-color: var(--search-border-focus-color, #6e94ff);
+  box-shadow: 0 0 0 2px rgba(110, 148, 255, 0.25);
+}
+
+.searchBarInputWrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  min-width: 40rem;
+  padding: 0.75rem 2.5rem 0.75rem 1.25rem;
+  background-color: transparent;
+}
+
+.searchBarVariantFilled {
+  border-color: transparent;
+  background-color: var(--search-filled-bg, #f4f6fb);
+}
+
+.searchBarVariantGhost {
+  border-color: transparent;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.searchBarInputWrapperWithButton {
+  padding-right: 1.5rem;
+}
+
+.searchBarInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0;
+  padding-left: 3rem !important;
+  font-size: 0.95rem;
+  color: var(--search-text-color, #1e293b);
+  outline: none;
+  width: 100%;
+  height: 100%;
+}
+
+.searchBarInput::-webkit-search-cancel-button,
+.searchBarInput::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.searchBarInput::-ms-clear {
+  display: none;
+}
+
+.searchBarInput::placeholder {
+  color: #9aa5b5;
+}
+
+.searchBarInputSm {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.searchBarInputLg {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.searchBarNoIcon {
+  padding-left: 1.25rem;
+}
+
+.searchBarIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--search-icon-color, #a0aec0);
+  display: inline-flex;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.searchBarTrailingIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--search-button-bg, #b3ceff);
+  color: #2f3f5f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+
+.searchBarClearButton {
+  position: absolute;
+  right: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--search-clear-color, #94a3b8);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem;
+}
+
+.searchBarClearButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(110, 148, 255, 0.35);
+  border-radius: 999px;
+}
+
+.searchBarButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 0;
+  background-color: var(--search-button-bg, #b3ceff);
+  color: #2f3f5f;
+  width: 48px;
+  height: 48px;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.searchBarButton:hover:not(:disabled) {
+  background-color: var(--search-button-bg-hover, #b6cbff);
+}
+
+.searchBarButton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.searchBarButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.searchBarButtonSm {
+  width: 48px;
+  height: 48px;
+  font-size: 0.85rem;
+}
+
+.searchBarButtonLg {
+  width: 64px;
+  height: 64px;
+  font-size: 1rem;
+}
+
+.searchBarIconButton {
+  width: 55px;
+  height: 55px;
+  padding: 0;
+}
+
+.searchBarSpinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: searchBarSpin 0.8s linear infinite;
+}
+
+@keyframes searchBarSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.searchBarSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 /* Search Button */
@@ -1164,18 +1456,33 @@ form label,
 
 /* btnsBlock & btnsContainer */
 
-.btnsContainer {
+.btnsContainer,
+.calendar__controls {
   display: flex;
-  margin: 2.5rem 0;
   align-items: center;
-  /* gap: 10px; */
+  gap: 12px;
+  /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0;
+  /* Prevents buttons from getting squished */
+  white-space: nowrap;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
+}
+
+.searchBarWrapper {
+  flex-grow: 1;
+  max-width: 600px;
 }
 
 .btnsContainer .btnsBlock {
-  padding-right: 30px;
-  padding-inline-end: 30px;
   display: flex;
-  width: max-content;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 520px) {
@@ -1192,6 +1499,16 @@ form label,
     display: block;
     margin-top: 1rem;
     margin-right: 0;
+  }
+
+  .peopleTabBtnBlock {
+    height: 100%;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #808080;
+    border: 1px solid #dddddd;
   }
 
   .btnsContainer .btnsBlock div {
@@ -1248,6 +1565,7 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 0;
 }
 
 @media (max-width: 1020px) {
@@ -1383,7 +1701,7 @@ form label,
 }
 
 .errorIcon {
-  transform: scale(1.5);
+  font-size: var(--error-icon-size, 40px);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
 
@@ -1392,16 +1710,6 @@ form label,
     content: '⚠️';
     margin-right: 0.5rem;
   }
-}
-
-/* Not Found */
-
-.notFound {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
 /* Row Background */
@@ -1518,6 +1826,15 @@ form label,
   height: 3rem;
 }
 
+.createFundButton {
+  background-color: var(--createButton-bg) !important;
+  color: var(--createButton-color) !important;
+  border: 1px solid var(--createButton-border) !important;
+  margin: 5px 5px;
+  width: 10rem;
+  height: 3rem;
+}
+
 .createButton:hover {
   box-shadow: var(--createButton-box-shadow-hover);
   background-color: var(--createButton-bg-hover) !important;
@@ -1529,6 +1846,21 @@ form label,
   color: var(--createButton-color-active) !important;
   background-color: var(--createButton-bg-active) !important;
   border: 1px solid var(--createButton-border-active) !important;
+}
+
+.cardItemAuthor {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.userProfileName {
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.volunteersLabel {
+  font-size: 0.8rem;
+  color: var(--search-button-border);
 }
 
 /* Add more Global CSS Classes above this */
@@ -1750,29 +2082,6 @@ form label,
   margin-right: 8px;
 }
 
-/* -- AdvertisementRegister.tsx -- */
-
-.previewAdvertisementRegister {
-  display: flex;
-  position: relative;
-  width: 100%;
-  margin-top: 10px;
-  overflow: hidden;
-  justify-content: center;
-  border: 1px solid var(--previewAdvertisementRegister-border);
-}
-
-.previewAdvertisementRegister img {
-  width: 400px;
-  height: auto;
-  object-fit: cover;
-}
-
-.previewAdvertisementRegister video {
-  width: 400px;
-  height: auto;
-}
-
 .closeButtonAdvertisementRegister {
   top: 0px;
   right: 0px;
@@ -1864,6 +2173,7 @@ form label,
 
 .orgCard .innerContainer {
   display: flex;
+  height: 100%;
 }
 
 .orgCard {
@@ -1891,6 +2201,8 @@ form label,
 }
 
 .orgCard .innerContainer .content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin-left: 1rem;
   width: 70%;
@@ -2419,53 +2731,12 @@ form label,
   font-weight: 600;
 }
 
-/* -- CurrentHourIndicator.tsx -- */
-
-.currentHourIndicator_container {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  top: -8px;
-  left: -9px;
-}
-
-.currentHourIndicator_round {
-  background-color: var(--current-hour-indicator-color);
-  border-radius: 100%;
-  width: 15px;
-  height: 15px;
-}
-
-.currentHourIndicator_line {
-  width: 100%;
-  height: 1px;
-  background-color: var(--current-hour-indicator-color);
-  margin: auto;
-}
-
-/* -- DynamicDropDown.tsx -- */
-
-.dropwdownToggle {
-  background-color: var(--dropwdownToggle-bg);
-  color: var(--dropwdownToggle-color);
-  width: 100%;
-  border: none;
-  padding: 0.5rem;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 8rem;
-  outline: 1px solid var(--dropwdownToggle-outline);
-}
-
 /* -- EditCustomFieldDropDown.tsx -- */
 
 /* -- EventHeader.tsx -- */
 
 .calendarEventHeader {
   width: 100%;
-  margin-bottom: 20px;
   border-radius: 10px;
   padding: 5px;
 }
@@ -2475,10 +2746,10 @@ form label,
 }
 
 .space {
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
+  margin: 0 1rem;
 }
 
 .createButtonEventHeader {
@@ -2501,21 +2772,68 @@ form label,
   margin: 8px;
 }
 
-.calendar__header {
+.peopleTabEventHeader {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-right: 50px;
+  color: grey;
+}
+.peopleTabEventHeader:hover {
+  color: var(--groupsLabel-color);
+}
+
+.avatarImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+}
+.avatarPlaceholderSize {
+  width: 40px;
+  height: 40px;
+}
+.calendar__header {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-right: 0;
+}
+
+.calendar__search {
+  flex: 1 1 360px;
+  min-width: 260px;
+  max-width: 100%;
+}
+
+.calendar__controls {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 520px) {
-  .calendar__header {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
   .space {
     display: block !important;
     text-align: center;
@@ -3361,8 +3679,6 @@ form label,
   animation: load8 1.1s infinite linear;
 }
 
-/* -- EventStatsWrapper.tsx -- */
-
 /* -- GroupChatDetails.tsx -- */
 
 .groupInfo {
@@ -3535,43 +3851,99 @@ form label,
   border-width: 0.2rem;
 }
 
-/* -- LoginPortalToggle.tsx -- */
+/* -- LoadingState.tsx -- */
 
-.navLinkClass {
-  display: inline-block;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.4;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  color: var(--LoginToggle-button-color);
-  border-radius: 0.3rem;
+/* Container for spinner variant - provides relative positioning context */
+.loadingContainer {
+  position: relative;
+  min-height: 200px;
+}
+
+/* Overlay that blocks interactions during loading */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Dimmed content underneath the overlay */
+.loadingContent {
+  opacity: 0.5;
+}
+
+/* Skeleton loading styles */
+.skeletonContainer {
+  padding: 1rem;
   width: 100%;
-  box-sizing: border-box;
-  border: 1px solid var(--LoginToggle-button-border);
-  font-weight: 500;
-  transition: all 0.25s ease;
-  background-color: var(--LoginToggle-button-bg);
 }
 
-.navLinkClass:hover {
-  box-shadow: var(--hover-shadow);
-  background-color: var(--LoginToggle-button-bg-hover);
-  border-color: var(--LoginToggle-button-border-hover);
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
 }
 
-.activeLink {
-  color: var(--LoginToggle-button-color-active);
-  border: 1px solid var(--LoginToggle-button-border-active);
-  background-color: var(--LoginToggle-button-bg-active);
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.activeLink:hover {
-  box-shadow: var(--hover-shadow);
-  color: var(--LoginToggle-button-color-active-hover);
-  border: 1px solid var(--LoginToggle-button-border-active-hover);
-  background-color: var(--LoginToggle-button-bg-active-hover);
+.skeletonRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.skeletonItem {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base, #e0e0e0) 25%,
+    var(--skeleton-highlight, #f0f0f0) 50%,
+    var(--skeleton-base, #e0e0e0) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.skeletonTitle {
+  height: 2rem;
+  width: 40%;
+}
+
+.skeletonButton {
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 6px;
+}
+
+.skeletonCell {
+  height: 3rem;
+  flex: 1;
+}
+
+.skeletonCellSmall {
+  height: 2rem;
+  width: 6rem;
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 /* -- Sidebar options -- */
@@ -3594,85 +3966,7 @@ form label,
   font-weight: bold;
 }
 
-/* -- customTableCell.tsx -- */
-
-/* -- EventsAttendedByMember.tsx -- */
-
 /* -- EventsAttendedCardItem.tsx -- */
-
-/* -- EventsAttendedMemberModal.tsx -- */
-
-/* -- MemberRequestCard.tsx -- */
-
-.memberlist {
-  margin-top: -1px;
-}
-
-.memberimg {
-  width: 12.5rem;
-  height: 6.25rem;
-  border-radius: 7px;
-  margin-left: 20px;
-}
-
-.singledetails {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.singledetails p {
-  margin-bottom: -5px;
-}
-
-.singledetails_data_left {
-  margin-top: 10px;
-  margin-left: 10px;
-  color: var(--singledetails_dl-color);
-}
-
-.memberfont {
-  margin-top: 3px;
-}
-
-.memberfont > span {
-  width: 80%;
-}
-
-.memberfontcreated {
-  margin-top: 18px;
-}
-
-@media only screen and (max-width: var(--breakpoint-mobile)) {
-  .singledetails {
-    margin-left: 20px;
-  }
-
-  .memberimg {
-    margin: auto;
-  }
-
-  .singledetails_data_right {
-    margin-right: -52px;
-  }
-
-  .singledetails_data_left {
-    margin-left: 0px;
-  }
-}
-
-.memberfontcreatedbtn {
-  border-radius: 7px;
-  border-color: var(--memberfontbtn-border);
-  background-color: var(--memberfont-bg);
-  color: var(--memberfont-color);
-  box-shadow: none;
-  height: 2.5rem;
-  width: max-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 /* -- NotFound.tsx -- */
 
@@ -3699,8 +3993,6 @@ form label,
     font-style: oblique;
   }
 }
-
-/* -- OrgAdminListCard.tsx -- */
 
 /* -- OrganizationCard.tsx -- */
 
@@ -3750,7 +4042,6 @@ form label,
 .joinedBtn {
   display: flex;
   justify-content: space-around;
-  width: 8rem;
 }
 
 .joinedBtn {
@@ -3781,55 +4072,6 @@ form label,
   justify-content: space-around;
   width: 8rem;
   border-width: medium;
-}
-
-/* -- OrganizationCardStart.tsx -- */
-
-.alignimg {
-  border-radius: 50%;
-  background-blend-mode: darken;
-  height: 65px;
-  width: 65px;
-}
-
-.box {
-  color: var(--box-color);
-}
-
-.box :hover {
-  color: var(--box-color-hover);
-}
-
-.first_box {
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 10px;
-  padding-top: 10px;
-}
-
-.second_box {
-  padding-left: 20px;
-  padding-top: 10px;
-}
-
-.second_box > h4 {
-  font-size: 10;
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--secondBox-h4-color);
-}
-
-.second_box > h5 {
-  text-decoration: none;
-  font-size: 10;
-  font-weight: 100;
-  color: var(--secondBox-h5-color);
-}
-
-.deco {
-  border: 1px solid var(--deco-bg);
-  width: 65vw;
-  height: 0px !important;
 }
 
 /* -- CardItem.tsx -- */
@@ -3882,6 +4124,261 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.peopleTabIconWrapper {
+  display: flex;
+  align-items: center;
+  color: #dddddd;
+  border: 1px solid grey;
+  border-radius: 9px;
+  padding: 0 20px;
+  color: #808080;
+  border: 1px solid #ddd;
+}
+
+.peopleTabActiveButton {
+  color: #555555;
+  background: #eaebef;
+  border-radius: 9px;
+  border: 1px solid #555555;
+}
+
+.peopleTabActiveHeader {
+  color: #555555;
+  background: #eaebef;
+}
+
+.peopleTabIcon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: grey;
+  padding: 1rem 1.2rem;
+}
+
+.peopleTabIconWrapper:hover {
+  color: #808080;
+  border: 1px solid #dddddd;
+  cursor: pointer;
+}
+
+.peopleTabUserEventContainer {
+  background: white;
+  border-radius: 3px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+  margin: 0.5rem;
+  border-left: 6px solid #a8c7fa;
+  border-right: 1px solid #80808036;
+  border-top: 1px solid #80808036;
+  border-bottom: 1px solid #80808036;
+}
+
+.peopleTabUserEventTime {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.peopleTabUserEventDate {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.peopleTabUserEventInfo {
+  flex: 1;
+  margin: 2rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.peopleTabUserEventActionButton {
+  background-color: #a8c7fa;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -1rem -1.8rem;
+  width: 7rem;
+  padding: 4px 11px;
+  height: 2.5rem;
+}
+
+.peopleTabUserEventTimeWrapper {
+  text-align: center;
+  min-width: 80px;
+}
+
+.timeText {
+  margin: 0;
+}
+
+.timeSeparator {
+  margin: 4px 0;
+}
+
+.dateText {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.eventName {
+  margin: 0 0 8px 0;
+}
+
+.eventDescription {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.peopleTabUserEventAction {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionIcon {
+  display: flex;
+  align-items: center;
+}
+
+.peopleTabUserEventActionButton:hover {
+  background-color: #92b5f5;
+}
+
+.peopleTabUserOrganizationsCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  height: 230px;
+  width: 660x;
+  align-items: center;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardContent {
+  display: flex;
+  gap: 3rem;
+}
+
+.peopleTabUserOrganizationsCardImage {
+  width: 140px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #eaebef;
+  border: 2px solid #eaebef;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.peopleTabUserOrganizationsCardText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationEventPageTime {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.peopleTabUserOrganizationEventPageTimeSeparator {
+  margin: 4px 0;
+  font-size: 1rem;
+}
+
+.peopleTabUserOrganizationEventPageEventDescription {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.peopleTabUserOrganizationsCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.peopleTabUserOrganizationsCardDescription {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.peopleTabUserOrganizationsCardStats {
+  font-size: 0.875rem;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.peopleTabUserOrganizationsCardAction {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+.peopleTabUserOrganizationsEditButton {
+  padding: 0.4rem 0.8rem;
+  background-color: #92b5f5;
+  border: none;
+  border-radius: 8px;
+  color: #555555;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 7.3rem;
+  height: 2.5rem;
+}
+
+.peopleTabUserOrganizationsEditButton:hover {
+  background-color: #90c1ff;
+}
+
+.peopleTabUserEventsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.peopleTabNavbarAlignment {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Optional: mobile fallback */
+@media (max-width: 768px) {
+  .peopleTabUserEventsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cardItem .iconWrapper .themeOverlay {
@@ -4074,8 +4571,6 @@ form label,
 .cards:last-child:nth-last-child(odd) {
   grid-column: auto / span 2;
 }
-
-/* -- OrgDelete.tsx -- */
 
 /* -- OrgListCard.tsx -- */
 
@@ -4451,6 +4946,9 @@ form label,
 .btnsContainerOrgActionItemCategories {
   display: flex;
   margin: 0.5rem 0 1.5rem 0;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .btnsContainerOrgActionItemCategories .input {
@@ -4905,7 +5403,6 @@ form label,
 /* -- RequestsTableItem.tsx -- */
 
 .requestsTableItemIndex {
-  padding-inline-start: 2.5rem;
   vertical-align: middle;
 }
 
@@ -5043,7 +5540,7 @@ form label,
   margin-right: 8px;
 }
 
-.modelHeaderDelete {
+.modalHeaderDelete {
   background-color: var(--card-header-background-color);
 }
 
@@ -5146,10 +5643,6 @@ form {
   background-color: var(--card-background-color) !important;
   font-size: 0.8rem;
 }
-
-/* -- OrganizationCard.tsx -- */
-
-/* -- OrganizationCardStart.tsx -- */
 
 /* -- CardItem.tsx -- */
 
@@ -5411,7 +5904,34 @@ form {
   margin-left: 10px;
 }
 
+.signOutDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 /* SortingButton.tsx */
+.sortingImgIcon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px; /* space between icon & text */
+}
+
+.dropdownItemButton {
+  background-color: var(--dropdownItem-bg) !important;
+  color: var(--dropdownItem-color) !important;
+  border: none !important;
+  box-shadow: var(--dropdownItem-box-shadow);
+  border-radius: 9px;
+}
+
+.iconRightMargin {
+  margin-right: 0.6rem;
+}
 
 .dropdownItem {
   background-color: var(--dropdownItem-bg) !important;
@@ -5558,61 +6078,6 @@ form {
   transform: scale(0.98);
 }
 
-/* -- UserListCard.tsx -- */
-
-.memberfontcreatedbtnUserListCard {
-  margin-top: 33px;
-  border-radius: 7px;
-  border-color: var(--memberfontcreatedbtnUserListCard-border);
-  background-color: var(--memberfontcreatedbtnUserListCard-bg);
-  color: var(--memberfontcreatedbtnUserListCard-color);
-  padding-right: 10px;
-  padding-left: 10px;
-  justify-content: flex-end;
-  float: right;
-  text-align: right;
-  box-shadow: none;
-}
-
-/* -- UserPasswordUpdate.tsx -- */
-
-.dispflexUserPasswordUpdate {
-  display: flex;
-  justify-content: flex-start;
-  margin: 0 auto;
-}
-
-.dispflexUserPasswordUpdate > div {
-  width: 50%;
-  margin-right: 50px;
-}
-
-.dispbtnflex {
-  width: 90%;
-  display: flex;
-  margin: 20px 30% 0 30%;
-}
-
-.whitebtn {
-  margin: 1rem 0 0;
-  margin-top: 10px;
-  border: 1px solid var(--whitebtn-border);
-  box-shadow: 0 2px 2px var(--whitebtn-box-shadow);
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 20%;
-  font-size: 16px;
-  color: var(--whitebtn-color);
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  float: left;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-}
-
 /* -- ChatRoom.tsx -- */
 /* -- CommentCard.tsx -- */
 /* -- ContactCard.tsx -- */
@@ -5693,45 +6158,6 @@ form {
 }
 
 /* -- EventCard.tsx -- */
-/* -- OrganizationCard.tsx -- */
-/* -- OrganizationNavbar.tsx -- */
-
-/* -- PeopleCard.tsx -- */
-
-.personImage_peoplecard {
-  border-radius: 50%;
-  margin-right: 25px;
-  max-width: 70px;
-}
-
-.userAvatar {
-  border-radius: 50%;
-  margin-right: 25px;
-  width: 53px;
-  height: 53px;
-}
-
-.people_card_container {
-  display: flex;
-}
-
-.display_flex {
-  display: flex;
-}
-
-.align_center {
-  align-self: center;
-}
-
-.people_role {
-  width: 75%;
-  border: 1px solid var(--peopleRole-border);
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 0.25rem;
-}
 
 /* -- PostCard.tsx -- */
 
@@ -5944,21 +6370,6 @@ form {
   box-shadow: none;
 }
 
-/* -- PromotedPost.tsx -- */
-
-.cardHeaderPromotedPost {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  color: var(--cardHeaderPromotedPost-color);
-}
-
-.imageContainerPromotedPost {
-  max-width: 100%;
-}
-
-/* -- Register.tsx -- */
 /* -- SecuredRouteForUser.tsx -- */
 /* -- StartPostModal.tsx -- */
 
@@ -6057,6 +6468,7 @@ form {
   background-color: var(--leftDrawer-fixedModule-bg) !important;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
+  overflow-x: hidden !important;
 }
 
 .activeDrawer {
@@ -6078,6 +6490,7 @@ form {
 
 .leftDrawer .sidebarcompheight {
   flex-grow: 1;
+  overflow-x: hidden !important;
 }
 
 .leftDrawer .brandingContainer {
@@ -6122,6 +6535,7 @@ form {
 .leftDrawer .optionList {
   /* height: 75%; */
   overflow-y: hidden;
+  overflow-x: hidden !important;
   scrollbar-width: thin;
   scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
   transition: overflow 0.3s ease-in-out;
@@ -6148,11 +6562,14 @@ form {
   background-color: var(--leftDrawer-optionList-bg);
 }
 
-.leftDrawer .optionList button {
+.leftDrawer .optionList button,
+.leftDrawer .optionList a {
   display: flex;
   align-items: center;
   width: 100%;
+  max-width: 100%;
   text-align: start;
+  text-decoration: none;
   margin-bottom: 0.8rem;
   border-radius: 12px;
   font-size: 16px;
@@ -6160,10 +6577,16 @@ form {
   padding-left: 0.8rem;
   outline: none;
   border: none;
+  overflow: hidden;
 }
 
-.leftDrawer button .iconWrapper {
+.leftDrawer button .iconWrapper,
+.leftDrawer a .iconWrapper {
   width: 36px;
+  min-width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .leftDrawer .optionList .collapseBtn {
@@ -6491,7 +6914,6 @@ form {
   }
 }
 
-/* -- DeleteUser.tsx -- */
 /* -- OtherSettings.tsx -- */
 /* -- UserProfile.tsx -- */
 
@@ -6593,6 +7015,7 @@ form {
   color: var(--eventManagementSelectedBtn-color);
   background-color: var(--eventManagementSelectedBtn-bg) !important;
   border: 1px solid var(--eventManagementSelectedBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementSelectedBtn:hover {
@@ -6604,6 +7027,7 @@ form {
   color: var(--eventManagementBtn-color);
   background-color: var(--eventManagementBtn-bg) !important;
   border-color: var(--eventManagementBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementBtn:hover {
@@ -6904,6 +7328,8 @@ form {
   display: flex;
   gap: 0.8rem;
   margin: 2.2rem 0 0.8rem 0;
+  align-items: stretch;
+  flex-wrap: wrap;
 }
 
 .btnsContainerPledge .inputPledge {
@@ -7256,10 +7682,6 @@ form {
   margin-top: 20px !important;
 }
 
-/* -- RemoveUserTagModal.tsx -- */
-
-/* -- UnassignUserTagModal.tsx -- */
-
 /* -- MemberDetail.tsx -- */
 
 .allRound {
@@ -7269,6 +7691,8 @@ form {
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  color: '#555';
+  background: #eaebef;
 }
 
 .inputColor {
@@ -7353,46 +7777,23 @@ form {
 
 .cardBody .textBox {
   margin: 0 0 3rem 0;
-  padding-bottom: 10px;
+  padding: 10px;
   color: var(--cardBody-color);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cardBody .textWrapper {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .textBox {
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.changeLanguageBtn {
-  border-width: 2px;
-  background-color: var(--changelangauge-btn-bg);
-  color: var(--changelangauge-btn-color);
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border-color: var(--changelangauge-btn-border);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  height: 49px;
-  width: 160px;
-  font-size: 0.8rem;
-}
-
-.changeLanguageBtn:hover,
-.changeLanguageBtn:active,
-.changeLanguageBtn:focus {
-  border-width: 2px;
-  background-color: #ffff !important;
-  color: var(--changelangauge-btn-color) !important;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border-color: var(--changelangauge-btn-border) !important;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  height: 49px;
-  width: 160px;
-  font-size: 0.8rem;
-  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
 }
 
 @media (max-width: 600px) {
@@ -7536,7 +7937,15 @@ form {
   width: 100%;
   justify-content: space-between;
   margin: 1.8rem 0 1.8rem 0;
-  align-items: center;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btnsContainerSearchBar > :first-child {
+  flex: 1 1 360px;
+  min-width: 260px;
+  max-width: 100%;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
@@ -7549,7 +7958,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7561,20 +7971,35 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
-.btnsContainerSearchBar input {
-  outline: 1px solid var(--bs-gray-400);
+/* Scope reset to the SearchBar input only so other inputs are unaffected */
+.btnsContainerSearchBar .searchBarInput,
+.btnsContainerSearchBar input[type='search'] {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+/* The wrapper provides focus-visible ring (see .searchBarContainer:focus-within) */
+.btnsContainerSearchBar .searchBarInput:focus,
+.btnsContainerSearchBar input[type='search']:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -7785,6 +8210,9 @@ form {
 .btnsContainerOrgPost {
   display: flex;
   margin: 2.5rem 0 2.5rem 0;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .btnsContainerOrgPost .btnsBlockOrgPost {
@@ -8049,6 +8477,13 @@ form {
   margin-left: 5px;
 }
 
+/* Additional left offset required to visually align Bootstrap switches
+   with their labels in the Create Event modal.
+   Verified against Bootstrap 5.3.x + react-bootstrap Form.Switch rendering. */
+.switch :global(.form-check-input) {
+  margin-inline-start: -1.7em;
+}
+
 .checkboxdiv {
   display: flex;
   margin-bottom: 5px;
@@ -8091,7 +8526,7 @@ form {
 
 /* -- CampaignModal.tsx -- */
 
-/* -- OrganizationFundCampagins.tsx -- */
+/* -- OrganizationFundCampaigns.tsx -- */
 
 .organizationFundCampaignContainer {
   margin: 0.5rem 0;
@@ -8114,6 +8549,10 @@ form {
 
 .container {
   min-height: 100vh;
+}
+
+.titleMargin {
+  margin-top: 0.75rem;
 }
 
 .message {
@@ -8152,8 +8591,7 @@ form {
   max-width: var(--modal-max-width);
 }
 
-.eventsAttended,
-.membername {
+.eventsAttended {
   color: var(--eventsAttended-membername-color);
 }
 
@@ -8191,8 +8629,6 @@ form {
 .colorWhite {
   color: var(--colorWhite);
 }
-
-/* -- OrganizationPeople.tsx -- */
 
 /* -- OrganizationTags.tsx -- */
 
@@ -8466,21 +8902,23 @@ form {
 /* -- Campaigns.tsx -- */
 
 .outlineBtn {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border-color: var(--outlineBtn-border);
+  padding: 10px 10px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 8rem;
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
   color: var(--outlineBtn-bg) !important;
   border-color: var(--outlineBtn-hover-bg);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-disabled);
   border-color: var(--outlineBtn-disabled);
@@ -8745,6 +9183,17 @@ form {
   margin-left: 5px;
 }
 
+.datediv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.datediv > div {
+  flex: 1;
+}
+
 @media only screen and (max-width: 600px) {
   .checkboxContainer {
     flex-direction: column;
@@ -8775,10 +9224,14 @@ form {
 
 .checkboxdivEvents {
   display: flex;
+  flex-wrap: wrap;
+  --events-gap: 1rem;
+  gap: var(--events-gap, 1rem);
 }
 
 .checkboxdivEvents > div {
-  width: 50%;
+  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
+  min-width: 200px;
 }
 
 .dispflexEvents {
@@ -8799,6 +9252,7 @@ form {
   max-height: 100%;
   width: 100%;
   overflow: auto;
+  overflow-x: 'hidden';
 }
 
 .maxWidth {
@@ -8806,12 +9260,9 @@ form {
 }
 
 .content {
-  height: fit-content;
-  min-height: calc(100% - 40px);
-}
-
-.content {
-  min-height: calc(100% - 40px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .orgCard .innerContainer .content {
@@ -8866,6 +9317,14 @@ form {
   margin-top: 1.5rem;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+}
+
+.people_card_header_col_1 {
+  flex: 1;
+}
+
+.people_card_header_col_2 {
+  flex: 2;
 }
 
 .people_card_main_container {
@@ -9269,10 +9728,6 @@ form {
 }
 
 @media (max-height: 900px) {
-  .pageContainer {
-    padding: 1rem 1.5rem 0 calc(300px + 2rem);
-  }
-
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);
@@ -9349,18 +9804,6 @@ form {
   margin: 0.15rem 0 0 1.25rem;
 }
 
-.active {
-  background-color: var(--active-bg) !important;
-  color: var(--active-color) !important;
-  border-color: var(--active-border-color) !important;
-}
-
-.pending {
-  background-color: var(--status-pending-bg) !important;
-  color: var(--pending-color) !important;
-  border-color: var(--pending-border-color) !important;
-}
-
 /* -- GroupModal.tsx -- */
 
 .modalCloseBtn {
@@ -9435,24 +9878,39 @@ form {
 }
 
 .outlineBtn {
-  margin-bottom: 10px;
+  /* SAME layout as manageBtn */
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 2px 2px var(--manageBtn-box-shadow);
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
-  border-color: var(--outlineBtn-border);
+  border: 1px solid var(--outlineBtn-border);
+}
+
+.outlineBtnPositioned {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
-  color: var(--outlineBtn-color-hover) !important;
-  border-color: var(--outlineBtn-hover-border);
+  color: var(--outlineBtn-bg) !important;
+  border-color: var(--outlineBtn-hover-bg);
+  box-shadow: var(--hover-shadow);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
-  background-color: var(--outlineBtn-bg-disabled);
-  color: var(--outlineBtn-color-disabled);
-  border-color: var(--outlineBtn-border-disabled);
+  background-color: var(--outlineBtn-bg);
+  color: var(--outlineBtn-disabled);
+  border-color: var(--outlineBtn-disabled);
 }
 
 .modalTable {
@@ -9585,6 +10043,7 @@ form {
 
 .collapsedDrawer {
   width: var(--sidebar-collapsed-width);
+  overflow-x: hidden !important;
 }
 
 .sidebarText {
@@ -9596,6 +10055,7 @@ form {
 
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
+  overflow-x: hidden !important;
 }
 
 .venueimage {
@@ -9675,4 +10135,769 @@ form {
   background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
 }
 
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: 8rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.statusChip {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.member {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.pendingMembership {
+  background-color: #fff4e5;
+  color: #b26a00;
+}
+
+.notMember {
+  background-color: #f1f3f4;
+  color: #5f6368;
+}
+
+.btnsBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
+  flex-shrink: 0;
+  height: 48px;
+  margin: 0;
+}
+
+/* 2. Ensure the header stays in one line and doesn't wrap on Desktop */
+.calendar__header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  width: 100%;
+  gap: 1rem;
+}
+
+/* 3. Mobile responsiveness: Only allow wrapping on actual small screens */
+@media (max-width: 768px) {
+  .calendar__header {
+    flex-wrap: wrap !important;
+  }
+
+  .btnsBlock {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+}
+
+.btnsBlock > * {
+  margin: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: auto !important;
+}
+
 /* ----------------------------------------------------- */
+
+.whiteContainer {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* -- Common Layout Classes -- */
+
+/* Flex container for title area in screens */
+.flexContainerColumn {
+  flex: 1;
+}
+
+/* Breadcrumbs margin spacing */
+.breadcrumbsMargin {
+  margin-top: 0.5rem;
+}
+
+/* Search container row layout for fund campaign/funds screens */
+.searchContainerRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+/* Search container row layout without top margin */
+.searchContainerRowNoTopMargin {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+/* Search bar margin reset with flex grow */
+.searchBarMarginReset {
+  margin: 0;
+}
+
+/* Button style to prevent text wrapping */
+.buttonNoWrap {
+  white-space: nowrap;
+}
+
+/* Button margin reset for flex containers with gap */
+.buttonMarginReset {
+  margin: 0;
+}
+
+/* Search container for Campaigns screen with min/max width */
+.searchContainerCampaigns {
+  max-width: 700px;
+  min-width: 400px;
+  margin: 0;
+}
+
+/* UserScreen main content margin when expanded */
+.userScreenExpandedMargin {
+  margin-left: 100px;
+}
+
+/* -- Progress Indicator Styles for Campaign Tables -- */
+
+/* Progress indicator container */
+.progressIndicatorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+}
+
+/* Progress indicator wrapper (relative positioning) */
+.progressIndicatorWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Progress indicator base track color */
+.progressIndicatorBase {
+  color: var(--progress-track-color, #e0e0e0);
+}
+
+/* Progress indicator overlay (absolute positioning) */
+.progressIndicatorAbsolute {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Progress indicator color states */
+.progressComplete {
+  color: var(--progress-complete-color, #4caf50);
+}
+
+.progressHalf {
+  color: var(--progress-half-color, #ff9800);
+}
+
+.progressLow {
+  color: var(--progress-low-color, #2196f3);
+}
+
+/* Progress percentage text */
+.progressTypography {
+  font-weight: bold;
+}
+
+/* -- DataGrid Row Hover Styles -- */
+
+/* DataGrid row hover background */
+.dataGridRowHover:hover {
+  background-color: var(--row-hover-bg, #f0f0f0);
+}
+
+/* Error icon large size */
+.errorIconLarge {
+  font-size: 2rem;
+}
+
+/* Progress cell container */
+.progressCellContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+}
+
+/* Button width 8rem - for visit and join buttons */
+.buttonWidth8rem {
+  width: 8rem;
+}
+
+/* Video full width - for video elements */
+.videoFullWidth {
+  width: 100%;
+}
+
+/* Margin left auto - for positioning elements to the right */
+.marginLeftAuto {
+  margin-left: auto;
+}
+
+/* Background paper - matches MUI background.paper */
+.backgroundPaper {
+  background-color: var(--popup-bg, #fff);
+}
+
+.addIconStyle {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+.dataGridContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnHeaders),
+.dataGridContainer :global(.MuiDataGrid-cell) {
+  border: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnSeparator) {
+  display: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row:hover),
+.dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.iconButton {
+  min-width: 32px;
+}
+
+.smallText {
+  font-size: var(--font-size-sm);
+}
+
+.marginTopSm {
+  margin-top: 11px;
+}
+
+.iconLg {
+  font-size: 2rem;
+}
+
+/* -- DataTable Component Styles -- */
+
+:root {
+  --datatable-border: #ddd;
+  --datatable-surface: #ffffff;
+  --datatable-text: #555555;
+  --datatable-focus-outline: var(--primary-theme-color, #1778f2);
+  --datatable-focus-ring: var(--focus-ring-color, #90caf9);
+  --datatable-focus-background: #e3f2fd;
+  --datatable-hover-bg: var(--row-hover-bg, #f0f0f0);
+  --datatable-bulk-bg: #f6f8fa;
+  --datatable-bulk-border: #e5e7eb;
+  --datatable-bulk-text: #333333;
+  --datatable-muted-text: #666666;
+  --datatable-error-text: #842029;
+  --datatable-error-border: #f5c2c7;
+  --datatable-error-bg: #f8d7da;
+  --datatable-empty-border: #dddddd;
+  --datatable-empty-bg: #f9f9f9;
+  --datatable-skeleton-base: var(--skeleton-base, #e0e0e0);
+  --datatable-skeleton-highlight: var(--skeleton-highlight, #f0f0f0);
+}
+
+.dataTableWrapper {
+  width: 100%;
+  position: relative;
+  overflow-x: auto;
+}
+
+.dataTableBase {
+  font-size: 0.95rem;
+}
+
+.dataSkeletonCell {
+  height: 1em;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--datatable-skeleton-highlight) 25%,
+    var(--datatable-skeleton-base) 50%,
+    var(--datatable-skeleton-highlight) 75%
+  );
+  border-radius: 4px;
+  animation: datatable-loading 1.2s ease-in-out infinite;
+}
+@keyframes datatable-loading {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+.sortable:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+}
+
+.sortable:focus-visible {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--datatable-focus-ring);
+  background: var(--datatable-focus-background);
+}
+
+.headerInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sortIndicator {
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+
+.active {
+  opacity: 1;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 12px;
+}
+
+.searchWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--datatable-border);
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: var(--datatable-surface);
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  min-width: 220px;
+}
+
+.searchInput:focus-visible,
+.searchInput:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.searchClear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 0.9rem;
+  color: var(--datatable-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchClear:hover {
+  color: var(--primaryText-color, #000000);
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dataErrorState {
+  padding: 16px;
+  text-align: left;
+  color: var(--datatable-error-text);
+  background: var(--datatable-error-bg);
+  border: 1px solid var(--datatable-error-border);
+  border-radius: 6px;
+}
+
+.dataErrorDetails {
+  margin-top: 4px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  color: var(--errorState-color, #5c1a21);
+}
+
+.loading {
+  padding: 16px;
+  text-align: center;
+}
+
+.dataEmptyState {
+  padding: 16px;
+  text-align: center;
+  color: var(--datatable-text);
+  border: 1px solid var(--datatable-empty-border);
+  border-radius: 6px;
+  background: var(--datatable-empty-bg);
+}
+
+.selectCol {
+  width: 42px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.selectCol input[type='checkbox'] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.actionsCol {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.actionsCellContainer {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionBtn {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulkBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+  background: var(--datatable-bulk-bg);
+  border: 1px solid var(--datatable-bulk-border);
+  border-radius: 8px;
+}
+
+.bulkLeft {
+  color: var(--datatable-bulk-text);
+  font-size: 0.9rem;
+}
+
+.bulkRight {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bulkBtn {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.bulkBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulkClear {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--datatable-muted-text);
+}
+
+.bulkClear:hover {
+  background: var(--datatable-hover-bg);
+}
+
+.dataLoadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* OrgSelector Component Styles */
+.orgSelectorDropdown {
+  position: absolute;
+  width: 100%;
+  background-color: var(--orgSelector-dropdown-bg);
+  border: 1px solid var(--orgSelector-dropdown-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.25rem var(--orgSelector-dropdown-shadow);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  top: 100%;
+  margin-top: 2px;
+}
+
+.orgSelectorOption {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.orgSelectorOption:hover {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionHighlighted {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionSelected {
+  background-color: var(--orgSelector-option-selected-bg);
+}
+
+.orgSelectorNoResults {
+  padding: 0.75rem 1rem;
+  color: var(--orgSelector-no-results-color);
+  .tagActionsDivider {
+    border-color: var(--grey-border-box-color);
+    border-style: solid;
+    border-width: 2px;
+    width: 85%;
+  }
+}
+
+/* DataTable Pagination Styles */
+.paginationWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  border-top: 1px solid var(--pagination-border-top);
+}
+
+.paginationRange {
+  font-size: 0.875rem;
+  color: var(--row-color);
+  min-width: 120px;
+  text-align: center;
+}
+
+.pageBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--pagination-btn-border);
+  border-radius: 0.375rem;
+  background-color: var(--pagination-btn-bg);
+  color: var(--pagination-btn-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--pagination-btn-bg-hover);
+  border-color: var(--pagination-btn-border-hover);
+  color: var(--pagination-btn-color-hover);
+}
+
+.pageBtn:disabled {
+  opacity: 0.6;
+  background-color: var(--pagination-btn-bg-disabled);
+  cursor: not-allowed;
+}
+
+.pageBtn:focus {
+  outline: 2px solid var(--pagination-btn-bg-focus);
+  outline-offset: 2px;
+}
+
+/* Organizations page styles */
+.organizationsContainer {
+  padding-top: 20px;
+}
+
+.organizationsContainerExpanded {
+  margin-left: 40px;
+}
+
+.organizationsContainerContracted {
+  margin-left: 20px;
+}
+
+.organizationsMainContainer {
+  overflow-x: hidden;
+}
+
+.organizationsFlexContainer {
+  flex: 1;
+}
+
+/* Groups page styles */
+.groupsViewButton {
+  min-width: 32px;
+}
+
+/* DataGrid styles */
+.dataGridRoot {
+  border-radius: 0.5rem;
+}
+
+.dataGridMain {
+  border-radius: 0.5rem;
+}
+
+.dataGridRow:hover {
+  background-color: transparent;
+}
+
+.dataGridRow.Mui-hovered {
+  background-color: transparent;
+}
+
+.dataGridCell:focus-within {
+  outline: none;
+}
+
+.dataGridColumnHeader:focus-within {
+  outline: none;
+}
+
+.divider {
+  border: 2px solid var(--pagination-btn-border);
+  border-width: 2px;
+  width: 85%;
+}
+
+@media (max-width: 768px) {
+  .paginationWrap {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pageBtn {
+    width: 100%;
+  }
+}
+
+.manageTagErrorIcon {
+  font-size: 2rem;
+}
+
+.errorIconLarge {
+  font-size: 2.5rem;
+}
+
+.roundedTableContainer {
+  border-radius: 16px;
+}
+
+.manageTagDivider {
+  border-color: var(--grey-border-box-color);
+  border-width: 2px;
+  width: 85%;
+}
+
+/* -- CheckInModal.tsx styles -- */
+
+.checkInModalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.checkInDataGridContainer {
+  height: 500px;
+  width: 100%;
+}
+
+/* -- OrgActionItemCategories.tsx dataGrid styles -- */
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-cell:focus-within) {
+  outline: none !important;
+}
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within) {
+  outline: none;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row:hover),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-root),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
+}

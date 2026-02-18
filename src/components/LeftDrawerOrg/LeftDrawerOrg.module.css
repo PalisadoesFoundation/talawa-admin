@@ -1,0 +1,42 @@
+/* LeftDrawerOrg component styles */
+.optionList {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileContainer {
+  display: flex;
+}
+
+.profileContainerHidden {
+  display: none;
+}
+
+.switchPortalWrapper :global(a) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  text-align: start;
+  text-decoration: none;
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-md);
+  padding: var(--space-3);
+  padding-left: var(--space-4);
+  outline: none;
+  border: none;
+  overflow: hidden;
+}
+
+.switchPortalWrapper :global(a):focus-visible {
+  outline: var(--border-2) solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: var(--radius-lg);
+}
+
+.leftDrawerActiveButton {
+  background-color: var(--leftDrawer-active-button-bg);
+  color: var(--color-black);
+  font-weight: bold;
+}

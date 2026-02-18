@@ -4,27 +4,20 @@ import gql from 'graphql-tag';
  * GraphQL mutation to create a user tag.
  *
  * @param name - Name of the tag.
- * @param tagColor - Color of the tag.
- * @param parentTagId - Id of the parent tag.
+ * @param folderId - Id of the folder/parent tag to organize tags.
  * @param organizationId - Organization to which the tag belongs.
  */
 
 export const CREATE_USER_TAG = gql`
-  mutation CreateUserTag(
-    $name: String!
-    $tagColor: String
-    $parentTagId: ID
-    $organizationId: ID!
-  ) {
-    createUserTag(
+  mutation CreateTag($name: String!, $folderId: ID, $organizationId: ID!) {
+    createTag(
       input: {
         name: $name
         organizationId: $organizationId
-        parentTagId: $parentTagId
-        tagColor: $tagColor
+        folderId: $folderId
       }
     ) {
-      _id
+      id
     }
   }
 `;

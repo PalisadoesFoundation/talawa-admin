@@ -1,0 +1,55 @@
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+
+  &::before {
+    content: '⚠️';
+    margin-right: var(--space-3);
+  }
+}
+
+.TableImagePledge {
+  object-fit: cover;
+  width: var(--space-7);
+  height: var(--space-7);
+  border-radius: var(--radius-full);
+}
+
+.imageContainerPledge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.TableImage {
+  object-fit: cover;
+  margin-right: var(--space-2);
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-full);
+}
+
+.container {
+  min-height: 100vh;
+}
+
+.message {
+  margin-top: var(--space-20);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pledgerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: var(--space-4) var(--space-2) var(--space-1);
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background-color: color-mix(in srgb, var(--color-green-500) 20%, transparent);
+  height: var(--space-8);
+}

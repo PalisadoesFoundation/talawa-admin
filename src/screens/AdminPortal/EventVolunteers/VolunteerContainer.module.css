@@ -1,0 +1,27 @@
+.toggleGroup {
+  width: 50%;
+  min-width: var(--space-21);
+  margin: var(--space-3) var(--space-0);
+}
+
+.toggleBtn {
+  padding: var(--space-0);
+  height: var(--space-8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-400);
+  border: var(--border-1) solid var(--color-gray-100);
+}
+
+#individualRadio,
+#requestsRadio,
+#groupsRadio {
+  color: var(--color-blue-500);
+}
+
+.toggleBtn:hover {
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-100);
+}

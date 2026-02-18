@@ -4,7 +4,7 @@
 
 # Interface: IDeleteEventModalProps
 
-Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L123)
+Defined in: [src/types/Event/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L139)
 
 ## Properties
 
@@ -12,13 +12,13 @@ Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoun
 
 > **deleteEventHandler**: (`deleteOption?`) => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L129)
+Defined in: [src/types/Event/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L145)
 
 #### Parameters
 
 ##### deleteOption?
 
-`"single"` | `"following"` | `"all"`
+`"all"` | `"single"` | `"following"`
 
 #### Returns
 
@@ -30,29 +30,33 @@ Defined in: [src/types/Event/interface.ts:129](https://github.com/PalisadoesFoun
 
 > **eventDeleteModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L125)
+Defined in: [src/types/Event/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L141)
 
 ***
 
 ### eventListCardProps
 
-> **eventListCardProps**: `IEventListCard`
+> **eventListCardProps**: [`IEventListCard`](IEventListCard.md)
 
-Defined in: [src/types/Event/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L124)
+Defined in: [src/types/Event/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L140)
 
 ***
 
 ### t()
 
-> **t**: (`key`) => `string`
+> **t**: (`key`, `options?`) => `string`
 
-Defined in: [src/types/Event/interface.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L127)
+Defined in: [src/types/Event/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L143)
 
 #### Parameters
 
 ##### key
 
 `string`
+
+##### options?
+
+`Record`\<`string`, `unknown`\>
 
 #### Returns
 
@@ -64,7 +68,7 @@ Defined in: [src/types/Event/interface.ts:127](https://github.com/PalisadoesFoun
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L128)
+Defined in: [src/types/Event/interface.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L144)
 
 #### Parameters
 
@@ -82,7 +86,7 @@ Defined in: [src/types/Event/interface.ts:128](https://github.com/PalisadoesFoun
 
 > **toggleDeleteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L126)
+Defined in: [src/types/Event/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L142)
 
 #### Returns
 

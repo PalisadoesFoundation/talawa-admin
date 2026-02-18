@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -7,14 +7,19 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import CreateDirectChatModal from './CreateDirectChat';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import {
   CREATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import * as ErrorHandler from 'utils/errorHandler';
-import type { GroupChat } from 'types/Chat/type';
+import { errorHandler } from 'utils/errorHandler';
+import type { Chat } from 'types/UserPortal/Chat/interface';
+import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
 vi.mock('react-router', async () => {
@@ -25,7 +30,9 @@ vi.mock('react-router', async () => {
   };
 });
 
-const errorHandlerSpy = vi.spyOn(ErrorHandler, 'errorHandler');
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
 
 // Mocks
 const mockUsers = [
@@ -59,7 +66,7 @@ const mockUsers = [
       id: 'user-3',
       name: 'Test User 3',
       avatarURL: '',
-      role: 'Member',
+      role: '',
     },
   },
 ];
@@ -183,13 +190,15 @@ const mocks = [
 ];
 
 describe('CreateDirectChatModal', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   const { setItem } = useLocalStorage();
   const toggleCreateDirectChatModal = vi.fn();
   const chatsListRefetch = vi.fn();
 
   beforeEach(() => {
     setItem('userId', '1');
-    vi.clearAllMocks();
   });
 
   const renderComponent = (props = {}) => {
@@ -201,7 +210,7 @@ describe('CreateDirectChatModal', () => {
       ...props,
     };
     return render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <I18nextProvider i18n={i18nForTest}>
           <Provider store={store}>
             <CreateDirectChatModal {...defaultProps} />
@@ -212,6 +221,7 @@ describe('CreateDirectChatModal', () => {
   };
 
   test('should render users and allow creating a new direct chat', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     const userRows = await screen.findAllByTestId('user');
@@ -221,7 +231,7 @@ describe('CreateDirectChatModal', () => {
     expect(screen.queryByText('Current User')).not.toBeInTheDocument();
 
     const addButtons = await screen.findAllByTestId('addBtn');
-    fireEvent.click(addButtons[0]);
+    await user.click(addButtons[0]);
 
     await waitFor(() => {
       expect(chatsListRefetch).toHaveBeenCalled();
@@ -230,51 +240,85 @@ describe('CreateDirectChatModal', () => {
   });
 
   test('should allow searching for a user', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     await screen.findAllByTestId('user');
 
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
-    fireEvent.change(searchInput, { target: { value: 'Test User 2' } });
-    fireEvent.click(searchButton);
+    await user.clear(searchInput);
+    await user.type(searchInput, 'Test User 2');
+    await user.click(searchButton);
 
-    await waitFor(async () => {
-      const userRows = await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const userRows = screen.getAllByTestId('user');
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });
     expect(screen.queryByText('Test User 3')).not.toBeInTheDocument();
   });
 
+  test('should clear the search input when clear button is clicked', async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await screen.findAllByTestId('user');
+
+    const searchInput = screen.getByTestId('searchUser');
+    const searchButton = screen.getByTestId('submitBtn');
+
+    await user.type(searchInput, 'Test User 2');
+    await user.click(searchButton);
+
+    await waitFor(() => {
+      const userRows = screen.getAllByTestId('user');
+      expect(userRows.length).toBe(1);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
+    });
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    expect(searchInput).toHaveValue('');
+    expect(screen.queryByLabelText(/clear/i)).not.toBeInTheDocument();
+  });
+
+  test('shows member fallback when role is missing', async () => {
+    renderComponent();
+
+    const userRows = await screen.findAllByTestId('user');
+    const lastRow = userRows[userRows.length - 1];
+
+    expect(lastRow).toHaveTextContent('Test User 3');
+    expect(lastRow).toHaveTextContent('Member');
+  });
+
   test('should prevent creating a duplicate chat', async () => {
-    const existingChats: GroupChat[] = [
+    const user = userEvent.setup();
+    const existingChats: Chat[] = [
       {
-        _id: 'existing-chat-1',
-        isGroup: false,
+        id: 'existing-chat-1',
         name: 'Current User & Test User 2',
-        image: undefined,
-        messages: [],
-        admins: [],
-        users: [
-          {
-            _id: '1',
-            createdAt: new Date('2023-01-01T00:00:00Z'),
-            email: 'user1@example.com',
-            firstName: 'Current',
-            lastName: 'User',
-          },
-          {
-            _id: 'user-2',
-            createdAt: new Date('2023-01-01T00:00:00Z'),
-            email: 'user2@example.com',
-            firstName: 'Test',
-            lastName: 'User2',
-          },
-        ],
-        unseenMessagesByUsers: '',
         description: 'A direct chat conversation',
-        createdAt: new Date('2023-01-01T00:00:00Z'),
+        isGroup: false,
+        createdAt: dayjs.utc().toISOString(),
+        members: {
+          edges: [
+            {
+              node: {
+                user: { id: '1', name: 'Current User' },
+                role: 'regular',
+              },
+            },
+            {
+              node: {
+                user: { id: 'user-2', name: 'Test User 2' },
+                role: 'regular',
+              },
+            },
+          ],
+        },
       },
     ];
 
@@ -284,10 +328,10 @@ describe('CreateDirectChatModal', () => {
     expect(userRows[0]).toHaveTextContent('Test User 2');
 
     const addButtons = await screen.findAllByTestId('addBtn');
-    fireEvent.click(addButtons[0]);
+    await user.click(addButtons[0]);
 
     await waitFor(() => {
-      expect(errorHandlerSpy).toHaveBeenCalledWith(
+      expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),
         expect.any(Error),
       );

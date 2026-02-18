@@ -1,0 +1,113 @@
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+}
+
+.addButton:disabled {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-blue-200);
+}
+
+.dropdown {
+  background-color: var(--color-gray-50);
+  min-width: var(--space-15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown:is(:hover, :active, .show, :disabled, :checked) {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--border-2) solid var(--color-blue-200);
+  border: var(--border-1) solid var(--color-gray-700);
+}
+
+.colorPrimary {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  cursor: pointer;
+}
+
+.colorPrimary:hover,
+.colorPrimary:focus,
+.colorPrimary:active {
+  background-color: var(--color-blue-200);
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  color: var(--color-gray-700);
+}
+
+.mainContainer50 {
+  width: 50%;
+  flex-grow: 3;
+  padding: var(--space-5);
+  max-height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--color-gray-50);
+}
+
+.inputContainer {
+  position: relative;
+  flex: 1;
+  margin: 0;
+}
+
+.box:hover {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  transition: box-shadow 0.2s ease;
+}
+
+.box {
+  width: auto;
+  background-color: var(--color-white);
+  margin-top: var(--space-5);
+  padding: var(--space-6);
+  border: var(--border-1) solid var(--color-gray-100);
+  border-radius: var(--space-4);
+}
+
+.heading {
+  font-size: var(--font-size-md);
+}
+
+.width100 {
+  width: 100%;
+}
+
+.donateBtn {
+  padding-inline: var(--space-5);
+}
+
+/* Base container pattern */
+.container {
+  padding-top: var(--space-11);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}

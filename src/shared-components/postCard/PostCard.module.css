@@ -1,0 +1,212 @@
+/* PostCard Component Styles - Exact replication of styled components */
+
+.postContainer {
+  width: 100%;
+  max-width: var(--space-27);
+  margin: 0 auto var(--space-7);
+  border-radius: var(--radius-md);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
+    var(--color-gray-100);
+  overflow: hidden;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4);
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.postMedia {
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
+  width: 100%;
+}
+
+.postMedia img,
+.postMedia video {
+  width: 100%;
+  max-height: var(--space-27);
+  object-fit: cover;
+}
+
+.postActions {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-3) var(--space-4) var(--space-0);
+}
+
+.leftActions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.postContent {
+  padding: var(--space-3) var(--space-5) var(--space-0);
+}
+
+.likesCount {
+  padding: var(--space-0) var(--space-5) var(--space-0);
+}
+
+.caption {
+  margin: var(--space-3) var(--space-3);
+  font-weight: var(--font-weight-heavy);
+  font-size: var(--font-size-md);
+  white-space: pre-line;
+  overflow-wrap: break-word;
+}
+
+.bodyContainer {
+  margin-top: var(--space-3);
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  margin: var(--space-3) var(--space-0);
+  white-space: pre-line;
+  overflow-wrap: break-word;
+  line-height: var(--line-height-tight);
+}
+
+.bodyClamp {
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.commentSection {
+  max-height: var(--space-20);
+  overflow-y: auto;
+  padding: var(--space-0) var(--space-5);
+}
+
+.commentForm {
+  padding: var(--space-3) var(--space-5) var(--space-5);
+  width: 100%;
+}
+
+.commentForm :global(.MuiInput-root) {
+  font-size: var(--font-size-sm);
+}
+
+.commentFormContainer {
+  padding: var(--space-3) var(--space-5) var(--space-5);
+}
+
+.timeText {
+  font-size: var(--font-size-xs);
+  padding: var(--space-0) var(--space-5) var(--space-3);
+}
+
+.editModalContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: var(--space-25);
+  /* background-color handled by sx prop for theme support */
+  border-radius: var(--radius-md);
+  padding: var(--space-7);
+}
+
+.editModalContent h3 {
+  margin-bottom: var(--space-5);
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.video {
+  width: 100%;
+}
+
+.postContainerBackground {
+  background-color: var(--bs-white);
+}
+
+.pinnedIcon {
+  margin-left: auto;
+}
+
+.editModalWrapper {
+  position: absolute;
+}
+
+.closeButton {
+  background-color: var(--color-gray-100) !important;
+  border: none !important;
+  border-radius: var(--radius-full) !important;
+  width: var(--space-8) !important;
+  height: var(--space-8) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.closeButton:hover {
+  background-color: var(--color-gray-200) !important;
+}
+
+.closeButtonIcon {
+  font-size: var(--font-size-xl) !important;
+}
+
+.image {
+  width: 100%;
+}
+
+.noCommentsText {
+  color: var(--color-gray-500);
+  text-align: center;
+  padding: var(--space-5) var(--space-0);
+  font-size: var(--font-size-sm);
+}
+
+.userImageUserPost {
+  display: flex;
+  width: var(--space-10);
+  height: var(--space-10);
+  margin-left: var(--space-5);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  position: relative;
+  border: var(--border-2) solid var(--userImageUserPost-border);
+}
+
+.userImageUserPost img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: scale(1.5);
+}
+
+.viewCommentsButton {
+  color: var(--color-gray-500);
+  font-size: var(--font-size-xs);
+  margin-left: var(--space-2);
+  margin-bottom: var(--space-1);
+  text-transform: none;
+  text-decoration: none;
+}
+
+.viewCommentsButton:hover {
+  text-decoration: underline;
+}

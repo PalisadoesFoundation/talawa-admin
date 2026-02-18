@@ -33,16 +33,16 @@
  * ```
  *
  */
-import EventListCard from 'components/EventListCard/EventListCard';
+import EventListCard from 'shared-components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import type { JSX } from 'react';
-import Button from 'react-bootstrap/Button';
-import styles from '../../../style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
-import { holidays, months, weekdays } from 'types/Event/utils';
+import { holidays, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
 import type {
   InterfaceEvent,
@@ -50,6 +50,8 @@ import type {
   InterfaceIOrgList,
 } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
+import { useTranslation } from 'react-i18next';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const Calendar: React.FC<
   InterfaceCalendarProps & {
@@ -68,6 +70,10 @@ const Calendar: React.FC<
   currentMonth,
   currentYear,
 }) => {
+  const { t, i18n } = useTranslation('translation', {
+    keyPrefix: 'eventCalendar',
+  });
+  const { t: tErrors } = useTranslation('errors');
   const [selectedDate] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(() => new Date().getDate());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
@@ -88,31 +94,50 @@ const Calendar: React.FC<
     userRole?: string,
     userId?: string,
   ): InterfaceEvent[] => {
-    const filteredEvents: InterfaceEvent[] = [];
-
+    // If no user info, only show public events
     if (!userRole || !userId) {
       return eventData.filter((event) => event.isPublic);
     }
 
+    // Admins see everything
     if (userRole === UserRole.ADMINISTRATOR) {
       return eventData;
     }
 
-    eventData.forEach((event) => {
+    // For regular users:
+    // - Backend already filters Organization Members events based on membership
+    // - We need to check Invite Only events for creator OR attendee status
+    // - All other events returned by backend should be shown
+    return eventData.filter((event) => {
+      // Creator always sees their own events
+      if (event.creator && event.creator.id === userId) {
+        return true;
+      }
+
+      // Public events - always visible (backend returns them)
       if (event.isPublic) {
-        filteredEvents.push(event);
-        return;
+        return true;
       }
 
-      const isMember = orgData?.members?.edges.some(
-        (edge) => edge.node.id === userId,
-      );
-      if (!event.isPublic && isMember) {
-        filteredEvents.push(event);
+      // Invite Only events - visible to creator OR attendees
+      if (event.isInviteOnly) {
+        const isCreator = event.creator && event.creator.id === userId;
+        const isAttendee = event.attendees?.some(
+          (attendee) => attendee.id === userId,
+        );
+        return isCreator || isAttendee;
       }
+
+      // Organization Members events - check membership
+      // If not public and not invite-only, it must be an organization event
+      // Check if user is a member of the organization
+      const isMember =
+        orgData?.members?.edges?.some((edge) => edge.node.id === userId) ||
+        !orgData?.members ||
+        false;
+
+      return isMember || false;
     });
-
-    return filteredEvents;
   };
 
   useEffect(() => {
@@ -138,13 +163,7 @@ const Calendar: React.FC<
     return Array.isArray(holidays)
       ? holidays.filter((holiday) => {
           if (!holiday.date) {
-            if (
-              typeof globalThis !== 'undefined' &&
-              typeof globalThis.process !== 'undefined' &&
-              globalThis.process.env?.NODE_ENV !== 'test'
-            ) {
-              console.warn(`Holiday "${holiday.name}" has no date specified.`);
-            }
+            console.warn(`Holiday "${holiday.name}" has no date specified.`);
             return false;
           }
           const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
@@ -234,6 +253,7 @@ const Calendar: React.FC<
           allDay={datas.allDay}
           isPublic={datas.isPublic}
           isRegisterable={datas.isRegisterable}
+          isInviteOnly={Boolean(datas.isInviteOnly)}
           isRecurringEventTemplate={datas.isRecurringEventTemplate}
           baseEvent={datas.baseEvent}
           sequenceNumber={datas.sequenceNumber}
@@ -293,62 +313,99 @@ const Calendar: React.FC<
                   )
                 ) : (
                   <p className={styles.no_events_message}>
-                    No events available
+                    {t('noEventsAvailable')}
                   </p>
                 )}
               </div>
               {Array.isArray(allDayEventsList) && shouldShowViewMore && (
-                <button
+                <Button
+                  variant="primary"
                   className={styles.btn__more}
                   onClick={handleExpandClick}
                   data-testid="view-more-button"
                 >
-                  {expanded === -100 ? 'View less' : 'View all'}
-                </button>
+                  {expanded === -100 ? t('viewLess') : t('viewAll')}
+                </Button>
               )}
             </div>
           </div>
         </div>
 
-        <div className={styles.calendar_infocards}>
-          <div
-            className={styles.holidays_card}
-            role="region"
-            aria-label="Holidays"
-          >
-            <h3 className={styles.card_title}>Holidays</h3>
-            <ul className={styles.card_list}>
-              {filteredHolidays.map((holiday, index) => (
-                <li className={styles.card_list_item} key={index}>
-                  <span className={styles.holiday_date}>
-                    {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
-                    {holiday.date.slice(3)}
-                  </span>
-                  <span className={styles.holiday_name}>{holiday.name}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className={styles.events_card} role="region" aria-label="Events">
-            <h3 className={styles.card_title}>Events</h3>
-            <div className={styles.legend}>
-              <div className={styles.eventsLegend}>
-                <span className={styles.organizationIndicator}></span>
-                <span className={styles.legendText}>
-                  Events Created by Organization
-                </span>
-              </div>
-              <div className={styles.list_container_holidays}>
-                <span className={styles.holidayIndicator}></span>
-                <span className={styles.holidayText}>Holidays</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {renderInfoCards()}
       </>
     );
   };
+
+  const renderInfoCards = (): JSX.Element => (
+    <div className={styles.calendar_infocards}>
+      <section className={styles.holidays_card} aria-label={t('holidays')}>
+        <h3 className={styles.card_title}>{t('holidays')}</h3>
+        <ul className={styles.card_list}>
+          {filteredHolidays.length > 0 ? (
+            filteredHolidays.map((holiday, index) => {
+              // Parse the holiday date (MM-DD format) and get localized month name
+              const holidayDate = dayjs(
+                `${currentYear}-${holiday.date}`,
+                'YYYY-MM-DD',
+              );
+              const localizedMonth = holidayDate
+                .locale(i18n.language)
+                .format('MMMM');
+              const day = holiday.date.slice(3);
+
+              // Create a translation key from the holiday name
+              // Convert to camelCase: "May Day / Labour Day" -> "mayDayLabourDay"
+              const translationKey = holiday.name
+                .replace(/[^\w\s]/g, '') // Remove special characters
+                .split(/\s+/) // Split by whitespace
+                .map((word, idx) =>
+                  idx === 0
+                    ? word.toLowerCase()
+                    : word.charAt(0).toUpperCase() +
+                      word.slice(1).toLowerCase(),
+                )
+                .join('');
+
+              // Get the translated holiday name with fallback
+              const translatedName = t(
+                ['holidayNames', translationKey].join('.'),
+                { defaultValue: holiday.name },
+              );
+
+              return (
+                <li className={styles.card_list_item} key={index}>
+                  <span className={styles.holiday_date}>
+                    {localizedMonth} {day}
+                  </span>
+                  <span className={styles.holiday_name}>{translatedName}</span>
+                </li>
+              );
+            })
+          ) : (
+            <li className={styles.card_list_item}>
+              {t('noHolidaysAvailable')}
+            </li>
+          )}
+        </ul>
+      </section>
+
+      <section className={styles.events_card} aria-label={t('events')}>
+        <h3 className={styles.card_title}>{t('events')}</h3>
+        <div className={styles.legend}>
+          <div className={styles.eventsLegend}>
+            <span className={styles.organizationIndicator}></span>
+            <span className={styles.legendText}>
+              {t('eventsCreatedByOrganization')}
+            </span>
+          </div>
+          <div className={styles.list_container_holidays}>
+            <span className={styles.holidayIndicator}></span>
+            <span className={styles.holidayText}>{t('holidays')}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 
   const renderDays = (): JSX.Element[] => {
     const monthStart = new Date(currentYear, currentMonth, 1);
@@ -413,6 +470,7 @@ const Calendar: React.FC<
               allDay={datas.allDay}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
+              isInviteOnly={Boolean(datas.isInviteOnly)}
               attendees={datas.attendees || []}
               creator={datas.creator}
               userId={userId}
@@ -443,6 +501,7 @@ const Calendar: React.FC<
           key={index}
           className={`${className} ${allEventsList?.length > 0 ? styles.day__events : ''}`}
           data-testid="day"
+          data-has-events={allEventsList?.length > 0}
         >
           {date.getDate()}
           {date.getMonth() !== currentMonth ? null : (
@@ -464,13 +523,14 @@ const Calendar: React.FC<
                     : allEventsList?.slice(0, 2)}
               </div>
               {shouldShowViewMore && (
-                <button
+                <Button
+                  variant="primary"
                   className={styles.btn__more}
                   data-testid="more"
                   onClick={() => toggleExpand(index)}
                 >
-                  {expanded === index ? 'View less' : 'View all'}
-                </button>
+                  {expanded === index ? t('viewLess') : t('viewAll')}
+                </Button>
               )}
             </div>
           )}
@@ -480,77 +540,89 @@ const Calendar: React.FC<
   };
 
   return (
-    <div className={styles.calendar}>
-      {viewType !== ViewType.YEAR && (
-        <div className={styles.calendar__header}>
-          <div className={styles.calender_month}>
-            <div className={styles.navigation_buttons}>
-              <Button
-                variant="outlined"
-                className={styles.buttonEventCalendar}
-                onClick={
-                  viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
-                }
-                data-testid="prevmonthordate"
-              >
-                <ChevronLeft />
-              </Button>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <div className={styles.calendar}>
+        {viewType !== ViewType.YEAR && (
+          <div className={styles.calendar__header}>
+            <div className={styles.calender_month}>
+              <div className={styles.navigation_buttons}>
+                <Button
+                  variant="outlined"
+                  className={styles.buttonEventCalendar}
+                  onClick={
+                    viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
+                  }
+                  data-testid="prevmonthordate"
+                >
+                  <ChevronLeft />
+                </Button>
 
-              <Button
-                variant="outlined"
-                className={styles.buttonEventCalendar}
-                onClick={
-                  viewType === ViewType.DAY ? handleNextDate : handleNextMonth
-                }
-                data-testid="nextmonthordate"
-              >
-                <ChevronRight />
-              </Button>
-              <div
-                className={styles.calendar__header_month}
-                data-testid="current-date"
-              >
-                {viewType === ViewType.DAY ? `${currentDate} ` : ''}
-                {currentYear} {months[currentMonth]}
+                <Button
+                  variant="outlined"
+                  className={styles.buttonEventCalendar}
+                  onClick={
+                    viewType === ViewType.DAY ? handleNextDate : handleNextMonth
+                  }
+                  data-testid="nextmonthordate"
+                >
+                  <ChevronRight />
+                </Button>
+                <div
+                  className={styles.calendar__header_month}
+                  data-testid="current-date"
+                >
+                  {viewType === ViewType.DAY ? `${currentDate} ` : ''}
+                  {currentYear}{' '}
+                  {dayjs()
+                    .month(currentMonth)
+                    .locale(i18n.language)
+                    .format('MMMM')}
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <Button
-              className={styles.editButton}
-              onClick={handleTodayButton}
-              data-testid="today"
-            >
-              Today
-            </Button>
-          </div>
-        </div>
-      )}
-      <div>
-        {viewType === ViewType.MONTH ? (
-          <>
-            <div className={styles.calendar__weekdays}>
-              {weekdays.map((weekday, index) => (
-                <div key={index} className={styles.weekday}>
-                  {weekday}
-                </div>
-              ))}
+            <div>
+              <Button
+                className={styles.editButton}
+                onClick={handleTodayButton}
+                data-testid="today"
+              >
+                {t('today')}
+              </Button>
             </div>
-            <div className={styles.calendar__days}>{renderDays()}</div>
-          </>
-        ) : viewType === ViewType.YEAR ? (
-          <YearlyEventCalender
-            eventData={eventData}
-            refetchEvents={refetchEvents}
-            orgData={orgData}
-            userRole={userRole}
-            userId={userId}
-          />
-        ) : (
-          <div className={styles.calendar__hours}>{renderHours()}</div>
+          </div>
         )}
+        <div>
+          {viewType === ViewType.MONTH ? (
+            <>
+              <div className={styles.calendar__weekdays}>
+                {weekdays.map((weekday, index) => (
+                  <div key={index} className={styles.weekday}>
+                    {weekday}
+                  </div>
+                ))}
+              </div>
+              <div className={styles.calendar__days}>{renderDays()}</div>
+              {renderInfoCards()}
+            </>
+          ) : viewType === ViewType.YEAR ? (
+            <YearlyEventCalender
+              eventData={eventData}
+              refetchEvents={refetchEvents}
+              orgData={orgData}
+              userRole={userRole}
+              userId={userId}
+            />
+          ) : (
+            <div className={styles.calendar__hours}>{renderHours()}</div>
+          )}
+        </div>
       </div>
-    </div>
+    </ErrorBoundaryWrapper>
   );
 };
 

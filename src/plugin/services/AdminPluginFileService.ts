@@ -12,29 +12,29 @@
  * - Works in both development and production
  */
 
-import { AdminPluginManifest } from '../../utils/adminPluginInstaller';
+import { IAdminPluginManifest } from '../../utils/adminPluginInstaller';
 import { internalFileWriter } from './InternalFileWriter';
 import type { IPluginDetails } from '../types';
 
-export interface PluginFileValidationResult {
+export interface IPluginFileValidationResult {
   valid: boolean;
   error?: string;
-  manifest?: AdminPluginManifest;
+  manifest?: IAdminPluginManifest;
 }
 
-export interface PluginInstallationResult {
+export interface IPluginInstallationResult {
   success: boolean;
   pluginId: string;
   path: string;
   filesWritten: number;
   writtenFiles: string[];
-  manifest: AdminPluginManifest;
+  manifest: IAdminPluginManifest;
   error?: string;
 }
 
-export interface InstalledPlugin {
+export interface IInstalledPlugin {
   pluginId: string;
-  manifest: AdminPluginManifest;
+  manifest: IAdminPluginManifest;
   installedAt: string;
   lastUpdated: string;
 }
@@ -63,7 +63,7 @@ export class AdminPluginFileService {
    */
   validatePluginFiles(
     files: Record<string, string>,
-  ): PluginFileValidationResult {
+  ): IPluginFileValidationResult {
     if (
       !files ||
       typeof files !== 'object' ||
@@ -84,10 +84,10 @@ export class AdminPluginFileService {
     }
 
     // Parse and validate manifest
-    let manifest: AdminPluginManifest;
+    let manifest: IAdminPluginManifest;
     try {
       manifest = JSON.parse(files['manifest.json']);
-    } catch (error) {
+    } catch {
       return {
         valid: false,
         error: 'Invalid manifest.json format',
@@ -104,7 +104,7 @@ export class AdminPluginFileService {
       'main',
     ];
     for (const field of requiredFields) {
-      if (!manifest[field as keyof AdminPluginManifest]) {
+      if (!manifest[field as keyof IAdminPluginManifest]) {
         return {
           valid: false,
           error: `Missing required field in manifest: ${field}`,
@@ -173,7 +173,7 @@ export class AdminPluginFileService {
   async installPlugin(
     pluginId: string,
     files: Record<string, string>,
-  ): Promise<PluginInstallationResult> {
+  ): Promise<IPluginInstallationResult> {
     try {
       // Validate plugin files
       const filesValidation = this.validatePluginFiles(files);
@@ -184,12 +184,23 @@ export class AdminPluginFileService {
           path: '',
           filesWritten: 0,
           writtenFiles: [],
-          manifest: {} as AdminPluginManifest,
+          manifest: {} as IAdminPluginManifest,
           error: filesValidation.error,
         };
       }
 
-      const manifest = filesValidation.manifest!;
+      const manifest = filesValidation.manifest;
+      if (!manifest) {
+        return {
+          success: false,
+          pluginId,
+          path: '',
+          filesWritten: 0,
+          writtenFiles: [],
+          manifest: {} as IAdminPluginManifest,
+          error: 'Manifest is missing',
+        };
+      }
 
       // Ensure pluginId matches manifest
       if (pluginId !== manifest.pluginId) {
@@ -199,7 +210,7 @@ export class AdminPluginFileService {
           path: '',
           filesWritten: 0,
           writtenFiles: [],
-          manifest: {} as AdminPluginManifest,
+          manifest: {} as IAdminPluginManifest,
           error: 'Plugin ID does not match manifest pluginId',
         };
       }
@@ -213,7 +224,7 @@ export class AdminPluginFileService {
           path: '',
           filesWritten: 0,
           writtenFiles: [],
-          manifest: {} as AdminPluginManifest,
+          manifest: {} as IAdminPluginManifest,
           error: pluginIdValidation.error,
         };
       }
@@ -228,7 +239,7 @@ export class AdminPluginFileService {
           path: '',
           filesWritten: 0,
           writtenFiles: [],
-          manifest: {} as AdminPluginManifest,
+          manifest: {} as IAdminPluginManifest,
           error: response.error || 'Failed to write files to filesystem',
         };
       }
@@ -249,7 +260,7 @@ export class AdminPluginFileService {
         path: '',
         filesWritten: 0,
         writtenFiles: [],
-        manifest: {} as AdminPluginManifest,
+        manifest: {} as IAdminPluginManifest,
         error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
@@ -286,7 +297,7 @@ export class AdminPluginFileService {
   /**
    * Get all installed plugins from filesystem
    */
-  async getInstalledPlugins(): Promise<InstalledPlugin[]> {
+  async getInstalledPlugins(): Promise<IInstalledPlugin[]> {
     try {
       const result = await internalFileWriter.listInstalledPlugins();
 
@@ -311,7 +322,7 @@ export class AdminPluginFileService {
   /**
    * Get specific plugin from filesystem
    */
-  async getPlugin(pluginId: string): Promise<InstalledPlugin | null> {
+  async getPlugin(pluginId: string): Promise<IInstalledPlugin | null> {
     try {
       const result = await internalFileWriter.readPluginFiles(pluginId);
 
@@ -391,7 +402,14 @@ export class AdminPluginFileService {
       }
 
       // Parse info.json if it exists
-      let pluginInfo: any = {};
+      let pluginInfo: {
+        features?: string[];
+        homepage?: string;
+        license?: string;
+        tags?: string[];
+        screenshots?: string[];
+        changelog?: { version: string; date: string; changes: string[] }[];
+      } = {};
       if (pluginFilesResult.files?.['info.json']) {
         try {
           pluginInfo = JSON.parse(pluginFilesResult.files['info.json']);
@@ -424,7 +442,9 @@ export class AdminPluginFileService {
         description: manifest.description || 'No description available',
         author: manifest.author || 'Unknown',
         version: manifest.version || '1.0.0',
-        icon: (manifest as any).icon || '/images/logo512.png',
+        icon:
+          (manifest as unknown as { icon: string }).icon ||
+          '/images/logo512.png',
         homepage: pluginInfo.homepage || '',
         license: pluginInfo.license || 'MIT',
         tags: pluginInfo.tags || [],

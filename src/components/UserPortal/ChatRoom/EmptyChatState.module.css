@@ -1,0 +1,8 @@
+.container {
+  color: var(--color-gray-600);
+}
+
+.message {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-600);
+}

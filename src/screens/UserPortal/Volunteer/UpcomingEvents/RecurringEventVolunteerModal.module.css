@@ -1,0 +1,39 @@
+.radioFieldset {
+  border: 0;
+  padding: 0;
+}
+
+.radioLegend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.radioOption {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.radioLabel {
+  flex: 1;
+  cursor: pointer;
+}
+
+.radioDescription {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-600);
+  margin-top: var(--space-1);
+}
