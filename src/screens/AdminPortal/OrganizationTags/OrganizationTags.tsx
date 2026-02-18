@@ -36,9 +36,9 @@ import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
 import {
   DataGridWrapper,
-  GridColDef,
   type GridCellParams,
 } from 'shared-components/DataGridWrapper';
+import type { TokenAwareGridColDef } from 'types/DataGridWrapper/interface';
 import type {
   InterfaceOrganizationTagsQueryPG,
   SortedByType,
@@ -188,12 +188,12 @@ function OrganizationTags(): JSX.Element {
     </Link>
   );
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'id',
       headerName: tCommon('sl_no'),
       flex: 0.5,
-      minWidth: 60,
+      minWidth: 'space-11',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -208,7 +208,7 @@ function OrganizationTags(): JSX.Element {
       field: 'name',
       headerName: t('tagName'),
       flex: 2,
-      minWidth: 150,
+      minWidth: 'space-15',
       align: 'left',
       headerAlign: 'left',
       sortable: false,
@@ -256,7 +256,7 @@ function OrganizationTags(): JSX.Element {
       field: 'totalSubTags',
       headerName: t('totalSubTags'),
       flex: 1,
-      minWidth: 120,
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -273,7 +273,7 @@ function OrganizationTags(): JSX.Element {
       field: 'totalAssignedUsers',
       headerName: t('totalAssignedUsers'),
       flex: 1,
-      minWidth: 120,
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -290,7 +290,7 @@ function OrganizationTags(): JSX.Element {
       field: 'actions',
       headerName: tCommon('actions'),
       flex: 1,
-      minWidth: 120,
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
