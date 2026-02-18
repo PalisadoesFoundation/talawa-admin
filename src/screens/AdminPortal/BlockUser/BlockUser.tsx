@@ -67,7 +67,7 @@ import { DataTable } from 'shared-components/DataTable/DataTable';
 import Button from 'shared-components/Button';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import ErrorPanel from 'shared-components/ErrorPanel';
-import { OrganizationMembershipRole } from '../OrganizationPeople/addMember/types';
+import { OrganizationMembershipRole } from 'screens/AdminPortal/OrganizationPeople/addMember/types';
 
 type BlockUserRow = {
   user: InterfaceUserPg;

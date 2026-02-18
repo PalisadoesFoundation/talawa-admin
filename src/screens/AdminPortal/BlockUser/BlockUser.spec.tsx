@@ -18,7 +18,7 @@ import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
-import { OrganizationMembershipRole } from '../OrganizationPeople/addMember/types';
+import { OrganizationMembershipRole } from 'screens/AdminPortal/OrganizationPeople/addMember/types';
 
 const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
   const useParams = vi.fn();
@@ -74,7 +74,6 @@ interface InterfaceGraphQLVariables {
   organizationId?: string;
   where?: {
     role?: {
-      equal?: string;
       notEqual?: string;
     };
   };
