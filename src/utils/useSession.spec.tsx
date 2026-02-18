@@ -629,38 +629,43 @@ test('should handle missing community data', async () => {
   vi.useRealTimers();
 });
 
-test('should handle event listener errors gracefully', async () => {
-  // This test only verifies that startSession() propagates an error when addEventListener throws.
-  // Remove the unrelated setTimeout spy; the catch block assertion below is sufficient.
+test('should propagate event listener errors', () => {
   const consoleErrorSpy = vi
     .spyOn(console, 'error')
     .mockImplementation(() => {});
   const mockError = new Error('Event listener error');
 
-  // Mock addEventListener to throw an error
-  const addEventListenerSpy = vi
-    .spyOn(window, 'addEventListener')
-    .mockImplementationOnce(() => {
-      throw mockError;
+  // Store the original implementation
+  const originalRemoveEventListener = window.removeEventListener;
+
+  // Mock removeEventListener to throw for specific events
+  const removeEventListenerSpy = vi
+    .spyOn(window, 'removeEventListener')
+    .mockImplementation((event, listener, options) => {
+      if (event === 'mousemove' || event === 'keydown') {
+        throw mockError;
+      }
+      return originalRemoveEventListener.call(window, event, listener, options);
     });
 
-  try {
-    const { result } = renderHook(() => useSession(), {
-      wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS}>
-          <BrowserRouter>{children}</BrowserRouter>
-        </MockedProvider>
-      ),
-    });
+  const { result } = renderHook(() => useSession(), {
+    wrapper: ({ children }: { children?: ReactNode }) => (
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </MockedProvider>
+    ),
+  });
 
+  // The error should propagate since it's not handled
+  expect(() => {
     result.current.startSession();
-  } catch {
-    // Error should be caught and logged
-    expect(consoleErrorSpy).toHaveBeenCalled();
-  }
+  }).toThrow(mockError);
+
+  // console.error might not be called since the error isn't caught
+  expect(consoleErrorSpy).not.toHaveBeenCalled();
 
   consoleErrorSpy.mockRestore();
-  addEventListenerSpy.mockRestore();
+  removeEventListenerSpy.mockRestore();
 });
 
 test('should handle session timeout data updates', async () => {

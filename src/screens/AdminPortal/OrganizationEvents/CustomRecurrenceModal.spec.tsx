@@ -165,7 +165,7 @@ describe('CustomRecurrenceModal', () => {
       },
     });
 
-    expect(screen.getByText('repeatsOn')).toBeInTheDocument();
+    expect(screen.getByText('Repeats On')).toBeInTheDocument();
 
     const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
     expect(dayButtons).toHaveLength(7);

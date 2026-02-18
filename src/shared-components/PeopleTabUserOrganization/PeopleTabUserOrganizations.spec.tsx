@@ -4,6 +4,18 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import PeopleTabUserOrganizations from './PeopleTabUserOrganizations';
 import userEvent from '@testing-library/user-event';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        admins: 'Admins',
+        members: 'Members',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 describe('PeopleTabUserOrganizations', () => {
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {

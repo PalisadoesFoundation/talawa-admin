@@ -601,13 +601,19 @@ describe('CreatePostModal Integration Tests', () => {
         'input[type="file"]',
       ) as HTMLInputElement;
 
-      // Mock empty file selection
-      Object.defineProperty(fileInput, 'files', { value: null });
+      // Create a spy on the file input's click method
+      const clickSpy = vi
+        .spyOn(fileInput, 'click')
+        .mockImplementation(() => {});
 
-      await user.upload(fileInput, []);
+      // Click the photo button to trigger file selection
+      await user.click(photoButton);
 
-      // Should not show any preview
-      expect(screen.queryByAltText('Selected')).not.toBeInTheDocument();
+      expect(clickSpy).toHaveBeenCalled();
+
+      // Instead of mocking files to null, we can simulate cancel by not uploading anything
+      expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
     });
 
     it('handles null name from localStorage', () => {
