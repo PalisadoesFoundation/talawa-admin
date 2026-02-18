@@ -79,7 +79,7 @@ const SidebarNavItem = ({
         {
           fill: useSimpleButton
             ? isActive
-              ? 'var(--bs-black)'
+              ? 'var(--color-black)'
               : 'var(--bs-secondary)'
             : 'none',
           width: ICON_SIZE,
