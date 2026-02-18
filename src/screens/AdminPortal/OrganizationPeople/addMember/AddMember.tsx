@@ -305,6 +305,7 @@ function AddMember({
                   fallbackName={row.name}
                   size="small"
                   dataTestId="avatarImage"
+                  crossOrigin="anonymous"
                 />
               </div>
             );
