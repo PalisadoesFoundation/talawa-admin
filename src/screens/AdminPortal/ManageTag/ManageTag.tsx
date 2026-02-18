@@ -67,7 +67,8 @@ import styles from './ManageTag.module.css';
 import {
   DataGrid,
   type GridCellParams,
-  type GridColDef,
+  type TokenAwareGridColDef,
+  convertTokenColumns,
 } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceTagAssignedMembersQuery,
@@ -320,11 +321,11 @@ function ManageTag(): JSX.Element {
       .join(' ');
   };
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'id',
       headerName: '#',
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -337,7 +338,7 @@ function ManageTag(): JSX.Element {
       field: 'userName',
       headerName: tCommon('userName'),
       flex: 2,
-      minWidth: 100,
+      minWidth: 'space-13',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
@@ -353,7 +354,7 @@ function ManageTag(): JSX.Element {
       headerName: tCommon('actions'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -519,7 +520,7 @@ function ManageTag(): JSX.Element {
                           ...assignedMembers,
                         }),
                       )}
-                      columns={columns}
+                      columns={convertTokenColumns(columns)}
                       isRowSelectable={() => false}
                     />
                   </InfiniteScroll>

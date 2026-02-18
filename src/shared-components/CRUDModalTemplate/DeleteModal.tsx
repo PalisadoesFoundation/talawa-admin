@@ -84,7 +84,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
   };
 
   const customFooter = (
-    <div>
+    <>
       <Button
         variant="secondary"
         onClick={onClose}
@@ -101,7 +101,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
       >
         {tCommon('delete')}
       </Button>
-    </div>
+    </>
   );
 
   return (

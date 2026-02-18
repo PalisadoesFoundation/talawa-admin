@@ -299,5 +299,16 @@
   "toggleSidebar": "Toggle sidebar",
   "picture": "{{name}} Picture",
   "optionsSuffix": "options",
-  "userMenu": "User menu"
+  "userMenu": "User menu",
+  "searchPlaceholder": "Search...",
+  "noOptionsFound": "No options found",
+  "noUserId": "User ID not available",
+  "noOrgId": "Org Id not available",
+  "noTagsFound": "No tags found",
+  "unknownMember": "Unknown Member",
+  "searchTags": "Search Tags",
+  "sortBy": "Sort By",
+  "previousYear": "Previous Year",
+  "nextYear": "Next Year",
+  "navigateToProfile": "Navigate to profile"
 }

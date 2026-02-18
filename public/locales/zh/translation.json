@@ -5,6 +5,10 @@
   "securedRoute": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
+  "oauth": {
+    "continueWith": "继续使用 {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
@@ -101,6 +105,21 @@
     "resendVerification": "重新发送验证邮件",
     "resendFailed": "重新发送验证邮件失败，请重试。"
   },
+  "verifyEmail": {
+    "title": "验证邮箱",
+    "loginRequired": "需要登录",
+    "verifying": "正在验证...",
+    "success": "邮箱已验证",
+    "successMessage": "您的邮箱已成功验证。您现在可以登录。",
+    "error": "验证失败",
+    "invalidToken": "验证链接无效或已过期。",
+    "noToken": "未提供验证令牌。请检查您的邮箱中的验证链接。",
+    "verificationFailed": "邮箱验证失败。请重试。",
+    "resendSuccess": "验证邮件已成功重新发送。",
+    "resendFailed": "重新发送验证邮件失败，请重试。",
+    "resendButton": "重新发送验证邮件",
+    "goToLogin": "去登录"
+  },
   "adminProfile": {
     "title": "管理员资料",
     "settings": "设置",
@@ -177,7 +196,8 @@
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
-    "logout": "登出"
+    "logout": "登出",
+    "notAvailable": "不可用"
   },
   "leftDrawerOrg": {
     "Dashboard": "仪表板",
@@ -311,7 +331,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "errorLoadingRequests": "加载会员申请时出错"
   },
   "users": {
     "membershipStatus": {
@@ -558,21 +579,12 @@
     "loadAssignedUsersError": "加载已分配用户时发生错误",
     "noTagsFound": "未找到标签",
     "addMember": "添加会员",
-    "removeMember": "删除会员"
+    "removeMember": "删除会员",
+    "invalidTagName": "无效的标签名称"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
     "joined": "已加入",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
-  },
-  "orgAdminListCard": {
-    "remove": "消除",
-    "removeAdmin": "删除管理员",
-    "removeAdminMsg": "您想删除该管理员吗？",
-    "adminRemoved": "管理员被删除。",
-    "joined": "已加入",
-    "no": "否",
-    "yes": "是",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgPeopleListCard": {
@@ -765,9 +777,38 @@
     "deleteAgendaCategory": "删除议程类别",
     "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "议程文件夹已成功更新",
+    "agendaFolderDeleted": "议程文件夹已成功删除",
+    "deleteAgendaFolder": "删除议程文件夹",
+    "deleteAgendaFolderMsg": "您确定要删除此议程文件夹吗？",
+    "updateAgendaFolder": "更新议程文件夹",
+    "folderNamePlaceholder": "文件夹名称",
+    "createAgendaFolder": "创建议程部分",
+    "folderName": "文件夹",
+    "categoryName": "类别",
+    "noCategory": "无分类",
+    "folder": "议程文件夹",
+    "notes": "备注",
+    "enterNotes": "输入备注",
+    "agendaFolderDetails": "议程部分详情",
+    "agendaFolderCreated": "议程部分已成功创建",
+    "attachmentPreviewAlt": "附件预览",
+    "agendaFolderUpdateFailed": "议程文件夹更新失败",
+    "previewItem": "预览项目",
+    "removeUrl": "移除网址",
+    "removeAttachment": "移除附件",
+    "itemSequenceUpdateSuccessMsg": "项目顺序已成功更新",
+    "sectionSequenceUpdateSuccessMsg": "部分顺序已成功更新",
+    "editFolder": "编辑文件夹",
+    "editItem": "编辑项目",
+    "deleteItem": "删除项目",
+    "deleteFolder": "删除文件夹",
+    "itemPreview": "项目预览",
     "agendaItemDetails": "议程项目详细信息",
     "updateAgendaItem": "更新议程项目",
+    "fileUploadFailed": "文件上传失败",
+    "organizationRequired": "需要选择组织",
     "title": "标题",
     "enterTitle": "输入标题",
     "sequence": "顺序",
@@ -1146,7 +1187,9 @@
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "noResultsFoundFor": "未找到结果",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "加载被阻止用户时发生错误",
+    "errorLoadingMembers": "加载成员时发生错误"
   },
   "eventManagement": {
     "name": "事件管理",
@@ -1159,7 +1202,9 @@
     "statistics": "统计数据",
     "to": "到",
     "volunteers": "志愿者",
-    "backToEvents": "返回活动"
+    "backToEvents": "返回活动",
+    "selectTab": "选择标签页",
+    "eventTabs": "活动选项卡"
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1228,7 +1273,8 @@
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
     "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
-    "cancel": "取消"
+    "cancel": "取消",
+    "successfullyDeletedOrganization": "组织已成功删除"
   },
   "userUpdate": {
     "appLanguageCode": "默认语言",
@@ -1242,25 +1288,6 @@
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "旧密码",
-    "newPassword": "新密码",
-    "confirmNewPassword": "确认新密码",
-    "passCantBeEmpty": "密码不能为空",
-    "passNoMatch": "新密码和确认密码不匹配。",
-    "saveChanges": "保存更改",
-    "cancel": "取消"
-  },
-  "orgDelete": {
-    "deleteOrg": "删除组织"
-  },
-  "membershipRequest": {
-    "accept": "接受",
-    "reject": "拒绝",
-    "memberAdded": "它被接受",
-    "joined": "已加入",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgUpdate": {
     "city": "城市",
@@ -1317,6 +1344,7 @@
     }
   },
   "memberDetail": {
+    "user": "用户",
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
     "noeventsAttended": "未参加任何活动",
@@ -1409,25 +1437,6 @@
     "role": "角色",
     "loading": "加载中...",
     "emailNotAvailable": "邮箱不可用"
-  },
-  "userRegister": {
-    "enterFirstName": "输入您的名字",
-    "enterLastName": "输入您的姓氏",
-    "enterConfirmPassword": "输入您的密码进行确认",
-    "alreadyhaveAnAccount": "已经有帐户？",
-    "login": "登录",
-    "afterRegister": "注册成功。",
-    "passwordNotMatch": "密码不匹配。",
-    "invalidDetailsMessage": "请输入有效的详细信息。",
-    "register": "注册",
-    "firstName": "名字",
-    "lastName": "姓氏",
-    "emailAddress": "电子邮件地址",
-    "enterEmail": "输入电子邮件",
-    "password": "密码",
-    "enterPassword": "输入密码",
-    "confirmPassword": "确认密码",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "userNavbar": {
     "talawa": "塔拉瓦",
@@ -1564,6 +1573,7 @@
     "Admin": "管理员",
     "loading": "加载中...",
     "noAttendees": "未找到参与者",
+    "unknownMember": "未知成员",
     "attendeeCount": "参与人数",
     "maleAttendees": "男性参与者",
     "femaleAttendees": "女性参与者",
@@ -1631,9 +1641,7 @@
     "country": "国家",
     "resetChanges": "重置更改",
     "profileDetails": "个人资料详情",
-    "deleteUserMessage": "通过单击\"删除用户\"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
     "copyLink": "复制个人资料链接",
-    "deleteUser": "删除用户",
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
     "sgender": "选择性别",
@@ -1706,7 +1714,8 @@
     "invalidAmount": "请输入捐赠金额的数值。",
     "donationAmountDescription": "请输入捐款金额的数值。",
     "donationOutOfRange": "捐款金额必须在 {{min}} 和 {{max}} 之间。",
-    "donateTo": "捐赠给"
+    "donateTo": "捐赠给",
+    "selectCurrency": "选择货币"
   },
   "transactions": {
     "title": "交易",
@@ -1899,10 +1908,15 @@
     "confirmRemoveMember": "确认删除成员",
     "failedToAddUser": "添加用户失败",
     "userAddedSuccessfully": "用户添加成功",
-    "next": "下一步"
+    "next": "下一步",
+    "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
+    "thisUser": "此用户",
+    "deleteChatConfirmation": "您确定要删除此聊天吗？",
+    "memberActionsMenu": "成员操作菜单",
+    "editImage": "编辑图像"
   },
   "userChatRoom": {
-    "selectContact": "选择联系人开始对话",
+    "selectContact": "点击 + 图标以开始新的聊天",
     "sendMessage": "发信息",
     "loading": "正在加载…",
     "loadOlderMessages": "加载旧消息",
@@ -1922,7 +1936,10 @@
       "resetButton": "重试",
       "resetButtonAriaLabel": "重试"
     },
-    "messageActions": "消息操作"
+    "messageActions": "消息操作",
+    "addAttachment": "添加附件",
+    "removeAttachment": "删除附件",
+    "closeReply": "关闭回复"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
@@ -1975,7 +1992,8 @@
     "name": "名称",
     "desc": "描述",
     "venueImagePreview": "场地图片预览",
-    "sortVenues": "排序场地"
+    "sortVenues": "排序场地",
+    "closeImagePreview": "关闭图片预览"
   },
   "addMember": {
     "title": "添加会员",
@@ -2315,7 +2333,8 @@
     "invited": "已邀请",
     "groupsAvailable": "{{count}} 个小组可用",
     "volunteersRequired": "必需",
-    "signedUp": "已报名"
+    "signedUp": "已报名",
+    "volunteerTabs": "志愿者选项卡"
   },
   "pluginStore": {
     "title": "插件商店",
@@ -2376,7 +2395,7 @@
     "installing": "安装中 ({{elapsed}})",
     "uploading": "上传中...",
     "screenshotCounter": "{{current}} / {{total}}",
-    "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
+    "uninstallPluginWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败",
     "failedToParsePluginZip": "解析插件 ZIP 文件失败",
     "pluginUploadedSuccess": "插件上传成功！({{components}} 组件) - 您现在可以从插件列表中安装它。"
@@ -2409,7 +2428,21 @@
     "holidays": "节假日",
     "events": "活动",
     "eventsCreatedByOrganization": "组织创建的活动",
-    "today": "今天"
+    "today": "今天",
+    "viewLess": "查看更少",
+    "viewAll": "查看全部",
+    "noHolidaysAvailable": "没有可用的节假日",
+    "holidayNames": {
+      "mayDayLabourDay": "劳动节",
+      "mothersDay": "母亲节",
+      "fathersDay": "父亲节",
+      "independenceDayUS": "独立日（美国）",
+      "oktoberfest": "慕尼黑啤酒节",
+      "halloween": "万圣节",
+      "diwali": "排灯节",
+      "remembranceDayVeteransDay": "阵亡将士纪念日 / 退伍军人节",
+      "christmasDay": "圣诞节"
+    }
   },
   "contact": {
     "card_aria": "联系人卡片"
@@ -2438,7 +2471,10 @@
     "clear": "清除",
     "clearSelection": "清除选择",
     "loading": "加载中...",
-    "selectRow": "选择第 {{rowKey}} 行"
+    "selectRow": "选择第 {{rowKey}} 行",
+    "previousYear": "上一年",
+    "nextYear": "下一年",
+    "member": "成员"
   },
   "donation": {
     "amount_label": "金额",
@@ -2511,19 +2547,6 @@
       "filledByCount": "{{count}} 人已為此活動填寫反饋。"
     }
   },
-  "verifyEmail": {
-    "title": "验证您的邮箱",
-    "verifying": "正在验证您的邮箱...",
-    "success": "验证成功!",
-    "successMessage": "您的邮箱已成功验证。您现在可以登录了。",
-    "error": "验证失败",
-    "invalidToken": "无效或过期的验证链接。",
-    "loginRequired": "请登录以继续。",
-    "resendButton": "重新发送验证邮件",
-    "resendSuccess": "验证邮件发送成功!",
-    "resendFailed": "发送验证邮件失败。请稍后再试。",
-    "goToLogin": "前往登录"
-  },
   "plugins": {
     "loading": "正在加载插件...",
     "component": "组件",
@@ -2550,20 +2573,19 @@
       }
     }
   },
-  "memberActivity": {
-    "dateNA": "日期不可用",
-    "yes": "是",
-    "no": "否",
-    "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
-    "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数",
-    "viewEventDetails": "查看活动详情"
-  },
-  "promotedPost": {
-    "title": "推广内容",
-    "promotedContent": "推广内容：{{title}}"
-  },
   "csv": {
     "demographics": "{{category}} 人口统计"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "expandDay": "展开日期"
   }
 }

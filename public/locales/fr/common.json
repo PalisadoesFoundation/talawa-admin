@@ -299,5 +299,16 @@
   "toggleSidebar": "Basculer la barre latérale",
   "picture": "Image de {{name}}",
   "optionsSuffix": "options",
-  "userMenu": "Menu utilisateur"
+  "userMenu": "Menu utilisateur",
+  "searchPlaceholder": "Rechercher...",
+  "noOptionsFound": "Aucune option trouvée",
+  "noUserId": "ID utilisateur non disponible",
+  "noOrgId": "ID d'organisation non disponible",
+  "noTagsFound": "Aucune étiquette trouvée",
+  "searchTags": "Rechercher des étiquettes",
+  "sortBy": "Trier par",
+  "unknownMember": "Membre inconnu",
+  "previousYear": "Année précédente",
+  "nextYear": "Année suivante",
+  "navigateToProfile": "Naviguer vers le profil"
 }

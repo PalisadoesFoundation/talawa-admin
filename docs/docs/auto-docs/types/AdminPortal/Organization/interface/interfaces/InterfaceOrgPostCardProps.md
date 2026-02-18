@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgPostCardProps
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L12)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L6)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:12](https://github.
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L14)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L8)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:14](https://github.
 
 > **pinned**: `boolean`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L20)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L14)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:20](https://github.
 
 > **postAuthor**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L17)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L11)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:17](https://github.
 
 > **postID**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L13)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L7)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:13](https://github.
 
 > **postInfo**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L16)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L10)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:16](https://github.
 
 > **postPhoto**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L18)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L12)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:18](https://github.
 
 > **postTitle**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L15)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L9)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:15](https://github.
 
 > **postVideo**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L19)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L13)

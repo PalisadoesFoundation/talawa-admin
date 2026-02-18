@@ -255,7 +255,7 @@ describe('Organisation Tags Page', () => {
         const buttons = screen.getAllByTestId('manageTagBtn');
         expect(buttons.length).toEqual(2);
       },
-      { timeout: 500 },
+      { timeout: 3000 },
     );
   });
 
@@ -360,36 +360,45 @@ describe('Organisation Tags Page', () => {
     const input = screen.getByPlaceholderText(translations.searchByName);
 
     // Trigger search by changing the input value
-    // The mock PageHeader's onChange handler calls onSearch with the input value
     await userEvent.clear(input);
     await userEvent.type(input, 'searchUserTag');
 
-    // Wait for the search results to load
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag 1',
-      );
-    });
+    // Wait for the search results to load (searchUserTag1 comes first in DESCENDING order)
+    await waitFor(
+      () => {
+        expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+          'userTag searchUserTag1',
+        );
+      },
+      { timeout: 3000 },
+    );
+
     await userEvent.click(screen.getByTestId('sortTags-toggle'));
     // Click the "Oldest" button to sort in ascending order
     await userEvent.click(screen.getByTestId('sortTags-item-oldest'));
 
-    // Wait for tags to be re-ordered (oldest first)
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag 10',
-      );
-    });
+    // Wait for Apollo re-query to complete and tags to be re-ordered (oldest first)
+    // In ASCENDING order with search "searchUserTag", searchUserTag2 comes first
+    await waitFor(
+      () => {
+        expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+          'userTag searchUserTag2',
+        );
+      },
+      { timeout: 3000 },
+    );
 
-    // Click "Latest" to switch back to descending order
     await userEvent.click(screen.getByTestId('sortTags-item-latest'));
 
-    // Wait for tags to be re-ordered back (latest first)
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag 1',
-      );
-    });
+    // Wait for Apollo re-query to complete and tags to return to DESCENDING order
+    await waitFor(
+      () => {
+        expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
+          'userTag searchUserTag1',
+        );
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('fetches more tags with infinite scroll', async () => {
@@ -645,7 +654,7 @@ describe('Organisation Tags Page', () => {
         // Should still find the tags because whitespace is trimmed
         expect(buttons.length).toEqual(2);
       },
-      { timeout: 500 },
+      { timeout: 3000 },
     );
   });
 

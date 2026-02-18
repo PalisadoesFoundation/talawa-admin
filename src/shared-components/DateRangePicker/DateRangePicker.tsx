@@ -34,6 +34,7 @@ import type {
 } from 'types/shared-components/DateRangePicker/interface';
 
 import styles from './DateRangePicker.module.css';
+import Button from 'shared-components/Button';
 
 function isDayjsLike(value: unknown): value is { toDate: () => Date } {
   return (
@@ -158,7 +159,11 @@ export default function DateRangePicker({
       data-testid={dataTestId}
     >
       <div className={styles.controlsRow}>
-        <FormFieldGroup label={t('startDate')} name="startDate">
+        <FormFieldGroup
+          label={t('startDate')}
+          name="startDate"
+          className={styles.inputGroup}
+        >
           <DatePicker
             value={startDayjs}
             name="start-date"
@@ -173,7 +178,11 @@ export default function DateRangePicker({
           />
         </FormFieldGroup>
 
-        <FormFieldGroup label={t('endDate')} name="endDate">
+        <FormFieldGroup
+          label={t('endDate')}
+          name="endDate"
+          className={styles.inputGroup}
+        >
           <DatePicker
             value={endDayjs}
             name="end-date"
@@ -207,7 +216,7 @@ export default function DateRangePicker({
             const isActive = preset.key === activePresetKey;
 
             return (
-              <button
+              <Button
                 key={preset.key}
                 type="button"
                 disabled={disabled}
@@ -219,7 +228,7 @@ export default function DateRangePicker({
                 onClick={() => handlePresetClick(preset)}
               >
                 {preset.label}
-              </button>
+              </Button>
             );
           })}
         </div>

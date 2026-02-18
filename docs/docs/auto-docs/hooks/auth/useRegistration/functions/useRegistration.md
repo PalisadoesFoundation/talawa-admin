@@ -6,9 +6,9 @@
 
 > **useRegistration**(`__namedParameters`): `object`
 
-Defined in: [src/hooks/auth/useRegistration.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L16)
+Defined in: [src/hooks/auth/useRegistration.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L63)
 
-Custom hook for user registration
+Custom hook for user registration using SIGNUP_MUTATION.
 
 ## Parameters
 
@@ -32,21 +32,7 @@ Custom hook for user registration
 
 ##### data
 
-###### email
-
-`string`
-
-###### name
-
-`string`
-
-###### organizationId
-
-`string`
-
-###### password
-
-`string`
+[`IRegisterInput`](../interfaces/IRegisterInput.md)
 
 #### Returns
 

@@ -57,3 +57,22 @@
   border-bottom-right-radius: var(--radius-2xl);
   background-color: var(--color-white);
 }
+
+.peopleTable {
+  margin-top: var(--space-7);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.avatarCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatarImage {
+  width: var(--logo-xs);
+  height: var(--logo-xs);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}

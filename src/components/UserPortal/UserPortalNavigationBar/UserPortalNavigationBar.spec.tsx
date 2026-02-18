@@ -1740,4 +1740,12 @@ describe('UserPortalNavigationBarMocks', () => {
   it('logoutMock variableMatcher returns true for any variables', () => {
     expect(logoutMock.variableMatcher()).toBe(true);
   });
+
+  it('logoutErrorMock variableMatcher returns true for any variables', () => {
+    expect(logoutErrorMock.variableMatcher()).toBe(true);
+  });
+
+  it('logoutNetworkErrorMock variableMatcher returns true for any variables', () => {
+    expect(logoutNetworkErrorMock.variableMatcher()).toBe(true);
+  });
 });

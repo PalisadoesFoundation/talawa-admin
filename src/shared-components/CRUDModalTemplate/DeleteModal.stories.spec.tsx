@@ -4,7 +4,6 @@ import {
   BasicUsage,
   WithWarning,
   RecurringEvent,
-  DeleteUser,
   DeleteOrganization,
 } from './DeleteModal.stories';
 import { DeleteModal } from './DeleteModal';
@@ -102,27 +101,6 @@ describe('DeleteModal Stories', () => {
       expect(RecurringEvent.args?.entityName).toBe('Weekly Team Meeting');
       expect(RecurringEvent.args?.showWarning).toBe(true);
       expect(RecurringEvent.args?.recurringEventContent).toBeDefined();
-    });
-  });
-
-  describe('DeleteUser Story', () => {
-    test('renders for user deletion', () => {
-      const args = DeleteUser.args as InterfaceDeleteModalProps;
-      render(<DeleteModal {...args} open={true} />);
-
-      // Verify modal title
-      expect(screen.getByText('Delete User')).toBeInTheDocument();
-
-      // Verify warning message is displayed (user-visible content)
-      expect(
-        screen.getByText(/This action cannot be undone\./),
-      ).toBeInTheDocument();
-    });
-
-    test('has correct user deletion configuration', () => {
-      expect(DeleteUser.args?.title).toBe('Delete User');
-      expect(DeleteUser.args?.entityName).toBe('John Doe');
-      expect(DeleteUser.args?.showWarning).toBe(true);
     });
   });
 

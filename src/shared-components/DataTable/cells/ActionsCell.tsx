@@ -1,6 +1,7 @@
 import React from 'react';
 import type { InterfaceActionsCellProps } from '../../../types/shared-components/ActionsCell/interface';
 import styles from './ActionsCell.module.css';
+import Button from 'shared-components/Button';
 
 /**
  * ActionsCell renders a row of action buttons for a single table row.
@@ -22,7 +23,7 @@ export function ActionsCell<T>(
             : !!action.disabled;
 
         return (
-          <button
+          <Button
             key={action.id}
             type="button"
             onClick={() => action.onClick(row)}
@@ -32,11 +33,9 @@ export function ActionsCell<T>(
             data-testid={`action-btn-${action.id}`}
           >
             {action.label}
-          </button>
+          </Button>
         );
       })}
     </div>
   );
 }
-
-export default ActionsCell;

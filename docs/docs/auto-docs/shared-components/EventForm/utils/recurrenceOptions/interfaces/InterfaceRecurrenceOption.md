@@ -20,6 +20,6 @@ Defined in: [src/shared-components/EventForm/utils/recurrenceOptions.ts:16](http
 
 ### value
 
-> **value**: [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md) \| `"custom"`
+> **value**: `"custom"` \| [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
 Defined in: [src/shared-components/EventForm/utils/recurrenceOptions.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/utils/recurrenceOptions.ts#L17)

@@ -1,0 +1,19 @@
+{
+  "venues": [
+    {
+      "id": "venue_001",
+      "name": "Main Hall",
+      "address": "100 Example St",
+      "city": "Example City",
+      "country": "Exampleland"
+    },
+    {
+      "id": "venue_002",
+      "name": "Community Hall — مرحبا 世界",
+      "address": "200 Long Name Rd",
+      "city": "Long City",
+      "country": "Exampleland"
+    }
+  ],
+  "emptyVenues": []
+}

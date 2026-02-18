@@ -24,7 +24,7 @@
 
 .input:active {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+    var(--border-shadow-xs) var(--color-gray-400);
 
   background-color: var(--color-blue-200);
   border-color: var(--color-gray-200);
@@ -33,7 +33,7 @@
 
 .input:focus-within {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+    var(--border-shadow-xs) var(--color-gray-400);
 
   border-color: var(--color-gray-200);
 }
@@ -138,9 +138,9 @@
   background-color: var(--color-blue-200);
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-300);
   color: var(--color-gray-700);
 }
 
@@ -160,4 +160,15 @@
   background-color: var(--color-red-500);
   border-color: var(--color-red-500);
   color: var(--color-white);
+}
+
+.dataTable {
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.profileCell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -130,3 +130,8 @@ export const TEST_ID_PEOPLE_EMAIL = (id: string): string =>
  * @returns The formatted data-testid.
  */
 export const TEST_ID_PEOPLE_ROLE = (id: string): string => `people-role-${id}`;
+
+/**
+ * Maximum length for the displayed user name before truncation.
+ */
+export const MAX_NAME_LENGTH = 20;

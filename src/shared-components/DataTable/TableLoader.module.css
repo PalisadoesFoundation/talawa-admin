@@ -1,0 +1,7 @@
+.dataLoadingOverlay {
+  composes: dataLoadingOverlay from './DataTableShared.module.css';
+}
+
+.dataSkeletonCell {
+  composes: dataSkeletonCell from './DataTableShared.module.css';
+}

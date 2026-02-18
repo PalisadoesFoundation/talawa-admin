@@ -40,7 +40,8 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
-  type GridColDef,
+  type TokenAwareGridColDef,
+  convertTokenColumns,
 } from 'shared-components/DataGridWrapper';
 import { debounce, Stack } from '@mui/material';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
@@ -229,13 +230,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'assignee',
       headerName: t('assignedTo'),
       flex: 1,
       align: 'left',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -286,7 +287,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('itemCategory'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -341,7 +342,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('options'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -386,7 +387,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('completed'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -525,7 +526,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           index: index + 1,
           ...actionItem,
         }))}
-        columns={columns}
+        columns={convertTokenColumns(columns)}
         isRowSelectable={() => false}
       />
 

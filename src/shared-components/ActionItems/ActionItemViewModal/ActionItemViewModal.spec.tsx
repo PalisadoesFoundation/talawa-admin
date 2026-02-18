@@ -949,6 +949,39 @@ describe('Testing ItemViewModal', () => {
       // Should use fallback category data
       expect(screen.getByDisplayValue('Test Category')).toBeInTheDocument();
     });
+
+    it('should skip members query when organizationId is missing', async () => {
+      const item = createActionItem({
+        organizationId: undefined,
+        creatorId: 'userId1',
+        creator: null,
+      });
+
+      // No mock for MEMBERS_LIST_WITH_DETAILS needed
+      const linkNoMembers = new StaticMockLink([
+        {
+          request: {
+            query: GET_ACTION_ITEM_CATEGORY,
+            variables: { input: { id: 'categoryId1' } },
+          },
+          result: { data: { actionItemCategory: mockCategory } },
+        },
+      ]);
+
+      renderItemViewModal(linkNoMembers, {
+        isOpen: true,
+        hide: mockHide,
+        item,
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+
+      // Should fall back to item.creator
+      const creatorField = screen.getByLabelText(/creator/i);
+      expect(creatorField).toHaveValue('Unknown');
+    });
   });
 
   describe('Form Field Accessibility', () => {

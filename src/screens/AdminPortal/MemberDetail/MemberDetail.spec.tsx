@@ -1,10 +1,20 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MemberDetail from './MemberDetail';
 import { ReactNode } from 'react';
 
 /* -------------------- mocks -------------------- */
+
+// mock react-router params - default mock
+const mockUseParams = vi.fn((): { userId?: string; orgId?: string } => ({
+  userId: '123',
+  orgId: '456',
+}));
+
+vi.mock('react-router-dom', () => ({
+  useParams: () => mockUseParams(),
+}));
 
 // mock i18n
 vi.mock('react-i18next', () => ({
@@ -13,21 +23,11 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-// mock MUI LocalizationProvider
-vi.mock('@mui/x-date-pickers', async () => {
-  const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
-    '@mui/x-date-pickers',
-  );
-
-  return {
-    ...actual,
-    LocalizationProvider: ({ children }: { children: ReactNode }) => (
-      <div>{children}</div>
-    ),
-  };
-});
-
-vi.mock('@mui/x-date-pickers/AdapterDayjs', () => ({
+// mock LocalizationProvider (your shared wrapper)
+vi.mock('shared-components/DateRangePicker', () => ({
+  LocalizationProvider: ({ children }: { children: ReactNode }) => (
+    <div>{children}</div>
+  ),
   AdapterDayjs: vi.fn(),
 }));
 
@@ -43,11 +43,13 @@ vi.mock('components/UserDetails/UserOrganizations', () => ({
 }));
 
 vi.mock('components/UserDetails/UserEvents', () => ({
-  default: () => <div data-testid="user-events" />,
+  default: ({ orgId, userId }: { orgId?: string; userId?: string }) => (
+    <div data-testid="user-events" data-orgid={orgId} data-userid={userId} />
+  ),
 }));
 
 vi.mock('components/UserDetails/UserTags', () => ({
-  default: () => <div data-testid="user-tags" />,
+  default: ({ id }: { id?: string }) => <div data-testid="user-tags">{id}</div>,
 }));
 
 vi.mock(
@@ -63,8 +65,8 @@ vi.mock(
       isActive: boolean;
     }) => (
       <button
-        data-testid={`tab-${title}`}
         type="button"
+        data-testid={`tab-${title}`}
         data-active={isActive}
         onClick={action}
       >
@@ -78,18 +80,56 @@ vi.mock(
 
 describe('MemberDetail', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
-  it('renders overview tab by default', () => {
-    render(<MemberDetail id="123" />);
+  it('renders noUserId message when userId is not provided', () => {
+    // Override the mock to return no userId
+    mockUseParams.mockReturnValueOnce({
+      userId: undefined,
+      orgId: undefined,
+    });
 
-    expect(screen.getByTestId('tab-overview')).toBeInTheDocument();
-    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
+    render(<MemberDetail />);
+
+    // Should render the noUserId message
+    expect(screen.getByText('noUserId')).toBeInTheDocument();
+
+    // Should NOT render any tabs or content
+    expect(screen.queryByTestId('tab-overview')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('user-contact-details'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders noOrgId message when orgId is not provided', () => {
+    // Override params → userId exists but orgId missing
+    mockUseParams.mockReturnValueOnce({
+      userId: '123',
+      orgId: undefined,
+    });
+
+    render(<MemberDetail />);
+
+    // Should render the noOrgId message
+    expect(screen.getByText('noOrgId')).toBeInTheDocument();
+
+    // Should NOT render tabs or member content
+    expect(screen.queryByTestId('tab-overview')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('user-contact-details'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders overview tab by default with userId from route', () => {
+    render(<MemberDetail />);
+
     expect(screen.getByTestId('tab-overview')).toHaveAttribute(
       'data-active',
       'true',
     );
+    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
   });
 
   it('switches to organizations tab', async () => {
@@ -104,40 +144,46 @@ describe('MemberDetail', () => {
     );
   });
 
-  it('switches to tags tab', async () => {
-    render(<MemberDetail />);
-
-    await userEvent.click(screen.getByTestId('tab-tags'));
-
-    expect(screen.getByTestId('user-tags')).toBeInTheDocument();
-  });
-
   it('switches to events tab', async () => {
     render(<MemberDetail />);
 
     await userEvent.click(screen.getByTestId('tab-events'));
 
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
+    expect(screen.getByTestId('user-events')).toHaveAttribute(
+      'data-orgid',
+      '456',
+    );
+    expect(screen.getByTestId('user-events')).toHaveAttribute(
+      'data-userid',
+      '123',
+    );
     expect(screen.getByTestId('tab-events')).toHaveAttribute(
       'data-active',
       'true',
     );
   });
 
-  it('switches back to overview tab when overview button is clicked', async () => {
-    render(<MemberDetail id="123" />);
+  it('switches to tags tab and passes userId', async () => {
+    render(<MemberDetail />);
 
-    // Step 1: switch away from overview
+    await userEvent.click(screen.getByTestId('tab-tags'));
+
+    expect(screen.getByTestId('user-tags')).toHaveTextContent('123');
+    expect(screen.getByTestId('tab-tags')).toHaveAttribute(
+      'data-active',
+      'true',
+    );
+  });
+
+  it('switches back to overview tab', async () => {
+    render(<MemberDetail />);
+
     await userEvent.click(screen.getByTestId('tab-events'));
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
 
-    // Step 2: click overview tab
     await userEvent.click(screen.getByTestId('tab-overview'));
-
-    // Step 3: overview content is rendered again
     expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
-
-    // Step 4: overview tab is active
     expect(screen.getByTestId('tab-overview')).toHaveAttribute(
       'data-active',
       'true',

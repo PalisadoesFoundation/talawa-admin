@@ -1,8 +1,9 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
-import ProfileDropdown, { MAX_NAME_LENGTH } from './ProfileDropdown';
+import ProfileDropdown from './ProfileDropdown';
+import { MAX_NAME_LENGTH } from 'Constant/common';
 import { MockedProvider } from '@apollo/react-testing';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -52,13 +53,16 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
-  setItem('SuperAdmin', false);
+  setItem('role', 'user');
   setItem('AdminFor', []);
   setItem('id', '123');
 });
 
 afterEach(() => {
   vi.clearAllMocks();
+  vi.restoreAllMocks();
+  window.history.replaceState(null, '', '/');
+  cleanup();
   clearAllItems();
 });
 
@@ -173,10 +177,14 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
-
-    await userEvent.click(screen.getByTestId('logoutBtn'));
+    await waitFor(() =>
+      expect(screen.getByTestId('profile-item-logout')).toBeInTheDocument(),
+    );
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('profile-item-logout'));
+    });
 
     expect(global.window.location.pathname).toBe('/');
   });
@@ -195,11 +203,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-viewProfile'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -208,7 +216,7 @@ describe('ProfileDropdown Component', () => {
   test('navigates to /admin/profile for admin roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
 
-    setItem('SuperAdmin', true); // Admin role
+    setItem('role', 'administrator'); // Admin role
     setItem('id', '123');
 
     render(
@@ -224,11 +232,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-viewProfile'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/admin/profile');
@@ -247,11 +255,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-viewProfile'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -280,11 +288,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('logoutBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-logout'));
     });
 
     expect(consoleSpy).toHaveBeenCalledWith(

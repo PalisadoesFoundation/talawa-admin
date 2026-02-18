@@ -56,7 +56,7 @@ import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type {
   GridCellParams,
-  GridColDef,
+  TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -233,13 +233,13 @@ function Volunteers(): JSX.Element {
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'volunteer',
       headerName: t('eventVolunteers.volunteerHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -279,7 +279,7 @@ function Volunteers(): JSX.Element {
       headerName: t('eventVolunteers.statusHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -338,7 +338,7 @@ function Volunteers(): JSX.Element {
       headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,

@@ -10,6 +10,7 @@ import styles from './CursorPaginationManager.module.css';
 import { useTranslation } from 'react-i18next';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import Button from 'shared-components/Button';
 
 /**
  * Extracts connection data from a nested GraphQL response using a dot-separated path.
@@ -438,13 +439,13 @@ export function CursorPaginationManager<
         className={styles.stateMessage}
       >
         <p>{error.message}</p>
-        <button
+        <Button
           type="button"
           onClick={handleRefetch}
           className={styles.loadMoreButton}
         >
           {t('retry')}
-        </button>
+        </Button>
       </div>
     );
   }
@@ -491,7 +492,7 @@ export function CursorPaginationManager<
         paginationType === 'backward' &&
         pageInfo?.hasPreviousPage && (
           <div className={styles.loadMoreSection}>
-            <button
+            <Button
               type="button"
               onClick={handleLoadMore}
               disabled={isLoadingMore}
@@ -500,7 +501,7 @@ export function CursorPaginationManager<
               data-testid="load-more-button-top"
             >
               {isLoadingMore ? t('loading') : t('loadOlderMessages')}
-            </button>
+            </Button>
           </div>
         )}
 
@@ -521,7 +522,7 @@ export function CursorPaginationManager<
         paginationType === 'forward' &&
         pageInfo?.hasNextPage && (
           <div className={styles.loadMoreSection}>
-            <button
+            <Button
               type="button"
               onClick={handleLoadMore}
               disabled={isLoadingMore}
@@ -530,7 +531,7 @@ export function CursorPaginationManager<
               data-testid="load-more-button"
             >
               {isLoadingMore ? t('loading') : t('loadMore')}
-            </button>
+            </Button>
           </div>
         )}
 
@@ -542,5 +543,3 @@ export function CursorPaginationManager<
     </div>
   );
 }
-
-export default CursorPaginationManager;

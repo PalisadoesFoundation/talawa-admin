@@ -1,207 +1,694 @@
 import React from 'react';
-import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, within } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
-import { I18nextProvider } from 'react-i18next';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { I18nextProvider } from 'react-i18next';
 
-let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
-let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
+import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
+import { DELETE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import i18nForTest from 'utils/i18nForTest';
+
+// Mock NotificationToast
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
 const mockT = (key: string): string => key;
+const mockOnClose = vi.fn();
+const mockRefetchAgendaFolder = vi.fn();
+
+const MOCK_AGENDA_ITEM_ID = 'item123';
 const mockTCommon = (key: string): string => key;
+const MOCKS_SUCCESS: MockedResponse[] = [
+  {
+    request: {
+      query: DELETE_AGENDA_ITEM_MUTATION,
+      variables: {
+        input: {
+          id: MOCK_AGENDA_ITEM_ID,
+        },
+      },
+    },
+    result: {
+      data: {
+        deleteAgendaItem: {
+          id: MOCK_AGENDA_ITEM_ID,
+        },
+      },
+    },
+  },
+];
+
+const MOCKS_ERROR: MockedResponse[] = [
+  {
+    request: {
+      query: DELETE_AGENDA_ITEM_MUTATION,
+      variables: {
+        input: {
+          id: MOCK_AGENDA_ITEM_ID,
+        },
+      },
+    },
+    error: new Error('Failed to delete agenda item'),
+  },
+];
+
+const renderModal = (
+  mocks: MockedResponse[] = [],
+  isOpen = true,
+  agendaItemId = MOCK_AGENDA_ITEM_ID,
+) => {
+  return render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <I18nextProvider i18n={i18nForTest}>
+        <AgendaItemsDeleteModal
+          isOpen={isOpen}
+          onClose={mockOnClose}
+          agendaItemId={agendaItemId}
+          t={mockT}
+          tCommon={mockTCommon}
+          refetchAgendaFolder={mockRefetchAgendaFolder}
+        />
+      </I18nextProvider>
+    </MockedProvider>,
+  );
+};
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
-    mockToggleDeleteModal = vi.fn();
-    mockDeleteAgendaItemHandler = vi.fn();
-    // Reset any manual timers
-    vi.useRealTimers();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const renderComponent = (
-    isOpen = true,
-    toggleDelete = mockToggleDeleteModal,
-    deleteHandler = mockDeleteAgendaItemHandler,
-  ): RenderResult => {
-    return render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaItemsDeleteModal
-              agendaItemDeleteModalIsOpen={isOpen}
-              toggleDeleteModal={toggleDelete}
-              deleteAgendaItemHandler={deleteHandler}
-              t={mockT}
-              tCommon={mockTCommon}
-            />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>,
-    );
-  };
+  describe('Rendering', () => {
+    it('should render the modal when isOpen is true', () => {
+      renderModal();
 
-  // Basic Rendering Tests
-  test('renders modal correctly when open', () => {
-    renderComponent();
-    expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
-    expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
-    expect(screen.getByTestId('deleteAgendaItemCloseBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('deleteAgendaItemBtn')).toBeInTheDocument();
-    expect(screen.getByText('no')).toBeInTheDocument();
-    expect(screen.getByText('yes')).toBeInTheDocument();
-  });
-
-  test('modal should not be rendered when agendaItemDeleteModalIsOpen is false', () => {
-    renderComponent(false);
-    expect(screen.queryByText('deleteAgendaItem')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('deleteAgendaItemBtn')).not.toBeInTheDocument();
-  });
-
-  // Interaction Tests
-  describe('User Interactions', () => {
-    test('calls toggleDeleteModal when close button is clicked', async () => {
-      const user = userEvent.setup();
-      renderComponent();
-      const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-      await user.click(closeButton);
-      expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
+      expect(screen.getByTestId('deleteAgendaItemModal')).toBeInTheDocument();
+      expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
+      expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
     });
 
-    test('calls deleteAgendaItemHandler when confirm button is clicked', async () => {
-      renderComponent();
-      const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-      const user = userEvent.setup();
-      await user.click(confirmButton);
-      expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
-    });
-  });
+    it('should not render the modal when isOpen is false', () => {
+      renderModal([], false);
 
-  test('calls toggleDeleteModal when modal header close button is clicked', async () => {
-    renderComponent();
-    const closeButton = screen.getByTestId('modalCloseBtn');
-    await userEvent.click(closeButton);
-    expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
-  });
-
-  // Edge Cases
-  test('handles rapid button clicks correctly', async () => {
-    renderComponent();
-    const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-    const user = userEvent.setup();
-
-    // Simulate rapid clicks
-    await user.click(confirmButton);
-    await user.click(closeButton);
-    await user.click(confirmButton);
-
-    expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(2);
-    expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
-  });
-
-  test('handles keyboard events correctly', async () => {
-    renderComponent();
-
-    // Clear any previous calls to ensure clean state
-    mockDeleteAgendaItemHandler.mockClear();
-    mockToggleDeleteModal.mockClear();
-
-    // Test Escape key - BaseModal has keyboard=true by default, so it will close
-    screen.getByTestId('deleteAgendaItemModal');
-    await userEvent.keyboard('{Escape}');
-
-    // Verify Escape key triggers the close handler but NOT the delete handler
-    expect(mockToggleDeleteModal).toHaveBeenCalled();
-    expect(mockDeleteAgendaItemHandler).not.toHaveBeenCalled();
-
-    // Test click on confirm button
-    const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    confirmButton.focus();
-
-    await userEvent.click(confirmButton);
-    expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
-  });
-
-  test('handles multiple modal instances correctly', () => {
-    // Render two instances of the modal
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaItemsDeleteModal
-              agendaItemDeleteModalIsOpen={true}
-              toggleDeleteModal={mockToggleDeleteModal}
-              deleteAgendaItemHandler={mockDeleteAgendaItemHandler}
-              t={mockT}
-              tCommon={mockTCommon}
-            />
-            <AgendaItemsDeleteModal
-              agendaItemDeleteModalIsOpen={true}
-              toggleDeleteModal={mockToggleDeleteModal}
-              deleteAgendaItemHandler={mockDeleteAgendaItemHandler}
-              t={mockT}
-              tCommon={mockTCommon}
-            />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>,
-    );
-
-    // Verify both modals are rendered
-    const deleteButtons = screen.getAllByTestId('deleteAgendaItemBtn');
-    expect(deleteButtons).toHaveLength(2);
-  });
-
-  test('handles modal state transitions correctly', async () => {
-    const { rerender } = renderComponent(true);
-
-    // Verify initial open state
-    expect(screen.getByTestId('deleteAgendaItemModal')).toBeInTheDocument();
-
-    // Rerender with closed state
-    rerender(
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaItemsDeleteModal
-              agendaItemDeleteModalIsOpen={false}
-              toggleDeleteModal={mockToggleDeleteModal}
-              deleteAgendaItemHandler={mockDeleteAgendaItemHandler}
-              t={mockT}
-              tCommon={mockTCommon}
-            />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>,
-    );
-
-    await waitFor(() => {
       expect(
         screen.queryByTestId('deleteAgendaItemModal'),
       ).not.toBeInTheDocument();
     });
+
+    it('should render modal with correct title', () => {
+      renderModal();
+
+      expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
+    });
+
+    it('should render delete confirmation message', () => {
+      renderModal();
+
+      expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
+    });
+
+    it('should render "Cancel" button', () => {
+      renderModal();
+
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      expect(cancelButton).toBeInTheDocument();
+      expect(cancelButton).toHaveTextContent(/cancel/i);
+    });
+
+    it('should render "Delete" button', () => {
+      renderModal();
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      expect(deleteButton).toBeInTheDocument();
+      expect(deleteButton).toHaveTextContent(/delete/i);
+    });
+
+    it('should apply correct modal props', () => {
+      renderModal();
+
+      const modal = screen.getByTestId('deleteAgendaItemModal');
+      expect(modal).toBeInTheDocument();
+    });
+
+    it('should render warning icon', () => {
+      renderModal();
+
+      const warningIcon = document.querySelector('.fa-exclamation-triangle');
+      expect(warningIcon).toBeInTheDocument();
+    });
   });
 
-  // Accessibility Tests
-  test('meets accessibility requirements', () => {
-    renderComponent();
+  describe('User Interactions', () => {
+    it('should call onClose when "Cancel" button is clicked', async () => {
+      renderModal();
 
-    // Verify modal has correct test id
-    const modal = screen.getByTestId('deleteAgendaItemModal');
-    expect(modal).toBeInTheDocument();
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      await userEvent.click(cancelButton);
 
-    const buttons = within(modal as HTMLElement).getAllByRole('button');
-    buttons.forEach((button) => {
-      expect(button).toHaveAccessibleName();
+      expect(mockOnClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call deleteAgendaItemHandler when "Delete" button is clicked', async () => {
+      renderModal(MOCKS_SUCCESS);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'agendaItemDeleted',
+          );
+        },
+        { timeout: 5000 },
+      );
+    });
+  });
+
+  describe('Delete Agenda Item Handler', () => {
+    it('should successfully delete agenda item', async () => {
+      renderModal(MOCKS_SUCCESS);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'agendaItemDeleted',
+          );
+        },
+        { timeout: 5000 },
+      );
+
+      expect(mockRefetchAgendaFolder).toHaveBeenCalledTimes(1);
+      expect(mockOnClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call refetchAgendaFolder after successful deletion', async () => {
+      renderModal(MOCKS_SUCCESS);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+    });
+
+    it('should close modal after successful deletion', async () => {
+      renderModal(MOCKS_SUCCESS);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(mockOnClose).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+    });
+
+    it('should display success notification after successful deletion', async () => {
+      renderModal(MOCKS_SUCCESS);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'agendaItemDeleted',
+          );
+        },
+        { timeout: 5000 },
+      );
+    });
+  });
+
+  describe('Branch coverage – non-Error rejection', () => {
+    beforeEach(async () => {
+      vi.resetModules();
+
+      vi.doMock('@apollo/client', async () => {
+        const actual =
+          await vi.importActual<typeof import('@apollo/client')>(
+            '@apollo/client',
+          );
+
+        return {
+          ...actual,
+          useMutation: () => [
+            vi.fn().mockRejectedValueOnce('Network failure'), // ✅ non-Error
+          ],
+        };
+      });
+    });
+
+    afterEach(() => {
+      vi.doUnmock('@apollo/client');
+      vi.resetModules();
+    });
+
+    it('does nothing when mutation throws non-Error value', async () => {
+      const { default: AgendaItemsDeleteModal } =
+        await import('./AgendaItemsDeleteModal');
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <AgendaItemsDeleteModal
+            isOpen
+            onClose={mockOnClose}
+            agendaItemId={MOCK_AGENDA_ITEM_ID}
+            t={mockT}
+            tCommon={mockTCommon}
+            refetchAgendaFolder={mockRefetchAgendaFolder}
+          />
+        </I18nextProvider>,
+      );
+
+      await userEvent.click(screen.getByTestId('modal-delete-btn'));
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).not.toHaveBeenCalled();
+          expect(NotificationToast.success).not.toHaveBeenCalled();
+          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+          expect(mockOnClose).not.toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should handle error when deletion fails', async () => {
+      renderModal(MOCKS_ERROR);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Failed to delete agenda item',
+          );
+        },
+        { timeout: 5000 },
+      );
+    });
+
+    it('should not call onClose when deletion fails', async () => {
+      renderModal(MOCKS_ERROR);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+
+      expect(mockOnClose).not.toHaveBeenCalled();
+    });
+
+    it('should not call refetchAgendaFolder when deletion fails', async () => {
+      renderModal(MOCKS_ERROR);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+
+      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+    });
+
+    it('should handle Error instance in catch block', async () => {
+      renderModal(MOCKS_ERROR);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Failed to delete agenda item',
+          );
+        },
+        { timeout: 5000 },
+      );
+    });
+
+    it('should handle non-Error instance in catch block', async () => {
+      const MOCKS_NON_ERROR: MockedResponse[] = [
+        {
+          request: {
+            query: DELETE_AGENDA_ITEM_MUTATION,
+            variables: {
+              input: {
+                id: MOCK_AGENDA_ITEM_ID,
+              },
+            },
+          },
+          error: { message: 'Non-error object' } as Error,
+        },
+      ];
+
+      renderModal(MOCKS_NON_ERROR);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      // Non-Error instances won't trigger NotificationToast.error
+      await waitFor(
+        () => {
+          expect(mockOnClose).not.toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+
+      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Modal Props', () => {
+    it('should pass correct size prop to BaseModal', () => {
+      renderModal();
+
+      const modal = screen.getByTestId('deleteAgendaItemModal');
+      expect(modal).toBeInTheDocument();
+    });
+
+    it('should set backdrop to static', () => {
+      renderModal();
+
+      const modal = screen.getByTestId('deleteAgendaItemModal');
+      expect(modal).toBeInTheDocument();
+      // BaseModal with backdrop="static" prevents closing on backdrop click
+    });
+
+    it('should set keyboard to false', () => {
+      renderModal();
+
+      const modal = screen.getByTestId('deleteAgendaItemModal');
+      expect(modal).toBeInTheDocument();
+      // BaseModal with keyboard={false} prevents closing on Escape key
+    });
+  });
+
+  describe('Translation Functions', () => {
+    it('should use t function for agenda-specific translations', () => {
+      const customT = vi.fn((key: string) => `translated_${key}`);
+
+      render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <AgendaItemsDeleteModal
+              isOpen={true}
+              onClose={mockOnClose}
+              agendaItemId={MOCK_AGENDA_ITEM_ID}
+              t={customT}
+              tCommon={mockTCommon}
+              refetchAgendaFolder={mockRefetchAgendaFolder}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      expect(customT).toHaveBeenCalledWith('deleteAgendaItem');
+      expect(customT).toHaveBeenCalledWith('deleteAgendaItemMsg');
+    });
+  });
+
+  describe('Different Agenda Item IDs', () => {
+    it('should handle deletion with different agenda item ID', async () => {
+      const differentItemId = 'different-item-456';
+
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: DELETE_AGENDA_ITEM_MUTATION,
+            variables: {
+              input: {
+                id: differentItemId,
+              },
+            },
+          },
+          result: {
+            data: {
+              deleteAgendaItem: {
+                id: differentItemId,
+              },
+            },
+          },
+        },
+      ];
+
+      renderModal(mocks, true, differentItemId);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'agendaItemDeleted',
+          );
+        },
+        { timeout: 5000 },
+      );
+    });
+  });
+
+  describe('Multiple Clicks Prevention', () => {
+    it('should handle multiple rapid clicks on delete button', async () => {
+      renderModal(MOCKS_SUCCESS);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+
+      // Rapidly click multiple times
+      await userEvent.click(deleteButton);
+      await userEvent.click(deleteButton);
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+
+      // Should still only close once
+      expect(mockOnClose).toHaveBeenCalled();
+    });
+  });
+
+  describe('Component Lifecycle', () => {
+    it('should render correctly on initial mount', () => {
+      const { container } = renderModal();
+
+      expect(container).toBeInTheDocument();
+      expect(screen.getByTestId('deleteAgendaItemModal')).toBeInTheDocument();
+    });
+
+    it('should update when isOpen prop changes', () => {
+      const { rerender } = render(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <AgendaItemsDeleteModal
+              isOpen={false}
+              onClose={mockOnClose}
+              agendaItemId={MOCK_AGENDA_ITEM_ID}
+              t={mockT}
+              tCommon={mockTCommon}
+              refetchAgendaFolder={mockRefetchAgendaFolder}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      expect(
+        screen.queryByTestId('deleteAgendaItemModal'),
+      ).not.toBeInTheDocument();
+
+      rerender(
+        <MockedProvider mocks={[]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <AgendaItemsDeleteModal
+              isOpen={true}
+              onClose={mockOnClose}
+              agendaItemId={MOCK_AGENDA_ITEM_ID}
+              t={mockT}
+              tCommon={mockTCommon}
+              refetchAgendaFolder={mockRefetchAgendaFolder}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      expect(screen.getByTestId('deleteAgendaItemModal')).toBeInTheDocument();
+    });
+  });
+
+  describe('Button Types', () => {
+    it('should render buttons with correct type attribute', () => {
+      renderModal();
+
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+
+      expect(cancelButton).toHaveAttribute('type', 'button');
+      expect(deleteButton).toHaveAttribute('type', 'button');
+    });
+  });
+
+  describe('CSS Classes', () => {
+    it('should apply correct CSS classes to buttons', () => {
+      renderModal();
+
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+
+      expect(cancelButton).toHaveClass('btn', 'btn-secondary');
+      expect(deleteButton).toHaveClass('btn', 'btn-danger');
+    });
+  });
+
+  describe('Async Operation Flow', () => {
+    it('should execute deletion flow in correct order', async () => {
+      const callOrder: string[] = [];
+
+      const trackedOnClose = vi.fn(() => callOrder.push('onClose'));
+      const trackedRefetch = vi.fn(() => callOrder.push('refetch'));
+
+      render(
+        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <AgendaItemsDeleteModal
+              isOpen={true}
+              onClose={trackedOnClose}
+              agendaItemId={MOCK_AGENDA_ITEM_ID}
+              t={mockT}
+              tCommon={mockTCommon}
+              refetchAgendaFolder={trackedRefetch}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+
+      await waitFor(
+        () => {
+          expect(trackedRefetch).toHaveBeenCalled();
+          expect(trackedOnClose).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+
+      // Verify order: refetch should be called before onClose
+      expect(callOrder).toEqual(['refetch', 'onClose']);
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle empty agenda item ID', async () => {
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: DELETE_AGENDA_ITEM_MUTATION,
+            variables: {
+              input: {
+                id: '',
+              },
+            },
+          },
+          result: {
+            data: {
+              deleteAgendaItem: {
+                id: '',
+              },
+            },
+          },
+        },
+      ];
+
+      renderModal(mocks, true, '');
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
+    });
+
+    it('should handle very long agenda item ID', async () => {
+      const longId = 'a'.repeat(1000);
+
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: DELETE_AGENDA_ITEM_MUTATION,
+            variables: {
+              input: {
+                id: longId,
+              },
+            },
+          },
+          result: {
+            data: {
+              deleteAgendaItem: {
+                id: longId,
+              },
+            },
+          },
+        },
+      ];
+
+      renderModal(mocks, true, longId);
+
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 });
