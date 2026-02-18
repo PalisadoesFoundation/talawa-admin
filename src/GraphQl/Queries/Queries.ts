@@ -461,9 +461,14 @@ export const GET_USER_BY_ID = gql`
 `;
 
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
-  query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
+  query GetOrganizationMembers(
+    $id: String!
+    $first: Int
+    $after: String
+    $where: MembersWhereInput
+  ) {
     organization(input: { id: $id }) {
-      members(first: $first, after: $after) {
+      members(first: $first, after: $after, where: $where) {
         edges {
           node {
             id
