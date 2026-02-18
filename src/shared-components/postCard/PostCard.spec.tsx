@@ -1,12 +1,6 @@
 import React from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -600,11 +594,12 @@ describe('PostCard', () => {
     expect(screen.getByTestId('plugin-injector-g4')).toBeInTheDocument();
   });
   it('creates comment and clears input', async () => {
+    const user = userEvent.setup();
     renderPostCard();
     const input = screen.getByPlaceholderText(/add comment/i);
-    fireEvent.change(input, { target: { value: 'My comment' } });
+    await user.type(input, 'My comment');
     const sendButton = screen.getByTestId('comment-send');
-    fireEvent.click(sendButton);
+    await user.click(sendButton);
     await waitFor(() => {
       expect(defaultProps.fetchPosts).not.toHaveBeenCalled();
       expect(input).toHaveValue(''); // cleared by setCommentInput('')
@@ -612,27 +607,23 @@ describe('PostCard', () => {
   });
 
   it('renders CommentCard when comments exist', async () => {
+    const user = userEvent.setup();
     renderPostCard();
-    // reveal comments
-    fireEvent.click(screen.getByText(/view/i));
 
-    // Wait for comments to load
-    await waitFor(
-      () => {
-        expect(screen.getByTestId('comment-card')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
+    await user.click(screen.getByText(/view/i));
+
+    expect(await screen.findByText('Test comment')).toBeInTheDocument();
   });
 
   it('handles like button click when post is not liked', async () => {
+    const user = userEvent.setup();
     renderPostCard({
       hasUserVoted: { hasVoted: false, voteType: null },
       upVoteCount: 0,
     });
 
     const likeButton = screen.getByTestId('like-btn');
-    fireEvent.click(likeButton);
+    await user.click(likeButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('liked')).toBeInTheDocument();
@@ -640,13 +631,14 @@ describe('PostCard', () => {
   });
 
   it('handles like button click when post is already liked', async () => {
+    const user = userEvent.setup();
     renderPostCard({
       hasUserVoted: { hasVoted: true, voteType: 'up_vote' as const },
       upVoteCount: 5,
     });
 
     const likeButton = screen.getByTestId('like-btn');
-    fireEvent.click(likeButton);
+    await user.click(likeButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('unliked')).toBeInTheDocument();
@@ -654,6 +646,7 @@ describe('PostCard', () => {
   });
 
   it('shows error when like action fails', async () => {
+    const user = userEvent.setup();
     // Create a mock mutation function that rejects
     const mockLikePost = vi
       .fn()
@@ -675,7 +668,7 @@ describe('PostCard', () => {
       });
 
       const likeButton = screen.getByTestId('like-btn');
-      fireEvent.click(likeButton);
+      await user.click(likeButton);
 
       // Wait for the mutation to be called and the error to be handled
       await waitFor(() => {
@@ -693,6 +686,7 @@ describe('PostCard', () => {
   });
 
   it('handles comment creation error and calls errorHandler', async () => {
+    const user = userEvent.setup();
     // Create a mock mutation function that rejects for CREATE_COMMENT_POST
     const mockCreateComment = vi
       .fn()
@@ -717,12 +711,12 @@ describe('PostCard', () => {
       const commentInput = screen.getByPlaceholderText(/add comment/i);
       const sendButton = screen.getByTestId('comment-send');
 
-      fireEvent.change(commentInput, { target: { value: 'Test comment' } });
+      await user.type(commentInput, 'Test comment');
 
       // The send button should be enabled with input
       expect(sendButton).not.toBeDisabled();
 
-      fireEvent.click(sendButton);
+      await user.click(sendButton);
 
       // Wait for the mutation to be called and the error to be handled
       await waitFor(() => {
@@ -740,10 +734,11 @@ describe('PostCard', () => {
   });
 
   it('shows comments section when showComments is toggled', async () => {
+    const user = userEvent.setup();
     renderPostCard();
 
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Wait for comments to load
     await waitFor(
@@ -755,18 +750,18 @@ describe('PostCard', () => {
   });
 
   it('closes dropdown menu when Menu onClose is triggered', async () => {
+    const user = userEvent.setup();
     renderPostCard();
 
     // Open dropdown menu
     const moreButton = screen.getByTestId('post-more-options-button');
-    await userEvent.click(moreButton);
+    await user.click(moreButton);
 
     // Ensure menu is open
     const editMenuItem = await screen.findByTestId('edit-post-menu-item');
     expect(editMenuItem).toBeInTheDocument();
 
-    //press Escape key to close menu
-    fireEvent.keyDown(editMenuItem, { key: 'Escape', code: 'Escape' });
+    await user.keyboard('{Escape}');
 
     // Menu should be closed
     await waitFor(() => {
@@ -777,10 +772,11 @@ describe('PostCard', () => {
   });
 
   it('hides comments when clicking hide comments', async () => {
+    const user = userEvent.setup();
     renderPostCard();
 
     const viewCommentsButton = screen.getByText(/view/i);
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Wait for comments to load first
     await waitFor(
@@ -791,7 +787,7 @@ describe('PostCard', () => {
     );
 
     const hideCommentsButton = screen.getByText(/hide/i);
-    fireEvent.click(hideCommentsButton);
+    await user.click(hideCommentsButton);
 
     await waitFor(() => {
       expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
@@ -799,6 +795,7 @@ describe('PostCard', () => {
   });
 
   it('handles edit post error', async () => {
+    const user = userEvent.setup();
     const linkWithEditError = new StaticMockLink(
       [editPostErrorMock, ...mocks],
       true,
@@ -817,14 +814,14 @@ describe('PostCard', () => {
     );
 
     const moreButton = screen.getByTestId('post-more-options-button');
-    fireEvent.click(moreButton);
+    await user.click(moreButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('edit-post-menu-item')).toBeInTheDocument();
     });
 
     const editButton = screen.getByTestId('edit-post-menu-item');
-    fireEvent.click(editButton);
+    await user.click(editButton);
 
     // Wait for the modal to open
     await waitFor(() => {
@@ -832,10 +829,10 @@ describe('PostCard', () => {
     });
 
     const postInput = screen.getByTestId('postTitleInput');
-    fireEvent.change(postInput, { target: { value: 'Updated content' } });
+    await user.type(postInput, 'Updated content');
 
     const saveButton = screen.getByTestId('createPostBtn');
-    fireEvent.click(saveButton);
+    await user.click(saveButton);
 
     // Wait for the error mock to be triggered - error handling might vary
     await waitFor(() => {
@@ -848,6 +845,7 @@ describe('PostCard', () => {
   });
 
   it('handles delete post error', async () => {
+    const user = userEvent.setup();
     const linkWithDeleteError = new StaticMockLink(
       [deletePostErrorMock, ...mocks],
       true,
@@ -866,10 +864,10 @@ describe('PostCard', () => {
     );
 
     const moreButton = screen.getByTestId('post-more-options-button');
-    fireEvent.click(moreButton);
+    await user.click(moreButton);
 
     const deleteButton = await screen.findByTestId('delete-post-menu-item');
-    fireEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     // Wait for error handler to be called
     await waitFor(() => {
@@ -889,22 +887,24 @@ describe('PostCard', () => {
     expect(sendButton).toBeDisabled();
   });
 
-  it('enables comment send button when input has content', () => {
+  it('enables comment send button when input has content', async () => {
+    const user = userEvent.setup();
     renderPostCard();
 
     const commentInput = screen.getByPlaceholderText(/add comment/i);
     const sendButton = screen.getByTestId('comment-send');
 
-    fireEvent.change(commentInput, { target: { value: 'Test comment' } });
+    await user.type(commentInput, 'Test comment');
     expect(sendButton).not.toBeDisabled();
   });
 
   it('renders CursorPaginationManager when comments are shown', async () => {
+    const user = userEvent.setup();
     renderPostCard();
 
     // Show comments
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Verify CursorPaginationManager is rendered
     await waitFor(() => {
@@ -915,6 +915,7 @@ describe('PostCard', () => {
   });
 
   it('should handle comment creation with showComments true', async () => {
+    const user = userEvent.setup();
     const mockFetchPosts = vi.fn();
 
     // Reuse helper to inject CREATE_COMMENT_POST mock alongside base mocks
@@ -929,7 +930,7 @@ describe('PostCard', () => {
     });
 
     // Show comments first to test the refresh logic
-    fireEvent.click(screen.getByTestId('comment-card'));
+    await user.click(screen.getByTestId('comment-card'));
 
     await waitFor(() => {
       expect(screen.getByPlaceholderText(/add comment/i)).toBeInTheDocument();
@@ -939,8 +940,8 @@ describe('PostCard', () => {
     const commentInput = screen.getByPlaceholderText(
       /add comment/i,
     ) as HTMLInputElement;
-    fireEvent.change(commentInput, { target: { value: 'New test comment' } });
-    fireEvent.click(screen.getByTestId('comment-send'));
+    await user.type(commentInput, 'New test comment');
+    await user.click(screen.getByTestId('comment-send'));
 
     await waitFor(() => {
       expect(mockFetchPosts).not.toHaveBeenCalled();
@@ -949,6 +950,7 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted callback when data.post.comments is null', async () => {
+    const user = userEvent.setup();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
 
@@ -956,7 +958,7 @@ describe('PostCard', () => {
 
     // Show comments to trigger the query
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Wait for query to complete without throwing errors
     await waitFor(() => {
@@ -1022,11 +1024,12 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted when data is undefined', async () => {
+    const user = userEvent.setup();
     renderPostCardWithCustomMock(undefinedDataMock);
 
     // Show comments to trigger the query
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Wait for query to complete without throwing errors
     await waitFor(() => {
@@ -1036,11 +1039,12 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted when data.post is undefined', async () => {
+    const user = userEvent.setup();
     renderPostCardWithCustomMock(undefinedPostMock);
 
     // Show comments to trigger the query
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Wait for query to complete without throwing errors
     await waitFor(() => {
@@ -1050,11 +1054,12 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted when data.post.comments is undefined', async () => {
+    const user = userEvent.setup();
     renderPostCardWithCustomMock(undefinedCommentsMock);
 
     // Show comments to trigger the query
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Wait for query to complete without throwing errors
     await waitFor(() => {
@@ -1311,7 +1316,8 @@ describe('PostCard', () => {
     expect(screen.queryByTestId('comment-card')).not.toBeInTheDocument();
   });
 
-  it('should handle different user roles correctly', () => {
+  it('should handle different user roles correctly', async () => {
+    const user = userEvent.setup();
     const { setItem } = useLocalStorage();
 
     // Test as regular user (not admin, not post creator)
@@ -1321,7 +1327,7 @@ describe('PostCard', () => {
     renderPostCard();
 
     const moreButton = screen.getByTestId('post-more-options-button');
-    fireEvent.click(moreButton);
+    await user.click(moreButton);
 
     // Regular user should not see edit or delete options for other users' posts
     expect(screen.queryByTestId('edit-post-menu-item')).not.toBeInTheDocument();
@@ -1370,6 +1376,7 @@ describe('PostCard', () => {
   });
 
   it('should handle large comment lists efficiently', async () => {
+    const user = userEvent.setup();
     // Create mock with many comments
     const manyCommentsMock = {
       request: {
@@ -1425,7 +1432,7 @@ describe('PostCard', () => {
 
     // Show comments
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     // Should render pagination manager for large comment lists
     await waitFor(() => {
@@ -1574,6 +1581,7 @@ describe('PostCard', () => {
   });
 
   it('should display empty state message when there are no comments', async () => {
+    const user = userEvent.setup();
     // Create a mock with empty comments edges
     const emptyCommentsMock = {
       request: {
@@ -1606,7 +1614,7 @@ describe('PostCard', () => {
     renderPostCardWithCustomMockAndProps(emptyCommentsMock, {});
 
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     await waitFor(() => {
       expect(screen.getByText(/No comments/i)).toBeInTheDocument();
@@ -1614,6 +1622,7 @@ describe('PostCard', () => {
   });
 
   it('should refetch comments when refetchTrigger is incremented', async () => {
+    const user = userEvent.setup();
     const refetchCommentsMock = {
       request: {
         query: GET_POST_COMMENTS,
@@ -1717,7 +1726,7 @@ describe('PostCard', () => {
     );
 
     const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
+    await user.click(viewCommentsButton);
 
     await waitFor(() =>
       expect(
@@ -1728,8 +1737,8 @@ describe('PostCard', () => {
     expect(screen.getByText('Test comment')).toBeInTheDocument();
 
     const commentInput = screen.getByPlaceholderText(/add comment/i);
-    fireEvent.change(commentInput, { target: { value: 'New test comment' } });
-    fireEvent.click(screen.getByTestId('comment-send'));
+    await user.type(commentInput, 'New test comment');
+    await user.click(screen.getByTestId('comment-send'));
 
     await waitFor(() => {
       expect(screen.getByText('New test comment')).toBeInTheDocument();
