@@ -100,7 +100,7 @@
   position: absolute;
   /* width and left are set inline by getEventStyle based on collision columns */
   background-color: var(--color-blue-100);
-  border-left: 3px solid var(--color-blue-500);
+  border-left: var(--border-3) solid var(--color-blue-500);
   border-radius: var(--radius-sm);
   overflow: hidden;
   pointer-events: auto;
