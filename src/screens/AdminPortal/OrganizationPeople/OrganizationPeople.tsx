@@ -5,6 +5,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams } from 'react-router';
@@ -83,7 +84,8 @@ function OrganizationPeople(): JSX.Element {
   const isUserPortal = location.pathname.startsWith('/user/');
 
   // Constants
-  const PAGE_SIZE = 10;
+  // Constants
+  // Imported PAGE_SIZE is already available
 
   // State
   const [state, setState] = useState(() => {
@@ -94,6 +96,11 @@ function OrganizationPeople(): JSX.Element {
     return isUserPortal && validRole === 2 ? 0 : validRole;
   });
   const [searchTerm, setSearchTerm] = useState('');
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setPage(1);
+    cursors.current = { 1: null };
+  };
 
   // Pagination State
   const [page, setPage] = useState(1);
@@ -157,7 +164,8 @@ function OrganizationPeople(): JSX.Element {
           name: edge.node.name,
           email: edge.node.emailAddress,
           image: edge.node.avatarURL,
-          createdAt: edge.node.createdAt || new Date().toISOString(),
+          // Use a fixed date fallback to prevent hydration mismatches and flickering
+          createdAt: edge.node.createdAt || '1970-01-01T00:00:00.000Z',
           rowNumber: (page - 1) * PAGE_SIZE + index + 1,
         }),
       );
@@ -166,45 +174,48 @@ function OrganizationPeople(): JSX.Element {
     }
   }, [data, page]);
 
-  // Reset pagination when tab or search changes
-  useEffect(() => {
-    setPage(1);
-    cursors.current = { 1: null };
-  }, [state, searchTerm, currentUrl]);
-
   // Fetch Data Effect
   useEffect(() => {
-    const variables: IQueryVariable = {
-      first: PAGE_SIZE,
-      after: cursors.current[page],
-      last: null,
-      before: null,
-      orgId: currentUrl,
-      where: undefined,
+    // Reset pagination when tab or search changes, then fetch new data
+    // This combined effect prevents double-fetching (once for reset, once for fetch)
+
+    // Helper to perform fetch based on current state variables
+    const performFetch = (
+      currentPage: number,
+      currentCursor: string | null,
+    ) => {
+      const variables: IQueryVariable = {
+        first: PAGE_SIZE,
+        after: currentCursor,
+        last: null,
+        before: null,
+        orgId: currentUrl,
+        where: undefined,
+      };
+
+      if (state === 0) {
+        // All members
+        if (searchTerm) {
+          variables.where = { name: searchTerm };
+        }
+        fetchMembers({ variables });
+      } else if (state === 1) {
+        // Administrators only
+        variables.where = { role: { equal: 'administrator' } };
+        if (searchTerm && variables.where) {
+          variables.where.name = searchTerm;
+        }
+        fetchMembers({ variables });
+      } else if (state === 2) {
+        // Users
+        if (searchTerm) {
+          variables.where = { name: searchTerm };
+        }
+        fetchUsers({ variables });
+      }
     };
 
-    if (state === 0) {
-      // All members
-      if (searchTerm) {
-        // Assuming API supports name filter. Using 'name' directly based on AddMember.tsx pattern.
-        // If it requires strict 'contains', this might need adjustment, but 'name' works in other screens.
-        variables.where = { name: searchTerm };
-      }
-      fetchMembers({ variables });
-    } else if (state === 1) {
-      // Administrators only
-      variables.where = { role: { equal: 'administrator' } };
-      if (searchTerm && variables.where) {
-        variables.where.name = searchTerm;
-      }
-      fetchMembers({ variables });
-    } else if (state === 2) {
-      // Users
-      if (searchTerm) {
-        variables.where = { name: searchTerm };
-      }
-      fetchUsers({ variables });
-    }
+    performFetch(page, cursors.current[page]);
   }, [state, currentUrl, fetchMembers, fetchUsers, page, searchTerm]);
 
   // Calculate totalItems for infinite pagination pattern
@@ -238,6 +249,8 @@ function OrganizationPeople(): JSX.Element {
 
   const handleSortChange = (value: string): void => {
     setState(OPTION_TO_STATE[value] ?? 0);
+    setPage(1);
+    cursors.current = { 1: null };
   };
 
   const handlePageChange = (newPage: number) => {
@@ -386,7 +399,7 @@ function OrganizationPeople(): JSX.Element {
           hasDropdowns={true}
           searchPlaceholder={t('searchFullName')}
           searchValue={searchTerm}
-          onSearchChange={(value) => setSearchTerm(value)}
+          onSearchChange={handleSearchChange}
           searchInputTestId="member-search-input"
           searchButtonTestId="searchBtn"
           containerClassName={styles.calendar__header}

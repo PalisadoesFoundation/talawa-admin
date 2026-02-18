@@ -97,6 +97,7 @@ describe('OrganizationPeople - User Portal Context', () => {
           after: null,
           last: null,
           before: null,
+          where: undefined,
         },
       },
       result: {
@@ -175,6 +176,14 @@ describe('OrganizationPeople - User Portal Context', () => {
       const sortDropdownToggle = screen.getByTestId('sort-toggle');
       // Open the dropdown
       await userEvent.click(sortDropdownToggle);
+
+      // Wait for dropdown to be visible
+      await waitFor(
+        () => {
+          expect(screen.getByRole('listbox')).toBeVisible();
+        },
+        { timeout: TEST_TIMEOUTS.FAST },
+      );
 
       expect(screen.queryByText('Users')).not.toBeInTheDocument();
     },

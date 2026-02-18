@@ -154,7 +154,7 @@ const createMemberConnectionMock = (
 describe('OrganizationPeople', () => {
   beforeEach(() => {
     vi.useFakeTimers({ toFake: ['Date'] });
-    vi.setSystemTime(dayjs().toDate());
+    vi.setSystemTime(FIXED_DATE.toDate());
 
     originalLocation = window.location;
     Object.defineProperty(window, 'location', {
@@ -174,8 +174,6 @@ describe('OrganizationPeople', () => {
     client = new ApolloClient({
       cache: new InMemoryCache({ addTypename: false }),
     });
-
-    vi.clearAllMocks();
   });
 
   afterEach(async () => {
@@ -251,10 +249,10 @@ describe('OrganizationPeople', () => {
     });
 
     vi.useFakeTimers({ toFake: ['Date'] });
-    await waitFor(() =>
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument(),
-    );
-    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    });
   });
 
   test('handles pagination correctly via server-side cursors', async () => {
