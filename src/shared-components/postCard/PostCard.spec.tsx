@@ -1,6 +1,12 @@
 import React from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  within,
+  cleanup,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -432,6 +438,7 @@ const mocks = [
 const link = new StaticMockLink(mocks, true);
 
 describe('PostCard', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   const fetchPostsMock = vi.fn();
 
   const defaultProps = {
@@ -528,28 +535,28 @@ describe('PostCard', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    user = userEvent.setup();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
   test('opens and closes edit modal', async () => {
     renderPostCard();
-
     const moreButton = screen.getByTestId('post-more-options-button');
-    await userEvent.click(moreButton);
+    await user.click(moreButton);
 
     const editButton = await screen.findByTestId('edit-post-menu-item');
-    await userEvent.click(editButton);
+    await user.click(editButton);
 
     expect(await screen.findByText('Edit Post')).toBeInTheDocument();
 
     const cancelButton = screen.getByRole('button', { name: 'close' });
-    await userEvent.click(cancelButton);
+    await user.click(cancelButton);
 
     // Just verify that the test completes without throwing errors
     // The modal closing behavior might vary depending on implementation
@@ -559,9 +566,9 @@ describe('PostCard', () => {
     renderPostCard();
 
     const moreButton = screen.getByTestId('post-more-options-button');
-    await userEvent.click(moreButton);
+    await user.click(moreButton);
     const deleteButton = await screen.findByTestId('delete-post-menu-item');
-    await userEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -594,7 +601,6 @@ describe('PostCard', () => {
     expect(screen.getByTestId('plugin-injector-g4')).toBeInTheDocument();
   });
   it('creates comment and clears input', async () => {
-    const user = userEvent.setup();
     renderPostCard();
     const input = screen.getByPlaceholderText(/add comment/i);
     await user.type(input, 'My comment');
@@ -607,7 +613,6 @@ describe('PostCard', () => {
   });
 
   it('renders CommentCard when comments exist', async () => {
-    const user = userEvent.setup();
     renderPostCard();
 
     await user.click(screen.getByText(/view/i));
@@ -616,7 +621,6 @@ describe('PostCard', () => {
   });
 
   it('handles like button click when post is not liked', async () => {
-    const user = userEvent.setup();
     renderPostCard({
       hasUserVoted: { hasVoted: false, voteType: null },
       upVoteCount: 0,
@@ -631,7 +635,6 @@ describe('PostCard', () => {
   });
 
   it('handles like button click when post is already liked', async () => {
-    const user = userEvent.setup();
     renderPostCard({
       hasUserVoted: { hasVoted: true, voteType: 'up_vote' as const },
       upVoteCount: 5,
@@ -646,7 +649,6 @@ describe('PostCard', () => {
   });
 
   it('shows error when like action fails', async () => {
-    const user = userEvent.setup();
     // Create a mock mutation function that rejects
     const mockLikePost = vi
       .fn()
@@ -686,7 +688,6 @@ describe('PostCard', () => {
   });
 
   it('handles comment creation error and calls errorHandler', async () => {
-    const user = userEvent.setup();
     // Create a mock mutation function that rejects for CREATE_COMMENT_POST
     const mockCreateComment = vi
       .fn()
@@ -714,7 +715,9 @@ describe('PostCard', () => {
       await user.type(commentInput, 'Test comment');
 
       // The send button should be enabled with input
-      expect(sendButton).not.toBeDisabled();
+      await waitFor(() => {
+        expect(sendButton).not.toBeDisabled();
+      });
 
       await user.click(sendButton);
 
@@ -734,7 +737,6 @@ describe('PostCard', () => {
   });
 
   it('shows comments section when showComments is toggled', async () => {
-    const user = userEvent.setup();
     renderPostCard();
 
     const viewCommentsButton = screen.getByTestId('comment-card');
@@ -750,7 +752,6 @@ describe('PostCard', () => {
   });
 
   it('closes dropdown menu when Menu onClose is triggered', async () => {
-    const user = userEvent.setup();
     renderPostCard();
 
     // Open dropdown menu
@@ -772,7 +773,6 @@ describe('PostCard', () => {
   });
 
   it('hides comments when clicking hide comments', async () => {
-    const user = userEvent.setup();
     renderPostCard();
 
     const viewCommentsButton = screen.getByText(/view/i);
@@ -795,7 +795,6 @@ describe('PostCard', () => {
   });
 
   it('handles edit post error', async () => {
-    const user = userEvent.setup();
     const linkWithEditError = new StaticMockLink(
       [editPostErrorMock, ...mocks],
       true,
@@ -840,12 +839,12 @@ describe('PostCard', () => {
       expect(saveButton).toBeInTheDocument(); // Just verify the button still exists
     });
 
-    // Ensure modal stays open after error to prevent UX regression
-    expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    });
   });
 
   it('handles delete post error', async () => {
-    const user = userEvent.setup();
     const linkWithDeleteError = new StaticMockLink(
       [deletePostErrorMock, ...mocks],
       true,
@@ -880,7 +879,7 @@ describe('PostCard', () => {
     // The dropdown should close after error - we can't assert modal state without additional setup
   });
 
-  it('disables comment send button when input is empty', () => {
+  it('disables comment send button when input is empty', async () => {
     renderPostCard();
 
     const sendButton = screen.getByTestId('comment-send');
@@ -888,7 +887,6 @@ describe('PostCard', () => {
   });
 
   it('enables comment send button when input has content', async () => {
-    const user = userEvent.setup();
     renderPostCard();
 
     const commentInput = screen.getByPlaceholderText(/add comment/i);
@@ -899,7 +897,6 @@ describe('PostCard', () => {
   });
 
   it('renders CursorPaginationManager when comments are shown', async () => {
-    const user = userEvent.setup();
     renderPostCard();
 
     // Show comments
@@ -915,7 +912,6 @@ describe('PostCard', () => {
   });
 
   it('should handle comment creation with showComments true', async () => {
-    const user = userEvent.setup();
     const mockFetchPosts = vi.fn();
 
     // Reuse helper to inject CREATE_COMMENT_POST mock alongside base mocks
@@ -950,7 +946,6 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted callback when data.post.comments is null', async () => {
-    const user = userEvent.setup();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
 
@@ -1024,7 +1019,6 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted when data is undefined', async () => {
-    const user = userEvent.setup();
     renderPostCardWithCustomMock(undefinedDataMock);
 
     // Show comments to trigger the query
@@ -1039,7 +1033,6 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted when data.post is undefined', async () => {
-    const user = userEvent.setup();
     renderPostCardWithCustomMock(undefinedPostMock);
 
     // Show comments to trigger the query
@@ -1054,7 +1047,6 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted when data.post.comments is undefined', async () => {
-    const user = userEvent.setup();
     renderPostCardWithCustomMock(undefinedCommentsMock);
 
     // Show comments to trigger the query
@@ -1093,7 +1085,7 @@ describe('PostCard', () => {
 
     // Open dropdown
     const dropdownButton = screen.getByTestId('post-more-options-button');
-    await userEvent.click(dropdownButton);
+    await user.click(dropdownButton);
 
     // Wait for menu to appear, then click pin option
     await waitFor(() => {
@@ -1101,7 +1093,7 @@ describe('PostCard', () => {
     });
 
     const pinButton = screen.getByTestId('pin-post-menu-item');
-    await userEvent.click(pinButton);
+    await user.click(pinButton);
 
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalled();
@@ -1144,7 +1136,7 @@ describe('PostCard', () => {
 
     // Open dropdown
     const dropdownButton = screen.getByTestId('post-more-options-button');
-    await userEvent.click(dropdownButton);
+    await user.click(dropdownButton);
 
     // Wait for menu to appear, then click unpin option (uses same test ID)
     await waitFor(() => {
@@ -1152,7 +1144,7 @@ describe('PostCard', () => {
     });
 
     const unpinButton = screen.getByTestId('pin-post-menu-item');
-    await userEvent.click(unpinButton);
+    await user.click(unpinButton);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -1189,7 +1181,7 @@ describe('PostCard', () => {
 
     // Open dropdown
     const dropdownButton = screen.getByTestId('post-more-options-button');
-    await userEvent.click(dropdownButton);
+    await user.click(dropdownButton);
 
     // Wait for menu to appear and check that dropdown is open
     await waitFor(() => {
@@ -1198,7 +1190,7 @@ describe('PostCard', () => {
 
     // Click pin option
     const pinButton = screen.getByTestId('pin-post-menu-item');
-    await userEvent.click(pinButton);
+    await user.click(pinButton);
 
     // Dropdown should close (pin button should no longer be visible)
     await waitFor(() => {
@@ -1317,7 +1309,6 @@ describe('PostCard', () => {
   });
 
   it('should handle different user roles correctly', async () => {
-    const user = userEvent.setup();
     const { setItem } = useLocalStorage();
 
     // Test as regular user (not admin, not post creator)
@@ -1329,12 +1320,18 @@ describe('PostCard', () => {
     const moreButton = screen.getByTestId('post-more-options-button');
     await user.click(moreButton);
 
-    // Regular user should not see edit or delete options for other users' posts
-    expect(screen.queryByTestId('edit-post-menu-item')).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId('delete-post-menu-item'),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByTestId('pin-post-menu-item')).not.toBeInTheDocument();
+    await waitFor(() => {
+      // Regular user should not see edit or delete options for other users' posts
+      expect(
+        screen.queryByTestId('edit-post-menu-item'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('delete-post-menu-item'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('pin-post-menu-item'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it('should handle keyboard navigation for accessibility', async () => {
@@ -1343,7 +1340,7 @@ describe('PostCard', () => {
     const moreButton = screen.getByTestId('post-more-options-button');
 
     // Open dropdown with click
-    await userEvent.click(moreButton);
+    await user.click(moreButton);
 
     // Wait for menu to open and find the edit menu item
     const editMenuItem = await screen.findByTestId('edit-post-menu-item');
@@ -1376,7 +1373,6 @@ describe('PostCard', () => {
   });
 
   it('should handle large comment lists efficiently', async () => {
-    const user = userEvent.setup();
     // Create mock with many comments
     const manyCommentsMock = {
       request: {
@@ -1442,8 +1438,10 @@ describe('PostCard', () => {
     });
 
     // Should render multiple comments
-    expect(screen.getByText('Comment 0')).toBeInTheDocument();
-    expect(screen.getByText('Comment 9')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Comment 0')).toBeInTheDocument();
+      expect(screen.getByText('Comment 9')).toBeInTheDocument();
+    });
   });
 
   it('should handle rapid state changes gracefully', async () => {
@@ -1573,7 +1571,7 @@ describe('PostCard', () => {
 
     renderPostCard();
 
-    await userEvent.click(screen.getByTestId('post-more-options-button'));
+    await user.click(screen.getByTestId('post-more-options-button'));
 
     expect(
       await screen.findByTestId('edit-post-menu-item'),
@@ -1581,7 +1579,6 @@ describe('PostCard', () => {
   });
 
   it('should display empty state message when there are no comments', async () => {
-    const user = userEvent.setup();
     // Create a mock with empty comments edges
     const emptyCommentsMock = {
       request: {
@@ -1622,7 +1619,6 @@ describe('PostCard', () => {
   });
 
   it('should refetch comments when refetchTrigger is incremented', async () => {
-    const user = userEvent.setup();
     const refetchCommentsMock = {
       request: {
         query: GET_POST_COMMENTS,
@@ -1746,12 +1742,15 @@ describe('PostCard', () => {
   });
 
   describe('Share functionality', () => {
+    let user: ReturnType<typeof userEvent.setup>;
     let originalClipboard: typeof navigator.clipboard;
     let originalLocation: Location;
     beforeEach(() => {
+      user = userEvent.setup();
       originalClipboard = navigator.clipboard;
       originalLocation = window.location;
       // Mock the clipboard API
+
       Object.defineProperty(navigator, 'clipboard', {
         value: {
           writeText: vi.fn().mockResolvedValue(undefined),
@@ -1777,7 +1776,8 @@ describe('PostCard', () => {
         value: originalLocation,
         writable: true,
       });
-      vi.clearAllMocks();
+      cleanup();
+      // vi.restoreAllMocks();
     });
 
     test('opens share menu item and copies link to clipboard', async () => {
@@ -1785,13 +1785,13 @@ describe('PostCard', () => {
 
       // Open the more options menu
       const moreButton = screen.getByTestId('post-more-options-button');
-      await userEvent.click(moreButton);
+      await user.click(moreButton);
 
       // Find and click the share menu item
       const shareMenuItem = await screen.findByTestId('share-post-menu-item');
       expect(shareMenuItem).toBeInTheDocument();
 
-      await userEvent.click(shareMenuItem);
+      await user.click(shareMenuItem);
 
       // Verify clipboard.writeText was called with the correct URL
       await waitFor(() => {
@@ -1801,16 +1801,18 @@ describe('PostCard', () => {
       });
 
       // Verify success notification
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        'Link copied to clipboard',
-      );
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Link copied to clipboard',
+        );
+      });
     });
 
     test('share button displays correct icon and text', async () => {
       renderPostCard();
 
       const moreButton = screen.getByTestId('post-more-options-button');
-      await userEvent.click(moreButton);
+      await user.click(moreButton);
 
       const shareMenuItem = await screen.findByTestId('share-post-menu-item');
       const shareButton =
@@ -1824,10 +1826,10 @@ describe('PostCard', () => {
       renderPostCard();
 
       const moreButton = screen.getByTestId('post-more-options-button');
-      await userEvent.click(moreButton);
+      await user.click(moreButton);
 
       const shareMenuItem = await screen.findByTestId('share-post-menu-item');
-      await userEvent.click(shareMenuItem);
+      await user.click(shareMenuItem);
 
       // Verify menu closes after sharing
       await waitFor(() => {
@@ -1849,10 +1851,10 @@ describe('PostCard', () => {
       renderPostCard();
 
       const moreButton = screen.getByTestId('post-more-options-button');
-      await userEvent.click(moreButton);
+      await user.click(moreButton);
 
       const shareMenuItem = await screen.findByTestId('share-post-menu-item');
-      await userEvent.click(shareMenuItem);
+      await user.click(shareMenuItem);
 
       // Verify error notification is shown
       await waitFor(() => {
