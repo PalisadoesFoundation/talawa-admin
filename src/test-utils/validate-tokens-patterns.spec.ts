@@ -499,6 +499,54 @@ describe('TSX_PATTERNS', () => {
       ]);
     });
   });
+
+  describe('dataGridVarWidth', () => {
+    test('matches width with var() single quotes', () => {
+      expect(
+        "width: 'var(--space-15)'".match(TSX_PATTERNS.dataGridVarWidth),
+      ).toEqual(["width: 'var(--space-15)'"]);
+    });
+
+    test('matches minWidth with var() double quotes', () => {
+      expect(
+        'minWidth: "var(--vw-8)"'.match(TSX_PATTERNS.dataGridVarWidth),
+      ).toEqual(['minWidth: "var(--vw-8)"']);
+    });
+
+    test('matches maxWidth with var()', () => {
+      expect(
+        "maxWidth: 'var(--max-col-width)'".match(TSX_PATTERNS.dataGridVarWidth),
+      ).toEqual(["maxWidth: 'var(--max-col-width)'"]);
+    });
+
+    test('matches minWidth with var(--vw-80) pattern', () => {
+      expect(
+        "minWidth: 'var(--vw-80)'".match(TSX_PATTERNS.dataGridVarWidth),
+      ).toEqual(["minWidth: 'var(--vw-80)'"]);
+    });
+
+    test('does not match width with spacing token (no var())', () => {
+      expect(
+        "width: 'space-15'".match(TSX_PATTERNS.dataGridVarWidth),
+      ).toBeNull();
+    });
+
+    test('does not match width with numeric value', () => {
+      expect('width: 150'.match(TSX_PATTERNS.dataGridVarWidth)).toBeNull();
+    });
+
+    test('does not match height with var()', () => {
+      expect(
+        "height: 'var(--space-15)'".match(TSX_PATTERNS.dataGridVarWidth),
+      ).toBeNull();
+    });
+
+    test('does not match width without quotes around var()', () => {
+      expect(
+        'width: var(--space-15)'.match(TSX_PATTERNS.dataGridVarWidth),
+      ).toBeNull();
+    });
+  });
 });
 
 describe('ALLOWLIST_PATTERNS', () => {
