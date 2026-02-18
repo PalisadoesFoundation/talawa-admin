@@ -1,6 +1,6 @@
 import { BasePage } from '../base/BasePage';
 
-type CreateOrganizationInput = {
+export type CreateOrganizationInput = {
   name: string;
   description: string;
   countryCode: string;
@@ -33,7 +33,7 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   private readonly organizationSearchButton = 'searchBtn';
   private readonly organizationCardContainer = '[data-cy="orgCardContainer"]';
   private readonly organizationManageButton = '[data-cy="manageBtn"]';
-  private readonly pageNotFoundSelector = 'h1';
+  private readonly pageNotFoundHeading = 'page-not-found-heading';
 
   protected self(): OrganizationSetupPage {
     return this;
@@ -105,17 +105,16 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   }
 
   closePluginNotificationIfOpen(timeout = 15000): this {
-    cy.get('body', { timeout }).then(($body) => {
-      const hasModal =
-        $body.find(`[data-testid="${this.pluginNotificationModal}"]`).length >
-        0;
-      if (!hasModal) {
-        return;
-      }
-      this.byTestId(this.closePluginNotificationButton, timeout)
-        .should('be.visible')
-        .click();
-    });
+    cy.get(`[data-testid="${this.pluginNotificationModal}"]`, { timeout }).then(
+      ($modal) => {
+        if ($modal.length === 0) {
+          return;
+        }
+        this.byTestId(this.closePluginNotificationButton, timeout)
+          .should('be.visible')
+          .click();
+      },
+    );
     return this;
   }
 
@@ -151,7 +150,7 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   }
 
   assertPageNotFound(timeout = 10000): this {
-    cy.get(this.pageNotFoundSelector, { timeout })
+    this.byTestId(this.pageNotFoundHeading, timeout)
       .should('be.visible')
       .and('contain.text', '404');
     return this;

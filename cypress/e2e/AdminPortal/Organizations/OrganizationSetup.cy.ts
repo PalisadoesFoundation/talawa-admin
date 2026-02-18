@@ -1,6 +1,9 @@
 import { MemberManagementPage } from '../../../pageObjects/AdminPortal/MemberManagementPage';
 import { OrganizationSettingsPage } from '../../../pageObjects/AdminPortal/OrganizationSettingsPage';
-import { OrganizationSetupPage } from '../../../pageObjects/AdminPortal/OrganizationSetupPage';
+import {
+  OrganizationSetupPage,
+  type CreateOrganizationInput,
+} from '../../../pageObjects/AdminPortal/OrganizationSetupPage';
 
 const clearTestState = () => {
   cy.clearAllGraphQLMocks();
@@ -36,6 +39,15 @@ describe('Organization setup workflow', () => {
     const updatedDescription = 'Updated from Cypress organization setup flow';
     const updatedLocation = 'Updated Cypress Street';
     const inviteeName = `E2E Invitee ${uniqueSuffix}`;
+    const createOrganizationInput: CreateOrganizationInput = {
+      name: orgName,
+      description: 'Created from Cypress organization setup flow',
+      countryCode: 'us',
+      state: 'California',
+      city: 'San Francisco',
+      addressLine1: '123 Cypress Ave',
+      postalCode: '94105',
+    };
 
     cy.mockGraphQLOperation('OrganizationFilterList', (req) => {
       req.continue();
@@ -48,19 +60,10 @@ describe('Organization setup workflow', () => {
     });
 
     setupPage.visitOrgList();
-    cy.waitForGraphQLOperation('OrganizationFilterList');
 
     setupPage
       .openCreateOrganizationModal()
-      .fillCreateOrganizationForm({
-        name: orgName,
-        description: 'Created from Cypress organization setup flow',
-        countryCode: 'us',
-        state: 'California',
-        city: 'San Francisco',
-        addressLine1: '123 Cypress Ave',
-        postalCode: '94105',
-      })
+      .fillCreateOrganizationForm(createOrganizationInput)
       .submitCreateOrganizationForm();
 
     cy.waitForGraphQLOperation('createOrganization').then((interception) => {
@@ -73,8 +76,6 @@ describe('Organization setup workflow', () => {
     cy.waitForGraphQLOperation('CreateOrganizationMembership')
       .its('response.statusCode')
       .should('eq', 200);
-
-    cy.waitForGraphQLOperation('OrganizationFilterList');
 
     setupPage
       .closePluginNotificationIfOpen()
@@ -148,6 +149,15 @@ describe('Organization setup workflow', () => {
 
   it('shows an error for duplicate organization names', () => {
     const duplicateOrgName = `E2E Duplicate Org ${Date.now()}`;
+    const duplicateOrganizationInput: CreateOrganizationInput = {
+      name: duplicateOrgName,
+      description: 'Conflict path validation',
+      countryCode: 'us',
+      state: 'California',
+      city: 'San Francisco',
+      addressLine1: '123 Conflict Ave',
+      postalCode: '94105',
+    };
 
     cy.mockGraphQLOperation('OrganizationFilterList', (req) => {
       req.continue();
@@ -158,19 +168,10 @@ describe('Organization setup workflow', () => {
     );
 
     setupPage.visitOrgList();
-    cy.waitForGraphQLOperation('OrganizationFilterList');
 
     setupPage
       .openCreateOrganizationModal()
-      .fillCreateOrganizationForm({
-        name: duplicateOrgName,
-        description: 'Conflict path validation',
-        countryCode: 'us',
-        state: 'California',
-        city: 'San Francisco',
-        addressLine1: '123 Conflict Ave',
-        postalCode: '94105',
-      })
+      .fillCreateOrganizationForm(duplicateOrganizationInput)
       .submitCreateOrganizationForm();
 
     cy.waitForGraphQLOperation('createOrganization')
@@ -242,13 +243,11 @@ describe('Organization switching workflow', () => {
 
   it('switches between organizations from the org list', () => {
     setupPage.visitOrgList();
-    cy.waitForGraphQLOperation('OrganizationFilterList');
 
     setupPage.openOrganizationDashboardByName(firstOrgName);
     cy.url().should('include', `/admin/orgdash/${firstOrgId}`);
 
     setupPage.visitOrgList();
-    cy.waitForGraphQLOperation('OrganizationFilterList');
 
     setupPage.openOrganizationDashboardByName(secondOrgName);
     cy.url().should('include', `/admin/orgdash/${secondOrgId}`);
