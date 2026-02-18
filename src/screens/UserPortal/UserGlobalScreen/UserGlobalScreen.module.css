@@ -1,7 +1,7 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: var(--layout-vh-100);
   padding: var(--space-5) var(--space-7) 0 var(--space-22);
 }
 
@@ -55,7 +55,7 @@
   top: 0;
   left: 0;
   width: var(--space-7);
-  height: 100vh;
+  height: var(--layout-vh-100);
   z-index: 9999;
   background-color: var(--color-gray-50);
   border: none;
@@ -181,7 +181,7 @@
 .profileImage {
   width: var(--space-9);
   height: var(--space-9);
-  border-radius: 50%;
+  border-radius: var(--border-radius-circle);
   object-fit: cover;
   border: var(--border-2) solid var(--color-gray-100);
 }

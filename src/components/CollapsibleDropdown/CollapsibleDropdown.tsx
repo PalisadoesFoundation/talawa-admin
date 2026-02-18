@@ -39,12 +39,13 @@
  */
 import React, { useEffect } from 'react';
 import { Collapse } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import Button from 'shared-components/Button';
 
 const CollapsibleDropdown = ({
   target,
@@ -72,7 +73,7 @@ const CollapsibleDropdown = ({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <button
+      <Button
         className={
           showDropdown
             ? styles.leftDrawerActiveButton
@@ -95,7 +96,7 @@ const CollapsibleDropdown = ({
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />
-      </button>
+      </Button>
       <Collapse in={showDropdown}>
         <div className="ps-4">
           {subTargets &&
@@ -103,7 +104,7 @@ const CollapsibleDropdown = ({
               return (
                 <NavLink to={url} key={name}>
                   {({ isActive }) => (
-                    <button
+                    <Button
                       key={name}
                       className={
                         isActive
@@ -126,7 +127,7 @@ const CollapsibleDropdown = ({
                           }`}
                         />
                       </div>
-                    </button>
+                    </Button>
                   )}
                 </NavLink>
               );

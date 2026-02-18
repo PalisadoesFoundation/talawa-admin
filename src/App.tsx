@@ -145,12 +145,8 @@ function App(): React.ReactElement {
 
   // Get user permissions and admin status (memoized to prevent infinite loops)
   const userPermissions = useMemo(() => {
-    return (
-      data?.currentUser?.appUserProfile?.adminFor?.map(
-        (org: { _id: string }) => org._id,
-      ) || []
-    );
-  }, [data?.currentUser?.appUserProfile?.adminFor]);
+    return data?.user?.role === 'administrator' ? ['admin'] : [];
+  }, [data?.user?.role]);
 
   // Get plugin routes
   const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
@@ -179,12 +175,13 @@ function App(): React.ReactElement {
   }, [apolloClient]);
 
   useEffect(() => {
-    if (!loading && data?.currentUser) {
-      const auth = data.currentUser;
+    if (!loading && data?.user) {
+      const auth = data.user;
       setItem('IsLoggedIn', 'TRUE');
       setItem('id', auth.id);
       setItem('name', auth.name);
       setItem('email', auth.emailAddress);
+      setItem('role', auth.role);
       // setItem('UserImage', auth.avatarURL|| "");
     }
   }, [data, loading, setItem]);

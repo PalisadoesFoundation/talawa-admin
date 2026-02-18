@@ -1,21 +1,53 @@
 .dataTableWrapper {
-  composes: dataTableWrapper from '../../style/app-fixed.module.css';
+  composes: dataTableWrapper from './DataTableShared.module.css';
 }
+
 .dataTableBase {
-  composes: dataTableBase from '../../style/app-fixed.module.css';
+  font-size: var(--font-size-15);
 }
+
 .toolbar {
-  composes: toolbar from '../../style/app-fixed.module.css';
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: var(--space-3) 0 var(--space-4);
 }
+
 .dataErrorState {
-  composes: dataErrorState from '../../style/app-fixed.module.css';
+  padding: var(--space-5);
+  text-align: left;
+  color: var(--color-red-500);
+  background: var(--color-red-100);
+  border: var(--border-1) solid var(--color-red-500);
+  border-radius: var(--radius-md);
 }
+
 .dataErrorDetails {
-  composes: dataErrorDetails from '../../style/app-fixed.module.css';
+  margin-top: var(--space-2);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-red-500);
 }
+
 .dataEmptyState {
-  composes: dataEmptyState from '../../style/app-fixed.module.css';
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--color-gray-900);
+  border: var(--border-1) solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+  background: var(--color-gray-50);
 }
+
 .bulkBtn {
-  composes: bulkBtn from '../../style/app-fixed.module.css';
+  composes: bulkBtn from './DataTableShared.module.css';
+}
+
+.actionsCellContainer {
+  display: inline-flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.actionBtn {
+  composes: bulkBtn from './DataTableShared.module.css';
 }

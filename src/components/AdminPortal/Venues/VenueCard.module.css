@@ -1,0 +1,43 @@
+.venueimage {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+}
+
+.title {
+  font-size: var(--space-5);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: var(--space-1);
+}
+
+.capacityLabel {
+  background-color: var(--capacityLabel-bg);
+  color: var(--capacityLabel-color);
+  height: var(--space-6);
+  font-size: var(--space-4);
+  font-weight: bolder;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--space-3);
+  position: relative;
+  overflow: hidden;
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.removeButton {
+  margin-bottom: var(--space-4);
+  margin-right: var(--space-4);
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  --bs-btn-border-color: var(--removeButton-border);
+}

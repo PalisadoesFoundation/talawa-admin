@@ -286,7 +286,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       className={styles.userContactDetailContactAvatarUrl}
                       enableEnlarge={true}
                     />
-                    <button
+                    <Button
                       type="button"
                       className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${styles.userContactDetailContactAvatarEditIcon}`}
                       onClick={() => fileInputRef.current?.click()}

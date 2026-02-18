@@ -11,7 +11,6 @@
  * Dependencies:
  * - `EventCalendar`: Displays events in a calendar view.
  * - `EventHeader`: Provides controls for calendar view and event creation.
- * - `DateRangePicker`: Used for selecting arbitrary event date ranges.
  * - `EventForm`: Form component for event creation with validation.
  *
  * State:
@@ -79,9 +78,6 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
-
-import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
 dayjs.extend(utc);
 
 export function computeCalendarFromStartDate(
@@ -111,61 +107,6 @@ export default function Events(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-
-  // Define date presets using translations (inside component to access t)
-  const datePresets: IDateRangePreset[] = React.useMemo(
-    () => [
-      {
-        key: 'today',
-        label: t('presetToday'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'thisWeek',
-        label: t('presetThisWeek'),
-        getRange: () => ({
-          startDate: dayjs().startOf('week').toDate(),
-          endDate: dayjs().endOf('week').toDate(),
-        }),
-      },
-      {
-        key: 'thisMonth',
-        label: t('presetThisMonth'),
-        getRange: () => ({
-          startDate: dayjs().startOf('month').toDate(),
-          endDate: dayjs().endOf('month').toDate(),
-        }),
-      },
-      {
-        key: 'next7Days',
-        label: t('presetNext7Days'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().add(7, 'days').endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'next30Days',
-        label: t('presetNext30Days'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().add(30, 'days').endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'nextMonth',
-        label: t('presetNextMonth'),
-        getRange: () => ({
-          startDate: dayjs().add(1, 'month').startOf('month').toDate(),
-          endDate: dayjs().add(1, 'month').endOf('month').toDate(),
-        }),
-      },
-    ],
-    [t],
-  );
 
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
   const createEventModal = useModalState();
@@ -219,7 +160,6 @@ export default function Events(): JSX.Element {
     errorPolicy: 'all',
   });
 
-  // Get user details from local storage
   // Get user details from local storage
   const userId = (getItem('userId') || getItem('id') || '') as string;
 
@@ -381,7 +321,6 @@ export default function Events(): JSX.Element {
 
   return (
     <>
-      {/* <div className={`d-flex flex-row`}> */}
       <div className={styles.mainpageright}>
         <div className={`${styles.justifyspOrganizationEvents}`}>
           <EventHeader
@@ -392,15 +331,6 @@ export default function Events(): JSX.Element {
         </div>
       </div>
 
-      <DateRangePicker
-        value={dateRange}
-        onChange={setDateRange}
-        dataTestId="events-date-range"
-        showPresets
-        presets={datePresets}
-      />
-
-      {/* <div className="mt-4"> */}
       <EventCalendar
         viewType={viewType}
         eventData={events}
@@ -421,7 +351,7 @@ export default function Events(): JSX.Element {
         currentMonth={calendarMonth}
         currentYear={calendarYear}
       />
-      {/* </div> */}
+
       <CRUDModalTemplate
         open={createEventModal.isOpen}
         onClose={closeCreateEventModal}
@@ -443,8 +373,6 @@ export default function Events(): JSX.Element {
           showRecurrenceToggle
         />
       </CRUDModalTemplate>
-
-      {/* </div> */}
     </>
   );
 }

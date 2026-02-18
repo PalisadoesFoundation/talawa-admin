@@ -31,7 +31,7 @@
  * ```
  *
  */
-import EventListCard from 'components/EventListCard/EventListCard';
+import EventListCard from 'shared-components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'shared-components/Button';
 import React, { useState, useEffect, type JSX } from 'react';
@@ -56,25 +56,37 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
+  const { t: tRoot } = useTranslation('translation');
+  const { t: tYearlyCalendar } = useTranslation('translation', {
+    keyPrefix: 'yearlyCalendar',
+  });
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expandedY, setExpandedY] = useState<string | null>(null);
 
-  const weekdaysShorthand = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const weekdaysShorthand = [
+    tYearlyCalendar('weekdaysShorthand.mon'),
+    tYearlyCalendar('weekdaysShorthand.tue'),
+    tYearlyCalendar('weekdaysShorthand.wed'),
+    tYearlyCalendar('weekdaysShorthand.thu'),
+    tYearlyCalendar('weekdaysShorthand.fri'),
+    tYearlyCalendar('weekdaysShorthand.sat'),
+    tYearlyCalendar('weekdaysShorthand.sun'),
+  ];
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    tRoot('eventListCard.january'),
+    tRoot('eventListCard.february'),
+    tRoot('eventListCard.march'),
+    tRoot('eventListCard.april'),
+    tRoot('eventListCard.may'),
+    tRoot('eventListCard.june'),
+    tRoot('eventListCard.july'),
+    tRoot('eventListCard.august'),
+    tRoot('eventListCard.september'),
+    tRoot('eventListCard.october'),
+    tRoot('eventListCard.november'),
+    tRoot('eventListCard.december'),
   ];
 
   /**
@@ -230,38 +242,56 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                 {expandedY === expandKey && renderedEvents}
               </div>
               {eventsForDate.length > 0 ? (
-                <button
+                <Button
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`expand-btn-${expandKey}`}
+                  aria-label={
+                    expandedY === expandKey
+                      ? tCommon('close')
+                      : tYearlyCalendar('expandDay')
+                  }
                 >
                   {expandedY === expandKey ? (
                     <div className={styles.closebtnYearlyEventCalender}>
-                      <br />
+                      <div
+                        className={styles.closebtnYearlyEventCalenderTopSpacing}
+                      ></div>
                       <p>{tCommon('close')}</p>
                     </div>
                   ) : (
                     <div className={styles.circularButton}></div>
                   )}
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`no-events-btn-${expandKey}`}
+                  aria-label={
+                    expandedY === expandKey
+                      ? tCommon('close')
+                      : tYearlyCalendar('expandDay')
+                  }
                 >
                   {expandedY === expandKey ? (
                     <div className={styles.closebtnYearlyEventCalender}>
-                      <br />
-                      <br />
-                      {t('noEventAvailable')}
-                      <br />
+                      <div
+                        className={styles.closebtnYearlyEventCalenderTopSpacing}
+                      ></div>
+                      <div
+                        className={
+                          styles.closebtnYearlyEventCalenderBottomSpacing
+                        }
+                      >
+                        {t('noEventAvailable')}
+                      </div>
                       <p>{tCommon('close')}</p>
                     </div>
                   ) : (
                     <div className={styles.circularButton}></div>
                   )}
-                </button>
+                </Button>
               )}
             </div>
           </div>
@@ -274,9 +304,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <h6 className={styles.cardHeaderYearlyEventCalender}>
               {months[monthIdx]}
             </h6>
-            <div className={styles.calendar__weekdays}>
+            <div
+              className={styles.weekdayHeaderRow}
+              data-testid="weekday-header-row"
+            >
               {weekdaysShorthand.map((weekday, idx) => (
-                <div key={idx} className={styles.weekday__yearly}>
+                <div
+                  key={idx}
+                  className={styles.weekdayHeaderCell}
+                  data-testid="weekday-header-cell"
+                >
                   {weekday}
                 </div>
               ))}
@@ -303,7 +340,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             variant="outlined"
             className={styles.buttonEventCalendar}
             onClick={handlePrevYear}
-            data-testid="prevYear"
+            aria-label={tCommon('previousYear')}
           >
             <ChevronLeft />
           </Button>
@@ -313,6 +350,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             className={styles.buttonEventCalendar}
             onClick={handleNextYear}
             data-testid="nextYear"
+            aria-label={tCommon('nextYear')}
           >
             <ChevronRight />
           </Button>
