@@ -101,7 +101,7 @@
   padding: var(--space-6);
   border: var(--border-1) solid var(--color-gray-100);
   border-radius: var(--space-4);
-  transition: box-shadow var(--transition-fast) ease;
+  transition: box-shadow 0.2s ease;
 }
 
 .heading {
