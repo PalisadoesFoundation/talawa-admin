@@ -223,6 +223,13 @@ describe('AcceptInvitation', () => {
     });
   });
 
+  const FIXED_BASE_DATE = dayjs
+    .utc()
+    .startOf('year')
+    .add(165, 'days')
+    .hour(10)
+    .toISOString();
+
   it('should show invitation details for unauthenticated user', async () => {
     const mocks = [
       {
@@ -236,7 +243,10 @@ describe('AcceptInvitation', () => {
               invitationToken: 'test-token',
               eventId: 'event-1',
               organizationId: 'org-1',
-              expiresAt: dayjs().add(1, 'month').toISOString(),
+              expiresAt: dayjs
+                .utc(FIXED_BASE_DATE)
+                .add(1, 'month')
+                .toISOString(),
             },
           },
         },
@@ -285,7 +295,8 @@ describe('AcceptInvitation', () => {
 
   // NEW: Test for displaying all invitation metadata fields
   it('should display all invitation metadata fields correctly', async () => {
-    const expiryDate = dayjs().add(2, 'years').toISOString();
+    const expiryDate = dayjs.utc(FIXED_BASE_DATE).add(2, 'years').toISOString();
+
     const mocks = [
       {
         request: {
@@ -312,9 +323,7 @@ describe('AcceptInvitation', () => {
       expect(screen.getByText('event-1')).toBeInTheDocument();
       expect(
         screen.getByText((content, element) => {
-          return (
-            element?.tagName === 'DD' && /\d{1,2}\/\d{1,2}\/\d{4}/.test(content)
-          );
+          return element?.tagName === 'DD' && content.includes('2028');
         }),
       ).toBeInTheDocument();
     });
@@ -401,6 +410,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -408,7 +424,10 @@ describe('AcceptInvitation', () => {
     ];
     renderComponent(mocks, '/invitation/test-token');
     await waitFor(() => {
-      expect(screen.getByText('Log in')).toBeInTheDocument();
+      const loginButton = screen.getByText('Log in');
+      expect(loginButton).toBeInTheDocument();
+      expect(loginButton).toBeEnabled();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
     await user.click(screen.getByText('Log in'));
     await waitFor(() => {
