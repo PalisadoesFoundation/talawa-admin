@@ -1,5 +1,5 @@
 import { errorHandler } from './errorHandler';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { cleanup } from '@testing-library/react';
 
@@ -24,10 +24,6 @@ vi.mock('utils/i18n', () => ({
 }));
 
 describe('Test if errorHandler is working properly', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
@@ -99,18 +95,18 @@ describe('Test if errorHandler is working properly', () => {
 
   it('should handle error messages with different cases', () => {
     errorHandler(null, new Error('VALUE IS NOT A VALID PHONE NUMBER'));
-    expect(NotificationToast.error).toHaveBeenCalledWith({
+
+    expect(NotificationToast.error).toHaveBeenNthCalledWith(1, {
       key: 'invalidPhoneNumber',
       namespace: 'errors',
     });
-
-    vi.clearAllMocks();
 
     errorHandler(
       null,
       new Error('This Value Does Not Exist in "EducationGrade"'),
     );
-    expect(NotificationToast.error).toHaveBeenCalledWith({
+
+    expect(NotificationToast.error).toHaveBeenNthCalledWith(2, {
       key: 'invalidEducationGrade',
       namespace: 'errors',
     });
@@ -135,7 +131,8 @@ describe('Test if errorHandler is working properly', () => {
 
   it('should handle non-null but non-Error objects for the error parameter', () => {
     errorHandler(null, { message: 'Error message in object' });
-    expect(NotificationToast.error).toHaveBeenCalledWith({
+
+    expect(NotificationToast.error).toHaveBeenNthCalledWith(1, {
       key: 'unknownError',
       namespace: 'errors',
       values: {
@@ -143,10 +140,9 @@ describe('Test if errorHandler is working properly', () => {
       },
     });
 
-    vi.clearAllMocks();
-
     errorHandler(null, 'Direct error message');
-    expect(NotificationToast.error).toHaveBeenCalledWith({
+
+    expect(NotificationToast.error).toHaveBeenNthCalledWith(2, {
       key: 'unknownError',
       namespace: 'errors',
       values: {

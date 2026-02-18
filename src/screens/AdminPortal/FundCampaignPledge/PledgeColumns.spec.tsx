@@ -61,7 +61,7 @@ describe('getPledgeColumns', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should return 5 column definitions', () => {

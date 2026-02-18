@@ -14,6 +14,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     warning: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
@@ -77,19 +78,20 @@ const MOCKS = [
     },
   },
 ];
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+  vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
+  vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
+});
+
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
+
 describe('useSession Hook', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
-    vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
-  });
-
-  afterEach(() => {
-    cleanup();
-    vi.useRealTimers();
-    vi.restoreAllMocks();
-  });
-
   test('should handle visibility change to visible', async () => {
     vi.useFakeTimers();
 
@@ -567,6 +569,7 @@ test('should properly clean up on unmount', () => {
   );
 
   documentRemoveEventListener.mockRestore();
+  windowRemoveEventListener.mockRestore();
 });
 test('should handle missing community data', async () => {
   vi.useFakeTimers();
@@ -627,7 +630,11 @@ test('should handle missing community data', async () => {
 });
 
 test('should handle event listener errors gracefully', async () => {
-  const consoleErrorSpy = vi.spyOn(global, 'setTimeout');
+  // This test only verifies that startSession() propagates an error when addEventListener throws.
+  // Remove the unrelated setTimeout spy; the catch block assertion below is sufficient.
+  const consoleErrorSpy = vi
+    .spyOn(console, 'error')
+    .mockImplementation(() => {});
   const mockError = new Error('Event listener error');
 
   // Mock addEventListener to throw an error

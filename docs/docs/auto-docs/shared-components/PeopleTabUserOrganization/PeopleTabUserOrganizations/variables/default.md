@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfacePeopleTabUserOrganizationProps`](../../../../types/PeopleTab/interface/interfaces/InterfacePeopleTabUserOrganizationProps.md)\>
 
-Defined in: [src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.tsx#L44)
+Defined in: [src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.tsx#L45)

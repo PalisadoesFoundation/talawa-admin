@@ -1,5 +1,5 @@
 import React from 'react';
-import type { IPaginationControlsProps } from '../../types/shared-components/DataTable/interface';
+import type { IPaginationControlsProps } from 'types/shared-components/DataTable/interface';
 import styles from './Pagination.module.css';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';

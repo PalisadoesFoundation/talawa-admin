@@ -7,8 +7,7 @@
   background-color: var(--color-white);
   width: 100%;
   height: var(--space-18);
-  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
-    rgba(0, 0, 0, 0.05);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg) var(--color-black);
   align-items: center;
   justify-content: center;
 }
@@ -26,8 +25,8 @@
   background-color: var(--color-gray-100);
   border: var(--border-2) solid var(--color-gray-100);
   box-shadow:
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) rgba(0, 0, 0, 0.12),
-    0 var(--shadow-offset-sm) var(--shadow-blur-md) rgba(0, 0, 0, 0.08);
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black),
+    0 var(--shadow-offset-sm) var(--shadow-blur-md) var(--color-black);
 }
 
 .peopleTabUserOrganizationsCardText {
@@ -82,5 +81,5 @@
 }
 
 .peopleTabUserOrganizationsEditButton:hover {
-  background-color: var(--color-blue-300);
+  background-color: var(--color-blue-500);
 }

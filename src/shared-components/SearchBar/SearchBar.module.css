@@ -68,7 +68,7 @@
   padding: 0;
   padding-left: var(--space-12) !important;
   font-size: var(--font-size-15);
-  color: rgb(30, 41, 59);
+  color: var(--color-gray-900);
   outline: none;
   width: 100%;
   height: 100%;
@@ -91,7 +91,7 @@
 .searchBarInputSm {
   padding-top: var(--space-2);
   padding-bottom: var(--space-2);
-  font-size: 0.85rem;
+  font-size: var(--font-size-sm);
 }
 
 .searchBarInputLg {
@@ -121,7 +121,7 @@
   top: var(--space-0);
   bottom: var(--space-0);
   background-color: var(--color-blue-200);
-  color: #2f3f5f;
+  color: var(--color-blue-800);
   display: inline-flex;
   align-items: center;
   justify-content: center;

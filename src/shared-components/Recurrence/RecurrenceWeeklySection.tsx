@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Frequency,
-  Days,
-  daysOptions,
-  WeekDays,
-} from '../../utils/recurrenceUtils';
+import { Frequency, Days, daysOptions, WeekDays } from 'utils/recurrenceUtils';
 import styles from './RecurrenceWeeklySection.module.css';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
@@ -61,6 +56,7 @@ export const RecurrenceWeeklySection: React.FC<
             data-cy={`recurrenceWeekDay-${index}`}
             aria-pressed={byDay?.includes(Days[index])}
             aria-label={`${tr('select')} ${day}`}
+            tabIndex={0}
           >
             <span>{day}</span>
           </Button>

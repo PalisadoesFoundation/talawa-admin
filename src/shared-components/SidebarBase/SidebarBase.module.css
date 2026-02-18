@@ -98,7 +98,7 @@
 }
 
 .optionList::-webkit-scrollbar-thumb:hover {
-  background-color: var(--color-white);
+  background-color: var(--color-gray-300);
 }
 
 .optionList button,

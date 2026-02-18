@@ -43,7 +43,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--font-weight-medium);
+  background-color: var(--color-white);
   display: flex;
   align-items: center;
   justify-content: center;

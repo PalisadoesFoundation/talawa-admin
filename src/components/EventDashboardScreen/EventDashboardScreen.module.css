@@ -40,7 +40,7 @@
   width: var(--space-9);
   height: var(--vh-100);
   z-index: 9999;
-  background-color: rgba(245, 245, 245, 1);
+  background-color: var(--color-gray-50);
   border: none;
   border-radius: var(--radius-none);
   margin-right: var(--space-6);
