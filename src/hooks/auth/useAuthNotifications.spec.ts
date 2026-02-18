@@ -29,7 +29,7 @@ const mockT = vi.fn((key: string, opts?: Record<string, unknown>) => {
 describe('useAuthNotifications', () => {
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('default configuration', () => {
@@ -174,6 +174,7 @@ describe('useAuthNotifications', () => {
         'Authentication error:',
         error,
       );
+      consoleErrorSpy.mockRestore();
     });
 
     it('should show translated fallback when error has empty message', () => {
@@ -194,6 +195,7 @@ describe('useAuthNotifications', () => {
         'Authentication error:',
         error,
       );
+      consoleErrorSpy.mockRestore();
     });
 
     it('should show fallback when error message is only whitespace', () => {
@@ -213,6 +215,7 @@ describe('useAuthNotifications', () => {
         'Authentication error:',
         error,
       );
+      consoleErrorSpy.mockRestore();
     });
 
     it('should truncate long error messages to 120 characters', () => {
@@ -233,6 +236,7 @@ describe('useAuthNotifications', () => {
         'Authentication error:',
         error,
       );
+      consoleErrorSpy.mockRestore();
     });
 
     it('should not surface sensitive error details in toast message', () => {
@@ -253,6 +257,53 @@ describe('useAuthNotifications', () => {
         'Authentication error:',
         error,
       );
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should show fallback when error message contains a JWT token', () => {
+      const { result } = renderHook(() => useAuthNotifications(mockT));
+      const error = new Error(
+        'token rejected: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+      );
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      result.current.showAuthError(error);
+
+      expect(mockT).toHaveBeenCalledWith('authError');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Authentication error',
+        expect.any(Object),
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Authentication error:',
+        error,
+      );
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should show fallback when error message contains a long hex token', () => {
+      const { result } = renderHook(() => useAuthNotifications(mockT));
+      const error = new Error(
+        'lookup failed for key deadbeefdeadbeefdeadbeefdeadbeef',
+      );
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      result.current.showAuthError(error);
+
+      expect(mockT).toHaveBeenCalledWith('authError');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Authentication error',
+        expect.any(Object),
+      );
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Authentication error:',
+        error,
+      );
+      consoleErrorSpy.mockRestore();
     });
   });
 

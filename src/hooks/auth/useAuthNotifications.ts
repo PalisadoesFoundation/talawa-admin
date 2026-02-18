@@ -18,7 +18,7 @@ const sanitizeAuthErrorSuffix = (message?: string): string => {
       /\b(password|passwd|pwd|token|secret|api[-_\s]?key|authorization)\b\s*[:=]\s*[^,;\s]+/gi,
       '[redacted]',
     )
-    .replace(/\bBearer\s+[A-Za-z0-9\-._~+/]+=*\b/gi, '[redacted]')
+    .replace(/\bBearer\s+[A-Za-z0-9\-._~+/]+=*(?=$|\s)/gi, '[redacted]')
     .replace(
       /\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b/g,
       '[redacted]',
