@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
@@ -111,7 +111,7 @@ const organizationFunds = (): JSX.Element => {
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
 
-  const fundModal = useModalState();
+  const { isOpen, open, close } = useModalState();
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -122,9 +122,9 @@ const organizationFunds = (): JSX.Element => {
     (selectedFund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
       setFund(selectedFund);
       setFundModalMode(mode);
-      fundModal.open();
+      open();
     },
-    [fundModal],
+    [],
   );
 
   const {
@@ -432,8 +432,8 @@ const organizationFunds = (): JSX.Element => {
       )}
 
       <FundModal
-        isOpen={fundModal.isOpen}
-        hide={fundModal.close}
+        isOpen={isOpen}
+        hide={close}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}

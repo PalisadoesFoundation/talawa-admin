@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
@@ -26,7 +27,6 @@ import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/Breadcr
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button';
-import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -88,7 +88,7 @@ const orgFundCampaign = (): JSX.Element => {
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
 
-  const campaignModal = useModalState();
+  const { isOpen, open, close } = useModalState();
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -100,9 +100,9 @@ const orgFundCampaign = (): JSX.Element => {
     ): void => {
       setCampaign(selectedCampaign);
       setCampaignModalMode(mode);
-      campaignModal.open();
+      open();
     },
-    [campaignModal],
+    [],
   );
 
   const {
@@ -472,8 +472,8 @@ const orgFundCampaign = (): JSX.Element => {
 
       {/* Create Campaign Modal */}
       <CampaignModal
-        isOpen={campaignModal.isOpen}
-        hide={campaignModal.close}
+        isOpen={isOpen}
+        hide={close}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
         orgId={orgId}
