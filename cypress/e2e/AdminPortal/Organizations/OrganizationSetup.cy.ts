@@ -62,9 +62,8 @@ describe('Organization setup workflow', () => {
       .fillCreateOrganizationForm(createOrganizationInput)
       .submitCreateOrganizationForm();
 
-    setupPage
-      .closePluginNotificationIfOpen()
-      .openOrganizationDashboardByName(orgName);
+    setupPage.closePluginNotificationIfOpen();
+    setupPage.visitOrgList().openOrganizationDashboardByName(orgName);
 
     cy.url().then((currentUrl) => {
       const createdOrgId = currentUrl.match(/\/admin\/orgdash\/([^/?#]+)/)?.[1];

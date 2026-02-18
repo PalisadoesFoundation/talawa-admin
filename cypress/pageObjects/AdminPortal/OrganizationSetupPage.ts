@@ -131,7 +131,15 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   openOrganizationDashboardByName(name: string, timeout = 30000): this {
     this.searchOrganizationByName(name, timeout);
     this.byDataCy(this.organizationCardContainer, timeout)
-      .should('exist')
+      .should(($cards) => {
+        const hasMatchingCard = Array.from($cards).some((card) =>
+          card.textContent?.includes(name),
+        );
+        expect(
+          hasMatchingCard,
+          `Organization card with name "${name}" not found.`,
+        ).to.eq(true);
+      })
       .then(($cards) => {
         const matchingCard = Array.from($cards).find((card) =>
           card.textContent?.includes(name),
@@ -139,11 +147,10 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
         if (!matchingCard) {
           throw new Error(`Organization card with name "${name}" not found.`);
         }
-        cy.wrap(matchingCard).within(() => {
-          this.byDataCy(this.organizationManageButton, timeout)
-            .should('be.visible')
-            .click();
-        });
+        cy.wrap(matchingCard)
+          .find(`[data-cy="${this.organizationManageButton}"]`, { timeout })
+          .should('be.visible')
+          .click({ force: true });
       });
     this.assertUrlMatch(/\/admin\/orgdash\/[^/?#]+/, timeout);
     return this;
