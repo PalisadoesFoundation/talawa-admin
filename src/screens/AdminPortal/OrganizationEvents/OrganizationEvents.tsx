@@ -257,7 +257,6 @@ function organizationEvents(): JSX.Element {
                   testIdPrefix: 'selectViewType',
                 },
               ]}
-              showEventTypeFilter={true}
               actions={
                 <Button
                   className={styles.dropdown}
