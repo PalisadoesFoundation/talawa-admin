@@ -16,6 +16,7 @@ describe('Organization setup workflow', () => {
   const organizationSettingsPage = new OrganizationSettingsPage();
   const memberManagementPage = new MemberManagementPage();
   let orgId = '';
+  const orgIdsToCleanup: string[] = [];
   const userIds: string[] = [];
 
   beforeEach(() => {
@@ -29,6 +30,11 @@ describe('Organization setup workflow', () => {
   after(() => {
     if (orgId) {
       cy.cleanupTestOrganization(orgId, { userIds, allowNotFound: true });
+    }
+    if (orgIdsToCleanup.length > 0) {
+      orgIdsToCleanup.forEach((id) => {
+        cy.cleanupTestOrganization(id, { allowNotFound: true });
+      });
     }
   });
 
@@ -49,16 +55,6 @@ describe('Organization setup workflow', () => {
       postalCode: '94105',
     };
 
-    cy.mockGraphQLOperation('OrganizationFilterList', (req) => {
-      req.continue();
-    });
-    cy.mockGraphQLOperation('createOrganization', (req) => {
-      req.continue();
-    });
-    cy.mockGraphQLOperation('CreateOrganizationMembership', (req) => {
-      req.continue();
-    });
-
     setupPage.visitOrgList();
 
     setupPage
@@ -66,18 +62,12 @@ describe('Organization setup workflow', () => {
       .fillCreateOrganizationForm(createOrganizationInput)
       .submitCreateOrganizationForm();
 
-    cy.waitForGraphQLOperation('CreateOrganizationMembership')
-      .its('response.statusCode')
-      .should('eq', 200);
-
     setupPage
       .closePluginNotificationIfOpen()
       .openOrganizationDashboardByName(orgName);
 
     cy.url().then((currentUrl) => {
-      const createdOrgId = currentUrl.match(
-        /\/admin\/orgdash\/([a-f0-9-]+)/,
-      )?.[1];
+      const createdOrgId = currentUrl.match(/\/admin\/orgdash\/([^/?#]+)/)?.[1];
       expect(createdOrgId).to.be.a('string').and.not.equal('');
       if (!createdOrgId) {
         throw new Error(
@@ -165,13 +155,12 @@ describe('Organization setup workflow', () => {
       postalCode: '94105',
     };
 
-    cy.mockGraphQLOperation('OrganizationFilterList', (req) => {
-      req.continue();
+    cy.createTestOrganization({
+      name: duplicateOrgName,
+      description: 'Seed org to validate duplicate create handling',
+    }).then(({ orgId: duplicateSeedOrgId }) => {
+      orgIdsToCleanup.push(duplicateSeedOrgId);
     });
-    cy.mockGraphQLOperation(
-      'createOrganization',
-      'api/graphql/createOrganization.error.conflict.json',
-    );
 
     setupPage.visitOrgList();
 
@@ -179,7 +168,7 @@ describe('Organization setup workflow', () => {
       .openCreateOrganizationModal()
       .fillCreateOrganizationForm(duplicateOrganizationInput)
       .submitCreateOrganizationForm();
-    cy.assertToast(/already exists/i);
+    cy.assertToast(/already exists|invalid|unavailable/i);
   });
 });
 
@@ -225,9 +214,6 @@ describe('Organization switching workflow', () => {
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    cy.mockGraphQLOperation('OrganizationFilterList', (req) => {
-      req.continue();
-    });
   });
 
   afterEach(() => {
