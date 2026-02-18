@@ -23,8 +23,6 @@ import { DataTable } from 'shared-components/DataTable/DataTable';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
-import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
-import TableLoader from 'components/TableLoader/TableLoader';
 
 type SortingOption = 'newest' | 'oldest';
 type FilteringOption = 'admin' | 'user' | 'cancel';
