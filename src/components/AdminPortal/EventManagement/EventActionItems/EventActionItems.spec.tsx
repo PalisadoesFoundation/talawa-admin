@@ -454,8 +454,9 @@ const renderEventActionItems = (
 
 describe('EventActionItems', () => {
   beforeEach(async () => {
-    const { default: SortingButton } =
-      await import('shared-components/SortingButton/SortingButton');
+    const { default: SortingButton } = await import(
+      'shared-components/SortingButton/SortingButton'
+    );
     // Define the type locally for the cast
     type SortingButtonMock = { resetFilterCount: () => void };
     (SortingButton as unknown as SortingButtonMock).resetFilterCount?.();
