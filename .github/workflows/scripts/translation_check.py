@@ -229,7 +229,7 @@ def check_file(path: Path, valid_keys: set[str]) -> tuple | None:
         r"\bprops\.t\b|\bt\s*=|([({,]\s*\bt\b\s*[:},)])", content
     )
 
-    if uses_standalone_t:
+    if uses_standalone_t and not uses_i18n_t and not uses_use_translation:
         if uses_prop_t:
             return (
                 "error",
@@ -237,13 +237,12 @@ def check_file(path: Path, valid_keys: set[str]) -> tuple | None:
                 "Fix: Import and call useTranslation() from 'react-i18next'. "
                 "Do not pass `t` as a prop.",
             )
-        if not uses_i18n_t and not uses_use_translation:
-            return (
-                "error",
-                "Translation lint error: `t()` use `useTranslation()`. "
-                "Fix: Import and call useTranslation() from 'react-i18next'. "
-                "Do not pass `t` as a prop.",
-            )
+        return (
+            "error",
+            "Translation lint error: `t()` must use `useTranslation()`. "
+            "Fix: Import and call useTranslation() from 'react-i18next'. "
+            "Do not pass `t` as a prop.",
+        )
 
     tags = find_translation_tags(content, file_name=str(path))
     missing = sorted(tag for tag in tags if tag not in valid_keys)
