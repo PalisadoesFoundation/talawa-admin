@@ -1,5 +1,5 @@
 import React from 'react';
-import * as ApolloClient from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { renderHook, act, waitFor, cleanup } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
@@ -8,6 +8,22 @@ import {
   RegistrationErrorCode,
 } from 'hooks/auth/useRegistration';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
+
+const apolloUseMutationRef = vi.hoisted(() => ({
+  actual: undefined as unknown as typeof useMutation,
+}));
+
+vi.mock('@apollo/client', async () => {
+  const actual =
+    await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+  apolloUseMutationRef.actual = actual.useMutation;
+
+  return {
+    ...actual,
+    // Mock at module level so this test is not coupled to how useRegistration imports useMutation.
+    useMutation: vi.fn(actual.useMutation),
+  };
+});
 
 const SUCCESS_MOCK: MockedResponse[] = [
   {
@@ -60,6 +76,7 @@ describe('useRegistration', () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
+    vi.mocked(useMutation).mockImplementation(apolloUseMutationRef.actual);
   });
 
   it('should handle successful registration', async () => {
@@ -127,9 +144,9 @@ describe('useRegistration', () => {
     const mockedMutationTuple = [
       mockSignup,
       { loading: false },
-    ] as unknown as ReturnType<typeof ApolloClient.useMutation>;
+    ] as unknown as ReturnType<typeof useMutation>;
 
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue(mockedMutationTuple);
+    vi.mocked(useMutation).mockReturnValue(mockedMutationTuple);
 
     const { result } = renderHook(() =>
       useRegistration({ onError: mockOnError }),
@@ -144,16 +161,50 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockSignup).toHaveBeenCalledTimes(1);
-    expect(mockOnError).toHaveBeenCalledTimes(1);
-    expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
-    expect((mockOnError.mock.calls[0][0] as Error).message).toBe(
-      'Registration failed from object',
+    await waitFor(() => {
+      expect(mockSignup).toHaveBeenCalledTimes(1);
+      expect(mockOnError).toHaveBeenCalledTimes(1);
+      expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
+      expect((mockOnError.mock.calls[0][0] as Error).message).toBe(
+        'Registration failed from object',
+      );
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe(
+        'Registration failed from object',
+      );
+    });
+  });
+
+  it('should normalize non-object thrown values using String coercion', async () => {
+    const mockOnError = vi.fn();
+    const mockSignup = vi.fn().mockRejectedValue(404);
+    const mockedMutationTuple = [
+      mockSignup,
+      { loading: false },
+    ] as unknown as ReturnType<typeof useMutation>;
+
+    vi.mocked(useMutation).mockReturnValue(mockedMutationTuple);
+
+    const { result } = renderHook(() =>
+      useRegistration({ onError: mockOnError }),
     );
-    expect(result.current.error).toBeInstanceOf(Error);
-    expect(result.current.error?.message).toBe(
-      'Registration failed from object',
-    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    await waitFor(() => {
+      expect(mockSignup).toHaveBeenCalledTimes(1);
+      expect(mockOnError).toHaveBeenCalledTimes(1);
+      expect((mockOnError.mock.calls[0][0] as Error).message).toBe('404');
+      expect(result.current.error).toBeInstanceOf(Error);
+      expect(result.current.error?.message).toBe('404');
+    });
   });
 
   it('should handle registration without callbacks', async () => {
@@ -302,10 +353,12 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(1);
-    expect((mockOnError.mock.calls[0][0] as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
-    );
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(1);
+      expect((mockOnError.mock.calls[0][0] as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+      );
+    });
 
     await act(async () => {
       await result.current.register({
@@ -316,10 +369,12 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(2);
-    expect((mockOnError.mock.calls[1][0] as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
-    );
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(2);
+      expect((mockOnError.mock.calls[1][0] as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+      );
+    });
 
     await act(async () => {
       await result.current.register({
@@ -330,10 +385,12 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnError).toHaveBeenCalledTimes(3);
-    expect((mockOnError.mock.calls[2][0] as RegistrationError).code).toBe(
-      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
-    );
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledTimes(3);
+      expect((mockOnError.mock.calls[2][0] as RegistrationError).code).toBe(
+        RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+      );
+    });
   });
 
   it('should call onError with RegistrationError (MISSING_ORGANIZATION_ID) when organizationId is missing or empty', async () => {

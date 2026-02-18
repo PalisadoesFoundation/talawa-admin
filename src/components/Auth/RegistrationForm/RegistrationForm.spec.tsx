@@ -121,7 +121,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('validates email field', async () => {
@@ -133,7 +135,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('validates password field', async () => {
@@ -145,7 +149,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('validates password confirmation field', async () => {
@@ -161,7 +167,9 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockRegister).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockRegister).not.toHaveBeenCalled();
+    });
   });
 
   it('updates form state on input changes', async () => {
@@ -329,7 +337,7 @@ describe('RegistrationForm', () => {
     });
   });
 
-  it('initializes hook with onSuccess and onError callbacks', async () => {
+  it('initializes hook with onSuccess and onError callbacks', () => {
     const mockOnError = vi.fn();
     const mockRegister = vi.fn().mockResolvedValue(undefined);
 
@@ -341,14 +349,6 @@ describe('RegistrationForm', () => {
 
     renderComponent({ onError: mockOnError });
 
-    await user.type(screen.getByLabelText('First Name'), 'John Doe');
-    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
-    await user.type(screen.getByLabelText('Password'), 'Password123!');
-    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
-
-    await user.click(screen.getByRole('button', { name: /register/i }));
-
-    // Verify the hook was initialized with onSuccess and onError callbacks
     expect(useRegistration).toHaveBeenCalledWith({
       onSuccess: expect.any(Function),
       onError: expect.any(Function),
