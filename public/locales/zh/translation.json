@@ -2594,6 +2594,7 @@
     "expandDay": "展开日期"
   },
   "recurrenceWeeklySection": {
-    "repeatsOn": "重复开启"
+    "repeatsOn": "重复开启",
+    "select": "请选择"
   }
 }

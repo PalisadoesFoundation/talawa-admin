@@ -2594,6 +2594,7 @@
     "expandDay": "Développer le jour"
   },
   "recurrenceWeeklySection": {
-    "repeatsOn": "Répétition activée"
+    "repeatsOn": "Répétition activée",
+    "select": "Sélectionner"
   }
 }

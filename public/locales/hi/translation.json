@@ -2594,6 +2594,7 @@
     "expandDay": "दिन विस्तारित करें"
   },
   "recurrenceWeeklySection": {
-    "repeatsOn": "पर दोहराता है"
+    "repeatsOn": "पर दोहराता है",
+    "select": "चुनें"
   }
 }

@@ -25,7 +25,7 @@ interface InterfaceRecurrenceWeeklySectionProps {
  */
 export const RecurrenceWeeklySection: React.FC<
   InterfaceRecurrenceWeeklySectionProps
-> = ({ frequency, byDay, onDayClick, onWeekdayKeyDown, t }) => {
+> = ({ frequency, byDay, onDayClick, onWeekdayKeyDown }) => {
   const { t: tr } = useTranslation('translation', {
     keyPrefix: 'recurrenceWeeklySection',
   });
@@ -60,7 +60,7 @@ export const RecurrenceWeeklySection: React.FC<
             data-testid="recurrenceWeekDay"
             data-cy={`recurrenceWeekDay-${index}`}
             aria-pressed={byDay?.includes(Days[index])}
-            aria-label={`${t('select')} ${day}`}
+            aria-label={`${tr('select')} ${day}`}
           >
             <span>{day}</span>
           </Button>
