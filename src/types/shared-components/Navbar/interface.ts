@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 
 /**
- * Props for PeopleTabNavbar component.
+ * Interface for PageHeader component props.
  */
-export interface InterfacePeopleTabNavbarProps {
+export interface InterfacePageHeaderProps {
   title?: string;
   search?: {
     placeholder: string;
@@ -17,9 +17,11 @@ export interface InterfacePeopleTabNavbarProps {
     selected: string | number;
     onChange: (value: string | number) => void;
     testIdPrefix: string;
-    icon?: string | null;
+    containerClassName?: string;
+    toggleClassName?: string;
+    icon?: string;
   }>;
 
   actions?: ReactNode;
-  alignmentClassName?: string;
+  rootClassName?: string;
 }

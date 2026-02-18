@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceWeeklySection } from './RecurrenceWeeklySection';
 import { Frequency, WeekDays, Days } from '../../utils/recurrenceUtils';
@@ -15,11 +15,12 @@ const defaultProps = {
 
 describe('RecurrenceWeeklySection', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {
@@ -208,7 +209,8 @@ describe('RecurrenceWeeklySection', () => {
       preventDefaultSpy.mockRestore();
     });
 
-    it('should call onWeekdayKeyDown for other keys', () => {
+    it('should call onWeekdayKeyDown for other keys', async () => {
+      const user = userEvent.setup();
       const onWeekdayKeyDown = vi.fn();
 
       render(
@@ -219,11 +221,8 @@ describe('RecurrenceWeeklySection', () => {
       );
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
-      const arrowKeyEvent = {
-        key: 'ArrowRight',
-      } as unknown as React.KeyboardEvent<HTMLButtonElement>;
-
-      fireEvent.keyDown(dayButtons[0], arrowKeyEvent);
+      await user.click(dayButtons[0]); // focus the first button
+      await user.keyboard('{ArrowRight}');
 
       expect(onWeekdayKeyDown).toHaveBeenCalled();
       const callArgs = onWeekdayKeyDown.mock.calls[0];
