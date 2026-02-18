@@ -62,19 +62,12 @@ describe('Organization setup workflow', () => {
       .fillCreateOrganizationForm(createOrganizationInput)
       .submitCreateOrganizationForm();
 
-    setupPage.closePluginNotificationIfOpen();
-    setupPage.visitOrgList().openOrganizationDashboardByName(orgName);
-
-    cy.url().then((currentUrl) => {
-      const createdOrgId = currentUrl.match(/\/admin\/orgdash\/([^/?#]+)/)?.[1];
-      expect(createdOrgId).to.be.a('string').and.not.equal('');
-      if (!createdOrgId) {
-        throw new Error(
-          'Expected organization id in /admin/orgdash/:orgId URL',
-        );
-      }
+    setupPage.getCreatedOrganizationIdFromPluginModal().then((createdOrgId) => {
       orgId = createdOrgId;
+      setupPage.closePluginNotificationIfOpen();
+      cy.visit(`/admin/orgdash/${createdOrgId}`);
     });
+    cy.url().should('include', '/admin/orgdash/');
 
     cy.mockGraphQLOperation('getOrganizationBasicData', (req) => {
       req.continue();

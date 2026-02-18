@@ -29,6 +29,7 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   private readonly submitOrganizationFormButton = 'submitOrganizationForm';
   private readonly pluginNotificationModal = 'pluginNotificationModal';
   private readonly closePluginNotificationButton = 'enableEverythingForm';
+  private readonly goToStoreLink = 'goToStore';
   private readonly organizationSearchInput = 'searchInput';
   private readonly organizationSearchButton = 'searchBtn';
   private readonly organizationCardContainer = 'orgCardContainer';
@@ -115,6 +116,27 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
       }
     });
     return this;
+  }
+
+  getCreatedOrganizationIdFromPluginModal(
+    timeout = 30000,
+  ): Cypress.Chainable<string> {
+    return this.byTestId(this.pluginNotificationModal, timeout)
+      .should('be.visible')
+      .then(() => {
+        return this.byTestId(this.goToStoreLink, timeout)
+          .should('be.visible')
+          .invoke('attr', 'href')
+          .then((href) => {
+            const orgId = href?.match(/id=([^/?#]+)/)?.[1];
+            if (!orgId) {
+              throw new Error(
+                'Could not extract organization id from plugin modal store link.',
+              );
+            }
+            return orgId;
+          });
+      });
   }
 
   searchOrganizationByName(name: string, timeout = 10000): this {
