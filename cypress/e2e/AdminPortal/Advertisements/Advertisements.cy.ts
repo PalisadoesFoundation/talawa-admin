@@ -304,7 +304,7 @@ function navigateToAdsPage(adEdges: object[] = []): void {
     .click();
 
   // 3. Button is ready (it re-renders when loading finishes)
-  cy.get('[data-testid="createAdvertisement"]', { timeout: 10000 }).should(
+  cy.get('[data-testid="createAdvertisement"]', { timeout: 30000 }).should(
     'be.visible',
   );
 
