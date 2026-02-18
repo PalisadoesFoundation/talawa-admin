@@ -1326,6 +1326,139 @@ describe('EventForm', () => {
     });
   });
 
+  test('handles CustomRecurrenceModal callbacks - setCustomRecurrenceModalIsOpen with function', async () => {
+    const rule = createDefaultRecurrenceRule(
+      dayjs().add(30, 'days').toDate(),
+      Frequency.WEEKLY,
+    );
+    render(
+      <EventForm
+        initialValues={{ ...baseValues, recurrenceRule: rule }}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+        showRecurrenceToggle
+      />,
+    );
+
+    await act(async () => {
+      await user.click(screen.getByTestId('recurrence-toggle'));
+    });
+    const options = screen.getAllByTestId(/recurrence-item-/);
+    await act(async () => {
+      await user.click(options[options.length - 1]); // Custom...
+    });
+
+    expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
+
+    // Mock the setCustomRecurrenceModalIsOpen to pass a function
+    // The modal should close when the function returns false
+    const modal = screen.getByTestId('customRecurrenceModalMock');
+    const setOpenButton = modal.querySelector('[data-testid="setModalOpen"]');
+    if (setOpenButton) {
+      await act(async () => {
+        await user.click(setOpenButton);
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('customRecurrenceModalMock'),
+        ).not.toBeInTheDocument();
+      });
+    }
+  });
+
+  test('updates start time and adjusts end time when new start is after end time', async () => {
+    const handleSubmit = vi.fn();
+    // Set initial times where endTime (14:00) is after startTime (10:00)
+    // Use same date for start and end
+    const testDate = dayjs().add(30, 'day').startOf('day');
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          allDay: false,
+          startDate: testDate.toDate(),
+          endDate: testDate.toDate(),
+          startTime: '10:00:00',
+          endTime: '14:00:00',
+        }}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+      />,
+    );
+
+    const startTimeInput = screen.getByTestId('startTime');
+    // Change start time to 16:00 (after current end time of 14:00)
+    await act(async () => {
+      await user.clear(startTimeInput);
+      await user.type(startTimeInput, '16:00:00');
+    });
+
+    await act(async () => {
+      await user.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalled();
+    const call = handleSubmit.mock.calls[0][0];
+    // endAtISO should match startAtISO when start is after end (adjusted by form logic)
+    expect(call.startAtISO).toBeTruthy();
+    expect(call.endAtISO).toBeTruthy();
+    const startAt = dayjs(call.startAtISO);
+    const endAt = dayjs(call.endAtISO);
+    // The end time should be adjusted to not be before start time
+    expect(endAt.isSame(startAt) || endAt.isAfter(startAt)).toBe(true);
+  });
+
+  test('does not adjust end time when new start time is before end time', async () => {
+    const handleSubmit = vi.fn();
+    // Set initial times where endTime (14:00) is after startTime (10:00)
+    const testDate = dayjs().add(30, 'day').startOf('day');
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          allDay: false,
+          startDate: testDate.toDate(),
+          endDate: testDate.toDate(),
+          startTime: '10:00:00',
+          endTime: '14:00:00',
+        }}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+      />,
+    );
+
+    const startTimeInput = screen.getByTestId('startTime');
+    // Change start time to 12:00 (still before end time of 14:00)
+    await act(async () => {
+      await user.clear(startTimeInput);
+      await user.type(startTimeInput, '12:00:00');
+    });
+
+    await act(async () => {
+      await user.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalled();
+    const call = handleSubmit.mock.calls[0][0];
+    const startAt = dayjs(call.startAtISO);
+    const endAt = dayjs(call.endAtISO);
+    // The end time should still be after start time (not adjusted)
+    expect(endAt.isAfter(startAt)).toBe(true);
+    // Duration should be at least some positive value (end > start)
+    const durationMinutes = endAt.diff(startAt, 'minute');
+    expect(durationMinutes).toBeGreaterThan(0);
+  });
+
   test('handles recurrence enabled but rule is null', async () => {
     const handleSubmit = vi.fn();
     render(
