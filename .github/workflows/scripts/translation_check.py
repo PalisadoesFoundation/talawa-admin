@@ -105,19 +105,6 @@ def find_translation_tags(source: str | Path) -> set[str]:
     else:
         content = source
 
-    # Detect usage patterns
-    uses_direct_t = re.search(r"\bt\(\s*['\"]", content)
-    uses_i18n_t = re.search(r"\bi18n\.t\(\s*['\"]", content)
-    uses_use_translation = re.search(r"useTranslation\s*\(", content)
-
-    # Enforce correct usage
-    if uses_direct_t and not uses_i18n_t and not uses_use_translation:
-        raise ValueError(
-            "Translation lint error: `t()` used without `useTranslation()`. "
-            "Fix: Import and call useTranslation() from 'react-i18next'. "
-            "Do not pass `t` as a prop."
-        )
-
     # Extract keyPrefix from useTranslation only
     key_prefix_pattern = (
         r"useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
@@ -212,20 +199,24 @@ def get_target_files(
 
 
 def check_file(path: Path, valid_keys: set[str]) -> list[str]:
-    """Check a file for missing translation keys.
-
-    Args:
-        path: File path to check.
-        valid_keys: Set of valid translation keys.
-
-    Returns:
-        missing_keys: A sorted list of missing translation keys.
-    """
+    """Check a file for missing translation keys."""
     try:
-        tags = find_translation_tags(path)
-    except ValueError as exc:
-        return [str(exc)]
+        content = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return []
 
+    uses_direct_t = re.search(r"\bt\(\s*['\"]", content)
+    uses_i18n_t = re.search(r"\bi18n\.t\(\s*['\"]", content)
+    uses_use_translation = re.search(r"useTranslation\s*\(", content)
+
+    if uses_direct_t and not uses_i18n_t and not uses_use_translation:
+        return [
+            "Translation lint error: `t()` used without `useTranslation()`. "
+            "Fix: Import and call useTranslation() from 'react-i18next'. "
+            "Do not pass `t` as a prop."
+        ]
+
+    tags = find_translation_tags(path)
     return sorted(tag for tag in tags if tag not in valid_keys)
 
 
