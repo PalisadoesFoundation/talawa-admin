@@ -255,14 +255,14 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
           <div className={styles.screenshotViewer}>
             {/* Header with back button */}
             <div className={styles.screenshotHeader}>
-              <button
+              <Button
                 type="button"
                 onClick={closeScreenshotViewer}
                 className={styles.backButton}
                 aria-label={t('backToDetails')}
               >
                 {t('backToDetails')}
-              </button>
+              </Button>
 
               {screenshotViewer.screenshots.length > 1 && (
                 <div className={styles.screenshotCounter}>
@@ -277,7 +277,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
             {/* Navigation buttons */}
             {screenshotViewer.screenshots.length > 1 && (
               <>
-                <button
+                <Button
                   type="button"
                   onClick={previousScreenshot}
                   className={styles.navigationButtonLeft}
@@ -285,8 +285,8 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                   aria-label={`${t('previousImage')}`}
                 >
                   <FaChevronLeft />
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={nextScreenshot}
                   className={styles.navigationButtonRight}
@@ -294,7 +294,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                   aria-label={`${t('nextImage')}`}
                 >
                   <FaChevronRight />
-                </button>
+                </Button>
               </>
             )}
 
@@ -315,7 +315,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
               screenshotViewer.screenshots.length <= 5 && (
                 <div className={styles.dotIndicators}>
                   {screenshotViewer.screenshots.map((_, index) => (
-                    <button
+                    <Button
                       type="button"
                       key={index}
                       onClick={() => {
@@ -342,7 +342,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
             {/* Tabs */}
             <div className={styles.tabsContainer} role="tablist">
               {TABS.map((tName) => (
-                <button
+                <Button
                   key={tName}
                   id={`tab-${tName}`}
                   type="button"
@@ -353,7 +353,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                   className={tab === tName ? styles.tabActive : styles.tab}
                 >
                   {t(tName)}
-                </button>
+                </Button>
               ))}
             </div>
 
@@ -381,7 +381,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                         </div>
                         <div className={styles.screenshotsContainer}>
                           {details.screenshots.map((src, idx) => (
-                            <button
+                            <Button
                               key={idx}
                               type="button"
                               className={styles.screenshotThumbnailButton}
@@ -404,7 +404,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                                 alt={`${t('ss')} ${idx + 1}`}
                                 className={styles.screenshotThumbnail}
                               />
-                            </button>
+                            </Button>
                           ))}
                         </div>
                       </>

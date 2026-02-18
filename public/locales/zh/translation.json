@@ -196,7 +196,8 @@
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
-    "logout": "登出"
+    "logout": "登出",
+    "notAvailable": "不可用"
   },
   "leftDrawerOrg": {
     "Dashboard": "仪表板",
@@ -1911,7 +1912,8 @@
     "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
     "thisUser": "此用户",
     "deleteChatConfirmation": "您确定要删除此聊天吗？",
-    "memberActionsMenu": "成员操作菜单"
+    "memberActionsMenu": "成员操作菜单",
+    "editImage": "编辑图像"
   },
   "userChatRoom": {
     "selectContact": "点击 + 图标以开始新的聊天",
@@ -1934,7 +1936,10 @@
       "resetButton": "重试",
       "resetButtonAriaLabel": "重试"
     },
-    "messageActions": "消息操作"
+    "messageActions": "消息操作",
+    "addAttachment": "添加附件",
+    "removeAttachment": "删除附件",
+    "closeReply": "关闭回复"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
