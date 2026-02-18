@@ -1,9 +1,4 @@
-"""Validates i18n translation tags against locale JSON files.
-
-Note:
-    Prop-passed `t` cannot be reliably detected without AST-based analysis.
-    This script uses regex heuristics to enforce `useTranslation()` usage.
-"""
+"""Validates i18n translation tags against locale JSON files."""
 
 from __future__ import annotations
 
@@ -224,19 +219,31 @@ def check_file(path: Path, valid_keys: set[str]) -> tuple | None:
         return None
 
     # Detect usage patterns (excluding i18n.t via negative lookbehind)
-    uses_standalone_t = re.search(
-        r"(?<!i18n)\bt\(\s*['\"]", content, re.MULTILINE
-    )
+    uses_standalone_t = re.search(r"(?<!i18n)\bt\(\s*['\"]", content)
     uses_i18n_t = re.search(r"\bi18n\.t\(\s*['\"]", content)
     uses_use_translation = re.search(r"useTranslation\s*\(", content)
 
-    if uses_standalone_t and not uses_i18n_t and not uses_use_translation:
-        return (
-            "error",
-            "Translation lint error: `t()` used without `useTranslation()`. "
-            "Fix: Import and call useTranslation() from 'react-i18next'. "
-            "Do not pass `t` as a prop.",
-        )
+    # Detect if 't' is passed as a prop or defined in function params
+    # Matches: props.t, t= (JSX), ({ t }), (..., t, ...), (t: any)
+    uses_prop_t = re.search(
+        r"\bprops\.t\b|\bt\s*=|([({,]\s*\bt\b\s*[:},)])", content
+    )
+
+    if uses_standalone_t:
+        if uses_prop_t:
+            return (
+                "error",
+                "Translation lint error: `t` detected as a prop or param. "
+                "Fix: Import and call useTranslation() from 'react-i18next'. "
+                "Do not pass `t` as a prop.",
+            )
+        if not uses_i18n_t and not uses_use_translation:
+            return (
+                "error",
+                "Translation lint error: `t()` use `useTranslation()`. "
+                "Fix: Import and call useTranslation() from 'react-i18next'. "
+                "Do not pass `t` as a prop.",
+            )
 
     tags = find_translation_tags(content, file_name=str(path))
     missing = sorted(tag for tag in tags if tag not in valid_keys)
@@ -289,12 +296,12 @@ def main() -> None:
             errors[str(path)] = result
 
     if errors:
-        for file, (error_type, result) in errors.items():
+        for file, (error_type, payload) in errors.items():
             print(f"File: {file}")
             if error_type == "error":
-                print(f"  - Error: {result}")
+                print(f"  - Error: {payload}")
             else:
-                for tag in result:
+                for tag in payload:
                     print(f"  - Missing: {tag}")
         sys.exit(1)
 
