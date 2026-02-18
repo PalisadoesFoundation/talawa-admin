@@ -86,7 +86,9 @@ export default function BaseModal({
         </Modal.Header>
       ) : (
         <Modal.Header className={headerClassName} data-testid={headerTestId}>
-          <Modal.Title id={titleId}>{title}</Modal.Title>
+          <Modal.Title id={titleId} data-testid="modalTitle">
+            {title}
+          </Modal.Title>
           {closeButton}
         </Modal.Header>
       )}

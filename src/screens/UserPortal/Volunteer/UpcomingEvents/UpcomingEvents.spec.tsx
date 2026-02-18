@@ -82,7 +82,15 @@ vi.mock('react-icons/fa', () => ({
 }));
 
 vi.mock('react-router-dom', async () => {
-  const actual = await vi.importActual('react-router');
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: sharedMocks.useParams,
+  };
+});
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: sharedMocks.useParams,

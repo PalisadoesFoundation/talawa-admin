@@ -48,6 +48,15 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router-dom');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
+
 const mockedUseParams = vi.mocked(useParams);
 const loadingOverlaySpy = vi.fn();
 

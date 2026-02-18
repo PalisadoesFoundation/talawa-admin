@@ -83,14 +83,15 @@ const MOCKS = [
 describe('useSession Hook', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
-    vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
+    vi.spyOn(window, 'addEventListener');
+    vi.spyOn(window, 'removeEventListener');
   });
 
   afterEach(() => {
     cleanup();
     vi.useRealTimers();
     vi.restoreAllMocks();
+    mockClearAllItems.mockClear();
   });
 
   test('should handle visibility change to visible', async () => {
@@ -643,7 +644,7 @@ describe('useSession Hook', () => {
     vi.useRealTimers();
   });
 
-  test('should handle event listener errors gracefully', () => {
+  test('should propagate event listener registration errors', () => {
     const setTimeoutSpy = vi
       .spyOn(global, 'setTimeout')
       .mockImplementation(() => ({}) as unknown as NodeJS.Timeout);
