@@ -310,5 +310,12 @@
   "sortBy": "Sort By",
   "previousYear": "Previous Year",
   "nextYear": "Next Year",
-  "navigateToProfile": "Navigate to profile"
+  "workshops": "Workshops",
+  "navigateToProfile": "Navigate to profile",
+  "monthlyOn": "Monthly on",
+  "loginSuccess": "Welcome!",
+  "loginSuccessWithName": "Welcome, {{name}}!",
+  "signupSuccess": "Registration successful!",
+  "authError": "Authentication error",
+  "networkError": "Network error"
 }

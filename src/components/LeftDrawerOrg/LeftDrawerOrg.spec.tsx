@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
@@ -115,6 +115,7 @@ const mockTImplementation = (key: string) => {
     'Action Items': 'Action Items',
     Posts: 'Posts',
     switchToUserPortal: 'Switch to User Portal',
+    'leftDrawer.notAvailable': 'N/A',
   };
   return translations[key] || key;
 };
@@ -212,7 +213,6 @@ vi.mock('utils/useLocalstorage', () => ({
   })),
 }));
 
-// Mock SVG imports
 vi.mock('assets/svgs/angleRight.svg?react', () => ({
   default: vi.fn(({ fill }) => (
     <div data-testid="angle-right-icon" data-fill={fill}>
@@ -324,7 +324,6 @@ describe('LeftDrawerOrg', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
     mockT = vi.fn(mockTImplementation);
     mockTErrors = vi.fn(mockTErrorsImplementation);
     mockGetItem = vi.fn((key: string) => {
@@ -342,6 +341,7 @@ describe('LeftDrawerOrg', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {
@@ -634,7 +634,7 @@ describe('LeftDrawerOrg', () => {
         (icon) => icon.getAttribute('data-name') === 'Dashboard',
       );
       expect(dashboardIcon).toHaveAttribute('data-name', 'Dashboard');
-      expect(dashboardIcon).toHaveAttribute('data-fill', 'var(--bs-black)');
+      expect(dashboardIcon).toHaveAttribute('data-fill', 'var(--color-black)');
     });
 
     it('should render inactive icon with correct fill color', () => {

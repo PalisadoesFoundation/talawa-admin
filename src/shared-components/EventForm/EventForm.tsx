@@ -79,7 +79,11 @@ const EventForm: React.FC<IEventFormProps> = ({
     );
   });
 
-  const customRecurrenceModal = useModalState();
+  const {
+    isOpen: customRecurrenceModalIsOpen,
+    open: openCustomRecurrenceModal,
+    close: closeCustomRecurrenceModal,
+  } = useModalState();
   const [recurrenceEnabled, setRecurrenceEnabled] = useState(
     !disableRecurrence &&
       (!!initialValues.recurrenceRule || !showRecurrenceToggle),
@@ -121,7 +125,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           ),
         }));
       }
-      customRecurrenceModal.open();
+      openCustomRecurrenceModal();
     } else {
       setFormState((prev) => ({
         ...prev,
@@ -402,7 +406,7 @@ const EventForm: React.FC<IEventFormProps> = ({
               className={`me-4 ${styles.switch}`}
               id="allday"
               name="allDay"
-              label={`${t('allDay')}?`}
+              label={t('allDay')}
               type="switch"
               checked={formState.allDay}
               data-testid="allDayEventCheck"
@@ -415,7 +419,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="recurring"
                 name="recurring"
-                label={`${t('recurring')}:`}
+                label={t('recurring')}
                 type="switch"
                 checked={recurrenceEnabled}
                 data-testid="recurringEventCheck"
@@ -429,7 +433,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="registrable"
                 name="registrable"
-                label={`${t('registerable')}?`}
+                label={t('registerable')}
                 type="switch"
                 checked={formState.isRegisterable}
                 data-testid="registerableEventCheck"
@@ -448,7 +452,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="chat"
                 name="createChat"
-                label={`${t('createChat')}?`}
+                label={t('createChat')}
                 type="switch"
                 data-testid="createChatCheck"
                 checked={formState.createChat}
@@ -524,20 +528,15 @@ const EventForm: React.FC<IEventFormProps> = ({
               endDate: nextDate ?? prev.endDate,
             }));
           }}
-          customRecurrenceModalIsOpen={customRecurrenceModal.isOpen}
-          hideCustomRecurrenceModal={customRecurrenceModal.close}
-          setCustomRecurrenceModalIsOpen={(
-            state: React.SetStateAction<boolean>,
-          ) => {
-            const v =
+          customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
+          hideCustomRecurrenceModal={closeCustomRecurrenceModal}
+          setCustomRecurrenceModalIsOpen={(state) => {
+            const next =
               typeof state === 'function'
-                ? state(customRecurrenceModal.isOpen)
+                ? state(customRecurrenceModalIsOpen)
                 : state;
-            if (v) {
-              customRecurrenceModal.open();
-            } else {
-              customRecurrenceModal.close();
-            }
+            if (next) openCustomRecurrenceModal();
+            else closeCustomRecurrenceModal();
           }}
           t={t}
           startDate={formState.startDate}

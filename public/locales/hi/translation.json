@@ -1,4 +1,5 @@
 {
+  "workshops": "कार्यशालाएँ",
   "securedRouteForUser": {
     "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
   },
@@ -14,6 +15,7 @@
   "customRecurrence": "कस्टम पुनरावृत्ति",
   "frequency": "आवृत्ति",
   "repeatsEvery": "हर बार दोहराता है",
+  "repeatsOn": "पर दोहराता है",
   "day": "दिन",
   "week": "सप्ताह",
   "month": "महीना",
@@ -196,7 +198,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
-    "logout": "लॉगआउट"
+    "logout": "लॉगआउट",
+    "notAvailable": "उपलब्ध नहीं"
   },
   "leftDrawerOrg": {
     "Dashboard": "डैशबोर्ड",
@@ -1397,6 +1400,10 @@
     "tags": "टैग",
     "invalidFileType": "अमान्य फ़ाइल प्रकार",
     "fileTooLarge": "फ़ाइल बहुत बड़ी है",
+    "ascendingOrder": "आरोही क्रम",
+    "descendingOrder": "अवरोही क्रम",
+    "searchCreatedEvents": "निर्मित कार्यक्रम खोजें",
+    "sortByName": "नाम के अनुसार छाँटें",
     "memberDetailNumberExample": "उदाहरण: 1234567890",
     "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
     "memberDetailPostalExample": "उदाहरण: 110001",
@@ -1790,7 +1797,9 @@
     "presetThisMonth": "इस महीने",
     "presetNext7Days": "अगले 7 दिन",
     "presetNext30Days": "अगले 30 दिन",
-    "presetNextMonth": "अगले महीने"
+    "presetNextMonth": "अगले महीने",
+    "repeatsOn": "पर दोहराता है",
+    "select": "चुनें"
   },
   "userEventCard": {
     "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",

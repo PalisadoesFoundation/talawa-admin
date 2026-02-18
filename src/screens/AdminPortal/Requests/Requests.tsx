@@ -34,8 +34,7 @@ import {
   MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
-import type { IColumnDef } from 'types/shared-components/DataTable/column';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import Avatar from 'shared-components/Avatar/Avatar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -48,6 +47,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import ErrorPanel from 'shared-components/ErrorPanel';
+import { IColumnDef } from 'types/shared-components/DataTable/column';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;

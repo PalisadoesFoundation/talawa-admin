@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/LoadingState/LoadingState.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/LoadingState/LoadingState.tsx#L39)
+Defined in: [src/shared-components/LoadingState/LoadingState.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/LoadingState/LoadingState.tsx#L38)
 
 ## Parameters
 

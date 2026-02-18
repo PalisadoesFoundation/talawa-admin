@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceMonthlySection } from './RecurrenceMonthlySection';
 import { Frequency, WeekDays } from '../../utils/recurrenceUtils';
@@ -19,7 +19,14 @@ const defaultProps = {
   frequency: Frequency.MONTHLY,
   recurrenceRuleState: defaultRecurrenceRule,
   setRecurrenceRuleState: vi.fn(),
-  startDate: dayjs().year(2024).month(6).date(15).toDate(), // July 15, 2024 (3rd Monday)
+  startDate: dayjs()
+    .year(2024)
+    .month(6)
+    .date(15)
+    .hour(10)
+    .minute(0)
+    .second(0)
+    .toDate(),
   t: (key: string) => key,
 };
 
@@ -29,6 +36,7 @@ describe('RecurrenceMonthlySection', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -38,7 +46,7 @@ describe('RecurrenceMonthlySection', () => {
 
       expect(screen.getByText('monthlyOn')).toBeInTheDocument();
       expect(
-        screen.getByTestId('monthlyRecurrenceDropdown'),
+        screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
       ).toBeInTheDocument();
     });
 
@@ -56,7 +64,7 @@ describe('RecurrenceMonthlySection', () => {
     it('should display byDate option when byDay is undefined', () => {
       render(<RecurrenceMonthlySection {...defaultProps} />);
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 15');
     });
 
@@ -74,7 +82,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on the third Monday');
     });
   });
@@ -84,7 +92,7 @@ describe('RecurrenceMonthlySection', () => {
       render(<RecurrenceMonthlySection {...defaultProps} />);
 
       // Verify the dropdown shows the correct text based on startDate
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 15');
     });
 
@@ -96,7 +104,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      let dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      let dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 1');
 
       rerender(
@@ -106,29 +114,38 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 31');
     });
 
     it('should have correct aria-label', () => {
       render(<RecurrenceMonthlySection {...defaultProps} />);
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveAttribute('aria-label', 'monthlyOn');
     });
   });
 
   describe('User Interactions', () => {
-    it('should open dropdown when clicked', async () => {
+    it('should render the dropdown with correct options', async () => {
       const user = userEvent.setup();
-
       render(<RecurrenceMonthlySection {...defaultProps} />);
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
-      await user.click(dropdown);
+      // Open dropdown
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
 
-      // Check that dropdown menu item is available
-      expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+      // Check that dropdown menu items are available
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByTestId('monthlyRecurrenceDropdown-item-WEEKDAY'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('should call setRecurrenceRuleState when byDate option is selected', async () => {
@@ -142,13 +159,17 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
-      await user.click(dropdown);
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
 
-      const byDateOption = screen.getByTestId('monthlyByDate');
+      const byDateOption = screen.getByTestId(
+        'monthlyRecurrenceDropdown-item-DATE',
+      );
       await user.click(byDateOption);
 
-      expect(setRecurrenceRuleState).toHaveBeenCalled();
+      await waitFor(() => expect(setRecurrenceRuleState).toHaveBeenCalled());
       const callArg = setRecurrenceRuleState.mock.calls[0][0];
 
       // Verify it's a function that updates state correctly
@@ -156,10 +177,53 @@ describe('RecurrenceMonthlySection', () => {
         const prevState: InterfaceRecurrenceRule = {
           ...defaultRecurrenceRule,
           byDay: [WeekDays.MO],
+          bySetPos: [3],
         };
         const newState = callArg(prevState);
         expect(newState.byMonthDay).toEqual([15]);
         expect(newState.byDay).toBeUndefined();
+        expect(newState.bySetPos).toBeUndefined();
+      }
+    });
+
+    it('should call setRecurrenceRuleState when WEEKDAY option is selected', async () => {
+      const user = userEvent.setup();
+      const setRecurrenceRuleState = vi.fn();
+
+      render(
+        <RecurrenceMonthlySection
+          {...defaultProps}
+          setRecurrenceRuleState={setRecurrenceRuleState}
+        />,
+      );
+
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
+
+      const weekdayOption = screen.getByTestId(
+        'monthlyRecurrenceDropdown-item-WEEKDAY',
+      );
+      await user.click(weekdayOption);
+
+      await waitFor(() => expect(setRecurrenceRuleState).toHaveBeenCalled());
+      const callArg = setRecurrenceRuleState.mock.calls[0][0];
+
+      // Verify it's a function that updates state correctly (else branch)
+      if (typeof callArg === 'function') {
+        const prevState: InterfaceRecurrenceRule = {
+          ...defaultRecurrenceRule,
+          byMonthDay: [15],
+          byDay: undefined,
+        };
+        const newState = callArg(prevState);
+        expect(newState.byDay).toBeDefined();
+        expect(newState.byMonthDay).toBeUndefined();
+        // bySetPos should be set to the nth occurrence of the weekday
+        expect(newState.bySetPos).toBeDefined();
+        expect(Array.isArray(newState.bySetPos)).toBe(true);
+        expect(newState.bySetPos?.length).toBe(1);
       }
     });
 
@@ -180,13 +244,17 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
-      await user.click(dropdown);
+      const dropdownToggle = screen.getByTestId(
+        'monthlyRecurrenceDropdown-toggle',
+      );
+      await user.click(dropdownToggle);
 
-      const byDateOption = screen.getByTestId('monthlyByDate');
+      const byDateOption = screen.getByTestId(
+        'monthlyRecurrenceDropdown-item-DATE',
+      );
       await user.click(byDateOption);
 
-      expect(setRecurrenceRuleState).toHaveBeenCalled();
+      await waitFor(() => expect(setRecurrenceRuleState).toHaveBeenCalled());
     });
   });
 
@@ -199,7 +267,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 1');
     });
 
@@ -211,7 +279,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 31');
     });
 
@@ -223,7 +291,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 29');
     });
 
@@ -235,7 +303,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 28');
     });
 
@@ -251,7 +319,7 @@ describe('RecurrenceMonthlySection', () => {
           <RecurrenceMonthlySection {...defaultProps} startDate={startDate} />,
         );
 
-        const dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+        const dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
         expect(dropdown).toHaveTextContent('Monthly on day 15');
         unmount();
       });
@@ -281,7 +349,7 @@ describe('RecurrenceMonthlySection', () => {
         <RecurrenceMonthlySection {...defaultProps} />,
       );
 
-      let dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      let dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 15');
 
       const newRule: InterfaceRecurrenceRule = {
@@ -297,7 +365,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on the third Monday');
     });
 
@@ -307,7 +375,7 @@ describe('RecurrenceMonthlySection', () => {
       );
 
       // Initially showing byDate
-      let dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      let dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on day 15');
 
       // Switch to byWeekday (July 15, 2024 is a Monday)
@@ -324,7 +392,7 @@ describe('RecurrenceMonthlySection', () => {
         />,
       );
 
-      dropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+      dropdown = screen.getByTestId('monthlyRecurrenceDropdown-toggle');
       expect(dropdown).toHaveTextContent('Monthly on the third Monday');
     });
   });

@@ -141,15 +141,15 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
         {/* ===== Page Header with Search & Sort ===== */}
         <PeopleTabNavbar
           search={{
-            placeholder: 'Search created events',
+            placeholder: t('searchCreatedEvents'),
             onSearch: setSearchValue,
           }}
           sorting={[
             {
-              title: 'Sort By Name',
+              title: t('sortByName'),
               options: [
-                { label: 'A → Z', value: 'ASC' },
-                { label: 'Z → A', value: 'DESC' },
+                { label: t('ascendingOrder'), value: 'ASC' },
+                { label: t('descendingOrder'), value: 'DESC' },
               ],
               icon: '/images/svg/ri_arrow-up-down-line.svg',
               selected: sortOption,
@@ -170,6 +170,7 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
               testIdPrefix: 'eventsParticipationFilter',
             },
           ]}
+          alignmentClassName={styles.peopleTabNavbarAlignment}
         />
 
         <Card.Body className={`${styles.peoplePageUserEventCardBody}`}>

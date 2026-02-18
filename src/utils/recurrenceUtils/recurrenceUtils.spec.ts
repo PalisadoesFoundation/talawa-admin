@@ -566,6 +566,42 @@ describe('Recurrence Utility Functions', () => {
       };
       expect(areRecurrenceRulesEqual(rule1, null)).toBe(false);
     });
+
+    it('should return false when bySetPos differs', () => {
+      const rule1: InterfaceRecurrenceRule = {
+        frequency: Frequency.MONTHLY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        bySetPos: [3],
+        never: true,
+      };
+      const rule2: InterfaceRecurrenceRule = {
+        frequency: Frequency.MONTHLY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        bySetPos: [2],
+        never: true,
+      };
+      expect(areRecurrenceRulesEqual(rule1, rule2)).toBe(false);
+    });
+
+    it('should return true when bySetPos is identical', () => {
+      const rule1: InterfaceRecurrenceRule = {
+        frequency: Frequency.MONTHLY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        bySetPos: [3],
+        never: true,
+      };
+      const rule2: InterfaceRecurrenceRule = {
+        frequency: Frequency.MONTHLY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        bySetPos: [3],
+        never: true,
+      };
+      expect(areRecurrenceRulesEqual(rule1, rule2)).toBe(true);
+    });
   });
 
   describe('formatRecurrenceForApi', () => {
