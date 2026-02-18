@@ -7,7 +7,6 @@
  */
 
 // SKIP_LOCALSTORAGE_CHECK
-import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { InMemoryCache } from '@apollo/client';
@@ -808,12 +807,10 @@ const CREATOR_NULL_MOCKS = [
   MOCKS[1],
 ];
 
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
+async function wait(): Promise<void> {
+  await waitFor(() =>
+    expect(screen.getByTestId('events-screen')).toBeInTheDocument(),
+  );
 }
 
 describe('Testing Events Screen [User Portal]', () => {
@@ -839,7 +836,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   afterEach(() => {
     localStorage.clear();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.useRealTimers();
   });
 
@@ -1156,7 +1153,7 @@ describe('Testing Events Screen [User Portal]', () => {
       await userEvent.click(submitBtn);
     }
 
-    await wait(500);
+    await wait();
 
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
@@ -1211,7 +1208,7 @@ describe('Testing Events Screen [User Portal]', () => {
       await userEvent.click(submitBtn);
     }
 
-    await wait(500);
+    await wait();
 
     // Error should be logged (console.error is called in catch block)
     expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -1485,7 +1482,7 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait(500);
+    await wait();
 
     // Should log warning for non-rate-limit errors
     expect(consoleWarnSpy).toHaveBeenCalled();
@@ -1789,7 +1786,7 @@ describe('Testing Events Screen [User Portal]', () => {
       await userEvent.click(submitBtn);
     }
 
-    await wait(500);
+    await wait();
 
     // The createEvent mutation returned null data, so no success toast
     expect(mockToast.success).not.toHaveBeenCalled();
@@ -1968,7 +1965,7 @@ describe('Testing Events Screen [User Portal]', () => {
     const submitBtn = screen.getByRole('button', { name: /create event/i });
     if (form) await userEvent.click(submitBtn);
 
-    await wait(500);
+    await wait();
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
     });

@@ -462,8 +462,8 @@ const Calendar: React.FC<
         events
           ?.filter(
             (datas) =>
-              dayjs(datas.startAt).format('YYYY-MM-DD') ===
-              dayjs(date).format('YYYY-MM-DD'),
+              dayjs.utc(datas.startAt).local().format('YYYY-MM-DD') ===
+              dayjs.utc(date).local().format('YYYY-MM-DD'),
           )
           .map((datas: InterfaceEvent) => (
             <EventListCard

@@ -174,7 +174,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
   ): Map<string, { colIndex: number; colCount: number }> => {
     // Sort by start time
     const sorted = [...evts].sort((a, b) =>
-      dayjs(a.startAt).diff(dayjs(b.startAt)),
+      dayjs.utc(a.startAt).local().diff(dayjs.utc(b.startAt).local()),
     );
 
     // Each "cluster" is a group of events that all overlap with at least one other
@@ -183,8 +183,8 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
     const columns: number[] = [];
 
     for (const evt of sorted) {
-      const start = dayjs(evt.startAt).valueOf();
-      const end = dayjs(evt.endAt).valueOf();
+      const start = dayjs.utc(evt.startAt).local().valueOf();
+      const end = dayjs.utc(evt.endAt).local().valueOf();
 
       // Find the first column whose last event ends at or before this event starts
       let placed = false;
@@ -237,9 +237,9 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
 
       const eventsForDate =
         events?.filter((event) => {
-          const eventStart = dayjs(event.startAt).startOf('day');
-          const eventEnd = dayjs(event.endAt).startOf('day');
-          const current = dayjs(tempDate).startOf('day');
+          const eventStart = dayjs.utc(event.startAt).local().startOf('day');
+          const eventEnd = dayjs.utc(event.endAt).local().startOf('day');
+          const current = dayjs.utc(tempDate).local().startOf('day');
           return (
             current.isSame(eventStart) ||
             current.isSame(eventEnd) ||
