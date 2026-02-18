@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import 'style/app-fixed.module.css';
 
 // to block the user
 
@@ -58,6 +57,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
       avatarMimeType
       avatarURL
       updatedAt
+      isUserRegistrationRequired
     }
   }
 `;
@@ -95,36 +95,46 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
   }
 `;
 
-// to update the password of user
-
-export const UPDATE_USER_PASSWORD_MUTATION = gql`
-  mutation UpdateUserPassword(
-    $previousPassword: String!
-    $newPassword: String!
-    $confirmNewPassword: String!
-  ) {
-    updateUserPassword(
-      data: {
-        previousPassword: $previousPassword
-        newPassword: $newPassword
-        confirmNewPassword: $confirmNewPassword
-      }
-    ) {
-      user {
-        _id
-      }
+export const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUser($input: MutationUpdateUserInput!) {
+    updateUser(input: $input) {
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      description
+      educationGrade
+      emailAddress
+      employmentStatus
+      homePhoneNumber
+      id
+      isEmailAddressVerified
+      maritalStatus
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
     }
   }
 `;
 
 // to sign up in the talawa admin
-
 export const SIGNUP_MUTATION = gql`
   mutation SignUp(
     $ID: ID!
     $name: String!
     $email: EmailAddress!
     $password: String!
+    $recaptchaToken: String
   ) {
     signUp(
       input: {
@@ -132,12 +142,14 @@ export const SIGNUP_MUTATION = gql`
         name: $name
         emailAddress: $email
         password: $password
+        recaptchaToken: $recaptchaToken
       }
     ) {
       user {
         id
       }
       authenticationToken
+      refreshToken
     }
   }
 `;
@@ -229,32 +241,75 @@ export const CREATE_MEMBER_PG = gql`
   }
 `;
 
-// to login in the talawa admin
-
-// to get the refresh token
-
-export const REFRESH_TOKEN_MUTATION = gql`
-  mutation RefreshToken($refreshToken: String!) {
-    refreshToken(refreshToken: $refreshToken) {
-      refreshToken
-      accessToken
+/**
+ * Verifies a user's email address using a token sent via email.
+ *
+ * @param token - The verification token received via email
+ * @returns An object containing:
+ *   - success: boolean indicating if the verification succeeded
+ *   - message: A descriptive message about the result
+ */
+export const VERIFY_EMAIL_MUTATION = gql`
+  mutation VerifyEmail($token: String!) {
+    verifyEmail(input: { token: $token }) {
+      success
+      message
     }
   }
 `;
 
-// to revoke a refresh token
-
-export const REVOKE_REFRESH_TOKEN = gql`
-  mutation RevokeRefreshTokenForUser {
-    revokeRefreshTokenForUser
+/**
+ * Resends the email verification link to the currently authenticated user.
+ *
+ * @remarks
+ * The user must be logged in for this mutation to work.
+ * No parameters are required as it uses the authenticated user's session.
+ *
+ * @returns An object containing:
+ *   - success: boolean indicating if the email was sent successfully
+ *   - message: A descriptive message about the result
+ */
+export const RESEND_VERIFICATION_EMAIL_MUTATION = gql`
+  mutation SendVerificationEmail {
+    sendVerificationEmail {
+      success
+      message
+    }
   }
 `;
 
-// To verify the google recaptcha
+// to login in the talawa admin
 
-export const RECAPTCHA_MUTATION = gql`
-  mutation Recaptcha($recaptchaToken: String!) {
-    recaptcha(data: { recaptchaToken: $recaptchaToken })
+// to get the refresh token
+// Note: refreshToken variable is optional - the API will read from HTTP-Only cookie if not provided
+
+export const REFRESH_TOKEN_MUTATION = gql`
+  mutation RefreshToken($refreshToken: String) {
+    refreshToken(refreshToken: $refreshToken) {
+      authenticationToken
+      refreshToken
+    }
+  }
+`;
+
+// Logout mutation - clears HTTP-Only cookies on the server
+// This is preferred over REVOKE_REFRESH_TOKEN for web clients using cookie-based auth
+
+export const LOGOUT_MUTATION = gql`
+  mutation Logout {
+    logout {
+      success
+    }
+  }
+`;
+
+/**
+ * to revoke a refresh token (legacy - use LOGOUT_MUTATION for cookie-based auth)
+ * @public
+ */
+export const REVOKE_REFRESH_TOKEN = gql`
+  mutation RevokeRefreshToken($refreshToken: String!) {
+    revokeRefreshToken(refreshToken: $refreshToken)
   }
 `;
 
@@ -345,15 +400,6 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// to remove an admin from an organization
-export const REMOVE_ADMIN_MUTATION = gql`
-  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
-    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      _id
-    }
-  }
-`;
-
 // to Remove member from an organization
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {
@@ -376,29 +422,14 @@ export const REMOVE_MEMBER_MUTATION_PG = gql`
   }
 `;
 
-// to add the admin
-export const ADD_ADMIN_MUTATION = gql`
-  mutation CreateAdmin($orgid: ID!, $userid: ID!) {
-    createAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      user {
-        _id
-      }
-    }
-  }
-`;
-
 export const CREATE_POST_MUTATION = gql`
   mutation CreatePost($input: MutationCreatePostInput!) {
     createPost(input: $input) {
       id
       caption
+      body
       pinnedAt
-      attachments {
-        fileHash
-        mimeType
-        name
-        objectName
-      }
+      attachmentURL
     }
   }
 `;
@@ -496,8 +527,27 @@ export const UPDATE_POST_VOTE = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to update community profile settings including logo upload.
+ *
+ * @param logo - Optional logo file (Upload scalar) - sent as multipart request via apollo-upload-client
+ * @param name - Community name
+ * @param websiteURL - Community website URL
+ * @param facebookURL - Facebook profile URL
+ * @param instagramURL - Instagram profile URL
+ * @param xURL - X (Twitter) profile URL
+ * @param githubURL - GitHub organization URL
+ * @param youtubeURL - YouTube channel URL
+ * @param linkedinURL - LinkedIn profile URL
+ * @param redditURL - Reddit community URL
+ * @param slackURL - Slack workspace URL
+ * @param inactivityTimeoutDuration - Session timeout in minutes
+ *
+ * @returns Updated community with id, logoURL (computed MinIO URL) and logoMimeType
+ */
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
+    $logo: Upload
     $facebookURL: String
     $githubURL: String
     $instagramURL: String
@@ -512,6 +562,7 @@ export const UPDATE_COMMUNITY_PG = gql`
   ) {
     updateCommunity(
       input: {
+        logo: $logo
         facebookURL: $facebookURL
         githubURL: $githubURL
         inactivityTimeoutDuration: $inactivityTimeoutDuration
@@ -526,6 +577,8 @@ export const UPDATE_COMMUNITY_PG = gql`
       }
     ) {
       id
+      logoMimeType
+      logoURL
     }
   }
 `;
@@ -585,10 +638,10 @@ export {
 } from './ActionItemMutations';
 
 export {
-  CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
-  DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
-  UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
-} from './AgendaCategoryMutations';
+  CREATE_AGENDA_FOLDER_MUTATION,
+  DELETE_AGENDA_FOLDER_MUTATION,
+  UPDATE_AGENDA_FOLDER_MUTATION,
+} from './AgendaFolderMutations';
 
 export {
   ADD_ADVERTISEMENT_MUTATION,
@@ -600,6 +653,7 @@ export {
   CREATE_AGENDA_ITEM_MUTATION,
   DELETE_AGENDA_ITEM_MUTATION,
   UPDATE_AGENDA_ITEM_MUTATION,
+  UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
 } from './AgendaItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization
@@ -655,6 +709,60 @@ export const GET_FILE_PRESIGNEDURL = gql`
   mutation createGetfileUrl($input: MutationCreateGetfileUrlInput!) {
     createGetfileUrl(input: $input) {
       presignedUrl
+    }
+  }
+`;
+
+/** Links an OAuth provider account to the currently authenticated user. */
+export const LINK_OAUTH_ACCOUNT = gql`
+  mutation LinkOAuthAccount($input: OAuthLoginInput!) {
+    linkOAuthAccount(input: $input) {
+      id
+      name
+      emailAddress
+      isEmailAddressVerified
+      role
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Unlinks an OAuth provider account from the currently authenticated user. */
+export const UNLINK_OAUTH_ACCOUNT = gql`
+  mutation UnlinkOAuthAccount($provider: OAuthProvider!) {
+    unlinkOAuthAccount(provider: $provider) {
+      id
+      emailAddress
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Authenticates a user using an OAuth provider and returns authentication tokens. */
+export const SIGN_IN_WITH_OAUTH = gql`
+  mutation SignInWithOAuth($input: OAuthLoginInput!) {
+    signInWithOAuth(input: $input) {
+      authenticationToken
+      refreshToken
+      user {
+        id
+        name
+        emailAddress
+        role
+        countryCode
+        avatarURL
+        isEmailAddressVerified
+      }
     }
   }
 `;

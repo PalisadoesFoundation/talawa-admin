@@ -1,46 +1,54 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import dayjs from 'dayjs';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  BrowserRouter,
-  MemoryRouter,
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-} from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+import i18nForTest from 'utils/i18nForTest';
 import LeaveOrganization from './LeaveOrganization';
 import {
   ORGANIZATIONS_LIST_BASIC,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { getItem } from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach, describe, test } from 'vitest';
 
-vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn() }, // Mock toast function
+const routerMocks = vi.hoisted(() => ({
+  params: vi.fn(),
+  navigate: vi.fn(),
 }));
 
-Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-  },
-  writable: true,
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+}));
+
+vi.mock('react-i18next', async () => {
+  const original = await vi.importActual('react-i18next');
+  return {
+    ...original,
+    useTranslation: () => ({
+      t: (key: string, options?: Record<string, unknown>) =>
+        i18nForTest.t(key, options),
+      i18n: i18nForTest,
+    }),
+  };
 });
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
+}));
 
 // Mock useParams to return a test organization ID
 
 vi.mock('react-router', async () => {
-  const actualDom = await vi.importActual('react-router');
+  const actualDom =
+    await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actualDom,
-    useParams: vi.fn(),
-    useNavigate: vi.fn(),
+    useParams: routerMocks.params,
+    useNavigate: () => routerMocks.navigate,
   };
 });
 
@@ -51,8 +59,6 @@ vi.mock('utils/useLocalstorage', () => {
       if (prefix === 'Talawa-admin' && key === 'email')
         return 'test@example.com';
       if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
-      if (prefix === 'Talawa-admin-error' && key === 'user-email-error')
-        throw new Error();
       return null;
     }),
   };
@@ -84,6 +90,7 @@ const mocks = [
         ],
       },
     },
+    delay: 50, // Add delay to show loading spinner
   },
   {
     request: {
@@ -124,7 +131,7 @@ const mocks = [
               { _id: 'user003' },
             ],
             admins: [{ _id: 'admin001' }, { _id: 'admin002' }],
-            createdAt: '2024-01-15T12:34:56.789Z',
+            createdAt: dayjs().month(0).date(15).toISOString(),
             address: {
               city: 'San Francisco',
               countryCode: 'US',
@@ -180,25 +187,31 @@ const errorMocks = [
   },
 ];
 
-beforeEach(() => {
-  localStorage.clear();
-  vi.clearAllMocks();
-  (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-    orgId: 'test-org-id',
-  });
-});
-
 describe('LeaveOrganization Component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.params.mockReset();
+    routerMocks.navigate.mockReset();
+    routerMocks.params.mockReturnValue({
+      orgId: 'test-org-id',
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
+  });
+
   test('renders organization details and shows loading spinner', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
       </MockedProvider>,
     );
-    const spinner = await screen.findByRole('status');
-    expect(spinner).toBeInTheDocument();
+    // LoadingState renders with data-testid="loading-state"
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByText('Test Organization')).toBeInTheDocument();
       expect(
@@ -209,7 +222,7 @@ describe('LeaveOrganization Component', () => {
 
   test('renders organization details and displays content correctly', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -225,7 +238,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error message when mutation fails', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/user/leaveOrg/test-org-id']}>
           <Routes>
             <Route
@@ -248,48 +261,16 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     expect(screen.queryByText(/An error occurred!/i)).not.toBeInTheDocument();
   });
 
-  test('logs an error when unable to access localStorage', () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const userEmail = (() => {
-      try {
-        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
-      } catch (e) {
-        console.error('Failed to access localStorage:', e);
-        return '';
-      }
-    })();
-    const userId = (() => {
-      try {
-        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
-      } catch (e) {
-        console.error('Failed to access localStorage:', e);
-        return '';
-      }
-    })();
-    expect(userEmail).toBe('');
-    expect(userId).toBe('');
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Failed to access localStorage:',
-      expect.any(Error),
-    );
-    consoleErrorSpy.mockRestore();
-  });
+  // Note: localStorage error/null/undefined handling is comprehensively tested
+  // in LeaveOrganization.localStorage.spec.tsx using vi.resetModules() and dynamic imports
 
-  test('navigates and shows toast when email matches', async () => {
-    const mockNavigate = vi.fn();
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
-    const toastSuccessMock = vi.fn();
-    toast.success = toastSuccessMock;
+  test('does not submit when non-Enter key is pressed on email input', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -298,26 +279,54 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    await screen.findByText('Continue');
+    await userEvent.click(screen.getByText('Continue'));
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    await userEvent.type(emailInput, 'test@example.com');
+    // Press a non-Enter key - should not trigger verification
+    await userEvent.tab();
+    // Verify the modal is still open and no navigation happened
+    expect(
+      screen.getByPlaceholderText(/Enter your email/i),
+    ).toBeInTheDocument();
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
+  });
+
+  test('navigates and shows toast when email matches', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const leaveButton = await screen.findByRole('button', {
+      name: /Leave Organization/i,
+    });
+    await userEvent.click(leaveButton);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/Are you sure you want to leave/i),
+      ).toBeInTheDocument(),
+    );
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, {
-      target: { value: 'test@example.com' },
-    });
-    fireEvent.keyDown(emailInput, { key: 'Enter', code: 'Enter' });
+    await userEvent.type(emailInput, 'test@example.com');
+    await userEvent.type(emailInput, '{enter}');
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
+      expect(routerMocks.navigate).toHaveBeenCalledWith(`/user/organizations`);
     });
     await waitFor(() => {
-      expect(toastSuccessMock).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         'You have successfully left the organization!',
       );
     });
@@ -325,7 +334,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error when email is missing', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -334,30 +343,33 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
-    fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
-      target: { value: '' },
+    await userEvent.click(screen.getByText('Continue'));
+
+    const confirmButton = screen.getByRole('button', {
+      name: /confirm/i,
     });
-    fireEvent.click(screen.getByText('Confirm'));
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(
-        screen.getByText('Verification failed: Email does not match.'),
+        screen.getByText(
+          'The email you entered does not match your account email.',
+        ),
       ).toBeInTheDocument();
     });
   });
 
   test('shows error when email does not match', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -366,30 +378,36 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
-    fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
-      target: { value: 'different@example.com' },
+    await userEvent.click(screen.getByText('Continue'));
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter your email/i),
+      'different@example.com',
+    );
+    const confirmButton = screen.getByRole('button', {
+      name: /confirm/i,
     });
-    fireEvent.click(screen.getByText('Confirm'));
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(
-        screen.getByText('Verification failed: Email does not match.'),
+        screen.getByText(
+          'The email you entered does not match your account email.',
+        ),
       ).toBeInTheDocument();
     });
   });
 
   test('resets state when back button pressed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -398,26 +416,26 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
     const closeButton = screen.getByRole('button', { name: /Back/i });
-    fireEvent.click(closeButton);
+    await userEvent.click(closeButton);
     expect(
-      screen.queryByText(/Are you sure you want to leave this organization?/i),
+      screen.queryByText(/are you sure you want to leave/i),
     ).toBeInTheDocument();
   });
 
   test('resets state when modal is closed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -426,19 +444,15 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     const closeButton = screen.getByRole('button', { name: /Cancel/i });
-    fireEvent.click(closeButton);
+    await userEvent.click(closeButton);
     expect(screen.queryByText(/Leave Organization/i)).toBeInTheDocument();
   });
 
   test('closes modal and resets state when Esc key is pressed', async () => {
-    const mockNavigate = vi.fn();
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -447,10 +461,10 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
-    fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
+    await userEvent.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByTestId('leave-organization-modal')).toBeNull(); // Modal should no longer be present
     });
@@ -459,7 +473,7 @@ describe('LeaveOrganization Component', () => {
 
   test('displays an error alert when query fails', async () => {
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <LeaveOrganization />
       </MockedProvider>,
     );
@@ -481,7 +495,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], networkErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -497,20 +511,20 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = screen.getByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
 
     // Continue to verification step
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
 
     // Enter correct email and submit
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    await userEvent.type(emailInput, 'test@example.com');
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     // Verify network error message is displayed
     await waitFor(() => {
@@ -538,7 +552,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], graphQLErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -554,20 +568,20 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = screen.getByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
 
     // Continue to verification step
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
 
     // Enter correct email and submit
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    await userEvent.type(emailInput, 'test@example.com');
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     // Verify GraphQL error message is displayed
     await waitFor(() => {
@@ -579,8 +593,8 @@ describe('LeaveOrganization Component', () => {
 
   test('handles missing organizationId or userId', async () => {
     // Mock useParams to return undefined orgId
-    (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      orgId: undefined,
+    routerMocks.params.mockReturnValue({
+      orgId: undefined as string | undefined,
     });
 
     // Render with mocks that don't depend on specific orgId
@@ -605,7 +619,6 @@ describe('LeaveOrganization Component', () => {
             },
           },
         ]}
-        addTypename={false}
       >
         <BrowserRouter>
           <LeaveOrganization />
@@ -619,20 +632,20 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
 
     // Continue to verification step
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
 
     // Enter correct email and submit
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    await userEvent.type(emailInput, 'test@example.com');
 
-    // Use aria-label to find the confirm button
+    // Use the button text to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     // Verify error message is displayed
     await waitFor(() => {
@@ -659,7 +672,7 @@ describe('LeaveOrganization Component', () => {
     };
 
     render(
-      <MockedProvider mocks={[emptyOrgMock]} addTypename={false}>
+      <MockedProvider mocks={[emptyOrgMock]}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>

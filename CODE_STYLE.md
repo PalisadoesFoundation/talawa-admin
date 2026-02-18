@@ -13,6 +13,15 @@ code style should not be changed and must be followed.
 - [Tech Stack](#tech-stack)
 - [Component Structure](#component-structure)
 - [Code Style and Naming Conventions](#code-style-and-naming-conventions)
+- [Empty State Guidelines](#empty-state-guidelines)
+  - [Preferred Pattern: EmptyState Component](#preferred-pattern-emptystate-component)
+  - [NotFound vs EmptyState](#notfound-vs-emptystate)
+  - [Migration Rule](#migration-rule)
+  - [Refactoring Example](#refactoring-example)
+  - [NotFound vs EmptyState Distinction](#notfound-vs-emptystate-distinction)
+    - [Use `EmptyState` when:](#use-emptystate-when)
+    - [Use `NotFound` when:](#use-notfound-when)
+  - [Notes](#notes)
 - [TSDoc](#tsdoc)
   - [How Contributors Can Improve Comments](#how-contributors-can-improve-comments)
 - [Test and Code Linting](#test-and-code-linting)
@@ -37,7 +46,7 @@ code style should not be changed and must be followed.
 
 - GraphQL
 
-- Jest & React Testing Library for testing
+- Vitest & React Testing Library for testing
 
 ## Component Structure
 
@@ -117,6 +126,91 @@ function BasicExample() {
 
 export default BasicExample;
 ```
+
+## Empty State Guidelines
+
+To ensure consistency across the application, all empty or no-data UI states must follow a standardized pattern.
+
+### Preferred Pattern: EmptyState Component
+
+The shared `EmptyState` component **must** be used for all new empty state implementations.
+
+Use `EmptyState` for:
+- Empty lists or tables
+- No search results
+- No organizations, users, events, or records
+- Filtered views returning no data
+- First-time or onboarding empty states
+
+### NotFound vs EmptyState
+
+| Use Case | Component |
+|--------|-----------|
+| No data / empty list | `EmptyState` |
+| No search results | `EmptyState` |
+| Resource does not exist (404) | `NotFound` |
+| Invalid route | `NotFound` |
+
+### Migration Rule
+
+- Legacy `.notFound` CSS-based implementations are deprecated
+- Existing screens should be migrated incrementally
+- **For new empty state implementations, always use `EmptyState`**
+
+### Refactoring Example
+
+**Before (legacy pattern):**
+
+```tsx
+<div className={styles.notFound}>
+  <h4>{t('noResultsFound')}</h4>
+</div>
+
+```
+
+**After (preferred pattern):**
+
+```tsx
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+
+<EmptyState
+  icon="search"
+  message="noResultsFound"
+  description="tryAdjustingFilters"
+/>
+```
+
+### NotFound vs EmptyState Distinction
+
+Although both components represent “absence” scenarios, they serve **different purposes** and must not be used interchangeably.
+
+#### Use `EmptyState` when:
+- The page or screen is valid, but the data set is empty
+- A list, table, or search returns zero results
+- Filters remove all visible items
+- The user has no data yet (first-time or onboarding state)
+
+**Examples:**
+- No users in a table
+- No organizations found after search
+- No membership requests
+
+#### Use `NotFound` when:
+- A requested resource does not exist
+- A route is invalid or inaccessible
+- A user navigates to a non-existent entity
+
+**Examples:**
+- Invalid organization ID
+- Unknown user profile URL
+- 404-style navigation errors
+
+### Notes
+
+- Do not show EmptyState while data is loading
+- Use LoadingState during fetch operations
+- All user-visible text must use i18n keys
+
 
 ## TSDoc
 

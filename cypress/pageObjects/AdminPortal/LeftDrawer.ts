@@ -1,13 +1,11 @@
 export class LeftDrawer {
-  checkBreakpoint(): void {
+  checkBreakpoint(orgId: string): void {
     // Ensure we're inside the <1280px breakpoint where the fix applies
     cy.viewport(1200, 900);
     // Stabilize assertions by waiting on org data
     cy.intercept('POST', '**/graphql').as('graphql');
-    cy.visit('/orglist');
-    // Visit any organization to check OrgBtn test id
-    cy.get('[data-testid="manageBtn"]').first().click();
-    cy.url().should('include', '/orgdash');
+    cy.visit(`/admin/orgdash/${orgId}`);
+    cy.url().should('include', '/admin/orgdash');
     cy.wait('@graphql', { timeout: 15000 });
   }
 

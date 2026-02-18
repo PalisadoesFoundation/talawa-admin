@@ -1,0 +1,120 @@
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--color-blue-50) 0%,
+    var(--color-white) 100%
+  );
+  padding: var(--space-5);
+}
+
+.cardTemplate {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 var(--border-4) var(--border-8) -2px var(--shadow-md),
+    0 var(--border-8) var(--border-16) -4px var(--shadow-sm);
+  padding: var(--space-10);
+  max-width: 450px;
+  width: 100%;
+}
+
+.logo {
+  height: clamp(var(--space-10), 8vw, var(--space-12));
+  width: auto;
+  aspect-ratio: 1;
+  display: block;
+  margin: 0 auto var(--space-8);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: zoomIn 0.3s ease-in-out;
+  }
+}
+
+.stateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  padding: var(--space-5) 0;
+}
+
+.successIcon {
+  font-size: 4rem;
+  color: var(--color-green-500);
+}
+
+.errorIcon {
+  font-size: 4rem;
+  color: var(--color-red-500);
+}
+
+.actionBtn {
+  font-weight: bold;
+  color: var(--color-gray-700);
+  --bs-btn-bg: var(--color-blue-200);
+  --bs-btn-border-color: var(--color-blue-200);
+  --bs-btn-hover-bg: var(--color-blue-300);
+  --bs-btn-hover-border-color: var(--color-blue-300);
+  --bs-btn-active-bg: var(--color-blue-200);
+  --bs-btn-active-border-color: var(--color-blue-200);
+  transition: background-color 0.2s ease;
+}
+
+.actionBtn:hover {
+  color: var(--color-gray-700) !important;
+  box-shadow:
+    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
+    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
+}
+
+@media (max-width: 576px) {
+  .pageWrapper {
+    padding: var(--space-3);
+  }
+
+  .cardTemplate {
+    padding: var(--space-6);
+  }
+
+  .logo {
+    height: var(--logo-md);
+    margin-bottom: var(--space-6);
+  }
+
+  .stateContainer {
+    min-height: 200px;
+  }
+
+  .successIcon,
+  .errorIcon {
+    font-size: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo {
+    animation: none;
+  }
+}
+
+/* Animations */
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

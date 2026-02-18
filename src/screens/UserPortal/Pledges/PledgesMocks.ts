@@ -1,58 +1,49 @@
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const userDetailsQuery = {
   request: {
     query: USER_DETAILS,
     variables: {
-      id: 'userId',
+      input: { id: 'userId' },
     },
   },
   result: {
     data: {
       user: {
-        user: {
-          id: 'userId',
-          joinedOrganizations: [
-            {
-              id: '6537904485008f171cf29924',
-              __typename: 'Organization',
-            },
-          ],
-          firstName: 'Harve',
-          lastName: 'Lance',
-          email: 'testuser1@example.com',
-          image: null,
-          createdAt: '2023-04-13T04:53:17.742Z',
-          birthDate: null,
-          educationGrade: null,
-          employmentStatus: null,
-          gender: null,
-          maritalStatus: null,
-          phone: null,
-          address: {
-            line1: 'Line1',
-            countryCode: 'CountryCode',
-            city: 'CityName',
-            state: 'State',
-            __typename: 'Address',
+        id: 'userId',
+        joinedOrganizations: [
+          {
+            id: '6537904485008f171cf29924',
+            __typename: 'Organization',
           },
-          registeredEvents: [],
-          membershipRequests: [],
-          __typename: 'User',
+        ],
+        firstName: 'Harve',
+        lastName: 'Lance',
+        email: 'testuser1@example.com',
+        image: null,
+        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+        birthDate: null,
+        educationGrade: null,
+        employmentStatus: null,
+        gender: null,
+        maritalStatus: null,
+        phone: null,
+        address: {
+          line1: 'Line1',
+          countryCode: 'CountryCode',
+          city: 'CityName',
+          state: 'State',
+          __typename: 'Address',
         },
-        appUserProfile: {
-          id: '67078abd85008f171cf2991d',
-          adminFor: [],
-          isSuperAdmin: false,
-          appLanguageCode: 'en',
-          createdOrganizations: [],
-          createdEvents: [],
-          eventAdmin: [],
-          __typename: 'AppUserProfile',
-        },
-        __typename: 'UserData',
+        registeredEvents: [],
+        membershipRequests: [],
+        __typename: 'User',
       },
     },
   },
@@ -64,7 +55,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -76,13 +67,13 @@ export const MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            endDate: '2024-09-30T23:59:59.000Z',
+            updatedAt: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs.utc().startOf('month').toISOString(),
+              endAt: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -103,13 +94,13 @@ export const MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            endDate: '2024-08-30T23:59:59.000Z',
+            updatedAt: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(1, 'month').endOf('month').toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs.utc().startOf('month').toISOString(),
+              endAt: dayjs.utc().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -135,7 +126,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           firstName_contains: 'Harve',
           name_contains: undefined,
@@ -150,13 +141,13 @@ export const MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            endDate: '2024-08-30T23:59:59.000Z',
+            updatedAt: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(1, 'month').endOf('month').toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs.utc().startOf('month').toISOString(),
+              endAt: dayjs.utc().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -182,7 +173,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           firstName_contains: '',
           name_contains: 'School',
@@ -197,13 +188,13 @@ export const MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            endDate: '2024-09-30T23:59:59.000Z',
+            updatedAt: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs.utc().startOf('month').toISOString(),
+              endAt: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -229,7 +220,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           name_contains: 'School',
         },
@@ -243,13 +234,13 @@ export const MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            endDate: '2024-09-30T23:59:59.000Z',
+            updatedAt: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs.utc().startOf('month').toISOString(),
+              endAt: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -275,7 +266,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'amount_ASC',
       },
@@ -287,13 +278,13 @@ export const MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            endDate: '2024-09-30T23:59:59.000Z',
+            updatedAt: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs.utc().startOf('month').toISOString(),
+              endAt: dayjs.utc().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -314,13 +305,13 @@ export const MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            endDate: '2024-08-30T23:59:59.000Z',
+            updatedAt: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(1, 'month').endOf('month').toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs.utc().startOf('month').toISOString(),
+              endAt: dayjs.utc().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',

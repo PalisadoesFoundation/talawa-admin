@@ -1,0 +1,15 @@
+.modalContent {
+  width: var(--space-25);
+}
+
+.inputContainer {
+  position: relative;
+  flex: 1;
+  margin: var(--space-0);
+}
+
+.tableContainer {
+  height: var(--space-23);
+  overflow-y: auto;
+  overflow-x: hidden;
+}

@@ -1,0 +1,168 @@
+/**
+ * AgendaItemsCreateModal.module.css
+ * Component-specific styles for AgendaItemsCreateModal.tsx
+ */
+
+.AgendaItemsModal {
+  max-width: 80vw;
+  margin-top: var(--space-10);
+  margin-left: var(--sidebar-offset, 13vw);
+}
+
+@media (max-width: var(--breakpoint-md)) {
+  .AgendaItemsModal {
+    margin: var(--space-12) auto;
+    max-width: 90%;
+  }
+
+  .titlemodalAgendaItems {
+    width: 90%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 90%;
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) {
+  .AgendaItemsModal {
+    margin: var(--space-9) auto;
+    max-width: 95%;
+  }
+
+  .titlemodalAgendaItems {
+    width: 100%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 100%;
+  }
+}
+
+.titlemodalAgendaItems {
+  color: var(--color-gray-900);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-3) solid var(--color-gray-200);
+  width: 65%;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: var(--border-3) solid var(--color-gray-200);
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:focus-visible,
+.noOutline textarea:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-2);
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-600);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-600);
+  opacity: 1;
+}
+
+/* Increased specificity to override Bootstrap without !important */
+.noOutline.noOutline:is(:hover, :focus, :active, .show) {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+.urlListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-0);
+}
+
+.urlListItem a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.urlListItem a:hover {
+  text-decoration: underline;
+}
+
+.urlIcon {
+  margin-right: var(--space-5);
+}
+
+.deleteButtonAgendaItems {
+  margin-left: auto;
+  padding: var(--space-2) var(--space-4);
+}
+
+.previewFile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: var(--space-5);
+}
+
+.previewFile img,
+.previewFile video {
+  width: 100%;
+  max-width: var(--space-23);
+  height: auto;
+  margin-bottom: var(--space-5);
+}
+
+.attachmentPreview {
+  position: relative;
+  width: 100%;
+}
+
+.closeButtonFile {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: 1;
+  background: transparent;
+  transform: scale(1.2);
+  cursor: pointer;
+  border: none;
+  color: var(--color-red-500);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+}
+
+.greenregbtnAgendaItems {
+  margin-top: var(--space-7);
+  border: var(--border-1) solid var(--color-green-500);
+  box-shadow: var(--shadow-offset-none) var(--shadow-offset-sm)
+    var(--shadow-blur-sm) var(--color-gray-300);
+  padding: var(--space-5) var(--space-5);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-green-500);
+  width: 100%;
+  font-size: var(--font-size-md);
+  color: var(--color-white);
+  outline: none;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.greenregbtnAgendaItems:focus-visible {
+  outline: var(--border-2) solid var(--color-green-500);
+  outline-offset: var(--space-2);
+}

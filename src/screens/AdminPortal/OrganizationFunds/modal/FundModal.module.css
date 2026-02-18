@@ -1,0 +1,68 @@
+.fundModal {
+  max-width: 80vw;
+}
+
+.titlemodal {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
+  width: 65%;
+  margin-bottom: 0;
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-600);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-600);
+  opacity: 1;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none;
+}
+
+.switch input {
+  --bs-form-switch-bg: transparent;
+}
+
+.switch input:checked {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-blue-500);
+  box-shadow: 0 0 var(--shadow-blur-xs) var(--shadow-spread-sm)
+    var(--color-blue-200);
+}
+
+.switch input:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--color-gray-200);
+}
+
+.switch :global(.form-check-input) {
+  margin-inline-start: -1.7em;
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+}
+
+.addButton:disabled {
+  margin-bottom: var(--space-4);
+  background-color: var(--color-gray-50);
+  border-color: var(--color-blue-200);
+}

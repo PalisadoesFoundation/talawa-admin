@@ -2,85 +2,99 @@ import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
+import SecuredRoute from 'components/AdminPortal/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
+import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
-import LoginPage from 'screens/LoginPage/LoginPage';
+import LoginPage from 'screens/Auth/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
+import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const OrganizationScreen = lazy(
-  () => import('components/OrganizationScreen/OrganizationScreen'),
+  () => import('components/AdminPortal/OrganizationScreen/OrganizationScreen'),
 );
+const PostsPage = lazy(() => import('shared-components/posts/posts'));
+
 const SuperAdminScreen = lazy(
-  () => import('components/SuperAdminScreen/SuperAdminScreen'),
+  () => import('components/AdminPortal/SuperAdminScreen/SuperAdminScreen'),
 );
-const BlockUser = lazy(() => import('screens/BlockUser/BlockUser'));
+const BlockUser = lazy(() => import('screens/AdminPortal/BlockUser/BlockUser'));
 const EventManagement = lazy(
-  () => import('screens/EventManagement/EventManagement'),
+  () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
 const ForgotPassword = lazy(
-  () => import('screens/ForgotPassword/ForgotPassword'),
+  () => import('screens/Auth/ForgotPassword/ForgotPassword'),
 );
-const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
+const MemberDetail = lazy(
+  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
+);
+const VerifyEmail = lazy(() => import('screens/Auth/VerifyEmail/VerifyEmail'));
 const OrgContribution = lazy(
-  () => import('screens/OrgContribution/OrgContribution'),
+  () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
 );
-const OrgList = lazy(() => import('screens/OrgList/OrgList'));
-const OrgPost = lazy(() => import('screens/OrgPost/OrgPost'));
-const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
+const OrgList = lazy(() => import('screens/AdminPortal/OrgList/OrgList'));
+const OrgSettings = lazy(
+  () => import('screens/AdminPortal/OrgSettings/OrgSettings'),
+);
 
 const OrganizationDashboard = lazy(
-  () => import('screens/OrganizationDashboard/OrganizationDashboard'),
+  () =>
+    import('screens/AdminPortal/OrganizationDashboard/OrganizationDashboard'),
 );
 const OrganizationEvents = lazy(
-  () => import('screens/OrganizationEvents/OrganizationEvents'),
+  () => import('screens/AdminPortal/OrganizationEvents/OrganizationEvents'),
 );
 const OrganizationFunds = lazy(
-  () => import('screens/OrganizationFunds/OrganizationFunds'),
+  () => import('screens/AdminPortal/OrganizationFunds/OrganizationFunds'),
 );
 const OrganizationTransactions = lazy(
-  () => import('screens/OrganizationTransactions/OrganizationTransactions'),
+  () =>
+    import(
+      'screens/AdminPortal/OrganizationTransactions/OrganizationTransactions'
+    ),
 );
 const FundCampaignPledge = lazy(
-  () => import('screens/FundCampaignPledge/FundCampaignPledge'),
+  () => import('screens/AdminPortal/FundCampaignPledge/FundCampaignPledge'),
 );
 const OrganizationPeople = lazy(
-  () => import('screens/OrganizationPeople/OrganizationPeople'),
+  () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
 );
 const OrganizationTags = lazy(
-  () => import('screens/OrganizationTags/OrganizationTags'),
+  () => import('screens/AdminPortal/OrganizationTags/OrganizationTags'),
 );
-const ManageTag = lazy(() => import('screens/ManageTag/ManageTag'));
-const SubTags = lazy(() => import('screens/SubTags/SubTags'));
-const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
-const Requests = lazy(() => import('screens/Requests/Requests'));
-const Users = lazy(() => import('screens/Users/Users'));
+const ManageTag = lazy(() => import('screens/AdminPortal/ManageTag/ManageTag'));
+const SubTags = lazy(() => import('screens/AdminPortal/SubTags/SubTags'));
+const Requests = lazy(() => import('screens/AdminPortal/Requests/Requests'));
+const Users = lazy(() => import('screens/AdminPortal/Users/Users'));
 const CommunityProfile = lazy(
-  () => import('screens/CommunityProfile/CommunityProfile'),
+  () => import('screens/AdminPortal/CommunityProfile/CommunityProfile'),
 );
 const OrganizationVenues = lazy(
-  () => import('screens/OrganizationVenues/OrganizationVenues'),
+  () => import('screens/AdminPortal/OrganizationVenues/OrganizationVenues'),
 );
-const Leaderboard = lazy(() => import('screens/Leaderboard/Leaderboard'));
+const Leaderboard = lazy(
+  () => import('screens/AdminPortal/Leaderboard/Leaderboard'),
+);
 const Advertisements = lazy(
-  () => import('components/Advertisements/Advertisements'),
+  () => import('components/AdminPortal/Advertisements/Advertisements'),
 );
 const Donate = lazy(() => import('screens/UserPortal/Donate/Donate'));
 const Transactions = lazy(
   () => import('screens/UserPortal/Transactions/Transactions'),
 );
 const Events = lazy(() => import('screens/UserPortal/Events/Events'));
-const Posts = lazy(() => import('screens/UserPortal/Posts/Posts'));
 const Organizations = lazy(
   () => import('screens/UserPortal/Organizations/Organizations'),
 );
 const People = lazy(() => import('screens/UserPortal/People/People'));
-const Settings = lazy(() => import('screens/UserPortal/Settings/Settings'));
 const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
@@ -96,9 +110,13 @@ const VolunteerManagement = lazy(
 const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
-const Notification = lazy(() => import('screens/Notification/Notification'));
+const Notification = lazy(
+  () => import('screens/AdminPortal/Notification/Notification'),
+);
 
-const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
+const PluginStore = lazy(
+  () => import('screens/AdminPortal/PluginStore/PluginStore'),
+);
 
 const { setItem } = useLocalStorage();
 
@@ -121,55 +139,22 @@ const { setItem } = useLocalStorage();
 
 function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
+
+  const { t } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
+
   const apolloClient = useApolloClient();
 
   // Get user permissions and admin status (memoized to prevent infinite loops)
   const userPermissions = useMemo(() => {
-    return (
-      data?.currentUser?.appUserProfile?.adminFor?.map(
-        (org: { _id: string }) => org._id,
-      ) || []
-    );
-  }, [data?.currentUser?.appUserProfile?.adminFor]);
-
-  const isAdmin =
-    data?.currentUser?.userType === 'ADMIN' ||
-    data?.currentUser?.userType === 'SUPERADMIN';
-  const isSuperAdmin = data?.currentUser?.userType === 'SUPERADMIN';
+    return data?.user?.role === 'administrator' ? ['admin'] : [];
+  }, [data?.user?.role]);
 
   // Get plugin routes
   const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
   const adminOrgPluginRoutes = usePluginRoutes(userPermissions, true, true);
   const userOrgPluginRoutes = usePluginRoutes(userPermissions, false, true);
   const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
-
-  console.log('=== APP.TSX ROUTE DEBUG ===');
-  console.log('Current user data:', {
-    userType: data?.currentUser?.userType,
-    isAdmin,
-    isSuperAdmin,
-    userPermissions: userPermissions.length,
-    userPermissionsArray: userPermissions,
-  });
-  console.log('Plugin routes loaded:', {
-    admin: {
-      count: adminOrgPluginRoutes.length,
-      routes: adminOrgPluginRoutes.map((r) => ({
-        path: r.path,
-        component: r.component,
-        pluginId: r.pluginId,
-      })),
-    },
-    user: {
-      count: userOrgPluginRoutes.length,
-      routes: userOrgPluginRoutes.map((r) => ({
-        path: r.path,
-        component: r.component,
-        pluginId: r.pluginId,
-      })),
-    },
-  });
-  console.log('=== END APP.TSX ROUTE DEBUG ===');
 
   // Initialize plugin system on app startup
   useEffect(() => {
@@ -181,13 +166,8 @@ function App(): React.ReactElement {
         // Initialize plugin manager
         await getPluginManager().initializePluginSystem();
 
-        // Import and initialize plugin registry
-        const { discoverAndRegisterAllPlugins } = await import(
-          './plugin/registry'
-        );
+        // Initialize plugin registry
         await discoverAndRegisterAllPlugins();
-
-        console.log('Plugin system initialized successfully');
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);
       }
@@ -197,31 +177,47 @@ function App(): React.ReactElement {
   }, [apolloClient]);
 
   useEffect(() => {
-    if (!loading && data?.currentUser) {
-      const auth = data.currentUser;
+    if (!loading && data?.user) {
+      const auth = data.user;
       setItem('IsLoggedIn', 'TRUE');
       setItem('id', auth.id);
       setItem('name', auth.name);
       setItem('email', auth.emailAddress);
+      setItem('role', auth.role);
       // setItem('UserImage', auth.avatarURL|| "");
     }
   }, [data, loading, setItem]);
 
   return (
-    <>
-      <Suspense fallback={<Loader />}>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <Suspense
+        fallback={
+          <LoadingState isLoading={true} variant="spinner">
+            <div />
+          </LoadingState>
+        }
+      >
+        <NotificationToastContainer />
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
           <Route path="/admin" element={<LoginPage />} />
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
-              <Route path="/orglist" element={<OrgList />} />
-              <Route path="/notification" element={<Notification />} />
-              <Route path="/member" element={<MemberDetail />} />
-              <Route path="/users" element={<Users />} />
-              <Route path="/communityProfile" element={<CommunityProfile />} />
-              <Route path="/pluginstore" element={<PluginStore />} />
+              <Route path="/admin/orglist" element={<OrgList />} />
+              <Route path="/admin/notification" element={<Notification />} />
+              <Route path="/admin/profile" element={<MemberDetail />} />
+              <Route path="/admin/users" element={<Users />} />
+              <Route
+                path="/admin/communityProfile"
+                element={<CommunityProfile />}
+              />
+              <Route path="/admin/pluginstore" element={<PluginStore />} />
               {/* Admin global plugin routes (e.g., settings) */}
               {adminGlobalPluginRoutes.map((route) => (
                 <Route
@@ -230,65 +226,83 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<div>{t('loadingAdminPlugin')}</div>}
                     />
                   }
                 />
               ))}
             </Route>
             <Route element={<OrganizationScreen />}>
-              <Route path="/requests/:orgId" element={<Requests />} />
+              <Route path="/admin/requests/:orgId" element={<Requests />} />
               <Route
-                path="/orgdash/:orgId"
+                path="/admin/orgdash/:orgId"
                 element={<OrganizationDashboard />}
               />
               <Route
-                path="/orgpeople/:orgId"
+                path="/admin/orgpeople/:orgId"
                 element={<OrganizationPeople />}
               />
-              <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId"
+                element={<OrganizationTags />}
+              />
+              <Route
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<ManageTag />}
               />
               <Route
-                path="orgtags/:orgId/subTags/:tagId"
+                path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
-              <Route path="/member/:orgId" element={<MemberDetail />} />
               <Route
-                path="/orgevents/:orgId"
+                path="/admin/member/:orgId/:userId"
+                element={<MemberDetail />}
+              />
+              <Route
+                path="/admin/orgevents/:orgId"
                 element={<OrganizationEvents />}
               />
               <Route
-                path="/event/:orgId/:eventId"
+                path="/admin/event/:orgId/:eventId"
                 element={<EventManagement />}
               />
 
-              <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
               <Route
-                path="/orgtransactions/:orgId"
+                path="/admin/orgfunds/:orgId"
+                element={<OrganizationFunds />}
+              />
+              <Route
+                path="/admin/orgtransactions/:orgId"
                 element={<OrganizationTransactions />}
               />
               <Route
-                path="/orgfundcampaign/:orgId/:fundId"
-                element={<OrganizaitionFundCampiagn />}
+                path="/admin/orgfundcampaign/:orgId/:fundId"
+                element={<OrganizationFundCampaign />}
               />
               <Route
-                path="/fundCampaignPledge/:orgId/:fundCampaignId"
+                path="/admin/fundCampaignPledge/:orgId/:fundCampaignId"
                 element={<FundCampaignPledge />}
               />
-              <Route path="/orgcontribution" element={<OrgContribution />} />
-              <Route path="/orgpost/:orgId" element={<OrgPost />} />
-              <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
-              <Route path="/orgads/:orgId" element={<Advertisements />} />
-              <Route path="/blockuser/:orgId" element={<BlockUser />} />
               <Route
-                path="/orgvenues/:orgId"
+                path="/admin/orgcontribution"
+                element={<OrgContribution />}
+              />
+              <Route path="/admin/orgpost/:orgId" element={<PostsPage />} />
+              <Route
+                path="/admin/orgsetting/:orgId"
+                element={<OrgSettings />}
+              />
+              <Route path="/admin/orgads/:orgId" element={<Advertisements />} />
+              <Route path="/admin/blockuser/:orgId" element={<BlockUser />} />
+              <Route
+                path="/admin/orgvenues/:orgId"
                 element={<OrganizationVenues />}
               />
-              <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
-              <Route path="/orgchat/:orgId" element={<Chat />} />
+              <Route
+                path="/admin/leaderboard/:orgId"
+                element={<Leaderboard />}
+              />
+              <Route path="/admin/orgchat/:orgId" element={<Chat />} />
               {/* Admin org plugin routes */}
               {adminOrgPluginRoutes.map((route) => (
                 <Route
@@ -297,7 +311,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<div>{t('loadingAdminPlugin')}</div>}
                     />
                   }
                 />
@@ -305,6 +319,8 @@ function App(): React.ReactElement {
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/auth/verify-email" element={<VerifyEmail />} />
           {/* Public invitation accept route */}
           <Route
             path="/event/invitation/:token"
@@ -313,7 +329,6 @@ function App(): React.ReactElement {
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
-            <Route path="/user/settings" element={<Settings />} />
             {/* User global plugin routes (no orgId required) */}
             <Route element={<UserGlobalScreen />}>
               {userGlobalPluginRoutes.map((route) => (
@@ -323,7 +338,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<div>{t('loadingUserPlugin')}</div>}
                     />
                   }
                 />
@@ -332,7 +347,8 @@ function App(): React.ReactElement {
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
               <Route path="/user/organizations" element={<Organizations />} />
-              <Route path="/user/organization/:orgId" element={<Posts />} />
+              <Route path="/user/settings" element={<MemberDetail />} />
+              <Route path="/user/organization/:orgId" element={<PostsPage />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />
               <Route
@@ -359,7 +375,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<div>{t('loadingUserPlugin')}</div>}
                     />
                   }
                 />
@@ -376,7 +392,7 @@ function App(): React.ReactElement {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 

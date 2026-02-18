@@ -1,0 +1,23 @@
+.errorContainer {
+  padding: 40px;
+  text-align: center;
+  background-color: var(--bs-gray-100);
+  border: 1px solid var(--bs-gray-300);
+  border-radius: 8px;
+  margin: 20px;
+}
+
+.errorHeading {
+  color: var(--bs-danger);
+  margin-bottom: 16px;
+}
+
+.errorText {
+  color: var(--bs-secondary);
+  margin-bottom: 8px;
+}
+
+.errorSmallText {
+  color: var(--bs-secondary);
+  font-size: 14px;
+}

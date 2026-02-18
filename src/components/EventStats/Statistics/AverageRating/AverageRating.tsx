@@ -4,13 +4,9 @@
  * This component displays the average review score for an event using a styled card layout.
  * It utilizes Material-UI's `Rating` component to visually represent the score with custom icons.
  *
- * @param {InterfaceStatsModal} props - The props object containing event statistics data.
- * @param {object} props.data - The data object containing event-related statistics.
- * @param {object} props.data.event - The event object containing feedback details.
- * @param {number} [props.data.event.averageFeedbackScore] - The average feedback score for the event.
- *   This value is displayed as a numeric score and visually represented using the `Rating` component.
+ * @param data - Event statistics data for the AverageRating component.
  *
- * @returns {JSX.Element} A React component that renders the average review score with a styled card.
+ * @returns A React component that renders the average review score with a styled card.
  *
  * @remarks
  * - The `Rating` component uses custom icons (`FavoriteIcon` and `FavoriteBorderIcon`) to represent filled and empty states.
@@ -19,9 +15,8 @@
  *
  * @example
  * ```tsx
- * <AverageRating data={{ event: { averageFeedbackScore: 4.5 } }} />
+ * <AverageRating data=\{\{ event: \{ averageFeedbackScore: 4.5 \} \}\} />
  * ```
- *
  */
 import React from 'react';
 import Card from 'react-bootstrap/Card';
@@ -29,29 +24,40 @@ import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Typography from '@mui/material/Typography';
-import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
+import styles from './AverageRating.module.css';
 import type { InterfaceStatsModal } from 'types/Event/interface';
 
 export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventStats.averageRating',
+  });
+
+  const safeScore = data.event.averageFeedbackScore ?? 0;
+
   return (
     <>
       <Card className={styles.cardContainer}>
         <Card.Body>
           <Card.Title>
-            <h4>Average Review Score</h4>
+            <h4>{t('title')}</h4>
           </Card.Title>
           <Typography component="legend">
-            Rated {data.event.averageFeedbackScore?.toFixed(2)} / 5
+            {t('rated', {
+              score: safeScore.toFixed(2),
+            })}
           </Typography>
           <Rating
             name="customized-color"
             precision={0.5}
             max={5}
             readOnly
-            value={data.event.averageFeedbackScore}
-            icon={<FavoriteIcon fontSize="inherit" />}
+            value={safeScore}
+            icon={<FavoriteIcon className={styles.ratingIcon} />}
             size="medium"
-            emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            emptyIcon={
+              <FavoriteBorderIcon className={styles.ratingEmptyIcon} />
+            }
             classes={{
               iconFilled: styles.ratingFilled,
               iconHover: styles.ratingHover,

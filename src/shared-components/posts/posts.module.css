@@ -1,0 +1,76 @@
+.dropdown {
+  background-color: var(--color-gray-50) !important;
+  border: var(--border-1) solid var(--color-gray-600) !important;
+  color: var(--color-gray-600) !important;
+  position: relative;
+  /* !important needed to override Bootstrap's display on .btn */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-3);
+  width: auto;
+  height: var(--space-10);
+}
+
+/* :global(.show) targets Bootstrap's .show class added to open dropdowns */
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+.dropdown:is(:hover, :active),
+:global(.show).dropdown {
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--space-1) solid var(--color-blue-200);
+  outline-offset: var(--space-1);
+}
+
+.list_box {
+  overflow-y: auto;
+  width: auto;
+}
+
+.head {
+  min-width: 0;
+}
+
+.postContainer {
+  min-width: 0;
+}
+
+.mainpagerightOrgPost {
+  min-width: 0;
+}
+
+.addPost {
+  min-width: 0;
+}
+
+.noPostsFound {
+  min-width: 0;
+}
+
+.postInfiniteScroll {
+  min-width: 0;
+}
+
+.createPostModalContainer {
+  min-width: 0;
+}
+
+.pinnedPostModal {
+  min-width: 0;
+}
+
+.pinnedPostModalBody {
+  min-width: 0;
+}
+
+.closeButtonIcon {
+  min-width: 0;
+}

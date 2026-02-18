@@ -1,12 +1,9 @@
 import gql from 'graphql-tag';
-import 'style/app-fixed.module.css';
-//Query List
-// Check Auth
 
 // Query to get info about current user
 export const CURRENT_USER = gql`
   query CurrentUser {
-    currentUser {
+    user: currentUser {
       addressLine1
       addressLine2
       avatarMimeType
@@ -83,15 +80,15 @@ export const ORGANIZATION_FILTER_LIST = gql`
   ${ORG_FIELDS}
 `;
 
-// Lightweight version without members
+// Lightweight version without members and other fields for registration page
 export const ORGANIZATION_LIST_NO_MEMBERS = gql`
-  query {
+  query OrganizationListBasic {
     organizations {
-      ...OrgFields
-      isMember
+      id
+      name
+      addressLine1
     }
   }
-  ${ORG_FIELDS}
 `;
 
 export const ORGANIZATION_MEMBER_ADMIN_COUNT = gql`
@@ -120,34 +117,6 @@ export const USER_JOINED_ORGANIZATIONS_NO_MEMBERS = gql`
     }
   }
   ${ORG_FIELDS}
-`;
-
-export const USER_JOINED_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int!) {
-    user(input: { id: $id }) {
-      organizationsWhereMember(first: $first) {
-        pageInfo {
-          hasNextPage
-        }
-        edges {
-          node {
-            id
-            name
-            addressLine1
-            description
-            avatarURL
-            members(first: 32) {
-              edges {
-                node {
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 `;
 
 export const ALL_ORGANIZATIONS_PG = gql`
@@ -245,6 +214,83 @@ export const USER_LIST_FOR_TABLE = gql`
   }
 `;
 
+export const USER_LIST_FOR_ADMIN = gql`
+  query allUsers(
+    $first: Int
+    $after: String
+    $orgFirst: Int
+    $last: Int
+    $before: String
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(
+      first: $first
+      after: $after
+      where: $where
+      last: $last
+      before: $before
+    ) {
+      pageInfo {
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+          role
+          avatarURL
+          emailAddress
+          createdAt
+          city
+          state
+          countryCode
+          postalCode
+          orgsWhereUserIsBlocked(first: 16) {
+            edges {
+              node {
+                id
+                createdAt
+                organization {
+                  name
+                  createdAt
+                  city
+                  avatarURL
+                  creator {
+                    name
+                  }
+                }
+              }
+            }
+          }
+          organizationsWhereMember(first: $orgFirst) {
+            edges {
+              node {
+                id
+                name
+                avatarURL
+                createdAt
+                city
+                state
+                countryCode
+                creator {
+                  id
+                  name
+                  emailAddress
+                  avatarURL
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const EVENT_DETAILS = gql`
   query GetEvent($eventId: String!) {
     event(input: { id: $eventId }) {
@@ -255,6 +301,7 @@ export const EVENT_DETAILS = gql`
       allDay
       isPublic
       isRegisterable
+      isInviteOnly
       startAt
       endAt
       createdAt
@@ -276,21 +323,6 @@ export const EVENT_DETAILS = gql`
         name
         emailAddress
       }
-      organization {
-        id
-        name
-      }
-    }
-  }
-`;
-
-export const EVENT_DETAILS_BASIC = gql`
-  query GetEventBasic($eventId: String!) {
-    event(input: { id: $eventId }) {
-      id
-      name
-      location
-      startAt
       organization {
         id
         name
@@ -347,6 +379,7 @@ export const EVENT_REGISTRANTS = gql`
         id
         name
         emailAddress
+        avatarURL
       }
       isRegistered
       isInvited
@@ -400,32 +433,29 @@ export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
   }
 `;
 
-export const GET_POSTS_BY_ORG = gql`
-  query GetPostsByOrg($input: GetPostsByOrgInput!) {
-    postsByOrganization(input: $input) {
-      id
-      caption
-      pinnedAt
-      createdAt
-      updatedAt
-      attachments {
-        id
-        name
-        mimeType
-        objectName
-      }
-      creator {
-        id
-      }
-    }
-  }
-`;
-
 export const GET_USER_BY_ID = gql`
   query GetUserById($input: QueryUserInput!) {
     user(input: $input) {
       id
       name
+      emailAddress
+      addressLine1
+      addressLine2
+      birthDate
+      city
+      avatarURL
+      countryCode
+      description
+      educationGrade
+      employmentStatus
+      homePhoneNumber
+      maritalStatus
+      mobilePhoneNumber
+      natalSex
+      naturalLanguageCode
+      postalCode
+      state
+      workPhoneNumber
     }
   }
 `;
@@ -521,8 +551,13 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
+            attendees {
+              id
+              name
+            }
             baseEvent {
               id
               name
@@ -602,6 +637,15 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
+            creator {
+              id
+              name
+            }
+            attendees {
+              id
+              name
+            }
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -681,7 +725,6 @@ const ORGANIZATION_BASIC_FIELDS = gql`
     countryCode
     avatarURL
     createdAt
-    updatedAt
     isUserRegistrationRequired
   }
 `;
@@ -819,6 +862,22 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
+export const MEMBERS_LIST_WITH_DETAILS = gql`
+  query GetMembersByOrganizationWithDetails($organizationId: ID!) {
+    usersByOrganizationId(organizationId: $organizationId) {
+      id
+      name
+      firstName
+      lastName
+      emailAddress
+      role
+      avatarURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
@@ -898,12 +957,18 @@ export const USER_DETAILS = gql`
       mobilePhoneNumber
       homePhoneNumber
       workPhoneNumber
-
+      eventsAttended {
+        id
+      }
       organizationsWhereMember(first: 10) {
         edges {
           node {
             id
             name
+            membersCount
+            adminsCount
+            description
+            avatarURL
           }
         }
       }
@@ -911,6 +976,10 @@ export const USER_DETAILS = gql`
       createdOrganizations {
         id
         name
+        membersCount
+        adminsCount
+        description
+        avatarURL
       }
     }
   }
@@ -993,7 +1062,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 `;
 
 // to take the membership request
-export const MEMBERSHIP_REQUEST = gql`
+export const MEMBERSHIP_REQUEST_PG = gql`
   query Organization(
     $input: QueryOrganizationInput!
     $skip: Int
@@ -1002,7 +1071,7 @@ export const MEMBERSHIP_REQUEST = gql`
   ) {
     organization(input: $input) {
       id
-      membershipRequestsCount
+      # membershipRequestsCount
       membershipRequests(
         skip: $skip
         first: $first
@@ -1016,7 +1085,6 @@ export const MEMBERSHIP_REQUEST = gql`
           id
           name
           emailAddress
-          avatarURL
         }
       }
     }
@@ -1136,8 +1204,18 @@ export const GET_COMMUNITY_DATA_PG = gql`
 `;
 
 export const SIGNIN_QUERY = gql`
-  query SignIn($email: EmailAddress!, $password: String!) {
-    signIn(input: { emailAddress: $email, password: $password }) {
+  query SignIn(
+    $email: EmailAddress!
+    $password: String!
+    $recaptchaToken: String
+  ) {
+    signIn(
+      input: {
+        emailAddress: $email
+        password: $password
+        recaptchaToken: $recaptchaToken
+      }
+    ) {
       user {
         id
         name
@@ -1145,8 +1223,10 @@ export const SIGNIN_QUERY = gql`
         role
         countryCode
         avatarURL
+        isEmailAddressVerified
       }
       authenticationToken
+      refreshToken
     }
   }
 `;
@@ -1187,20 +1267,59 @@ export const GET_ORGANIZATION_VENUES_PG = gql`
   }
 `;
 
+/** Fetches tags assigned to a user, including assignees (capped), creator, and folder. */
+export const GET_USER_TAGS = gql`
+  query GetUserTags($userId: ID!) {
+    userTags(userId: $userId) {
+      id
+      name
+      createdAt
+      folder {
+        id
+      }
+      assignees(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+
+      creator {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_EVENTS_BY_ORGANIZATION_ID = gql`
+  query GetEventsByOrganizationId($organizationId: ID!) {
+    eventsByOrganizationId(input: { organizationId: $organizationId }) {
+      id
+      name
+      description
+      startAt
+      endAt
+      creator {
+        id
+      }
+    }
+  }
+`;
+
 // get the list of Action Item Categories
 export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
-export { AgendaItemByEvent } from './AgendaItemQueries';
-
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
+export { AGENDA_FOLDER_LIST } from './AgendaFolderQueries';
 // to take the list of the blocked users
 export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
 
 // display posts
-export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
 export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
 // comments

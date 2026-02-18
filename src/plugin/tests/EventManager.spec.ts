@@ -10,7 +10,7 @@ describe('EventManager', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Constructor', () => {

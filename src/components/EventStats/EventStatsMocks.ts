@@ -24,6 +24,48 @@ export const mockData = [
       },
     },
   },
+  {
+    // Covers renders where _id prop is empty
+    request: {
+      query: EVENT_FEEDBACKS,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        event: {
+          _id: '',
+          feedback: [],
+          averageFeedbackScore: 0,
+        },
+      },
+    },
+  },
+  {
+    // Covers rerender with a different id value
+    request: {
+      query: EVENT_FEEDBACKS,
+      variables: {
+        id: 'differentId',
+      },
+    },
+    result: {
+      data: {
+        event: {
+          _id: 'differentId',
+          feedback: [
+            {
+              _id: 'feedback2',
+              review: 'review2',
+              rating: 4,
+            },
+          ],
+          averageFeedbackScore: 4,
+        },
+      },
+    },
+  },
 ];
 
 export const nonEmptyProps = {

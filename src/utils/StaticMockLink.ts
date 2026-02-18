@@ -15,6 +15,13 @@ import {
 
 import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
 
+/**
+ * Extended MockedResponse type that supports variableMatcher for flexible matching
+ */
+interface IMockedResponseWithMatcher extends MockedResponse {
+  variableMatcher?: (variables: Record<string, unknown>) => boolean;
+}
+
 function requestToKey(
   request:
     | Operation
@@ -70,6 +77,16 @@ export class StaticMockLink extends ApolloLink {
       (res, index) => {
         const requestVariables = operation.variables || {};
         const mockedResponseVariables = res.request.variables || {};
+
+        // Support variableMatcher function for flexible matching
+        // If matcher exists and returns true, use this mock
+        // If matcher returns false, fall back to deep-equal check
+        const matcher = (res as IMockedResponseWithMatcher).variableMatcher;
+        if (typeof matcher === 'function' && matcher(requestVariables)) {
+          responseIndex = index;
+          return true;
+        }
+
         if (equal(requestVariables, mockedResponseVariables)) {
           responseIndex = index;
           return true;
@@ -145,7 +162,16 @@ export class StaticMockLink extends ApolloLink {
   private _normalizeMockedResponse(
     mockedResponse: MockedResponse,
   ): MockedResponse {
-    const newMockedResponse = cloneDeep(mockedResponse);
+    const newMockedResponse = cloneDeep(
+      mockedResponse,
+    ) as IMockedResponseWithMatcher;
+    // cloneDeep might strip functions, so we restore the variableMatcher if it existed
+    if ((mockedResponse as IMockedResponseWithMatcher).variableMatcher) {
+      newMockedResponse.variableMatcher = (
+        mockedResponse as IMockedResponseWithMatcher
+      ).variableMatcher;
+    }
+
     const queryWithoutConnection = removeConnectionDirectiveFromDocument(
       newMockedResponse.request.query,
     );

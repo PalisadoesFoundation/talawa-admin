@@ -4,13 +4,13 @@
  * controlled by the `showDropdown` state, and it automatically toggles
  * based on the current route.
  *
- * @component
- * @param {InterfaceCollapsibleDropdown} props - The props for the component.
- * @param {object} props.target - The target object containing the dropdown's name and sub-targets.
- * @param {boolean} props.showDropdown - A boolean indicating whether the dropdown is currently visible.
- * @param {React.Dispatch<React.SetStateAction<boolean>>} props.setShowDropdown - A function to toggle the dropdown's visibility.
  *
- * @returns {JSX.Element} The collapsible dropdown component.
+ * @param props - The props for the component.
+ * - target - The target object containing the dropdown's name and sub-targets.
+ * - showDropdown - A boolean indicating whether the dropdown is currently visible.
+ * - setShowDropdown - A function to toggle the dropdown's visibility.
+ *
+ * @returns The collapsible dropdown component.
  *
  * @remarks
  * - The dropdown automatically opens if the current route includes 'orgstore'.
@@ -31,7 +31,7 @@
  * />
  * ```
  *
- * @dependencies
+ * Uses -
  * - `react-bootstrap/Collapse` for dropdown animation.
  * - `react-router-dom` for navigation and route handling.
  * - `react-i18next` for internationalization support.
@@ -39,18 +39,21 @@
  */
 import React, { useEffect } from 'react';
 import { Collapse } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
-import { NavLink, useLocation, useNavigate } from 'react-router';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import Button from 'shared-components/Button';
 
-const collapsibleDropdown = ({
+const CollapsibleDropdown = ({
   target,
   showDropdown,
   setShowDropdown,
 }: InterfaceCollapsibleDropdown): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
   const { name, subTargets } = target;
   const navigate = useNavigate();
   const location = useLocation();
@@ -64,8 +67,13 @@ const collapsibleDropdown = ({
   }, [location.pathname]);
 
   return (
-    <>
-      <button
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <Button
         className={
           showDropdown
             ? styles.leftDrawerActiveButton
@@ -88,7 +96,7 @@ const collapsibleDropdown = ({
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />
-      </button>
+      </Button>
       <Collapse in={showDropdown}>
         <div className="ps-4">
           {subTargets &&
@@ -96,7 +104,7 @@ const collapsibleDropdown = ({
               return (
                 <NavLink to={url} key={name}>
                   {({ isActive }) => (
-                    <button
+                    <Button
                       key={name}
                       className={
                         isActive
@@ -119,15 +127,15 @@ const collapsibleDropdown = ({
                           }`}
                         />
                       </div>
-                    </button>
+                    </Button>
                   )}
                 </NavLink>
               );
             })}
         </div>
       </Collapse>
-    </>
+    </ErrorBoundaryWrapper>
   );
 };
 
-export default collapsibleDropdown;
+export default CollapsibleDropdown;

@@ -1,12 +1,13 @@
 import JSZip from 'jszip';
-import { toast } from 'react-toastify';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+
 import {
   UPLOAD_PLUGIN_ZIP_MUTATION,
   CREATE_PLUGIN_MUTATION,
 } from '../GraphQl/Mutations/PluginMutations';
 import { adminPluginFileService } from '../plugin/services/AdminPluginFileService';
 
-export interface AdminPluginManifest {
+export interface IAdminPluginManifest {
   name: string;
   version: string;
   description: string;
@@ -23,28 +24,28 @@ export interface AdminPluginManifest {
   };
 }
 
-export interface AdminPluginZipStructure {
+export interface IAdminPluginZipStructure {
   hasAdminFolder: boolean;
   hasApiFolder: boolean;
-  adminManifest?: AdminPluginManifest;
-  apiManifest?: AdminPluginManifest;
+  adminManifest?: IAdminPluginManifest;
+  apiManifest?: IAdminPluginManifest;
   pluginId?: string;
   files: Record<string, string>;
   apiFiles?: string[];
 }
 
-export interface AdminPluginInstallationResult {
+export interface IAdminPluginInstallationResult {
   success: boolean;
   pluginId: string;
-  manifest: AdminPluginManifest;
+  manifest: IAdminPluginManifest;
   installedComponents: string[];
   error?: string;
 }
 
-export interface AdminPluginInstallationOptions {
+export interface IAdminPluginInstallationOptions {
   zipFile: File;
   backup?: boolean;
-  apolloClient?: any;
+  apolloClient?: ApolloClient<NormalizedCacheObject>;
 }
 
 /**
@@ -52,11 +53,11 @@ export interface AdminPluginInstallationOptions {
  */
 export async function validateAdminPluginZip(
   zipFile: File,
-): Promise<AdminPluginZipStructure> {
+): Promise<IAdminPluginZipStructure> {
   const zip = new JSZip();
   const zipContent = await zip.loadAsync(zipFile);
 
-  const structure: AdminPluginZipStructure = {
+  const structure: IAdminPluginZipStructure = {
     hasAdminFolder: false,
     hasApiFolder: false,
     files: {},
@@ -98,7 +99,7 @@ export async function validateAdminPluginZip(
     if (manifestFile) {
       const manifestContent = await manifestFile.async('string');
       try {
-        const manifest = JSON.parse(manifestContent) as AdminPluginManifest;
+        const manifest = JSON.parse(manifestContent) as IAdminPluginManifest;
 
         // Validate required fields
         const requiredFields = [
@@ -110,7 +111,7 @@ export async function validateAdminPluginZip(
           'pluginId',
         ];
         const missingFields = requiredFields.filter(
-          (field) => !manifest[field as keyof AdminPluginManifest],
+          (field) => !manifest[field as keyof IAdminPluginManifest],
         );
 
         if (missingFields.length > 0) {
@@ -121,7 +122,7 @@ export async function validateAdminPluginZip(
 
         structure.adminManifest = manifest;
         structure.pluginId = manifest.pluginId;
-      } catch (error) {
+      } catch {
         throw new Error('Invalid admin manifest.json');
       }
     } else {
@@ -147,7 +148,7 @@ export async function validateAdminPluginZip(
       try {
         const apiManifest = JSON.parse(
           apiManifestContent,
-        ) as AdminPluginManifest;
+        ) as IAdminPluginManifest;
 
         // Validate required fields
         const requiredFields = [
@@ -159,7 +160,7 @@ export async function validateAdminPluginZip(
           'pluginId',
         ];
         const missingFields = requiredFields.filter(
-          (field) => !apiManifest[field as keyof AdminPluginManifest],
+          (field) => !apiManifest[field as keyof IAdminPluginManifest],
         );
 
         if (missingFields.length > 0) {
@@ -180,7 +181,7 @@ export async function validateAdminPluginZip(
         if (!structure.pluginId) {
           structure.pluginId = apiManifest.pluginId;
         }
-      } catch (error) {
+      } catch {
         throw new Error('Invalid api manifest.json');
       }
     } else {
@@ -236,7 +237,7 @@ export function validateAdminPluginStructure(files: Record<string, string>): {
     }
 
     return { valid: true };
-  } catch (error) {
+  } catch {
     return {
       valid: false,
       error: 'Invalid manifest.json format',
@@ -251,7 +252,7 @@ export function validateAdminPluginStructure(files: Record<string, string>): {
 export async function installAdminPluginFromZip({
   zipFile,
   apolloClient,
-}: AdminPluginInstallationOptions): Promise<AdminPluginInstallationResult> {
+}: IAdminPluginInstallationOptions): Promise<IAdminPluginInstallationResult> {
   try {
     // Validate zip structure
     const structure = await validateAdminPluginZip(zipFile);
@@ -261,15 +262,25 @@ export async function installAdminPluginFromZip({
       return {
         success: false,
         pluginId: '',
-        manifest: {} as AdminPluginManifest,
+        manifest: {} as IAdminPluginManifest,
         installedComponents: [],
         error:
           "Zip file must contain either 'admin' or 'api' folder with valid plugin structure",
       };
     }
 
-    const pluginId = structure.pluginId!;
-    const manifest = structure.adminManifest || structure.apiManifest!;
+    const pluginId = structure.pluginId;
+    const manifest = structure.adminManifest || structure.apiManifest;
+
+    if (!pluginId || !manifest) {
+      return {
+        success: false,
+        pluginId: '',
+        manifest: {} as IAdminPluginManifest,
+        installedComponents: [],
+        error: 'Invalid plugin structure: missing pluginId or manifest',
+      };
+    }
     const installedComponents: string[] = [];
 
     // STEP 1: Create plugin in database first (basic entry with isInstalled: false)
@@ -362,7 +373,7 @@ export async function installAdminPluginFromZip({
     return {
       success: false,
       pluginId: '',
-      manifest: {} as AdminPluginManifest,
+      manifest: {} as IAdminPluginManifest,
       installedComponents: [],
       error: error instanceof Error ? error.message : 'Failed to upload plugin',
     };
@@ -375,7 +386,7 @@ export async function installAdminPluginFromZip({
 export async function getInstalledAdminPlugins(): Promise<
   Array<{
     pluginId: string;
-    manifest: AdminPluginManifest;
+    manifest: IAdminPluginManifest;
     installedAt: string;
   }>
 > {

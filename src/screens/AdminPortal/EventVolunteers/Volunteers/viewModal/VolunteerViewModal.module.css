@@ -1,0 +1,140 @@
+.volunteerViewModal {
+  max-width: 80vw;
+  margin: 2vh auto;
+}
+
+.modalTitle {
+  margin: 0;
+}
+
+.modalForm {
+  padding: var(--space-5);
+}
+
+.formGroup {
+  margin-bottom: var(--space-5);
+}
+
+.tableImage {
+  width: var(--space-9);
+  height: var(--space-9);
+  border-radius: 50%;
+  margin-right: var(--space-3);
+}
+
+.statusGroup {
+  display: flex;
+  gap: var(--space-5);
+  margin: 0 auto;
+  margin-bottom: var(--space-3);
+}
+
+.statusIcon {
+  margin-right: var(--space-3);
+}
+
+.acceptedStatus {
+  color: var(--color-blue-700);
+  -webkit-text-fill-color: var(--color-blue-700);
+  outline: var(--border-0) solid currentColor;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+}
+
+.rejectedStatus {
+  color: var(--color-red-500);
+  -webkit-text-fill-color: var(--color-red-500);
+  outline: var(--border-0) solid currentColor;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+}
+
+.pendingStatus {
+  color: var(--color-yellow-500);
+  -webkit-text-fill-color: var(--color-yellow-500);
+  outline: var(--border-0) solid currentColor;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+}
+
+.hoursField {
+  width: 100%;
+}
+
+.groupsLabel {
+  font-weight: var(--font-weight-lighter);
+  margin-left: var(--space-3);
+  margin-bottom: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-700);
+}
+
+.modalTable {
+  max-height: var(--space-17);
+  overflow-y: auto;
+}
+
+.modalTable img[alt='creator'] {
+  height: var(--space-7);
+  width: var(--space-7);
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  margin-right: var(--space-3);
+}
+
+.modalTable img[alt='orgImage'] {
+  height: var(--space-7);
+  width: var(--space-7);
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-3);
+}
+
+.tableHeader {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.tableRow:last-child td,
+.tableRow:last-child th {
+  border: 0;
+}
+
+.avatarContainer {
+  width: var(--space-7);
+  height: var(--space-7);
+}
+
+.imageContainer {
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: 100%;
+  margin-right: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-400);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-400);
+  opacity: 1;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none;
+}

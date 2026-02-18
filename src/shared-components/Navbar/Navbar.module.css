@@ -1,0 +1,60 @@
+.calendarEventHeader {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  padding: var(--space-2);
+}
+
+.calendar__header {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-right: 0;
+}
+
+.space {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0 var(--space-1);
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-600);
+  border-radius: var(--radius-md);
+}
+
+.dropdown:is(:hover, :active),
+:global(.show).dropdown {
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-gray-800) !important;
+  box-shadow: none !important;
+}
+
+/* Ensure the dropdown menu matches the button width perfectly */
+.dropdown :global(.dropdown-menu) {
+  min-width: 100% !important;
+  width: 100% !important;
+  margin-top: var(--space-1);
+  border-radius: var(--radius-lg);
+}
+
+.btnsBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  width: auto;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.selectTypeEventHeader {
+  border-radius: var(--radius-md);
+}

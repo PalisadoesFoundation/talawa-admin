@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { act } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
@@ -10,8 +10,8 @@ import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import '../../style/app-fixed.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
+import userEvent from '@testing-library/user-event';
 
 const { setItem } = useLocalStorage();
 
@@ -37,30 +37,83 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({
-      pathname: mockID ? `/orgdash/${mockID}` : '/orgdash/undefined',
+      pathname: mockID
+        ? `/admin/orgdash/${mockID}`
+        : '/admin/orgdash/undefined',
     }),
   };
 });
 
-const link = new StaticMockLink(MOCKS, true);
+// Mock LeftDrawerOrg to prevent router-related errors from NavLink, useLocation, etc.
+vi.mock('components/LeftDrawerOrg/LeftDrawerOrg', () => ({
+  default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
+    <div data-testid="leftDrawerContainer" data-hide-drawer={hideDrawer}>
+      <span>Organization Menu</span>
+    </div>
+  )),
+}));
 
+// Mock SignOut component to prevent useNavigate() error from Router context
+vi.mock('components/SignOut/SignOut', () => ({
+  default: vi.fn(() => (
+    <button data-testid="signOutBtn" type="button">
+      Sign Out
+    </button>
+  )),
+}));
+
+// Mock useSession to prevent router hook errors
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+    startSession: vi.fn(),
+    handleLogout: vi.fn(),
+    extendSession: vi.fn(),
+  })),
+}));
+
+// Mock ProfileCard component to prevent useNavigate() error from Router context
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: vi.fn(() => (
+    <div data-testid="profile-dropdown">
+      <div data-testid="display-name">Test User</div>
+    </div>
+  )),
+}));
+
+// Mock ProfileDropdown component to prevent useNavigate() error from Router context
+vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
+  default: vi.fn(() => (
+    <div data-testid="profile-dropdown-admin">
+      <div data-testid="display-name">Admin User</div>
+    </div>
+  )),
+}));
+
+const link = new StaticMockLink(MOCKS, true);
+const user = userEvent.setup();
 const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  act(() => {
+    window.innerWidth = width;
+    window.dispatchEvent(new Event('resize'));
+  });
 };
 
-const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
-  fireEvent.click(toggleButton);
+const clickToggleMenuBtn = async (toggleButton: HTMLElement): Promise<void> => {
+  await user.click(toggleButton);
 };
 
 describe('EventDashboardScreen Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('does not render main content when orgId is undefined', async () => {
     mockID = undefined;
     setItem('IsLoggedIn', 'true');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/orgdash/undefined']}>
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgdash/undefined']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -79,8 +132,8 @@ describe('EventDashboardScreen Component', () => {
     setItem('IsLoggedIn', 'false');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -98,8 +151,8 @@ describe('EventDashboardScreen Component', () => {
     setItem('AdminFor', null);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -109,7 +162,7 @@ describe('EventDashboardScreen Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
+    expect(screen.getByText('Dashboard')).toBeInTheDocument();
   });
 
   it('renders and toggles drawer states correctly', async () => {
@@ -118,8 +171,8 @@ describe('EventDashboardScreen Component', () => {
     setItem('sidebar', false);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -136,7 +189,7 @@ describe('EventDashboardScreen Component', () => {
 
     // Resize window to trigger hideDrawer true
     resizeWindow(800);
-    clickToggleMenuBtn(toggleButton);
+    await clickToggleMenuBtn(toggleButton);
 
     const afterFirstToggle = mainPage.className;
     expect(afterFirstToggle).not.toBe(initialClass);
@@ -144,7 +197,7 @@ describe('EventDashboardScreen Component', () => {
 
     // Resize back
     resizeWindow(1200);
-    clickToggleMenuBtn(toggleButton);
+    await clickToggleMenuBtn(toggleButton);
 
     const afterSecondToggle = mainPage.className;
     expect(afterSecondToggle).not.toBe(afterFirstToggle);

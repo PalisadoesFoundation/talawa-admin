@@ -3,13 +3,14 @@ services:
     build:
       context: ..
       dockerfile: docker/Dockerfile.dev
+      args:
+        PNPM_VERSION: '${PNPM_VERSION:-10.4.1}'
     ports:
       - '${PORT:-4321}:${PORT:-4321}'
     env_file:
       - ../.env
     #environment:
     #  - REACT_APP_TALAWA_URL=${REACT_APP_TALAWA_URL}
-    #  - REACT_APP_BACKEND_WEBSOCKET_URL=${REACT_APP_BACKEND_WEBSOCKET_URL}
     #  - PORT=${PORT}
     #  - REACT_APP_USE_RECAPTCHA=${REACT_APP_USE_RECAPTCHA}
     #  - REACT_APP_RECAPTCHA_SITE_KEY=${REACT_APP_RECAPTCHA_SITE_KEY}

@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -13,8 +13,23 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
-const { setItem } = useLocalStorage();
+dayjs.extend(utc);
+
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+    promise: vi.fn(),
+  },
+}));
+
+const { setItem, clearAllItems } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -37,7 +52,8 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
+  vi.clearAllMocks();
 });
 
 describe('Testing Event Card In User portal', () => {
@@ -46,9 +62,11 @@ describe('Testing Event Card In User portal', () => {
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startAt: '2023-04-13T17:49:12Z',
-    endAt: '2023-04-15T19:49:12Z',
+    // Use dynamic dates to avoid test staleness
+    startAt: dayjs.utc().add(10, 'days').toISOString(),
+    endAt: dayjs.utc().add(12, 'days').toISOString(),
     isRegisterable: true,
+    isInviteOnly: false,
     isPublic: true,
     endTime: '19:49:12',
     startTime: '17:49:12',
@@ -70,14 +88,48 @@ describe('Testing Event Card In User portal', () => {
     isRecurringEventException: false,
   };
 
-  it('When the user is already registered', async () => {
-    setItem('userId', '234');
-    const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+  it('shows loading spinner when registration is in flight', async () => {
+    const user = userEvent.setup();
+    const delayedMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { id: '123' },
+        },
+        result: {
+          data: {
+            registerForEvent: [{ _id: '123' }],
+          },
+        },
+        delay: 500,
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={delayedMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const registerBtn = screen.getByText('Register');
+    await user.click(registerBtn);
+
+    expect(screen.getByTestId('loadingIcon')).toBeInTheDocument();
+  });
+
+  it('When the user is already registered', async () => {
+    setItem('userId', '234');
+    const { queryByText } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -90,13 +142,13 @@ describe('Testing Event Card In User portal', () => {
   });
 
   it('Handle register should work properly', async () => {
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
     setItem('userId', '456');
-    const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+    render(
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -105,14 +157,14 @@ describe('Testing Event Card In User portal', () => {
     );
     await userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
-      expect(
-        queryByText('Successfully registered for Test Event'),
-      ).toBeInTheDocument(),
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Successfully registered for Test Event',
+      ),
     );
   });
 
   it('should display an error toast when the register mutation fails', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const errorMocks = [
       {
         request: {
@@ -126,11 +178,10 @@ describe('Testing Event Card In User portal', () => {
     const errorLink = new StaticMockLink(errorMocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -140,23 +191,87 @@ describe('Testing Event Card In User portal', () => {
 
     await userEvent.click(screen.getByText('Register'));
 
-    await waitFor(() => {
+    await waitFor(() =>
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        `Failed to register for the event`,
-      );
-    });
+        'Failed to register for the event',
+      ),
+    );
+  });
+
+  it('should display "Invite Only" badge and disable registration when isInviteOnly is true', () => {
+    const inviteOnlyProps = { ...props, isInviteOnly: true };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...inviteOnlyProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const inviteOnlyButton = screen.getByText('Invite Only');
+    expect(inviteOnlyButton).toBeInTheDocument();
+    expect(inviteOnlyButton.closest('button')).toBeDisabled();
+    expect(screen.queryByText('Register')).not.toBeInTheDocument();
+  });
+
+  it('should set aria-label with event name for accessibility', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const eventCard = screen.getByTestId('event-card');
+    expect(eventCard).toHaveAttribute(
+      'aria-label',
+      `Event card for ${props.name}`,
+    );
+  });
+
+  it('should handle combined scenario with isPublic: false and isInviteOnly: true', () => {
+    const combinedProps = { ...props, isPublic: false, isInviteOnly: true };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...combinedProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const inviteOnlyButton = screen.getByText('Invite Only');
+    expect(inviteOnlyButton).toBeInTheDocument();
+    expect(inviteOnlyButton.closest('button')).toBeDisabled();
   });
 });
 
 describe('Event card when start and end time are not given', () => {
+  // Props with empty startTime and endTime to test all-day events
   const props = {
     id: '123',
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startAt: '2023-04-13T00:00:00Z',
-    endAt: '2023-04-15T23:59:59Z',
+    // Use dynamic dates to avoid test staleness
+    startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
+    endAt: dayjs.utc().add(12, 'days').endOf('day').toISOString(),
     isRegisterable: true,
+    isInviteOnly: false,
     isPublic: true,
     endTime: '',
     startTime: '',
@@ -178,13 +293,12 @@ describe('Event card when start and end time are not given', () => {
     isRecurringEventException: false,
   };
 
-  it('Card is rendered correctly', async () => {
-    const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+  it('Card is rendered correctly without start and end times', async () => {
+    render(
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -192,8 +306,10 @@ describe('Event card when start and end time are not given', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() =>
-      expect(container.querySelector(':empty')).toBeInTheDocument(),
-    );
+    // Verify event name is displayed
+    expect(screen.getByText('Test Event')).toBeInTheDocument();
+    // Verify times are not displayed when empty
+    expect(screen.queryByTestId('startTime')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('endTime')).not.toBeInTheDocument();
   });
 });

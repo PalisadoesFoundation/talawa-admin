@@ -1,0 +1,24 @@
+.mainpageright > hr {
+  margin-top: var(--space-6);
+  width: 100%;
+  margin-left: calc(var(--space-5) * -1);
+  margin-right: calc(var(--space-5) * -1);
+  margin-bottom: var(--space-6);
+}
+
+@media screen and (max-width: 1200px) {
+  .mainpageright {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 575.5px) {
+  .mainpageright {
+    width: 98%;
+  }
+}
+
+.justifyspOrganizationEvents {
+  justify-content: space-between;
+  margin-top: var(--space-6);
+}

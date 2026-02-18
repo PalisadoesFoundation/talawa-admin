@@ -32,8 +32,9 @@ describe('backupEnvFile', () => {
     const mockEpochMs = 1234567890000;
     const mockEpochSec = 1234567890;
     vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
+    const expectedPath = path.join(mockCwd, '.backup', `.env.${mockEpochSec}`);
 
-    await backupEnvFile();
+    const result = await backupEnvFile();
 
     expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
       recursive: true,
@@ -45,15 +46,17 @@ describe('backupEnvFile', () => {
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining(`.env.${mockEpochSec}`),
     );
+    expect(result).toBe(expectedPath);
   });
 
   it('should not create backup when user declines', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: false });
 
-    await backupEnvFile();
+    const result = await backupEnvFile();
 
     expect(mkdir).not.toHaveBeenCalled();
     expect(copyFile).not.toHaveBeenCalled();
+    expect(result).toBe(null);
   });
 
   it('should ensure .backup directory exists when backing up', async () => {
@@ -65,11 +68,12 @@ describe('backupEnvFile', () => {
     const mockEpochMs = 1234567890000;
     vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
 
-    await backupEnvFile();
+    const result = await backupEnvFile();
 
     expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
       recursive: true,
     });
+    expect(result).not.toBeNull();
   });
 
   it('should handle missing .env file gracefully', async () => {
@@ -80,12 +84,13 @@ describe('backupEnvFile', () => {
     });
     vi.mocked(access).mockRejectedValue(enoentError);
 
-    await backupEnvFile();
+    const result = await backupEnvFile();
 
     expect(copyFile).not.toHaveBeenCalled();
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining('No .env file found'),
     );
+    expect(result).toBe(null);
   });
 
   it('should throw error when directory creation fails', async () => {
@@ -120,11 +125,12 @@ describe('backupEnvFile', () => {
     const mockEpochSec = 1609459200;
     vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
 
-    await backupEnvFile();
+    const result = await backupEnvFile();
 
     expect(copyFile).toHaveBeenCalledWith(
       expect.any(String),
       expect.stringContaining(`.env.${mockEpochSec}`),
     );
+    expect(result).toContain(`.env.${mockEpochSec}`);
   });
 });

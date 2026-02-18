@@ -1,4 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import JSZip from 'jszip';
 import {
   validateAdminPluginZip,
@@ -9,7 +14,7 @@ import {
 } from './adminPluginInstaller';
 import {
   adminPluginFileService,
-  type InstalledPlugin,
+  type IInstalledPlugin,
 } from '../plugin/services/AdminPluginFileService';
 // import { toast } from 'react-toastify';
 
@@ -41,6 +46,10 @@ interface IMockApolloClient {
 }
 
 describe('adminPluginInstaller', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   let mockZip: {
     loadAsync: ReturnType<typeof vi.fn>;
     file: ReturnType<typeof vi.fn>;
@@ -174,6 +183,21 @@ describe('adminPluginInstaller', () => {
       );
     });
 
+    it('should throw when api manifest is missing required fields', async () => {
+      const mockFile = new File([''], 'test.zip');
+      mockZip.loadAsync.mockResolvedValue(
+        createMockZipContent({
+          'api/manifest.json': JSON.stringify({ name: 'Test API' }),
+        }),
+      );
+
+      // This covers line 167: if (missingFields.length > 0) { ... }
+      // Note: The implementation catches the specific error and re-throws "Invalid api manifest.json"
+      await expect(validateAdminPluginZip(mockFile)).rejects.toThrow(
+        'Invalid api manifest.json',
+      );
+    });
+
     it('should return flags false when no admin or API folder exists', async () => {
       const mockFile = new File([''], 'test.zip');
       mockZip.loadAsync.mockResolvedValue(
@@ -237,7 +261,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       // Accept that only 'Admin' is installed (matches implementation)
@@ -268,7 +293,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       // Accept the actual error message thrown by the implementation
@@ -381,7 +407,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       expect(errorSpy).toHaveBeenCalled();
@@ -445,8 +472,8 @@ describe('adminPluginInstaller', () => {
             main: 'index.js',
             pluginId: 'TestPlugin',
           },
-          installedAt: '2023-01-01T00:00:00.000Z',
-          lastUpdated: '2023-01-01T00:00:00.000Z',
+          installedAt: dayjs.utc().startOf('year').toISOString(),
+          lastUpdated: dayjs.utc().startOf('year').toISOString(),
         },
       ];
 
@@ -480,7 +507,7 @@ describe('adminPluginInstaller', () => {
           installedAt: undefined,
           lastUpdated: undefined,
         },
-      ] as unknown as InstalledPlugin[]);
+      ] as unknown as IInstalledPlugin[]);
 
       const result = await getInstalledAdminPlugins();
 
@@ -657,7 +684,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       expect(result.success).toBe(true);

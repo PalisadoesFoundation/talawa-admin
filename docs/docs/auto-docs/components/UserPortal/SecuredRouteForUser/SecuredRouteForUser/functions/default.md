@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L44)
+Defined in: [src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L42)
 
 ## Returns
 

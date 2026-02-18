@@ -9,7 +9,7 @@ import type { Plugin } from 'vite';
 import { promises as fs } from 'fs';
 import { join, dirname } from 'path';
 
-export interface InternalFileWriterPluginOptions {
+export interface IInternalFileWriterPluginOptions {
   /**
    * Whether to enable the plugin
    */
@@ -30,7 +30,7 @@ export interface InternalFileWriterPluginOptions {
  * Vite plugin for internal file operations
  */
 export function createInternalFileWriterPlugin(
-  options: InternalFileWriterPluginOptions = {},
+  options: IInternalFileWriterPluginOptions = {},
 ): Plugin {
   const {
     enabled = true,
@@ -50,7 +50,7 @@ export function createInternalFileWriterPlugin(
   return {
     name: 'internal-file-writer',
 
-    configResolved(config) {
+    configResolved() {
       if (debug) {
         console.log('Internal File Writer Plugin: Initialized');
         console.log('Base path:', basePath);
@@ -165,51 +165,37 @@ export function createInternalFileWriterPlugin(
  */
 async function handleFileOperation(
   method: string,
-  params: any,
+  params: unknown,
   basePath: string,
   debug: boolean,
-): Promise<any> {
+): Promise<unknown> {
+  const typedParams = params as { path: string; content?: string };
   const resolvedBasePath = join(process.cwd(), basePath);
 
   switch (method) {
     case 'ensureDirectory':
-      return await ensureDirectory(params.path, resolvedBasePath, debug);
+      return await ensureDirectory(typedParams.path, resolvedBasePath, debug);
 
     case 'writeFile': {
-      const { path: filePath, content } = params;
-      const fullPath = join(process.cwd(), filePath);
-
-      // Ensure directory exists
-      await fs.mkdir(dirname(fullPath), { recursive: true });
-
-      // Check if this is a base64 data URL (binary asset)
-      if (content.startsWith('data:')) {
-        // Extract base64 content and write as binary
-        const base64Data = content.split(',')[1];
-        const binaryBuffer = Buffer.from(base64Data, 'base64');
-        await fs.writeFile(fullPath, binaryBuffer);
-      } else {
-        // Write as text file
-        await fs.writeFile(fullPath, content, 'utf8');
-      }
-
-      return { path: fullPath };
+      const { path: filePath, content } = typedParams;
+      await writeFile(filePath, content || '', resolvedBasePath);
+      return { path: filePath };
     }
 
     case 'readFile':
-      return await readFile(params.path, resolvedBasePath, debug);
+      return await readFile(typedParams.path, resolvedBasePath);
 
     case 'pathExists':
-      return await pathExists(params.path, resolvedBasePath, debug);
+      return await pathExists(typedParams.path, resolvedBasePath, debug);
 
     case 'listDirectories':
-      return await listDirectories(params.path, resolvedBasePath, debug);
+      return await listDirectories(typedParams.path, resolvedBasePath);
 
     case 'readDirectoryRecursive':
-      return await readDirectoryRecursive(params.path, resolvedBasePath, debug);
+      return await readDirectoryRecursive(typedParams.path, resolvedBasePath);
 
     case 'removeDirectory':
-      return await removeDirectory(params.path, resolvedBasePath, debug);
+      return await removeDirectory(typedParams.path, resolvedBasePath);
 
     default:
       throw new Error(`Unknown method: ${method}`);
@@ -242,7 +228,6 @@ async function writeFile(
   path: string,
   content: string,
   basePath: string,
-  debug: boolean,
 ): Promise<void> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
@@ -251,18 +236,22 @@ async function writeFile(
   // Ensure directory exists
   await fs.mkdir(dirname(resolvedPath), { recursive: true });
 
-  // Write file
-  await fs.writeFile(resolvedPath, content, 'utf8');
+  // Check if this is a base64 data URL (binary asset)
+  if (content.startsWith('data:')) {
+    // Extract base64 content and write as binary
+    const base64Data = content.split(',')[1];
+    const binaryBuffer = Buffer.from(base64Data, 'base64');
+    await fs.writeFile(resolvedPath, binaryBuffer);
+  } else {
+    // Write as text file
+    await fs.writeFile(resolvedPath, content, 'utf8');
+  }
 }
 
 /**
  * Read file
  */
-async function readFile(
-  path: string,
-  basePath: string,
-  debug: boolean,
-): Promise<string> {
+async function readFile(path: string, basePath: string): Promise<string> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
@@ -300,7 +289,6 @@ async function pathExists(
 async function listDirectories(
   path: string,
   basePath: string,
-  debug: boolean,
 ): Promise<string[]> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
@@ -318,7 +306,6 @@ async function listDirectories(
 async function readDirectoryRecursive(
   path: string,
   basePath: string,
-  debug: boolean,
 ): Promise<Record<string, string>> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
@@ -353,49 +340,12 @@ async function readDirectoryRecursive(
 /**
  * Remove directory recursively
  */
-async function removeDirectory(
-  path: string,
-  basePath: string,
-  debug: boolean,
-): Promise<void> {
+async function removeDirectory(path: string, basePath: string): Promise<void> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
   await fs.rm(resolvedPath, { recursive: true, force: true });
-}
-
-/**
- * Copy directory recursively
- */
-async function copyDirectory(
-  source: string,
-  destination: string,
-  basePath: string,
-  debug: boolean,
-): Promise<void> {
-  const resolvedSource = source.startsWith('/')
-    ? join(process.cwd(), source.substring(1))
-    : join(basePath, source);
-  const resolvedDestination = destination.startsWith('/')
-    ? join(process.cwd(), destination.substring(1))
-    : join(basePath, destination);
-
-  await fs.mkdir(resolvedDestination, { recursive: true });
-
-  const entries = await fs.readdir(resolvedSource, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const srcPath = join(resolvedSource, entry.name);
-    const destPath = join(resolvedDestination, entry.name);
-
-    if (entry.isDirectory()) {
-      await copyDirectory(srcPath, destPath, '', debug);
-    } else {
-      const content = await fs.readFile(srcPath);
-      await fs.writeFile(destPath, content);
-    }
-  }
 }
 
 /**

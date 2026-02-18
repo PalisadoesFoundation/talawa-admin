@@ -1,45 +1,3 @@
-/**
- * @file LeaveOrganization.tsx
- * @description This component allows a user to leave an organization they are a member of.
- * It includes email verification for confirmation and handles the removal process via GraphQL mutations.
- *
- * @module LeaveOrganization
- */
-
-/**
- * @constant userEmail
- * @description Retrieves the user's email from localStorage. Returns an empty string if unavailable or an error occurs.
- */
-
-/**
- * @constant userId
- * @description Retrieves the user's ID from localStorage. Returns an empty string if unavailable or an error occurs.
- */
-
-/**
- * @function LeaveOrganization
- * @description React functional component that renders the UI for leaving an organization.
- * It includes a modal for confirmation, email verification, and handles the GraphQL mutation to remove the user.
- *
- * @returns {JSX.Element} The rendered LeaveOrganization component.
- *
- * @remarks
- * - Uses Apollo Client's `useQuery` to fetch organization details.
- * - Uses Apollo Client's `useMutation` to remove the user from the organization.
- * - Displays a modal for user confirmation and email verification.
- * - Handles errors and loading states gracefully.
- *
- * @dependencies
- * - `useQuery` and `useMutation` from Apollo Client for GraphQL operations.
- * - `useParams` and `useNavigate` from React Router for route handling.
- * - `react-toastify` for toast notifications.
- * - `react-bootstrap` for UI components like Modal, Button, Spinner, and Alert.
- *
- * @example
- * ```tsx
- * <LeaveOrganization />
- * ```
- */
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
@@ -47,10 +5,17 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
+import { Alert } from 'react-bootstrap';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
+import styles from './LeaveOrganization.module.css';
 
 const userEmail = (() => {
   try {
@@ -71,13 +36,37 @@ const userId = (() => {
 
 export { userEmail, userId };
 
+/**
+ * LeaveOrganization Component
+ *
+ * This component allows a user to leave an organization they are a member of.
+ * It includes email verification for confirmation and handles the removal process via GraphQL mutations.
+ *
+ * Features:
+ * - Uses Apollo Client's `useQuery` to fetch organization details.
+ * - Uses Apollo Client's `useMutation` to remove the user from the organization.
+ * - Displays a modal for user confirmation and email verification.
+ * - Handles errors and loading states gracefully.
+ *
+ * @example
+ * ```tsx
+ * <LeaveOrganization />
+ * ```
+ *
+ * @returns The rendered LeaveOrganization component.
+ */
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
+  const { t } = useTranslation(['translation', 'common']);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const {
+    isOpen: showModal,
+    open: openModal,
+    close: closeModal,
+  } = useModalState();
   const [verificationStep, setVerificationStep] = useState(false);
 
   /**
@@ -98,16 +87,16 @@ const LeaveOrganization = (): JSX.Element => {
     ],
     onCompleted: () => {
       // Use a toast notification or in-app message
-      setShowModal(false);
-      toast.success('You have successfully left the organization!');
+      closeModal();
+      NotificationToast.success(t('leaveOrganization.leftOrganizationSuccess'));
       navigate(`/user/organizations`);
     },
     onError: (err) => {
       const isNetworkError = err.networkError !== null;
       setError(
         isNetworkError
-          ? 'Unable to process your request. Please check your connection.'
-          : 'Failed to leave organization. Please try again.',
+          ? t('leaveOrganization.networkError')
+          : t('leaveOrganization.leftOrganizationError'),
       );
       setLoading(false);
     },
@@ -118,7 +107,7 @@ const LeaveOrganization = (): JSX.Element => {
    */
   const handleLeaveOrganization = (): void => {
     if (!organizationId || !userId) {
-      setError('Unable to process request: Missing required information.');
+      setError(t('leaveOrganization.missingRequiredInfo'));
       setLoading(false);
       return;
     }
@@ -134,115 +123,77 @@ const LeaveOrganization = (): JSX.Element => {
     if (email.trim().toLowerCase() === (userEmail as string).toLowerCase()) {
       handleLeaveOrganization();
     } else {
-      setError('Verification failed: Email does not match.');
+      setError(t('leaveOrganization.emailMismatchError'));
     }
   };
 
   /**
-   * Handles the 'Enter' key press.
+   * Handles the 'Enter' key press on the email input to submit verification.
+   * This handler is only attached to the email input which only renders
+   * when verificationStep is true, so we can directly call handleVerifyAndLeave.
    */
   const handleKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (verificationStep) {
-        handleVerifyAndLeave();
-      } else {
-        setVerificationStep(true);
-      }
+      handleVerifyAndLeave();
     }
   };
 
   if (orgLoading) {
     return (
-      <div className="text-center mt-4" role="status">
-        <Spinner animation="border" />
-        <p>Loading organization details...</p>
-      </div>
+      <output className={styles.loadingContainer}>
+        <LoadingState isLoading={orgLoading} variant="spinner">
+          <div />
+        </LoadingState>
+      </output>
     );
   }
   if (orgError)
-    return <Alert variant="danger">Error: {orgError.message}</Alert>;
+    return (
+      <Alert variant="danger">
+        {t('common:error')}: {orgError.message}
+      </Alert>
+    );
 
   if (!orgData?.organizations?.length) {
-    return <p>Organization not found</p>;
+    return <p>{t('leaveOrganization.organizationNotFound')}</p>;
   }
 
   const organization = orgData?.organizations[0];
 
   return (
     <div>
-      <br />
-      <h1>{organization?.name}</h1>
-      <p>{organization?.description}</p>
+      <h1 className={styles.title}>{organization?.name}</h1>
+      <p className={styles.description}>{organization?.description}</p>
 
-      <Button variant="danger" onClick={() => setShowModal(true)}>
-        Leave Organization
+      <Button variant="danger" onClick={openModal}>
+        {t('leaveOrganization.leaveOrganization')}
       </Button>
 
-      <Modal
-        show={showModal}
+      <CRUDModalTemplate
+        open={showModal}
         data-testid="leave-organization-modal"
-        aria-labelledby="leave-organization-modal"
-        onHide={() => {
-          setShowModal(false);
+        title={t('leaveOrganization.confirmLeaveOrganization')}
+        onClose={() => {
+          closeModal();
           setVerificationStep(false);
           setEmail('');
           setError('');
         }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="leave-organization-modal">
-            Leave Joined Organization
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {!verificationStep ? (
+        loading={loading}
+        customFooter={
+          !verificationStep ? (
             <>
-              <p>Are you sure you want to leave this organization?</p>
-              <p>
-                This action cannot be undone, and you may need to request access
-                again if you reconsider.
-              </p>
-            </>
-          ) : (
-            <Form>
-              <Form.Group>
-                <Form.Label htmlFor="confirm-email">
-                  Enter your email to confirm:
-                </Form.Label>
-                <Form.Control
-                  id="confirm-email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  required
-                  aria-describedby={error ? 'email-error' : undefined}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  aria-label="confirm-email-input"
-                />
-              </Form.Group>
-              {error && (
-                <Alert variant="danger" id="email-error" role="alert">
-                  {error}
-                </Alert>
-              )}
-            </Form>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          {!verificationStep ? (
-            <>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Cancel
+              <Button variant="secondary" onClick={closeModal}>
+                {t('common:cancel')}
               </Button>
               <Button
                 variant="danger"
                 onClick={() => setVerificationStep(true)}
               >
-                Continue
+                {t('leaveOrganization.continue')}
               </Button>
             </>
           ) : (
@@ -254,28 +205,43 @@ const LeaveOrganization = (): JSX.Element => {
                   setEmail('');
                   setError('');
                 }}
+                disabled={loading}
               >
-                Back
+                {t('common:back')}
               </Button>
               <Button
                 variant="danger"
                 disabled={loading}
                 onClick={handleVerifyAndLeave}
-                aria-label="confirm-leave-button"
+                aria-label={t('leaveOrganization.confirmLeaveButton')}
               >
-                {loading ? (
-                  <>
-                    <Spinner animation="border" size="sm" role="status" />
-                    {' Loading...'}
-                  </>
-                ) : (
-                  'Confirm'
-                )}
+                {t('common:confirm')}
               </Button>
             </>
-          )}
-        </Modal.Footer>
-      </Modal>
+          )
+        }
+      >
+        {!verificationStep ? (
+          <p>
+            {t('leaveOrganization.leaveOrganizationConfirmation', {
+              orgName: organization?.name,
+            })}
+          </p>
+        ) : (
+          <FormTextField
+            name="confirm-email"
+            label={t('leaveOrganization.enterEmailToConfirm')}
+            type="email"
+            placeholder={t('leaveOrganization.enterYourEmail')}
+            value={email}
+            onChange={(val) => setEmail(val)}
+            error={error}
+            touched={!!error}
+            required
+            onKeyDown={handleKeyPress}
+          />
+        )}
+      </CRUDModalTemplate>
     </div>
   );
 };

@@ -1,0 +1,38 @@
+.modalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.emailField {
+  flex: 1;
+}
+
+.nameField {
+  width: var(--space-17);
+  margin-left: var(--space-4);
+}
+
+.removeButton {
+  margin-left: var(--space-3);
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.recipientsContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.setRecipientsButton {
+  margin-bottom: var(--space-3);
+}
+
+.emailHelp {
+  color: var(--color-gray-600);
+}

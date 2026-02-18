@@ -1,0 +1,177 @@
+.messageSentContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.messageReceivedContainer {
+  display: flex;
+  align-items: flex-end;
+}
+
+.messageReceived {
+  border: var(--space-1) solid var(--color-gray-300);
+  border-radius: var(--space-3) var(--space-3) var(--space-3) var(--space-0);
+  padding: var(--space-2) var(--space-3);
+  margin: var(--space-2) var(--space-3);
+  width: fit-content;
+  max-width: 75%;
+  min-width: var(--space-6);
+  padding-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.messageSent {
+  border: var(--space-1) solid var(--color-gray-300);
+  border-radius: var(--space-3) var(--space-3) var(--space-0) var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  margin: var(--space-2) var(--space-3);
+  width: fit-content;
+  max-width: 75%;
+  background-color: rgba(196, 255, 211, 0.3);
+  min-width: var(--space-6);
+  padding-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.contactImage {
+  height: var(--space-9) !important;
+  border-radius: 100%;
+}
+
+.messageContent {
+  margin-bottom: var(--space-1);
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.senderInfo {
+  margin: var(--space-1) var(--space-1) var(--space-0) var(--space-1);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.replyToMessage {
+  border-left: var(--space-2) solid pink;
+  border-radius: var(--space-3);
+  margin: var(--space-3) var(--space-0);
+  padding: var(--space-3);
+  background-color: var(--color-green-100);
+}
+
+.messageReceived .replyToMessage {
+  background-color: var(--color-gray-100);
+}
+
+.replyToMessageSender {
+  margin: 0;
+}
+
+.messageAttributes {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.customToggle {
+  opacity: 0;
+  visibility: hidden;
+  padding: 0;
+  background: none;
+  border: none;
+  --bs-btn-active-bg: none;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
+}
+
+.messageReceived:hover .customToggle,
+.messageSent:hover .customToggle {
+  opacity: 1;
+  visibility: visible;
+}
+
+.customToggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.customToggle svg {
+  color: var(--color-black);
+  font-size: var(--font-size-lg);
+}
+
+.customToggle::after,
+.closeBtn::after {
+  content: none;
+}
+
+.customToggle,
+.closeBtn {
+  padding: 0;
+  background: none;
+  border: none;
+  --bs-btn-active-bg: none;
+}
+
+.closeBtn svg {
+  color: var(--color-black);
+  font-size: var(--font-size-lg);
+}
+
+.customToggle:hover,
+.customToggle:focus,
+.customToggle:active {
+  background: none;
+  border: none;
+}
+
+.messageSent:target {
+  scroll-margin-top: var(--space-10);
+  animation-name: test;
+  animation-duration: 1s;
+}
+
+.messageReceived:target {
+  scroll-margin-top: var(--space-10);
+  animation-name: test;
+  animation-duration: 1s;
+}
+
+@keyframes test {
+  from {
+    background-color: var(--color-white);
+  }
+
+  to {
+    background-color: var(--color-gray-600);
+  }
+}
+
+a {
+  color: currentColor;
+  width: 100%;
+}
+
+.dropdownCursor {
+  cursor: pointer;
+}
+
+.deleteMenuItem {
+  color: red;
+}
+
+.messageTime {
+  font-size: var(--font-size-xs);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-bottom: var(--space-0);
+  margin-left: var(--space-3);
+}

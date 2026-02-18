@@ -1,4 +1,4 @@
-/* global clearTimeout, HTMLButtonElement, HTMLTextAreaElement */
+/* global HTMLButtonElement, HTMLTextAreaElement */
 /**
  * Organizations.tsx
  *
@@ -12,7 +12,7 @@
  *
  * @remarks
  * - The component dynamically adjusts its layout based on the screen size, toggling a sidebar for smaller screens.
- * - It supports three modes: viewing all organizations, joined organizations, and created organizations.
+ * - It supports three modes: viewing all organizations, joined organizations, and created organizations (administrators only).
  * - The search functionality is debounced to reduce unnecessary GraphQL query calls.
  * - Pagination is implemented to handle large datasets efficiently.
  *
@@ -32,71 +32,33 @@
  *
  */
 
-import { useQuery } from '@apollo/client';
-import { SearchOutlined } from '@mui/icons-material';
+import { useQuery, useMutation } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   ORGANIZATION_FILTER_LIST,
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+  CURRENT_USER,
 } from 'GraphQl/Queries/Queries';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
+import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import React, { useEffect, useState, useRef } from 'react';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './Organizations.module.css';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { Alert } from 'react-bootstrap';
+import Button from 'shared-components/Button';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { errorHandler } from 'utils/errorHandler';
 
-function useDebounce<T>(fn: (val: T) => void, delay: number) {
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function debouncedFn(val: T) {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(() => {
-      fn(val);
-    }, delay);
-  }
-
-  return debouncedFn;
-}
-
-interface IOrganizationCardProps {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  admins: [];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
-  isJoined: boolean;
-  membersCount: number; // Add this
-  adminsCount: number; // Add this
-}
-
-/**
- * Interface defining the structure of organization properties.
- */
+type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
 interface InterfaceMemberNode {
   id: string;
-  // add other fields if needed
 }
 interface InterfaceMemberEdge {
   node: InterfaceMemberNode;
@@ -111,14 +73,13 @@ interface IOrganization {
   isJoined: boolean;
   id: string;
   name: string;
-  image?: string;
-  avatarURL?: string; // <-- add this
-  addressLine1?: string; // <-- add this
+  avatarURL?: string;
+  addressLine1?: string;
   description: string;
   adminsCount?: number;
   membersCount?: number;
   admins: [];
-  members?: InterfaceMembersConnection; // <-- update this
+  members?: InterfaceMembersConnection;
   address: {
     city: string;
     countryCode: string;
@@ -141,7 +102,6 @@ interface IOrgData {
   addressLine1: string;
   avatarURL: string | null;
   id: string;
-  adminsCount: number;
   membersCount: number;
   members: {
     edges: [
@@ -159,23 +119,80 @@ interface IOrgData {
   name: string;
 }
 
-/**
- * Component for displaying and managing user organizations.
- */
 export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
+  const { t: tLogin } = useTranslation('translation', {
+    keyPrefix: 'loginPage',
+  });
+  const { t: tCommon } = useTranslation('common');
 
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem, setItem, removeItem } = useLocalStorage();
+
+  // Email verification warning state
+  const [showEmailWarning, setShowEmailWarning] = useState(false);
+  const [hasDismissed, setHasDismissed] = useState(false);
+
+  // Fetch current user status to sync verification state
+  const { data: currentUserData } = useQuery(CURRENT_USER, {
+    fetchPolicy: 'network-only', // Ensure fresh data
+  });
+
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
+    RESEND_VERIFICATION_EMAIL_MUTATION,
+  );
+
+  // Check for email verification status on component mount and sync with backend
+  useEffect(() => {
+    if (hasDismissed) return;
+
+    // Priority: API data > LocalStorage
+    if (currentUserData?.user) {
+      if (currentUserData.user.isEmailAddressVerified) {
+        setShowEmailWarning(false);
+        // Clean up legacy flags
+        removeItem('emailNotVerified');
+        removeItem('unverifiedEmail');
+      } else {
+        setShowEmailWarning(true);
+        // Only store boolean flag, not PII
+        setItem('emailNotVerified', 'true');
+      }
+    } else {
+      // Fallback to local storage if API data not yet available
+      const emailNotVerified = getItem('emailNotVerified');
+      if (emailNotVerified === 'true') {
+        setShowEmailWarning(true);
+      }
+    }
+  }, [currentUserData, getItem, removeItem, setItem, hasDismissed]);
+
+  const handleDismissWarning = (): void => {
+    setShowEmailWarning(false);
+    setHasDismissed(true);
+    removeItem('emailNotVerified');
+    removeItem('unverifiedEmail');
+  };
+
+  const handleResendVerification = async (): Promise<void> => {
+    try {
+      const { data } = await resendVerificationEmail();
+      if (data?.sendVerificationEmail?.success) {
+        NotificationToast.success(tLogin('emailResent'));
+      } else {
+        NotificationToast.info(tLogin('resendFailed'));
+      }
+    } catch (error) {
+      errorHandler(tCommon, error);
+    }
+  };
+
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
   });
 
-  /**
-   * Handles window resize events to toggle drawer visibility.
-   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -195,14 +212,15 @@ export default function Organizations(): React.JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [organizations, setOrganizations] = React.useState<IOrganization[]>([]);
-  const [typedValue, setTypedValue] = React.useState('');
   const [filterName, setFilterName] = React.useState('');
+  const [searchText, setSearchText] = useState('');
   const [mode, setMode] = React.useState(0);
+  const role = getItem('role') === 'administrator' ? 'administrator' : 'user';
 
   const modes = [
     t('allOrganizations'),
     t('joinedOrganizations'),
-    t('createdOrganizations'),
+    ...(role === 'administrator' ? [t('createdOrganizations')] : []),
   ];
 
   const userId: string | null = getItem('userId');
@@ -237,9 +255,7 @@ export default function Organizations(): React.JSX.Element {
     variables: { id: userId, filter: filterName },
     skip: mode !== 2,
   });
-  /**
-   * 2) doSearch sets the filterName (triggering refetch)
-   */
+
   function doSearch(value: string) {
     setFilterName(value);
     if (mode === 0) {
@@ -251,61 +267,28 @@ export default function Organizations(): React.JSX.Element {
     }
   }
 
-  const debouncedSearch = useDebounce(doSearch, 300);
-
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
-    setTypedValue(newVal);
-    debouncedSearch(newVal);
-  };
-
-  const handleSearchByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      doSearch(typedValue);
-    }
-  };
-
-  /**
-   * Clicking the search button also triggers the same logic
-   */
-  const handleSearchByBtnClick = () => {
-    doSearch(typedValue);
-  };
-
-  /**
-   * React to changes in mode or relevant query data
-   */
   useEffect(() => {
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
-          // Check if current user is a member
           const isMember = org.isMember;
-
           return {
             id: org.id,
             name: org.name,
-            image: org.avatarURL || null,
-            address: {
-              line1: org.addressLine1 || '',
-              city: '',
-              countryCode: '',
-              postalCode: '',
-              state: '',
-            },
-            adminsCount: org.adminsCount || 0,
+            avatarURL: org.avatarURL || '',
+            description: org.description || '',
+            addressLine1: org.addressLine1 || '',
             membersCount: org.membersCount || 0,
             admins: [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
-            isJoined: isMember, // Set based on membership check
+            isJoined: isMember,
           };
         });
         setOrganizations(orgs);
       }
     } else if (mode === 1) {
-      // Joined
       if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
         const orgs =
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
@@ -313,7 +296,7 @@ export default function Organizations(): React.JSX.Element {
               const organization = edge.node;
               return {
                 ...organization,
-                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
+                membershipRequestStatus: 'accepted',
                 isJoined: true,
               };
             },
@@ -322,8 +305,7 @@ export default function Organizations(): React.JSX.Element {
       } else {
         setOrganizations([]);
       }
-    } else if (mode === 2) {
-      // Created
+    } else {
       if (createdOrganizationsData?.user?.createdOrganizations) {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: IOrganization) => ({
@@ -345,9 +327,6 @@ export default function Organizations(): React.JSX.Element {
     userId,
   ]);
 
-  /**
-   * pagination
-   */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -367,106 +346,88 @@ export default function Organizations(): React.JSX.Element {
 
   return (
     <>
-      {/* {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={() => setHideDrawer(!hideDrawer)}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" />
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={() => setHideDrawer(!hideDrawer)}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" />
-        </Button>
-      )} */}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract}`}
-        style={{
-          marginLeft: hideDrawer ? '40px' : '20px',
-          paddingTop: '20px',
-        }}
+        className={`${styles.organizationsContainer} ${
+          hideDrawer ? styles.marginLeft80 : styles.marginLeft260
+        } ${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="organizations-container"
       >
         <div
-          className={styles.mainContainerOrganization}
-          style={{ overflowX: 'hidden' }}
+          className={`${styles.mainContainerOrganization} ${styles.organizationsMainContainer}`}
         >
-          <div className="d-flex justify-content-between align-items-center">
-            <div style={{ flex: 1 }}>
+          <div className={styles.selectOrganizationContainer}>
+            <div className={styles.organizationsFlexContainer}>
               <h1>{t('selectOrganization')}</h1>
             </div>
           </div>
 
-          <div className={styles.head}>
-            <div className={styles.btnsContainer}>
-              <div className={styles.input}>
-                <InputGroup className={styles.maxWidth}>
-                  <Form.Control
-                    placeholder={t('searchOrganizations')}
-                    id="searchUserOrgs"
-                    type="text"
-                    className={styles.inputField}
-                    value={typedValue}
-                    onChange={handleChangeFilter} // debounced
-                    onKeyUp={handleSearchByEnter} // immediate search if user presses Enter
-                    data-testid="searchInput"
-                  />
-                  <InputGroup.Text
-                    className={styles.searchButton}
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleSearchByBtnClick}
-                    data-testid="searchBtn"
-                  >
-                    <SearchOutlined className={styles.colorWhite} />
-                  </InputGroup.Text>
-                </InputGroup>
+          {/* Email Verification Warning Banner */}
+          {showEmailWarning && (
+            <Alert
+              variant="warning"
+              dismissible
+              onClose={handleDismissWarning}
+              className={styles.alert}
+              data-testid="email-verification-warning"
+              aria-live="polite"
+            >
+              <div className={styles.selectOrganizationContainer}>
+                <div>
+                  <strong>{tLogin('emailNotVerified')}</strong>
+                </div>
+                <Button
+                  variant="outline-warning"
+                  size="sm"
+                  onClick={handleResendVerification}
+                  disabled={resendLoading}
+                  data-testid="resend-verification-btn"
+                >
+                  {resendLoading
+                    ? tCommon('loading')
+                    : tLogin('resendVerification')}
+                </Button>
               </div>
-              <div className={styles.btnsBlock}>
-                <Dropdown drop="down-centered">
-                  <Dropdown.Toggle
-                    className={styles.dropdown}
-                    variant="success"
-                    id="dropdown-basic"
-                    data-testid="modeChangeBtn"
-                  >
-                    {modes[mode]}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {modes.map((value, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        data-testid={`modeBtn${index}`}
-                        onClick={() => setMode(index)}
-                      >
-                        {value}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            </div>
+            </Alert>
+          )}
+
+          {/* Refactored Header Structure */}
+          <div className={styles.calendar__header}>
+            <SearchFilterBar
+              hasDropdowns={true}
+              dropdowns={[
+                {
+                  id: 'filter',
+                  label: t('filter'),
+                  type: 'filter',
+                  options: modes.map((value, index) => ({
+                    label: value,
+                    value: index,
+                  })),
+                  selectedOption: mode,
+                  onOptionChange: (value) => setMode(Number(value)),
+                  dataTestIdPrefix: 'modeChangeBtn',
+                },
+              ]}
+              searchValue={searchText}
+              onSearchChange={setSearchText}
+              onSearchSubmit={() => doSearch(searchText)}
+              searchPlaceholder={t('searchOrganizations')}
+              searchInputTestId="searchInput"
+              searchButtonTestId="searchBtn"
+            />
           </div>
 
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
-            <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
-            >
+          <div className={styles.content}>
+            <div className={styles.loadingSpinnerContainer}>
               {isLoading ? (
                 <div
-                  className="d-flex flex-row justify-content-center"
+                  className={styles.conditionalLoadingSpinner}
                   data-testid="loading-spinner"
                   role="status"
                 >
                   <HourglassBottomIcon />{' '}
-                  <span aria-live="polite">Loading...</span>
+                  <span aria-live="polite">{t('loading')}</span>
                 </div>
               ) : (
                 <>
@@ -481,11 +442,11 @@ export default function Organizations(): React.JSX.Element {
                       ).map((organization: IOrganization, index) => {
                         const cardProps: IOrganizationCardProps = {
                           name: organization.name,
-                          image: organization.image ?? '',
                           id: organization.id,
                           description: organization.description,
+                          avatarURL: organization.avatarURL || '',
+                          addressLine1: organization.addressLine1 || '',
                           admins: organization.admins,
-                          address: organization.address,
                           membershipRequestStatus:
                             organization.membershipRequestStatus,
                           userRegistrationRequired:
@@ -494,11 +455,12 @@ export default function Organizations(): React.JSX.Element {
                           isJoined: organization.isJoined,
                           membersCount: organization.membersCount || 0,
                           adminsCount: organization.adminsCount || 0,
+                          role: role,
                         };
                         return (
                           <div
                             key={index}
-                            className="col-md-6 mb-4"
+                            className={`${styles.organizationCol} ${styles.organizationCard}`}
                             data-testid="organization-card"
                             data-organization-name={organization.name}
                             data-membership-status={
@@ -512,8 +474,7 @@ export default function Organizations(): React.JSX.Element {
                               className="visually-hidden"
                             ></div>
 
-                            <OrganizationCard {...cardProps} />
-                            {/* Add a hidden span with organization name for testing purposes */}
+                            <OrganizationCard data={cardProps} />
                             <span
                               data-testid={`org-name-${organization.name}`}
                               className="visually-hidden"
@@ -535,8 +496,9 @@ export default function Organizations(): React.JSX.Element {
             <table>
               <tbody>
                 <tr>
+                  {/* Use the real dataset size to avoid rendering phantom pages. */}
                   <PaginationList
-                    count={organizations ? organizations.length : 0}
+                    count={organizations.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

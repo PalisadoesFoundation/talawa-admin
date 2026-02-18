@@ -1,65 +1,105 @@
 /**
- * @file DonationCard.tsx
- * @description A React functional component that displays a donation card with donor details,
- *              donation amount, and the date of the donation. Includes a button for further actions.
- * @module components/UserPortal/DonationCard
+ * Displays a compact donation card for the user portal.
  *
- * @function donationCard
- * @description Renders a donation card with donor information, donation amount, and formatted date.
- * @param {InterfaceDonationCardProps} props - The properties required to render the donation card.
- * @param {string} props.name - The name of the donor.
- * @param {number} props.amount - The amount donated.
- * @param {string} props.updatedAt - The date when the donation was last updated, in ISO string format.
- * @returns {JSX.Element} A JSX element representing the donation card.
+ * Shows the donor name, amount, and a localized donation date with a view action.
+ *
+ * @remarks
+ * Uses `UserPortalCard` for layout and formats the timestamp with the active locale.
+ *
+ * @param id - Donation identifier used for labels and test ids.
+ * @param name - Donor display name to render.
+ * @param amount - Donation amount to display.
+ * @param updatedAt - ISO timestamp of the donation for localized date formatting.
+ * @returns JSX element representing the donation card.
  *
  * @example
  * ```tsx
- * <donationCard
+ * <DonationCard
  *   name="John Doe"
  *   amount={100}
- *   updatedAt="2023-03-15T12:00:00Z"
+ *   updatedAt={dayjs.utc().subtract(1, 'year').month(2).date(15).hour(12).toISOString()}
  * />
  * ```
- *
- * @remarks
- * - The `updatedAt` property is parsed into a `Date` object and formatted into a readable string.
- * - The component uses CSS modules for styling and Bootstrap for the button.
- * - Ensure that the `InterfaceDonationCardProps` type is correctly defined in the `types/Donation/interface` module.
  */
+
 import React from 'react';
-import styles from '../../../style/app-fixed.module.css';
-import { type InterfaceDonationCardProps } from 'types/Donation/interface';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
+import { useTranslation } from 'react-i18next';
 
-function donationCard(props: InterfaceDonationCardProps): JSX.Element {
-  // Create a date object from the donation date string
-  const date = new Date(props.updatedAt);
+import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
+import type { InterfaceDonationCardProps } from 'types/UserPortal/Donation/interface';
+import styles from './DonationCard.module.css';
 
-  // Format the date into a readable string
-  const formattedDate = new Intl.DateTimeFormat('en-US', {
-    weekday: 'short',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }).format(date);
+const DonationCard: React.FC<InterfaceDonationCardProps> = ({
+  id,
+  name,
+  amount,
+  updatedAt,
+}) => {
+  const { t, i18n } = useTranslation();
+
+  const formattedDate =
+    updatedAt && updatedAt.length > 0
+      ? new Intl.DateTimeFormat(i18n.language ?? 'en-US', {
+          weekday: 'short',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+        }).format(new Date(updatedAt))
+      : '';
 
   return (
-    <div className={`${styles.mainContainerDonateCard}`}>
-      <div className={styles.img}></div>
-      <div className={styles.personDetails}>
-        <span>
-          <b data-testid="DonorName">{props.name}</b>
-        </span>
-        <span>Amount: {props.amount}</span>
-        <span>Date: {formattedDate}</span>
-      </div>
-      <div className={styles.btnDonate}>
-        <Button size="sm" className={styles.addButton}>
-          View
+    <UserPortalCard
+      variant="compact"
+      dataTestId={t('donation.card_test_id', {
+        defaultValue: 'donation-card-{{id}}',
+        id,
+      })}
+      ariaLabel={t('donation.card_aria', 'Donation card')}
+      imageSlot={
+        <div
+          className={styles.donationAvatar}
+          aria-hidden="true"
+          data-testid={`donation-${id}-avatar`}
+        />
+      }
+      actionsSlot={
+        <Button
+          size="sm"
+          className="addButton"
+          type="button"
+          data-testid={`donation-${id}-view`}
+        >
+          {t('common.view', 'View')}
         </Button>
-      </div>
-    </div>
-  );
-}
+      }
+    >
+      <div className={styles.donationDetails}>
+        <div
+          className={`${styles.donationRow} ${styles.donorName}`}
+          data-testid="DonorName"
+        >
+          {name}
+        </div>
 
-export default donationCard;
+        <div
+          className={`${styles.donationRow} ${styles.donationMeta}`}
+          data-testid="donation-amount"
+        >
+          {t('donation.amount_label', 'Amount')}: {amount}
+        </div>
+
+        {formattedDate && (
+          <div
+            className={`${styles.donationRow} ${styles.donationMeta}`}
+            data-testid="donation-date"
+          >
+            {t('donation.date_label', 'Date')}: {formattedDate}
+          </div>
+        )}
+      </div>
+    </UserPortalCard>
+  );
+};
+
+export default DonationCard;

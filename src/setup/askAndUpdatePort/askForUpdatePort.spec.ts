@@ -19,7 +19,7 @@ vi.mock('inquirer', async () => {
 
 describe('askAndUpdatePort', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should update the port when user confirms and provides a valid port', async () => {

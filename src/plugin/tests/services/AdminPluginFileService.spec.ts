@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { AdminPluginFileService } from '../../services/AdminPluginFileService';
-import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
+import { IAdminPluginManifest } from '../../../utils/adminPluginInstaller';
 import { internalFileWriter } from '../../services/InternalFileWriter';
+import dayjs from 'dayjs';
 
 // Mock InternalFileWriter
 vi.mock('../../services/InternalFileWriter', () => ({
@@ -13,7 +14,7 @@ vi.mock('../../services/InternalFileWriter', () => ({
   },
 }));
 
-const validManifest: AdminPluginManifest = {
+const validManifest: IAdminPluginManifest = {
   name: 'Test Plugin',
   pluginId: 'TestPlugin',
   version: '1.0.0',
@@ -69,7 +70,7 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail if required manifest fields are missing', () => {
-      const badManifest = { ...validManifest } as Partial<AdminPluginManifest>;
+      const badManifest = { ...validManifest } as Partial<IAdminPluginManifest>;
       delete badManifest.main;
       const files = {
         ...validFiles,
@@ -155,6 +156,19 @@ describe('AdminPluginFileService', () => {
       const result = await service.installPlugin('TestPlugin', {});
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
+    });
+
+    it('should fail if manifest is missing despite validation passing', async () => {
+      // Mock validatePluginFiles to return valid=true but manifest=undefined
+      // This covers line 194: if (!manifest) { ... }
+      vi.spyOn(service, 'validatePluginFiles').mockReturnValue({
+        valid: true,
+        manifest: undefined,
+      });
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Manifest is missing');
     });
 
     it('should fail if pluginId does not match manifest', async () => {
@@ -311,7 +325,7 @@ describe('AdminPluginFileService', () => {
         {
           pluginId: 'TestPlugin',
           manifest: validManifest,
-          installedAt: '2023-01-01T00:00:00Z',
+          installedAt: dayjs().subtract(1, 'year').toISOString(),
         },
       ];
 
@@ -460,7 +474,7 @@ describe('AdminPluginFileService', () => {
           {
             pluginId: 'TestPlugin',
             manifest: validManifest,
-            installedAt: '2023-01-01T00:00:00Z',
+            installedAt: dayjs().subtract(1, 'year').toISOString(),
           },
         ],
       });
@@ -704,7 +718,7 @@ describe('AdminPluginFileService', () => {
 
     it('should use logical OR fallbacks for manifest fields when missing', async () => {
       // Manifest with empty strings to ensure fallbacks are used
-      const emptyFieldsManifest: Partial<AdminPluginManifest> & {
+      const emptyFieldsManifest: Partial<IAdminPluginManifest> & {
         main: string;
       } = {
         pluginId: '',
@@ -721,7 +735,7 @@ describe('AdminPluginFileService', () => {
 
       mockInternalFileWriter.readPluginFiles.mockResolvedValue({
         success: true,
-        manifest: emptyFieldsManifest as AdminPluginManifest,
+        manifest: emptyFieldsManifest as IAdminPluginManifest,
         files: mockFiles,
       });
 

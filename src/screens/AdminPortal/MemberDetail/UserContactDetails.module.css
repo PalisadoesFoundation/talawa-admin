@@ -1,0 +1,60 @@
+.allRound {
+  border-radius: var(--space-4);
+}
+
+.cardControl {
+  margin-bottom: var(--space-5);
+  display: none;
+}
+
+.inputColor {
+  background: var(--color-gray-100);
+}
+
+.saveChangesBtn {
+  background-color: var(--color-primary-200);
+  color: var(--color-gray-700);
+}
+
+.topRadius {
+  border-top-left-radius: var(--space-6);
+  border-top-right-radius: var(--space-6);
+  color: var(--color-gray-700);
+  background: var(--color-gray-200);
+}
+
+.userContactDetailPersonalCardHeader {
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: var(--space-2);
+  border-top-right-radius: var(--space-2);
+  background: var(--color-gray-200);
+}
+
+.userContactDetailContactAvatarUrl {
+  width: var(--space-8);
+  height: var(--space-8);
+  object-fit: cover;
+}
+
+.userContactDetailContactAvatarEditIcon {
+  cursor: pointer;
+  font-size: var(--font-size-md);
+  border: none;
+}
+
+.dateboxMemberDetail {
+  border-radius: var(--space-2);
+  border-color: var(--color-gray-300);
+  outline: none;
+  box-shadow: none;
+  background: var(--color-gray-100);
+  display: flex;
+  align-items: center;
+}
+
+.dropdownField button span {
+  font-size: var(--font-size-sm);
+}

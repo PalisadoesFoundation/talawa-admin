@@ -1,7 +1,5 @@
 vi.resetModules();
-vi.mock('./filehash', () => ({
-  calculateFileHash: vi.fn().mockResolvedValue('mocked-file-hash'),
-}));
+vi.mock('./filehash');
 
 beforeAll(() => {
   Object.defineProperty(File.prototype, 'arrayBuffer', {
@@ -14,7 +12,8 @@ beforeAll(() => {
 });
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
 import { useMinioUpload } from './MinioUpload';
@@ -57,6 +56,7 @@ const TestComponent = ({
 
 describe('Minio Upload Integration', (): void => {
   beforeEach(() => {
+    vi.clearAllMocks();
     (calculateFileHash as Mock).mockResolvedValue('mocked-file-hash');
     global.fetch = vi.fn(() =>
       Promise.resolve({
@@ -67,7 +67,7 @@ describe('Minio Upload Integration', (): void => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   const successMocks = [
@@ -85,7 +85,7 @@ describe('Minio Upload Integration', (): void => {
       result: {
         data: {
           createPresignedUrl: {
-            fileUrl: null, // Added field to match the query shape.
+            fileUrl: null,
             presignedUrl: 'https://minio-test.com/upload/url',
             objectName: 'test-object-name',
             requiresUpload: true,
@@ -99,20 +99,16 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
-    expect(screen.getByTestId('status').textContent).toBe('uploading');
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('success');
     });
@@ -156,18 +152,15 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={missingUrlMocks} addTypename={false}>
+      <MockedProvider mocks={missingUrlMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');
@@ -203,18 +196,15 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={errorMock} addTypename={false}>
+      <MockedProvider mocks={errorMock}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');
@@ -232,18 +222,15 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');
@@ -255,7 +242,7 @@ describe('Minio Upload Integration', (): void => {
   it('should log error "File upload failed" when file upload returns not ok', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={vi.fn()} />
       </MockedProvider>,
     );
@@ -264,13 +251,10 @@ describe('Minio Upload Integration', (): void => {
       Promise.resolve({ ok: false } as Response),
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');

@@ -1,12 +1,23 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import {
   PluginGraphQLService,
   useGetAllPlugins,
   useCreatePlugin,
+  useInstallPlugin,
   useUpdatePlugin,
   useDeletePlugin,
 } from '../graphql-service';
+import {
+  type ApolloClient,
+  useQuery,
+  useMutation,
+  type QueryResult,
+} from '@apollo/client';
 
 // Mock Apollo client
 const mockApolloClient = {
@@ -29,7 +40,14 @@ vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
 vi.mock('@apollo/client', () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
-  gql: vi.fn((strings, ...args) => strings.join('')),
+  gql: vi.fn((strings: readonly string[]) => strings.join('')),
+}));
+
+// Mock i18n to prevent initialization errors
+vi.mock('../../utils/i18n', () => ({
+  default: {
+    getFixedT: () => (key: string) => key,
+  },
 }));
 
 describe('PluginGraphQLService', () => {
@@ -37,11 +55,13 @@ describe('PluginGraphQLService', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    graphqlService = new PluginGraphQLService(mockApolloClient);
+    graphqlService = new PluginGraphQLService(
+      mockApolloClient as unknown as ApolloClient<unknown>,
+    );
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Constructor', () => {
@@ -59,8 +79,8 @@ describe('PluginGraphQLService', () => {
           isActivated: true,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().subtract(1, 'year').format('YYYY-MM-DD'),
+          updatedAt: dayjs.utc().subtract(1, 'year').format('YYYY-MM-DD'),
         },
       ];
 
@@ -121,8 +141,8 @@ describe('PluginGraphQLService', () => {
         isActivated: true,
         isInstalled: true,
         backup: false,
-        createdAt: '2023-01-01',
-        updatedAt: '2023-01-01',
+        createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+        updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
       };
       const input = { pluginId: 'new-plugin', isActivated: true };
 
@@ -169,6 +189,62 @@ describe('PluginGraphQLService', () => {
     });
   });
 
+  describe('installPlugin', () => {
+    it('should install plugin successfully', async () => {
+      const mockPlugin = {
+        id: '1',
+        pluginId: 'test-plugin',
+        isActivated: true,
+        isInstalled: true,
+        backup: false,
+        createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+        updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+      };
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
+
+      mockApolloClient.mutate.mockResolvedValue({
+        data: { installPlugin: mockPlugin },
+      });
+
+      const result = await graphqlService.installPlugin(input);
+      expect(result).toEqual(mockPlugin);
+      expect(mockApolloClient.mutate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          mutation: expect.anything(),
+          variables: { input },
+          refetchQueries: expect.any(Array),
+        }),
+      );
+    });
+
+    it('should return null when install result is null', async () => {
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
+      mockApolloClient.mutate.mockResolvedValue({
+        data: { installPlugin: null },
+      });
+
+      const result = await graphqlService.installPlugin(input);
+      expect(result).toBeNull();
+    });
+
+    it('should handle errors and return null', async () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
+      mockApolloClient.mutate.mockRejectedValue(new Error('Install failed'));
+
+      const result = await graphqlService.installPlugin(input);
+      expect(result).toBeNull();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to install plugin:',
+        expect.any(Error),
+      );
+
+      consoleSpy.mockRestore();
+    });
+  });
+
   describe('updatePlugin', () => {
     it('should update plugin successfully', async () => {
       const mockPlugin = {
@@ -177,8 +253,11 @@ describe('PluginGraphQLService', () => {
         isActivated: false,
         isInstalled: true,
         backup: true,
-        createdAt: '2023-01-01',
-        updatedAt: '2023-01-02',
+        createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+        updatedAt: dayjs()
+          .subtract(1, 'year')
+          .add(1, 'day')
+          .format('YYYY-MM-DD'),
       };
       const input = { id: '1', isActivated: false, backup: true };
 
@@ -279,51 +358,287 @@ describe('GraphQL Hooks', () => {
     vi.clearAllMocks();
   });
 
-  describe('useGetAllPlugins', () => {
-    it('should return useQuery hook for getting all plugins', () => {
-      const mockResult = {
-        data: { getPlugins: [] },
-        loading: false,
-        error: null,
-      };
-      const mockUseQuery = vi.fn().mockReturnValue(mockResult);
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseQuery());
-      expect(result.current).toEqual(mockResult);
+  describe('useGetAllPlugins', () => {
+    it('should call useQuery with correct query and return the result', () => {
+      const mockData = {
+        getPlugins: [
+          {
+            id: '1',
+            pluginName: 'Test Plugin',
+            pluginCreatedBy: 'Admin',
+            pluginDesc: 'Test Description',
+            uninstalledOrgs: [],
+          },
+        ],
+      };
+
+      const mockQueryResult = {
+        data: mockData,
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+        fetchMore: vi.fn(),
+        networkStatus: 7,
+        called: true,
+      };
+
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as QueryResult,
+      );
+
+      const { result } = renderHook(() => useGetAllPlugins());
+
+      expect(vi.mocked(useQuery)).toHaveBeenCalled();
+      expect(result.current.data).toEqual(mockData);
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeUndefined();
+    });
+
+    it('should handle loading state', () => {
+      const mockQueryResult = {
+        data: undefined,
+        loading: true,
+        error: undefined,
+        refetch: vi.fn(),
+        fetchMore: vi.fn(),
+        networkStatus: 1,
+        called: true,
+      };
+
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as QueryResult,
+      );
+
+      const { result } = renderHook(() => useGetAllPlugins());
+
+      expect(result.current.loading).toBe(true);
+      expect(result.current.data).toBeUndefined();
+    });
+
+    it('should handle error state', () => {
+      const mockError = new Error('Failed to fetch plugins');
+      const mockQueryResult = {
+        data: undefined,
+        loading: false,
+        error: mockError,
+        refetch: vi.fn(),
+        fetchMore: vi.fn(),
+        networkStatus: 8,
+        called: true,
+      };
+
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as QueryResult,
+      );
+
+      const { result } = renderHook(() => useGetAllPlugins());
+
+      expect(result.current.error).toEqual(mockError);
+      expect(result.current.loading).toBe(false);
     });
   });
 
   describe('useCreatePlugin', () => {
-    it('should return useMutation hook for creating plugins', () => {
-      const mockResult = [vi.fn(), { data: null, loading: false, error: null }];
-      const mockUseMutation = vi.fn().mockReturnValue(mockResult);
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
 
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseMutation());
-      expect(result.current).toEqual(mockResult);
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useCreatePlugin());
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { createPlugin: { id: '1', pluginId: 'plugin-1' } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useCreatePlugin());
+
+      const input = { pluginId: 'plugin-1' };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
+    });
+  });
+
+  describe('useInstallPlugin', () => {
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useInstallPlugin());
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { installPlugin: { id: '1', isInstalled: true } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useInstallPlugin());
+
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
     });
   });
 
   describe('useUpdatePlugin', () => {
-    it('should return useMutation hook for updating plugins', () => {
-      const mockResult = [vi.fn(), { data: null, loading: false, error: null }];
-      const mockUseMutation = vi.fn().mockReturnValue(mockResult);
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
 
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseMutation());
-      expect(result.current).toEqual(mockResult);
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useUpdatePlugin());
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { updatePlugin: { id: '1', pluginName: 'Updated Plugin' } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useUpdatePlugin());
+
+      const input = {
+        id: '1',
+        pluginName: 'Updated Plugin',
+        pluginDesc: 'Updated Description',
+      };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
     });
   });
 
   describe('useDeletePlugin', () => {
-    it('should return useMutation hook for deleting plugins', () => {
-      const mockResult = [vi.fn(), { data: null, loading: false, error: null }];
-      const mockUseMutation = vi.fn().mockReturnValue(mockResult);
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
 
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseMutation());
-      expect(result.current).toEqual(mockResult);
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useDeletePlugin());
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { deletePlugin: { success: true } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useDeletePlugin());
+
+      const input = { id: '1' };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
     });
   });
 });

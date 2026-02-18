@@ -1,0 +1,7 @@
+{
+  "name": "eslint-plugin-vitest-isolation",
+  "version": "1.0.0",
+  "description": "Custom ESLint plugin to enforce mock isolation in Vitest test files",
+  "main": "index.js",
+  "private": true
+}

@@ -9,7 +9,7 @@ import gql from 'graphql-tag';
  * @param startAt - Date time at which the advertised event starts.
  * @param endAt - Date time at which the advertised event ends.
  * @param description - Custom information about the advertisement.
- * @param attachments - Attachments of the advertisement.
+ * @param attachments - Attachments of the advertisement (FileMetadataInput from MinIO presigned upload).
  */
 export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
@@ -19,7 +19,7 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
     $startAt: DateTime!
     $endAt: DateTime!
     $description: String
-    $attachments: [Upload!]
+    $attachments: [FileMetadataInput!]
   ) {
     createAdvertisement(
       input: {

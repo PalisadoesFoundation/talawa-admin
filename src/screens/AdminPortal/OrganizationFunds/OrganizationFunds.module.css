@@ -1,0 +1,113 @@
+.overflowVisible {
+  overflow: visible;
+}
+
+.whiteContainer {
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+
+  /* Add error icon for non-color indication */
+  &::before {
+    content: '⚠️';
+    margin-right: var(--space-3);
+  }
+}
+
+.errorIconLarge {
+  font-size: var(--font-size-3xl);
+}
+
+.tableHeader {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.requestsTableItemIndex {
+  vertical-align: middle;
+}
+
+.editButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-100);
+  --bs-btn-active-bg: var(--color-blue-500);
+  --bs-btn-active-border-color: var(--color-gray-100);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+  box-shadow: none;
+}
+
+.searchContainerRowNoTopMargin {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.createFundButton {
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
+  margin: var(--space-2) var(--space-2);
+  width: var(--space-16);
+  height: var(--space-10);
+}
+
+.createFundButton:hover {
+  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
+    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
+}
+
+.createFundButton:active {
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-400);
+}
+
+.buttonNoWrap {
+  white-space: nowrap;
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+.listTable {
+  width: 100%;
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.rowBackground {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  max-height: var(--space-14);
+  overflow-y: auto;
+}

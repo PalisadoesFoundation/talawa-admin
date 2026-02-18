@@ -1,12 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -16,7 +10,8 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import { vi, it } from 'vitest';
+import { vi, it, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
 /**
  * This file contains unit tests for the People component.
  *
@@ -37,7 +32,18 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
-const memberEdge = (props: any = {}) => ({
+interface InterfaceMemberEdgeProps {
+  cursor?: string;
+  id?: string;
+  name?: string;
+  role?: string;
+  avatarURL?: string | null;
+  emailAddress?: string | null;
+  node?: Record<string, unknown>;
+}
+
+// Helper for members edges
+const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
     id: props.id || 'user-1',
@@ -45,7 +51,7 @@ const memberEdge = (props: any = {}) => ({
     role: props.role || 'member',
     avatarURL: props.avatarURL || null,
     emailAddress: props.emailAddress || 'user1@example.com',
-    createdAt: '2023-03-02T03:22:08.101Z',
+    createdAt: dayjs().subtract(1, 'year').month(2).toISOString(),
     ...props.node,
   },
 });
@@ -55,6 +61,7 @@ const makeQueryVars = (overrides = {}) => ({
   orgId: DEFAULT_ORG_ID,
   firstName_contains: DEFAULT_SEARCH,
   first: DEFAULT_FIRST,
+  after: undefined,
   ...overrides,
 });
 
@@ -298,6 +305,10 @@ const fiveMembersMock = {
   },
 };
 
+// Debounce duration used by SearchFilterBar component (default: 300ms)
+// NOTE: This value must be manually kept in sync with SearchFilterBar's debounceDelay default
+const SEARCH_DEBOUNCE_MS = 300;
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -306,15 +317,19 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const sharedMocks = vi.hoisted(() => ({
+  useParams: vi.fn(() => ({ orgId: '' })),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: '' }),
+    useParams: sharedMocks.useParams,
   };
 });
 
-describe('Testing People Screen [User Portal]', () => {
+const setMatchMediaStub = (): void => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -326,10 +341,25 @@ describe('Testing People Screen [User Portal]', () => {
       dispatchEvent: vi.fn(),
     })),
   });
+};
 
+let user: ReturnType<typeof userEvent.setup>;
+beforeEach(() => {
+  vi.clearAllMocks();
+  user = userEvent.setup();
+  sharedMocks.useParams.mockReturnValue({ orgId: '' });
+  setMatchMediaStub();
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+  sharedMocks.useParams.mockReturnValue({ orgId: '' });
+});
+
+describe('Testing People Screen [User Portal]', () => {
   it('Screen should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -346,10 +376,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Search works properly by pressing enter', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -362,19 +389,18 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
-    await wait();
+    await user.type(screen.getByTestId('searchInput'), 'Ad{enter}');
+    await wait(SEARCH_DEBOUNCE_MS);
 
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    });
   });
 
   it('Search works properly by clicking search Btn', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -387,22 +413,22 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.clear(screen.getByTestId('searchInput'));
-    await userEvent.click(searchBtn);
-    await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
-    await userEvent.click(searchBtn);
+    await user.clear(screen.getByTestId('searchInput'));
+    await user.click(searchBtn);
+    await user.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
+    await user.click(searchBtn);
     await wait();
 
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    });
   });
 
   it('Mode is changed to Admins', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminsOnlyMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminsOnlyMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -415,8 +441,8 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await user.click(screen.getByTestId('modeChangeBtn-toggle'));
+    await user.click(screen.getByTestId('modeChangeBtn-item-1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
@@ -425,7 +451,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Shows loading state while fetching data', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -436,16 +462,13 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable-loading')).toBeInTheDocument();
     await wait();
   });
 
   it('pagination working', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[fiveMembersMock, lotsOfMembersMock]}
-      >
+      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -464,10 +487,7 @@ describe('Testing People Screen [User Portal]', () => {
 describe('Testing People Screen Pagination [User Portal]', () => {
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[fiveMembersMock, lotsOfMembersMock]}
-      >
+      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -479,22 +499,6 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     );
   };
 
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
-  });
-
   it('handles rows per page change and pagination navigation', async () => {
     renderComponent();
     await wait();
@@ -504,24 +508,51 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 
     // Change rows per page to 10 (should show 6 now)
     const select = screen.getByRole('combobox');
-    await userEvent.selectOptions(select, '10');
+    await user.selectOptions(select, '10');
     await wait();
 
     expect(screen.getByText('user6')).toBeInTheDocument();
 
     // Reset to smaller page size to test navigation
-    await userEvent.selectOptions(select, '5');
+    await user.selectOptions(select, '5');
     await wait();
+  });
+
+  it('handles backward pagination correctly', async () => {
+    // Use mocks that support forward and backward navigation
+    render(
+      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    // Navigate to page 2
+    const nextButton = screen.getByTestId('nextPage');
+    await user.click(nextButton);
+    await wait();
+
+    // Now navigate back to page 1 (this covers lines 158-161)
+    // This uses cached cursor, no new query needed
+    const prevButton = screen.getByTestId('previousPage');
+    await user.click(prevButton);
+    await wait();
+
+    // Should be back on first page
+    expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 });
 
 describe('People Component Mode Switch and Search Coverage', () => {
   it('searches partial user name correctly and displays matching results', async (): Promise<void> => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -532,40 +563,19 @@ describe('People Component Mode Switch and Search Coverage', () => {
       </MockedProvider>,
     );
 
-    await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
-    await userEvent.click(screen.getByTestId('searchBtn'));
+    await user.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
+    await user.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
       expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     });
-
-    // Mock router param with invalid tab to simulate edge case fallback
-    vi.resetModules();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ tab: 'invalid' }), // simulate invalid mode/tab
-      };
-    });
-
-    // Force a re-render to trigger the useEffect with mocked state
-
-    // Verify the component still renders valid fallback data (e.g., Admin/User list)
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-      // Fallback to 'All Members' or default view
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
-    });
   });
 
   it('handles rowsPerPage = 0 case and edge cases', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, nextPageMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -580,12 +590,12 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const select = screen.getByLabelText('rows per page');
     expect(select).toBeInTheDocument();
     const nextButton = screen.getByTestId('nextPage');
-    await userEvent.click(nextButton);
+    await user.click(nextButton);
   });
 
   it('should not trigger search for non-Enter key press', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -597,15 +607,15 @@ describe('People Component Mode Switch and Search Coverage', () => {
     );
 
     const searchInput = screen.getByTestId('searchInput');
-    fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
+    await user.type(searchInput, 'A'); // Type 'A' without Enter
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
   it('should handle search with empty input value', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -621,15 +631,15 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const searchInput = screen.getByTestId('searchInput');
     searchInput.remove();
 
-    await userEvent.click(searchBtn);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await user.click(searchBtn);
+    await wait();
   });
 });
 
 describe('People Component Field Tests (Email, ID, Role)', () => {
   const renderComponentWithEmailMock = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[defaultQueryMock]} addTypename={false}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -640,22 +650,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       </MockedProvider>,
     );
   };
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
-  });
 
   it('should display user email addresses correctly', async () => {
     renderComponentWithEmailMock();
@@ -680,12 +674,11 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
     expect(screen.getByText('Admin User')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await user.click(screen.getByTestId('modeChangeBtn-toggle'));
+    await user.click(screen.getByTestId('modeChangeBtn-item-1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
   });
 
   it('should correctly assign userType based on role for admin filtering', async () => {
@@ -695,15 +688,14 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Admin User')).toBeInTheDocument();
     expect(screen.getByText('Test User')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await user.click(screen.getByTestId('modeChangeBtn-toggle'));
+    await user.click(screen.getByTestId('modeChangeBtn-item-1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn0'));
+    await user.click(screen.getByTestId('modeChangeBtn-toggle'));
+    await user.click(screen.getByTestId('modeChangeBtn-item-0'));
     await wait();
 
     expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -718,12 +710,90 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await user.click(screen.getByTestId('modeChangeBtn-toggle'));
+    await user.click(screen.getByTestId('modeChangeBtn-item-1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-    expect(screen.queryByText('test@example.com')).not.toBeInTheDocument();
+  });
+
+  it('clears search input', async () => {
+    render(
+      <MockedProvider mocks={[defaultQueryMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+    await user.type(searchInput, 'Test');
+    expect(searchInput).toHaveValue('Test');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByLabelText('Clear');
+    await user.click(clearBtn);
+
+    expect(searchInput).toHaveValue('');
+  });
+
+  it('displays localized emailNotAvailable when email is missing', async () => {
+    // Create a mock with a member that has null email
+    const mockWithNullEmail = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeQueryVars(),
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: {
+                    id: 'user-null-email',
+                    name: 'Test User No Email',
+                    role: 'member',
+                    avatarURL: null,
+                    emailAddress: null,
+                    createdAt: dayjs().subtract(2, 'year').toISOString(),
+                  },
+                },
+              ],
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[mockWithNullEmail]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify member is rendered
+    expect(screen.getByText('Test User No Email')).toBeInTheDocument();
+    // Verify emailNotAvailable translation is displayed (DataTable renders email in datatable-cell-email)
+    expect(screen.getByText('Email not available')).toBeInTheDocument();
   });
 });

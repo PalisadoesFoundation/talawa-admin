@@ -1,0 +1,157 @@
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icon {
+  margin-right: var(--space-3);
+}
+
+.iconLarge {
+  font-size: var(--font-size-4xl);
+}
+
+.TableImage {
+  object-fit: cover;
+  margin-right: var(--space-3);
+  width: var(--logo-xs);
+  height: var(--logo-xs);
+  border-radius: var(--radius-full);
+}
+
+.assigneeCellContainer {
+  display: flex;
+  align-items: center;
+  font-weight: var(--font-weight-bold);
+  margin-inline-start: var(--space-3);
+}
+
+.groupIconSecondary {
+  background-color: var(--color-gray-300);
+  margin-inline-start: var(--space-2);
+}
+
+.tableHeader {
+  background-color: var(--color-red-500);
+  font-weight: bold;
+}
+
+.infoButton {
+  background-color: var(--infoButton-bg) !important;
+  border-color: var(--infoButton-border);
+  color: var(--infoButton-color);
+  margin-right: var(--space-3);
+  border-radius: var(--radius-sm);
+}
+
+.infoButton:hover {
+  background-color: var(--infoButton-bg-hover);
+  border-color: var(--infoButton-border-hover);
+  color: var(--infoButton-color) !important;
+  box-shadow: var(--drop-shadow);
+}
+
+.actionItemDeleteButton {
+  background-color: var(--actionItemDeleteButton-bg) !important;
+  color: var(--actionItemDeleteButton-color) !important;
+}
+
+.actionItemDeleteButton:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:checked {
+  background-color: var(--checkboxButton-checked-bg);
+  border-color: var(--checkboxButton-checked-color);
+}
+
+.checkboxButton input:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:focus {
+  border-color: var(--checkbox-focus-border);
+  outline: var(--border-2) solid var(--checkbox-focus-border);
+  outline-offset: var(--space-1);
+}
+
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: var(--space-15);
+  border: var(--border-1) solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}
+
+.createButton {
+  background-color: var(--createButton-bg);
+  color: var(--createButton-color);
+  border: var(--border-1) solid var(--createButton-border);
+  margin: var(--space-3) var(--space-4);
+  width: var(--space-16);
+  height: var(--space-10);
+}
+
+.rowBackground {
+  background-color: var(--rowBackground-bg);
+  color: var(--rowBackground-color);
+  max-height: var(--space-14);
+  overflow-y: auto;
+}
+
+.btnsContainer {
+  display: flex;
+  margin: var(--space-9) var(--space-0);
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: var(--space-7) var(--space-0);
+  }
+}
+
+@media (max-width: 768px) {
+  .btnsContainer {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.loadingHeading {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-red-500);
+  text-align: center;
+}
+
+.categoryName {
+  display: flex;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+}
+
+.statusCheckBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-5);
+}
+
+.searchByContainer {
+  display: flex;
+  gap: var(--space-4);
+}

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserSidebarOrgProps
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L56)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L29)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:56](htt
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L59)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L32)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:59](htt
 
 > **orgId**: `string`
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L57)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L30)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:57](htt
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L60)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L33)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:60](htt
 
 > **targets**: [`TargetsType`](../../../../../state/reducers/routesReducer/type-aliases/TargetsType.md)[]
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L58)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L31)

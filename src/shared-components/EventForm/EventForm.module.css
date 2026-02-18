@@ -1,0 +1,121 @@
+.datedivEvents {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: var(--space-6);
+}
+
+.dateboxEvents {
+  width: 90%;
+  border-radius: var(--radius-md);
+  border-color: var(--dateboxEvents-border, #e8e5e5);
+  outline: none;
+  box-shadow: none;
+  padding: var(--space-2) var(--space-3);
+  margin-right: var(--space-3);
+  margin-left: var(--space-3);
+}
+
+.datediv {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin-bottom: var(--space-6);
+}
+
+.datediv > div {
+  flex: 1;
+}
+
+@media only screen and (max-width: 600px) {
+  .datediv {
+    flex-direction: column;
+  }
+
+  .datediv > div {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: var(--space-4);
+  }
+
+  .datediv > div p {
+    margin-bottom: var(--space-3);
+  }
+}
+
+.checkboxdivEvents {
+  display: flex;
+  flex-wrap: wrap;
+
+  --events-gap: var(--space-5);
+  /* stylelint-disable-next-line declaration-empty-line-before */
+  column-gap: var(--events-gap, 1rem);
+}
+
+.checkboxdivEvents > div {
+  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
+  min-width: var(--space-17);
+  margin-bottom: var(--space-8);
+}
+
+.dispflexEvents {
+  display: flex;
+  align-items: center;
+}
+
+.dispflexEvents > input {
+  border: none;
+  box-shadow: none;
+  margin-top: var(--space-3);
+}
+
+/* Migrated from app-fixed.module.css */
+.inputField {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--inputField-bg, #fff);
+  border: var(--border-1) solid var(--inputField-border, #dddddd);
+  box-shadow: var(--drop-shadow);
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--addButton-font, #555555);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg, #a8c7fa);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover, #1778f2);
+  border-color: var(--addButton-border-hover, #555555);
+}
+
+.switch input {
+  --bs-form-switch-bg: transparent;
+}
+
+.switch input:checked {
+  background-color: var(--switch-bg-checked, #1778f2);
+  border-color: var(--switch-border-checked, #1778f2);
+  box-shadow: 0 0 var(--shadow-blur-xs) var(--shadow-spread-sm)
+    var(--switch-box-shadow-checked, #a8c7fa);
+}
+
+.switch input:focus {
+  border-color: var(--switch-border-focus, #d1d5db);
+}
+
+/* Helper for bootstrap switch alignment */
+.switch {
+  padding-left: var(--space-13);
+  white-space: nowrap;
+}
+
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown -- CSS Modules :global() targets Bootstrap's .form-check-input */
+.switch :global(.form-check-input) {
+  margin-left: calc(-1 * var(--space-11));
+  margin-top: var(--space-4);
+  flex-shrink: 0;
+}

@@ -1,0 +1,106 @@
+.carouselWrapper {
+  position: relative;
+}
+
+.scrollContainer {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.cardWrapper {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 350px;
+  min-width: 280px;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .cardWrapper {
+    max-width: 380px;
+    min-width: 320px;
+  }
+}
+
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e1e5e9;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #666;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.navButton:hover {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: #333;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.navButton:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.navButtonLeft {
+  left: 8px;
+}
+
+.navButtonRight {
+  right: 8px;
+}
+
+@media (min-width: 1024px) {
+  .scrollContainer {
+    gap: 1.5rem;
+  }
+
+  .cardWrapper {
+    max-width: 400px;
+    min-width: 350px;
+  }
+
+  .navButton {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollContainer {
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  .navButton,
+  .navButton:hover,
+  .navButton:active {
+    transition: none;
+    transform: none;
+  }
+
+  .navButton {
+    transform: translateY(-50%);
+  }
+}

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import useSession from './useSession';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { BrowserRouter } from 'react-router';
 
@@ -22,10 +22,35 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-i18next')>();
+
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      i18n: { changeLanguage: vi.fn() },
+    }),
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
+    },
+  };
+});
+
+const mockClearAllItems = vi.fn();
+
+vi.mock('./useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    clearAllItems: mockClearAllItems,
+    getItem: vi.fn((key: string) => {
+      if (key === 'refreshToken') return 'test-refresh-token';
+      return null;
+    }),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
+  })),
 }));
 
 const MOCKS = [
@@ -44,11 +69,11 @@ const MOCKS = [
   },
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
     result: {
       data: {
-        revokeRefreshTokenForUser: true,
+        logout: { success: true },
       },
     },
   },
@@ -58,12 +83,6 @@ describe('useSession Hook', () => {
     vi.clearAllMocks();
     vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
     vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
-    Object.defineProperty(global, 'localStorage', {
-      value: {
-        clear: vi.fn(),
-      },
-      writable: true,
-    });
   });
 
   afterEach(() => {
@@ -77,7 +96,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -103,7 +122,10 @@ describe('useSession Hook', () => {
         'keydown',
         expect.any(Function),
       );
-      expect(toast.warning).toHaveBeenCalledWith('sessionWarning');
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionWarning',
+        expect.any(Object),
+      );
     });
 
     vi.useRealTimers();
@@ -114,7 +136,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -157,7 +179,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -188,7 +210,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -199,12 +221,22 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(31 * 60 * 1000);
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledTimes(2);
-      expect(toast.warning).toHaveBeenNthCalledWith(1, 'sessionWarning');
-      expect(toast.warning).toHaveBeenNthCalledWith(2, 'sessionLogout', {
-        autoClose: false,
-      });
+
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        1,
+        'sessionWarning',
+        expect.any(Object),
+      );
+
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        2,
+        'sessionLogOut',
+        expect.objectContaining({
+          autoClose: false,
+        }),
+      );
     });
   });
 
@@ -213,7 +245,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -224,13 +256,16 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(15 * 60 * 1000);
 
     await vi.waitFor(() =>
-      expect(toast.warning).toHaveBeenCalledWith('sessionWarning'),
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionWarning',
+        expect.any(Object),
+      ),
     );
 
     vi.useRealTimers();
   });
 
-  test('should handle error when revoking token fails', async () => {
+  test('should handle error when logout fails', async () => {
     const consoleErrorMock = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -251,15 +286,15 @@ describe('useSession Hook', () => {
       },
       {
         request: {
-          query: REVOKE_REFRESH_TOKEN,
+          query: LOGOUT_MUTATION,
         },
-        error: new Error('Failed to revoke refresh token'),
+        error: new Error('Failed to logout'),
       },
     ];
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={errorMocks} addTypename={false}>
+        <MockedProvider mocks={errorMocks}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -270,7 +305,7 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() =>
       expect(consoleErrorMock).toHaveBeenCalledWith(
-        'Error revoking refresh token:',
+        'Error during logout:',
         expect.any(Error),
       ),
     );
@@ -283,7 +318,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -306,7 +341,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={errorMocks} addTypename={false}>
+        <MockedProvider mocks={errorMocks}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -328,7 +363,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -361,7 +396,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -405,7 +440,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -440,21 +475,22 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(250);
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
-        autoClose: false,
-      });
+      expect(mockClearAllItems).toHaveBeenCalled();
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionLogOut',
+        expect.objectContaining({ autoClose: false }),
+      );
     });
 
     vi.useRealTimers();
   });
 
-  test('should handle logout and revoke token', async () => {
+  test('should handle logout', async () => {
     vi.useFakeTimers();
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -464,10 +500,11 @@ describe('useSession Hook', () => {
     result.current.handleLogout();
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
-        autoClose: false,
-      });
+      expect(mockClearAllItems).toHaveBeenCalled();
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionLogOut',
+        expect.objectContaining({ autoClose: false }),
+      );
     });
 
     vi.useRealTimers();
@@ -478,7 +515,7 @@ test('should extend session when called directly', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -502,7 +539,10 @@ test('should extend session when called directly', async () => {
   vi.advanceTimersByTime(14 * 60 * 1000);
 
   await vi.waitFor(() =>
-    expect(toast.warning).toHaveBeenCalledWith('sessionWarning'),
+    expect(toast.warning).toHaveBeenCalledWith(
+      'sessionWarning',
+      expect.any(Object),
+    ),
   );
 
   vi.useRealTimers();
@@ -515,7 +555,7 @@ test('should properly clean up on unmount', () => {
 
   const { result, unmount } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -558,7 +598,7 @@ test('should handle missing community data', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={nullDataMocks} addTypename={false}>
+      <MockedProvider mocks={nullDataMocks}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -611,7 +651,7 @@ test('should handle event listener errors gracefully', async () => {
   try {
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -648,7 +688,7 @@ test('should handle session timeout data updates', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={customMocks} addTypename={false}>
+      <MockedProvider mocks={customMocks}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -691,7 +731,7 @@ test('should handle edge case when visibility state is neither visible nor hidde
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -712,7 +752,10 @@ test('should handle edge case when visibility state is neither visible nor hidde
   vi.advanceTimersByTime(15 * 60 * 1000);
 
   await vi.waitFor(() => {
-    expect(toast.warning).toHaveBeenCalledWith('sessionWarning');
+    expect(toast.warning).toHaveBeenCalledWith(
+      'sessionWarning',
+      expect.any(Object),
+    );
   });
 
   vi.useRealTimers();

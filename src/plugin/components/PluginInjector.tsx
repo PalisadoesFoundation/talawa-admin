@@ -2,6 +2,9 @@ import React from 'react';
 import { usePluginInjectors } from '../hooks';
 import { getPluginComponent } from '../registry';
 import type { IInjectorExtension } from '../types';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { Extension } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 interface IPluginInjectorProps {
   injectorType: 'G1' | 'G2' | 'G3' | 'G4';
@@ -29,6 +32,7 @@ const PluginInjector: React.FC<IPluginInjectorProps> = ({
   style,
   data,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'pluginInjector' });
   const injectors = usePluginInjectors(injectorType);
 
   const renderInjector = (injector: IInjectorExtension, index: number) => {
@@ -38,7 +42,6 @@ const PluginInjector: React.FC<IPluginInjectorProps> = ({
         injector.pluginId || '',
         injector.injector,
       );
-
       if (!Component) {
         console.warn(
           `Component ${injector.injector} not found for injector`,
@@ -59,7 +62,13 @@ const PluginInjector: React.FC<IPluginInjectorProps> = ({
   };
 
   if (!injectors || injectors.length === 0) {
-    return null;
+    return (
+      <EmptyState
+        message={t('notFoundOrDisabled')}
+        description={t('notFoundOrDisabledDescription')}
+        icon={<Extension />}
+      />
+    );
   }
 
   return (
