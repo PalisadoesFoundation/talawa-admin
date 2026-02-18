@@ -120,11 +120,11 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
   searchOrganizationByName(name: string, timeout = 10000): this {
     this.byTestId(this.organizationSearchInput, timeout)
       .should('be.visible')
-      .clear()
-      .type(name);
+      .clear({ force: true })
+      .type(name, { force: true });
     this.byTestId(this.organizationSearchButton, timeout)
       .should('be.visible')
-      .click();
+      .click({ force: true });
     return this;
   }
 
