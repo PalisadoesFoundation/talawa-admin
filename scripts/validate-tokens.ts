@@ -259,12 +259,22 @@ const isInsideVarOrCalc = (
 };
 
 /**
- * Check if a width/minWidth/maxWidth match is inside a DataTable meta object.
- * DataTable columns use `meta: { width: 'var(--...)' }` which is legitimate.
+ * Track whether a line opens or closes a DataTable `meta: { ... }` block.
+ * Returns the updated inMetaObject state after processing the line.
  */
-const isInsideMetaObject = (line: string, matchIndex: number): boolean => {
-  const beforeMatch = line.slice(0, matchIndex);
-  return /meta\s*:\s*\{[^}]*$/.test(beforeMatch);
+const updateMetaObjectState = (
+  line: string,
+  inMetaObject: boolean,
+): boolean => {
+  if (inMetaObject) {
+    // Check if the meta block closes on this line
+    return !line.includes('}');
+  }
+  // Check if a meta block opens but doesn't close on this line
+  if (/meta\s*:\s*\{/.test(line) && !line.includes('}')) {
+    return true;
+  }
+  return false;
 };
 
 /**
@@ -702,6 +712,7 @@ const validateTsxLine = (
   lineNumber: number,
   results: IValidationResult[],
   isCommentLine: boolean,
+  inMetaObject: boolean,
 ): void => {
   // Skip comments
   if (isCommentLine) return;
@@ -792,21 +803,22 @@ const validateTsxLine = (
   );
 
   // DataGrid var() check - bypasses allowlist since var() is normally allowed
-  // but invalid for DataGrid column widths (MUI requires numeric values)
-  TSX_PATTERNS.dataGridVarWidth.lastIndex = 0;
-  const dataGridVarMatches = line.match(TSX_PATTERNS.dataGridVarWidth);
-  if (dataGridVarMatches) {
-    dataGridVarMatches.forEach((match) => {
-      const matchIndex = line.indexOf(match);
-      if (matchIndex !== -1 && !isInsideMetaObject(line, matchIndex)) {
+  // but invalid for DataGrid column widths (MUI requires numeric values).
+  // Skip if inside a DataTable meta: { } block (legitimate CSS usage).
+  const isMetaLine = inMetaObject || /meta\s*:\s*\{/.test(line);
+  if (!isMetaLine) {
+    TSX_PATTERNS.dataGridVarWidth.lastIndex = 0;
+    const dataGridVarMatches = line.match(TSX_PATTERNS.dataGridVarWidth);
+    if (dataGridVarMatches) {
+      dataGridVarMatches.forEach((match) => {
         results.push({
           file,
           line: lineNumber,
           match,
           type: 'tsx-datagrid-var',
         });
-      }
-    });
+      });
+    }
   }
 };
 
@@ -840,6 +852,7 @@ export async function validateFiles(
     const isCss = isCssFile(file);
 
     let inBlockComment = false;
+    let inMetaObject = false;
 
     lines.forEach((line, index) => {
       const lineNumber = index + 1;
@@ -859,12 +872,14 @@ export async function validateFiles(
           commentState.isComment,
         );
       } else if (isTs) {
+        inMetaObject = updateMetaObjectState(lineToValidate, inMetaObject);
         validateTsxLine(
           lineToValidate,
           file,
           lineNumber,
           results,
           commentState.isComment,
+          inMetaObject,
         );
       }
     });

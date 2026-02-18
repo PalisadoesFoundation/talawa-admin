@@ -413,6 +413,24 @@ describe('validateFiles', () => {
     expect(result.some((r) => r.type === 'tsx-datagrid-var')).toBe(false);
   });
 
+  test('does not flag multiline DataTable meta.width with var()', async () => {
+    readFileSyncMock.mockReturnValue(
+      [
+        'const columns = [{',
+        "  id: 'sno',",
+        '  meta: {',
+        '    sortable: true,',
+        "    width: 'var(--space-11)',",
+        '  },',
+        '}];',
+      ].join('\n'),
+    );
+
+    const result = await validateFiles('**/*.tsx', ['src/components/Test.tsx']);
+
+    expect(result.some((r) => r.type === 'tsx-datagrid-var')).toBe(false);
+  });
+
   test('allows spacing token names in DataGrid column widths', async () => {
     readFileSyncMock.mockReturnValue(
       "const columns = [{ field: 'id', minWidth: 'space-15' }];",
