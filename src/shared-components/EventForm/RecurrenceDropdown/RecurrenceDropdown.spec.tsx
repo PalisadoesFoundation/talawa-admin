@@ -259,8 +259,9 @@ describe('RecurrenceDropdown Edge Cases', () => {
 
   it('does not call onSelect when an invalid option index is selected', async () => {
     const user = userEvent.setup();
-    const { default: RecurrenceDropdown } =
-      await import('./RecurrenceDropdown');
+    const { default: RecurrenceDropdown } = await import(
+      './RecurrenceDropdown'
+    );
     const onSelect = vi.fn();
     renderWithI18n(
       <RecurrenceDropdown

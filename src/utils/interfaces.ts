@@ -1377,7 +1377,8 @@ export interface InterfaceUserInfoPG {
 /**
  * Extends InterfaceBaseEvent with additional properties for an organization event list item.
  */
-export interface InterfaceQueryOrganizationEventListItem extends InterfaceBaseEvent {
+export interface InterfaceQueryOrganizationEventListItem
+  extends InterfaceBaseEvent {
   isPublic: boolean;
   isRegisterable: boolean;
 }

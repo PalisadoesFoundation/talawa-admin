@@ -30,10 +30,11 @@ export interface InterfaceSearchBarRef {
 /**
  * Strongly typed props for the shared {@link SearchBar} component.
  */
-export interface InterfaceSearchBarProps extends Omit<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  'onChange' | 'size'
-> {
+export interface InterfaceSearchBarProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    'onChange' | 'size'
+  > {
   /** Placeholder text for the search input. */
   placeholder?: string;
   /** Controlled input value. */
