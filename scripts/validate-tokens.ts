@@ -56,6 +56,7 @@ import { fileURLToPath } from 'url';
  * - `'tsx-line-height'` - lineHeight property with px/rem/em units
  * - `'tsx-border-radius'` - borderRadius property with hardcoded values
  * - `'tsx-outline'` - outline/outlineWidth properties with hardcoded values
+ * - `'tsx-datagrid-var'` - var() CSS variable strings used in width/minWidth/maxWidth column properties (DataGrid requires numeric values)
  */
 export type ValidationResultType =
   | 'color'
@@ -73,7 +74,8 @@ export type ValidationResultType =
   | 'tsx-color'
   | 'tsx-line-height'
   | 'tsx-border-radius'
-  | 'tsx-outline';
+  | 'tsx-outline'
+  | 'tsx-datagrid-var';
 
 /**
  * Models a single validation finding representing a hardcoded value
@@ -173,6 +175,10 @@ export const TSX_PATTERNS = {
   // Outline in TSX
   outlineCamelCase:
     /(?:outline|outlineWidth):\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+  // DataGrid column width properties with var() CSS variables
+  // MUI DataGrid requires numeric pixel values for width/minWidth/maxWidth.
+  // Using var(--...) strings will break at runtime. Use spacing tokens instead.
+  dataGridVarWidth: /(?:width|minWidth|maxWidth):\s*['"]var\(--[^)]+\)['"]/gi,
 };
 
 /**
@@ -250,6 +256,15 @@ const isInsideVarOrCalc = (
   }
 
   return false;
+};
+
+/**
+ * Check if a width/minWidth/maxWidth match is inside a DataTable meta object.
+ * DataTable columns use `meta: { width: 'var(--...)' }` which is legitimate.
+ */
+const isInsideMetaObject = (line: string, matchIndex: number): boolean => {
+  const beforeMatch = line.slice(0, matchIndex);
+  return /meta\s*:\s*\{[^}]*$/.test(beforeMatch);
 };
 
 /**
@@ -775,6 +790,24 @@ const validateTsxLine = (
     lineNumber,
     results,
   );
+
+  // DataGrid var() check - bypasses allowlist since var() is normally allowed
+  // but invalid for DataGrid column widths (MUI requires numeric values)
+  TSX_PATTERNS.dataGridVarWidth.lastIndex = 0;
+  const dataGridVarMatches = line.match(TSX_PATTERNS.dataGridVarWidth);
+  if (dataGridVarMatches) {
+    dataGridVarMatches.forEach((match) => {
+      const matchIndex = line.indexOf(match);
+      if (matchIndex !== -1 && !isInsideMetaObject(line, matchIndex)) {
+        results.push({
+          file,
+          line: lineNumber,
+          match,
+          type: 'tsx-datagrid-var',
+        });
+      }
+    });
+  }
 };
 
 /**
@@ -926,6 +959,7 @@ export async function main() {
     'tsx-line-height',
     'tsx-border-radius',
     'tsx-outline',
+    'tsx-datagrid-var',
   ];
 
   const byType = allResults.reduce(

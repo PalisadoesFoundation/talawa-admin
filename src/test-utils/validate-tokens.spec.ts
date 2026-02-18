@@ -382,6 +382,47 @@ describe('validateFiles', () => {
     expect(result).toEqual([]);
   });
 
+  test('detects var() in DataGrid column width properties in TSX files', async () => {
+    readFileSyncMock.mockReturnValue(
+      "const columns = [{ field: 'id', minWidth: 'var(--vw-8)' }];",
+    );
+
+    const result = await validateFiles('**/*.tsx', ['src/components/Test.tsx']);
+
+    expect(result.some((r) => r.type === 'tsx-datagrid-var')).toBe(true);
+    expect(result.some((r) => r.match.includes('var(--vw-8)'))).toBe(true);
+  });
+
+  test('detects var() in width with double quotes in TSX files', async () => {
+    readFileSyncMock.mockReturnValue(
+      'const columns = [{ field: "name", width: "var(--space-15)" }];',
+    );
+
+    const result = await validateFiles('**/*.tsx', ['src/components/Test.tsx']);
+
+    expect(result.some((r) => r.type === 'tsx-datagrid-var')).toBe(true);
+  });
+
+  test('does not flag DataTable meta.width with var() in TSX files', async () => {
+    readFileSyncMock.mockReturnValue(
+      "const columns = [{ id: 'sno', meta: { width: 'var(--space-11)' } }];",
+    );
+
+    const result = await validateFiles('**/*.tsx', ['src/components/Test.tsx']);
+
+    expect(result.some((r) => r.type === 'tsx-datagrid-var')).toBe(false);
+  });
+
+  test('allows spacing token names in DataGrid column widths', async () => {
+    readFileSyncMock.mockReturnValue(
+      "const columns = [{ field: 'id', minWidth: 'space-15' }];",
+    );
+
+    const result = await validateFiles('**/*.tsx', ['src/components/Test.tsx']);
+
+    expect(result.some((r) => r.type === 'tsx-datagrid-var')).toBe(false);
+  });
+
   test('handles file read errors gracefully', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
