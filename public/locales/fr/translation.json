@@ -1,4 +1,5 @@
 {
+  "workshops": "Ateliers",
   "securedRouteForUser": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
@@ -1403,6 +1404,10 @@
     "tags": "Étiquettes",
     "invalidFileType": "Type de fichier invalide",
     "fileTooLarge": "Fichier trop volumineux",
+    "ascendingOrder": "Ordre croissant",
+    "descendingOrder": "Ordre décroissant",
+    "searchCreatedEvents": "Rechercher des événements créés",
+    "sortByName": "Trier par nom",
     "memberDetailNumberExample": "Exemple de numéro",
     "memberDetailExampleLane": "Exemple de rue",
     "memberDetailPostalExample": "Exemple de code postal",
