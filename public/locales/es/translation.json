@@ -107,6 +107,14 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "Cuenta vinculada exitosamente",
+    "successfullyLoggedIn": "Inicio de sesión exitoso",
+    "oauthProviderError": "Error del proveedor OAuth: {{error}}",
+    "noAuthCodeReceived": "No se recibió código de autorización del proveedor OAuth",
+    "oauthAuthenticationFailed": "Autenticación OAuth fallida. Por favor, inténtalo de nuevo.",
+    "oauthConfigurationNotFound": "Configuración OAuth no encontrada para el proveedor."
+  },
   "verifyEmail": {
     "title": "Verificar Email",
     "loginRequired": "Inicio de sesión requerido",

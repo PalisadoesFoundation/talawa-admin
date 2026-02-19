@@ -112,6 +112,14 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "Account linked successfully.",
+    "successfullyLoggedIn": "Successfully logged in.",
+    "oauthProviderError": "OAuth provider error: {{error}}",
+    "noAuthCodeReceived": "No authorization code received from OAuth provider.",
+    "oauthAuthenticationFailed": "OAuth authentication failed. Please try again.",
+    "oauthConfigurationNotFound": "OAuth configuration not found for the provider."
+  },
   "verifyEmail": {
     "title": "Verify Email",
     "loginRequired": "Login Required",
