@@ -42,14 +42,13 @@ import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
-import { holidays, weekdays } from 'types/Event/utils';
+import { holidays, weekdays, filterEvents } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
+import WeeklyEventCalender from '../Weekly/WeeklyEventCalender';
 import type {
   InterfaceEvent,
   InterfaceCalendarProps,
-  InterfaceIOrgList,
 } from 'types/Event/interface';
-import { UserRole } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
@@ -88,60 +87,8 @@ const Calendar: React.FC<
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const filterData = (
-    eventData: InterfaceEvent[],
-    orgData?: InterfaceIOrgList,
-    userRole?: string,
-    userId?: string,
-  ): InterfaceEvent[] => {
-    // If no user info, only show public events
-    if (!userRole || !userId) {
-      return eventData.filter((event) => event.isPublic);
-    }
-
-    // Admins see everything
-    if (userRole === UserRole.ADMINISTRATOR) {
-      return eventData;
-    }
-
-    // For regular users:
-    // - Backend already filters Organization Members events based on membership
-    // - We need to check Invite Only events for creator OR attendee status
-    // - All other events returned by backend should be shown
-    return eventData.filter((event) => {
-      // Creator always sees their own events
-      if (event.creator && event.creator.id === userId) {
-        return true;
-      }
-
-      // Public events - always visible (backend returns them)
-      if (event.isPublic) {
-        return true;
-      }
-
-      // Invite Only events - visible to creator OR attendees
-      if (event.isInviteOnly) {
-        const isCreator = event.creator && event.creator.id === userId;
-        const isAttendee = event.attendees?.some(
-          (attendee) => attendee.id === userId,
-        );
-        return isCreator || isAttendee;
-      }
-
-      // Organization Members events - check membership
-      // If not public and not invite-only, it must be an organization event
-      // Check if user is a member of the organization
-      const isMember =
-        orgData?.members?.edges?.some((edge) => edge.node.id === userId) ||
-        !orgData?.members ||
-        false;
-
-      return isMember || false;
-    });
-  };
-
   useEffect(() => {
-    const filteredEvents = filterData(
+    const filteredEvents = filterEvents(
       eventData || [],
       orgData,
       userRole,
@@ -179,7 +126,11 @@ const Calendar: React.FC<
   };
 
   const handlePrevDate = (): void => {
-    if (currentDate > 1) {
+    if (viewType === ViewType.WEEK) {
+      const newDate = new Date(currentYear, currentMonth, currentDate - 7);
+      setCurrentDate(newDate.getDate());
+      onMonthChange(newDate.getMonth(), newDate.getFullYear());
+    } else if (currentDate > 1) {
       setCurrentDate(currentDate - 1);
     } else {
       const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
@@ -191,18 +142,24 @@ const Calendar: React.FC<
   };
 
   const handleNextDate = (): void => {
-    const lastDayOfCurrentMonth = new Date(
-      currentYear,
-      currentMonth + 1,
-      0,
-    ).getDate();
-    if (currentDate < lastDayOfCurrentMonth) {
-      setCurrentDate(currentDate + 1);
+    if (viewType === ViewType.WEEK) {
+      const newDate = new Date(currentYear, currentMonth, currentDate + 7);
+      setCurrentDate(newDate.getDate());
+      onMonthChange(newDate.getMonth(), newDate.getFullYear());
     } else {
-      const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-      const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-      setCurrentDate(1);
-      onMonthChange(newMonth, newYear);
+      const lastDayOfCurrentMonth = new Date(
+        currentYear,
+        currentMonth + 1,
+        0,
+      ).getDate();
+      if (currentDate < lastDayOfCurrentMonth) {
+        setCurrentDate(currentDate + 1);
+      } else {
+        const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+        const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
+        setCurrentDate(1);
+        onMonthChange(newMonth, newYear);
+      }
     }
   };
 
@@ -451,8 +408,8 @@ const Calendar: React.FC<
         events
           ?.filter(
             (datas) =>
-              dayjs(datas.startAt).format('YYYY-MM-DD') ===
-              dayjs(date).format('YYYY-MM-DD'),
+              dayjs.utc(datas.startAt).local().format('YYYY-MM-DD') ===
+              dayjs.utc(date).local().format('YYYY-MM-DD'),
           )
           .map((datas: InterfaceEvent) => (
             <EventListCard
@@ -555,7 +512,9 @@ const Calendar: React.FC<
                   variant="outlined"
                   className={styles.buttonEventCalendar}
                   onClick={
-                    viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
+                    viewType === ViewType.DAY || viewType === ViewType.WEEK
+                      ? handlePrevDate
+                      : handlePrevMonth
                   }
                   data-testid="prevmonthordate"
                 >
@@ -566,7 +525,9 @@ const Calendar: React.FC<
                   variant="outlined"
                   className={styles.buttonEventCalendar}
                   onClick={
-                    viewType === ViewType.DAY ? handleNextDate : handleNextMonth
+                    viewType === ViewType.DAY || viewType === ViewType.WEEK
+                      ? handleNextDate
+                      : handleNextMonth
                   }
                   data-testid="nextmonthordate"
                 >
@@ -616,6 +577,15 @@ const Calendar: React.FC<
               orgData={orgData}
               userRole={userRole}
               userId={userId}
+            />
+          ) : viewType === ViewType.WEEK ? (
+            <WeeklyEventCalender
+              eventData={eventData}
+              refetchEvents={refetchEvents}
+              orgData={orgData}
+              userRole={userRole}
+              userId={userId}
+              currentDate={new Date(currentYear, currentMonth, currentDate)}
             />
           ) : (
             <div className={styles.calendar__hours}>{renderHours()}</div>
