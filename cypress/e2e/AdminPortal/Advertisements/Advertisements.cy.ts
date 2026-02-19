@@ -99,8 +99,11 @@ describe('Testing Admin Advertisement Management', () => {
   // The page object mocks the MinIO PUT.  We additionally mock the
   // createPresignedUrl query so the frontend gets a URL to "upload" to.
   it('create a new advertisement with file attachment', () => {
+    // Mock both presignedUrl (MinIO not reachable on CI) and the
+    // AddAdvertisement mutation (backend can't validate unmocked upload).
     cy.intercept('POST', '**/graphql', (req) => {
-      if (req.body.operationName === 'createPresignedUrl') {
+      const op = req.body.operationName ?? '';
+      if (op === 'createPresignedUrl') {
         req.reply({
           data: {
             createPresignedUrl: {
@@ -109,6 +112,11 @@ describe('Testing Admin Advertisement Management', () => {
               requiresUpload: true,
             },
           },
+        });
+      }
+      if (op === 'AddAdvertisement') {
+        req.reply({
+          data: { createAdvertisement: { id: 'mock-ad-attachment' } },
         });
       }
     });
