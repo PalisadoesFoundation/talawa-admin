@@ -12,7 +12,7 @@ import {
   searchComponentsExemption,
 } from './scripts/eslint/config/special.js';
 
-import enforceScreenRoute from './scripts/eslint/rules/enforce-screen-route.js';
+import { screenRouteConfig } from "./scripts/eslint/config/enforce-screen-route.js";
 
 export default [
   {
@@ -47,18 +47,5 @@ export default [
   configFilesConfig,
   testConfig,
   preferCrudModalTemplateConfig,
-
-  {
-    plugins: {
-      'screen-route': {
-        rules: {
-          'enforce-screen-route': enforceScreenRoute,
-        },
-      },
-    },
-
-    rules: {
-      'screen-route/enforce-screen-route': 'error',
-    },
-  },
+  screenRouteConfig,
 ];
