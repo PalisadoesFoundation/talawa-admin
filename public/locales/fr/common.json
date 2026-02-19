@@ -309,7 +309,14 @@
   "searchTags": "Rechercher des étiquettes",
   "sortBy": "Trier par",
   "unknownMember": "Membre inconnu",
+  "workshops": "Ateliers",
   "previousYear": "Année précédente",
   "nextYear": "Année suivante",
-  "navigateToProfile": "Naviguer vers le profil"
+  "navigateToProfile": "Naviguer vers le profil",
+  "monthlyOn": "Mensuel le",
+  "loginSuccess": "Bienvenue !",
+  "loginSuccessWithName": "Bienvenue, {{name}} !",
+  "signupSuccess": "Inscription réussie !",
+  "authError": "Erreur d'authentification",
+  "networkError": "Erreur réseau"
 }

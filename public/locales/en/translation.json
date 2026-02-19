@@ -8,6 +8,7 @@
     "continueWith": "Continue with {{provider}}",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "workshops": "Workshops",
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
@@ -19,6 +20,7 @@
   "customRecurrence": "Custom Recurrence",
   "frequency": "Frequency",
   "repeatsEvery": "Repeats Every",
+  "repeatsOn": "Repeats On",
   "day": "Day",
   "week": "Week",
   "month": "Month",
@@ -656,7 +658,7 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done",
+    "done": "Done",
     "viewType": "View Type",
     "search": "Search",
     "Events": "Events",
@@ -1449,6 +1451,10 @@
     "tags": "Tags",
     "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
     "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "ascendingOrder": "Ascending Order",
+    "descendingOrder": "Descending Order",
+    "searchCreatedEvents": "Search created events",
+    "sortByName": "Sort by Name",
     "memberDetailNumberExample": "Ex. +1234567890",
     "memberDetailExampleLane": "Ex. Lane 2",
     "memberDetailPostalExample": "Ex. 12345",
@@ -1779,7 +1785,9 @@
     "presetThisMonth": "This Month",
     "presetNext7Days": "Next 7 Days",
     "presetNext30Days": "Next 30 Days",
-    "presetNextMonth": "Next Month"
+    "presetNextMonth": "Next Month",
+    "repeatsOn": "Repeats On",
+    "select": "Select"
   },
   "userEventCard": {
     "failedToRegister": "Failed to register for the event",

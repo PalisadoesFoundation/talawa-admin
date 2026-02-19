@@ -289,30 +289,29 @@ describe('PledgeModal', () => {
   });
 
   it('should update fund', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link2, fundProps[1]);
 
-    const fundNameInput = screen.getByLabelText(translations.fundName, {
-      exact: false,
-    });
-    await userEvent.clear(fundNameInput);
-    await userEvent.type(fundNameInput, 'Fund 2');
+    const fundNameInput = document.getElementById(
+      'fundName',
+    ) as HTMLInputElement;
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Fund 2');
 
-    const fundIdInput = screen.getByLabelText(translations.fundId, {
-      exact: false,
-    });
-    await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '2222');
+    const fundIdInput = document.getElementById('fundId') as HTMLInputElement;
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '2222');
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
-    await userEvent.click(taxDeductibleSwitch);
+    await user.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
-    await userEvent.click(defaultSwitch);
+    await user.click(defaultSwitch);
 
     const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await userEvent.click(archivedSwitch);
+    await user.click(archivedSwitch);
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -477,6 +476,7 @@ describe('PledgeModal', () => {
   });
 
   it('should create fund successfully and call side effects', async () => {
+    const user = userEvent.setup({ delay: null });
     vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
 
     const hide = vi.fn();
@@ -489,23 +489,19 @@ describe('PledgeModal', () => {
       mode: 'create',
     });
 
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-      'New Fund',
-    );
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'New Fund');
 
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundId, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundId, { exact: false }),
-      '1234',
-    );
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '1234');
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -524,6 +520,7 @@ describe('PledgeModal', () => {
   });
 
   it('should update fund successfully and call side effects', async () => {
+    const user = userEvent.setup({ delay: null });
     vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
 
     const hide = vi.fn();
@@ -536,15 +533,13 @@ describe('PledgeModal', () => {
       mode: 'edit',
     });
 
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-      'Updated Fund',
-    );
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Updated Fund');
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();

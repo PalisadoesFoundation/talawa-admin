@@ -6,7 +6,7 @@
 
 > **default**(`props`): `ReactElement`
 
-Defined in: [src/shared-components/SidebarBase/SidebarBase.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SidebarBase/SidebarBase.tsx#L19)
+Defined in: [src/shared-components/SidebarBase/SidebarBase.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SidebarBase/SidebarBase.tsx#L20)
 
 SidebarBase Component
 

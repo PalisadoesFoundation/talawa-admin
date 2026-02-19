@@ -25,7 +25,7 @@ Handles event listeners and event emission for the plugin system
 
 > **emit**(`event`, ...`args`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L45)
+Defined in: [src/plugin/managers/event-manager.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L44)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/Palisad
 
 > **getEvents**(): `string`[]
 
-Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L76)
+Defined in: [src/plugin/managers/event-manager.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L75)
 
 #### Returns
 
@@ -59,7 +59,7 @@ Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/Palisad
 
 > **getListenerCount**(`event`): `number`
 
-Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L71)
+Defined in: [src/plugin/managers/event-manager.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L70)
 
 #### Parameters
 
@@ -77,7 +77,7 @@ Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/Palisad
 
 > **off**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L27)
+Defined in: [src/plugin/managers/event-manager.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L26)
 
 #### Parameters
 
@@ -121,7 +121,7 @@ Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/Palisad
 
 > **removeAllListeners**(`event?`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L63)
+Defined in: [src/plugin/managers/event-manager.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L62)
 
 #### Parameters
 

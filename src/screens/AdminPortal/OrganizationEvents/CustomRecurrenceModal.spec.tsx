@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -59,6 +59,22 @@ vi.mock('shared-components/DatePicker', () => ({
   ),
 }));
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          repeatsOn: 'Repeats On',
+          select: 'Select',
+        };
+        return translations[key] || key;
+      },
+    }),
+  };
+});
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -67,19 +83,21 @@ const theme = createTheme({
   },
 });
 
+const baseDate = dayjs.utc().add(30, 'days').startOf('day').hour(10);
+
 const mockProps = {
   recurrenceRuleState: createDefaultRecurrenceRule(
-    dayjs.utc().toDate(),
+    baseDate.toDate(),
     Frequency.WEEKLY,
   ),
   setRecurrenceRuleState: vi.fn(),
-  endDate: dayjs.utc().add(5, 'days').toDate(),
+  endDate: baseDate.add(7, 'days').toDate(),
   setEndDate: vi.fn(),
   customRecurrenceModalIsOpen: true,
   hideCustomRecurrenceModal: vi.fn(),
   setCustomRecurrenceModalIsOpen: vi.fn(),
   t: (key: string) => key,
-  startDate: dayjs.utc().toDate(),
+  startDate: baseDate.toDate(),
 };
 
 const renderComponent = (props = mockProps) => {
@@ -98,11 +116,12 @@ const renderComponent = (props = mockProps) => {
 
 describe('CustomRecurrenceModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   test('renders modal when open', () => {
@@ -130,23 +149,27 @@ describe('CustomRecurrenceModal', () => {
     });
 
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
-    expect(hideModal).toHaveBeenCalled();
+    await waitFor(() => expect(hideModal).toHaveBeenCalled());
   });
 
   test('renders frequency dropdown and handles frequency change', async () => {
     renderComponent();
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequencyDropdown-toggle',
     );
     expect(frequencyDropdown).toBeInTheDocument();
 
     await userEvent.click(frequencyDropdown);
 
-    const dailyOption = screen.getByTestId('customDailyRecurrence');
+    const dailyOption = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-item-DAILY',
+    );
     await userEvent.click(dailyOption);
 
-    expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled();
+    await waitFor(() =>
+      expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled(),
+    );
   });
 
   test('displays weekly day selection when frequency is weekly', async () => {
@@ -178,10 +201,16 @@ describe('CustomRecurrenceModal', () => {
     });
 
     expect(screen.getByText('monthlyOn')).toBeInTheDocument();
-    expect(screen.getByTestId('monthlyRecurrenceDropdown')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
+    ).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    const monthlyByDateOption = screen.getByTestId('monthlyByDate');
+    await userEvent.click(
+      screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
+    );
+    const monthlyByDateOption = screen.getByTestId(
+      'monthlyRecurrenceDropdown-item-DATE',
+    );
     await userEvent.click(monthlyByDateOption);
 
     expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled();
@@ -288,17 +317,19 @@ describe('CustomRecurrenceModal', () => {
     renderComponent({
       ...mockProps,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequencyDropdown-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
-    const yearlyOption = screen.getByTestId('customYearlyRecurrence');
+    const yearlyOption = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-item-YEARLY',
+    );
     await userEvent.click(yearlyOption);
 
     // Verify that setRecurrenceRuleState was called with yearly defaults
@@ -399,17 +430,19 @@ describe('CustomRecurrenceModal', () => {
     renderComponent({
       ...mockProps,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequencyDropdown-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
-    const yearlyOption = screen.getByTestId('customYearlyRecurrence');
+    const yearlyOption = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-item-YEARLY',
+    );
     await userEvent.click(yearlyOption);
 
     // Wait for state update and check if count input shows correct value
@@ -533,18 +566,20 @@ describe('CustomRecurrenceModal', () => {
       ...mockProps,
       setRecurrenceRuleState: mockSetRecurrenceRuleState,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequencyDropdown-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
     // Click on weekly option (line 398)
-    const weeklyOption = screen.getByTestId('customWeeklyRecurrence');
+    const weeklyOption = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-item-WEEKLY',
+    );
     await userEvent.click(weeklyOption);
 
     // Verify handleFrequencyChange(Frequency.WEEKLY) was called
@@ -557,18 +592,20 @@ describe('CustomRecurrenceModal', () => {
       ...mockProps,
       setRecurrenceRuleState: mockSetRecurrenceRuleState,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        dayjs.utc().toDate(),
+        baseDate.toDate(),
         Frequency.DAILY,
       ),
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequencyDropdown-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
     // Click on monthly option (line 404)
-    const monthlyOption = screen.getByTestId('customMonthlyRecurrence');
+    const monthlyOption = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-item-MONTHLY',
+    );
     await userEvent.click(monthlyOption);
 
     // Verify handleFrequencyChange(Frequency.MONTHLY) was called
@@ -935,11 +972,13 @@ describe('CustomRecurrenceModal', () => {
     mockSetRecurrenceRuleState.mockClear();
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequencyDropdown-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
-    const weeklyOption = screen.getByTestId('customWeeklyRecurrence');
+    const weeklyOption = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-item-WEEKLY',
+    );
     await userEvent.click(weeklyOption);
 
     expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
@@ -1042,10 +1081,14 @@ describe('CustomRecurrenceModal', () => {
 
     mockSetRecurrenceRuleState.mockClear();
 
-    const monthlyDropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+    const monthlyDropdown = screen.getByTestId(
+      'monthlyRecurrenceDropdown-toggle',
+    );
     await userEvent.click(monthlyDropdown);
 
-    const monthlyByDateOption = screen.getByTestId('monthlyByDate');
+    const monthlyByDateOption = screen.getByTestId(
+      'monthlyRecurrenceDropdown-item-DATE',
+    );
     await userEvent.click(monthlyByDateOption);
 
     expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
@@ -1062,7 +1105,7 @@ describe('CustomRecurrenceModal', () => {
 
     expect(newState).toEqual({
       ...prevState,
-      byMonthDay: [new Date(mockProps.startDate).getDate()],
+      byMonthDay: [new Date(mockProps.startDate).getUTCDate()],
       byDay: undefined,
     });
   });

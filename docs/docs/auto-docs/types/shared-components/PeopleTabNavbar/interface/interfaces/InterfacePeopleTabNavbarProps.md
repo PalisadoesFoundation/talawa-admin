@@ -18,6 +18,14 @@ Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:23](https:
 
 ***
 
+### alignmentClassName?
+
+> `optional` **alignmentClassName**: `string`
+
+Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L24)
+
+***
+
 ### search?
 
 > `optional` **search**: `object`
@@ -49,14 +57,6 @@ Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:8](https:/
 #### placeholder
 
 > **placeholder**: `string`
-
-***
-
-### showEventTypeFilter?
-
-> `optional` **showEventTypeFilter**: `boolean`
-
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L22)
 
 ***
 

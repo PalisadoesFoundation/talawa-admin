@@ -975,7 +975,7 @@ describe('Plugin Modal Tests', () => {
       'Afghanistan',
     );
 
-    await user.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     const pluginModal = await screen.findByTestId('pluginNotificationModal');
 
@@ -1172,7 +1172,7 @@ describe('Advanced Component Functionality Tests', () => {
       'Afghanistan',
     );
 
-    await user.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await screen.findByTestId('pluginNotificationModal');
   });
@@ -1265,7 +1265,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await user.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     // Verify success side-effect
     await screen.findByTestId('pluginNotificationModal');
@@ -1317,7 +1317,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await user.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     // Wait for the modal to close after submission
     const pluginModal = await screen.findByTestId('pluginNotificationModal');
@@ -1407,7 +1407,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await user.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
@@ -2020,14 +2020,12 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit the form to verify organization creation flow
-    const submitBtn = screen.getByTestId('submitOrganizationForm');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     await user.click(submitBtn);
 
     // Wait for the modal to close, indicating mutations completed
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modal-submit-btn')).not.toBeInTheDocument();
     });
 
     // Verify organization creation flow completed successfully:
@@ -2180,7 +2178,7 @@ describe('Advanced Component Functionality Tests', () => {
       'United States',
     );
 
-    const submitBtn = screen.getByTestId('submitOrganizationForm');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     await user.click(submitBtn);
 
     // Wait for the plugin modal to appear and verify closeDialogModal is triggered
@@ -2286,7 +2284,7 @@ describe('Advanced Component Functionality Tests', () => {
       'United States',
     );
 
-    const submitBtn = screen.getByTestId('submitOrganizationForm');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     await user.click(submitBtn);
 
     // Wait for plugin modal to appear, then verify toggleDialogModal behavior when closing
@@ -2404,7 +2402,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await user.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();

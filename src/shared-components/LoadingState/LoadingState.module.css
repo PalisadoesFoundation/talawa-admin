@@ -1,0 +1,126 @@
+:root {
+  --skeleton-bg-pos-start: 200% 0;
+  --skeleton-bg-pos-end: -200% 0;
+}
+/* -- Loader.tsx -- */
+
+.spinner_wrapper {
+  height: var(--vh-100);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerXl {
+  width: var(--space-13);
+  height: var(--space-13);
+  border-width: var(--border-8);
+}
+
+.spinnerLg {
+  height: var(--space-11);
+  width: var(--space-11);
+  border-width: var(--border-4);
+}
+
+.spinnerSm {
+  height: var(--space-8);
+  width: var(--space-8);
+  border-width: var(--border-3);
+}
+
+/* -- LoadingState.tsx -- */
+
+.loadingContainer {
+  position: relative;
+  min-height: var(--space-17);
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.loadingContent {
+  opacity: 0.5;
+}
+
+.skeletonContainer {
+  padding: var(--space-5);
+  width: 100%;
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-7);
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.skeletonRow {
+  display: flex;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.skeletonItem {
+  background: linear-gradient(
+    90deg,
+    var(--color-gray-200) 25%,
+    var(--color-gray-100) 50%,
+    var(--color-gray-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeletonTitle {
+  height: var(--space-8);
+  width: 40%;
+}
+
+.skeletonButton {
+  height: var(--space-9);
+  width: var(--space-13);
+  border-radius: var(--radius-md);
+}
+
+.skeletonCell {
+  height: var(--space-10);
+  flex: 1;
+}
+
+.skeletonCellSmall {
+  height: var(--space-8);
+  width: var(--space-13);
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: var(--skeleton-bg-pos-start);
+  }
+
+  100% {
+    background-position: var(--skeleton-bg-pos-end);
+  }
+}
+
+.loadingItem {
+  height: var(--space-8);
+}

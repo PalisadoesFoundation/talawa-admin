@@ -191,7 +191,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
           <div className={styles.pluginVersion}>v{details.version}</div>
         )}
         {plugin && isInstalled(plugin.name) && (
-          <div className="mb-2 d-flex justify-content-center">
+          <div className={styles.pluginActive}>
             <StatusBadge
               variant={isPluginActive ? 'active' : 'inactive'}
               size="md"
@@ -207,7 +207,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
               <LoadingState isLoading={loading} variant="inline">
                 <Button
                   variant="light"
-                  className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${styles.actionButton}`}
+                  className={styles.actionButton}
                   onClick={() =>
                     togglePluginStatus(
                       meta,
@@ -222,7 +222,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
               <LoadingState isLoading={loading} variant="inline">
                 <Button
                   variant="light"
-                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
+                  className={styles.actionButtonDanger}
                   onClick={() => uninstallPlugin(meta)}
                 >
                   <FaTrash className={styles.iconTrash} />
@@ -236,7 +236,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
               <LoadingState isLoading={loading} variant="inline">
                 <Button
                   variant="primary"
-                  className="w-100 d-flex align-items-center justify-content-center gap-2"
+                  className={styles.common}
                   onClick={() => installPlugin(meta)}
                 >
                   {loading
@@ -256,7 +256,6 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
             {/* Header with back button */}
             <div className={styles.screenshotHeader}>
               <Button
-                type="button"
                 onClick={closeScreenshotViewer}
                 className={styles.backButton}
                 aria-label={t('backToDetails')}
@@ -278,23 +277,19 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
             {screenshotViewer.screenshots.length > 1 && (
               <>
                 <Button
-                  type="button"
                   onClick={previousScreenshot}
                   className={styles.navigationButtonLeft}
                   title={`${t('previousImage')}`}
                   aria-label={`${t('previousImage')}`}
-                >
-                  <FaChevronLeft />
-                </Button>
+                  icon={<FaChevronLeft />}
+                />
                 <Button
-                  type="button"
                   onClick={nextScreenshot}
                   className={styles.navigationButtonRight}
                   title={`${t('nextImage')}`}
                   aria-label={`${t('nextImage')}`}
-                >
-                  <FaChevronRight />
-                </Button>
+                  icon={<FaChevronRight />}
+                />
               </>
             )}
 
@@ -316,7 +311,6 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                 <div className={styles.dotIndicators}>
                   {screenshotViewer.screenshots.map((_, index) => (
                     <Button
-                      type="button"
                       key={index}
                       onClick={() => {
                         setScreenshotViewer((prev) => ({
@@ -345,7 +339,6 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                 <Button
                   key={tName}
                   id={`tab-${tName}`}
-                  type="button"
                   role="tab"
                   aria-selected={tab === tName}
                   aria-controls={`panel-${tName}`}
@@ -383,20 +376,10 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                           {details.screenshots.map((src, idx) => (
                             <Button
                               key={idx}
-                              type="button"
                               className={styles.screenshotThumbnailButton}
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)
                               }
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                  e.preventDefault();
-                                  openScreenshotViewer(
-                                    details.screenshots,
-                                    idx,
-                                  );
-                                }
-                              }}
                               title={t('clickToViewFullSize')}
                             >
                               <img

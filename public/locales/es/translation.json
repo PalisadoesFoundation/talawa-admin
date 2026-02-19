@@ -1,4 +1,5 @@
 {
+  "workshops": "Talleres",
   "securedRouteForUser": {
     "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
   },
@@ -14,6 +15,7 @@
   "customRecurrence": "Recurrencia personalizada",
   "frequency": "Frecuencia",
   "repeatsEvery": "Se repite cada",
+  "repeatsOn": "Se repite en",
   "day": "Día",
   "week": "Semana",
   "month": "Mes",
@@ -1381,6 +1383,10 @@
     "tags": "Etiquetas",
     "invalidFileType": "Tipo de archivo no válido",
     "fileTooLarge": "El archivo es demasiado grande",
+    "ascendingOrder": "Orden ascendente",
+    "descendingOrder": "Orden descendente",
+    "searchCreatedEvents": "Buscar eventos creados",
+    "sortByName": "Ordenar por nombre",
     "memberDetailNumberExample": "Ejemplo de número",
     "memberDetailExampleLane": "Ejemplo de calle",
     "memberDetailPostalExample": "Ejemplo de código postal",
@@ -1779,7 +1785,9 @@
     "presetThisMonth": "Este Mes",
     "presetNext7Days": "Próximos 7 Días",
     "presetNext30Days": "Próximos 30 Días",
-    "presetNextMonth": "Próximo Mes"
+    "presetNextMonth": "Próximo Mes",
+    "repeatsOn": "Se repite en",
+    "select": "Seleccionar"
   },
   "userEventCard": {
     "failedToRegister": "Error al registrarse para el evento",
