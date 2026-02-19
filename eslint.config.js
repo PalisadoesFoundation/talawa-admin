@@ -12,6 +12,8 @@ import {
   searchComponentsExemption,
 } from './scripts/eslint/config/special.js';
 
+import enforceScreenRoute from './scripts/eslint/rules/enforce-screen-route.js';
+
 export default [
   {
     ignores: [
@@ -35,6 +37,7 @@ export default [
       '**/*.svg',
     ],
   },
+
   baseTypeScriptConfig,
   ...wrapperExemptions,
   graphqlConfig,
@@ -44,4 +47,18 @@ export default [
   configFilesConfig,
   testConfig,
   preferCrudModalTemplateConfig,
+
+  {
+    plugins: {
+      'screen-route': {
+        rules: {
+          'enforce-screen-route': enforceScreenRoute,
+        },
+      },
+    },
+
+    rules: {
+      'screen-route/enforce-screen-route': 'error',
+    },
+  },
 ];
