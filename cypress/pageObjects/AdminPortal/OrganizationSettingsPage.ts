@@ -24,9 +24,8 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
 
   openFromDrawer(timeout = 30000): this {
     this.byDataCy(this.settingsDrawerButton, timeout)
-      .filter(':visible')
-      .first()
       .should('exist')
+      .first()
       .click({ force: true });
     this.assertUrlMatch(/\/admin\/orgsetting\/[a-f0-9-]+/, timeout);
     return this;
