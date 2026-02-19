@@ -289,39 +289,42 @@ const VenueModal = ({
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0]; // Get the first file
-      const maxFileSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!files || files.length === 0) return;
 
-      if (!allowedTypes.includes(file.type)) {
-        NotificationToast.error({
-          key: 'invalidFileType',
-          namespace: 'errors',
-        });
-        return;
-      }
+    const file = files[0];
+    const maxFileSize = 5 * 1024 * 1024; // 5MB
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
-      if (file.size > maxFileSize) {
-        NotificationToast.error({
-          key: 'fileTooLarge',
-          namespace: 'errors',
-        });
-        return;
-      }
+    if (!allowedTypes.includes(file.type)) {
+      NotificationToast.error({
+        key: 'invalidFileType',
+        namespace: 'errors',
+      });
+      return; // Stop here if not an image
+    }
 
-      if (!file.size) {
-        NotificationToast.error({
-          key: 'emptyFile',
-          namespace: 'errors',
-        });
-        return;
-      }
+    if (file.size > maxFileSize) {
+      NotificationToast.error({
+        key: 'fileTooLarge',
+        namespace: 'errors',
+      });
+      return;
+    }
 
-      // Revoke any existing blob URL before creating a new one
+    if (!file.size) {
+      NotificationToast.error({
+        key: 'emptyFile',
+        namespace: 'errors',
+      });
+      return;
+    }
+
+    // Only try creating preview URL for valid files
+    try {
       if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
         URL.revokeObjectURL(imagePreviewUrl);
       }
+
       const previewUrl = URL.createObjectURL(file);
       setImagePreviewUrl(previewUrl);
 
@@ -329,8 +332,14 @@ const VenueModal = ({
         ...prev,
         attachments: [file],
       }));
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
+
   return (
     <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
       <form data-testid="venueForm">
