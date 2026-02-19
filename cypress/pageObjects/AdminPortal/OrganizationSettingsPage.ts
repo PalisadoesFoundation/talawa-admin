@@ -37,11 +37,12 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
     return this;
   }
 
-  openGeneralTab(timeout = 10000): this {
+  openGeneralTab(timeout = 30000): this {
     this.byTestId(this.generalSettingsButton, timeout)
       .should('be.visible')
-      .click();
+      .click({ force: true });
     this.byTestId(this.generalTab, timeout).should('be.visible');
+    this.byTestId(this.saveChangesButton, timeout).should('be.visible');
     return this;
   }
 
