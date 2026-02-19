@@ -90,6 +90,17 @@ const renderComponent = (
 };
 
 describe('AcceptInvitation', () => {
+  const FIXED_BASE_DATE = dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(10)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toISOString();
+
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     user = userEvent.setup();
@@ -226,17 +237,6 @@ describe('AcceptInvitation', () => {
     });
   });
 
-  const FIXED_BASE_DATE = dayjs
-    .utc()
-    .year(2025)
-    .month(5)
-    .date(15)
-    .hour(10)
-    .minute(0)
-    .second(0)
-    .millisecond(0)
-    .toISOString();
-
   it('should show invitation details for unauthenticated user', async () => {
     const mocks = [
       {
@@ -257,6 +257,7 @@ describe('AcceptInvitation', () => {
                 .utc(FIXED_BASE_DATE)
                 .add(1, 'month')
                 .toISOString(),
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -676,6 +677,9 @@ describe('AcceptInvitation', () => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
       await user.click(screen.getByTestId('accept-invite-btn'));
+      await waitFor(() => {
+        expect(screen.getByTestId('accept-invite-btn')).toBeEnabled();
+      });
       await waitFor(() => {
         expect(screen.queryByText('Event Page')).not.toBeInTheDocument();
         expect(NotificationToast.success).not.toHaveBeenCalled();
