@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';
@@ -211,7 +211,6 @@ const createMocks = (
 
 describe('BlockUser Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -521,9 +520,7 @@ describe('BlockUser Component', () => {
       });
 
       const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        await user.type(searchInput, 'John');
-      });
+      await user.type(searchInput, 'John');
 
       // Wait for debounced search to complete
       await waitFor(
@@ -556,9 +553,7 @@ describe('BlockUser Component', () => {
       });
 
       const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        await user.type(searchInput, 'jane@example.com');
-      });
+      await user.type(searchInput, 'jane@example.com');
 
       // Wait for debounced search to complete
       await waitFor(
@@ -599,9 +594,7 @@ describe('BlockUser Component', () => {
       });
 
       const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        await user.type(searchInput, 'Bob');
-      });
+      await user.type(searchInput, 'Bob');
 
       // Wait for debounced search to complete
       await waitFor(
@@ -641,9 +634,7 @@ describe('BlockUser Component', () => {
       });
 
       const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        await user.type(searchInput, 'bob@example.com');
-      });
+      await user.type(searchInput, 'bob@example.com');
 
       // Wait for debounced search to complete
       await waitFor(
@@ -675,9 +666,7 @@ describe('BlockUser Component', () => {
       });
 
       const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        await user.type(searchInput, 'nonexistent');
-      });
+      await user.type(searchInput, 'nonexistent');
 
       // Wait for debounced search to complete
       await waitFor(
@@ -719,9 +708,7 @@ describe('BlockUser Component', () => {
       });
 
       const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        await user.type(searchInput, 'nonexistent');
-      });
+      await user.type(searchInput, 'nonexistent');
 
       // Wait for debounced search to complete
       await waitFor(
@@ -757,9 +744,7 @@ describe('BlockUser Component', () => {
 
       // First search for something
       const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        await user.type(searchInput, 'John');
-      });
+      await user.type(searchInput, 'John');
 
       // Wait for debounced search to complete
       await waitFor(
@@ -770,10 +755,7 @@ describe('BlockUser Component', () => {
         { timeout: 500 },
       );
 
-      // Then clear the search
-      await act(async () => {
-        await user.clear(searchInput);
-      });
+      await user.clear(searchInput);
 
       // Wait for debounced clear to complete
       await waitFor(
@@ -1050,13 +1032,11 @@ describe('BlockUser Component', () => {
 
       await waitFor(() => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+        expect(screen.getByText('#')).toBeInTheDocument();
+        expect(screen.getByText('Name')).toBeInTheDocument();
+        expect(screen.getByText('Email')).toBeInTheDocument();
+        expect(screen.getByText('Block/Unblock')).toBeInTheDocument();
       });
-
-      // Check for table headers
-      expect(screen.getByText('#')).toBeInTheDocument();
-      expect(screen.getByText('Name')).toBeInTheDocument();
-      expect(screen.getByText('Email')).toBeInTheDocument();
-      expect(screen.getByText('Block/Unblock')).toBeInTheDocument();
     });
   });
 });
