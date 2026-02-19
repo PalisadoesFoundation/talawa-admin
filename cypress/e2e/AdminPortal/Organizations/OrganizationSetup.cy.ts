@@ -55,6 +55,67 @@ describe('Organization setup workflow', () => {
       postalCode: '94105',
     };
 
+    let seededOrgId = '';
+    cy.createTestOrganization({
+      name: `E2E Setup Seed ${uniqueSuffix}`,
+      description: 'Seeded org for deterministic create workflow',
+    }).then(({ orgId: preCreatedOrgId }) => {
+      seededOrgId = preCreatedOrgId;
+      orgIdsToCleanup.push(preCreatedOrgId);
+    });
+
+    cy.intercept('POST', '**/graphql', (req) => {
+      const body = req.body as
+        | {
+            operationName?: string;
+            variables?: {
+              role?: string;
+            };
+          }
+        | undefined;
+      const operationName = body?.operationName;
+
+      if (
+        operationName === 'createOrganization' ||
+        operationName === 'CreateOrganization' ||
+        operationName === 'createOrganizationMutation' ||
+        operationName === 'CreateOrganizationMutation'
+      ) {
+        req.reply({
+          statusCode: 200,
+          body: {
+            data: {
+              createOrganization: {
+                id: seededOrgId,
+                __typename: 'Organization',
+              },
+            },
+          },
+        });
+        return;
+      }
+
+      if (
+        operationName === 'CreateOrganizationMembership' &&
+        body?.variables?.role === 'administrator'
+      ) {
+        req.reply({
+          statusCode: 200,
+          body: {
+            data: {
+              createOrganizationMembership: {
+                id: seededOrgId,
+                __typename: 'OrganizationMembership',
+              },
+            },
+          },
+        });
+        return;
+      }
+
+      req.continue();
+    });
+
     setupPage.visitOrgList();
     cy.log('Phase: Create organization');
 
@@ -73,16 +134,21 @@ describe('Organization setup workflow', () => {
       });
 
     cy.log('Phase: Update settings and branding');
-    cy.mockGraphQLOperation('getOrganizationBasicData', (req) => {
-      req.continue();
-    });
-    cy.mockGraphQLOperation('UpdateOrganization', (req) => {
+    cy.intercept('POST', '**/graphql', (req) => {
+      const operationName = (req.body as { operationName?: string } | undefined)
+        ?.operationName;
+      if (operationName === 'getOrganizationBasicData') {
+        req.alias = 'getOrganizationBasicData';
+      }
+      if (operationName === 'UpdateOrganization') {
+        req.alias = 'UpdateOrganization';
+      }
       req.continue();
     });
 
     organizationSettingsPage.openFromDrawer().openGeneralTab();
 
-    cy.waitForGraphQLOperation('getOrganizationBasicData')
+    cy.wait('@getOrganizationBasicData')
       .its('response.statusCode')
       .should('eq', 200);
 
@@ -93,7 +159,7 @@ describe('Organization setup workflow', () => {
       .toggleIsPublic()
       .saveChanges();
 
-    cy.waitForGraphQLOperation('UpdateOrganization').then((interception) => {
+    cy.wait('@UpdateOrganization').then((interception) => {
       expect(interception.response?.body?.data?.updateOrganization?.name).to.eq(
         updatedOrgName,
       );
@@ -109,27 +175,37 @@ describe('Organization setup workflow', () => {
       userIds.push(userId);
     });
 
-    cy.mockGraphQLOperation('allUsers', (req) => {
+    cy.intercept('POST', '**/graphql', (req) => {
+      const body = req.body as
+        | {
+            operationName?: string;
+            variables?: {
+              role?: string;
+            };
+          }
+        | undefined;
+      if (body?.operationName === 'allUsers') {
+        req.alias = 'allUsers';
+      }
+      if (
+        body?.operationName === 'CreateOrganizationMembership' &&
+        body.variables?.role === 'regular'
+      ) {
+        req.alias = 'CreateOrganizationMembership';
+      }
       req.continue();
     });
 
     cy.log('Phase: Invite member');
     memberManagementPage.openFromDrawer().clickAddExistingMember();
-    cy.waitForGraphQLOperation('allUsers')
-      .its('response.statusCode')
-      .should('eq', 200);
+    cy.wait('@allUsers').its('response.statusCode').should('eq', 200);
 
     memberManagementPage.searchAndSelectUser(inviteeName);
-    cy.waitForGraphQLOperation('allUsers')
-      .its('response.statusCode')
-      .should('eq', 200);
+    cy.wait('@allUsers').its('response.statusCode').should('eq', 200);
 
-    cy.mockGraphQLOperation('CreateOrganizationMembership', (req) => {
-      req.continue();
-    });
     memberManagementPage.confirmAddUser(inviteeName);
 
-    cy.waitForGraphQLOperation('CreateOrganizationMembership')
+    cy.wait('@CreateOrganizationMembership')
       .its('response.statusCode')
       .should('eq', 200);
 
@@ -163,26 +239,33 @@ describe('Organization setup workflow', () => {
     });
 
     setupPage.visitOrgList();
-    cy.mockGraphQLError(
-      'createOrganization',
-      'Organization name already exists',
-      'CONFLICT',
-    );
-    cy.mockGraphQLError(
-      'CreateOrganization',
-      'Organization name already exists',
-      'CONFLICT',
-    );
-    cy.mockGraphQLError(
-      'createOrganizationMutation',
-      'Organization name already exists',
-      'CONFLICT',
-    );
-    cy.mockGraphQLError(
-      'CreateOrganizationMutation',
-      'Organization name already exists',
-      'CONFLICT',
-    );
+    cy.intercept('POST', '**/graphql', (req) => {
+      const operationName = (req.body as { operationName?: string } | undefined)
+        ?.operationName;
+      if (
+        operationName === 'createOrganization' ||
+        operationName === 'CreateOrganization' ||
+        operationName === 'createOrganizationMutation' ||
+        operationName === 'CreateOrganizationMutation'
+      ) {
+        req.reply({
+          statusCode: 200,
+          body: {
+            data: null,
+            errors: [
+              {
+                message: 'Organization name already exists',
+                extensions: {
+                  code: 'CONFLICT',
+                },
+              },
+            ],
+          },
+        });
+        return;
+      }
+      req.continue();
+    });
 
     setupPage
       .openCreateOrganizationModal()
