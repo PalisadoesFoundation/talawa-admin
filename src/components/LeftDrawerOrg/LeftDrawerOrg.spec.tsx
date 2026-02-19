@@ -449,11 +449,10 @@ describe('LeftDrawerOrg', () => {
       await waitFor(() => {
         expect(screen.getByText('Test Organization')).toBeInTheDocument();
         expect(screen.getByText('Test City')).toBeInTheDocument();
+        const avatar = screen.getByAltText('Test Organization');
+        expect(avatar).toBeInTheDocument();
+        expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
       });
-
-      const avatar = screen.getByAltText('Test Organization');
-      expect(avatar).toBeInTheDocument();
-      expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
 
     it('should display Avatar component when no avatarURL', async () => {
@@ -513,13 +512,12 @@ describe('LeftDrawerOrg', () => {
         expect(
           screen.getByText('Error loading Organization'),
         ).toBeInTheDocument();
+        const errorButton = screen.getByRole('button', {
+          name: /Error loading Organization/i,
+        });
+        expect(errorButton).toBeDisabled();
+        expect(errorButton).toHaveClass('bgDanger');
       });
-
-      const errorButton = screen.getByRole('button', {
-        name: /Error loading Organization/i,
-      });
-      expect(errorButton).toBeDisabled();
-      expect(errorButton).toHaveClass('bgDanger');
     });
 
     it('should not show error state on profile page when data fails to load', async () => {
