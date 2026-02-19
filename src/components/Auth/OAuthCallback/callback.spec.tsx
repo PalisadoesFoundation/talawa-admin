@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, cleanup } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import OAuthCallbackPage from './callback';
@@ -100,10 +100,6 @@ describe('OAuthCallbackPage', () => {
       clearAllItems: vi.fn(),
     });
 
-    // Clear NotificationToast mocks
-    vi.mocked(NotificationToast.success).mockClear();
-    vi.mocked(NotificationToast.error).mockClear();
-
     // Mock successful auth response
     mockAuthResponse = {
       user: {
@@ -161,18 +157,16 @@ describe('OAuthCallbackPage', () => {
           'auth-code-123',
           'http://localhost:3000/auth/callback',
         );
+        expect(mockSetItem).toHaveBeenCalledWith('userId', 'user-123');
+        expect(mockSetItem).toHaveBeenCalledWith('IsLoggedIn', 'TRUE');
+        expect(mockSetItem).toHaveBeenCalledWith('name', 'John Doe');
+        expect(mockSetItem).toHaveBeenCalledWith('email', 'john@example.com');
+        expect(mockSetItem).toHaveBeenCalledWith('role', 'regular');
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          translations.successfullyLoggedIn,
+        );
+        expect(mockNavigate).toHaveBeenCalledWith('/');
       });
-
-      expect(mockSetItem).toHaveBeenCalledWith('userId', 'user-123');
-      expect(mockSetItem).toHaveBeenCalledWith('IsLoggedIn', 'TRUE');
-      expect(mockSetItem).toHaveBeenCalledWith('name', 'John Doe');
-      expect(mockSetItem).toHaveBeenCalledWith('email', 'john@example.com');
-      expect(mockSetItem).toHaveBeenCalledWith('role', 'regular');
-
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        translations.successfullyLoggedIn,
-      );
-      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
 
     it('should handle successful login with sessionStorage fallback', async () => {
@@ -203,13 +197,12 @@ describe('OAuthCallbackPage', () => {
           'auth-code-456',
           'http://localhost:3000/auth/callback',
         );
+        expect(mockSetItem).toHaveBeenCalledWith('userId', 'user-123');
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          translations.successfullyLoggedIn,
+        );
+        expect(mockNavigate).toHaveBeenCalledWith('/');
       });
-
-      expect(mockSetItem).toHaveBeenCalledWith('userId', 'user-123');
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        translations.successfullyLoggedIn,
-      );
-      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
 
     it('should clear sessionStorage after successful login', async () => {
@@ -306,13 +299,12 @@ describe('OAuthCallbackPage', () => {
           'link-code-123',
           'http://localhost:3000/auth/callback',
         );
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          translations.accountLinkedSuccessfully,
+        );
+        expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
+        expect(mockSetItem).not.toHaveBeenCalled();
       });
-
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        translations.accountLinkedSuccessfully,
-      );
-      expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
-      expect(mockSetItem).not.toHaveBeenCalled();
     });
 
     it('should handle successful account linking with sessionStorage fallback', async () => {
@@ -348,12 +340,11 @@ describe('OAuthCallbackPage', () => {
           'link-code-456',
           'http://localhost:3000/auth/callback',
         );
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          translations.accountLinkedSuccessfully,
+        );
+        expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
       });
-
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        translations.accountLinkedSuccessfully,
-      );
-      expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
     });
 
     it('should clear sessionStorage after successful link', async () => {
@@ -409,10 +400,9 @@ describe('OAuthCallbackPage', () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'OAuth provider error: access_denied',
         );
+        expect(handleOAuthLogin).not.toHaveBeenCalled();
+        expect(handleOAuthLink).not.toHaveBeenCalled();
       });
-
-      expect(handleOAuthLogin).not.toHaveBeenCalled();
-      expect(handleOAuthLink).not.toHaveBeenCalled();
 
       // Should navigate to home after delay
       await waitFor(
@@ -539,14 +529,12 @@ describe('OAuthCallbackPage', () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Authentication failed',
         );
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'OAuth callback error:',
+          expect.any(Error),
+        );
+        expect(mockSetItem).not.toHaveBeenCalled();
       });
-
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'OAuth callback error:',
-        expect.any(Error),
-      );
-
-      expect(mockSetItem).not.toHaveBeenCalled();
 
       // Should navigate to home after delay
       await waitFor(
@@ -581,12 +569,11 @@ describe('OAuthCallbackPage', () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Account linking failed',
         );
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'OAuth callback error:',
+          expect.any(Error),
+        );
       });
-
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'OAuth callback error:',
-        expect.any(Error),
-      );
     });
 
     it('should handle non-Error exceptions', async () => {
@@ -661,11 +648,12 @@ describe('OAuthCallbackPage', () => {
 
       // Assert
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          translations.csrfValidationFailed,
+        );
+        expect(handleOAuthLogin).not.toHaveBeenCalled();
+        expect(handleOAuthLink).not.toHaveBeenCalled();
       });
-
-      expect(handleOAuthLogin).not.toHaveBeenCalled();
-      expect(handleOAuthLink).not.toHaveBeenCalled();
 
       // Should clear sessionStorage and navigate home
       await waitFor(

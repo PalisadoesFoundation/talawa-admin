@@ -1195,7 +1195,7 @@ export const GET_COMMUNITY_DATA_PG = gql`
       name
       redditURL
       slackURL
-      # updatedAt
+      updatedAt
       websiteURL
       xURL
       youtubeURL

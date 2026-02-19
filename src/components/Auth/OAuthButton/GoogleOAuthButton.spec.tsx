@@ -461,7 +461,7 @@ describe('GoogleOAuthButton', () => {
       window.location.href = '';
       randomUUIDSpy.mockReturnValueOnce(nonce2);
 
-      const { rerender } = render(<GoogleOAuthButton mode="login" />);
+      render(<GoogleOAuthButton mode="login" />);
       button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 

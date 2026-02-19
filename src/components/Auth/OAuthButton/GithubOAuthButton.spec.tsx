@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import type { OAuthMode } from './OAuthButton';
@@ -59,7 +59,6 @@ describe('GitHubOAuthButton', () => {
 
   beforeEach(() => {
     vi.resetModules();
-    vi.clearAllMocks();
 
     // Save original location
     originalLocation = window.location;
@@ -85,6 +84,7 @@ describe('GitHubOAuthButton', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
     vi.unstubAllEnvs();
     (window as { location: Location }).location = originalLocation;
@@ -146,31 +146,33 @@ describe('GitHubOAuthButton', () => {
       const button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      // Check sessionStorage
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_mode',
-        'login',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_provider',
-        'GITHUB',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_nonce',
-        mockNonce,
-      );
+      await waitFor(() => {
+        // Check sessionStorage
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_mode',
+          'login',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_provider',
+          'GITHUB',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_nonce',
+          mockNonce,
+        );
 
-      // Check URL contains expected parameters
-      const url = new URL(window.location.href);
-      expect(url.origin + url.pathname).toBe(
-        'https://github.com/login/oauth/authorize',
-      );
-      expect(url.searchParams.get('client_id')).toBe('test-client-id');
-      expect(url.searchParams.get('redirect_uri')).toBe(
-        'http://localhost/auth/callback',
-      );
-      expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe(`login:GITHUB:${mockNonce}`);
+        // Check URL contains expected parameters
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(
+          'https://github.com/login/oauth/authorize',
+        );
+        expect(url.searchParams.get('client_id')).toBe('test-client-id');
+        expect(url.searchParams.get('redirect_uri')).toBe(
+          'http://localhost/auth/callback',
+        );
+        expect(url.searchParams.get('scope')).toBe('openid profile email');
+        expect(url.searchParams.get('state')).toBe(`login:GITHUB:${mockNonce}`);
+      });
     });
 
     it('should initiate OAuth flow with register mode', async () => {
@@ -179,33 +181,35 @@ describe('GitHubOAuthButton', () => {
       const button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      // Check sessionStorage
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_mode',
-        'register',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_provider',
-        'GITHUB',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_nonce',
-        mockNonce,
-      );
+      await waitFor(() => {
+        // Check sessionStorage
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_mode',
+          'register',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_provider',
+          'GITHUB',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_nonce',
+          mockNonce,
+        );
 
-      // Check URL contains expected parameters
-      const url = new URL(window.location.href);
-      expect(url.origin + url.pathname).toBe(
-        'https://github.com/login/oauth/authorize',
-      );
-      expect(url.searchParams.get('client_id')).toBe('test-client-id');
-      expect(url.searchParams.get('redirect_uri')).toBe(
-        'http://localhost/auth/callback',
-      );
-      expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe(
-        `register:GITHUB:${mockNonce}`,
-      );
+        // Check URL contains expected parameters
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(
+          'https://github.com/login/oauth/authorize',
+        );
+        expect(url.searchParams.get('client_id')).toBe('test-client-id');
+        expect(url.searchParams.get('redirect_uri')).toBe(
+          'http://localhost/auth/callback',
+        );
+        expect(url.searchParams.get('scope')).toBe('openid profile email');
+        expect(url.searchParams.get('state')).toBe(
+          `register:GITHUB:${mockNonce}`,
+        );
+      });
     });
 
     it('should initiate OAuth flow with link mode', async () => {
@@ -214,31 +218,33 @@ describe('GitHubOAuthButton', () => {
       const button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      // Check sessionStorage
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_mode',
-        'link',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_provider',
-        'GITHUB',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_nonce',
-        mockNonce,
-      );
+      await waitFor(() => {
+        // Check sessionStorage
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_mode',
+          'link',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_provider',
+          'GITHUB',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_nonce',
+          mockNonce,
+        );
 
-      // Check URL contains expected parameters
-      const url = new URL(window.location.href);
-      expect(url.origin + url.pathname).toBe(
-        'https://github.com/login/oauth/authorize',
-      );
-      expect(url.searchParams.get('client_id')).toBe('test-client-id');
-      expect(url.searchParams.get('redirect_uri')).toBe(
-        'http://localhost/auth/callback',
-      );
-      expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe(`link:GITHUB:${mockNonce}`);
+        // Check URL contains expected parameters
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(
+          'https://github.com/login/oauth/authorize',
+        );
+        expect(url.searchParams.get('client_id')).toBe('test-client-id');
+        expect(url.searchParams.get('redirect_uri')).toBe(
+          'http://localhost/auth/callback',
+        );
+        expect(url.searchParams.get('scope')).toBe('openid profile email');
+        expect(url.searchParams.get('state')).toBe(`link:GITHUB:${mockNonce}`);
+      });
     });
   });
 
@@ -264,16 +270,18 @@ describe('GitHubOAuthButton', () => {
       const button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      // Should log error
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'GitHub OAuth is not properly configured. Please check your environment variables.',
-      );
+      await waitFor(() => {
+        // Should log error
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'GitHub OAuth is not properly configured. Please check your environment variables.',
+        );
 
-      // Should not set sessionStorage
-      expect(sessionStorageSetItemSpy).not.toHaveBeenCalled();
+        // Should not set sessionStorage
+        expect(sessionStorageSetItemSpy).not.toHaveBeenCalled();
 
-      // Should not redirect
-      expect(window.location.href).toBe('');
+        // Should not redirect
+        expect(window.location.href).toBe('');
+      });
     });
 
     it('should not redirect when OAuth is not enabled (missing redirect URI)', async () => {
@@ -297,16 +305,18 @@ describe('GitHubOAuthButton', () => {
       const button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      // Should log error
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'GitHub OAuth is not properly configured. Please check your environment variables.',
-      );
+      await waitFor(() => {
+        // Should log error
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'GitHub OAuth is not properly configured. Please check your environment variables.',
+        );
 
-      // Should not set sessionStorage
-      expect(sessionStorageSetItemSpy).not.toHaveBeenCalled();
+        // Should not set sessionStorage
+        expect(sessionStorageSetItemSpy).not.toHaveBeenCalled();
 
-      // Should not redirect
-      expect(window.location.href).toBe('');
+        // Should not redirect
+        expect(window.location.href).toBe('');
+      });
     });
 
     it('should not redirect when OAuth is not enabled (enabled flag false)', async () => {
@@ -330,16 +340,18 @@ describe('GitHubOAuthButton', () => {
       const button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      // Should log error
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'GitHub OAuth is not properly configured. Please check your environment variables.',
-      );
+      await waitFor(() => {
+        // Should log error
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'GitHub OAuth is not properly configured. Please check your environment variables.',
+        );
 
-      // Should not set sessionStorage
-      expect(sessionStorageSetItemSpy).not.toHaveBeenCalled();
+        // Should not set sessionStorage
+        expect(sessionStorageSetItemSpy).not.toHaveBeenCalled();
 
-      // Should not redirect
-      expect(window.location.href).toBe('');
+        // Should not redirect
+        expect(window.location.href).toBe('');
+      });
     });
   });
 
@@ -397,9 +409,11 @@ describe('GitHubOAuthButton', () => {
       const button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      expect(sessionStorage.getItem('oauth_mode')).toBe('login');
-      expect(sessionStorage.getItem('oauth_provider')).toBe('GITHUB');
-      expect(sessionStorage.getItem('oauth_nonce')).toBe(mockNonce);
+      await waitFor(() => {
+        expect(sessionStorage.getItem('oauth_mode')).toBe('login');
+        expect(sessionStorage.getItem('oauth_provider')).toBe('GITHUB');
+        expect(sessionStorage.getItem('oauth_nonce')).toBe(mockNonce);
+      });
     });
 
     it('should update sessionStorage for different modes', async () => {
@@ -408,7 +422,9 @@ describe('GitHubOAuthButton', () => {
       let button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      expect(sessionStorage.getItem('oauth_mode')).toBe('register');
+      await waitFor(() => {
+        expect(sessionStorage.getItem('oauth_mode')).toBe('register');
+      });
 
       // Clear and test link mode
       sessionStorage.clear();
@@ -416,7 +432,9 @@ describe('GitHubOAuthButton', () => {
       button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      expect(sessionStorage.getItem('oauth_mode')).toBe('link');
+      await waitFor(() => {
+        expect(sessionStorage.getItem('oauth_mode')).toBe('link');
+      });
     });
   });
 
@@ -433,10 +451,12 @@ describe('GitHubOAuthButton', () => {
         const button = screen.getByTestId('oauth-button');
         await userEvent.click(button);
 
-        const url = new URL(window.location.href);
-        const state = url.searchParams.get('state');
+        await waitFor(() => {
+          const url = new URL(window.location.href);
+          const state = url.searchParams.get('state');
 
-        expect(state).toBe(`${mode}:GITHUB:${mockNonce}`);
+          expect(state).toBe(`${mode}:GITHUB:${mockNonce}`);
+        });
 
         unmount();
       }
@@ -447,23 +467,30 @@ describe('GitHubOAuthButton', () => {
       const nonce2 = 'nonce-2';
 
       randomUUIDSpy.mockReturnValueOnce(nonce1);
-      render(<GitHubOAuthButton mode="login" />);
+      const { unmount } = render(<GitHubOAuthButton mode="login" />);
       let button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      let url = new URL(window.location.href);
-      expect(url.searchParams.get('state')).toBe(`login:GITHUB:${nonce1}`);
+      await waitFor(() => {
+        const url = new URL(window.location.href);
+        expect(url.searchParams.get('state')).toBe(`login:GITHUB:${nonce1}`);
+      });
+
+      // Cleanup first render
+      unmount();
 
       // Reset and test again with different nonce
       window.location.href = '';
       randomUUIDSpy.mockReturnValueOnce(nonce2);
 
-      const { rerender } = render(<GitHubOAuthButton mode="login" />);
+      render(<GitHubOAuthButton mode="login" />);
       button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      url = new URL(window.location.href);
-      expect(url.searchParams.get('state')).toBe(`login:GITHUB:${nonce2}`);
+      await waitFor(() => {
+        const url = new URL(window.location.href);
+        expect(url.searchParams.get('state')).toBe(`login:GITHUB:${nonce2}`);
+      });
     });
   });
 
