@@ -420,8 +420,9 @@ describe('LeftDrawerOrg', () => {
       const switchButton = screen.getByTestId('switchToUserPortalBtn');
       const user = userEvent.setup();
       await user.click(switchButton);
-
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
   });
 
@@ -546,7 +547,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(dashboardLink);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
 
     it('should not hide drawer on desktop when navigation link is clicked', async () => {
@@ -562,7 +565,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(dashboardLink);
 
-      expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      });
     });
 
     it('should hide drawer at exactly 820px breakpoint', async () => {
@@ -578,7 +583,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(membersLink);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
 
     it('should hide drawer below 820px breakpoint', async () => {
@@ -594,7 +601,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(eventsLink);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
   });
 
@@ -762,7 +771,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(pluginButton);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
 
     it('should call usePluginDrawerItems with correct parameters', () => {
@@ -844,8 +855,10 @@ describe('LeftDrawerOrg', () => {
     const user = userEvent.setup();
     await user.click(toggleButton);
 
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    await waitFor(() => {
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
 
     // Clear mocks and unmount previous component
     mockSetItem.mockClear();
@@ -859,8 +872,10 @@ describe('LeftDrawerOrg', () => {
     // Test onClick when drawer is hidden - clicking should show it
     await user.click(toggleButtonCollapsed);
 
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+    await waitFor(() => {
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+    });
 
     unmount2();
   });
@@ -943,7 +958,9 @@ describe('LeftDrawerOrg', () => {
       const dashboardLink = screen.getByText('Dashboard');
       const user = userEvent.setup();
       await user.click(dashboardLink);
-      expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      });
 
       // Change to mobile during next interaction
       Object.defineProperty(window, 'innerWidth', {
@@ -953,7 +970,9 @@ describe('LeftDrawerOrg', () => {
       });
 
       await user.click(dashboardLink);
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
   });
 
