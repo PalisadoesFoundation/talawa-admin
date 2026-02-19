@@ -271,7 +271,7 @@ describe('Organization setup workflow', () => {
       .openCreateOrganizationModal()
       .fillCreateOrganizationForm(duplicateOrganizationInput)
       .submitCreateOrganizationForm();
-    cy.assertToast(/organization name already exists/i);
+    cy.assertToast('An organization with this name already exists');
   });
 });
 
