@@ -53,7 +53,7 @@ import VenueIcon from 'assets/svgs/venues.svg?react';
 import RequestsIcon from 'assets/svgs/requests.svg?react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
-import { IIconComponent } from 'types/shared-components/IconComponent/interface';
+import type { IIconComponent } from 'types/shared-components/IconComponent/interface';
 import type { JSX } from 'react';
 
 const iconComponent = (props: IIconComponent): JSX.Element => {
