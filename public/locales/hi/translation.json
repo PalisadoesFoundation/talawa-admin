@@ -113,7 +113,8 @@
     "oauthProviderError": "OAuth प्रदाता त्रुटि: {{error}}",
     "noAuthCodeReceived": "OAuth प्रदाता से कोई प्राधिकरण कोड प्राप्त नहीं हुआ",
     "oauthAuthenticationFailed": "OAuth प्रमाणीकरण विफल। कृपया पुनः प्रयास करें।",
-    "oauthConfigurationNotFound": "प्रदाता के लिए OAuth कॉन्फ़िगरेशन नहीं मिला।"
+    "oauthConfigurationNotFound": "प्रदाता के लिए OAuth कॉन्फ़िगरेशन नहीं मिला।",
+    "csrfValidationFailed": "CSRF सत्यापन विफल रहा। कृपया पुनः प्रयास करें।"
   },
   "verifyEmail": {
     "title": "ईमेल सत्यापित करें",

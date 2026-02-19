@@ -13,10 +13,6 @@ GitHub OAuth authentication button component.
 Handles GitHub OAuth flow by redirecting users to GitHub's authentication page
 and storing the authentication mode (login/register/link) for callback processing.
 
-## Param
-
-Component Props
-
 ## Returns
 
 A GitHub-branded OAuth button
@@ -33,8 +29,9 @@ A GitHub-branded OAuth button
 
 ## Remarks
 
-- Uses OAuth `state` parameter to pass mode and provider through the OAuth flow
+- Uses OAuth `state` parameter to pass mode, provider, and CSRF nonce through the OAuth flow
 - Also stores configuration in sessionStorage as fallback
-- The callback handler extracts mode from state parameter (or sessionStorage) and calls
+- The callback handler extracts mode and nonce from state parameter (or sessionStorage) and calls
   the appropriate OAuth flow handler (`handleOAuthLogin` or `handleOAuthLink`)
-- State parameter format: "mode:provider" (e.g., "login:GITHUB" or "link:GITHUB")
+- State parameter format: "mode:provider:nonce" (e.g., "login:GITHUB:uuid-v4")
+- CSRF protection: Nonce is validated in callback to prevent CSRF attacks

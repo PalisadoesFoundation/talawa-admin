@@ -118,7 +118,8 @@
     "oauthProviderError": "OAuth provider error: {{error}}",
     "noAuthCodeReceived": "No authorization code received from OAuth provider.",
     "oauthAuthenticationFailed": "OAuth authentication failed. Please try again.",
-    "oauthConfigurationNotFound": "OAuth configuration not found for the provider."
+    "oauthConfigurationNotFound": "OAuth configuration not found for the provider.",
+    "csrfValidationFailed": "CSRF validation failed. Please try again."
   },
   "verifyEmail": {
     "title": "Verify Email",

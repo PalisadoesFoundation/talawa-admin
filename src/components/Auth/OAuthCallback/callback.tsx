@@ -74,15 +74,17 @@ const OAuthCallbackPage = () => {
           throw new Error(t('noAuthCodeReceived'));
         }
 
-        // Get mode and provider from state parameter (preferred) or sessionStorage (fallback)
+        // Get mode, provider, and nonce from state parameter (preferred) or sessionStorage (fallback)
         let mode: string | null = null;
         let provider: OAuthProviderKey | null = null;
+        let stateNonce: string | null = null;
 
         if (state) {
-          // State format: "mode:provider" (e.g., "login:GOOGLE")
-          const [stateMode, stateProvider] = state.split(':');
+          // State format: "mode:provider:nonce" (e.g., "login:GOOGLE:uuid")
+          const [stateMode, stateProvider, nonce] = state.split(':');
           mode = stateMode;
           provider = stateProvider as OAuthProviderKey;
+          stateNonce = nonce;
         } else {
           // Fallback to sessionStorage
           mode = sessionStorage.getItem('oauth_mode');
@@ -93,6 +95,12 @@ const OAuthCallbackPage = () => {
 
         if (!mode || !provider) {
           throw new Error(t('oauthConfigurationNotFound'));
+        }
+
+        // CSRF protection: Validate nonce
+        const storedNonce = sessionStorage.getItem('oauth_nonce');
+        if (stateNonce && storedNonce && stateNonce !== storedNonce) {
+          throw new Error(t('csrfValidationFailed'));
         }
 
         // Use the correct redirect URI (must match what was sent to the OAuth provider)
@@ -109,6 +117,7 @@ const OAuthCallbackPage = () => {
           // Clear sessionStorage
           sessionStorage.removeItem('oauth_mode');
           sessionStorage.removeItem('oauth_provider');
+          sessionStorage.removeItem('oauth_nonce');
 
           // Redirect to settings page
           navigate('/user/settings');
@@ -133,6 +142,7 @@ const OAuthCallbackPage = () => {
           // Clear sessionStorage
           sessionStorage.removeItem('oauth_mode');
           sessionStorage.removeItem('oauth_provider');
+          sessionStorage.removeItem('oauth_nonce');
           startSession();
           // Redirect to organization list
           navigate('/');
@@ -146,6 +156,7 @@ const OAuthCallbackPage = () => {
         // Clear sessionStorage even on error
         sessionStorage.removeItem('oauth_mode');
         sessionStorage.removeItem('oauth_provider');
+        sessionStorage.removeItem('oauth_nonce');
 
         // Redirect back to login after a delay
         setTimeout(() => {
@@ -155,7 +166,7 @@ const OAuthCallbackPage = () => {
     };
 
     processOAuthCallback();
-  }, []);
+  }, [navigate, t, setItem, startSession]);
 
   return (
     <div className={styles.spinnerWrapper}>

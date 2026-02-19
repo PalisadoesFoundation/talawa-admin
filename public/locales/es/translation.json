@@ -113,7 +113,8 @@
     "oauthProviderError": "Error del proveedor OAuth: {{error}}",
     "noAuthCodeReceived": "No se recibió código de autorización del proveedor OAuth",
     "oauthAuthenticationFailed": "Autenticación OAuth fallida. Por favor, inténtalo de nuevo.",
-    "oauthConfigurationNotFound": "Configuración OAuth no encontrada para el proveedor."
+    "oauthConfigurationNotFound": "Configuración OAuth no encontrada para el proveedor.",
+    "csrfValidationFailed": "La validación CSRF falló. Por favor, inténtalo de nuevo."
   },
   "verifyEmail": {
     "title": "Verificar Email",

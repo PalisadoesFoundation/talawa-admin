@@ -8,7 +8,6 @@ import { Props } from './types';
  * Handles GitHub OAuth flow by redirecting users to GitHub's authentication page
  * and storing the authentication mode (login/register/link) for callback processing.
  *
- * @param Props - Component Props
  * @returns A GitHub-branded OAuth button
  *
  * @example
@@ -21,11 +20,12 @@ import { Props } from './types';
  * ```
  *
  * @remarks
- * - Uses OAuth `state` parameter to pass mode and provider through the OAuth flow
+ * - Uses OAuth `state` parameter to pass mode, provider, and CSRF nonce through the OAuth flow
  * - Also stores configuration in sessionStorage as fallback
- * - The callback handler extracts mode from state parameter (or sessionStorage) and calls
+ * - The callback handler extracts mode and nonce from state parameter (or sessionStorage) and calls
  *   the appropriate OAuth flow handler (`handleOAuthLogin` or `handleOAuthLink`)
- * - State parameter format: "mode:provider" (e.g., "login:GITHUB" or "link:GITHUB")
+ * - State parameter format: "mode:provider:nonce" (e.g., "login:GITHUB:uuid-v4")
+ * - CSRF protection: Nonce is validated in callback to prevent CSRF attacks
  */
 const GitHubOAuthButton: React.FC<Props> = ({
   mode,
@@ -39,7 +39,7 @@ const GitHubOAuthButton: React.FC<Props> = ({
 }) => {
   /**
    * Initiates GitHub OAuth flow by redirecting to GitHub's authorization endpoint.
-   * Uses OAuth state parameter to pass mode and provider (preferred method).
+   * Uses OAuth state parameter to pass mode, provider, and CSRF nonce (preferred method).
    * Also stores in sessionStorage as a fallback.
    */
   const githubAuthHandler: () => void = () => {
@@ -55,17 +55,22 @@ const GitHubOAuthButton: React.FC<Props> = ({
     }
     const scope = OAUTH_PROVIDERS.GITHUB.scopes.join(' ');
 
-    // Also store in sessionStorage as fallback (in case state is lost)
+    // Generate CSRF protection nonce
+    const nonce = crypto.randomUUID();
+
+    // Store in sessionStorage as fallback (in case state is lost)
     sessionStorage.setItem('oauth_mode', mode);
     sessionStorage.setItem('oauth_provider', 'GITHUB');
+    sessionStorage.setItem('oauth_nonce', nonce);
 
     const OAUTH_PROVIDER = 'GITHUB';
 
+    // State format: "mode:provider:nonce" for CSRF protection
     const authUrl = `https://github.com/login/oauth/authorize?client_id=${encodeURIComponent(
       clientID,
     )}&redirect_uri=${encodeURIComponent(
       redirectURI,
-    )}&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(`${mode}:${OAUTH_PROVIDER}`)}`;
+    )}&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(`${mode}:${OAUTH_PROVIDER}:${nonce}`)}`;
 
     window.location.href = authUrl;
   };

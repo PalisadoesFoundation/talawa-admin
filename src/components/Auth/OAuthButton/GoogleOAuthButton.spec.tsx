@@ -54,6 +54,8 @@ describe('GoogleOAuthButton', () => {
   let originalLocation: Location;
   let sessionStorageSetItemSpy: ReturnType<typeof vi.spyOn>;
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+  let randomUUIDSpy: ReturnType<typeof vi.spyOn>;
+  const mockNonce = 'test-uuid-1234-5678-90ab';
 
   beforeEach(() => {
     vi.resetModules();
@@ -71,6 +73,9 @@ describe('GoogleOAuthButton', () => {
 
     // Spy on sessionStorage
     sessionStorageSetItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+    // Mock crypto.randomUUID
+    randomUUIDSpy = vi.spyOn(crypto, 'randomUUID').mockReturnValue(mockNonce);
 
     // Spy on console.error
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -150,6 +155,10 @@ describe('GoogleOAuthButton', () => {
         'oauth_provider',
         'GOOGLE',
       );
+      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+        'oauth_nonce',
+        mockNonce,
+      );
 
       // Check URL contains expected parameters
       const url = new URL(window.location.href);
@@ -162,7 +171,7 @@ describe('GoogleOAuthButton', () => {
       );
       expect(url.searchParams.get('response_type')).toBe('code');
       expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe('login:GOOGLE');
+      expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${mockNonce}`);
     });
 
     it('should initiate OAuth flow with register mode', async () => {
@@ -180,6 +189,10 @@ describe('GoogleOAuthButton', () => {
         'oauth_provider',
         'GOOGLE',
       );
+      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+        'oauth_nonce',
+        mockNonce,
+      );
 
       // Check URL contains expected parameters
       const url = new URL(window.location.href);
@@ -192,7 +205,9 @@ describe('GoogleOAuthButton', () => {
       );
       expect(url.searchParams.get('response_type')).toBe('code');
       expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe('register:GOOGLE');
+      expect(url.searchParams.get('state')).toBe(
+        `register:GOOGLE:${mockNonce}`,
+      );
     });
 
     it('should initiate OAuth flow with link mode', async () => {
@@ -210,6 +225,10 @@ describe('GoogleOAuthButton', () => {
         'oauth_provider',
         'GOOGLE',
       );
+      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+        'oauth_nonce',
+        mockNonce,
+      );
 
       // Check URL contains expected parameters
       const url = new URL(window.location.href);
@@ -222,7 +241,7 @@ describe('GoogleOAuthButton', () => {
       );
       expect(url.searchParams.get('response_type')).toBe('code');
       expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe('link:GOOGLE');
+      expect(url.searchParams.get('state')).toBe(`link:GOOGLE:${mockNonce}`);
     });
   });
 
@@ -375,7 +394,7 @@ describe('GoogleOAuthButton', () => {
   });
 
   describe('SessionStorage Behavior', () => {
-    it('should store OAuth mode and provider in sessionStorage', async () => {
+    it('should store OAuth mode, provider, and nonce in sessionStorage', async () => {
       render(<GoogleOAuthButton mode="login" />);
 
       const button = screen.getByTestId('oauth-button');
@@ -383,6 +402,7 @@ describe('GoogleOAuthButton', () => {
 
       expect(sessionStorage.getItem('oauth_mode')).toBe('login');
       expect(sessionStorage.getItem('oauth_provider')).toBe('GOOGLE');
+      expect(sessionStorage.getItem('oauth_nonce')).toBe(mockNonce);
     });
 
     it('should update sessionStorage for different modes', async () => {
@@ -404,7 +424,7 @@ describe('GoogleOAuthButton', () => {
   });
 
   describe('State Parameter', () => {
-    it('should include state parameter in OAuth URL with correct format', async () => {
+    it('should include state parameter in OAuth URL with correct format including nonce', async () => {
       const modes: OAuthMode[] = ['login', 'register', 'link'];
 
       for (const mode of modes) {
@@ -419,10 +439,34 @@ describe('GoogleOAuthButton', () => {
         const url = new URL(window.location.href);
         const state = url.searchParams.get('state');
 
-        expect(state).toBe(`${mode}:GOOGLE`);
+        expect(state).toBe(`${mode}:GOOGLE:${mockNonce}`);
 
         unmount();
       }
+    });
+
+    it('should generate unique nonce for each OAuth flow', async () => {
+      const nonce1 = 'nonce-1';
+      const nonce2 = 'nonce-2';
+
+      randomUUIDSpy.mockReturnValueOnce(nonce1);
+      render(<GoogleOAuthButton mode="login" />);
+      let button = screen.getByTestId('oauth-button');
+      await userEvent.click(button);
+
+      let url = new URL(window.location.href);
+      expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${nonce1}`);
+
+      // Reset and test again with different nonce
+      window.location.href = '';
+      randomUUIDSpy.mockReturnValueOnce(nonce2);
+
+      const { rerender } = render(<GoogleOAuthButton mode="login" />);
+      button = screen.getByTestId('oauth-button');
+      await userEvent.click(button);
+
+      url = new URL(window.location.href);
+      expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${nonce2}`);
     });
   });
 

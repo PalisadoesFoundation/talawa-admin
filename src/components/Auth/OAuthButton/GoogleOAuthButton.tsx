@@ -21,11 +21,12 @@ import { Props } from './types';
  * ```
  *
  * @remarks
- * - Uses OAuth `state` parameter to pass mode and provider through the OAuth flow
+ * - Uses OAuth `state` parameter to pass mode, provider, and CSRF nonce through the OAuth flow
  * - Also stores configuration in sessionStorage as fallback
- * - The callback handler extracts mode from state parameter (or sessionStorage) and calls
+ * - The callback handler extracts mode and nonce from state parameter (or sessionStorage) and calls
  *   the appropriate OAuth flow handler (`handleOAuthLogin` or `handleOAuthLink`)
- * - State parameter format: "mode:provider" (e.g., "login:GOOGLE" or "link:GOOGLE")
+ * - State parameter format: "mode:provider:nonce" (e.g., "login:GOOGLE:uuid-v4")
+ * - CSRF protection: Nonce is validated in callback to prevent CSRF attacks
  */
 const GoogleOAuthButton: React.FC<Props> = ({
   mode,
@@ -39,7 +40,7 @@ const GoogleOAuthButton: React.FC<Props> = ({
 }) => {
   /**
    * Initiates Google OAuth flow by redirecting to Google's authorization endpoint.
-   * Uses OAuth state parameter to pass mode and provider (preferred method).
+   * Uses OAuth state parameter to pass mode, provider, and CSRF nonce (preferred method).
    * Also stores in sessionStorage as a fallback.
    */
   const googleAuthHandler: () => void = () => {
@@ -56,19 +57,24 @@ const GoogleOAuthButton: React.FC<Props> = ({
     const scope = OAUTH_PROVIDERS.GOOGLE.scopes.join(' ');
     const responseType = 'code';
 
-    // Also store in sessionStorage as fallback (in case state is lost)
+    // Generate CSRF protection nonce
+    const nonce = crypto.randomUUID();
+
+    // Store in sessionStorage as fallback (in case state is lost)
     sessionStorage.setItem('oauth_mode', mode);
     sessionStorage.setItem('oauth_provider', 'GOOGLE');
+    sessionStorage.setItem('oauth_nonce', nonce);
 
     const OAUTH_PROVIDER = 'GOOGLE';
 
+    // State format: "mode:provider:nonce" for CSRF protection
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(
       clientID,
     )}&redirect_uri=${encodeURIComponent(
       redirectURI,
     )}&response_type=${encodeURIComponent(
       responseType,
-    )}&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(`${mode}:${OAUTH_PROVIDER}`)}`;
+    )}&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(`${mode}:${OAUTH_PROVIDER}:${nonce}`)}`;
 
     window.location.href = authUrl;
   };

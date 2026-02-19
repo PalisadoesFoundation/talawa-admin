@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`Props`](../../types/type-aliases/Props.md)\>
 
-Defined in: [src/components/Auth/OAuthButton/GoogleOAuthButton.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/GoogleOAuthButton.tsx#L30)
+Defined in: [src/components/Auth/OAuthButton/GoogleOAuthButton.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/GoogleOAuthButton.tsx#L31)
 
 Google OAuth authentication button component.
 
@@ -33,8 +33,9 @@ A Google-branded OAuth button
 
 ## Remarks
 
-- Uses OAuth `state` parameter to pass mode and provider through the OAuth flow
+- Uses OAuth `state` parameter to pass mode, provider, and CSRF nonce through the OAuth flow
 - Also stores configuration in sessionStorage as fallback
-- The callback handler extracts mode from state parameter (or sessionStorage) and calls
+- The callback handler extracts mode and nonce from state parameter (or sessionStorage) and calls
   the appropriate OAuth flow handler (`handleOAuthLogin` or `handleOAuthLink`)
-- State parameter format: "mode:provider" (e.g., "login:GOOGLE" or "link:GOOGLE")
+- State parameter format: "mode:provider:nonce" (e.g., "login:GOOGLE:uuid-v4")
+- CSRF protection: Nonce is validated in callback to prevent CSRF attacks

@@ -1,10 +1,11 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, cleanup } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 import OAuthCallbackPage from './callback';
 import type { InterfaceAuthenticationPayload } from 'types/Auth/auth';
 import { UserRole, Iso3166Alpha2CountryCode } from 'utils/interfaces';
+import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import {
   handleOAuthLogin,
@@ -64,19 +65,12 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
   ),
 }));
 
-vi.mock('Constant/constant', () => ({
-  VITE_GOOGLE_REDIRECT_URI: 'http://localhost:3000/auth/callback',
-}));
-
 vi.mock('config/oauthProviders', () => ({
   OAUTH_PROVIDERS: {
     GOOGLE: {
       redirectUri: 'http://localhost:3000/auth/callback',
     },
     GITHUB: {
-      redirectUri: 'http://localhost:3000/auth/callback',
-    },
-    MICROSOFT: {
       redirectUri: 'http://localhost:3000/auth/callback',
     },
   },
@@ -86,11 +80,13 @@ describe('OAuthCallbackPage', () => {
   let mockAuthResponse: InterfaceAuthenticationPayload;
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
   let mockSetItem: ReturnType<typeof vi.fn>;
+  let originalLocation: Location;
 
   beforeEach(() => {
     vi.clearAllMocks();
     sessionStorage.clear();
 
+    originalLocation = window.location;
     // Mock console.error to prevent test output pollution
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
@@ -134,14 +130,19 @@ describe('OAuthCallbackPage', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.clearAllMocks();
+    (window as { location: Location }).location = originalLocation;
     sessionStorage.clear();
   });
 
   describe('Successful Login Flow', () => {
     it('should handle successful login with state parameter', async () => {
       // Arrange
+      const nonce = 'test-nonce-123';
       (window as { location: Location }).location.search =
-        '?code=auth-code-123&state=login:GOOGLE';
+        `?code=auth-code-123&state=login:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
@@ -181,14 +182,17 @@ describe('OAuthCallbackPage', () => {
 
       sessionStorage.setItem('oauth_mode', 'login');
       sessionStorage.setItem('oauth_provider', 'GOOGLE');
+      sessionStorage.setItem('oauth_nonce', 'fallback-nonce');
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
       // Act
       render(
-        <BrowserRouter>
-          <OAuthCallbackPage />
-        </BrowserRouter>,
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <OAuthCallbackPage />
+          </BrowserRouter>
+        </I18nextProvider>,
       );
 
       // Assert
@@ -210,11 +214,13 @@ describe('OAuthCallbackPage', () => {
 
     it('should clear sessionStorage after successful login', async () => {
       // Arrange
+      const nonce = 'test-nonce-789';
       (window as { location: Location }).location.search =
-        '?code=auth-code-789&state=login:GOOGLE';
+        `?code=auth-code-789&state=login:GOOGLE:${nonce}`;
 
       sessionStorage.setItem('oauth_mode', 'login');
       sessionStorage.setItem('oauth_provider', 'GOOGLE');
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
@@ -229,13 +235,17 @@ describe('OAuthCallbackPage', () => {
       await waitFor(() => {
         expect(sessionStorage.getItem('oauth_mode')).toBeNull();
         expect(sessionStorage.getItem('oauth_provider')).toBeNull();
+        expect(sessionStorage.getItem('oauth_nonce')).toBeNull();
       });
     });
 
     it('should handle register mode correctly', async () => {
       // Arrange
+      const nonce = 'test-register-nonce';
       (window as { location: Location }).location.search =
-        '?code=auth-code-register&state=register:GOOGLE';
+        `?code=auth-code-register&state=register:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
@@ -266,8 +276,11 @@ describe('OAuthCallbackPage', () => {
   describe('Successful Link Flow', () => {
     it('should handle successful account linking with state parameter', async () => {
       // Arrange
+      const nonce = 'test-link-nonce-123';
       (window as { location: Location }).location.search =
-        '?code=link-code-123&state=link:GOOGLE';
+        `?code=link-code-123&state=link:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLink).mockResolvedValueOnce({
         id: 'user-123',
@@ -309,6 +322,7 @@ describe('OAuthCallbackPage', () => {
 
       sessionStorage.setItem('oauth_mode', 'link');
       sessionStorage.setItem('oauth_provider', 'GOOGLE');
+      sessionStorage.setItem('oauth_nonce', 'fallback-link-nonce');
 
       vi.mocked(handleOAuthLink).mockResolvedValueOnce({
         id: 'user-123',
@@ -344,11 +358,13 @@ describe('OAuthCallbackPage', () => {
 
     it('should clear sessionStorage after successful link', async () => {
       // Arrange
+      const nonce = 'test-link-nonce-789';
       (window as { location: Location }).location.search =
-        '?code=link-code-789&state=link:GOOGLE';
+        `?code=link-code-789&state=link:GOOGLE:${nonce}`;
 
       sessionStorage.setItem('oauth_mode', 'link');
       sessionStorage.setItem('oauth_provider', 'GOOGLE');
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLink).mockResolvedValueOnce({
         id: 'user-123',
@@ -370,6 +386,7 @@ describe('OAuthCallbackPage', () => {
       await waitFor(() => {
         expect(sessionStorage.getItem('oauth_mode')).toBeNull();
         expect(sessionStorage.getItem('oauth_provider')).toBeNull();
+        expect(sessionStorage.getItem('oauth_nonce')).toBeNull();
       });
     });
   });
@@ -500,8 +517,11 @@ describe('OAuthCallbackPage', () => {
 
     it('should handle login error and navigate back', async () => {
       // Arrange
+      const nonce = 'test-error-nonce';
       (window as { location: Location }).location.search =
-        '?code=auth-code-error&state=login:GOOGLE';
+        `?code=auth-code-error&state=login:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockRejectedValueOnce(
         new Error('Authentication failed'),
@@ -539,8 +559,11 @@ describe('OAuthCallbackPage', () => {
 
     it('should handle link error and navigate back', async () => {
       // Arrange
+      const nonce = 'test-link-error-nonce';
       (window as { location: Location }).location.search =
-        '?code=link-code-error&state=link:GOOGLE';
+        `?code=link-code-error&state=link:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLink).mockRejectedValueOnce(
         new Error('Account linking failed'),
@@ -568,8 +591,11 @@ describe('OAuthCallbackPage', () => {
 
     it('should handle non-Error exceptions', async () => {
       // Arrange
+      const nonce = 'test-unknown-error-nonce';
       (window as { location: Location }).location.search =
-        '?code=auth-code-unknown&state=login:GOOGLE';
+        `?code=auth-code-unknown&state=login:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockRejectedValueOnce('Unknown error');
 
@@ -590,11 +616,13 @@ describe('OAuthCallbackPage', () => {
 
     it('should clear sessionStorage on error', async () => {
       // Arrange
+      const nonce = 'test-clear-error-nonce';
       (window as { location: Location }).location.search =
-        '?code=auth-code-error&state=login:GOOGLE';
+        `?code=auth-code-error&state=login:GOOGLE:${nonce}`;
 
       sessionStorage.setItem('oauth_mode', 'login');
       sessionStorage.setItem('oauth_provider', 'GOOGLE');
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockRejectedValueOnce(
         new Error('Authentication failed'),
@@ -611,15 +639,53 @@ describe('OAuthCallbackPage', () => {
       await waitFor(() => {
         expect(sessionStorage.getItem('oauth_mode')).toBeNull();
         expect(sessionStorage.getItem('oauth_provider')).toBeNull();
+        expect(sessionStorage.getItem('oauth_nonce')).toBeNull();
       });
+    });
+
+    it('should handle CSRF validation failure', async () => {
+      // Arrange - state nonce doesn't match stored nonce
+      (window as { location: Location }).location.search =
+        '?code=auth-code-123&state=login:GOOGLE:wrong-nonce';
+
+      sessionStorage.setItem('oauth_nonce', 'correct-nonce');
+
+      // Act
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <OAuthCallbackPage />
+          </BrowserRouter>
+        </I18nextProvider>,
+      );
+
+      // Assert
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
+
+      expect(handleOAuthLogin).not.toHaveBeenCalled();
+      expect(handleOAuthLink).not.toHaveBeenCalled();
+
+      // Should clear sessionStorage and navigate home
+      await waitFor(
+        () => {
+          expect(sessionStorage.getItem('oauth_nonce')).toBeNull();
+          expect(mockNavigate).toHaveBeenCalledWith('/');
+        },
+        { timeout: 3500 },
+      );
     });
   });
 
   describe('State Parameter Parsing', () => {
     it('should parse state parameter with login mode', async () => {
       // Arrange
+      const nonce = 'test-parse-login-nonce';
       (window as { location: Location }).location.search =
-        '?code=code-123&state=login:GOOGLE';
+        `?code=code-123&state=login:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
@@ -643,8 +709,11 @@ describe('OAuthCallbackPage', () => {
 
     it('should parse state parameter with link mode', async () => {
       // Arrange
+      const nonce = 'test-parse-link-nonce';
       (window as { location: Location }).location.search =
-        '?code=code-456&state=link:GOOGLE';
+        `?code=code-456&state=link:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLink).mockResolvedValueOnce({
         id: 'user-123',
@@ -675,12 +744,14 @@ describe('OAuthCallbackPage', () => {
 
     it('should prefer state parameter over sessionStorage', async () => {
       // Arrange
+      const nonce = 'test-prefer-state-nonce';
       (window as { location: Location }).location.search =
-        '?code=code-789&state=link:GOOGLE';
+        `?code=code-789&state=link:GOOGLE:${nonce}`;
 
       // Set different values in sessionStorage
       sessionStorage.setItem('oauth_mode', 'login');
       sessionStorage.setItem('oauth_provider', 'GITHUB');
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLink).mockResolvedValueOnce({
         id: 'user-123',
@@ -713,8 +784,11 @@ describe('OAuthCallbackPage', () => {
   describe('Redirect URI', () => {
     it('should use VITE_GOOGLE_REDIRECT_URI from constants', async () => {
       // Arrange
+      const nonce = 'test-uri-nonce';
       (window as { location: Location }).location.search =
-        '?code=code-uri-test&state=login:GOOGLE';
+        `?code=code-uri-test&state=login:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
@@ -740,8 +814,11 @@ describe('OAuthCallbackPage', () => {
   describe('Component Rendering', () => {
     it('should render LoadingState component', () => {
       // Arrange
+      const nonce = 'test-render-nonce';
       (window as { location: Location }).location.search =
-        '?code=code-123&state=login:GOOGLE';
+        `?code=code-123&state=login:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
@@ -760,8 +837,11 @@ describe('OAuthCallbackPage', () => {
   describe('Different OAuth Providers', () => {
     it('should handle GITHUB provider from state parameter', async () => {
       // Arrange
+      const nonce = 'test-github-nonce';
       (window as { location: Location }).location.search =
-        '?code=code-github&state=login:GITHUB';
+        `?code=code-github&state=login:GITHUB:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
 
       vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
 
@@ -778,34 +858,6 @@ describe('OAuthCallbackPage', () => {
           expect.anything(),
           'GITHUB',
           'code-github',
-          'http://localhost:3000/auth/callback',
-        );
-      });
-    });
-
-    it('should handle MICROSOFT provider from sessionStorage', async () => {
-      // Arrange
-      (window as { location: Location }).location.search =
-        '?code=code-microsoft';
-
-      sessionStorage.setItem('oauth_mode', 'login');
-      sessionStorage.setItem('oauth_provider', 'MICROSOFT');
-
-      vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
-
-      // Act
-      render(
-        <BrowserRouter>
-          <OAuthCallbackPage />
-        </BrowserRouter>,
-      );
-
-      // Assert
-      await waitFor(() => {
-        expect(handleOAuthLogin).toHaveBeenCalledWith(
-          expect.anything(),
-          'MICROSOFT',
-          'code-microsoft',
           'http://localhost:3000/auth/callback',
         );
       });
