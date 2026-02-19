@@ -1428,7 +1428,8 @@
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible"
+    "emailNotAvailable": "E-mail non disponible",
+    "membersList": "Liste des membres"
   },
   "userLogin": {
     "login": "Se connecter",

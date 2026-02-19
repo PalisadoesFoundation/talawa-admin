@@ -1423,7 +1423,8 @@
     "email": "ईमेल",
     "role": "भूमिका",
     "loading": "लोड हो रहा है...",
-    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है",
+    "membersList": "सदस्य सूची"
   },
   "userLogin": {
     "login": "लॉग इन करें",

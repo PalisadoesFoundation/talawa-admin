@@ -1425,7 +1425,8 @@
     "email": "Correo Electrónico",
     "role": "Rol",
     "loading": "Cargando...",
-    "emailNotAvailable": "Correo electrónico no disponible"
+    "emailNotAvailable": "Correo electrónico no disponible",
+    "membersList": "Lista de miembros"
   },
   "userNavbar": {
     "talawa": "Talawa",
