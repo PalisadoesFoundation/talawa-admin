@@ -268,10 +268,6 @@ const Requests = (): JSX.Element => {
             imageUrl={user.avatarURL}
             dataTestId="display-img"
             crossOrigin="anonymous"
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.style.display = 'none';
-            }}
           />
         );
       },

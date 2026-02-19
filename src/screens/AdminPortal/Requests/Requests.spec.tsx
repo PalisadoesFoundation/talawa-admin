@@ -1384,7 +1384,6 @@ describe('Testing Requests screen', () => {
     expect(datatable).toBeInTheDocument();
     // Verify the user name is displayed, indicating the row is rendered
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-
     // Verify ProfileAvatarDisplay mock renders the first initial when avatarURL is null
     const avatarDisplay = screen.getByTestId('display-img');
     expect(avatarDisplay).toBeInTheDocument();

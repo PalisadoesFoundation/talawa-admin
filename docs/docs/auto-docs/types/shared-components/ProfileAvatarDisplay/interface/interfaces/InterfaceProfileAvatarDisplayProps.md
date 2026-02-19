@@ -136,17 +136,11 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:27](h
 
 ### onError()?
 
-> `optional` **onError**: (`e`) => `void`
+> `optional` **onError**: () => `void`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L37)
 
 Error handler for the image element.
-
-#### Parameters
-
-##### e
-
-`SyntheticEvent`\<`HTMLImageElement`, `Event`\>
 
 #### Returns
 
@@ -156,17 +150,11 @@ Error handler for the image element.
 
 ### onLoad()?
 
-> `optional` **onLoad**: (`e`) => `void`
+> `optional` **onLoad**: () => `void`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L39)
 
 Load handler for the image element.
-
-#### Parameters
-
-##### e
-
-`SyntheticEvent`\<`HTMLImageElement`, `Event`\>
 
 #### Returns
 

@@ -34,7 +34,7 @@ export interface InterfaceProfileAvatarDisplayProps {
   /** (Optional) Loading strategy for the image element. */
   loading?: 'eager' | 'lazy';
   /** Error handler for the image element. */
-  onError?: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
+  onError?: () => void;
   /** Load handler for the image element. */
-  onLoad?: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
+  onLoad?: () => void;
 }
