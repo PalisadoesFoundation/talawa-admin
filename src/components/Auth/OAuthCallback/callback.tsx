@@ -166,7 +166,7 @@ const OAuthCallbackPage = () => {
     };
 
     processOAuthCallback();
-  }, [navigate, t, setItem, startSession]);
+  }, []);
 
   return (
     <div className={styles.spinnerWrapper}>

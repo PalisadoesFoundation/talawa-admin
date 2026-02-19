@@ -58,8 +58,6 @@ describe('GitHubOAuthButton', () => {
   const mockNonce = 'test-uuid-1234-5678-90ab';
 
   beforeEach(() => {
-    vi.resetModules();
-
     // Save original location
     originalLocation = window.location;
 
@@ -249,6 +247,10 @@ describe('GitHubOAuthButton', () => {
   });
 
   describe('OAuth Handler - Disabled', () => {
+    beforeEach(() => {
+      vi.resetModules();
+    });
+
     it('should not redirect when OAuth is not enabled (missing client ID)', async () => {
       // Override mock to return empty client ID
       vi.doMock('config/oauthProviders', () => ({
@@ -439,32 +441,25 @@ describe('GitHubOAuthButton', () => {
   });
 
   describe('State Parameter', () => {
-    it('should include state parameter in OAuth URL with correct format including nonce', async () => {
-      const modes: OAuthMode[] = ['login', 'register', 'link'];
-
-      for (const mode of modes) {
-        // Reset window.location.href
+    it.each<OAuthMode>(['login', 'register', 'link'])(
+      'should include correct state parameter for %s mode',
+      async (mode) => {
         window.location.href = '';
-
-        const { unmount } = render(<GitHubOAuthButton mode={mode} />);
-
+        render(<GitHubOAuthButton mode={mode} />);
         const button = screen.getByTestId('oauth-button');
         await userEvent.click(button);
-
         await waitFor(() => {
           const url = new URL(window.location.href);
-          const state = url.searchParams.get('state');
-
-          expect(state).toBe(`${mode}:GITHUB:${mockNonce}`);
+          expect(url.searchParams.get('state')).toBe(
+            `${mode}:GITHUB:${mockNonce}`,
+          );
         });
-
-        unmount();
-      }
-    });
+      },
+    );
 
     it('should generate unique nonce for each OAuth flow', async () => {
-      const nonce1 = 'nonce-1';
-      const nonce2 = 'nonce-2';
+      const nonce1 = 'test-uuid-1234-5678-0001';
+      const nonce2 = 'test-uuid-1234-5678-0002';
 
       randomUUIDSpy.mockReturnValueOnce(nonce1);
       const { unmount } = render(<GitHubOAuthButton mode="login" />);

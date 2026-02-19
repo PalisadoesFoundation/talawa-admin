@@ -249,7 +249,6 @@ describe('OAuthCallbackPage', () => {
         </BrowserRouter>,
       );
 
-      // Assert
       await waitFor(() => {
         expect(handleOAuthLogin).toHaveBeenCalledWith(
           expect.anything(),
@@ -257,12 +256,11 @@ describe('OAuthCallbackPage', () => {
           'auth-code-register',
           'http://localhost:3000/auth/callback',
         );
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          translations.successfullyLoggedIn,
+        );
+        expect(mockNavigate).toHaveBeenCalledWith('/');
       });
-
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        translations.successfullyLoggedIn,
-      );
-      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
   });
 

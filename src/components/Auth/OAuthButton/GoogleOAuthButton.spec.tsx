@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import type { OAuthMode } from './OAuthButton';
@@ -58,7 +58,6 @@ describe('GoogleOAuthButton', () => {
   const mockNonce = 'test-uuid-1234-5678-90ab';
 
   beforeEach(() => {
-    vi.resetModules();
     vi.clearAllMocks();
 
     // Save original location
@@ -147,31 +146,35 @@ describe('GoogleOAuthButton', () => {
       await userEvent.click(button);
 
       // Check sessionStorage
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_mode',
-        'login',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_provider',
-        'GOOGLE',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_nonce',
-        mockNonce,
-      );
+      await waitFor(() => {
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_mode',
+          'login',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_provider',
+          'GOOGLE',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_nonce',
+          mockNonce,
+        );
+      });
 
       // Check URL contains expected parameters
-      const url = new URL(window.location.href);
-      expect(url.origin + url.pathname).toBe(
-        'https://accounts.google.com/o/oauth2/v2/auth',
-      );
-      expect(url.searchParams.get('client_id')).toBe('test-client-id');
-      expect(url.searchParams.get('redirect_uri')).toBe(
-        'http://localhost/auth/callback',
-      );
-      expect(url.searchParams.get('response_type')).toBe('code');
-      expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${mockNonce}`);
+      await waitFor(() => {
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(
+          'https://accounts.google.com/o/oauth2/v2/auth',
+        );
+        expect(url.searchParams.get('client_id')).toBe('test-client-id');
+        expect(url.searchParams.get('redirect_uri')).toBe(
+          'http://localhost/auth/callback',
+        );
+        expect(url.searchParams.get('response_type')).toBe('code');
+        expect(url.searchParams.get('scope')).toBe('openid profile email');
+        expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${mockNonce}`);
+      });
     });
 
     it('should initiate OAuth flow with register mode', async () => {
@@ -181,33 +184,37 @@ describe('GoogleOAuthButton', () => {
       await userEvent.click(button);
 
       // Check sessionStorage
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_mode',
-        'register',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_provider',
-        'GOOGLE',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_nonce',
-        mockNonce,
-      );
+      await waitFor(() => {
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_mode',
+          'register',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_provider',
+          'GOOGLE',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_nonce',
+          mockNonce,
+        );
+      });
 
       // Check URL contains expected parameters
-      const url = new URL(window.location.href);
-      expect(url.origin + url.pathname).toBe(
-        'https://accounts.google.com/o/oauth2/v2/auth',
-      );
-      expect(url.searchParams.get('client_id')).toBe('test-client-id');
-      expect(url.searchParams.get('redirect_uri')).toBe(
-        'http://localhost/auth/callback',
-      );
-      expect(url.searchParams.get('response_type')).toBe('code');
-      expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe(
-        `register:GOOGLE:${mockNonce}`,
-      );
+      await waitFor(() => {
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(
+          'https://accounts.google.com/o/oauth2/v2/auth',
+        );
+        expect(url.searchParams.get('client_id')).toBe('test-client-id');
+        expect(url.searchParams.get('redirect_uri')).toBe(
+          'http://localhost/auth/callback',
+        );
+        expect(url.searchParams.get('response_type')).toBe('code');
+        expect(url.searchParams.get('scope')).toBe('openid profile email');
+        expect(url.searchParams.get('state')).toBe(
+          `register:GOOGLE:${mockNonce}`,
+        );
+      });
     });
 
     it('should initiate OAuth flow with link mode', async () => {
@@ -217,36 +224,41 @@ describe('GoogleOAuthButton', () => {
       await userEvent.click(button);
 
       // Check sessionStorage
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_mode',
-        'link',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_provider',
-        'GOOGLE',
-      );
-      expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
-        'oauth_nonce',
-        mockNonce,
-      );
+      await waitFor(() => {
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_mode',
+          'link',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_provider',
+          'GOOGLE',
+        );
+        expect(sessionStorageSetItemSpy).toHaveBeenCalledWith(
+          'oauth_nonce',
+          mockNonce,
+        );
+      });
 
       // Check URL contains expected parameters
-      const url = new URL(window.location.href);
-      expect(url.origin + url.pathname).toBe(
-        'https://accounts.google.com/o/oauth2/v2/auth',
-      );
-      expect(url.searchParams.get('client_id')).toBe('test-client-id');
-      expect(url.searchParams.get('redirect_uri')).toBe(
-        'http://localhost/auth/callback',
-      );
-      expect(url.searchParams.get('response_type')).toBe('code');
-      expect(url.searchParams.get('scope')).toBe('openid profile email');
-      expect(url.searchParams.get('state')).toBe(`link:GOOGLE:${mockNonce}`);
+      await waitFor(() => {
+        const url = new URL(window.location.href);
+        expect(url.origin + url.pathname).toBe(
+          'https://accounts.google.com/o/oauth2/v2/auth',
+        );
+        expect(url.searchParams.get('client_id')).toBe('test-client-id');
+        expect(url.searchParams.get('redirect_uri')).toBe(
+          'http://localhost/auth/callback',
+        );
+        expect(url.searchParams.get('response_type')).toBe('code');
+        expect(url.searchParams.get('scope')).toBe('openid profile email');
+        expect(url.searchParams.get('state')).toBe(`link:GOOGLE:${mockNonce}`);
+      });
     });
   });
 
   describe('OAuth Handler - Disabled', () => {
     it('should not redirect when OAuth is not enabled (missing client ID)', async () => {
+      vi.resetModules();
       // Override mock to return empty client ID
       vi.doMock('config/oauthProviders', () => ({
         OAUTH_PROVIDERS: {
@@ -280,6 +292,7 @@ describe('GoogleOAuthButton', () => {
     });
 
     it('should not redirect when OAuth is not enabled (missing redirect URI)', async () => {
+      vi.resetModules();
       // Override mock to return empty redirect URI
       vi.doMock('config/oauthProviders', () => ({
         OAUTH_PROVIDERS: {
@@ -313,6 +326,7 @@ describe('GoogleOAuthButton', () => {
     });
 
     it('should not redirect when OAuth is not enabled (enabled flag false)', async () => {
+      vi.resetModules();
       // Override mock to return enabled: false
       vi.doMock('config/oauthProviders', () => ({
         OAUTH_PROVIDERS: {
@@ -450,23 +464,28 @@ describe('GoogleOAuthButton', () => {
       const nonce2 = 'nonce-2';
 
       randomUUIDSpy.mockReturnValueOnce(nonce1);
-      render(<GoogleOAuthButton mode="login" />);
+      const { unmount } = render(<GoogleOAuthButton mode="login" />);
       let button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      let url = new URL(window.location.href);
-      expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${nonce1}`);
+      await waitFor(() => {
+        const url = new URL(window.location.href);
+        expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${nonce1}`);
+      });
 
       // Reset and test again with different nonce
       window.location.href = '';
       randomUUIDSpy.mockReturnValueOnce(nonce2);
 
+      unmount();
       render(<GoogleOAuthButton mode="login" />);
       button = screen.getByTestId('oauth-button');
       await userEvent.click(button);
 
-      url = new URL(window.location.href);
-      expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${nonce2}`);
+      await waitFor(() => {
+        const url = new URL(window.location.href);
+        expect(url.searchParams.get('state')).toBe(`login:GOOGLE:${nonce2}`);
+      });
     });
   });
 
