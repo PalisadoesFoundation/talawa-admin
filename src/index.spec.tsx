@@ -7,6 +7,7 @@ import {
   afterEach,
   type Mock,
 } from 'vitest';
+import { cleanup } from '@testing-library/react';
 import {
   ApolloClient,
   InMemoryCache,
@@ -23,7 +24,7 @@ import {
   BACKEND_WEBSOCKET_URL,
   deriveBackendWebsocketUrl,
 } from 'Constant/constant';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -55,7 +56,7 @@ const getTestExpiredToken = (): string =>
 
 // Mock external dependencies
 vi.mock(
-  'components/NotificationToast/NotificationToast',
+  'shared-components/NotificationToast/NotificationToast',
   (): { NotificationToast: InterfaceNotificationToastMock } => ({
     NotificationToast: {
       error: vi.fn(),
@@ -109,13 +110,14 @@ vi.mock('./utils/i18n', () => ({
 
 describe('Apollo Client Configuration', () => {
   beforeEach((): void => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Reset localStorage mock with default test token
     createLocalStorageMock('valid');
   });
 
   afterEach(() => {
-    vi.clearAllMocks(); // Only module mocks, no spies
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should create an Apollo Client with correct configuration', (): void => {
@@ -248,7 +250,7 @@ describe('Apollo Client Configuration', () => {
       }: InterfaceErrorCallbackParams): void => {
         if (networkError) {
           NotificationToast.error(
-            'API server unavailable. Check your connection or try again later',
+            { key: 'talawaApiUnavailable', namespace: 'errors' },
             {
               toastId: 'apiServer',
             },
@@ -260,7 +262,7 @@ describe('Apollo Client Configuration', () => {
       errorCallback({ networkError: mockNetworkError });
 
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'API server unavailable. Check your connection or try again later',
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
         {
           toastId: 'apiServer',
         },
@@ -271,8 +273,13 @@ describe('Apollo Client Configuration', () => {
   describe('Token Refresh Error Link', () => {
     let mockLocalStorageData: Record<string, string>;
     let mockClear: ReturnType<typeof vi.fn>;
+    let originalLocation: Location;
+    let originalLocalStorage: Storage;
 
     beforeEach(() => {
+      originalLocation = window.location;
+      originalLocalStorage = window.localStorage;
+
       mockLocalStorageData = {
         token: 'test-token',
         refreshToken: 'test-refresh-token',
@@ -314,8 +321,21 @@ describe('Apollo Client Configuration', () => {
         configurable: true,
         writable: true,
       });
+    });
 
-      vi.clearAllMocks();
+    afterEach(() => {
+      cleanup();
+      vi.restoreAllMocks();
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        configurable: true,
+        writable: true,
+      });
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        configurable: true,
+        writable: true,
+      });
     });
 
     it('should skip token refresh for SignIn operations', () => {
@@ -556,7 +576,8 @@ describe('Apollo Client Configuration', () => {
     });
 
     afterEach(() => {
-      vi.clearAllMocks();
+      cleanup();
+      vi.restoreAllMocks();
       getComputedStyleSpy.mockRestore();
       if (getElementByIdSpy) {
         getElementByIdSpy.mockRestore();
@@ -693,10 +714,33 @@ describe('Apollo Client Configuration', () => {
     });
 
     afterEach(() => {
-      vi.clearAllMocks();
+      cleanup();
+      vi.restoreAllMocks();
       getComputedStyleSpy.mockRestore();
       getElementByIdSpy.mockRestore();
     });
+
+    const createOperation = (
+      operationName: string,
+      operationType: 'query' | 'subscription',
+    ): Operation =>
+      ({
+        operationName,
+        query: {
+          kind: 'Document',
+          definitions: [
+            {
+              kind: 'OperationDefinition',
+              operation: operationType,
+            },
+          ],
+        } as unknown as DocumentNode,
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      }) as unknown as Operation;
 
     it('should trigger refreshToken on unauthenticated error', async () => {
       await import('./index');
@@ -902,6 +946,102 @@ describe('Apollo Client Configuration', () => {
 
       expect(splitPredicate({ query: subscriptionQuery })).toBe(true);
       expect(splitPredicate({ query: otherQuery })).toBe(false);
+    });
+
+    it('should not show API unavailable toast for subscription network errors', async () => {
+      await import('./index');
+
+      const subscriptionOperation = createOperation(
+        'SubscriptionQuery',
+        'subscription',
+      );
+
+      onErrorCallback({
+        networkError: new Error('Network Error'),
+        operation: subscriptionOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
+    it('should not show API unavailable toast for aborted network errors', async () => {
+      await import('./index');
+
+      const queryOperation = createOperation('RegularQuery', 'query');
+
+      const abortError = new Error('The operation was aborted');
+      abortError.name = 'AbortError';
+
+      onErrorCallback({
+        networkError: abortError,
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
+    it('should show API unavailable toast for query network errors', async () => {
+      await import('./index');
+
+      const queryOperation = createOperation('RegularQuery', 'query');
+
+      onErrorCallback({
+        networkError: new Error('Network Error'),
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
+        {
+          toastId: 'apiServer',
+        },
+      );
+    });
+
+    it('should not show API unavailable toast for 4xx query errors', async () => {
+      await import('./index');
+
+      const queryOperation = createOperation('RegularQuery', 'query');
+
+      const badRequestError = new Error(
+        'Response not successful: Received status code 400',
+      ) as Error & { statusCode?: number };
+      badRequestError.statusCode = 400;
+
+      onErrorCallback({
+        networkError: badRequestError,
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
+    it('should show API unavailable toast for 5xx query errors', async () => {
+      await import('./index');
+
+      const queryOperation = createOperation('RegularQuery', 'query');
+
+      const serverError = new Error(
+        'Response not successful: Received status code 503',
+      ) as Error & { statusCode?: number };
+      serverError.statusCode = 503;
+
+      onErrorCallback({
+        networkError: serverError,
+        operation: queryOperation,
+        forward: vi.fn(),
+      });
+
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
+        {
+          toastId: 'apiServer',
+        },
+      );
     });
   });
 });
