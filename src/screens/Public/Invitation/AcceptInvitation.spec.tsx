@@ -285,6 +285,7 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
               organizationId: 'org-1',
               inviteeEmailMasked: null,
               inviteeName: null,
@@ -358,6 +359,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -563,7 +571,20 @@ describe('AcceptInvitation', () => {
       result: {
         data: {
           acceptEventInvitation: {
+            id: null,
+            eventId: null,
+            recurringEventInstanceId: null,
+            invitedBy: null,
+            userId: null,
+            inviteeEmail: null,
+            inviteeName: null,
             invitationToken: 'test-token',
+            status: null,
+            expiresAt: null,
+            respondedAt: null,
+            metadata: null,
+            createdAt: null,
+            updatedAt: null,
           },
         },
       },
