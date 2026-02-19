@@ -1869,6 +1869,7 @@
     "advertisementImageAlt": "विज्ञापन छवि #{{index}} {{name}} के लिए",
     "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
     "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+    "fileUploadError": "फ़ाइल अपलोड करने में त्रुटि: {{fileName}}",
     "invalidArgumentsForAction": "इस क्रिया के लिए अमान्य तर्क।",
     "englishCaptions": "अंग्रेज़ी कैप्शन",
     "preview": "पूर्वावलोकन",

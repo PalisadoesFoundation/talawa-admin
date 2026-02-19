@@ -1874,6 +1874,7 @@
     "advertisementImageAlt": "廣告圖片 #{{index}} 用於 {{name}}",
     "invalidFileType": "無效的文件類型：{{fileName}}",
     "fileTooLarge": "文件太大：{{fileName}}",
+    "fileUploadError": "文件上传错误：{{fileName}}",
     "invalidArgumentsForAction": "此操作的參數無效。",
     "englishCaptions": "英文字幕",
     "preview": "預覽",
