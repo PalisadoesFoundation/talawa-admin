@@ -303,17 +303,17 @@ const VenueModal = ({
       return; // Stop here if not an image
     }
 
-    if (file.size > maxFileSize) {
+    if (!file.size) {
       NotificationToast.error({
-        key: 'fileTooLarge',
+        key: 'emptyFile',
         namespace: 'errors',
       });
       return;
     }
 
-    if (!file.size) {
+    if (file.size > maxFileSize) {
       NotificationToast.error({
-        key: 'emptyFile',
+        key: 'fileTooLarge',
         namespace: 'errors',
       });
       return;
@@ -337,6 +337,7 @@ const VenueModal = ({
         key: 'unknownError',
         namespace: 'errors',
       });
+      setImagePreviewUrl(null);
     }
   };
 
