@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -18,7 +18,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import FundCampaignPledge from './FundCampaignPledge';
 import { MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR } from './Pledges.mocks';
-import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
@@ -478,7 +477,6 @@ describe('Testing Campaign Pledge Screen', () => {
 
   afterEach(() => {
     vi.useRealTimers();
-
     vi.clearAllMocks();
   });
 
@@ -1435,11 +1433,6 @@ describe('Testing Campaign Pledge Screen', () => {
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, '  John Doe  ');
 
-    // Wait for debounce (300ms default) to complete
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
-
     // The onSearchChange callback should have been called with trimmed value and filtered results
     await waitFor(
       () => {
@@ -1455,11 +1448,6 @@ describe('Testing Campaign Pledge Screen', () => {
     await userEvent.click(searchInput);
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Jane');
-
-    // Wait for debounce again
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
 
     await waitFor(() => {
       // Jane Doe should now be visible
@@ -1506,6 +1494,54 @@ describe('Testing Campaign Pledge Screen', () => {
       });
 
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open create pledge modal when Enter is pressed on add pledge button', async () => {
+      vi.setSystemTime(dayjs.utc().add(10, 'day').toDate());
+      renderFundCampaignPledge(link1);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+      });
+
+      const addPledgeBtn = screen.getByTestId('addPledgeBtn');
+      expect(addPledgeBtn).not.toBeDisabled();
+      addPledgeBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByText(translations.createPledge)).toBeInTheDocument();
+      });
+
+      vi.useRealTimers();
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      vi.setSystemTime(dayjs.utc().add(10, 'day').toDate());
+      renderFundCampaignPledge(link1);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+      });
+
+      const addPledgeBtn = screen.getByTestId('addPledgeBtn');
+      await userEvent.click(addPledgeBtn);
+
+      await waitFor(() => {
+        expect(screen.getByText(translations.createPledge)).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText(translations.createPledge),
+        ).not.toBeInTheDocument();
+      });
+
+      vi.useRealTimers();
     });
   });
 });

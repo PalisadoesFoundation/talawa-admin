@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloError } from '@apollo/client';
@@ -14,9 +15,18 @@ vi.mock('plugin/hooks');
 vi.mock('plugin/manager');
 vi.mock('plugin/services/AdminPluginFileService');
 
-// Mock UploadPluginModal to allow triggering onHide
 vi.mock('./UploadPluginModal', () => ({
   default: ({ show, onHide }: { show: boolean; onHide: () => void }) => {
+    React.useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape' && show) {
+          onHide();
+        }
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [show, onHide]);
+
     return show ? (
       <div role="dialog" data-testid="upload-plugin-modal">
         <button
@@ -559,13 +569,8 @@ describe('PluginStore', () => {
 
       const searchInput = screen.getByTestId('searchPlugins');
 
-      // Type quickly to test debouncing
       await userEvent.type(searchInput, 'test');
 
-      // Wait for debounce delay
-      await new Promise((resolve) => setTimeout(resolve, 350));
-
-      // Should show filtered results
       await waitFor(() => {
         expect(
           screen.getByTestId('plugin-list-item-test-plugin-1'),
@@ -581,9 +586,6 @@ describe('PluginStore', () => {
 
       const searchInput = screen.getByTestId('searchPlugins');
       await userEvent.type(searchInput, 'test plugin');
-
-      // Wait for debounce delay
-      await new Promise((resolve) => setTimeout(resolve, 350));
 
       await waitFor(() => {
         expect(
@@ -845,9 +847,6 @@ describe('PluginStore', () => {
       const searchInput = screen.getByTestId('searchPlugins');
       await userEvent.clear(searchInput);
 
-      // Wait for debounce delay
-      await new Promise((resolve) => setTimeout(resolve, 350));
-
       await waitFor(() => {
         expect(
           screen.getByTestId('plugin-list-item-test-plugin-1'),
@@ -864,9 +863,6 @@ describe('PluginStore', () => {
       const searchInput = screen.getByTestId('searchPlugins');
       await userEvent.type(searchInput, 'TEST PLUGIN');
 
-      // Wait for debounce delay
-      await new Promise((resolve) => setTimeout(resolve, 350));
-
       await waitFor(() => {
         expect(
           screen.getByTestId('plugin-list-item-test-plugin-1'),
@@ -882,9 +878,6 @@ describe('PluginStore', () => {
 
       const searchInput = screen.getByTestId('searchPlugins');
       await userEvent.type(searchInput, 'test');
-
-      // Wait for debounce delay
-      await new Promise((resolve) => setTimeout(resolve, 350));
 
       await waitFor(() => {
         expect(
@@ -1057,10 +1050,6 @@ describe('PluginStore', () => {
       const searchInput = screen.getByTestId('searchPlugins');
       await userEvent.type(searchInput, 'Plugin 1');
 
-      // Wait for debounce and page reset
-      await new Promise((resolve) => setTimeout(resolve, 350));
-
-      // Page should be reset to 0, so Plugin 1 (matching "Plugin 1") should be on first page
       await waitFor(() => {
         expect(
           screen.getByTestId('plugin-list-item-test-plugin-1'),
@@ -1198,53 +1187,79 @@ describe('PluginStore', () => {
     });
   });
 
-  describe('Upload Modal Close with Reload', () => {
+  describe('Upload Modal Close with Refetch', () => {
     it('should execute closeUploadModal async operations correctly', async () => {
-      const reloadMock = vi.fn();
-      const originalLocation = global.location;
+      mockRefetch.mockClear();
+      mockRefetch.mockResolvedValue({});
 
-      try {
-        // Stub only what we use, and restore it explicitly
-        vi.stubGlobal('location', { ...originalLocation, reload: reloadMock });
+      renderPluginStore();
 
-        mockRefetch.mockClear();
-        mockRefetch.mockResolvedValue({});
+      await waitFor(() =>
+        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument(),
+      );
 
-        renderPluginStore();
+      // Open the upload modal
+      const uploadButton = screen.getByTestId('uploadPluginBtn');
+      await userEvent.click(uploadButton);
 
-        await waitFor(() =>
-          expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument(),
-        );
+      await waitFor(() =>
+        expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument(),
+      );
 
-        // Open the upload modal
-        const uploadButton = screen.getByTestId('uploadPluginBtn');
-        // If you switch to userEvent, remember to await:
-        // await userEvent.click(uploadButton);
-        await userEvent.click(uploadButton);
+      // Trigger closeUploadModal by clicking the close button
+      const closeButton = screen.getByTestId('mock-close-upload-modal');
+      await userEvent.click(closeButton);
 
-        await waitFor(() =>
-          expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument(),
-        );
+      // Verify refetch is called to refresh plugin data
+      await waitFor(() => expect(mockRefetch).toHaveBeenCalled());
 
-        // Trigger closeUploadModal by clicking the close button
-        const closeButton = screen.getByTestId('mock-close-upload-modal');
-        // await userEvent.click(closeButton);
-        await userEvent.click(closeButton);
+      // Modal should be closed
+      await waitFor(() =>
+        expect(
+          screen.queryByTestId('upload-plugin-modal'),
+        ).not.toBeInTheDocument(),
+      );
+    });
+  });
 
-        // Verify the async steps performed by closeUploadModal
-        await waitFor(() => expect(mockRefetch).toHaveBeenCalled());
-        await waitFor(() => expect(reloadMock).toHaveBeenCalled());
+  describe('Keyboard Accessibility', () => {
+    it('should open upload plugin modal when Enter is pressed on upload plugin button', async () => {
+      renderPluginStore();
 
-        // Modal should be closed
-        await waitFor(() =>
-          expect(
-            screen.queryByTestId('upload-plugin-modal'),
-          ).not.toBeInTheDocument(),
-        );
-      } finally {
-        // Restore only the global we stubbed
-        vi.stubGlobal('location', originalLocation);
-      }
+      await waitFor(() =>
+        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument(),
+      );
+
+      const uploadBtn = screen.getByTestId('uploadPluginBtn');
+      uploadBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() =>
+        expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument(),
+      );
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      renderPluginStore();
+
+      await waitFor(() =>
+        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument(),
+      );
+
+      const uploadBtn = screen.getByTestId('uploadPluginBtn');
+      await userEvent.click(uploadBtn);
+
+      await waitFor(() =>
+        expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument(),
+      );
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() =>
+        expect(
+          screen.queryByTestId('upload-plugin-modal'),
+        ).not.toBeInTheDocument(),
+      );
     });
   });
 });

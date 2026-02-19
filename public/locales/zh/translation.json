@@ -1,4 +1,5 @@
 {
+  "workshops": "研讨会",
   "securedRouteForUser": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
@@ -14,6 +15,7 @@
   "customRecurrence": "自定义重复",
   "frequency": "频率",
   "repeatsEvery": "每重复一次",
+  "repeatsOn": "重复开启",
   "day": "天",
   "week": "周",
   "month": "月",
@@ -1403,6 +1405,10 @@
     "tags": "标签",
     "invalidFileType": "无效的文件类型",
     "fileTooLarge": "文件过大",
+    "ascendingOrder": "升序",
+    "descendingOrder": "降序",
+    "searchCreatedEvents": "搜索已创建的活动",
+    "sortByName": "按名称排序",
     "memberDetailNumberExample": "例如: 1234",
     "memberDetailExampleLane": "例如: 街道名称",
     "memberDetailPostalExample": "例如: 邮政编码",
@@ -1796,7 +1802,9 @@
     "presetThisMonth": "本月",
     "presetNext7Days": "未来 7 天",
     "presetNext30Days": "未来 30 天",
-    "presetNextMonth": "下个月"
+    "presetNextMonth": "下个月",
+    "repeatsOn": "重复开启",
+    "select": "请选择"
   },
   "userEventCard": {
     "failedToRegister": "无法注册该活动",

@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`InterfaceEventActionItemsProps`\>
 
-Defined in: [src/components/AdminPortal/EventManagement/EventActionItems/EventActionItems.tsx:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventActionItems/EventActionItems.tsx#L76)
+Defined in: [src/components/AdminPortal/EventManagement/EventActionItems/EventActionItems.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventActionItems/EventActionItems.tsx#L68)

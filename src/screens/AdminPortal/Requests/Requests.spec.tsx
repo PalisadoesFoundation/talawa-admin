@@ -293,7 +293,7 @@ afterAll(() => {
 });
 
 describe('Testing Requests screen', () => {
-  // Helper factories to reduce mock repetition
+  // Helper factories to reduce mock repetition in tests
   const makeOrgListMock = (orgOverrides: Partial<unknown> = {}) => ({
     request: { query: ORGANIZATION_LIST },
     result: {
