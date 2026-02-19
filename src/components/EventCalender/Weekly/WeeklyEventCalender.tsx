@@ -108,10 +108,10 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
 
   const renderTimeColumn = (): JSX.Element => {
     return (
-      <div className={styles.timeColumn}>
-        <div className={styles.timeHeader}></div>
+      <div className={styles.timeColumn} role="presentation">
+        <div className={styles.timeHeader} role="presentation"></div>
         {timeSlots.map((hour) => (
-          <div key={hour} className={styles.timeSlot}>
+          <div key={hour} className={styles.timeSlot} role="presentation">
             <span className={styles.timeLabel}>
               {dayjs().hour(hour).minute(0).format('h A')}
             </span>
@@ -119,6 +119,26 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
         ))}
       </div>
     );
+  };
+
+  const handleDayKeyDown = (
+    e: React.KeyboardEvent<HTMLDivElement>,
+    index: number,
+  ): void => {
+    const columns =
+      document.querySelectorAll<HTMLDivElement>('[data-weekly-col]');
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const next = columns[index + 1];
+      if (next) next.focus();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prev = columns[index - 1];
+      if (prev) prev.focus();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      (e.currentTarget as HTMLElement).click();
+    }
   };
 
   const renderWeekDays = (): JSX.Element[] => {
@@ -141,25 +161,41 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
           );
         }) || [];
 
+      const dayLabel = dayjs(tempDate).format('dddd, MMMM D, YYYY');
+      const isToday = dayjs(tempDate).isSame(dayjs(), 'day');
+
       days.push(
-        <div key={i} className={styles.dayColumn}>
+        <div
+          key={i}
+          className={styles.dayColumn}
+          role="gridcell"
+          aria-label={dayLabel}
+          tabIndex={0}
+          data-weekly-col={i}
+          onKeyDown={(e) => handleDayKeyDown(e, i)}
+        >
           <div
             className={`${styles.dayHeader} ${
-              dayjs(tempDate).isSame(dayjs(), 'day')
-                ? styles.todayHighlight
-                : ''
+              isToday ? styles.todayHighlight : ''
             }`}
+            role="columnheader"
+            aria-label={dayLabel}
           >
-            <span className={styles.dayName}>
+            <span className={styles.dayName} aria-hidden="true">
               {dayjs(tempDate).format('ddd')}
             </span>
-            <span className={styles.dayDate}>
+            <span className={styles.dayDate} aria-hidden="true">
               {dayjs(tempDate).format('D')}
             </span>
           </div>
-          <div className={styles.dayGrid}>
+          <div className={styles.dayGrid} role="presentation">
             {timeSlots.map((hour) => (
-              <div key={hour} className={styles.gridCell}></div>
+              <div
+                key={hour}
+                className={styles.gridCell}
+                role="row"
+                aria-label={dayjs().hour(hour).minute(0).format('h A')}
+              ></div>
             ))}
             {eventsForDate.map((event) => {
               return (
@@ -195,10 +231,19 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <div className={styles.weeklyCalendar}>
+      <div
+        className={styles.weeklyCalendar}
+        data-testid="weekly-calendar-container"
+      >
         <div className={styles.calendarBody}>
           {renderTimeColumn()}
-          <div className={styles.weekGrid}>{renderWeekDays()}</div>
+          <div
+            className={styles.weekGrid}
+            role="grid"
+            aria-label="Weekly calendar view"
+          >
+            {renderWeekDays()}
+          </div>
         </div>
       </div>
     </ErrorBoundaryWrapper>

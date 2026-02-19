@@ -605,4 +605,178 @@ describe('WeeklyEventCalender Component', () => {
 
     expect(screen.getAllByText('Multi-Day Event').length).toBeGreaterThan(0);
   });
+
+  // ── Accessibility ────────────────────────────────────────────────────────
+
+  it('renders the week grid with role="grid" and aria-label', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const grid = screen.getByRole('grid', { name: /weekly calendar view/i });
+    expect(grid).toBeInTheDocument();
+  });
+
+  it('renders seven day columns with role="gridcell" and correct aria-label', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const cells = screen.getAllByRole('gridcell');
+    expect(cells).toHaveLength(7);
+
+    // Each gridcell aria-label should match the full date string
+    const startOfWeek = dayjs(today).startOf('week');
+    for (let i = 0; i < 7; i++) {
+      const day = startOfWeek.add(i, 'day');
+      const expectedLabel = day.format('dddd, MMMM D, YYYY');
+      expect(cells[i]).toHaveAttribute('aria-label', expectedLabel);
+    }
+  });
+
+  it('renders day headers with role="columnheader" and aria-label', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const headers = screen.getAllByRole('columnheader');
+    expect(headers).toHaveLength(7);
+
+    const startOfWeek = dayjs(today).startOf('week');
+    for (let i = 0; i < 7; i++) {
+      const day = startOfWeek.add(i, 'day');
+      const expectedLabel = day.format('dddd, MMMM D, YYYY');
+      expect(headers[i]).toHaveAttribute('aria-label', expectedLabel);
+    }
+  });
+
+  it('renders time slots with role="row"', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    // 7 days × 24 hours = 168 row cells
+    const rows = screen.getAllByRole('row');
+    expect(rows).toHaveLength(7 * 24);
+  });
+
+  it('day columns are focusable via tabIndex=0', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const cells = screen.getAllByRole('gridcell');
+    cells.forEach((cell) => {
+      expect(cell).toHaveAttribute('tabIndex', '0');
+    });
+  });
+
+  it('ArrowRight key moves focus to the next day column', async () => {
+    const { container } = renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const cells =
+      container.querySelectorAll<HTMLDivElement>('[data-weekly-col]');
+    expect(cells).toHaveLength(7);
+
+    // Focus first column, press ArrowRight
+    cells[0].focus();
+    cells[0].dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }),
+    );
+
+    // Second column should now be focused
+    expect(document.activeElement).toBe(cells[1]);
+  });
+
+  it('ArrowLeft key moves focus to the previous day column', async () => {
+    const { container } = renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const cells =
+      container.querySelectorAll<HTMLDivElement>('[data-weekly-col]');
+    expect(cells).toHaveLength(7);
+
+    // Focus second column, press ArrowLeft
+    cells[1].focus();
+    cells[1].dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+    );
+
+    // First column should now be focused
+    expect(document.activeElement).toBe(cells[0]);
+  });
+
+  it('ArrowRight on the last column does not throw or move focus elsewhere', () => {
+    const { container } = renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const cells =
+      container.querySelectorAll<HTMLDivElement>('[data-weekly-col]');
+    const lastCell = cells[cells.length - 1];
+    lastCell.focus();
+    expect(() => {
+      lastCell.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }),
+      );
+    }).not.toThrow();
+    // Focus stays on last cell since there is no next column
+    expect(document.activeElement).toBe(lastCell);
+  });
+
+  it('renders with data-testid="weekly-calendar-container" on the root element', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getByTestId('weekly-calendar-container')).toBeInTheDocument();
+  });
 });
