@@ -253,6 +253,12 @@ const delayedMockClient = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
+const noopLink = new ApolloLink((_operation) => {
+  return new Observable((observer) => {
+    observer.complete();
+  });
+});
+
 vi.mock('react-router-dom', async () => {
   const actual = (await vi.importActual(
     'react-router-dom',
@@ -2333,6 +2339,76 @@ describe('Validation', () => {
       expect(revokeObjectURLMock).toHaveBeenCalledWith(
         'blob:http://localhost:3000/unmount-test',
       );
+    });
+
+    test('shows error if capacity is invalid in edit mode and name unchanged', async () => {
+      const user = userEvent.setup();
+
+      const venueData = {
+        node: {
+          id: 'venue-1',
+          name: 'Test Venue',
+          description: 'Some description',
+          capacity: 100,
+          image: 'image.png',
+        },
+      };
+
+      renderVenueModal({ ...defaultProps, venueData, edit: true }, noopLink);
+
+      const nameInput = screen.getByTestId('venueTitleInput');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Test Venue');
+
+      const capacityInput = screen.getByTestId('venueCapacityInput');
+      await user.clear(capacityInput);
+      await user.type(capacityInput, '-5');
+
+      await user.click(screen.getByTestId('updateVenueBtn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'organizationVenues.venueCapacityError',
+          namespace: 'translation',
+        });
+      });
+    });
+
+    test('shows error if venue image URL causes URL() to throw', async () => {
+      const originalURL = global.URL;
+
+      global.URL = class {
+        constructor() {
+          throw new Error('Invalid URL');
+        }
+        toString() {
+          return '';
+        }
+      } as unknown as typeof URL;
+
+      const invalidVenueData = {
+        node: {
+          id: 'venue-1',
+          name: 'Test Venue',
+          description: 'Test Description',
+          capacity: 100,
+          image: 'image.png',
+        },
+      };
+
+      renderVenueModal(
+        { ...defaultProps, venueData: invalidVenueData },
+        noopLink,
+      );
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+      });
+
+      global.URL = originalURL;
     });
   });
 });

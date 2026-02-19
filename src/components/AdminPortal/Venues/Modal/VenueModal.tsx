@@ -63,6 +63,8 @@ interface InterfaceVenueFormState {
   attachments?: File[];
 }
 
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const;
 const VenueModal = ({
   show,
   onHide,
@@ -285,61 +287,70 @@ const VenueModal = ({
 
   const { name, description, capacity } = formState;
   // Handle file uploads
-  const handleFileUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
+  const handleFileUpload = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>): Promise<void> => {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
 
-    const file = files[0];
-    const maxFileSize = 5 * 1024 * 1024; // 5MB
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+      const file = files[0];
+      const resetInput = (): void => {
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      };
 
-    if (!allowedTypes.includes(file.type)) {
-      NotificationToast.error({
-        key: 'invalidFileType',
-        namespace: 'errors',
-      });
-      return; // Stop here if not an image
-    }
-
-    if (!file.size) {
-      NotificationToast.error({
-        key: 'emptyFile',
-        namespace: 'errors',
-      });
-      return;
-    }
-
-    if (file.size > maxFileSize) {
-      NotificationToast.error({
-        key: 'fileTooLarge',
-        namespace: 'errors',
-      });
-      return;
-    }
-
-    // Only try creating preview URL for valid files
-    try {
-      if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(imagePreviewUrl);
+      if (
+        !ALLOWED_IMAGE_TYPES.includes(
+          file.type as (typeof ALLOWED_IMAGE_TYPES)[number],
+        )
+      ) {
+        NotificationToast.error({
+          key: 'invalidFileType',
+          namespace: 'errors',
+        });
+        resetInput();
+        return; // Stop here if not an image
       }
 
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreviewUrl(previewUrl);
+      if (!file.size) {
+        NotificationToast.error({
+          key: 'emptyFile',
+          namespace: 'errors',
+        });
+        resetInput();
+        return;
+      }
 
-      setFormState((prev) => ({
-        ...prev,
-        attachments: [file],
-      }));
-    } catch {
-      NotificationToast.error({
-        key: 'unknownError',
-        namespace: 'errors',
-      });
-      setImagePreviewUrl(null);
-    }
-  };
+      if (file.size > MAX_FILE_SIZE) {
+        NotificationToast.error({
+          key: 'fileTooLarge',
+          namespace: 'errors',
+        });
+        resetInput();
+        return;
+      }
+
+      // Only try creating preview URL for valid files
+      try {
+        if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(imagePreviewUrl);
+        }
+
+        const previewUrl = URL.createObjectURL(file);
+        setImagePreviewUrl(previewUrl);
+
+        setFormState((prev) => ({
+          ...prev,
+          attachments: [file],
+        }));
+      } catch {
+        NotificationToast.error({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+        setImagePreviewUrl(null);
+      }
+    },
+    [imagePreviewUrl],
+  );
 
   return (
     <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
@@ -379,6 +390,7 @@ const VenueModal = ({
           required
           onChange={(v) => setFormState((prev) => ({ ...prev, capacity: v }))}
           className={styles.inputField}
+          data-testid="venueCapacityInput"
         />
         <label htmlFor="venueImgUrl">{t('image')}</label>
         <input
