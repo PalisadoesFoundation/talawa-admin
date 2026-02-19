@@ -107,9 +107,6 @@ function organizationEvents(): JSX.Element {
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
 
-  const showCreateEventModal = (): void => createEventModal.open();
-  const hideCreateEventModal = (): void => createEventModal.close();
-
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
   };
@@ -276,7 +273,7 @@ function organizationEvents(): JSX.Element {
               actions={
                 <Button
                   className={styles.dropdown}
-                  onClick={showCreateEventModal}
+                  onClick={createEventModal.open}
                   data-testid="createEventModalBtn"
                   data-cy="createEventModalBtn"
                 >
@@ -303,7 +300,7 @@ function organizationEvents(): JSX.Element {
 
         <CreateEventModal
           isOpen={createEventModal.isOpen}
-          onClose={hideCreateEventModal}
+          onClose={createEventModal.close}
           onEventCreated={refetchEvents}
           currentUrl={currentUrl || ''}
         />

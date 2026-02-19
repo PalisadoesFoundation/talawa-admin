@@ -1358,4 +1358,44 @@ describe('Manage Tag Page', () => {
       });
     });
   });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open add people modal when Enter is pressed on add people button', async () => {
+      renderManageTag(link);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
+      });
+
+      const addBtn = screen.getByTestId('addPeopleToTagBtn');
+      addBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('addPeopleToTagModal')).toBeInTheDocument();
+      });
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      renderManageTag(link);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByTestId('addPeopleToTagBtn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('addPeopleToTagModal')).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('addPeopleToTagModal'),
+        ).not.toBeInTheDocument();
+      });
+    });
+  });
 });

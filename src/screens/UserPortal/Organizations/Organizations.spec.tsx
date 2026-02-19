@@ -199,7 +199,7 @@ const baseUserFields = {
   natalSex: 'Male',
   naturalLanguageCode: 'en',
   postalCode: '12345',
-  role: 'user',
+  role: 'regular',
   state: 'State',
   updatedAt: '1234567890',
   workPhoneNumber: '1234567890',
@@ -213,7 +213,7 @@ const CURRENT_USER_VERIFIED_MOCK = {
   },
   result: {
     data: {
-      currentUser: {
+      user: {
         __typename: 'User',
         ...baseUserFields,
         isEmailAddressVerified: true,
@@ -229,7 +229,7 @@ const CURRENT_USER_UNVERIFIED_MOCK = {
   },
   result: {
     data: {
-      currentUser: {
+      user: {
         __typename: 'User',
         ...baseUserFields,
         isEmailAddressVerified: false,
@@ -245,7 +245,7 @@ const CURRENT_USER_NULL_MOCK = {
   },
   result: {
     data: {
-      currentUser: null,
+      user: null,
     },
   },
 };
@@ -478,8 +478,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
   cleanup();
+  vi.restoreAllMocks();
   clearAllItems();
   Object.defineProperty(window, 'innerWidth', {
     writable: true,
@@ -503,10 +503,10 @@ test('Screen should be rendered properly', async () => {
 
   await waitFor(() => {
     expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
   });
-  expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-  expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
-  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 });
 
 test('should search organizations when pressing Enter key', async () => {
@@ -568,6 +568,8 @@ test('should search organizations when clicking search button', async () => {
 });
 
 test('Mode dropdown switches list correctly', async () => {
+  setItem('role', 'administrator');
+
   render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -650,15 +652,22 @@ test('Pagination basic functionality works', async () => {
   expect(rowsPerPageSelect).toHaveValue('5');
 
   await userEvent.selectOptions(rowsPerPageSelect, '10');
-  expect(rowsPerPageSelect).toHaveValue('10');
+  await waitFor(() => {
+    expect(rowsPerPageSelect).toHaveValue('10');
+  });
 
   const currentPage = screen.getByTestId('current-page');
-  expect(currentPage.textContent).toBe('0');
-
+  await waitFor(() => {
+    expect(currentPage.textContent).toBe('0');
+  });
   const nextButton = screen.getByTestId('next-page');
-  expect(nextButton).toBeDisabled();
+  await waitFor(() => {
+    expect(nextButton).toBeDisabled();
+  });
   await userEvent.click(nextButton);
-  expect(screen.getByTestId('current-page').textContent).toBe('0');
+  await waitFor(() => {
+    expect(screen.getByTestId('current-page').textContent).toBe('0');
+  });
 });
 
 test('should handle resize event and hide drawer on small screens', async () => {
@@ -886,6 +895,8 @@ test('should handle mode switching to joined organizations', async () => {
 });
 
 test('should handle mode switching to created organizations', async () => {
+  setItem('role', 'administrator');
+
   render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -909,6 +920,41 @@ test('should handle mode switching to created organizations', async () => {
 
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+  });
+});
+
+test('should not show created organizations option for user role', async () => {
+  // Don't set role or set it to 'user' - both should have the same effect
+  setItem('role', 'user');
+
+  render(
+    <MockedProvider link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
+  });
+
+  // Open the mode dropdown
+  const modeButton = screen.getByTestId('modeChangeBtn-toggle');
+  await userEvent.click(modeButton);
+
+  await waitFor(() => {
+    // Should have Mode 0 (All Organizations) and Mode 1 (Joined Organizations)
+    expect(screen.getByTestId('modeChangeBtn-item-0')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-item-1')).toBeInTheDocument();
+    // Should NOT have Mode 2 (Created Organizations)
+    expect(
+      screen.queryByTestId('modeChangeBtn-item-2'),
+    ).not.toBeInTheDocument();
   });
 });
 
@@ -1043,6 +1089,8 @@ test('should handle missing organizationsWhereMember in joined organizations', a
 });
 
 test('should handle null createdOrganizations in created organizations', async () => {
+  setItem('role', 'administrator');
+
   const nullCreatedMocks = [
     COMMUNITY_TIMEOUT_MOCK,
     {
@@ -1108,6 +1156,8 @@ test('should handle null createdOrganizations in created organizations', async (
 });
 
 test('should handle missing createdOrganizations field', async () => {
+  setItem('role', 'administrator');
+
   const missingUserMocks = [
     COMMUNITY_TIMEOUT_MOCK,
     {
@@ -1478,22 +1528,24 @@ describe('Email Verification Warning', () => {
     const dismissBtn = screen.getByLabelText(/close/i);
     await userEvent.click(dismissBtn);
 
-    expect(
-      screen.queryByTestId('email-verification-warning'),
-    ).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('email-verification-warning'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('should show warning from localStorage fallback when CURRENT_USER has no data', async () => {
     // Set the localStorage flag BEFORE rendering so the fallback branch fires
     setItem('emailNotVerified', 'true');
 
-    // Use a CURRENT_USER mock that returns null/undefined currentUser
+    // Use a CURRENT_USER mock that returns null user
     const noUserDataLink = new StaticMockLink(
       [
         COMMUNITY_TIMEOUT_MOCK,
         {
           request: { query: CURRENT_USER, variables: {} },
-          result: { data: { currentUser: null } },
+          result: { data: { user: null } },
         },
         ORGANIZATION_FILTER_LIST_MOCK,
       ],
@@ -1662,6 +1714,8 @@ test('should search in joined mode (mode 1) via doSearch', async () => {
 });
 
 test('should search in created mode (mode 2) via doSearch', async () => {
+  setItem('role', 'administrator');
+
   const createdSearchMocks = [
     COMMUNITY_TIMEOUT_MOCK,
     CURRENT_USER_VERIFIED_MOCK,
@@ -1997,6 +2051,8 @@ test('should search joined organizations in mode 1', async () => {
 });
 
 test('should search created organizations in mode 2', async () => {
+  setItem('role', 'administrator');
+
   const createdSearchLink = new StaticMockLink(
     [
       COMMUNITY_TIMEOUT_MOCK,

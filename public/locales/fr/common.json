@@ -303,8 +303,19 @@
   "searchPlaceholder": "Rechercher...",
   "noOptionsFound": "Aucune option trouvée",
   "noUserId": "ID utilisateur non disponible",
+  "noOrgId": "ID d'organisation non disponible",
   "noTagsFound": "Aucune étiquette trouvée",
   "searchTags": "Rechercher des étiquettes",
   "sortBy": "Trier par",
-  "unknownMember": "Membre inconnu"
+  "unknownMember": "Membre inconnu",
+  "workshops": "Ateliers",
+  "previousYear": "Année précédente",
+  "nextYear": "Année suivante",
+  "navigateToProfile": "Naviguer vers le profil",
+  "monthlyOn": "Mensuel le",
+  "loginSuccess": "Bienvenue !",
+  "loginSuccessWithName": "Bienvenue, {{name}} !",
+  "signupSuccess": "Inscription réussie !",
+  "authError": "Erreur d'authentification",
+  "networkError": "Erreur réseau"
 }

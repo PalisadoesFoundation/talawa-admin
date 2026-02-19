@@ -1,18 +1,18 @@
 import type { ReactNode } from 'react';
 import React from 'react';
-import { renderHook } from '@testing-library/react';
+import { cleanup, renderHook } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { toast } from 'react-toastify';
 import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import useSession from './useSession';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { BrowserRouter } from 'react-router';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    info: vi.fn(),
+// Mock NotificationToast
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     warning: vi.fn(),
     error: vi.fn(),
   },
@@ -78,19 +78,20 @@ const MOCKS = [
     },
   },
 ];
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+  vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
+  vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
+});
+
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+});
+
 describe('useSession Hook', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
-    vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-    vi.useRealTimers();
-    vi.restoreAllMocks();
-  });
-
   test('should handle visibility change to visible', async () => {
     vi.useFakeTimers();
 
@@ -122,10 +123,7 @@ describe('useSession Hook', () => {
         'keydown',
         expect.any(Function),
       );
-      expect(toast.warning).toHaveBeenCalledWith(
-        'sessionWarning',
-        expect.any(Object),
-      );
+      expect(NotificationToast.warning).toHaveBeenCalledWith('sessionWarning');
     });
 
     vi.useRealTimers();
@@ -162,7 +160,7 @@ describe('useSession Hook', () => {
         'keydown',
         expect.any(Function),
       );
-      expect(toast.warning).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
     });
 
     vi.useRealTimers();
@@ -222,15 +220,14 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledTimes(2);
+      expect(NotificationToast.warning).toHaveBeenCalledTimes(2);
 
-      expect(toast.warning).toHaveBeenNthCalledWith(
+      expect(NotificationToast.warning).toHaveBeenNthCalledWith(
         1,
         'sessionWarning',
-        expect.any(Object),
       );
 
-      expect(toast.warning).toHaveBeenNthCalledWith(
+      expect(NotificationToast.warning).toHaveBeenNthCalledWith(
         2,
         'sessionLogOut',
         expect.objectContaining({
@@ -256,10 +253,7 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(15 * 60 * 1000);
 
     await vi.waitFor(() =>
-      expect(toast.warning).toHaveBeenCalledWith(
-        'sessionWarning',
-        expect.any(Object),
-      ),
+      expect(NotificationToast.warning).toHaveBeenCalledWith('sessionWarning'),
     );
 
     vi.useRealTimers();
@@ -476,7 +470,7 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'sessionLogOut',
         expect.objectContaining({ autoClose: false }),
       );
@@ -501,7 +495,7 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'sessionLogOut',
         expect.objectContaining({ autoClose: false }),
       );
@@ -533,16 +527,13 @@ test('should extend session when called directly', async () => {
   vi.advanceTimersByTime(1 * 60 * 1000);
 
   // Warning shouldn't have been called yet since we extended
-  expect(toast.warning).not.toHaveBeenCalled();
+  expect(NotificationToast.warning).not.toHaveBeenCalled();
 
   // Advance to new warning time
   vi.advanceTimersByTime(14 * 60 * 1000);
 
   await vi.waitFor(() =>
-    expect(toast.warning).toHaveBeenCalledWith(
-      'sessionWarning',
-      expect.any(Object),
-    ),
+    expect(NotificationToast.warning).toHaveBeenCalledWith('sessionWarning'),
   );
 
   vi.useRealTimers();
@@ -578,6 +569,7 @@ test('should properly clean up on unmount', () => {
   );
 
   documentRemoveEventListener.mockRestore();
+  windowRemoveEventListener.mockRestore();
 });
 test('should handle missing community data', async () => {
   vi.useFakeTimers();
@@ -637,34 +629,43 @@ test('should handle missing community data', async () => {
   vi.useRealTimers();
 });
 
-test('should handle event listener errors gracefully', async () => {
-  const consoleErrorSpy = vi.spyOn(global, 'setTimeout');
+test('should propagate event listener errors', () => {
+  const consoleErrorSpy = vi
+    .spyOn(console, 'error')
+    .mockImplementation(() => {});
   const mockError = new Error('Event listener error');
 
-  // Mock addEventListener to throw an error
-  const addEventListenerSpy = vi
-    .spyOn(window, 'addEventListener')
-    .mockImplementationOnce(() => {
-      throw mockError;
+  // Store the original implementation
+  const originalRemoveEventListener = window.removeEventListener;
+
+  // Mock removeEventListener to throw for specific events
+  const removeEventListenerSpy = vi
+    .spyOn(window, 'removeEventListener')
+    .mockImplementation((event, listener, options) => {
+      if (event === 'mousemove' || event === 'keydown') {
+        throw mockError;
+      }
+      return originalRemoveEventListener.call(window, event, listener, options);
     });
 
-  try {
-    const { result } = renderHook(() => useSession(), {
-      wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS}>
-          <BrowserRouter>{children}</BrowserRouter>
-        </MockedProvider>
-      ),
-    });
+  const { result } = renderHook(() => useSession(), {
+    wrapper: ({ children }: { children?: ReactNode }) => (
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>{children}</BrowserRouter>
+      </MockedProvider>
+    ),
+  });
 
+  // The error should propagate since it's not handled
+  expect(() => {
     result.current.startSession();
-  } catch {
-    // Error should be caught and logged
-    expect(consoleErrorSpy).toHaveBeenCalled();
-  }
+  }).toThrow(mockError);
+
+  // console.error might not be called since the error isn't caught
+  expect(consoleErrorSpy).not.toHaveBeenCalled();
 
   consoleErrorSpy.mockRestore();
-  addEventListenerSpy.mockRestore();
+  removeEventListenerSpy.mockRestore();
 });
 
 test('should handle session timeout data updates', async () => {
@@ -752,10 +753,7 @@ test('should handle edge case when visibility state is neither visible nor hidde
   vi.advanceTimersByTime(15 * 60 * 1000);
 
   await vi.waitFor(() => {
-    expect(toast.warning).toHaveBeenCalledWith(
-      'sessionWarning',
-      expect.any(Object),
-    );
+    expect(NotificationToast.warning).toHaveBeenCalledWith('sessionWarning');
   });
 
   vi.useRealTimers();

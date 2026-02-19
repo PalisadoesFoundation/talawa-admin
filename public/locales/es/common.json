@@ -303,8 +303,19 @@
   "searchPlaceholder": "Buscar...",
   "noOptionsFound": "No se encontraron opciones",
   "noUserId": "ID de usuario no disponible",
+  "noOrgId": "Id de organización no disponible",
   "noTagsFound": "No se encontraron etiquetas",
   "searchTags": "Buscar etiquetas",
   "sortBy": "Ordenar por",
-  "unknownMember": "Miembro desconocido"
+  "unknownMember": "Miembro desconocido",
+  "workshops": "Talleres",
+  "previousYear": "Año anterior",
+  "nextYear": "Siguiente año",
+  "navigateToProfile": "Navegar al perfil",
+  "monthlyOn": "Mensual el",
+  "loginSuccess": "¡Bienvenido!",
+  "loginSuccessWithName": "¡Bienvenido, {{name}}!",
+  "signupSuccess": "¡Registro exitoso!",
+  "authError": "Error de autenticación",
+  "networkError": "Error de red"
 }

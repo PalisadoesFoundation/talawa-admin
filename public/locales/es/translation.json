@@ -1,15 +1,21 @@
 {
+  "workshops": "Talleres",
   "securedRouteForUser": {
     "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
   },
   "securedRoute": {
     "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
   },
+  "oauth": {
+    "continueWith": "Continuar con {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "customRecurrence": "Recurrencia personalizada",
   "frequency": "Frecuencia",
   "repeatsEvery": "Se repite cada",
+  "repeatsOn": "Se repite en",
   "day": "Día",
   "week": "Semana",
   "month": "Mes",
@@ -192,7 +198,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menú",
     "users": "usuarios",
-    "logout": "cerrar sesión"
+    "logout": "cerrar sesión",
+    "notAvailable": "No disponible"
   },
   "leftDrawerOrg": {
     "Dashboard": "Panel de control",
@@ -317,6 +324,7 @@
     "email": "Correo electrónico",
     "accept": "Aceptar",
     "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
+    "errorLoadingRequests": "Error al cargar las solicitudes",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
@@ -1159,7 +1167,9 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "sortOrganizations": "Sort Organizations",
     "noSpammerFound": "No se encontró ningún spammer",
-    "noUsersFound": "No se encontraron usuarios"
+    "noUsersFound": "No se encontraron usuarios",
+    "errorLoadingBlockedUsers": "Error al cargar los datos de los usuarios bloqueados",
+    "errorLoadingMembers": "Error al cargar los datos de los miembros"
   },
   "eventManagement": {
     "name": "Gestión de eventos",
@@ -1373,6 +1383,10 @@
     "tags": "Etiquetas",
     "invalidFileType": "Tipo de archivo no válido",
     "fileTooLarge": "El archivo es demasiado grande",
+    "ascendingOrder": "Orden ascendente",
+    "descendingOrder": "Orden descendente",
+    "searchCreatedEvents": "Buscar eventos creados",
+    "sortByName": "Ordenar por nombre",
     "memberDetailNumberExample": "Ejemplo de número",
     "memberDetailExampleLane": "Ejemplo de calle",
     "memberDetailPostalExample": "Ejemplo de código postal",
@@ -1771,7 +1785,9 @@
     "presetThisMonth": "Este Mes",
     "presetNext7Days": "Próximos 7 Días",
     "presetNext30Days": "Próximos 30 Días",
-    "presetNextMonth": "Próximo Mes"
+    "presetNextMonth": "Próximo Mes",
+    "repeatsOn": "Se repite en",
+    "select": "Seleccionar"
   },
   "userEventCard": {
     "failedToRegister": "Error al registrarse para el evento",
@@ -1887,7 +1903,8 @@
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
     "thisUser": "este usuario",
     "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?",
-    "memberActionsMenu": "Menú de acciones del miembro"
+    "memberActionsMenu": "Menú de acciones del miembro",
+    "editImage": "Editar imagen"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
@@ -1910,7 +1927,10 @@
       "resetButton": "Intentar de nuevo",
       "resetButtonAriaLabel": "Intentar de nuevo"
     },
-    "messageActions": "Acción del mensaje"
+    "messageActions": "Acción del mensaje",
+    "addAttachment": "Agregar archivo adjunto",
+    "removeAttachment": "Eliminar archivo adjunto",
+    "closeReply": "Cerrar Responder"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -2461,7 +2481,8 @@
     "loading": "Cargando...",
     "selectRow": "Seleccionar fila {{rowKey}}",
     "previousYear": "Año anterior",
-    "nextYear": "Siguiente año"
+    "nextYear": "Siguiente año",
+    "member": "Miembro"
   },
   "donation": {
     "amount_label": "Cantidad",
@@ -2562,5 +2583,17 @@
   },
   "csv": {
     "demographics": "Demografía de {{category}}"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "L",
+      "tue": "M",
+      "wed": "X",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S",
+      "sun": "D"
+    },
+    "expandDay": "Expandir día"
   }
 }

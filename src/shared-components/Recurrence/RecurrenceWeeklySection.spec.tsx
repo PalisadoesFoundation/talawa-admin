@@ -1,9 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceWeeklySection } from './RecurrenceWeeklySection';
-import { Frequency, WeekDays, Days } from '../../utils/recurrenceUtils';
+import { Frequency, WeekDays, Days } from 'utils/recurrenceUtils';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 
 const defaultProps = {
   frequency: Frequency.WEEKLY,
@@ -13,18 +15,39 @@ const defaultProps = {
   t: (key: string) => key,
 };
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          repeatsOn: 'Repeats On',
+          select: 'Select',
+        };
+        return translations[key] || key;
+      },
+    }),
+  };
+});
+
+const renderWithI18n = (ui: React.ReactElement) =>
+  render(<I18nextProvider i18n={i18nForTest}>{ui}</I18nextProvider>);
+
 describe('RecurrenceWeeklySection', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
-    vi.clearAllMocks();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {
     it('should render when frequency is WEEKLY', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       expect(screen.getByText('repeatsOn')).toBeInTheDocument();
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
@@ -32,7 +55,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should return null when frequency is not WEEKLY', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <RecurrenceWeeklySection
           {...defaultProps}
           frequency={Frequency.DAILY}
@@ -43,14 +66,14 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should render all 7 day buttons', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       expect(dayButtons).toHaveLength(7);
     });
 
     it('should highlight selected days', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       // Monday (index 1) and Wednesday (index 3) should be selected
@@ -59,7 +82,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should not highlight unselected days', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       // Sunday (index 0) should not be selected
@@ -67,7 +90,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should have correct aria-label for the day group', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const group = screen.getByRole('group');
       expect(group).toHaveAttribute('aria-label', 'repeatsOn');
@@ -76,7 +99,9 @@ describe('RecurrenceWeeklySection', () => {
 
   describe('Props Handling', () => {
     it('should handle undefined byDay prop', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} byDay={undefined} />);
+      renderWithI18n(
+        <RecurrenceWeeklySection {...defaultProps} byDay={undefined} />,
+      );
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       // All days should be unselected (aria-pressed will be undefined/null when byDay is undefined)
@@ -88,7 +113,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should handle empty byDay array', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} byDay={[]} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} byDay={[]} />);
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       // All days should be unselected
@@ -98,7 +123,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should handle all days selected', () => {
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection
           {...defaultProps}
           byDay={[
@@ -122,24 +147,24 @@ describe('RecurrenceWeeklySection', () => {
 
   describe('User Interactions', () => {
     it('should call onDayClick when a day button is clicked', async () => {
-      const user = userEvent.setup();
       const onDayClick = vi.fn();
 
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection {...defaultProps} onDayClick={onDayClick} />,
       );
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       await user.click(dayButtons[0]); // Click Sunday
 
-      expect(onDayClick).toHaveBeenCalledWith(Days[0]);
+      await waitFor(() => {
+        expect(onDayClick).toHaveBeenCalledWith(Days[0]);
+      });
     });
 
     it('should call onDayClick for each day when clicked', async () => {
-      const user = userEvent.setup();
       const onDayClick = vi.fn();
 
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection {...defaultProps} onDayClick={onDayClick} />,
       );
 
@@ -157,7 +182,7 @@ describe('RecurrenceWeeklySection', () => {
     it('should call onDayClick when Enter key is pressed', () => {
       const onDayClick = vi.fn();
 
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection {...defaultProps} onDayClick={onDayClick} />,
       );
 
@@ -184,7 +209,7 @@ describe('RecurrenceWeeklySection', () => {
     it('should call onDayClick when Space key is pressed', () => {
       const onDayClick = vi.fn();
 
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection {...defaultProps} onDayClick={onDayClick} />,
       );
 
@@ -208,10 +233,10 @@ describe('RecurrenceWeeklySection', () => {
       preventDefaultSpy.mockRestore();
     });
 
-    it('should call onWeekdayKeyDown for other keys', () => {
+    it('should call onWeekdayKeyDown for other keys', async () => {
       const onWeekdayKeyDown = vi.fn();
 
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection
           {...defaultProps}
           onWeekdayKeyDown={onWeekdayKeyDown}
@@ -219,11 +244,11 @@ describe('RecurrenceWeeklySection', () => {
       );
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
-      const arrowKeyEvent = {
-        key: 'ArrowRight',
-      } as unknown as React.KeyboardEvent<HTMLButtonElement>;
 
-      fireEvent.keyDown(dayButtons[0], arrowKeyEvent);
+      // Focus the button first
+      await user.click(dayButtons[0]);
+      // Simulate key down with ArrowRight
+      await user.keyboard(`{ArrowRight}`);
 
       expect(onWeekdayKeyDown).toHaveBeenCalled();
       const callArgs = onWeekdayKeyDown.mock.calls[0];
@@ -232,7 +257,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should have correct aria-label for each day button', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       dayButtons.forEach((button) => {
@@ -244,7 +269,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should have tabIndex 0 for keyboard navigation', () => {
-      render(<RecurrenceWeeklySection {...defaultProps} />);
+      renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       dayButtons.forEach((button) => {
@@ -255,7 +280,7 @@ describe('RecurrenceWeeklySection', () => {
 
   describe('Edge Cases', () => {
     it('should handle single day selection', () => {
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection {...defaultProps} byDay={[WeekDays.MO]} />,
       );
 
@@ -265,7 +290,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should handle multiple consecutive days', () => {
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection
           {...defaultProps}
           byDay={[WeekDays.MO, WeekDays.TU, WeekDays.WE]}
@@ -279,7 +304,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should handle non-consecutive days', () => {
-      render(
+      renderWithI18n(
         <RecurrenceWeeklySection
           {...defaultProps}
           byDay={[WeekDays.SU, WeekDays.WE, WeekDays.FR]}
@@ -293,7 +318,7 @@ describe('RecurrenceWeeklySection', () => {
     });
 
     it('should handle frequency changes dynamically', () => {
-      const { rerender } = render(
+      const { rerender } = renderWithI18n(
         <RecurrenceWeeklySection {...defaultProps} />,
       );
 
@@ -312,7 +337,7 @@ describe('RecurrenceWeeklySection', () => {
 
   describe('State Changes', () => {
     it('should update selected state when byDay prop changes', () => {
-      const { rerender } = render(
+      const { rerender } = renderWithI18n(
         <RecurrenceWeeklySection {...defaultProps} byDay={[WeekDays.MO]} />,
       );
 

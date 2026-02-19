@@ -26,8 +26,9 @@
  * - `addPeopleToTagModal`: Test ID for the modal container.
  * - `closeAddPeopleToTagModal`: Test ID for the close button.
  */
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import Button from 'shared-components/Button';
 import type { InterfaceAddPeopleToTagProps } from 'types/AdminPortal/Tag/interface';
 
 const TEST_IDS = {
@@ -40,6 +41,21 @@ const MockAddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const { t: tCommon } = useTranslation('common');
+
+  const handleEscapeKey = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && addPeopleToTagModalIsOpen) {
+        hideAddPeopleToTagModal();
+      }
+    },
+    [addPeopleToTagModalIsOpen, hideAddPeopleToTagModal],
+  );
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleEscapeKey);
+    return () => document.removeEventListener('keydown', handleEscapeKey);
+  }, [handleEscapeKey]);
+
   return (
     <>
       {addPeopleToTagModalIsOpen && (
@@ -52,14 +68,14 @@ const MockAddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           <h2 id="modal-title" className="sr-only">
             {t('addPeopleToTag')}
           </h2>
-          <button
+          <Button
             type="button"
             data-testid={TEST_IDS.CLOSE_BUTTON}
             onClick={hideAddPeopleToTagModal}
             aria-label={tCommon('closeModal')}
           >
             {tCommon('close')}
-          </button>
+          </Button>
         </div>
       )}
     </>

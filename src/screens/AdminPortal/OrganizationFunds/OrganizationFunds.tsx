@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
@@ -29,6 +29,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 const dataGridStyle = {
   ...baseDataGridStyle,
@@ -110,7 +111,7 @@ const organizationFunds = (): JSX.Element => {
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const { isOpen, open, close } = useModalState();
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -118,10 +119,10 @@ const organizationFunds = (): JSX.Element => {
   const [searchText, setSearchText] = useState('');
 
   const handleOpenModal = useCallback(
-    (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
-      setFund(fund);
+    (selectedFund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
+      setFund(selectedFund);
       setFundModalMode(mode);
-      setModalState(true);
+      open();
     },
     [],
   );
@@ -224,7 +225,7 @@ const organizationFunds = (): JSX.Element => {
       field: 'sl_no',
       headerName: tCommon('hash'),
       flex: 1,
-      minWidth: 60,
+      minWidth: 'space-11',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -240,7 +241,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: t('funds.fundName'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -252,7 +253,7 @@ const organizationFunds = (): JSX.Element => {
       field: 'createdAt',
       headerName: tCommon('createdOn'),
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: true,
       sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
@@ -271,7 +272,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: t('funds.status'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -284,7 +285,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: t('funds.assocCampaigns'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -308,7 +309,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: tCommon('action'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -431,8 +432,8 @@ const organizationFunds = (): JSX.Element => {
       )}
 
       <FundModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={isOpen}
+        hide={close}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}

@@ -12,7 +12,7 @@
  *
  * @remarks
  * - The component dynamically adjusts its layout based on the screen size, toggling a sidebar for smaller screens.
- * - It supports three modes: viewing all organizations, joined organizations, and created organizations.
+ * - It supports three modes: viewing all organizations, joined organizations, and created organizations (administrators only).
  * - The search functionality is debounced to reduce unnecessary GraphQL query calls.
  * - Pagination is implemented to handle large datasets efficiently.
  *
@@ -148,8 +148,8 @@ export default function Organizations(): React.JSX.Element {
     if (hasDismissed) return;
 
     // Priority: API data > LocalStorage
-    if (currentUserData?.currentUser) {
-      if (currentUserData.currentUser.isEmailAddressVerified) {
+    if (currentUserData?.user) {
+      if (currentUserData.user.isEmailAddressVerified) {
         setShowEmailWarning(false);
         // Clean up legacy flags
         removeItem('emailNotVerified');
@@ -215,11 +215,12 @@ export default function Organizations(): React.JSX.Element {
   const [filterName, setFilterName] = React.useState('');
   const [searchText, setSearchText] = useState('');
   const [mode, setMode] = React.useState(0);
+  const role = getItem('role') === 'administrator' ? 'administrator' : 'user';
 
   const modes = [
     t('allOrganizations'),
     t('joinedOrganizations'),
-    t('createdOrganizations'),
+    ...(role === 'administrator' ? [t('createdOrganizations')] : []),
   ];
 
   const userId: string | null = getItem('userId');
@@ -342,7 +343,6 @@ export default function Organizations(): React.JSX.Element {
   };
 
   const isLoading = loadingAll || loadingJoined || loadingCreated;
-  const role = 'user';
 
   return (
     <>
@@ -356,7 +356,7 @@ export default function Organizations(): React.JSX.Element {
         <div
           className={`${styles.mainContainerOrganization} ${styles.organizationsMainContainer}`}
         >
-          <div className="d-flex justify-content-between align-items-center">
+          <div className={styles.selectOrganizationContainer}>
             <div className={styles.organizationsFlexContainer}>
               <h1>{t('selectOrganization')}</h1>
             </div>
@@ -368,11 +368,11 @@ export default function Organizations(): React.JSX.Element {
               variant="warning"
               dismissible
               onClose={handleDismissWarning}
-              className="mb-3"
+              className={styles.alert}
               data-testid="email-verification-warning"
               aria-live="polite"
             >
-              <div className="d-flex justify-content-between align-items-center">
+              <div className={styles.selectOrganizationContainer}>
                 <div>
                   <strong>{tLogin('emailNotVerified')}</strong>
                 </div>
@@ -418,15 +418,11 @@ export default function Organizations(): React.JSX.Element {
             />
           </div>
 
-          <div
-            className={`d-flex flex-column justify-content-between ${styles.content}`}
-          >
-            <div
-              className={`d-flex flex-column ${styles.gap} ${styles.paddingY}`}
-            >
+          <div className={styles.content}>
+            <div className={styles.loadingSpinnerContainer}>
               {isLoading ? (
                 <div
-                  className="d-flex flex-row justify-content-center"
+                  className={styles.conditionalLoadingSpinner}
                   data-testid="loading-spinner"
                   role="status"
                 >
@@ -464,7 +460,7 @@ export default function Organizations(): React.JSX.Element {
                         return (
                           <div
                             key={index}
-                            className="col-md-6 mb-4"
+                            className={`${styles.organizationCol} ${styles.organizationCard}`}
                             data-testid="organization-card"
                             data-organization-name={organization.name}
                             data-membership-status={

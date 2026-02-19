@@ -357,15 +357,13 @@ export default function PostsPage() {
                 testIdPrefix: 'sortpost',
               },
             ]}
-            showEventTypeFilter={false}
             actions={
               <Button
-                variant="success"
                 onClick={createPostModal.open}
                 disabled={!userId}
                 data-testid="createPostModalBtn"
                 data-cy="createPostModalBtn"
-                className={styles.createButton}
+                className={styles.dropdown}
               >
                 <Add />
                 {t('createPost')}

@@ -17,6 +17,7 @@ import {
 } from './GroupChatDetailsMocks';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 
 // Mock MinIO hooks used for uploading/downloading files
 vi.mock('utils/MinioUpload', () => ({
@@ -1495,5 +1496,77 @@ describe('GroupChatDetails', () => {
 
     toastError.mockRestore();
     consoleError.mockRestore();
+  });
+
+  it('renders "Member" fallback when organization member has no role', async () => {
+    if (!filledMockChat.organization) {
+      throw new Error('organization missing in mock');
+    }
+
+    if (!filledMockChat.members?.edges?.length) {
+      throw new Error('members missing in mock');
+    }
+
+    const orgId = filledMockChat.organization.id;
+    const adminUserId = filledMockChat.members.edges[0].node.user.id;
+
+    useLocalStorage().setItem('userId', adminUserId);
+
+    const fallbackMemberMock = {
+      request: {
+        query: ORGANIZATION_MEMBERS,
+        variables: {
+          input: { id: orgId },
+          first: 20,
+          after: null,
+          where: {},
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  cursor: 'cursor-x',
+                  node: {
+                    id: 'brandNewUser',
+                    name: 'No Role User',
+                    avatarURL: undefined,
+                    role: null,
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider
+          mocks={[fallbackMemberMock, fallbackMemberMock]}
+          cache={testCache}
+        >
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await userEvent.click(await screen.findByTestId('addMembers'));
+    await screen.findByTestId('addExistingUserModal');
+
+    await waitFor(() => {
+      const row = screen.getByTestId('user');
+      expect(row).toHaveTextContent('No Role User');
+      expect(row).toHaveTextContent('Member');
+    });
   });
 });

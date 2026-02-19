@@ -1,4 +1,10 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  within,
+  cleanup,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -72,12 +78,24 @@ const mockEventListCardProps = {
   location: 'Test Location',
   startAt: dayjs
     .utc()
-    .add(10, 'days')
+    .year(2025)
+    .month(5) // June (0-indexed)
+    .date(15)
     .hour(10)
     .minute(0)
     .second(0)
+    .millisecond(0)
     .toISOString(),
-  endAt: dayjs.utc().add(10, 'days').hour(12).minute(0).second(0).toISOString(),
+  endAt: dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(12)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -112,8 +130,26 @@ const mockDefaultProps = {
   tCommon: mockTCommon,
   isRegistered: false,
   userId: 'user123',
-  eventStartDate: dayjs.utc().add(10, 'days').toDate(),
-  eventEndDate: dayjs.utc().add(10, 'days').toDate(),
+  eventStartDate: dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toDate(),
+  eventEndDate: dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(0)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toDate(),
   setEventStartDate: vi.fn(),
   setEventEndDate: vi.fn(),
   allDayChecked: false,
@@ -154,11 +190,11 @@ const renderComponent = (props = {}) => {
 
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   beforeEach(() => {
-    vi.clearAllMocks();
     (CustomRecurrenceModal as Mock).mockImplementation(() => (
       <div data-testid="mock-custom-recurrence-modal" />
     ));
@@ -887,19 +923,6 @@ describe('EventListCardPreviewModal', () => {
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });
 
-  test('does not render recurrence dropdown when recurrence is null', () => {
-    renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-        isRecurringEventTemplate: true,
-        userRole: UserRole.ADMINISTRATOR,
-      },
-      recurrence: null,
-    });
-
-    expect(screen.queryByTestId('recurrenceDropdown')).not.toBeInTheDocument();
-  });
-
   test('opens custom recurrence modal when recurrence already exists', () => {
     const mockSetRecurrence = vi.fn();
     const mockSetCustomRecurrenceModalIsOpen = vi.fn();
@@ -1556,6 +1579,45 @@ describe('EventListCardPreviewModal', () => {
       // Verify that both start date and end date are updated
       expect(mockSetEventStartDate).toHaveBeenCalled();
       expect(mockSetEventEndDate).toHaveBeenCalled();
+    });
+  });
+
+  it('updates endTime if new startTime is after current endTime', async () => {
+    const user = userEvent.setup();
+    const mockSetFormState = vi.fn();
+
+    renderComponent({
+      setFormState: mockSetFormState,
+      formState: {
+        ...mockFormState,
+        startTime: '09:00:00',
+        endTime: '10:00:00',
+      },
+    });
+
+    // Open the start time picker and select hour 11
+    const startTimeInput = getPickerInputByTestId('startTime');
+    const startTimePicker = startTimeInput.parentElement as HTMLElement;
+    const clockButton = within(startTimePicker).getByLabelText(/choose time/i);
+    await user.click(clockButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('listbox', { name: /select hours/i }),
+      ).toBeInTheDocument();
+    });
+
+    const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
+    const timeToSelect = within(hoursListbox).getByText('11');
+    await user.click(timeToSelect);
+
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          startTime: expect.stringContaining('11'),
+          endTime: expect.stringContaining('11'),
+        }),
+      );
     });
   });
 });

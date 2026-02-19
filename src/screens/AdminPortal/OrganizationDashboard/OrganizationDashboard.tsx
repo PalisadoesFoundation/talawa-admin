@@ -319,7 +319,7 @@ function OrganizationDashboard(): JSX.Element {
             pendingMembershipRequests.length > 0 && (
               <Row>
                 <Col xs={6} sm={4} className="mb-4">
-                  <button
+                  <Button
                     type="button"
                     className="p-0 m-0 border-0 bg-transparent w-100 text-start"
                     onClick={(): void => {
@@ -332,7 +332,7 @@ function OrganizationDashboard(): JSX.Element {
                       title={tCommon('requests')}
                       icon={<UsersIcon className={styles.requestsIcon} />}
                     />
-                  </button>
+                  </Button>
                 </Col>
               </Row>
             )}
