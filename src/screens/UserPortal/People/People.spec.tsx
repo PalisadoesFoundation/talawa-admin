@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { cleanup, render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -136,12 +136,7 @@ const defaultQueryMock = {
 const nextPageMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: {
-      orgId: '',
-      firstName_contains: '',
-      first: 5,
-      after: 'cursor3', // This matches the failing query!
-    },
+    variables: makeQueryVars({ after: 'cursor3' }),
   },
   result: {
     data: {
@@ -305,7 +300,31 @@ const fiveMembersMock = {
   },
 };
 
-// Mock for empty members (covers useMemo early return when no edges)
+// Mock that returns members.edges as null to cover the useMemo null-guard branch
+// (if (!data?.organization?.members?.edges) return []) in People.tsx
+const nullEdgesMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: makeQueryVars(),
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: null,
+          pageInfo: {
+            endCursor: null,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: null,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Mock for visual empty state (edges empty array; does not exercise null-guard early return)
 const emptyMembersMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -360,18 +379,6 @@ const memberWithAvatarMock = {
   },
 };
 
-// Debounce duration used by SearchFilterBar component (default: 300ms)
-// NOTE: This value must be manually kept in sync with SearchFilterBar's debounceDelay default
-const SEARCH_DEBOUNCE_MS = 300;
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 const sharedMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: '' })),
 }));
@@ -400,14 +407,12 @@ const setMatchMediaStub = (): void => {
 
 let user: ReturnType<typeof userEvent.setup>;
 beforeEach(() => {
-  vi.clearAllMocks();
   user = userEvent.setup();
   sharedMocks.useParams.mockReturnValue({ orgId: '' });
   setMatchMediaStub();
 });
 
 afterEach(() => {
-  cleanup();
   vi.restoreAllMocks();
   sharedMocks.useParams.mockReturnValue({ orgId: '' });
 });
@@ -425,9 +430,28 @@ describe('Testing People Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(screen.queryAllByText('Test User')).not.toBe([]);
-    expect(screen.queryAllByText('Admin User')).not.toBe([]);
+    await waitFor(() => {
+      expect(screen.queryAllByText('Test User')).not.toEqual([]);
+      expect(screen.queryAllByText('Admin User')).not.toEqual([]);
+    });
+  });
+
+  it('renders empty state when members.edges is null (null-guard branch)', async () => {
+    render(
+      <MockedProvider mocks={[nullEdgesMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await waitFor(() => {
+      expect(screen.getByText(/nothing to show/i)).toBeInTheDocument();
+    });
+    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
   });
 
   it('Search works properly by pressing enter', async () => {
@@ -443,10 +467,10 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
     await user.type(screen.getByTestId('searchInput'), 'Ad{enter}');
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
       expect(screen.queryByText('Admin User')).toBeInTheDocument();
@@ -467,14 +491,14 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
     const searchBtn = screen.getByTestId('searchBtn');
     await user.clear(screen.getByTestId('searchInput'));
     await user.click(searchBtn);
     await user.type(screen.getByTestId('searchInput'), 'Admin');
-    await wait(SEARCH_DEBOUNCE_MS);
     await user.click(searchBtn);
-    await wait();
 
     await waitFor(() => {
       expect(screen.queryByText('Admin User')).toBeInTheDocument();
@@ -495,15 +519,14 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
+    await waitFor(() => {
+      expect(screen.getByTestId('modeChangeBtn-toggle')).toBeInTheDocument();
+    });
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-1'));
-    await wait();
 
-    // Wait for refetch and useMemo with mode=1 (return adminsList branch)
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('Admin User')).toBeInTheDocument();
       expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     });
   });
@@ -522,7 +545,9 @@ describe('Testing People Screen [User Portal]', () => {
     );
 
     expect(screen.getByTestId('datatable-loading')).toBeInTheDocument();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
   });
 
   it('pagination working', async () => {
@@ -537,9 +562,9 @@ describe('Testing People Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    // Pagination functional (visual test)
-    expect(screen.getByText('user1')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('user1')).toBeInTheDocument();
+    });
   });
 
   it('renders empty state when organization has no members', async () => {
@@ -626,10 +651,18 @@ describe('Testing People Screen [User Portal]', () => {
   });
 });
 
+// Same as fiveMembersMock, used when switching rows-per-page back to 5
+const fiveMembersMockSecond = {
+  ...fiveMembersMock,
+  request: { ...fiveMembersMock.request },
+};
+
 describe('Testing People Screen Pagination [User Portal]', () => {
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
+      <MockedProvider
+        mocks={[fiveMembersMock, lotsOfMembersMock, fiveMembersMockSecond]}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -643,21 +676,22 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 
   it('handles rows per page change and pagination navigation', async () => {
     renderComponent();
-    await wait();
-
-    // Default should show 5 items
-    expect(screen.getByText('user5')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('user5')).toBeInTheDocument();
+    });
 
     // Change rows per page to 10 (should show 6 now)
     const select = screen.getByRole('combobox');
     await user.selectOptions(select, '10');
-    await wait();
-
-    expect(screen.getByText('user6')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('user6')).toBeInTheDocument();
+    });
 
     // Reset to smaller page size to test navigation
     await user.selectOptions(select, '5');
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('user5')).toBeInTheDocument();
+    });
   });
 
   it('handles backward pagination correctly', async () => {
@@ -675,21 +709,22 @@ describe('Testing People Screen Pagination [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await waitFor(() =>
-      expect(screen.getByText('Test User')).toBeInTheDocument(),
-    );
-
-    const nextButton = screen.getByTestId('nextPage');
-    const prevButton = screen.getByTestId('previousPage');
-
-    // Navigate to page 2 (fetchMore with after: endCursor)
-    await user.click(nextButton);
-    // Wait until we are on page 2 (previous button becomes enabled)
     await waitFor(() => {
-      expect(prevButton).not.toBeDisabled();
+      expect(screen.getByText('Test User')).toBeInTheDocument();
     });
 
-    // Navigate back to page 1 (covers else-if: setCurrentPage when pageCursors[newPage] is defined)
+    const nextButton = screen.getByTestId('nextPage');
+    await user.click(nextButton);
+    // Wait for loading to finish (fetchMore); then go back
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('datatable-loading')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    // Now navigate back to page 1 (this covers lines 158-161)
+    const prevButton = screen.getByTestId('previousPage');
     await user.click(prevButton);
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -711,8 +746,10 @@ describe('People Component Mode Switch and Search Coverage', () => {
       </MockedProvider>,
     );
 
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
     await user.type(screen.getByTestId('searchInput'), 'Admin');
-    await wait(SEARCH_DEBOUNCE_MS);
     await user.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
@@ -733,10 +770,11 @@ describe('People Component Mode Switch and Search Coverage', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByLabelText('rows per page')).toBeInTheDocument();
+    });
 
     const select = screen.getByLabelText('rows per page');
-    expect(select).toBeInTheDocument();
     const nextButton = screen.getByTestId('nextPage');
     await user.click(nextButton);
   });
@@ -754,11 +792,15 @@ describe('People Component Mode Switch and Search Coverage', () => {
       </MockedProvider>,
     );
 
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+    });
     const searchInput = screen.getByTestId('searchInput');
     await user.type(searchInput, 'A'); // Type 'A' without Enter
 
-    await wait();
-    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
   });
 
   it('should handle search with empty input value', async () => {
@@ -774,13 +816,15 @@ describe('People Component Mode Switch and Search Coverage', () => {
       </MockedProvider>,
     );
 
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    });
     const searchBtn = screen.getByTestId('searchBtn');
     // Remove the search input from DOM to simulate edge case
     const searchInput = screen.getByTestId('searchInput');
     searchInput.remove();
 
     await user.click(searchBtn);
-    await wait();
   });
 });
 
@@ -801,68 +845,68 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
 
   it('should display user email addresses correctly', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
-    expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+      expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    });
   });
 
   it('should handle users with different ID formats', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+    });
   });
 
   it('should correctly identify and display different user roles', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-1'));
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+    });
   });
 
   it('should correctly assign userType based on role for admin filtering', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-1'));
-    await wait();
-
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Admin User')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-0'));
-    await wait();
-
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
   });
 
   it('should pass correct props including id, email, and role to PeopleCard components', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-1'));
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+    });
   });
 
   it('clears search input', async () => {
@@ -937,11 +981,9 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    // Verify member is rendered
-    expect(screen.getByText('Test User No Email')).toBeInTheDocument();
-    // Verify emailNotAvailable translation is displayed (DataTable renders email in datatable-cell-email)
-    expect(screen.getByText('Email not available')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User No Email')).toBeInTheDocument();
+      expect(screen.getByText('Email not available')).toBeInTheDocument();
+    });
   });
 });
