@@ -228,9 +228,13 @@ describe('AcceptInvitation', () => {
 
   const FIXED_BASE_DATE = dayjs
     .utc()
-    .startOf('year')
-    .add(165, 'days')
+    .year(2025)
+    .month(5)
+    .date(15)
     .hour(10)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
     .toISOString();
 
   it('should show invitation details for unauthenticated user', async () => {
@@ -335,7 +339,7 @@ describe('AcceptInvitation', () => {
 
       expect(
         screen.getByText((content, element) => {
-          return element?.tagName === 'DD' && content.includes('2028');
+          return element?.tagName === 'DD' && content.includes('2027');
         }),
       ).toBeInTheDocument();
     });
@@ -565,6 +569,27 @@ describe('AcceptInvitation', () => {
       delay: 100, // Add delay to ensure loading state is visible
     };
 
+    const verifyMaskedEmailMock = {
+      request: {
+        query: VERIFY_EVENT_INVITATION,
+        variables: { input: { invitationToken: 'test-token' } },
+      },
+      result: {
+        data: {
+          verifyEventInvitation: {
+            invitationToken: 'test-token',
+            eventId: null,
+            organizationId: null,
+            inviteeEmailMasked: 't**@e***.com',
+            inviteeName: null,
+            status: null,
+            expiresAt: null,
+            recurringEventInstanceId: null,
+          },
+        },
+      },
+    };
+
     it('should show accept button for authenticated user', async () => {
       renderComponent([verifyMock], '/invitation/test-token', 'auth-token');
       await waitFor(() => {
@@ -738,27 +763,6 @@ describe('AcceptInvitation', () => {
     });
 
     it('should require confirmation for masked email', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              eventId: 'event-1',
-              organizationId: 'org-1',
-              inviteeEmailMasked: 't**@e***.com',
-              inviteeName: null,
-              status: null,
-              expiresAt: null,
-              recurringEventInstanceId: null,
-            },
-          },
-        },
-      };
-
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
@@ -778,27 +782,6 @@ describe('AcceptInvitation', () => {
 
     // NEW: Test masked email warning message appears
     it('should show warning message for masked email invitations', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              inviteeEmailMasked: 't**@e***.com',
-              inviteeName: null,
-              status: null,
-              expiresAt: null,
-              eventId: null,
-              recurringEventInstanceId: null,
-              organizationId: null,
-            },
-          },
-        },
-      };
-
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
@@ -814,27 +797,6 @@ describe('AcceptInvitation', () => {
     });
 
     it('should allow signing in as a different user', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              inviteeEmailMasked: 't**@e***.com',
-              inviteeName: null,
-              status: null,
-              expiresAt: null,
-              eventId: null,
-              recurringEventInstanceId: null,
-              organizationId: null,
-            },
-          },
-        },
-      };
-
       const { mockLocalStorage } = renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
@@ -869,27 +831,6 @@ describe('AcceptInvitation', () => {
 
     // NEW: Test unchecking confirmation checkbox disables button again
     it('should disable accept button when confirmation checkbox is unchecked', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              inviteeEmailMasked: 't**@e***.com',
-              inviteeName: null,
-              status: null,
-              expiresAt: null,
-              eventId: null,
-              recurringEventInstanceId: null,
-              organizationId: null,
-            },
-          },
-        },
-      };
-
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
