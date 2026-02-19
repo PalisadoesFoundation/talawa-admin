@@ -101,26 +101,26 @@
   /* width and left are set inline by getEventStyle based on collision columns */
   background-color: var(--color-blue-100);
   border-left: var(--border-3) solid var(--color-blue-500);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
+  border-top: var(--border-3) solid var(--color-blue-500);
+  border-radius: var(--radius-md);
+  overflow: visible;
   pointer-events: auto;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
   /* height is set inline by getEventStyle — do NOT override it here */
 }
 
-/* Inner EventListCard fills the full block height */
-.eventContainer > div {
-  height: 100%;
-  padding: var(--space-2) var(--space-3) !important;
+/* Inner EventListCard - allow it to size based on content */
+.eventContainer > div:first-child {
+  flex: 0 0 auto;
+  padding: var(--space-1) var(--space-2) !important;
   box-shadow: none !important;
   background-color: transparent !important;
   border: none !important;
   border-radius: 0;
   cursor: pointer;
   min-height: 0 !important;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   transform: none !important;
   transition: none !important;
 }
@@ -136,6 +136,16 @@
   font-weight: var(--font-weight-medium);
 }
 
+.eventTime {
+  font-size: 10px;
+  color: var(--color-blue-600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 100%;
+}
+
 .weeklyEvents {
-  margin-bottom: var(--space-3);
+  margin-bottom: var(--space-7);
 }

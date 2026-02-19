@@ -63,3 +63,12 @@
   color: var(--cardsEventListCard-h2-color);
   text-align: center;
 }
+
+.eventTime {
+  font-size: 10px;
+  color: var(--cardsEventListCard-h2-color);
+  opacity: 0.8;
+  margin-top: 2px;
+  text-align: center;
+  width: 100%;
+}

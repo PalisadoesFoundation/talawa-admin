@@ -42,10 +42,7 @@ dayjs.extend(utc);
 import EventListCard from 'shared-components/EventListCard/EventListCard';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { filterEvents } from 'types/Event/utils';
-import type {
-  InterfaceEvent,
-  InterfaceCalendarProps,
-} from 'types/Event/interface';
+import type { InterfaceCalendarProps } from 'types/Event/interface';
 
 export interface InterfaceWeeklyEventCalenderProps extends InterfaceCalendarProps {
   currentDate: Date;
@@ -83,12 +80,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
 
   const CELL_HEIGHT_PX = 80; // matches --space-12 (5rem = 80px) in CSS
 
-  const getEventStyle = (
-    start: string,
-    end: string,
-    colIndex = 0,
-    colCount = 1,
-  ) => {
+  const getEventStyle = (start: string, end: string) => {
     // Use dayjs.utc() so hours/minutes match the UTC values stored by EventForm
     const startDate = dayjs.utc(start);
     const endDate = dayjs.utc(end);
@@ -102,65 +94,17 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
     const top = (startHour + startMinute / 60) * CELL_HEIGHT_PX;
     const height = Math.max((durationMinutes / 60) * CELL_HEIGHT_PX, 20); // min 20px so tiny events are visible
 
-    // Divide the column width evenly; leave a small gap between columns
-    const GAP = 2; // px gap between side-by-side events
-    const totalWidth = 95; // % of day column used
-    const colWidth = (totalWidth - GAP * (colCount - 1)) / colCount;
-    const left = colIndex * (colWidth + GAP) + 2.5; // 2.5% left margin
+    // Google Calendar style: slight offset based on hour to allow overlapping visibility
+    // Offset cycles every 3 hours (0, 2, 4... hours get different offsets)
+    const offsetIndex = Math.floor(startHour / 3) % 3;
+    const offsetPercent = offsetIndex * 2.5; // 0%, 2.5%, 5% offset
 
     return {
       top: `${top}px`,
       height: `${height}px`,
-      width: `${colWidth}%`,
-      left: `${left}%`,
+      width: '95%',
+      left: `${2.5 + offsetPercent}%`,
     };
-  };
-
-  /**
-   * Groups events that overlap in time and assigns each a column index.
-   * @returns a Map from event id → `{ colIndex, colCount }`.
-   */
-  const computeColumns = (
-    evts: InterfaceEvent[],
-  ): Map<string, { colIndex: number; colCount: number }> => {
-    // Sort by start time
-    const sorted = [...evts].sort((a, b) =>
-      dayjs.utc(a.startAt).local().diff(dayjs.utc(b.startAt).local()),
-    );
-
-    // Each "cluster" is a group of events that all overlap with at least one other
-    const result = new Map<string, { colIndex: number; colCount: number }>();
-    // columns[i] = end time of the last event placed in column i
-    const columns: number[] = [];
-
-    for (const evt of sorted) {
-      const start = dayjs.utc(evt.startAt).local().valueOf();
-      const end = dayjs.utc(evt.endAt).local().valueOf();
-
-      // Find the first column whose last event ends at or before this event starts
-      let placed = false;
-      for (let c = 0; c < columns.length; c++) {
-        if (columns[c] <= start) {
-          columns[c] = end;
-          result.set(evt.id, { colIndex: c, colCount: 0 }); // colCount filled later
-          placed = true;
-          break;
-        }
-      }
-      if (!placed) {
-        columns.push(end);
-        result.set(evt.id, { colIndex: columns.length - 1, colCount: 0 });
-      }
-    }
-
-    // colCount = total number of columns in use (all events in the same cluster share it)
-    // Simple approach: colCount = columns.length for all events in this day
-    const colCount = columns.length;
-    for (const [id, info] of result) {
-      result.set(id, { ...info, colCount });
-    }
-
-    return result;
   };
 
   const renderTimeColumn = (): JSX.Element => {
@@ -198,9 +142,6 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
           );
         }) || [];
 
-      // Compute side-by-side column layout for overlapping events
-      const columnMap = computeColumns(eventsForDate);
-
       days.push(
         <div key={i} className={styles.dayColumn}>
           <div
@@ -222,20 +163,11 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
               <div key={hour} className={styles.gridCell}></div>
             ))}
             {eventsForDate.map((event) => {
-              const col = columnMap.get(event.id) ?? {
-                colIndex: 0,
-                colCount: 1,
-              };
               return (
                 <div
                   key={event.id}
                   className={styles.eventContainer}
-                  style={getEventStyle(
-                    event.startAt,
-                    event.endAt,
-                    col.colIndex,
-                    col.colCount,
-                  )}
+                  style={getEventStyle(event.startAt, event.endAt)}
                 >
                   <EventListCard
                     {...event}
@@ -243,6 +175,10 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
                     userRole={userRole}
                     userId={userId}
                   />
+                  <div className={styles.eventTime}>
+                    {dayjs.utc(event.startAt).local().format('h:mm A')} -{' '}
+                    {dayjs.utc(event.endAt).local().format('h:mm A')}
+                  </div>
                 </div>
               );
             })}
