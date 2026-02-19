@@ -49,7 +49,7 @@ interface IMemberNode {
   name: string;
   role: string;
   avatarURL?: string;
-  createdAt: string;
+  createdAt?: string;
   emailAddress?: string;
 }
 
@@ -151,7 +151,7 @@ function OrganizationPeople(): JSX.Element {
           </Link>
         </span>
         <span className={styles.people_card_header_col_2} role="cell">
-          {node.emailAddress ?? tCommon('email')}
+          {node.emailAddress ?? t('emailNotAvailable')}
         </span>
         <span
           className={styles.people_card_header_col_2}
@@ -283,6 +283,7 @@ function OrganizationPeople(): JSX.Element {
                 queryVariables={{}}
                 dataPath="allUsers"
                 itemsPerPage={10}
+                refetchTrigger={state}
                 keyExtractor={(node: IMemberNode) => node.id}
                 renderItem={renderMemberRow}
                 emptyStateComponent={

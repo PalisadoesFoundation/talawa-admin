@@ -484,7 +484,8 @@
     "createUser": "उपयोगकर्ता बनाएं",
     "notFound": "कोई सदस्य नहीं मिले",
     "showPassword": "पासवर्ड दिखाएं",
-    "hidePassword": "पासवर्ड छुपाएं"
+    "hidePassword": "पासवर्ड छुपाएं",
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
   },
   "organizationCard": {
     "join": "जॉइन करें",

@@ -489,7 +489,8 @@
     "createUser": "创建用户",
     "notFound": "未找到成员",
     "showPassword": "显示密码",
-    "hidePassword": "隐藏密码"
+    "hidePassword": "隐藏密码",
+    "emailNotAvailable": "电子邮件不可用"
   },
   "organizationCard": {
     "join": "加入",
