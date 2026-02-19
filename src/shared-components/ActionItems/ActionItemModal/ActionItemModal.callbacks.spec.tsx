@@ -28,9 +28,9 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-const ModalStub = ({ children }: { children: React.ReactNode }) => (
-  <form data-testid="actionItemModal">{children}</form>
-);
+function ModalStub({ children }: { children: React.ReactNode }): JSX.Element {
+  return <form data-testid="actionItemModal">{children}</form>;
+}
 
 vi.mock('shared-components/CRUDModalTemplate/CreateModal', () => ({
   CreateModal: ModalStub,
