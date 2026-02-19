@@ -319,11 +319,6 @@ describe('Testing Volunteers Screen', () => {
     const volunteerNames = await screen.findAllByTestId('volunteerName');
     expect(volunteerNames.length).toBeGreaterThanOrEqual(2);
 
-    // Force a re-render/update to ensure all cells are painted
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    });
-
     await waitFor(() => {
       // Find the volunteer that has an avatarURL (Bruce Graza)
       const img = screen.queryByTestId('volunteer_image');
@@ -607,11 +602,6 @@ describe('Testing Volunteers Screen', () => {
     const volunteerNames = await screen.findAllByTestId('volunteerName');
     expect(volunteerNames.length).toBeGreaterThanOrEqual(2);
 
-    // Force a re-render/update to ensure all cells are painted
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    });
-
     // Now check for avatar components
     // volunteer1 (Teresa Bradley) in mocks has avatarURL: null, should render Avatar component
     const avatars = screen.queryAllByTestId('volunteer_avatar');
@@ -686,12 +676,6 @@ describe('Testing Volunteers Screen', () => {
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Teresa');
 
-    // Wait for debounce to complete (300ms) - the handleSearchChange callback should execute
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
-
-    // The search term should be set by handleSearchChange callback and query refetched
     // After debounced search with 'Teresa', only Teresa Bradley should appear
     await waitFor(
       () => {
@@ -701,5 +685,40 @@ describe('Testing Volunteers Screen', () => {
       },
       { timeout: 3000 },
     );
+  });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open create modal when Enter is pressed on add volunteer button', async () => {
+      renderVolunteers(link1);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
+      addVolunteerBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      expect(await screen.findByTestId('modalCloseBtn')).toBeInTheDocument();
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      renderVolunteers(link1);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
+      await userEvent.click(addVolunteerBtn);
+
+      expect(await screen.findByTestId('modalCloseBtn')).toBeInTheDocument();
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
+      });
+    });
   });
 });

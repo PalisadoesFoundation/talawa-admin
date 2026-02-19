@@ -3,28 +3,32 @@ import { useParams } from 'react-router-dom';
 import { FormControl, InputGroup } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation, type ApolloError } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import {
+  DONATE_TO_ORGANIZATION,
+  DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+} from 'GraphQl/Mutations/mutations';
 import styles from './Donate.module.css';
-import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
-import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import {
+import type {
   InterfaceDonation,
-  InterfaceDonationCardProps,
+  IDonationTableRow,
 } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 const currencies = ['USD', 'INR', 'EUR'];
 const currencyOptions = currencies.map((currency) => ({
@@ -70,9 +74,76 @@ export default function Donate(): JSX.Element {
   });
 
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
+  const [donateWithCurrency] = useMutation(
+    DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+  );
+
+  const donationRows: IDonationTableRow[] = React.useMemo(
+    () =>
+      donations.map((donation) => ({
+        id: donation._id,
+        donor: donation.nameOfUser,
+        amount: Number(donation.amount),
+        updatedAt: donation.updatedAt,
+      })),
+    [donations],
+  );
+
+  const filteredDonationRows = React.useMemo(() => {
+    const query = searchText.trim().toLowerCase();
+    if (!query) {
+      return donationRows;
+    }
+
+    return donationRows.filter((donation) => {
+      const matchesDonor = donation.donor.toLowerCase().includes(query);
+      const matchesAmount = String(donation.amount).includes(query);
+      const matchesDate = donation.updatedAt.toLowerCase().includes(query);
+      return matchesDonor || matchesAmount || matchesDate;
+    });
+  }, [donationRows, searchText]);
+
+  const paginatedDonationRows = React.useMemo(
+    () =>
+      filteredDonationRows.slice(
+        page * rowsPerPage,
+        page * rowsPerPage + rowsPerPage,
+      ),
+    [filteredDonationRows, page, rowsPerPage],
+  );
+
+  const donationColumns: IColumnDef<IDonationTableRow>[] = React.useMemo(
+    () => [
+      {
+        id: 'donor',
+        header: t('donor'),
+        accessor: 'donor',
+        render: (value) => (
+          <span data-testid="donationCard">{String(value)}</span>
+        ),
+      },
+      {
+        id: 'amount',
+        header: t('amount'),
+        accessor: 'amount',
+        render: (value) => {
+          // ORGANIZATION_DONATION_CONNECTION_LIST does not yet return per-donation currencyCode.
+          // When it does, wire row currency formatting here (e.g., with `currencySymbols`) instead of `selectedCurrency`.
+          return Number(value);
+        },
+      },
+      {
+        id: 'updatedAt',
+        header: t('date'),
+        accessor: 'updatedAt',
+        render: (value) => dayjs(String(value)).format('YYYY-MM-DD HH:mm'),
+      },
+    ],
+    [t],
+  );
 
   useEffect(() => {
-    if (data?.organizations) {
+    if (data?.organizations?.length) {
       setOrganizationDetails(data.organizations[0]);
     }
   }, [data]);
@@ -83,7 +154,69 @@ export default function Donate(): JSX.Element {
     }
   }, [donationData]);
 
+  useEffect(() => {
+    setPage(0);
+  }, [searchText]);
+
+  const handleCurrencyChange = (currency: string): void => {
+    setSelectedCurrency(currency);
+    setPage(0);
+  };
+
+  /**
+   * Return true for backend responses that still require the legacy mutation.
+   * Performs case-insensitive matching on the combined error message because
+   * the server currently advertises currency awareness in free-form strings.
+   *
+   * Known patterns:
+   * - `unknown argument "currencycode"`
+   * - `unknown type "iso4217currencycode"`
+   * - `field "createdonation" argument "currencycode" is not defined`
+   *
+   * Once the backend schema explicitly supports `currencyCode` on
+   * `createDonation`, remove this fallback and its string checks.
+   */
+  const shouldFallbackToLegacyDonationMutation = (error: unknown): boolean => {
+    const apolloError = error as ApolloError;
+
+    const combinedMessage = [
+      apolloError?.message,
+      ...(apolloError?.graphQLErrors?.map((e) => e?.message) ?? []),
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    const shouldFallback =
+      combinedMessage.includes('unknown argument "currencycode"') ||
+      combinedMessage.includes('unknown type "iso4217currencycode"') ||
+      combinedMessage.includes(
+        'field "createdonation" argument "currencycode" is not defined',
+      );
+
+    if (shouldFallback) {
+      console.error(
+        'Currency-aware donation unsupported by backend, falling back to legacy mutation',
+        {
+          error,
+          combinedMessage,
+        },
+      );
+    }
+
+    return shouldFallback;
+  };
+
   const donateToOrg = async (): Promise<void> => {
+    if (!userId || organizationId == null || !userName) {
+      console.error('Missing required donation identifiers for mutation.', {
+        userId,
+        organizationId,
+        userName,
+      });
+      return;
+    }
+
     if (amount === '' || Number.isNaN(Number(amount))) {
       NotificationToast.error(t('invalidAmount'));
       return;
@@ -100,18 +233,36 @@ export default function Donate(): JSX.Element {
     }
 
     try {
-      await donate({
-        variables: {
-          userId,
-          createDonationOrgId2: organizationId,
-          payPalId: 'paypalId',
-          nameOfUser: userName,
-          amount: Number(amount),
-          nameOfOrg: organizationDetails.name,
-        },
-      });
+      try {
+        await donateWithCurrency({
+          variables: {
+            userId,
+            createDonationOrgId2: organizationId,
+            payPalId: 'paypalId',
+            nameOfUser: userName,
+            amount: Number(amount),
+            nameOfOrg: organizationDetails.name,
+            currencyCode: selectedCurrency,
+          },
+        });
+      } catch (error) {
+        if (shouldFallbackToLegacyDonationMutation(error)) {
+          await donate({
+            variables: {
+              userId,
+              createDonationOrgId2: organizationId,
+              payPalId: 'paypalId',
+              nameOfUser: userName,
+              amount: Number(amount),
+              nameOfOrg: organizationDetails.name,
+            },
+          });
+        } else {
+          throw error;
+        }
+      }
 
-      refetch();
+      await refetch();
       NotificationToast.success(t('success') as string);
     } catch (error) {
       errorHandler(t, error);
@@ -119,14 +270,15 @@ export default function Donate(): JSX.Element {
   };
 
   return (
-    <div className="d-flex flex-row mt-4">
-      <div className={`${styles.mainContainer50} me-4`}>
+    <div className="mt-2">
+      <div className={styles.mainContainer50}>
         <SearchFilterBar
           searchPlaceholder={t('searchDonations')}
           searchValue={searchText}
           onSearchChange={setSearchText}
           searchInputTestId="searchInput"
           searchButtonTestId="searchButton"
+          containerClassName={styles.donateSearchContainer}
           hasDropdowns={false}
         />
 
@@ -140,7 +292,7 @@ export default function Donate(): JSX.Element {
               id="currency-dropdown"
               options={currencyOptions}
               selectedValue={selectedCurrency}
-              onSelect={setSelectedCurrency}
+              onSelect={handleCurrencyChange}
               variant="success"
               btnStyle={`${styles.colorPrimary} ${styles.dropdown}`}
               dataTestIdPrefix="currency-dropdown"
@@ -158,13 +310,8 @@ export default function Donate(): JSX.Element {
               placeholder={t('amount')}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              aria-describedby="donationAmountHelp"
             />
           </InputGroup>
-
-          <div id="donationAmountHelp" className="text-muted form-text">
-            {t('donationAmountDescription')}
-          </div>
 
           <Button
             size="sm"
@@ -182,45 +329,32 @@ export default function Donate(): JSX.Element {
 
           {loading ? (
             <div data-testid="loading-state">
-              <HourglassBottomIcon /> Loading...
+              <HourglassBottomIcon /> {t('loading')}
             </div>
-          ) : donations.length > 0 ? (
-            donations
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((donation) => {
-                const cardProps: InterfaceDonationCardProps = {
-                  name: donation.nameOfUser,
-                  id: donation._id,
-                  amount: donation.amount,
-                  userId: donation.userId,
-                  payPalId: donation.payPalId,
-                  updatedAt: donation.updatedAt,
-                };
-
-                return (
-                  <div key={donation._id} data-testid="donationCard">
-                    <DonationCard {...cardProps} />
-                  </div>
-                );
-              })
           ) : (
-            <span>{t('nothingToShow')}</span>
+            <DataTable<IDonationTableRow>
+              data={paginatedDonationRows}
+              columns={donationColumns}
+              rowKey="id"
+              paginationMode="none"
+              emptyMessage={t('nothingToShow')}
+            />
           )}
 
-          <PaginationList
-            count={donations.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={(_, p) => setPage(p)}
-            onRowsPerPageChange={(e) => {
-              setRowsPerPage(parseInt(e.target.value, 10));
-              setPage(0);
-            }}
-          />
+          {filteredDonationRows.length > 0 && (
+            <PaginationList
+              count={filteredDonationRows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={(_, p) => setPage(p)}
+              onRowsPerPageChange={(e) => {
+                setRowsPerPage(parseInt(e.target.value, 10));
+                setPage(0);
+              }}
+            />
+          )}
         </div>
       </div>
-
-      <OrganizationSidebar />
     </div>
   );
 }

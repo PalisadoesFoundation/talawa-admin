@@ -1,35 +1,36 @@
-.createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin-top: calc(var(--space-2) + var(--space-0-5));
-  margin-inline: calc(var(--space-3) + var(--space-1));
-  margin-bottom: var(--space-3);
-  width: var(--space-16);
+.dropdown {
+  background-color: var(--color-gray-50) !important;
+  border: var(--border-1) solid var(--color-gray-600) !important;
+  color: var(--color-gray-600) !important;
+  position: relative;
+  /* !important needed to override Bootstrap's display on .btn */
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-3);
+  width: auto;
   height: var(--space-10);
 }
 
-.closeButton {
-  color: var(--color-red-500);
-  border: none;
-  background-color: var(--color-white);
+/* :global(.show) targets Bootstrap's .show class added to open dropdowns */
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+.dropdown:is(:hover, :active),
+:global(.show).dropdown {
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
 }
 
-.createButton:hover {
-  box-shadow: var(--shadow-xs);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-900);
-  border: var(--border-1) solid var(--color-gray-700);
-}
-
-.createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--space-1) solid var(--color-blue-200);
+  outline-offset: var(--space-1);
 }
 
 .list_box {
-  height: 70vh;
   overflow-y: auto;
   width: auto;
 }

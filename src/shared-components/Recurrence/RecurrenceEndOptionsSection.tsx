@@ -1,7 +1,7 @@
 import React from 'react';
-import { FormCheckField } from '../FormFieldGroup/FormCheckField';
-import { FormTextField } from '../FormFieldGroup/FormTextField';
-import DatePicker from '../DatePicker';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import DatePicker from 'shared-components/DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import {
@@ -10,7 +10,7 @@ import {
   endsNever,
   endsOn,
   recurrenceEndOptions,
-} from '../../utils/recurrenceUtils';
+} from 'utils/recurrenceUtils';
 import styles from './RecurrenceEndOptionsSection.module.css';
 
 import { InterfaceRecurrenceEndOptionsSectionProps } from 'types/shared-components/Recurrence/interface';
@@ -31,9 +31,9 @@ export const RecurrenceEndOptionsSection: React.FC<
   t,
 }) => {
   return (
-    <div className="mb-3">
+    <div className={styles.endOptionsContainer}>
       <span className="fw-semibold text-secondary">{t('ends')}</span>
-      <div className="ms-3 mt-3">
+      <div className={styles.radioGroupContainer}>
         <div>
           {recurrenceEndOptions
             .filter(
@@ -41,13 +41,13 @@ export const RecurrenceEndOptionsSection: React.FC<
                 frequency !== Frequency.YEARLY || option !== endsNever,
             )
             .map((option, index) => (
-              <div key={index} className="my-2 d-flex align-items-center">
+              <div key={index} className={styles.radioOption}>
                 <FormCheckField
                   type="radio"
                   id={`radio-${index}`}
                   label={t(option)}
                   name="recurrenceEndOption"
-                  className="d-inline-block me-5"
+                  className={styles.radioLabel}
                   value={option}
                   onChange={onRecurrenceEndOptionChange}
                   checked={option === selectedRecurrenceEndOption}
@@ -56,42 +56,39 @@ export const RecurrenceEndOptionsSection: React.FC<
                 />
 
                 {option === endsOn && (
-                  <div className="ms-3">
-                    <DatePicker
-                      name="recurrenceEndDate"
-                      label={t('endDate')}
-                      data-testid="customRecurrenceEndDatePicker"
-                      data-cy="customRecurrenceEndDatePicker"
-                      className={styles.recurrenceRuleDateBox}
-                      disabled={selectedRecurrenceEndOption !== endsOn}
-                      value={dayjs(recurrenceRuleState.endDate ?? new Date())}
-                      onChange={(date: Dayjs | null): void => {
-                        if (date) {
-                          const newRecurrenceEndDate = date.toDate();
-                          setRecurrenceRuleState((prev) => ({
-                            ...prev,
-                            endDate: newRecurrenceEndDate,
-                            never: false,
-                            count: undefined,
-                          }));
-                        } else {
-                          // When date is cleared, also update the state accordingly
-                          setRecurrenceRuleState((prev) => ({
-                            ...prev,
-                            endDate: undefined,
-                            never: false,
-                            count: undefined,
-                          }));
-                        }
-                      }}
-                      minDate={dayjs()}
-                      slotProps={{
-                        textField: {
-                          'aria-label': t('endDate'),
-                        },
-                      }}
-                    />
-                  </div>
+                  <DatePicker
+                    name="recurrenceEndDate"
+                    data-testid="customRecurrenceEndDatePicker"
+                    data-cy="customRecurrenceEndDatePicker"
+                    className={`${styles.recurrenceRuleDateBox} ${styles.datePickerWrapper}`}
+                    disabled={selectedRecurrenceEndOption !== endsOn}
+                    value={dayjs(recurrenceRuleState.endDate ?? new Date())}
+                    onChange={(date: Dayjs | null): void => {
+                      if (date) {
+                        const newRecurrenceEndDate = date.toDate();
+                        setRecurrenceRuleState((prev) => ({
+                          ...prev,
+                          endDate: newRecurrenceEndDate,
+                          never: false,
+                          count: undefined,
+                        }));
+                      } else {
+                        // When date is cleared, also update the state accordingly
+                        setRecurrenceRuleState((prev) => ({
+                          ...prev,
+                          endDate: undefined,
+                          never: false,
+                          count: undefined,
+                        }));
+                      }
+                    }}
+                    minDate={dayjs()}
+                    slotProps={{
+                      textField: {
+                        'aria-label': t('endDate'),
+                      },
+                    }}
+                  />
                 )}
                 {option === endsAfter && (
                   <>
@@ -124,7 +121,7 @@ export const RecurrenceEndOptionsSection: React.FC<
                         }
                       }}
                       min="1"
-                      className={`${styles.recurrenceRuleNumberInput} ms-1 me-2 d-inline-block py-2`}
+                      className={`${styles.recurrenceRuleNumberInput} ${styles.countInputWrapper}`}
                       disabled={selectedRecurrenceEndOption !== endsAfter}
                       data-testid="customRecurrenceCountInput"
                       data-cy="customRecurrenceCountInput"

@@ -308,7 +308,14 @@
   "searchTags": "टैग खोजें",
   "sortBy": "इसके द्वारा क्रमबद्ध करें",
   "unknownMember": "अज्ञानी सदस्य",
+  "workshops": "कार्यशालाएँ",
   "previousYear": "पिछला वर्ष",
   "nextYear": "अगला वर्ष",
-  "navigateToProfile": "प्रोफ़ाइल पर जाएं"
+  "navigateToProfile": "प्रोफ़ाइल पर जाएं",
+  "monthlyOn": "हर माह को",
+  "loginSuccess": "स्वागत है!",
+  "loginSuccessWithName": "स्वागत है, {{name}}!",
+  "signupSuccess": "पंजीकरण सफल!",
+  "authError": "प्रमाणीकरण त्रुटि",
+  "networkError": "नेटवर्क त्रुटि"
 }

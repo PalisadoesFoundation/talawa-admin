@@ -1,4 +1,5 @@
 {
+  "workshops": "Ateliers",
   "securedRouteForUser": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
@@ -14,6 +15,7 @@
   "customRecurrence": "Récurrence personnalisée",
   "frequency": "Fréquence",
   "repeatsEvery": "Répète chaque",
+  "repeatsOn": "Répétition activée",
   "day": "Jour",
   "week": "Semaine",
   "month": "Mois",
@@ -663,7 +665,8 @@
     "Workshops": "Ateliers",
     "selectMonth": "Sélectionner le mois",
     "selectDay": "Sélectionner le jour",
-    "selectYear": "Sélectionner l’année"
+    "selectYear": "Sélectionner l’année",
+    "selectWeek": "Sélectionner la semaine"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -1403,6 +1406,10 @@
     "tags": "Étiquettes",
     "invalidFileType": "Type de fichier invalide",
     "fileTooLarge": "Fichier trop volumineux",
+    "ascendingOrder": "Ordre croissant",
+    "descendingOrder": "Ordre décroissant",
+    "searchCreatedEvents": "Rechercher des événements créés",
+    "sortByName": "Trier par nom",
     "memberDetailNumberExample": "Exemple de numéro",
     "memberDetailExampleLane": "Exemple de rue",
     "memberDetailPostalExample": "Exemple de code postal",
@@ -1706,9 +1713,12 @@
     "donations": "Des dons",
     "searchDonations": "Rechercher des dons",
     "donateForThe": "Faites un don pour le",
+    "donor": "Donateur",
     "amount": "Montant",
+    "date": "Date",
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Faire un don",
+    "loading": "Chargement...",
     "nothingToShow": "Rien à montrer ici.",
     "success": "Don réussi",
     "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
@@ -1796,7 +1806,9 @@
     "presetThisMonth": "Ce Mois",
     "presetNext7Days": "7 Prochains Jours",
     "presetNext30Days": "30 Prochains Jours",
-    "presetNextMonth": "Mois Prochain"
+    "presetNextMonth": "Mois Prochain",
+    "repeatsOn": "Répétition activée",
+    "select": "Sélectionner"
   },
   "userEventCard": {
     "failedToRegister": "Échec de l'inscription à l'événement",
@@ -2587,5 +2599,8 @@
       "sun": "D"
     },
     "expandDay": "Développer le jour"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Vue du calendrier hebdomadaire"
   }
 }

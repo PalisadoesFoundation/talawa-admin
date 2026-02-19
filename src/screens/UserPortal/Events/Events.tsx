@@ -166,24 +166,33 @@ export default function Events(): JSX.Element {
   const storedRole = getItem('role') as string | null;
   const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
 
-  const defaultEventValues = React.useMemo<IEventFormValues>(
-    () => ({
+  const buildDefaultEventValues = (): IEventFormValues => {
+    const now = new Date();
+    const nextHour = new Date(now);
+    const nextHourValue = Math.min(now.getHours() + 1, 23);
+    nextHour.setHours(nextHourValue, 0, 0, 0);
+    const twoHoursLater = new Date(nextHour);
+    const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
+    twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
+    return {
       name: '',
       description: '',
       location: '',
       startDate: new Date(),
       endDate: new Date(),
-      startTime: '08:00:00',
-      endTime: '10:00:00',
+      startTime: nextHour.toTimeString().split(' ')[0],
+      endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,
       isPublic: false,
       isInviteOnly: true,
       isRegisterable: true,
       recurrenceRule: null,
       createChat: false,
-    }),
-    [],
-  );
+    };
+  };
+
+  const [defaultEventValues, setDefaultEventValues] =
+    React.useState<IEventFormValues>(buildDefaultEventValues);
   const [formResetKey, setFormResetKey] = React.useState(0);
 
   const handleCreateEvent = async (
@@ -243,8 +252,8 @@ export default function Events(): JSX.Element {
 
       name: edge.node.name || '',
       description: edge.node.description || '',
-      startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
-      endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+      startAt: edge.node.startAt,
+      endAt: edge.node.endAt,
       startTime: edge.node.allDay
         ? null
         : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
@@ -304,6 +313,7 @@ export default function Events(): JSX.Element {
    */
 
   const showInviteModal = (): void => {
+    setDefaultEventValues(buildDefaultEventValues());
     createEventModal.open();
   };
 
@@ -321,7 +331,7 @@ export default function Events(): JSX.Element {
 
   return (
     <>
-      <div className={styles.mainpageright}>
+      <div className={styles.mainpageright} data-testid="events-screen">
         <div className={`${styles.justifyspOrganizationEvents}`}>
           <EventHeader
             viewType={viewType}

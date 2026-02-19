@@ -23,7 +23,6 @@
  */
 
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
-import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
@@ -41,17 +40,19 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
-  type GridColDef,
+  type TokenAwareGridColDef,
+  convertTokenColumns,
 } from 'shared-components/DataGridWrapper';
 import { debounce, Stack } from '@mui/material';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
-import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -59,20 +60,10 @@ enum ItemStatus {
   Late = 'late',
 }
 
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-  VIEW = 'view',
-  STATUS = 'status',
-}
-
 interface InterfaceEventActionItemsProps {
   eventId: string;
   orgActionItemsRefetch?: () => void;
 }
-
-const MIN_COLUMN_WIDTH = 100;
-const ROW_HEIGHT = 65;
 
 const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   eventId,
@@ -98,32 +89,34 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
 
-  const itemModalState = useModalState();
-  const deleteModalState = useModalState();
-  const viewModalState = useModalState();
-  const statusModalState = useModalState();
+  const itemModal = useModalState();
+  const deleteModal = useModalState();
+  const viewModal = useModalState();
+  const statusModal = useModalState();
 
-  const handleModalClick = useCallback(
-    (actionItem: IActionItemInfo | null, modal: ModalState): void => {
-      setActionItem(actionItem);
-      if (modal === ModalState.SAME) {
-        setModalMode(actionItem ? 'edit' : 'create');
-        itemModalState.open();
-      } else if (modal === ModalState.DELETE) {
-        deleteModalState.open();
-      } else if (modal === ModalState.VIEW) {
-        viewModalState.open();
-      } else if (modal === ModalState.STATUS) {
-        statusModalState.open();
-      }
+  const handleOpenItemModal = useCallback(
+    (item: IActionItemInfo | null): void => {
+      setModalMode(item ? 'edit' : 'create');
+      setActionItem(item);
+      itemModal.open();
     },
-    [
-      itemModalState.open,
-      deleteModalState.open,
-      viewModalState.open,
-      statusModalState.open,
-    ],
+    [],
   );
+
+  const handleOpenViewModal = useCallback((item: IActionItemInfo): void => {
+    setActionItem(item);
+    viewModal.open();
+  }, []);
+
+  const handleOpenDeleteModal = useCallback((item: IActionItemInfo): void => {
+    setActionItem(item);
+    deleteModal.open();
+  }, []);
+
+  const handleOpenStatusModal = useCallback((item: IActionItemInfo): void => {
+    setActionItem(item);
+    statusModal.open();
+  }, []);
 
   const {
     data: eventData,
@@ -205,13 +198,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 
-  useEffect(() => {
-    // Cleanup debounce on unmount
-    return () => {
-      debouncedSearch.clear();
-    };
-  }, [debouncedSearch]);
-
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
@@ -235,13 +221,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'assignee',
       headerName: t('assignedTo'),
       flex: 1,
       align: 'left',
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -250,21 +236,14 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         const volunteerGroup = params.row.volunteerGroup;
 
         let displayName = t('noAssignment');
-        let avatarKey = 'no-assignment';
         let isAssigned = false;
         let isGroup = false;
 
-        let imageUrl: string | null | undefined;
-
         if (volunteer?.user) {
           displayName = volunteer.user.name || t('unknownVolunteer');
-          avatarKey = volunteer.id;
-          imageUrl = volunteer.user.avatarURL;
           isAssigned = true;
         } else if (volunteerGroup) {
           displayName = volunteerGroup.name;
-          avatarKey = volunteerGroup.id;
-          imageUrl = volunteerGroup.leader?.avatarURL;
           isAssigned = true;
           isGroup = true;
         }
@@ -275,16 +254,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             data-testid="assigneeName"
           >
             <div className={styles.TableImage}>
-              <ProfileAvatarDisplay
-                key={avatarKey}
-                fallbackName={displayName}
-                imageUrl={imageUrl}
-                size="medium"
-                onError={() => {
-                  console.warn(`Failed to load avatar for user: ${avatarKey}`);
-                }}
-                enableEnlarge={true}
-              />
+              <Avatar name={displayName} alt={displayName} />
             </div>
             <span className={!isAssigned ? 'text-muted' : ''}>
               {displayName}
@@ -305,7 +275,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('itemCategory'),
       flex: 1,
       align: 'center',
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -360,7 +330,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('options'),
       align: 'center',
       flex: 1,
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -371,7 +341,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               size="sm"
               className={styles.infoButton}
               data-testid={`viewItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              onClick={() => handleOpenViewModal(params.row)}
               aria-label={t('details')}
             >
               <i className="fa fa-info" />
@@ -381,7 +351,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               size="sm"
               className={styles.infoButton}
               data-testid={`editItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.SAME)}
+              onClick={() => handleOpenItemModal(params.row)}
               aria-label={t('editActionItem')}
             >
               <i className="fa fa-edit" />
@@ -391,7 +361,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               variant="danger"
               className={styles.actionItemDeleteButton}
               data-testid={`deleteItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.DELETE)}
+              onClick={() => handleOpenDeleteModal(params.row)}
               aria-label={t('deleteActionItem')}
             >
               <i className="fa fa-trash" />
@@ -405,7 +375,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('completed'),
       align: 'center',
       flex: 1,
-      minWidth: MIN_COLUMN_WIDTH,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -417,7 +387,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               data-testid={`statusCheckbox${params.row.id}`}
               className={styles.checkboxButton}
               checked={params.row.isCompleted}
-              onChange={() => handleModalClick(params.row, ModalState.STATUS)}
+              onChange={() => handleOpenStatusModal(params.row)}
               aria-label={
                 params.row.isCompleted
                   ? t('actionItemCompleted')
@@ -437,7 +407,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           placeholder={tCommon('searchBy', {
             item:
               searchBy === 'assignee'
-                ? t('assignedTo')
+                ? tCommon('assignedTo')
                 : searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}
           onSearch={(value) => {
@@ -506,7 +476,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           />
           <Button
             variant="success"
-            onClick={() => handleModalClick(null, ModalState.SAME)}
+            onClick={() => handleOpenItemModal(null)}
             className={styles.createButton}
             data-testid="createActionItemBtn"
             data-cy="createActionItemBtn"
@@ -539,18 +509,18 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
-        rowHeight={ROW_HEIGHT}
+        rowHeight={65}
         rows={actionItems.map((actionItem, index) => ({
           index: index + 1,
           ...actionItem,
         }))}
-        columns={columns}
+        columns={convertTokenColumns(columns)}
         isRowSelectable={() => false}
       />
 
       <ItemModal
-        isOpen={itemModalState.isOpen}
-        hide={itemModalState.close}
+        isOpen={itemModal.isOpen}
+        hide={itemModal.close}
         orgId={orgId}
         eventId={eventId}
         actionItemsRefetch={eventActionItemsRefetch}
@@ -564,23 +534,23 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       {actionItem && (
         <>
           <ItemViewModal
-            isOpen={viewModalState.isOpen}
-            hide={viewModalState.close}
+            isOpen={viewModal.isOpen}
+            hide={viewModal.close}
             item={actionItem}
           />
 
           <ItemUpdateStatusModal
             actionItem={actionItem}
-            isOpen={statusModalState.isOpen}
-            hide={statusModalState.close}
+            isOpen={statusModal.isOpen}
+            hide={statusModal.close}
             actionItemsRefetch={eventActionItemsRefetch}
             isRecurring={isRecurring}
             eventId={eventId}
           />
 
           <ItemDeleteModal
-            isOpen={deleteModalState.isOpen}
-            hide={deleteModalState.close}
+            isOpen={deleteModal.isOpen}
+            hide={deleteModal.close}
             actionItem={actionItem}
             actionItemsRefetch={eventActionItemsRefetch}
             eventId={eventId}

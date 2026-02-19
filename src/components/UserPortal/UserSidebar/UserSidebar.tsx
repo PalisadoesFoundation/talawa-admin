@@ -13,7 +13,7 @@ import { FaBell, FaExchangeAlt } from 'react-icons/fa';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';

@@ -317,7 +317,7 @@ describe('LeftDrawer Component', () => {
       // Simulate active route
       window.history.pushState({}, '', '/admin/orglist');
 
-      expect(organizationsButton).toHaveClass('sidebarBtnActive');
+      expect(organizationsButton.className).toContain('sidebarBtnActive');
     });
 
     it('does not hide drawer on desktop view navigation button clicks', async () => {
