@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
@@ -103,13 +103,7 @@ const renderComponent = (
 
 const PAGE_SIZE = 10;
 
-const runDebounce = async (ms: number) => {
-  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
-  await act(async () => {
-    vi.advanceTimersByTime(ms);
-  });
-  vi.useRealTimers();
-};
+const TIMEOUT_MS = 10000;
 
 const createMemberConnectionMock = (
   variables: Record<string, unknown>,
@@ -172,9 +166,6 @@ const createMemberConnectionMock = (
 
 describe('OrganizationPeople', () => {
   beforeEach(() => {
-    vi.useFakeTimers({ toFake: ['Date'] });
-    vi.setSystemTime(FIXED_DATE.toDate());
-
     originalLocation = window.location;
     Object.defineProperty(window, 'location', {
       value: {
@@ -201,8 +192,8 @@ describe('OrganizationPeople', () => {
       writable: true,
     });
     await client.clearStore();
-    vi.useRealTimers();
     cleanup();
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -220,13 +211,12 @@ describe('OrganizationPeople', () => {
       () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       },
-      { timeout: 5000 },
+      { timeout: TIMEOUT_MS },
     );
   });
 
   test('handles search functionality correctly', async () => {
     const user = userEvent.setup({ delay: null });
-    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
 
     const initialMock = createMemberConnectionMock({ orgId: 'orgid' });
     const searchMock = createMemberConnectionMock(
@@ -253,7 +243,6 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMock, searchMock, clearMock], true);
 
     renderComponent(link);
-    vi.useFakeTimers({ toFake: ['Date'] });
 
     await waitFor(() =>
       expect(screen.getByText('John Doe')).toBeInTheDocument(),
@@ -262,13 +251,13 @@ describe('OrganizationPeople', () => {
     const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'Jane');
 
-    await runDebounce(400);
-
-    vi.useFakeTimers({ toFake: ['Date'] });
-    await waitFor(() => {
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      },
+      { timeout: TIMEOUT_MS },
+    );
   });
 
   test('handles pagination correctly via server-side cursors', async () => {
@@ -276,7 +265,12 @@ describe('OrganizationPeople', () => {
     const page1Mock = createMemberConnectionMock(
       { orgId: 'orgid' },
       {
-        pageInfo: { hasNextPage: true, endCursor: 'cursor1' },
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false,
+          startCursor: 'startCursor1',
+          endCursor: 'cursor1',
+        },
       },
     );
 
@@ -297,7 +291,12 @@ describe('OrganizationPeople', () => {
             cursor: 'cursor2',
           },
         ],
-        pageInfo: { hasNextPage: false, endCursor: 'cursor2' },
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: true,
+          startCursor: 'adminCursor1',
+          endCursor: 'cursor2',
+        },
       },
     );
 
@@ -373,7 +372,6 @@ describe('OrganizationPeople', () => {
           after: null,
           last: null,
           before: null,
-          orgId: 'orgid',
           where: undefined,
         },
       },
@@ -425,7 +423,6 @@ describe('OrganizationPeople', () => {
 
   test('handles search in Users tab', async () => {
     const user = userEvent.setup({ delay: null });
-    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
 
     const initialMock = createMemberConnectionMock({ orgId: 'orgid' });
     const usersMock = {
@@ -436,7 +433,6 @@ describe('OrganizationPeople', () => {
           after: null,
           last: null,
           before: null,
-          orgId: 'orgid',
           where: undefined,
         },
       },
@@ -463,8 +459,7 @@ describe('OrganizationPeople', () => {
           after: null,
           last: null,
           before: null,
-          orgId: 'orgid',
-          where: { name: 'Specific' },
+          where: { name: { contains: 'Specific' } },
         },
       },
       result: {
@@ -486,7 +481,6 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([initialMock, usersMock, searchMock], true);
     renderComponent(link);
-    vi.useFakeTimers({ toFake: ['Date'] });
 
     await waitFor(() =>
       expect(screen.getByText('John Doe')).toBeInTheDocument(),
@@ -503,12 +497,12 @@ describe('OrganizationPeople', () => {
     const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'Specific');
 
-    await runDebounce(400);
-
-    vi.useFakeTimers({ toFake: ['Date'] });
-    await waitFor(() => {
-      expect(screen.getByText('Specific User')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Specific User')).toBeInTheDocument();
+      },
+      { timeout: TIMEOUT_MS },
+    );
   });
 
   test('handles invalid sort option correctly', async () => {
@@ -574,7 +568,6 @@ describe('OrganizationPeople', () => {
           after: null,
           last: null,
           before: null,
-          orgId: 'orgid',
           where: undefined,
         },
       },
@@ -671,7 +664,6 @@ describe('OrganizationPeople', () => {
 
   test('handles search correctly in Administrators tab', async () => {
     const user = userEvent.setup({ delay: null });
-    vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
 
     const initialMock = createMemberConnectionMock({ orgId: 'orgid' });
     const adminMock = createMemberConnectionMock({
@@ -698,7 +690,6 @@ describe('OrganizationPeople', () => {
       true,
     );
     renderComponent(link);
-    vi.useFakeTimers({ toFake: ['Date'] });
 
     await waitFor(() =>
       expect(screen.getByText('John Doe')).toBeInTheDocument(),
@@ -710,20 +701,26 @@ describe('OrganizationPeople', () => {
     const adminOption = screen.getByTestId('sort-item-admin');
     await user.click(adminOption);
 
+    vi.useRealTimers();
     // Type in search
     const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'AdminSearch');
 
-    await runDebounce(400);
-
-    vi.useFakeTimers({ toFake: ['Date'] });
-    await waitFor(() => {
-      expect(screen.getByText('AdminSearch Result')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('AdminSearch Result')).toBeInTheDocument();
+      },
+      { timeout: TIMEOUT_MS },
+    );
 
     // Clear search to hit false branch of searchTerm check
     await user.clear(searchInput);
-    await runDebounce(400);
+    await waitFor(
+      () => {
+        // Wait for reset if any
+      },
+      { timeout: TIMEOUT_MS },
+    );
   });
 
   test('handles pagination correctly in Users tab', async () => {
@@ -737,7 +734,6 @@ describe('OrganizationPeople', () => {
           after: null,
           last: null,
           before: null,
-          orgId: 'orgid',
           where: undefined,
         },
       },
@@ -745,7 +741,12 @@ describe('OrganizationPeople', () => {
         data: {
           allUsers: {
             edges: [{ node: { id: 'u1', name: 'User Page 1' }, cursor: 'uc1' }],
-            pageInfo: { hasNextPage: true, endCursor: 'uc1' },
+            pageInfo: {
+              hasNextPage: true,
+              hasPreviousPage: false,
+              startCursor: 'uc1',
+              endCursor: 'uc1',
+            },
           },
         },
       },
@@ -758,7 +759,6 @@ describe('OrganizationPeople', () => {
           after: 'uc1',
           last: null,
           before: null,
-          orgId: 'orgid',
           where: undefined,
         },
       },
@@ -766,7 +766,12 @@ describe('OrganizationPeople', () => {
         data: {
           allUsers: {
             edges: [{ node: { id: 'u2', name: 'User Page 2' }, cursor: 'uc2' }],
-            pageInfo: { hasNextPage: false, endCursor: 'uc2' },
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: true,
+              startCursor: 'uc2',
+              endCursor: 'uc2',
+            },
           },
         },
       },

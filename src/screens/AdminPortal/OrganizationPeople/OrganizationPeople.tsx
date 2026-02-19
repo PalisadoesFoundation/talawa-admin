@@ -6,7 +6,7 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useParams } from 'react-router';
 import Button from 'shared-components/Button';
@@ -59,18 +59,6 @@ interface IEdges {
   };
 }
 
-interface IQueryVariable {
-  orgId?: string | undefined;
-  first?: number | null;
-  after?: string | null;
-  last?: number | null;
-  before?: string | null;
-  where?: {
-    role?: { equal: 'administrator' | 'regular' };
-    name?: { contains: string } | string; // Supporting search
-  } | null;
-}
-
 function OrganizationPeople(): JSX.Element {
   const { t, i18n } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
@@ -96,11 +84,11 @@ function OrganizationPeople(): JSX.Element {
     return isUserPortal && validRole === 2 ? 0 : validRole;
   });
   const [searchTerm, setSearchTerm] = useState('');
-  const handleSearchChange = (value: string) => {
+  const handleSearchChange = useCallback((value: string) => {
     setSearchTerm(value);
     setPage(1);
     cursors.current = { 1: null };
-  };
+  }, []);
 
   // Pagination State
   const [page, setPage] = useState(1);
@@ -184,33 +172,38 @@ function OrganizationPeople(): JSX.Element {
       currentPage: number,
       currentCursor: string | null,
     ) => {
-      const variables: IQueryVariable = {
+      const baseVariables = {
         first: PAGE_SIZE,
         after: currentCursor,
         last: null,
         before: null,
-        orgId: currentUrl,
-        where: undefined,
       };
 
       if (state === 0) {
         // All members
-        if (searchTerm) {
-          variables.where = { name: searchTerm };
-        }
+        const variables = {
+          ...baseVariables,
+          orgId: currentUrl,
+          where: searchTerm ? { name: searchTerm } : undefined,
+        };
         fetchMembers({ variables });
       } else if (state === 1) {
         // Administrators only
-        variables.where = { role: { equal: 'administrator' } };
-        if (searchTerm && variables.where) {
-          variables.where.name = searchTerm;
-        }
+        const variables = {
+          ...baseVariables,
+          orgId: currentUrl,
+          where: {
+            role: { equal: 'administrator' },
+            name: searchTerm || undefined,
+          },
+        };
         fetchMembers({ variables });
       } else if (state === 2) {
         // Users
-        if (searchTerm) {
-          variables.where = { name: searchTerm };
-        }
+        const variables = {
+          ...baseVariables,
+          where: searchTerm ? { name: { contains: searchTerm } } : undefined,
+        };
         fetchUsers({ variables });
       }
     };

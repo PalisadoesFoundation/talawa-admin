@@ -13,7 +13,7 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
     '[data-testid="removeMemberModalBtn"]';
   private readonly confirmRemoveMemberButton = 'removeMemberBtn';
   private readonly alertSelector = '[role=alert]';
-  private readonly table = this.tableActions('.MuiDataGrid-root');
+  private readonly table = this.tableActions('[data-testid="datatable"]');
   private readonly removeMemberModal = this.modalActions('[role="dialog"]');
 
   protected self(): MemberManagementPage {

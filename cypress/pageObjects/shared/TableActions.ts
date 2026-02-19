@@ -24,7 +24,8 @@ export class TableActions {
     const matcher = exact ? new RegExp(`^${this.escapeRegex(text)}$`) : null;
 
     return cy
-      .get(`${this.tableSelector} .MuiDataGrid-row`, { timeout })
+      .get(this.tableSelector, { timeout })
+      .find('.MuiDataGrid-row, tbody tr', { timeout })
       .then(($rows) => {
         const matchedRow = $rows.toArray().find((row) => {
           const cells = Cypress.$(row).find('[role="gridcell"], td').toArray();
@@ -82,10 +83,9 @@ export class TableActions {
   }
 
   expectMinRows(minRows: number, timeout = 10000): this {
-    cy.get(`${this.tableSelector} .MuiDataGrid-row`, { timeout }).should(
-      'have.length.at.least',
-      minRows,
-    );
+    cy.get(this.tableSelector, { timeout })
+      .find('.MuiDataGrid-row, tbody tr', { timeout })
+      .should('have.length.at.least', minRows);
     return this;
   }
 
@@ -95,7 +95,8 @@ export class TableActions {
     timeout = 10000,
   ): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy
-      .get(`${this.tableSelector} .MuiDataGrid-row`, { timeout })
+      .get(this.tableSelector, { timeout })
+      .find('.MuiDataGrid-row, tbody tr')
       .eq(rowIndex)
       .find('[role="gridcell"], td')
       .eq(columnIndex);
