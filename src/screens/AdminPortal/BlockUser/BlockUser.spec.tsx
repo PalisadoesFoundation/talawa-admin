@@ -210,7 +210,9 @@ const createMocks = (
 };
 
 describe('BlockUser Component', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
+    user = userEvent.setup();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -265,7 +267,6 @@ describe('BlockUser Component', () => {
     });
 
     it('handles both queries returning null data', async () => {
-      const user = userEvent.setup();
       // Create custom mocks with both queries returning null data
       const customMocks = [
         {
@@ -412,7 +413,6 @@ describe('BlockUser Component', () => {
     });
 
     it('switches to blocked users view', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -466,7 +466,6 @@ describe('BlockUser Component', () => {
     });
 
     it('displays empty state with noSpammerFound message when blocked tab is selected and searchTerm is empty', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
@@ -500,7 +499,6 @@ describe('BlockUser Component', () => {
 
   describe('Search Functionality', () => {
     it('searches members by name', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -533,7 +531,6 @@ describe('BlockUser Component', () => {
     });
 
     it('searches members by email address', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -566,7 +563,6 @@ describe('BlockUser Component', () => {
     });
 
     it('searches blocked users by name', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -606,7 +602,6 @@ describe('BlockUser Component', () => {
     });
 
     it('searches blocked users by email address', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -646,7 +641,6 @@ describe('BlockUser Component', () => {
     });
 
     it('handles search with no results for members', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -680,7 +674,6 @@ describe('BlockUser Component', () => {
     });
 
     it('handles search with no results for blocked users', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -722,7 +715,6 @@ describe('BlockUser Component', () => {
     });
 
     it('clears search results when search term is empty', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -770,7 +762,6 @@ describe('BlockUser Component', () => {
 
   describe('Block/Unblock Actions', () => {
     it('blocks a user successfully', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -799,7 +790,6 @@ describe('BlockUser Component', () => {
     });
 
     it('unblocks a user successfully', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -837,7 +827,6 @@ describe('BlockUser Component', () => {
     });
 
     it('handles block user error', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks({ blockUserError: true })}>
@@ -865,7 +854,6 @@ describe('BlockUser Component', () => {
     });
 
     it('handles unblock user error', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks({ unblockUserError: true })}>
@@ -901,7 +889,6 @@ describe('BlockUser Component', () => {
     });
 
     it('can block multiple users', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
@@ -953,7 +940,6 @@ describe('BlockUser Component', () => {
     });
 
     it('shows blocked user in blocked users list after blocking', async () => {
-      const user = userEvent.setup();
       render(
         <I18nextProvider i18n={i18nForTest}>
           <MockedProvider mocks={createMocks()}>
