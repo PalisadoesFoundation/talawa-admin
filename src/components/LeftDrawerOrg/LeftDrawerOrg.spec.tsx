@@ -825,7 +825,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, successMocks, '/admin/member/other-user');
 
       // This should not be considered a profile page for the current user
-      expect(true).toBe(true); // Profile page logic is internal
+      // Verifying the component renders without error for a non-current-user profile route
+      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
     });
   });
 
@@ -975,16 +976,16 @@ describe('LeftDrawerOrg', () => {
   });
 
   describe('GraphQL Query Variables', () => {
-    it('should use correct variables for organization query', () => {
+    it('should use correct variables for organization query', async () => {
       renderComponent();
 
       // The query should be called with correct variables
-      expect(successMocks[0].request.variables).toEqual({
-        id: 'org-123',
+      await waitFor(() => {
+        expect(screen.getByText('Test Organization')).toBeInTheDocument();
       });
     });
 
-    it('should handle different orgId prop', () => {
+    it('should handle different orgId prop', async () => {
       const differentOrgMocks: IMockedResponse[] = [
         {
           request: {
@@ -1005,7 +1006,9 @@ describe('LeftDrawerOrg', () => {
 
       renderComponent({ orgId: 'different-org' }, differentOrgMocks);
 
-      expect(differentOrgMocks[0].request.variables.id).toBe('different-org');
+      await waitFor(() => {
+        expect(screen.getByText('Different Organization')).toBeInTheDocument();
+      });
     });
   });
 });
