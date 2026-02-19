@@ -147,6 +147,16 @@ vi.mock('./CreateEventModal', () => ({
     onClose: () => void;
     onEventCreated: () => void;
   }) => {
+    React.useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape' && isOpen) {
+          onClose();
+        }
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
     return (
       <div data-testid="createEventModal">
@@ -180,6 +190,7 @@ describe('Organisation Events Page', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const renderWithLink = (link: StaticMockLink) =>
@@ -834,14 +845,37 @@ describe('Organisation Events Page', () => {
     const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
     await userEvent.click(viewTypeDropdown);
 
-    // Find and click the "Year View" option
+    // Find and click the "Year View" option (value = ViewType.YEAR = 'Year View')
     const yearOption = await screen.findByTestId(
       'selectViewType-item-Year View',
     );
     await userEvent.click(yearOption);
 
+    // The dropdown toggle now shows the selected option's label ("Select Year")
     await waitFor(() => {
-      expect(container.textContent).toMatch('Year View');
+      expect(container.textContent).toMatch('Select Year');
+    });
+  });
+
+  test('should switch to week view when ViewType.WEEK is selected', async () => {
+    const { container } = renderWithLink(defaultLink);
+
+    await wait();
+
+    expect(container.textContent).toMatch('Month');
+
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
+    await userEvent.click(viewTypeDropdown);
+
+    // Find and click the "Week View" option (value = ViewType.WEEK = 'Week View')
+    const weekOption = await screen.findByTestId(
+      'selectViewType-item-Week View',
+    );
+    await userEvent.click(weekOption);
+
+    // The dropdown toggle now shows the selected option's label ("Select Week")
+    await waitFor(() => {
+      expect(container.textContent).toMatch('Select Week');
     });
   });
 
@@ -970,6 +1004,50 @@ describe('Organisation Events Page', () => {
     await wait(100);
 
     expect(searchInput.value).toBe('NonexistentEvent12345');
+  });
+
+  describe('Keyboard Accessibility', () => {
+    test('should open create event modal when Enter is pressed on create event button', async () => {
+      renderWithLink(defaultLink);
+
+      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createEventModalBtn');
+      createBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModal')).toBeInTheDocument();
+      });
+    });
+
+    test('should close modal when Escape is pressed', async () => {
+      renderWithLink(defaultLink);
+
+      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModal')).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('createEventModal'),
+        ).not.toBeInTheDocument();
+      });
+    });
   });
 });
 

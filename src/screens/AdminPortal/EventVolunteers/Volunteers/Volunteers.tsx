@@ -56,7 +56,7 @@ import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type {
   GridCellParams,
-  GridColDef,
+  TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -68,18 +68,13 @@ import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 enum VolunteerStatus {
   All = 'all',
   Pending = 'pending',
   Accepted = 'accepted',
   Rejected = 'rejected',
-}
-
-enum ModalState {
-  ADD = 'add',
-  DELETE = 'delete',
-  VIEW = 'view',
 }
 
 /**
@@ -112,28 +107,28 @@ function Volunteers(): JSX.Element {
   const [status, setStatus] = useState<VolunteerStatus>(VolunteerStatus.All);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.ADD]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-  });
 
-  const openModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+  const addModal = useModalState();
+  const deleteModal = useModalState();
+  const viewModal = useModalState();
+
+  const handleOpenAddModal = (): void => {
+    setVolunteer(null);
+    addModal.open();
   };
 
-  const closeModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-  };
-
-  const handleOpenModal = (
-    volunteer: InterfaceEventVolunteerInfo | null,
-    modalType: ModalState,
+  const handleOpenViewModal = (
+    selectedVolunteer: InterfaceEventVolunteerInfo,
   ): void => {
-    setVolunteer(volunteer);
-    openModal(modalType);
+    setVolunteer(selectedVolunteer);
+    viewModal.open();
+  };
+
+  const handleOpenDeleteModal = (
+    selectedVolunteer: InterfaceEventVolunteerInfo,
+  ): void => {
+    setVolunteer(selectedVolunteer);
+    deleteModal.open();
   };
 
   /**
@@ -238,13 +233,13 @@ function Volunteers(): JSX.Element {
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'volunteer',
       headerName: t('eventVolunteers.volunteerHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -284,7 +279,7 @@ function Volunteers(): JSX.Element {
       headerName: t('eventVolunteers.statusHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -343,7 +338,7 @@ function Volunteers(): JSX.Element {
       headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -355,7 +350,7 @@ function Volunteers(): JSX.Element {
               size="sm"
               className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewItemBtn"
-              onClick={() => handleOpenModal(params.row, ModalState.VIEW)}
+              onClick={() => handleOpenViewModal(params.row)}
               aria-label={t('eventVolunteers.viewDetails', {
                 name: params.row.name,
               })}
@@ -367,7 +362,7 @@ function Volunteers(): JSX.Element {
               variant="danger"
               className="rounded"
               data-testid="deleteItemBtn"
-              onClick={() => handleOpenModal(params.row, ModalState.DELETE)}
+              onClick={() => handleOpenDeleteModal(params.row)}
               aria-label={t('eventVolunteers.deleteVolunteerEntry', {
                 name: params.row.name,
               })}
@@ -437,7 +432,7 @@ function Volunteers(): JSX.Element {
           additionalButtons={
             <Button
               variant="success"
-              onClick={() => handleOpenModal(null, ModalState.ADD)}
+              onClick={handleOpenAddModal}
               className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
@@ -463,8 +458,8 @@ function Volunteers(): JSX.Element {
         />
 
         <VolunteerCreateModal
-          isOpen={modalState[ModalState.ADD]}
-          hide={() => closeModal(ModalState.ADD)}
+          isOpen={addModal.isOpen}
+          hide={addModal.close}
           eventId={eventId}
           orgId={orgId}
           refetchVolunteers={refetchVolunteers}
@@ -476,13 +471,13 @@ function Volunteers(): JSX.Element {
         {volunteer && (
           <>
             <VolunteerViewModal
-              isOpen={modalState[ModalState.VIEW]}
-              hide={() => closeModal(ModalState.VIEW)}
+              isOpen={viewModal.isOpen}
+              hide={viewModal.close}
               volunteer={volunteer}
             />
             <VolunteerDeleteModal
-              isOpen={modalState[ModalState.DELETE]}
-              hide={() => closeModal(ModalState.DELETE)}
+              isOpen={deleteModal.isOpen}
+              hide={deleteModal.close}
               volunteer={volunteer}
               refetchVolunteers={refetchVolunteers}
               isRecurring={isRecurring}

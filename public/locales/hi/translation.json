@@ -677,7 +677,8 @@
     "Workshops": "कार्यशालाएँ",
     "selectMonth": "महीना चुनें",
     "selectDay": "दिन चुनें",
-    "selectYear": "वर्ष चुनें"
+    "selectYear": "वर्ष चुनें",
+    "selectWeek": "सप्ताह चुनें"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -1707,9 +1708,12 @@
     "donations": "दान",
     "searchDonations": "दान खोजें",
     "donateForThe": "के लिए दान करें",
+    "donor": "दाता",
     "amount": "मात्रा",
+    "date": "तारीख",
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान करें",
+    "loading": "लोड हो रहा है...",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "success": "दान सफल",
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
@@ -2596,5 +2600,8 @@
       "sun": "रवि"
     },
     "expandDay": "दिन विस्तारित करें"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "साप्ताहिक कैलेंडर दृश्य"
   }
 }

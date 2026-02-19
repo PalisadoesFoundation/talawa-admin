@@ -14,6 +14,12 @@ const PARAM_DESCRIPTIONS: Record<string, string> = {
   REACT_APP_RECAPTCHA_SITE_KEY:
     'Google reCAPTCHA site key used for verification.',
   ALLOW_LOGS: 'Whether logs are allowed in the console.',
+  VITE_GOOGLE_CLIENT_ID: 'Google OAuth 2.0 Client ID for authentication.',
+  VITE_GOOGLE_REDIRECT_URI:
+    'Redirect URI for Google OAuth callback (authorized in Google Console).',
+  VITE_GITHUB_CLIENT_ID: 'GitHub OAuth App Client ID for authentication.',
+  VITE_GITHUB_REDIRECT_URI:
+    'Redirect URI for GitHub OAuth callback (authorized in GitHub settings).',
 };
 
 export const updateEnvFile = (

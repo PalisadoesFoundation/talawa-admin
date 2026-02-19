@@ -660,7 +660,8 @@
     "Workshops": "Talleres",
     "selectMonth": "Seleccionar mes",
     "selectDay": "Seleccionar día",
-    "selectYear": "Seleccionar año"
+    "selectYear": "Seleccionar año",
+    "selectWeek": "Seleccionar semana"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -1696,9 +1697,12 @@
     "searchDonations": "Buscar donaciones",
     "donateForThe": "Donar para el",
     "donateTo": "Donar a",
+    "donor": "Donante",
     "amount": "Cantidad",
+    "date": "Fecha",
     "yourPreviousDonations": "Tus donaciones anteriores",
     "donate": "Donar",
+    "loading": "Cargando...",
     "nothingToShow": "Nada que mostrar aquí.",
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
@@ -2596,5 +2600,8 @@
       "sun": "D"
     },
     "expandDay": "Expandir día"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Vista de calendario semanal"
   }
 }

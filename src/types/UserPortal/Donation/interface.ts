@@ -15,3 +15,10 @@ export interface InterfaceDonationCardProps {
   payPalId: string;
   updatedAt: string;
 }
+
+export interface IDonationTableRow {
+  id: string;
+  donor: string;
+  amount: number;
+  updatedAt: string;
+}
