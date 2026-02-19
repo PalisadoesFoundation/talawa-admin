@@ -31,17 +31,6 @@ import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
 
-vi.mock('../../utils/useLocalStorage', () => {
-  return {
-    default: () => ({
-      getItem: vi.fn(),
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-      clearAllItems: vi.fn(),
-    }),
-  };
-});
-
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
@@ -1151,7 +1140,7 @@ describe('PostCard', () => {
 
     // Open dropdown
     const dropdownButton = screen.getByTestId('post-more-options-button');
-    await userEvent.click(dropdownButton);
+    await user.click(dropdownButton);
 
     // Wait for menu to appear, then click unpin option (uses same test ID)
     await waitFor(() => {
@@ -1159,7 +1148,7 @@ describe('PostCard', () => {
     });
 
     const unpinButton = screen.getByTestId('pin-post-menu-item');
-    await userEvent.click(unpinButton);
+    await user.click(unpinButton);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
