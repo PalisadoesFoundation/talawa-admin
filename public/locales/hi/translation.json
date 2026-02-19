@@ -677,7 +677,8 @@
     "Workshops": "कार्यशालाएँ",
     "selectMonth": "महीना चुनें",
     "selectDay": "दिन चुनें",
-    "selectYear": "वर्ष चुनें"
+    "selectYear": "वर्ष चुनें",
+    "selectWeek": "सप्ताह चुनें"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -2598,5 +2599,8 @@
       "sun": "रवि"
     },
     "expandDay": "दिन विस्तारित करें"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "साप्ताहिक कैलेंडर दृश्य"
   }
 }
