@@ -371,6 +371,24 @@ describe('ActionItemModal', () => {
   });
 
   describe('Create Mode', () => {
+    it('should show validation toast when form is submitted without required fields', async () => {
+      renderModal();
+      const modal = await screen.findByTestId('actionItemModal');
+      const form = modal.querySelector('form');
+
+      expect(form).not.toBeNull();
+      form?.dispatchEvent(
+        new Event('submit', { bubbles: true, cancelable: true }),
+      );
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
+      });
+    });
+
     it('should show validation error when submitting without category and assignment', async () => {
       renderModal();
       await screen.findByTestId('actionItemModal');
@@ -672,6 +690,74 @@ describe('ActionItemModal', () => {
       expect(seriesRadio).toBeChecked();
       expect(instanceRadio).not.toBeChecked();
     });
+
+    it('should clear non-template volunteer when switching applyTo to series', async () => {
+      const user = userEvent.setup();
+      renderModal({
+        editMode: true,
+        isRecurring: true,
+        actionItem: {
+          ...mockActionItem,
+          isTemplate: true,
+          volunteerId: 'volunteer2',
+          volunteer: createVolunteer('eventId', {
+            id: 'volunteer2',
+            name: 'Jane Smith',
+            isTemplate: false,
+          }),
+        } as unknown as IActionItemInfo,
+      });
+      await screen.findByTestId('actionItemModal');
+
+      const volunteerInput = within(
+        screen.getByTestId('volunteerSelect'),
+      ).getByRole('combobox');
+
+      await waitFor(() => {
+        expect(volunteerInput).toHaveValue('Jane Smith');
+      });
+
+      await user.click(screen.getByLabelText('thisEventOnly'));
+      await user.click(screen.getByLabelText('entireSeries'));
+
+      await waitFor(() => {
+        expect(volunteerInput).toHaveValue('');
+      });
+    });
+
+    it('should clear non-template volunteer group when switching applyTo to series', async () => {
+      const user = userEvent.setup();
+      renderModal({
+        editMode: true,
+        isRecurring: true,
+        actionItem: {
+          ...mockActionItemWithGroup,
+          isTemplate: true,
+          volunteerGroupId: 'group2',
+          volunteerGroup: createVolunteerGroup('eventId', {
+            id: 'group2',
+            name: 'Test Group 2',
+            isTemplate: false,
+          }),
+        } as unknown as IActionItemInfo,
+      });
+      await screen.findByTestId('actionItemModal');
+
+      const groupInput = within(
+        await screen.findByTestId('volunteerGroupSelect'),
+      ).getByRole('combobox');
+
+      await waitFor(() => {
+        expect(groupInput).toHaveValue('Test Group 2');
+      });
+
+      await user.click(screen.getByLabelText('thisEventOnly'));
+      await user.click(screen.getByLabelText('entireSeries'));
+
+      await waitFor(() => {
+        expect(groupInput).toHaveValue('');
+      });
+    });
   });
 
   describe('Assignment Type Switching', () => {
@@ -909,6 +995,212 @@ describe('ActionItemModal', () => {
       );
 
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
+    });
+
+    it('should handle updateActionItem mutation failure with error toast', async () => {
+      const user = userEvent.setup();
+      const updateErrorMocks = [
+        ...mockQueries.slice(0, 4),
+        {
+          request: { query: UPDATE_ACTION_ITEM_MUTATION },
+          variableMatcher: () => true,
+          error: new Error('update failed'),
+        },
+        mockQueries[5],
+      ];
+
+      render(
+        <MockedProvider mocks={updateErrorMocks}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={vi.fn()}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={vi.fn()}
+              editMode={true}
+              actionItem={{ ...mockActionItem, isTemplate: false }}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('actionItemModal');
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+      });
+    });
+
+    it('should handle updateActionForInstance error and missing id paths', async () => {
+      const user = userEvent.setup();
+      const instanceErrorMocks = [
+        ...mockQueries.slice(0, 5),
+        {
+          request: { query: UPDATE_ACTION_ITEM_FOR_INSTANCE },
+          variableMatcher: () => true,
+          error: new Error('instance update failed'),
+        },
+      ];
+
+      const { rerender } = render(
+        <MockedProvider mocks={instanceErrorMocks}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={vi.fn()}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={vi.fn()}
+              editMode={true}
+              isRecurring={true}
+              actionItem={mockActionItem}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('actionItemModal');
+      await user.click(screen.getByLabelText('thisEventOnly'));
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+      });
+
+      rerender(
+        <MockedProvider mocks={mockQueries}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={vi.fn()}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={vi.fn()}
+              editMode={true}
+              isRecurring={true}
+              actionItem={
+                {
+                  ...mockActionItem,
+                  id: undefined,
+                  isTemplate: true,
+                } as unknown as IActionItemInfo
+              }
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('actionItemModal');
+      await user.click(screen.getByLabelText('thisEventOnly'));
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+      });
+    });
+
+    it('should route template instance-exception edits through instance update path', async () => {
+      const user = userEvent.setup();
+      const instanceCalls: unknown[] = [];
+      const instanceMatcher = (variables: unknown): boolean => {
+        instanceCalls.push(variables);
+        return true;
+      };
+
+      const instanceExceptionMocks = [
+        ...mockQueries.slice(0, 5),
+        {
+          request: { query: UPDATE_ACTION_ITEM_FOR_INSTANCE },
+          variableMatcher: instanceMatcher,
+          result: { data: { updateActionItemForInstance: { id: '1' } } },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={instanceExceptionMocks}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={vi.fn()}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={vi.fn()}
+              editMode={true}
+              isRecurring={true}
+              actionItem={{
+                ...mockActionItem,
+                isTemplate: true,
+                isInstanceException: true,
+              }}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('actionItemModal');
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(instanceCalls.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should include volunteerGroupId in updateActionForInstance payload when assigned to group', async () => {
+      const user = userEvent.setup();
+      let capturedInput: Record<string, unknown> | undefined;
+      const matcher = (variables: unknown): boolean => {
+        const vars = variables as { input?: Record<string, unknown> };
+        capturedInput = vars.input;
+        return true;
+      };
+
+      const groupInstanceMocks = [
+        ...mockQueries.slice(0, 5),
+        {
+          request: { query: UPDATE_ACTION_ITEM_FOR_INSTANCE },
+          variableMatcher: matcher,
+          result: { data: { updateActionItemForInstance: { id: '1' } } },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={groupInstanceMocks}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={vi.fn()}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={vi.fn()}
+              editMode={true}
+              isRecurring={true}
+              actionItem={{
+                ...mockActionItemWithGroup,
+                isTemplate: true,
+              }}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('actionItemModal');
+      await user.click(screen.getByLabelText('thisEventOnly'));
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(capturedInput?.volunteerGroupId).toBe('group1');
+      });
     });
   });
 
