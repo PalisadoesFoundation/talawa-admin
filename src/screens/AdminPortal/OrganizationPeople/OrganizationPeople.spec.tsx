@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
@@ -283,16 +283,6 @@ const loadMoreMock = {
   },
 };
 
-const SEARCH_DEBOUNCE_MS = 300;
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 let user: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
@@ -332,22 +322,24 @@ describe('OrganizationPeople', () => {
   it('renders loading state initially', async () => {
     renderOrgPeople([defaultMemberMock]);
     expect(screen.getByTestId('cursor-pagination-loading')).toBeInTheDocument();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
   });
 
   it('displays members list correctly', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    expect(screen.getByText('john@example.com')).toBeInTheDocument();
-    expect(screen.getByText('jane@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      expect(screen.getByText('john@example.com')).toBeInTheDocument();
+      expect(screen.getByText('jane@example.com')).toBeInTheDocument();
+    });
   });
 
   it('displays joined dates correctly', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
 
     const dateFormatter = new Intl.DateTimeFormat('en-GB', {
       year: 'numeric',
@@ -359,32 +351,40 @@ describe('OrganizationPeople', () => {
       dayjs.utc().subtract(3, 'day').toDate(),
     );
 
-    expect(screen.getByTestId('org-people-joined-member1')).toHaveTextContent(
-      `Joined : ${expectedDate1}`,
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('org-people-joined-member1')).toHaveTextContent(
+        `Joined : ${expectedDate1}`,
+      );
+    });
   });
 
   it('renders avatar image when avatarURL is provided', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByAltText('John Doe')).toBeInTheDocument();
+    });
 
     const img = screen.getByAltText('John Doe');
-    expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/avatar1.jpg');
     expect(img).toHaveAttribute('crossorigin', 'anonymous');
   });
 
   it('renders Avatar component when avatarURL is null', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
 
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    expect(screen.getByTestId('org-people-row-member2')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      expect(screen.getByTestId('org-people-row-member2')).toBeInTheDocument();
+    });
   });
 
   it('renders member name as link to profile', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     const link = screen.getByText('John Doe').closest('a');
     expect(link).toHaveAttribute('href', '/admin/member/orgid/member1');
@@ -392,24 +392,25 @@ describe('OrganizationPeople', () => {
 
   it('shows empty state when no members', async () => {
     renderOrgPeople([emptyMemberMock]);
-    await wait();
 
-    expect(
-      screen.getByTestId('organization-people-empty-state'),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('organization-people-empty-state'),
+      ).toBeInTheDocument();
+    });
   });
 });
 
 describe('OrganizationPeople Search', () => {
   it('filters members by name (client-side)', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    });
 
     await user.type(screen.getByTestId('member-search-input'), 'Jane');
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
@@ -419,10 +420,12 @@ describe('OrganizationPeople Search', () => {
 
   it('filters members by email (client-side)', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     await user.type(screen.getByTestId('member-search-input'), 'john@example');
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -432,7 +435,10 @@ describe('OrganizationPeople Search', () => {
 
   it('clears search and shows all members', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'John');
@@ -442,7 +448,6 @@ describe('OrganizationPeople Search', () => {
     await user.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -454,13 +459,13 @@ describe('OrganizationPeople Search', () => {
 describe('OrganizationPeople Tab Switching', () => {
   it('switches to admin tab and shows admin data', async () => {
     renderOrgPeople([defaultMemberMock, adminMock]);
-    await wait();
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByTestId('sort-toggle'));
     await user.click(screen.getByText(/admin/i));
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -469,13 +474,13 @@ describe('OrganizationPeople Tab Switching', () => {
 
   it('switches to users tab and shows user data', async () => {
     renderOrgPeople([defaultMemberMock, usersMock]);
-    await wait();
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByTestId('sort-toggle'));
     await user.click(screen.getByText(/users/i));
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('User One')).toBeInTheDocument();
@@ -490,14 +495,14 @@ describe('OrganizationPeople Tab Switching', () => {
       usersMock,
       defaultMemberMock,
     ]);
-    await wait();
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     // → Admins
     await user.click(screen.getByTestId('sort-toggle'));
     await user.click(screen.getByText(/admin/i));
-    await wait();
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
     });
@@ -505,7 +510,6 @@ describe('OrganizationPeople Tab Switching', () => {
     // → Users
     await user.click(screen.getByTestId('sort-toggle'));
     await user.click(screen.getByText(/users/i));
-    await wait();
     await waitFor(() => {
       expect(screen.getByText('User One')).toBeInTheDocument();
     });
@@ -513,7 +517,6 @@ describe('OrganizationPeople Tab Switching', () => {
     // → Members
     await user.click(screen.getByTestId('sort-toggle'));
     await user.click(screen.getByText(/members/i));
-    await wait();
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
@@ -523,15 +526,15 @@ describe('OrganizationPeople Tab Switching', () => {
 describe('OrganizationPeople Load More', () => {
   it('loads more members when Load More is clicked', async () => {
     renderOrgPeople([defaultMemberMock, loadMoreMock]);
-    await wait();
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     const loadMoreBtn = screen.getByTestId('load-more-button');
     expect(loadMoreBtn).toBeInTheDocument();
 
     await user.click(loadMoreBtn);
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Extra Member')).toBeInTheDocument();
@@ -556,9 +559,10 @@ describe('OrganizationPeople Remove Member', () => {
     };
 
     renderOrgPeople([defaultMemberMock, removeMemberMock]);
-    await wait();
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
     await user.click(deleteButtons[0]);
@@ -577,11 +581,13 @@ describe('OrganizationPeople Remove Member', () => {
 
   it('disables delete button on users tab', async () => {
     renderOrgPeople([defaultMemberMock, usersMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
     await user.click(screen.getByTestId('sort-toggle'));
     await user.click(screen.getByText(/users/i));
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('User One')).toBeInTheDocument();
@@ -600,7 +606,6 @@ describe('OrganizationPeople Location State', () => {
       [adminMock],
       [{ pathname: '/admin/orgpeople/orgid', state: { role: 1 } }],
     );
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -613,7 +618,6 @@ describe('OrganizationPeople Location State', () => {
       [defaultMemberMock],
       [{ pathname: '/admin/orgpeople/orgid', state: { role: 99 } }],
     );
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -625,7 +629,6 @@ describe('OrganizationPeople Location State', () => {
 describe('OrganizationPeople Sort Fallback', () => {
   it('handleSortChange falls back to state 0 for invalid option', async () => {
     renderOrgPeople([defaultMemberMock]);
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -690,7 +693,6 @@ describe('OrganizationPeople Date Locale', () => {
       };
 
       renderOrgPeople([mockWithFixedDate]);
-      await wait();
 
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -743,7 +745,6 @@ describe('OrganizationPeople Date Locale', () => {
     };
 
     renderOrgPeople([mockWithMissingDate]);
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Member No Date')).toBeInTheDocument();
@@ -767,5 +768,224 @@ describe('OrganizationPeople Date Locale', () => {
     }).format(new Date());
 
     expect(joinedEl.textContent ?? '').toContain(todayFormatted);
+  });
+});
+
+describe('OrganizationPeople Keyboard Accessibility', () => {
+  it('search input is focusable via Tab', async () => {
+    renderOrgPeople([defaultMemberMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('member-search-input');
+    await user.tab();
+
+    await waitFor(() => {
+      expect(searchInput).toHaveFocus();
+    });
+  });
+
+  it('member name link is focusable and activatable via keyboard', async () => {
+    renderOrgPeople([defaultMemberMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const link = screen.getByText('John Doe').closest('a') as HTMLElement;
+    link.focus();
+    expect(link).toHaveFocus();
+    expect(link).toHaveAttribute('href', '/admin/member/orgid/member1');
+  });
+
+  it('delete button is focusable and activatable via Enter key', async () => {
+    const removeMemberMock = {
+      request: {
+        query: REMOVE_MEMBER_MUTATION_PG,
+        variables: { organizationId: 'orgid', memberId: 'member1' },
+      },
+      result: {
+        data: {
+          removeMember: { id: 1 },
+        },
+      },
+    };
+
+    renderOrgPeople([defaultMemberMock, removeMemberMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
+    deleteButtons[0].focus();
+    expect(deleteButtons[0]).toHaveFocus();
+
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('removeMemberModal')).toBeInTheDocument();
+    });
+  });
+
+  it('delete button has accessible aria-label', async () => {
+    renderOrgPeople([defaultMemberMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
+    deleteButtons.forEach((btn) => {
+      expect(btn).toHaveAttribute('aria-label');
+    });
+  });
+
+  it('table has correct ARIA roles', async () => {
+    renderOrgPeople([defaultMemberMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getAllByRole('columnheader').length).toBeGreaterThanOrEqual(
+      4,
+    );
+    expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByRole('cell').length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('allows Tab navigation through interactive elements in member rows', async () => {
+    renderOrgPeople([defaultMemberMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const firstLink = screen.getByText('John Doe').closest('a') as HTMLElement;
+    const secondLink = screen
+      .getByText('Jane Smith')
+      .closest('a') as HTMLElement;
+    const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
+
+    firstLink.focus();
+    expect(firstLink).toHaveFocus();
+
+    await user.tab();
+    expect(deleteButtons[0]).toHaveFocus();
+
+    await user.tab();
+    expect(secondLink).toHaveFocus();
+
+    await user.tab();
+    expect(deleteButtons[1]).toHaveFocus();
+  });
+
+  it('Load More button has accessible aria-label and is keyboard activatable', async () => {
+    renderOrgPeople([defaultMemberMock, loadMoreMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const loadMoreBtn = screen.getByTestId('load-more-button');
+    expect(loadMoreBtn).toHaveAttribute('aria-label');
+
+    loadMoreBtn.focus();
+    expect(loadMoreBtn).toHaveFocus();
+
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByText('Extra Member')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('OrganizationPeople Error States', () => {
+  it('displays error state when initial query fails', async () => {
+    const errorMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeMemberQueryVars(),
+      },
+      error: new Error('Network error'),
+    };
+
+    renderOrgPeople([errorMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
+      expect(screen.getByText('Network error')).toBeInTheDocument();
+    });
+  });
+
+  it('displays error with retry button on query failure', async () => {
+    const errorMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeMemberQueryVars(),
+      },
+      error: new Error('Server error'),
+    };
+
+    renderOrgPeople([errorMock, defaultMemberMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Server error')).toBeInTheDocument();
+    });
+
+    const retryBtn = screen.getByRole('button', { name: /retry/i });
+    expect(retryBtn).toBeInTheDocument();
+  });
+
+  it('handles error on users tab query', async () => {
+    const usersErrorMock = {
+      request: {
+        query: USER_LIST_FOR_TABLE,
+        variables: makeUserQueryVars(),
+      },
+      error: new Error('Users query failed'),
+    };
+
+    renderOrgPeople([defaultMemberMock, usersErrorMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('sort-toggle'));
+    await user.click(screen.getByText(/users/i));
+
+    await waitFor(() => {
+      expect(screen.getByText('Users query failed')).toBeInTheDocument();
+    });
+  });
+
+  it('handles rapid tab switching without errors', async () => {
+    renderOrgPeople([
+      defaultMemberMock,
+      adminMock,
+      defaultMemberMock,
+      adminMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Rapidly switch tabs
+    await user.click(screen.getByTestId('sort-toggle'));
+    await user.click(screen.getByText(/admin/i));
+
+    await user.click(screen.getByTestId('sort-toggle'));
+    await user.click(screen.getByText(/members/i));
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
   });
 });

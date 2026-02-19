@@ -1,4 +1,4 @@
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -242,16 +242,6 @@ const avatarMock = {
   },
 };
 
-const SEARCH_DEBOUNCE_MS = 300;
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 const sharedMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: '' })),
 }));
@@ -308,25 +298,30 @@ const renderPeople = (mocks: MockedResponse[]) => {
 describe('People Screen [User Portal]', () => {
   it('renders members correctly', async () => {
     renderPeople([defaultQueryMock]);
-    await wait();
 
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
-    expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+      expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    });
   });
 
   it('shows loading state initially', async () => {
     renderPeople([defaultQueryMock]);
 
-    // CursorPaginationManager shows loading state
     expect(screen.getByTestId('cursor-pagination-loading')).toBeInTheDocument();
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
   });
 
   it('displays role labels correctly', async () => {
     renderPeople([defaultQueryMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
 
     // Admin User should have 'Admin' role label
     const adminRow = screen.getByTestId('people-row-2');
@@ -339,59 +334,61 @@ describe('People Screen [User Portal]', () => {
 
   it('displays email addresses correctly', async () => {
     renderPeople([defaultQueryMock]);
-    await wait();
 
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
-    expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+      expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    });
   });
 
   it('displays emailNotAvailable when email is null', async () => {
     renderPeople([nullEmailMock]);
-    await wait();
 
-    expect(screen.getByText('Test User No Email')).toBeInTheDocument();
-    expect(screen.getByText('Email not available')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User No Email')).toBeInTheDocument();
+      expect(screen.getByText('Email not available')).toBeInTheDocument();
+    });
   });
 
   it('renders avatar image when avatarURL is provided', async () => {
     renderPeople([avatarMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByAltText('User With Avatar')).toBeInTheDocument();
+    });
 
     const img = screen.getByAltText('User With Avatar');
-    expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg');
   });
 
   it('renders Avatar component when avatarURL is null', async () => {
     renderPeople([avatarMock]);
-    await wait();
 
-    // User Without Avatar should render Avatar component (no img tag)
-    expect(screen.getByText('User Without Avatar')).toBeInTheDocument();
-    // The Avatar component renders with the user's name
-    expect(screen.getByTestId('people-row-2')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('User Without Avatar')).toBeInTheDocument();
+      expect(screen.getByTestId('people-row-2')).toBeInTheDocument();
+    });
   });
 
   it('shows empty state when no members', async () => {
     renderPeople([emptyMock]);
-    await wait();
 
-    expect(screen.getByText('Nothing to show here')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Nothing to show here')).toBeInTheDocument();
+    });
   });
 });
 
 describe('People Screen Search [User Portal]', () => {
   it('filters members by name (client-side)', async () => {
     renderPeople([defaultQueryMock]);
-    await wait();
 
-    // All members visible initially
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+    });
 
-    // Type search term
     await user.type(screen.getByTestId('searchInput'), 'Admin');
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -401,10 +398,12 @@ describe('People Screen Search [User Portal]', () => {
 
   it('filters members by email (client-side)', async () => {
     renderPeople([defaultQueryMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
 
     await user.type(screen.getByTestId('searchInput'), 'test@example');
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -414,7 +413,10 @@ describe('People Screen Search [User Portal]', () => {
 
   it('clears search input and shows all members', async () => {
     renderPeople([defaultQueryMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
 
     const searchInput = screen.getByTestId('searchInput');
     await user.type(searchInput, 'Test');
@@ -424,9 +426,7 @@ describe('People Screen Search [User Portal]', () => {
     await user.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
-    await wait(SEARCH_DEBOUNCE_MS);
 
-    // All members should be visible again
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
       expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -435,10 +435,12 @@ describe('People Screen Search [User Portal]', () => {
 
   it('handles search with enter key', async () => {
     renderPeople([defaultQueryMock]);
-    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
 
     await user.type(screen.getByTestId('searchInput'), 'Admin{enter}');
-    await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -450,15 +452,13 @@ describe('People Screen Search [User Portal]', () => {
 describe('People Screen Mode Switch [User Portal]', () => {
   it('switches to Admins mode and refetches with where filter', async () => {
     renderPeople([defaultQueryMock, adminModeMock]);
-    await wait();
 
-    // Initially all members visible
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
 
-    // Switch to Admins
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-1'));
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -467,21 +467,20 @@ describe('People Screen Mode Switch [User Portal]', () => {
 
   it('switches back to All Members mode', async () => {
     renderPeople([defaultQueryMock, adminModeMock, defaultQueryMock]);
-    await wait();
 
-    // Switch to Admins
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
+
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-1'));
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
     });
 
-    // Switch back to All Members
     await user.click(screen.getByTestId('modeChangeBtn-toggle'));
     await user.click(screen.getByTestId('modeChangeBtn-item-0'));
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -492,24 +491,133 @@ describe('People Screen Mode Switch [User Portal]', () => {
 describe('People Screen Load More [User Portal]', () => {
   it('loads more members when Load More is clicked', async () => {
     renderPeople([defaultQueryMock, loadMoreMock]);
-    await wait();
 
-    // Initial members visible
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
 
-    // Load more button should be visible (hasNextPage: true)
     const loadMoreBtn = screen.getByTestId('load-more-button');
     expect(loadMoreBtn).toBeInTheDocument();
 
     await user.click(loadMoreBtn);
-    await wait();
 
-    // New member should appear
     await waitFor(() => {
       expect(screen.getByText('Extra User')).toBeInTheDocument();
     });
 
-    // Original members should still be visible
     expect(screen.getByText('Test User')).toBeInTheDocument();
+  });
+});
+
+describe('People Screen Keyboard Accessibility [User Portal]', () => {
+  it('search input is focusable via Tab', async () => {
+    renderPeople([defaultQueryMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchInput');
+    await user.tab();
+
+    await waitFor(() => {
+      expect(searchInput).toHaveFocus();
+    });
+  });
+
+  it('table has correct ARIA roles', async () => {
+    renderPeople([defaultQueryMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
+
+    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(screen.getAllByRole('columnheader').length).toBeGreaterThanOrEqual(
+      4,
+    );
+    expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(2);
+    expect(screen.getAllByRole('cell').length).toBeGreaterThanOrEqual(4);
+  });
+
+  it('Load More button has accessible aria-label and is keyboard activatable', async () => {
+    renderPeople([defaultQueryMock, loadMoreMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
+
+    const loadMoreBtn = screen.getByTestId('load-more-button');
+    expect(loadMoreBtn).toHaveAttribute('aria-label');
+
+    loadMoreBtn.focus();
+    expect(loadMoreBtn).toHaveFocus();
+
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByText('Extra User')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('People Screen Error States [User Portal]', () => {
+  it('displays error state when initial query fails', async () => {
+    const errorMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeQueryVars(),
+      },
+      error: new Error('Network error'),
+    };
+
+    renderPeople([errorMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
+      expect(screen.getByText('Network error')).toBeInTheDocument();
+    });
+  });
+
+  it('displays retry button on query failure', async () => {
+    const errorMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeQueryVars(),
+      },
+      error: new Error('Server error'),
+    };
+
+    renderPeople([errorMock, defaultQueryMock]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Server error')).toBeInTheDocument();
+    });
+
+    const retryBtn = screen.getByRole('button', { name: /retry/i });
+    expect(retryBtn).toBeInTheDocument();
+  });
+
+  it('handles rapid mode switching without errors', async () => {
+    renderPeople([
+      defaultQueryMock,
+      adminModeMock,
+      defaultQueryMock,
+      adminModeMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('modeChangeBtn-toggle'));
+    await user.click(screen.getByTestId('modeChangeBtn-item-1'));
+
+    await user.click(screen.getByTestId('modeChangeBtn-toggle'));
+    await user.click(screen.getByTestId('modeChangeBtn-item-0'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
   });
 });
