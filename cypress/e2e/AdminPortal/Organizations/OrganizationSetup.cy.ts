@@ -4,7 +4,6 @@ import {
   OrganizationSetupPage,
   type CreateOrganizationInput,
 } from '../../../pageObjects/AdminPortal/OrganizationSetupPage';
-import { getApiPattern } from '../../../support/graphql-utils';
 
 const clearTestState = () => {
   cy.clearAllGraphQLMocks();
@@ -57,43 +56,6 @@ describe('Organization setup workflow', () => {
     };
 
     setupPage.visitOrgList();
-    cy.intercept('POST', getApiPattern(), (req) => {
-      const body = req.body as
-        | {
-            operationName?: string;
-            query?: string;
-            operations?: string | { operationName?: string; query?: string };
-          }
-        | undefined;
-      let operationName = body?.operationName;
-      let query = body?.query;
-
-      if (!operationName && body?.operations) {
-        try {
-          const operationsPayload =
-            typeof body.operations === 'string'
-              ? (JSON.parse(body.operations) as {
-                  operationName?: string;
-                  query?: string;
-                })
-              : body.operations;
-          operationName = operationsPayload.operationName;
-          query = operationsPayload.query;
-        } catch {
-          operationName = body?.operationName;
-          query = body?.query;
-        }
-      }
-
-      if (
-        operationName === 'createOrganization' ||
-        operationName === 'CreateOrganization' ||
-        query?.includes('createOrganization(')
-      ) {
-        req.alias = 'createOrganizationMutation';
-      }
-      req.continue();
-    });
     cy.log('Phase: Create organization');
 
     setupPage
@@ -101,21 +63,14 @@ describe('Organization setup workflow', () => {
       .fillCreateOrganizationForm(createOrganizationInput)
       .submitCreateOrganizationForm();
 
-    cy.wait('@createOrganizationMutation', { timeout: 50000 }).then(
-      (interception) => {
-        const createdOrgId =
-          interception.response?.body?.data?.createOrganization?.id;
-        if (typeof createdOrgId !== 'string' || createdOrgId.length === 0) {
-          throw new Error(
-            'Expected createOrganization response with a valid organization id.',
-          );
-        }
+    setupPage
+      .getCreatedOrganizationIdFromPluginModal(50000)
+      .then((createdOrgId) => {
         orgId = createdOrgId;
         setupPage.closePluginNotificationIfOpen();
         cy.visit(`/admin/orgdash/${orgId}`);
         cy.url().should('include', '/admin/orgdash/');
-      },
-    );
+      });
 
     cy.log('Phase: Update settings and branding');
     cy.mockGraphQLOperation('getOrganizationBasicData', (req) => {
@@ -208,6 +163,26 @@ describe('Organization setup workflow', () => {
     });
 
     setupPage.visitOrgList();
+    cy.mockGraphQLError(
+      'createOrganization',
+      'Organization name already exists',
+      'CONFLICT',
+    );
+    cy.mockGraphQLError(
+      'CreateOrganization',
+      'Organization name already exists',
+      'CONFLICT',
+    );
+    cy.mockGraphQLError(
+      'createOrganizationMutation',
+      'Organization name already exists',
+      'CONFLICT',
+    );
+    cy.mockGraphQLError(
+      'CreateOrganizationMutation',
+      'Organization name already exists',
+      'CONFLICT',
+    );
 
     setupPage
       .openCreateOrganizationModal()
