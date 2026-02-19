@@ -6,9 +6,9 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
   private readonly actionItemCategoriesButton = 'actionItemCategoriesSettings';
   private readonly generalTab = 'generalTab';
   private readonly actionItemCategoriesTab = 'actionItemCategoriesTab';
-  private readonly organizationNameInput = '[name="orgName"]';
-  private readonly organizationDescriptionInput = '[name="orgDescrip"]';
-  private readonly organizationLocationInput = '[name="address.line1"]';
+  private readonly organizationNameInput = '#orgName';
+  private readonly organizationDescriptionInput = '#orgDescrip';
+  private readonly organizationLocationInput = '#address\\.line1';
   private readonly isPublicSwitch = 'user-reg-switch';
   private readonly organizationImageInput = 'organisationImage';
   private readonly saveChangesButton = 'save-org-changes-btn';
