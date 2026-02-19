@@ -8,7 +8,9 @@ import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
+import askAndSetOAuth from 'setup/oauthConfig/oauthConfig';
 import { pathToFileURL } from 'url';
+import { ENV_KEYS, isExitPromptError } from 'setup/utils';
 
 /**
  * Environment variable value constants
@@ -17,25 +19,6 @@ export const ENV_VALUES = {
   YES: 'YES',
   NO: 'NO',
 } as const;
-
-/**
- * Environment variable key names used by the setup script
- */
-export const ENV_KEYS = {
-  USE_RECAPTCHA: 'REACT_APP_USE_RECAPTCHA',
-  RECAPTCHA_SITE_KEY: 'REACT_APP_RECAPTCHA_SITE_KEY',
-  ALLOW_LOGS: 'ALLOW_LOGS',
-  USE_DOCKER: 'USE_DOCKER',
-  DOCKER_MODE: 'DOCKER_MODE',
-  TALAWA_URL: 'REACT_APP_TALAWA_URL',
-  BACKEND_WEBSOCKET_URL: 'REACT_APP_BACKEND_WEBSOCKET_URL',
-} as const;
-
-const isExitPromptError = (error: unknown): boolean =>
-  typeof error === 'object' &&
-  error !== null &&
-  'name' in error &&
-  (error as { name: string }).name === 'ExitPromptError';
 
 /**
  * Prompts user to configure reCAPTCHA settings and updates the .env file.
@@ -138,7 +121,8 @@ export const askAndSetLogErrors = async (): Promise<void> => {
  * 3. Configures Docker options
  * 4. Sets up port (if not using Docker) and API URL
  * 5. Configures reCAPTCHA settings
- * 6. Configures error logging preferences
+ * 6. Configures OAuth providers (Google/GitHub)
+ * 7. Configures error logging preferences
  *
  * If any step fails, exits with error code 1.
  * Can be cancelled with CTRL+C (exits with code 130).
@@ -200,6 +184,7 @@ export async function main(): Promise<void> {
     await askAndUpdateTalawaApiUrl(useDocker);
 
     await askAndSetRecaptcha();
+    await askAndSetOAuth();
     await askAndSetLogErrors();
 
     console.log(

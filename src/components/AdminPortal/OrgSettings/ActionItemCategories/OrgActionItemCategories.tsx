@@ -39,7 +39,8 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
   type GridCellParams,
-  type GridColDef,
+  convertTokenColumns,
+  type TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
 import { Stack } from '@mui/material';
@@ -48,13 +49,7 @@ import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-
-/** Modal state management */
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-  VIEW = 'view',
-}
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 /** Category status for filtering */
 enum CategoryStatus {
@@ -89,13 +84,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const [status, setStatus] = useState<CategoryStatus | null>(null);
   const [categories, setCategories] = useState<IActionItemCategoryInfo[]>([]);
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-  });
+  const categoryModal = useModalState();
+  const viewModal = useModalState();
 
   // Query to fetch action item categories
   const {
@@ -118,13 +108,6 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     },
   });
 
-  /** Modal state handlers */
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-
   /** Open category modal in create/edit mode */
   const handleOpenModal = useCallback(
     (
@@ -133,9 +116,9 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     ): void => {
       setCategory(category);
       setModalMode(mode);
-      openModal(ModalState.SAME);
+      categoryModal.open();
     },
-    [openModal],
+    [categoryModal],
   );
 
   /** Apply client-side filtering and sorting */
@@ -197,12 +180,12 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   }
 
   /** DataGrid column configuration */
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'serialNumber',
       headerName: 'Sr. No.',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -216,7 +199,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerName: 'Category',
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -236,7 +219,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerName: 'Status',
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -254,7 +237,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       field: 'createdAt',
       headerName: 'Created On',
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -272,7 +255,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerName: 'Action',
       flex: 1.5,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -286,7 +269,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
               data-testid={'viewCategoryBtn' + params.row.serialNumber}
               onClick={() => {
                 setCategory(params.row as IActionItemCategoryInfo);
-                openModal(ModalState.VIEW);
+                viewModal.open();
               }}
             >
               <i className="fa fa-eye" />
@@ -406,14 +389,14 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
             ...category,
             serialNumber: index + 1,
           }))}
-          columns={columns}
+          columns={convertTokenColumns(columns)}
           isRowSelectable={() => false}
         />
 
         {/* Category Modal */}
         <CategoryModal
-          isOpen={modalState[ModalState.SAME]}
-          hide={() => closeModal(ModalState.SAME)}
+          isOpen={categoryModal.isOpen}
+          hide={categoryModal.close}
           refetchCategories={refetchCategories}
           category={category}
           orgId={orgId}
@@ -422,8 +405,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
 
         {/* Category View Modal */}
         <CategoryViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
+          isOpen={viewModal.isOpen}
+          hide={viewModal.close}
           category={category}
         />
       </div>

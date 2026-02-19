@@ -5,6 +5,7 @@ import { FaBars } from 'react-icons/fa';
 import styles from './SidebarBase.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ISidebarBaseProps } from '../../types/SidebarBase/interface';
+import Button from 'shared-components/Button';
 
 /**
  * SidebarBase Component
@@ -65,7 +66,7 @@ const SidebarBase = ({
           hideDrawer ? 'justify-content-center' : 'justify-content-between'
         }`}
       >
-        <button
+        <Button
           className="d-flex align-items-center btn p-0 border-0 bg-transparent"
           data-testid="toggleBtn"
           onClick={handleToggle}
@@ -81,7 +82,7 @@ const SidebarBase = ({
             }`}
             size={22}
           />
-        </button>
+        </Button>
         <div
           className={
             hideDrawer

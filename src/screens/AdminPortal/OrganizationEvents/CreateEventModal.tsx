@@ -68,14 +68,21 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     ),
   );
 
+  const nextHour = new Date(now);
+  const nextHourValue = Math.min(now.getHours() + 1, 23);
+  nextHour.setHours(nextHourValue, 0, 0, 0);
+  const twoHoursLater = new Date(nextHour);
+  const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
+  twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
+
   const defaultValues: IEventFormValues = {
     name: '',
     description: '',
     location: '',
     startDate: todayUTC,
     endDate: todayUTC,
-    startTime: '08:00:00',
-    endTime: '18:00:00',
+    startTime: nextHour.toTimeString().split(' ')[0],
+    endTime: twoHoursLater.toTimeString().split(' ')[0],
     allDay: true,
     isPublic: false,
     isInviteOnly: true,

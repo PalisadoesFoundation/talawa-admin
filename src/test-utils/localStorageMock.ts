@@ -4,10 +4,12 @@
  *
  * @returns Storage - Mock implementation of the Storage interface
  * @example
+ * ```tsx
  * const mockStorage = createLocalStorageMock();
  * mockStorage.setItem('key', 'value');
  * expect(mockStorage.getItem('key')).toBe('value');
  * mockStorage.clear();
+ * ```
  */
 export const createLocalStorageMock = (): Storage => {
   let store: Record<string, string> = {};
@@ -41,12 +43,12 @@ export const createLocalStorageMock = (): Storage => {
  * @returns Storage - The configured localStorage mock instance
  * @example
  * // In your test file's setup:
+ *```tsx
  * const localStorageMock = setupLocalStorageMock();
- *
  * afterEach(() => {
  *   localStorageMock.clear();
  * });
- *
+ *```
  * // Then in your tests:
  * window.localStorage.setItem('token', 'abc123');
  * expect(window.localStorage.getItem('token')).toBe('abc123');

@@ -579,4 +579,41 @@ describe('FundCampaigns Screen', () => {
     const goalCells = screen.getAllByTestId('goalCell');
     expect(goalCells.length).toBe(5);
   });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open create campaign modal when Enter is pressed on add campaign button', async () => {
+      mockRouteParams();
+      renderFundCampaign(link1);
+
+      const addCampaignBtn = await screen.findByTestId('addCampaignBtn');
+      addCampaignBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() =>
+        expect(screen.getAllByText(translations.createCampaign)).toHaveLength(
+          2,
+        ),
+      );
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      mockRouteParams();
+      renderFundCampaign(link1);
+
+      const addCampaignBtn = await screen.findByTestId('addCampaignBtn');
+      await userEvent.click(addCampaignBtn);
+
+      await waitFor(() =>
+        expect(screen.getAllByText(translations.createCampaign)).toHaveLength(
+          2,
+        ),
+      );
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() =>
+        expect(screen.queryByTestId('campaignModal')).toBeNull(),
+      );
+    });
+  });
 });
