@@ -159,7 +159,9 @@ describe('OrganizationModal Component', () => {
 
     const submitButton = screen.getByTestId('modal-submit-btn');
     await userEvent.click(submitButton);
-    expect(mockCreateOrg).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockCreateOrg).toHaveBeenCalled();
+    });
   });
 
   test('uploads image correctly', async () => {
@@ -203,7 +205,9 @@ describe('OrganizationModal Component', () => {
     setup();
     const closeButton = screen.getByRole('button', { name: /close/i });
     await userEvent.click(closeButton);
-    expect(mockToggleModal).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockToggleModal).toHaveBeenCalled();
+    });
   });
 
   test('triggers sample organization creation', async () => {
@@ -238,7 +242,9 @@ describe('OrganizationModal Component', () => {
     );
 
     await userEvent.click(screen.getByTestId('modal-submit-btn'));
-    expect(mockCreateOrg).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockCreateOrg).toHaveBeenCalled();
+    });
   });
 
   test('updates all form fields correctly', async () => {
@@ -308,9 +314,11 @@ describe('OrganizationModal Component', () => {
     ) as HTMLSelectElement;
     await userEvent.selectOptions(countrySelect, 'us');
 
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ countryCode: 'us' }),
-    );
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ countryCode: 'us' }),
+      );
+    });
   });
 
   test('country code should not update if value length exceeds 50 characters', async () => {
@@ -329,7 +337,9 @@ describe('OrganizationModal Component', () => {
     await userEvent.selectOptions(countrySelect, longCode);
 
     // Expect setFormState NOT to be called because 51 > 50
-    expect(mockSetFormState).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockSetFormState).not.toHaveBeenCalled();
+    });
   });
 
   test('country select should have default disabled option', () => {
@@ -398,7 +408,9 @@ describe('OrganizationModal Component', () => {
     const submitButton = screen.getByTestId('modal-submit-btn');
 
     await userEvent.click(submitButton);
-    expect(mockCreateOrg).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockCreateOrg).toHaveBeenCalled();
+    });
   });
 
   const testCases = [
@@ -564,7 +576,9 @@ describe('OrganizationModal Component', () => {
     setup();
     const closeButton = screen.getByRole('button', { name: /close/i });
     await userEvent.click(closeButton);
-    expect(mockToggleModal).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockToggleModal).toHaveBeenCalled();
+    });
   });
   test('should handle country selection change', async () => {
     setup();
@@ -572,9 +586,11 @@ describe('OrganizationModal Component', () => {
 
     await userEvent.selectOptions(countrySelect, 'us');
 
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ countryCode: 'us' }),
-    );
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ countryCode: 'us' }),
+      );
+    });
   });
   test('should validate all required fields on submit', async () => {
     const validFormState = {
@@ -611,7 +627,9 @@ describe('OrganizationModal Component', () => {
     expect(form).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modal-submit-btn'));
-    expect(mockCreateOrg).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockCreateOrg).toHaveBeenCalled();
+    });
   });
 
   test('should handle file size exceeding 5MB', async () => {

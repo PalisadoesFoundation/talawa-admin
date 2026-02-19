@@ -147,18 +147,10 @@ describe('PledgeModal', () => {
     renderFundModal(link1, fundProps[1]);
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
-    }) as HTMLInputElement;
+    });
     expect(fundIdInput).toHaveValue('1111');
-    fundIdInput.focus();
     await userEvent.clear(fundIdInput);
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
+    await userEvent.type(fundIdInput, '2222');
     expect(fundIdInput).toHaveValue('2222');
   });
 
@@ -252,34 +244,25 @@ describe('PledgeModal', () => {
   });
 
   it('should create fund', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link2, fundProps[0]);
 
     const fundNameInput = screen.getByLabelText(translations.fundName, {
       exact: false,
-    }) as HTMLInputElement;
-    fundNameInput.focus();
-    await userEvent.clear(fundNameInput);
-    fundNameInput.focus();
-    await userEvent.type(fundNameInput, 'Fund 2');
+    });
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Fund 2');
 
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
-    }) as HTMLInputElement;
-    fundIdInput.focus();
-    await userEvent.clear(fundIdInput);
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
-    fundIdInput.focus();
-    await userEvent.type(fundIdInput, '2');
+    });
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '2222');
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
-    await userEvent.click(defaultSwitch);
+    await user.click(defaultSwitch);
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -292,13 +275,15 @@ describe('PledgeModal', () => {
     const user = userEvent.setup({ delay: null });
     renderFundModal(link2, fundProps[1]);
 
-    const fundNameInput = document.getElementById(
-      'fundName',
-    ) as HTMLInputElement;
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
     await user.clear(fundNameInput);
     await user.type(fundNameInput, 'Fund 2');
 
-    const fundIdInput = document.getElementById('fundId') as HTMLInputElement;
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
     await user.clear(fundIdInput);
     await user.type(fundIdInput, '2222');
 

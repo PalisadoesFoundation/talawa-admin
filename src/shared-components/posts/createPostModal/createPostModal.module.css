@@ -175,7 +175,7 @@
   height: var(--space-5);
   border: var(--border-2) solid
     color-mix(in srgb, var(--color-white) 20%, transparent);
-  border-top: var(--border-2) solid currentColor;
+  border-top: var(--border-2) solid currentcolor;
   border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
   vertical-align: middle;

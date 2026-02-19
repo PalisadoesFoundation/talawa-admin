@@ -26,6 +26,17 @@ import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/Pro
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import Button from 'shared-components/Button';
 
+function sanitizeBlobUrl(url: string | null): string | null {
+  if (!url || typeof url !== 'string') return null;
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== 'blob:') return null;
+    return url;
+  } catch {
+    return null;
+  }
+}
+
 function CreatePostModal({
   show,
   onHide,
@@ -48,6 +59,7 @@ function CreatePostModal({
   const [previewType, setPreviewType] = useState<'image' | 'video' | null>(
     null,
   );
+  const safeBlobUrl = sanitizeBlobUrl(preview);
   const [editPost, { loading: isEditing }] = useMutation(UPDATE_POST_MUTATION);
   const [create, { loading: isCreating }] = useMutation<
     ICreatePostData,
@@ -318,46 +330,29 @@ function CreatePostModal({
           }}
           data-testid="postBodyInput"
         />
-        {(() => {
-          const sanitizeBlobUrl = (url: string | null): string | null => {
-            if (!url || typeof url !== 'string') return null;
-            try {
-              const parsed = new URL(url);
-              if (parsed.protocol !== 'blob:') return null;
-              return url;
-            } catch {
-              return null;
-            }
-          };
+        {safeBlobUrl && previewType && (
+          <div className={styles.imagePreviewContainer}>
+            {previewType === 'image' && (
+              <img
+                src={safeBlobUrl}
+                alt={t('createPostModal.selectedImage')}
+                className={styles.imagePreview}
+                data-testid="imagePreview"
+              />
+            )}
 
-          const safeBlobUrl = sanitizeBlobUrl(preview);
-          return (
-            safeBlobUrl &&
-            previewType && (
-              <div className={styles.imagePreviewContainer}>
-                {previewType === 'image' && (
-                  <img
-                    src={safeBlobUrl}
-                    alt={t('createPostModal.selectedImage')}
-                    className={styles.imagePreview}
-                    data-testid="imagePreview"
-                  />
-                )}
-
-                {previewType === 'video' && (
-                  <video
-                    src={safeBlobUrl}
-                    controls
-                    className={styles.videoPreview}
-                    data-testid="videoPreview"
-                  >
-                    <track kind="captions" />
-                  </video>
-                )}
-              </div>
-            )
-          );
-        })()}
+            {previewType === 'video' && (
+              <video
+                src={safeBlobUrl}
+                controls
+                className={styles.videoPreview}
+                data-testid="videoPreview"
+              >
+                <track kind="captions" />
+              </video>
+            )}
+          </div>
+        )}
       </div>
     </CRUDModalTemplate>
   );

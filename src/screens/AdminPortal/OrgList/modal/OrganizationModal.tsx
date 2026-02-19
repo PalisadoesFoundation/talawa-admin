@@ -247,9 +247,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         name="photo"
         type="file"
         multiple={false}
-        onChange={async (e: React.ChangeEvent): Promise<void> => {
-          const target = e.target as HTMLInputElement;
-          const file = target.files && target.files[0];
+        onChange={async (
+          e: React.ChangeEvent<HTMLInputElement>,
+        ): Promise<void> => {
+          const file = e.target.files && e.target.files[0];
 
           if (file) {
             // Check file size (5MB limit)

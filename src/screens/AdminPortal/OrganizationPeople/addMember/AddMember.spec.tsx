@@ -1598,11 +1598,15 @@ describe('AddMember Screen', () => {
     const showPasswordToggle = screen.getByTestId('showPassword');
     fireEvent.keyDown(showPasswordToggle, { key: 'Enter' });
 
-    expect(passwordInput).toHaveAttribute('type', 'text');
+    await waitFor(() => {
+      expect(passwordInput).toHaveAttribute('type', 'text');
+    });
 
     fireEvent.keyDown(showPasswordToggle, { key: ' ' });
 
-    expect(passwordInput).toHaveAttribute('type', 'password');
+    await waitFor(() => {
+      expect(passwordInput).toHaveAttribute('type', 'password');
+    });
   });
 
   test('toggles confirm password visibility via Enter key on confirm password toggle', async () => {
@@ -1623,11 +1627,15 @@ describe('AddMember Screen', () => {
     const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');
     fireEvent.keyDown(showConfirmPasswordToggle, { key: 'Enter' });
 
-    expect(confirmPasswordInput).toHaveAttribute('type', 'text');
+    await waitFor(() => {
+      expect(confirmPasswordInput).toHaveAttribute('type', 'text');
+    });
 
     fireEvent.keyDown(showConfirmPasswordToggle, { key: ' ' });
 
-    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+    await waitFor(() => {
+      expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+    });
   });
 
   test('ignores invalid sort option', async () => {
