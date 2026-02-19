@@ -13,6 +13,55 @@ const ruleTester = new RuleTester({
 
 ruleTester.run('enforce-screen-route', rule, {
   valid: [
+{
+  filename: 'src/screens/Unknown/Foo/Foo.tsx',
+  code: `
+    function Component() {
+      return <Route path="/whatever" />;
+    }
+  `,
+},
+{
+  filename: 'src/screens',
+  code: `
+    function Component() {
+      return <Route path="/whatever" />;
+    }
+  `,
+},
+{
+  filename: 'src/screens/AdminPortal/Dashboard/Dashboard.tsx',
+  code: `
+    function Component() {
+      return <Route exact />;
+    }
+  `,
+},
+{
+  filename: 'src/screens/AdminPortal/Dashboard/Dashboard.tsx',
+  code: `
+    const p = "/admin/dashboard";
+    function Component() {
+      return <Route path={p} />;
+    }
+  `,
+},
+{
+  filename: 'src/screens/AdminPortal/__tests__/Dashboard.tsx',
+  code: `
+    function Component() {
+      return <Route path="/user/test" />;
+    }
+  `,
+},
+{
+  filename: 'src/screens/AdminPortal/Dashboard/Dashboard.test.tsx',
+  code: `
+    function Component() {
+      return <Route path="/user/test" />;
+    }
+  `,
+},
     //  Correct Admin route
     {
       filename:
