@@ -26,6 +26,9 @@ i18n.use(initReactI18next).init({
         userEvents: {
           title: 'User Events',
         },
+        weeklyEventCalender: {
+          weeklyCalendarAriaLabel: 'Weekly calendar view',
+        },
       },
       errors: {
         defaultErrorMessage: 'Error',

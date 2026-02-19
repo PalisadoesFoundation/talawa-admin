@@ -2596,5 +2596,8 @@
       "sun": "日"
     },
     "expandDay": "展开日期"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "每周日历视图"
   }
 }

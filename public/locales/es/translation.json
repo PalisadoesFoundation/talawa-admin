@@ -2596,5 +2596,8 @@
       "sun": "D"
     },
     "expandDay": "Expandir día"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Vista de calendario semanal"
   }
 }

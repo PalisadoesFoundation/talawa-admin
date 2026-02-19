@@ -2596,5 +2596,8 @@
       "sun": "रवि"
     },
     "expandDay": "दिन विस्तारित करें"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "साप्ताहिक कैलेंडर दृश्य"
   }
 }

@@ -57,6 +57,9 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
   currentDate,
 }) => {
   const { t: tErrors } = useTranslation('errors');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'weeklyEventCalender',
+  });
 
   const getWeekStart = React.useCallback((date: Date): Date => {
     const d = new Date(date);
@@ -240,7 +243,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
           <div
             className={styles.weekGrid}
             role="grid"
-            aria-label="Weekly calendar view"
+            aria-label={t('weeklyCalendarAriaLabel')}
           >
             {renderWeekDays()}
           </div>
