@@ -550,7 +550,9 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('createTagModal')).toBeInTheDocument();
     });
 
-    // Submit via Ctrl+Enter with empty tag name to bypass disabled button
+    // Native requestSubmit() is required here because the submit button is disabled
+    // when tag name is empty. This mirrors the component's Ctrl+Enter handler which
+    // calls formRef.current?.requestSubmit() to bypass the disabled button.
     const modal = screen.getByTestId('createTagModal');
     const form = modal.querySelector('form') as HTMLFormElement;
     expect(form).toBeTruthy();

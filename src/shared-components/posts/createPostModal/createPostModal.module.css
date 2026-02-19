@@ -76,12 +76,28 @@
   outline: none;
 }
 
+.imagePreviewContainer {
+  margin-top: var(--space-3);
+  display: flex;
+  justify-content: center;
+}
+
 .imagePreview {
   max-width: 100%;
 }
 
 .videoPreview {
   max-width: 100%;
+}
+
+.pinIcon {
+  transform: rotate(45deg);
+  color: var(--color-gray-600);
+}
+
+.pinIconActive {
+  transform: rotate(45deg);
+  color: var(--color-blue-600);
 }
 
 /* Footer Styles */

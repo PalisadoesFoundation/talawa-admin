@@ -665,7 +665,8 @@
     "Workshops": "Workshops",
     "selectMonth": "Select Month",
     "selectDay": "Select Day",
-    "selectYear": "Select Year"
+    "selectYear": "Select Year",
+    "selectWeek": "Select Week"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -2598,5 +2599,8 @@
       "sun": "S"
     },
     "expandDay": "Expand day"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Weekly calendar view"
   }
 }

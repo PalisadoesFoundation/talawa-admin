@@ -162,7 +162,7 @@ vi.mock('components/CollapsibleDropdown/CollapsibleDropdown', () => ({
   )),
 }));
 
-vi.mock('components/IconComponent/IconComponent', () => ({
+vi.mock('shared-components/IconComponent/IconComponent', () => ({
   default: vi.fn(({ name, fill }) => (
     <div data-testid="icon-component" data-name={name} data-fill={fill}>
       {name}Icon
@@ -420,8 +420,9 @@ describe('LeftDrawerOrg', () => {
       const switchButton = screen.getByTestId('switchToUserPortalBtn');
       const user = userEvent.setup();
       await user.click(switchButton);
-
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
   });
 
@@ -448,11 +449,10 @@ describe('LeftDrawerOrg', () => {
       await waitFor(() => {
         expect(screen.getByText('Test Organization')).toBeInTheDocument();
         expect(screen.getByText('Test City')).toBeInTheDocument();
+        const avatar = screen.getByAltText('Test Organization');
+        expect(avatar).toBeInTheDocument();
+        expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
       });
-
-      const avatar = screen.getByAltText('Test Organization');
-      expect(avatar).toBeInTheDocument();
-      expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
 
     it('should display Avatar component when no avatarURL', async () => {
@@ -512,13 +512,12 @@ describe('LeftDrawerOrg', () => {
         expect(
           screen.getByText('Error loading Organization'),
         ).toBeInTheDocument();
+        const errorButton = screen.getByRole('button', {
+          name: /Error loading Organization/i,
+        });
+        expect(errorButton).toBeDisabled();
+        expect(errorButton).toHaveClass('bgDanger');
       });
-
-      const errorButton = screen.getByRole('button', {
-        name: /Error loading Organization/i,
-      });
-      expect(errorButton).toBeDisabled();
-      expect(errorButton).toHaveClass('bgDanger');
     });
 
     it('should not show error state on profile page when data fails to load', async () => {
@@ -546,7 +545,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(dashboardLink);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
 
     it('should not hide drawer on desktop when navigation link is clicked', async () => {
@@ -562,7 +563,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(dashboardLink);
 
-      expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      });
     });
 
     it('should hide drawer at exactly 820px breakpoint', async () => {
@@ -578,7 +581,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(membersLink);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
 
     it('should hide drawer below 820px breakpoint', async () => {
@@ -594,7 +599,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(eventsLink);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
   });
 
@@ -762,7 +769,9 @@ describe('LeftDrawerOrg', () => {
       const user = userEvent.setup();
       await user.click(pluginButton);
 
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
 
     it('should call usePluginDrawerItems with correct parameters', () => {
@@ -816,7 +825,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, successMocks, '/admin/member/other-user');
 
       // This should not be considered a profile page for the current user
-      expect(true).toBe(true); // Profile page logic is internal
+      // Verifying the component renders without error for a non-current-user profile route
+      expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
     });
   });
 
@@ -844,8 +854,10 @@ describe('LeftDrawerOrg', () => {
     const user = userEvent.setup();
     await user.click(toggleButton);
 
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    await waitFor(() => {
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+    });
 
     // Clear mocks and unmount previous component
     mockSetItem.mockClear();
@@ -859,8 +871,10 @@ describe('LeftDrawerOrg', () => {
     // Test onClick when drawer is hidden - clicking should show it
     await user.click(toggleButtonCollapsed);
 
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+    await waitFor(() => {
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+    });
 
     unmount2();
   });
@@ -943,7 +957,9 @@ describe('LeftDrawerOrg', () => {
       const dashboardLink = screen.getByText('Dashboard');
       const user = userEvent.setup();
       await user.click(dashboardLink);
-      expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockSetHideDrawer).not.toHaveBeenCalled();
+      });
 
       // Change to mobile during next interaction
       Object.defineProperty(window, 'innerWidth', {
@@ -953,21 +969,23 @@ describe('LeftDrawerOrg', () => {
       });
 
       await user.click(dashboardLink);
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      await waitFor(() => {
+        expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+      });
     });
   });
 
   describe('GraphQL Query Variables', () => {
-    it('should use correct variables for organization query', () => {
+    it('should use correct variables for organization query', async () => {
       renderComponent();
 
       // The query should be called with correct variables
-      expect(successMocks[0].request.variables).toEqual({
-        id: 'org-123',
+      await waitFor(() => {
+        expect(screen.getByText('Test Organization')).toBeInTheDocument();
       });
     });
 
-    it('should handle different orgId prop', () => {
+    it('should handle different orgId prop', async () => {
       const differentOrgMocks: IMockedResponse[] = [
         {
           request: {
@@ -988,7 +1006,9 @@ describe('LeftDrawerOrg', () => {
 
       renderComponent({ orgId: 'different-org' }, differentOrgMocks);
 
-      expect(differentOrgMocks[0].request.variables.id).toBe('different-org');
+      await waitFor(() => {
+        expect(screen.getByText('Different Organization')).toBeInTheDocument();
+      });
     });
   });
 });
