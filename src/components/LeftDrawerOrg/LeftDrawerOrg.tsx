@@ -30,7 +30,7 @@
  */
 
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaExchangeAlt } from 'react-icons/fa';
