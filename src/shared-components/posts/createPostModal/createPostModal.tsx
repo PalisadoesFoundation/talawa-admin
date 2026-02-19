@@ -31,7 +31,7 @@ function sanitizeBlobUrl(url: string | null): string | null {
   try {
     const parsed = new URL(url);
     if (parsed.protocol !== 'blob:') return null;
-    return url;
+    return parsed.href;
   } catch {
     return null;
   }

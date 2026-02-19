@@ -236,7 +236,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           />
         </Col>
       </Row>
-      <Row className="mb-1"></Row>
       <label htmlFor="orgphoto" className="form-label">
         {tCommon('displayImage')}
       </label>

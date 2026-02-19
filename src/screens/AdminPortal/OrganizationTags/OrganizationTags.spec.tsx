@@ -179,9 +179,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('createTagBtn'));
 
     await waitFor(() => {
-      return expect(
-        screen.findByTestId('modalCloseBtn'),
-      ).resolves.toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
 

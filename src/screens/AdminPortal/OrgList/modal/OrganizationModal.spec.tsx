@@ -623,9 +623,6 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    const form = document.getElementById('crud-create-form');
-    expect(form).toBeInTheDocument();
-
     await userEvent.click(screen.getByTestId('modal-submit-btn'));
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();

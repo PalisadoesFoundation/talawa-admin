@@ -144,13 +144,14 @@ describe('PledgeModal', () => {
   });
 
   it('should update Fund Reference ID when input value changes', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
     });
     expect(fundIdInput).toHaveValue('1111');
-    await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '2222');
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '2222');
     expect(fundIdInput).toHaveValue('2222');
   });
 

@@ -1592,7 +1592,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const passwordInput = screen.getByTestId('passwordInput');
+    const passwordInput = await screen.findByTestId('passwordInput');
     expect(passwordInput).toHaveAttribute('type', 'password');
 
     const showPasswordToggle = screen.getByTestId('showPassword');
@@ -1621,7 +1621,9 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+    const confirmPasswordInput = await screen.findByTestId(
+      'confirmPasswordInput',
+    );
     expect(confirmPasswordInput).toHaveAttribute('type', 'password');
 
     const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');

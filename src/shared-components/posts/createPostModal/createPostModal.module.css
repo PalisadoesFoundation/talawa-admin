@@ -66,11 +66,13 @@
   margin-top: var(--space-3);
 }
 
-.postTextarea::placeholder {
+.postTextarea::placeholder,
+.postBodyTextarea::placeholder {
   color: var(--color-gray-600);
 }
 
-.postTextarea:focus {
+.postTextarea:focus,
+.postBodyTextarea:focus {
   outline: none;
 }
 
