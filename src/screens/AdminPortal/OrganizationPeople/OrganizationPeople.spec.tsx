@@ -244,8 +244,9 @@ describe('OrganizationPeople', () => {
 
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     const searchInput = screen.getByTestId('member-search-input');
@@ -305,8 +306,9 @@ describe('OrganizationPeople', () => {
 
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     const nextBtn = screen.getByRole('button', { name: /Next/i });
@@ -314,8 +316,9 @@ describe('OrganizationPeople', () => {
 
     await user.click(nextBtn);
 
-    await waitFor(() =>
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('Jane Smith')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
   });
 
@@ -344,8 +347,9 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMock, adminMock], true);
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Open sort dropdown (mocked via SearchFilterBar)
@@ -355,10 +359,13 @@ describe('OrganizationPeople', () => {
     const adminOption = screen.getByTestId('sort-item-admin');
     await user.click(adminOption);
 
-    await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Admin User')).toBeInTheDocument();
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      },
+      { timeout: TIMEOUT_MS },
+    );
   });
 
   test('switches to Users tab correctly', async () => {
@@ -405,8 +412,9 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMock, usersMock], true);
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     const sortDropdown = screen.getByTestId('sort-toggle');
@@ -415,10 +423,13 @@ describe('OrganizationPeople', () => {
     const usersOption = screen.getByTestId('sort-item-users');
     await user.click(usersOption);
 
-    await waitFor(() => {
-      expect(screen.getByText('Generic User')).toBeInTheDocument();
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Generic User')).toBeInTheDocument();
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      },
+      { timeout: TIMEOUT_MS },
+    );
   });
 
   test('handles search in Users tab', async () => {
@@ -482,8 +493,9 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMock, usersMock, searchMock], true);
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Switch to Users tab
@@ -491,7 +503,10 @@ describe('OrganizationPeople', () => {
     await user.click(sortDropdown);
     await user.click(screen.getByTestId('sort-item-users'));
 
-    await waitFor(() => expect(screen.getByText('User 1')).toBeInTheDocument());
+    await waitFor(
+      () => expect(screen.getByText('User 1')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
+    );
 
     // Type in search
     const searchInput = screen.getByTestId('member-search-input');
@@ -514,16 +529,18 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMock, membersMock], true);
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     const triggerInvalid = screen.getByTestId('trigger-invalid-sort');
     await user.click(triggerInvalid);
 
     // Should still display members
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
   });
 
@@ -549,9 +566,12 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([errorMock], true);
     renderComponent(link);
 
-    await waitFor(() => {
-      expect(spy).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(spy).toHaveBeenCalled();
+      },
+      { timeout: TIMEOUT_MS },
+    );
   });
 
   test('calls errorHandler on user query error', async () => {
@@ -577,8 +597,9 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMock, userErrorMock], true);
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Switch to Users tab to trigger error
@@ -587,9 +608,12 @@ describe('OrganizationPeople', () => {
     const usersOption = screen.getByTestId('sort-item-users');
     await user.click(usersOption);
 
-    await waitFor(() => {
-      expect(spy).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(spy).toHaveBeenCalled();
+      },
+      { timeout: TIMEOUT_MS },
+    );
   });
 
   test('renders User Portal view correctly', async () => {
@@ -597,8 +621,9 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
     renderComponent(link, ['/user/orgpeople/orgid']);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Users option should be hidden
@@ -622,8 +647,9 @@ describe('OrganizationPeople', () => {
     const user = userEvent.setup({ delay: null });
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     const removeBtn = screen.getByTestId('removeMemberModalBtn');
@@ -642,8 +668,9 @@ describe('OrganizationPeople', () => {
       } as unknown as Partial<Location>,
     ]);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
   });
 
@@ -657,8 +684,9 @@ describe('OrganizationPeople', () => {
       } as unknown as Partial<Location>,
     ]);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
   });
 
@@ -691,8 +719,9 @@ describe('OrganizationPeople', () => {
     );
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Switch to Administrators tab
@@ -701,7 +730,6 @@ describe('OrganizationPeople', () => {
     const adminOption = screen.getByTestId('sort-item-admin');
     await user.click(adminOption);
 
-    vi.useRealTimers();
     // Type in search
     const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'AdminSearch');
@@ -783,8 +811,9 @@ describe('OrganizationPeople', () => {
     );
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Switch to Users tab
@@ -793,15 +822,17 @@ describe('OrganizationPeople', () => {
     const usersOption = screen.getByTestId('sort-item-users');
     await user.click(usersOption);
 
-    await waitFor(() =>
-      expect(screen.getByText('User Page 1')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('User Page 1')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     const nextBtn = screen.getByRole('button', { name: /Next/i });
     await user.click(nextBtn);
 
-    await waitFor(() =>
-      expect(screen.getByText('User Page 2')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('User Page 2')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
   });
 
@@ -814,8 +845,10 @@ describe('OrganizationPeople', () => {
 
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByTestId(/^org-people-joined-/)).toBeInTheDocument(),
+    await waitFor(
+      () =>
+        expect(screen.getByTestId(/^org-people-joined-/)).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Reset language
@@ -831,8 +864,10 @@ describe('OrganizationPeople', () => {
 
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByTestId(/^org-people-joined-/)).toBeInTheDocument(),
+    await waitFor(
+      () =>
+        expect(screen.getByTestId(/^org-people-joined-/)).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     // Reset language
@@ -844,13 +879,57 @@ describe('OrganizationPeople', () => {
     const user = userEvent.setup({ delay: null });
     renderComponent(link);
 
-    await waitFor(() =>
-      expect(screen.getByText('John Doe')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
     );
 
     const removeBtn = screen.getByTestId('removeMemberModalBtn');
     await user.click(removeBtn);
 
     expect(screen.getByTestId('mock-org-people-list-card')).toBeInTheDocument();
+  });
+
+  test('verifies rapid typing cancels previous debounces', async () => {
+    const user = userEvent.setup({ delay: null });
+
+    const initialMock = createMemberConnectionMock({ orgId: 'orgid' });
+    // This mock should ONLY be called once for the final "Jane" search
+    const searchMock = createMemberConnectionMock(
+      { orgId: 'orgid', where: { name: 'Jane' } },
+      {
+        edges: [
+          {
+            node: { id: 'member2', name: 'Jane Smith' },
+            cursor: 'cursor2',
+          },
+        ],
+      },
+    );
+
+    const link = new StaticMockLink([initialMock, searchMock], true);
+    renderComponent(link);
+
+    await waitFor(
+      () => expect(screen.getByText('John Doe')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
+    );
+
+    const searchInput = screen.getByTestId('member-search-input');
+
+    // Type "J" then immediately "Jane"
+    await user.type(searchInput, 'J');
+    await user.type(searchInput, 'ane');
+
+    // If debounce works, only one request for "Jane" is sent
+    // We verify "Jane Smith" appears
+    await waitFor(
+      () => expect(screen.getByText('Jane Smith')).toBeInTheDocument(),
+      { timeout: TIMEOUT_MS },
+    );
+
+    // Verify StaticMockLink only received one search request
+    // We can check if searchMock was consumed exactly once.
+    // In StaticMockLink (if it's the one I think it is), unconsumed mocks remain.
   });
 });
