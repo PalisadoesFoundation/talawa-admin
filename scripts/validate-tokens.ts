@@ -56,6 +56,7 @@ import { fileURLToPath } from 'url';
  * - `'tsx-line-height'` - lineHeight property with px/rem/em units
  * - `'tsx-border-radius'` - borderRadius property with hardcoded values
  * - `'tsx-outline'` - outline/outlineWidth properties with hardcoded values
+ * - `'tsx-datagrid-var'` - var() CSS variable strings used in width/minWidth/maxWidth column properties (DataGrid requires numeric values)
  */
 export type ValidationResultType =
   | 'color'
@@ -73,7 +74,8 @@ export type ValidationResultType =
   | 'tsx-color'
   | 'tsx-line-height'
   | 'tsx-border-radius'
-  | 'tsx-outline';
+  | 'tsx-outline'
+  | 'tsx-datagrid-var';
 
 /**
  * Models a single validation finding representing a hardcoded value
@@ -173,6 +175,10 @@ export const TSX_PATTERNS = {
   // Outline in TSX
   outlineCamelCase:
     /(?:outline|outlineWidth):\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+  // DataGrid column width properties with var() CSS variables
+  // MUI DataGrid requires numeric pixel values for width/minWidth/maxWidth.
+  // Using var(--...) strings will break at runtime. Use spacing tokens instead.
+  dataGridVarWidth: /(?:width|minWidth|maxWidth):\s*['"]var\(--[^)]+\)['"]/gi,
 };
 
 /**
@@ -249,6 +255,25 @@ const isInsideVarOrCalc = (
     }
   }
 
+  return false;
+};
+
+/**
+ * Track whether a line opens or closes a DataTable `meta: { ... }` block.
+ * Returns the updated inMetaObject state after processing the line.
+ */
+const updateMetaObjectState = (
+  line: string,
+  inMetaObject: boolean,
+): boolean => {
+  if (inMetaObject) {
+    // Check if the meta block closes on this line
+    return !line.includes('}');
+  }
+  // Check if a meta block opens but doesn't close on this line
+  if (/meta\s*:\s*\{/.test(line) && !line.includes('}')) {
+    return true;
+  }
   return false;
 };
 
@@ -687,6 +712,7 @@ const validateTsxLine = (
   lineNumber: number,
   results: IValidationResult[],
   isCommentLine: boolean,
+  inMetaObject: boolean,
 ): void => {
   // Skip comments
   if (isCommentLine) return;
@@ -775,6 +801,25 @@ const validateTsxLine = (
     lineNumber,
     results,
   );
+
+  // DataGrid var() check - bypasses allowlist since var() is normally allowed
+  // but invalid for DataGrid column widths (MUI requires numeric values).
+  // Skip if inside a DataTable meta: { } block (legitimate CSS usage).
+  const isMetaLine = inMetaObject || /meta\s*:\s*\{/.test(line);
+  if (!isMetaLine) {
+    TSX_PATTERNS.dataGridVarWidth.lastIndex = 0;
+    const dataGridVarMatches = line.match(TSX_PATTERNS.dataGridVarWidth);
+    if (dataGridVarMatches) {
+      dataGridVarMatches.forEach((match) => {
+        results.push({
+          file,
+          line: lineNumber,
+          match,
+          type: 'tsx-datagrid-var',
+        });
+      });
+    }
+  }
 };
 
 /**
@@ -807,6 +852,7 @@ export async function validateFiles(
     const isCss = isCssFile(file);
 
     let inBlockComment = false;
+    let inMetaObject = false;
 
     lines.forEach((line, index) => {
       const lineNumber = index + 1;
@@ -826,12 +872,14 @@ export async function validateFiles(
           commentState.isComment,
         );
       } else if (isTs) {
+        inMetaObject = updateMetaObjectState(lineToValidate, inMetaObject);
         validateTsxLine(
           lineToValidate,
           file,
           lineNumber,
           results,
           commentState.isComment,
+          inMetaObject,
         );
       }
     });
@@ -926,6 +974,7 @@ export async function main() {
     'tsx-line-height',
     'tsx-border-radius',
     'tsx-outline',
+    'tsx-datagrid-var',
   ];
 
   const byType = allResults.reduce(

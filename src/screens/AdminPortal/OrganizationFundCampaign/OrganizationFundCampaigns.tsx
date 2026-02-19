@@ -94,8 +94,11 @@ const orgFundCampaign = (): JSX.Element => {
   );
 
   const handleOpenModal = useCallback(
-    (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
-      setCampaign(campaign);
+    (
+      selectedCampaign: InterfaceCampaignInfo | null,
+      mode: 'edit' | 'create',
+    ): void => {
+      setCampaign(selectedCampaign);
       setCampaignModalMode(mode);
       open();
     },
@@ -179,7 +182,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'id',
       headerName: '#',
       flex: 1,
-      minWidth: 'var(--vw-8)',
+      minWidth: 'space-11',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -235,7 +238,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'goalAmount',
       headerName: t('fundingGoal'),
       flex: 1,
-      minWidth: 'var(--vw-13)',
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -260,7 +263,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'fundingRaised',
       headerName: t('raised'),
       flex: 1,
-      minWidth: 'var(--vw-13)',
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -285,7 +288,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'percentageRaised',
       headerName: t('percentageRaised'),
       flex: 1,
-      minWidth: 'var(--vw-80)',
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -339,7 +342,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'action',
       headerName: tCommon('action'),
       flex: 1.5,
-      minWidth: 'var(--vw-80)',
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,

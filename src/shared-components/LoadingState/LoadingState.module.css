@@ -39,9 +39,11 @@
 
 .loadingOverlay {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: var(--color-white);
-  opacity: 0.8;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,4 +119,8 @@
   100% {
     background-position: var(--skeleton-bg-pos-end);
   }
+}
+
+.loadingItem {
+  height: var(--space-8);
 }

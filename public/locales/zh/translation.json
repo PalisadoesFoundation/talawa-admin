@@ -15,6 +15,7 @@
   "customRecurrence": "自定义重复",
   "frequency": "频率",
   "repeatsEvery": "每重复一次",
+  "repeatsOn": "重复开启",
   "day": "天",
   "week": "周",
   "month": "月",
@@ -1804,7 +1805,9 @@
     "presetThisMonth": "本月",
     "presetNext7Days": "未来 7 天",
     "presetNext30Days": "未来 30 天",
-    "presetNextMonth": "下个月"
+    "presetNextMonth": "下个月",
+    "repeatsOn": "重复开启",
+    "select": "请选择"
   },
   "userEventCard": {
     "failedToRegister": "无法注册该活动",
