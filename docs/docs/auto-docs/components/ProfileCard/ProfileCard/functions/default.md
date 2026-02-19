@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/ProfileCard/ProfileCard.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileCard/ProfileCard.tsx#L50)
+Defined in: [src/components/ProfileCard/ProfileCard.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileCard/ProfileCard.tsx#L52)
 
 ## Parameters
 

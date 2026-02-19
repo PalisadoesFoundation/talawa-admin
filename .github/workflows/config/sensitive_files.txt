@@ -10,6 +10,7 @@ src/App.tsx$
 ^scripts/.*
 ^docker/.*
 ^config/.*
+^cypress/.*
 ^src/style/.*
 ^src/assets/.*
 schema.graphql$

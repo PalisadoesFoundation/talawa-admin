@@ -138,8 +138,8 @@ export const ProfileAvatarDisplay = ({
           alt={t('profileAvatar.enlargedAltText', { name: fallbackName })}
           className={styles.enlargedImage}
           crossOrigin={crossOrigin}
-          onLoad={() => (onLoad ? onLoad() : null)}
-          onError={() => (onError ? onError() : null)}
+          onLoad={(e) => (onLoad ? onLoad(e) : null)}
+          onError={(e) => (onError ? onError(e) : null)}
         />
       ) : (
         <div className={styles.enlargedFallback}>
@@ -184,8 +184,8 @@ export const ProfileAvatarDisplay = ({
             src={imageUrl}
             alt={altText}
             className={imageClasses}
-            onError={() => (onError ? onError() : setImgError(true))}
-            onLoad={() => (onLoad ? onLoad() : null)}
+            onError={(e) => (onError ? onError(e) : setImgError(true))}
+            onLoad={(e) => (onLoad ? onLoad(e) : null)}
             crossOrigin={crossOrigin}
             decoding={decoding}
             loading={loading}

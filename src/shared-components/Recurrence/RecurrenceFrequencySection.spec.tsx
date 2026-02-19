@@ -1,9 +1,9 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceFrequencySection } from './RecurrenceFrequencySection';
-import { Frequency } from '../../utils/recurrenceUtils';
+import { Frequency } from 'utils/recurrenceUtils';
 
 const defaultProps = {
   frequency: Frequency.DAILY,
@@ -15,11 +15,12 @@ const defaultProps = {
 
 describe('RecurrenceFrequencySection', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders all required elements', () => {
@@ -29,14 +30,14 @@ describe('RecurrenceFrequencySection', () => {
       screen.getByTestId('customRecurrenceIntervalInput'),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     ).toBeInTheDocument();
   });
 
   it('shows correct frequency label', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     ).toHaveTextContent('Daily');
   });
 
@@ -53,7 +54,7 @@ describe('RecurrenceFrequencySection', () => {
     const input = screen.getByTestId('customRecurrenceIntervalInput');
     await user.clear(input);
     await user.type(input, '5');
-    expect(onIntervalChange).toHaveBeenCalled();
+    await waitFor(() => expect(onIntervalChange).toHaveBeenCalled());
   });
 
   it('prevents invalid keys in interval input', async () => {
@@ -78,12 +79,24 @@ describe('RecurrenceFrequencySection', () => {
     const user = userEvent.setup();
     render(<RecurrenceFrequencySection {...defaultProps} />);
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
 
-    expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customWeeklyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customMonthlyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customYearlyRecurrence')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
+      ).toBeInTheDocument();
+    });
   });
 
   it('selects interval text on double click', async () => {
@@ -101,7 +114,9 @@ describe('RecurrenceFrequencySection', () => {
 
   it('applies aria-label to frequency dropdown', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
-    const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
+    const dropdown = screen.getByTestId(
+      'customRecurrenceFrequencyDropdown-toggle',
+    );
     expect(dropdown).toHaveAttribute('aria-label', 'frequency');
   });
 
@@ -115,9 +130,15 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
-    expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY);
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
+    await waitFor(() =>
+      expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY),
+    );
   });
 
   it('calls onFrequencyChange for daily frequency', async () => {
@@ -130,9 +151,15 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customDailyRecurrence'));
-    expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.DAILY);
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+    );
+    await waitFor(() =>
+      expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.DAILY),
+    );
   });
 
   it('calls onFrequencyChange for monthly frequency', async () => {
@@ -145,8 +172,12 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customMonthlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+    );
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.MONTHLY);
   });
 
@@ -160,8 +191,12 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customYearlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
+    );
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.YEARLY);
   });
 

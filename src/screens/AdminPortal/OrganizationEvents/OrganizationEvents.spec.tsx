@@ -147,6 +147,16 @@ vi.mock('./CreateEventModal', () => ({
     onClose: () => void;
     onEventCreated: () => void;
   }) => {
+    React.useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape' && isOpen) {
+          onClose();
+        }
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
     return (
       <div data-testid="createEventModal">
@@ -180,6 +190,7 @@ describe('Organisation Events Page', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const renderWithLink = (link: StaticMockLink) =>
@@ -970,6 +981,50 @@ describe('Organisation Events Page', () => {
     await wait(100);
 
     expect(searchInput.value).toBe('NonexistentEvent12345');
+  });
+
+  describe('Keyboard Accessibility', () => {
+    test('should open create event modal when Enter is pressed on create event button', async () => {
+      renderWithLink(defaultLink);
+
+      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createEventModalBtn');
+      createBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModal')).toBeInTheDocument();
+      });
+    });
+
+    test('should close modal when Escape is pressed', async () => {
+      renderWithLink(defaultLink);
+
+      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModal')).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('createEventModal'),
+        ).not.toBeInTheDocument();
+      });
+    });
   });
 });
 

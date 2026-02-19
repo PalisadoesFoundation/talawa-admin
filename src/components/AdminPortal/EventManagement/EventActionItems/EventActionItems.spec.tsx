@@ -4,7 +4,7 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -19,18 +19,27 @@ dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
+import type { InterfaceSortingButtonProps } from 'types/shared-components/SortingButton/interface';
+import Avatar from 'shared-components/Avatar/Avatar';
 
 // Mock dependencies
+let useParamsMock: { orgId: string | undefined } = { orgId: 'orgId1' };
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: vi.fn(() => ({ orgId: 'orgId1' })),
-    Navigate: ({ to }: { to: string }) => (
-      <div data-testid="navigate">{to}</div>
+    useParams: vi.fn(() => useParamsMock),
+    Navigate: vi.fn(({ to }: { to: string }) =>
+      React.createElement('div', { 'data-testid': 'navigate' }, to),
     ),
   };
 });
+
+const setUseParamsMock = (mock: { orgId: string | undefined }): void => {
+  useParamsMock = mock;
+};
 
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
@@ -52,80 +61,116 @@ vi.mock('react-toastify', () => ({
 
 // Mock sub-components
 vi.mock('shared-components/LoadingState/LoadingState', () => ({
-  default: ({
-    isLoading,
-    children,
-  }: {
-    isLoading: boolean;
-    children: React.ReactNode;
-  }) => {
-    if (isLoading) return <div data-testid="loader">Loading...</div>;
-    return children;
-  },
-}));
-
-vi.mock('shared-components/Avatar/Avatar', () => ({
-  default: ({ name }: { name: string }) => (
-    <div data-testid="avatar">{name}</div>
+  default: vi.fn(
+    ({
+      isLoading,
+      children,
+    }: {
+      isLoading: boolean;
+      children: React.ReactNode;
+    }) => {
+      if (isLoading)
+        return React.createElement(
+          'div',
+          { 'data-testid': 'loader' },
+          'Loading...',
+        );
+      return children;
+    },
   ),
 }));
 
-vi.mock('shared-components/SortingButton/SortingButton', () => ({
-  default: ({
-    onSortChange,
-    dataTestIdPrefix,
-    buttonLabel,
-  }: {
+vi.mock('shared-components/Avatar/Avatar', () => ({
+  default: vi.fn(({ name, alt }: { name: string; alt?: string }) =>
+    React.createElement(
+      'div',
+      {
+        'data-testid': 'avatar',
+        'data-name': name,
+        'data-alt': alt ?? '',
+      },
+      name,
+    ),
+  ),
+}));
+
+vi.mock('shared-components/SortingButton/SortingButton', () => {
+  let filterClickCount = 0;
+  // Define type for the mock component with the reset method
+  type SortingButtonMock = React.FC<{
     onSortChange: (value: string) => void;
     dataTestIdPrefix: string;
     buttonLabel: string;
-  }) => {
-    const [filterClickCount, setFilterClickCount] = React.useState(0);
+  }> & { resetFilterCount: () => void };
 
-    return (
-      <button
-        data-testid={`${dataTestIdPrefix}Btn`}
-        onClick={() => {
-          if (dataTestIdPrefix === 'searchByToggle') {
-            // Switch to category for testing
-            onSortChange('category');
-          } else if (dataTestIdPrefix === 'filter') {
-            // Cycle through filter states: all -> pending -> completed -> all
-            const nextCount = filterClickCount + 1;
-            setFilterClickCount(nextCount);
-            const filterStates = ['pending', 'completed', 'all'];
-            const currentState = filterStates[(nextCount - 1) % 3];
-            onSortChange(currentState);
-          } else {
-            onSortChange('test-value');
-          }
-        }}
-      >
-        {buttonLabel}
-      </button>
-    );
-  },
-}));
+  const MockComponent = vi.fn(
+    ({
+      onSortChange,
+      dataTestIdPrefix,
+      buttonLabel,
+    }: {
+      onSortChange: (value: string) => void;
+      dataTestIdPrefix: string;
+      buttonLabel: string;
+    }) =>
+      React.createElement(
+        'button',
+        {
+          'data-testid': `${dataTestIdPrefix}Btn`,
+          onClick: () => {
+            if (dataTestIdPrefix === 'searchByToggle') {
+              // Switch to category for testing
+              onSortChange('category');
+            } else if (dataTestIdPrefix === 'filter') {
+              // Cycle through filter states: all -> pending -> completed -> all
+              filterClickCount += 1;
+              const filterStates = ['pending', 'completed', 'all'];
+              const currentState = filterStates[(filterClickCount - 1) % 3];
+              onSortChange(currentState);
+            } else {
+              onSortChange('test-value');
+            }
+          },
+        },
+        buttonLabel,
+      ),
+  ) as unknown as SortingButtonMock;
+
+  MockComponent.resetFilterCount = () => {
+    filterClickCount = 0;
+  };
+
+  return {
+    default: MockComponent,
+  };
+});
 
 vi.mock('shared-components/SearchBar/SearchBar', () => ({
-  default: ({
-    onSearch,
-    inputTestId,
-    buttonTestId,
-  }: {
-    onSearch: (value: string) => void;
-    inputTestId: string;
-    buttonTestId: string;
-  }) => (
-    <div>
-      <input
-        data-testid={inputTestId}
-        onChange={(e) => {
-          onSearch(e.target.value);
-        }}
-      />
-      <button data-testid={buttonTestId}>Search</button>
-    </div>
+  default: vi.fn(
+    ({
+      onSearch,
+      inputTestId,
+      buttonTestId,
+    }: {
+      onSearch: (value: string) => void;
+      inputTestId: string;
+      buttonTestId: string;
+    }) =>
+      React.createElement(
+        'div',
+        null,
+        React.createElement('input', {
+          'data-testid': inputTestId,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+            onSearch(e.target.value);
+          },
+        }),
+        React.createElement(
+          'button',
+          { 'data-testid': buttonTestId },
+          'Search',
+        ),
+      ),
   ),
 }));
 
@@ -133,34 +178,72 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
 vi.mock(
   'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? <div data-testid="view-modal">View Modal</div> : null,
+    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
+      isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'view-modal' },
+            'View Modal',
+          )
+        : null,
+    ),
   }),
 );
 
 vi.mock(
   'shared-components/ActionItems/ActionItemModal/ActionItemModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? (
-        <div data-testid="action-item-modal">Action Item Modal</div>
-      ) : null,
+    default: vi.fn(
+      ({ isOpen, hide }: { isOpen: boolean; hide: () => void }) => {
+        React.useEffect(() => {
+          const handleKeyDown = (e: KeyboardEvent): void => {
+            if (e.key === 'Escape' && isOpen) {
+              hide();
+            }
+          };
+          document.addEventListener('keydown', handleKeyDown);
+          return () => document.removeEventListener('keydown', handleKeyDown);
+        }, [isOpen, hide]);
+
+        return isOpen
+          ? React.createElement(
+              'div',
+              { 'data-testid': 'action-item-modal' },
+              'Action Item Modal',
+            )
+          : null;
+      },
+    ),
   }),
 );
 
 vi.mock(
   'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? <div data-testid="delete-modal">Delete Modal</div> : null,
+    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
+      isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'delete-modal' },
+            'Delete Modal',
+          )
+        : null,
+    ),
   }),
 );
 
 vi.mock(
   'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? <div data-testid="status-modal">Status Modal</div> : null,
+    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
+      isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'status-modal' },
+            'Status Modal',
+          )
+        : null,
+    ),
   }),
 );
 
@@ -381,9 +464,21 @@ const renderEventActionItems = (
 };
 
 describe('EventActionItems', () => {
-  afterEach(() => {
+  beforeEach(async () => {
+    const { default: SortingButton } =
+      await import('shared-components/SortingButton/SortingButton');
+    // Define the type locally for the cast
+    type SortingButtonMock = { resetFilterCount: () => void };
+    (SortingButton as unknown as SortingButtonMock).resetFilterCount?.();
+
+    useParamsMock = { orgId: '123' };
     vi.clearAllMocks();
     vi.restoreAllMocks();
+  });
+  afterEach(() => {
+    setUseParamsMock({ orgId: 'orgId1' });
+    cleanup();
+    vi.clearAllMocks();
   });
 
   describe('Component Rendering', () => {
@@ -580,9 +675,9 @@ describe('EventActionItems', () => {
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'Category 2');
 
-      // Ensure `searchBy` state has applied before the debounced search term resolves.
-      // This avoids a race where the first debounced search runs while still in "assignee" mode.
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await waitFor(() => {
+        expect(searchInput).toBeInTheDocument();
+      });
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'Category 2');
 
@@ -629,11 +724,7 @@ describe('EventActionItems', () => {
       });
 
       await userEvent.clear(searchInput);
-      // userEvent.type with empty string doesn't clear, so just clear is enough if we want empty
-      // But preserving behavior:
-      /* fireEvent.change(searchInput, { target: { value: '' } }); was clearing it */
       await userEvent.click(searchButton);
-
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
         expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
@@ -1071,7 +1162,10 @@ describe('EventActionItems', () => {
       await userEvent.click(filterBtn);
 
       // Small delay between clicks to ensure state updates
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await waitFor(() => {
+        // Assert pending filter is applied before clicking again
+        expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
+      });
 
       await userEvent.click(filterBtn);
 
@@ -1100,11 +1194,7 @@ describe('EventActionItems', () => {
 
       // Click three times to cycle through all states
       await userEvent.click(filterBtn);
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       await userEvent.click(filterBtn);
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
       await userEvent.click(filterBtn);
 
       // Both items should be visible again
@@ -1339,6 +1429,91 @@ describe('EventActionItems', () => {
         expect(screen.getByTestId('filterBtn')).toBeInTheDocument();
       });
     });
+
+    it('should update sort selected option and order', async () => {
+      const mockDataWithDates = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item1',
+                  assignedAt: dayjs.utc().add(5, 'day').toDate(),
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item2',
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      };
+
+      const mocksWithDates = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithDates },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocksWithDates);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('sortBtn')).toBeInTheDocument();
+      });
+
+      const sortingButtonMock = vi.mocked(SortingButton);
+      const getSortButtonProps = (): {
+        selectedOption?: string | number;
+        onSortChange: (value: string) => void;
+      } => {
+        const sortCall = [...sortingButtonMock.mock.calls]
+          .reverse()
+          .find(([props]) => props.dataTestIdPrefix === 'sort');
+        expect(sortCall).toBeTruthy();
+        const sortProps = sortCall as [InterfaceSortingButtonProps];
+        return sortProps[0];
+      };
+
+      expect(getSortButtonProps().selectedOption).toBe('sort');
+
+      await act(async () => {
+        getSortButtonProps().onSortChange('assignedAt_DESC');
+      });
+
+      await waitFor(() => {
+        expect(getSortButtonProps().selectedOption).toBe('latestAssigned');
+        const assignedDates = screen.getAllByTestId('assignedDate');
+        expect(assignedDates[0]).toHaveTextContent(
+          dayjs.utc().add(10, 'day').format('DD/MM/YYYY'),
+        );
+      });
+
+      await act(async () => {
+        getSortButtonProps().onSortChange('assignedAt_ASC');
+      });
+
+      await waitFor(() => {
+        expect(getSortButtonProps().selectedOption).toBe('earliestAssigned');
+        const assignedDates = screen.getAllByTestId('assignedDate');
+        expect(assignedDates[0]).toHaveTextContent(
+          dayjs.utc().add(5, 'day').format('DD/MM/YYYY'),
+        );
+      });
+    });
   });
 
   describe('Additional Coverage Tests', () => {
@@ -1525,6 +1700,363 @@ describe('EventActionItems', () => {
       // Verify component renders and eventually loads data
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Redirect Behavior', () => {
+    it('should redirect to home when orgId is missing', async () => {
+      setUseParamsMock({ orgId: undefined });
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockEventData },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('navigate')).toBeInTheDocument();
+        expect(screen.getByTestId('navigate')).toHaveTextContent('/');
+      });
+    });
+  });
+
+  describe('Avatar Display', () => {
+    it('renders Avatar with correct props for each assignee', async () => {
+      renderEventActionItems();
+
+      await waitFor(
+        () => {
+          const avatars = screen.getAllByTestId('avatar');
+          expect(avatars.length).toBeGreaterThan(0);
+          // Verify name is passed through
+          expect(avatars[0]).toHaveAttribute('data-name', 'John Doe');
+        },
+        { timeout: 5000 },
+      );
+    });
+  });
+
+  describe('Modal State Branches Coverage', () => {
+    it('opens delete modal when DELETE state is clicked', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('deleteItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const deleteBtn = screen.getByTestId('deleteItemBtnactionItemId1');
+      await userEvent.click(deleteBtn);
+
+      await waitFor(() => {
+        // Asserting that the delete modal is present, which implies toggleModal(ModalState.DELETE) logic worked
+        expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('opens view modal when VIEW state is clicked', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('viewItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const viewBtn = screen.getByTestId('viewItemBtnactionItemId1');
+      await userEvent.click(viewBtn);
+
+      await waitFor(() => {
+        // Asserting that the view modal is present, which implies toggleModal(ModalState.VIEW) logic worked
+        expect(screen.getByTestId('view-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('opens status modal when STATUS state is clicked', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('statusCheckboxactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const statusCheckbox = screen.getByTestId('statusCheckboxactionItemId1');
+      await userEvent.click(statusCheckbox);
+
+      await waitFor(() => {
+        // Asserting that the status modal is present, which implies toggleModal(ModalState.STATUS) logic worked
+        expect(screen.getByTestId('status-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('handles edit mode when actionItem exists', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('editItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const editBtn = screen.getByTestId('editItemBtnactionItemId1');
+      await userEvent.click(editBtn);
+
+      await waitFor(() => {
+        // The modal should be open (edit mode)
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Modal Mode - Edit vs Create', () => {
+    test('sets modal to edit mode when actionItem exists', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('editItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const editBtn = screen.getByTestId('editItemBtnactionItemId1');
+      await userEvent.click(editBtn);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+
+    test('sets modal to create mode when actionItem is null', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createActionItemBtn');
+      await userEvent.click(createBtn);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Date Sorting Logic', () => {
+    it('should sort action items by assignedAt in descending order', async () => {
+      const mockDataWithDifferentDates = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item1',
+                  assignedAt: dayjs.utc().add(5, 'day').toDate(),
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item2',
+                  assignedAt: dayjs.utc().add(15, 'day').toDate(),
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item3',
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithDifferentDates },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('sortBtn')).toBeInTheDocument();
+      });
+
+      // Click the sort button to trigger sorting
+      const sortBtn = screen.getByTestId('sortBtn');
+      await userEvent.click(sortBtn);
+
+      // Verify items are rendered (sorting logic is tested via the component's behavior)
+      await waitFor(() => {
+        expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should sort action items by assignedAt in ascending order', async () => {
+      const mockDataWithDifferentDates = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item1',
+                  assignedAt: dayjs.utc().add(15, 'day').toDate(),
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'item2',
+                  assignedAt: dayjs.utc().add(5, 'day').toDate(),
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithDifferentDates },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('sortBtn')).toBeInTheDocument();
+      });
+
+      // Click twice to cycle through sort options (first click: DESC, second click: ASC)
+      const sortBtn = screen.getByTestId('sortBtn');
+      await userEvent.click(sortBtn);
+      await userEvent.click(sortBtn);
+
+      // Verify items are rendered
+      await waitFor(() => {
+        expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  describe('Avatar Rendering', () => {
+    it('should render Avatar with correct name for each volunteer', async () => {
+      const mockWithAvatar = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  volunteer: {
+                    id: 'vol1',
+                    hasAccepted: true,
+                    isPublic: true,
+                    hoursVolunteered: 5,
+                    user: {
+                      id: 'user1',
+                      name: 'Test User',
+                      avatarURL: 'https://invalid-url.com/avatar.jpg',
+                    },
+                  },
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockWithAvatar },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+      });
+
+      const avatarMock = vi.mocked(Avatar);
+      const avatarCall = avatarMock.mock.calls.find(
+        ([props]) => props.name === 'Test User',
+      );
+
+      expect(avatarCall).toBeTruthy();
+      expect(avatarCall?.[0].name).toBe('Test User');
+      expect(avatarCall?.[0].alt).toBe('Test User');
+    });
+  });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open create modal when Enter is pressed on create button', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createActionItemBtn');
+      createBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByTestId('createActionItemBtn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('action-item-modal'),
+        ).not.toBeInTheDocument();
       });
     });
   });

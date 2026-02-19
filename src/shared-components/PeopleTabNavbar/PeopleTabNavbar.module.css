@@ -1,44 +1,57 @@
 .calendarEventHeader {
   width: 100%;
-  border-radius: 10px;
-  padding: 5px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
 }
 
 .calendar__header {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: 0.75rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
   margin-right: 0;
 }
 
 .peopleTabNavbarAlignment {
   display: flex;
-  gap: 4rem;
+  gap: var(--space-8);
   align-items: center;
+  margin-left: var(--space-6);
 }
 
 .selectTypeEventHeader {
-  border-radius: 10px;
-  margin: 8px;
+  border-radius: var(--radius-lg);
+  margin: var(--space-4);
 }
 
 .dropdownItemButton {
   background-color: var(--dropdownItem-bg) !important;
   color: var(--dropdownItem-color) !important;
   border: none !important;
-  box-shadow: var(--dropdownItem-box-shadow);
-  border-radius: 9px;
+  box-shadow: var(--dropdownItem-box-shadow) !important;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
 }
 
 .dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
+  width: 100%;
+}
+
+.dropdown:hover img {
+  filter: brightness(0) invert(1);
+}
+
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+.dropdown :global(.dropdown-menu) {
+  min-width: 100% !important;
+  width: 100% !important;
+  margin-top: var(--space-1);
+  border-radius: var(--radius-lg);
 }
 
 .btnsBlock > * {

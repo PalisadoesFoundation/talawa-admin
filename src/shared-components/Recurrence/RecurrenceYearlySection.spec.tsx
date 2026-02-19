@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { RecurrenceYearlySection } from './RecurrenceYearlySection';
 import { Frequency } from '../../utils/recurrenceUtils';
 import dayjs from 'dayjs';
@@ -13,11 +13,12 @@ const defaultProps = {
 
 describe('RecurrenceYearlySection', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {

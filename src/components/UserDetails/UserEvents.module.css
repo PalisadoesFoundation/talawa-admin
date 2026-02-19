@@ -4,7 +4,11 @@
 
 .peoplePageUserEventCardBody {
   display: grid;
-  gap: 1rem;
+  gap: var(--space-1);
   justify-content: center;
-  grid-template-columns: repeat(2, minmax(650px, 1fr));
+  grid-template-columns: repeat(2, minmax(550px, 1fr));
+}
+
+.peopleTabNavbarAlignment {
+  margin-left: var(--space-10);
 }

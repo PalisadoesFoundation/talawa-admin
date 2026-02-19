@@ -1,15 +1,21 @@
 {
+  "workshops": "研讨会",
   "securedRouteForUser": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
   "securedRoute": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
+  "oauth": {
+    "continueWith": "继续使用 {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
   "frequency": "频率",
   "repeatsEvery": "每重复一次",
+  "repeatsOn": "重复开启",
   "day": "天",
   "week": "周",
   "month": "月",
@@ -192,7 +198,8 @@
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
-    "logout": "登出"
+    "logout": "登出",
+    "notAvailable": "不可用"
   },
   "leftDrawerOrg": {
     "Dashboard": "仪表板",
@@ -326,7 +333,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "errorLoadingRequests": "加载会员申请时出错"
   },
   "users": {
     "membershipStatus": {
@@ -1181,7 +1189,9 @@
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "noResultsFoundFor": "未找到结果",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "加载被阻止用户时发生错误",
+    "errorLoadingMembers": "加载成员时发生错误"
   },
   "eventManagement": {
     "name": "事件管理",
@@ -1265,7 +1275,8 @@
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
     "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
-    "cancel": "取消"
+    "cancel": "取消",
+    "successfullyDeletedOrganization": "组织已成功删除"
   },
   "userUpdate": {
     "appLanguageCode": "默认语言",
@@ -1279,13 +1290,6 @@
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消"
-  },
-  "membershipRequest": {
-    "accept": "接受",
-    "reject": "拒绝",
-    "memberAdded": "它被接受",
-    "joined": "已加入",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgUpdate": {
     "city": "城市",
@@ -1401,6 +1405,10 @@
     "tags": "标签",
     "invalidFileType": "无效的文件类型",
     "fileTooLarge": "文件过大",
+    "ascendingOrder": "升序",
+    "descendingOrder": "降序",
+    "searchCreatedEvents": "搜索已创建的活动",
+    "sortByName": "按名称排序",
     "memberDetailNumberExample": "例如: 1234",
     "memberDetailExampleLane": "例如: 街道名称",
     "memberDetailPostalExample": "例如: 邮政编码",
@@ -1435,25 +1443,6 @@
     "role": "角色",
     "loading": "加载中...",
     "emailNotAvailable": "邮箱不可用"
-  },
-  "userRegister": {
-    "enterFirstName": "输入您的名字",
-    "enterLastName": "输入您的姓氏",
-    "enterConfirmPassword": "输入您的密码进行确认",
-    "alreadyhaveAnAccount": "已经有帐户？",
-    "login": "登录",
-    "afterRegister": "注册成功。",
-    "passwordNotMatch": "密码不匹配。",
-    "invalidDetailsMessage": "请输入有效的详细信息。",
-    "register": "注册",
-    "firstName": "名字",
-    "lastName": "姓氏",
-    "emailAddress": "电子邮件地址",
-    "enterEmail": "输入电子邮件",
-    "password": "密码",
-    "enterPassword": "输入密码",
-    "confirmPassword": "确认密码",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "userNavbar": {
     "talawa": "塔拉瓦",
@@ -1590,6 +1579,7 @@
     "Admin": "管理员",
     "loading": "加载中...",
     "noAttendees": "未找到参与者",
+    "unknownMember": "未知成员",
     "attendeeCount": "参与人数",
     "maleAttendees": "男性参与者",
     "femaleAttendees": "女性参与者",
@@ -1657,9 +1647,7 @@
     "country": "国家",
     "resetChanges": "重置更改",
     "profileDetails": "个人资料详情",
-    "deleteUserMessage": "通过单击\"删除用户\"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
     "copyLink": "复制个人资料链接",
-    "deleteUser": "删除用户",
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
     "sgender": "选择性别",
@@ -1814,7 +1802,9 @@
     "presetThisMonth": "本月",
     "presetNext7Days": "未来 7 天",
     "presetNext30Days": "未来 30 天",
-    "presetNextMonth": "下个月"
+    "presetNextMonth": "下个月",
+    "repeatsOn": "重复开启",
+    "select": "请选择"
   },
   "userEventCard": {
     "failedToRegister": "无法注册该活动",
@@ -1930,7 +1920,8 @@
     "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
     "thisUser": "此用户",
     "deleteChatConfirmation": "您确定要删除此聊天吗？",
-    "memberActionsMenu": "成员操作菜单"
+    "memberActionsMenu": "成员操作菜单",
+    "editImage": "编辑图像"
   },
   "userChatRoom": {
     "selectContact": "点击 + 图标以开始新的聊天",
@@ -1953,7 +1944,10 @@
       "resetButton": "重试",
       "resetButtonAriaLabel": "重试"
     },
-    "messageActions": "消息操作"
+    "messageActions": "消息操作",
+    "addAttachment": "添加附件",
+    "removeAttachment": "删除附件",
+    "closeReply": "关闭回复"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
@@ -2485,7 +2479,10 @@
     "clear": "清除",
     "clearSelection": "清除选择",
     "loading": "加载中...",
-    "selectRow": "选择第 {{rowKey}} 行"
+    "selectRow": "选择第 {{rowKey}} 行",
+    "previousYear": "上一年",
+    "nextYear": "下一年",
+    "member": "成员"
   },
   "donation": {
     "amount_label": "金额",
@@ -2586,5 +2583,17 @@
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "expandDay": "展开日期"
   }
 }
