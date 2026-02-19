@@ -146,7 +146,9 @@ describe('Organization setup workflow', () => {
       req.continue();
     });
 
-    organizationSettingsPage.openFromDrawer().openGeneralTab();
+    cy.then(() => {
+      organizationSettingsPage.visitPage(orgId).openGeneralTab();
+    });
 
     cy.wait('@getOrganizationBasicData')
       .its('response.statusCode')
