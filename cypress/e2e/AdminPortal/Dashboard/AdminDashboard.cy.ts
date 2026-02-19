@@ -1,4 +1,4 @@
-import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
+import { AdminDashboardPage } from '../../../pageObjects/AdminPortal/AdminDashboard';
 
 describe('Admin Dashboard', () => {
   const adminDashboard = new AdminDashboardPage();

@@ -220,7 +220,7 @@ export default defineConfig({
     // Viewport settings
     viewportWidth: 1920,
     viewportHeight: 1080,
-    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    specPattern: 'cypress/e2e/**/*.cy.ts',
     supportFile: 'cypress/support/e2e.ts',
 
     defaultCommandTimeout: 50000,

@@ -1,4 +1,4 @@
-import { PeoplePage } from '../../pageObjects/AdminPortal/PeoplePage';
+import { PeoplePage } from '../../../pageObjects/AdminPortal/PeoplePage';
 
 type SeededUser = { name: string; userId?: string };
 
