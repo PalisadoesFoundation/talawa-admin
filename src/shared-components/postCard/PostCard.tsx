@@ -210,22 +210,14 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             imageUrl={props.creator.avatarURL || UserDefault}
             enableEnlarge
           />
-          <Typography
-            sx={{
-              fontSize: '14px',
-              fontWeight: '500',
-            }}
-          >
+          <Typography className={postCardStyles.creatorName}>
             {props.creator.name}
-          </Typography>{' '}
+          </Typography>
           <Typography
             color="text.secondary"
-            sx={{
-              fontSize: '12px',
-              fontWeight: '400',
-            }}
+            className={postCardStyles.postedAt}
           >
-            {t('postedOn', props.postedAt)}
+            {props.postedAt}
           </Typography>
           {isPinned && (
             <PushPinOutlined
@@ -261,8 +253,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               sx: {
                 minWidth: 'var(--space-15)',
                 '& .MuiMenuItem-root': {
-                  px: 2,
-                  py: 1,
+                  px: 'var(--space-5)',
+                  py: 'var(--space-3)',
                 },
               },
             }}
@@ -359,26 +351,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       {/* Post Content */}
       <Box className={postCardStyles.postContent}>
-        <Typography
-          className={postCardStyles.caption}
-          sx={{
-            margin: '8px 0 8px 0',
-            fontSize: '18px',
-            fontWeight: '600',
-          }}
-        >
+        <Typography className={postCardStyles.caption}>
           {props.title}
         </Typography>
         {props.body && (
           <Box className={postCardStyles.bodyContainer}>
-            <Typography
-              variant="body2"
-              className={`${postCardStyles.body}`}
-              sx={{
-                fontSize: '14px',
-                fontWeight: '300',
-              }}
-            >
+            <Typography variant="body2" className={`${postCardStyles.body}`}>
               {props.body}
             </Typography>
           </Box>
@@ -406,14 +384,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         }) as React.ReactNode
       }
 
-      <Box
-        className={postCardStyles.likesCount}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
+      <Box className={postCardStyles.likesCount}>
         <Typography
           variant="subtitle1"
           fontWeight="bold"
@@ -443,7 +414,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         <Box className={postCardStyles.leftActions}>
           <Box onClick={handleToggleLike} className={postCardStyles.action}>
             <IconButton
-              sx={{ padding: 0 }}
+              className={postCardStyles.actionIcon}
               size="medium"
               data-testid="like-btn"
               aria-label={
@@ -461,15 +432,15 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <Typography
               variant="subtitle1"
               fontWeight="bold"
-              sx={{ color: 'rgb(117 117 117)' }}
+              className={postCardStyles.actionLabel}
             >
-              Like
+              {t('like')}
             </Typography>
           </Box>
 
           <Box className={postCardStyles.action} onClick={toggleComments}>
             <IconButton
-              sx={{ padding: 0 }}
+              className={postCardStyles.actionIcon}
               size="medium"
               aria-label={
                 showComments
@@ -482,15 +453,15 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <Typography
               variant="subtitle1"
               fontWeight="bold"
-              sx={{ color: 'rgb(117 117 117)' }}
+              className={postCardStyles.actionLabel}
             >
-              Comment
+              {t('comment')}
             </Typography>
           </Box>
 
           <Box className={postCardStyles.action} onClick={copyToClipboard}>
             <IconButton
-              sx={{ padding: 0 }}
+              className={postCardStyles.actionIcon}
               size="medium"
               aria-label={t('postCard.share')}
               data-testid="share-post-quick-button"
@@ -500,9 +471,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <Typography
               variant="subtitle1"
               fontWeight="bold"
-              sx={{ color: 'rgb(117 117 117)' }}
+              className={postCardStyles.actionLabel}
             >
-              Share
+              {t('share')}
             </Typography>
           </Box>
         </Box>
@@ -573,8 +544,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             sx={{
               backgroundColor: 'action.hover',
               borderRadius: 'var(--radius-2xl)',
-              px: 2,
-              py: 1,
+              px: 'var(--space-5)',
+              py: 'var(--space-3)',
             }}
           />
         </Box>

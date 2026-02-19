@@ -1,35 +1,11 @@
-.createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin-top: calc(var(--space-2) + var(--space-0-5));
-  margin-inline: calc(var(--space-3) + var(--space-1));
-  margin-bottom: var(--space-3);
-  width: var(--space-16);
-  height: var(--space-10);
-}
-
 .closeButton {
   color: var(--color-red-500);
   border: none;
   background-color: var(--color-white);
 }
 
-.createButton:hover {
-  box-shadow: var(--shadow-xs);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-900);
-  border: var(--border-1) solid var(--color-gray-700);
-}
-
-.createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
-}
-
 .list_box {
-  height: 70vh;
+  height: var(--space-25-5);
   overflow-y: auto;
   width: auto;
 }
@@ -44,6 +20,13 @@
 
 .mainpagerightOrgPost {
   min-width: 0;
+}
+
+.pinnedPosts,
+.yourFeed {
+  font-size: var(--font-size-40) !important;
+  font-weight: var(--font-weight-medium) !important;
+  margin-bottom: var(--space-5) !important;
 }
 
 .addPost {

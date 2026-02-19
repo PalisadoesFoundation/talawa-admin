@@ -374,18 +374,14 @@ export default function PostsPage() {
               {/* Create Post Container */}
               {userId && (
                 <div>
-                  {' '}
-                  <CreatePostContainer onClick={createPostModal.open} />{' '}
+                  <CreatePostContainer onClick={createPostModal.open} />
                 </div>
               )}
 
               {/* Pinned Posts Carousel */}
               {pinnedPosts.length > 0 && !isFiltering && (
-                <Box sx={{ mb: 3 }}>
-                  <Typography
-                    variant="h5"
-                    sx={{ fontSize: 40, fontWeight: 500, mb: 2 }}
-                  >
+                <Box sx={{ mb: 'var(--space-7)' }}>
+                  <Typography variant="h5" className={styles.pinnedPosts}>
                     {t('pinnedPosts')}
                   </Typography>
                   <PinnedPostsLayout
@@ -397,7 +393,7 @@ export default function PostsPage() {
 
               {/* Search Results Message */}
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
-                <Box sx={{ py: 4 }}>
+                <Box sx={{ py: 'var(--space-8)' }}>
                   <Typography color="text.secondary">
                     {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
@@ -425,11 +421,8 @@ export default function PostsPage() {
                 // Infinite scroll for regular posts
                 <>
                   {postsToDisplay.length > 0 && (
-                    <Box sx={{ mb: 3 }}>
-                      <Typography
-                        variant="h5"
-                        sx={{ fontSize: 40, fontWeight: 500, mb: 2 }}
-                      >
+                    <Box sx={{ mb: 'var(--space-7)' }}>
+                      <Typography variant="h5" className={styles.yourFeed}>
                         {t('yourFeed')}
                       </Typography>
                     </Box>
@@ -441,7 +434,7 @@ export default function PostsPage() {
                     loader={<InfiniteScrollLoader />}
                     endMessage={
                       postsToDisplay.length > 0 && (
-                        <Box sx={{ py: 2 }}>
+                        <Box sx={{ py: 'var(--space-5)' }}>
                           <Typography color="text.secondary">
                             {t('noMorePosts')}
                           </Typography>
@@ -451,7 +444,11 @@ export default function PostsPage() {
                     scrollThreshold={0.8}
                   >
                     <Box
-                      sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--space-5)',
+                      }}
                     >
                       {postsToDisplay.map((post) => (
                         <PostCard
@@ -468,7 +465,7 @@ export default function PostsPage() {
               {postsToDisplay.length === 0 &&
                 !orgPostListLoading &&
                 !isFiltering && (
-                  <Box sx={{ py: 4 }}>
+                  <Box sx={{ py: 'var(--space-8)' }}>
                     <Typography color="text.secondary">
                       {t('noPosts')}
                     </Typography>

@@ -36,6 +36,7 @@ import {
 } from 'types/Post/interface';
 import PinnedPostCard from './pinnedPostCard';
 import styles from './pinnedPostsLayout.module.css';
+import Button from 'shared-components/Button';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
@@ -73,11 +74,6 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   useEffect(() => {
     checkScrollability();
     startAutoScroll();
-  }, [pinnedPosts]);
-
-  useEffect(() => {
-    startAutoScroll();
-
     return () => stopAutoScroll();
   }, [pinnedPosts]);
 
@@ -142,19 +138,23 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
     <div
       className={styles.carouselWrapper}
       data-testid="pinned-posts-layout"
+      role="region"
+      aria-label={t('pinnedPost')}
+      tabIndex={0}
       onMouseEnter={stopAutoScroll}
       onMouseLeave={resumeAutoScroll}
+      onFocus={stopAutoScroll}
+      onBlur={resumeAutoScroll}
     >
       {canScrollLeft && (
-        <button
-          type="button"
+        <Button
           className={`${styles.navButton} ${styles.navButtonLeft}`}
           onClick={scrollLeft}
           aria-label={t('scrollLeft')}
           data-testid="scroll-left-button"
         >
           <ChevronLeft />
-        </button>
+        </Button>
       )}
 
       <div
@@ -181,15 +181,14 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
       </div>
 
       {canScrollRight && (
-        <button
-          type="button"
+        <Button
           className={`${styles.navButton} ${styles.navButtonRight}`}
           onClick={scrollRight}
           aria-label={t('scrollRight')}
           data-testid="scroll-right-button"
         >
           <ChevronRight />
-        </button>
+        </Button>
       )}
     </div>
   );

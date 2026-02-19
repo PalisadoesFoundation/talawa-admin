@@ -1,57 +1,63 @@
 .createPostContainer {
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 24px;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 1130px;
+  background-color: var(--bs-white);
+  border: var(--border-1) solid var(--color-gray-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-7);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    var(--color-gray-100);
+  max-width: var(--space-28-5);
 }
 
 .createPostContent {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-4);
 }
 
 .title {
-  font-size: 18px;
-  font-weight: 400;
-  color: rgba(0, 0, 0, 0.9);
-  margin-top: 8px;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-gray-900);
+  margin-top: var(--space-3);
 }
 
 .inputArea {
   display: flex;
   align-items: stretch;
-  gap: 12px;
-  background-color: rgba(0, 0, 0, 0.05);
-  border-radius: 8px;
-  min-height: 48px;
+  gap: var(--space-4);
+  background-color: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  min-height: var(--space-10);
 }
 
 .browseFilesButton {
   flex-shrink: 0;
-  background-color: #1778f2;
-  color: white;
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
   text-transform: none;
-  padding: 8px 16px;
-  border-radius: 8px 0 0 8px;
-  font-weight: 500;
-  height: 48px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md) var(--radius-none) var(--radius-none)
+    var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  height: var(--space-10);
   display: flex;
   align-items: center;
 }
 
 .postInput {
   flex: 1;
-  font-size: 1rem;
+  font-size: var(--font-size-md);
   background-color: transparent;
+  cursor: pointer !important;
+}
+
+.postInput input {
+  cursor: pointer;
 }
 
 .postInput::placeholder {
-  color: rgba(0, 0, 0, 0.4);
+  color: var(--color-gray-400);
 }
 
 .sendButtonContainer {
@@ -60,14 +66,14 @@
 }
 
 .sendButton {
-  background-color: #1778f2 !important;
-  color: white;
-  width: 55px;
-  height: 37px;
-  border-radius: 8px;
+  background-color: var(--color-blue-500) !important;
+  color: var(--bs-white);
+  width: var(--space-10-5);
+  height: var(--space-9);
+  border-radius: var(--radius-md);
 }
 
 .sendButton svg {
-  font-size: 20px;
-  color: white;
+  font-size: var(--font-size-xl);
+  color: var(--color-white);
 }

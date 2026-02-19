@@ -40,6 +40,7 @@ const CreatePostContainer: React.FC<InterfaceCreatePostContainerProps> = ({
           <Input
             className={styles.postInput}
             placeholder={t('startYourPost')}
+            aria-label={t('startYourPost')}
             onClick={onClick}
             disableUnderline
             readOnly
