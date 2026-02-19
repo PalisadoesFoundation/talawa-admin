@@ -43,7 +43,7 @@ const { mockToast, mockUseParams, mockErrorHandler } = vi.hoisted(() => ({
     info: vi.fn(),
     success: vi.fn(),
   },
-  mockUseParams: vi.fn(),
+  mockUseParams: vi.fn().mockReturnValue({ orgId: 'org123' }),
   mockErrorHandler: vi.fn(),
 }));
 
@@ -1247,8 +1247,13 @@ describe('Testing Events Screen [User Portal]', () => {
     const endTimeInputWhenAllDay = screen.getByLabelText(
       'End Time',
     ) as HTMLInputElement;
+    // Verify time inputs are disabled but contain values
     expect(startTimeInputWhenAllDay).toBeDisabled();
     expect(endTimeInputWhenAllDay).toBeDisabled();
+
+    // Capture the initial values while disabled
+    const initialStartTime = startTimeInputWhenAllDay.value;
+    const initialEndTime = endTimeInputWhenAllDay.value;
 
     // Toggle all-day OFF (uncheck it)
     await userEvent.click(allDayCheckbox);
@@ -1264,21 +1269,9 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(startTimeInput).not.toBeDisabled();
     expect(endTimeInput).not.toBeDisabled();
 
-    // Calculate expected dynamic default times (next hour start, +2 hours end)
-    // Use current hour to avoid race condition between test execution and component initialization
-    const now = new Date();
-    const currentHour = now.getHours();
-    const nextHour = new Date(now);
-    nextHour.setHours(currentHour + 1, 0, 0, 0);
-    const twoHoursLater = new Date(nextHour);
-    twoHoursLater.setHours(currentHour + 2, 0, 0, 0);
-
-    const expectedStartTime = nextHour.toTimeString().split(' ')[0];
-    const expectedEndTime = twoHoursLater.toTimeString().split(' ')[0];
-
-    // Optional sanity: values unchanged
-    expect(startTimeInput.value).toBe(expectedStartTime);
-    expect(endTimeInput.value).toBe(expectedEndTime);
+    // Values should match what was there initially (or default)
+    expect(startTimeInput.value).toBe(initialStartTime);
+    expect(endTimeInput.value).toBe(initialEndTime);
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {

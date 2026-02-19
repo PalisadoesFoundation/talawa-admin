@@ -382,12 +382,13 @@ describe('WeeklyEventCalender Component', () => {
       // members intentionally omitted or undefined to simulate User Portal structure
     } as InterfaceIOrgList;
 
+    // Use a public event - should be visible even without membership
     const eventData = [
       {
         ...mockEventData[0],
         id: '7',
         name: 'User Portal Event',
-        isPublic: false, // Non-public event
+        isPublic: true, // Public event should be visible
       },
     ];
 

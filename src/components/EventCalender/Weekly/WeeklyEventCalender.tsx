@@ -190,7 +190,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
         events?.filter((event) => {
           const eventStart = dayjs.utc(event.startAt).local().startOf('day');
           const eventEnd = dayjs.utc(event.endAt).local().startOf('day');
-          const current = dayjs.utc(tempDate).local().startOf('day');
+          const current = dayjs(tempDate).startOf('day');
           return (
             current.isSame(eventStart) ||
             current.isSame(eventEnd) ||

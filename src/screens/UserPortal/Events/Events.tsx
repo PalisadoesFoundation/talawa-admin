@@ -331,7 +331,7 @@ export default function Events(): JSX.Element {
 
   return (
     <>
-      <div className={styles.mainpageright}>
+      <div className={styles.mainpageright} data-testid="events-screen">
         <div className={`${styles.justifyspOrganizationEvents}`}>
           <EventHeader
             viewType={viewType}
