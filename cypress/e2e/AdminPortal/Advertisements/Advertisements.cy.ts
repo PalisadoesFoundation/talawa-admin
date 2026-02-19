@@ -87,7 +87,7 @@ describe('Testing Admin Advertisement Management', () => {
   // ── Test 1 — create ad (real backend) ──────────────────────────────────────
   it('create a new advertisement', () => {
     cy.visit(`/admin/orgads/${orgId}`);
-    cy.get('[data-testid="createAdvertisement"]').should('be.visible');
+    adPage.waitForPageReady();
     adPage.createAdvertisement(
       'Advertisement 1',
       'This is a test advertisement',
@@ -121,7 +121,7 @@ describe('Testing Admin Advertisement Management', () => {
       }
     });
     cy.visit(`/admin/orgads/${orgId}`);
-    cy.get('[data-testid="createAdvertisement"]').should('be.visible');
+    adPage.waitForPageReady();
     adPage.createAdvertisementWithAttachment(
       'Advertisement with attachment',
       'This is a test advertisement',
@@ -135,7 +135,7 @@ describe('Testing Admin Advertisement Management', () => {
     mockAdList(orgId, [makeAdEdge(orgId, 'mock-ad-1', 'Advertisement 1')]);
     mockAdMutations();
     cy.visit(`/admin/orgads/${orgId}`);
-    cy.get('[data-testid="createAdvertisement"]').should('be.visible');
+    adPage.waitForPageReady();
     adPage.verifyAndEditAdvertisement('Advertisement 1', 'Advertisement 2');
   });
 
@@ -144,7 +144,7 @@ describe('Testing Admin Advertisement Management', () => {
     mockAdList(orgId, [makeAdEdge(orgId, 'mock-ad-1', 'Advertisement 2')]);
     mockAdMutations();
     cy.visit(`/admin/orgads/${orgId}`);
-    cy.get('[data-testid="createAdvertisement"]').should('be.visible');
+    adPage.waitForPageReady();
     adPage.verifyAndDeleteAdvertisement('Advertisement 2');
   });
 

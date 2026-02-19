@@ -1443,6 +1443,7 @@ describe('Testing Advertisement Register Component', () => {
     const setAfterActiveMock = vi.fn();
     const setAfterCompletedMock = vi.fn();
     const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1465,34 +1466,44 @@ describe('Testing Advertisement Register Component', () => {
         screen.getByText(translations.createAdvertisement),
       ).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
-    await userEvent.type(
-      screen.getByTestId('advertisementNameInput'),
-      'Test Ad',
-    );
+    await act(async () => {
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
+    });
 
-    await userEvent.selectOptions(
-      screen.getByTestId('advertisementTypeSelect'),
-      'banner',
-    );
+    await act(async () => {
+      await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+      await userEvent.type(
+        screen.getByTestId('advertisementNameInput'),
+        'Test Ad',
+      );
 
-    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
-    await userEvent.type(
-      screen.getByTestId('advertisementStartDate'),
-      dateConstants.create.startAtISO.split('T')[0],
-    );
+      await userEvent.selectOptions(
+        screen.getByTestId('advertisementTypeSelect'),
+        'banner',
+      );
 
-    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
-    await userEvent.type(
-      screen.getByTestId('advertisementEndDate'),
-      dateConstants.create.endAtISO.split('T')[0],
-    );
+      await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+      await userEvent.type(
+        screen.getByTestId('advertisementStartDate'),
+        dateConstants.create.startAtISO.split('T')[0],
+      );
 
-    await userEvent.click(screen.getByText(translations.register));
+      await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+      await userEvent.type(
+        screen.getByTestId('advertisementEndDate'),
+        dateConstants.create.endAtISO.split('T')[0],
+      );
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByText(translations.register));
+    });
 
     await waitFor(() => {
+      // If validation fails, error toast is shown and createMock is not called.
+      // We check this first to get a useful error message.
+      expect(toastErrorSpy).not.toHaveBeenCalled();
       expect(createMock).toHaveBeenCalled();
 
       expect(toastSuccessSpy).toHaveBeenCalledWith(
@@ -1532,27 +1543,34 @@ describe('Testing Advertisement Register Component', () => {
         screen.getByText(translations.createAdvertisement),
       ).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
-    await userEvent.type(
-      screen.getByTestId('advertisementNameInput'),
-      'Test Ad',
-    );
+    await act(async () => {
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
+    });
 
-    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
-    await userEvent.type(
-      screen.getByTestId('advertisementStartDate'),
-      dateConstants.create.startAtISO.split('T')[0],
-    );
+    await act(async () => {
+      await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+      await userEvent.type(
+        screen.getByTestId('advertisementNameInput'),
+        'Test Ad',
+      );
 
-    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
-    await userEvent.type(
-      screen.getByTestId('advertisementEndDate'),
-      dateConstants.create.endAtISO.split('T')[0],
-    );
+      await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+      await userEvent.type(
+        screen.getByTestId('advertisementStartDate'),
+        dateConstants.create.startAtISO.split('T')[0],
+      );
 
-    await userEvent.click(screen.getByText(translations.register));
+      await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+      await userEvent.type(
+        screen.getByTestId('advertisementEndDate'),
+        dateConstants.create.endAtISO.split('T')[0],
+      );
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByText(translations.register));
+    });
 
     await waitFor(() => {
       expect(createMock).toHaveBeenCalled();
@@ -1575,10 +1593,10 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="edit"
-                startAtEdit={new Date()}
                 endAtEdit={new Date()}
+                startAtEdit={new Date()}
                 typeEdit="banner"
-                nameEdit="Ad1"
+                nameEdit="Advert1"
                 idEdit="1"
                 setAfterActive={setAfterActiveMock}
                 setAfterCompleted={setAfterCompletedMock}
@@ -1592,19 +1610,27 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('editBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('editBtn'));
 
-    await userEvent.type(
-      screen.getByTestId('advertisementNameInput'),
-      'Updated Ad',
-    );
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('editBtn'));
+    });
 
-    await userEvent.click(screen.getByText(translations.saveChanges));
+    await act(async () => {
+      await userEvent.type(
+        screen.getByTestId('advertisementNameInput'),
+        'Updated Ad',
+      );
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByText(translations.saveChanges));
+    });
 
     await waitFor(() => {
       expect(updateMock).toHaveBeenCalled();
       expect(toastSuccessSpy).not.toHaveBeenCalled();
       expect(setAfterActiveMock).not.toHaveBeenCalled();
+      expect(setAfterCompletedMock).not.toHaveBeenCalled();
     });
   });
 

@@ -15,6 +15,15 @@ export class AdvertisementPage {
   private readonly _deleteBtn = '[data-cy="deletebtn"]';
   private readonly _deleteConfirmBtn = '[data-testid="delete_yes"]';
 
+  /**
+   * Wait for the advertisement page to be fully loaded and ready for interaction.
+   * Asserts that the "Create Advertisement" button is visible.
+   */
+  waitForPageReady() {
+    cy.get(this._createAdBtn).should('be.visible');
+    return this;
+  }
+
   visitAdvertisementPage() {
     cy.get(this._leftDrawerAdBtn).should('be.visible').click();
     cy.url().should('match', /\/admin\/orgads\/[a-f0-9-]+/);
