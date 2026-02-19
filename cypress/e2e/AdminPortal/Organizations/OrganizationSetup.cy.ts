@@ -218,6 +218,10 @@ describe('Organization setup workflow', () => {
 
     memberManagementPage.closeAddMemberModal();
 
+    // The member list uses local filtering and does not refetch after
+    // adding a member. Reload so the newly added member appears.
+    cy.reload();
+
     memberManagementPage
       .searchMemberByName(inviteeName)
       .verifyMemberInList(inviteeName);
