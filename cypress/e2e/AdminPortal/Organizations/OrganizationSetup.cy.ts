@@ -214,6 +214,8 @@ describe('Organization setup workflow', () => {
       .should('be.visible')
       .and('contain.text', 'added');
 
+    memberManagementPage.closeAddMemberModal();
+
     memberManagementPage
       .searchMemberByName(inviteeName)
       .verifyMemberInList(inviteeName);
