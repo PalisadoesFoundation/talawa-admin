@@ -188,8 +188,8 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
                   anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                   PaperProps={{
+                    className: styles.menuPaper,
                     sx: {
-                      minWidth: 'var(--space-15)',
                       '& .MuiMenuItem-root': { px: 2, py: 1 },
                     },
                   }}

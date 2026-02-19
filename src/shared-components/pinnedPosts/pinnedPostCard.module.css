@@ -59,3 +59,7 @@
 .postCardContainer .viewPostButton:hover {
   background-color: var(--color-blue-300);
 }
+
+.menuPaper {
+  min-width: var(--space-15);
+}
