@@ -881,7 +881,7 @@ describe('PostCard', () => {
     // The dropdown should close after error - we can't assert modal state without additional setup
   });
 
-  it('disables comment send button when input is empty', async () => {
+  it('disables comment send button when input is empty', () => {
     renderPostCard();
 
     const sendButton = screen.getByTestId('comment-send');
@@ -950,9 +950,6 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted callback when data.post.comments is null', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
     renderPostCardWithCustomMock(nullCommentsMock);
 
     // Show comments to trigger the query
@@ -971,9 +968,6 @@ describe('PostCard', () => {
   };
 
   it('should not display comments section when commentCount is 0', () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -991,10 +985,6 @@ describe('PostCard', () => {
   });
 
   it('should render avatar with UserDefault fallback when avatarURL is null', () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
-    // Post props with null avatarURL to test the fallback
     const postWithNullAvatar = {
       ...defaultProps,
       creator: {
