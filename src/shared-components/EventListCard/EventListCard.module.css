@@ -18,7 +18,7 @@
 
 .cardsEventListCard > p {
   font-size: var(--font-size-xs);
-  margin-top: 0px;
+  margin-top: 0;
   margin-bottom: var(--space-2);
 }
 
@@ -55,7 +55,7 @@
 }
 
 .eventtitle {
-  margin-bottom: 0px;
+  margin-bottom: 0;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -65,10 +65,10 @@
 }
 
 .eventTime {
-  font-size: 10px;
+  font-size: var(--font-size-xs);
   color: var(--cardsEventListCard-h2-color);
   opacity: 0.8;
-  margin-top: 2px;
+  margin-top: var(--space-1);
   text-align: center;
   width: 100%;
 }

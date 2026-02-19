@@ -438,7 +438,6 @@ describe('WeeklyEventCalender Component', () => {
     const CELL_HEIGHT_PX = 80;
     const expectedTop = 14 * CELL_HEIGHT_PX;
     const expectedHeight = CELL_HEIGHT_PX;
-    const expectedWidth = 95;
     const startHour = 14;
     const offsetIndex = Math.floor(startHour / 3) % 3;
     const offsetPercent = offsetIndex * 2.5;
@@ -446,7 +445,6 @@ describe('WeeklyEventCalender Component', () => {
 
     expect(eventContainer).toHaveStyle(`top: ${expectedTop}px`);
     expect(eventContainer).toHaveStyle(`height: ${expectedHeight}px`);
-    expect(eventContainer).toHaveStyle(`width: ${expectedWidth}%`);
     expect(eventContainer).toHaveStyle(`left: ${expectedLeft}%`);
   });
 

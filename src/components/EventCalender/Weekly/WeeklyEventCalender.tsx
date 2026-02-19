@@ -102,7 +102,6 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
     return {
       top: `${top}px`,
       height: `${height}px`,
-      width: '95%',
       left: `${2.5 + offsetPercent}%`,
     };
   };
