@@ -402,4 +402,208 @@ describe('WeeklyEventCalender Component', () => {
 
     expect(screen.getByText('User Portal Event')).toBeInTheDocument();
   });
+
+  it('uses default column values when colIndex and colCount are not provided', async () => {
+    const mockEvent: InterfaceEvent[] = [
+      {
+        id: 'col-test-event',
+        location: 'Test',
+        name: 'Column Test Event',
+        description: 'Test',
+        startAt: dayjs().hour(14).minute(0).second(0).utc().toISOString(),
+        endAt: dayjs().hour(15).minute(0).second(0).utc().toISOString(),
+        startTime: '14:00:00',
+        endTime: '15:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+    ];
+
+    renderComponent({
+      eventData: mockEvent,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const eventCard = screen.getByTestId('event-list-card');
+    const eventContainer = eventCard.parentElement;
+
+    const CELL_HEIGHT_PX = 80;
+    const expectedTop = 14 * CELL_HEIGHT_PX;
+    const expectedHeight = CELL_HEIGHT_PX;
+    const totalWidth = 95;
+    const GAP = 2;
+    const expectedWidth = (totalWidth - GAP * 0) / 1;
+    const expectedLeft = 0 * (expectedWidth + GAP) + 2.5;
+
+    expect(eventContainer).toHaveStyle(`top: ${expectedTop}px`);
+    expect(eventContainer).toHaveStyle(`height: ${expectedHeight}px`);
+    expect(eventContainer).toHaveStyle(`width: ${expectedWidth}%`);
+    expect(eventContainer).toHaveStyle(`left: ${expectedLeft}%`);
+  });
+
+  it('sorts events by start time in computeColumns', async () => {
+    const laterEvent = dayjs(today)
+      .hour(16)
+      .minute(0)
+      .second(0)
+      .utc()
+      .toISOString();
+    const earlierEvent = dayjs(today)
+      .hour(10)
+      .minute(0)
+      .second(0)
+      .utc()
+      .toISOString();
+
+    const unsortedEvents: InterfaceEvent[] = [
+      {
+        id: 'event-1',
+        location: 'Test',
+        name: 'Later Event',
+        description: 'Test',
+        startAt: laterEvent,
+        endAt: dayjs(laterEvent).add(1, 'hour').toISOString(),
+        startTime: '16:00:00',
+        endTime: '17:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+      {
+        id: 'event-2',
+        location: 'Test',
+        name: 'Earlier Event',
+        description: 'Test',
+        startAt: earlierEvent,
+        endAt: dayjs(earlierEvent).add(1, 'hour').toISOString(),
+        startTime: '10:00:00',
+        endTime: '11:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+    ];
+
+    renderComponent({
+      eventData: unsortedEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getByText('Earlier Event')).toBeInTheDocument();
+    expect(screen.getByText('Later Event')).toBeInTheDocument();
+  });
+
+  it('handles overlapping events with column placement logic', async () => {
+    const baseTime = dayjs(today).hour(10).minute(0).second(0).utc();
+
+    const overlappingEvents: InterfaceEvent[] = [
+      {
+        id: 'overlap-1',
+        location: 'Test',
+        name: 'Event A',
+        description: 'Test',
+        startAt: baseTime.toISOString(),
+        endAt: baseTime.add(2, 'hour').toISOString(),
+        startTime: '10:00:00',
+        endTime: '12:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+      {
+        id: 'overlap-2',
+        location: 'Test',
+        name: 'Event B',
+        description: 'Test',
+        startAt: baseTime.add(1, 'hour').toISOString(),
+        endAt: baseTime.add(3, 'hour').toISOString(),
+        startTime: '11:00:00',
+        endTime: '13:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+    ];
+
+    renderComponent({
+      eventData: overlappingEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getByText('Event A')).toBeInTheDocument();
+    expect(screen.getByText('Event B')).toBeInTheDocument();
+  });
+
+  it('displays multi-day events that start before current day', async () => {
+    const yesterday = dayjs(today)
+      .subtract(1, 'day')
+      .hour(20)
+      .minute(0)
+      .second(0)
+      .utc();
+    const tomorrow = dayjs(today)
+      .add(1, 'day')
+      .hour(8)
+      .minute(0)
+      .second(0)
+      .utc();
+
+    const multiDayEvent: InterfaceEvent[] = [
+      {
+        id: 'multiday-1',
+        location: 'Test',
+        name: 'Multi-Day Event',
+        description: 'Test',
+        startAt: yesterday.toISOString(),
+        endAt: tomorrow.toISOString(),
+        startTime: '20:00:00',
+        endTime: '08:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+    ];
+
+    renderComponent({
+      eventData: multiDayEvent,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getAllByText('Multi-Day Event').length).toBeGreaterThan(0);
+  });
 });
