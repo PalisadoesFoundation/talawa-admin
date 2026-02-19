@@ -10,7 +10,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:21](https://github
 
 ### attachments
 
-> **attachments**: `File`[]
+> **attachments**: [`FileMetadataAttachment`](../../type/type-aliases/FileMetadataAttachment.md)[]
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L28)
 

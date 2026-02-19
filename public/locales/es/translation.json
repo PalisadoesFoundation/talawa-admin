@@ -1848,6 +1848,7 @@
     "advertisementImageAlt": "Imagen publicitaria #{{index}} para {{name}}",
     "invalidFileType": "Tipo de archivo no válido: {{fileName}}",
     "fileTooLarge": "Archivo demasiado grande: {{fileName}}",
+    "fileUploadError": "Error al subir archivo: {{fileName}}",
     "invalidArgumentsForAction": "Argumentos no válidos para esta acción.",
     "englishCaptions": "Subtítulos en inglés",
     "preview": "Vista previa",

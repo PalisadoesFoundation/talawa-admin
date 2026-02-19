@@ -6,4 +6,4 @@
 
 > `const` **mockFile**: `File`
 
-Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L15)
+Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L16)
