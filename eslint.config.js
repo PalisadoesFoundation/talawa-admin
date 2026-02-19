@@ -12,7 +12,7 @@ import {
   searchComponentsExemption,
 } from './scripts/eslint/config/special.js';
 
-import { screenRouteConfig } from "./scripts/eslint/config/enforce-screen-route.js";
+import { screenRouteConfig } from './scripts/eslint/config/enforce-screen-route.js';
 
 export default [
   {
