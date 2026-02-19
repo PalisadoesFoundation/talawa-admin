@@ -20,6 +20,14 @@
   appearance: none;
 }
 
+.backdrop:hover,
+.backdrop:active,
+.backdrop:focus {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
 .backdrop.backdropShow {
   opacity: 1;
   visibility: visible;
@@ -270,6 +278,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
