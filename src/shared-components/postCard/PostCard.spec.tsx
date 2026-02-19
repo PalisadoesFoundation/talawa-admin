@@ -31,6 +31,17 @@ import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
 
+vi.mock('../../utils/useLocalStorage', () => {
+  return {
+    default: () => ({
+      getItem: vi.fn(),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clearAllItems: vi.fn(),
+    }),
+  };
+});
+
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
@@ -542,7 +553,9 @@ describe('PostCard', () => {
 
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
+    const { clearAllItems } = useLocalStorage();
+    clearAllItems();
   });
 
   test('opens and closes edit modal', async () => {
@@ -893,7 +906,9 @@ describe('PostCard', () => {
     const sendButton = screen.getByTestId('comment-send');
 
     await user.type(commentInput, 'Test comment');
-    expect(sendButton).not.toBeDisabled();
+    await waitFor(() => {
+      expect(sendButton).not.toBeDisabled();
+    });
   });
 
   it('renders CursorPaginationManager when comments are shown', async () => {
@@ -1136,7 +1151,7 @@ describe('PostCard', () => {
 
     // Open dropdown
     const dropdownButton = screen.getByTestId('post-more-options-button');
-    await user.click(dropdownButton);
+    await userEvent.click(dropdownButton);
 
     // Wait for menu to appear, then click unpin option (uses same test ID)
     await waitFor(() => {
@@ -1144,7 +1159,7 @@ describe('PostCard', () => {
     });
 
     const unpinButton = screen.getByTestId('pin-post-menu-item');
-    await user.click(unpinButton);
+    await userEvent.click(unpinButton);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -1347,7 +1362,7 @@ describe('PostCard', () => {
     expect(editMenuItem).toBeInTheDocument();
 
     // Close dropdown with Escape key
-    await userEvent.keyboard('[Escape]');
+    await user.keyboard('{Escape}');
 
     await waitFor(() => {
       expect(
@@ -1730,7 +1745,9 @@ describe('PostCard', () => {
       ).toBeInTheDocument(),
     );
 
-    expect(screen.getByText('Test comment')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Test comment')).toBeInTheDocument(),
+    );
 
     const commentInput = screen.getByPlaceholderText(/add comment/i);
     await user.type(commentInput, 'New test comment');
@@ -1738,6 +1755,26 @@ describe('PostCard', () => {
 
     await waitFor(() => {
       expect(screen.getByText('New test comment')).toBeInTheDocument();
+    });
+  });
+
+  it('renders post body when provided', () => {
+    renderPostCard({ body: 'Hello body' });
+
+    const bodyParagraph = screen
+      .getAllByText('Hello body')
+      .find((el) => el.tagName.toLowerCase() === 'p');
+
+    expect(bodyParagraph).toBeInTheDocument();
+  });
+
+  it('renders comments section', async () => {
+    renderPostCard();
+
+    await user.click(screen.getByTestId('comment-card'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Test comment')).toBeInTheDocument();
     });
   });
 
@@ -1777,7 +1814,6 @@ describe('PostCard', () => {
         writable: true,
       });
       cleanup();
-      // vi.restoreAllMocks();
     });
 
     test('opens share menu item and copies link to clipboard', async () => {
