@@ -47,6 +47,16 @@
   min-width: var(--space-15);
 }
 
+.dayColumn:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: calc(var(--border-2) * -1);
+}
+
+.eventCard:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: calc(var(--border-2) * -1);
+}
+
 .dayHeader {
   height: var(--space-11);
   display: flex;

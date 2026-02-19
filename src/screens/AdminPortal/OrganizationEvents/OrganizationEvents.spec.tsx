@@ -835,7 +835,7 @@ describe('Organisation Events Page', () => {
     }
   });
 
-  test.todo('viewType changes to Year view via EventHeader', async () => {
+  test('viewType changes to Year view via EventHeader', async () => {
     const { container } = renderWithLink(defaultLink);
 
     await wait();
@@ -845,50 +845,39 @@ describe('Organisation Events Page', () => {
     const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
     await userEvent.click(viewTypeDropdown);
 
-    // Find and click the "Year View" option
+    // Find and click the "Year View" option (value = ViewType.YEAR = 'Year View')
     const yearOption = await screen.findByTestId(
       'selectViewType-item-Year View',
     );
     await userEvent.click(yearOption);
 
-    // Click outside to close dropdown
-    await userEvent.click(document.body);
-
-    // Wait for the view to update
+    // The dropdown toggle now shows the selected option's label ("Select Year")
     await waitFor(() => {
-      expect(container.textContent).toMatch('Year View');
+      expect(container.textContent).toMatch('Select Year');
     });
   });
 
-  test.todo(
-    'should switch to week view when ViewType.WEEK is selected',
-    async () => {
-      const { container } = renderWithLink(defaultLink);
+  test('should switch to week view when ViewType.WEEK is selected', async () => {
+    const { container } = renderWithLink(defaultLink);
 
-      await wait();
+    await wait();
 
-      expect(container.textContent).toMatch('Month');
+    expect(container.textContent).toMatch('Month');
 
-      const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
-      await userEvent.click(viewTypeDropdown);
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
+    await userEvent.click(viewTypeDropdown);
 
-      // Wait for dropdown to open
-      await screen.findByTestId('selectViewType-menu');
+    // Find and click the "Week View" option (value = ViewType.WEEK = 'Week View')
+    const weekOption = await screen.findByTestId(
+      'selectViewType-item-Week View',
+    );
+    await userEvent.click(weekOption);
 
-      const weekOption = await screen.findByTestId(
-        'selectViewType-item-Week View',
-      );
-      await userEvent.click(weekOption);
-
-      // Click outside to close dropdown
-      await userEvent.click(document.body);
-
-      // Wait for the view to update
-      await waitFor(() => {
-        expect(container.textContent).toMatch('Week View');
-      });
-    },
-  );
+    // The dropdown toggle now shows the selected option's label ("Select Week")
+    await waitFor(() => {
+      expect(container.textContent).toMatch('Select Week');
+    });
+  });
 
   test('handleChangeView ignores null values', async () => {
     const { container } = renderWithLink(defaultLink);

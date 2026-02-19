@@ -81,8 +81,14 @@ const renderComponent = (props: Partial<InterfaceWeeklyEventCalenderProps>) => {
 };
 
 describe('WeeklyEventCalender Component', () => {
+  // Fixed date: June 15, 2024 (Saturday), 10:00 AM local time.
+  // June 15 is a Saturday, so startOf('week') = June 9 (Sun) giving a full
+  // deterministic week regardless of CI runner timezone or execution day.
+  const FIXED_DATE = new Date(2024, 5, 15, 10, 0, 0);
+
   beforeEach(() => {
-    // Reset any mocks if needed
+    vi.useFakeTimers();
+    vi.setSystemTime(FIXED_DATE);
   });
 
   afterEach(() => {
@@ -90,31 +96,39 @@ describe('WeeklyEventCalender Component', () => {
     cleanup();
   });
 
-  const mockRefetchEvents = vi.fn();
-  const today = new Date();
-  const todayISO = today.toISOString();
+  let mockRefetchEvents: ReturnType<typeof vi.fn>;
+  let today: Date;
+  let todayISO: string;
+  let mockEventData: InterfaceEvent[];
 
-  const mockEventData: InterfaceEvent[] = [
-    {
-      id: '1',
-      location: 'Test Location',
-      name: 'Test Event',
-      description: 'Test Description',
-      startAt: todayISO,
-      endAt: dayjs(todayISO).add(1, 'hour').toISOString(),
-      startTime: '10:00:00',
-      endTime: '11:00:00',
-      allDay: false,
-      isPublic: true,
-      isRegisterable: true,
-      isInviteOnly: false,
-      attendees: [],
-      creator: {
-        id: 'creator1',
-        name: 'John Doe',
+  beforeEach(() => {
+    mockRefetchEvents = vi.fn();
+    // These are re-evaluated after vi.setSystemTime so they reflect the frozen clock
+    today = new Date();
+    todayISO = today.toISOString();
+
+    mockEventData = [
+      {
+        id: '1',
+        location: 'Test Location',
+        name: 'Test Event',
+        description: 'Test Description',
+        startAt: todayISO,
+        endAt: dayjs(todayISO).add(1, 'hour').toISOString(),
+        startTime: '10:00:00',
+        endTime: '11:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: {
+          id: 'creator1',
+          name: 'John Doe',
+        },
       },
-    },
-  ];
+    ];
+  });
 
   const mockOrgData: InterfaceIOrgList = {
     id: 'org1',
@@ -780,6 +794,52 @@ describe('WeeklyEventCalender Component', () => {
       currentDate: today,
     });
 
+    expect(screen.getByTestId('weekly-calendar-container')).toBeInTheDocument();
+  });
+
+  it('triggers click on day column when Enter or Space is pressed (l141-143 coverage)', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const dayCells = screen.getAllByRole('gridcell');
+    const firstCell = dayCells[0];
+
+    // Spy on the click method of the element
+    const clickSpy = vi.spyOn(firstCell, 'click');
+
+    // Focus and press Enter
+    firstCell.focus();
+    firstCell.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
+    );
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+
+    // Focus and press Space
+    firstCell.dispatchEvent(
+      new KeyboardEvent('keydown', { key: ' ', bubbles: true }),
+    );
+    expect(clickSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('handles undefined eventData gracefully (l165 coverage)', () => {
+    expect(() => {
+      renderComponent({
+        eventData: undefined,
+        refetchEvents: mockRefetchEvents,
+        orgData: mockOrgData,
+        userRole: UserRole.ADMINISTRATOR,
+        userId: 'admin1',
+        currentDate: today,
+      });
+    }).not.toThrow();
+
+    // Verify grid is still rendered even with undefined eventData
     expect(screen.getByTestId('weekly-calendar-container')).toBeInTheDocument();
   });
 });

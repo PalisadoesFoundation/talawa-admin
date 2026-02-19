@@ -204,8 +204,9 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
               return (
                 <div
                   key={event.id}
-                  className={styles.eventContainer}
+                  className={`${styles.eventContainer} ${styles.eventCard}`}
                   style={getEventStyle(event.startAt, event.endAt)}
+                  tabIndex={0}
                 >
                   <EventListCard
                     {...event}
