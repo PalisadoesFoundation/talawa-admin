@@ -3286,7 +3286,7 @@ form label,
   box-sizing: border-box;
 }
 
-/* -- EventDashboardScreen.tsx -- */
+/* -- EventDashboardSreen.tsx -- */
 
 .containerHeightEventDash {
   height: calc(100vh - 66px);

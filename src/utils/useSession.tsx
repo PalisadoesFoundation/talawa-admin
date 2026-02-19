@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from './useLocalstorage';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { toast } from 'react-toastify';
 
 type UseSessionReturnType = {
   startSession: () => void;
@@ -74,7 +75,7 @@ const useSession = (): UseSessionReturnType => {
       await logout();
     } catch (error) {
       console.error('Error during logout:', error);
-      NotificationToast.error(tCommon('errorOccurred'));
+      toast.error(tCommon('errorOccurred'));
     }
     clearAllItems();
     endSession();

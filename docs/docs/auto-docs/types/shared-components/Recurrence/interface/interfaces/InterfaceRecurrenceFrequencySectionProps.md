@@ -4,7 +4,7 @@
 
 # Interface: InterfaceRecurrenceFrequencySectionProps
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L36)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L35)
 
 Props for the RecurrenceFrequencySection component.
 
@@ -14,7 +14,7 @@ Props for the RecurrenceFrequencySection component.
 
 > **frequency**: [`Frequency`](../../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/Frequency.md)
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L38)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L37)
 
 The selected frequency usage.
 
@@ -24,7 +24,7 @@ The selected frequency usage.
 
 > **localInterval**: `string` \| `number`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L40)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L39)
 
 The interval value (e.g., every 2 weeks).
 
@@ -34,7 +34,7 @@ The interval value (e.g., every 2 weeks).
 
 > **onFrequencyChange**: (`newFrequency`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L44)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L43)
 
 Callback when the frequency changes.
 
@@ -54,7 +54,7 @@ Callback when the frequency changes.
 
 > **onIntervalChange**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L42)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L41)
 
 Callback when the interval changes.
 
@@ -74,7 +74,7 @@ Callback when the interval changes.
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L46)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L45)
 
 Translation function.
 

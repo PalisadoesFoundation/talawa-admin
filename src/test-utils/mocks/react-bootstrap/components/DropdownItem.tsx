@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'shared-components/Button';
 
 /**
  * Mock Dropdown.Item - renders a button representing an item inside a
@@ -10,13 +9,13 @@ export type BtnProps = React.PropsWithChildren<
 >;
 
 const DropdownItem: React.FC<BtnProps> = ({ children, onClick, ...rest }) => (
-  <Button
+  <button
     data-testid={(rest as { 'data-testid'?: string })['data-testid']}
     onClick={onClick}
     {...rest}
   >
     {children}
-  </Button>
+  </button>
 );
 
 export default DropdownItem;

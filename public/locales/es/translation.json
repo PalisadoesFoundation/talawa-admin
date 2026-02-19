@@ -15,7 +15,6 @@
   "customRecurrence": "Recurrencia personalizada",
   "frequency": "Frecuencia",
   "repeatsEvery": "Se repite cada",
-  "repeatsOn": "Se repite en",
   "day": "Día",
   "week": "Semana",
   "month": "Mes",
@@ -1785,9 +1784,7 @@
     "presetThisMonth": "Este Mes",
     "presetNext7Days": "Próximos 7 Días",
     "presetNext30Days": "Próximos 30 Días",
-    "presetNextMonth": "Próximo Mes",
-    "repeatsOn": "Se repite en",
-    "select": "Seleccionar"
+    "presetNextMonth": "Próximo Mes"
   },
   "userEventCard": {
     "failedToRegister": "Error al registrarse para el evento",

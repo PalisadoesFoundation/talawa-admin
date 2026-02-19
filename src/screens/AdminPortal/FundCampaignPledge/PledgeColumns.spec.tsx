@@ -1,11 +1,10 @@
 import React from 'react';
-import { render, screen, cleanup, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getPledgeColumns } from './PledgeColumns';
 import type { GridRenderCellParams } from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import userEvent from '@testing-library/user-event';
 
 dayjs.extend(utc);
 
@@ -31,14 +30,8 @@ vi.mock('shared-components/Avatar/Avatar', () => ({
 }));
 
 describe('getPledgeColumns', () => {
-  let user: ReturnType<typeof userEvent.setup>;
-  beforeEach(() => {
-    user = userEvent.setup();
-  });
-
   afterEach(() => {
-    cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const mockT = vi.fn((key: string) => key);
@@ -59,6 +52,10 @@ describe('getPledgeColumns', () => {
     handleOpenModal: mockHandleOpenModal,
     handleDeleteClick: mockHandleDeleteClick,
   };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it('should return 5 column definitions', () => {
     const columns = getPledgeColumns(defaultProps);
@@ -112,7 +109,7 @@ describe('getPledgeColumns', () => {
       expect(screen.getAllByText('Jane Doe').length).toBeGreaterThan(0);
     });
 
-    it('should display extra users count and handle click', async () => {
+    it('should display extra users count and handle click', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
 
@@ -136,16 +133,14 @@ describe('getPledgeColumns', () => {
       expect(moreContainer).toBeInTheDocument();
       expect(moreContainer).toHaveTextContent('moreCount_2');
 
-      await user.click(moreContainer);
-      await waitFor(() => {
-        expect(mockHandleClick).toHaveBeenCalledWith(
-          expect.any(Object),
-          extraUsers,
-        );
-      });
+      fireEvent.click(moreContainer);
+      expect(mockHandleClick).toHaveBeenCalledWith(
+        expect.any(Object),
+        extraUsers,
+      );
     });
 
-    it('should handle keyboard navigation on extra users container', async () => {
+    it('should handle keyboard navigation on extra users container', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
 
@@ -165,11 +160,8 @@ describe('getPledgeColumns', () => {
       expect(moreContainer).toHaveAttribute('role', 'button');
       expect(moreContainer).toHaveAttribute('tabIndex', '0');
 
-      await user.click(moreContainer);
-      await user.keyboard('{Enter}');
-      await waitFor(() => {
-        expect(mockHandleClick).toHaveBeenCalled();
-      });
+      fireEvent.keyDown(moreContainer, { key: 'Enter' });
+      expect(mockHandleClick).toHaveBeenCalled();
     });
 
     it('should handle empty users array', () => {
@@ -281,7 +273,7 @@ describe('getPledgeColumns', () => {
   });
 
   describe('action column', () => {
-    it('should call handleOpenModal with edit mode on edit button click', async () => {
+    it('should call handleOpenModal with edit mode on edit button click', () => {
       const columns = getPledgeColumns(defaultProps);
       const actionColumn = columns[4];
 
@@ -291,14 +283,12 @@ describe('getPledgeColumns', () => {
       render(<>{actionColumn.renderCell?.(params)}</>);
 
       const editButton = screen.getByTestId('editPledgeBtn');
-      await user.click(editButton);
+      fireEvent.click(editButton);
 
-      await waitFor(() => {
-        expect(mockHandleOpenModal).toHaveBeenCalledWith(row, 'edit');
-      });
+      expect(mockHandleOpenModal).toHaveBeenCalledWith(row, 'edit');
     });
 
-    it('should call handleDeleteClick on delete button click', async () => {
+    it('should call handleDeleteClick on delete button click', () => {
       const columns = getPledgeColumns(defaultProps);
       const actionColumn = columns[4];
 
@@ -308,11 +298,9 @@ describe('getPledgeColumns', () => {
       render(<>{actionColumn.renderCell?.(params)}</>);
 
       const deleteButton = screen.getByTestId('deletePledgeBtn');
-      await user.click(deleteButton);
+      fireEvent.click(deleteButton);
 
-      await waitFor(() => {
-        expect(mockHandleDeleteClick).toHaveBeenCalledWith(row);
-      });
+      expect(mockHandleDeleteClick).toHaveBeenCalledWith(row);
     });
   });
 
@@ -379,7 +367,7 @@ describe('getPledgeColumns', () => {
       expect(result).toBe('-');
     });
 
-    it('should handle keydown with Enter/Space/Tab as expected', async () => {
+    it('should handle keydown with Enter/Space/Tab as expected', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
       const params = {
@@ -395,29 +383,20 @@ describe('getPledgeColumns', () => {
       render(<>{pledgersColumn.renderCell?.(params)}</>);
       const moreContainer = screen.getByTestId('moreContainer-1');
 
-      // Test Enter key
+      // Enter
       mockHandleClick.mockClear();
-      moreContainer.focus();
-      await user.keyboard('{Enter}'); // Using bracket notation sometimes works differently
-      await waitFor(() => {
-        expect(mockHandleClick).toHaveBeenCalledTimes(1);
-      });
+      fireEvent.keyDown(moreContainer, { key: 'Enter' });
+      expect(mockHandleClick).toHaveBeenCalledTimes(1);
 
-      // Test Space key
+      // Space
       mockHandleClick.mockClear();
-      moreContainer.focus();
-      await user.keyboard(' ');
-      await waitFor(() => {
-        expect(mockHandleClick).toHaveBeenCalledTimes(1);
-      });
+      fireEvent.keyDown(moreContainer, { key: ' ' });
+      expect(mockHandleClick).toHaveBeenCalledTimes(1);
 
-      // Test Tab key
+      // Tab (should not trigger)
       mockHandleClick.mockClear();
-      moreContainer.focus();
-      await user.keyboard('{Tab}');
-      await waitFor(() => {
-        expect(mockHandleClick).not.toHaveBeenCalled();
-      });
+      fireEvent.keyDown(moreContainer, { key: 'Tab' });
+      expect(mockHandleClick).not.toHaveBeenCalled();
     });
   });
 });

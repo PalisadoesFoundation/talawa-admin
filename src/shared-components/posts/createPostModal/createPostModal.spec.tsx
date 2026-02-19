@@ -1,5 +1,5 @@
-import React from 'react';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -246,8 +246,8 @@ afterEach(() => {
   } else {
     Reflect.deleteProperty(HTMLInputElement.prototype, 'accept');
   }
-  cleanup();
-  vi.restoreAllMocks();
+
+  vi.clearAllMocks();
 });
 
 describe('CreatePostModal Integration Tests', () => {
@@ -601,19 +601,15 @@ describe('CreatePostModal Integration Tests', () => {
         'input[type="file"]',
       ) as HTMLInputElement;
 
-      // Create a spy on the file input's click method
-      const clickSpy = vi
-        .spyOn(fileInput, 'click')
-        .mockImplementation(() => {});
+      // Mock empty file selection
+      Object.defineProperty(fileInput, 'files', { value: null });
 
-      // Click the photo button to trigger file selection
-      await user.click(photoButton);
+      await act(async () => {
+        fireEvent.change(fileInput);
+      });
 
-      expect(clickSpy).toHaveBeenCalled();
-
-      // Instead of mocking files to null, we can simulate cancel by not uploading anything
-      expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
+      // Should not show any preview
+      expect(screen.queryByAltText('Selected')).not.toBeInTheDocument();
     });
 
     it('handles null name from localStorage', () => {

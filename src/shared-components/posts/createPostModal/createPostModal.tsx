@@ -29,7 +29,6 @@ import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import Button from 'shared-components/Button';
 
 function CreatePostModal({
   show,
@@ -205,7 +204,7 @@ function CreatePostModal({
   return (
     <>
       {/* Backdrop overlay */}
-      <Button
+      <button
         className={`${styles.backdrop} ${show ? styles.backdropShow : ''}`}
         onClick={!isLoading ? handleClose : undefined}
         data-testid="modalBackdrop"
@@ -237,7 +236,7 @@ function CreatePostModal({
               </span>
             </div>
           </div>
-          <Button
+          <button
             className={styles.closeButton}
             onClick={!isLoading ? handleClose : undefined}
             aria-label={t('createPostModal.close')}
@@ -245,7 +244,7 @@ function CreatePostModal({
             type="button"
           >
             <Close />
-          </Button>
+          </button>
         </div>
 
         {/* Content Area */}
@@ -306,7 +305,7 @@ function CreatePostModal({
         {/* Footer */}
         <div className={styles.modalFooter}>
           <div className={styles.mediaActions}>
-            <Button
+            <button
               type="button"
               className={styles.mediaButton}
               aria-label={t('createPostModal.addAttachment')}
@@ -326,8 +325,8 @@ function CreatePostModal({
                 hidden
                 onChange={handleImageSelect}
               />
-            </Button>
-            <Button
+            </button>
+            <button
               type="button"
               className={styles.mediaButton}
               aria-label={
@@ -350,12 +349,12 @@ function CreatePostModal({
                   color: isPinned ? '#0a66c2' : '',
                 }}
               />
-            </Button>
+            </button>
           </div>
 
           <div className={styles.postActions}>
             <form onSubmit={createPostHandler}>
-              <Button
+              <button
                 className={`${styles.postButton} ${
                   isPostDisabled || isLoading ? styles.postButtonDisabled : ''
                 }`}
@@ -370,7 +369,7 @@ function CreatePostModal({
                 ) : (
                   t('createPostModal.saveChanges')
                 )}
-              </Button>
+              </button>
             </form>
           </div>
         </div>

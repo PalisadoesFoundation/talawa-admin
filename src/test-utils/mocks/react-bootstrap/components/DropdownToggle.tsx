@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'shared-components/Button';
 
 /**
  * Mock Dropdown.Toggle - renders a button and forwards onClick and any props.
@@ -11,7 +10,7 @@ export type BtnProps = React.PropsWithChildren<
 >;
 
 const DropdownToggle: React.FC<BtnProps> = ({ children, onClick, ...rest }) => (
-  <Button
+  <button
     type="button"
     data-testid={
       (rest as { 'data-testid'?: string })['data-testid'] || 'dropdown'
@@ -20,7 +19,7 @@ const DropdownToggle: React.FC<BtnProps> = ({ children, onClick, ...rest }) => (
     {...rest}
   >
     {children}
-  </Button>
+  </button>
 );
 
 export default DropdownToggle;

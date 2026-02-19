@@ -1,21 +1,10 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import dayjs from 'dayjs';
 import PeopleTabUserEvents from './PeopleTabUserEvents';
-import userEvent from '@testing-library/user-event';
 
 describe('PeopleTabUserEvents', () => {
-  let user: ReturnType<typeof userEvent.setup>;
-  beforeEach(() => {
-    user = userEvent.setup();
-  });
-
-  afterEach(() => {
-    cleanup();
-    vi.restoreAllMocks();
-  });
-
   const startDate = dayjs().add(30, 'days').format('YYYY-MM-DD');
   const endDate = dayjs().add(30, 'days').format('YYYY-MM-DD');
 
@@ -81,13 +70,11 @@ describe('PeopleTabUserEvents', () => {
     expect(screen.getByText('Test Event')).toBeInTheDocument();
   });
 
-  it('handles click on the action button', async () => {
+  it('handles click on the action button', () => {
     render(<PeopleTabUserEvents {...defaultProps} />);
     const button = screen.getByRole('button');
 
-    await user.click(button);
-    await waitFor(() => {
-      expect(button).toBeInTheDocument();
-    });
+    fireEvent.click(button);
+    expect(button).toBeInTheDocument();
   });
 });

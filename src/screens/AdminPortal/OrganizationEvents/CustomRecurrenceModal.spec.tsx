@@ -59,22 +59,6 @@ vi.mock('shared-components/DatePicker', () => ({
   ),
 }));
 
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string) => {
-        const translations: Record<string, string> = {
-          repeatsOn: 'Repeats On',
-          select: 'Select',
-        };
-        return translations[key] || key;
-      },
-    }),
-  };
-});
-
 const theme = createTheme({
   palette: {
     primary: {

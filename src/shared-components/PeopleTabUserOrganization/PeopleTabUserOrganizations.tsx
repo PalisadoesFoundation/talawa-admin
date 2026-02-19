@@ -37,10 +37,8 @@
  */
 
 import React from 'react';
-import Button from 'shared-components/Button';
-import styles from './PeopleTabUserOrganizations.module.css';
+import styles from 'style/app-fixed.module.css';
 import { InterfacePeopleTabUserOrganizationProps } from 'types/PeopleTab/interface';
-import { useTranslation } from 'react-i18next';
 
 const PeopleTabUserOrganizations: React.FC<
   InterfacePeopleTabUserOrganizationProps
@@ -53,7 +51,6 @@ const PeopleTabUserOrganizations: React.FC<
   actionIcon,
   actionName,
 }) => {
-  const { t: tCommon } = useTranslation('common');
   return (
     <div className={styles.peopleTabUserOrganizationsCard}>
       <div className={styles.peopleTabUserOrganizationsCardContent}>
@@ -70,20 +67,16 @@ const PeopleTabUserOrganizations: React.FC<
             {description}
           </p>
           <div className={styles.peopleTabUserOrganizationsCardStats}>
-            <span>
-              {tCommon('admins')}: {adminCount}
-            </span>
-            <span>
-              {tCommon('members')}: {membersCount}
-            </span>
+            <span>Admins: {adminCount}</span>
+            <span>Members: {membersCount}</span>
           </div>
         </div>
       </div>
       <div className={styles.peopleTabUserOrganizationsCardAction}>
-        <Button className={styles.peopleTabUserOrganizationsEditButton}>
+        <button className={styles.peopleTabUserOrganizationsEditButton}>
           {actionIcon}
           {actionName}
-        </Button>
+        </button>
       </div>
     </div>
   );

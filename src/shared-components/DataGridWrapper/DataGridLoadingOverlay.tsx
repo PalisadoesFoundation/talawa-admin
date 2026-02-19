@@ -4,6 +4,7 @@
  * A wrapper component that bridges MUI DataGrid's GridLoadingOverlayProps
  * and the LoadingState component interface.
  *
+ * @component
  * @returns A loading overlay compatible with MUI DataGrid
  */
 import React from 'react';

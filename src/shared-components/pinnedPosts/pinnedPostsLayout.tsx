@@ -37,7 +37,6 @@ import {
 import PinnedPostCard from './pinnedPostCard';
 import styles from './pinnedPostsLayout.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import Button from 'shared-components/Button';
 
 const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   pinnedPosts,
@@ -94,7 +93,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   return (
     <div className={styles.carouselWrapper} data-testid="pinned-posts-layout">
       {canScrollLeft && (
-        <Button
+        <button
           type="button"
           className={`${styles.navButton} ${styles.navButtonLeft}`}
           onClick={scrollLeft}
@@ -102,7 +101,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           data-testid="scroll-left-button"
         >
           <ChevronLeft />
-        </Button>
+        </button>
       )}
 
       <div
@@ -129,7 +128,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
       </div>
 
       {canScrollRight && (
-        <Button
+        <button
           type="button"
           className={`${styles.navButton} ${styles.navButtonRight}`}
           onClick={scrollRight}
@@ -137,7 +136,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           data-testid="scroll-right-button"
         >
           <ChevronRight />
-        </Button>
+        </button>
       )}
     </div>
   );

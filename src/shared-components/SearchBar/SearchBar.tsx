@@ -10,12 +10,11 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import styles from './SearchBar.module.css';
+import styles from 'style/app-fixed.module.css';
 import type {
   InterfaceSearchBarProps,
   InterfaceSearchBarRef,
 } from 'types/SearchBar/interface';
-import Button from 'shared-components/Button';
 
 const mergeClassNames = (
   ...classes: Array<string | false | undefined>
@@ -221,7 +220,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
             {...rest}
           />
           {showClearButton && currentValue.length > 0 && !disabled && (
-            <Button
+            <button
               type="button"
               className={styles.searchBarClearButton}
               aria-label={clearButtonAriaLabel}
@@ -229,7 +228,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
               data-testid={clearButtonTestId}
             >
               <CloseRoundedIcon fontSize="small" />
-            </Button>
+            </button>
           )}
           {showTrailingIcon && (
             <span className={styles.searchBarTrailingIcon} aria-hidden="true">
@@ -238,7 +237,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
           )}
         </div>
         {showSearchButton && (
-          <Button
+          <button
             type="button"
             className={buttonClassNames}
             onClick={handleButtonClick}
@@ -257,7 +256,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
                 {buttonAriaLabel || 'Search'}
               </span>
             )}
-          </Button>
+          </button>
         )}
       </div>
     );
