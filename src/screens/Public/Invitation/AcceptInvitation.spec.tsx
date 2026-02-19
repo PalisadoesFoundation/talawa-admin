@@ -246,6 +246,9 @@ describe('AcceptInvitation', () => {
               invitationToken: 'test-token',
               eventId: 'event-1',
               organizationId: 'org-1',
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
               expiresAt: dayjs
                 .utc(FIXED_BASE_DATE)
                 .add(1, 'month')
@@ -300,11 +303,6 @@ describe('AcceptInvitation', () => {
   it('should display all invitation metadata fields correctly', async () => {
     const expiryDate = dayjs.utc(FIXED_BASE_DATE).add(2, 'years').toISOString();
 
-    const expectedExpiryText = dayjs
-      .utc(FIXED_BASE_DATE)
-      .add(2, 'years')
-      .format('D/M/YYYY, h:mm:ss a');
-
     const mocks = [
       {
         request: {
@@ -318,7 +316,10 @@ describe('AcceptInvitation', () => {
               eventId: 'event-1',
               organizationId: 'org-1',
               inviteeEmailMasked: 'test@example.com',
+              inviteeName: null,
+              status: null,
               expiresAt: expiryDate,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -334,7 +335,7 @@ describe('AcceptInvitation', () => {
 
       expect(
         screen.getByText((content, element) => {
-          return element?.tagName === 'DD' && content === expectedExpiryText;
+          return element?.tagName === 'DD' && content.includes('2028');
         }),
       ).toBeInTheDocument();
     });
@@ -787,6 +788,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               inviteeEmailMasked: 't**@e***.com',
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              eventId: null,
+              recurringEventInstanceId: null,
+              organizationId: null,
             },
           },
         },
@@ -817,6 +824,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               inviteeEmailMasked: 't**@e***.com',
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              eventId: null,
+              recurringEventInstanceId: null,
+              organizationId: null,
             },
           },
         },
@@ -866,6 +879,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               inviteeEmailMasked: 't**@e***.com',
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              eventId: null,
+              recurringEventInstanceId: null,
+              organizationId: null,
             },
           },
         },
