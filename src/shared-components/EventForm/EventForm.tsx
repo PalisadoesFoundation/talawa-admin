@@ -11,6 +11,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Button from 'shared-components/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks';
 import styles from './EventForm.module.css';
 import type {
   IEventFormProps,
@@ -30,7 +31,7 @@ import {
   getVisibilityType,
   buildRecurrenceOptions,
 } from './utils';
-import type { EventVisibility } from './utils';
+import type { EventVisibility, InterfaceRecurrenceOption } from './utils';
 import VisibilitySelector from './VisibilitySelector/VisibilitySelector';
 import RecurrenceDropdown from './RecurrenceDropdown/RecurrenceDropdown';
 
@@ -78,9 +79,11 @@ const EventForm: React.FC<IEventFormProps> = ({
     );
   });
 
-  const [recurrenceDropdownOpen, setRecurrenceDropdownOpen] = useState(false);
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
+  const {
+    isOpen: customRecurrenceModalIsOpen,
+    open: openCustomRecurrenceModal,
+    close: closeCustomRecurrenceModal,
+  } = useModalState();
   const [recurrenceEnabled, setRecurrenceEnabled] = useState(
     !disableRecurrence &&
       (!!initialValues.recurrenceRule || !showRecurrenceToggle),
@@ -111,10 +114,7 @@ const EventForm: React.FC<IEventFormProps> = ({
     [formState.startDate, t],
   );
 
-  const handleRecurrenceSelect = (option: {
-    label: string;
-    value: InterfaceRecurrenceRule | 'custom' | null;
-  }): void => {
+  const handleRecurrenceSelect = (option: InterfaceRecurrenceOption): void => {
     if (option.value === 'custom') {
       if (!formState.recurrenceRule) {
         setFormState((prev) => ({
@@ -125,14 +125,13 @@ const EventForm: React.FC<IEventFormProps> = ({
           ),
         }));
       }
-      setCustomRecurrenceModalIsOpen(true);
+      openCustomRecurrenceModal();
     } else {
       setFormState((prev) => ({
         ...prev,
         recurrenceRule: option.value as InterfaceRecurrenceRule | null,
       }));
     }
-    setRecurrenceDropdownOpen(false);
   };
 
   const currentRecurrenceLabel = (): string => {
@@ -407,7 +406,7 @@ const EventForm: React.FC<IEventFormProps> = ({
               className={`me-4 ${styles.switch}`}
               id="allday"
               name="allDay"
-              label={`${t('allDay')}?`}
+              label={t('allDay')}
               type="switch"
               checked={formState.allDay}
               data-testid="allDayEventCheck"
@@ -420,7 +419,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="recurring"
                 name="recurring"
-                label={`${t('recurring')}:`}
+                label={t('recurring')}
                 type="switch"
                 checked={recurrenceEnabled}
                 data-testid="recurringEventCheck"
@@ -434,7 +433,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="registrable"
                 name="registrable"
-                label={`${t('registerable')}?`}
+                label={t('registerable')}
                 type="switch"
                 checked={formState.isRegisterable}
                 data-testid="registerableEventCheck"
@@ -453,7 +452,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="chat"
                 name="createChat"
-                label={`${t('createChat')}?`}
+                label={t('createChat')}
                 type="switch"
                 data-testid="createChatCheck"
                 checked={formState.createChat}
@@ -479,8 +478,6 @@ const EventForm: React.FC<IEventFormProps> = ({
           <RecurrenceDropdown
             recurrenceOptions={recurrenceOptions}
             currentLabel={currentRecurrenceLabel()}
-            isOpen={recurrenceDropdownOpen}
-            onToggle={setRecurrenceDropdownOpen}
             onSelect={handleRecurrenceSelect}
             t={t}
           />
@@ -532,10 +529,15 @@ const EventForm: React.FC<IEventFormProps> = ({
             }));
           }}
           customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-          hideCustomRecurrenceModal={(): void =>
-            setCustomRecurrenceModalIsOpen(false)
-          }
-          setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+          hideCustomRecurrenceModal={closeCustomRecurrenceModal}
+          setCustomRecurrenceModalIsOpen={(state) => {
+            const next =
+              typeof state === 'function'
+                ? state(customRecurrenceModalIsOpen)
+                : state;
+            if (next) openCustomRecurrenceModal();
+            else closeCustomRecurrenceModal();
+          }}
           t={t}
           startDate={formState.startDate}
         />

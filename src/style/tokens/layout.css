@@ -1,0 +1,19 @@
+:root {
+  /* Viewport Heights — containers & constraint */
+  --vh-100: 100vh;
+  --vh-90: 90vh;
+  --vh-70: 70vh;
+  --vh-50: 50vh;
+  --vh-40: 40vh;
+
+  /* Viewport Heights — vertical positioning */
+  --vh-35: 35vh;
+  --vh-20: 20vh;
+  --vh-10: 10vh;
+  --vh-2: 2vh;
+
+  /* Viewport Widths — modal & layout patterns */
+  --vw-80: 80vw;
+  --vw-13: 13vw;
+  --vw-8: 8vw;
+}

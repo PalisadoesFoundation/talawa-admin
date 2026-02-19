@@ -49,13 +49,13 @@ src/types/DataGridWrapper/interface.ts
 
 ```tsx
 import { DataGridWrapper } from 'src/shared-components/DataGridWrapper/DataGridWrapper';
-import type { GridColDef } from '@mui/x-data-grid';
+import type { TokenAwareGridColDef } from 'src/types/DataGridWrapper/interface';
 
 type User = { id: string; name: string; email: string };
 
-const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'email', headerName: 'Email', width: 250 },
+const columns: TokenAwareGridColDef[] = [
+  { field: 'name', headerName: 'Name', minWidth: 'space-17' },   // 220px
+  { field: 'email', headerName: 'Email', minWidth: 'space-18' }, // 250px
 ];
 
 const users: User[] = [
@@ -76,7 +76,7 @@ const users: User[] = [
 | Prop | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `rows` | `GridRowsProp<T>` | Yes | - | Array of data rows. Each row must have a unique `id` property |
-| `columns` | `GridColDef[]` | Yes | - | Column configuration defining headers, widths, and rendering |
+| `columns` | `TokenAwareGridColDef[]` | Yes | - | Column configuration defining headers, widths, and rendering. Supports spacing token names for width properties |
 | `loading` | `boolean` | No | `false` | Shows loading overlay when `true` |
 | `searchConfig` | `SearchConfig<T>` | No | - | Configuration for search functionality |
 | `sortConfig` | `SortConfig` | No | - | Configuration for sorting options |
@@ -278,7 +278,7 @@ import { useQuery } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import { DataGridWrapper } from 'src/shared-components/DataGridWrapper/DataGridWrapper';
 import { GET_USERS } from 'src/GraphQl/Queries/Queries';
-import type { GridColDef } from '@mui/x-data-grid';
+import type { TokenAwareGridColDef } from 'src/types/DataGridWrapper/interface';
 
 type User = {
   id: string;
@@ -291,10 +291,10 @@ export const UsersScreen = () => {
   const navigate = useNavigate();
   const { data, loading, error } = useQuery(GET_USERS);
 
-  const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', width: 200 },
-    { field: 'email', headerName: 'Email', width: 250 },
-    { field: 'role', headerName: 'Role', width: 150 },
+  const columns: TokenAwareGridColDef[] = [
+    { field: 'name', headerName: 'Name', minWidth: 'space-17' },    // 220px
+    { field: 'email', headerName: 'Email', minWidth: 'space-18' },  // 250px
+    { field: 'role', headerName: 'Role', minWidth: 'space-15' },    // 150px
   ];
 
   return (
@@ -347,7 +347,7 @@ import type { GridColDef } from '@mui/x-data-grid';
 **After:**
 ```tsx
 import { DataGridWrapper } from 'src/shared-components/DataGridWrapper/DataGridWrapper';
-import type { GridColDef } from '@mui/x-data-grid';
+import type { TokenAwareGridColDef } from 'src/types/DataGridWrapper/interface';
 ```
 
 #### Step 2: Update Component Usage
@@ -552,10 +552,12 @@ Always provide the generic type parameter for full type safety:
 Define columns outside the component to prevent re-renders:
 
 ```tsx
+import type { TokenAwareGridColDef } from 'src/types/DataGridWrapper/interface';
+
 // ✅ Good: Defined outside component
-const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'email', headerName: 'Email', width: 250 },
+const columns: TokenAwareGridColDef[] = [
+  { field: 'name', headerName: 'Name', minWidth: 'space-17' },
+  { field: 'email', headerName: 'Email', minWidth: 'space-18' },
 ];
 
 export const UsersScreen = () => {
@@ -565,11 +567,45 @@ export const UsersScreen = () => {
 // ❌ Bad: Defined inside component (re-creates on every render)
 export const UsersScreen = () => {
   const columns = [
-    { field: 'name', headerName: 'Name', width: 200 },
+    { field: 'name', headerName: 'Name', minWidth: 'space-17' },
   ];
   return <DataGridWrapper<User> rows={users} columns={columns} />;
 };
 ```
+
+### Column Width Tokens
+
+MUI DataGrid requires numeric pixel values for `width`, `minWidth`, and `maxWidth`. CSS `var()` strings do not work and will silently break column sizing at runtime.
+
+Use `TokenAwareGridColDef` from `src/types/DataGridWrapper/interface` and spacing token names instead. The `DataGridWrapper` automatically converts token names to pixel values via `convertTokenColumns()`.
+
+```tsx
+import type { TokenAwareGridColDef } from 'src/types/DataGridWrapper/interface';
+
+// ✅ Correct: spacing token names
+const columns: TokenAwareGridColDef[] = [
+  { field: 'name', headerName: 'Name', minWidth: 'space-15' },    // converted to 150px
+  { field: 'email', headerName: 'Email', width: 'space-18' },     // converted to 250px
+  { field: 'role', headerName: 'Role', minWidth: 'space-15' },    // converted to 150px
+];
+
+// ✅ Also correct: raw numeric values still work
+const columns: TokenAwareGridColDef[] = [
+  { field: 'name', headerName: 'Name', minWidth: 150 },
+];
+
+// ❌ Wrong: var() strings break DataGrid at runtime
+const columns = [
+  { field: 'name', minWidth: 'var(--vw-80)' },  // silently broken
+];
+
+// ❌ Wrong: hardcoded numbers with GridColDef (fails the design token validator)
+const columns: GridColDef[] = [
+  { field: 'name', minWidth: 150 },              // flagged by validator
+];
+```
+
+See `src/utils/tokenValues.ts` for the full token-to-pixel mapping (e.g., `'space-15'` = 150px, `'space-17'` = 220px, `'space-18'` = 250px).
 
 ### Search Fields
 
@@ -773,10 +809,10 @@ A: DataGridWrapper exposes the most commonly used props. If you need additional 
 
 **Q: How do I customize column rendering?**
 
-A: Use the standard MUI `GridColDef` `renderCell` property:
+A: Use the standard MUI `renderCell` property on `TokenAwareGridColDef`:
 
 ```tsx
-const columns: GridColDef[] = [
+const columns: TokenAwareGridColDef[] = [
   {
     field: 'status',
     headerName: 'Status',

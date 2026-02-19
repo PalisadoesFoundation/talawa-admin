@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
@@ -65,20 +66,43 @@ export const useRegistration = ({
   onError,
 }: IUseRegistrationProps) => {
   const [signup, { loading }] = useMutation(SIGNUP_MUTATION);
+  const [error, setError] = useState<Error | null>(null);
+
+  const normalizeError = (caughtError: unknown): Error => {
+    if (caughtError instanceof Error) {
+      return caughtError;
+    }
+
+    if (
+      typeof caughtError === 'object' &&
+      caughtError !== null &&
+      'message' in caughtError &&
+      typeof caughtError.message === 'string'
+    ) {
+      return new Error(caughtError.message);
+    }
+
+    return new Error(String(caughtError));
+  };
 
   const register = async (data: IRegisterInput): Promise<void> => {
+    setError(null);
     try {
       if (!data.name?.trim() || !data.email?.trim() || !data.password?.trim()) {
-        onError?.(
-          new RegistrationError(RegistrationErrorCode.MISSING_REQUIRED_FIELDS),
+        const err = new RegistrationError(
+          RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
         );
+        setError(err);
+        onError?.(err);
         return;
       }
       const organizationId = data.organizationId?.trim();
       if (!organizationId) {
-        onError?.(
-          new RegistrationError(RegistrationErrorCode.MISSING_ORGANIZATION_ID),
+        const err = new RegistrationError(
+          RegistrationErrorCode.MISSING_ORGANIZATION_ID,
         );
+        setError(err);
+        onError?.(err);
         return;
       }
       const { data: signUpData } = await signup({
@@ -91,17 +115,24 @@ export const useRegistration = ({
         },
       });
 
-      if (signUpData?.signUp) {
-        onSuccess?.({
-          signUp: signUpData.signUp,
-          name: data.name,
-          email: data.email,
-        });
+      if (!signUpData?.signUp) {
+        const err = new Error('Sign-up returned no data');
+        setError(err);
+        onError?.(err);
+        return;
       }
-    } catch (error) {
-      onError?.(error as Error);
+
+      onSuccess?.({
+        signUp: signUpData.signUp,
+        name: data.name,
+        email: data.email,
+      });
+    } catch (caughtError) {
+      const err = normalizeError(caughtError);
+      setError(err);
+      onError?.(err);
     }
   };
 
-  return { register, loading };
+  return { register, loading, error };
 };

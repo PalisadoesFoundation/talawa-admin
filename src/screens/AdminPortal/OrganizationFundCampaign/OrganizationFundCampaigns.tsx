@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
@@ -87,16 +88,19 @@ const orgFundCampaign = (): JSX.Element => {
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const { isOpen, open, close } = useModalState();
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
 
   const handleOpenModal = useCallback(
-    (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
-      setCampaign(campaign);
+    (
+      selectedCampaign: InterfaceCampaignInfo | null,
+      mode: 'edit' | 'create',
+    ): void => {
+      setCampaign(selectedCampaign);
       setCampaignModalMode(mode);
-      setModalState(true);
+      open();
     },
     [],
   );
@@ -178,7 +182,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'id',
       headerName: '#',
       flex: 1,
-      minWidth: 60,
+      minWidth: 'space-11',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -234,7 +238,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'goalAmount',
       headerName: t('fundingGoal'),
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -259,7 +263,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'fundingRaised',
       headerName: t('raised'),
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -284,7 +288,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'percentageRaised',
       headerName: t('percentageRaised'),
       flex: 1,
-      minWidth: 120,
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -338,7 +342,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'action',
       headerName: tCommon('action'),
       flex: 1.5,
-      minWidth: 120,
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -468,8 +472,8 @@ const orgFundCampaign = (): JSX.Element => {
 
       {/* Create Campaign Modal */}
       <CampaignModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={isOpen}
+        hide={close}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
         orgId={orgId}

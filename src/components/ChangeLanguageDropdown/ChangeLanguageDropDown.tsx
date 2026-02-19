@@ -35,7 +35,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
 
-  const userId = getItem('id');
+  const userId = getItem('userId');
   const userImage = getItem('UserImage');
   const isLoggedIn = getItem('IsLoggedIn') === 'TRUE';
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);

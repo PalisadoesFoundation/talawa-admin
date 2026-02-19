@@ -413,7 +413,7 @@ function OrganizationPeople(): JSX.Element {
           searchPlaceholder={t('searchFullName')}
           searchValue={searchTerm}
           onSearchChange={(value) => setSearchTerm(value)}
-          searchInputTestId="searchbtn"
+          searchInputTestId="member-search-input"
           searchButtonTestId="searchBtn"
           containerClassName={styles.calendar__header}
           dropdowns={[
@@ -429,9 +429,17 @@ function OrganizationPeople(): JSX.Element {
               selectedOption: STATE_TO_OPTION[state] ?? 'members',
               onOptionChange: (value) => handleSortChange(value.toString()),
               dataTestIdPrefix: 'sort',
+              containerClassName: styles.membersSortContainer,
+              toggleClassName: styles.membersSortToggle,
             },
           ]}
-          additionalButtons={<AddMember />}
+          additionalButtons={
+            <AddMember
+              rootClassName={styles.membersAddHeader}
+              containerClassName={styles.membersAddContainer}
+              toggleClassName={styles.membersAddToggle}
+            />
+          }
         />
 
         <DataGridWrapper<IProcessedRow>

@@ -52,7 +52,13 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
-function AddMember(): JSX.Element {
+import type { InterfaceAddMemberProps } from 'types/AdminPortal/OrganizationPeople/addMember/interface';
+
+function AddMember({
+  rootClassName,
+  containerClassName,
+  toggleClassName,
+}: InterfaceAddMemberProps = {}): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
@@ -99,6 +105,7 @@ function AddMember(): JSX.Element {
   const createMember = useCallback(
     async (userId: string): Promise<void> => {
       try {
+        if (!currentUrl) return;
         await addMember({
           variables: {
             memberId: userId,
@@ -166,6 +173,7 @@ function AddMember(): JSX.Element {
           },
         });
         const createdUserId = registeredUser?.data.createUser.user.id;
+        if (!createdUserId) return;
         await createMember(createdUserId);
         closeCreateNewUserModal();
         setCreateUserVariables({
@@ -361,6 +369,7 @@ function AddMember(): JSX.Element {
   return (
     <>
       <PageHeader
+        rootClassName={rootClassName}
         sorting={[
           {
             title: translateOrgPeople('addMembers'),
@@ -374,6 +383,8 @@ function AddMember(): JSX.Element {
             selected: translateOrgPeople('addMembers'),
             onChange: (value) => handleSortChange(value.toString()),
             testIdPrefix: 'addMembers',
+            containerClassName,
+            toggleClassName,
           },
         ]}
       />

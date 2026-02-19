@@ -356,7 +356,6 @@ export default function PostsPage() {
                 testIdPrefix: 'sortpost',
               },
             ]}
-            showEventTypeFilter={false}
           />
 
           <div className={`row ${styles.list_box}`}>

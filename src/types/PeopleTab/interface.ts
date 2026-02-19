@@ -17,7 +17,7 @@ export interface InterfacePageHeaderProps {
     testIdPrefix: string;
     icon?: React.ReactNode;
   }>;
-  showEventTypeFilter?: boolean;
+
   actions?: React.ReactNode;
 }
 
@@ -37,7 +37,7 @@ export interface InterfacePeopleTabNavbarProps {
     testIdPrefix: string;
     icon?: string | null;
   }>;
-  showEventTypeFilter?: boolean;
+
   actions?: React.ReactNode;
 }
 

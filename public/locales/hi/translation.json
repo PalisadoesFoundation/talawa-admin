@@ -1,15 +1,21 @@
 {
+  "workshops": "कार्यशालाएँ",
   "securedRouteForUser": {
     "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
   },
   "securedRoute": {
     "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
   },
+  "oauth": {
+    "continueWith": "{{provider}} के साथ जारी रखें",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
   "frequency": "आवृत्ति",
   "repeatsEvery": "हर बार दोहराता है",
+  "repeatsOn": "पर दोहराता है",
   "day": "दिन",
   "week": "सप्ताह",
   "month": "महीना",
@@ -192,7 +198,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
-    "logout": "लॉगआउट"
+    "logout": "लॉगआउट",
+    "notAvailable": "उपलब्ध नहीं"
   },
   "leftDrawerOrg": {
     "Dashboard": "डैशबोर्ड",
@@ -326,7 +333,8 @@
     "email": "ईमेल",
     "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
     "placeholderAvatarAlt": "प्लेसहोल्डर अवतार",
-    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे"
+    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे",
+    "errorLoadingRequests": "सदस्यता अनुरोध लोड करते समय त्रुटि हुई"
   },
   "users": {
     "membershipStatus": {
@@ -1176,7 +1184,9 @@
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "ब्लॉक किए गए उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "errorLoadingMembers": "सदस्यों को लोड करते समय त्रुटि हुई"
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",
@@ -1260,7 +1270,8 @@
     "longDelOrgMsg": "संगठन हटाएं बटन पर क्लिक करने से संगठन अपने ईवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
     "deleteSampleOrganization": "नमूना संगठन हटाएँ",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "successfullyDeletedOrganization": "संगठन सफलतापूर्वक हटा दिया गया"
   },
   "userUpdate": {
     "appLanguageCode": "डिफ़ॉल्ट भाषा",
@@ -1274,13 +1285,6 @@
     "displayImage": "प्रदर्शन छवि",
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें"
-  },
-  "membershipRequest": {
-    "accept": "स्वीकार करना",
-    "reject": "अस्वीकार करना",
-    "memberAdded": "यह स्वीकृत है",
-    "joined": "शामिल हुए",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "orgUpdate": {
     "city": "शहर",
@@ -1396,6 +1400,10 @@
     "tags": "टैग",
     "invalidFileType": "अमान्य फ़ाइल प्रकार",
     "fileTooLarge": "फ़ाइल बहुत बड़ी है",
+    "ascendingOrder": "आरोही क्रम",
+    "descendingOrder": "अवरोही क्रम",
+    "searchCreatedEvents": "निर्मित कार्यक्रम खोजें",
+    "sortByName": "नाम के अनुसार छाँटें",
     "memberDetailNumberExample": "उदाहरण: 1234567890",
     "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
     "memberDetailPostalExample": "उदाहरण: 110001",
@@ -1429,25 +1437,6 @@
     "password": "पासवर्ड",
     "enterPassword": "पासवर्ड दर्ज करें",
     "register": "पंजीकरण करें",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
-  },
-  "userRegister": {
-    "enterFirstName": "अपना पहला नाम दर्ज करें",
-    "enterLastName": "अपना अंतिम नाम दर्ज करें",
-    "enterConfirmPassword": "पुष्टि करने के लिए अपना पासवर्ड दर्ज करें",
-    "alreadyhaveAnAccount": "क्या आपके पास पहले से एक खाता मौजूद है?",
-    "login": "लॉग इन करें",
-    "afterRegister": "पंजीकरण सफलतापूर्वक हो गया है। ",
-    "passwordNotMatch": "पासवर्ड मेल नहीं खाता. ",
-    "invalidDetailsMessage": "कृपया वैध विवरण दर्ज करें.",
-    "register": "पंजीकरण करें",
-    "firstName": "प्रथम नाम",
-    "lastName": "अंतिम नाम",
-    "emailAddress": "ईमेल पता",
-    "enterEmail": "ईमेल दर्ज करें",
-    "password": "पासवर्ड",
-    "enterPassword": "पासवर्ड दर्ज करें",
-    "confirmPassword": "पासवर्ड की पुष्टि करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "userNavbar": {
@@ -1592,6 +1581,7 @@
     "Admin": "व्यवस्थापक",
     "loading": "लोड हो रहा है",
     "noAttendees": "कोई प्रतिभागी नहीं मिला",
+    "unknownMember": "अज्ञात सदस्य",
     "attendeeCount": "उपस्थित लोगों की संख्या",
     "maleAttendees": "पुरुष उपस्थित",
     "femaleAttendees": "महिला उपस्थित",
@@ -1658,9 +1648,7 @@
     "country": "देश",
     "resetChanges": "परिवर्तन रीसेट करें",
     "profileDetails": "प्रोफ़ाइल विवरण",
-    "deleteUserMessage": "डिलीट यूजर बटन पर क्लिक करने से आपका यूजर अपने इवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
     "copyLink": "प्रोफ़ाइल लिंक कॉपी करें",
-    "deleteUser": "उपभोक्ता मिटायें",
     "otherSettings": "अन्य सेटिंग",
     "changeLanguage": "भाषा बदलें",
     "sgender": "लिंग चुनें",
@@ -1726,9 +1714,12 @@
     "donations": "दान",
     "searchDonations": "दान खोजें",
     "donateForThe": "के लिए दान करें",
+    "donor": "दाता",
     "amount": "मात्रा",
+    "date": "तारीख",
     "yourPreviousDonations": "आपका पिछला दान",
     "donate": "दान करें",
+    "loading": "लोड हो रहा है...",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "success": "दान सफल",
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
@@ -1816,7 +1807,9 @@
     "presetThisMonth": "इस महीने",
     "presetNext7Days": "अगले 7 दिन",
     "presetNext30Days": "अगले 30 दिन",
-    "presetNextMonth": "अगले महीने"
+    "presetNextMonth": "अगले महीने",
+    "repeatsOn": "पर दोहराता है",
+    "select": "चुनें"
   },
   "userEventCard": {
     "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",
@@ -1932,7 +1925,8 @@
     "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
     "thisUser": "इस उपयोगकर्ता",
     "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
-    "memberActionsMenu": "सदस्य क्रियाएं मेनू"
+    "memberActionsMenu": "सदस्य क्रियाएं मेनू",
+    "editImage": "संपादित छवि"
   },
   "userChatRoom": {
     "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",
@@ -1955,7 +1949,10 @@
       "resetButton": "फिर से प्रयास करें",
       "resetButtonAriaLabel": "फिर से प्रयास करें"
     },
-    "messageActions": "संदेश क्रियाएं"
+    "messageActions": "संदेश क्रियाएं",
+    "addAttachment": "संलग्नक जोड़ें",
+    "removeAttachment": "संलग्नक हटाएँ",
+    "closeReply": "उत्तर बंद करें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
@@ -2494,7 +2491,8 @@
     "loading": "लोड हो रहा है...",
     "selectRow": "पंक्ति {{rowKey}} चुनें",
     "previousYear": "पिछला वर्ष",
-    "nextYear": "अगला वर्ष"
+    "nextYear": "अगला वर्ष",
+    "member": "सदस्य"
   },
   "donation": {
     "amount_label": "राशि",
@@ -2595,5 +2593,17 @@
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "सो",
+      "tue": "मं",
+      "wed": "बु",
+      "thu": "गु",
+      "fri": "शु",
+      "sat": "शनि",
+      "sun": "रवि"
+    },
+    "expandDay": "दिन विस्तारित करें"
   }
 }

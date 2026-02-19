@@ -11,8 +11,8 @@
 }
 
 .descriptionTextField {
-  background-color: var(--inputColor-bg);
-  color: var(--text-fields-color);
+  background-color: var(--color-white);
+  color: var(--color-gray-600);
   margin-bottom: var(--space-5);
   width: 100%;
   resize: none;
@@ -20,20 +20,58 @@
 }
 
 .textFields {
-  background-color: var(--inputColor-bg);
-  color: var(--text-fields-color);
+  background-color: var(--color-white);
+  color: var(--color-gray-600);
   margin-bottom: var(--space-5);
   width: 100%;
 }
 
 .customFileInput {
-  background-color: var(--inputColor-bg);
+  background-color: var(--color-white);
+  color: var(--color-gray-600);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-1) solid var(--color-gray-200);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: border-color 0.2s ease;
+  width: 100%;
+  max-width: var(--space-22);
+  margin-left: var(--space-8);
+}
+
+.customFileInput:hover {
+  border-color: var(--color-gray-400);
+}
+
+.customFileInput:focus {
+  outline: none;
+  border-color: var(--color-blue-500);
+  box-shadow: 0 0 0 var(--border-1) var(--color-blue-500);
+  opacity: 0.8;
+}
+
+.customFileInput::file-selector-button {
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
+  border: var(--border-0);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: var(--font-weight-semibold);
+  margin-right: var(--space-2);
+  transition: background-color 0.2s ease;
+}
+
+.customFileInput::file-selector-button:hover {
+  background-color: var(--color-blue-600);
+  opacity: 0.9;
 }
 
 .resetChangesBtn {
   border-width: var(--border-2);
-  border-color: var(--resetbtn-border);
-  color: var(--resetbtn-color);
+  border-color: var(--color-gray-400);
+  color: var(--color-gray-400);
   padding: var(--space-3) var(--space-5);
   border-radius: var(--radius-md);
   display: flex;
@@ -48,16 +86,16 @@
   transform: rotate(135deg) scale(1.2);
   width: var(--space-3);
   height: var(--space-3);
-  stroke: var(--card-background-color);
+  stroke: var(--color-blue-500);
   stroke-width: var(--border-1);
-  fill: var(--card-background-color);
+  fill: var(--color-blue-500);
 }
 
 .saveChangesBtn {
-  color: var(--btn-primary-text-color, white);
+  color: var(--color-white);
   border: var(--border-0);
   height: var(--space-10);
-  width: var(--space-16);
+  width: var(--space-22);
   font-size: var(--font-size-xs);
-  background-color: var(--card-background-color);
+  background-color: var(--color-blue-500);
 }

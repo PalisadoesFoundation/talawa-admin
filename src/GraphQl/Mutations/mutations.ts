@@ -57,6 +57,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
       avatarMimeType
       avatarURL
       updatedAt
+      isUserRegistrationRequired
     }
   }
 `;
@@ -623,6 +624,37 @@ export const DONATE_TO_ORGANIZATION = gql`
   }
 `;
 
+/**
+ * DONATE_TO_ORGANIZATION_WITH_CURRENCY is the currency-aware variant of DONATE_TO_ORGANIZATION for donations with explicit currency.
+ * Accepts an ISO 4217 `currencyCode` (Iso4217CurrencyCode) while preserving the same returned fields: `_id`, `amount`, `nameOfUser`, and `nameOfOrg`.
+ */
+export const DONATE_TO_ORGANIZATION_WITH_CURRENCY = gql`
+  mutation donateWithCurrency(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+    $currencyCode: Iso4217CurrencyCode!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+      currencyCode: $currencyCode
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
+  }
+`;
+
 // Create and Update Action Item Categories
 export {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
@@ -708,6 +740,60 @@ export const GET_FILE_PRESIGNEDURL = gql`
   mutation createGetfileUrl($input: MutationCreateGetfileUrlInput!) {
     createGetfileUrl(input: $input) {
       presignedUrl
+    }
+  }
+`;
+
+/** Links an OAuth provider account to the currently authenticated user. */
+export const LINK_OAUTH_ACCOUNT = gql`
+  mutation LinkOAuthAccount($input: OAuthLoginInput!) {
+    linkOAuthAccount(input: $input) {
+      id
+      name
+      emailAddress
+      isEmailAddressVerified
+      role
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Unlinks an OAuth provider account from the currently authenticated user. */
+export const UNLINK_OAUTH_ACCOUNT = gql`
+  mutation UnlinkOAuthAccount($provider: OAuthProvider!) {
+    unlinkOAuthAccount(provider: $provider) {
+      id
+      emailAddress
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Authenticates a user using an OAuth provider and returns authentication tokens. */
+export const SIGN_IN_WITH_OAUTH = gql`
+  mutation SignInWithOAuth($input: OAuthLoginInput!) {
+    signInWithOAuth(input: $input) {
+      authenticationToken
+      refreshToken
+      user {
+        id
+        name
+        emailAddress
+        role
+        countryCode
+        avatarURL
+        isEmailAddressVerified
+      }
     }
   }
 `;

@@ -24,6 +24,7 @@ All token files live under `src/style/tokens/`:
 | `typography.css` | Font sizes, line heights, font weights, and letter spacing |
 | `borders.css` | Border widths, border-radius scale, shadow offsets, blur, and spread |
 | `logosizes.css` | Standard logo dimension tokens |
+| `layout.css` | Viewport-relative layout tokens (`vh` and `vw` values for heights, widths, and positioning) |
 | `index.css` | Barrel file that imports all of the above |
 
 Token files are imported globally via `src/index.tsx`, so every token is available everywhere without any additional imports.
@@ -46,6 +47,8 @@ Token files are imported globally via `src/index.tsx`, so every token is availab
 | **Shadow blur** | `--shadow-blur-<size>` | `--shadow-blur-sm`, `--shadow-blur-lg` |
 | **Shadow spread** | `--shadow-spread-<size>` | `--shadow-spread-none`, `--shadow-spread-sm` |
 | **Logo sizes** | `--logo-<size>` | `--logo-xs`, `--logo-lg` |
+| **Viewport height** | `--vh-<value>` | `--vh-100`, `--vh-70`, `--vh-2` |
+| **Viewport width** | `--vw-<value>` | `--vw-80`, `--vw-13`, `--vw-8` |
 
 Follow the existing scale order and units in each file when adding new tokens.
 
@@ -290,6 +293,32 @@ import styles from './SaveButton.module.css';
 }
 ```
 
+### MUI DataGrid Column Widths
+
+MUI DataGrid column properties (`width`, `minWidth`, `maxWidth`) require **numeric pixel values** and cannot accept CSS variables. Using `var(--...)` strings will silently break column sizing at runtime.
+
+Use `To kenAwareGridColDef` from `src/types/DataGridWrapper/interface.ts` and spacing token names instead:
+
+```tsx
+// NOT allowed - var() breaks DataGrid
+const columns = [
+  { field: 'name', minWidth: 'var(--vw-80)' },   // breaks at runtime
+  { field: 'email', width: 150 },                  // hardcoded, fails validator
+];
+
+// Correct - use spacing token names
+import type { TokenAwareGridColDef } from 'src/types/DataGridWrapper/interface';
+
+const columns: TokenAwareGridColDef[] = [
+  { field: 'name', minWidth: 'space-15' },         // converted to 150 by DataGridWrapper
+  { field: 'email', width: 'space-18' },            // converted to 250
+];
+```
+
+The `DataGridWrapper` component automatically converts spacing token names to their pixel values via `convertTokenColumns()`. See `src/utils/tokenValues.ts` for the full token-to-pixel mapping.
+
+> **Note:** The design token validator flags `var()` usage in `width`/`minWidth`/`maxWidth` in TSX files as a `tsx-datagrid-var` violation.
+
 ### Responsive Breakpoints
 
 ```css
@@ -332,12 +361,13 @@ Token usage is enforced by `scripts/validate-tokens.ts`, which scans `src/` CSS/
 | **Typography** | `fontSize` with numeric or string values, `fontWeight` with numeric values (100-900), `lineHeight` with unit values |
 | **Borders** | `borderRadius` with numeric or string values |
 | **Colours** | `color`, `backgroundColor`, `borderColor`, `background` with hex/rgb/hsl values |
+| **DataGrid var()** | `width`, `minWidth`, `maxWidth` with quoted `var(--...)` values. MUI DataGrid requires numeric pixel values, not CSS variable strings. Use spacing token names (e.g. `'space-15'`) via `TokenAwareGridColDef` instead |
 
 ### Allowlisted Patterns
 
 The following patterns are **not flagged** as violations:
 
-- CSS `var()` usage (e.g. `var(--space-4)`)
+- CSS `var()` usage (e.g. `var(--space-4)`), **except** `var()` in `width`/`minWidth`/`maxWidth` properties in TSX files (DataGrid columns require numeric values, not CSS variable strings)
 - CSS `calc()` expressions
 - CSS `color-mix()` expressions
 - CSS custom property definitions (`--my-token: value`)

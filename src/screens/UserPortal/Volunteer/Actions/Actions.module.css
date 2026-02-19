@@ -6,6 +6,21 @@
   flex-direction: column;
 }
 
+.name {
+  margin-inline-start: var(--space-3);
+}
+
+.loadingHeading {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-red-500);
+  text-align: center;
+}
+
+.assigneeName {
+  display: flex;
+  align-items: center;
+  font-weight: var(--font-weight-bold);
+}
 .icon {
   margin: var(--space-0-5);
 }

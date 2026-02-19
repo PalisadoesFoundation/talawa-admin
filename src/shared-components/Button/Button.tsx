@@ -10,7 +10,7 @@ import { forwardRef } from 'react';
 import type { ForwardedRef } from 'react';
 import RBButton from 'react-bootstrap/Button';
 import styles from './Button.module.css';
-import type { ButtonProps, ButtonSize } from './Button.types';
+import type { ButtonProps, ButtonSize, ButtonVariant } from './Button.types';
 
 const mapSizeToBootstrap = (
   size: ButtonSize | undefined,
@@ -22,6 +22,47 @@ const mapSizeToBootstrap = (
     return 'lg';
   }
   return undefined; // md/default
+};
+
+const BOOTSTRAP_VARIANTS = new Set([
+  'primary',
+  'secondary',
+  'success',
+  'danger',
+  'warning',
+  'info',
+  'light',
+  'dark',
+  'link',
+  'outline-primary',
+  'outline-secondary',
+  'outline-success',
+  'outline-danger',
+  'outline-warning',
+  'outline-info',
+  'outline-light',
+  'outline-dark',
+]);
+
+const mapVariantToBootstrap = (variant: ButtonVariant | undefined): string => {
+  if (!variant) return 'primary';
+
+  if (BOOTSTRAP_VARIANTS.has(variant)) {
+    return variant;
+  }
+
+  // Map MUI variants to bootstrap
+  switch (variant) {
+    case 'contained':
+      return 'primary';
+    case 'outlined':
+    case 'outline':
+      return 'outline-primary';
+    case 'text':
+      return 'link';
+    default:
+      return 'primary';
+  }
 };
 
 const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
@@ -46,10 +87,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     const showEndIcon = icon && iconPosition === 'end' && !isLoading;
     const content = isLoading && loadingText ? loadingText : children;
     const { variant, role, ...restProps } = rest;
-    const resolvedVariant =
-      variant === 'outlined' || variant === 'outline'
-        ? 'outline-primary'
-        : variant;
+    const resolvedVariant = mapVariantToBootstrap(variant);
     const hasHref = 'href' in restProps && restProps.href !== undefined;
 
     const classes = [

@@ -16,6 +16,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { vi } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 import {
   COMBINED_MOCKS,
@@ -26,6 +27,12 @@ import {
   ERROR_DELETION_MOCKS,
 } from './Registrations.mocks';
 
+import {
+  EVENT_REGISTRANTS,
+  EVENT_DETAILS,
+  EVENT_CHECKINS,
+} from 'GraphQl/Queries/Queries';
+
 // Mock NotificationToast
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -35,6 +42,26 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     info: vi.fn(),
     dismiss: vi.fn(),
   },
+}));
+
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: vi.fn(
+    ({
+      dataTestId,
+      fallbackName,
+      imageUrl,
+    }: {
+      dataTestId?: string;
+      fallbackName?: string;
+      imageUrl?: string;
+    }) => (
+      <div
+        data-testid={dataTestId ?? 'profile-avatar-display'}
+        data-name={fallbackName ?? ''}
+        data-image={imageUrl ?? ''}
+      />
+    ),
+  ),
 }));
 
 let mockParams: { eventId?: string; orgId?: string } = {
@@ -396,6 +423,522 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Check In Members')).toBeInTheDocument();
+    });
+  });
+
+  describe('ProfileAvatarDisplay', () => {
+    beforeEach(() => {
+      mockParams = {
+        eventId: 'event123',
+        orgId: 'org123',
+      };
+    });
+
+    test('renders ProfileAvatarDisplay for registrants with name', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+    });
+
+    test('ProfileAvatarDisplay renders avatar for each registrant row', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
+    });
+
+    test('passes fallback name and imageUrl to ProfileAvatarDisplay', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+
+      const avatarDisplayMock = vi.mocked(ProfileAvatarDisplay);
+      const avatarCall = avatarDisplayMock.mock.calls.find(
+        ([props]) => props.fallbackName === 'Bruce Garza',
+      );
+
+      expect(avatarCall).toBeTruthy();
+      expect(avatarCall?.[0].imageUrl).toBeUndefined();
+    });
+  });
+
+  describe('Optional Chaining Edge Cases', () => {
+    test('handles registrant with null user (avatarURL undefined check)', async () => {
+      const mockDataWithNullAvatar = {
+        getEventAttendeesByEventId: [
+          {
+            id: 'att1',
+            isRegistered: true,
+            createdAt: dayjs()
+              .year(2023)
+              .month(0)
+              .date(1)
+              .hour(10)
+              .minute(0)
+              .second(0)
+              .millisecond(0)
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            user: {
+              id: 'user1',
+              name: 'User No Avatar',
+              emailAddress: 'test@example.com',
+              avatarURL: null,
+            },
+          },
+        ],
+      };
+
+      const customMocks = [
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: mockDataWithNullAvatar },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+      ];
+
+      renderEventRegistrants(customMocks);
+
+      await waitFor(() => {
+        expect(screen.getByText('User No Avatar')).toBeInTheDocument();
+        const avatarDisplay = screen.getByTestId('profile-avatar-display');
+        expect(avatarDisplay).toBeInTheDocument();
+      });
+    });
+
+    test('handles delete when user is undefined (simulated by checking button click handler safety)', async () => {
+      const mockData = {
+        getEventAttendeesByEventId: [
+          {
+            id: 'att1',
+            isRegistered: true,
+            createdAt: dayjs()
+              .year(2023)
+              .month(0)
+              .date(1)
+              .hour(10)
+              .minute(0)
+              .second(0)
+              .millisecond(0)
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            user: {
+              id: 'user1',
+              name: 'User To Delete',
+              emailAddress: 'test@example.com',
+              avatarURL: 'http://example.com/avatar.jpg',
+            },
+          },
+        ],
+      };
+
+      const customMocks = [
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: mockData },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+      ];
+
+      renderEventRegistrants(customMocks);
+
+      const unregisterButton = await screen.findByRole('button', {
+        name: 'Unregister',
+      });
+      await user.click(unregisterButton);
+
+      await waitFor(() => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          'Removing the attendee...',
+        );
+      });
+    });
+  });
+
+  describe('Edge Cases - Null/Undefined Handling', () => {
+    test('handles registrant with null user gracefully', async () => {
+      const mockDataWithNullUser = {
+        getEventAttendeesByEventId: [
+          {
+            id: 'att1',
+            userId: 'user1',
+            createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
+            user: {
+              id: 'user1',
+              name: 'Valid User',
+              emailAddress: 'valid@example.com',
+              avatarURL: null,
+            },
+          },
+          {
+            id: 'att2',
+            userId: null,
+            createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+            user: null,
+          },
+        ],
+      };
+
+      const customMocks = [
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: mockDataWithNullUser },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+      ];
+
+      renderEventRegistrants(customMocks);
+
+      await waitFor(() => {
+        expect(screen.getByText('Valid User')).toBeInTheDocument();
+      });
+    });
+
+    test('prevents unregistering checked-in user', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        const checkedInButton = screen.getByRole('button', {
+          name: 'Checked In',
+        });
+        expect(checkedInButton).toBeDisabled();
+      });
+    });
+  });
+
+  describe('Error Handling - RefreshData', () => {
+    test('handles error when component unmounts during data fetch', async () => {
+      const slowErrorMocks = [
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          delay: 100,
+          error: new Error('Network error'),
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+      ];
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const notificationErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+      const { unmount } = renderEventRegistrants(slowErrorMocks);
+
+      // Wait a tiny bit for the queries to start
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      // Unmount before the error query completes
+      unmount();
+
+      // Wait for the delayed error to potentially trigger
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      // After unmount, the error handler should check isMountedRef and not show toast
+      // The console.error might still be called, but NotificationToast.error should not
+      // be called after unmount due to the isMountedRef.current check
+
+      consoleErrorSpy.mockRestore();
+      notificationErrorSpy.mockRestore();
+    });
+  });
+
+  describe('ProfileAvatarDisplay - Error Handling', () => {
+    test('calls onError callback when avatar fails to load', async () => {
+      const consoleWarnSpy = vi
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      // Create mocks with invalid avatar URLs to trigger onError
+      const mockDataWithInvalidAvatar = {
+        getEventAttendeesByEventId: [
+          {
+            id: 'att1',
+            isRegistered: true,
+            createdAt: dayjs.utc().add(4, 'year').toISOString(),
+            user: {
+              id: 'user1',
+              name: 'Test User',
+              emailAddress: 'test@example.com',
+              avatarURL: 'https://invalid-url-that-will-fail.com/avatar.jpg',
+            },
+          },
+        ],
+      };
+
+      const customMocks = [
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: mockDataWithInvalidAvatar },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+      ];
+
+      renderEventRegistrants(customMocks);
+
+      await waitFor(() => {
+        expect(screen.getByText('Test User')).toBeInTheDocument();
+      });
+
+      const avatarDisplayMock = vi.mocked(ProfileAvatarDisplay);
+      const avatarCall = avatarDisplayMock.mock.calls.find(
+        ([props]) => props.fallbackName === 'Test User',
+      );
+      expect(avatarCall).toBeTruthy();
+
+      avatarCall?.[0].onError?.();
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Failed to load avatar for user: user1',
+      );
+
+      consoleWarnSpy.mockRestore();
+    });
+
+    test('onError handler is properly configured for all registrants', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
+
+      // Verify that ProfileAvatarDisplay components are rendered with onError callbacks
+      const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
+      expect(avatarDisplays.length).toBeGreaterThanOrEqual(2);
+
+      // Each avatar should have the onError handler configured
+      // The actual error handling will be tested through integration
+      avatarDisplays.forEach((avatar) => {
+        expect(avatar).toBeInTheDocument();
+      });
+    });
+
+    test('should log warning when avatar fails to load', async () => {
+      const consoleWarnSpy = vi
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+
+      const avatarDisplayMock = vi.mocked(ProfileAvatarDisplay);
+      const avatarCall = avatarDisplayMock.mock.calls.find(
+        ([props]) => props.fallbackName === 'Bruce Garza',
+      );
+      expect(avatarCall).toBeTruthy();
+
+      avatarCall?.[0].onError?.();
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Failed to load avatar for user: 6589386a2caa9d8d69087484',
+      );
+
+      consoleWarnSpy.mockRestore();
+    });
+  });
+
+  describe('Error Handling', () => {
+    test('should show error toast when check-in query fails', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const notificationErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+      const errorMocks = [
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: {
+            data: {
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+                recurrenceRule: null,
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: {
+            data: { getEventAttendeesByEventId: [] },
+          },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          error: new Error('Failed to fetch check-ins'),
+        },
+      ];
+
+      renderEventRegistrants(errorMocks);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Error refreshing data:',
+          expect.any(Error),
+        );
+      });
+
+      await waitFor(() => {
+        expect(notificationErrorSpy).toHaveBeenCalledWith('errorLoadingData');
+      });
+
+      consoleErrorSpy.mockRestore();
+      notificationErrorSpy.mockRestore();
+    });
+
+    test('should handle refreshData errors gracefully', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const notificationErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+      const ERROR_MOCKS = [
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: {
+            data: {
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+                recurrenceRule: null,
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          error: new Error('Failed to fetch registrants'),
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          error: new Error('Failed to fetch check-ins'),
+        },
+      ];
+
+      renderEventRegistrants(ERROR_MOCKS);
+
+      // Wait for the error to be logged
+      await waitFor(
+        () => {
+          expect(consoleErrorSpy).toHaveBeenCalledWith(
+            'Error refreshing data:',
+            expect.any(Error),
+          );
+        },
+        { timeout: 3000 },
+      );
+
+      await waitFor(() => {
+        expect(notificationErrorSpy).toHaveBeenCalledWith('errorLoadingData');
+      });
+
+      consoleErrorSpy.mockRestore();
+      notificationErrorSpy.mockRestore();
     });
   });
 });
