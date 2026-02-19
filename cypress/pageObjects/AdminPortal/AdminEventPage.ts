@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 export class AdminEventPage {
   private readonly _eventsTabButton = '[data-cy="leftDrawerButton-Events"]';
   private readonly _createEventModalButton = '[data-cy="createEventModalBtn"]';
@@ -59,20 +60,20 @@ export class AdminEventPage {
       'be.visible',
     );
 
-    // Cypress cannot click this due to calendar cards overlapping the button.
-    // This is a known Cypress actionability limitation — force click is required.
-    cy.get('[data-testid="more"]')
-      .filter(':contains("View all")')
-      .each(($btn) => {
-        cy.wrap($btn).click({ force: true });
-      })
-      .then(($buttons) => {
-        // Wait for all clicks to be flushed; branch on whether any buttons existed.
-        if ($buttons.length === 0) {
-          return;
-        }
-        cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
-      });
+    // Check for "View all" buttons which might appear if there are many events.
+    // If they exist, click them to ensure our new event is visible.
+    cy.get('body').then(($body) => {
+      if ($body.find('[data-testid="more"]').length > 0) {
+        cy.get('[data-testid="more"]')
+          .filter(':contains("View all")')
+          .each(($btn) => {
+            cy.wrap($btn).click({ force: true });
+          });
+      }
+    });
+
+    // Wait for the specific event card to be visible in the list
+    cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
 
     return this;
   }
