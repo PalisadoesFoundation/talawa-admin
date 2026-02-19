@@ -426,7 +426,10 @@ describe('VenueModal', () => {
 
 // Basic Rendering Tests
 describe('Rendering', () => {
-  const user = userEvent.setup();
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   test('renders correctly when show is true', () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
     expect(screen.getByText('Venue Details')).toBeInTheDocument();
@@ -450,7 +453,10 @@ describe('Rendering', () => {
 
 // Form Field Tests
 describe('Form Fields', () => {
-  const user = userEvent.setup();
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   test('populates form fields correctly in edit mode', () => {
     renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
     expect(screen.getByDisplayValue('Venue 1')).toBeInTheDocument();
@@ -784,7 +790,10 @@ describe('Image Handling', () => {
 // Validation Tests
 
 describe('Validation', () => {
-  const user = userEvent.setup();
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   test('shows error when venue name is empty', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
@@ -841,7 +850,10 @@ describe('Validation', () => {
 
   // Mutation Tests
   describe('Mutations', () => {
-    const user = userEvent.setup();
+    let user: ReturnType<typeof userEvent.setup>;
+    beforeEach(() => {
+      user = userEvent.setup();
+    });
 
     test('submit button disables during mutation loading state', async () => {
       render(
@@ -1058,7 +1070,10 @@ describe('Validation', () => {
 
   // Update Tests
   describe('Venue Updates', () => {
-    const user = userEvent.setup();
+    let user: ReturnType<typeof userEvent.setup>;
+    beforeEach(() => {
+      user = userEvent.setup();
+    });
 
     test('shows success toast when an existing venue is updated', async () => {
       renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
@@ -1624,7 +1639,10 @@ describe('Validation', () => {
 
       // Error Boundary Tests
       describe('Error Handling', () => {
-        const user = userEvent.setup();
+        let user: ReturnType<typeof userEvent.setup>;
+        beforeEach(() => {
+          user = userEvent.setup();
+        });
         test('handles image upload with no files', async () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
           const fileInput = screen.getByTestId('venueImgUrl');
@@ -2342,8 +2360,6 @@ describe('Validation', () => {
     });
 
     test('shows error if capacity is invalid in edit mode and name unchanged', async () => {
-      const user = userEvent.setup();
-
       const venueData = {
         node: {
           id: 'venue-1',
