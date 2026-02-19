@@ -975,7 +975,7 @@ describe('PostCard', () => {
     setItem('userId', '1');
 
     render(
-      <MockedProvider mocks={mocks} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1004,7 +1004,7 @@ describe('PostCard', () => {
     };
 
     render(
-      <MockedProvider mocks={mocks} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1768,11 +1768,9 @@ describe('PostCard', () => {
   });
 
   describe('Share functionality', () => {
-    let user: ReturnType<typeof userEvent.setup>;
     let originalClipboard: typeof navigator.clipboard;
     let originalLocation: Location;
     beforeEach(() => {
-      user = userEvent.setup();
       originalClipboard = navigator.clipboard;
       originalLocation = window.location;
       // Mock the clipboard API
@@ -1802,7 +1800,6 @@ describe('PostCard', () => {
         value: originalLocation,
         writable: true,
       });
-      cleanup();
     });
 
     test('opens share menu item and copies link to clipboard', async () => {
