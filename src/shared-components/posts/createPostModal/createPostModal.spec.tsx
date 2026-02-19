@@ -652,6 +652,28 @@ describe('CreatePostModal Integration Tests', () => {
       });
     });
 
+    it('does not show preview when createObjectURL returns an invalid URL', async () => {
+      // Override the mock to return an invalid URL that causes new URL() to throw
+      global.URL.createObjectURL = vi.fn(() => ':::invalid-url');
+
+      renderComponent();
+
+      const fileInput = screen.getByTestId('addMedia');
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      await userEvent.upload(fileInput, mockFile);
+
+      // sanitizeBlobUrl catches the URL parse error and returns null,
+      // so no preview should be rendered
+      expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
+
+      // Restore mock for subsequent tests
+      global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+    });
+
     it('does not render modal content when show is false', () => {
       renderComponent({ show: false });
 

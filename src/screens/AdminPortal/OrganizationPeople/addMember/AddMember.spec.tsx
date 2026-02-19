@@ -1552,6 +1552,84 @@ describe('AddMember Screen', () => {
     expect(screen.getByTestId('page-info')).toHaveTextContent('Page 1');
   });
 
+  test('shows error when create user form is submitted with missing required fields via keyboard shortcut', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+
+    // Submit form via Ctrl+Enter with all fields empty to trigger the early return at line 173
+    const form = screen
+      .getByTestId('addNewUserModal')
+      .querySelector('form') as HTMLFormElement;
+    expect(form).not.toBeNull();
+    fireEvent.keyDown(form, { key: 'Enter', ctrlKey: true });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('toggles password visibility via Enter key on password toggle', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const passwordInput = screen.getByTestId('passwordInput');
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    const showPasswordToggle = screen.getByTestId('showPassword');
+    fireEvent.keyDown(showPasswordToggle, { key: 'Enter' });
+
+    expect(passwordInput).toHaveAttribute('type', 'text');
+
+    fireEvent.keyDown(showPasswordToggle, { key: ' ' });
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+  });
+
+  test('toggles confirm password visibility via Enter key on confirm password toggle', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+
+    const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: 'Enter' });
+
+    expect(confirmPasswordInput).toHaveAttribute('type', 'text');
+
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: ' ' });
+
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+  });
+
   test('ignores invalid sort option', async () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];

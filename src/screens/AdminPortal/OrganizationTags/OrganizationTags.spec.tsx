@@ -217,6 +217,42 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
     });
   });
+  test('navigates to sub tags screen via Enter key on tag name', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+
+    const tagName = screen.getAllByTestId('tagName')[0];
+    tagName.focus();
+    await userEvent.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
+    });
+  });
+
+  test('navigates to sub tags screen via Space key on tag name', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+
+    const tagName = screen.getAllByTestId('tagName')[0];
+    tagName.focus();
+    await userEvent.keyboard(' ');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
+    });
+  });
+
   test('navigates to manage tag page after clicking manage tag option', async () => {
     renderOrganizationTags(link);
 
@@ -549,6 +585,33 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       const submitButton = screen.getByTestId('modal-submit-btn');
       expect(submitButton).toBeDisabled();
+    });
+  });
+
+  test('shows error when creating tag with empty name via keyboard shortcut', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('createTagBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagModal')).toBeInTheDocument();
+    });
+
+    // Submit via Ctrl+Enter with empty tag name to bypass disabled button
+    const modal = screen.getByTestId('createTagModal');
+    const form = modal.querySelector('form') as HTMLFormElement;
+    expect(form).toBeTruthy();
+    form.requestSubmit();
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.enterTagName,
+      );
     });
   });
 
