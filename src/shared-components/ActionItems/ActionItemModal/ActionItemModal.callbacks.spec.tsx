@@ -18,31 +18,29 @@ import {
 const FIXED_TIME_MS = 1_735_603_200_000;
 const FIXED_UTC = dayjs(FIXED_TIME_MS).toISOString();
 
-function getCallbackTracker(): {
+type CallbackTracker = {
   datePickerOnChange: number;
   comparatorCalls: number;
   volunteerFallbackCalls: number;
   categoryNullOnChangeCalls: number;
-} {
-  const globalRef = globalThis as unknown as {
-    __actionItemModalCallbackTracker?: {
-      datePickerOnChange: number;
-      comparatorCalls: number;
-      volunteerFallbackCalls: number;
-      categoryNullOnChangeCalls: number;
-    };
+};
+
+function createCallbackTracker(): CallbackTracker {
+  return {
+    datePickerOnChange: 0,
+    comparatorCalls: 0,
+    volunteerFallbackCalls: 0,
+    categoryNullOnChangeCalls: 0,
   };
+}
 
-  if (!globalRef.__actionItemModalCallbackTracker) {
-    globalRef.__actionItemModalCallbackTracker = {
-      datePickerOnChange: 0,
-      comparatorCalls: 0,
-      volunteerFallbackCalls: 0,
-      categoryNullOnChangeCalls: 0,
-    };
+var callbackTracker: CallbackTracker | undefined;
+
+function getCallbackTracker(): CallbackTracker {
+  if (!callbackTracker) {
+    callbackTracker = createCallbackTracker();
   }
-
-  return globalRef.__actionItemModalCallbackTracker;
+  return callbackTracker;
 }
 
 vi.mock('react-i18next', () => ({
@@ -191,11 +189,7 @@ vi.mock('@apollo/client', async (importOriginal) => {
 });
 
 beforeEach(() => {
-  const tracker = getCallbackTracker();
-  tracker.datePickerOnChange = 0;
-  tracker.comparatorCalls = 0;
-  tracker.volunteerFallbackCalls = 0;
-  tracker.categoryNullOnChangeCalls = 0;
+  callbackTracker = createCallbackTracker();
 });
 
 afterEach(() => {
@@ -203,13 +197,13 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const baseProps = {
+const createBaseProps = () => ({
   isOpen: true,
   hide: vi.fn(),
   orgId: 'orgId',
   eventId: 'eventId',
   actionItemsRefetch: vi.fn(),
-};
+});
 
 const groupActionItem: IActionItemInfo = {
   id: 'a1',
@@ -261,7 +255,7 @@ describe('ActionItemModal callback coverage', () => {
   it('covers category/volunteer comparator callbacks and DatePicker create-mode onChange', () => {
     render(
       <ItemModal
-        {...baseProps}
+        {...createBaseProps()}
         editMode={false}
         actionItem={null}
         isRecurring={false}
@@ -281,7 +275,7 @@ describe('ActionItemModal callback coverage', () => {
   it('covers volunteer-group comparator callback and DatePicker edit-mode guard', () => {
     render(
       <ItemModal
-        {...baseProps}
+        {...createBaseProps()}
         editMode={true}
         actionItem={groupActionItem}
         isRecurring={true}
