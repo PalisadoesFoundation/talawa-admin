@@ -35,6 +35,7 @@
 .sidebarcompheight {
   flex-grow: 1;
   overflow-x: hidden !important;
+  overflow-y: auto;
 }
 
 .sidebarBrandingContainer {

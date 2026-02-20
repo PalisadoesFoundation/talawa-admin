@@ -100,7 +100,7 @@
 }
 
 .searchBarNoIcon {
-  padding-left: var(--space-5);
+  padding-left: var(--space-5) !important;
 }
 
 .searchBarIcon {
@@ -194,7 +194,7 @@
 
 .searchBarIconButton {
   width: var(--space-11);
-  height: var(--space-14);
+  height: var(--space-10-5);
   padding: var(--space-0);
 }
 

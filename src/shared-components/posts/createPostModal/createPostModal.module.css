@@ -48,8 +48,8 @@
   border-radius: var(--radius-md);
   z-index: -1;
   box-shadow:
-    0 0 0 1px var(--color-black-8),
-    0 4px 12px var(--color-black-20);
+    0 0 0 var(--border-1) var(--color-black-8),
+    0 var(--space-2) var(--space-4) var(--color-black-20);
   opacity: 0;
   visibility: hidden;
   display: none;
@@ -268,7 +268,7 @@
   width: var(--space-5);
   height: var(--space-5);
   border: var(--border-2) solid var(--color-white-20);
-  border-top: var(--border-2) solid currentColor;
+  border-top: var(--border-2) solid currentcolor;
   border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
   vertical-align: middle;
