@@ -1,11 +1,10 @@
-.tableHeader {
-  background-color: var(--color-red-500);
-  font-weight: var(--font-weight-bold);
-}
-
-.eventsAttended,
-.membername {
-  color: var(--color-blue-200);
+.orgPeopleGrid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-right: var(--space-5);
+  box-sizing: border-box;
 }
 
 .membername {
@@ -50,6 +49,8 @@
   flex-wrap: nowrap;
   width: 100%;
   gap: var(--space-5);
+  margin-bottom: 0;
+  /* Let grid gap handle spacing */
 }
 
 @media (max-width: 768px) {
@@ -64,6 +65,12 @@
   justify-content: center;
 }
 
+.flexLeft {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .flexColumn {
   flex-direction: column;
 }
@@ -73,49 +80,35 @@
   height: 100%;
 }
 
-.avatarImage {
-  object-fit: cover;
-  border-radius: var(--radius-full);
-  width: var(--avatar-size, var(--logo-xs));
-  height: var(--avatar-size, var(--logo-xs));
-}
-
-.avatarPlaceholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  background-color: var(--color-gray-50);
-}
-
-.avatarPlaceholderSize {
-  width: var(--avatar-size, var(--logo-xs));
-  height: var(--avatar-size, var(--logo-xs));
-}
-
 .memberNameFontSize {
   font-size: var(--font-size-md);
 }
 
-.orgPeopleGrid {
-  padding-right: var(--space-7);
-}
-
-.orgPeopleGrid [data-field='sl_no'],
-.orgPeopleGrid [data-field='profile'] {
+/* DataTable Column Sizing Overrides */
+.orgPeopleGrid [data-testid^='datatable-cell-sl_no'] {
+  width: auto;
   min-width: var(--space-10);
+  white-space: nowrap;
+  text-align: left;
 }
 
-.orgPeopleGrid [data-field='name'],
-.orgPeopleGrid [data-field='email'] {
+.orgPeopleGrid [data-testid^='datatable-cell-profile'] {
+  width: var(--space-10);
+  text-align: center;
+}
+
+.orgPeopleGrid [data-testid^='datatable-cell-name'],
+.orgPeopleGrid [data-testid^='datatable-cell-email'] {
   min-width: var(--space-15);
 }
 
-.orgPeopleGrid [data-field='joined'],
-.orgPeopleGrid [data-field='action'] {
+.orgPeopleGrid [data-testid^='datatable-cell-joined'],
+.orgPeopleGrid [data-testid^='datatable-cell-action'] {
   min-width: var(--space-13);
+  text-align: left;
 }
 
+/* Add Member Button Styling in SearchFilterBar */
 .orgPeopleGrid .membersAddHeader {
   width: auto;
   flex-shrink: 0;
@@ -124,8 +117,10 @@
 .orgPeopleGrid .membersAddToggle {
   width: auto;
   min-width: var(--space-16);
+  white-space: nowrap;
 }
 
+/* Dropdown styling overrides for SearchFilterBar integration */
 .orgPeopleGrid .membersSortContainer,
 .orgPeopleGrid .membersSortToggle,
 .orgPeopleGrid .membersAddContainer,

@@ -745,7 +745,7 @@ describe('AddMember Screen', () => {
       );
 
       expect(screen.getByTestId('avatarImage')).toBeInTheDocument();
-      expect(screen.getByAltText(/User avatar/)).toBeInTheDocument();
+      expect(screen.getByAltText(/Profile picture of/)).toBeInTheDocument();
     } finally {
       i18nForTest.addResource(
         'en',
