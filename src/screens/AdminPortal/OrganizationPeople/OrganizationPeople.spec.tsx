@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -18,7 +18,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
-import { languages } from 'utils/languages';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceSearchFilterBarAdvanced } from 'types/shared-components/SearchFilterBar/interface';
 
@@ -286,12 +285,13 @@ const loadMoreMock = {
 let user: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
   user = userEvent.setup();
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 const renderOrgPeople = (
@@ -362,12 +362,11 @@ describe('OrganizationPeople', () => {
     renderOrgPeople([defaultMemberMock]);
 
     await waitFor(() => {
-      expect(screen.getByAltText('John Doe')).toBeInTheDocument();
+      const img = screen.getByAltText('John Doe');
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('src', 'https://example.com/avatar1.jpg');
+      expect(img).toHaveAttribute('crossorigin', 'anonymous');
     });
-
-    const img = screen.getByAltText('John Doe');
-    expect(img).toHaveAttribute('src', 'https://example.com/avatar1.jpg');
-    expect(img).toHaveAttribute('crossorigin', 'anonymous');
   });
 
   it('renders Avatar component when avatarURL is null', async () => {
@@ -384,10 +383,9 @@ describe('OrganizationPeople', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+      const link = screen.getByText('John Doe').closest('a');
+      expect(link).toHaveAttribute('href', '/admin/member/orgid/member1');
     });
-
-    const link = screen.getByText('John Doe').closest('a');
-    expect(link).toHaveAttribute('href', '/admin/member/orgid/member1');
   });
 
   it('shows empty state when no members', async () => {
@@ -529,18 +527,15 @@ describe('OrganizationPeople Load More', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByTestId('load-more-button')).toBeInTheDocument();
     });
 
-    const loadMoreBtn = screen.getByTestId('load-more-button');
-    expect(loadMoreBtn).toBeInTheDocument();
-
-    await user.click(loadMoreBtn);
+    await user.click(screen.getByTestId('load-more-button'));
 
     await waitFor(() => {
       expect(screen.getByText('Extra Member')).toBeInTheDocument();
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
-
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 });
 
@@ -591,11 +586,10 @@ describe('OrganizationPeople Remove Member', () => {
 
     await waitFor(() => {
       expect(screen.getByText('User One')).toBeInTheDocument();
-    });
-
-    const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
-    deleteButtons.forEach((btn) => {
-      expect(btn).toBeDisabled();
+      const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
+      deleteButtons.forEach((btn) => {
+        expect(btn).toBeDisabled();
+      });
     });
   });
 });
@@ -609,8 +603,8 @@ describe('OrganizationPeople Location State', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
     });
-    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
   });
 
   it('falls back to members when location.state.role is invalid', async () => {
@@ -621,8 +615,8 @@ describe('OrganizationPeople Location State', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
   });
 });
 
@@ -694,10 +688,6 @@ describe('OrganizationPeople Date Locale', () => {
 
       renderOrgPeople([mockWithFixedDate]);
 
-      await waitFor(() => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-      });
-
       const expectedEnUSDate = new Intl.DateTimeFormat('en-US', {
         year: 'numeric',
         month: '2-digit',
@@ -705,8 +695,12 @@ describe('OrganizationPeople Date Locale', () => {
         timeZone: 'UTC',
       }).format(new Date(fixedCreatedAt));
 
-      const joinedEl = screen.getByTestId('org-people-joined-member1');
-      expect(joinedEl).toHaveTextContent(`Joined : ${expectedEnUSDate}`);
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('org-people-joined-member1'),
+        ).toHaveTextContent(`Joined : ${expectedEnUSDate}`);
+      });
     } finally {
       i18nForTest.options.supportedLngs = originalSupported;
       await i18nForTest.changeLanguage(originalLanguage);
@@ -748,26 +742,9 @@ describe('OrganizationPeople Date Locale', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Member No Date')).toBeInTheDocument();
+      const joinedEl = screen.getByTestId('org-people-joined-member-no-date');
+      expect(joinedEl.textContent ?? '').toContain('-');
     });
-
-    const joinedEl = screen.getByTestId('org-people-joined-member-no-date');
-    expect(joinedEl).toBeInTheDocument();
-
-    const currentLang = languages.find(
-      (lang: { code: string; country_code: string }) =>
-        lang.code === i18nForTest.language,
-    );
-    const locale = currentLang
-      ? `${currentLang.code}-${currentLang.country_code}`
-      : 'en-US';
-    const todayFormatted = new Intl.DateTimeFormat(locale, {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      timeZone: 'UTC',
-    }).format(new Date());
-
-    expect(joinedEl.textContent ?? '').toContain(todayFormatted);
   });
 });
 
@@ -796,8 +773,11 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
 
     const link = screen.getByText('John Doe').closest('a') as HTMLElement;
     link.focus();
-    expect(link).toHaveFocus();
-    expect(link).toHaveAttribute('href', '/admin/member/orgid/member1');
+
+    await waitFor(() => {
+      expect(link).toHaveFocus();
+      expect(link).toHaveAttribute('href', '/admin/member/orgid/member1');
+    });
   });
 
   it('delete button is focusable and activatable via Enter key', async () => {
@@ -821,7 +801,10 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
 
     const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
     deleteButtons[0].focus();
-    expect(deleteButtons[0]).toHaveFocus();
+
+    await waitFor(() => {
+      expect(deleteButtons[0]).toHaveFocus();
+    });
 
     await user.keyboard('{Enter}');
 
@@ -835,11 +818,10 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
-    deleteButtons.forEach((btn) => {
-      expect(btn).toHaveAttribute('aria-label');
+      const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
+      deleteButtons.forEach((btn) => {
+        expect(btn).toHaveAttribute('aria-label');
+      });
     });
   });
 
@@ -848,14 +830,13 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByRole('table')).toBeInTheDocument();
+      expect(screen.getAllByRole('columnheader').length).toBeGreaterThanOrEqual(
+        4,
+      );
+      expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(2);
+      expect(screen.getAllByRole('cell').length).toBeGreaterThanOrEqual(4);
     });
-
-    expect(screen.getByRole('table')).toBeInTheDocument();
-    expect(screen.getAllByRole('columnheader').length).toBeGreaterThanOrEqual(
-      4,
-    );
-    expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByRole('cell').length).toBeGreaterThanOrEqual(4);
   });
 
   it('allows Tab navigation through interactive elements in member rows', async () => {
@@ -872,16 +853,25 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
     const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
 
     firstLink.focus();
-    expect(firstLink).toHaveFocus();
+
+    await waitFor(() => {
+      expect(firstLink).toHaveFocus();
+    });
 
     await user.tab();
-    expect(deleteButtons[0]).toHaveFocus();
+    await waitFor(() => {
+      expect(deleteButtons[0]).toHaveFocus();
+    });
 
     await user.tab();
-    expect(secondLink).toHaveFocus();
+    await waitFor(() => {
+      expect(secondLink).toHaveFocus();
+    });
 
     await user.tab();
-    expect(deleteButtons[1]).toHaveFocus();
+    await waitFor(() => {
+      expect(deleteButtons[1]).toHaveFocus();
+    });
   });
 
   it('Load More button has accessible aria-label and is keyboard activatable', async () => {
@@ -889,13 +879,16 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+      const btn = screen.getByTestId('load-more-button');
+      expect(btn).toHaveAttribute('aria-label');
     });
 
     const loadMoreBtn = screen.getByTestId('load-more-button');
-    expect(loadMoreBtn).toHaveAttribute('aria-label');
-
     loadMoreBtn.focus();
-    expect(loadMoreBtn).toHaveFocus();
+
+    await waitFor(() => {
+      expect(loadMoreBtn).toHaveFocus();
+    });
 
     await user.keyboard('{Enter}');
 
@@ -936,10 +929,10 @@ describe('OrganizationPeople Error States', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Server error')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /retry/i }),
+      ).toBeInTheDocument();
     });
-
-    const retryBtn = screen.getByRole('button', { name: /retry/i });
-    expect(retryBtn).toBeInTheDocument();
   });
 
   it('handles error on users tab query', async () => {

@@ -89,7 +89,7 @@ function OrganizationPeople(): JSX.Element {
     setState(OPTION_TO_STATE[value] ?? 0);
   };
 
-  const getLocale = (): string => {
+  const locale = useMemo(() => {
     const currentLang = languages.find(
       (lang: { code: string; country_code: string }) =>
         lang.code === i18n.language,
@@ -97,7 +97,7 @@ function OrganizationPeople(): JSX.Element {
     return currentLang
       ? `${currentLang.code}-${currentLang.country_code}`
       : 'en-US';
-  };
+  }, [i18n.language]);
 
   const renderMemberRow = (
     node: IMemberNode,
@@ -110,12 +110,14 @@ function OrganizationPeople(): JSX.Element {
       if (!nameMatch && !emailMatch) return null;
     }
 
-    const formattedDate = new Intl.DateTimeFormat(getLocale(), {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      timeZone: 'UTC',
-    }).format(new Date(node.createdAt || new Date().toISOString()));
+    const formattedDate = node.createdAt
+      ? new Intl.DateTimeFormat(locale, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          timeZone: 'UTC',
+        }).format(new Date(node.createdAt))
+      : '-';
 
     return (
       <div

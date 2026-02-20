@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router';
@@ -10,6 +10,9 @@ import People from './People';
 import userEvent from '@testing-library/user-event';
 import { vi, it, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 interface InterfaceMemberEdgeProps {
   cursor?: string;
@@ -29,7 +32,7 @@ const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
     avatarURL: props.avatarURL ?? null,
     emailAddress:
       'emailAddress' in props ? props.emailAddress : 'user1@example.com',
-    createdAt: dayjs().subtract(1, 'year').month(2).toISOString(),
+    createdAt: dayjs.utc().subtract(1, 'year').month(2).toISOString(),
   },
 });
 
@@ -270,14 +273,15 @@ const setMatchMediaStub = (): void => {
 
 let user: ReturnType<typeof userEvent.setup>;
 beforeEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
   user = userEvent.setup();
   sharedMocks.useParams.mockReturnValue({ orgId: '' });
   setMatchMediaStub();
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
   sharedMocks.useParams.mockReturnValue({ orgId: '' });
 });
 
@@ -321,15 +325,11 @@ describe('People Screen [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
+      // Admin User should have 'Admin' role label
+      expect(screen.getByTestId('people-row-2')).toHaveTextContent('Admin');
+      // Test User should have 'Member' role label
+      expect(screen.getByTestId('people-row-1')).toHaveTextContent('Member');
     });
-
-    // Admin User should have 'Admin' role label
-    const adminRow = screen.getByTestId('people-row-2');
-    expect(adminRow).toHaveTextContent('Admin');
-
-    // Test User should have 'Member' role label
-    const memberRow = screen.getByTestId('people-row-1');
-    expect(memberRow).toHaveTextContent('Member');
   });
 
   it('displays email addresses correctly', async () => {
@@ -354,11 +354,10 @@ describe('People Screen [User Portal]', () => {
     renderPeople([avatarMock]);
 
     await waitFor(() => {
-      expect(screen.getByAltText('User With Avatar')).toBeInTheDocument();
+      const img = screen.getByAltText('User With Avatar');
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
-
-    const img = screen.getByAltText('User With Avatar');
-    expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg');
   });
 
   it('renders Avatar component when avatarURL is null', async () => {
@@ -494,18 +493,15 @@ describe('People Screen Load More [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByTestId('load-more-button')).toBeInTheDocument();
     });
 
-    const loadMoreBtn = screen.getByTestId('load-more-button');
-    expect(loadMoreBtn).toBeInTheDocument();
-
-    await user.click(loadMoreBtn);
+    await user.click(screen.getByTestId('load-more-button'));
 
     await waitFor(() => {
       expect(screen.getByText('Extra User')).toBeInTheDocument();
+      expect(screen.getByText('Test User')).toBeInTheDocument();
     });
-
-    expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 });
 
@@ -530,14 +526,13 @@ describe('People Screen Keyboard Accessibility [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
+      expect(screen.getByRole('table')).toBeInTheDocument();
+      expect(screen.getAllByRole('columnheader').length).toBeGreaterThanOrEqual(
+        4,
+      );
+      expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(2);
+      expect(screen.getAllByRole('cell').length).toBeGreaterThanOrEqual(4);
     });
-
-    expect(screen.getByRole('table')).toBeInTheDocument();
-    expect(screen.getAllByRole('columnheader').length).toBeGreaterThanOrEqual(
-      4,
-    );
-    expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByRole('cell').length).toBeGreaterThanOrEqual(4);
   });
 
   it('Load More button has accessible aria-label and is keyboard activatable', async () => {
@@ -547,11 +542,17 @@ describe('People Screen Keyboard Accessibility [User Portal]', () => {
       expect(screen.getByText('Test User')).toBeInTheDocument();
     });
 
-    const loadMoreBtn = screen.getByTestId('load-more-button');
-    expect(loadMoreBtn).toHaveAttribute('aria-label');
+    await waitFor(() => {
+      const btn = screen.getByTestId('load-more-button');
+      expect(btn).toHaveAttribute('aria-label');
+    });
 
+    const loadMoreBtn = screen.getByTestId('load-more-button');
     loadMoreBtn.focus();
-    expect(loadMoreBtn).toHaveFocus();
+
+    await waitFor(() => {
+      expect(loadMoreBtn).toHaveFocus();
+    });
 
     await user.keyboard('{Enter}');
 
@@ -592,10 +593,10 @@ describe('People Screen Error States [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Server error')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: /retry/i }),
+      ).toBeInTheDocument();
     });
-
-    const retryBtn = screen.getByRole('button', { name: /retry/i });
-    expect(retryBtn).toBeInTheDocument();
   });
 
   it('handles rapid mode switching without errors', async () => {
