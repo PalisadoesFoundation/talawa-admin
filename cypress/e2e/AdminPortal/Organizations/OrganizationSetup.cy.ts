@@ -28,6 +28,7 @@ describe('Organization setup workflow', () => {
   });
 
   after(() => {
+    cy.loginByApi('admin');
     if (orgId) {
       cy.cleanupTestOrganization(orgId, { userIds, allowNotFound: true });
     }
@@ -241,21 +242,11 @@ describe('Organization setup workflow', () => {
       postalCode: '94105',
     };
 
-    cy.createTestOrganization({
-      name: duplicateOrgName,
-      description: 'Seed org to validate duplicate create handling',
-    }).then(({ orgId: duplicateSeedOrgId }) => {
-      orgIdsToCleanup.push(duplicateSeedOrgId);
-    });
-
     setupPage.visitOrgList();
     cy.intercept('POST', '**/graphql', (req) => {
       const operationName = (req.body as { operationName?: string } | undefined)
         ?.operationName;
-      if (
-        operationName === 'createOrganization' ||
-        operationName === 'CreateOrganization'
-      ) {
+      if (operationName === 'createOrganization') {
         req.reply({
           statusCode: 200,
           body: {

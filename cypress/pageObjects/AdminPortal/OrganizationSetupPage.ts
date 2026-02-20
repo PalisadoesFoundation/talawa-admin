@@ -109,8 +109,7 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
     const modalSelector = `[data-testid="${this.pluginNotificationModal}"]`;
     const startedAt = Date.now();
     const pollIntervalMs = 250;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const waitForAndClose = (): Cypress.Chainable<any> => {
+    const waitForAndClose = (): Cypress.Chainable<unknown> => {
       return cy.document({ log: false }).then((doc) => {
         const modal = doc.querySelector(modalSelector);
         if (!modal) {
@@ -167,22 +166,12 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
 
   openOrganizationDashboardByName(name: string, timeout = 30000): this {
     this.searchOrganizationByName(name, timeout);
-    this.byDataCy(this.organizationCardContainer, timeout).then(($cards) => {
-      const matchingCard = Array.from($cards).find((card) =>
-        card.textContent?.includes(name),
-      );
-      expect(
-        matchingCard,
-        `Organization card with name "${name}" not found.`,
-      ).to.not.equal(undefined);
-      if (!matchingCard) {
-        throw new Error(`Organization card with name "${name}" not found.`);
-      }
-      cy.wrap(matchingCard)
-        .find(`[data-cy="${this.organizationManageButton}"]`, { timeout })
-        .should('be.visible')
-        .click({ force: true });
-    });
+    this.byDataCy(this.organizationCardContainer, timeout)
+      .contains(name, { timeout })
+      .closest(`[data-cy="${this.organizationCardContainer}"]`)
+      .find(`[data-cy="${this.organizationManageButton}"]`, { timeout })
+      .should('be.visible')
+      .click();
     this.assertUrlMatch(/\/admin\/orgdash\/[^/?#]+/, timeout);
     return this;
   }
