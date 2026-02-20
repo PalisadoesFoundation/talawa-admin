@@ -1,6 +1,7 @@
 import { cleanup, render, screen } from '@testing-library/react';
 import { describe, it, expect, afterEach } from 'vitest';
 import { DataTable } from './DataTable';
+import { LoadingMoreRows } from './LoadingMoreRows';
 import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
 
 /**
@@ -692,6 +693,383 @@ describe('LoadingMoreRows (loadingMore functionality)', () => {
       expect(screen.getByTestId('datatable-empty')).toBeInTheDocument();
       const skeletonRows = screen.queryAllByTestId(/^skeleton-append-/);
       expect(skeletonRows).toHaveLength(0);
+    });
+  });
+});
+
+/**
+ * Direct tests for LoadingMoreRows component
+ *
+ * These tests render LoadingMoreRows directly (not through DataTable)
+ * to achieve 100% branch coverage, particularly testing default parameter values.
+ */
+describe('LoadingMoreRows (direct component tests)', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
+  const baseColumns: IColumnDef<{ name: string; email: string }>[] = [
+    {
+      id: 'name',
+      header: 'Name',
+      accessor: 'name' as const,
+    },
+    {
+      id: 'email',
+      header: 'Email',
+      accessor: 'email' as const,
+    },
+  ];
+
+  /**
+   * Helper function to render LoadingMoreRows within a table structure
+   */
+  const renderLoadingMoreRows = <T,>(
+    props: Parameters<typeof LoadingMoreRows<T>>[0],
+  ) => {
+    return render(
+      <table>
+        <tbody>
+          <LoadingMoreRows {...props} />
+        </tbody>
+      </table>,
+    );
+  };
+
+  describe('Default parameter values', () => {
+    it('uses default skeletonRows value (5) when not provided', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        // skeletonRows not provided, should default to 5
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      expect(skeletonRows).toHaveLength(5);
+    });
+
+    it('overrides default skeletonRows when explicitly provided', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 3,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      expect(skeletonRows).toHaveLength(3);
+    });
+
+    it('renders with skeletonRows 0 when explicitly provided', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 0,
+      });
+
+      const skeletonRows = screen.queryAllByTestId(/^skeleton-append-/);
+      expect(skeletonRows).toHaveLength(0);
+    });
+  });
+
+  describe('Column rendering', () => {
+    it('renders correct number of cells based on columns', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 2,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(2); // 2 columns
+      });
+    });
+
+    it('renders single column correctly', () => {
+      const singleColumn: IColumnDef<{ name: string }>[] = [
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+        },
+      ];
+
+      renderLoadingMoreRows<{ name: string }>({
+        columns: singleColumn,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(1);
+      });
+    });
+
+    it('renders multiple columns correctly', () => {
+      const multiColumns: IColumnDef<{
+        a: string;
+        b: string;
+        c: string;
+        d: string;
+      }>[] = [
+        { id: 'a', header: 'A', accessor: 'a' as const },
+        { id: 'b', header: 'B', accessor: 'b' as const },
+        { id: 'c', header: 'C', accessor: 'c' as const },
+        { id: 'd', header: 'D', accessor: 'd' as const },
+      ];
+
+      renderLoadingMoreRows<{
+        a: string;
+        b: string;
+        c: string;
+        d: string;
+      }>({
+        columns: multiColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(4);
+      });
+    });
+  });
+
+  describe('effectiveSelectable prop', () => {
+    it('renders selection column when effectiveSelectable is true', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: true,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(3); // 1 selection + 2 columns
+      });
+    });
+
+    it('does not render selection column when effectiveSelectable is false', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(2); // 2 columns only
+      });
+    });
+  });
+
+  describe('hasRowActions prop', () => {
+    it('renders actions column when hasRowActions is true', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: true,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(3); // 2 columns + 1 actions
+      });
+    });
+
+    it('does not render actions column when hasRowActions is false', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(2); // 2 columns only
+      });
+    });
+  });
+
+  describe('Combined props', () => {
+    it('renders all column types when both effectiveSelectable and hasRowActions are true', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: true,
+        hasRowActions: true,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(4); // 1 selection + 2 columns + 1 actions
+      });
+    });
+
+    it('renders only data columns when both effectiveSelectable and hasRowActions are false', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(2); // 2 columns only
+      });
+    });
+  });
+
+  describe('Skeleton cell attributes', () => {
+    it('renders skeleton cells with data-testid attribute', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: true,
+        hasRowActions: true,
+        skeletonRows: 1,
+      });
+
+      // 1 selection + 2 columns + 1 actions = 4 cells per row
+      const skeletonCells = screen.getAllByTestId('data-skeleton-cell');
+      expect(skeletonCells).toHaveLength(4);
+    });
+
+    it('renders skeleton cells with aria-hidden="true"', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 2,
+      });
+
+      const skeletonCells = screen.getAllByTestId('data-skeleton-cell');
+      skeletonCells.forEach((cell) => {
+        expect(cell).toHaveAttribute('aria-hidden', 'true');
+      });
+    });
+
+    it('renders skeleton cells with correct CSS class', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonCells = screen.getAllByTestId('data-skeleton-cell');
+      skeletonCells.forEach((cell) => {
+        expect(cell.className).toContain('dataSkeletonCell');
+      });
+    });
+  });
+
+  describe('Row attributes', () => {
+    it('renders rows with correct key structure', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 3,
+      });
+
+      expect(screen.getByTestId('skeleton-append-0')).toBeInTheDocument();
+      expect(screen.getByTestId('skeleton-append-1')).toBeInTheDocument();
+      expect(screen.getByTestId('skeleton-append-2')).toBeInTheDocument();
+    });
+
+    it('generates unique keys for each row', () => {
+      const { container } = renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 10,
+      });
+
+      const rows = container.querySelectorAll(
+        'tr[data-testid^="skeleton-append-"]',
+      );
+      expect(rows).toHaveLength(10);
+
+      const testIds = Array.from(rows).map((row) =>
+        row.getAttribute('data-testid'),
+      );
+      const uniqueTestIds = new Set(testIds);
+      expect(uniqueTestIds.size).toBe(10);
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('handles empty columns array', () => {
+      renderLoadingMoreRows<{ id?: string }>({
+        columns: [],
+        effectiveSelectable: true,
+        hasRowActions: true,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(2); // 1 selection + 1 actions (no data columns)
+      });
+    });
+
+    it('handles large number of columns', () => {
+      const largeColumns: IColumnDef<Record<string, string>>[] = Array.from(
+        { length: 20 },
+        (_, i) => ({
+          id: `col${i}`,
+          header: `Column ${i}`,
+          accessor: (row: Record<string, string>) => row[`col${i}`],
+        }),
+      );
+
+      renderLoadingMoreRows<Record<string, string>>({
+        columns: largeColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 1,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      skeletonRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        expect(cells).toHaveLength(20);
+      });
+    });
+
+    it('handles large skeletonRows count', () => {
+      renderLoadingMoreRows({
+        columns: baseColumns,
+        effectiveSelectable: false,
+        hasRowActions: false,
+        skeletonRows: 50,
+      });
+
+      const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+      expect(skeletonRows).toHaveLength(50);
     });
   });
 });
