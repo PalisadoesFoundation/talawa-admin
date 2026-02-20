@@ -30,6 +30,7 @@ export const ORGANIZATION_PINNED_POST_LIST = gql`
           node {
             id
             caption
+            body
             commentsCount
             attachments {
               mimeType

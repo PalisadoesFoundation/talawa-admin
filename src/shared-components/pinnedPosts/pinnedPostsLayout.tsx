@@ -36,8 +36,8 @@ import {
 } from 'types/Post/interface';
 import PinnedPostCard from './pinnedPostCard';
 import styles from './pinnedPostsLayout.module.css';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import Button from 'shared-components/Button';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   pinnedPosts,
@@ -46,6 +46,8 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number | null>(null);
+  const isPausedRef = useRef(false);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
@@ -71,6 +73,8 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
 
   useEffect(() => {
     checkScrollability();
+    startAutoScroll();
+    return () => stopAutoScroll();
   }, [pinnedPosts]);
 
   const scrollLeft = () => {
@@ -91,11 +95,59 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
     });
   };
 
+  const startAutoScroll = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    if (animationRef.current) return; // prevent multiple loops
+
+    const speed = 1;
+
+    const step = () => {
+      if (!container || isPausedRef.current) return;
+
+      container.scrollLeft += speed;
+
+      const maxScroll = container.scrollWidth / 2;
+
+      if (container.scrollLeft >= maxScroll) {
+        container.scrollLeft -= maxScroll;
+      }
+      animationRef.current = requestAnimationFrame(step);
+    };
+
+    animationRef.current = requestAnimationFrame(step);
+  };
+
+  const stopAutoScroll = () => {
+    isPausedRef.current = true;
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+  };
+
+  const resumeAutoScroll = () => {
+    isPausedRef.current = false;
+    startAutoScroll();
+  };
+
+  const allPosts = [...pinnedPosts, ...pinnedPosts];
+
   return (
-    <div className={styles.carouselWrapper} data-testid="pinned-posts-layout">
+    <div
+      className={styles.carouselWrapper}
+      data-testid="pinned-posts-layout"
+      role="region"
+      aria-label={t('pinnedPost')}
+      tabIndex={0}
+      onMouseEnter={stopAutoScroll}
+      onMouseLeave={resumeAutoScroll}
+      onFocus={stopAutoScroll}
+      onBlur={resumeAutoScroll}
+    >
       {canScrollLeft && (
         <Button
-          type="button"
           className={`${styles.navButton} ${styles.navButtonLeft}`}
           onClick={scrollLeft}
           aria-label={t('scrollLeft')}
@@ -110,7 +162,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
         className={styles.scrollContainer}
         data-testid="scroll-container"
       >
-        {pinnedPosts
+        {allPosts
           .filter(
             (
               pinnedPost,
@@ -130,7 +182,6 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
 
       {canScrollRight && (
         <Button
-          type="button"
           className={`${styles.navButton} ${styles.navButtonRight}`}
           onClick={scrollRight}
           aria-label={t('scrollRight')}

@@ -210,9 +210,23 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             imageUrl={props.creator.avatarURL || UserDefault}
             enableEnlarge
           />
-          <Typography variant="subtitle2" fontWeight="bold">
+          <Typography className={postCardStyles.creatorName}>
             {props.creator.name}
           </Typography>
+          <Typography
+            color="text.secondary"
+            className={postCardStyles.postedAt}
+          >
+            {props.postedAt}
+          </Typography>
+          {isPinned && (
+            <PushPinOutlined
+              fontSize="small"
+              color="primary"
+              data-testid="pinned-icon"
+              className={postCardStyles.pinnedIcon}
+            />
+          )}
         </Box>
         <>
           <IconButton
@@ -239,8 +253,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               sx: {
                 minWidth: 'var(--space-15)',
                 '& .MuiMenuItem-root': {
-                  px: 2,
-                  py: 1,
+                  px: 'var(--space-5)',
+                  py: 'var(--space-3)',
                 },
               },
             }}
@@ -369,62 +383,100 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           },
         }) as React.ReactNode
       }
-      {/* Post Actions */}
-      <Box className={postCardStyles.postActions}>
-        <Box className={postCardStyles.leftActions}>
-          <IconButton
-            onClick={handleToggleLike}
-            size="small"
-            data-testid="like-btn"
-            aria-label={
-              isLikedByUser ? t('postCard.unlike') : t('postCard.like')
-            }
-          >
-            {likeLoading ? (
-              <CircularProgress size={20} />
-            ) : isLikedByUser ? (
-              <Favorite color="error" fontSize="small" data-testid="liked" />
-            ) : (
-              <Favorite fontSize="small" data-testid="unliked" />
-            )}
-          </IconButton>
-          <IconButton
-            onClick={toggleComments}
-            size="small"
-            aria-label={
-              showComments
-                ? t('postCard.hideComments')
-                : t('postCard.viewComments')
-            }
-          >
-            <ChatBubbleOutline fontSize="small" />
-          </IconButton>
-          <IconButton
-            size="small"
-            aria-label={t('postCard.share')}
-            onClick={copyToClipboard}
-            data-testid="share-post-quick-button"
-          >
-            <Share fontSize="small" />
-          </IconButton>
-        </Box>
-        {isPinned && (
-          <PushPinOutlined
-            fontSize="small"
-            color="primary"
-            data-testid="pinned-icon"
-            className={postCardStyles.pinnedIcon}
-          />
-        )}
-      </Box>
+
       <Box className={postCardStyles.likesCount}>
         <Typography
-          variant="subtitle2"
+          variant="subtitle1"
           fontWeight="bold"
           data-testid="like-count"
         >
           {likeCount} {t('postCard.likes')}
         </Typography>
+        {/* View/Hide Comments Button */}
+        {commentCount > 0 && (
+          <Button
+            className={postCardStyles.viewHideCommentsButton}
+            onClick={toggleComments}
+            data-testid="comment-card"
+            size="sm"
+          >
+            {showComments
+              ? t('postCard.hideComments')
+              : t('postCard.viewComments', { count: commentCount })}
+          </Button>
+        )}
+      </Box>
+
+      <Divider variant="fullWidth" sx={{ color: 'black' }}></Divider>
+
+      {/* Post Actions */}
+      <Box className={postCardStyles.postActions}>
+        <Box className={postCardStyles.leftActions}>
+          <Box onClick={handleToggleLike} className={postCardStyles.action}>
+            <IconButton
+              className={postCardStyles.actionIcon}
+              size="medium"
+              data-testid="like-btn"
+              aria-label={
+                isLikedByUser ? t('postCard.unlike') : t('postCard.like')
+              }
+            >
+              {likeLoading ? (
+                <CircularProgress size={20} />
+              ) : isLikedByUser ? (
+                <Favorite color="error" fontSize="small" data-testid="liked" />
+              ) : (
+                <Favorite fontSize="small" data-testid="unliked" />
+              )}
+            </IconButton>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              className={postCardStyles.actionLabel}
+            >
+              {t('like')}
+            </Typography>
+          </Box>
+
+          <Box className={postCardStyles.action} onClick={toggleComments}>
+            <IconButton
+              className={postCardStyles.actionIcon}
+              size="medium"
+              aria-label={
+                showComments
+                  ? t('postCard.hideComments')
+                  : t('postCard.viewComments')
+              }
+            >
+              <ChatBubbleOutline fontSize="small" />
+            </IconButton>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              className={postCardStyles.actionLabel}
+            >
+              {t('comment')}
+            </Typography>
+          </Box>
+
+          <Box className={postCardStyles.action} onClick={copyToClipboard}>
+            <IconButton
+              className={postCardStyles.actionIcon}
+              size="medium"
+              aria-label={t('postCard.share')}
+              data-testid="share-post-quick-button"
+            >
+              <Share fontSize="small" />
+            </IconButton>
+            <Typography
+              variant="subtitle1"
+              fontWeight="bold"
+              className={postCardStyles.actionLabel}
+            >
+              {t('share')}
+            </Typography>
+          </Box>
+        </Box>
       </Box>
 
       {/* Comments Section */}
@@ -463,29 +515,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         </>
       )}
 
-      {/* View/Hide Comments Button */}
-      {commentCount > 0 && (
-        <Button
-          onClick={toggleComments}
-          data-testid="comment-card"
-          size="sm"
-          variant="link"
-          className={postCardStyles.viewCommentsButton}
-        >
-          {showComments
-            ? t('postCard.hideComments')
-            : t('postCard.viewComments', { count: commentCount })}
-        </Button>
-      )}
-
-      {/* Post Time */}
-      <Typography
-        className={postCardStyles.timeText}
-        sx={{ color: 'text.secondary' }}
-      >
-        {props.postedAt}
-      </Typography>
-
       {/* Add Comment */}
       <div className={postCardStyles.commentFormContainer}>
         <Box className={postCardStyles.commentForm}>
@@ -515,8 +544,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             sx={{
               backgroundColor: 'action.hover',
               borderRadius: 'var(--radius-2xl)',
-              px: 2,
-              py: 0.5,
+              px: 'var(--space-5)',
+              py: 'var(--space-3)',
             }}
           />
         </Box>

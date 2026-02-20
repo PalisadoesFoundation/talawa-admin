@@ -2,12 +2,14 @@
 
 .postContainer {
   width: 100%;
-  max-width: var(--space-27);
+  max-width: var(--space-26);
   margin: 0 auto var(--space-7);
   border-radius: var(--radius-md);
+  border: var(--border-1) solid var(--color-gray-200);
   box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
     var(--color-gray-100);
   overflow: hidden;
+  width: 100%;
 }
 
 .postHeader {
@@ -15,6 +17,7 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4);
+  height: var(--space-10);
 }
 
 .userInfo {
@@ -23,9 +26,27 @@
   gap: var(--space-4);
 }
 
+.userImageUserPost {
+  display: flex;
+  width: var(--space-7-5);
+  height: var(--space-7-5);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  position: relative;
+  border: var(--space-1) solid var(--userImageUserPost-border);
+}
+
+.userImageUserPost img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: scale(1.5);
+}
+
 .postMedia {
-  padding-left: var(--space-5);
-  padding-right: var(--space-5);
   width: 100%;
 }
 
@@ -39,11 +60,34 @@
 .postActions {
   display: flex;
   justify-content: space-between;
-  padding: var(--space-3) var(--space-4) var(--space-0);
+  padding: var(--space-3) var(--space-4) var(--space-3);
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+
+.actionIcon {
+  padding: var(--space-0) !important;
+}
+
+.actionLabel {
+  color: var(--color-gray-500);
+}
+
+.action:hover {
+  background-color: var(--bs-gray-200);
+  cursor: pointer;
 }
 
 .leftActions {
   display: flex;
+  justify-content: space-around;
+  width: 100%;
   gap: var(--space-3);
 }
 
@@ -52,13 +96,16 @@
 }
 
 .likesCount {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: var(--space-0) var(--space-5) var(--space-0);
 }
 
 .caption {
-  margin: var(--space-3) var(--space-3);
-  font-weight: var(--font-weight-heavy);
-  font-size: var(--font-size-md);
+  margin: var(--space-3) var(--space-0) !important;
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
   white-space: pre-line;
   overflow-wrap: break-word;
 }
@@ -70,10 +117,20 @@
 }
 
 .body {
-  margin: var(--space-3) var(--space-0);
+  margin: var(--space-3) var(--space-0) !important;
   white-space: pre-line;
   overflow-wrap: break-word;
   line-height: var(--line-height-tight);
+  font-weight: var(--font-weight-lighter);
+}
+
+.creatorName {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.postedAt {
+  font-size: var(--font-size-xs) !important;
 }
 
 .bodyClamp {
@@ -147,6 +204,10 @@
   position: absolute;
 }
 
+.image {
+  width: 100%;
+}
+
 .closeButton {
   background-color: var(--color-gray-100) !important;
   border: none !important;
@@ -166,10 +227,6 @@
   font-size: var(--font-size-xl) !important;
 }
 
-.image {
-  width: 100%;
-}
-
 .noCommentsText {
   color: var(--color-gray-500);
   text-align: center;
@@ -177,25 +234,18 @@
   font-size: var(--font-size-sm);
 }
 
-.userImageUserPost {
-  display: flex;
-  width: var(--space-10);
-  height: var(--space-10);
-  margin-left: var(--space-5);
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: var(--radius-full);
-  position: relative;
-  border: var(--border-2) solid var(--userImageUserPost-border);
+.viewHideCommentsButton {
+  color: var(--color-gray-500);
+  background-color: var(--bs-gray-200);
+  font-size: var(--font-size-xs);
+  text-transform: none;
+  margin: var(--space-0) var(--space-0) var(--space-3) var(--space-5);
+  border: none;
 }
 
-.userImageUserPost img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  transform: scale(1.5);
+.viewHideCommentsButton:hover {
+  background-color: var(--bs-gray-200);
+  color: var(--color-gray-500) !important;
 }
 
 .viewCommentsButton {

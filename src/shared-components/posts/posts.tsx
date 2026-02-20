@@ -57,8 +57,6 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import { useTranslation } from 'react-i18next';
 import Row from 'react-bootstrap/Row';
-import { Add } from '@mui/icons-material';
-import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
@@ -68,6 +66,7 @@ import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
+import CreatePostContainer from 'shared-components/posts/createPostContainer/createPostContainer';
 import PostViewModal from 'shared-components/PostViewModal/PostViewModal';
 import { formatPostForCard } from './helperFunctions';
 
@@ -357,18 +356,6 @@ export default function PostsPage() {
                 testIdPrefix: 'sortpost',
               },
             ]}
-            actions={
-              <Button
-                onClick={createPostModal.open}
-                disabled={!userId}
-                data-testid="createPostModalBtn"
-                data-cy="createPostModalBtn"
-                className={styles.dropdown}
-              >
-                <Add />
-                {t('createPost')}
-              </Button>
-            }
           />
 
           <div className={`row ${styles.list_box}`}>
@@ -383,10 +370,17 @@ export default function PostsPage() {
                 <div data-testid="not-found">{t('errorLoadingPosts')}</div>
               )}
 
+              {/* Create Post Container */}
+              {userId && (
+                <div>
+                  <CreatePostContainer onClick={createPostModal.open} />
+                </div>
+              )}
+
               {/* Pinned Posts Carousel */}
               {pinnedPosts.length > 0 && !isFiltering && (
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="h5" sx={{ mb: 2 }}>
+                <Box sx={{ mb: 'var(--space-7)' }}>
+                  <Typography variant="h5" className={styles.pinnedPosts}>
                     {t('pinnedPosts')}
                   </Typography>
                   <PinnedPostsLayout
@@ -398,7 +392,7 @@ export default function PostsPage() {
 
               {/* Search Results Message */}
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
-                <Box sx={{ py: 4 }}>
+                <Box sx={{ py: 'var(--space-8)' }}>
                   <Typography color="text.secondary">
                     {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
@@ -424,44 +418,53 @@ export default function PostsPage() {
                 </Box>
               ) : (
                 // Infinite scroll for regular posts
-                <InfiniteScroll
-                  dataLength={postsToDisplay.length}
-                  next={loadMorePosts}
-                  hasMore={hasMore && sortingOption === 'None'}
-                  loader={<InfiniteScrollLoader />}
-                  endMessage={
-                    postsToDisplay.length > 0 && (
-                      <Box sx={{ py: 2 }}>
-                        <Typography color="text.secondary">
-                          {t('noMorePosts')}
-                        </Typography>
-                      </Box>
-                    )
-                  }
-                  scrollThreshold={0.8}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 'var(--space-2)',
-                    }}
+                <>
+                  {postsToDisplay.length > 0 && (
+                    <Box sx={{ mb: 'var(--space-7)' }}>
+                      <Typography variant="h5" className={styles.yourFeed}>
+                        {t('yourFeed')}
+                      </Typography>
+                    </Box>
+                  )}
+                  <InfiniteScroll
+                    dataLength={postsToDisplay.length}
+                    next={loadMorePosts}
+                    hasMore={hasMore && sortingOption === 'None'}
+                    loader={<InfiniteScrollLoader />}
+                    endMessage={
+                      postsToDisplay.length > 0 && (
+                        <Box sx={{ py: 'var(--space-5)' }}>
+                          <Typography color="text.secondary">
+                            {t('noMorePosts')}
+                          </Typography>
+                        </Box>
+                      )
+                    }
+                    scrollThreshold={0.8}
                   >
-                    {postsToDisplay.map((post) => (
-                      <PostCard
-                        key={post.id}
-                        {...formatPostForCard(post, t, refetch)}
-                      />
-                    ))}
-                  </Box>
-                </InfiniteScroll>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--space-5)',
+                      }}
+                    >
+                      {postsToDisplay.map((post) => (
+                        <PostCard
+                          key={post.id}
+                          {...formatPostForCard(post, t, refetch)}
+                        />
+                      ))}
+                    </Box>
+                  </InfiniteScroll>
+                </>
               )}
 
               {/* Empty State */}
               {postsToDisplay.length === 0 &&
                 !orgPostListLoading &&
                 !isFiltering && (
-                  <Box sx={{ py: 4 }}>
+                  <Box sx={{ py: 'var(--space-8)' }}>
                     <Typography color="text.secondary">
                       {t('noPosts')}
                     </Typography>

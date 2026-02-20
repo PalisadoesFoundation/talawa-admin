@@ -47,6 +47,13 @@
   min-width: 0;
 }
 
+.pinnedPosts,
+.yourFeed {
+  font-size: var(--font-size-40) !important;
+  font-weight: var(--font-weight-medium) !important;
+  margin-bottom: var(--space-5) !important;
+}
+
 .addPost {
   min-width: 0;
 }

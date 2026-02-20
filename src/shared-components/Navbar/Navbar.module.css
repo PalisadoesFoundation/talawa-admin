@@ -44,6 +44,10 @@
   border-radius: var(--radius-lg);
 }
 
+.dropdown:hover {
+  color: var(--dropdown-font-color) !important;
+}
+
 .btnsBlock {
   display: flex;
   flex-direction: row;

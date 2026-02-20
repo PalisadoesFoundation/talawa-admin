@@ -117,6 +117,7 @@ describe('PinnedPostCard Component', () => {
       id: 'post-1',
       caption:
         'This is a test post caption that should be displayed in the card',
+      body: 'This is a test post body that should be displayed in the card',
       createdAt: dayjs.utc().subtract(14, 'days').toISOString(),
       pinnedAt: dayjs.utc().subtract(14, 'days').toISOString(),
       pinned: true,
@@ -169,6 +170,13 @@ describe('PinnedPostCard Component', () => {
       expect(
         screen.getAllByText(
           'This is a test post caption that should be displayed in the card',
+        ),
+      ).toBeTruthy();
+
+      //Check body
+      expect(
+        screen.getAllByText(
+          'This is a test post body that should be displayed in the card',
         ),
       ).toBeTruthy();
 

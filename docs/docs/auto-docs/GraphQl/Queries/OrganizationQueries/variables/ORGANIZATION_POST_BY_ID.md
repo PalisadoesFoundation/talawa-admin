@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_POST\_BY\_ID**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L122)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L123)
 
 GraphQL query to retrieve a single post by its ID.
 

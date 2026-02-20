@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:95](https://github.com/PalisadoesFounda
 
 > `optional` **body**: `string`
 
-Defined in: [src/types/Post/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L94)
+Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L90)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Post/interface.ts:103](https://github.com/PalisadoesFound
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L90)
+Defined in: [src/types/Post/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L91)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFounda
 
 > `optional` **creator**: [`InterfaceCreator`](InterfaceCreator.md)
 
-Defined in: [src/types/Post/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L93)
+Defined in: [src/types/Post/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L94)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/types/Post/interface.ts:88](https://github.com/PalisadoesFounda
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L92)
+Defined in: [src/types/Post/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L93)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/types/Post/interface.ts:92](https://github.com/PalisadoesFounda
 
 > `optional` **pinnedAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L91)
+Defined in: [src/types/Post/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L92)
 
 ***
 

@@ -1,0 +1,79 @@
+.createPostContainer {
+  background-color: var(--bs-white);
+  border: var(--border-1) solid var(--color-gray-100);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  margin-bottom: var(--space-7);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    var(--color-gray-100);
+  max-width: var(--space-28-5);
+}
+
+.createPostContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-gray-900);
+  margin-top: var(--space-3);
+}
+
+.inputArea {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-4);
+  background-color: var(--color-gray-100);
+  border-radius: var(--radius-md);
+  min-height: var(--space-10);
+}
+
+.browseFilesButton {
+  flex-shrink: 0;
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
+  text-transform: none;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md) var(--radius-none) var(--radius-none)
+    var(--radius-md);
+  font-weight: var(--font-weight-medium);
+  height: var(--space-10);
+  display: flex;
+  align-items: center;
+}
+
+.postInput {
+  flex: 1;
+  font-size: var(--font-size-md);
+  background-color: transparent;
+  cursor: pointer !important;
+}
+
+.postInput input {
+  cursor: pointer;
+}
+
+.postInput::placeholder {
+  color: var(--color-gray-400);
+}
+
+.sendButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sendButton {
+  background-color: var(--color-blue-500) !important;
+  color: var(--bs-white);
+  width: var(--space-10-5);
+  height: var(--space-9);
+  border-radius: var(--radius-md);
+}
+
+.sendButton svg {
+  font-size: var(--font-size-xl);
+  color: var(--color-white);
+}

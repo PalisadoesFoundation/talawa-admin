@@ -4,10 +4,9 @@
 
 .scrollContainer {
   display: flex;
-  gap: 1rem;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -19,71 +18,58 @@
 
 .cardWrapper {
   flex: 0 0 auto;
-  width: 100%;
-  max-width: 350px;
-  min-width: 280px;
-}
-
-/* Responsive adjustments */
-@media (min-width: 768px) {
-  .cardWrapper {
-    max-width: 380px;
-    min-width: 320px;
-  }
+  width: fit-content;
 }
 
 .navButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e1e5e9;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  background: var(--bs-gray-100);
+  border: var(--space-0-5) solid var(--color-blue-100);
+  border-radius: var(--radius-full);
+  width: var(--space-10);
+  height: var(--space-10);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  color: #666;
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
+    var(--color-gray-100);
+  color: var(--color-gray-600);
   z-index: 2;
   flex-shrink: 0;
 }
 
 .navButton:hover {
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  color: #333;
-  transform: translateY(-50%) scale(1.05);
+  background: var(--bs-white);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-xl)
+    var(--color-gray-400);
+  color: var(--color-gray-800);
+  transform: scale(1.05);
 }
 
 .navButton:active {
-  transform: translateY(-50%) scale(0.95);
+  transform: scale(0.95);
 }
 
 .navButtonLeft {
-  left: 8px;
+  left: var(--space-3);
 }
 
 .navButtonRight {
-  right: 8px;
+  right: var(--space-3);
 }
 
 @media (min-width: 1024px) {
   .scrollContainer {
-    gap: 1.5rem;
-  }
-
-  .cardWrapper {
-    max-width: 400px;
-    min-width: 350px;
+    gap: var(--space-7);
   }
 
   .navButton {
-    width: 56px;
-    height: 56px;
+    width: var(--space-10-5);
+    height: var(--space-10-5);
   }
 }
 
@@ -98,9 +84,5 @@
   .navButton:active {
     transition: none;
     transform: none;
-  }
-
-  .navButton {
-    transform: translateY(-50%);
   }
 }

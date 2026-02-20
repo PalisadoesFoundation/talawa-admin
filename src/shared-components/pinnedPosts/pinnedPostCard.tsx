@@ -39,7 +39,6 @@ import {
   Avatar,
   Box,
   IconButton,
-  Container,
   Menu,
   MenuItem,
   ListItemIcon,
@@ -131,23 +130,17 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   };
 
   return (
-    <Container className={styles.postCardContainer}>
+    <Box className={styles.postCardContainer}>
       <Card className={styles.card}>
         {/* Header with user info and actions */}
-        <Box
-          className={styles.cardHeader}
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            p: 2,
-            pb: 1,
-          }}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box className={styles.cardHeader}>
+          <Box className={styles.creatorContainer}>
             <Avatar
               src={pinnedPost.node?.creator?.avatarURL || undefined}
-              sx={{ width: 28, height: 28 }}
+              sx={{
+                width: 'var(--space-7-5)',
+                height: 'var(--space-7-5)',
+              }}
             >
               {pinnedPost.node?.creator?.name?.[0]}
             </Avatar>
@@ -156,9 +149,9 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             </Typography>
           </Box>
 
-          <Box sx={{ display: 'flex', gap: 0.5 }}>
+          <Box sx={{ display: 'flex', gap: 'var(--space-3)' }}>
             <IconButton size="small" aria-label={t('pinnedPost')}>
-              <PushPin className={styles.pushPin} />
+              <PushPin fontSize="small" />
             </IconButton>
             {canManage && (
               <>
@@ -180,8 +173,11 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                   PaperProps={{
                     sx: {
-                      minWidth: '150px',
-                      '& .MuiMenuItem-root': { px: 2, py: 1 },
+                      minWidth: 'var(--space-15)',
+                      '& .MuiMenuItem-root': {
+                        px: 'var(--space-5)',
+                        py: 'var(--space-3)',
+                      },
                     },
                   }}
                 >
@@ -262,31 +258,24 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
 
         {/* Post Content */}
         <CardContent className={styles.cardContent}>
-          <Typography
-            sx={{
-              fontWeight: 500,
-              fontSize: '18px',
-              display: '-webkit-box',
-              WebkitLineClamp: 1,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
+          <Typography className={styles.caption}>
             {pinnedPost.node.caption}
           </Typography>
 
           <Typography
             color="text.secondary"
             sx={{
-              mb: 1,
-              fontSize: '12px',
+              fontSize: 'var(--font-size-sm)',
             }}
           >
             {t('postedOn', { date: formatDate(pinnedPost.node.createdAt) })}
           </Typography>
 
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Typography color="text.secondary" className={styles.body}>
+            {pinnedPost.node.body}
+          </Typography>
+
+          <Box className={styles.viewPostButtonContainer}>
             <Button
               variant="contained"
               icon={<Visibility />}
@@ -300,7 +289,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
           </Box>
         </CardContent>
       </Card>
-    </Container>
+    </Box>
   );
 };
 

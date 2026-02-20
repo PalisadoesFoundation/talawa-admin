@@ -195,7 +195,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // All posts have the same creator 'John Doe'
       const creatorNames = screen.getAllByText('John Doe');
-      expect(creatorNames.length).toBe(3);
+      expect(creatorNames.length).toBe(6);
     });
 
     it('renders view buttons for all posts', () => {
@@ -211,7 +211,7 @@ describe('PinnedPostsLayout Component', () => {
       );
 
       const viewButtons = screen.getAllByTestId('view-post-btn');
-      expect(viewButtons.length).toBe(3);
+      expect(viewButtons.length).toBe(6);
     });
 
     it('renders empty state when no pinned posts', () => {
@@ -268,6 +268,92 @@ describe('PinnedPostsLayout Component', () => {
       await waitFor(() => {
         expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
       });
+    });
+  });
+
+  describe('Auto scroll', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+    });
+
+    afterEach(() => {
+      // Clean up any timers or event listeners
+      vi.clearAllTimers();
+      vi.useRealTimers();
+    });
+
+    it('auto scrolls posts over time', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      const initialScrollLeft = scrollContainer.scrollLeft;
+      //Advance time to simulate auto scolling behavior
+      await act(async () => {
+        vi.advanceTimersByTime(100);
+      });
+
+      expect(scrollContainer.scrollLeft).toBeGreaterThan(initialScrollLeft);
+    });
+
+    it('pauses auto scroll on hover', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      fireEvent.mouseEnter(scrollContainer);
+
+      const scrollBefore = scrollContainer.scrollLeft;
+      //Advance time while auto scroll is paused
+      await act(async () => {
+        vi.advanceTimersByTime(100);
+      });
+
+      expect(scrollContainer.scrollLeft).toBe(scrollBefore);
+    });
+
+    it('resumes auto scroll on mouse leave', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      fireEvent.mouseEnter(scrollContainer);
+      fireEvent.mouseLeave(scrollContainer);
+
+      const scrollBefore = scrollContainer.scrollLeft;
+      //Advance time after resuming auto scroll
+      await act(async () => {
+        vi.advanceTimersByTime(100);
+      });
+
+      expect(scrollContainer.scrollLeft).toBeGreaterThan(scrollBefore);
     });
   });
 
@@ -567,7 +653,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Should render all posts including the one with null creator
       const postCards = screen.getAllByTestId('view-post-btn');
-      expect(postCards.length).toBe(4);
+      expect(postCards.length).toBe(8);
 
       // Check that the post with null creator still renders caption
       expect(
@@ -595,7 +681,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Should render all posts including those with empty captions
       const postCards = screen.getAllByTestId('view-post-btn');
-      expect(postCards.length).toBe(5);
+      expect(postCards.length).toBe(10);
     });
   });
 

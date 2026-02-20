@@ -1,51 +1,89 @@
 .postCardContainer {
-  width: 340px;
-  height: 380px;
+  width: var(--space-22);
+  height: var(--space-22-5);
 }
 
 .card {
-  width: 340px;
-  border-radius: 2px;
+  height: 100%;
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: var(--border-1) solid var(--color-gray-200);
   overflow: hidden;
 }
 
 .cardHeader {
-  height: 49px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--space-10);
+  padding: var(--space-3);
 }
 
 .pushPin {
-  font-size: 20px;
+  font-size: var(--font-size-xl);
+}
+
+.creatorContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
 }
 
 .creatorName {
-  font-size: 14px;
-  font-weight: 300;
+  font-size: var(--font-size-sm) !important;
 }
 
 .moreOptionsButton {
-  font-size: 20px;
+  font-size: var(--font-size-xl);
 }
 
 .postMedia {
-  height: 195px;
+  height: var(--space-16-5);
   width: 100%;
 }
 
+.caption {
+  font-weight: var(--font-weight-medium) !important;
+  font-size: var(--font-size-lg) !important;
+}
+
+.body {
+  font-size: var(--font-size-sm);
+}
+
+.caption,
+.body {
+  display: -webkit-box;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .cardContent {
-  height: 136px;
+  position: relative;
+  height: var(--space-16);
 }
 
-/* Scoped button styles with parent class for proper specificity */
-.postCardContainer .viewPostButton {
-  background-color: #a8c7fa;
-  color: black;
+.viewPostButtonContainer {
+  position: absolute;
+  bottom: var(--space-5);
+  right: var(--space-5);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.viewPostButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-black);
   text-transform: none;
-  border-radius: 8px;
-  padding: 8px 24px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
-.postCardContainer .viewPostButton:hover {
-  background-color: #8bb5e8;
+.viewPostButton:hover {
+  background-color: var(--color-blue-300) !important;
 }
