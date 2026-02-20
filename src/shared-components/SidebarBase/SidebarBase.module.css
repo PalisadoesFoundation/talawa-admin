@@ -341,7 +341,7 @@
   .leftDrawer.expandedDrawer {
     width: 100%;
     left: var(--space-0);
-    right: 0;
+    right: var(--space-0);
   }
 
   .collapsedDrawer {

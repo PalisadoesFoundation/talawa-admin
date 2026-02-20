@@ -30,8 +30,8 @@
   width: auto;
   flex-shrink: 0;
   height: var(--space-9);
-  margin-top: var(--space-10);
-  margin-left: calc(var(--space-1) * -20);
+  margin-top: var(--space-10-5);
+  margin-left: calc(var(--space-1) * -6);
 }
 
 .btnsBlock .dropdown {
