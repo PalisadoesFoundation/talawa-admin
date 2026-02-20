@@ -1,7 +1,7 @@
 id: test-race-condition-expect-after-userevent
 language: typescript
 rule:
-  pattern: 'await userEvent.$METHOD($$$ARGS)'
+  pattern: 'await $OBJ.$METHOD($$$ARGS)'
   precedes:
     pattern: 'expect($$$ASSERTION)'
     stopBy: neighbor
