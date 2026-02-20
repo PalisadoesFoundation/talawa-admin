@@ -344,7 +344,7 @@ export const CREATE_ORGANIZATION_MUTATION_PG = gql`
     $name: String!
     $addressLine1: String
     $addressLine2: String
-    $avatar: Upload
+    $avatar: FileMetadataInput
     $city: String
     $countryCode: Iso3166Alpha2CountryCode
     $description: String
@@ -530,7 +530,7 @@ export const UPDATE_POST_VOTE = gql`
 /**
  * GraphQL mutation to update community profile settings including logo upload.
  *
- * @param logo - Optional logo file (Upload scalar) - sent as multipart request via apollo-upload-client
+ * @param logo - Optional logo metadata (FileMetadataInput) - uploaded via MinIO presigned URL
  * @param name - Community name
  * @param websiteURL - Community website URL
  * @param facebookURL - Facebook profile URL
@@ -547,7 +547,7 @@ export const UPDATE_POST_VOTE = gql`
  */
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
-    $logo: Upload
+    $logo: FileMetadataInput
     $facebookURL: String
     $githubURL: String
     $instagramURL: String

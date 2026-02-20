@@ -1,12 +1,13 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
 import type * as RouterTypes from 'react-router-dom';
 
 import type { InterfaceVenueModalProps } from './VenueModal';
@@ -20,6 +21,21 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ApolloLink, Observable } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+// Mock useMinioUpload
+const { mockUploadFileToMinio } = vi.hoisted(() => {
+  const fn = vi.fn();
+  fn.mockResolvedValue({
+    objectName: 'test-obj',
+    fileHash: 'test-hash',
+    mimetype: 'image/png',
+    name: 'test-image.png',
+  });
+  return { mockUploadFileToMinio: fn };
+});
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
+}));
 
 // Mock Setup
 const MOCKS = [
@@ -247,13 +263,6 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
 // Helper Functions
-async function wait(ms = 100): Promise<void> {
-  await act(async () => {
-    await new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const defaultProps: InterfaceVenueModalProps = {
   show: true,
@@ -299,8 +308,18 @@ const renderVenueModal = (
 
 describe('VenueModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    vi.resetModules();
+    // Configure MinIO upload mock
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'test-obj',
+      fileHash: 'test-hash',
+      mimetype: 'image/png',
+      name: 'test-image.png',
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    cleanup();
   });
 
   test('creates a new venue successfully', async () => {
@@ -391,8 +410,9 @@ describe('VenueModal', () => {
     await userEvent.upload(fileInput, file);
 
     fireEvent.click(screen.getByTestId('closeimage'));
-
-    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByRole('img')).not.toBeInTheDocument();
+    });
   });
 });
 
@@ -412,10 +432,12 @@ describe('Rendering', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  test('calls onHide when close button is clicked', () => {
+  test('calls onHide when close button is clicked', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
     fireEvent.click(screen.getByTestId('modalCloseBtn'));
-    expect(defaultProps.onHide).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(defaultProps.onHide).toHaveBeenCalled();
+    });
   });
 });
 
@@ -618,6 +640,34 @@ describe('Image Handling', () => {
     vi.restoreAllMocks();
   });
 
+  test('handles image upload error correctly', async () => {
+    // Mock upload failure
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+
+    await act(async () => {
+      await userEvent.upload(fileInput, file);
+    });
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error uploading file:',
+        expect.any(Error),
+      );
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'imageUploadError',
+        namespace: 'errors',
+      });
+    });
+
+    consoleSpy.mockRestore();
+  });
+
   test('shows error when uploading file larger than 5MB', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
@@ -730,6 +780,16 @@ describe('Image Handling', () => {
 
 // Validation Tests
 describe('Validation', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'test-obj',
+      fileHash: 'test-hash',
+      mimetype: 'image/png',
+      name: 'test-image.png',
+    });
+  });
+
   test('shows error when venue name is empty', async () => {
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
@@ -995,6 +1055,16 @@ describe('Validation', () => {
 
   // Update Tests
   describe('Venue Updates', () => {
+    beforeEach(() => {
+      vi.clearAllMocks();
+      mockUploadFileToMinio.mockResolvedValue({
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimetype: 'image/png',
+        name: 'test-image.png',
+      });
+    });
+
     test('shows success toast when an existing venue is updated', async () => {
       renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
 
@@ -1101,7 +1171,6 @@ describe('Validation', () => {
 
       await act(async () => {
         fireEvent.click(screen.getByTestId('updateVenueBtn'));
-        await wait(0);
       });
 
       await waitFor(() => {
@@ -1115,7 +1184,6 @@ describe('Validation', () => {
 
       await act(async () => {
         fireEvent.click(screen.getByTestId('updateVenueBtn'));
-        await wait(0);
       });
 
       await waitFor(() => {
@@ -1336,7 +1404,10 @@ describe('Validation', () => {
             </BrowserRouter>
           </MockedProvider>,
         );
-        await wait(100);
+      });
+      await waitFor(() => {
+        const nameInput = screen.queryByPlaceholderText('Enter Venue Name');
+        expect(nameInput).not.toBeInTheDocument();
       });
 
       // Mount fresh component
@@ -2137,13 +2208,19 @@ describe('Validation', () => {
 
         test('handles URL creation error in useEffect', async () => {
           // Mock URL constructor to throw an error
-          const originalURL = global.URL;
-          global.URL = class extends URL {
-            constructor() {
-              super('about:blank');
+          // Spy on URL constructor to throw an error
+          const urlSpy = vi
+            .spyOn(global, 'URL')
+            .mockImplementation((url: string | URL, _base?: string | URL) => {
+              if (url === 'about:blank') {
+                // Return a valid URL object for the super call simulation if needed,
+                // but since we are mocking implementation, we just throw.
+                // However, the component calls `new URL(image, minioBaseUrl)`.
+                throw new Error('Invalid URL');
+              }
+              // For other calls (if any), we might want default behavior, but here we want to trigger error.
               throw new Error('Invalid URL');
-            }
-          } as unknown as typeof URL;
+            });
 
           const propsWithInvalidImage = {
             ...editProps,
@@ -2170,8 +2247,8 @@ describe('Validation', () => {
             });
           });
 
-          // Restore original URL
-          global.URL = originalURL;
+          // Restore spy
+          urlSpy.mockRestore();
         });
 
         test('handles file upload with invalid file type', async () => {
@@ -2184,9 +2261,11 @@ describe('Validation', () => {
             fireEvent.change(fileInput, { target: { files: [file] } });
           });
 
-          expect(NotificationToast.error).toHaveBeenCalledWith({
-            key: 'invalidFileType',
-            namespace: 'errors',
+          await waitFor(() => {
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'invalidFileType',
+              namespace: 'errors',
+            });
           });
         });
 
@@ -2782,12 +2861,18 @@ describe('Validation', () => {
 
       // Verify attachments exist in the variables
       if (variables.attachments && variables.attachments.length > 0) {
-        expect(variables.attachments[0]).toBeInstanceOf(File);
+        // Verify it's metadata, not a File object
+        expect(variables.attachments[0]).toMatchObject({
+          objectName: 'test-obj',
+          fileHash: 'test-hash',
+          mimetype: 'image/png',
+          name: 'test-image.png',
+        });
       }
 
       mutationSpy(variables);
       return Observable.of({
-        data: { createVenue: { id: 'newVenue' } },
+        data: { updateVenue: { id: 'venue1' } },
       });
     });
 
@@ -2808,9 +2893,15 @@ describe('Validation', () => {
     });
 
     // Upload a file
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
     await userEvent.upload(fileInput, file);
+
+    // Wait for upload to complete
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
 
     // Submit
     await act(async () => {
@@ -2873,7 +2964,7 @@ describe('Validation', () => {
   });
 
   test('updates venue with changed name and attachments', async () => {
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
 
     // Create a flexible mock using ApolloLink
     const mutationSpy = vi.fn().mockReturnValue(
@@ -2897,7 +2988,13 @@ describe('Validation', () => {
       expect(vars.name).toBe('New Venue Name');
       expect(vars.capacity).toBe(100);
       expect(vars.attachments).toBeDefined();
-      expect(vars.attachments[0]).toBeInstanceOf(File);
+      // Verify it's metadata, not a File object
+      expect(vars.attachments[0]).toMatchObject({
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimetype: 'image/png',
+        name: 'test-image.png',
+      });
 
       return mutationSpy();
     });
@@ -2921,6 +3018,12 @@ describe('Validation', () => {
       await userEvent.upload(fileInput, file);
     });
 
+    // Wait for upload to complete
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+      expect(screen.getByRole('img')).toBeInTheDocument();
+    });
+
     await act(async () => {
       fireEvent.click(screen.getByTestId('updateVenueBtn'));
     });
@@ -2934,7 +3037,7 @@ describe('Validation', () => {
   });
 
   test('creates venue with attachments successfully', async () => {
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
 
     const mutationSpy = vi.fn().mockReturnValue(
       Observable.of({
@@ -2959,7 +3062,13 @@ describe('Validation', () => {
       expect(vars.organizationId).toBe('orgId');
       expect(vars.attachments).toBeDefined();
       expect(vars.attachments.length).toBe(1);
-      expect(vars.attachments[0]).toBeInstanceOf(File);
+      // Verify it's metadata, not a File object
+      expect(vars.attachments[0]).toMatchObject({
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimetype: 'image/png',
+        name: 'test-image.png',
+      });
 
       return mutationSpy();
     });
@@ -2987,6 +3096,12 @@ describe('Validation', () => {
     const fileInput = screen.getByTestId('venueImgUrl');
     await act(async () => {
       await userEvent.upload(fileInput, file);
+    });
+
+    // Wait for upload to complete
+    await waitFor(() => {
+      expect(mockUploadFileToMinio).toHaveBeenCalled();
+      expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     await act(async () => {
@@ -3017,7 +3132,7 @@ describe('Validation', () => {
     );
 
     // Upload file to create blob URL
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const file = new File(['test'], 'test-image.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
     await act(async () => {
