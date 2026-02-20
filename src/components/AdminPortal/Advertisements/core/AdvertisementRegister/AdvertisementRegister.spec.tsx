@@ -1225,18 +1225,17 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(
       () => {
         expect(updateMock).toHaveBeenCalled();
+        const mockCall = updateMock.mock.calls[0][0];
+        expect(mockCall.variables).toEqual({
+          id: '1',
+          startAt: expect.any(String),
+          endAt: expect.any(String),
+        });
+        expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+        expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
       },
       { timeout: 5000 },
     );
-
-    const mockCall = updateMock.mock.calls[0][0];
-    expect(mockCall.variables).toEqual({
-      id: '1',
-      startAt: expect.any(String),
-      endAt: expect.any(String),
-    });
-    expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
-    expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
   });
 
   it('Updates advertisement name and type in edit mode', async () => {

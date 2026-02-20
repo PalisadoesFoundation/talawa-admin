@@ -24,7 +24,7 @@
 .backdrop:active,
 .backdrop:focus {
   background-color: var(--color-black-25) !important;
-  outline: none !important;
+  outline: none !important; /* intentionally suppressed: backdrop is a non-navigable overlay, not a focusable control */
   box-shadow: none !important;
 }
 
