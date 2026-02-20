@@ -25,5 +25,6 @@
   "resetButtonAriaLabel": "Intentar de nuevo",
   "fileTooLarge": "Archivo demasiado grande: {{fileName}}",
   "invalidFileType": "Tipo de archivo no válido: {{fileName}}",
-  "emptyFile": "Archivo vacío seleccionado"
+  "emptyFile": "Archivo vacío seleccionado",
+  "imageUploadError": "Error al subir el archivo, por favor inténtelo de nuevo."
 }

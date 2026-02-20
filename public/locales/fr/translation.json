@@ -1867,6 +1867,7 @@
     "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
     "invalidFileType": "Type de fichier invalide : {{fileName}}",
     "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "fileUploadError": "Erreur lors du téléchargement du fichier : {{fileName}}",
     "invalidArgumentsForAction": "Arguments invalides pour cette action.",
     "englishCaptions": "Légendes en anglais",
     "preview": "Aperçu",
