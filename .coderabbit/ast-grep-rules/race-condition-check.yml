@@ -1,0 +1,9 @@
+id: test-race-condition-expect-after-userevent
+language: typescript
+rule:
+  pattern: |
+    await userEvent.$METHOD($$$ARGS);
+    expect($$$ASSERTION)
+message: 'Wrap assertion in waitFor() after async userEvent operation'
+severity: error
+note: 'Assertions immediately after userEvent can race with DOM updates in sharded CI'
