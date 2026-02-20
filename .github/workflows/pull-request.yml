@@ -337,9 +337,9 @@ jobs:
           echo "🔍 Scanning for test quality issues..."
 
           # Check 1: vi.clearAllMocks
-          if rg -q "vi\.clearAllMocks" src/ --glob "*.spec.tsx" --glob "*.test.tsx"; then
-            echo "❌ FAIL: vi.clearAllMocks detected. Use vi.restoreAllMocks instead."
-            rg -n "vi\.clearAllMocks" src/ --glob "*.spec.tsx" --glob "*.test.tsx"
+          if rg -q "vi\.restoreAllMocks" src/ --glob "*.spec.tsx" --glob "*.spec.ts" --glob "*.test.tsx" --glob "*.test.ts"; then
+            echo "❌ FAIL: vi.restoreAllMocks detected. Use vi.clearAllMocks instead."
+            rg -n "vi\.restoreAllMocks" src/ --glob "*.spec.tsx" --glob "*.spec.ts" --glob "*.test.tsx" --glob "*.test.ts"
             exit 1
           fi
 
