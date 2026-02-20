@@ -16,6 +16,7 @@
   --color-blue-100: #d3e3fd;
   --color-blue-200: #a8c7fa;
   --color-blue-300: #6e94ff;
+  --color-blue-400: #95a5f6;
   --color-blue-500: #1778f2;
   --color-blue-600: #286fe0;
   --color-blue-700: #0056b3;
@@ -30,5 +31,17 @@
   --color-yellow-100: #fff3cd;
   --color-yellow-500: #febc59;
   --color-yellow-600: #856404;
+
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-40: rgba(255, 255, 255, 0.4);
   --color-white-60: rgba(255, 255, 255, 0.6);
+  --color-black-5: rgba(0, 0, 0, 0.05);
+  --color-black-8: rgba(0, 0, 0, 0.08);
+  --color-black-10: rgba(0, 0, 0, 0.1);
+  --color-black-15: rgba(0, 0, 0, 0.15);
+  --color-black-20: rgba(0, 0, 0, 0.2);
+  --color-black-25: rgba(0, 0, 0, 0.25);
+  --color-blue-shadow-light: rgba(149, 156, 202, 0.1);
+  --color-blue-shadow-focus: rgba(110, 148, 255, 0.25);
+  --color-blue-shadow-focus-strong: rgba(110, 148, 255, 0.35);
 }
