@@ -109,23 +109,27 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
     const modalSelector = `[data-testid="${this.pluginNotificationModal}"]`;
     const startedAt = Date.now();
     const pollIntervalMs = 250;
-    const waitForAndClose = (): Cypress.Chainable<void> => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const waitForAndClose = (): Cypress.Chainable<any> => {
       return cy.document({ log: false }).then((doc) => {
         const modal = doc.querySelector(modalSelector);
         if (!modal) {
           if (Date.now() - startedAt >= timeout) {
-            return;
+            return cy.wrap(undefined);
           }
           return cy
             .wait(pollIntervalMs, { log: false })
             .then(() => waitForAndClose());
         }
-        this.byTestId(this.closePluginNotificationButton, timeout)
+        return this.byTestId(this.closePluginNotificationButton, timeout)
           .should('be.visible')
-          .click();
+          .click()
+          .then(() => cy.wrap(undefined));
       });
     };
-    waitForAndClose();
+    // Wrap in cy.then() so the polling chain is enqueued and Cypress
+    // awaits its completion before advancing to subsequent commands.
+    cy.then(() => waitForAndClose());
     return this;
   }
 

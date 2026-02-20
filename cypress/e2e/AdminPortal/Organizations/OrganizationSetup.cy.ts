@@ -62,169 +62,171 @@ describe('Organization setup workflow', () => {
     }).then(({ orgId: preCreatedOrgId }) => {
       seededOrgId = preCreatedOrgId;
       orgIdsToCleanup.push(preCreatedOrgId);
-    });
 
-    cy.intercept('POST', '**/graphql', (req) => {
-      const body = req.body as
-        | {
-            operationName?: string;
-            variables?: {
-              role?: string;
-            };
-          }
-        | undefined;
-      const operationName = body?.operationName;
+      // Register intercepts INSIDE .then() so seededOrgId is guaranteed
+      // to be set before the createOrganization mutation can fire.
+      cy.intercept('POST', '**/graphql', (req) => {
+        const body = req.body as
+          | {
+              operationName?: string;
+              variables?: {
+                role?: string;
+              };
+            }
+          | undefined;
+        const operationName = body?.operationName;
 
-      if (
-        operationName === 'createOrganization' ||
-        operationName === 'CreateOrganization' ||
-        operationName === 'createOrganizationMutation' ||
-        operationName === 'CreateOrganizationMutation'
-      ) {
-        req.reply({
-          statusCode: 200,
-          body: {
-            data: {
-              createOrganization: {
-                id: seededOrgId,
-                __typename: 'Organization',
+        if (
+          operationName === 'createOrganization' ||
+          operationName === 'CreateOrganization'
+        ) {
+          req.reply({
+            statusCode: 200,
+            body: {
+              data: {
+                createOrganization: {
+                  id: seededOrgId,
+                  __typename: 'Organization',
+                },
               },
             },
-          },
-        });
-        return;
-      }
+          });
+          return;
+        }
 
-      if (
-        operationName === 'CreateOrganizationMembership' &&
-        body?.variables?.role === 'administrator'
-      ) {
-        req.reply({
-          statusCode: 200,
-          body: {
-            data: {
-              createOrganizationMembership: {
-                id: seededOrgId,
-                __typename: 'OrganizationMembership',
+        if (
+          operationName === 'CreateOrganizationMembership' &&
+          body?.variables?.role === 'administrator'
+        ) {
+          req.reply({
+            statusCode: 200,
+            body: {
+              data: {
+                createOrganizationMembership: {
+                  id: seededOrgId,
+                  __typename: 'OrganizationMembership',
+                },
               },
             },
-          },
-        });
-        return;
-      }
+          });
+          return;
+        }
 
-      req.continue();
-    });
-
-    setupPage.visitOrgList();
-    cy.log('Phase: Create organization');
-
-    setupPage
-      .openCreateOrganizationModal()
-      .fillCreateOrganizationForm(createOrganizationInput)
-      .submitCreateOrganizationForm();
-
-    setupPage
-      .getCreatedOrganizationIdFromPluginModal(50000)
-      .then((createdOrgId) => {
-        orgId = createdOrgId;
-        setupPage.closePluginNotificationIfOpen();
-        cy.visit(`/admin/orgdash/${orgId}`);
-        cy.url().should('include', '/admin/orgdash/');
+        req.continue();
       });
 
-    cy.log('Phase: Update settings and branding');
-    cy.intercept('POST', '**/graphql', (req) => {
-      const operationName = (req.body as { operationName?: string } | undefined)
-        ?.operationName;
-      if (operationName === 'getOrganizationBasicData') {
-        req.alias = 'getOrganizationBasicData';
-      }
-      if (operationName === 'UpdateOrganization') {
-        req.alias = 'UpdateOrganization';
-      }
-      req.continue();
+      setupPage.visitOrgList();
+      cy.log('Phase: Create organization');
+
+      setupPage
+        .openCreateOrganizationModal()
+        .fillCreateOrganizationForm(createOrganizationInput)
+        .submitCreateOrganizationForm();
+
+      setupPage
+        .getCreatedOrganizationIdFromPluginModal(50000)
+        .then((createdOrgId) => {
+          orgId = createdOrgId;
+          setupPage.closePluginNotificationIfOpen();
+          cy.visit(`/admin/orgdash/${orgId}`);
+          cy.url().should('include', '/admin/orgdash/');
+        });
+
+      cy.log('Phase: Update settings and branding');
+      cy.intercept('POST', '**/graphql', (req) => {
+        const operationName = (
+          req.body as { operationName?: string } | undefined
+        )?.operationName;
+        if (operationName === 'getOrganizationBasicData') {
+          req.alias = 'getOrganizationBasicData';
+        }
+        if (operationName === 'UpdateOrganization') {
+          req.alias = 'UpdateOrganization';
+        }
+        req.continue();
+      });
+
+      cy.then(() => {
+        organizationSettingsPage.visitPage(orgId).openGeneralTab();
+      });
+
+      cy.wait('@getOrganizationBasicData')
+        .its('response.statusCode')
+        .should('eq', 200);
+
+      organizationSettingsPage
+        .updateOrganizationName(updatedOrgName)
+        .updateOrganizationDescription(updatedDescription)
+        .updateOrganizationLocation(updatedLocation)
+        .toggleIsPublic()
+        .saveChanges();
+
+      cy.wait('@UpdateOrganization').then((interception) => {
+        expect(
+          interception.response?.body?.data?.updateOrganization?.name,
+        ).to.eq(updatedOrgName);
+      });
+      cy.assertToast(/updated/i);
+
+      // Branding step: validate organization image input behavior.
+      organizationSettingsPage
+        .uploadDisplayImageFromFixture('advertisement_banner.png')
+        .assertSelectedDisplayImage('advertisement_banner.png');
+
+      cy.createTestUser({ name: inviteeName }).then(({ userId }) => {
+        userIds.push(userId);
+      });
+
+      cy.intercept('POST', '**/graphql', (req) => {
+        const body = req.body as
+          | {
+              operationName?: string;
+              variables?: {
+                role?: string;
+              };
+            }
+          | undefined;
+        if (body?.operationName === 'allUsers') {
+          req.alias = 'allUsers';
+        }
+        if (
+          body?.operationName === 'CreateOrganizationMembership' &&
+          body.variables?.role === 'regular'
+        ) {
+          req.alias = 'CreateOrganizationMembership';
+        }
+        req.continue();
+      });
+
+      cy.log('Phase: Invite member');
+      memberManagementPage.openFromDrawer().clickAddExistingMember();
+      cy.wait('@allUsers').its('response.statusCode').should('eq', 200);
+
+      memberManagementPage.searchAndSelectUser(inviteeName);
+      cy.wait('@allUsers').its('response.statusCode').should('eq', 200);
+
+      memberManagementPage.confirmAddUser(inviteeName);
+
+      cy.wait('@CreateOrganizationMembership')
+        .its('response.statusCode')
+        .should('eq', 200);
+
+      memberManagementPage
+        .getAlert()
+        .should('be.visible')
+        .and('contain.text', 'added');
+
+      memberManagementPage.closeAddMemberModal();
+
+      // Give the server a moment to commit the membership before reloading,
+      // then reload so the local-filter DataGrid picks up the new member.
+      cy.wait(500);
+      cy.reload();
+
+      memberManagementPage
+        .searchMemberByName(inviteeName)
+        .verifyMemberInList(inviteeName);
     });
-
-    cy.then(() => {
-      organizationSettingsPage.visitPage(orgId).openGeneralTab();
-    });
-
-    cy.wait('@getOrganizationBasicData')
-      .its('response.statusCode')
-      .should('eq', 200);
-
-    organizationSettingsPage
-      .updateOrganizationName(updatedOrgName)
-      .updateOrganizationDescription(updatedDescription)
-      .updateOrganizationLocation(updatedLocation)
-      .toggleIsPublic()
-      .saveChanges();
-
-    cy.wait('@UpdateOrganization').then((interception) => {
-      expect(interception.response?.body?.data?.updateOrganization?.name).to.eq(
-        updatedOrgName,
-      );
-    });
-    cy.assertToast(/updated/i);
-
-    // Branding step: validate organization image input behavior.
-    organizationSettingsPage
-      .uploadDisplayImageFromFixture('advertisement_banner.png')
-      .assertSelectedDisplayImage('advertisement_banner.png');
-
-    cy.createTestUser({ name: inviteeName }).then(({ userId }) => {
-      userIds.push(userId);
-    });
-
-    cy.intercept('POST', '**/graphql', (req) => {
-      const body = req.body as
-        | {
-            operationName?: string;
-            variables?: {
-              role?: string;
-            };
-          }
-        | undefined;
-      if (body?.operationName === 'allUsers') {
-        req.alias = 'allUsers';
-      }
-      if (
-        body?.operationName === 'CreateOrganizationMembership' &&
-        body.variables?.role === 'regular'
-      ) {
-        req.alias = 'CreateOrganizationMembership';
-      }
-      req.continue();
-    });
-
-    cy.log('Phase: Invite member');
-    memberManagementPage.openFromDrawer().clickAddExistingMember();
-    cy.wait('@allUsers').its('response.statusCode').should('eq', 200);
-
-    memberManagementPage.searchAndSelectUser(inviteeName);
-    cy.wait('@allUsers').its('response.statusCode').should('eq', 200);
-
-    memberManagementPage.confirmAddUser(inviteeName);
-
-    cy.wait('@CreateOrganizationMembership')
-      .its('response.statusCode')
-      .should('eq', 200);
-
-    memberManagementPage
-      .getAlert()
-      .should('be.visible')
-      .and('contain.text', 'added');
-
-    memberManagementPage.closeAddMemberModal();
-
-    // The member list uses local filtering and does not refetch after
-    // adding a member. Reload so the newly added member appears.
-    cy.reload();
-
-    memberManagementPage
-      .searchMemberByName(inviteeName)
-      .verifyMemberInList(inviteeName);
   });
 
   it('shows an error for duplicate organization names', () => {
@@ -252,9 +254,7 @@ describe('Organization setup workflow', () => {
         ?.operationName;
       if (
         operationName === 'createOrganization' ||
-        operationName === 'CreateOrganization' ||
-        operationName === 'createOrganizationMutation' ||
-        operationName === 'CreateOrganizationMutation'
+        operationName === 'CreateOrganization'
       ) {
         req.reply({
           statusCode: 200,
