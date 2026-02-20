@@ -795,6 +795,45 @@ describe('OAuthCallbackPage', () => {
         );
       });
     });
+
+    it('should use window.location.origin fallback when redirectUri is not configured', async () => {
+      // Arrange
+      const nonce = 'test-fallback-nonce';
+      (window as { location: Location }).location.search =
+        `?code=code-fallback-test&state=login:GOOGLE:${nonce}`;
+
+      sessionStorage.setItem('oauth_nonce', nonce);
+
+      vi.mocked(handleOAuthLogin).mockResolvedValueOnce(mockAuthResponse);
+
+      // Temporarily override the OAUTH_PROVIDERS mock to have no redirectUri
+      const originalModule = await import('config/oauthProviders');
+      vi.mocked(originalModule).OAUTH_PROVIDERS = {
+        GOOGLE: {
+          // No redirectUri property - should use fallback
+        },
+        GITHUB: {
+          // No redirectUri property - should use fallback
+        },
+      } as typeof originalModule.OAUTH_PROVIDERS;
+
+      // Act
+      render(
+        <BrowserRouter>
+          <OAuthCallbackPage />
+        </BrowserRouter>,
+      );
+
+      // Assert - should use window.location.origin + '/auth/callback'
+      await waitFor(() => {
+        expect(handleOAuthLogin).toHaveBeenCalledWith(
+          expect.anything(),
+          'GOOGLE',
+          'code-fallback-test',
+          'http://localhost:3000/auth/callback', // From window.location.origin
+        );
+      });
+    });
   });
 
   describe('Component Rendering', () => {
