@@ -47,7 +47,12 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: string | null;
+  avatar?: {
+    objectName: string;
+    fileHash: string;
+    mimetype: string;
+    name: string;
+  } | null;
   city: string;
   countryCode: string;
   description: string;
@@ -545,8 +550,6 @@ function OrgList(): JSX.Element {
         formState={formState}
         setFormState={setFormState}
         createOrg={createOrg}
-        t={t}
-        tCommon={tCommon}
       />
       {/* Plugin Notification Modal after Org is Created */}
       <CRUDModalTemplate

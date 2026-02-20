@@ -1,14 +1,46 @@
 import React from 'react';
-import { render, screen, waitFor, RenderResult } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  RenderResult,
+  cleanup,
+} from '@testing-library/react';
 
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from '../../../../state/store'; // Update path based on your project structure
-import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
-import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on your project structure
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: { [key: string]: string } = {
+        name: 'Name',
+        description: 'Description',
+        createOrganization: 'Create Organization',
+        updateOrganization: 'Update Organization',
+        imageUploadSuccess: 'Image uploaded successfully',
+        create: 'Create',
+        update: 'Update',
+        cancel: 'Cancel',
+        close: 'Close',
+        register: 'Register',
+        saveChanges: 'Save Changes',
+        remove: 'Remove',
+        edit: 'Edit',
+      };
+      return translations[key] || key;
+    },
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
+}));
 
 /**
  * Helper to set input value natively (simulates paste behavior).
@@ -37,9 +69,10 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 const { mockUploadFileToMinio } = vi.hoisted(() => ({
-  mockUploadFileToMinio: vi
-    .fn()
-    .mockResolvedValue({ objectName: 'mocked-object-name' }),
+  mockUploadFileToMinio: vi.fn().mockResolvedValue({
+    objectName: 'mocked-object-name',
+    fileHash: 'mocked-file-hash',
+  }),
 }));
 
 vi.mock('utils/MinioUpload', () => ({
@@ -65,7 +98,7 @@ describe('OrganizationModal Component', () => {
   const formState = {
     addressLine1: '',
     addressLine2: '',
-    avatar: '',
+    avatar: null,
     city: '',
     countryCode: '',
     description: '',
@@ -79,28 +112,26 @@ describe('OrganizationModal Component', () => {
 
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'mocked-object-name',
+      fileHash: 'mocked-file-hash',
     });
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    cleanup();
   });
 
   const setup = (): RenderResult => {
     return render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={formState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={formState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -136,23 +167,19 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
+      avatar: null,
     };
 
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={validFormState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={validFormState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -167,15 +194,21 @@ describe('OrganizationModal Component', () => {
   test('uploads image correctly', async () => {
     setup();
     const fileInput = screen.getByTestId('organisationImage');
-    const file = new File(['dummy content'], 'example.png', {
+    const file = new File(['dummy content'], 'test-avatar.png', {
       type: 'image/png',
     });
     await userEvent.upload(fileInput, file);
-    await waitFor(() =>
-      expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
-      ),
-    );
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+      const updater = mockSetFormState.mock.calls[0][0];
+      const result = updater(formState);
+      expect(result.avatar).toEqual({
+        objectName: 'mocked-object-name',
+        fileHash: 'mocked-file-hash',
+        mimetype: 'image/png',
+        name: 'test-avatar.png',
+      });
+    });
     expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
   });
 
@@ -220,23 +253,19 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
+      avatar: null,
     };
 
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={validFormState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={validFormState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -378,17 +407,13 @@ describe('OrganizationModal Component', () => {
       return render(
         <Provider store={store}>
           <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationModal
-                showModal={true}
-                toggleModal={mockToggleModal}
-                formState={completeFormState}
-                setFormState={mockSetFormState}
-                createOrg={mockCreateOrg}
-                t={(key) => key}
-                tCommon={(key) => key}
-              />
-            </I18nextProvider>
+            <OrganizationModal
+              showModal={true}
+              toggleModal={mockToggleModal}
+              formState={completeFormState}
+              setFormState={mockSetFormState}
+              createOrg={mockCreateOrg}
+            />
           </BrowserRouter>
         </Provider>,
       );
@@ -460,16 +485,24 @@ describe('OrganizationModal Component', () => {
   });
   test('should handle valid image upload', async () => {
     setup();
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    const file = new File(['dummy content'], 'test-avatar.png', {
+      type: 'image/png',
+    });
     const fileInput = screen.getByTestId('organisationImage');
 
     await userEvent.upload(fileInput, file);
 
     // Use waitFor to handle async state updates after upload
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
-      );
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+      const updater = mockSetFormState.mock.calls[0][0];
+      const result = updater(formState);
+      expect(result.avatar).toEqual({
+        objectName: 'mocked-object-name',
+        fileHash: 'mocked-file-hash',
+        mimetype: 'image/png',
+        name: 'test-avatar.png',
+      });
     });
   });
 
@@ -490,7 +523,10 @@ describe('OrganizationModal Component', () => {
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
+      expect(toastMocks.error).toHaveBeenCalledWith({
+        key: 'invalidFileType',
+        namespace: 'errors',
+      });
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -530,17 +566,13 @@ describe('OrganizationModal Component', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={formState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={formState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -552,17 +584,13 @@ describe('OrganizationModal Component', () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={false}
-              toggleModal={mockToggleModal}
-              formState={formState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={false}
+            toggleModal={mockToggleModal}
+            formState={formState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -602,23 +630,19 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
+      avatar: null,
     };
 
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={validFormState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
-            />
-          </I18nextProvider>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={validFormState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+          />
         </BrowserRouter>
       </Provider>,
     );
@@ -641,7 +665,10 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('fileTooLarge');
+      expect(toastMocks.error).toHaveBeenCalledWith({
+        key: 'fileTooLarge',
+        namespace: 'errors',
+      });
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -649,16 +676,34 @@ describe('OrganizationModal Component', () => {
 
   test('should show success toast on successful upload', async () => {
     setup();
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    const file = new File(['dummy content'], 'test-avatar.png', {
+      type: 'image/png',
+    });
     const fileInput = screen.getByTestId('organisationImage');
 
     await userEvent.upload(fileInput, file);
 
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
-      expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
+      expect(toastMocks.success).toHaveBeenCalledWith(
+        'Image uploaded successfully',
+      );
+
+      // setFormState is called with a functional update for avatar
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+      // Execute the updater to verify the result
+      const updater = mockSetFormState.mock.calls[0][0];
+      // We pass the current formState to the updater
+      const result = updater(formState);
+      expect(result).toEqual(
+        expect.objectContaining({
+          avatar: {
+            objectName: 'mocked-object-name',
+            fileHash: 'mocked-file-hash',
+            mimetype: 'image/png',
+            name: 'test-avatar.png',
+          },
+        }),
       );
     });
   });
@@ -673,7 +718,10 @@ describe('OrganizationModal Component', () => {
 
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(toastMocks.error).toHaveBeenCalledWith({
+        key: 'imageUploadError',
+        namespace: 'errors',
+      });
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
   });

@@ -44,8 +44,9 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import { InterfaceQueryVenueListItem } from 'utils/interfaces';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
+import { useMinioUpload } from 'utils/MinioUpload';
+import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -60,7 +61,12 @@ interface InterfaceVenueFormState {
   description: string;
   capacity: string;
   objectName: string;
-  attachments?: File[];
+  attachments?: {
+    objectName: string;
+    fileHash: string;
+    mimetype: string;
+    name: string;
+  }[];
 }
 
 const VenueModal = ({
@@ -93,6 +99,9 @@ const VenueModal = ({
   const [mutate, { loading }] = useMutation(
     edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION,
   );
+
+  // MinIO upload hook
+  const { uploadFileToMinio } = useMinioUpload();
 
   /**
    * Handles form submission to create or update a venue.
@@ -322,13 +331,30 @@ const VenueModal = ({
       if (imagePreviewUrl && imagePreviewUrl.startsWith('blob:')) {
         URL.revokeObjectURL(imagePreviewUrl);
       }
-      const previewUrl = URL.createObjectURL(file);
-      setImagePreviewUrl(previewUrl);
+      const newPreviewUrl = URL.createObjectURL(file);
+      setImagePreviewUrl(newPreviewUrl);
 
-      setFormState((prev) => ({
-        ...prev,
-        attachments: [file],
-      }));
+      // Upload to MinIO and store metadata
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(file, orgId);
+        const fileMetadata = {
+          objectName,
+          fileHash,
+          mimetype: file.type,
+          name: file.name,
+        };
+
+        setFormState((prev) => ({
+          ...prev,
+          attachments: [...(prev.attachments || []), fileMetadata],
+        }));
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        NotificationToast.error({
+          key: 'imageUploadError',
+          namespace: 'errors',
+        });
+      }
     }
   };
   return (
