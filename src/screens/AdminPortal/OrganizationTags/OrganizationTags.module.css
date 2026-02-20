@@ -118,7 +118,8 @@
 
 .createButton:hover {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) color-mix(in srgb, var(--color-black) 30%, transparent);
+    var(--border-shadow-xs)
+    color-mix(in srgb, var(--color-black) 30%, transparent);
   background-color: var(--color-gray-50);
   color: var(--color-gray-700);
   border: var(--border-1) solid var(--color-gray-700);
@@ -135,7 +136,8 @@
   margin-bottom: var(--space-4);
   background-color: var(--color-white);
   border: var(--border-1) solid var(--color-gray-200);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg) color-mix(in srgb, var(--color-black) 10%, transparent);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black) 10%, transparent);
 }
 
 .inputField::placeholder {
