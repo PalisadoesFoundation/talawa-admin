@@ -1208,22 +1208,35 @@ describe('Testing Advertisement Register Component', () => {
     });
     await userEvent.click(screen.getByTestId('editBtn'));
 
+    await waitFor(() => {
+      expect(screen.getByTestId('advertisementStartDate')).toBeInTheDocument();
+    });
+
     const startDateField = screen.getByTestId('advertisementStartDate');
     await userEvent.clear(startDateField);
     await userEvent.type(startDateField, newStartDate);
 
+    await waitFor(() => {
+      expect(startDateField).toHaveValue(newStartDate);
+    });
+
     await userEvent.click(screen.getByText(translations.saveChanges));
 
-    await waitFor(() => {
-      const mockCall = updateMock.mock.calls[0][0];
-      expect(mockCall.variables).toEqual({
-        id: '1',
-        startAt: expect.any(String),
-        endAt: expect.any(String),
-      });
-      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
-      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
+    await waitFor(
+      () => {
+        expect(updateMock).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
+
+    const mockCall = updateMock.mock.calls[0][0];
+    expect(mockCall.variables).toEqual({
+      id: '1',
+      startAt: expect.any(String),
+      endAt: expect.any(String),
     });
+    expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+    expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
   });
 
   it('Updates advertisement name and type in edit mode', async () => {
