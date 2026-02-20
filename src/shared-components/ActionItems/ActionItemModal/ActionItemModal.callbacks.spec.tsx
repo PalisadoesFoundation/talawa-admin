@@ -65,30 +65,19 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-function ModalStub({
-  children,
-  onSubmit,
-}: {
-  children: React.ReactNode;
-  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
-}): JSX.Element {
-  return (
-    <form data-testid="actionItemModal" onSubmit={onSubmit}>
-      {children}
-      <button data-testid="modal-submit-btn" type="submit">
-        submit
-      </button>
-    </form>
-  );
-}
+vi.mock('shared-components/CRUDModalTemplate/CreateModal', async () => {
+  const module = await import('./ModalStub');
+  return {
+    CreateModal: module.default,
+  };
+});
 
-vi.mock('shared-components/CRUDModalTemplate/CreateModal', () => ({
-  CreateModal: ModalStub,
-}));
-
-vi.mock('shared-components/CRUDModalTemplate/EditModal', () => ({
-  EditModal: ModalStub,
-}));
+vi.mock('shared-components/CRUDModalTemplate/EditModal', async () => {
+  const module = await import('./ModalStub');
+  return {
+    EditModal: module.default,
+  };
+});
 
 vi.mock('shared-components/DatePicker/DatePicker', () => ({
   default: ({
