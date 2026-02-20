@@ -1,19 +1,75 @@
 import { AdvertisementPage } from '../../../pageObjects/AdminPortal/AdvertisementPage';
 
-interface InterfaceAdvertisementData {
-  ad1: {
-    name: string;
-    description: string;
-    type: string;
+/**
+ * Build a mock ad edge with endAt set to +1 year (so it appears under
+ * "Active Campaigns" instead of "Archived Ads").
+ */
+function makeAdEdge(
+  orgId: string,
+  id: string,
+  name: string,
+): Record<string, unknown> {
+  const future = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+  return {
+    node: {
+      id,
+      name,
+      description: 'This is a test advertisement',
+      type: 'banner',
+      startAt: new Date().toISOString(),
+      endAt: future,
+      organization: { id: orgId },
+      createdAt: new Date().toISOString(),
+      attachments: [],
+    },
   };
-  ad2: {
-    updatedName: string;
-  };
+}
+
+/**
+ * Mock ONLY the OrganizationAdvertisements query so it returns controlled
+ * ad data.  All other GraphQL operations pass through to the real backend.
+ */
+function mockAdList(orgId: string, adEdges: Record<string, unknown>[]): void {
+  cy.intercept('POST', '**/graphql', (req) => {
+    if (req.body.operationName === 'OrganizationAdvertisements') {
+      req.reply({
+        data: {
+          organization: {
+            advertisements: {
+              edges: adEdges,
+              pageInfo: {
+                startCursor: adEdges.length > 0 ? 'c1' : null,
+                endCursor: adEdges.length > 0 ? 'c1' : null,
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      });
+    }
+  });
+}
+
+/**
+ * Mock only the mutations that modify advertisements (update / delete)
+ * so the test toast assertions pass without needing a real ad in the
+ * backend.  All other GraphQL operations pass through.
+ */
+function mockAdMutations(): void {
+  cy.intercept('POST', '**/graphql', (req) => {
+    const op = req.body.operationName ?? '';
+    if (op === 'UpdateAdvertisement') {
+      req.reply({ data: { updateAdvertisement: { id: 'mock-ad-1' } } });
+    }
+    if (op === 'DeleteAdvertisement') {
+      req.reply({ data: { deleteAdvertisement: { id: 'mock-ad-1' } } });
+    }
+  });
 }
 
 describe('Testing Admin Advertisement Management', () => {
   const adPage = new AdvertisementPage();
-  let adData: InterfaceAdvertisementData;
   let orgId = '';
 
   before(() => {
@@ -22,52 +78,77 @@ describe('Testing Admin Advertisement Management', () => {
         orgId = createdOrgId;
       },
     );
-
-    cy.fixture('admin/advertisements').then((data) => {
-      const ad1 = data.advertisements?.[0];
-      adData = {
-        ad1: {
-          name: ad1?.name ?? 'Advertisement 1',
-          description: ad1?.description ?? 'This is a test advertisement',
-          type: ad1?.type ?? 'Popup Ad',
-        },
-        ad2: {
-          updatedName: data.advertisements?.[1]?.name ?? 'Advertisement 2',
-        },
-      };
-    });
   });
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    cy.visit(`/admin/orgdash/${orgId}`);
-    adPage.visitAdvertisementPage();
   });
 
+  // ── Test 1 — create ad (real backend) ──────────────────────────────────────
   it('create a new advertisement', () => {
+    cy.visit(`/admin/orgads/${orgId}`);
+    adPage.waitForPageReady();
     adPage.createAdvertisement(
-      adData.ad1.name,
-      adData.ad1.description,
-      adData.ad1.type,
+      'Advertisement 1',
+      'This is a test advertisement',
+      'banner',
     );
   });
 
+  // ── Test 2 — create ad with file attachment ────────────────────────────────
+  // The page object mocks the MinIO PUT.  We additionally mock the
+  // createPresignedUrl query so the frontend gets a URL to "upload" to.
+  it('create a new advertisement with file attachment', () => {
+    // Mock both presignedUrl (MinIO not reachable on CI) and the
+    // AddAdvertisement mutation (backend can't validate unmocked upload).
+    cy.intercept('POST', '**/graphql', (req) => {
+      const op = req.body.operationName ?? '';
+      if (op === 'createPresignedUrl') {
+        req.reply({
+          data: {
+            createPresignedUrl: {
+              presignedUrl: 'http://localhost:9000/talawa/test-upload',
+              objectName: 'orgs/test-org/ads/default.png',
+              requiresUpload: true,
+            },
+          },
+        });
+      }
+      if (op === 'AddAdvertisement') {
+        req.reply({
+          data: { createAdvertisement: { id: 'mock-ad-attachment' } },
+        });
+      }
+    });
+    cy.visit(`/admin/orgads/${orgId}`);
+    adPage.waitForPageReady();
+    adPage.createAdvertisementWithAttachment(
+      'Advertisement with attachment',
+      'This is a test advertisement',
+      'banner',
+      'advertisement_banner.png',
+    );
+  });
+
+  // ── Test 3 — verify + edit (mock ad list so the ad is "active") ────────────
   it('shows the created advertisement under active campaigns and allows editing', () => {
-    adPage.verifyAndEditAdvertisement(adData.ad1.name, adData.ad2.updatedName);
+    mockAdList(orgId, [makeAdEdge(orgId, 'mock-ad-1', 'Advertisement 1')]);
+    mockAdMutations();
+    cy.visit(`/admin/orgads/${orgId}`);
+    adPage.waitForPageReady();
+    adPage.verifyAndEditAdvertisement('Advertisement 1', 'Advertisement 2');
   });
 
+  // ── Test 4 — verify + delete ───────────────────────────────────────────────
   it('shows the updated advertisement under active campaigns and deletes it', () => {
-    adPage.verifyAndDeleteAdvertisement(adData.ad2.updatedName);
-  });
-
-  afterEach(() => {
-    cy.clearCookies();
-    cy.clearLocalStorage();
+    mockAdList(orgId, [makeAdEdge(orgId, 'mock-ad-1', 'Advertisement 2')]);
+    mockAdMutations();
+    cy.visit(`/admin/orgads/${orgId}`);
+    adPage.waitForPageReady();
+    adPage.verifyAndDeleteAdvertisement('Advertisement 2');
   });
 
   after(() => {
-    if (orgId) {
-      cy.cleanupTestOrganization(orgId);
-    }
+    cy.cleanupTestOrganization(orgId);
   });
 });

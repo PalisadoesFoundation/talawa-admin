@@ -660,7 +660,8 @@
     "Workshops": "Talleres",
     "selectMonth": "Seleccionar mes",
     "selectDay": "Seleccionar día",
-    "selectYear": "Seleccionar año"
+    "selectYear": "Seleccionar año",
+    "selectWeek": "Seleccionar semana"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -1853,6 +1854,7 @@
     "advertisementImageAlt": "Imagen publicitaria #{{index}} para {{name}}",
     "invalidFileType": "Tipo de archivo no válido: {{fileName}}",
     "fileTooLarge": "Archivo demasiado grande: {{fileName}}",
+    "fileUploadError": "Error al subir archivo: {{fileName}}",
     "invalidArgumentsForAction": "Argumentos no válidos para esta acción.",
     "englishCaptions": "Subtítulos en inglés",
     "preview": "Vista previa",
@@ -2604,5 +2606,8 @@
       "sun": "D"
     },
     "expandDay": "Expandir día"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Vista de calendario semanal"
   }
 }

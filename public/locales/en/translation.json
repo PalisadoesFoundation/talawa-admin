@@ -665,7 +665,8 @@
     "Workshops": "Workshops",
     "selectMonth": "Select Month",
     "selectDay": "Select Day",
-    "selectYear": "Select Year"
+    "selectYear": "Select Year",
+    "selectWeek": "Select Week"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -1853,6 +1854,7 @@
     "advertisementImageAlt": "Advertisement image #{{index}} for {{name}}",
     "invalidFileType": "Invalid file type: {{fileName}}",
     "fileTooLarge": "File too large: {{fileName}}",
+    "fileUploadError": "Error uploading file: {{fileName}}",
     "invalidArgumentsForAction": "Invalid arguments for this action.",
     "englishCaptions": "English captions",
     "preview": "Preview",
@@ -2604,5 +2606,8 @@
       "sun": "S"
     },
     "expandDay": "Expand day"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Weekly calendar view"
   }
 }

@@ -665,7 +665,8 @@
     "Workshops": "Ateliers",
     "selectMonth": "Sélectionner le mois",
     "selectDay": "Sélectionner le jour",
-    "selectYear": "Sélectionner l’année"
+    "selectYear": "Sélectionner l’année",
+    "selectWeek": "Sélectionner la semaine"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -1870,6 +1871,7 @@
     "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
     "invalidFileType": "Type de fichier invalide : {{fileName}}",
     "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "fileUploadError": "Erreur lors du téléchargement du fichier : {{fileName}}",
     "invalidArgumentsForAction": "Arguments invalides pour cette action.",
     "englishCaptions": "Légendes en anglais",
     "preview": "Aperçu",
@@ -2604,5 +2606,8 @@
       "sun": "D"
     },
     "expandDay": "Développer le jour"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Vue du calendrier hebdomadaire"
   }
 }

@@ -677,7 +677,8 @@
     "Workshops": "कार्यशालाएँ",
     "selectMonth": "महीना चुनें",
     "selectDay": "दिन चुनें",
-    "selectYear": "वर्ष चुनें"
+    "selectYear": "वर्ष चुनें",
+    "selectWeek": "सप्ताह चुनें"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -1866,6 +1867,7 @@
     "advertisementImageAlt": "विज्ञापन छवि #{{index}} {{name}} के लिए",
     "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
     "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+    "fileUploadError": "फ़ाइल अपलोड करने में त्रुटि: {{fileName}}",
     "invalidArgumentsForAction": "इस क्रिया के लिए अमान्य तर्क।",
     "englishCaptions": "अंग्रेज़ी कैप्शन",
     "preview": "पूर्वावलोकन",
@@ -2605,5 +2607,8 @@
       "sun": "रवि"
     },
     "expandDay": "दिन विस्तारित करें"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "साप्ताहिक कैलेंडर दृश्य"
   }
 }

@@ -665,7 +665,8 @@
     "Workshops": "研讨会",
     "selectMonth": "选择月份",
     "selectDay": "选择日期",
-    "selectYear": "选择年份"
+    "selectYear": "选择年份",
+    "selectWeek": "选择周"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -1870,6 +1871,7 @@
     "advertisementImageAlt": "廣告圖片 #{{index}} 用於 {{name}}",
     "invalidFileType": "無效的文件類型：{{fileName}}",
     "fileTooLarge": "文件太大：{{fileName}}",
+    "fileUploadError": "文件上传错误：{{fileName}}",
     "invalidArgumentsForAction": "此操作的參數無效。",
     "englishCaptions": "英文字幕",
     "preview": "預覽",
@@ -2604,5 +2606,8 @@
       "sun": "日"
     },
     "expandDay": "展开日期"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "每周日历视图"
   }
 }
