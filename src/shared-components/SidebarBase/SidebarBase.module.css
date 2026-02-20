@@ -3,7 +3,7 @@
   min-height: 100%;
   position: fixed;
   top: 0;
-  left: 0;
+  left: var(--space-0);
   bottom: 0;
   z-index: 100;
   display: flex;
@@ -19,7 +19,7 @@
   width: calc(var(--space-20) + var(--space-8));
   position: fixed;
   top: 0;
-  left: 0;
+  left: var(--space-0);
   bottom: 0;
   animation: comeToRightBigScreen 0.5s ease-in-out;
 }
@@ -232,19 +232,19 @@
 }
 
 .hamburgerIconCollapsed {
-  margin-left: 0;
+  margin-left: var(--space-0);
 }
 
 .collapsedDrawer {
-  width: var(--sidebar-collapsed-width);
-  min-width: var(--sidebar-collapsed-width);
-  max-width: var(--sidebar-collapsed-width);
+  width: var(--space-12);
+  min-width: var(--space-12);
+  max-width: var(--space-12);
   overflow-x: hidden !important;
 }
 
 .leftDrawer.collapsedDrawer {
-  width: var(--sidebar-collapsed-width) !important;
-  max-width: var(--sidebar-collapsed-width);
+  width: var(--space-12) !important;
+  max-width: var(--space-12);
 }
 
 .sidebarText {
@@ -255,7 +255,7 @@
 }
 
 .expandedDrawer {
-  width: var(--sidebar-expanded-width);
+  width: var(--space-21);
   overflow-x: hidden !important;
 }
 
@@ -340,7 +340,7 @@
 @media (max-width: 820px) {
   .leftDrawer.expandedDrawer {
     width: 100%;
-    left: 0;
+    left: var(--space-0);
     right: 0;
   }
 
@@ -353,7 +353,7 @@
 
   .inactiveDrawer {
     opacity: 0;
-    left: 0;
+    left: var(--space-0);
     z-index: -1;
     animation: closeDrawer 0.2s ease-in-out;
   }
@@ -365,13 +365,13 @@
   }
 
   100% {
-    left: 0;
+    left: var(--space-0);
   }
 }
 
 @keyframes goToLeftBigScreen {
   0% {
-    left: 0;
+    left: var(--space-0);
   }
 
   100% {
