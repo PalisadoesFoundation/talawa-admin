@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import ItemModal from './ActionItemModal';
@@ -23,6 +23,11 @@ type CallbackTracker = {
   comparatorCalls: number;
   volunteerFallbackCalls: number;
   categoryNullOnChangeCalls: number;
+  updateForInstanceCalls: number;
+  lastUpdateForInstanceInput?: Record<string, unknown>;
+  forceUndefinedDateOutput: boolean;
+  forceUndefinedPreCompletion: boolean;
+  forcedDateOutputCalls: number;
 };
 
 function createCallbackTracker(): CallbackTracker {
@@ -31,10 +36,14 @@ function createCallbackTracker(): CallbackTracker {
     comparatorCalls: 0,
     volunteerFallbackCalls: 0,
     categoryNullOnChangeCalls: 0,
+    updateForInstanceCalls: 0,
+    forceUndefinedDateOutput: false,
+    forceUndefinedPreCompletion: false,
+    forcedDateOutputCalls: 0,
   };
 }
 
-var callbackTracker: CallbackTracker | undefined;
+let callbackTracker: CallbackTracker | undefined;
 
 function getCallbackTracker(): CallbackTracker {
   if (!callbackTracker) {
@@ -56,8 +65,21 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-function ModalStub({ children }: { children: React.ReactNode }): JSX.Element {
-  return <form data-testid="actionItemModal">{children}</form>;
+function ModalStub({
+  children,
+  onSubmit,
+}: {
+  children: React.ReactNode;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+}): JSX.Element {
+  return (
+    <form data-testid="actionItemModal" onSubmit={onSubmit}>
+      {children}
+      <button data-testid="modal-submit-btn" type="submit">
+        submit
+      </button>
+    </form>
+  );
 }
 
 vi.mock('shared-components/CRUDModalTemplate/CreateModal', () => ({
@@ -78,10 +100,77 @@ vi.mock('shared-components/DatePicker/DatePicker', () => ({
   }) => {
     React.useEffect(() => {
       // Intentional one-time callback execution to cover DatePicker onChange paths.
-      getCallbackTracker().datePickerOnChange += 1;
+      const tracker = getCallbackTracker();
+      tracker.datePickerOnChange += 1;
+
+      if (tracker.forceUndefinedDateOutput) {
+        tracker.forcedDateOutputCalls += 1;
+        onChange?.({
+          toDate: () => 0,
+        });
+        return;
+      }
+
       onChange?.(dayjs(FIXED_UTC));
     }, []);
-    return <input data-testid={dataTestId || 'assignmentDate'} />;
+    return (
+      <button
+        data-testid={dataTestId || 'assignmentDate'}
+        type="button"
+        onClick={() => {
+          const tracker = getCallbackTracker();
+          tracker.datePickerOnChange += 1;
+          if (tracker.forceUndefinedDateOutput) {
+            tracker.forcedDateOutputCalls += 1;
+            onChange?.({
+              toDate: () => 0,
+            });
+            return;
+          }
+          onChange?.(dayjs(FIXED_UTC));
+        }}
+      >
+        date
+      </button>
+    );
+  },
+}));
+
+vi.mock('shared-components/FormFieldGroup/FormTextField', () => ({
+  FormTextField: ({
+    name,
+    onChange,
+  }: {
+    name: string;
+    onChange?: (value: string | undefined | null) => void;
+  }) => {
+    React.useEffect(() => {
+      const tracker = getCallbackTracker();
+      if (
+        tracker.forceUndefinedPreCompletion &&
+        name === 'preCompletionNotes'
+      ) {
+        onChange?.(undefined);
+      }
+      // Intentional mount-only callback execution for deterministic branch coverage.
+    }, []);
+    return (
+      <button
+        aria-label={name}
+        type="button"
+        onClick={() => {
+          const tracker = getCallbackTracker();
+          if (
+            tracker.forceUndefinedPreCompletion &&
+            name === 'preCompletionNotes'
+          ) {
+            onChange?.(undefined);
+          }
+        }}
+      >
+        field
+      </button>
+    );
   },
 }));
 
@@ -178,10 +267,23 @@ vi.mock('@apollo/client', async (importOriginal) => {
     useMutation: (mutation: unknown) => {
       if (
         mutation === CREATE_ACTION_ITEM_MUTATION ||
-        mutation === UPDATE_ACTION_ITEM_MUTATION ||
-        mutation === UPDATE_ACTION_ITEM_FOR_INSTANCE
+        mutation === UPDATE_ACTION_ITEM_MUTATION
       ) {
         return [vi.fn().mockResolvedValue({ data: {} })];
+      }
+      if (mutation === UPDATE_ACTION_ITEM_FOR_INSTANCE) {
+        return [
+          vi
+            .fn()
+            .mockImplementation(
+              (options: { variables: { input: Record<string, unknown> } }) => {
+                const tracker = getCallbackTracker();
+                tracker.updateForInstanceCalls += 1;
+                tracker.lastUpdateForInstanceInput = options.variables.input;
+                return Promise.resolve({ data: {} });
+              },
+            ),
+        ];
       }
       return [vi.fn()];
     },
@@ -193,8 +295,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  cleanup();
   vi.restoreAllMocks();
+  cleanup();
 });
 
 const createBaseProps = () => ({
@@ -287,5 +389,75 @@ describe('ActionItemModal callback coverage', () => {
     const tracker = getCallbackTracker();
     expect(tracker.datePickerOnChange).toBeGreaterThan(0);
     expect(tracker.comparatorCalls).toBeGreaterThan(0);
+  });
+
+  it('covers categoryId false branch in updateActionForInstance payload', async () => {
+    const tracker = getCallbackTracker();
+    tracker.forceUndefinedDateOutput = true;
+    tracker.forceUndefinedPreCompletion = true;
+
+    const sharedActionItem = {
+      ...groupActionItem,
+      isTemplate: true,
+      isInstanceException: true,
+      category: null,
+    };
+
+    const baseProps = createBaseProps();
+
+    const { rerender } = render(
+      <ItemModal
+        {...baseProps}
+        editMode={true}
+        actionItem={sharedActionItem}
+        isRecurring={true}
+      />,
+    );
+
+    rerender(
+      <ItemModal
+        {...baseProps}
+        editMode={false}
+        actionItem={sharedActionItem}
+        isRecurring={true}
+      />,
+    );
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    await act(async () => {
+      (screen.getByTestId('assignmentDate') as HTMLButtonElement).click();
+      await Promise.resolve();
+    });
+
+    await act(async () => {
+      (
+        screen.getByLabelText('preCompletionNotes') as HTMLButtonElement
+      ).click();
+      await Promise.resolve();
+    });
+
+    rerender(
+      <ItemModal
+        {...baseProps}
+        editMode={true}
+        actionItem={sharedActionItem}
+        isRecurring={true}
+      />,
+    );
+
+    const form = screen.getByTestId('actionItemModal');
+    await act(async () => {
+      form.dispatchEvent(
+        new Event('submit', { bubbles: true, cancelable: true }),
+      );
+      await Promise.resolve();
+    });
+
+    expect(tracker.updateForInstanceCalls).toBeGreaterThan(0);
+    expect(tracker.forcedDateOutputCalls).toBeGreaterThan(0);
+    expect(tracker.lastUpdateForInstanceInput).toBeDefined();
   });
 });
