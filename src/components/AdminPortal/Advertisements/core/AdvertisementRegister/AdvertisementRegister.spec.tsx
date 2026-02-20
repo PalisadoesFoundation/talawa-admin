@@ -73,7 +73,6 @@ const translations = {
 describe('Testing Advertisement Register Component', () => {
   beforeEach(() => {
     mockUseMutation = vi.fn();
-    vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'test-object',
@@ -81,7 +80,6 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
     cleanup();
   });
@@ -158,9 +156,8 @@ describe('Testing Advertisement Register Component', () => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
         `Invalid arguments for this action.`,
       );
+      expect(setTimeoutSpy).toHaveBeenCalled();
     });
-
-    expect(setTimeoutSpy).toHaveBeenCalled();
   });
 
   test('Shows error toast when image upload fails', async () => {
@@ -264,10 +261,12 @@ describe('Testing Advertisement Register Component', () => {
 
     const registerButton = await screen.findByText(translations.register);
     await userEvent.click(registerButton);
-    expect(toastErrorSpy).toHaveBeenCalledWith(
-      'End Date should be greater than Start Date',
-    );
-    expect(setTimeoutSpy).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        'End Date should be greater than Start Date',
+      );
+      expect(setTimeoutSpy).toHaveBeenCalled();
+    });
   });
 
   test('AdvertismentRegister component loads correctly in edit mode', async () => {
