@@ -1,9 +1,8 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  padding: var(--space-5) var(--space-7) var(--space-0)
-    calc(300px + var(--space-8) + var(--space-7));
+  min-height: var(--vh-100);
+  padding: var(--space-5) var(--space-7) var(--space-0) calc(300px + var(--space-8) + var(--space-7));
 }
 
 .expand {
@@ -13,15 +12,14 @@
 }
 
 .avatarStyle {
-  border-radius: 100%;
+  border-radius: var(--radius-full);
 }
 
 .profileContainer {
   border: none;
   padding: var(--space-8) var(--space-3);
   height: var(--space-10);
-  border-radius: var(--radius-md) var(--radius-none) var(--radius-none)
-    var(--radius-md);
+  border-radius: var(--radius-md) var(--radius-none) var(--radius-none) var(--radius-md);
   display: flex;
   align-items: center;
   background-color: white !important;
@@ -103,7 +101,7 @@
   top: 0;
   left: 0;
   width: var(--space-9);
-  height: 100vh;
+  height: var(--vh-100);
   z-index: 100;
   background-color: var(--color-gray-50);
   border: none;
@@ -155,8 +153,7 @@
 
 @media (max-height: 900px) {
   .pageContainer {
-    padding: var(--space-5) var(--space-7) var(--space-0)
-      calc(300px + var(--space-8));
+    padding: var(--space-5) var(--space-7) var(--space-0) calc(300px + var(--space-8));
   }
 
   .collapseSidebarButton {
