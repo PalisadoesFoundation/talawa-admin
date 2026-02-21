@@ -5,9 +5,10 @@ import {
   TextField,
   CircularProgress,
   AutocompleteValue,
+  AutocompleteRenderInputParams,
 } from '@mui/material';
 
-import type { IAutocompleteProps } from '.';
+import type { IAutocompleteProps } from 'types/shared-components/Autocomplete/interface';
 
 /**
  * Shared Autocomplete Component
@@ -102,10 +103,10 @@ export const Autocomplete = <
     ...restAutocompleteProps
   } = props;
 
+  const hasWarnedRef = React.useRef(false);
+
   // Default renderInput using TextField
-  const defaultRenderInput = (
-    params: import('@mui/material').AutocompleteRenderInputParams,
-  ) => (
+  const defaultRenderInput = (params: AutocompleteRenderInputParams) => (
     <TextField
       {...params}
       {...textFieldProps}
@@ -114,19 +115,22 @@ export const Autocomplete = <
       error={error}
       helperText={helperText}
       data-testid={`${dataTestId}-input`}
-      InputProps={{
-        ...params.InputProps,
-        ...textFieldProps?.InputProps,
-        endAdornment: (
-          <>
-            {loading && <CircularProgress color="inherit" size={20} />}
-            {params.InputProps.endAdornment}
-          </>
-        ),
+      slotProps={{
+        input: {
+          ...params.InputProps,
+          ...textFieldProps?.InputProps,
+          endAdornment: (
+            <>
+              {loading && <CircularProgress color="inherit" size={20} />}
+              {params.InputProps.endAdornment}
+              {textFieldProps?.InputProps?.endAdornment}
+            </>
+          ),
+        },
       }}
     />
   );
-  const hasWarnedRef = React.useRef(false);
+
   return (
     <MuiAutocomplete<T, TMultiple, TDisableClearable, TFreeSolo>
       id={id}

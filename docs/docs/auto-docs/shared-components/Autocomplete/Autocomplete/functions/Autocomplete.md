@@ -6,7 +6,7 @@
 
 > **Autocomplete**\<`T`, `TMultiple`, `TDisableClearable`, `TFreeSolo`\>(`props`): `ReactElement`
 
-Defined in: [src/shared-components/Autocomplete/Autocomplete.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Autocomplete/Autocomplete.tsx#L65)
+Defined in: [src/shared-components/Autocomplete/Autocomplete.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Autocomplete/Autocomplete.tsx#L66)
 
 Shared Autocomplete Component
 

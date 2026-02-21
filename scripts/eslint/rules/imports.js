@@ -212,13 +212,13 @@ const restrictedImports = [
     name: '@mui/material',
     importNames: ['Autocomplete'],
     message:
-      'Do not import Autocomplete from @mui/material. Use the shared Autocomplete component.',
+      'Do not import Autocomplete from `@mui/material`. Use the shared Autocomplete component from src/shared-components/Autocomplete/ instead.',
   },
   {
     id: 'mui-autocomplete-path',
     name: '@mui/material/Autocomplete',
     message:
-      'Do not import Autocomplete from @mui/material. Use the shared Autocomplete component.',
+    'Do not import Autocomplete from `@mui/material`. Use the shared Autocomplete component from src/shared-components/Autocomplete/ instead.',
   },
 ];
 
