@@ -23,13 +23,22 @@ export type Advertisement = {
   startAt: Date;
   type: AdvertisementType;
   updatedAt: Date;
-  attachments?: AdvertisementAttachment[];
+  attachments?: FileMetadataAttachment[];
 };
 
 // Advertisement Attachment Type
 export type AdvertisementAttachment = {
   url: string;
-  mimeType: string;
+  mimetype: string;
+};
+
+// File Metadata Attachment Type (for MinIO uploads)
+export type FileMetadataAttachment = {
+  objectName: string;
+  fileHash: string;
+  mimetype: string;
+  name: string;
+  previewUrl?: string;
 };
 
 export type AdvertisementEdge = {
@@ -50,7 +59,7 @@ export type CreateAdvertisementInput = {
   organizationId: string;
   startAt: Date;
   endAt: Date;
-  attachments: File[];
+  attachments: FileMetadataAttachment[];
 };
 
 export type CreateAdvertisementPayload = {

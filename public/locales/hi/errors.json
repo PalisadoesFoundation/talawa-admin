@@ -25,5 +25,6 @@
   "resetButtonAriaLabel": "फिर से प्रयास करें",
   "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
   "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
-  "emptyFile": "खाली फ़ाइल चुनी गई"
+  "emptyFile": "खाली फ़ाइल चुनी गई",
+  "imageUploadError": "फ़ाइल अपलोड करने में त्रुटि, कृपया पुनः प्रयास करें।"
 }

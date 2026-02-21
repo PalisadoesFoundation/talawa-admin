@@ -12,6 +12,8 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+
+export { ORGANIZATION_MEMBERS };
 import dayjs from 'dayjs';
 
 /**

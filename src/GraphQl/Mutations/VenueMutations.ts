@@ -6,7 +6,7 @@ import gql from 'graphql-tag';
  * @param name - Name of the venue.
  * @param capacity - Ineteger representing capacity of venue.
  * @param description - Description of the venue.
- * @param file - Image file for the venue.
+ * @param attachments - Image file metadata for the venue.
  * @param organizationId - Organization to which the ActionItemCategory belongs.
  */
 
@@ -16,7 +16,7 @@ export const CREATE_VENUE_MUTATION = gql`
     $description: String
     $organizationId: ID!
     $capacity: Int
-    $attachments: [Upload!]
+    $attachments: [FileMetadataInput!]
   ) {
     createVenue(
       input: {
@@ -47,7 +47,7 @@ export const UPDATE_VENUE_MUTATION = gql`
     $name: String
     $description: String
     $capacity: Int
-    $attachments: [Upload!]
+    $attachments: [FileMetadataInput!]
   ) {
     updateVenue(
       input: {
