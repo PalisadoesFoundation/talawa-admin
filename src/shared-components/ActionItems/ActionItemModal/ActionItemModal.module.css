@@ -61,7 +61,7 @@
 .addButton:disabled:focus-visible {
   outline: var(--border-2) solid var(--color-gray-400);
   outline-offset: var(--shadow-offset-sm);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-400);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-300);
 }
 
 .autocompleteWrapper {
