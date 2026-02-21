@@ -160,12 +160,14 @@ const restrictedImports = [
       'Do not import Chip from @mui/material. Use the shared StatusBadge component instead.',
   },
   {
+    id: 'mui-textfield',
     name: '@mui/material',
     importNames: ['TextField'],
     message:
       'Do not import TextField from @mui/material. Use the shared FormFieldGroup component instead.',
   },
   {
+    id: 'mui-textfield-path',
     name: '@mui/material/TextField',
     message:
       'Do not import TextField from @mui/material. Use the shared FormFieldGroup component instead.',
@@ -210,13 +212,13 @@ const restrictedImports = [
     name: '@mui/material',
     importNames: ['Autocomplete'],
     message:
-      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead.',
+      'Do not import Autocomplete from `@mui/material`. Use the shared Autocomplete component from src/shared-components/Autocomplete/ instead.',
   },
   {
     id: 'mui-autocomplete-path',
     name: '@mui/material/Autocomplete',
     message:
-      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead.',
+    'Do not import Autocomplete from `@mui/material`. Use the shared Autocomplete component from src/shared-components/Autocomplete/ instead.',
   },
 ];
 

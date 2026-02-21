@@ -125,6 +125,15 @@ export const wrapperExemptions = [
     ],
     rules: restrictImportsExcept(['mui-autocomplete', 'mui-autocomplete-path']),
   },
+  createWrapperExemption({
+    componentName: 'Autocomplete',
+    allowedIds: [
+      'mui-autocomplete',
+      'mui-autocomplete-path',
+      'mui-textfield',
+      'mui-textfield-path',
+    ],
+  }),
 ];
 
 export const avatarExemption = createWrapperExemption({
