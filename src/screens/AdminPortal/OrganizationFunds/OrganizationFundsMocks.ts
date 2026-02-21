@@ -129,35 +129,12 @@ export const MOCKS = [
         name: 'Fund 2',
         organizationId: 'orgId',
         isTaxDeductible: false,
-        isArchived: false,
-        isDefault: true,
       },
     },
     result: {
       data: {
         createFund: {
           id: '01959665-9bda-7d65-906d-e37c4a821f39',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_FUND_MUTATION,
-      variables: {
-        input: {
-          id: 'fundId',
-          name: 'Fund 2',
-          isTaxDeductible: false,
-          isArchived: true,
-          isDefault: true,
-        },
-      },
-    },
-    result: {
-      data: {
-        updateFund: {
-          id: 'fundId',
         },
       },
     },
@@ -273,8 +250,6 @@ export const MOCKS_ERROR = [
         name: 'Fund 2',
         organizationId: 'orgId',
         isTaxDeductible: false,
-        isArchived: false,
-        isDefault: true,
       },
     },
     error: new Error('Mock graphql error'),
@@ -287,22 +262,6 @@ export const MOCKS_ERROR = [
           id: 'fundId',
           name: 'Fund 2',
           isTaxDeductible: false,
-          isArchived: true,
-          isDefault: true,
-        },
-      },
-    },
-    error: new Error('Mock graphql error'),
-  },
-  {
-    request: {
-      query: UPDATE_FUND_MUTATION,
-      variables: {
-        input: {
-          id: 'fundId',
-          name: 'Fund 2',
-          isTaxDeductible: false,
-          isDefault: true,
         },
       },
     },

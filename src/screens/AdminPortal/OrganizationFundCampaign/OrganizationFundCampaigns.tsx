@@ -27,7 +27,6 @@ import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/Breadcr
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button';
-import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',

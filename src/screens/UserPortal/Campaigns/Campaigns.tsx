@@ -14,7 +14,7 @@ import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import Button from 'shared-components/Button/Button';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 
 /**
  * Extended interface for campaigns with computed status

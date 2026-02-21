@@ -126,16 +126,6 @@ const renderFundModal = (
   );
 };
 
-const mutationReturn = [
-  vi.fn().mockResolvedValue({ data: {} }),
-  {
-    loading: false,
-    called: false,
-    reset: vi.fn(),
-    client: {} as never,
-  },
-] satisfies ReturnType<typeof apollo.useMutation>;
-
 describe('FundModal', () => {
   afterEach(() => {
     cleanup();
@@ -254,9 +244,9 @@ describe('FundModal', () => {
       ...fundProps[1],
       fund: baseFund
         ? {
-          ...baseFund,
-          isArchived: true,
-        }
+            ...baseFund,
+            isArchived: true,
+          }
         : null,
       hide: vi.fn(),
       refetchFunds: vi.fn(),
@@ -284,9 +274,9 @@ describe('FundModal', () => {
       ...fundProps[1],
       fund: baseFund
         ? {
-          ...baseFund,
-          id: undefined as unknown as string,
-        }
+            ...baseFund,
+            id: undefined as unknown as string,
+          }
         : null,
       hide: vi.fn(),
       refetchFunds: vi.fn(),

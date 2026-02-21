@@ -46,7 +46,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: fund?.name ?? '',
-    fundRef: fund?.refrenceNumber ?? '',
     isDefault: fund?.isDefault ?? false,
     isTaxDeductible: fund?.isTaxDeductible ?? false,
     isArchived: fund?.isArchived ?? false,
@@ -54,10 +53,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
   const [touched, setTouched] = useState<{
     fundName: boolean;
-    fundRef: boolean;
   }>({
     fundName: false,
-    fundRef: false,
   });
 
   // Validation logic
@@ -65,15 +62,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     touched.fundName && !formState.fundName.trim()
       ? tCommon('required')
       : undefined;
-  const fundRefError =
-    touched.fundRef && !formState.fundRef.trim()
-      ? tCommon('required')
-      : undefined;
 
   useEffect(() => {
     setFormState({
       fundName: fund?.name ?? '',
-      fundRef: fund?.refrenceNumber ?? '',
       isDefault: fund?.isDefault ?? false,
       isTaxDeductible: fund?.isTaxDeductible ?? false,
       isArchived: fund?.isArchived ?? false,
@@ -83,7 +75,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   // Reset touched state when modal opens to prevent stale validation errors
   useEffect(() => {
     if (isOpen) {
-      setTouched({ fundName: false, fundRef: false });
+      setTouched({ fundName: false });
     }
   }, [isOpen]);
 
@@ -96,7 +88,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, isDefault, isTaxDeductible, isArchived } = formState;
+    const { fundName, isTaxDeductible } = formState;
 
     try {
       await createFund({
@@ -104,14 +96,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           name: fundName,
           organizationId: orgId,
           isTaxDeductible,
-          isArchived,
-          isDefault,
         },
       });
 
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         isTaxDeductible: false,
         isArchived: false,
@@ -129,7 +118,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, isTaxDeductible, isDefault } = formState;
+    if (!fund?.id) return;
+    const { fundName, isTaxDeductible } = formState;
 
     try {
       const updatedFields: { [key: string]: string | boolean } = {};
@@ -139,9 +129,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       }
       if (isTaxDeductible !== fund?.isTaxDeductible) {
         updatedFields.isTaxDeductible = isTaxDeductible;
-      }
-      if (isDefault !== fund?.isDefault) {
-        updatedFields.isDefault = isDefault;
       }
 
       if (Object.keys(updatedFields).length === 0) {
@@ -160,7 +147,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         isTaxDeductible: false,
         isArchived: false,
@@ -187,7 +173,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         isTaxDeductible: false,
         isArchived: false,
@@ -209,7 +194,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       await updateFund({
         variables: {
           input: {
-            id: fund?.id,
+            id: fund.id,
             isArchived: newArchivedState,
           },
         },
@@ -257,27 +242,12 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           />
         </div>
 
-        <div className="mb-3">
-          <FormTextField
-            name="fundId"
-            label={t('fundId')}
-            placeholder={t('fundIdPlaceholder')}
-            required
-            value={formState.fundRef}
-            touched={touched.fundRef}
-            error={fundRefError}
-            onChange={(value) =>
-              setFormState((prev) => ({ ...prev, fundRef: value }))
-            }
-            onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
-          />
-        </div>
-
         <div
-          className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit'
+          className={`d-flex mt-2 mb-3 flex-wrap ${
+            mode === 'edit'
               ? 'justify-content-between'
               : 'justify-content-start gap-3'
-            }`}
+          }`}
         >
           <div className="d-flex align-items-center">
             <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
