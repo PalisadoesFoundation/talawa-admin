@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Validates i18n translation tags against locale JSON files."""
 
 from __future__ import annotations
