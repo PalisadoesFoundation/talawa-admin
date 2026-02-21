@@ -210,6 +210,36 @@ describe('Shared Component: Autocomplete', () => {
           expect(onChangeSpy).toHaveBeenCalledWith(objectOptions[0]);
         });
       });
+      it('warns once in development when getOptionLabel is not provided for object options', async () => {
+        const user = userEvent.setup();
+        const originalEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = 'development';
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        const onChangeSpy = vi.fn();
+
+        render(
+          <I18nextProvider i18n={i18nForTest}>
+            <Autocomplete<{ id: number }>
+              id="warn-test"
+              options={[{ id: 1 }]}
+              value={null}
+              onChange={onChangeSpy}
+              dataTestId="warn-test"
+            />
+          </I18nextProvider>,
+        );
+
+        await userEvent.setup().click(screen.getByRole('combobox'));
+        await user.click(
+          await screen.findAllByRole('option').then((o) => o[0]),
+        );
+        await waitFor(() => {
+          expect(warnSpy).toHaveBeenCalledWith(
+            expect.stringContaining('getOptionLabel is not provided'),
+          );
+        });
+        process.env.NODE_ENV = originalEnv;
+      });
 
       it('uses default getOptionLabel fallback for string options', async () => {
         const user = userEvent.setup();
@@ -413,6 +443,41 @@ describe('Shared Component: Autocomplete', () => {
         expect(onChangeSpy).toHaveBeenCalledTimes(1);
         expect(onChangeSpy).toHaveBeenCalledWith('Custom User');
       });
+    });
+    it('uses custom renderInput when provided', () => {
+      const customRenderInput = vi.fn((params) => (
+        <input {...params.inputProps} data-testid="custom-input" />
+      ));
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<string>
+            id="custom-render"
+            options={['One']}
+            value={null}
+            onChange={vi.fn()}
+            renderInput={customRenderInput}
+          />
+        </I18nextProvider>,
+      );
+      expect(screen.getByTestId('custom-input')).toBeInTheDocument();
+      expect(customRenderInput).toHaveBeenCalled();
+    });
+
+    it('forwards textFieldProps to the underlying TextField', () => {
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<string>
+            id="tf-props"
+            options={['One']}
+            value={null}
+            onChange={vi.fn()}
+            textFieldProps={{ size: 'small' }}
+          />
+        </I18nextProvider>,
+      );
+      expect(
+        screen.getByRole('combobox').closest('.MuiInputBase-sizeSmall'),
+      ).toBeTruthy();
     });
   });
 
