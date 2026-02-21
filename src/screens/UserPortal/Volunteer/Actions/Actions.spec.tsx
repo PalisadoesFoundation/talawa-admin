@@ -28,6 +28,27 @@ import {
   expect,
 } from 'vitest';
 
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    dataTestId,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+    dataTestId?: string;
+  }) => (
+    <div>
+      {imageUrl ? (
+        <img src={imageUrl} alt={fallbackName} data-testid={dataTestId} />
+      ) : (
+        <div data-testid={dataTestId}>{fallbackName.charAt(0)}</div>
+      )}
+    </div>
+  ),
+}));
+
 const localStorageMock = createLocalStorageMock();
 
 let setItem: ReturnType<typeof useLocalStorage>['setItem'];

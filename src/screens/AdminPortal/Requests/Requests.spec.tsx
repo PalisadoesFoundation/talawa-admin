@@ -120,6 +120,27 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    dataTestId,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+    dataTestId?: string;
+  }) => (
+    <div>
+      {imageUrl ? (
+        <img src={imageUrl} alt={fallbackName} data-testid={dataTestId} />
+      ) : (
+        <div data-testid={dataTestId}>{fallbackName.charAt(0)}</div>
+      )}
+    </div>
+  ),
+}));
+
 // Create mock links
 const link = new StaticMockLink(UPDATED_MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
@@ -1362,9 +1383,11 @@ describe('Testing Requests screen', () => {
     const datatable = await screen.findByTestId('datatable');
     expect(datatable).toBeInTheDocument();
     // Verify the user name is displayed, indicating the row is rendered
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    // Verify ProfileAvatarDisplay mock renders the first initial when avatarURL is null
+    const avatarDisplay = screen.getByTestId('display-img');
+    expect(avatarDisplay).toBeInTheDocument();
+    expect(avatarDisplay).toHaveTextContent('J'); // First letter of 'John Doe'
   });
 
   test('should call handleAcceptUser when accept button is clicked', async () => {

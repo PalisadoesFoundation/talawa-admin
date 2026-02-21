@@ -100,6 +100,27 @@ const togglePinMock = {
 
 const mockMutations = [deletePostMock, togglePinMock];
 
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    dataTestId,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+    dataTestId?: string;
+  }) => (
+    <div>
+      {imageUrl ? (
+        <img src={imageUrl} alt={fallbackName} data-testid={dataTestId} />
+      ) : (
+        <div data-testid={dataTestId}>{fallbackName.charAt(0)}</div>
+      )}
+    </div>
+  ),
+}));
+
 vi.mock('@mui/material', async () => {
   const actual = await vi.importActual('@mui/material');
   return actual;
@@ -278,7 +299,10 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByText('J')).toBeInTheDocument();
+      // When avatarURL is undefined, the mock ProfileAvatarDisplay renders fallback initials
+      const avatar = screen.getByTestId('org-avatar');
+      expect(avatar).toBeInTheDocument();
+      expect(avatar).toHaveTextContent('J'); // First letter of "John Doe"
     });
   });
 

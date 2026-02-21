@@ -54,12 +54,12 @@ import {
   type TokenAwareGridColDef,
   DataGridWrapper,
 } from 'shared-components/DataGridWrapper';
-import Avatar from 'shared-components/Avatar/Avatar';
 import styles from './Groups.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupViewModal from 'shared-components/VolunteerGroupViewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 function Groups(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -206,24 +206,12 @@ function Groups(): JSX.Element {
             className="d-flex fw-bold align-items-center ms-2"
             data-testid="leaderName"
           >
-            {avatarURL ? (
-              <img
-                src={avatarURL}
-                alt={t('leader')}
-                data-testid={`image${id + 1}`}
-                className={styles.tableImage}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={id + '1'}
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.tableImage}
-                  name={name}
-                  alt={name}
-                />
-              </div>
-            )}
+            <ProfileAvatarDisplay
+              imageUrl={avatarURL}
+              fallbackName={name}
+              size="small"
+              dataTestId={'image' + id}
+            />
             {name}
           </div>
         );

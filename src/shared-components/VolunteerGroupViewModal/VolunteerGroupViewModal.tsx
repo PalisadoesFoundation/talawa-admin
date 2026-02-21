@@ -47,9 +47,9 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { InterfaceVolunteerGroupViewModalProps } from 'types/shared-components/VolunteerGroupViewModal/interface';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 const VolunteerGroupViewModal: React.FC<
   InterfaceVolunteerGroupViewModalProps
@@ -110,25 +110,14 @@ const VolunteerGroupViewModal: React.FC<
             onChange={() => {}}
             disabled
             startAdornment={
-              leader.avatarURL ? (
-                <img
-                  src={leader.avatarURL}
-                  alt={leader.name}
-                  data-testid="leader_image"
-                  className={styles.tableImages}
-                />
-              ) : (
-                <div className={styles.avatarContainer}>
-                  <Avatar
-                    key={`${leader.id}-avatar`}
-                    containerStyle={styles.imageContainer}
-                    avatarStyle={styles.tableImages}
-                    dataTestId="leader_avatar"
-                    name={leader.name}
-                    alt={leader.name}
-                  />
-                </div>
-              )
+              <ProfileAvatarDisplay
+                key={`${leader.id}-avatar`}
+                imageUrl={leader.avatarURL}
+                size="small"
+                dataTestId="leader_avatar"
+                fallbackName={leader.name}
+                className={styles.tableimages}
+              />
             }
             data-testid="groupLeader"
           />
@@ -140,25 +129,14 @@ const VolunteerGroupViewModal: React.FC<
             onChange={() => {}}
             disabled
             startAdornment={
-              creator.avatarURL ? (
-                <img
-                  src={creator.avatarURL}
-                  alt={creator.name}
-                  data-testid="creator_image"
-                  className={styles.tableImages}
-                />
-              ) : (
-                <div className={styles.avatarContainer}>
-                  <Avatar
-                    key={`${creator.id}-avatar`}
-                    containerStyle={styles.imageContainer}
-                    avatarStyle={styles.tableImages}
-                    dataTestId="creator_avatar"
-                    name={creator.name}
-                    alt={creator.name}
-                  />
-                </div>
-              )
+              <ProfileAvatarDisplay
+                key={`${creator.id}-avatar`}
+                imageUrl={creator.avatarURL}
+                size="small"
+                dataTestId="creator_avatar"
+                className={styles.tableimages}
+                fallbackName={creator.name}
+              />
             }
             data-testid="groupCreator"
           />

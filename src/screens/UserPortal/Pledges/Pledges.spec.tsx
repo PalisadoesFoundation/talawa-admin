@@ -23,6 +23,27 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, describe, it } from 'vitest';
 import dayjs from 'dayjs';
 
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    dataTestId,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+    dataTestId?: string;
+  }) => (
+    <div>
+      {imageUrl ? (
+        <img src={imageUrl} alt={fallbackName} data-testid={dataTestId} />
+      ) : (
+        <div data-testid={dataTestId}>{fallbackName.charAt(0)}</div>
+      )}
+    </div>
+  ),
+}));
+
 type MockStorage = Storage & { resetStore: () => void };
 
 const createLocalStorageMock = (): MockStorage => {
@@ -610,22 +631,22 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(link1);
     await waitFor(() => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
-        'src',
-        'image-url',
-      );
     });
+
+    const pledgerAvatar = screen.getByTestId('profile-avatar-pledger-userId');
+    expect(pledgerAvatar).toHaveAttribute('src', 'image-url');
+    expect(pledgerAvatar).toHaveAttribute('alt', 'Harve Lance');
   });
 
   it('should render avatar when no avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByTestId('avatar-pledger-userId5')).toHaveAttribute(
-        'alt',
-        'John Doe',
-      );
     });
+
+    const pledgerAvatar = screen.getByTestId('profile-avatar-pledger-userId5');
+    expect(pledgerAvatar).toBeInTheDocument();
+    expect(pledgerAvatar).toHaveTextContent('J');
   });
 
   it('should handle missing campaign data', async () => {
@@ -847,10 +868,8 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
-      'src',
-      'image-url',
-    );
+    const pledgerAvatar = screen.getByTestId('profile-avatar-pledger-userId');
+    expect(pledgerAvatar).toHaveAttribute('src', 'image-url');
   });
 
   it('should handle campaign with missing data gracefully', async () => {
@@ -964,10 +983,10 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByText('Avatar Pledger')).toBeInTheDocument();
     });
 
-    const pledgerImage = screen.getByTestId(
-      'image-pledger-avatarPledgerUserId',
+    const pledgerAvatar = screen.getByTestId(
+      'profile-avatar-pledger-avatarPledgerUserId',
     );
-    expect(pledgerImage).toHaveAttribute(
+    expect(pledgerAvatar).toHaveAttribute(
       'src',
       'https://example.com/pledger-avatar.jpg',
     );

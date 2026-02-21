@@ -16,6 +16,27 @@ import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import type { InterfaceVolunteerGroupViewModalProps } from 'types/shared-components/VolunteerGroupViewModal/interface';
 
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    dataTestId,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+    dataTestId?: string;
+  }) => (
+    <div>
+      {imageUrl ? (
+        <img src={imageUrl} alt={fallbackName} data-testid={dataTestId} />
+      ) : (
+        <div data-testid={dataTestId}>{fallbackName.charAt(0)}</div>
+      )}
+    </div>
+  ),
+}));
+
 const t = {
   ...JSON.parse(
     JSON.stringify(
@@ -123,8 +144,8 @@ describe('Testing VolunteerGroupViewModal', () => {
   it('Render VolunteerGroupViewModal (variation 1)', async () => {
     renderGroupViewModal(itemProps[0]);
     expect(screen.getByText(t.groupDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('leader_image')).toBeInTheDocument();
-    expect(screen.getByTestId('creator_image')).toBeInTheDocument();
+    expect(screen.getByTestId('leader_avatar')).toBeInTheDocument();
+    expect(screen.getByTestId('creator_avatar')).toBeInTheDocument();
   });
 
   it('Render VolunteerGroupViewModal (variation 2)', async () => {

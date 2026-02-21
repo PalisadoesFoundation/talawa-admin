@@ -35,7 +35,6 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'shared-components/TableLoader/TableLoader';
-import Avatar from 'shared-components/Avatar/Avatar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './Requests.module.css';
@@ -48,6 +47,7 @@ import { Group, Search } from '@mui/icons-material';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import ErrorPanel from 'shared-components/ErrorPanel';
 import { IColumnDef } from 'types/shared-components/DataTable/column';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -262,28 +262,12 @@ const Requests = (): JSX.Element => {
       accessor: (req: InterfaceRequestsListItem) => req.user?.id || '',
       render: (_: unknown, req: InterfaceRequestsListItem) => {
         const user = req.user || {};
-        if (user.avatarURL && user.avatarURL !== 'null') {
-          return (
-            <img
-              src={user.avatarURL}
-              className={styles.userAvatar}
-              alt={t('requests.profilePictureAlt')}
-              data-testid="display-img"
-              crossOrigin="anonymous"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          );
-        }
         return (
-          <Avatar
-            data-testid="display-img"
-            size={45}
-            avatarStyle={styles.avatarStyle}
-            name={user.name || ''}
-            alt={t('requests.placeholderAvatarAlt')}
+          <ProfileAvatarDisplay
+            fallbackName={user.name}
+            imageUrl={user.avatarURL}
+            dataTestId="display-img"
+            crossOrigin="anonymous"
           />
         );
       },
