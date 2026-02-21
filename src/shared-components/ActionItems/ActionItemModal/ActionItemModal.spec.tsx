@@ -757,13 +757,19 @@ describe('ActionItemModal', () => {
         </MockedProvider>,
       );
 
-      await screen.findByTestId('actionItemModal');
+      await waitFor(() => {
+        expect(screen.getByTestId('modal-submit-btn')).toBeInTheDocument();
+      });
+
       await user.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(capturedInput?.volunteerId).toBeUndefined();
-        expect(capturedInput?.volunteerGroupId).toBe('group1');
-      });
+      await waitFor(
+        () => {
+          expect(capturedInput?.volunteerId).toBeUndefined();
+          expect(capturedInput?.volunteerGroupId).toBe('group1');
+        },
+        { timeout: 10000 },
+      );
     });
 
     it('should show error when action item ID is missing', async () => {

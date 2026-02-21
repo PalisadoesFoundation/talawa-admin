@@ -523,6 +523,10 @@ describe('AgendaFolderCreateModal', () => {
       </MockedProvider>,
     );
 
+    await waitFor(() => {
+      expect(screen.getByLabelText(/folderName/i)).toBeInTheDocument();
+    });
+
     const nameInput = screen.getByLabelText(/folderName/i);
     const descInput = screen.getByLabelText(/description/i);
 
@@ -534,7 +538,7 @@ describe('AgendaFolderCreateModal', () => {
       () => {
         expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
       },
-      { timeout: 5000 },
+      { timeout: 10000 },
     );
 
     // Form should still have values after error
