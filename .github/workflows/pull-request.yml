@@ -363,12 +363,12 @@ jobs:
           echo "🔍 Scanning changed test files for quality issues..."
           CHANGED_FILES="${{ steps.changed-test-files.outputs.files }}"
 
-          # Check 1: vi.restoreAllMocks
+          # Check 1: vi.clearAllMocks
           # Write the space-separated list as newline-separated for rg --file-list
           echo "$CHANGED_FILES" | tr ' ' '\n' | grep -v '^$' > /tmp/changed_test_files.txt
-          if rg -q "vi\.restoreAllMocks" --file-list /tmp/changed_test_files.txt 2>/dev/null; then
-            echo "❌ FAIL: vi.restoreAllMocks detected. Use vi.clearAllMocks instead."
-            rg -n "vi\.restoreAllMocks" --file-list /tmp/changed_test_files.txt
+          if rg -q "vi\.clearAllMocks" --file-list /tmp/changed_test_files.txt 2>/dev/null; then
+            echo "❌ FAIL: vi.clearAllMocks detected. Use vi.restoreAllMocks instead."
+            rg -n "vi\.clearAllMocks" --file-list /tmp/changed_test_files.txt
             exit 1
           fi
 
