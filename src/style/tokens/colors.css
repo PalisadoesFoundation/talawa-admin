@@ -40,7 +40,7 @@
   --color-black-15: rgba(0, 0, 0, 0.15);
   --color-black-20: rgba(0, 0, 0, 0.2);
   --color-black-25: rgba(0, 0, 0, 0.25);
-  --color-blue-shadow-light: rgba(149, 156, 202, 0.1);
+  --color-blue-shadow-light: rgba(110, 148, 255, 0.1);
   --color-blue-shadow-focus: rgba(110, 148, 255, 0.25);
   --color-blue-shadow-focus-strong: rgba(110, 148, 255, 0.35);
 }

@@ -8,7 +8,7 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
-  padding: var(--space-4) var(--space-5) 0 var(--space-5);
+  padding: var(--space-4) var(--space-5) var(--space-0) var(--space-5);
   background-color: var(--color-gray-50) !important;
   transition: 0.5s ease;
   font-family: var(--bs-leftDrawer-font-family);
@@ -262,7 +262,7 @@
 @media (max-width: 1120px) {
   .leftDrawer {
     width: calc(var(--space-18) + var(--space-8));
-    padding: var(--space-4) var(--space-4) 0 var(--space-4);
+    padding: var(--space-4) var(--space-4) var(--space-0) var(--space-4);
   }
 }
 
@@ -298,7 +298,7 @@
 
 @media (max-height: 650px) {
   .leftDrawer {
-    padding: var(--space-2) var(--space-3) 0 var(--space-3);
+    padding: var(--space-2) var(--space-3) var(--space-0) var(--space-3);
     width: var(--space-18);
   }
 

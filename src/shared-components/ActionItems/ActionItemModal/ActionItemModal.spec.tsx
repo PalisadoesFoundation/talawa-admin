@@ -46,7 +46,7 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 const ASYNC_TIMEOUT = 10000;
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
   cleanup();
 });
 
@@ -319,7 +319,7 @@ const renderModal = (props: Partial<IItemModalProps> = {}) => {
 
 describe('ActionItemModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Modal Visibility', () => {

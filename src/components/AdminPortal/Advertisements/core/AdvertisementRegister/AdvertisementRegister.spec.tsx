@@ -1536,28 +1536,24 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(
       () => {
         expect(createAdMock).toHaveBeenCalled();
+        const mockCall = createAdMock.mock.calls[0][0];
+        expect(mockCall.variables).toMatchObject({
+          organizationId: '1',
+          name: 'Ad1',
+          type: 'banner',
+          description: 'this is a test ad',
+        });
+        expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+        expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
+        expect(toastSuccessSpy).toHaveBeenCalledWith(
+          translations.advertisementCreated,
+        );
+        expect(setAfterActiveMock).toHaveBeenCalledWith(null);
+        expect(setAfterCompletedMock).toHaveBeenCalledWith(null);
+        expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();
       },
       { timeout: 5000 },
     );
-
-    const mockCall = createAdMock.mock.calls[0][0];
-    expect(mockCall.variables).toMatchObject({
-      organizationId: '1',
-      name: 'Ad1',
-      type: 'banner',
-      description: 'this is a test ad',
-    });
-    expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
-    expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
-
-    expect(toastSuccessSpy).toHaveBeenCalledWith(
-      translations.advertisementCreated,
-    );
-
-    expect(setAfterActiveMock).toHaveBeenCalledWith(null);
-    expect(setAfterCompletedMock).toHaveBeenCalledWith(null);
-
-    expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();
   });
 
   it('Does not show toast when create error is not an Error instance', async () => {
