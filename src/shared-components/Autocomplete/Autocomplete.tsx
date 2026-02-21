@@ -106,30 +106,35 @@ export const Autocomplete = <
   const hasWarnedRef = React.useRef(false);
 
   // Default renderInput using TextField
-  const defaultRenderInput = (params: AutocompleteRenderInputParams) => (
-    <TextField
-      {...params}
-      {...textFieldProps}
-      label={label}
-      placeholder={placeholder}
-      error={error}
-      helperText={helperText}
-      data-testid={`${dataTestId}-input`}
-      slotProps={{
-        input: {
-          ...params.InputProps,
-          ...textFieldProps?.InputProps,
-          endAdornment: (
-            <>
-              {loading && <CircularProgress color="inherit" size={20} />}
-              {params.InputProps.endAdornment}
-              {textFieldProps?.InputProps?.endAdornment}
-            </>
-          ),
-        },
-      }}
-    />
-  );
+  const defaultRenderInput = (params: AutocompleteRenderInputParams) => {
+    const { InputProps: paramsInputProps, ...restParams } = params;
+    const { InputProps: tfInputProps, ...restTextFieldProps } =
+      textFieldProps ?? {};
+    return (
+      <TextField
+        {...restParams}
+        {...restTextFieldProps}
+        label={label}
+        placeholder={placeholder}
+        error={error}
+        helperText={helperText}
+        data-testid={`${dataTestId}-input`}
+        slotProps={{
+          input: {
+            ...paramsInputProps,
+            ...tfInputProps,
+            endAdornment: (
+              <>
+                {loading && <CircularProgress color="inherit" size={20} />}
+                {paramsInputProps.endAdornment}
+                {tfInputProps?.endAdornment}
+              </>
+            ),
+          },
+        }}
+      />
+    );
+  };
 
   return (
     <MuiAutocomplete<T, TMultiple, TDisableClearable, TFreeSolo>
