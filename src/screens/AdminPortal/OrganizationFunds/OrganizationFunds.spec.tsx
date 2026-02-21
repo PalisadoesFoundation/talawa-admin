@@ -201,8 +201,7 @@ describe('OrganizationFunds Screen =>', () => {
     await user.click(createFundBtn);
 
     await waitFor(() => {
-      const modalTitle = screen.getByTestId('modalTitle');
-      expect(modalTitle).toHaveTextContent(translations.fundCreate);
+      expect(screen.getByTestId('fund-modal')).toBeInTheDocument();
     });
 
     await user.click(screen.getByTestId('modalCloseBtn'));
@@ -536,8 +535,7 @@ describe('OrganizationFunds Screen =>', () => {
       await user.keyboard('{Enter}');
 
       await waitFor(() => {
-        const modalTitle = screen.getByTestId('modalTitle');
-        expect(modalTitle).toHaveTextContent(translations.fundCreate);
+        expect(screen.getByTestId('fund-modal')).toBeInTheDocument();
       });
     });
 
@@ -553,8 +551,7 @@ describe('OrganizationFunds Screen =>', () => {
       await user.click(createFundBtn);
 
       await waitFor(() => {
-        const modalTitle = screen.getByTestId('modalTitle');
-        expect(modalTitle).toHaveTextContent(translations.fundCreate);
+        expect(screen.getByTestId('fund-modal')).toBeInTheDocument();
       });
 
       await user.keyboard('{Escape}');

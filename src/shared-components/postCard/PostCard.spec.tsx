@@ -555,9 +555,9 @@ describe('PostCard', () => {
     const editButton = await screen.findByTestId('edit-post-menu-item');
     await user.click(editButton);
 
-    expect(await screen.findByText('Edit Post')).toBeInTheDocument();
+    expect(await screen.findByTestId('create-post-modal')).toBeInTheDocument();
 
-    const cancelButton = screen.getByRole('button', { name: 'close' });
+    const cancelButton = screen.getByTestId('modalCloseBtn');
     await user.click(cancelButton);
 
     // Just verify that the test completes without throwing errors
@@ -826,7 +826,7 @@ describe('PostCard', () => {
 
     // Wait for the modal to open
     await waitFor(() => {
-      expect(screen.getByText('Edit Post')).toBeInTheDocument();
+      expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
     });
 
     const postInput = screen.getByTestId('postTitleInput');
@@ -841,9 +841,8 @@ describe('PostCard', () => {
       expect(saveButton).toBeInTheDocument(); // Just verify the button still exists
     });
 
-    await waitFor(() => {
-      expect(screen.getByText('Edit Post')).toBeInTheDocument();
-    });
+    // Ensure modal stays open after error to prevent UX regression
+    expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
   });
 
   it('handles delete post error', async () => {

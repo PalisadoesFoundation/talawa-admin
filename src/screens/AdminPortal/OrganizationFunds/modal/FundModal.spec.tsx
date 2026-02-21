@@ -10,7 +10,7 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
@@ -18,7 +18,7 @@ import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import * as apollo from '@apollo/client';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -37,36 +37,7 @@ const fundProps: InterfaceFundModal[] = [
   {
     isOpen: true,
     hide: vi.fn(),
-    fund: {
-      id: 'fundId',
-      name: 'Fund 1',
-      refrenceNumber: '1111',
-      isTaxDeductible: true,
-      isArchived: false,
-      isDefault: false,
-      createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
-      organizationId: 'orgId',
-      creator: {
-        name: 'John Doe',
-      },
-      organization: {
-        name: 'Organization 1',
-      },
-      updater: {
-        name: 'John Doe',
-      },
-      edges: {
-        node: {
-          id: 'nodeId',
-          name: 'Node Name',
-          fundingGoal: 1000,
-          startDate: dayjs().format('YYYY-MM-DD'),
-          endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
-          currency: 'USD',
-          createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
-        },
-      },
-    },
+    fund: null,
     refetchFunds: vi.fn(),
     orgId: 'orgId',
     mode: 'create',
@@ -173,13 +144,14 @@ describe('PledgeModal', () => {
   });
 
   it('should update Fund Reference ID when input value changes', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
     });
     expect(fundIdInput).toHaveValue('1111');
-    await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '2222');
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '2222');
     expect(fundIdInput).toHaveValue('2222');
   });
 
@@ -263,7 +235,7 @@ describe('PledgeModal', () => {
     await userEvent.click(archivedSwitch);
     await userEvent.click(archivedSwitch);
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -273,27 +245,25 @@ describe('PledgeModal', () => {
   });
 
   it('should create fund', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link2, fundProps[0]);
 
     const fundNameInput = screen.getByLabelText(translations.fundName, {
       exact: false,
     });
-    await userEvent.clear(fundNameInput);
-    await userEvent.type(fundNameInput, 'Fund 2');
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Fund 2');
 
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
     });
-    await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '2222');
-
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
-    await userEvent.click(taxDeductibleSwitch);
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '2222');
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
-    await userEvent.click(defaultSwitch);
+    await user.click(defaultSwitch);
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -303,30 +273,31 @@ describe('PledgeModal', () => {
   });
 
   it('should update fund', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link2, fundProps[1]);
 
     const fundNameInput = screen.getByLabelText(translations.fundName, {
       exact: false,
     });
-    await userEvent.clear(fundNameInput);
-    await userEvent.type(fundNameInput, 'Fund 2');
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Fund 2');
 
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
     });
-    await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '2222');
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '2222');
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
-    await userEvent.click(taxDeductibleSwitch);
+    await user.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
-    await userEvent.click(defaultSwitch);
+    await user.click(defaultSwitch);
 
     const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await userEvent.click(archivedSwitch);
+    await user.click(archivedSwitch);
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -491,6 +462,7 @@ describe('PledgeModal', () => {
   });
 
   it('should create fund successfully and call side effects', async () => {
+    const user = userEvent.setup({ delay: null });
     vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
 
     const hide = vi.fn();
@@ -503,23 +475,19 @@ describe('PledgeModal', () => {
       mode: 'create',
     });
 
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-      'New Fund',
-    );
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'New Fund');
 
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundId, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundId, { exact: false }),
-      '1234',
-    );
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '1234');
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -538,6 +506,7 @@ describe('PledgeModal', () => {
   });
 
   it('should update fund successfully and call side effects', async () => {
+    const user = userEvent.setup({ delay: null });
     vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
 
     const hide = vi.fn();
@@ -550,15 +519,13 @@ describe('PledgeModal', () => {
       mode: 'edit',
     });
 
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-      'Updated Fund',
-    );
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Updated Fund');
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();

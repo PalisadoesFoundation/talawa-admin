@@ -9,7 +9,7 @@ import { fireEvent } from '@testing-library/dom';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import AddMember from './AddMember';
 import i18nForTest from 'utils/i18nForTest';
@@ -34,7 +34,7 @@ const sharedMocks = vi.hoisted(() => ({
 import React from 'react';
 
 // Mock NotificationToast
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.toast,
 }));
 
@@ -1230,7 +1230,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -1284,7 +1284,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -1329,7 +1329,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password124' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -1337,7 +1337,7 @@ describe('AddMember Screen', () => {
     });
   });
 
-  test('shows error when required fields are missing', async () => {
+  test('disables submit button when required fields are missing', async () => {
     const orgId = 'org123';
 
     const registerMock = createRegisterMutationMock({
@@ -1362,6 +1362,10 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+
     const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
@@ -1374,11 +1378,9 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
-    fireEvent.click(createButton);
-
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
+      const createButton = screen.getByTestId('modal-submit-btn');
+      expect(createButton).toBeDisabled();
     });
   });
 
@@ -1548,6 +1550,94 @@ describe('AddMember Screen', () => {
     fireEvent.click(forcePrev);
 
     expect(screen.getByTestId('page-info')).toHaveTextContent('Page 1');
+  });
+
+  test('shows error when create user form is submitted with missing required fields via keyboard shortcut', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+
+    // Submit form via Ctrl+Enter with all fields empty to trigger the early return at line 173
+    const form = screen
+      .getByTestId('addNewUserModal')
+      .querySelector('form') as HTMLFormElement;
+    expect(form).not.toBeNull();
+    fireEvent.keyDown(form, { key: 'Enter', ctrlKey: true });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('toggles password visibility via Enter key on password toggle', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const passwordInput = await screen.findByTestId('passwordInput');
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    const showPasswordToggle = screen.getByTestId('showPassword');
+    fireEvent.keyDown(showPasswordToggle, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(passwordInput).toHaveAttribute('type', 'text');
+    });
+
+    fireEvent.keyDown(showPasswordToggle, { key: ' ' });
+
+    await waitFor(() => {
+      expect(passwordInput).toHaveAttribute('type', 'password');
+    });
+  });
+
+  test('toggles confirm password visibility via Enter key on confirm password toggle', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const confirmPasswordInput = await screen.findByTestId(
+      'confirmPasswordInput',
+    );
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+
+    const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(confirmPasswordInput).toHaveAttribute('type', 'text');
+    });
+
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: ' ' });
+
+    await waitFor(() => {
+      expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+    });
   });
 
   test('ignores invalid sort option', async () => {

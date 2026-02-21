@@ -131,6 +131,7 @@
   "overview": "Overview",
   "events": "Events",
   "tags": "Tags",
+  "viewSubTagsOf": "View subtags of {{tagName}}",
   "toggleOptions": "Toggle options",
   "filterAndSortOptions": "Filter and sort options",
   "clear": "Clear",
