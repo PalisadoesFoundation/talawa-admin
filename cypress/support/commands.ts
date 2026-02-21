@@ -396,6 +396,15 @@ Cypress.Commands.add('loginByApi', (role: string) => {
 });
 
 Cypress.Commands.add('assertToast', (expectedMessage: string | RegExp) => {
+  if (expectedMessage instanceof RegExp) {
+    cy.get('.Toastify__toast', { timeout: 5000 })
+      .should('be.visible')
+      .should(($toasts) => {
+        expect($toasts.text()).to.match(expectedMessage);
+      });
+    return;
+  }
+
   cy.get('.Toastify__toast', { timeout: 5000 })
     .should('be.visible')
     .and('contain.text', expectedMessage);

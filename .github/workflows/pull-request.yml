@@ -727,6 +727,7 @@ jobs:
           # This ensures only the merged lcov.info is uploaded
           find ./coverage -name "coverage-*.json" -type f -delete
           find ./coverage -name "coverage-final.json" -type f -delete
+          rm -rf ./coverage-shards 2>/dev/null || true
           rm -rf ./coverage/tmp ./.nyc_output 2>/dev/null || true
 
           echo "Cleanup complete. Remaining coverage files:"
@@ -761,6 +762,7 @@ jobs:
           exclude: 'docs/'
           gcov_ignore: 'docs/'
           files: ./coverage/vitest/lcov.info
+          disable_search: true
           flags: vitest
           commit_parent: ${{ steps.get-merge-base.outputs.merge_base }}
 

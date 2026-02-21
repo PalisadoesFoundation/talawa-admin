@@ -32,7 +32,7 @@ const PageNotFound = (): JSX.Element => {
           <img src={Logo} alt={t('logoAlt')} className="img-fluid" />
         </div>
         {/* Display the 404 error code */}
-        <h1 className={styles.head}>
+        <h1 className={styles.head} data-testid="page-not-found-heading">
           <span>{t('404')}</span>
         </h1>
         {/* Display a not found message */}
