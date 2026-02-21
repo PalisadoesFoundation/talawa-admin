@@ -1,7 +1,7 @@
 ---
 id: design-token-system
 title: Design Token System
-slug: /developer-resources/design-token-system
+slug: /developer-resources/general/design-token-system
 sidebar_position: 40
 ---
 

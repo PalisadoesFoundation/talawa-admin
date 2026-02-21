@@ -1,7 +1,7 @@
 ---
 id: introduction
 title: Introduction
-slug: /developer-resources/introduction
+slug: /developer-resources/general/introduction
 sidebar_position: 10
 ---
 

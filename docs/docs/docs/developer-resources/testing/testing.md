@@ -1,7 +1,7 @@
 ---
 id: testing
 title: Testing
-slug: /developer-resources/testing
+slug: /developer-resources/testing/testing
 sidebar_position: 60
 ---
 
@@ -15,7 +15,7 @@ All our workflows use Linux based commands, therefore if you are a developer who
 
 ### UI/UX Testing
 
-If you have loaded the API sample database, then you can login using the credentials found on the [testing page of the API documentation website](https://docs-api.talawa.io/docs/developer-resources/testing/)
+If you have loaded the API sample database, then you can login using the credentials found on the [testing page of the API documentation website](https://docs-api.talawa.io/docs/developer-resources/testing/testing/)
 
 ## Pre-commit Hooks
 

@@ -1,7 +1,7 @@
 ---
 id: plugin-graphql-integration
 title: Plugin GraphQL Integration
-slug: /developer-resources/plugin-graphql-integration
+slug: /developer-resources/features/plugin-graphql-integration
 sidebar_position: 50
 ---
 
