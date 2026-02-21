@@ -1625,7 +1625,12 @@ describe('Testing Advertisement Register Component', () => {
       expect(createMock).toHaveBeenCalled();
     });
 
-    expect(toastErrorSpy).not.toHaveBeenCalled();
+    // Wait for React state to settle before asserting the negative case,
+    // preventing a race condition where the toast handler may not have
+    // had a chance to run yet after the mutation promise resolves.
+    await waitFor(() => {
+      expect(toastErrorSpy).not.toHaveBeenCalled();
+    });
   });
 
   it('Handles updateAdvertisement returning no data', async () => {
