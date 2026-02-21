@@ -1,7 +1,7 @@
 .itemModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+  max-width: var(--vw-80);
+  margin-top: var(--vh-2);
+  margin-left: var(--vw-13);
 }
 
 .noOutline input {
@@ -67,7 +67,7 @@
 .autocompleteWrapper {
   display: flex;
   align-items: center;
-  border: 1px solid var(--color-gray-300);
+  border: var(--border-1) solid var(--color-gray-300);
   border-radius: var(--rounded-md);
   padding: var(--space-2);
   background-color: var(--color-white);
