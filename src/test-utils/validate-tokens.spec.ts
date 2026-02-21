@@ -34,7 +34,7 @@ import {
 beforeEach(() => {
   execSyncMock.mockReset();
   readFileSyncMock.mockReset();
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('formatCount', () => {
