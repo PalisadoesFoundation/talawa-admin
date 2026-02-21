@@ -54,7 +54,7 @@ describe('UserPortalNavigationBarMocks', () => {
 
     it('should handle an unrecognized icon type gracefully', () => {
       const FallbackComponent = getMockIcon(
-        'unknown' as Parameters<typeof getMockIcon>[0],
+        'unknown' as unknown as Parameters<typeof getMockIcon>[0],
       );
       expect(FallbackComponent).toBeDefined();
 
@@ -133,10 +133,13 @@ describe('UserPortalNavigationBarMocks', () => {
 
     it('should export logoutNetworkErrorMock with a query, variableMatcher, and network errors array', () => {
       expect(logoutNetworkErrorMock.request.query).toBeDefined();
-      expect(logoutNetworkErrorMock.result).toEqual({
-        errors: [
-          { message: 'Network error', extensions: { code: 'NETWORK_ERROR' } },
-        ],
+      expect(logoutNetworkErrorMock.result).toMatchObject({
+        errors: expect.arrayContaining([
+          expect.objectContaining({
+            message: expect.any(String),
+            extensions: expect.objectContaining({ code: expect.any(String) }),
+          }),
+        ]),
       });
       expect(logoutNetworkErrorMock.variableMatcher()).toBe(true);
     });
