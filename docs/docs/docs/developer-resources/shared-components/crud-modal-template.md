@@ -622,6 +622,6 @@ A: The modal size is standardized for consistency. If you need a different size 
 
 ## See Also
 
-- [Reusable Components Guide](./reusable-components.md)
-- [Design Token System](./design-token-system.md)
-- [Testing Guide](./testing.md)
+- [Reusable Components Guide](../general/reusable-components.md)
+- [Design Token System](../general/design-token-system.md)
+- [Testing Guide](../testing//testing.md)
