@@ -1,7 +1,7 @@
 ---
 id: reusable-components
 title: Reusable Components
-slug: /developer-resources/general/reusable-components
+slug: /developer-resources/reusable-components
 sidebar_position: 35
 ---
 
@@ -213,6 +213,8 @@ Some shared components are wrappers around third-party UI libraries. To enforce 
 - `react-bootstrap` `Button` -> use the shared `Button` wrapper
 - `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
 - `react-toastify` -> use `NotificationToast`
+- `react-bootstrap` `Table` -> use the shared `DataTable` component
+- `@mui/material` Table primitives (`Table`, `TableBody`, `TableCell`, `TableContainer`, `TableHead`, `TableRow`, `TablePagination`) -> use the shared `DataTable` component from `src/shared-components/DataTable/`
 
 These restrictions are enforced by `no-restricted-imports` in `eslint.config.js` (configured in
 `scripts/eslint/config/base.ts`) and defined in `scripts/eslint/rules/imports.ts`.
@@ -276,6 +278,12 @@ Allowed IDs by folder:
 - NotificationToast: `react-toastify`
   - `src/shared-components/NotificationToast/**`
   - `src/types/shared-components/NotificationToast/**`
+- DataTable: `rb-table`, `rb-table-path`, `mui-table-table`, `mui-table-table-path`, `mui-table-body`, `mui-table-body-path`, `mui-table-cell`, `mui-table-cell-path`, `mui-table-container`, `mui-table-container-path`, `mui-table-head`, `mui-table-head-path`, `mui-table-row`, `mui-table-row-path`, `mui-table-pagination`, `mui-table-pagination-path`
+  - `src/shared-components/DataTable/**`
+  - `src/types/shared-components/DataTable/**`
+- PaginationList: `mui-table-pagination`, `mui-table-pagination-path`
+  - `src/shared-components/PaginationList/**`
+  - `src/types/shared-components/PaginationList/**`
 
 ### Adding a new restricted import or wrapper
 
@@ -841,7 +849,7 @@ It also ensures that any changes in shared components are propagated safely, wit
 ### Testing Shared Component
 
 1. Each shared component must include a corresponding test file (`Component.spec.tsx`)
-1. Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/general/testing)
+1. Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/testing)
 
 ### Document Your Code
 
