@@ -92,7 +92,7 @@ export const mockNavigationLinksBase = [
     id: 'campaigns',
     label: 'Campaigns',
     path: '/campaigns',
-    translationKey: 'userNavbar.campaigns',
+    translationKey: 'pledges.campaigns',
   },
   {
     id: 'events',
