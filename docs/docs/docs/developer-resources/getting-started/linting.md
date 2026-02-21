@@ -1,7 +1,7 @@
 ---
 id: linting-guidelines
 title: Linting Guidelines
-slug: /developer-resources/general/linting
+slug: /developer-resources/getting-started/linting
 sidebar_position: 40
 ---
 

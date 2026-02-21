@@ -1,7 +1,7 @@
 ---
 id: troubleshooting
 title: Troubleshooting
-slug: /developer-resources/general/troubleshooting
+slug: /developer-resources/getting-started/troubleshooting
 sidebar_position: 100
 ---
 
