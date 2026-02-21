@@ -7,6 +7,18 @@ import {
 } from '@mui/material';
 import React from 'react';
 
+/**
+ * Props for the shared Autocomplete component.
+ *
+ * This interface extends the MUI Autocomplete props while providing custom
+ * props for consistent behavior, accessibility, and integration patterns
+ * across the application.
+ *
+ * @typeParam T - The type of the option object
+ * @typeParam TMultiple - Whether multiple selection is enabled (default: false)
+ * @typeParam TDisableClearable - Whether clearing the value is disabled (default: false)
+ * @typeParam TFreeSolo - Whether free-form user input is allowed (default: false)
+ */
 export interface IAutocompleteProps<
   T,
   TMultiple extends boolean = false,

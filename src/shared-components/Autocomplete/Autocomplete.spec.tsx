@@ -1,9 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Autocomplete } from './Autocomplete';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 
 interface IUser {
   id: number;
@@ -36,14 +38,16 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          label="Select User"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            label="Select User"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByLabelText('Select User')).toBeInTheDocument();
@@ -53,13 +57,15 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       expect(
@@ -71,14 +77,16 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          placeholder="Choose user"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            placeholder="Choose user"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByPlaceholderText('Choose user')).toBeInTheDocument();
@@ -88,15 +96,17 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          className="custom-class"
-          dataTestId="custom-autocomplete"
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            className="custom-class"
+            dataTestId="custom-autocomplete"
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       const element = screen.getByTestId('custom-autocomplete');
@@ -110,15 +120,17 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          error
-          helperText="Error occurred"
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            error
+            helperText="Error occurred"
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByText('Error occurred')).toBeInTheDocument();
@@ -134,14 +146,16 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          loading
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            loading
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByRole('progressbar')).toBeInTheDocument();
@@ -151,14 +165,16 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          disabled
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            disabled
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByRole('combobox')).toBeDisabled();
@@ -171,13 +187,15 @@ describe('Shared Component: Autocomplete', () => {
         const objectOptions = [{ id: 1 }, { id: 2 }];
 
         render(
-          <Autocomplete<{ id: number }>
-            id="object-autocomplete"
-            options={objectOptions}
-            value={null}
-            onChange={onChangeSpy}
-            dataTestId="object-autocomplete"
-          />,
+          <I18nextProvider i18n={i18nForTest}>
+            <Autocomplete<{ id: number }>
+              id="object-autocomplete"
+              options={objectOptions}
+              value={null}
+              onChange={onChangeSpy}
+              dataTestId="object-autocomplete"
+            />
+          </I18nextProvider>,
         );
 
         const input = screen.getByRole('combobox');
@@ -187,10 +205,10 @@ describe('Shared Component: Autocomplete', () => {
         const options = await screen.findAllByRole('option');
 
         await user.click(options[0]);
-
-        expect(onChangeSpy).toHaveBeenCalledTimes(1);
-
-        expect(onChangeSpy).toHaveBeenCalledWith(objectOptions[0]);
+        await waitFor(() => {
+          expect(onChangeSpy).toHaveBeenCalledTimes(1);
+          expect(onChangeSpy).toHaveBeenCalledWith(objectOptions[0]);
+        });
       });
 
       it('uses default getOptionLabel fallback for string options', async () => {
@@ -198,19 +216,22 @@ describe('Shared Component: Autocomplete', () => {
         const onChangeSpy = vi.fn();
 
         render(
-          <Autocomplete<string>
-            id="string-autocomplete"
-            options={['One', 'Two']}
-            value={null}
-            onChange={onChangeSpy}
-          />,
+          <I18nextProvider i18n={i18nForTest}>
+            <Autocomplete<string>
+              id="string-autocomplete"
+              options={['One', 'Two']}
+              value={null}
+              onChange={onChangeSpy}
+            />
+          </I18nextProvider>,
         );
 
         const input = screen.getByRole('combobox');
 
         await user.click(input);
-
-        expect(screen.getByText('One')).toBeInTheDocument();
+        await waitFor(() => {
+          expect(screen.getByText('One')).toBeInTheDocument();
+        });
       });
 
       it('uses default isOptionEqualToValue fallback when comparing values', async () => {
@@ -218,12 +239,14 @@ describe('Shared Component: Autocomplete', () => {
         const onChangeSpy = vi.fn();
 
         render(
-          <Autocomplete<string>
-            id="equality-autocomplete"
-            options={['One', 'Two']}
-            value={'One'}
-            onChange={onChangeSpy}
-          />,
+          <I18nextProvider i18n={i18nForTest}>
+            <Autocomplete<string>
+              id="equality-autocomplete"
+              options={['One', 'Two']}
+              value={'One'}
+              onChange={onChangeSpy}
+            />
+          </I18nextProvider>,
         );
 
         const input = screen.getByRole('combobox');
@@ -233,20 +256,23 @@ describe('Shared Component: Autocomplete', () => {
         const option = await screen.findByText('Two');
 
         await user.click(option);
-
-        expect(onChangeSpy).toHaveBeenCalledWith('Two');
+        await waitFor(() => {
+          expect(onChangeSpy).toHaveBeenCalledWith('Two');
+        });
       });
 
       it('does not render loading spinner when loading is false', () => {
         const onChangeSpy = vi.fn();
 
         render(
-          <Autocomplete<string>
-            id="no-loading"
-            options={['One']}
-            value={null}
-            onChange={onChangeSpy}
-          />,
+          <I18nextProvider i18n={i18nForTest}>
+            <Autocomplete<string>
+              id="no-loading"
+              options={['One']}
+              value={null}
+              onChange={onChangeSpy}
+            />
+          </I18nextProvider>,
         );
 
         expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
@@ -256,13 +282,15 @@ describe('Shared Component: Autocomplete', () => {
         const onChangeSpy = vi.fn();
 
         render(
-          <Autocomplete<string>
-            id="test-id-check"
-            options={['One']}
-            value={null}
-            onChange={onChangeSpy}
-            dataTestId="custom-id"
-          />,
+          <I18nextProvider i18n={i18nForTest}>
+            <Autocomplete<string>
+              id="test-id-check"
+              options={['One']}
+              value={null}
+              onChange={onChangeSpy}
+              dataTestId="custom-id"
+            />
+          </I18nextProvider>,
         );
 
         expect(screen.getByTestId('custom-id-input')).toBeInTheDocument();
@@ -273,13 +301,15 @@ describe('Shared Component: Autocomplete', () => {
         const onChangeSpy = vi.fn();
 
         render(
-          <Autocomplete<string, false, true>
-            id="disable-clearable"
-            options={['One', 'Two']}
-            value={'One'}
-            disableClearable
-            onChange={onChangeSpy}
-          />,
+          <I18nextProvider i18n={i18nForTest}>
+            <Autocomplete<string, false, true>
+              id="disable-clearable"
+              options={['One', 'Two']}
+              value={'One'}
+              disableClearable
+              onChange={onChangeSpy}
+            />
+          </I18nextProvider>,
         );
 
         const input = screen.getByRole('combobox');
@@ -287,8 +317,9 @@ describe('Shared Component: Autocomplete', () => {
         await user.click(input);
 
         await user.click(await screen.findByText('Two'));
-
-        expect(onChangeSpy).toHaveBeenCalledWith('Two');
+        await waitFor(() => {
+          expect(onChangeSpy).toHaveBeenCalledWith('Two');
+        });
       });
     });
   });
@@ -303,13 +334,15 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          options={USERS}
-          value={null}
-          onChange={onChangeSpy}
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            options={USERS}
+            value={null}
+            onChange={onChangeSpy}
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       const input = screen.getByRole('combobox');
@@ -319,10 +352,10 @@ describe('Shared Component: Autocomplete', () => {
       const option = await screen.findByText('John Doe');
 
       await user.click(option);
-
-      expect(onChangeSpy).toHaveBeenCalledTimes(1);
-
-      expect(onChangeSpy).toHaveBeenCalledWith(USERS[0]);
+      await waitFor(() => {
+        expect(onChangeSpy).toHaveBeenCalledTimes(1);
+        expect(onChangeSpy).toHaveBeenCalledWith(USERS[0]);
+      });
     });
 
     it('supports multiple selection', async () => {
@@ -330,14 +363,16 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser, true>
-          id="user-autocomplete"
-          options={USERS}
-          value={[]}
-          multiple
-          onChange={onChangeSpy}
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser, true>
+            id="user-autocomplete"
+            options={USERS}
+            value={[]}
+            multiple
+            onChange={onChangeSpy}
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       const input = screen.getByRole('combobox');
@@ -347,10 +382,10 @@ describe('Shared Component: Autocomplete', () => {
       const option = await screen.findByText('John Doe');
 
       await user.click(option);
-
-      expect(onChangeSpy).toHaveBeenCalledTimes(1);
-
-      expect(onChangeSpy).toHaveBeenCalledWith([USERS[0]]);
+      await waitFor(() => {
+        expect(onChangeSpy).toHaveBeenCalledTimes(1);
+        expect(onChangeSpy).toHaveBeenCalledWith([USERS[0]]);
+      });
     });
 
     it('supports freeSolo input', async () => {
@@ -358,24 +393,26 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser, false, false, true>
-          id="user-autocomplete"
-          options={USERS}
-          value={null}
-          freeSolo
-          onChange={onChangeSpy}
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser, false, false, true>
+            id="user-autocomplete"
+            options={USERS}
+            value={null}
+            freeSolo
+            onChange={onChangeSpy}
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       const input = screen.getByRole('combobox');
 
       await user.type(input, 'Custom User');
       await user.keyboard('{Enter}');
-
-      expect(onChangeSpy).toHaveBeenCalledTimes(1);
-
-      expect(onChangeSpy).toHaveBeenCalledWith('Custom User');
+      await waitFor(() => {
+        expect(onChangeSpy).toHaveBeenCalledTimes(1);
+        expect(onChangeSpy).toHaveBeenCalledWith('Custom User');
+      });
     });
   });
 
@@ -388,12 +425,14 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<string>
-          id="string-autocomplete"
-          options={['One', 'Two']}
-          value={null}
-          onChange={onChangeSpy}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<string>
+            id="string-autocomplete"
+            options={['One', 'Two']}
+            value={null}
+            onChange={onChangeSpy}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByRole('combobox')).toBeInTheDocument();
@@ -403,13 +442,15 @@ describe('Shared Component: Autocomplete', () => {
       const onChangeSpy = vi.fn();
 
       render(
-        <Autocomplete<IUser>
-          id="user-autocomplete"
-          options={USERS}
-          value={USERS[0]}
-          onChange={onChangeSpy}
-          getOptionLabel={getUserOptionLabel}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <Autocomplete<IUser>
+            id="user-autocomplete"
+            options={USERS}
+            value={USERS[0]}
+            onChange={onChangeSpy}
+            getOptionLabel={getUserOptionLabel}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByRole('combobox')).toBeInTheDocument();
