@@ -503,7 +503,8 @@
     "joined": "Joined",
     "notFound": "No Members Found",
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "emailNotAvailable": "Email not available"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -1474,7 +1475,8 @@
     "email": "Email",
     "role": "Role",
     "loading": "Loading...",
-    "emailNotAvailable": "Email not available"
+    "emailNotAvailable": "Email not available",
+    "membersList": "Members list"
   },
   "userLogin": {
     "login": "Login",
