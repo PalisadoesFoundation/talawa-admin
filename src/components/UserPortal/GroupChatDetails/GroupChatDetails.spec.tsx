@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, waitFor, cleanup } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GroupChatDetails from './GroupChatDetails';
 import { MockedProvider } from '@apollo/client/testing';
@@ -14,10 +14,10 @@ import {
   incompleteMockChat,
   failingMocks,
   delayedMocks,
+  ORGANIZATION_MEMBERS as ORG_MEMBERS_QUERY,
 } from './GroupChatDetailsMocks';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 
 // Mock MinIO hooks used for uploading/downloading files
 vi.mock('utils/MinioUpload', () => ({
@@ -127,6 +127,7 @@ describe('GroupChatDetails', () => {
   let testCache: InMemoryCache;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     testCache = new InMemoryCache();
 
     for (const key in mockLocalStorageStore) {
@@ -135,7 +136,6 @@ describe('GroupChatDetails', () => {
   });
 
   afterEach(() => {
-    cleanup();
     vi.clearAllMocks();
     vi.restoreAllMocks();
   });
@@ -298,12 +298,9 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
+    });
 
     await act(async () => {
       await userEvent.click(await screen.findByTestId('editTitleBtn'));
@@ -317,12 +314,9 @@ describe('GroupChatDetails', () => {
       await userEvent.click(screen.getByTestId('cancelEditBtn'));
     });
 
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
+    });
   });
 
   it('edit chat title', async () => {
@@ -359,12 +353,9 @@ describe('GroupChatDetails', () => {
       await userEvent.click(await screen.findByTestId('updateTitleBtn'));
     });
 
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
+    });
   });
 
   it('add user to group chat using first name', async () => {
@@ -400,12 +391,10 @@ describe('GroupChatDetails', () => {
       await userEvent.click(await screen.findByTestId('searchBtn'));
     });
 
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('user')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBeGreaterThan(0);
+    });
 
     await act(async () => {
       await userEvent.click(await screen.findByTestId('addUserBtn'));
@@ -507,12 +496,9 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
+    });
     await act(async () => {
       await userEvent.click(await screen.findByTestId('editImageBtn'));
     });
@@ -788,9 +774,7 @@ describe('GroupChatDetails', () => {
 
     // Wait for delete (trash) button to be present
     // Wait for delete (trash) button to be present
-    expect(
-      await screen.findByRole('button', { name: /delete/i }, { timeout: 3000 }),
-    ).toBeTruthy();
+    expect(await screen.findByRole('button', { name: /delete/i })).toBeTruthy();
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     const toastSuccess = vi.spyOn(NotificationToast, 'success');
@@ -938,9 +922,7 @@ describe('GroupChatDetails', () => {
 
     // Wait for delete (trash) button to be present
     // Wait for delete (trash) button to be present
-    expect(
-      await screen.findByRole('button', { name: /delete/i }, { timeout: 3000 }),
-    ).toBeTruthy();
+    expect(await screen.findByRole('button', { name: /delete/i })).toBeTruthy();
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
 
@@ -1330,12 +1312,10 @@ describe('GroupChatDetails', () => {
       await userEvent.click(await screen.findByTestId('searchBtn'));
     });
 
-    await waitFor(
-      async () => {
-        expect(await screen.findByTestId('user')).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBeGreaterThan(0);
+    });
 
     await act(async () => {
       await userEvent.click(await screen.findByTestId('addUserBtn'));
@@ -1371,13 +1351,10 @@ describe('GroupChatDetails', () => {
       });
 
       // Wait for spinner to appear during the ORGANIZATION_MEMBERS query loading
-      await waitFor(
-        () => {
-          const spinner = document.querySelector('[data-testid="spinner"]');
-          expect(spinner).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        const spinner = document.querySelector('[data-testid="spinner"]');
+        expect(spinner).toBeInTheDocument();
+      });
     });
 
     it('should hide spinner and render chat details after LoadingState completes', async () => {
@@ -1396,12 +1373,9 @@ describe('GroupChatDetails', () => {
         </I18nextProvider>,
       );
 
-      await waitFor(
-        () => {
-          expect(screen.getByTestId('editImageBtn')).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(screen.getByTestId('editImageBtn')).toBeInTheDocument();
+      });
 
       const spinners = screen.queryAllByTestId('spinner');
       const visibleSpinners = spinners.filter((spinner) => {
@@ -1499,22 +1473,13 @@ describe('GroupChatDetails', () => {
   });
 
   it('renders "Member" fallback when organization member has no role', async () => {
-    if (!filledMockChat.organization) {
-      throw new Error('organization missing in mock');
-    }
+    useLocalStorage().setItem('userId', 'user1');
 
-    if (!filledMockChat.members?.edges?.length) {
-      throw new Error('members missing in mock');
-    }
-
-    const orgId = filledMockChat.organization.id;
-    const adminUserId = filledMockChat.members.edges[0].node.user.id;
-
-    useLocalStorage().setItem('userId', adminUserId);
+    const orgId = filledMockChat.organization?.id ?? 'org123';
 
     const fallbackMemberMock = {
       request: {
-        query: ORGANIZATION_MEMBERS,
+        query: ORG_MEMBERS_QUERY,
         variables: {
           input: { id: orgId },
           first: 20,
@@ -1547,7 +1512,7 @@ describe('GroupChatDetails', () => {
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider
-          mocks={[fallbackMemberMock, fallbackMemberMock]}
+          mocks={[fallbackMemberMock, ...mocks]}
           cache={testCache}
         >
           <GroupChatDetails
@@ -1560,13 +1525,21 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await userEvent.click(await screen.findByTestId('addMembers'));
+    await act(async () => {
+      await userEvent.click(await screen.findByTestId('addMembers'));
+    });
+
     await screen.findByTestId('addExistingUserModal');
 
     await waitFor(() => {
-      const row = screen.getByTestId('user');
-      expect(row).toHaveTextContent('No Role User');
-      expect(row).toHaveTextContent('Member');
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBeGreaterThan(0);
+      const rowWithNoRoleUser = Array.from(rows).find((el) =>
+        el.textContent?.includes('No Role User'),
+      );
+      expect(rowWithNoRoleUser).toBeDefined();
+      expect(rowWithNoRoleUser).toHaveTextContent('No Role User');
+      expect(rowWithNoRoleUser).toHaveTextContent('Member');
     });
   });
 });

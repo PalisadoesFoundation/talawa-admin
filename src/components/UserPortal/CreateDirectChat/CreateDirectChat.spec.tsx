@@ -198,6 +198,7 @@ describe('CreateDirectChatModal', () => {
   const chatsListRefetch = vi.fn();
 
   beforeEach(() => {
+    vi.clearAllMocks();
     setItem('userId', '1');
   });
 
@@ -224,11 +225,15 @@ describe('CreateDirectChatModal', () => {
     const user = userEvent.setup();
     renderComponent();
 
-    const userRows = await screen.findAllByTestId('user');
-    expect(userRows.length).toBe(2);
-    expect(userRows[0]).toHaveTextContent('Test User 2');
-    expect(userRows[1]).toHaveTextContent('Test User 3');
-    expect(screen.queryByText('Current User')).not.toBeInTheDocument();
+    await waitFor(() => {
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
+      expect(userRows.length).toBe(2);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
+      expect(userRows[1]).toHaveTextContent('Test User 3');
+      expect(screen.queryByText('Current User')).not.toBeInTheDocument();
+    });
 
     const addButtons = await screen.findAllByTestId('addBtn');
     await user.click(addButtons[0]);
@@ -243,7 +248,10 @@ describe('CreateDirectChatModal', () => {
     const user = userEvent.setup();
     renderComponent();
 
-    await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBe(2);
+    });
 
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
@@ -252,7 +260,9 @@ describe('CreateDirectChatModal', () => {
     await user.click(searchButton);
 
     await waitFor(() => {
-      const userRows = screen.getAllByTestId('user');
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });
@@ -263,7 +273,10 @@ describe('CreateDirectChatModal', () => {
     const user = userEvent.setup();
     renderComponent();
 
-    await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const rows = document.querySelectorAll('[data-testid^="datatable-row-"]');
+      expect(rows.length).toBe(2);
+    });
 
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
@@ -272,7 +285,9 @@ describe('CreateDirectChatModal', () => {
     await user.click(searchButton);
 
     await waitFor(() => {
-      const userRows = screen.getAllByTestId('user');
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });
@@ -287,11 +302,15 @@ describe('CreateDirectChatModal', () => {
   test('shows member fallback when role is missing', async () => {
     renderComponent();
 
-    const userRows = await screen.findAllByTestId('user');
-    const lastRow = userRows[userRows.length - 1];
-
-    expect(lastRow).toHaveTextContent('Test User 3');
-    expect(lastRow).toHaveTextContent('Member');
+    await waitFor(() => {
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
+      expect(userRows.length).toBe(2);
+      const lastRow = userRows[userRows.length - 1];
+      expect(lastRow).toHaveTextContent('Test User 3');
+      expect(lastRow).toHaveTextContent('Member');
+    });
   });
 
   test('should prevent creating a duplicate chat', async () => {
@@ -324,8 +343,13 @@ describe('CreateDirectChatModal', () => {
 
     renderComponent({ chats: existingChats });
 
-    const userRows = await screen.findAllByTestId('user');
-    expect(userRows[0]).toHaveTextContent('Test User 2');
+    await waitFor(() => {
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
+      expect(userRows.length).toBeGreaterThanOrEqual(1);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
+    });
 
     const addButtons = await screen.findAllByTestId('addBtn');
     await user.click(addButtons[0]);

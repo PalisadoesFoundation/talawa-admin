@@ -1,8 +1,8 @@
 ---
 id: linting-guidelines
 title: Linting Guidelines
-slug: /developer-resources/linting
-sidebar_position: 25
+slug: /developer-resources/general/linting
+sidebar_position: 40
 ---
 
 ## Introduction
@@ -25,7 +25,7 @@ The rule flags `BaseModal` usage in these scenarios:
 
 1. **CRUD Handler Props:** When the modal has props that indicate CRUD operations:
    - `onSubmit`
-   - `onConfirm` 
+   - `onConfirm`
    - `onPrimary`
    - `onSave`
 
@@ -34,13 +34,14 @@ The rule flags `BaseModal` usage in these scenarios:
 #### Examples
 
 **Incorrect - Using BaseModal with CRUD props:**
+
 ```tsx
 import { BaseModal } from 'shared-components/BaseModal';
 
 function UserEditModal() {
   return (
-    <BaseModal 
-      isOpen={true} 
+    <BaseModal
+      isOpen={true}
       onSubmit={handleSubmit} // CRUD handler prop
       title="Edit User"
     >
@@ -54,13 +55,16 @@ function UserEditModal() {
 ```
 
 **Incorrect - Using BaseModal with form elements:**
+
 ```tsx
 import { BaseModal } from 'shared-components/BaseModal';
 
 function CreatePostModal() {
   return (
     <BaseModal isOpen={true} title="Create Post">
-      <Form onSubmit={handleSubmit}> {/* Form element detected */}
+      <Form onSubmit={handleSubmit}>
+        {' '}
+        {/* Form element detected */}
         <input name="title" />
         <textarea name="content" />
       </Form>
@@ -70,16 +74,13 @@ function CreatePostModal() {
 ```
 
 **Correct - Using CRUDModalTemplate:**
+
 ```tsx
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 function UserEditModal() {
   return (
-    <CRUDModalTemplate 
-      isOpen={true} 
-      onSubmit={handleSubmit}
-      title="Edit User"
-    >
+    <CRUDModalTemplate isOpen={true} onSubmit={handleSubmit} title="Edit User">
       <form>
         <input name="username" />
         <button type="submit">Save</button>
@@ -108,7 +109,8 @@ The rule can be customized with these options:
 #### Auto-fix Capability
 
 This rule provides automatic fixes that:
-- Replace `BaseModal` imports with `CRUDModalTemplate` 
+
+- Replace `BaseModal` imports with `CRUDModalTemplate`
 - Preserve other imports when multiple components are imported from the same module
 - Handle both default and named imports
 - Maintain import aliases
@@ -116,7 +118,7 @@ This rule provides automatic fixes that:
 #### Benefits
 
 1. **Consistency:** Ensures CRUD modals use the standardized template
-2. **Best Practices:** Enforces proper component usage patterns  
+2. **Best Practices:** Enforces proper component usage patterns
 3. **Maintainability:** Makes CRUD modal code more predictable and easier to maintain
 4. **Developer Experience:** Provides real-time feedback and automatic fixes in your IDE
 
@@ -127,18 +129,21 @@ While ESLint rules are designed to maintain code quality, there are rare cases w
 ### Inline Disabling
 
 **Disable a specific rule for the next line:**
+
 ```tsx
 // es‌lint-disable-next-line custom-rules/prefer-crud-modal-template
 <BaseModal onSubmit={handleSubmit}>
 ```
 
 **Disable multiple rules for the next line:**
+
 ```tsx
 // es‌lint-disable-next-line custom-rules/prefer-crud-modal-template, no-restricted-imports
 import { BaseModal } from 'shared-components/BaseModal';
 ```
 
 **Disable a rule for the current line:**
+
 ```tsx
 <BaseModal onSubmit={handleSubmit}> {/* es‌lint-disable-line custom-rules/prefer-crud-modal-template */}
 ```
@@ -146,6 +151,7 @@ import { BaseModal } from 'shared-components/BaseModal';
 ### Block Disabling
 
 **Disable rules for a block of code:**
+
 ```tsx
 /* es‌lint-disable custom-rules/prefer-crud-modal-template */
 function LegacyModal() {
@@ -161,6 +167,7 @@ function LegacyModal() {
 ### File-level Disabling
 
 **Disable rules for an entire file (add at the top):**
+
 ```tsx
 /* es‌lint-disable custom-rules/prefer-crud-modal-template */
 
@@ -168,6 +175,7 @@ function LegacyModal() {
 ```
 
 **Disable all ESLint rules for a file:**
+
 ```tsx
 /* es‌lint-disable */
 
@@ -177,8 +185,9 @@ function LegacyModal() {
 ### Best Practices for Disabling Rules
 
 1. **Always include a comment explaining why** you're disabling the rule:
+
    ```tsx
-   // Legacy component that will be refactored in next sprint  
+   // Legacy component that will be refactored in next sprint
    // es‌lint-disable-next-line custom-rules/prefer-crud-modal-template
    <BaseModal onSubmit={handleSubmit}>
    ```

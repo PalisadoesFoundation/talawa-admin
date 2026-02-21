@@ -42,8 +42,13 @@
  * - `react-icons`
  *
  */
-import { Paper, TableBody } from '@mui/material';
-import React, { useRef, useState, useEffect } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+} from 'react';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -56,12 +61,9 @@ import {
   DELETE_CHAT,
   DELETE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import Table from '@mui/material/Table';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
@@ -103,20 +105,6 @@ export default function GroupChatDetails({
       NotificationToast.error(t('userNotFound'));
     }
   }, [userId, t]);
-
-  if (!userId) {
-    return (
-      <BaseModal
-        show={groupChatDetailsModalisOpen}
-        onHide={toggleGroupChatDetailsModal}
-        title={t('Error')}
-        dataTestId="groupChatDetailsModal"
-        className={styles.modalContent}
-      >
-        {t('userNotFound')}
-      </BaseModal>
-    );
-  }
 
   //states
 
@@ -205,8 +193,9 @@ export default function GroupChatDetails({
     setAddUserModalisOpen(true);
   }
 
-  const toggleAddUserModal = (): void =>
-    setAddUserModalisOpen(!addUserModalisOpen);
+  const toggleAddUserModal = useCallback((): void => {
+    setAddUserModalisOpen((prev) => !prev);
+  }, []);
 
   const {
     data: allUsersData,
@@ -221,13 +210,16 @@ export default function GroupChatDetails({
     },
   });
 
-  const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({
-      variables: {
-        input: { memberId: userId, chatId: chat.id, role: 'regular' },
-      },
-    });
-  };
+  const addUserToGroupChat = useCallback(
+    async (memberId: string): Promise<void> => {
+      await addUser({
+        variables: {
+          input: { memberId, chatId: chat.id, role: 'regular' },
+        },
+      });
+    },
+    [addUser, chat.id],
+  );
 
   const handleUserModalSearchChange = (value: string): void => {
     const trimmedName = value.trim();
@@ -278,6 +270,94 @@ export default function GroupChatDetails({
       setSelectedImage('');
     }
   };
+
+  const addUserTableData = useMemo(
+    () =>
+      allUsersData?.organization?.members?.edges
+        ?.filter(
+          ({ node: userDetails }: { node: InterfaceOrganizationMember }) =>
+            userDetails.id !== userId &&
+            !chat.members?.edges?.some(
+              (edge) => edge.node.user.id === userDetails.id,
+            ),
+        )
+        .map(
+          (
+            {
+              node: userDetails,
+            }: {
+              node: InterfaceOrganizationMember;
+            },
+            index: number,
+          ) => ({ ...userDetails, index: index + 1 }),
+        ) ?? [],
+    [allUsersData?.organization?.members?.edges, userId, chat.members?.edges],
+  );
+
+  const addUserColumns = useMemo<
+    IColumnDef<InterfaceOrganizationMember & { index: number }>[]
+  >(
+    () => [
+      {
+        id: 'index',
+        header: '#',
+        accessor: 'index',
+        meta: { align: 'center' },
+      },
+      {
+        id: 'user',
+        header: t('user'),
+        accessor: 'name',
+        meta: { align: 'center' },
+        render: (value, row) => (
+          <>
+            {row.name}
+            <br />
+            {row.role || tCommon('member', { defaultValue: 'Member' })}
+          </>
+        ),
+      },
+      {
+        id: 'action',
+        header: t('chatAction'),
+        accessor: 'id',
+        meta: { align: 'center' },
+        render: (_, row) => (
+          <Button
+            onClick={async () => {
+              try {
+                await addUserToGroupChat(row.id);
+                toggleAddUserModal();
+                await chatRefetch({ input: { id: chat.id } });
+                NotificationToast.success(t('userAddedSuccessfully'));
+              } catch (error) {
+                NotificationToast.error(t('failedToAddUser'));
+                console.error(error);
+              }
+            }}
+            data-testid="addUserBtn"
+          >
+            {t('add')}
+          </Button>
+        ),
+      },
+    ],
+    [t, tCommon, chat.id, addUserToGroupChat, toggleAddUserModal, chatRefetch],
+  );
+
+  if (!userId) {
+    return (
+      <BaseModal
+        show={groupChatDetailsModalisOpen}
+        onHide={toggleGroupChatDetailsModal}
+        title={t('Error')}
+        dataTestId="groupChatDetailsModal"
+        className={styles.modalContent}
+      >
+        {t('userNotFound')}
+      </BaseModal>
+    );
+  }
 
   return (
     <ErrorBoundaryWrapper
@@ -343,6 +423,7 @@ export default function GroupChatDetails({
             data-testid="editImageBtn"
             onClick={handleImageClick}
             className={styles.editImgBtn}
+            variant="light"
             aria-label={t('editImage')}
           >
             <FiEdit />
@@ -533,89 +614,15 @@ export default function GroupChatDetails({
             />
           </div>
 
-          <TableContainer className={styles.userData} component={Paper}>
-            <Table aria-label={t('customizedTable')}>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={styles.tableHeader}>#</TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    {t('user')}
-                  </TableCell>
-                  <TableCell align="center" className={styles.tableHeader}>
-                    {t('chatAction')}
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody data-testid="userList">
-                {allUsersData &&
-                  allUsersData.organization?.members?.edges?.length > 0 &&
-                  allUsersData.organization.members.edges
-                    .filter(
-                      ({
-                        node: userDetails,
-                      }: {
-                        node: InterfaceOrganizationMember;
-                      }) =>
-                        userDetails.id !== userId &&
-                        !chat.members?.edges?.some(
-                          (edge) => edge.node.user.id === userDetails.id,
-                        ),
-                    )
-                    .map(
-                      (
-                        {
-                          node: userDetails,
-                        }: {
-                          node: InterfaceOrganizationMember;
-                        },
-                        index: number,
-                      ) => (
-                        <TableRow key={userDetails.id} data-testid="user">
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className={styles.tableBody}
-                          >
-                            {index + 1}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            className={styles.tableBody}
-                          >
-                            {userDetails.name}
-                            <br />
-                            {userDetails.role ||
-                              tCommon('member', { defaultValue: 'Member' })}
-                          </TableCell>
-                          <TableCell
-                            align="center"
-                            className={styles.tableBody}
-                          >
-                            <Button
-                              onClick={async () => {
-                                try {
-                                  await addUserToGroupChat(userDetails.id);
-                                  toggleAddUserModal();
-                                  chatRefetch({ input: { id: chat.id } });
-                                  NotificationToast.success(
-                                    t('userAddedSuccessfully'),
-                                  );
-                                } catch (error) {
-                                  NotificationToast.error(t('failedToAddUser'));
-                                  console.error(error);
-                                }
-                              }}
-                              data-testid="addUserBtn"
-                            >
-                              {t('add')}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ),
-                    )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <div className={styles.userData} data-testid="userList">
+            <DataTable<InterfaceOrganizationMember & { index: number }>
+              data={addUserTableData}
+              columns={addUserColumns}
+              rowKey="id"
+              paginationMode="none"
+              ariaLabel={t('customizedTable')}
+            />
+          </div>
         </LoadingState>
       </BaseModal>
     </ErrorBoundaryWrapper>
