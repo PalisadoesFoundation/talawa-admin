@@ -872,6 +872,6 @@ A: The DataGrid uses MUI's styling system. You can use the `sx` prop on columns 
 ## See Also
 
 - [MUI DataGrid Documentation](https://mui.com/x/react-data-grid/)
-- [Reusable Components Guide](../general/reusable-components.md)
-- [Design Token System](../general/design-token-system.md)
+- [Reusable Components Guide](../getting-started/reusable-components.md)
+- [Design Token System](../getting-started/design-token-system.md)
 - [Testing Guide](../testing//testing.md)

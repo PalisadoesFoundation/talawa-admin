@@ -2,9 +2,9 @@
   display: flex;
   align-items: center;
   border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background-color: var(--color-gray-50);
-  box-shadow: 0 var(--space-4) var(--space-6) var(--color-gray-800);
+  box-shadow: 0 var(--space-4) var(--space-6) var(--color-blue-shadow-light);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -12,17 +12,16 @@
   flex-grow: 1;
   flex-shrink: 1;
   width: auto;
-  min-width: var(--space-12);
-  max-width: 100%;
-  height: var(--space-14);
+  min-width: var(--space-16);
+  height: var(--space-10-5);
   margin: var(--space-10) 0;
-  gap: var(--space-4);
-  max-width: var(--space-28);
+  max-width: var(--space-27);
+  gap: var(--space-3);
 }
 
 .searchBarContainer > :first-child {
-  flex: 1 1 var(--space-20);
-  min-width: var(--space-15);
+  flex: 1 1 var(--space-21);
+  min-width: var(--space-18);
   max-width: 100%;
 }
 
@@ -32,7 +31,7 @@
 
 .searchBarContainer:focus-within {
   border-color: var(--color-blue-300);
-  box-shadow: 0 0 0 var(--border-2) var(--color-gray-800);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-shadow-focus);
 }
 
 .searchBarInputWrapper {
@@ -40,15 +39,15 @@
   flex: 1;
   display: flex;
   align-items: center;
-  min-height: var(--space-12);
-  min-width: var(--space-64);
-  padding: var(--space-3) var(--space-10) var(--space-3) var(--space-5);
+  min-height: var(--space-10);
+  min-width: var(--space-21);
+  padding: var(--space-3) var(--space-9) var(--space-3) var(--space-5);
   background-color: transparent;
 }
 
 .searchBarVariantFilled {
   border-color: transparent;
-  background-color: var(--color-gray-50);
+  background-color: var(--color-gray-100);
 }
 
 .searchBarVariantGhost {
@@ -66,8 +65,8 @@
   border: none;
   background: transparent;
   padding: 0;
-  padding-left: var(--space-12) !important;
-  font-size: var(--font-size-15);
+  padding-left: var(--space-10) !important;
+  font-size: var(--font-size-base);
   color: var(--color-gray-900);
   outline: none;
   width: 100%;
@@ -85,7 +84,7 @@
 }
 
 .searchBarInput::placeholder {
-  color: var(--color-blue-200);
+  color: var(--color-gray-500);
 }
 
 .searchBarInputSm {
@@ -101,7 +100,7 @@
 }
 
 .searchBarNoIcon {
-  padding-left: var(--space-5);
+  padding-left: var(--space-5) !important;
 }
 
 .searchBarIcon {
@@ -109,9 +108,9 @@
   left: var(--space-4);
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-blue-100);
+  color: var(--color-gray-400);
   display: inline-flex;
-  font-size: var(--font-size-19);
+  font-size: var(--font-size-md);
   pointer-events: none;
 }
 
@@ -121,7 +120,7 @@
   top: var(--space-0);
   bottom: var(--space-0);
   background-color: var(--color-blue-200);
-  color: var(--color-blue-800);
+  color: var(--color-gray-700);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -135,7 +134,7 @@
   right: var(--space-2);
   border: none;
   background: transparent;
-  color: var(--color-gray-300);
+  color: var(--color-gray-400);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -145,7 +144,7 @@
 
 .searchBarClearButton:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-300);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-shadow-focus-strong);
   border-radius: var(--radius-full);
 }
 
@@ -158,17 +157,17 @@
   border-radius: var(--radius-none);
   background-color: var(--color-blue-200);
   color: var(--color-gray-700);
-  width: var(--space-12);
-  height: var(--space-12);
+  width: var(--space-10);
+  height: var(--space-10);
   font-weight: var(--font-weight-semibold);
   transition:
     background-color 0.2s ease,
     transform 0.1s ease;
-  border-left: var(--border-1) solid var(--color-gray-400);
+  border-left: var(--border-1) solid var(--color-gray-200);
 }
 
 .searchBarButton:hover:not(:disabled) {
-  background-color: var(--color-blue-200);
+  background-color: var(--color-blue-300);
 }
 
 .searchBarButton:active:not(:disabled) {
@@ -182,8 +181,8 @@
 }
 
 .searchBarButtonSm {
-  width: var(--space-12);
-  height: var(--space-12);
+  width: var(--space-10);
+  height: var(--space-10);
   font-size: var(--font-size-sm);
 }
 
@@ -194,15 +193,15 @@
 }
 
 .searchBarIconButton {
-  width: var(--space-14);
-  height: var(--space-14);
+  width: var(--space-11);
+  height: var(--space-10-5);
   padding: var(--space-0);
 }
 
 .searchBarSpinner {
   width: var(--space-4);
   height: var(--space-4);
-  border: var(--border-2) solid var(--color-gray-400);
+  border: var(--border-2) solid var(--color-white-60);
   border-top-color: var(--color-white);
   border-radius: var(--radius-full);
   animation: searchBarSpin 0.8s linear infinite;

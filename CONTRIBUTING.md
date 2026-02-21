@@ -12,5 +12,5 @@ Please read the [Palisadoes Contributing Guidelines](https://developer.palisadoe
 
 Use the single source of truth for Talawa-Admin contributing guidelines:
 
-- Local docs: `docs/docs/docs/developer-resources/general/introduction.md`
+- Local docs: `docs/docs/docs/developer-resources/getting-started/introduction.md`
 - Online docs: [Introduction to Contributing](https://docs-admin.talawa.io/docs/developer-resources/introduction)

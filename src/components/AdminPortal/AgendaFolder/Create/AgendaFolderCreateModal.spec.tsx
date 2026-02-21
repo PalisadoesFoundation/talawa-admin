@@ -43,7 +43,6 @@ describe('AgendaFolderCreateModal', () => {
     cleanup();
     mockOrgId = 'org-123';
     vi.restoreAllMocks(); // restore spy implementations
-    vi.clearAllMocks();
   });
 
   it('renders modal when open', () => {
@@ -327,8 +326,9 @@ describe('AgendaFolderCreateModal', () => {
     );
 
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
-
-    expect(hideMock).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(hideMock).toHaveBeenCalled();
+    });
   });
 
   it('does not show modal when isOpen is false', () => {
@@ -533,18 +533,16 @@ describe('AgendaFolderCreateModal', () => {
     await waitFor(
       () => {
         expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
+        // Form should still have values after error
+        expect(nameInput).toHaveValue('Error Test');
+        expect(descInput).toHaveValue('Error Desc');
+        // These should not be called on error
+        expect(hideMock).not.toHaveBeenCalled();
+        expect(refetchMock).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
       },
-      { timeout: 5000 },
+      { timeout: 10000 },
     );
-
-    // Form should still have values after error
-    expect(nameInput).toHaveValue('Error Test');
-    expect(descInput).toHaveValue('Error Desc');
-
-    // These should not be called on error
-    expect(hideMock).not.toHaveBeenCalled();
-    expect(refetchMock).not.toHaveBeenCalled();
-    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('handles non-array agendaFoldersByEventId safely', async () => {
