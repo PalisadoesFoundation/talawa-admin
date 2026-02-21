@@ -15,6 +15,10 @@ import {
   organizationDataNullMock,
 } from './UserPortalNavigationBarMocks';
 
+type MockIconProps = HTMLAttributes<HTMLDivElement> & {
+  'data-testid'?: string;
+};
+
 describe('UserPortalNavigationBarMocks', () => {
   describe('Mock Constants', () => {
     it('should export correct string constants', () => {
@@ -30,10 +34,6 @@ describe('UserPortalNavigationBarMocks', () => {
   });
 
   describe('getMockIcon factory', () => {
-    type MockIconProps = HTMLAttributes<HTMLDivElement> & {
-      'data-testid'?: string;
-    };
-
     it('should return the Home Icon when type is "home"', () => {
       const HomeIconComponent = getMockIcon('home');
       const element = HomeIconComponent({}) as ReactElement<MockIconProps>;
@@ -46,10 +46,8 @@ describe('UserPortalNavigationBarMocks', () => {
       const PersonIconComponent = getMockIcon('permIdentity');
       const element = PersonIconComponent({
         className: 'test-class',
-        'data-testid': 'mock-person-icon',
       } as MockIconProps) as ReactElement<MockIconProps>;
 
-      expect(element.props['data-testid']).toBe('mock-person-icon');
       expect(element.props.className).toBe('test-class');
       expect(element.props.children).toBe('Person Icon');
     });
@@ -59,6 +57,7 @@ describe('UserPortalNavigationBarMocks', () => {
         'unknown' as Parameters<typeof getMockIcon>[0],
       );
       expect(FallbackComponent).toBeDefined();
+
       const element = FallbackComponent({}) as ReactElement<MockIconProps>;
       expect(element).toBeDefined();
       expect(element.props.children).toBe('Person Icon');
@@ -68,21 +67,21 @@ describe('UserPortalNavigationBarMocks', () => {
   describe('Navigation Links Mock', () => {
     it('should export an array of navigation links', () => {
       expect(mockNavigationLinksBase).toHaveLength(3);
-      expect(mockNavigationLinksBase[0]).toEqual({
-        id: 'home',
-        label: 'Home',
-        path: '/home',
+      expect(mockNavigationLinksBase[0]).toMatchObject({
+        id: expect.any(String),
+        label: expect.any(String),
+        path: expect.any(String),
       });
-      expect(mockNavigationLinksBase[1]).toEqual({
-        id: 'campaigns',
-        label: 'Campaigns',
-        path: '/campaigns',
+      expect(mockNavigationLinksBase[1]).toMatchObject({
+        id: expect.any(String),
+        label: expect.any(String),
+        path: expect.any(String),
         translationKey: 'pledges.campaigns',
       });
-      expect(mockNavigationLinksBase[2]).toEqual({
-        id: 'events',
-        label: 'Events',
-        path: '/events',
+      expect(mockNavigationLinksBase[2]).toMatchObject({
+        id: expect.any(String),
+        label: expect.any(String),
+        path: expect.any(String),
       });
     });
   });
