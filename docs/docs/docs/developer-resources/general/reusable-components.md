@@ -1,7 +1,7 @@
 ---
 id: reusable-components
 title: Reusable Components
-slug: /developer-resources/reusable-components
+slug: /developer-resources/general/reusable-components
 sidebar_position: 35
 ---
 
@@ -841,7 +841,7 @@ It also ensures that any changes in shared components are propagated safely, wit
 ### Testing Shared Component
 
 1. Each shared component must include a corresponding test file (`Component.spec.tsx`)
-1. Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/testing)
+1. Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/general/testing)
 
 ### Document Your Code
 

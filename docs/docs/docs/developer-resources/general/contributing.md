@@ -1,7 +1,7 @@
 ---
 id: contributing
 title: Contributing
-slug: /developer-resources/contributing
+slug: /developer-resources/general/contributing
 sidebar_position: 15
 ---
 

@@ -1,7 +1,7 @@
 ---
 id: e2e-testing
 title: End to End Testing
-slug: /developer-resources/e2e-testing
+slug: /developer-resources/testing/e2e-testing
 sidebar_position: 70
 ---
 
@@ -9,7 +9,7 @@ This project uses Cypress for comprehensive end-to-end testing to ensure the app
 
 ## Additional Resources
 
-- [Online docs](https://docs-admin.talawa.io/docs/developer-resources/e2e-testing)
+- [Online docs](https://docs-admin.talawa.io/docs/developer-resources/testing/e2e-testing)
 - Cypress local quick reference: `cypress/README.md`
 
 ## Prerequisites
