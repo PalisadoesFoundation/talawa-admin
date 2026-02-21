@@ -116,6 +116,10 @@ const PluginStore = lazy(
   () => import('screens/AdminPortal/PluginStore/PluginStore'),
 );
 
+const OAuthCallbackPage = lazy(
+  () => import('components/Auth/OAuthCallback/callback'),
+);
+
 const { setItem } = useLocalStorage();
 
 /**
@@ -324,6 +328,8 @@ function App(): React.ReactElement {
             path="/event/invitation/:token"
             element={<AcceptInvitation />}
           />
+          {/* OAuth callback route */}
+          <Route path="/auth/callback" element={<OAuthCallbackPage />} />
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />

@@ -107,6 +107,15 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "Compte lié avec succès.",
+    "successfullyLoggedIn": "Connecté avec succès.",
+    "oauthProviderError": "Erreur du fournisseur OAuth : {{error}}",
+    "noAuthCodeReceived": "Aucun code d'autorisation reçu du fournisseur OAuth.",
+    "oauthAuthenticationFailed": "Échec de l'authentification OAuth. Veuillez réessayer.",
+    "oauthConfigurationNotFound": "Configuration OAuth introuvable pour le fournisseur.",
+    "csrfValidationFailed": "La validation CSRF a échoué. Veuillez réessayer."
+  },
   "verifyEmail": {
     "title": "Vérifier l'Email",
     "loginRequired": "Connexion requise",

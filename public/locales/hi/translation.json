@@ -107,6 +107,15 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "खाता सफलतापूर्वक जुड़ा हुआ है",
+    "successfullyLoggedIn": "सफलतापूर्वक लॉग इन किया गया",
+    "oauthProviderError": "OAuth प्रदाता त्रुटि: {{error}}",
+    "noAuthCodeReceived": "OAuth प्रदाता से कोई प्राधिकरण कोड प्राप्त नहीं हुआ",
+    "oauthAuthenticationFailed": "OAuth प्रमाणीकरण विफल। कृपया पुनः प्रयास करें।",
+    "oauthConfigurationNotFound": "प्रदाता के लिए OAuth कॉन्फ़िगरेशन नहीं मिला।",
+    "csrfValidationFailed": "CSRF सत्यापन विफल रहा। कृपया पुनः प्रयास करें।"
+  },
   "verifyEmail": {
     "title": "ईमेल सत्यापित करें",
     "loginRequired": "लॉगिन आवश्यक",
