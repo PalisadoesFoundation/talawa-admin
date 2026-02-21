@@ -61,31 +61,46 @@
 .searchContainerRowNoTopMargin {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: var(--space-4);
   margin-bottom: var(--space-5);
+}
+
+.searchBarContainer {
+  flex: 0 1 auto;
+  max-width: var(--space-26);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  height: auto;
 }
 
 .createFundButton {
   background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
+  --btn-text-color: var(--color-gray-700);
+  color: var(--btn-text-color) !important;
   border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-2);
-  width: var(--space-16);
+  padding: var(--space-2) var(--space-4);
+  flex-shrink: 0;
+  white-space: nowrap;
   height: var(--space-10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .createFundButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
+  box-shadow: var(--drop-shadow);
+  background-color: var(--color-gray-100);
+  --btn-text-color: var(--color-black);
   border: var(--border-1) solid var(--color-gray-700);
 }
 
 .createFundButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  --btn-text-color: var(--color-black);
+  background-color: var(--color-gray-200);
+  border: var(--border-1) solid var(--color-gray-700);
 }
 
 .buttonNoWrap {

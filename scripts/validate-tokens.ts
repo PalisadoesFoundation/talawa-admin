@@ -203,6 +203,9 @@ export const ALLOWLIST_PATTERNS = [
   /flex-grow:\s*[\d.]+/,
   /flex-shrink:\s*[\d.]+/,
   /order:\s*-?\d+/,
+  // MUI DataGrid column width configuration (expects numeric pixels, not CSS tokens)
+  /minWidth:\s*\d+/,
+  /maxWidth:\s*\d+/,
   /animation-duration:\s*[\d.]+m?s/,
   /animation-delay:\s*[\d.]+m?s/,
   /transition:\s*[^;]+[\d.]+m?s/,

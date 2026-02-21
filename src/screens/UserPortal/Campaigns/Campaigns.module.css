@@ -1,6 +1,6 @@
 .whiteContainer {
   background-color: var(--color-white);
-  border-radius: var(--space-5);
+  border-radius: var(--radius-xl);
   margin-top: var(--space-5);
   margin-bottom: var(--space-5);
 }
@@ -21,7 +21,7 @@
   /* Add error icon for non-color indication */
   &::before {
     content: '⚠️';
-    margin-right: var(--space-2);
+    margin-right: var(--space-3);
   }
 }
 
@@ -30,6 +30,9 @@
 }
 
 .tableHeader {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
 }
 
@@ -42,4 +45,44 @@
   color: var(--color-black);
   max-height: var(--space-14);
   overflow-y: auto;
+}
+
+.searchContainerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.pledgesButton {
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
+  white-space: nowrap;
+}
+
+.pledgesButton:hover {
+  box-shadow: var(--createButton-box-shadow-hover);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
+}
+
+.pledgesButton:active {
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-400);
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+.listTable {
+  width: 100%;
+  background-color: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-top: var(--space-5);
 }

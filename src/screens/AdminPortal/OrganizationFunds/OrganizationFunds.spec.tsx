@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -17,14 +17,6 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import { vi, afterEach } from 'vitest';
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -224,9 +216,9 @@ describe('OrganizationFunds Screen =>', () => {
     await user.click(editFundBtn[0]);
 
     await waitFor(() =>
-      expect(
-        screen.getAllByText(translations.fundUpdate)[0],
-      ).toBeInTheDocument(),
+      expect(screen.getByTestId('modalTitle')).toHaveTextContent(
+        translations.manageFunds,
+      ),
     );
     await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
@@ -333,7 +325,9 @@ describe('OrganizationFunds Screen =>', () => {
     expect(createdOnHeader).toBeInTheDocument();
     if (createdOnHeader) {
       await user.click(createdOnHeader);
-      await wait(300);
+      await waitFor(() =>
+        expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0),
+      );
     }
 
     const allFundNames = screen.getAllByTestId('fundName');
@@ -386,7 +380,9 @@ describe('OrganizationFunds Screen =>', () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     const { container } = renderOrganizationFunds(link1);
 
-    await wait();
+    await waitFor(() =>
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument(),
+    );
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -410,7 +406,9 @@ describe('OrganizationFunds Screen =>', () => {
 
       if (nextButton && !nextButton.disabled) {
         await user.click(nextButton);
-        await wait(300);
+        await waitFor(() =>
+          expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument(),
+        );
       }
     }
 
@@ -508,11 +506,15 @@ describe('OrganizationFunds Screen =>', () => {
 
     if (createdOnHeader) {
       await user.click(createdOnHeader);
-      await wait(300);
+      await waitFor(() =>
+        expect(screen.getAllByTestId('createdOn').length).toBeGreaterThan(0),
+      );
 
       // Click again to toggle sort direction
       await user.click(createdOnHeader);
-      await wait(300);
+      await waitFor(() =>
+        expect(screen.getAllByTestId('createdOn').length).toBeGreaterThan(0),
+      );
     }
 
     // Verify created on dates are displayed

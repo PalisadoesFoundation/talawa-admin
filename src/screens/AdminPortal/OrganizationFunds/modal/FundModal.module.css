@@ -1,13 +1,30 @@
-.fundModal {
-  max-width: 80vw;
+.fundModal :global(.modal-dialog) {
+  max-width: var(--space-25);
+  margin: auto;
+}
+
+.fundModal :global(.form-control) {
+  background-color: var(--color-gray-100);
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: var(--space-4) var(--space-5);
+}
+
+.fundModal :global(.form-control):focus {
+  background-color: var(--color-gray-100);
+  box-shadow: none;
+}
+
+.fundModal :global(.form-control.is-invalid) {
+  border: var(--border-2) solid var(--color-red-500);
 }
 
 .titlemodal {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-3xl);
-  width: 65%;
+  color: var(--color-black);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-2xl);
   margin-bottom: 0;
+  white-space: nowrap;
 }
 
 .noOutline input {
@@ -48,21 +65,108 @@
   margin-inline-start: -1.7em;
 }
 
-.addButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+/* Base button styles shared across all action buttons */
+.btnBase {
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
   --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+.addButton {
+  composes: btnBase;
+  width: 100%;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700) !important;
+  background-color: var(--color-blue-200) !important;
+  border-color: var(--color-blue-200) !important;
+}
+
+.addButton:hover {
+  background-color: var(--color-blue-300) !important;
+  border-color: var(--color-blue-300) !important;
+  color: var(--color-gray-800) !important;
+}
+
+.addButton:active,
+.addButton:focus {
+  background-color: var(--color-blue-400) !important;
+  border-color: var(--color-blue-400) !important;
+}
+
+.buttonRow {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.editButton {
+  composes: btnBase;
+  flex: 1;
+  color: var(--color-gray-700) !important;
+  background-color: var(--color-blue-200) !important;
+  border-color: var(--color-blue-200) !important;
+}
+
+.editButton:hover {
+  background-color: var(--color-blue-300) !important;
+  border-color: var(--color-blue-300) !important;
+  color: var(--color-gray-800) !important;
+}
+
+.editButton:active,
+.editButton:focus {
+  background-color: var(--color-blue-400) !important;
+  border-color: var(--color-blue-400) !important;
+}
+
+.deleteButton {
+  composes: btnBase;
+  flex: 1;
+  color: var(--color-red-500) !important;
+  background-color: var(--color-red-100) !important;
+  border-color: var(--color-red-100) !important;
+}
+
+.deleteButton:hover {
+  background-color: var(--color-red-200) !important;
+  border-color: var(--color-red-200) !important;
+  color: var(--color-red-600) !important;
+}
+
+.deleteButton:active,
+.deleteButton:focus {
+  background-color: var(--color-red-300) !important;
+  border-color: var(--color-red-300) !important;
+}
+
+.archiveButton {
+  composes: btnBase;
+  width: 100%;
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700) !important;
+  background-color: var(--color-gray-200) !important;
+  border-color: var(--color-gray-200) !important;
+}
+
+.archiveButton:hover {
+  background-color: var(--color-gray-300) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-gray-800) !important;
+}
+
+.archiveButton:active,
+.archiveButton:focus {
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-400) !important;
 }
 
 .addButton:disabled {
   margin-bottom: var(--space-4);
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  background-color: var(--color-gray-50) !important;
+  border-color: var(--color-blue-200) !important;
+  color: var(--color-gray-400) !important;
+  cursor: not-allowed;
+  opacity: 0.65;
 }

@@ -1,7 +1,11 @@
-.campaignModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+.campaignModal :global(.modal-dialog) {
+  max-width: var(--space-25);
+  margin: auto;
+}
+
+.campaignModal :global(.modal-content),
+.campaignModal :global(.modal-body) {
+  overflow: visible;
 }
 
 .titlemodal {
@@ -35,21 +39,68 @@
   outline: none;
 }
 
-.addButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+.datePickerWrapper {
+  flex: 1;
+}
+
+.dateLabel {
+  display: block;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.inlineFieldWrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.inlineFieldWrapper label {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.inlineFieldWrapper :global(.form-control),
+.inlineFieldWrapper :global(.form-select) {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--color-gray-100);
+  border: none;
+  border-radius: var(--radius-xl);
+}
+
+/* Base button styles shared across action buttons */
+.btnBase {
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
   --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+.addButton {
+  composes: btnBase;
+  width: 100%;
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700) !important;
+  background-color: var(--color-blue-200) !important;
+  border-color: var(--color-blue-200) !important;
+}
+
+.addButton:hover {
+  background-color: var(--color-blue-300) !important;
+  border-color: var(--color-blue-300) !important;
+  color: var(--color-gray-800) !important;
+}
+
+.addButton:active,
+.addButton:focus {
+  background-color: var(--color-blue-400) !important;
+  border-color: var(--color-blue-400) !important;
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-gray-100);
-  border-color: var(--color-blue-200);
+  background-color: var(--color-gray-100) !important;
+  border-color: var(--color-blue-200) !important;
 }

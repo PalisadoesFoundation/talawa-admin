@@ -88,7 +88,11 @@ const orgFundCampaign = (): JSX.Element => {
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
 
-  const { isOpen, open, close } = useModalState();
+  const {
+    isOpen: modalState,
+    open: openModal,
+    close: closeModal,
+  } = useModalState();
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -100,9 +104,9 @@ const orgFundCampaign = (): JSX.Element => {
     ): void => {
       setCampaign(selectedCampaign);
       setCampaignModalMode(mode);
-      open();
+      openModal();
     },
-    [],
+    [openModal],
   );
 
   const {
@@ -409,11 +413,12 @@ const orgFundCampaign = (): JSX.Element => {
           searchInputTestId="searchFullName"
           searchButtonTestId="searchButton"
           hasDropdowns={false}
+          containerClassName={styles.searchBarContainer}
         />
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}
-          className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
+          className={`${styles.createButton} ${styles.buttonNoWrap}`}
           data-testid="addCampaignBtn"
           disabled={isArchived}
         >
@@ -472,8 +477,8 @@ const orgFundCampaign = (): JSX.Element => {
 
       {/* Create Campaign Modal */}
       <CampaignModal
-        isOpen={isOpen}
-        hide={close}
+        isOpen={modalState}
+        hide={closeModal}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
         orgId={orgId}

@@ -5,6 +5,7 @@ dayjs.extend(utc);
 import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
+  DELETE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 
@@ -128,8 +129,6 @@ export const MOCKS = [
         name: 'Fund 2',
         organizationId: 'orgId',
         isTaxDeductible: false,
-        isArchived: false,
-        isDefault: true,
       },
     },
     result: {
@@ -154,6 +153,59 @@ export const MOCKS = [
     result: {
       data: {
         updateFund: {
+          id: 'fundId',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
+          isArchived: true,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateFund: {
+          id: 'fundId',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
+          isArchived: false,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateFund: {
+          id: 'fundId',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: DELETE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
+        },
+      },
+    },
+    result: {
+      data: {
+        deleteFund: {
           id: 'fundId',
         },
       },
@@ -198,8 +250,6 @@ export const MOCKS_ERROR = [
         name: 'Fund 2',
         organizationId: 'orgId',
         isTaxDeductible: false,
-        isArchived: false,
-        isDefault: true,
       },
     },
     error: new Error('Mock graphql error'),
@@ -212,6 +262,29 @@ export const MOCKS_ERROR = [
           id: 'fundId',
           name: 'Fund 2',
           isTaxDeductible: false,
+        },
+      },
+    },
+    error: new Error('Mock graphql error'),
+  },
+  {
+    request: {
+      query: UPDATE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
+          isArchived: true,
+        },
+      },
+    },
+    error: new Error('Mock graphql error'),
+  },
+  {
+    request: {
+      query: DELETE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
         },
       },
     },

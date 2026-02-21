@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -500,7 +499,7 @@ describe('DatePicker', () => {
           onChange={mockOnChange}
           onBlur={customOnBlur}
           slotProps={{
-            textField: null as any,
+            textField: null as unknown as Record<string, unknown>,
           }}
           data-testid="null-slot-blur-test"
         />,
@@ -525,7 +524,7 @@ describe('DatePicker', () => {
           onBlur={customOnBlur}
           slotProps={{
             textField: {
-              onBlur: 'not-a-function' as any,
+              onBlur: 'not-a-function' as unknown as () => void,
             },
           }}
           data-testid="invalid-blur-test"
@@ -819,6 +818,23 @@ describe('DatePicker', () => {
       // Check that the class list doesn't include undefined padding
       expect(input).toBeInTheDocument();
     });
+
+    it('renders calendar adornment with correct styling', () => {
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          label="Select Date"
+          value={dayjs()}
+          onChange={mockOnChange}
+          data-testid="adornment-test"
+        />,
+      );
+      const adornment = screen.getByTestId('datepicker-adornment');
+      expect(adornment).toBeInTheDocument();
+      const input = screen.getByTestId('adornment-test');
+      // CSS modules hash class names, so check for partial match
+      expect(input.className).toContain('paddedInput');
+    });
   });
 
   describe('Component Lifecycle and Re-renders', () => {
@@ -1099,6 +1115,67 @@ describe('DatePicker', () => {
       const input = screen.getByRole('textbox');
       expect(input).not.toHaveAttribute('required');
       expect(input).not.toHaveAttribute('aria-required');
+    });
+  });
+
+  describe('SlotProps Edge Cases', () => {
+    it('handles functional slotProps.textField', () => {
+      const functionalTextField = vi.fn((props: Record<string, unknown>) => (
+        <input
+          {...(props.inputProps as Record<string, unknown>)}
+          data-testid="custom-input"
+        />
+      ));
+
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          value={dayjs()}
+          onChange={mockOnChange}
+          slotProps={{
+            textField: functionalTextField as unknown as Record<
+              string,
+              unknown
+            >,
+          }}
+        />,
+      );
+
+      expect(functionalTextField).toHaveBeenCalled();
+    });
+
+    it('does not inject onBlur when slotProps.textField is a function', async () => {
+      const mockOnBlur = vi.fn();
+      const functionalTextField = vi.fn(
+        (ownerState: Record<string, unknown>) => ({
+          ...ownerState,
+          'data-custom': 'functional',
+        }),
+      );
+
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          value={dayjs()}
+          onChange={mockOnChange}
+          onBlur={mockOnBlur}
+          slotProps={{
+            textField: functionalTextField as unknown as Record<
+              string,
+              unknown
+            >,
+          }}
+        />,
+      );
+
+      expect(functionalTextField).toHaveBeenCalled();
+      // When slotProps.textField is a function, the component bypasses onBlur injection
+      // so the external onBlur callback will not be fired on blur
+      const user = userEvent.setup();
+      const input = screen.getByRole('textbox');
+      await user.click(input);
+      await user.click(document.body);
+      expect(mockOnBlur).not.toHaveBeenCalled();
     });
   });
 });

@@ -62,92 +62,98 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
         disabled={disabled}
         inputId={inputId}
       >
-        <MuiDatePicker
-          format={format}
-          value={value === undefined ? null : value}
-          onChange={onChange}
-          minDate={minDate}
-          maxDate={maxDate}
-          disabled={disabled}
-          className={styles.fullWidth}
-          enableAccessibleFieldDOMStructure={false}
-          reduceAnimations
-          slotProps={{
-            ...slotProps,
-            textField: {
-              ...slotProps?.textField,
-              // Handle onBlur with safe type checking
-              onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
-                onBlur?.();
-                const textFieldProps = slotProps?.textField;
-                if (
-                  typeof textFieldProps === 'object' &&
-                  textFieldProps !== null &&
-                  'onBlur' in textFieldProps &&
-                  typeof (textFieldProps as { onBlur: unknown }).onBlur ===
-                    'function'
-                ) {
-                  (
-                    textFieldProps as {
-                      onBlur: (ev: React.FocusEvent<HTMLInputElement>) => void;
-                    }
-                  ).onBlur(e);
-                }
+        <div className={styles.datePickerContainer}>
+          <MuiDatePicker
+            format={format}
+            value={value === undefined ? null : value}
+            onChange={onChange}
+            minDate={minDate}
+            maxDate={maxDate}
+            disabled={disabled}
+            className={styles.fullWidth}
+            enableAccessibleFieldDOMStructure={false}
+            reduceAnimations
+            slotProps={{
+              ...slotProps,
+              popper: {
+                ...slotProps?.popper,
+                // Enforce modal positioning - these must come after spread to prevent override
+                placement: 'bottom-start' as const,
+                disablePortal: true,
               },
-            },
-          }}
-          slots={{
-            ...customSlots,
-            textField: (props) => {
-              const {
-                inputProps,
-                ref,
-                ownerState: _ownerState,
-                InputProps,
-                error: _error,
-                label: _label,
-                focused: _focused,
-                helperText: _helperText,
-                className: textFieldClassName,
-                ...other
-              } = props;
+              textField:
+                typeof slotProps?.textField === 'function'
+                  ? slotProps.textField
+                  : {
+                      ...slotProps?.textField,
+                      onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+                        onBlur?.();
+                        const textFieldProps = slotProps?.textField;
+                        if (
+                          textFieldProps &&
+                          typeof textFieldProps === 'object' &&
+                          'onBlur' in textFieldProps &&
+                          typeof textFieldProps.onBlur === 'function'
+                        ) {
+                          textFieldProps.onBlur(e);
+                        }
+                      },
+                    },
+            }}
+            slots={{
+              ...customSlots,
+              textField: (props) => {
+                const {
+                  inputProps,
+                  ref,
+                  ownerState: _ownerState,
+                  InputProps,
+                  error: _error,
+                  label: _label,
+                  focused: _focused,
+                  helperText: _helperText,
+                  className: textFieldClassName,
+                  ...other
+                } = props;
 
-              return (
-                <div
-                  className={`${styles.wrapper} ${textFieldClassName || ''}`.trim()}
-                >
-                  <input
-                    {...inputProps}
-                    {...other}
-                    id={inputId}
-                    required={required}
-                    disabled={disabled}
-                    aria-required={required}
-                    aria-invalid={showError ? 'true' : 'false'}
-                    aria-describedby={
-                      showError
-                        ? `${inputId}-error`
-                        : helpText
-                          ? `${inputId}-help`
-                          : undefined
-                    }
-                    data-testid={dataTestId}
-                    data-cy={dataCy}
-                    className={`form-control ${styles.fullWidth} ${textFieldClassName || ''} ${InputProps?.endAdornment ? styles.paddedInput : ''} ${showError ? 'is-invalid' : ''}`.trim()}
-                  />
-                  {InputProps?.endAdornment && (
-                    <div
-                      className={styles.adornment}
-                      data-testid="datepicker-adornment"
-                    >
-                      {InputProps.endAdornment}
-                    </div>
-                  )}
-                </div>
-              );
-            },
-          }}
-        />
+                return (
+                  <div
+                    ref={ref}
+                    className={`${styles.wrapper} ${textFieldClassName || ''}`.trim()}
+                  >
+                    <input
+                      {...inputProps}
+                      {...other}
+                      id={inputId}
+                      required={required}
+                      disabled={disabled}
+                      aria-required={required}
+                      aria-invalid={showError ? 'true' : 'false'}
+                      aria-describedby={
+                        showError
+                          ? `${inputId}-error`
+                          : helpText
+                            ? `${inputId}-help`
+                            : undefined
+                      }
+                      data-testid={dataTestId}
+                      data-cy={dataCy}
+                      className={`form-control ${styles.fullWidth} ${InputProps?.endAdornment ? styles.paddedInput : ''} ${showError ? 'is-invalid' : ''}`.trim()}
+                    />
+                    {InputProps?.endAdornment && (
+                      <div
+                        className={styles.adornment}
+                        data-testid="datepicker-adornment"
+                      >
+                        {InputProps.endAdornment}
+                      </div>
+                    )}
+                  </div>
+                );
+              },
+            }}
+          />
+        </div>
       </FormFieldGroup>
     </LocalizationProvider>
   );

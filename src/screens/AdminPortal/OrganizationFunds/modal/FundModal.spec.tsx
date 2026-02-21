@@ -10,15 +10,14 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import * as apollo from '@apollo/client';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -127,17 +126,7 @@ const renderFundModal = (
   );
 };
 
-const mutationReturn = [
-  vi.fn().mockResolvedValue({ data: {} }),
-  {
-    loading: false,
-    called: false,
-    reset: vi.fn(),
-    client: {} as never,
-  },
-] satisfies ReturnType<typeof apollo.useMutation>;
-
-describe('PledgeModal', () => {
+describe('FundModal', () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
@@ -146,9 +135,9 @@ describe('PledgeModal', () => {
   it('should populate form fields with correct values in edit mode', async () => {
     renderFundModal(link1, fundProps[1]);
     await waitFor(() =>
-      expect(
-        screen.getAllByText(translations.fundUpdate)[0],
-      ).toBeInTheDocument(),
+      expect(screen.getByTestId('modalTitle')).toHaveTextContent(
+        translations.manageFunds,
+      ),
     );
     expect(
       screen.getByLabelText(translations.fundName, { exact: false }),
@@ -158,7 +147,7 @@ describe('PledgeModal', () => {
     ).toHaveValue('1111');
     expect(screen.getByTestId('setisTaxDeductibleSwitch')).toBeChecked();
     expect(screen.getByTestId('setDefaultSwitch')).not.toBeChecked();
-    expect(screen.getByTestId('archivedSwitch')).not.toBeChecked();
+    expect(screen.getByTestId('archiveFundBtn')).toBeInTheDocument();
   });
 
   it('should update Fund Name when input value changes', async () => {
@@ -201,7 +190,7 @@ describe('PledgeModal', () => {
   it('should show required error when Fund Reference ID is empty and touched', async () => {
     renderFundModal(link1, fundProps[1]);
 
-    const fundIdInput = await screen.findByLabelText(/fund \(reference\) id/i);
+    const fundIdInput = await screen.findByLabelText(/fund id/i);
 
     // Clear the input (now it's empty)
     await userEvent.clear(fundIdInput);
@@ -227,12 +216,78 @@ describe('PledgeModal', () => {
     expect(defaultSwitch).toBeChecked();
   });
 
-  it('should update Tax isArchived switch when input value changes', async () => {
-    renderFundModal(link1, fundProps[1]);
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    expect(archivedSwitch).not.toBeChecked();
-    await userEvent.click(archivedSwitch);
-    expect(archivedSwitch).toBeChecked();
+  it('should toggle isArchived when Archive button is clicked', async () => {
+    const props = {
+      ...fundProps[1],
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
+    const archiveBtn = screen.getByTestId('archiveFundBtn');
+    expect(archiveBtn).toBeInTheDocument();
+    // Click the archive button to archive the fund
+    await userEvent.click(archiveBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundArchived,
+      );
+    });
+
+    expect(props.hide).toHaveBeenCalled();
+    expect(props.refetchFunds).toHaveBeenCalled();
+  });
+
+  it('should unarchive fund when Unarchive button is clicked on archived fund', async () => {
+    const baseFund = fundProps[1].fund;
+    const props = {
+      ...fundProps[1],
+      fund: baseFund
+        ? {
+            ...baseFund,
+            isArchived: true,
+          }
+        : null,
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
+    const unarchiveBtn = screen.getByTestId('archiveFundBtn');
+    expect(unarchiveBtn).toBeInTheDocument();
+    expect(unarchiveBtn).toHaveTextContent(translations.unarchive);
+    // Click the button to unarchive the fund
+    await userEvent.click(unarchiveBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundUnarchived,
+      );
+    });
+
+    expect(props.hide).toHaveBeenCalled();
+    expect(props.refetchFunds).toHaveBeenCalled();
+  });
+
+  it('should not archive when fund has no id', async () => {
+    const baseFund = fundProps[1].fund;
+    const props = {
+      ...fundProps[1],
+      fund: baseFund
+        ? {
+            ...baseFund,
+            id: undefined as unknown as string,
+          }
+        : null,
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
+    const archiveBtn = screen.getByTestId('archiveFundBtn');
+    await userEvent.click(archiveBtn);
+
+    // Should not call refetch or hide since fund.id is missing
+    expect(props.hide).not.toHaveBeenCalled();
+    expect(props.refetchFunds).not.toHaveBeenCalled();
   });
 
   it('should not update the fund when no fields are changed', async () => {
@@ -259,9 +314,7 @@ describe('PledgeModal', () => {
     await userEvent.click(defaultSwitch);
     await userEvent.click(defaultSwitch);
 
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await userEvent.click(archivedSwitch);
-    await userEvent.click(archivedSwitch);
+    // Note: Archive button is not toggled here since it triggers a mutation directly
 
     await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
@@ -323,8 +376,8 @@ describe('PledgeModal', () => {
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     await userEvent.click(defaultSwitch);
 
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await userEvent.click(archivedSwitch);
+    // Note: Archive button click removed to isolate update-error path
+    // archiveFundBtn triggers a separate mutation that would fire its own error
 
     await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
@@ -401,7 +454,8 @@ describe('PledgeModal', () => {
       ).toHaveValue('9999');
       expect(screen.getByTestId('setisTaxDeductibleSwitch')).not.toBeChecked();
       expect(screen.getByTestId('setDefaultSwitch')).toBeChecked();
-      expect(screen.getByTestId('archivedSwitch')).toBeChecked();
+      // Archive button is present - the isArchived state is internal and toggled by clicking the button
+      expect(screen.getByTestId('archiveFundBtn')).toBeInTheDocument();
     });
   });
 
@@ -490,86 +544,115 @@ describe('PledgeModal', () => {
     expect(screen.queryByText('Required')).not.toBeInTheDocument();
   });
 
-  it('should create fund successfully and call side effects', async () => {
-    vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
+  it('should delete fund when delete button is clicked', async () => {
+    renderFundModal(link1, fundProps[1]);
 
-    const hide = vi.fn();
-    const refetchFunds = vi.fn();
+    // Click the delete button
+    await userEvent.click(screen.getByTestId('deleteFundBtn'));
 
-    renderFundModal(link1, {
-      ...fundProps[0],
-      hide,
-      refetchFunds,
-      mode: 'create',
-    });
-
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-      'New Fund',
-    );
-
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundId, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundId, { exact: false }),
-      '1234',
-    );
-
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
-
+    // Wait for the success notification
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
-      expect(refetchFunds).toHaveBeenCalled();
-      expect(hide).toHaveBeenCalled();
-    });
-
-    await waitFor(() => {
-      expect(
-        screen.getByLabelText(translations.fundName, { exact: false }),
-      ).toHaveValue('');
-      expect(
-        screen.getByLabelText(translations.fundId, { exact: false }),
-      ).toHaveValue('');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundDeleted,
+      );
+      // Verify modal closed and refetch called
+      expect(fundProps[1].hide).toHaveBeenCalled();
+      expect(fundProps[1].refetchFunds).toHaveBeenCalled();
     });
   });
 
-  it('should update fund successfully and call side effects', async () => {
-    vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
-
-    const hide = vi.fn();
-    const refetchFunds = vi.fn();
-
-    renderFundModal(link1, {
+  it('should show error notification when archive fund fails', async () => {
+    const props = {
       ...fundProps[1],
-      hide,
-      refetchFunds,
-      mode: 'edit',
-    });
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link2, props);
 
-    await userEvent.clear(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    );
-    await userEvent.type(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-      'Updated Fund',
-    );
+    const archiveBtn = screen.getByTestId('archiveFundBtn');
+    await userEvent.click(archiveBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
+    });
+  });
+
+  it('should show error notification when delete fund fails', async () => {
+    renderFundModal(link2, fundProps[1]);
+
+    // Click the delete button
+    await userEvent.click(screen.getByTestId('deleteFundBtn'));
+
+    // Wait for the error notification
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('should successfully create fund and show success notification', async () => {
+    const props = {
+      ...fundProps[0],
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
+
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
+    await userEvent.clear(fundNameInput);
+    await userEvent.type(fundNameInput, 'Fund 2');
+
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
+    await userEvent.clear(fundIdInput);
+    await userEvent.type(fundIdInput, '2222');
+
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    await userEvent.click(taxDeductibleSwitch);
+
+    const defaultSwitch = screen.getByTestId('setDefaultSwitch');
+    await userEvent.click(defaultSwitch);
 
     await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
-      expect(refetchFunds).toHaveBeenCalled();
-      expect(hide).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundCreated,
+      );
+      expect(props.hide).toHaveBeenCalled();
+      expect(props.refetchFunds).toHaveBeenCalled();
     });
+  });
+
+  it('should successfully update fund and show success notification', async () => {
+    const props = {
+      ...fundProps[1],
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
+
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
+    await userEvent.clear(fundNameInput);
+    await userEvent.type(fundNameInput, 'Fund 2');
+
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    await userEvent.click(taxDeductibleSwitch);
+
+    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByLabelText(translations.fundName, { exact: false }),
-      ).toHaveValue('');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundUpdated,
+      );
+      expect(props.hide).toHaveBeenCalled();
+      expect(props.refetchFunds).toHaveBeenCalled();
     });
   });
 });

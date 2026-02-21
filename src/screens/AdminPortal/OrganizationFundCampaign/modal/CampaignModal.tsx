@@ -16,10 +16,7 @@ import {
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import {
-  FormTextField,
-  FormSelectField,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type { IDateRangeValue, InterfaceCampaignModal } from './types';
 
 export type { InterfaceCampaignModal };
@@ -254,10 +251,11 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         }
         className="p-3"
       >
-        <div className="d-flex mb-3 w-100">
+        <div className="mb-3">
           <FormTextField
             name="campaignName"
             label={t('campaignName')}
+            placeholder={t('enterCampaignName')}
             required
             error={isNameInvalid ? tCommon('required') : undefined}
             touched={touched.campaignName}
@@ -275,99 +273,112 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           />
         </div>
 
-        <div className="d-flex gap-4 mx-auto mb-3">
-          <DatePicker
-            format="DD/MM/YYYY"
-            label={tCommon('startDate')}
-            value={dayjs(campaignDateRange.startDate)}
-            className={styles.noOutline}
-            data-testid="campaignStartDate"
-            onChange={(date: Dayjs | null): void => {
-              // We must update state even if null/invalid to let validation catch it
-              const newStart = date ? date.toDate() : null;
+        <div className="d-flex gap-4 mb-3">
+          <div className={styles.datePickerWrapper}>
+            <label htmlFor="campaignStartDate" className={styles.dateLabel}>
+              {tCommon('startDate')}
+            </label>
+            <DatePicker
+              format="DD/MM/YYYY"
+              value={dayjs(campaignDateRange.startDate)}
+              className={styles.noOutline}
+              data-testid="campaignStartDate"
+              onChange={(date: Dayjs | null): void => {
+                const newStart = date ? date.toDate() : null;
 
-              setCampaignDateRange((prev: IDateRangeValue) => {
-                let newEnd = prev.endDate;
+                setCampaignDateRange((prev: IDateRangeValue) => {
+                  let newEnd = prev.endDate;
 
-                // Auto-update end date if start date moves after it
-                if (date && date.isValid() && prev.endDate) {
-                  const startDay = dayjs(date);
-                  const endDay = dayjs(prev.endDate);
+                  if (date && date.isValid() && prev.endDate) {
+                    const startDay = dayjs(date);
+                    const endDay = dayjs(prev.endDate);
 
-                  if (startDay.isAfter(endDay)) {
-                    newEnd = date.toDate();
+                    if (startDay.isAfter(endDay)) {
+                      newEnd = date.toDate();
+                    }
                   }
-                }
 
-                return {
-                  startDate: newStart,
+                  return {
+                    startDate: newStart,
+                    endDate: newEnd,
+                  };
+                });
+              }}
+              minDate={dayjs()}
+            />
+          </div>
+
+          <div className={styles.datePickerWrapper}>
+            <label htmlFor="campaignEndDate" className={styles.dateLabel}>
+              {tCommon('endDate')}
+            </label>
+            <DatePicker
+              format="DD/MM/YYYY"
+              className={styles.noOutline}
+              value={dayjs(campaignDateRange.endDate)}
+              data-testid="campaignEndDate"
+              onChange={(date: Dayjs | null): void => {
+                const newEnd = date ? date.toDate() : null;
+                setCampaignDateRange((prev: IDateRangeValue) => ({
+                  ...prev,
                   endDate: newEnd,
-                };
-              });
-            }}
-            minDate={dayjs(new Date())}
-          />
-
-          <DatePicker
-            format="DD/MM/YYYY"
-            label={tCommon('endDate')}
-            className={styles.noOutline}
-            value={dayjs(campaignDateRange.endDate)}
-            data-testid="campaignEndDate"
-            onChange={(date: Dayjs | null): void => {
-              const newEnd = date ? date.toDate() : null;
-              setCampaignDateRange((prev: IDateRangeValue) => ({
-                ...prev,
-                endDate: newEnd,
-              }));
-            }}
-            minDate={dayjs(campaignDateRange.startDate)}
-          />
+                }));
+              }}
+              minDate={dayjs(campaignDateRange.startDate)}
+            />
+          </div>
         </div>
 
         <div className="d-flex gap-4 mb-4">
-          <FormSelectField
-            name="campaign-currency"
-            label={t('currency')}
-            value={campaignCurrency}
-            data-testid="currencySelect"
-            onChange={(value) =>
-              setFormState({
-                ...formState,
-                campaignCurrency: value,
-              })
-            }
-          >
-            {currencyOptions.map((currency) => (
-              <option key={currency.label} value={currency.value}>
-                {currency.label} ({currencySymbols[currency.value]})
-              </option>
-            ))}
-          </FormSelectField>
-
-          <FormTextField
-            name="fundingGoal"
-            label={t('fundingGoal')}
-            type="number"
-            value={String(campaignGoal)}
-            data-testid="fundingGoalInput"
-            onChange={(value) => {
-              if (value === '') {
+          <div className={styles.inlineFieldWrapper}>
+            <label htmlFor="currencySelect">{t('currency')}</label>
+            <select
+              id="currencySelect"
+              className="form-select"
+              value={campaignCurrency}
+              data-testid="currencySelect"
+              onChange={(e) =>
                 setFormState({
                   ...formState,
-                  campaignGoal: 0,
-                });
-              } else {
-                const parsed = parseInt(value);
-                if (!isNaN(parsed)) {
+                  campaignCurrency: e.target.value,
+                })
+              }
+            >
+              {currencyOptions.map((currency) => (
+                <option key={currency.label} value={currency.value}>
+                  {currency.label} ({currencySymbols[currency.value]})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className={styles.inlineFieldWrapper}>
+            <label htmlFor="fundingGoalInput">{t('fundingGoal')}</label>
+            <input
+              id="fundingGoalInput"
+              type="number"
+              className="form-control"
+              value={campaignGoal === 0 ? '' : String(campaignGoal)}
+              data-testid="fundingGoalInput"
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === '') {
                   setFormState({
                     ...formState,
-                    campaignGoal: Math.max(0, parsed),
+                    campaignGoal: 0,
                   });
+                } else {
+                  const parsed = parseInt(value, 10);
+                  if (!isNaN(parsed)) {
+                    setFormState({
+                      ...formState,
+                      campaignGoal: Math.max(0, parsed),
+                    });
+                  }
                 }
-              }
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
 
         <Button

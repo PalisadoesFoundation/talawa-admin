@@ -10,10 +10,11 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { Campaign, WarningAmberRounded } from '@mui/icons-material';
+import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import Button from 'shared-components/Button/Button';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 
 /**
  * Extended interface for campaigns with computed status
@@ -49,10 +50,10 @@ const dataGridStyle = {
     '&:focus-within': { outline: 'none' },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-background)',
+    backgroundColor: 'var(--row-hover-bg)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-background)',
+    backgroundColor: 'var(--row-hover-bg)',
   },
   '& .MuiDataGrid-cell:focus': { outline: 'none' },
   '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
@@ -60,6 +61,7 @@ const dataGridStyle = {
 
 const Campaigns = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
+  const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   const { getItem } = useLocalStorage();
@@ -102,6 +104,19 @@ const Campaigns = (): JSX.Element => {
     closeModalState();
     setSelectedCampaign(null);
   }, [closeModalState]);
+
+  // Header titles for the table loader - matches column order: id, name, status, startDate, endDate, fundingGoal, amountRaised, percentageRaised, action
+  const headerTitles: string[] = [
+    '#',
+    t('campaignName'),
+    t('campaignStatus'),
+    t('startDate'),
+    t('endDate'),
+    t('fundGoal'),
+    t('amountRaised'),
+    t('percentRaised'),
+    t('addPledge'),
+  ];
 
   const campaigns = useMemo((): CampaignWithStatus[] => {
     if (!campaignData?.organization?.funds?.edges) {
@@ -338,16 +353,6 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     hideFooter: true,
     compactColumns: columns.length >= 7,
-    slots: {
-      noRowsOverlay: () => (
-        <EmptyState
-          icon={<Campaign />}
-          message={t('noCampaigns')}
-          description={t('createFirstCampaign')}
-          dataTestId="campaigns-empty-state"
-        />
-      ),
-    },
     getRowClassName: () => `${styles.rowBackground}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
@@ -356,30 +361,69 @@ const Campaigns = (): JSX.Element => {
   };
 
   return (
-    <>
-      <SearchFilterBar
-        searchPlaceholder={t('searchCampaigns')}
-        searchValue={searchText}
-        onSearchChange={setSearchText}
-        searchInputTestId="searchByInput"
-        searchButtonTestId="searchBtn"
-        hasDropdowns={false}
-      />
+    <div>
+      <div className={styles.searchContainerRow}>
+        <SearchFilterBar
+          searchPlaceholder={t('searchCampaigns')}
+          searchValue={searchText}
+          onSearchChange={setSearchText}
+          searchInputTestId="searchByInput"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={false}
+        />
 
-      <Button
-        variant="success"
-        data-testid="myPledgesBtn"
-        onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
-      >
-        {t('myPledges')}
-      </Button>
+        <Button
+          variant="success"
+          className={styles.pledgesButton}
+          data-testid="myPledgesBtn"
+          onClick={() => navigate(`/user/pledges/${orgId}`)}
+        >
+          {t('myPledges')}
+        </Button>
+      </div>
 
-      <ReportingTable
-        rows={filteredCampaigns as ReportingRow[]}
-        columns={columns}
-        gridProps={gridProps}
-        listProps={{ ['data-testid']: 'campaigns-list' }}
-      />
+      {!campaignLoading &&
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText.length > 0 ? (
+        <EmptyState
+          icon={<Search />}
+          message="noResultsFound"
+          description={tCommon('noResultsFoundFor', {
+            query: `"${searchText}"`,
+          })}
+          dataTestId="campaigns-search-empty"
+        />
+      ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
+        <EmptyState
+          icon={<Campaign />}
+          message="userCampaigns.noCampaigns"
+          description={t('createFirstCampaign')}
+          dataTestId="campaigns-empty-state"
+        />
+      ) : (
+        <div className={styles.listBox}>
+          {campaignLoading ? (
+            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+          ) : (
+            <ReportingTable
+              rows={filteredCampaigns as ReportingRow[]}
+              columns={columns}
+              gridProps={gridProps}
+              listProps={{
+                className: styles.listTable,
+                ['data-testid']: 'campaigns-list',
+                scrollThreshold: 0.9,
+                endMessage: (
+                  <div className={'w-100 text-center my-4'}>
+                    <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                  </div>
+                ),
+              }}
+            />
+          )}
+        </div>
+      )}
 
       <PledgeModal
         isOpen={modalState}
@@ -390,7 +434,7 @@ const Campaigns = (): JSX.Element => {
         refetchPledge={refetchCampaigns}
         mode="create"
       />
-    </>
+    </div>
   );
 };
 

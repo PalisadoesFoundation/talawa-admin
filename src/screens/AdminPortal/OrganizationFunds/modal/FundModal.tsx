@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button } from 'shared-components/Button';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';
@@ -9,8 +9,9 @@ import { useMutation } from '@apollo/client';
 import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
+  DELETE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 export interface InterfaceFundModal {
@@ -45,7 +46,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: fund?.name ?? '',
-    fundRef: fund?.refrenceNumber ?? '',
     isDefault: fund?.isDefault ?? false,
     isTaxDeductible: fund?.isTaxDeductible ?? false,
     isArchived: fund?.isArchived ?? false,
@@ -53,10 +53,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
   const [touched, setTouched] = useState<{
     fundName: boolean;
-    fundRef: boolean;
   }>({
     fundName: false,
-    fundRef: false,
   });
 
   // Validation logic
@@ -64,15 +62,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     touched.fundName && !formState.fundName.trim()
       ? tCommon('required')
       : undefined;
-  const fundRefError =
-    touched.fundRef && !formState.fundRef.trim()
-      ? tCommon('required')
-      : undefined;
 
   useEffect(() => {
     setFormState({
       fundName: fund?.name ?? '',
-      fundRef: fund?.refrenceNumber ?? '',
       isDefault: fund?.isDefault ?? false,
       isTaxDeductible: fund?.isTaxDeductible ?? false,
       isArchived: fund?.isArchived ?? false,
@@ -82,18 +75,20 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   // Reset touched state when modal opens to prevent stale validation errors
   useEffect(() => {
     if (isOpen) {
-      setTouched({ fundName: false, fundRef: false });
+      setTouched({ fundName: false });
     }
   }, [isOpen]);
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
+  const [deleteFund, { loading: deleteFundLoading }] =
+    useMutation(DELETE_FUND_MUTATION);
 
   const createFundHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, isDefault, isTaxDeductible, isArchived } = formState;
+    const { fundName, isTaxDeductible } = formState;
 
     try {
       await createFund({
@@ -101,14 +96,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           name: fundName,
           organizationId: orgId,
           isTaxDeductible,
-          isArchived,
-          isDefault,
         },
       });
 
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         isTaxDeductible: false,
         isArchived: false,
@@ -126,6 +118,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+    if (!fund?.id) return;
     const { fundName, isTaxDeductible } = formState;
 
     try {
@@ -142,10 +135,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         return;
       }
 
+      if (!fund?.id) return;
       await updateFund({
         variables: {
           input: {
-            id: fund?.id,
+            id: fund.id,
             ...updatedFields,
           },
         },
@@ -153,7 +147,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
       setFormState({
         fundName: '',
-        fundRef: '',
         isDefault: false,
         isTaxDeductible: false,
         isArchived: false,
@@ -167,18 +160,65 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     }
   };
 
+  const deleteFundHandler = async (): Promise<void> => {
+    if (!fund?.id) return;
+    try {
+      await deleteFund({
+        variables: {
+          input: {
+            id: fund.id,
+          },
+        },
+      });
+
+      setFormState({
+        fundName: '',
+        isDefault: false,
+        isTaxDeductible: false,
+        isArchived: false,
+      });
+
+      refetchFunds();
+      hide();
+      NotificationToast.success(t('fundDeleted') as string);
+    } catch (error: unknown) {
+      NotificationToast.error((error as Error).message);
+    }
+  };
+
+  const archiveFundHandler = async (): Promise<void> => {
+    if (!fund?.id) return;
+    try {
+      const newArchivedState = !formState.isArchived;
+
+      await updateFund({
+        variables: {
+          input: {
+            id: fund.id,
+            isArchived: newArchivedState,
+          },
+        },
+      });
+
+      setFormState((prev) => ({ ...prev, isArchived: newArchivedState }));
+      refetchFunds();
+      hide();
+      NotificationToast.success(
+        t(newArchivedState ? 'fundArchived' : 'fundUnarchived') as string,
+      );
+    } catch (error: unknown) {
+      NotificationToast.error((error as Error).message);
+    }
+  };
+
   return (
     <BaseModal
       className={styles.fundModal}
-      show={isOpen}
-      onHide={hide}
-      headerContent={
-        <div className="d-flex justify-content-between align-items-center">
-          <p className={styles.titlemodal} data-testid="modalTitle">
-            {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-          </p>
-        </div>
-      }
+      open={isOpen}
+      onClose={hide}
+      title={t(mode === 'create' ? 'fundCreate' : 'manageFunds')}
+      data-testid="modalTitle"
+      showFooter={false}
     >
       <form
         onSubmitCapture={
@@ -186,10 +226,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         }
         className="p-3"
       >
-        <div className="d-flex mb-3 w-100">
+        <div className="mb-3">
           <FormTextField
             name="fundName"
             label={t('fundName')}
+            placeholder={t('fundNamePlaceholder')}
             required
             value={formState.fundName}
             touched={touched.fundName}
@@ -198,21 +239,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               setFormState((prev) => ({ ...prev, fundName: value }))
             }
             onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
-          />
-        </div>
-
-        <div className="d-flex mb-3 w-100">
-          <FormTextField
-            name="fundId"
-            label={t('fundId')}
-            required
-            value={formState.fundRef}
-            touched={touched.fundRef}
-            error={fundRefError}
-            onChange={(value) =>
-              setFormState((prev) => ({ ...prev, fundRef: value }))
-            }
-            onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
           />
         </div>
 
@@ -243,7 +269,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           </div>
 
           <div className="d-flex align-items-center">
-            <label htmlFor="isDefaultSwitch">{t('default')}</label>
+            <label htmlFor="isDefaultSwitch">{t('defaultFund')}</label>
             <div className={`form-check form-switch ms-2 ${styles.switch}`}>
               <input
                 type="checkbox"
@@ -260,36 +286,49 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               />
             </div>
           </div>
-
-          {mode === 'edit' && (
-            <div className="d-flex align-items-center">
-              <label htmlFor="archivedSwitch">{t('archived')}</label>
-              <div className={`form-check form-switch ms-2 ${styles.switch}`}>
-                <input
-                  type="checkbox"
-                  id="archivedSwitch"
-                  className="form-check-input"
-                  checked={formState.isArchived}
-                  data-testid="archivedSwitch"
-                  onChange={() =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      isArchived: !prev.isArchived,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          )}
         </div>
 
-        <Button
-          type="submit"
-          className={styles.addButton}
-          data-testid="createFundFormSubmitBtn"
-        >
-          {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-        </Button>
+        {mode === 'create' ? (
+          <Button
+            type="submit"
+            className={styles.addButton}
+            data-testid="createFundFormSubmitBtn"
+          >
+            {t('fundCreate')}
+          </Button>
+        ) : (
+          <>
+            <div className={styles.buttonRow}>
+              <Button
+                type="submit"
+                className={styles.editButton}
+                data-testid="createFundFormSubmitBtn"
+              >
+                <i className="fas fa-edit me-2" />
+                {t('edit')}
+              </Button>
+              <Button
+                type="button"
+                className={styles.deleteButton}
+                data-testid="deleteFundBtn"
+                onClick={deleteFundHandler}
+                disabled={deleteFundLoading}
+              >
+                <i className="fas fa-trash me-2" />
+                {deleteFundLoading ? t('delete') + '...' : t('delete')}
+              </Button>
+            </div>
+            <Button
+              type="button"
+              className={styles.archiveButton}
+              data-testid="archiveFundBtn"
+              onClick={archiveFundHandler}
+            >
+              <i className="fas fa-archive me-2" />
+              {formState.isArchived ? t('unarchive') : t('archive')}
+            </Button>
+          </>
+        )}
       </form>
     </BaseModal>
   );

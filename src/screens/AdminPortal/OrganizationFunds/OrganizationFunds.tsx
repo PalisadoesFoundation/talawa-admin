@@ -4,7 +4,6 @@ import {
   Search,
   WarningAmberRounded,
 } from '@mui/icons-material';
-import { Stack } from '@mui/material';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
@@ -29,7 +28,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
-import { useModalState } from 'shared-components/CRUDModalTemplate';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 const dataGridStyle = {
   ...baseDataGridStyle,
@@ -111,7 +110,11 @@ const organizationFunds = (): JSX.Element => {
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
 
-  const { isOpen, open, close } = useModalState();
+  const {
+    isOpen: modalState,
+    open: openModal,
+    close: closeModal,
+  } = useModalState();
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -122,9 +125,9 @@ const organizationFunds = (): JSX.Element => {
     (selectedFund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
       setFund(selectedFund);
       setFundModalMode(mode);
-      open();
+      openModal();
     },
-    [],
+    [openModal],
   );
 
   const {
@@ -341,13 +344,6 @@ const organizationFunds = (): JSX.Element => {
     pageSizeOptions: [PAGE_SIZE],
     loading: fundLoading,
     hideFooter: true,
-    slots: {
-      noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('funds.noFundsFound')}
-        </Stack>
-      ),
-    },
     getRowClassName: () => `${styles.rowBackground} ${styles.overflowVisible}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
@@ -370,6 +366,7 @@ const organizationFunds = (): JSX.Element => {
           searchInputTestId="searchByName"
           searchButtonTestId="searchButton"
           hasDropdowns={false}
+          containerClassName={styles.searchBarContainer}
         />
 
         <Button
@@ -432,8 +429,8 @@ const organizationFunds = (): JSX.Element => {
       )}
 
       <FundModal
-        isOpen={isOpen}
-        hide={close}
+        isOpen={modalState}
+        hide={closeModal}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}

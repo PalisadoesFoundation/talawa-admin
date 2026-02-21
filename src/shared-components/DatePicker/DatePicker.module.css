@@ -19,5 +19,20 @@
   right: 0;
   top: 50%;
   transform: translateY(-50%);
-  padding-right: 0.5rem;
+  padding-right: var(--space-3);
+}
+
+/* Container for DatePicker with Popper positioning fix */
+.datePickerContainer {
+  position: relative;
+  width: 100%;
+}
+
+/* Fix for DatePicker Popper positioning inside Bootstrap modals */
+.datePickerContainer :global(.MuiPopper-root) {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  transform: none !important;
+  z-index: 1300;
 }
