@@ -18,8 +18,6 @@ import {
 } from 'shared-components/DatePicker';
 import { vi, afterEach } from 'vitest';
 
-
-
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
 }));
