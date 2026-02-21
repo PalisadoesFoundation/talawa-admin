@@ -3,6 +3,54 @@
  * Add new restrictions here, then allow them in specific folders via IDs.
  * For more details refer `docs/docs/docs/developer-resources/reusable-components.md`
  */
+
+const MUI_TABLE_COMPONENTS = [
+  'Table',
+  'TableBody',
+  'TableCell',
+  'TableContainer',
+  'TableHead',
+  'TableRow',
+  'TablePagination',
+];
+
+/**
+ * Generates the two rule objects for a single MUI Table component (main package + path form).
+ * @param {string} component - Base name (e.g. 'Table', 'TableBody')
+ * @returns {Array<{ id: string, name: string, message: string, importNames?: string[] }>}
+ */
+function makeMuiTableRule(component) {
+  const suffix =
+    component === 'Table'
+      ? 'table'
+      : component.replace(/^Table/, '').toLowerCase();
+  // i18n-ignore-next-line -- ESLint rule ID; not user-facing
+  const idBase = `mui-table-${suffix}`;
+  // i18n-ignore-next-line -- ESLint rule message; developer-facing only
+  const message = `Do not import ${component} from @mui/material. Use the shared DataTable component from src/shared-components/DataTable/ instead.`;
+  return [
+    {
+      id: idBase,
+      name: '@mui/material',
+      importNames: [component],
+      message,
+    },
+    {
+      id: `${idBase}-path`,
+      name: `@mui/material/${component}`,
+      message,
+    },
+  ];
+}
+
+/**
+ * Returns the flat array of all MUI Table restriction rule objects (14 entries).
+ * @returns {Array<{ id: string, name: string, message: string, importNames?: string[] }>}
+ */
+function makeMuiTableRules() {
+  return MUI_TABLE_COMPONENTS.flatMap(makeMuiTableRule);
+}
+
 const restrictedImports = [
   {
     id: 'mui-data-grid',
@@ -68,6 +116,7 @@ const restrictedImports = [
     message:
       'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
   },
+  ...makeMuiTableRules(),
   {
     id: 'rb-button',
     name: 'react-bootstrap',

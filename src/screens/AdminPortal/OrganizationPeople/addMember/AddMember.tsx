@@ -42,13 +42,13 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from './AddMember.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
-import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
@@ -419,24 +419,12 @@ function AddMember({
           tableClassName={styles.dataTable}
           ariaLabel={translateOrgPeople('users')}
         />
-        <TablePagination
-          component="div"
+        <PaginationList
           count={-1}
           rowsPerPage={PAGE_SIZE}
           page={page}
           onPageChange={handleChangePage}
-          rowsPerPageOptions={[PAGE_SIZE]}
-          backIconButtonProps={{
-            disabled: !paginationMeta.hasPreviousPage,
-            'aria-label': tCommon('previousPage'),
-          }}
-          nextIconButtonProps={{
-            disabled: !paginationMeta.hasNextPage,
-            'aria-label': tCommon('nextPage'),
-          }}
-          labelDisplayedRows={({ page }) =>
-            tCommon('pageNumber', { page: page + 1 })
-          }
+          onRowsPerPageChange={() => {}}
         />
       </BaseModal>
       <BaseModal

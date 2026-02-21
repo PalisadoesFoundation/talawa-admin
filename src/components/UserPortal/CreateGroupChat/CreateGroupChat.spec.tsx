@@ -324,6 +324,7 @@ describe('CreateGroupChat', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
+    vi.clearAllMocks();
     for (const key in mockLocalStorageStore) {
       delete mockLocalStorageStore[key];
     }
@@ -388,9 +389,11 @@ describe('CreateGroupChat', () => {
       expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
     });
 
-    // Wait for users to load
+    // Wait for users to load (DataTable uses data-testid="datatable-row-{rowKey}")
     await waitFor(async () => {
-      const userRows = await screen.findAllByTestId('user');
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
       expect(userRows.length).toBe(2);
       expect(userRows[0]).toHaveTextContent('Test User 1');
       expect(userRows[1]).toHaveTextContent('Test User 2');
@@ -561,7 +564,9 @@ describe('CreateGroupChat', () => {
     });
 
     await waitFor(async () => {
-      const userRows = await screen.findAllByTestId('user');
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
       expect(userRows.length).toBe(2);
     });
 
@@ -574,7 +579,9 @@ describe('CreateGroupChat', () => {
 
     // Assert search results
     await waitFor(async () => {
-      const userRows = await screen.findAllByTestId('user');
+      const userRows = document.querySelectorAll(
+        '[data-testid^="datatable-row-"]',
+      );
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 1');
       expect(screen.queryByText('Test User 2')).not.toBeInTheDocument();

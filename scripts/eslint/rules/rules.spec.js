@@ -476,6 +476,40 @@ describe('ESLint Syntax Restrictions', () => {
         expect(muiDataGridPro?.message).toContain('DataGridWrapper');
       });
 
+      it('should have MUI Table restrictions with expected ids and DataTable message', () => {
+        const muiTableIds = [
+          'mui-table-table',
+          'mui-table-table-path',
+          'mui-table-body',
+          'mui-table-body-path',
+          'mui-table-cell',
+          'mui-table-cell-path',
+          'mui-table-container',
+          'mui-table-container-path',
+          'mui-table-head',
+          'mui-table-head-path',
+          'mui-table-row',
+          'mui-table-row-path',
+          'mui-table-pagination',
+          'mui-table-pagination-path',
+        ];
+        muiTableIds.forEach((id) => {
+          const entry = restrictedImports.find((imp) => imp.id === id);
+          expect(entry).toBeDefined();
+          expect(entry?.message).toContain('DataTable');
+          expect(entry?.message).toContain('src/shared-components/DataTable/');
+        });
+        const muiTableMain = restrictedImports.find(
+          (imp) => imp.id === 'mui-table-table',
+        );
+        expect(muiTableMain?.name).toBe('@mui/material');
+        expect(muiTableMain?.importNames).toEqual(['Table']);
+        const muiTablePath = restrictedImports.find(
+          (imp) => imp.id === 'mui-table-table-path',
+        );
+        expect(muiTablePath?.name).toBe('@mui/material/Table');
+      });
+
       it('should handle restrictions with importNames correctly', () => {
         const restrictionsWithImportNames = restrictedImports.filter(
           (imp) => imp.importNames,
@@ -756,6 +790,55 @@ describe('ESLint Syntax Restrictions', () => {
           true,
         );
       });
+    });
+  });
+
+  describe('MUI Table restriction exemption behavior', () => {
+    it('should not report no-restricted-imports for Table import inside DataTable', async () => {
+      const code = `
+        import React from 'react';
+        import { Table } from '@mui/material';
+
+        function DataTableInner() {
+          return <Table />;
+        }
+      `;
+
+      const messages = await lintCode(
+        code,
+        'src/shared-components/DataTable/DataTable.tsx',
+      );
+      const restrictedImportError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-imports' &&
+          msg.message?.includes('Table') &&
+          msg.message?.includes('DataTable'),
+      );
+
+      expect(restrictedImportError).toBeUndefined();
+    });
+
+    it('should report no-restricted-imports for Table import outside DataTable', async () => {
+      const code = `
+        import React from 'react';
+        import { Table } from '@mui/material';
+
+        function SomeScreen() {
+          return <Table />;
+        }
+      `;
+
+      const messages = await lintCode(
+        code,
+        'src/screens/AdminPortal/SomeScreen.tsx',
+      );
+      const restrictedImportError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-imports' &&
+          msg.message?.includes('DataTable'),
+      );
+
+      expect(restrictedImportError).toBeDefined();
     });
   });
 });
