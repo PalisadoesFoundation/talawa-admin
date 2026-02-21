@@ -94,7 +94,7 @@ export const Autocomplete = <
 
     fullWidth = true,
     className,
-    dataTestId = 'autocomplete',
+    dataTestId = 'shared-autocomplete',
     textFieldProps,
     renderInput: customRenderInput,
 
