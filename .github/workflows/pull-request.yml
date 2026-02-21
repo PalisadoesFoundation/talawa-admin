@@ -332,6 +332,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Update apt package index
+        run: sudo apt update
+
+      - name: Install required Ubuntu packages
+        run: sudo apt install -y ripgrep
+
       - name: Check for test anti-patterns
         run: |
           echo "🔍 Scanning for test quality issues..."
