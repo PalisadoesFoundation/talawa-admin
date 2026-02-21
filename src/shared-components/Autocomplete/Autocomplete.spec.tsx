@@ -213,32 +213,34 @@ describe('Shared Component: Autocomplete', () => {
       it('warns once in development when getOptionLabel is not provided for object options', async () => {
         const user = userEvent.setup();
         const originalEnv = process.env.NODE_ENV;
-        process.env.NODE_ENV = 'development';
         const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
         const onChangeSpy = vi.fn();
 
-        render(
-          <I18nextProvider i18n={i18nForTest}>
-            <Autocomplete<{ id: number }>
-              id="warn-test"
-              options={[{ id: 1 }]}
-              value={null}
-              onChange={onChangeSpy}
-              dataTestId="warn-test"
-            />
-          </I18nextProvider>,
-        );
-
-        await userEvent.setup().click(screen.getByRole('combobox'));
-        await user.click(
-          await screen.findAllByRole('option').then((o) => o[0]),
-        );
-        await waitFor(() => {
-          expect(warnSpy).toHaveBeenCalledWith(
-            expect.stringContaining('getOptionLabel is not provided'),
+        try {
+          process.env.NODE_ENV = 'development';
+          render(
+            <I18nextProvider i18n={i18nForTest}>
+              <Autocomplete<{ id: number }>
+                id="warn-test"
+                options={[{ id: 1 }]}
+                value={null}
+                onChange={onChangeSpy}
+                dataTestId="warn-test"
+              />
+            </I18nextProvider>,
           );
-        });
-        process.env.NODE_ENV = originalEnv;
+          await user.click(screen.getByRole('combobox'));
+          await user.click(
+            await screen.findAllByRole('option').then((o) => o[0]),
+          );
+          await waitFor(() => {
+            expect(warnSpy).toHaveBeenCalledWith(
+              expect.stringContaining('getOptionLabel is not provided'),
+            );
+          });
+        } finally {
+          process.env.NODE_ENV = originalEnv;
+        }
       });
 
       it('uses default getOptionLabel fallback for string options', async () => {
