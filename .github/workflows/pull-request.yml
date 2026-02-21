@@ -328,27 +328,49 @@ jobs:
         run: |
           python .github-central/.github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-  Check-Test-Quality:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+Check-Test-Quality:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Need history for git diff
 
-      - name: Update apt package index
-        run: sudo apt update
+    - name: Install required Ubuntu packages
+      run: sudo apt-get update && sudo apt-get install -y ripgrep
 
-      - name: Install required Ubuntu packages
-        run: sudo apt install -y ripgrep
+    - name: Get changed test files
+      id: changed-test-files
+      run: |
+        BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
 
-      - name: Check for test anti-patterns
-        run: |
-          echo "🔍 Scanning for test quality issues..."
+        # Get changed test files only
+        CHANGED_TEST_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} \
+          | grep -E '\.(spec|test)\.(ts|tsx)$' \
+          | tr '\n' ' ' || true)
 
-          # Check 1: vi.clearAllMocks
-          if rg -q "vi\.restoreAllMocks" src/ --glob "*.spec.tsx" --glob "*.spec.ts" --glob "*.test.tsx" --glob "*.test.ts"; then
-            echo "❌ FAIL: vi.restoreAllMocks detected. Use vi.clearAllMocks instead."
-            rg -n "vi\.restoreAllMocks" src/ --glob "*.spec.tsx" --glob "*.spec.ts" --glob "*.test.tsx" --glob "*.test.ts"
-            exit 1
-          fi
+        echo "files=$CHANGED_TEST_FILES" >> $GITHUB_OUTPUT
+
+        if [ -z "$CHANGED_TEST_FILES" ]; then
+          echo "none=true" >> $GITHUB_OUTPUT
+        else
+          echo "none=false" >> $GITHUB_OUTPUT
+          echo "Changed test files: $CHANGED_TEST_FILES"
+        fi
+
+    - name: Check for test anti-patterns
+      if: steps.changed-test-files.outputs.none != 'true'
+      run: |
+        echo "🔍 Scanning changed test files for quality issues..."
+        CHANGED_FILES="${{ steps.changed-test-files.outputs.files }}"
+
+        # Check 1: vi.restoreAllMocks
+        if echo "$CHANGED_FILES" | xargs rg -q "vi\.restoreAllMocks" 2>/dev/null; then
+          echo "❌ FAIL: vi.restoreAllMocks detected. Use vi.clearAllMocks instead."
+          echo "$CHANGED_FILES" | xargs rg -n "vi\.restoreAllMocks"
+          exit 1
+        fi
+
+        echo "✅ All changed test files passed quality checks"
 
   Translation-Tag-Check:
     name: Translation Tag Check
