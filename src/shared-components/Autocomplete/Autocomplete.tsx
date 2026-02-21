@@ -1,0 +1,178 @@
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  Autocomplete as MuiAutocomplete,
+  TextField,
+  CircularProgress,
+  AutocompleteValue,
+} from '@mui/material';
+
+import type { IAutocompleteProps } from '.';
+
+/**
+ * Shared Autocomplete Component
+ *
+ * This component standardizes behavior, accessibility, and integration patterns
+ * across the application while preserving full support for generics and advanced
+ * selection modes.
+ *
+ * Supports:
+ * - Single and multiple selection modes
+ * - Free solo input (custom user input)
+ * - Disable clearable mode
+ * - Loading and error states
+ * - Custom TextField rendering via renderInput prop
+ * - TextFieldProps customization
+ *
+ * The component intentionally controls the underlying TextField rendering to
+ * ensure design system consistency and accessibility compliance.
+ *
+ * Type parameters:
+ * - T: The type of the option object
+ * - Multiple: Whether multiple selection is enabled (default: false)
+ * - DisableClearable: Whether clearing the value is disabled (default: false)
+ * - FreeSolo: Whether free-form user input is allowed (default: false)
+ *
+ * @example
+ * ```tsx
+ * // Single selection
+ * <Autocomplete<User>
+ *   id="user-select"
+ *   options={users}
+ *   value={selectedUser}
+ *   onChange={setSelectedUser}
+ *   label="Select a user"
+ *   getOptionLabel={(user) => user.name}
+ * />
+ *
+ * // Multiple selection
+ * <Autocomplete<User, true>
+ *   id="user-select"
+ *   options={users}
+ *   value={selectedUsers}
+ *   onChange={setSelectedUsers}
+ *   multiple
+ *   label="Select users"
+ *   getOptionLabel={(user) => user.name}
+ * />
+ * ```
+ *
+ * @remarks
+ * - This component is part of the shared design system
+ * - See {@link IAutocompleteProps} for full prop documentation
+ */
+
+export const Autocomplete = <
+  T,
+  TMultiple extends boolean = false,
+  TDisableClearable extends boolean = false,
+  TFreeSolo extends boolean = false,
+>(
+  props: IAutocompleteProps<T, TMultiple, TDisableClearable, TFreeSolo>,
+): React.ReactElement => {
+  const { t } = useTranslation('common');
+
+  const {
+    id,
+    options,
+    value,
+    onChange,
+    label,
+    placeholder = `${t('select')} ${t('options')}`,
+
+    getOptionLabel,
+    isOptionEqualToValue,
+
+    multiple,
+    disableClearable,
+    freeSolo,
+
+    disabled = false,
+    loading = false,
+    error = false,
+    helperText,
+
+    fullWidth = true,
+    className,
+    dataTestId = 'autocomplete',
+    textFieldProps,
+    renderInput: customRenderInput,
+
+    // Capture all remaining MUI Autocomplete props
+    ...restAutocompleteProps
+  } = props;
+
+  // Default renderInput using TextField
+  const defaultRenderInput = (
+    params: import('@mui/material').AutocompleteRenderInputParams,
+  ) => (
+    <TextField
+      {...params}
+      {...textFieldProps}
+      label={label}
+      placeholder={placeholder}
+      error={error}
+      helperText={helperText}
+      data-testid={`${dataTestId}-input`}
+      InputProps={{
+        ...params.InputProps,
+        ...textFieldProps?.InputProps,
+        endAdornment: (
+          <>
+            {loading && <CircularProgress color="inherit" size={20} />}
+            {params.InputProps.endAdornment}
+          </>
+        ),
+      }}
+    />
+  );
+  const hasWarnedRef = React.useRef(false);
+  return (
+    <MuiAutocomplete<T, TMultiple, TDisableClearable, TFreeSolo>
+      id={id}
+      options={options}
+      value={value}
+      multiple={multiple}
+      disableClearable={disableClearable}
+      freeSolo={freeSolo}
+      disabled={disabled}
+      loading={loading}
+      fullWidth={fullWidth}
+      className={className}
+      data-testid={dataTestId}
+      getOptionLabel={
+        getOptionLabel ??
+        ((option) => {
+          if (
+            process.env.NODE_ENV === 'development' &&
+            !hasWarnedRef.current &&
+            option !== null &&
+            typeof option === 'object'
+          ) {
+            hasWarnedRef.current = true;
+            console.warn(
+              'Autocomplete: getOptionLabel is not provided for object options. Please provide getOptionLabel prop.',
+            );
+          }
+          return typeof option === 'string' ? option : String(option);
+        })
+      }
+      isOptionEqualToValue={
+        isOptionEqualToValue ?? ((option, val) => option === val)
+      }
+      onChange={(_, newValue) => {
+        onChange(
+          newValue as AutocompleteValue<
+            T,
+            TMultiple,
+            TDisableClearable,
+            TFreeSolo
+          >,
+        );
+      }}
+      renderInput={customRenderInput ?? defaultRenderInput}
+      // Spread all remaining MUI Autocomplete props
+      {...restAutocompleteProps}
+    />
+  );
+};

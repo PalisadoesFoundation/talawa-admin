@@ -49,7 +49,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Autocomplete from '@mui/material/Autocomplete';
+import { Autocomplete } from 'shared-components/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
@@ -207,12 +207,12 @@ export const EventRegistrantsModal = ({
             </div>
           }
         >
-          <Autocomplete
+          <Autocomplete<InterfaceUser>
             disablePortal
             inputValue={inputValue}
             onInputChange={(_, value) => setInputValue(value)}
             id="addRegistrant"
-            onChange={(_, newMember): void => {
+            onChange={(newMember) => {
               setMember(newMember);
             }}
             getOptionLabel={(member: InterfaceUser): string =>
@@ -220,7 +220,7 @@ export const EventRegistrantsModal = ({
             }
             renderOption={(props, option: InterfaceUser) => (
               <li {...props} key={option.id}>
-                <div className="d-flex align-items-center">
+                <div className={styles.avatarContainer}>
                   <ProfileAvatarDisplay
                     imageUrl={option.avatarURL}
                     fallbackName={option.name || t('unknownUser')}
@@ -232,19 +232,21 @@ export const EventRegistrantsModal = ({
                     }}
                     enableEnlarge={false}
                   />
-                  <span className="ms-2">
+                  <span className={styles.avatarName}>
                     {option.name || t('unknownUser')}
                   </span>
                 </div>
               </li>
             )}
             noOptionsText={
-              <div className="d-flex ">
-                <p className="me-2">{t('noRegistrationsFound')}</p>
+              <div className={styles.noOptionsContainer}>
+                <p className={styles.noResultsText}>
+                  {t('noRegistrationsFound')}
+                </p>
                 <Button
                   data-testid="add-onspot-link"
                   variant="link"
-                  className={`underline ${styles.underlineText}`}
+                  className={styles.underlineText}
                   onClick={() => setOpen(true)}
                   onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
                   onKeyDown={(e: React.KeyboardEvent) => {
@@ -259,7 +261,7 @@ export const EventRegistrantsModal = ({
               </div>
             }
             options={memberData?.usersByOrganizationId || []}
-            renderInput={(params): React.ReactNode => (
+            renderInput={(params) => (
               <FormTextField
                 name="addRegistrant"
                 label={t('addRegistrantLabel') as string}
@@ -279,6 +281,7 @@ export const EventRegistrantsModal = ({
                 }}
               />
             )}
+            value={member}
           />
           <br />
         </BaseModal>
