@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Validates i18n translation tags against locale JSON files."""
 
 from __future__ import annotations
@@ -80,25 +81,18 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
     return keys
 
 
-def find_translation_tags(source: str | Path) -> set[str]:
-    """Find all translation tags used inside a source file or string.
+def find_translation_tags(
+    source: str | Path, file_name: str | None = None
+) -> set[str]:
+    """Find and collect translation tags from a source file or string.
 
     Handles keyPrefix option in useTranslation calls by prefixing
-    the extracted keys with the keyPrefix value.
-
-    For components that receive `t` as a prop (not using useTranslation
-    directly), add a comment like:
-    // translation-check-keyPrefix: organizationEvents
-    to specify the keyPrefix used by the parent component.
-
-    Note:
-        This function assumes a single keyPrefix per file. If multiple
-        keyPrefixes are found (from useTranslation calls or comment
-        directives), only the first one is used for all translation tags.
-        A warning is emitted to stderr when this occurs.
+    the extracted keys with the keyPrefix value. Tags from both
+    useTranslation-sourced t() calls and i18n.t() calls are collected.
 
     Args:
         source: File path or raw source string.
+        file_name: Optional file name for reporting warnings.
 
     Returns:
         found_tags: A set of detected translation keys.
@@ -111,36 +105,27 @@ def find_translation_tags(source: str | Path) -> set[str]:
     else:
         content = source
 
-    # Find keyPrefix from useTranslation calls
-    # Matches: useTranslation('translation', { keyPrefix: 'namespace' })
+    # Extract keyPrefix from useTranslation only
     key_prefix_pattern = (
         r"useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
     )
     key_prefixes = re.findall(key_prefix_pattern, content)
 
-    # Also check for explicit keyPrefix comment directive
-    # Matches: // translation-check-keyPrefix: namespace
-    comment_prefix_pattern = (
-        r"(?://|/\*)\s*translation-check-keyPrefix:\s*(\S+)"
-    )
-    comment_prefixes = re.findall(comment_prefix_pattern, content)
-
-    # Combine prefixes from useTranslation and comments
-    all_prefixes = key_prefixes + comment_prefixes
-
-    # Get the primary keyPrefix (if multiple, use the first one found)
-    # Note: This assumes single keyPrefix per file. Files with multiple
-    # components using different keyPrefixes may have inaccurate results.
-    if len(all_prefixes) > 1:
-        file_name = str(source) if isinstance(source, Path) else "source"
+    if len(key_prefixes) > 1:
+        display_name = (
+            str(source)
+            if isinstance(source, Path)
+            else (file_name or "source")
+        )
         print(
-            f"Warning: Multiple keyPrefixes found in {file_name}. "
-            f"Using first: '{all_prefixes[0]}'. Found: {all_prefixes}",
+            f"Warning: Multiple keyPrefixes found in {display_name}. "
+            f"Using first: '{key_prefixes[0]}'. Found: {key_prefixes}",
             file=sys.stderr,
         )
-    primary_prefix = all_prefixes[0] if all_prefixes else None
 
-    # Find all t('key') calls
+    primary_prefix = key_prefixes[0] if key_prefixes else None
+
+    # Find translation tags
     tags = re.findall(
         r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n]+)['\"]",
         content,
@@ -148,11 +133,8 @@ def find_translation_tags(source: str | Path) -> set[str]:
 
     result = set()
     for tag in tags:
-        # Remove namespace prefix if present (e.g., "translation:key" -> "key")
         clean_tag = tag.split(":")[-1]
 
-        # If the tag already contains a dot (full path), use it as-is
-        # Otherwise, prefix it with the keyPrefix if one exists
         if "." in clean_tag or primary_prefix is None:
             result.add(clean_tag)
         else:
@@ -220,19 +202,53 @@ def get_target_files(
     ]
 
 
-def check_file(path: Path, valid_keys: set[str]) -> list[str]:
-    """Check a file for missing translation keys.
+def check_file(path: Path, valid_keys: set[str]) -> tuple | None:
+    """Check a source file for translation violations.
 
     Args:
-        path: File path to check.
-        valid_keys: Set of valid translation keys.
+        path: Path to the source file to check.
+        valid_keys: Set of all valid translation keys from the locale files.
 
     Returns:
-        missing_keys: A sorted list of missing translation keys.
+        errors: A tuple containing the error type ("error" or "missing") and
+            either a single lint error message or a list of missing keys.
+            Returns None if no violations are found.
     """
-    return sorted(
-        tag for tag in find_translation_tags(path) if tag not in valid_keys
+    try:
+        content = path.read_text(encoding="utf-8")
+    except (OSError, UnicodeDecodeError):
+        return None
+
+    # Detect usage patterns (excluding i18n.t via negative lookbehind)
+    uses_standalone_t = re.search(r"(?<!i18n)\bt\(\s*['\"]", content)
+    uses_i18n_t = re.search(r"\bi18n\.t\(\s*['\"]", content)
+    uses_use_translation = re.search(r"useTranslation\s*\(", content)
+
+    # Detect if 't' is passed as a prop or defined in function params
+    # Matches: props.t, t= (JSX), ({ t }), (..., t, ...), (t: any)
+    uses_prop_t = re.search(
+        r"\bprops\.t\b|\bt\s*=(?![=>])|([({,]\s*\bt\b\s*[:},)])", content
     )
+
+    if uses_standalone_t and not uses_i18n_t and not uses_use_translation:
+        if uses_prop_t:
+            return (
+                "error",
+                "Translation lint error: `t` detected as a prop or param. "
+                "Fix: Import and call useTranslation() from 'react-i18next'. "
+                "Do not pass `t` as a prop.",
+            )
+        return (
+            "error",
+            "Translation lint error: `t()` must use `useTranslation()`. "
+            "Fix: Import and call useTranslation() from 'react-i18next'. "
+            "Do not pass `t` as a prop.",
+        )
+
+    tags = find_translation_tags(content, file_name=str(path))
+    missing = sorted(tag for tag in tags if tag not in valid_keys)
+
+    return ("missing", missing) if missing else None
 
 
 def main() -> None:
@@ -273,18 +289,20 @@ def main() -> None:
         print(f"Error: {exc}", file=sys.stderr)
         sys.exit(2)
 
-    errors: dict[str, list[str]] = {}
+    errors: dict[str, tuple[str, str | list[str]]] = {}
     for path in targets:
-        missing = check_file(path, valid_keys)
-        if missing:
-            errors[str(path)] = missing
+        result = check_file(path, valid_keys)
+        if result:
+            errors[str(path)] = result
 
     if errors:
-        for file, tags in errors.items():
-            print(
-                f"File: {file}\n"
-                + "\n".join(f"  - Missing: {tag}" for tag in tags)
-            )
+        for file, (error_type, payload) in errors.items():
+            print(f"File: {file}")
+            if error_type == "error":
+                print(f"  - Error: {payload}")
+            else:
+                for tag in payload:
+                    print(f"  - Missing: {tag}")
         sys.exit(1)
 
     print("All translation tags validated successfully")

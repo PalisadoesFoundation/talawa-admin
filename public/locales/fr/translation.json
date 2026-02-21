@@ -665,7 +665,8 @@
     "Workshops": "Ateliers",
     "selectMonth": "Sélectionner le mois",
     "selectDay": "Sélectionner le jour",
-    "selectYear": "Sélectionner l’année"
+    "selectYear": "Sélectionner l’année",
+    "selectWeek": "Sélectionner la semaine"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -1712,9 +1713,12 @@
     "donations": "Des dons",
     "searchDonations": "Rechercher des dons",
     "donateForThe": "Faites un don pour le",
+    "donor": "Donateur",
     "amount": "Montant",
+    "date": "Date",
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Faire un don",
+    "loading": "Chargement...",
     "nothingToShow": "Rien à montrer ici.",
     "success": "Don réussi",
     "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
@@ -1861,6 +1865,7 @@
     "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
     "invalidFileType": "Type de fichier invalide : {{fileName}}",
     "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "fileUploadError": "Erreur lors du téléchargement du fichier : {{fileName}}",
     "invalidArgumentsForAction": "Arguments invalides pour cette action.",
     "englishCaptions": "Légendes en anglais",
     "preview": "Aperçu",
@@ -1894,6 +1899,7 @@
     "groupName": "Nom du groupe",
     "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
+    "editImage": "Modifier l'image",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
     "userNotFound": "Utilisateur non trouvé",
@@ -2595,5 +2601,8 @@
       "sun": "D"
     },
     "expandDay": "Développer le jour"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Vue du calendrier hebdomadaire"
   }
 }

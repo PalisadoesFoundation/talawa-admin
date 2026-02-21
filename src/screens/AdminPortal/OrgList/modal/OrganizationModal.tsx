@@ -15,8 +15,6 @@
  * - setFormState: Function to update the form state.
  * - createOrg: Function to handle form submission for creating an organization.
  * - t: Translation function for component-specific strings.
- * - tCommon: Translation function for common strings.
- * - userData: Current user data, if available.
  *
  * - The form includes validation for input fields such as name, description, and address.
  * - The `uploadFileToMinio` function is used to handle image uploads to MinIO storage.
@@ -41,19 +39,25 @@
 import React, { type ChangeEvent } from 'react';
 import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
 import styles from './OrganizationModal.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: string | null;
+  avatar?: {
+    objectName: string;
+    fileHash: string;
+    mimetype: string;
+    name: string;
+  } | null;
   city: string;
   countryCode: string;
   description: string;
@@ -71,8 +75,6 @@ export interface InterfaceOrganizationModalProps {
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
 }
 
 /**
@@ -85,24 +87,75 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   formState,
   setFormState,
   createOrg,
-  t,
-  tCommon,
 }) => {
   const { uploadFileToMinio } = useMinioUpload();
+  const { t: tCommon } = useTranslation('common');
+
+  const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
+  const handleAvatarUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const file = e.target.files && e.target.files[0];
+
+    if (file) {
+      // Check file size (5MB limit)
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        NotificationToast.error({
+          key: 'fileTooLarge',
+          namespace: 'errors',
+        });
+        return;
+      }
+
+      // Check file type
+      if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        NotificationToast.error({
+          key: 'invalidFileType',
+          namespace: 'errors',
+        });
+        return;
+      }
+
+      try {
+        const { objectName, fileHash } = await uploadFileToMinio(
+          file,
+          'organization',
+        );
+        setFormState((prev) => ({
+          ...prev,
+          avatar: {
+            objectName,
+            fileHash,
+            mimetype: file.type,
+            name: file.name,
+          },
+        }));
+        NotificationToast.success(tCommon('imageUploadSuccess'));
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        NotificationToast.error({
+          key: 'imageUploadError',
+          namespace: 'errors',
+        });
+      }
+    }
+  };
 
   return (
     <BaseModal
-      show={showModal}
-      onHide={toggleModal}
-      title={t('createOrganization')}
-      headerClassName={styles.modalHeader}
-      dataTestId="modalOrganizationHeader"
+      open={showModal}
+      onClose={toggleModal}
+      title={tCommon('createOrganization')}
+      className={styles.modalHeader}
+      data-testid="modalOrganizationHeader"
     >
-      <Form onSubmitCapture={createOrg}>
+      <form onSubmitCapture={createOrg}>
         <FormTextField
           name="orgname"
           label={tCommon('name')}
-          placeholder={t('enterName')}
+          placeholder={tCommon('enterName')}
           value={formState.name}
           onChange={(val) => {
             if (val.length <= 50) {
@@ -128,21 +181,23 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           data-testid="modalOrganizationDescription"
           autoComplete="off"
         />
-        <Form.Label>{tCommon('address')}</Form.Label>
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
-            <Form.Control
-              required
-              as="select"
-              data-testid="modalOrganizationCountryCode"
-              value={formState.countryCode}
-              onChange={(e): void => {
+            <label htmlFor="organization-address" className={styles.formLabel}>
+              {tCommon('address')}
+            </label>
+            <select
+              id="organization-address"
+              className={`mb-3 ${styles.inputField}`}
+              onChange={(e) => {
                 const inputText = e.target.value;
                 if (inputText.length <= 50) {
                   setFormState({ ...formState, countryCode: e.target.value });
                 }
               }}
-              className={`mb-3 ${styles.inputField}`}
+              required
+              data-testid="modalOrganizationCountryCode"
+              value={formState.countryCode}
             >
               <option value="" disabled>
                 {tCommon('selectACountry')}
@@ -155,7 +210,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   {country.label}
                 </option>
               ))}
-            </Form.Control>
+            </select>
           </Col>
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -241,46 +296,18 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           </Col>
         </Row>
         <Row className="mb-1"></Row>
-        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
-        <Form.Control
-          accept="image/*"
-          id="orgphoto"
-          className={`mb-3 ${styles.inputField}`}
-          name="photo"
-          type="file"
-          multiple={false}
-          onChange={async (e: React.ChangeEvent): Promise<void> => {
-            const target = e.target as HTMLInputElement;
-            const file = target.files && target.files[0];
-
-            if (file) {
-              // Check file size (5MB limit)
-              const maxSize = 5 * 1024 * 1024;
-              if (file.size > maxSize) {
-                NotificationToast.error(tCommon('fileTooLarge'));
-                return;
-              }
-
-              // Check file type
-              const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-              if (!allowedTypes.includes(file.type)) {
-                NotificationToast.error(tCommon('invalidFileType'));
-                return;
-              }
-
-              try {
-                const { objectName: avatarobjectName } =
-                  await uploadFileToMinio(file, 'organization');
-                setFormState({ ...formState, avatar: avatarobjectName });
-                NotificationToast.success(tCommon('imageUploadSuccess'));
-              } catch (error) {
-                console.error('Error uploading image:', error);
-                NotificationToast.error(tCommon('imageUploadError'));
-              }
-            }
-          }}
-          data-testid="organisationImage"
-        />
+        <FormFieldGroup name="orgphoto" label={tCommon('displayImage')}>
+          <input
+            accept="image/*"
+            id="orgphoto"
+            className={`mb-3 ${styles.inputField}`}
+            name="photo"
+            type="file"
+            multiple={false}
+            onChange={handleAvatarUpload}
+            data-testid="organisationImage"
+          />
+        </FormFieldGroup>
         <Col className={styles.sampleOrgSection}>
           <Button
             className="addButton"
@@ -291,7 +318,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             {tCommon('createOrganization')}
           </Button>
         </Col>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

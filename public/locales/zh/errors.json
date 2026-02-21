@@ -25,5 +25,6 @@
   "resetButtonAriaLabel": "再試一次",
   "fileTooLarge": "文件过大：{{fileName}}",
   "invalidFileType": "无效的文件类型：{{fileName}}",
-  "emptyFile": "选择了空文件"
+  "emptyFile": "选择了空文件",
+  "imageUploadError": "上传文件时出错，请重试。"
 }

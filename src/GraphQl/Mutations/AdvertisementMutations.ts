@@ -12,7 +12,7 @@ import gql from 'graphql-tag';
  * @param attachments - Attachments of the advertisement (FileMetadataInput from MinIO presigned upload).
  */
 export const ADD_ADVERTISEMENT_MUTATION = gql`
-  mutation (
+  mutation AddAdvertisement(
     $organizationId: ID!
     $name: String!
     $type: AdvertisementType!
@@ -78,7 +78,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
  */
 
 export const DELETE_ADVERTISEMENT_MUTATION = gql`
-  mutation ($id: ID!) {
+  mutation DeleteAdvertisement($id: ID!) {
     deleteAdvertisement(input: { id: $id }) {
       id
     }

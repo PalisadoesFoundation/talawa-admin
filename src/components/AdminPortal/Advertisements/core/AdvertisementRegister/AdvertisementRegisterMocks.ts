@@ -4,6 +4,7 @@ import {
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
+import type { FileMetadataAttachment } from 'types/AdminPortal/Advertisement/type';
 
 interface IPageInfo {
   startCursor: string | null;
@@ -12,7 +13,7 @@ interface IPageInfo {
   hasPreviousPage: boolean;
 }
 
-export const mockFile = new File(['dummy content'], 'test.jpg', {
+export const mockFile = new File(['dummy content'], 'test-file.jpg', {
   type: 'image/jpeg',
 });
 
@@ -23,19 +24,13 @@ export const mockBigFile = new File(
     type: 'image/jpeg',
   },
 );
-
 export const dateConstants = {
   create: {
-    startAtISO: dayjs().endOf('year').hour(18).minute(30).toISOString(),
+    startAtISO: '2025-12-31T18:30:00.000Z',
     endAtISO: '2030-02-01T18:30:00.000Z',
-    startAtCalledWith: dayjs().endOf('year').startOf('day').toISOString(),
+    startAtCalledWith: '2025-12-31T00:00:00.000Z',
     endAtCalledWith: '2030-02-01T00:00:00.000Z',
-    startISOReceived: dayjs()
-      .endOf('year')
-      .subtract(1, 'day')
-      .hour(18)
-      .minute(30)
-      .toISOString(),
+    startISOReceived: '2025-12-30T18:30:00.000Z',
     endISOReceived: '2030-01-31T18:30:00.000Z',
     endBeforeStartISO: '2010-02-01T18:30:00.000Z',
     endBeforeStartCalledWith: '2010-02-01T00:00:00.000Z',
@@ -46,12 +41,7 @@ export const dateConstants = {
     endAtISO: '2040-02-01T18:30:00.000Z',
     startAtCalledWith: '2020-12-31T00:00:00.000Z',
     endAtCalledWith: '2040-02-01T00:00:00.000Z',
-    startISOReceived: dayjs()
-      .endOf('year')
-      .subtract(1, 'day')
-      .hour(18)
-      .minute(30)
-      .toISOString(),
+    startISOReceived: '2020-12-30T18:30:00.000Z',
     endISOReceived: '2040-01-31T18:30:00.000Z',
     endBeforeStartISO: '2010-02-01T18:30:00.000Z',
     endBeforeStartCalledWith: '2010-02-01T00:00:00.000Z',
@@ -60,7 +50,6 @@ export const dateConstants = {
 };
 
 import { DocumentNode } from 'graphql';
-import dayjs from 'dayjs';
 
 const createMockResponse = <T extends Record<string, unknown> | undefined>(
   query: DocumentNode,
@@ -98,7 +87,7 @@ interface IAdvertisementEdge {
     name: string;
     startAt: string;
     type: string;
-    attachments: File[];
+    attachments: FileMetadataAttachment[];
   };
 }
 
@@ -143,11 +132,11 @@ const createAdvertisementNode = (
   startAt: string,
   endAt: string,
   type: string = 'banner',
-  attachments: File[] = [],
+  attachments: FileMetadataAttachment[] = [],
 ) => ({
   node: {
     id,
-    createdAt: new Date().toISOString(),
+    createdAt: '2023-01-01T00:00:00.000Z',
     description,
     endAt,
     organization: {
@@ -169,6 +158,14 @@ export const createAdFailMock = createMockResponse(
     startAt: '2022-12-31T18:30:00.000Z',
     endAt: '2023-01-31T18:30:00.000Z',
     description: 'advertisement',
+    attachments: [
+      {
+        objectName: 'test-obj',
+        fileHash: 'test-hash',
+        mimetype: 'image/jpeg',
+        name: 'test-file.jpg',
+      },
+    ],
   },
   undefined,
   new Error('Invalid arguments for this action.'),
