@@ -2592,5 +2592,8 @@
       "sun": "S"
     },
     "expandDay": "Expand day"
+  },
+  "userPortalCard": {
+    "ariaLabel": "Content card"
   }
 }

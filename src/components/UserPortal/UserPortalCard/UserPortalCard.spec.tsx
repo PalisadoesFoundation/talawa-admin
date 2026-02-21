@@ -4,6 +4,17 @@ import { render, screen } from '@testing-library/react';
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import UserPortalCard from './UserPortalCard';
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: (_ns: unknown, opts?: { keyPrefix?: string }) => ({
+      t: (key: string) =>
+        opts?.keyPrefix ? `${opts.keyPrefix}.${key}` : key,
+    }),
+  };
+});
+
 describe('UserPortalCard', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -146,6 +157,6 @@ describe('UserPortalCard', () => {
 
     const card = screen.getByTestId('user-portal-card');
     expect(card).toBeInTheDocument();
-    expect(card).not.toHaveAttribute('aria-label');
+    expect(card).toHaveAttribute('aria-label', 'userPortalCard.ariaLabel');
   });
 });

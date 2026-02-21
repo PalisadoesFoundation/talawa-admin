@@ -2592,5 +2592,8 @@
       "sun": "D"
     },
     "expandDay": "Développer le jour"
+  },
+  "userPortalCard": {
+    "ariaLabel": "Carte de contenu"
   }
 }

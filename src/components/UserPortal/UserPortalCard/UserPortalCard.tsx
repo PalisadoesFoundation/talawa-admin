@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import type { InterfaceUserPortalCardProps } from 'types/UserPortal/UserPortalCard/interface';
 import styles from './UserPortalCard.module.css';
 
@@ -17,7 +18,8 @@ import styles from './UserPortalCard.module.css';
  *
  * Accessibility:
  * - role="group"
- * - aria-label provided by consumer (i18n required)
+ * - aria-label defaults to the translated "Content card" label;
+ *   consumers may override it with a more specific translated string
  *
  * @example
  * ```tsx
@@ -40,6 +42,7 @@ const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
   dataTestId = 'user-portal-card',
   ariaLabel,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'userPortalCard' });
   /**
    * Maps variant prop to CSS module class.
    * Variants control density only (padding/spacing).
@@ -61,7 +64,7 @@ const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
       className={containerClassName}
       data-testid={dataTestId}
       role="group"
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? t('ariaLabel')}
     >
       {imageSlot && (
         <div
