@@ -1,7 +1,7 @@
 ---
 id: security
 title: Security Guidelines
-slug: /developer-resources/general/security
+slug: /developer-resources/getting-started/security
 sidebar_position: 90
 ---
 
