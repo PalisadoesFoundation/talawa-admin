@@ -59,6 +59,9 @@ describe('UserPortalNavigationBarMocks', () => {
         'unknown' as Parameters<typeof getMockIcon>[0],
       );
       expect(FallbackComponent).toBeDefined();
+      const element = FallbackComponent({}) as ReactElement<MockIconProps>;
+      expect(element).toBeDefined();
+      expect(element.props.children).toBe('Person Icon');
     });
   });
 
