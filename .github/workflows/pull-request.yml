@@ -781,11 +781,6 @@ jobs:
   #     - name: Checkout the Repository
   #       uses: actions/checkout@v4
 
-  #     - name: Set up Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: '24.x'
-
   #     - name: Install pnpm
   #       uses: pnpm/action-setup@v4
   #       with:
@@ -795,7 +790,6 @@ jobs:
   #       uses: actions/setup-node@v4
   #       with:
   #         node-version: '24.x'
-  #         cache: 'pnpm'
 
   #     - name: resolve dependency
   #       run: pnpm install -g @graphql-inspector/cli
@@ -1234,11 +1228,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
-          cache: 'pnpm'
 
       - name: Setup Devcontainer
         run: |
-          pnpm install -g @devcontainers/cli
+          pnpm add -g @devcontainers/cli
           cp envFiles/.env.devcontainer .env
           devcontainer up --workspace-folder . --config .devcontainer/default/devcontainer.json
           echo "Devcontainer started"
