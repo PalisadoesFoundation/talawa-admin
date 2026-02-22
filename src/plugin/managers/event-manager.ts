@@ -13,15 +13,14 @@ export class EventManager {
       return;
     }
 
-    if (!this.eventListeners.has(event)) {
-      this.eventListeners.set(event, []);
+    let listeners = this.eventListeners.get(event);
+
+    if (!listeners) {
+      listeners = [];
+      this.eventListeners.set(event, listeners);
     }
-    const listeners = this.eventListeners.get(event);
-    if (listeners) {
-      listeners.push(callback);
-    } else {
-      this.eventListeners.set(event, [callback]);
-    }
+
+    listeners.push(callback);
   }
 
   off(event: string, callback: (...args: unknown[]) => void): void {

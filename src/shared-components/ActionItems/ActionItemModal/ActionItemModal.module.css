@@ -1,7 +1,7 @@
 .itemModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+  max-width: var(--vw-80);
+  margin-top: var(--vh-2);
+  margin-left: var(--vw-13);
 }
 
 .noOutline input {
@@ -61,13 +61,13 @@
 .addButton:disabled:focus-visible {
   outline: var(--border-2) solid var(--color-gray-400);
   outline-offset: var(--shadow-offset-sm);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-400);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-300);
 }
 
 .autocompleteWrapper {
   display: flex;
   align-items: center;
-  border: 1px solid var(--color-gray-300);
+  border: var(--border-1) solid var(--color-gray-300);
   border-radius: var(--rounded-md);
   padding: var(--space-2);
   background-color: var(--color-white);

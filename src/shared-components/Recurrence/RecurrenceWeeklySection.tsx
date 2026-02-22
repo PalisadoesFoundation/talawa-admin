@@ -1,22 +1,8 @@
 import React from 'react';
-import {
-  Frequency,
-  Days,
-  daysOptions,
-  WeekDays,
-} from '../../utils/recurrenceUtils';
-import styles from '../../style/app-fixed.module.css';
-
-interface InterfaceRecurrenceWeeklySectionProps {
-  frequency: Frequency;
-  byDay?: WeekDays[];
-  onDayClick: (day: WeekDays) => void;
-  onWeekdayKeyDown: (
-    e: React.KeyboardEvent<HTMLButtonElement>,
-    currentIndex: number,
-  ) => void;
-  t: (key: string) => string;
-}
+import { Frequency, Days, daysOptions } from 'utils/recurrenceUtils';
+import styles from './RecurrenceWeeklySection.module.css';
+import Button from 'shared-components/Button';
+import { InterfaceRecurrenceWeeklySectionProps } from 'types/shared-components/Recurrence/interface';
 
 /**
  * Weekly recurrence day selection section
@@ -38,7 +24,7 @@ export const RecurrenceWeeklySection: React.FC<
         aria-label={t('repeatsOn')}
       >
         {daysOptions.map((day, index) => (
-          <button
+          <Button
             key={index}
             type="button"
             className={`${styles.recurrenceDayButton} ${byDay?.includes(Days[index]) ? styles.selected : ''}`}
@@ -58,7 +44,7 @@ export const RecurrenceWeeklySection: React.FC<
             tabIndex={0}
           >
             <span>{day}</span>
-          </button>
+          </Button>
         ))}
       </div>
     </div>

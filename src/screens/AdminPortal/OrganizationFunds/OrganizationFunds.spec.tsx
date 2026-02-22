@@ -521,4 +521,47 @@ describe('OrganizationFunds Screen =>', () => {
       expect(createdOnElements.length).toBeGreaterThan(0);
     });
   });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open create fund modal when Enter is pressed on create fund button', async () => {
+      mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+      renderOrganizationFunds(link1);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      });
+
+      const createFundBtn = await screen.findByTestId('createFundBtn');
+      createFundBtn.focus();
+      await user.keyboard('{Enter}');
+
+      await waitFor(() => {
+        const modalTitle = screen.getByTestId('modalTitle');
+        expect(modalTitle).toHaveTextContent(translations.fundCreate);
+      });
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+      renderOrganizationFunds(link1);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      });
+
+      const createFundBtn = await screen.findByTestId('createFundBtn');
+      await user.click(createFundBtn);
+
+      await waitFor(() => {
+        const modalTitle = screen.getByTestId('modalTitle');
+        expect(modalTitle).toHaveTextContent(translations.fundCreate);
+      });
+
+      await user.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
+      });
+    });
+  });
 });

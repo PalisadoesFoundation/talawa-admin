@@ -16,9 +16,9 @@ Defines the structure for a venue with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:930](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L930)
 
-#### mimeType
+#### mimetype
 
-> **mimeType**: `string`
+> **mimetype**: `string`
 
 #### url
 

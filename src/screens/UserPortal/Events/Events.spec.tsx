@@ -7,7 +7,6 @@
  */
 
 // SKIP_LOCALSTORAGE_CHECK
-import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { InMemoryCache } from '@apollo/client';
@@ -44,7 +43,7 @@ const { mockToast, mockUseParams, mockErrorHandler } = vi.hoisted(() => ({
     info: vi.fn(),
     success: vi.fn(),
   },
-  mockUseParams: vi.fn(),
+  mockUseParams: vi.fn().mockReturnValue({ orgId: 'org123' }),
   mockErrorHandler: vi.fn(),
 }));
 
@@ -223,19 +222,11 @@ const theme = createTheme({
   },
 });
 
-// Fixed date for testing to ensure determinism
-const TEST_DATE = dayjs()
-  .year(2024)
-  .month(5)
-  .date(15)
-  .hour(8)
-  .minute(0)
-  .second(0)
-  .millisecond(0)
-  .toISOString();
-const dateObj = new Date(TEST_DATE);
-const currentMonth = dateObj.getMonth();
-const currentYear = dateObj.getFullYear();
+// Fixed date for testing to ensure determinism.
+// Use Date.UTC directly to avoid any local-timezone offset captured by dayjs().
+const TEST_DATE = new Date(Date.UTC(2024, 5, 15, 8, 0, 0, 0));
+const currentMonth = TEST_DATE.getUTCMonth();
+const currentYear = TEST_DATE.getUTCFullYear();
 
 // Helper variables to match Events.tsx query structure
 // Use the exact same logic as Events.tsx to ensure timezone-independent behavior
@@ -808,12 +799,10 @@ const CREATOR_NULL_MOCKS = [
   MOCKS[1],
 ];
 
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
+async function wait(): Promise<void> {
+  await waitFor(() =>
+    expect(screen.getByTestId('events-screen')).toBeInTheDocument(),
+  );
 }
 
 describe('Testing Events Screen [User Portal]', () => {
@@ -839,7 +828,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   afterEach(() => {
     localStorage.clear();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.useRealTimers();
   });
 
@@ -860,8 +849,6 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
@@ -1156,7 +1143,7 @@ describe('Testing Events Screen [User Portal]', () => {
       await userEvent.click(submitBtn);
     }
 
-    await wait(500);
+    await wait();
 
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
@@ -1211,10 +1198,10 @@ describe('Testing Events Screen [User Portal]', () => {
       await userEvent.click(submitBtn);
     }
 
-    await wait(500);
-
     // Error should be logged (console.error is called in catch block)
-    expect(NotificationToast.success).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
@@ -1249,8 +1236,13 @@ describe('Testing Events Screen [User Portal]', () => {
     const endTimeInputWhenAllDay = screen.getByLabelText(
       'End Time',
     ) as HTMLInputElement;
+    // Verify time inputs are disabled but contain values
     expect(startTimeInputWhenAllDay).toBeDisabled();
     expect(endTimeInputWhenAllDay).toBeDisabled();
+
+    // Capture the initial values while disabled
+    const initialStartTime = startTimeInputWhenAllDay.value;
+    const initialEndTime = endTimeInputWhenAllDay.value;
 
     // Toggle all-day OFF (uncheck it)
     await userEvent.click(allDayCheckbox);
@@ -1266,9 +1258,9 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(startTimeInput).not.toBeDisabled();
     expect(endTimeInput).not.toBeDisabled();
 
-    // Optional sanity: values unchanged
-    expect(startTimeInput.value).toBe('08:00:00');
-    expect(endTimeInput.value).toBe('10:00:00');
+    // Values should match what was there initially (or default)
+    expect(startTimeInput.value).toBe(initialStartTime);
+    expect(endTimeInput.value).toBe(initialEndTime);
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
@@ -1355,11 +1347,11 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.clear(endDatePicker);
     await userEvent.type(endDatePicker, newDate.format('YYYY-MM-DD'));
 
-    await wait();
-
     // Date pickers should accept the changes - re-query as elements might have been detached
-    expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
-    expect(screen.getByTestId('eventEndAt')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+      expect(screen.getByTestId('eventEndAt')).toBeInTheDocument();
+    });
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
@@ -1408,11 +1400,11 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.clear(endTimePicker);
     await userEvent.type(endTimePicker, '11:00:00');
 
-    await wait();
-
     // Time pickers should accept the changes - re-query as elements might have been detached
-    expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Time')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
+      expect(screen.getByLabelText('End Time')).toBeInTheDocument();
+    });
   });
 
   it('Should handle null date values gracefully', async () => {
@@ -1445,10 +1437,10 @@ describe('Testing Events Screen [User Portal]', () => {
     const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     await userEvent.clear(endDatePicker);
 
-    await wait();
-
     // Should handle null values without crashing
-    expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+    });
   });
 
   it('Should handle network error gracefully', async () => {
@@ -1473,10 +1465,10 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait(500);
-
     // Should log warning for non-rate-limit errors
-    expect(consoleWarnSpy).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(consoleWarnSpy).toHaveBeenCalled();
+    });
 
     consoleWarnSpy.mockRestore();
   });
@@ -1502,8 +1494,6 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
@@ -1583,8 +1573,6 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
     });
@@ -1611,8 +1599,6 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
     });
@@ -1637,8 +1623,6 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
 
     // Initial view should be Month View
     await waitFor(() => {
@@ -1673,8 +1657,6 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
         'Month View',
@@ -1692,8 +1674,6 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('handleChangeNullBtn'));
 
     // Wait for state to settle after no-op view change
-    await wait();
-    // View type should remain DAY
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
     });
@@ -1717,9 +1697,7 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    const monthChangeBtn = screen.getByTestId('monthChangeBtn');
+    const monthChangeBtn = await screen.findByTestId('monthChangeBtn');
     expect(monthChangeBtn).toBeInTheDocument();
 
     await userEvent.click(monthChangeBtn);
@@ -1777,10 +1755,10 @@ describe('Testing Events Screen [User Portal]', () => {
       await userEvent.click(submitBtn);
     }
 
-    await wait(500);
-
     // The createEvent mutation returned null data, so no success toast
-    expect(mockToast.success).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockToast.success).not.toHaveBeenCalled();
+    });
   });
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
@@ -1956,7 +1934,6 @@ describe('Testing Events Screen [User Portal]', () => {
     const submitBtn = screen.getByRole('button', { name: /create event/i });
     if (form) await userEvent.click(submitBtn);
 
-    await wait(500);
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
     });
@@ -2043,8 +2020,6 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Verify partial data is rendered (checking mocked Calendar JSON dump)
     await waitFor(() => {
       expect(screen.getByTestId('event-data-json')).toHaveTextContent(
@@ -2053,7 +2028,9 @@ describe('Testing Events Screen [User Portal]', () => {
     });
 
     // Verify ERROR toast is NOT shown (suppressed)
-    expect(mockToast.error).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockToast.error).not.toHaveBeenCalled();
+    });
   });
 
   describe('computeCalendarFromStartDate', () => {

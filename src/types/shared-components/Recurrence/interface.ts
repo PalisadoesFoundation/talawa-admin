@@ -3,7 +3,8 @@ import {
   Frequency,
   InterfaceRecurrenceRule,
   RecurrenceEndOptionType,
-} from '../../../utils/recurrenceUtils';
+  WeekDays,
+} from 'utils/recurrenceUtils';
 
 /**
  * Props for the RecurrenceEndOptionsSection component.
@@ -60,5 +61,16 @@ export interface InterfaceRecurrenceMonthlySectionProps {
   /** The start date of the recurrence. */
   startDate: Date;
   /** Translation function. */
+  t: (key: string) => string;
+}
+
+export interface InterfaceRecurrenceWeeklySectionProps {
+  frequency: Frequency;
+  byDay?: WeekDays[];
+  onDayClick: (day: WeekDays) => void;
+  onWeekdayKeyDown: (
+    e: React.KeyboardEvent<HTMLButtonElement>,
+    currentIndex: number,
+  ) => void;
   t: (key: string) => string;
 }

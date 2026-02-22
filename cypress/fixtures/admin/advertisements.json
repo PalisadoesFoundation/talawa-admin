@@ -19,5 +19,15 @@
       "endDate": "2026-03-01T00:00:00.000Z"
     }
   ],
-  "emptyAdvertisements": []
+  "emptyAdvertisements": [],
+  "mockPresignedUrl": {
+    "presignedUrl": "http://localhost:9000/talawa/test-upload?X-Amz-Signature=mock",
+    "objectName": "orgs/test-org/ads/mock-image-abc123.png",
+    "requiresUpload": true
+  },
+  "mockFileMetadata": {
+    "objectName": "orgs/test-org/ads/mock-image-abc123.png",
+    "fileHash": "mockhash123456",
+    "mimeType": "image/png"
+  }
 }

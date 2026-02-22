@@ -1,4 +1,4 @@
-import type { AdvertisementAttachment } from './type';
+import type { AdvertisementAttachment, FileMetadataAttachment } from './type';
 
 export interface InterfaceAddOnRegisterProps {
   formStatus?: string; // Determines if the form is in register or edit mode
@@ -25,8 +25,8 @@ export interface InterfaceFormStateTypes {
   description: string | null; // Description of the advertisement
   endAt: Date; // End date of the advertisement
   organizationId?: string | undefined; // Organization ID
-  attachments: File[]; //File Array
-  existingAttachments?: string | undefined; //Keep existing media URL for previews
+  attachments: FileMetadataAttachment[]; // Attachment metadata array from MinIO uploads
+  existingAttachments?: string | undefined; // Existing media URLs for preview display
 }
 
 export interface InterfaceAddOnEntryProps {

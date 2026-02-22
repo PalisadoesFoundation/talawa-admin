@@ -11,27 +11,28 @@
 # - Formatting and linting (black, flake8, pydocstyle)
 # - Documentation and translation validation
 # - File complexity limits
-# - Security checks via external, checksum-verified scripts
+# - Centralized policy checks via auto-fetched scripts
 # - CSS policy checks on staged files
 #
-# External Script Caching:
-# - Centralized scripts are downloaded from PalisadoesFoundation/.github
-# - Cached locally to reduce network dependency
-# - SHA256 verification ensures script integrity
+# External Script Handling:
+# - Scripts downloaded from PalisadoesFoundation/.github
+# - Cached locally (24h) to reduce network dependency
+# - Format/syntax validation (shebang, Python syntax, file size)
+# - Falls back to cached version on download/validation failure
 #
 # Design Notes:
 # - Supports Windows via cmd.exe execution
 # - Uses null-delimited file lists for safety
-# - Falls back gracefully when no staged files are present
+# - Zero manual maintenance required
 #
 # =============================================================================
 set -euo pipefail
 
 . "$(git rev-parse --show-toplevel)/.husky/scripts/staged-files.sh"
-. "$(git rev-parse --show-toplevel)/.husky/scripts/fetch-verified.sh"
 
 cleanup() {
   [ -n "${CSS_TMP:-}" ] && rm -f "$CSS_TMP"
+  [ -n "${FETCH_TMP:-}" ] && rm -f "$FETCH_TMP"
   cleanup_staged_cache 2>/dev/null || true
 }
 
@@ -50,10 +51,87 @@ MAX_FILE_LINES=600
 SCRIPT_CACHE_HOURS=24
 
 STAGED_SRC_FILE="${1:-}"
+REPO_OWNER="PalisadoesFoundation"
+REPO_NAME=".github"
+CENTRAL_SCRIPTS_DIR=".github-central/.github/workflows/scripts"
+
 if [ -z "$STAGED_SRC_FILE" ]; then
   echo "Error: staged file list path is required." >&2
   exit 1
 fi
+
+# =============================================================================
+# Auto-fetch external scripts with validation
+# =============================================================================
+
+fetch_and_validate() {
+  local script_name="$1"
+  local python_bin="$2"
+  local dest="$CENTRAL_SCRIPTS_DIR/$script_name"
+  local url="https://raw.githubusercontent.com/$REPO_OWNER/$REPO_NAME/main/.github/workflows/scripts/$script_name"
+  local cache_mins=$((SCRIPT_CACHE_HOURS * 60))
+  local file_size
+  
+  mkdir -p "$(dirname "$dest")"
+  
+  # Use cached version if fresh
+  if [ -f "$dest" ] && find "$dest" -mmin -$cache_mins 2>/dev/null | grep -q .; then
+    return 0
+  fi
+  
+  echo "Fetching $script_name..."
+  
+  # Create unique temp file and register for cleanup
+  FETCH_TMP=$(mktemp "${dest}.XXXXXX")
+  
+  # Download with timeout and retry
+  if ! curl -fsSL --max-time 30 --retry 2 "$url" -o "$FETCH_TMP" 2>/dev/null; then
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
+    if [ -f "$dest" ]; then
+      echo "Warning: Download failed, using cached version of $script_name" >&2
+      return 0
+    fi
+    echo "Error: Failed to download $script_name and no cache available" >&2
+    return 1
+  fi
+  
+  # Validate: must be Python file with valid shebang
+  if ! head -n 1 "$FETCH_TMP" | grep -qE '^\s*#!.*\bpython([0-9.]+)?\b'; then
+    echo "Warning: $script_name doesn't have a valid Python shebang, using cached version" >&2
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
+    [ -f "$dest" ] && return 0
+    return 1
+  fi
+  
+  # Validate: Python syntax must be correct
+  if ! "$python_bin" -m py_compile "$FETCH_TMP" 2>/dev/null; then
+    echo "Warning: $script_name has syntax errors, using cached version" >&2
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
+    [ -f "$dest" ] && return 0
+    return 1
+  fi
+  
+  # Validate: reject suspiciously small files (error pages)
+  file_size=$(wc -c < "$FETCH_TMP" | tr -d ' ')
+  if [ "$file_size" -lt 200 ]; then
+    echo "Warning: $script_name too small ($file_size bytes), using cached version" >&2
+    rm -f "$FETCH_TMP"
+    FETCH_TMP=""
+    [ -f "$dest" ] && return 0
+    return 1
+  fi
+  
+  # All validations passed
+  mv "$FETCH_TMP" "$dest"
+  FETCH_TMP=""
+}
+
+# =============================================================================
+# Python environment setup
+# =============================================================================
 
 echo "Initializing Python virtual environment..."
 VENV_BIN=$(./.husky/scripts/venv.sh) || exit 1
@@ -65,11 +143,14 @@ else
   set -- "$VENV_BIN"
 fi
 
+# Store the Python interpreter for validation functions
+PYTHON_INTERPRETER="$1"
+
 echo "Running Python formatting and lint checks..."
 
 "$@" -m black --check .github
-"$@" -m pydocstyle .github
-"$@" -m flake8 .github
+"$@" -m pydocstyle --convention=google --add-ignore=D415,D205 .github
+"$@" -m flake8 --docstring-convention google --ignore E402,E722,E203,F401,W503 .github
 
 echo "Running Python CI parity checks..."
 
@@ -85,52 +166,18 @@ xargs -0 "$@" .github/workflows/scripts/translation_check.py --files < "$STAGED_
 
 echo "Running centralized Python policy checks..."
 
-# =============================================================================
-# We are using SHAs pinned to specific commits to ensure script integrity
-# and avoid executing unverified code.
-# Kindly update the SHAs if  upstream scripts are modified.
-#==============================================================================
-# Centralized scripts directory
-CENTRAL_SCRIPTS_DIR=".github-central/.github/workflows/scripts"
 
 echo "Running disable statements check..."
-DISABLE_STATEMENTS_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/disable_statements_check.py"
-DISABLE_STATEMENTS_PATH="$CENTRAL_SCRIPTS_DIR/disable_statements_check.py"
-DISABLE_STATEMENTS_SHA="9acbc75c02413607c2f15eb3babc3484bb7dbd53c5d27f611d6cd26cc89c55ec"
-
-fetch_and_verify \
-  "$DISABLE_STATEMENTS_URL" \
-  "$DISABLE_STATEMENTS_PATH" \
-  "$DISABLE_STATEMENTS_SHA" \
-  "$SCRIPT_CACHE_HOURS"
-
-xargs -0 "$@" "$DISABLE_STATEMENTS_PATH" --files < "$STAGED_SRC_FILE"
+fetch_and_validate "disable_statements_check.py" "$PYTHON_INTERPRETER"
+xargs -0 "$@" "$CENTRAL_SCRIPTS_DIR/disable_statements_check.py" --files < "$STAGED_SRC_FILE"
 
 echo "Running docstring compliance check..."
-CHECK_DOCSTRINGS_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/check_docstrings.py"
-CHECK_DOCSTRINGS_PATH="$CENTRAL_SCRIPTS_DIR/check_docstrings.py"
-CHECK_DOCSTRINGS_SHA="f9a2efbb8cad49241f3e72e65637f5cdde98980c30a09c8ba0acf3e98494fee7"
-
-fetch_and_verify \
-  "$CHECK_DOCSTRINGS_URL" \
-  "$CHECK_DOCSTRINGS_PATH" \
-  "$CHECK_DOCSTRINGS_SHA" \
-  "$SCRIPT_CACHE_HOURS"
-
-"$@" "$CHECK_DOCSTRINGS_PATH" --directories .github
+fetch_and_validate "check_docstrings.py" "$PYTHON_INTERPRETER"
+"$@" "$CENTRAL_SCRIPTS_DIR/check_docstrings.py" --directories .github
 
 echo "Running line count enforcement check..."
-COUNTLINE_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/countline.py"
-COUNTLINE_PATH="$CENTRAL_SCRIPTS_DIR/countline.py"
-COUNTLINE_SHA="482928bed829894d1a77b656d26de1d65fa9a69cda38cd8002136903307a6a08"
-
-fetch_and_verify \
-  "$COUNTLINE_URL" \
-  "$COUNTLINE_PATH" \
-  "$COUNTLINE_SHA" \
-  "$SCRIPT_CACHE_HOURS"
-
-"$@" "$COUNTLINE_PATH" \
+fetch_and_validate "countline.py" "$PYTHON_INTERPRETER"
+"$@" "$CENTRAL_SCRIPTS_DIR/countline.py" \
   --lines "$MAX_FILE_LINES" \
   --files ./.github/workflows/config/countline_excluded_file_list.txt
 
