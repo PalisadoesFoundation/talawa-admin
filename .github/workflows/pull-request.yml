@@ -480,7 +480,7 @@ jobs:
       - name: Run route prefix check script
         env:
           CI: true
-        run: npm run check-route-prefix -- --scan-entire-repo
+        run: pnpm run check-route-prefix -- --scan-entire-repo
 
   Test-Application:
     name: Test Application (Shard ${{ matrix.shard }})
@@ -786,8 +786,19 @@ jobs:
   #       with:
   #         node-version: '24.x'
 
+  #     - name: Install pnpm
+  #       uses: pnpm/action-setup@v4
+  #       with:
+  #         run_install: false
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '24.x'
+  #         cache: 'pnpm'
+
   #     - name: resolve dependency
-  #       run: npm install -g @graphql-inspector/cli
+  #       run: pnpm install -g @graphql-inspector/cli
 
   #     - name: Clone API Repository
   #       run: |
@@ -1214,9 +1225,20 @@ jobs:
           repository: palisadoesFoundation/talawa-api
           ref: develop
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
       - name: Setup Devcontainer
         run: |
-          npm install -g @devcontainers/cli
+          pnpm install -g @devcontainers/cli
           cp envFiles/.env.devcontainer .env
           devcontainer up --workspace-folder . --config .devcontainer/default/devcontainer.json
           echo "Devcontainer started"
