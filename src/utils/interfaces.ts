@@ -929,7 +929,7 @@ export interface InterfaceVenuePg {
   capacity?: number | null;
   attachments?: Array<{
     url: string;
-    mimeType: string;
+    mimetype: string;
   }>;
   createdAt: string;
   updatedAt: string;

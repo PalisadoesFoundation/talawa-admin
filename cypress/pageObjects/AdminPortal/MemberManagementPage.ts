@@ -72,6 +72,21 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
     return this;
   }
 
+  closeAddMemberModal(timeout = 40000): this {
+    cy.get('body').then(($body) => {
+      if ($body.find('[data-testid="addExistingUserModal"]').length > 0) {
+        cy.get('[data-testid="addExistingUserModal"]')
+          .find('[data-testid="modalCloseBtn"]')
+          .first()
+          .click({ force: true });
+      }
+    });
+    cy.get('[data-testid="addExistingUserModal"]', { timeout }).should(
+      'not.exist',
+    );
+    return this;
+  }
+
   deleteMember(name: string, timeout = 40000): this {
     this.searchMemberByName(name, timeout);
 

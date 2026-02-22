@@ -1,11 +1,11 @@
 ---
 id: tablefix-tables
-title: Data Tables
+title: DataTable
 description:
   End‑to‑end guide to Talawa Admin’s generic DataTable, including types, structure,
   empty/error states, pagination, loading, sorting, filtering/search, selection/actions,
   accessibility, testing, and migration patterns.
-slug: /developer-resources/tables
+slug: /developer-resources/shared-components/tables
 sidebar_position: 36
 tags:
   [
@@ -439,10 +439,13 @@ type UsersQuery = {
 };
 
 const result = useQuery<UsersQuery>(/* GET_USERS */);
-const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(result, {
-  path: ['users'],
-  transformNode: (n) => n,
-});
+const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(
+  result,
+  {
+    path: ['users'],
+    transformNode: (n) => n,
+  },
+);
 
 <DataTable<User>
   data={rows}
@@ -451,7 +454,9 @@ const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(res
   paginationMode="server"
   pageInfo={pageInfo}
   loadingMore={loadingMore}
-  onLoadMore={() => result.fetchMore({ variables: { after: pageInfo?.endCursor } })}
+  onLoadMore={() =>
+    result.fetchMore({ variables: { after: pageInfo?.endCursor } })
+  }
 />;
 ```
 
@@ -465,6 +470,7 @@ For queries with edges/pageInfo, use `useTableData` instead.
 The useSimpleTableData hook integrates array-based GraphQL queries with DataTable. It provides a consistent interface for data extraction, loading states, and error handling.
 
 **Use cases:**
+
 - Queries returning simple arrays: `data.organization.membershipRequests`
 - Small datasets without pagination
 - Legacy queries not yet migrated to connection format
@@ -536,15 +542,18 @@ interface InterfaceMembershipRequestsQueryData {
 }
 
 // Query returns simple array, not connection format
-const result = useQuery<InterfaceMembershipRequestsQueryData>(MEMBERSHIP_REQUEST_PG, {
-  variables: { input: { id: orgId }, first: 10 },
-});
+const result = useQuery<InterfaceMembershipRequestsQueryData>(
+  MEMBERSHIP_REQUEST_PG,
+  {
+    variables: { input: { id: orgId }, first: 10 },
+  },
+);
 
 // IMPORTANT: Memoize path function for stable reference (required)
 const extractRequests = useCallback(
   (data: InterfaceMembershipRequestsQueryData) =>
     data?.organization?.membershipRequests ?? [],
-  []
+  [],
 );
 
 const { rows, loading, error, refetch } = useSimpleTableData<
@@ -555,9 +564,9 @@ const { rows, loading, error, refetch } = useSimpleTableData<
 });
 
 // Optional: filter or transform rows
-const displayedRows = useMemo(() =>
-  rows.filter(req => req.status === 'pending'),
-  [rows]
+const displayedRows = useMemo(
+  () => rows.filter((req) => req.status === 'pending'),
+  [rows],
 );
 
 <DataTable<InterfaceRequestsListItem>
@@ -572,16 +581,16 @@ const displayedRows = useMemo(() =>
 
 **Comparison: useTableData vs useSimpleTableData**
 
-| Feature | useTableData | useSimpleTableData |
-| --- | --- | --- |
-| **Query format** | Connection (edges/pageInfo) | Simple array |
-| **Pagination** | Server-side (cursor-based) | Client-side or none |
-| **Returns** | rows, pageInfo, loadingMore, fetchMore | rows, loading, error, refetch |
-| **Error type** | Error \| null | ApolloError \| undefined |
-| **Refetch type** | QueryResult refetch (Promise) | QueryResult refetch (Promise) |
-| **Path function** | Can be inline or memoized | **Must be memoized with useCallback** |
-| **Use case** | Large datasets, infinite scroll | Small datasets, simple lists |
-| **Example** | Users list with pagination | Membership requests |
+| Feature           | useTableData                           | useSimpleTableData                    |
+| ----------------- | -------------------------------------- | ------------------------------------- |
+| **Query format**  | Connection (edges/pageInfo)            | Simple array                          |
+| **Pagination**    | Server-side (cursor-based)             | Client-side or none                   |
+| **Returns**       | rows, pageInfo, loadingMore, fetchMore | rows, loading, error, refetch         |
+| **Error type**    | Error \| null                          | ApolloError \| undefined              |
+| **Refetch type**  | QueryResult refetch (Promise)          | QueryResult refetch (Promise)         |
+| **Path function** | Can be inline or memoized              | **Must be memoized with useCallback** |
+| **Use case**      | Large datasets, infinite scroll        | Small datasets, simple lists          |
+| **Example**       | Users list with pagination             | Membership requests                   |
 
 ## Pagination
 
@@ -644,7 +653,7 @@ When `loading=true` and no data yet, displays a skeleton grid.
   data={[]}
   columns={[nameCol, emailCol]}
   loading
-  skeletonRows={5}  // default: 5
+  skeletonRows={5} // default: 5
 />
 ```
 
@@ -658,7 +667,7 @@ This avoids content jump during refresh.
   data={users}
   columns={[nameCol, emailCol]}
   loading
-  loadingOverlay  // true to show overlay
+  loadingOverlay // true to show overlay
 />
 ```
 
@@ -670,7 +679,7 @@ When `loadingMore=true`, appends skeleton rows at the bottom of the table to ind
 <DataTable<User>
   data={users}
   columns={[nameCol, emailCol]}
-  loadingMore  // append skeleton rows
+  loadingMore // append skeleton rows
   skeletonRows={5}
 />
 ```
@@ -678,6 +687,7 @@ When `loadingMore=true`, appends skeleton rows at the bottom of the table to ind
 ### Accessibility & styling
 
 Skeleton cells render with:
+
 - `aria-hidden="true"` (visual placeholder, not announced)
 - `role="status"` + `aria-live="polite"` (grid announces loading to screen readers)
 - Shimmer animation (linear gradient) for visual feedback
@@ -1029,20 +1039,27 @@ The Phase 5 pilot successfully migrated three screens to validate DataTable patt
 
 ### Pilot Screens Overview
 
-| Screen | Hook Used | Data Format | Key Features | Lines of Code |
-|--------|-----------|-------------|--------------|---------------|
-| Users.tsx | useTableData | Connection (edges/pageInfo) | Infinite scroll, role filtering | ~400 |
-| BlockUser.tsx | useTableData | Connection (2 queries) | Dual-list toggle, block/unblock | ~600 |
-| Requests.tsx | useSimpleTableData | Simple array | Accept/reject actions | ~300 |
+| Screen        | Hook Used          | Data Format                 | Key Features                    | Lines of Code |
+| ------------- | ------------------ | --------------------------- | ------------------------------- | ------------- |
+| Users.tsx     | useTableData       | Connection (edges/pageInfo) | Infinite scroll, role filtering | ~400          |
+| BlockUser.tsx | useTableData       | Connection (2 queries)      | Dual-list toggle, block/unblock | ~600          |
+| Requests.tsx  | useSimpleTableData | Simple array                | Accept/reject actions           | ~300          |
 
 ### Users.tsx Pattern (Connection + Infinite Scroll)
 
 **Data Structure:**
+
 ```graphql
 {
   allUsers(first: 12, after: null) {
     edges {
-      node { id, firstName, lastName, email, role }
+      node {
+        id
+        firstName
+        lastName
+        email
+        role
+      }
       cursor
     }
     pageInfo {
@@ -1054,6 +1071,7 @@ The Phase 5 pilot successfully migrated three screens to validate DataTable patt
 ```
 
 **Implementation:**
+
 ```tsx
 const { rows, pageInfo, loading, error, fetchMore } = useTableData<
   InterfaceQueryUserListForAdmin,
@@ -1063,7 +1081,7 @@ const { rows, pageInfo, loading, error, fetchMore } = useTableData<
   useQuery(USER_LIST_FOR_ADMIN, {
     variables: { first: 12, after: null, adminFor: orgId },
   }),
-  { path: (data) => data?.allUsers }
+  { path: (data) => data?.allUsers },
 );
 
 // Infinite scroll
@@ -1084,6 +1102,7 @@ useEffect(() => {
 ```
 
 **Key Learnings:**
+
 - `useTableData` automatically handles `edges → rows` transformation
 - `pageInfo` provides reliable pagination state
 - Infinite scroll requires scroll listener cleanup
@@ -1094,6 +1113,7 @@ useEffect(() => {
 **Challenge:** Single screen needs to display two different data sources (all members vs blocked users).
 
 **Solution:**
+
 ```tsx
 const [showBlockedMembers, setShowBlockedMembers] = useState(false);
 
@@ -1129,6 +1149,7 @@ const { rows, loading, error, refetch } = showBlockedMembers
 ```
 
 **Key Learnings:**
+
 - Multiple `useTableData` calls can coexist in one component
 - Conditional selection based on UI state works seamlessly
 - Each query maintains independent pagination state
@@ -1139,18 +1160,19 @@ const { rows, loading, error, refetch } = showBlockedMembers
 **Challenge:** Query returns simple array, not connection format.
 
 **Solution: Use useSimpleTableData**
+
 ```tsx
 // Query returns simple array
 const query = useQuery<InterfaceQueryMembershipRequestsPgResult>(
   MEMBERSHIP_REQUEST_PG,
-  { variables: { where: { organization: orgId } } }
+  { variables: { where: { organization: orgId } } },
 );
 
 // Extract with useSimpleTableData
 const extractRequests = useCallback(
   (data: InterfaceQueryMembershipRequestsPgResult) =>
     data?.membershipRequestsPaginated || [],
-  []
+  [],
 );
 
 const { rows, loading, error, refetch } = useSimpleTableData<
@@ -1160,11 +1182,13 @@ const { rows, loading, error, refetch } = useSimpleTableData<
 ```
 
 **Why Not useTableData?**
+
 - Query response is `membershipRequestsPaginated: InterfaceMembershipRequest[]`
 - No `edges`, no `pageInfo` in response
 - `useSimpleTableData` designed for this exact scenario
 
 **Key Learnings:**
+
 - Hook choice depends on GraphQL query structure, not component preferences
 - `useSimpleTableData` requires memoized path function (useCallback)
 - Both hooks provide consistent interface: `rows`, `loading`, `error`, `refetch`
@@ -1175,13 +1199,16 @@ const { rows, loading, error, refetch } = useSimpleTableData<
 The pilot eliminated all test flakiness by establishing these patterns:
 
 #### 1. Zero Fixed Waits
+
 **Before (flaky):**
+
 ```tsx
-await new Promise(resolve => setTimeout(resolve, 1000));
+await new Promise((resolve) => setTimeout(resolve, 1000));
 expect(screen.getByText('John Doe')).toBeInTheDocument();
 ```
 
 **After (reliable):**
+
 ```tsx
 await waitFor(() => {
   expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1191,7 +1218,9 @@ await waitFor(() => {
 **Result:** 0 instances of fixed waits across all 3 pilot screens.
 
 #### 2. Universal I18n Provider Coverage
+
 **Pattern:**
+
 ```tsx
 render(
   <I18nextProvider i18n={i18nForTest}>
@@ -1200,23 +1229,27 @@ render(
         <Users />
       </BrowserRouter>
     </MockedProvider>
-  </I18nextProvider>
+  </I18nextProvider>,
 );
 ```
 
 **Result:**
+
 - Users.spec.tsx: 67 instances
 - BlockUser.spec.tsx: 49 instances
 - Requests.spec.tsx: 93 instances
 - Zero translation key errors
 
 #### 3. Distinct TestIDs
+
 **Before (ambiguous):**
+
 ```tsx
 <Button data-testid="actionBtn">Block</Button>
 ```
 
 **After (unique):**
+
 ```tsx
 <Button data-testid={`blockUserBtn-${user.id}`}>Block</Button>
 <Button data-testid={`unblockUserBtn-${user.id}`}>Unblock</Button>
@@ -1225,7 +1258,9 @@ render(
 **Result:** No test selector collisions, easier debugging.
 
 #### 4. Proper Cleanup Hooks
+
 **Pattern:**
+
 ```tsx
 afterEach(() => {
   cleanup();
@@ -1244,6 +1279,7 @@ afterAll(() => {
 ```
 
 **Why restoreAllMocks over clearAllMocks:**
+
 - `restoreAllMocks()`: Clears history AND restores original implementations
 - `clearAllMocks()`: Only clears history, keeps mocks active
 - Critical for preventing mock leakage in sharded CI
@@ -1268,6 +1304,7 @@ if (error) {
 ```
 
 **Benefits:**
+
 - Consistent UX across all tables
 - Built-in retry functionality
 - Testable error states with unique testIds
@@ -1275,14 +1312,14 @@ if (error) {
 
 ### Migration Metrics
 
-| Metric | Users | BlockUser | Requests | Average |
-|--------|-------|-----------|----------|---------|
-| Test Coverage | 95%+ | 95%+ | 95%+ | 95%+ |
-| Fixed Waits | 0 | 0 | 0 | 0 |
-| Test Flakiness | 0% | 0% | 0% | 0% |
-| Lines Removed | ~200 | ~300 | ~150 | ~217 |
-| Lines Added | ~150 | ~250 | ~100 | ~167 |
-| Net Reduction | -50 | -50 | -50 | -50 |
+| Metric         | Users | BlockUser | Requests | Average |
+| -------------- | ----- | --------- | -------- | ------- |
+| Test Coverage  | 95%+  | 95%+      | 95%+     | 95%+    |
+| Fixed Waits    | 0     | 0         | 0        | 0       |
+| Test Flakiness | 0%    | 0%        | 0%       | 0%      |
+| Lines Removed  | ~200  | ~300      | ~150     | ~217    |
+| Lines Added    | ~150  | ~250      | ~100     | ~167    |
+| Net Reduction  | -50   | -50       | -50      | -50     |
 
 ### Hook Selection Decision Tree
 
@@ -1308,8 +1345,6 @@ Based on pilot results:
 5. **Column Definitions:** Memoize with useMemo when dependent on props/state
 6. **TestIDs:** Use `${action}${entity}${id}` pattern for uniqueness
 7. **Coverage:** Target 95%+ for edited files, verify with `npm test -- --coverage`
-
-
 
 ## Organization and People Screens Migration Examples
 
@@ -1339,20 +1374,26 @@ import TableRow from '@mui/material/TableRow';
     </TableHead>
     <TableBody>
       {userLoading ? (
-        <TableRow><TableCell colSpan={4}>Loading...</TableCell></TableRow>
+        <TableRow>
+          <TableCell colSpan={4}>Loading...</TableCell>
+        </TableRow>
       ) : (
         users.map((user, index) => (
           <TableRow key={user.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell><Avatar name={user.name} /></TableCell>
+            <TableCell>
+              <Avatar name={user.name} />
+            </TableCell>
             <TableCell>{user.name}</TableCell>
-            <TableCell><Button onClick={() => addMember(user.id)}>Add</Button></TableCell>
+            <TableCell>
+              <Button onClick={() => addMember(user.id)}>Add</Button>
+            </TableCell>
           </TableRow>
         ))
       )}
     </TableBody>
   </Table>
-</TableContainer>
+</TableContainer>;
 ```
 
 After (DataTable):
@@ -1377,7 +1418,9 @@ const columns: IColumnDef<UserRow>[] = [
     accessor: 'name',
     render: (_, row) => (
       <Link to={`/member/${row.id}`}>
-        {row.name}<br />{row.emailAddress}
+        {row.name}
+        <br />
+        {row.emailAddress}
       </Link>
     ),
   },
@@ -1385,9 +1428,7 @@ const columns: IColumnDef<UserRow>[] = [
     id: 'action',
     header: 'Add Member',
     accessor: 'id',
-    render: (_, row) => (
-      <Button onClick={() => addMember(row.id)}>Add</Button>
-    ),
+    render: (_, row) => <Button onClick={() => addMember(row.id)}>Add</Button>,
   },
 ];
 
@@ -1398,7 +1439,7 @@ const columns: IColumnDef<UserRow>[] = [
   loading={userLoading}
   error={userError}
   emptyMessage="No users found"
-/>
+/>;
 ```
 
 ### People List Screen (Phase 6)
@@ -1462,9 +1503,8 @@ const columns: IColumnDef<IPeopleTableRow>[] = [
     id: 'avatar',
     header: t('avatar'),
     accessor: 'image',
-    render: (value, row) => (
-      value ? <img src={value} alt={row.name} /> : <Avatar name={row.name} />
-    ),
+    render: (value, row) =>
+      value ? <img src={value} alt={row.name} /> : <Avatar name={row.name} />,
   },
   { id: 'name', header: t('name'), accessor: 'name' },
   { id: 'email', header: t('email'), accessor: 'email' },
@@ -1478,7 +1518,7 @@ const columns: IColumnDef<IPeopleTableRow>[] = [
   emptyMessage={t('nothingToShow')}
   rowKey="id"
   skeletonRows={rowsPerPage}
-/>
+/>;
 ```
 
 ### Key Migration Patterns
@@ -1531,12 +1571,14 @@ it('renders user table', async () => {
 #### 2. Avoid Fixed Waits - Use waitFor Instead
 
 ❌ **Bad - Fixed waits are flaky:**
+
 ```tsx
 await wait(500); // Arbitrary timeout, may fail in CI
 expect(screen.getByText('John Doe')).toBeInTheDocument();
 ```
 
 ✅ **Good - Use waitFor for assertions:**
+
 ```tsx
 await waitFor(() => {
   expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1550,6 +1592,7 @@ await waitFor(() => {
 Use descriptive, unique test IDs that clearly indicate the element's purpose.
 
 **Pattern for action buttons:**
+
 ```tsx
 // ✅ Good - Distinct IDs for different actions
 <Button data-testid={`blockUser${userId}`}>Block</Button>
@@ -1562,6 +1605,7 @@ Use descriptive, unique test IDs that clearly indicate the element's purpose.
 ```
 
 **Pattern for table elements:**
+
 ```tsx
 // Table container
 <div data-testid="datatable">
@@ -1733,6 +1777,7 @@ afterEach(() => {
 ```
 
 **Why `vi.restoreAllMocks()` instead of `vi.clearAllMocks()`:**
+
 - `restoreAllMocks()` both clears mock history AND restores original implementations
 - `clearAllMocks()` only clears call history but keeps mocks active
 - Using `restoreAllMocks()` prevents mock leakage between tests in sharded environments

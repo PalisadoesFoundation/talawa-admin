@@ -102,3 +102,4 @@ jobs:
           exclude: 'docs/'
           gcov_ignore: 'docs/'
           files: ./coverage/vitest/lcov.info
+          disable_search: true

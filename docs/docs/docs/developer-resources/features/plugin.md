@@ -1,7 +1,7 @@
 ---
 id: plugin
 title: Plugin System
-slug: /developer-resources/plugin
+slug: /developer-resources/features/plugin
 sidebar_position: 40
 ---
 
