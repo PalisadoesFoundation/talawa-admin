@@ -792,7 +792,7 @@ jobs:
   #         node-version: '24.x'
 
   #     - name: resolve dependency
-  #       run: pnpm install -g @graphql-inspector/cli
+  #       run: pnpm add -g @graphql-inspector/cli
 
   #     - name: Clone API Repository
   #       run: |
