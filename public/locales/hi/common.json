@@ -317,5 +317,8 @@
   "loginSuccessWithName": "स्वागत है, {{name}}!",
   "signupSuccess": "पंजीकरण सफल!",
   "authError": "प्रमाणीकरण त्रुटि",
-  "networkError": "नेटवर्क त्रुटि"
+  "networkError": "नेटवर्क त्रुटि",
+  "organizationCard": {
+    "card_aria": "संस्था कार्ड"
+  }
 }

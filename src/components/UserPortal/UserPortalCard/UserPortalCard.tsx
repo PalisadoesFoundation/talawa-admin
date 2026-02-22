@@ -17,7 +17,7 @@ import styles from './UserPortalCard.module.css';
  *
  * Accessibility:
  * - role="group"
- * - aria-label provided by consumer (i18n required)
+ * - aria-label provided by consumer or defaults to a translated internal label.
  *
  * @example
  * ```tsx
@@ -31,7 +31,7 @@ import styles from './UserPortalCard.module.css';
  * </UserPortalCard>
  * ```
  */
-const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
+const UserPortalCard = ({
   imageSlot,
   children,
   actionsSlot,
@@ -39,7 +39,7 @@ const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
   className,
   dataTestId = 'user-portal-card',
   ariaLabel,
-}) => {
+}: InterfaceUserPortalCardProps) => {
   const { t } = useTranslation('common');
   /**
    * Maps variant prop to CSS module class.
