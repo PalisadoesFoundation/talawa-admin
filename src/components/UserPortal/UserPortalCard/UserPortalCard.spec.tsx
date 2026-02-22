@@ -4,6 +4,12 @@ import { render, screen } from '@testing-library/react';
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import UserPortalCard from './UserPortalCard';
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 describe('UserPortalCard', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -144,8 +150,7 @@ describe('UserPortalCard', () => {
       </UserPortalCard>,
     );
 
-    const card = screen.getByTestId('user-portal-card');
-    expect(card).toBeInTheDocument();
-    expect(card).not.toHaveAttribute('aria-label');
+    const card = screen.getByRole('group');
+    expect(card).toHaveAttribute('aria-label', 'organizationCard.card_aria');
   });
 });

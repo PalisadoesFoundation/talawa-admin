@@ -1,5 +1,5 @@
-import React from 'react';
 import type { InterfaceUserPortalCardProps } from 'types/UserPortal/UserPortalCard/interface';
+import { useTranslation } from 'react-i18next';
 import styles from './UserPortalCard.module.css';
 
 /**
@@ -40,6 +40,7 @@ const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
   dataTestId = 'user-portal-card',
   ariaLabel,
 }) => {
+  const { t } = useTranslation('common');
   /**
    * Maps variant prop to CSS module class.
    * Variants control density only (padding/spacing).
@@ -61,7 +62,7 @@ const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
       className={containerClassName}
       data-testid={dataTestId}
       role="group"
-      aria-label={ariaLabel}
+      aria-label={ariaLabel || t('organizationCard.card_aria')}
     >
       {imageSlot && (
         <div
