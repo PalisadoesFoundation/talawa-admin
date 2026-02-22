@@ -328,6 +328,9 @@ jobs:
         run: |
           python .github-central/.github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
+  Detect-NPM:
+    uses: PalisadoesFoundation/.github/.github/workflows/pull-request-no-npm.yml@main
+
   Check-Test-Quality:
     runs-on: ubuntu-latest
     steps:
@@ -442,6 +445,7 @@ jobs:
         Check-Route-Prefix,
         Check-Mock-Isolation,
         CSS-Policy-Check,
+        Detect-NPM,
         MinIO-Compliance-Check,
         Python-Compliance,
         Translation-Tag-Check,
@@ -1154,6 +1158,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Checkout centralized CI/CD scripts
         uses: actions/checkout@v4
         with:
@@ -1180,6 +1185,7 @@ jobs:
           source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r .github/workflows/requirements.txt
+
       - name: Run Python tests for scripts
         run: |
           source venv/bin/activate
