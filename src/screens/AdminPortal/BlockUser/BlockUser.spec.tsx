@@ -18,6 +18,7 @@ import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
+import { OrganizationMembershipRole } from 'screens/AdminPortal/OrganizationPeople/addMember/types';
 
 const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
   const useParams = vi.fn();
@@ -71,6 +72,11 @@ interface InterfaceGraphQLVariables {
   after?: unknown;
   userId?: string;
   organizationId?: string;
+  where?: {
+    role?: {
+      notEqual?: string;
+    };
+  };
 }
 
 interface InterfaceGraphQLRequest {
@@ -103,7 +109,16 @@ const createMocks = (
     {
       request: {
         query: GET_ORGANIZATION_MEMBERS_PG,
-        variables: { id: '123', first: 32, after: null },
+        variables: {
+          id: '123',
+          first: 32,
+          after: null,
+          where: {
+            role: {
+              notEqual: OrganizationMembershipRole.ADMIN,
+            },
+          },
+        },
       },
       ...(membersQueryError
         ? { error: new Error('Failed to fetch members') }
@@ -272,7 +287,16 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: {
+              id: '123',
+              first: 32,
+              after: null,
+              where: {
+                role: {
+                  notEqual: OrganizationMembershipRole.ADMIN,
+                },
+              },
+            },
           },
           result: {
             data: { organization: null },
