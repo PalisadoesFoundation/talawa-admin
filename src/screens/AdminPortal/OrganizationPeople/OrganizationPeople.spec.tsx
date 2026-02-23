@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
+
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
@@ -282,6 +283,18 @@ const loadMoreMock = {
   },
 };
 
+const removeMemberMock = {
+  request: {
+    query: REMOVE_MEMBER_MUTATION_PG,
+    variables: { organizationId: 'orgid', memberId: 'member1' },
+  },
+  result: {
+    data: {
+      deleteOrganizationMembership: { id: '1' },
+    },
+  },
+};
+
 let user: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
@@ -440,12 +453,16 @@ describe('OrganizationPeople Search', () => {
 
     const searchInput = screen.getByTestId('member-search-input');
     await user.type(searchInput, 'John');
-    expect(searchInput).toHaveValue('John');
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('John');
+    });
 
     const clearBtn = screen.getByLabelText('Clear');
     await user.click(clearBtn);
 
-    expect(searchInput).toHaveValue('');
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('');
+    });
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -541,18 +558,6 @@ describe('OrganizationPeople Load More', () => {
 
 describe('OrganizationPeople Remove Member', () => {
   it('opens and uses remove member modal', async () => {
-    const removeMemberMock = {
-      request: {
-        query: REMOVE_MEMBER_MUTATION_PG,
-        variables: { organizationId: 'orgid', memberId: 'member1' },
-      },
-      result: {
-        data: {
-          removeMember: { id: 1 },
-        },
-      },
-    };
-
     renderOrgPeople([defaultMemberMock, removeMemberMock]);
 
     await waitFor(() => {
@@ -781,18 +786,6 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
   });
 
   it('delete button is focusable and activatable via Enter key', async () => {
-    const removeMemberMock = {
-      request: {
-        query: REMOVE_MEMBER_MUTATION_PG,
-        variables: { organizationId: 'orgid', memberId: 'member1' },
-      },
-      result: {
-        data: {
-          removeMember: { id: 1 },
-        },
-      },
-    };
-
     renderOrgPeople([defaultMemberMock, removeMemberMock]);
 
     await waitFor(() => {

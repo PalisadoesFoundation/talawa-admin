@@ -13,7 +13,7 @@
  *
  * @returns A JSX element rendering the organization people table.
  */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
@@ -99,16 +99,22 @@ function OrganizationPeople(): JSX.Element {
       : 'en-US';
   }, [i18n.language]);
 
+  const visibleCount = useRef(0);
+
   const renderMemberRow = (
     node: IMemberNode,
     index: number,
   ): React.ReactNode => {
+    if (index === 0) visibleCount.current = 0;
+
     if (searchTerm) {
       const lower = searchTerm.toLowerCase();
       const nameMatch = node.name?.toLowerCase().includes(lower);
       const emailMatch = node.emailAddress?.toLowerCase().includes(lower);
       if (!nameMatch && !emailMatch) return null;
     }
+
+    visibleCount.current += 1;
 
     const formattedDate = node.createdAt
       ? new Intl.DateTimeFormat(locale, {
@@ -129,7 +135,7 @@ function OrganizationPeople(): JSX.Element {
           className={`d-flex ${styles.people_card_header_col_1}`}
           role="cell"
         >
-          <span>{index + 1}</span>
+          <span>{visibleCount.current}</span>
           <span className={styles.avatarCell}>
             {node.avatarURL ? (
               <img
@@ -220,40 +226,42 @@ function OrganizationPeople(): JSX.Element {
           role="table"
           aria-label={t('title')}
         >
-          <div className={styles.people_card_header} role="row">
-            <span
-              className={`d-flex ${styles.people_card_header_col_1}`}
-              role="columnheader"
-            >
-              <span>#</span>
-            </span>
-            <span
-              className={styles.people_card_header_col_2}
-              role="columnheader"
-            >
-              {tCommon('name')}
-            </span>
-            <span
-              className={styles.people_card_header_col_2}
-              role="columnheader"
-            >
-              {tCommon('email')}
-            </span>
-            <span
-              className={styles.people_card_header_col_2}
-              role="columnheader"
-            >
-              {tCommon('joinedOn')}
-            </span>
-            <span
-              className={styles.people_card_header_col_1}
-              role="columnheader"
-            >
-              {tCommon('action')}
-            </span>
+          <div role="rowgroup">
+            <div className={styles.people_card_header} role="row">
+              <span
+                className={`d-flex ${styles.people_card_header_col_1}`}
+                role="columnheader"
+              >
+                <span>#</span>
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {tCommon('name')}
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {tCommon('email')}
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {tCommon('joinedOn')}
+              </span>
+              <span
+                className={styles.people_card_header_col_1}
+                role="columnheader"
+              >
+                {tCommon('action')}
+              </span>
+            </div>
           </div>
 
-          <div className={styles.people_card_main_container}>
+          <div className={styles.people_card_main_container} role="rowgroup">
             {state !== 2 ? (
               <CursorPaginationManager<
                 unknown,
