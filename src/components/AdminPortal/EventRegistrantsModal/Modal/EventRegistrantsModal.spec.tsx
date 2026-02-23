@@ -27,10 +27,11 @@ import {
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
+import { InterfaceBaseModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 import {
-  InterfaceBaseModalProps,
-  InterfaceAutocompleteMockProps,
-} from 'types/AdminPortal/EventRegistrantsModal/interface';
+  EnhancedAutocompleteMock,
+  createGetOptionLabelMock,
+} from 'test-utils/mocks/shared-autocomplete';
 
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
   __esModule: true,
@@ -145,63 +146,14 @@ vi.mock('shared-components/BaseModal', async () => {
   };
 });
 
-vi.mock('@mui/material/Autocomplete', () => ({
-  __esModule: true,
-  default: ({
-    renderInput,
-    options,
-    onChange,
-    noOptionsText,
-    onInputChange,
-  }: InterfaceAutocompleteMockProps & { inputValue?: string }) => {
-    const handleInputChange = (
-      e: React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      // Trigger onInputChange when input value changes
-      if (onInputChange) {
-        onInputChange({} as React.SyntheticEvent, e.target.value, 'input');
-      }
-    };
-
-    const inputProps = {
-      onChange: handleInputChange,
-      onInput: handleInputChange,
-    };
-
-    return (
-      <div data-testid="autocomplete-mock">
-        {renderInput({
-          InputProps: { ref: vi.fn() },
-          id: 'test-autocomplete',
-          disabled: false,
-          inputProps: inputProps, // ← Pass inputProps with onChange
-        })}
-        {options && options.length > 0 ? (
-          options.map((option) => (
-            <div
-              key={option.id}
-              data-testid={`option-${option.id}`}
-              onClick={(): void => {
-                if (onChange) {
-                  onChange({} as React.SyntheticEvent, option);
-                }
-              }}
-              onKeyDown={(): void => {
-                /* mock */
-              }}
-              role="button"
-              tabIndex={0}
-            >
-              {option.name || 'Unknown User'}
-            </div>
-          ))
-        ) : (
-          <div data-testid="no-options">{noOptionsText}</div>
-        )}
-      </div>
-    );
-  },
-}));
+vi.mock('shared-components/Autocomplete', async () => {
+  const { SimpleAutocompleteMock } =
+    await import('test-utils/mocks/shared-autocomplete');
+  return {
+    __esModule: true,
+    Autocomplete: SimpleAutocompleteMock,
+  };
+});
 
 type ApolloMock = MockedResponse<Record<string, unknown>>;
 
@@ -394,7 +346,7 @@ describe('EventRegistrantsModal', () => {
 
     // Autocomplete input should be rendered
     const autocomplete = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -465,7 +417,7 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -550,7 +502,7 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -611,7 +563,7 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -669,8 +621,8 @@ describe('EventRegistrantsModal', () => {
       makeAttendeesEmptyMock(), // for reloadMembers refetch
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -678,7 +630,7 @@ describe('EventRegistrantsModal', () => {
 
     await user.type(input, 'NonexistentUser');
 
-    // Wait for no options message
+    // Wait for no options message (rendered via noOptionsText prop)
     await waitFor(
       () => {
         expect(screen.getByText('No Registrations found')).toBeInTheDocument();
@@ -842,7 +794,7 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -882,8 +834,8 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -915,8 +867,8 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -948,8 +900,8 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -996,7 +948,7 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -1060,8 +1012,8 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -1094,7 +1046,7 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -1141,7 +1093,7 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -1192,7 +1144,7 @@ describe('EventRegistrantsModal', () => {
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
         { timeout: 3000 },
       );
@@ -1247,7 +1199,7 @@ describe('EventRegistrantsModal', () => {
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
         { timeout: 3000 },
       );
@@ -1292,7 +1244,7 @@ describe('EventRegistrantsModal', () => {
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
         { timeout: 3000 },
       );
@@ -1347,7 +1299,7 @@ describe('EventRegistrantsModal', () => {
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
         { timeout: 3000 },
       );
@@ -1406,12 +1358,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     ),
   );
 
-  // Array to capture getOptionLabel calls
-  const getOptionLabelCalls: {
-    option: { id: string; name?: string };
-    result: string;
-  }[] = [];
-
   beforeEach(() => {
     user = userEvent.setup();
     vi.clearAllMocks();
@@ -1462,72 +1408,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     },
   });
 
-  // Enhanced Autocomplete mock that renders the actual renderOption
-  const enhancedAutocompleteMock = ({
-    renderInput,
-    renderOption,
-    options,
-    onChange,
-    getOptionLabel,
-    onInputChange,
-  }: InterfaceAutocompleteMockProps) => {
-    const [_localInputValue, setLocalInputValue] = React.useState('');
-
-    const handleInputChange = (
-      e: React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      const newValue = e.target.value;
-      setLocalInputValue(newValue);
-      if (onInputChange) {
-        onInputChange({} as React.SyntheticEvent, newValue, 'input');
-      }
-    };
-
-    const inputProps = {
-      onChange: handleInputChange,
-      onInput: handleInputChange,
-    };
-
-    return (
-      <div data-testid="autocomplete-mock">
-        {renderInput({
-          InputProps: { ref: vi.fn() },
-          id: 'test-autocomplete',
-          disabled: false,
-          inputProps: inputProps,
-        })}
-        <div data-testid="options-container">
-          {options && options.length > 0 ? (
-            options.map((option) => {
-              const liProps = {
-                key: option.id,
-                'data-testid': `rendered-option-${option.id}`,
-                onClick: (): void => {
-                  if (onChange) {
-                    onChange({} as React.SyntheticEvent, option);
-                  }
-                },
-                role: 'option',
-                tabIndex: 0,
-              };
-
-              // Actually call renderOption to execute the real code
-              return renderOption
-                ? renderOption(liProps, option, { selected: false })
-                : (() => {
-                    const label = getOptionLabel?.(option) || option.name || '';
-                    getOptionLabelCalls.push({ option, result: label });
-                    return label;
-                  })();
-            })
-          ) : (
-            <div data-testid="no-options">No options</div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   test('renderOption renders ProfileAvatarDisplay with correct props for members with names and avatars (lines 192, 195-202)', async () => {
     vi.resetModules();
     vi.doMock(
@@ -1536,9 +1416,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1602,9 +1482,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1657,9 +1537,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1704,7 +1584,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     const optionsContainer = screen.getByTestId('options-container');
     const flexDivs = optionsContainer.querySelectorAll(
-      '.d-flex.align-items-center',
+      '[class*="avatarContainer"]',
     );
     expect(flexDivs.length).toBeGreaterThan(0);
   });
@@ -1717,9 +1597,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1748,7 +1628,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await waitFor(
       () => {
         const optionsContainer = screen.getByTestId('options-container');
-        const spanElements = optionsContainer.querySelectorAll('span.ms-2');
+        const spanElements = optionsContainer.querySelectorAll(
+          'span[class*="avatarName"]',
+        );
 
         expect(spanElements.length).toBeGreaterThan(0);
 
@@ -1771,9 +1653,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1821,9 +1703,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1870,9 +1752,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1916,76 +1798,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     const getOptionLabelCalls: { option: unknown; result: string }[] = [];
 
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: ({
-        getOptionLabel,
-        renderOption,
-        options,
-        renderInput,
-        onChange,
-        onInputChange,
-      }: InterfaceAutocompleteMockProps) => {
-        const [_localInputValue, setLocalInputValue] = React.useState('');
-
-        const handleInputChange = (
-          e: React.ChangeEvent<HTMLInputElement>,
-        ): void => {
-          const newValue = e.target.value;
-          setLocalInputValue(newValue);
-          if (onInputChange) {
-            onInputChange({} as React.SyntheticEvent, newValue, 'input');
-          }
-        };
-
-        const inputProps = {
-          onChange: handleInputChange,
-          onInput: handleInputChange,
-        };
-
-        return (
-          <div data-testid="autocomplete-mock">
-            {renderInput({
-              InputProps: { ref: vi.fn() },
-              id: 'test-autocomplete',
-              disabled: false,
-              inputProps: inputProps,
-            })}
-            <div data-testid="options-container">
-              {options && options.length > 0 ? (
-                options.map((option) => {
-                  const label = getOptionLabel
-                    ? getOptionLabel(option)
-                    : option.name || '';
-                  getOptionLabelCalls.push({ option, result: label });
-
-                  const liProps = {
-                    key: option.id,
-                    'data-testid': `getoptionlabel-option-${option.id}`,
-                    onClick: (): void => {
-                      if (onChange) {
-                        onChange({} as React.SyntheticEvent, option);
-                      }
-                    },
-                    role: 'option',
-                    tabIndex: 0,
-                  };
-
-                  const optionElement = renderOption ? (
-                    renderOption(liProps, option, { selected: false })
-                  ) : (
-                    <span key={option.id}>{label}</span>
-                  );
-
-                  return optionElement;
-                })
-              ) : (
-                <div data-testid="no-options">No options</div>
-              )}
-            </div>
-          </div>
-        );
-      },
+      Autocomplete: createGetOptionLabelMock(getOptionLabelCalls),
     }));
 
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
@@ -2026,9 +1841,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('clicking on rendered option triggers onChange (line 195)', async () => {
     vi.resetModules();
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -2084,7 +1899,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -2139,7 +1954,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -2188,7 +2003,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -2246,7 +2061,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );
@@ -2302,66 +2117,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         )),
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: ({
-        renderInput,
-        renderOption,
-        options,
-        onChange,
-        onInputChange,
-      }: InterfaceAutocompleteMockProps) => {
-        const [_localInputValue, setLocalInputValue] = React.useState('');
-
-        const handleInputChange = (
-          e: React.ChangeEvent<HTMLInputElement>,
-        ): void => {
-          const newValue = e.target.value;
-          setLocalInputValue(newValue);
-          if (onInputChange) {
-            onInputChange({} as React.SyntheticEvent, newValue, 'input');
-          }
-        };
-
-        const inputProps = {
-          onChange: handleInputChange,
-          onInput: handleInputChange,
-        };
-
-        return (
-          <div data-testid="autocomplete-mock">
-            {renderInput({
-              InputProps: { ref: vi.fn() },
-              id: 'test-autocomplete',
-              disabled: false,
-              inputProps: inputProps,
-            })}
-            <div data-testid="options-container">
-              {options && options.length > 0 ? (
-                options.map((option) => {
-                  const liProps = {
-                    key: option.id,
-                    'data-testid': `rendered-option-${option.id}`,
-                    onClick: (): void => {
-                      if (onChange) {
-                        onChange({} as React.SyntheticEvent, option);
-                      }
-                    },
-                    role: 'option',
-                    tabIndex: 0,
-                  };
-
-                  return renderOption
-                    ? renderOption(liProps, option, { selected: false })
-                    : null;
-                })
-              ) : (
-                <div data-testid="no-options">No options</div>
-              )}
-            </div>
-          </div>
-        );
-      },
+      Autocomplete: EnhancedAutocompleteMock,
     }));
 
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
@@ -2414,16 +2172,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    const input = await screen.findByTestId(
-      'autocomplete',
-      {},
-      { timeout: 3000 },
-    );
-
-    // Type to trigger the autocomplete options to render
-    await user.type(input, 'John');
-
-    // Wait for the option to appear
+    // Wait for the option to appear (rendered by the MUI mock)
     await waitFor(
       () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -2482,7 +2231,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
       { timeout: 3000 },
     );

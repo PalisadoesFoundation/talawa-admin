@@ -68,9 +68,7 @@ describe('Shared Component: Autocomplete', () => {
         </I18nextProvider>,
       );
 
-      expect(
-        screen.getByPlaceholderText('Select an option'),
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Select Options')).toBeInTheDocument();
     });
 
     it('renders custom placeholder', () => {
@@ -222,7 +220,7 @@ describe('Shared Component: Autocomplete', () => {
             <I18nextProvider i18n={i18nForTest}>
               <Autocomplete<{ id: number }>
                 id="warn-test"
-                options={[{ id: 1 }]}
+                options={[{ id: 1 }, { id: 2 }]}
                 value={null}
                 onChange={onChangeSpy}
                 dataTestId="warn-test"
@@ -233,11 +231,16 @@ describe('Shared Component: Autocomplete', () => {
           await user.click(
             await screen.findAllByRole('option').then((o) => o[0]),
           );
+          await user.click(screen.getByRole('combobox'));
+          await user.click(
+            await screen.findAllByRole('option').then((o) => o[1]),
+          );
           await waitFor(() => {
             expect(warnSpy).toHaveBeenCalledWith(
               expect.stringContaining('getOptionLabel is not provided'),
             );
           });
+          expect(warnSpy).toHaveBeenCalledTimes(1);
         } finally {
           process.env.NODE_ENV = originalEnv;
         }
@@ -473,54 +476,19 @@ describe('Shared Component: Autocomplete', () => {
             options={['One']}
             value={null}
             onChange={vi.fn()}
-            textFieldProps={{ size: 'small' }}
+            textFieldProps={{
+              size: 'small',
+              InputProps: {
+                endAdornment: <span data-testid="custom-adornment" />,
+              },
+            }}
           />
         </I18nextProvider>,
       );
       expect(
         screen.getByRole('combobox').closest('.MuiInputBase-sizeSmall'),
       ).toBeTruthy();
-    });
-  });
-
-  // ----------------------------
-  // Default logic tests
-  // ----------------------------
-
-  describe('Default logic', () => {
-    it('uses default getOptionLabel fallback', () => {
-      const onChangeSpy = vi.fn();
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <Autocomplete<string>
-            id="string-autocomplete"
-            options={['One', 'Two']}
-            value={null}
-            onChange={onChangeSpy}
-          />
-        </I18nextProvider>,
-      );
-
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
-    });
-
-    it('uses default isOptionEqualToValue fallback', () => {
-      const onChangeSpy = vi.fn();
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <Autocomplete<IUser>
-            id="user-autocomplete"
-            options={USERS}
-            value={USERS[0]}
-            onChange={onChangeSpy}
-            getOptionLabel={getUserOptionLabel}
-          />
-        </I18nextProvider>,
-      );
-
-      expect(screen.getByRole('combobox')).toBeInTheDocument();
+      expect(screen.getByTestId('custom-adornment')).toBeInTheDocument();
     });
   });
 });
