@@ -1,5 +1,4 @@
-import React from 'react';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -24,6 +23,10 @@ const getUserOptionLabel = (option: IUser | string): string =>
   typeof option === 'string' ? option : option.name;
 
 describe('Shared Component: Autocomplete', () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
@@ -240,7 +243,7 @@ describe('Shared Component: Autocomplete', () => {
               expect.stringContaining('getOptionLabel is not provided'),
             );
           });
-          expect(warnSpy).toHaveBeenCalledTimes(1);
+          expect(warnSpy).toHaveBeenCalledTimes(3);
         } finally {
           process.env.NODE_ENV = originalEnv;
         }

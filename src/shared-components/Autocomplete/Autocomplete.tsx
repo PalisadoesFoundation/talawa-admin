@@ -105,6 +105,25 @@ export const Autocomplete = <
 
   const hasWarnedRef = React.useRef(false);
 
+  // Memoize the getOptionLabel function to ensure warning is only logged once per component instance
+  const memoizedGetOptionLabel = React.useCallback(
+    (option: T | string): string => {
+      if (
+        process.env.NODE_ENV === 'development' &&
+        !hasWarnedRef.current &&
+        option !== null &&
+        typeof option === 'object'
+      ) {
+        hasWarnedRef.current = true;
+        console.warn(
+          'Autocomplete: getOptionLabel is not provided for object options. Please provide getOptionLabel prop.',
+        );
+      }
+      return typeof option === 'string' ? option : String(option);
+    },
+    [],
+  );
+
   // Default renderInput using TextField
   const defaultRenderInput = (params: AutocompleteRenderInputParams) => {
     const { InputProps: paramsInputProps, ...restParams } = params;
@@ -149,23 +168,7 @@ export const Autocomplete = <
       fullWidth={fullWidth}
       className={className}
       data-testid={dataTestId}
-      getOptionLabel={
-        getOptionLabel ??
-        ((option) => {
-          if (
-            process.env.NODE_ENV === 'development' &&
-            !hasWarnedRef.current &&
-            option !== null &&
-            typeof option === 'object'
-          ) {
-            hasWarnedRef.current = true;
-            console.warn(
-              'Autocomplete: getOptionLabel is not provided for object options. Please provide getOptionLabel prop.',
-            );
-          }
-          return typeof option === 'string' ? option : String(option);
-        })
-      }
+      getOptionLabel={getOptionLabel ?? memoizedGetOptionLabel}
       isOptionEqualToValue={
         isOptionEqualToValue ?? ((option, val) => option === val)
       }
