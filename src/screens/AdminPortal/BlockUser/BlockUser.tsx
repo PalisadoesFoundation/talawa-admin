@@ -102,7 +102,16 @@ const BlockUser = (): JSX.Element => {
   const blockedUsersResult = useQuery<InterfaceOrganizationPg>(
     GET_ORGANIZATION_BLOCKED_USERS_PG,
     {
-      variables: { id: currentUrl, first: 32, after: null },
+      variables: {
+        id: currentUrl,
+        first: 32,
+        after: null,
+        where: {
+          role: {
+            notEqual: OrganizationMembershipRole.ADMIN,
+          },
+        },
+      },
       notifyOnNetworkStatusChange: true,
     },
   );
@@ -201,10 +210,8 @@ const BlockUser = (): JSX.Element => {
         });
         if (data?.blockUser) {
           NotificationToast.success(t('blockedSuccessfully') as string);
-          setAllMembers((prevMembers) =>
-            prevMembers.filter((member) => member.id !== user.id),
-          );
-          setBlockedUsers((prevBlockedUsers) => [...prevBlockedUsers, user]);
+          await refetchMembers();
+          await refetchBlockedUsers();
         }
       } catch (error: unknown) {
         errorHandler(t, error);
@@ -220,14 +227,10 @@ const BlockUser = (): JSX.Element => {
         const { data } = await unBlockUser({
           variables: { userId: user.id, organizationId: currentUrl },
         });
-        if (data) {
+        if (data?.unblockUser) {
           NotificationToast.success(t('Un-BlockedSuccessfully') as string);
-          setBlockedUsers((prevBlockedUsers) =>
-            prevBlockedUsers.filter(
-              (blockedUser) => blockedUser.id !== user.id,
-            ),
-          );
-          setAllMembers((prevMembers) => [...prevMembers, user]);
+          await refetchMembers();
+          await refetchBlockedUsers();
         }
       } catch (error: unknown) {
         errorHandler(t, error);
@@ -314,72 +317,75 @@ const BlockUser = (): JSX.Element => {
     },
   ];
 
-  if (loadingMembers || loadingBlockedUsers) {
-    return (
-      <TableLoader
-        data-testid="TableLoader"
-        headerTitles={[
-          '#',
-          tCommon('name'),
-          tCommon('email'),
-          t('block_unblock'),
+  const searchFilterBar = (
+    <div className={styles.btnsContainer} data-testid="testcomp">
+      <SearchFilterBar
+        hasDropdowns={true}
+        searchPlaceholder={t('searchByName')}
+        searchValue={searchTerm}
+        onSearchChange={handleSearch}
+        searchInputTestId="searchByName"
+        searchButtonTestId="searchBtn"
+        dropdowns={[
+          {
+            id: 'block-user-view',
+            label: t('view'),
+            type: 'filter',
+            options: [
+              { label: t('allMembers'), value: 'allMembers' },
+              { label: t('blockedUsers'), value: 'blockedUsers' },
+            ],
+            selectedOption: showBlockedMembers
+              ? t('blockedUsers')
+              : t('allMembers'),
+            onOptionChange: (value) =>
+              setShowBlockedMembers(value === 'blockedUsers'),
+            dataTestIdPrefix: 'blockUserView',
+          },
         ]}
-        noOfRows={10}
       />
-    );
-  }
+    </div>
+  );
 
-  if (errorBlockedUsers) {
-    return (
-      <ErrorPanel
-        message={t('errorLoadingBlockedUsers')}
-        error={errorBlockedUsers}
-        onRetry={refetchBlockedUsers}
-        testId="errorBlockedUsers"
-      />
-    );
-  }
-
-  if (errorMembers) {
-    return (
-      <ErrorPanel
-        message={t('errorLoadingMembers')}
-        error={errorMembers}
-        onRetry={refetchMembers}
-        testId="errorMembers"
-      />
-    );
-  }
-
-  return (
-    <>
-      <div className={styles.btnsContainer} data-testid="testcomp">
-        <SearchFilterBar
-          hasDropdowns={true}
-          searchPlaceholder={t('searchByName')}
-          searchValue={searchTerm}
-          onSearchChange={handleSearch}
-          searchInputTestId="searchByName"
-          searchButtonTestId="searchBtn"
-          dropdowns={[
-            {
-              id: 'block-user-view',
-              label: t('view'),
-              type: 'filter',
-              options: [
-                { label: t('allMembers'), value: 'allMembers' },
-                { label: t('blockedUsers'), value: 'blockedUsers' },
-              ],
-              selectedOption: showBlockedMembers
-                ? t('blockedUsers')
-                : t('allMembers'),
-              onOptionChange: (value) =>
-                setShowBlockedMembers(value === 'blockedUsers'),
-              dataTestIdPrefix: 'blockUserView',
-            },
+  const renderContent = (): JSX.Element => {
+    if (loadingMembers || loadingBlockedUsers) {
+      return (
+        <TableLoader
+          data-testid="TableLoader"
+          headerTitles={[
+            '#',
+            tCommon('name'),
+            tCommon('email'),
+            t('block_unblock'),
           ]}
+          noOfRows={10}
         />
-      </div>
+      );
+    }
+
+    if (errorBlockedUsers) {
+      return (
+        <ErrorPanel
+          message={t('errorLoadingBlockedUsers')}
+          error={errorBlockedUsers}
+          onRetry={refetchBlockedUsers}
+          testId="errorBlockedUsers"
+        />
+      );
+    }
+
+    if (errorMembers) {
+      return (
+        <ErrorPanel
+          message={t('errorLoadingMembers')}
+          error={errorMembers}
+          onRetry={refetchMembers}
+          testId="errorMembers"
+        />
+      );
+    }
+
+    return (
       <div className={styles.listBox}>
         {(!showBlockedMembers && filteredAllMembers.length > 0) ||
         (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
@@ -405,6 +411,13 @@ const BlockUser = (): JSX.Element => {
           />
         )}
       </div>
+    );
+  };
+
+  return (
+    <>
+      {searchFilterBar}
+      {renderContent()}
     </>
   );
 };
