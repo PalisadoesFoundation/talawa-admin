@@ -2,9 +2,9 @@
 
 ***
 
-# Variable: default
+# Function: default()
 
-> `const` **default**: `React.FC`\<[`InterfaceUserPortalCardProps`](../../../../../types/UserPortal/UserPortalCard/interface/interfaces/InterfaceUserPortalCardProps.md)\>
+> **default**(`__namedParameters`): `Element`
 
 Defined in: [src/components/UserPortal/UserPortalCard/UserPortalCard.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalCard/UserPortalCard.tsx#L34)
 
@@ -22,7 +22,17 @@ Responsibilities:
 
 Accessibility:
 - role="group"
-- aria-label provided by consumer (i18n required)
+- aria-label provided by consumer or defaults to a translated internal label.
+
+## Parameters
+
+### \_\_namedParameters
+
+[`InterfaceUserPortalCardProps`](../../../../../types/UserPortal/UserPortalCard/interface/interfaces/InterfaceUserPortalCardProps.md)
+
+## Returns
+
+`Element`
 
 ## Example
 

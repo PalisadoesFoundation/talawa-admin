@@ -1,7 +1,7 @@
 ---
 id: actionitems-components
-title: ActionItems Modal Components
-slug: /developer-resources/actionitems-components
+title: ActionItems Modal
+slug: /developer-resources/shared-components/actionitems-components
 sidebar_position: 44
 ---
 
@@ -64,9 +64,10 @@ src/types/shared-components/ActionItems/interface.ts
 `BaseModal` - Base modal wrapper with backdrop handling Quick Start
 `ActionItemModal` (Create/Edit)
 
-
 ## Quick Start
+
 ### ActionItemModal (Create/Edit)
+
 ```tsx
 import ActionItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 
@@ -75,14 +76,15 @@ import ActionItemModal from 'shared-components/ActionItems/ActionItemModal/Actio
   hide={() => setShowModal(false)}
   orgId="organization-123"
   eventId="event-456"
-  actionItem={null}  // null for create, object for edit
+  actionItem={null} // null for create, object for edit
   editMode={false}
   actionItemsRefetch={refetchActionItems}
   isRecurring={false}
-/>
+/>;
 ```
 
 ### ActionItemViewModal (Read-Only)
+
 ```tsx
 import ActionItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 
@@ -90,10 +92,11 @@ import ActionItemViewModal from 'shared-components/ActionItems/ActionItemViewMod
   isOpen={showModal}
   hide={() => setShowModal(false)}
   item={actionItemData}
-/>
+/>;
 ```
 
 ### ActionItemDeleteModal (Confirmation)
+
 ```tsx
 import ActionItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
 
@@ -104,11 +107,13 @@ import ActionItemDeleteModal from 'shared-components/ActionItems/ActionItemDelet
   actionItemsRefetch={refetchActionItems}
   eventId="event-456"
   isRecurring={true}
-/>
+/>;
 ```
 
 ## Usage Examples
+
 ### Complete Create Flow
+
 ```tsx
 import React, { useState } from 'react';
 import ActionItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
@@ -125,7 +130,7 @@ export const ActionItemsManager = ({ eventId, orgId }) => {
   return (
     <>
       <Button onClick={() => setShowModal(true)}>Create Action Item</Button>
-      
+
       <ActionItemModal
         isOpen={showModal}
         hide={() => setShowModal(false)}
@@ -141,13 +146,19 @@ export const ActionItemsManager = ({ eventId, orgId }) => {
 ```
 
 ### Edit Flow with Recurring Support
+
 ```tsx
 import React, { useState } from 'react';
 import ActionItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 import { useQuery } from '@apollo/client';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
-export const EditActionItem = ({ actionItem, eventId, orgId, isRecurringEvent }) => {
+export const EditActionItem = ({
+  actionItem,
+  eventId,
+  orgId,
+  isRecurringEvent,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const { refetch: refetchActionItems } = useQuery(GET_EVENT_ACTION_ITEMS, {
     variables: { input: { id: eventId } },
@@ -156,7 +167,7 @@ export const EditActionItem = ({ actionItem, eventId, orgId, isRecurringEvent })
   return (
     <>
       <button onClick={() => setShowModal(true)}>Edit</button>
-      
+
       <ActionItemModal
         isOpen={showModal}
         hide={() => setShowModal(false)}
@@ -174,6 +185,7 @@ export const EditActionItem = ({ actionItem, eventId, orgId, isRecurringEvent })
 ```
 
 ### Delete With Confirmation
+
 ```tsx
 import React, { useState } from 'react';
 import ActionItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
@@ -189,8 +201,10 @@ export const DeleteActionItem = ({ actionItem, eventId, isRecurringEvent }) => {
 
   return (
     <>
-      <Button variant="danger" onClick={() => setShowModal(true)}>Delete</Button>
-      
+      <Button variant="danger" onClick={() => setShowModal(true)}>
+        Delete
+      </Button>
+
       <ActionItemDeleteModal
         isOpen={showModal}
         hide={() => setShowModal(false)}
@@ -210,40 +224,38 @@ export const DeleteActionItem = ({ actionItem, eventId, isRecurringEvent }) => {
 
 ### ActionItemModal Props
 
-| Prop                   | Type                              | Required | Default | Description |
-|------------------------|-----------------------------------|----------|---------|-------------|
-| `isOpen`               | `boolean`                         | Yes      | –       | Controls modal visibility |
-| `hide`                 | `() => void`                      | Yes      | –       | Callback to close the modal |
-| `orgId`                | `string`                          | Yes      | –       | Organization ID for category/volunteer queries |
-| `eventId`              | `string \| undefined`             | Yes      | –       | Event ID for volunteer group queries (`undefined` for organization-level) |
-| `actionItem`           | `IActionItemInfo \| null`          | Yes      | –       | Action item object for edit mode, `null` for create |
-| `editMode`             | `boolean`                         | Yes      | –       | Controls form behavior (create vs. edit) |
-| `actionItemsRefetch`   | `() => void`                      | Yes      | –       | Callback to refetch action items after mutation |
-| `orgActionItemsRefetch`| `() => void`                      | No       | –       | Optional callback for organization-level refetch |
-| `isRecurring`          | `boolean`                         | No       | `false` | Show series/instance selector for recurring events |
-| `baseEvent`            | `{ id: string } \| null`          | No       | –       | Base event reference for recurring event handling |
+| Prop                    | Type                      | Required | Default | Description                                                               |
+| ----------------------- | ------------------------- | -------- | ------- | ------------------------------------------------------------------------- |
+| `isOpen`                | `boolean`                 | Yes      | –       | Controls modal visibility                                                 |
+| `hide`                  | `() => void`              | Yes      | –       | Callback to close the modal                                               |
+| `orgId`                 | `string`                  | Yes      | –       | Organization ID for category/volunteer queries                            |
+| `eventId`               | `string \| undefined`     | Yes      | –       | Event ID for volunteer group queries (`undefined` for organization-level) |
+| `actionItem`            | `IActionItemInfo \| null` | Yes      | –       | Action item object for edit mode, `null` for create                       |
+| `editMode`              | `boolean`                 | Yes      | –       | Controls form behavior (create vs. edit)                                  |
+| `actionItemsRefetch`    | `() => void`              | Yes      | –       | Callback to refetch action items after mutation                           |
+| `orgActionItemsRefetch` | `() => void`              | No       | –       | Optional callback for organization-level refetch                          |
+| `isRecurring`           | `boolean`                 | No       | `false` | Show series/instance selector for recurring events                        |
+| `baseEvent`             | `{ id: string } \| null`  | No       | –       | Base event reference for recurring event handling                         |
 
 ---
 
 ### ActionItemViewModal Props
 
-| Prop     | Type               | Required | Default | Description |
-|----------|--------------------|----------|---------|-------------|
-| `isOpen` | `boolean`          | Yes      | –       | Controls modal visibility |
-| `hide`   | `() => void`       | Yes      | –       | Callback to close the modal |
-| `item`   | `IActionItemInfo`  | Yes      | –       | Action item data to display |
+| Prop     | Type              | Required | Default | Description                 |
+| -------- | ----------------- | -------- | ------- | --------------------------- |
+| `isOpen` | `boolean`         | Yes      | –       | Controls modal visibility   |
+| `hide`   | `() => void`      | Yes      | –       | Callback to close the modal |
+| `item`   | `IActionItemInfo` | Yes      | –       | Action item data to display |
 
 ---
 
 ### ActionItemDeleteModal Props
 
-| Prop                 | Type               | Required | Default | Description |
-|----------------------|--------------------|----------|---------|-------------|
-| `isOpen`             | `boolean`          | Yes      | –       | Controls modal visibility |
-| `hide`               | `() => void`       | Yes      | –       | Callback to close the modal |
-| `actionItem`         | `IActionItemInfo`  | Yes      | –       | Action item to delete |
-| `actionItemsRefetch` | `() => void`       | Yes      | –       | Callback to refetch after deletion |
-| `eventId`            | `string`           | No       | –       | Event ID for instance-specific deletion |
-| `isRecurring`        | `boolean`          | No       | `false` | Show series/instance selector for recurring events |
-
-
+| Prop                 | Type              | Required | Default | Description                                        |
+| -------------------- | ----------------- | -------- | ------- | -------------------------------------------------- |
+| `isOpen`             | `boolean`         | Yes      | –       | Controls modal visibility                          |
+| `hide`               | `() => void`      | Yes      | –       | Callback to close the modal                        |
+| `actionItem`         | `IActionItemInfo` | Yes      | –       | Action item to delete                              |
+| `actionItemsRefetch` | `() => void`      | Yes      | –       | Callback to refetch after deletion                 |
+| `eventId`            | `string`          | No       | –       | Event ID for instance-specific deletion            |
+| `isRecurring`        | `boolean`         | No       | `false` | Show series/instance selector for recurring events |
