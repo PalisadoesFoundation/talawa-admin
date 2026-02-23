@@ -791,7 +791,7 @@ describe('LoadingMoreRows (direct component tests)', () => {
   it('does not render actions column when hasRowActions is false', () => {
     renderLoadingMoreRows({
       columns: baseColumns,
-      effectiveSelectable: false,
+      effectiveSelectable: true,
       hasRowActions: false,
       skeletonRows: 1,
     });
@@ -799,8 +799,8 @@ describe('LoadingMoreRows (direct component tests)', () => {
     const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
     expect(skeletonRows).toHaveLength(1);
 
-    // Verify cell count: 2 data columns only = 2 TDs
+    // Verify cell count: 1 selection + 2 data columns = 3 TDs (no actions column)
     const cells = skeletonRows[0].querySelectorAll('td');
-    expect(cells).toHaveLength(2);
+    expect(cells).toHaveLength(3);
   });
 });
