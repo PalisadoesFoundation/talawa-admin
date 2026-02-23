@@ -317,5 +317,8 @@
   "loginSuccessWithName": "欢迎，{{name}}！",
   "signupSuccess": "注册成功！",
   "authError": "认证错误",
-  "networkError": "网络错误"
+  "networkError": "网络错误",
+  "organizationCard": {
+    "card_aria": "机构卡片"
+  }
 }
