@@ -29,6 +29,7 @@
  */
 // translation-check-keyPrefix: agendaSection
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { JSX } from 'react';
 import type {
   InterfaceAgendaItemInfo,
@@ -50,14 +51,13 @@ function AgendaFolderContainer({
   agendaFolderData,
   refetchAgendaFolder,
   agendaItemCategories,
-  t,
 }: {
   agendaFolderConnection: 'Event';
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
   refetchAgendaFolder: () => void;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
-  t: (key: string) => string;
 }): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const { getFileFromMinio } = useMinioDownload();
   const { orgId } = useParams();
   const organizationId = orgId ?? 'organization';

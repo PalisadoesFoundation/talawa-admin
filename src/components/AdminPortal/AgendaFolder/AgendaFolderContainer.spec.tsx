@@ -36,9 +36,7 @@ vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
   return {
     ...actual,
-    useTranslation: () => ({
-      t: (key: string) => key,
-    }),
+    useTranslation: () => ({}),
   };
 });
 
@@ -375,7 +373,6 @@ const renderAgendaFolderContainer = (
           agendaFolderData={agendaFolderData}
           refetchAgendaFolder={mockRefetchAgendaFolder}
           agendaItemCategories={agendaItemCategories}
-          t={(key: string) => key}
         />
       </I18nextProvider>
     </BrowserRouter>,
@@ -940,7 +937,6 @@ describe('AgendaFolderContainer', () => {
               agendaFolderData={updatedFolders}
               refetchAgendaFolder={mockRefetchAgendaFolder}
               agendaItemCategories={mockAgendaItemCategories}
-              t={(key: string) => key}
             />
           </I18nextProvider>
         </BrowserRouter>,

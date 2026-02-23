@@ -158,7 +158,6 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
             agendaFolderData={agendaFolderData?.agendaFoldersByEventId}
             refetchAgendaFolder={refetchAgendaFolder}
             agendaItemCategories={agendaCategoryData?.agendaCategoriesByEventId}
-            t={t}
           />
         </div>
 
