@@ -1,7 +1,7 @@
 ---
 id: dropdown-button
-title: DropDownButton Shared-Component
-slug: /developer-resources/dropdown-button-shared
+title: DropDownButton
+slug: /developer-resources/shared-components/dropdown-button-shared
 sidebar_position: 49
 ---
 
@@ -47,7 +47,7 @@ import DropDownButton from 'shared-components/DropDownButton';
 ## Props
 
 | Prop                   | Type                                                                                                                                                                                                                                                             | Required | Default | Description                                   |
-|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------|-----------------------------------------------|
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | --------------------------------------------- |
 | `id`                   | `string`                                                                                                                                                                                                                                                         | No       | —       | The id of the dropdown button.                |
 | `buttonLabel`          | `string`                                                                                                                                                                                                                                                         | No       | —       | The label of the button.                      |
 | `options`              | `InterfaceDropDownOption[]`                                                                                                                                                                                                                                      | Yes      | —       | The options to be displayed in the dropdown.  |
@@ -63,7 +63,6 @@ import DropDownButton from 'shared-components/DropDownButton';
 | `icon`                 | `React.ReactNode`                                                                                                                                                                                                                                                | No       | —       | The icon to be displayed on the button.       |
 
 ---
-
 
 ## Option Object
 
@@ -117,26 +116,47 @@ function RoleSelector() {
 import { FaUser, FaUserShield, FaUserEdit } from 'react-icons/fa';
 
 const optionsWithIcons = [
-    { label: <><FaUserShield /> Admin</>, value: 'admin' },
-    { label: <><FaUserEdit /> Editor</>, value: 'editor' },
-    { label: <><FaUser /> Viewer</>, value: 'viewer' },
+  {
+    label: (
+      <>
+        <FaUserShield /> Admin
+      </>
+    ),
+    value: 'admin',
+  },
+  {
+    label: (
+      <>
+        <FaUserEdit /> Editor
+      </>
+    ),
+    value: 'editor',
+  },
+  {
+    label: (
+      <>
+        <FaUser /> Viewer
+      </>
+    ),
+    value: 'viewer',
+  },
 ];
 
 function IconDropdown() {
-    const [role, setRole] = React.useState('');
+  const [role, setRole] = React.useState('');
 
-    return (
-        <DropDownButton
-            id="icon-role-dropdown"
-            buttonLabel="Select Role"
-            options={optionsWithIcons}
-            selectedValue={role}
-            onSelect={setRole}
-            placeholder="Choose a role"
-            variant="secondary"
-            icon={<FaUser />}
-        />
-    );
+  return (
+    <DropDownButton
+      id="icon-role-dropdown"
+      buttonLabel="Select Role"
+      options={optionsWithIcons}
+      selectedValue={role}
+      onSelect={setRole}
+      placeholder="Choose a role"
+      variant="secondary"
+      icon={<FaUser />}
+    />
+  );
 }
 ```
 
@@ -144,20 +164,21 @@ function IconDropdown() {
 
 ```jsx
 function DisabledDropdown() {
-    return (
-        <DropDownButton
-            id="disabled-dropdown"
-            buttonLabel="Disabled"
-            options={[
-                { label: 'Option 1', value: '1' },
-                { label: 'Option 2', value: '2' },
-            ]}
-            disabled={true}
-            placeholder="Not selectable"
-        />
-    );
+  return (
+    <DropDownButton
+      id="disabled-dropdown"
+      buttonLabel="Disabled"
+      options={[
+        { label: 'Option 1', value: '1' },
+        { label: 'Option 2', value: '2' },
+      ]}
+      disabled={true}
+      placeholder="Not selectable"
+    />
+  );
 }
 ```
+
 ---
 
 ## Accessibility
@@ -175,7 +196,6 @@ function DisabledDropdown() {
 - Add an `icon` to the button if needed.
 
 ---
-
 
 ## Notes
 

@@ -21,13 +21,13 @@
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   color: var(--color-gray-900);
-  line-height: var(--line-height-snug);
+  line-height: 1.25;
 }
 
 .postVisibility {
   font-size: var(--font-size-xs);
   color: var(--color-gray-600);
-  line-height: var(--line-height-compact);
+  line-height: 1.33;
   margin-top: var(--space-1);
 }
 
@@ -41,7 +41,7 @@
 
 .postTextarea {
   width: 100%;
-  height: var(--space-31);
+  height: var(--space-11);
   outline: none;
   resize: none;
   font-size: var(--font-size-md);
@@ -54,7 +54,7 @@
 
 .postBodyTextarea {
   width: 100%;
-  height: var(--space-32);
+  height: var(--space-17);
   outline: none;
   resize: none;
   font-size: var(--font-size-md);
@@ -106,7 +106,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--space-4) var(--space-5) var(--space-5) var(--space-5);
-  border-top: var(--border-1) solid var(--color-gray-200);
+  border-top: var(--border-1) solid var(--color-gray-100);
   flex-shrink: 0;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .mediaButton:hover {
-  background-color: color-mix(in srgb, var(--color-black) 8%, transparent);
+  background-color: var(--color-gray-100);
 }
 
 .mediaButton svg {
@@ -153,7 +153,7 @@
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: background-color 0.2s ease;
-  min-width: var(--space-30);
+  min-width: var(--space-10-5);
 }
 
 .postButton:hover:not(:disabled) {
@@ -165,8 +165,8 @@
 }
 
 .postButtonDisabled {
-  background-color: color-mix(in srgb, var(--color-black) 8%, transparent);
-  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-300);
   cursor: not-allowed;
 }
 
@@ -191,8 +191,7 @@
   display: inline-block;
   width: var(--space-5);
   height: var(--space-5);
-  border: var(--border-2) solid
-    color-mix(in srgb, var(--color-white) 20%, transparent);
+  border: var(--border-2) solid var(--color-white-20);
   border-top: var(--border-2) solid currentcolor;
   border-radius: var(--radius-full);
   animation: spin 1s linear infinite;
@@ -203,6 +202,7 @@
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
