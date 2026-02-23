@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/AdminPortal/AgendaFolder/AgendaFolderContainer.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/AgendaFolderContainer.tsx#L49)
+Defined in: [src/components/AdminPortal/AgendaFolder/AgendaFolderContainer.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/AgendaFolderContainer.tsx#L48)
 
 ## Parameters
 

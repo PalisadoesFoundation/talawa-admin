@@ -165,7 +165,6 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
         <AgendaFolderCreateModal
           isOpen={agendaFolderCreateModal.isOpen}
           hide={agendaFolderCreateModal.close}
-          t={t}
           eventId={eventId}
           agendaFolderData={agendaFolderData}
           refetchAgendaFolder={refetchAgendaFolder}
@@ -173,7 +172,6 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
         <AgendaItemsCreateModal
           isOpen={agendaItemCreateModal.isOpen}
           hide={agendaItemCreateModal.close}
-          t={t}
           eventId={eventId}
           refetchAgendaFolder={refetchAgendaFolder}
           agendaItemCategories={agendaCategoryData?.agendaCategoriesByEventId}

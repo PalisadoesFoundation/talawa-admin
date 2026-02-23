@@ -172,7 +172,6 @@ export interface InterfaceAgendaItemsCreateModalProps {
   isOpen: boolean;
   hide: () => void;
   eventId: string;
-  t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
   refetchAgendaFolder: () => void;
@@ -189,7 +188,6 @@ export interface InterfaceAgendaItemsUpdateModalProps {
   setItemFormState: (
     state: React.SetStateAction<InterfaceFormStateType>,
   ) => void;
-  t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
   refetchAgendaFolder: () => void;
@@ -202,8 +200,6 @@ export interface InterfaceAgendaItemsDeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   agendaItemId: string;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
   refetchAgendaFolder: () => void;
 }
 
@@ -215,8 +211,6 @@ export interface InterfaceAgendaFolderDeleteModalProps {
   onClose: () => void;
   agendaFolderId: string;
   refetchAgendaFolder: () => void;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
 }
 
 export interface InterfaceAgendaFolderCreateFormStateType {
@@ -233,7 +227,6 @@ export interface InterfaceAgendaFolderCreateModalProps {
   hide: () => void;
   eventId: string;
   agendaFolderData: InterfaceAgendaFolderList | undefined;
-  t: (key: string) => string;
   refetchAgendaFolder: () => void;
 }
 
@@ -256,7 +249,6 @@ export interface InterfaceAgendaFolderUpdateModalProps {
     state: React.SetStateAction<InterfaceAgendaFolderUpdateFormStateType>,
   ) => void;
   refetchAgendaFolder: () => void;
-  t: (key: string) => string;
 }
 
 export interface InterfaceItemFormStateType {
@@ -291,7 +283,6 @@ export interface InterfaceAgendaItemsPreviewModalProps {
   isOpen: boolean;
   hidePreviewModal: () => void;
   formState: InterfaceItemFormStateType;
-  t: (key: string) => string;
 }
 
 /**

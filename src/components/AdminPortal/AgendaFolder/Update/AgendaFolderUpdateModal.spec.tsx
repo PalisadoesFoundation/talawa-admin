@@ -19,7 +19,6 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock translations
-const mockT = (key: string): string => key;
 
 const mockAgendaFolderId = 'folder123';
 const mockOnClose = vi.fn();
@@ -139,7 +138,6 @@ const renderAgendaFolderUpdateModal = (
           folderFormState={folderFormState}
           setFolderFormState={mockSetFolderFormState}
           refetchAgendaFolder={mockRefetchAgendaFolder}
-          t={mockT}
         />
       </I18nextProvider>
     </MockedProvider>,
@@ -710,7 +708,6 @@ describe('AgendaFolderUpdateModal', () => {
               folderFormState={mockFolderFormState}
               setFolderFormState={mockSetFolderFormState}
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockT}
             />
           </I18nextProvider>
         </MockedProvider>,
@@ -837,7 +834,6 @@ describe('AgendaFolderUpdateModal', () => {
               folderFormState={mockFolderFormState}
               setFolderFormState={mockSetFolderFormState}
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockTSpy}
             />
           </I18nextProvider>
         </MockedProvider>,
@@ -859,7 +855,6 @@ describe('AgendaFolderUpdateModal', () => {
               folderFormState={mockFolderFormState}
               setFolderFormState={mockSetFolderFormState}
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockTSpy}
             />
           </I18nextProvider>
         </MockedProvider>,

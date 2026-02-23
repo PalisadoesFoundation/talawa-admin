@@ -19,8 +19,6 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock translations
-const mockT = (key: string): string => key;
-const mockTCommon = (key: string): string => key;
 
 const mockAgendaFolderId = 'folder123';
 const mockOnClose = vi.fn();
@@ -82,8 +80,6 @@ const renderAgendaFolderDeleteModal = (
           onClose={mockOnClose}
           agendaFolderId={mockAgendaFolderId}
           refetchAgendaFolder={mockRefetchAgendaFolder}
-          t={mockT}
-          tCommon={mockTCommon}
         />
       </I18nextProvider>
     </MockedProvider>,
@@ -435,8 +431,6 @@ describe('AgendaFolderDeleteModal', () => {
               onClose={mockOnClose}
               agendaFolderId=""
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockT}
-              tCommon={mockTCommon}
             />
           </I18nextProvider>
         </MockedProvider>,
@@ -498,8 +492,6 @@ describe('AgendaFolderDeleteModal', () => {
               onClose={mockOnClose}
               agendaFolderId={mockAgendaFolderId}
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockTSpy}
-              tCommon={mockTCommon}
             />
           </I18nextProvider>
         </MockedProvider>,
@@ -518,8 +510,6 @@ describe('AgendaFolderDeleteModal', () => {
               onClose={mockOnClose}
               agendaFolderId={mockAgendaFolderId}
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockTSpy}
-              tCommon={mockTCommon}
             />
           </I18nextProvider>
         </MockedProvider>,

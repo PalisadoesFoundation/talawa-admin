@@ -18,12 +18,10 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-const mockT = (key: string): string => key;
 const mockOnClose = vi.fn();
 const mockRefetchAgendaFolder = vi.fn();
 
 const MOCK_AGENDA_ITEM_ID = 'item123';
-const mockTCommon = (key: string): string => key;
 const MOCKS_SUCCESS: MockedResponse[] = [
   {
     request: {
@@ -70,8 +68,6 @@ const renderModal = (
           isOpen={isOpen}
           onClose={mockOnClose}
           agendaItemId={agendaItemId}
-          t={mockT}
-          tCommon={mockTCommon}
           refetchAgendaFolder={mockRefetchAgendaFolder}
         />
       </I18nextProvider>
@@ -274,8 +270,6 @@ describe('AgendaItemsDeleteModal', () => {
             isOpen
             onClose={mockOnClose}
             agendaItemId={MOCK_AGENDA_ITEM_ID}
-            t={mockT}
-            tCommon={mockTCommon}
             refetchAgendaFolder={mockRefetchAgendaFolder}
           />
         </I18nextProvider>,
@@ -428,8 +422,6 @@ describe('AgendaItemsDeleteModal', () => {
               isOpen={true}
               onClose={mockOnClose}
               agendaItemId={MOCK_AGENDA_ITEM_ID}
-              t={customT}
-              tCommon={mockTCommon}
               refetchAgendaFolder={mockRefetchAgendaFolder}
             />
           </I18nextProvider>
@@ -520,8 +512,6 @@ describe('AgendaItemsDeleteModal', () => {
               isOpen={false}
               onClose={mockOnClose}
               agendaItemId={MOCK_AGENDA_ITEM_ID}
-              t={mockT}
-              tCommon={mockTCommon}
               refetchAgendaFolder={mockRefetchAgendaFolder}
             />
           </I18nextProvider>
@@ -539,8 +529,6 @@ describe('AgendaItemsDeleteModal', () => {
               isOpen={true}
               onClose={mockOnClose}
               agendaItemId={MOCK_AGENDA_ITEM_ID}
-              t={mockT}
-              tCommon={mockTCommon}
               refetchAgendaFolder={mockRefetchAgendaFolder}
             />
           </I18nextProvider>
@@ -589,8 +577,6 @@ describe('AgendaItemsDeleteModal', () => {
               isOpen={true}
               onClose={trackedOnClose}
               agendaItemId={MOCK_AGENDA_ITEM_ID}
-              t={mockT}
-              tCommon={mockTCommon}
               refetchAgendaFolder={trackedRefetch}
             />
           </I18nextProvider>

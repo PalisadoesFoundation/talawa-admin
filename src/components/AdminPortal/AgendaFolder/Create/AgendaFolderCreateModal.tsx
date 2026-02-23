@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { useParams } from 'react-router';
 
@@ -32,7 +33,8 @@ import type { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Ag
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
   InterfaceAgendaFolderCreateModalProps
-> = ({ isOpen, hide, eventId, agendaFolderData, t, refetchAgendaFolder }) => {
+> = ({ isOpen, hide, eventId, agendaFolderData, refetchAgendaFolder }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const { orgId } = useParams();
 
   const [createAgendaFolder] = useMutation(CREATE_AGENDA_FOLDER_MUTATION);
