@@ -1,7 +1,7 @@
 ---
 id: testing
 title: Testing
-slug: /developer-resources/testing
+slug: /developer-resources/testing/testing
 sidebar_position: 60
 ---
 
@@ -15,7 +15,7 @@ All our workflows use Linux based commands, therefore if you are a developer who
 
 ### UI/UX Testing
 
-If you have loaded the API sample database, then you can login using the credentials found on the [testing page of the API documentation website](https://docs-api.talawa.io/docs/developer-resources/testing/)
+If you have loaded the API sample database, then you can login using the credentials found on the [testing page of the API documentation website](https://docs-api.talawa.io/docs/developer-resources/testing/testing/)
 
 ## Pre-commit Hooks
 
@@ -242,7 +242,7 @@ describe('MyComponent', () => {
 afterEach(() => {
   cleanup(); // React Testing Library cleanup
   vi.restoreAllMocks(); // Mock cleanup
-  clearAllItems(); // LocalStorage cleanup 
+  clearAllItems(); // LocalStorage cleanup
 });
 ```
 
@@ -417,7 +417,7 @@ describe('Component modifying globals', () => {
 ### Code Coverage Standards
 
 - The current code coverage of the repository: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
-- The currently acceptable coverage rate can be found in the [GitHub Pull Request workflow file](../../../../.github/workflows/pull-request.yml). Search for the value below the line containing `min_coverage`.
+- The currently acceptable coverage rate can be found in the GitHub Pull Request workflow file found here: `.github/workflows/pull-request.yml`. Search for the value below the line containing `min_coverage`.
 
 ## Cypress End-to-End Testing
 

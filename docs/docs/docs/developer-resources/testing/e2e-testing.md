@@ -1,7 +1,7 @@
 ---
 id: e2e-testing
 title: End to End Testing
-slug: /developer-resources/e2e-testing
+slug: /developer-resources/testing/e2e-testing
 sidebar_position: 70
 ---
 
@@ -9,7 +9,7 @@ This project uses Cypress for comprehensive end-to-end testing to ensure the app
 
 ## Additional Resources
 
-- [Online docs](https://docs-admin.talawa.io/docs/developer-resources/e2e-testing)
+- [Online docs](https://docs-admin.talawa.io/docs/developer-resources/testing/e2e-testing)
 - Cypress local quick reference: `cypress/README.md`
 
 ## Prerequisites
@@ -187,6 +187,57 @@ Guidelines:
 - Keep helper methods typed and chainable.
 - Keep network mocking in specs or support utilities; page object helpers should
   only perform UI interactions.
+
+### Organization Setup Workflow Pattern
+
+Use `cypress/e2e/AdminPortal/Organizations/OrganizationSetup.cy.ts` as the
+reference pattern for organization setup scenarios in the Admin Portal.
+
+Supporting page objects:
+
+- `cypress/pageObjects/AdminPortal/OrganizationSetupPage.ts`
+- `cypress/pageObjects/AdminPortal/OrganizationSettingsPage.ts`
+- `cypress/pageObjects/AdminPortal/MemberManagementPage.ts`
+
+The workflow covers:
+
+- Happy path: create organization -> configure settings -> validate branding
+  input -> invite member
+- Negative path: duplicate organization conflict
+- Permission path: non-admin user blocked from admin org setup route
+- Org switching: move between two organizations from `/admin/orglist`
+
+Recommended assertions:
+
+- Wait on GraphQL operations with `cy.waitForGraphQLOperation(...)`
+- Verify both UI state (toast/text/URL) and API payload/response when practical
+- Keep cleanup deterministic with `cy.cleanupTestOrganization(...)`
+
+Example shape:
+
+```ts
+describe('Organization setup workflow', () => {
+  afterEach(() => {
+    cy.clearAllGraphQLMocks();
+    cy.clearCookies();
+    cy.clearLocalStorage();
+  });
+
+  it('create -> configure -> invite', () => {
+    cy.loginByApi('admin');
+    cy.mockGraphQLOperation('OrganizationFilterList', (req) => req.continue());
+    cy.mockGraphQLOperation('createOrganization', (req) => req.continue());
+    cy.mockGraphQLOperation('CreateOrganizationMembership', (req) =>
+      req.continue(),
+    );
+
+    // Create organization through UI
+    // Update organization settings in /admin/orgsetting/:orgId
+    // Validate branding input via organisationImage control
+    // Add member from People tab
+  });
+});
+```
 
 ### Custom Commands
 
