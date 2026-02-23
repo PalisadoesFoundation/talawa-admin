@@ -750,6 +750,10 @@ describe('LoadingMoreRows (direct component tests)', () => {
 
     const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
     expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 1 selection + 2 data columns = 3 TDs
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(3);
   });
 
   it('does not render selection column when effectiveSelectable is false', () => {
@@ -762,6 +766,10 @@ describe('LoadingMoreRows (direct component tests)', () => {
 
     const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
     expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 2 data columns only = 2 TDs
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(2);
   });
 
   it('renders actions column when hasRowActions is true', () => {
@@ -774,6 +782,10 @@ describe('LoadingMoreRows (direct component tests)', () => {
 
     const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
     expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 2 data columns + 1 actions = 3 TDs
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(3);
   });
 
   it('does not render actions column when hasRowActions is false', () => {
@@ -786,5 +798,9 @@ describe('LoadingMoreRows (direct component tests)', () => {
 
     const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
     expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 2 data columns only = 2 TDs
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(2);
   });
 });
