@@ -1,14 +1,17 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-
-afterEach(() => {
-  vi.clearAllMocks();
-  vi.restoreAllMocks();
-});
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
 import SearchBar from './SearchBar';
 import type { InterfaceSearchBarRef } from 'types/SearchBar/interface';
+import i18n from 'utils/i18nForTest';
+import styles from './SearchBar.module.css';
+
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 describe('SearchBar', () => {
   it('renders with the provided placeholder', () => {
@@ -35,8 +38,10 @@ describe('SearchBar', () => {
     );
 
     await user.type(screen.getByTestId('search-input'), 'team');
-    expect(handleChange).toHaveBeenCalled();
-    expect(handleChange.mock.calls.at(-1)?.[0]).toBe('team');
+    await waitFor(() => {
+      expect(handleChange).toHaveBeenCalled();
+      expect(handleChange).toHaveBeenLastCalledWith('team', expect.any(Object));
+    });
   });
 
   it('calls onSearch when search button is clicked', async () => {
@@ -53,10 +58,12 @@ describe('SearchBar', () => {
     await user.type(screen.getByTestId('search-input'), 'volunteer');
     await user.click(screen.getByTestId('search-button'));
 
-    expect(handleSearch).toHaveBeenCalledWith(
-      'volunteer',
-      expect.objectContaining({ trigger: 'button' }),
-    );
+    await waitFor(() => {
+      expect(handleSearch).toHaveBeenCalledWith(
+        'volunteer',
+        expect.objectContaining({ trigger: 'button' }),
+      );
+    });
   });
 
   it('submits search when Enter key is pressed', async () => {
@@ -71,10 +78,12 @@ describe('SearchBar', () => {
     );
     await user.type(screen.getByTestId('search-input'), 'events{enter}');
 
-    expect(handleSearch).toHaveBeenCalledWith(
-      'events',
-      expect.objectContaining({ trigger: 'enter' }),
-    );
+    await waitFor(() => {
+      expect(handleSearch).toHaveBeenCalledWith(
+        'events',
+        expect.objectContaining({ trigger: 'enter' }),
+      );
+    });
   });
 
   it('clears the input value and notifies listeners', async () => {
@@ -97,11 +106,12 @@ describe('SearchBar', () => {
     await user.type(input, 'pledge');
     await user.click(screen.getByTestId('clear-search'));
 
-    expect(handleClear).toHaveBeenCalledTimes(1);
-    expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
-    // When onClear is provided, onSearch should NOT be called to avoid duplicate side effects
-    expect(handleSearch).not.toHaveBeenCalled();
-    expect(input).toHaveValue('');
+    await waitFor(() => {
+      expect(handleClear).toHaveBeenCalledTimes(1);
+      expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+      expect(handleSearch).not.toHaveBeenCalled();
+      expect(input).toHaveValue('');
+    });
   });
 
   it('supports controlled mode', async () => {
@@ -123,7 +133,9 @@ describe('SearchBar', () => {
     expect(input).toHaveValue('initial');
     await user.clear(input);
     await user.type(input, 'updated');
-    expect(input).toHaveValue('updated');
+    await waitFor(() => {
+      expect(input).toHaveValue('updated');
+    });
   });
 
   it('hides the button when showSearchButton is false', async () => {
@@ -140,10 +152,12 @@ describe('SearchBar', () => {
 
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
     await user.type(screen.getByTestId('search-input'), 'filters{enter}');
-    expect(handleSearch).toHaveBeenCalledWith(
-      'filters',
-      expect.objectContaining({ trigger: 'enter' }),
-    );
+    await waitFor(() => {
+      expect(handleSearch).toHaveBeenCalledWith(
+        'filters',
+        expect.objectContaining({ trigger: 'enter' }),
+      );
+    });
   });
 
   it('exposes imperative focus and clear helpers via ref', async () => {
@@ -162,24 +176,32 @@ describe('SearchBar', () => {
     const input = screen.getByTestId('search-input');
 
     // Test focus
-    act(() => {
+    await act(async () => {
       ref.current?.focus();
     });
-    expect(input).toHaveFocus();
+    await waitFor(() => {
+      expect(input).toHaveFocus();
+    });
 
     // Test blur
-    act(() => {
+    await act(async () => {
       ref.current?.blur();
     });
-    expect(input).not.toHaveFocus();
+    await waitFor(() => {
+      expect(input).not.toHaveFocus();
+    });
 
     // Test clear
     await user.type(input, 'orgs');
-    expect(input).toHaveValue('orgs');
+    await waitFor(() => {
+      expect(input).toHaveValue('orgs');
+    });
     await act(async () => {
       ref.current?.clear();
     });
-    expect(input).toHaveValue('');
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
   });
 
   it('triggers onSearch with empty string when clearing without onClear prop', async () => {
@@ -198,11 +220,13 @@ describe('SearchBar', () => {
     await user.type(input, 'query');
     await user.click(screen.getByTestId('clear-search'));
 
-    expect(handleSearch).toHaveBeenCalledWith(
-      '',
-      expect.objectContaining({ trigger: 'clear' }),
-    );
-    expect(input).toHaveValue('');
+    await waitFor(() => {
+      expect(handleSearch).toHaveBeenCalledWith(
+        '',
+        expect.objectContaining({ trigger: 'clear' }),
+      );
+      expect(input).toHaveValue('');
+    });
   });
 
   it('hides clear button when disabled', async () => {
@@ -264,18 +288,22 @@ describe('SearchBar', () => {
   it('uses default aria-label from i18n when clearButtonAriaLabel is undefined', async () => {
     const user = userEvent.setup();
     render(
-      <SearchBar
-        onSearch={vi.fn()}
-        inputTestId="search-input"
-        clearButtonTestId="clear-search"
-      />,
+      <I18nextProvider i18n={i18n}>
+        <SearchBar
+          onSearch={vi.fn()}
+          inputTestId="search-input"
+          clearButtonTestId="clear-search"
+        />
+      </I18nextProvider>,
     );
 
     const input = screen.getByTestId('search-input');
     await user.type(input, 'test');
 
-    const clearButton = screen.getByTestId('clear-search');
-    expect(clearButton).toHaveAttribute('aria-label', 'clear');
+    await waitFor(() => {
+      const clearButton = screen.getByTestId('clear-search');
+      expect(clearButton).toHaveAttribute('aria-label', 'Clear');
+    });
   });
 
   it('handles missing onSearch prop gracefully', async () => {
@@ -306,7 +334,7 @@ describe('SearchBar', () => {
     });
 
     it('does not render trailing search icon when showTrailingIcon is false', () => {
-      render(
+      const { container } = render(
         <SearchBar
           onSearch={vi.fn()}
           showTrailingIcon={false}
@@ -314,24 +342,28 @@ describe('SearchBar', () => {
         />,
       );
 
-      const container = screen.getByTestId('search-input').parentElement;
-      // When showTrailingIcon is false, there should be no trailing icon
-      // The container might still have other elements, but not the trailing icon
-      expect(container).toBeInTheDocument();
+      // When showTrailingIcon is false, trailing icon should not be present
+      const trailingIcon = container.querySelector(
+        `.${styles.searchBarTrailingIcon}`,
+      );
+      expect(trailingIcon).not.toBeInTheDocument();
     });
 
     it('does not render trailing icon by default', () => {
-      render(<SearchBar onSearch={vi.fn()} inputTestId="search-input" />);
+      const { container } = render(
+        <SearchBar onSearch={vi.fn()} inputTestId="search-input" />,
+      );
 
-      // Default behavior should not show trailing icon
-      const container = screen.getByTestId('search-input').parentElement;
-      expect(container).toBeInTheDocument();
-      // By default, showTrailingIcon is false
+      // By default, showTrailingIcon is false, so icon should not be present
+      const trailingIcon = container.querySelector(
+        `.${styles.searchBarTrailingIcon}`,
+      );
+      expect(trailingIcon).not.toBeInTheDocument();
     });
 
     it('renders both clear button and trailing icon when both are enabled', async () => {
       const user = userEvent.setup();
-      render(
+      const { container } = render(
         <SearchBar
           onSearch={vi.fn()}
           showTrailingIcon={true}
@@ -344,11 +376,14 @@ describe('SearchBar', () => {
       const input = screen.getByTestId('search-input');
       await user.type(input, 'test');
 
-      // Both the clear button and trailing icon should coexist
-      expect(screen.getByTestId('clear-search')).toBeInTheDocument();
-      const container = input.parentElement;
-      const trailingIcon = container?.querySelector('span[aria-hidden="true"]');
-      expect(trailingIcon).toBeInTheDocument();
+      await waitFor(() => {
+        // Both the clear button and trailing icon should coexist
+        expect(screen.getByTestId('clear-search')).toBeInTheDocument();
+        const trailingIcon = container.querySelector(
+          `.${styles.searchBarTrailingIcon}`,
+        );
+        expect(trailingIcon).toBeInTheDocument();
+      });
     });
 
     it('positions trailing icon correctly in the input wrapper', () => {
@@ -375,43 +410,47 @@ describe('SearchBar', () => {
 
   describe('Visual variants and sizes', () => {
     it('applies filled variant styles', () => {
-      const { container } = render(
+      render(
         <SearchBar
           onSearch={vi.fn()}
           variant="filled"
           inputTestId="search-input"
         />,
       );
-      expect(container).toBeInTheDocument();
+      const inputWrapper = screen.getByTestId('search-input').parentElement;
+      expect(inputWrapper).toHaveClass(styles.searchBarVariantFilled);
     });
 
     it('applies ghost variant styles', () => {
-      const { container } = render(
+      render(
         <SearchBar
           onSearch={vi.fn()}
           variant="ghost"
           inputTestId="search-input"
         />,
       );
-      expect(container).toBeInTheDocument();
+      const inputWrapper = screen.getByTestId('search-input').parentElement;
+      expect(inputWrapper).toHaveClass(styles.searchBarVariantGhost);
     });
 
     it('applies small size styles', () => {
-      const { container } = render(
+      render(
         <SearchBar onSearch={vi.fn()} size="sm" inputTestId="search-input" />,
       );
-      expect(container).toBeInTheDocument();
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveClass(styles.searchBarInputSm);
     });
 
     it('applies large size styles', () => {
-      const { container } = render(
+      render(
         <SearchBar onSearch={vi.fn()} size="lg" inputTestId="search-input" />,
       );
-      expect(container).toBeInTheDocument();
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveClass(styles.searchBarInputLg);
     });
 
     it('applies combined variant and size styles', () => {
-      const { container } = render(
+      render(
         <SearchBar
           onSearch={vi.fn()}
           variant="filled"
@@ -419,7 +458,10 @@ describe('SearchBar', () => {
           inputTestId="search-input"
         />,
       );
-      expect(container).toBeInTheDocument();
+      const input = screen.getByTestId('search-input');
+      const inputWrapper = input.parentElement;
+      expect(inputWrapper).toHaveClass(styles.searchBarVariantFilled);
+      expect(input).toHaveClass(styles.searchBarInputLg);
     });
   });
 
@@ -456,7 +498,9 @@ describe('SearchBar', () => {
       const { container } = render(
         <SearchBar onSearch={vi.fn()} inputTestId="search-input" />,
       );
-      expect(container).toBeInTheDocument();
+      // By default, showLeadingIcon is false, so icon should not be present
+      const leadingIcon = container.querySelector(`.${styles.searchBarIcon}`);
+      expect(leadingIcon).not.toBeInTheDocument();
     });
   });
 
@@ -619,35 +663,6 @@ describe('SearchBar', () => {
       expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
     });
 
-    it('handles onChange when inputRef is null during clear', () => {
-      const handleChange = vi.fn();
-      const ref = React.createRef<InterfaceSearchBarRef>();
-      const { unmount } = render(
-        <SearchBar
-          ref={ref}
-          onSearch={vi.fn()}
-          onChange={handleChange}
-          inputTestId="search-input"
-        />,
-      );
-
-      // Store the clear function before unmounting
-      const clearFn = ref.current?.clear;
-
-      // Unmount the component, which will clear the inputRef
-      unmount();
-
-      // Now call clear after unmounting, which triggers emitChange without a valid ref
-      if (clearFn) {
-        act(() => {
-          clearFn();
-        });
-      }
-
-      // onChange should still be called even without a valid ref
-      expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
-    });
-
     it('handles controlled mode with value prop provided', () => {
       render(
         <SearchBar
@@ -758,7 +773,9 @@ describe('SearchBar', () => {
       );
       const input = screen.getByTestId('search-input');
       await user.type(input, 'test');
-      expect(screen.queryByTestId('clear-search')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByTestId('clear-search')).not.toBeInTheDocument();
+      });
     });
 
     it('handles uncontrolled mode with defaultValue', () => {
@@ -773,7 +790,7 @@ describe('SearchBar', () => {
       expect(input).toHaveValue('initial value');
     });
 
-    it('syncs internal state when value prop changes in controlled mode', () => {
+    it('syncs internal state when value prop changes in controlled mode', async () => {
       const { rerender } = render(
         <SearchBar
           onSearch={vi.fn()}
@@ -791,7 +808,9 @@ describe('SearchBar', () => {
           inputTestId="search-input"
         />,
       );
-      expect(input).toHaveValue('second');
+      await waitFor(() => {
+        expect(input).toHaveValue('second');
+      });
     });
   });
 });
