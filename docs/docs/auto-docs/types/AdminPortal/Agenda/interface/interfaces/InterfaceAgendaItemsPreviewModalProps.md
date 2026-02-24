@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemsPreviewModalProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L290)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L282)
 
 Props for the AgendaItemsPreviewModal component.
 
@@ -18,7 +18,7 @@ such as updating or deleting an agenda item.
 
 > **formState**: [`InterfaceItemFormStateType`](InterfaceItemFormStateType.md)
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L293)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L285)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:293](https://github.com/P
 
 > **hidePreviewModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L292)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L284)
 
 #### Returns
 
@@ -38,22 +38,4 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:292](https://github.com/P
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L291)
-
-***
-
-### t()
-
-> **t**: (`key`) => `string`
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L294)
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L283)
