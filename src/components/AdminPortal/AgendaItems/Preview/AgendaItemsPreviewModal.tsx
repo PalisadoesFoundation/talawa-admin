@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaLink } from 'react-icons/fa';
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import styles from './AgendaItemsPreviewModal.module.css';
@@ -18,7 +19,8 @@ import type { InterfaceAgendaItemsPreviewModalProps } from 'types/AdminPortal/Ag
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
-> = ({ isOpen, hidePreviewModal, formState, t }) => {
+> = ({ isOpen, hidePreviewModal, formState }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const renderAttachments = (): JSX.Element[] =>
     (formState.attachment ?? []).map((att, index) => (
       <div key={index} className={styles.previewFile}>

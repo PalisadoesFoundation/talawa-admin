@@ -1,10 +1,11 @@
 id: assertions-after-async-must-use-waitfor
 language: typescript
 rule:
+  kind: call_expression
+  pattern: expect($$$)
   follows:
     stopBy: end
     pattern: await userEvent.$METHOD($$$)
-  regex: "expect\\("
   not:
     inside:
       any:
