@@ -190,12 +190,11 @@ describe('AgendaItemsDeleteModal', () => {
           expect(NotificationToast.success).toHaveBeenCalledWith(
             'Agenda Item deleted successfully',
           );
+          expect(mockRefetchAgendaFolder).toHaveBeenCalledTimes(1);
+          expect(mockOnClose).toHaveBeenCalledTimes(1);
         },
         { timeout: 5000 },
       );
-
-      expect(mockRefetchAgendaFolder).toHaveBeenCalledTimes(1);
-      expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
 
     it('should call refetchAgendaFolder after successful deletion', async () => {
@@ -306,9 +305,8 @@ describe('AgendaItemsDeleteModal', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
+        expect(mockOnClose).not.toHaveBeenCalled();
       });
-
-      expect(mockOnClose).not.toHaveBeenCalled();
     });
 
     it('should not call refetchAgendaFolder when deletion fails', async () => {
@@ -319,9 +317,8 @@ describe('AgendaItemsDeleteModal', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
+        expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
       });
-
-      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
 
     it('should handle Error instance in catch block', async () => {
@@ -360,9 +357,8 @@ describe('AgendaItemsDeleteModal', () => {
       // Non-Error instances won't trigger NotificationToast.error
       await waitFor(() => {
         expect(mockOnClose).not.toHaveBeenCalled();
+        expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
       });
-
-      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
   });
 
@@ -429,10 +425,8 @@ describe('AgendaItemsDeleteModal', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
+        expect(mockOnClose).toHaveBeenCalled();
       });
-
-      // Should still only close once
-      expect(mockOnClose).toHaveBeenCalled();
     });
   });
 
@@ -551,10 +545,8 @@ describe('AgendaItemsDeleteModal', () => {
       // Wait for the mutation to complete and side effects to trigger
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
+        expect(callOrder).toEqual(['refetchAgendaFolder', 'onClose']);
       });
-
-      // Verify order: refetch should be called before onClose
-      expect(callOrder).toEqual(['refetchAgendaFolder', 'onClose']);
     });
   });
 

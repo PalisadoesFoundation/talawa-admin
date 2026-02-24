@@ -18,16 +18,7 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-// Mock translations
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string) => key,
-    }),
-  };
-});
+// Mock NotificationToast
 
 const mockAgendaFolderId = 'folder123';
 const mockOnClose = vi.fn();
@@ -106,7 +97,9 @@ describe('AgendaFolderDeleteModal', () => {
       renderAgendaFolderDeleteModal();
 
       expect(screen.getByTestId('deleteAgendaFolderModal')).toBeInTheDocument();
-      expect(screen.getByText('deleteAgendaFolderMsg')).toBeInTheDocument();
+      expect(
+        screen.getByText('Do you want to remove this agenda folder?'),
+      ).toBeInTheDocument();
     });
 
     it('does not render modal when isOpen is false', () => {
@@ -120,13 +113,15 @@ describe('AgendaFolderDeleteModal', () => {
     it('renders modal with correct title', () => {
       renderAgendaFolderDeleteModal();
 
-      expect(screen.getByText('deleteAgendaFolder')).toBeInTheDocument();
+      expect(screen.getByText('Delete Agenda Folder')).toBeInTheDocument();
     });
 
     it('renders delete confirmation message', () => {
       renderAgendaFolderDeleteModal();
 
-      expect(screen.getByText('deleteAgendaFolderMsg')).toBeInTheDocument();
+      expect(
+        screen.getByText('Do you want to remove this agenda folder?'),
+      ).toBeInTheDocument();
     });
 
     it('renders Yes and No buttons', () => {
@@ -201,7 +196,7 @@ describe('AgendaFolderDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.success).toHaveBeenCalledWith(
-            'agendaFolderDeleted',
+            'Agenda Folder deleted successfully',
           );
         },
         { timeout: 5000 },
@@ -258,11 +253,10 @@ describe('AgendaFolderDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.success).toHaveBeenCalled();
+          expect(NotificationToast.error).not.toHaveBeenCalled();
         },
         { timeout: 5000 },
       );
-
-      expect(NotificationToast.error).not.toHaveBeenCalled();
     });
   });
 
@@ -292,11 +286,10 @@ describe('AgendaFolderDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.error).toHaveBeenCalled();
+          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
         },
         { timeout: 5000 },
       );
-
-      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
 
     it('does not call onClose when mutation fails', async () => {
@@ -308,11 +301,10 @@ describe('AgendaFolderDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.error).toHaveBeenCalled();
+          expect(mockOnClose).not.toHaveBeenCalled();
         },
         { timeout: 5000 },
       );
-
-      expect(mockOnClose).not.toHaveBeenCalled();
     });
 
     it('does not show success notification when mutation fails', async () => {
@@ -324,11 +316,10 @@ describe('AgendaFolderDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.error).toHaveBeenCalled();
+          expect(NotificationToast.success).not.toHaveBeenCalled();
         },
         { timeout: 5000 },
       );
-
-      expect(NotificationToast.success).not.toHaveBeenCalled();
     });
 
     it('handles GraphQL errors correctly', async () => {
@@ -457,12 +448,11 @@ describe('AgendaFolderDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.error).toHaveBeenCalled();
+          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+          expect(mockOnClose).not.toHaveBeenCalled();
         },
         { timeout: 5000 },
       );
-
-      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
-      expect(mockOnClose).not.toHaveBeenCalled();
     });
   });
 });
