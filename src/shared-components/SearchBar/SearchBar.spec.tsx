@@ -16,11 +16,13 @@ afterEach(() => {
 describe('SearchBar', () => {
   it('renders with the provided placeholder', () => {
     render(
-      <SearchBar
-        onSearch={vi.fn()}
-        placeholder="Search records"
-        clearButtonAriaLabel="clear"
-      />,
+      <I18nextProvider i18n={i18n}>
+        <SearchBar
+          onSearch={vi.fn()}
+          placeholder="Search records"
+          clearButtonAriaLabel="clear"
+        />
+      </I18nextProvider>,
     );
     expect(screen.getByPlaceholderText('Search records')).toBeInTheDocument();
   });
@@ -29,12 +31,14 @@ describe('SearchBar', () => {
     const user = userEvent.setup();
     const handleChange = vi.fn();
     render(
-      <SearchBar
-        onSearch={vi.fn()}
-        onChange={handleChange}
-        inputTestId="search-input"
-        clearButtonAriaLabel="clear"
-      />,
+      <I18nextProvider i18n={i18n}>
+        <SearchBar
+          onSearch={vi.fn()}
+          onChange={handleChange}
+          inputTestId="search-input"
+          clearButtonAriaLabel="clear"
+        />
+      </I18nextProvider>,
     );
 
     await user.type(screen.getByTestId('search-input'), 'team');
@@ -269,8 +273,10 @@ describe('SearchBar', () => {
       ref.current?.clear();
     });
 
-    expect(screen.getByTestId('search-input')).toHaveValue('locked');
-    expect(handleSearch).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(screen.getByTestId('search-input')).toHaveValue('locked');
+      expect(handleSearch).not.toHaveBeenCalled();
+    });
   });
 
   it('has accessible search button', () => {
@@ -639,7 +645,9 @@ describe('SearchBar', () => {
         ref.current?.clear();
       });
 
-      expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+      await waitFor(() => {
+        expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+      });
     });
 
     it('handles controlled mode with value prop provided', () => {
@@ -726,7 +734,9 @@ describe('SearchBar', () => {
         ref.current?.clear();
       });
 
-      expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+      await waitFor(() => {
+        expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+      });
     });
 
     it('hides clear button when input is empty', () => {
