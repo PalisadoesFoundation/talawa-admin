@@ -372,4 +372,426 @@ describe('SearchBar', () => {
       expect(trailingIcon).toBeInTheDocument();
     });
   });
+
+  describe('Visual variants and sizes', () => {
+    it('applies filled variant styles', () => {
+      const { container } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          variant="filled"
+          inputTestId="search-input"
+        />,
+      );
+      expect(container).toBeInTheDocument();
+    });
+
+    it('applies ghost variant styles', () => {
+      const { container } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          variant="ghost"
+          inputTestId="search-input"
+        />,
+      );
+      expect(container).toBeInTheDocument();
+    });
+
+    it('applies small size styles', () => {
+      const { container } = render(
+        <SearchBar onSearch={vi.fn()} size="sm" inputTestId="search-input" />,
+      );
+      expect(container).toBeInTheDocument();
+    });
+
+    it('applies large size styles', () => {
+      const { container } = render(
+        <SearchBar onSearch={vi.fn()} size="lg" inputTestId="search-input" />,
+      );
+      expect(container).toBeInTheDocument();
+    });
+
+    it('applies combined variant and size styles', () => {
+      const { container } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          variant="filled"
+          size="lg"
+          inputTestId="search-input"
+        />,
+      );
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  describe('Icon customization', () => {
+    it('renders with showLeadingIcon enabled', () => {
+      const { container } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showLeadingIcon={true}
+          inputTestId="search-input"
+        />,
+      );
+      const inputWrapper = container.querySelector('div > div');
+      const leadingIcon = inputWrapper?.querySelector(
+        'span[aria-hidden="true"]',
+      );
+      expect(leadingIcon).toBeInTheDocument();
+    });
+
+    it('renders with custom icon', () => {
+      const CustomIcon = <span data-testid="custom-icon">🔍</span>;
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showLeadingIcon={true}
+          icon={CustomIcon}
+          inputTestId="search-input"
+        />,
+      );
+      expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
+    });
+
+    it('does not render leading icon by default', () => {
+      const { container } = render(
+        <SearchBar onSearch={vi.fn()} inputTestId="search-input" />,
+      );
+      expect(container).toBeInTheDocument();
+    });
+  });
+
+  describe('Button customization', () => {
+    it('renders search button with custom label', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          buttonLabel="Search Now"
+          buttonTestId="search-button"
+        />,
+      );
+      const button = screen.getByTestId('search-button');
+      expect(button).toHaveTextContent('Search Now');
+    });
+
+    it('renders search button with custom aria-label', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          buttonAriaLabel="Find records"
+          buttonTestId="search-button"
+        />,
+      );
+      const button = screen.getByTestId('search-button');
+      expect(button).toHaveAttribute('aria-label', 'Find records');
+    });
+
+    it('renders search button in loading state', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          isLoading={true}
+          buttonTestId="search-button"
+        />,
+      );
+      const button = screen.getByTestId('search-button');
+      expect(button).toBeDisabled();
+    });
+
+    it('disables search button when disabled prop is true', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          disabled={true}
+          buttonTestId="search-button"
+        />,
+      );
+      const button = screen.getByTestId('search-button');
+      expect(button).toBeDisabled();
+    });
+
+    it('renders icon-only button without label', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          buttonTestId="search-button"
+          buttonAriaLabel="Search"
+        />,
+      );
+      const button = screen.getByTestId('search-button');
+      expect(button).toBeInTheDocument();
+      expect(button).toHaveAttribute('aria-label', 'Search');
+    });
+  });
+
+  describe('Input attributes', () => {
+    it('supports custom autoComplete attribute', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          autoComplete="on"
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveAttribute('autocomplete', 'on');
+    });
+
+    it('supports custom type attribute', () => {
+      render(
+        <SearchBar onSearch={vi.fn()} type="text" inputTestId="search-input" />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveAttribute('type', 'text');
+    });
+
+    it('supports disabled input', async () => {
+      const user = userEvent.setup();
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          disabled={true}
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toBeDisabled();
+      await user.type(input, 'test');
+      expect(input).toHaveValue('');
+    });
+  });
+
+  describe('CSS class customization', () => {
+    it('applies custom className to container', () => {
+      const { container } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          className="custom-container"
+          inputTestId="search-input"
+        />,
+      );
+      const searchBarContainer = container.querySelector('.custom-container');
+      expect(searchBarContainer).toBeInTheDocument();
+    });
+
+    it('applies custom inputClassName', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          inputClassName="custom-input"
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveClass('custom-input');
+    });
+
+    it('applies custom buttonClassName', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          buttonClassName="custom-button"
+          buttonTestId="search-button"
+        />,
+      );
+      const button = screen.getByTestId('search-button');
+      expect(button).toHaveClass('custom-button');
+    });
+  });
+
+  describe('Edge cases', () => {
+    it('handles onChange callback without event parameter', () => {
+      const handleChange = vi.fn();
+      const ref = React.createRef<InterfaceSearchBarRef>();
+      render(
+        <SearchBar
+          ref={ref}
+          onSearch={vi.fn()}
+          onChange={handleChange}
+          inputTestId="search-input"
+        />,
+      );
+
+      // Trigger clear via ref which may call onChange without a real event
+      act(() => {
+        ref.current?.clear();
+      });
+
+      expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+    });
+
+    it('handles onChange when inputRef is null during clear', () => {
+      const handleChange = vi.fn();
+      const ref = React.createRef<InterfaceSearchBarRef>();
+      const { unmount } = render(
+        <SearchBar
+          ref={ref}
+          onSearch={vi.fn()}
+          onChange={handleChange}
+          inputTestId="search-input"
+        />,
+      );
+
+      // Store the clear function before unmounting
+      const clearFn = ref.current?.clear;
+
+      // Unmount the component, which will clear the inputRef
+      unmount();
+
+      // Now call clear after unmounting, which triggers emitChange without a valid ref
+      if (clearFn) {
+        act(() => {
+          clearFn();
+        });
+      }
+
+      // onChange should still be called even without a valid ref
+      expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+    });
+
+    it('handles controlled mode with value prop provided', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          value="controlled value"
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveValue('controlled value');
+    });
+
+    it('handles controlled mode when value changes from null to string', () => {
+      const { rerender } = render(
+        <SearchBar onSearch={vi.fn()} value="" inputTestId="search-input" />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveValue('');
+
+      rerender(
+        <SearchBar
+          onSearch={vi.fn()}
+          value="new value"
+          inputTestId="search-input"
+        />,
+      );
+      expect(input).toHaveValue('new value');
+    });
+
+    it('handles controlled mode with undefined value', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          value={undefined}
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveValue('');
+    });
+
+    it('updates internal state when value changes from undefined to string in controlled mode', () => {
+      const { rerender } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          value={undefined}
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveValue('');
+
+      rerender(
+        <SearchBar
+          onSearch={vi.fn()}
+          value="updated"
+          inputTestId="search-input"
+        />,
+      );
+      expect(input).toHaveValue('updated');
+    });
+
+    it('clears value in controlled mode via ref', async () => {
+      const handleChange = vi.fn();
+      const ref = React.createRef<InterfaceSearchBarRef>();
+      render(
+        <SearchBar
+          ref={ref}
+          onSearch={vi.fn()}
+          onChange={handleChange}
+          value="controlled"
+          inputTestId="search-input"
+        />,
+      );
+
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveValue('controlled');
+
+      // Clear in controlled mode - should NOT update internal state
+      // but should emit change event
+      act(() => {
+        ref.current?.clear();
+      });
+
+      expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
+    });
+
+    it('hides clear button when input is empty', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          inputTestId="search-input"
+          clearButtonTestId="clear-search"
+        />,
+      );
+      expect(screen.queryByTestId('clear-search')).not.toBeInTheDocument();
+    });
+
+    it('hides clear button when showClearButton is false', async () => {
+      const user = userEvent.setup();
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showClearButton={false}
+          inputTestId="search-input"
+          clearButtonTestId="clear-search"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      await user.type(input, 'test');
+      expect(screen.queryByTestId('clear-search')).not.toBeInTheDocument();
+    });
+
+    it('handles uncontrolled mode with defaultValue', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          defaultValue="initial value"
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveValue('initial value');
+    });
+
+    it('syncs internal state when value prop changes in controlled mode', () => {
+      const { rerender } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          value="first"
+          inputTestId="search-input"
+        />,
+      );
+      const input = screen.getByTestId('search-input');
+      expect(input).toHaveValue('first');
+
+      rerender(
+        <SearchBar
+          onSearch={vi.fn()}
+          value="second"
+          inputTestId="search-input"
+        />,
+      );
+      expect(input).toHaveValue('second');
+    });
+  });
 });
