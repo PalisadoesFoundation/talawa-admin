@@ -3,5 +3,5 @@ import throttle from 'lodash/throttle';
 
 export { debounce, throttle };
 
-export const debounceInput = (fn: (...a: unknown[]) => void, wait = 300) =>
+export const debounceInput: typeof debounce = (fn, wait = 300) =>
   debounce(fn, wait, { leading: false, trailing: true });
