@@ -144,6 +144,12 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   );
 
   useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
+
+  useEffect(() => {
     if (eventData && eventData.event) {
       const items = eventData.event.actionItems.edges.map(
         (edge: { node: IActionItemInfo }) => edge.node,
