@@ -7,7 +7,7 @@
  */
 
 // SKIP_LOCALSTORAGE_CHECK
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
@@ -800,10 +800,14 @@ const CREATOR_NULL_MOCKS = [
 ];
 
 describe('Testing Events Screen [User Portal]', () => {
+  let originalMatchMedia: typeof window.matchMedia;
+
   beforeEach(() => {
     // Set system time without faking timers to keep Apollo promises working
     vi.setSystemTime(new Date(TEST_DATE));
 
+    // Save original matchMedia before overriding
+    originalMatchMedia = window.matchMedia;
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query) => ({
@@ -821,9 +825,15 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   afterEach(() => {
+    cleanup();
     localStorage.clear();
     vi.restoreAllMocks();
     vi.useRealTimers();
+    // Restore original matchMedia
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
   });
 
   it('Should render the Events screen properly', async () => {
@@ -1443,7 +1453,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(
       () => {
-        screen.getByTestId('eventStartAt');
+        expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
       },
       { timeout: 3000 },
     );
@@ -1458,7 +1468,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1490,7 +1500,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1841,14 +1851,14 @@ describe('Testing Events Screen [User Portal]', () => {
         // Creator fallback should be used when creator is null
         expect(parsed[0].creator).toEqual({ id: '', name: '' });
       },
-      { timeout: 5000 },
+      { timeout: 3000 },
     );
   });
 
   it('Should create an event with recurrence rule successfully', async () => {
     const today = new Date();
     const weekDayByJs = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-    const dayOfWeek = today.getDay();
+    const dayOfWeek = today.getUTCDay();
 
     // Use variableMatcher for flexible date and recurrence matching
     const createEventWithRecurrenceMock = {
