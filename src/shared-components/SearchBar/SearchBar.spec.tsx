@@ -662,7 +662,7 @@ describe('SearchBar', () => {
       expect(input).toHaveValue('controlled value');
     });
 
-    it('handles controlled mode when value changes from null to string', () => {
+    it('handles controlled mode when value changes from null to string', async () => {
       const { rerender } = render(
         <SearchBar onSearch={vi.fn()} value="" inputTestId="search-input" />,
       );
@@ -676,7 +676,9 @@ describe('SearchBar', () => {
           inputTestId="search-input"
         />,
       );
-      expect(input).toHaveValue('new value');
+      await waitFor(() => {
+        expect(input).toHaveValue('new value');
+      });
     });
 
     it('handles controlled mode with undefined value', () => {
@@ -691,7 +693,7 @@ describe('SearchBar', () => {
       expect(input).toHaveValue('');
     });
 
-    it('updates internal state when value changes from undefined to string in controlled mode', () => {
+    it('updates internal state when value changes from undefined to string in controlled mode', async () => {
       const { rerender } = render(
         <SearchBar
           onSearch={vi.fn()}
@@ -709,7 +711,9 @@ describe('SearchBar', () => {
           inputTestId="search-input"
         />,
       );
-      expect(input).toHaveValue('updated');
+      await waitFor(() => {
+        expect(input).toHaveValue('updated');
+      });
     });
 
     it('clears value in controlled mode via ref', async () => {
