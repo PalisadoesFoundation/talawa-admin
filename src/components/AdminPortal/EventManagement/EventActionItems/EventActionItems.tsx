@@ -43,7 +43,8 @@ import {
   type TokenAwareGridColDef,
   convertTokenColumns,
 } from 'shared-components/DataGridWrapper';
-import { debounce, Stack } from '@mui/material';
+import { debounce } from 'utils/performance';
+import { Stack } from '@mui/material';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
