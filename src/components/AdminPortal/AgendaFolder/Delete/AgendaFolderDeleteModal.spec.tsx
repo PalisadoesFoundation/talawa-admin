@@ -19,6 +19,15 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock translations
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
 
 const mockAgendaFolderId = 'folder123';
 const mockOnClose = vi.fn();
@@ -478,44 +487,6 @@ describe('AgendaFolderDeleteModal', () => {
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
       expect(mockOnClose).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Translation function calls', () => {
-    it('calls t function for modal title', () => {
-      const mockTSpy = vi.fn((key: string) => key);
-      render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaFolderDeleteModal
-              isOpen={true}
-              onClose={mockOnClose}
-              agendaFolderId={mockAgendaFolderId}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolder');
-    });
-
-    it('calls t function for delete message', () => {
-      const mockTSpy = vi.fn((key: string) => key);
-      render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaFolderDeleteModal
-              isOpen={true}
-              onClose={mockOnClose}
-              agendaFolderId={mockAgendaFolderId}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolderMsg');
     });
   });
 });

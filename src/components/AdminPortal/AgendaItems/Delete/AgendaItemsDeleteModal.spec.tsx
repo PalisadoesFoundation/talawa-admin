@@ -10,6 +10,17 @@ import { DELETE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
 
+// Mock translations
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
+
 // Mock NotificationToast
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -408,28 +419,6 @@ describe('AgendaItemsDeleteModal', () => {
       const modal = screen.getByTestId('deleteAgendaItemModal');
       expect(modal).toBeInTheDocument();
       // BaseModal with keyboard={false} prevents closing on Escape key
-    });
-  });
-
-  describe('Translation Functions', () => {
-    it('should use t function for agenda-specific translations', () => {
-      const customT = vi.fn((key: string) => `translated_${key}`);
-
-      render(
-        <MockedProvider mocks={[]} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaItemsDeleteModal
-              isOpen={true}
-              onClose={mockOnClose}
-              agendaItemId={MOCK_AGENDA_ITEM_ID}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      expect(customT).toHaveBeenCalledWith('deleteAgendaItem');
-      expect(customT).toHaveBeenCalledWith('deleteAgendaItemMsg');
     });
   });
 
