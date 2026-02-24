@@ -18,7 +18,7 @@ import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
-import { OrganizationMembershipRole } from 'screens/AdminPortal/OrganizationPeople/addMember/types';
+import { OrganizationMembershipRole } from 'screens/AdminPortal/types/organizationMembershipRole';
 
 const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
   const useParams = vi.fn();
@@ -180,11 +180,6 @@ const createMocks = (
           id: '123',
           first: 32,
           after: null,
-          where: {
-            role: {
-              notEqual: OrganizationMembershipRole.ADMIN,
-            },
-          },
         },
       },
       ...(blockedUsersQueryError
@@ -351,11 +346,6 @@ describe('BlockUser Component', () => {
               id: '123',
               first: 32,
               after: null,
-              where: {
-                role: {
-                  notEqual: OrganizationMembershipRole.ADMIN,
-                },
-              },
             },
           },
           result: {
@@ -595,7 +585,7 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'John');
 
-      // Wait for debounced search to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
         expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
@@ -624,7 +614,7 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'jane@example.com');
 
-      // Wait for debounced search to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
       await waitFor(() => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
         expect(screen.getByText('Jane Smith')).toBeInTheDocument();
@@ -661,7 +651,7 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'Bob');
 
-      // Wait for debounced search to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
       await waitFor(() => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
@@ -697,7 +687,7 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'bob@example.com');
 
-      // Wait for debounced search to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
       await waitFor(() => {
         expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
@@ -725,7 +715,7 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'nonexistent');
 
-      // Wait for debounced search to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
       await waitFor(() => {
         expect(
           screen.getByText('No results found for nonexistent'),
@@ -763,7 +753,7 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'nonexistent');
 
-      // Wait for debounced search to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
       await waitFor(() => {
         expect(
           screen.getByText('No results found for nonexistent'),
@@ -795,7 +785,7 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'John');
 
-      // Wait for debounced search to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
         expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
@@ -803,7 +793,7 @@ describe('BlockUser Component', () => {
 
       await user.clear(searchInput);
 
-      // Wait for debounced clear to complete
+      // Wait for SearchFilterBar's debounced `onSearchChange` to propagate clearing `searchTerm`
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
         expect(screen.getByText('Jane Smith')).toBeInTheDocument();

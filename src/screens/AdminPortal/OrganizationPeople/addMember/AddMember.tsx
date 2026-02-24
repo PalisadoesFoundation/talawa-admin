@@ -49,6 +49,7 @@ import type { IEdge, IUserDetails, IQueryVariable } from './types';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
+import { OrganizationMembershipRole } from 'screens/AdminPortal/types/organizationMembershipRole';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
@@ -142,10 +143,6 @@ function AddMember({
     password: '',
     confirmPassword: '',
   });
-  enum OrganizationMembershipRole {
-    ADMIN = 'administrator',
-    REGULAR = 'regular',
-  }
   const handleCreateUser = async (): Promise<void> => {
     if (
       !(

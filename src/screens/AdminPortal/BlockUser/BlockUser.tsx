@@ -67,7 +67,7 @@ import { DataTable } from 'shared-components/DataTable/DataTable';
 import Button from 'shared-components/Button';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import ErrorPanel from 'shared-components/ErrorPanel';
-import { OrganizationMembershipRole } from 'screens/AdminPortal/OrganizationPeople/addMember/types';
+import { OrganizationMembershipRole } from 'screens/AdminPortal/types/organizationMembershipRole';
 
 type BlockUserRow = {
   user: InterfaceUserPg;
@@ -106,11 +106,6 @@ const BlockUser = (): JSX.Element => {
         id: currentUrl,
         first: 32,
         after: null,
-        where: {
-          role: {
-            notEqual: OrganizationMembershipRole.ADMIN,
-          },
-        },
       },
       notifyOnNetworkStatusChange: true,
     },
@@ -217,7 +212,7 @@ const BlockUser = (): JSX.Element => {
         errorHandler(t, error);
       }
     },
-    [blockUser, currentUrl, t],
+    [blockUser, currentUrl, t, refetchMembers, refetchBlockedUsers],
   );
 
   // Handle unblock user
@@ -236,7 +231,7 @@ const BlockUser = (): JSX.Element => {
         errorHandler(t, error);
       }
     },
-    [unBlockUser, currentUrl, t],
+    [unBlockUser, currentUrl, t, refetchMembers, refetchBlockedUsers],
   );
 
   // Handle search
