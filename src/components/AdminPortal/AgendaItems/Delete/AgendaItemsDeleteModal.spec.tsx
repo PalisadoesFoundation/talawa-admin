@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -9,17 +9,6 @@ import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
 import { DELETE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
-
-// Mock translations
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string) => key,
-    }),
-  };
-});
 
 // Mock NotificationToast
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
@@ -88,11 +77,12 @@ const renderModal = (
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
   });
 
   describe('Rendering', () => {
@@ -100,8 +90,10 @@ describe('AgendaItemsDeleteModal', () => {
       renderModal();
 
       expect(screen.getByTestId('deleteAgendaItemModal')).toBeInTheDocument();
-      expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
-      expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
+      expect(screen.getByText('Delete Agenda Item')).toBeInTheDocument();
+      expect(
+        screen.getByText('Do you want to remove this agenda item?'),
+      ).toBeInTheDocument();
     });
 
     it('should not render the modal when isOpen is false', () => {
@@ -115,13 +107,15 @@ describe('AgendaItemsDeleteModal', () => {
     it('should render modal with correct title', () => {
       renderModal();
 
-      expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
+      expect(screen.getByText('Delete Agenda Item')).toBeInTheDocument();
     });
 
     it('should render delete confirmation message', () => {
       renderModal();
 
-      expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
+      expect(
+        screen.getByText('Do you want to remove this agenda item?'),
+      ).toBeInTheDocument();
     });
 
     it('should render "Cancel" button', () => {
@@ -162,7 +156,9 @@ describe('AgendaItemsDeleteModal', () => {
       const cancelButton = screen.getByTestId('modal-cancel-btn');
       await userEvent.click(cancelButton);
 
-      expect(mockOnClose).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(mockOnClose).toHaveBeenCalledTimes(1);
+      });
     });
 
     it('should call deleteAgendaItemHandler when "Delete" button is clicked', async () => {
@@ -174,7 +170,7 @@ describe('AgendaItemsDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.success).toHaveBeenCalledWith(
-            'agendaItemDeleted',
+            'Agenda Item deleted successfully',
           );
         },
         { timeout: 5000 },
@@ -192,7 +188,7 @@ describe('AgendaItemsDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.success).toHaveBeenCalledWith(
-            'agendaItemDeleted',
+            'Agenda Item deleted successfully',
           );
         },
         { timeout: 5000 },
@@ -208,12 +204,9 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(mockRefetchAgendaFolder).toHaveBeenCalledTimes(1);
+      });
     });
 
     it('should close modal after successful deletion', async () => {
@@ -222,12 +215,9 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(mockOnClose).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(mockOnClose).toHaveBeenCalledTimes(1);
+      });
     });
 
     it('should display success notification after successful deletion', async () => {
@@ -236,14 +226,11 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalledWith(
-            'agendaItemDeleted',
-          );
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Agenda Item deleted successfully',
+        );
+      });
     });
   });
 
@@ -288,15 +275,12 @@ describe('AgendaItemsDeleteModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.error).not.toHaveBeenCalled();
-          expect(NotificationToast.success).not.toHaveBeenCalled();
-          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
-          expect(mockOnClose).not.toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.error).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+        expect(mockOnClose).not.toHaveBeenCalled();
+      });
     });
   });
 
@@ -307,14 +291,11 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.error).toHaveBeenCalledWith(
-            'Failed to delete agenda item',
-          );
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Failed to delete agenda item',
+        );
+      });
     });
 
     it('should not call onClose when deletion fails', async () => {
@@ -323,12 +304,9 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.error).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
 
       expect(mockOnClose).not.toHaveBeenCalled();
     });
@@ -339,12 +317,9 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.error).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
@@ -355,14 +330,11 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.error).toHaveBeenCalledWith(
-            'Failed to delete agenda item',
-          );
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Failed to delete agenda item',
+        );
+      });
     });
 
     it('should handle non-Error instance in catch block', async () => {
@@ -386,39 +358,24 @@ describe('AgendaItemsDeleteModal', () => {
       await userEvent.click(deleteButton);
 
       // Non-Error instances won't trigger NotificationToast.error
-      await waitFor(
-        () => {
-          expect(mockOnClose).not.toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(mockOnClose).not.toHaveBeenCalled();
+      });
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
   });
 
   describe('Modal Props', () => {
-    it('should pass correct size prop to BaseModal', () => {
+    it('applies correct accessibility attributes and classes', () => {
       renderModal();
 
       const modal = screen.getByTestId('deleteAgendaItemModal');
       expect(modal).toBeInTheDocument();
-    });
+      expect(modal).toHaveClass('modal-dialog-centered');
 
-    it('should set backdrop to static', () => {
-      renderModal();
-
-      const modal = screen.getByTestId('deleteAgendaItemModal');
-      expect(modal).toBeInTheDocument();
-      // BaseModal with backdrop="static" prevents closing on backdrop click
-    });
-
-    it('should set keyboard to false', () => {
-      renderModal();
-
-      const modal = screen.getByTestId('deleteAgendaItemModal');
-      expect(modal).toBeInTheDocument();
-      // BaseModal with keyboard={false} prevents closing on Escape key
+      const modalContainer = modal.parentElement;
+      expect(modalContainer).toHaveAttribute('aria-modal', 'true');
     });
   });
 
@@ -451,14 +408,11 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalledWith(
-            'agendaItemDeleted',
-          );
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Agenda Item deleted successfully',
+        );
+      });
     });
   });
 
@@ -473,12 +427,9 @@ describe('AgendaItemsDeleteModal', () => {
       await userEvent.click(deleteButton);
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
 
       // Should still only close once
       expect(mockOnClose).toHaveBeenCalled();
@@ -557,10 +508,32 @@ describe('AgendaItemsDeleteModal', () => {
       const callOrder: string[] = [];
 
       const trackedOnClose = vi.fn(() => callOrder.push('onClose'));
-      const trackedRefetch = vi.fn(() => callOrder.push('refetch'));
+      const trackedRefetch = vi.fn(() => callOrder.push('refetchAgendaFolder'));
+
+      const MOCKS_SUCCESS_TRACKED: MockedResponse[] = [
+        {
+          request: {
+            query: DELETE_AGENDA_ITEM_MUTATION,
+            variables: {
+              input: {
+                id: MOCK_AGENDA_ITEM_ID,
+              },
+            },
+          },
+          result: {
+            data: {
+              deleteAgendaItem: {
+                id: MOCK_AGENDA_ITEM_ID,
+              },
+            },
+          },
+          // Add a delay to ensure async operations are tracked
+          delay: 10,
+        },
+      ];
 
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS_TRACKED} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={true}
@@ -575,23 +548,13 @@ describe('AgendaItemsDeleteModal', () => {
       const deleteButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(deleteButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
-
-      await waitFor(
-        () => {
-          expect(trackedRefetch).toHaveBeenCalled();
-          expect(trackedOnClose).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      // Wait for the mutation to complete and side effects to trigger
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
 
       // Verify order: refetch should be called before onClose
-      expect(callOrder).toEqual(['refetch', 'onClose']);
+      expect(callOrder).toEqual(['refetchAgendaFolder', 'onClose']);
     });
   });
 

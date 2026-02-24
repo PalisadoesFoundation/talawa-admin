@@ -99,7 +99,6 @@ describe('AgendaFolderDeleteModal', () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
-    vi.clearAllMocks();
   });
 
   describe('Rendering', () => {
@@ -164,7 +163,9 @@ describe('AgendaFolderDeleteModal', () => {
       const noButton = screen.getByTestId('modal-cancel-btn');
       await userEvent.click(noButton);
 
-      expect(mockOnClose).toHaveBeenCalledTimes(1);
+      await waitFor(() => {
+        expect(mockOnClose).toHaveBeenCalledTimes(1);
+      });
     });
 
     it('does not call refetchAgendaFolder when No button is clicked', async () => {
@@ -173,7 +174,9 @@ describe('AgendaFolderDeleteModal', () => {
       const noButton = screen.getByTestId('modal-cancel-btn');
       await userEvent.click(noButton);
 
-      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+      });
     });
 
     it('does not show success notification when No button is clicked', async () => {
@@ -182,27 +185,13 @@ describe('AgendaFolderDeleteModal', () => {
       const noButton = screen.getByTestId('modal-cancel-btn');
       await userEvent.click(noButton);
 
-      expect(NotificationToast.success).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      });
     });
   });
 
   describe('Delete functionality - Success', () => {
-    it('calls deleteAgendaFolder mutation when Yes button is clicked', async () => {
-      renderAgendaFolderDeleteModal();
-
-      const yesButton = screen.getByTestId('modal-delete-btn');
-      await userEvent.click(yesButton);
-
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalledWith(
-            'agendaFolderDeleted',
-          );
-        },
-        { timeout: 5000 },
-      );
-    });
-
     it('shows success notification after successful deletion', async () => {
       renderAgendaFolderDeleteModal();
 
@@ -255,10 +244,9 @@ describe('AgendaFolderDeleteModal', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
+        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+        expect(mockOnClose).toHaveBeenCalled();
       });
-
-      expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      expect(mockOnClose).toHaveBeenCalled();
     });
 
     it('does not show error notification on successful deletion', async () => {
@@ -375,25 +363,15 @@ describe('AgendaFolderDeleteModal', () => {
   });
 
   describe('Modal properties', () => {
-    it('renders modal when open', () => {
+    it('applies correct accessibility attributes and classes', () => {
       renderAgendaFolderDeleteModal();
 
       const modal = screen.getByTestId('deleteAgendaFolderModal');
       expect(modal).toBeInTheDocument();
-    });
+      expect(modal).toHaveClass('modal-dialog-centered');
 
-    it('prevents closing modal with backdrop click (static backdrop)', () => {
-      renderAgendaFolderDeleteModal();
-
-      const modal = screen.getByTestId('deleteAgendaFolderModal');
-      expect(modal).toBeInTheDocument();
-    });
-
-    it('prevents closing modal with keyboard (keyboard disabled)', () => {
-      renderAgendaFolderDeleteModal();
-
-      const modal = screen.getByTestId('deleteAgendaFolderModal');
-      expect(modal).toBeInTheDocument();
+      const modalContainer = modal.parentElement;
+      expect(modalContainer).toHaveAttribute('aria-modal', 'true');
     });
   });
 
@@ -410,13 +388,11 @@ describe('AgendaFolderDeleteModal', () => {
       await waitFor(
         () => {
           expect(NotificationToast.success).toHaveBeenCalled();
+          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+          expect(mockOnClose).toHaveBeenCalled();
         },
         { timeout: 5000 },
       );
-
-      // Should only process once due to modal closing
-      expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      expect(mockOnClose).toHaveBeenCalled();
     });
 
     it('handles empty agendaFolderId gracefully', async () => {
