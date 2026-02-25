@@ -9,10 +9,10 @@
  * @param tag - The tag data to be displayed.
  * @param checkedTags - A set of tag IDs that are currently selected.
  * @param toggleTagSelection - Callback function to toggle the selection state of a tag.
- * @param t - Translation function for i18n.
  *
  * @remarks
  * - The component uses the `@apollo/client` `useQuery` hook to fetch subtags.
+ * - Translations are sourced locally via `useTranslation` (keyPrefix: 'manageTag').
  * - Infinite scrolling is implemented using the `react-infinite-scroll-component` library.
  * - Displays a loader while fetching subtags and handles errors gracefully.
  *
@@ -22,7 +22,6 @@
  *   tag={tagData}
  *   checkedTags={selectedTags}
  *   toggleTagSelection={handleToggleTag}
- *   t={t}
  * />
  * ```
  *
@@ -32,6 +31,7 @@
 import { useQuery } from '@apollo/client';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type {
   InterfaceQueryUserTagChildTags,
   InterfaceTagData,
@@ -43,13 +43,12 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
 import componentStyle from '../TagAction.module.css';
+
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
   toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
 }
-
-import { useTranslation } from 'react-i18next';
 
 /**
  * Renders the Tags which can be expanded to list subtags.

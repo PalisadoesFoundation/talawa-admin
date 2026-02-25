@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:53](https://github.com/Palis
 
 > `optional` **data**: `object`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L54)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L55)
 
 #### getUsersToAssignTo
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/Palis
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L57)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L58)
 
 #### Parameters
 

@@ -189,6 +189,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       return;
     }
 
+    if (!currentTagId) {
+      NotificationToast.error(t('noTagSelected'));
+      return;
+    }
+
     const mutationObject = {
       variables: {
         currentTagId,

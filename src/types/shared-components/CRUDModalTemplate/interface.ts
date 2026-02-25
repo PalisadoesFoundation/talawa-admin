@@ -89,7 +89,8 @@ export interface InterfaceCrudModalBaseProps {
  *
  * This is the foundation component that all specialized modal templates build upon.
  */
-export interface InterfaceCRUDModalTemplateProps extends InterfaceCrudModalBaseProps {
+export interface InterfaceCRUDModalTemplateProps
+  extends InterfaceCrudModalBaseProps {
   /**
    * Content to render inside the modal body
    */
