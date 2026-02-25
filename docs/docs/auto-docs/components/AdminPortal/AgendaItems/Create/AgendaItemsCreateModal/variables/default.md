@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaItemsCreateModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaItemsCreateModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal.tsx#L49)
+Defined in: [src/components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal.tsx#L50)
 
 AgendaItemsCreateModal
 
