@@ -1429,9 +1429,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await waitFor(() => {
       expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
       expect(screen.getByLabelText('End Time')).toBeInTheDocument();
-    }, {
-      timeout: 3000,
-    });
+    }, { timeout: 3000 });
   });
 
   it('Should handle null date values gracefully', async () => {
