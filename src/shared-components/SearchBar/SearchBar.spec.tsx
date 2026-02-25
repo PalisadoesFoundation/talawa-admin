@@ -323,6 +323,9 @@ describe('SearchBar', () => {
 
     const input = screen.getByTestId('search-input');
     await user.type(input, 'test{enter}');
+
+    // Verify component doesn't crash and maintains input value
+    expect(input).toHaveValue('test');
   });
 
   describe('showTrailingIcon feature', () => {
