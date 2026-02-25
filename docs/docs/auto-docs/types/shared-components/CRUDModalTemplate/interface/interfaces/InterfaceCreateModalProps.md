@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateModalProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L142)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L141)
 
 Props for CreateModal template
 
@@ -34,7 +34,7 @@ Whether to center the modal vertically on the page
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L146)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L145)
 
 Form content to render inside the modal body
 
@@ -121,7 +121,7 @@ Triggered by close button, backdrop click, or Escape key
 
 > **onSubmit**: (`event`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L152)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L151)
 
 Callback function invoked when the form is submitted
 Should handle the creation logic and return a Promise
@@ -198,7 +198,7 @@ Modal size variant
 
 > `optional` **submitDisabled**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L159)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L158)
 
 Whether the submit button should be disabled
 Useful for form validation

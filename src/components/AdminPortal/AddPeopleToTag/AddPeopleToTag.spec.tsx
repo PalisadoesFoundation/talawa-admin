@@ -444,8 +444,8 @@ describe('Organisation Tags Page', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText('firstName')).toHaveValue('');
-      expect(screen.getByPlaceholderText('lastName')).toHaveValue('');
+      expect(screen.getByTestId('searchByFirstName')).toHaveValue('');
+      expect(screen.getByTestId('searchByLastName')).toHaveValue('');
     });
   });
 

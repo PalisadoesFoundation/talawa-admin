@@ -7,8 +7,6 @@
  *   - tagActionsModalIsOpen: Determines if the modal is open
  *   - hideTagActionsModal: Function to close the modal
  *   - tagActionType: The type of action to perform ('assignToTags' or 'removeFromTags')
- *   - t: Translation function for managing tags
- *   - tCommon: Common translation function
  *
  * @returns A React functional component.
  *
@@ -24,8 +22,6 @@
  *   tagActionsModalIsOpen={true}
  *   hideTagActionsModal={() => setModalOpen(false)}
  *   tagActionType="assignToTags"
- *   t={t}
- *   tCommon={tCommon}
  * />
  * ```
  *
@@ -48,11 +44,11 @@ import {
 import type { TagActionType } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import TagNode from './Node/TagNode';
-import type { TFunction } from 'i18next';
 import componentStyles from './TagAction.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -63,48 +59,31 @@ export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
   hideTagActionsModal: () => void;
   tagActionType: TagActionType;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
 }
 
 const TagActions: React.FC<InterfaceTagActionsProps> = ({
   tagActionsModalIsOpen,
   hideTagActionsModal,
   tagActionType,
-  t,
-  tCommon,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
+  const { t: tCommon } = useTranslation('common');
+
   const { orgId, tagId: currentTagId } = useParams();
 
   const [tagSearchName, setTagSearchName] = useState('');
-
-  // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
-
-  // tags that we have checked, it is there to differentiate between the selected tags and all the checked tags
-  // i.e. selected tags would only be the ones we select, but checked tags will also include the selected tag's ancestors
   const [checkedTags, setCheckedTags] = useState<Set<string>>(new Set());
-
-  // next 3 states are there to keep track of the ancestor tags of the the tags that we have selected
-  // i.e. when we check a tag, all of it's ancestor tags will be checked too
-  // indicating that the users will be assigned all of the ancestor tags as well
   const [addAncestorTagsData, setAddAncestorTagsData] = useState<
     Set<InterfaceUserTagsAncestorData>
   >(new Set());
   const [removeAncestorTagsData, setRemoveAncestorTagsData] = useState<
     Set<InterfaceUserTagsAncestorData>
   >(new Set());
-  /**
-   * Tracks reference counts for ancestor tags to maintain hierarchical consistency.
-   * Updated by two useEffect hooks (one for additions, one for removals) to manage
-   * the count of selected tags that share each ancestor. When count reaches zero,
-   * the ancestor is removed from checkedTags. Never read directly in render.
-   */
   const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState<
     Map<string, number>
   >(new Map());
 
-  // Dummy use to satisfy linter (ancestorTagsDataMap is only written, never read directly)
   void ancestorTagsDataMap;
 
   useEffect(() => {
@@ -135,14 +114,12 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   }, [addAncestorTagsData]);
 
   useEffect(() => {
-    // Compute what needs to be deleted first (pure computation)
     setAncestorTagsDataMap((prevMap) => {
       const newMap = new Map(prevMap);
       const tagsToDelete: string[] = [];
 
       removeAncestorTagsData.forEach((ancestorTag) => {
         const prevValue = prevMap.get(ancestorTag._id);
-        // Defensively check prevValue - if null/undefined, treat as 0 (deletion)
         if (prevValue === undefined || prevValue === null) {
           newMap.delete(ancestorTag._id);
           tagsToDelete.push(ancestorTag._id);
@@ -168,12 +145,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const selectTag = (tag: InterfaceTagData): void => {
     const newCheckedTags = new Set(checkedTags);
-
     setSelectedTags((selectedTags) => [...selectedTags, tag]);
     newCheckedTags.add(tag._id);
-
     setAddAncestorTagsData(new Set(tag.ancestorTags));
-
     setCheckedTags(newCheckedTags);
   };
 
@@ -183,14 +157,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     }
 
     const newCheckedTags = new Set(checkedTags);
-
     setSelectedTags(
       selectedTags.filter((selectedTag) => selectedTag._id !== tag._id),
     );
     newCheckedTags.delete(tag._id);
-
     setRemoveAncestorTagsData(new Set(tag.ancestorTags));
-
     setCheckedTags(newCheckedTags);
   };
 
@@ -349,11 +320,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                           tag={tag}
                           checkedTags={checkedTags}
                           toggleTagSelection={toggleTagSelection}
-                          t={t}
                         />
                       </div>
 
-                      {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
                       {tag.parentTag && (
                         <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
                           <>{'('}</>

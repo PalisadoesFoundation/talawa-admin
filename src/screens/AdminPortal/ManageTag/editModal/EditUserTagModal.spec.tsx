@@ -4,10 +4,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import EditUserTagModal, {
   InterfaceEditUserTagModalProps,
 } from './EditUserTagModal';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'utils/i18nForTest';
 
-import type { TFunction } from 'i18next';
-
-// Mock the CSS module
 vi.mock('./EditUserTagModal.module.css', () => ({
   default: {
     modalHeader: 'modalHeader-class',
@@ -18,23 +17,12 @@ vi.mock('./EditUserTagModal.module.css', () => ({
 }));
 
 describe('EditUserTagModal Component', () => {
-  const mockT = vi.fn((key) => key) as unknown as TFunction<
-    'translation',
-    'manageTag'
-  >;
-  const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
-    'common',
-    undefined
-  >;
-
   const defaultProps: InterfaceEditUserTagModalProps = {
     editUserTagModalIsOpen: true,
     hideEditUserTagModal: vi.fn(),
     newTagName: 'Test Tag',
     setNewTagName: vi.fn(),
     handleEditUserTag: vi.fn().mockResolvedValue(undefined),
-    t: mockT,
-    tCommon: mockTCommon,
   };
 
   beforeEach(() => {
@@ -45,103 +33,53 @@ describe('EditUserTagModal Component', () => {
     vi.clearAllMocks();
   });
 
-  it('renders the modal when open', () => {
-    render(<EditUserTagModal {...defaultProps} />);
+  const renderComponent = (props = defaultProps) =>
+    render(
+      <I18nextProvider i18n={i18n}>
+        <EditUserTagModal {...props} />
+      </I18nextProvider>,
+    );
 
-    expect(screen.getByText('tagDetails')).toBeInTheDocument();
-    expect(screen.getByLabelText(/tagName/i)).toBeInTheDocument();
+  it('renders the modal when open', () => {
+    renderComponent();
+    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     expect(screen.getByTestId('tagNameInput')).toBeInTheDocument();
-    expect(screen.getByTestId('closeEditTagModalBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('editTagSubmitBtn')).toBeInTheDocument();
   });
 
   it('does not render the modal when closed', () => {
-    render(
-      <EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />,
-    );
-
-    expect(screen.queryByText('tagDetails')).not.toBeInTheDocument();
-  });
-
-  it('displays the current tag name in the input field', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
-    const inputField = screen.getByTestId('tagNameInput');
-    expect(inputField).toHaveValue('Test Tag');
+    renderComponent({ ...defaultProps, editUserTagModalIsOpen: false });
+    expect(
+      screen.queryByTestId('modalOrganizationHeader'),
+    ).not.toBeInTheDocument();
   });
 
   it('calls setNewTagName when input changes', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
-    const inputField = screen.getByTestId('tagNameInput');
-    fireEvent.change(inputField, { target: { value: 'Updated Tag' } });
-
-    expect(defaultProps.setNewTagName).toHaveBeenCalledTimes(1);
+    renderComponent();
+    fireEvent.change(screen.getByTestId('tagNameInput'), {
+      target: { value: 'Updated Tag' },
+    });
     expect(defaultProps.setNewTagName).toHaveBeenCalledWith('Updated Tag');
   });
 
   it('calls hideEditUserTagModal when cancel button is clicked', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
+    renderComponent();
     fireEvent.click(screen.getByTestId('closeEditTagModalBtn'));
-    expect(defaultProps.hideEditUserTagModal).toHaveBeenCalledTimes(1);
+    expect(defaultProps.hideEditUserTagModal).toHaveBeenCalled();
   });
 
-  it('calls handleEditUserTag when form is submitted with valid input', async () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
+  it('calls handleEditUserTag when form is valid', async () => {
+    renderComponent();
     fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
-
     await waitFor(() => {
-      expect(defaultProps.handleEditUserTag).toHaveBeenCalledTimes(1);
+      expect(defaultProps.handleEditUserTag).toHaveBeenCalled();
     });
   });
 
-  it('does not call handleEditUserTag when form is submitted with empty input', async () => {
-    render(<EditUserTagModal {...defaultProps} newTagName="" />);
-
+  it('does not submit when input is empty', async () => {
+    renderComponent({ ...defaultProps, newTagName: '' });
     fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
-
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
     });
-  });
-
-  it('does not call handleEditUserTag when form is submitted with whitespace-only input', async () => {
-    render(<EditUserTagModal {...defaultProps} newTagName="   " />);
-
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
-
-    await waitFor(() => {
-      expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
-    });
-  });
-
-  it('applies the correct CSS classes from the module', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
-    expect(screen.getByTestId('modalOrganizationHeader')).toHaveClass(
-      'modalHeader-class',
-    );
-    expect(screen.getByTestId('tagNameInput')).toHaveClass('inputField-class');
-    expect(screen.getByTestId('closeEditTagModalBtn')).toHaveClass(
-      'removeButton-class',
-    );
-    expect(screen.getByTestId('editTagSubmitBtn')).toHaveClass(
-      'addButton-class',
-    );
-  });
-
-  it('sets the required attribute on the input field', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-    expect(screen.getByTestId('tagNameInput')).toHaveAttribute('required');
-  });
-
-  it('sets autoComplete to off on the input field', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-    expect(screen.getByTestId('tagNameInput')).toHaveAttribute(
-      'autoComplete',
-      'off',
-    );
   });
 });

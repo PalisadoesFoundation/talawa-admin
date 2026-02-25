@@ -50,6 +50,7 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import styles from './OrganizationModal.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -72,8 +73,6 @@ export interface InterfaceOrganizationModalProps {
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
   userData: InterfaceCurrentUserTypePG | undefined;
 }
 
@@ -87,9 +86,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   formState,
   setFormState,
   createOrg,
-  t,
-  tCommon,
 }) => {
+  const { t } = useTranslation();
+  const { t: tCommon } = useTranslation('common');
   const { uploadFileToMinio } = useMinioUpload();
 
   return (
@@ -130,7 +129,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           data-testid="modalOrganizationDescription"
           autoComplete="off"
         />
+
         <Form.Label>{tCommon('address')}</Form.Label>
+
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
             <Form.Control
@@ -159,6 +160,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               ))}
             </Form.Control>
           </Col>
+
           <Col sm={6} className="mb-1">
             <FormTextField
               name="state"
@@ -176,6 +178,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
+
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -193,6 +196,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               autoComplete="off"
             />
           </Col>
+
           <Col sm={6} className="mb-1">
             <FormTextField
               name="postalCode"
@@ -209,6 +213,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
+
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -226,6 +231,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               autoComplete="off"
             />
           </Col>
+
           <Col sm={6} className="mb-1">
             <FormTextField
               name="addressLine2"
@@ -242,8 +248,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
-        <Row className="mb-1"></Row>
+
         <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
+
         <Form.Control
           accept="image/*"
           id="orgphoto"
@@ -256,14 +263,12 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             const file = target.files && target.files[0];
 
             if (file) {
-              // Check file size (5MB limit)
               const maxSize = 5 * 1024 * 1024;
               if (file.size > maxSize) {
                 NotificationToast.error(tCommon('fileTooLarge'));
                 return;
               }
 
-              // Check file type
               const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
               if (!allowedTypes.includes(file.type)) {
                 NotificationToast.error(tCommon('invalidFileType'));
@@ -283,6 +288,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           }}
           data-testid="organisationImage"
         />
+
         <Col className={styles.sampleOrgSection}>
           <Button
             className="addButton"

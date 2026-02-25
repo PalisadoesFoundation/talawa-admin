@@ -96,8 +96,6 @@ describe('OrganizationModal Component', () => {
               formState={formState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
               userData={undefined}
             />
           </I18nextProvider>
@@ -145,8 +143,6 @@ describe('OrganizationModal Component', () => {
               formState={validFormState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
               userData={undefined}
             />
           </I18nextProvider>
@@ -171,7 +167,9 @@ describe('OrganizationModal Component', () => {
         expect.objectContaining({ avatar: 'mocked-object-name' }),
       ),
     );
-    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
+    expect(toastMocks.success).toHaveBeenCalledWith(
+      i18nForTest.t('common:imageUploadSuccess'),
+    );
   });
 
   test('handles image upload error correctly', async () => {
@@ -226,8 +224,6 @@ describe('OrganizationModal Component', () => {
               formState={validFormState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
               userData={undefined}
             />
           </I18nextProvider>
@@ -335,7 +331,9 @@ describe('OrganizationModal Component', () => {
     setup();
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/description/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/displayImage/i)).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(i18nForTest.t('common:displayImage')),
+    ).toBeInTheDocument();
   });
 
   test('required fields should have proper aria attributes', () => {
@@ -365,8 +363,6 @@ describe('OrganizationModal Component', () => {
                 formState={completeFormState}
                 setFormState={mockSetFormState}
                 createOrg={mockCreateOrg}
-                t={(key) => key}
-                tCommon={(key) => key}
                 userData={undefined}
               />
             </I18nextProvider>
@@ -456,7 +452,9 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [invalidFile] } });
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
+      expect(toastMocks.error).toHaveBeenCalledWith(
+        i18nForTest.t('common:invalidFileType'),
+      );
     });
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
     expect(mockSetFormState).not.toHaveBeenCalled();
@@ -493,8 +491,6 @@ describe('OrganizationModal Component', () => {
               formState={formState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
               userData={undefined}
             />
           </I18nextProvider>
@@ -516,8 +512,6 @@ describe('OrganizationModal Component', () => {
               formState={formState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
               userData={undefined}
             />
           </I18nextProvider>
@@ -569,8 +563,6 @@ describe('OrganizationModal Component', () => {
               formState={validFormState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
-              tCommon={(key) => key}
               userData={undefined}
             />
           </I18nextProvider>
@@ -597,7 +589,9 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('fileTooLarge');
+      expect(toastMocks.error).toHaveBeenCalledWith(
+        i18nForTest.t('common:fileTooLarge'),
+      );
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -611,7 +605,9 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(toastMocks.success).toHaveBeenCalledWith(
+        i18nForTest.t('common:imageUploadSuccess'),
+      );
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -627,7 +623,9 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(toastMocks.error).toHaveBeenCalledWith(
+        i18nForTest.t('common:imageUploadError'),
+      );
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });

@@ -18,19 +18,17 @@
  * - newTagName: tagName
  * - setNewTagName: setTagName
  * - handleEditUserTag: submitHandler
- * - t: t
- * - tCommon: tCommon
  *
  * @returns The rendered edit user tag modal.
  */
 // translation-check-keyPrefix: manageTag
-import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceEditUserTagModalProps {
   editUserTagModalIsOpen: boolean;
@@ -38,8 +36,6 @@ export interface InterfaceEditUserTagModalProps {
   newTagName: string;
   setNewTagName: (state: React.SetStateAction<string>) => void;
   handleEditUserTag: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
 }
 
 const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
@@ -48,14 +44,14 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   newTagName,
   handleEditUserTag,
   setNewTagName,
-  t,
-  tCommon,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
+  const { t: tCommon } = useTranslation('common');
+
   const formId = 'edit-user-tag-form';
   const [isTouched, setIsTouched] = useState(false);
   const tagNameRef = useRef<HTMLInputElement | null>(null);
 
-  // Reset touched state when modal opens to prevent stale validation errors
   useEffect(() => {
     if (editUserTagModalIsOpen) {
       setIsTouched(false);
@@ -108,7 +104,6 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           setIsTouched(true);
 
           if (isTagNameInvalid) {
-            // Focus the input for screen readers
             tagNameRef.current?.focus();
             return;
           }

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceRecurringEventProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L283)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L282)
 
 Props for recurring event pattern support
 
@@ -16,7 +16,7 @@ Common pattern for modals that handle recurring events
 
 > `optional` **applyTo**: `"series"` \| `"instance"`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L297)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L296)
 
 Current selection: apply to entire series or single instance
 
@@ -26,7 +26,7 @@ Current selection: apply to entire series or single instance
 
 > `optional` **baseEventId**: `string`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L292)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L291)
 
 Base event ID for recurring series
 
@@ -36,7 +36,7 @@ Base event ID for recurring series
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L287)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L286)
 
 Whether the event is recurring
 
@@ -46,7 +46,7 @@ Whether the event is recurring
 
 > `optional` **onApplyToChange**: (`value`) => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L302)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:301](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L301)
 
 Callback when applyTo selection changes
 

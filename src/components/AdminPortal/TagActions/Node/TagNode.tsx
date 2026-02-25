@@ -42,14 +42,14 @@ import styles from 'style/app-fixed.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
-import type { TFunction } from 'i18next';
 import componentStyle from '../TagAction.module.css';
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
   toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
-  t: TFunction<'translation', 'manageTag'>;
 }
+
+import { useTranslation } from 'react-i18next';
 
 /**
  * Renders the Tags which can be expanded to list subtags.
@@ -58,8 +58,8 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   tag,
   checkedTags,
   toggleTagSelection,
-  t,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const [expanded, setExpanded] = useState(false);
 
   const {
@@ -205,7 +205,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                     tag={tag}
                     checkedTags={checkedTags}
                     toggleTagSelection={toggleTagSelection}
-                    t={t}
                   />
                 </div>
               ))}

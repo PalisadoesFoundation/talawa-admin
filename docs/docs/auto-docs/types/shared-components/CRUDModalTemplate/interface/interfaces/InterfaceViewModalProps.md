@@ -4,7 +4,7 @@
 
 # Interface: InterfaceViewModalProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L237)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L236)
 
 Props for ViewModal template
 
@@ -35,7 +35,7 @@ Whether to center the modal vertically on the page
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L242)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:241](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L241)
 
 Content to display in the modal body
 Parent should pass formatted data display as children
@@ -60,7 +60,7 @@ Additional CSS class name for the modal
 
 > `optional` **customActions**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L253)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L252)
 
 Optional custom action buttons to display in the footer
 Useful for actions like "Edit" or "Delete" from the view modal
@@ -115,7 +115,7 @@ When true, displays a loading spinner and disables action buttons
 
 > `optional` **loadingData**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:247](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L247)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L246)
 
 Whether data is currently being loaded
 

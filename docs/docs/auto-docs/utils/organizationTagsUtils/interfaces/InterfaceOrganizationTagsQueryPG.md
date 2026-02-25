@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationTagsQueryPG
 
-Defined in: [src/utils/organizationTagsUtils.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L90)
+Defined in: [src/utils/organizationTagsUtils.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L89)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:90](https://github.com/Palisadoe
 
 > `optional` **data**: `object`
 
-Defined in: [src/utils/organizationTagsUtils.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L92)
+Defined in: [src/utils/organizationTagsUtils.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L90)
 
 #### organization
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/Palisadoe
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L95)
+Defined in: [src/utils/organizationTagsUtils.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L93)
 
 #### Parameters
 

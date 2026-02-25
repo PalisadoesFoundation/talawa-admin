@@ -25,8 +25,6 @@ const mockTag: InterfaceTagData = {
 
 const mockCheckedTags: Set<string> = new Set<string>();
 let mockToggleTagSelection: ReturnType<typeof vi.fn>;
-const mockT: TFunction<'translation', 'manageTag'> = ((key: string) =>
-  key) as TFunction<'translation', 'manageTag'>;
 
 describe('TagNode', () => {
   beforeEach(() => {
@@ -45,7 +43,6 @@ describe('TagNode', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -60,7 +57,6 @@ describe('TagNode', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -78,7 +74,6 @@ describe('TagNode', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -99,7 +94,6 @@ describe('TagNode', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -121,7 +115,6 @@ describe('TagNode', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -151,7 +144,6 @@ describe('TagNode with Mocks', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -166,7 +158,6 @@ describe('TagNode with Mocks', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -187,7 +178,6 @@ describe('TagNode with Mocks', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -220,7 +210,6 @@ describe('TagNode with Mocks', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -291,7 +280,6 @@ describe('Edge Cases and Coverage Improvements', () => {
           tag={leafTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -358,7 +346,6 @@ describe('Edge Cases and Coverage Improvements', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -413,7 +400,6 @@ describe('Edge Cases and Coverage Improvements', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -490,7 +476,6 @@ describe('Edge Cases and Coverage Improvements', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -541,7 +526,6 @@ describe('Edge Cases and Coverage Improvements', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );
@@ -608,7 +592,6 @@ describe('Edge Cases and Coverage Improvements', () => {
           tag={mockTag}
           checkedTags={mockCheckedTags}
           toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
         />
       </MockedProvider>,
     );

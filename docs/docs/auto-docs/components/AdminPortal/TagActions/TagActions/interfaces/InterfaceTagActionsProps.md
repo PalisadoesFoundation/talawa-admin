@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L62)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L58)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:62](https://gi
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L64)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L60)
 
 #### Returns
 
@@ -20,19 +20,11 @@ Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:64](https://gi
 
 ***
 
-### t
-
-> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
-
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L66)
-
-***
-
 ### tagActionsModalIsOpen
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L63)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L59)
 
 ***
 
@@ -40,12 +32,4 @@ Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:63](https://gi
 
 > **tagActionType**: [`TagActionType`](../../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L65)
-
-***
-
-### tCommon
-
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
-
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L67)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L61)
