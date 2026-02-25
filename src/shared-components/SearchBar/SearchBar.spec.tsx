@@ -1,12 +1,21 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, act, cleanup, waitFor } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import SearchBar from './SearchBar';
 import type { InterfaceSearchBarRef } from 'types/SearchBar/interface';
 import i18n from 'utils/i18nForTest';
 import styles from './SearchBar.module.css';
+
+/**
+ * Helper function to render components with I18nextProvider
+ * Ensures consistent i18n context across all tests
+ */
+const renderWithI18n = (ui: React.ReactElement): RenderResult => {
+  return render(<I18nextProvider i18n={i18n}>{ui}</I18nextProvider>);
+};
 
 afterEach(() => {
   cleanup();
@@ -15,14 +24,12 @@ afterEach(() => {
 
 describe('SearchBar', () => {
   it('renders with the provided placeholder', () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <SearchBar
-          onSearch={vi.fn()}
-          placeholder="Search records"
-          clearButtonAriaLabel="clear"
-        />
-      </I18nextProvider>,
+    renderWithI18n(
+      <SearchBar
+        onSearch={vi.fn()}
+        placeholder="Search records"
+        clearButtonAriaLabel="clear"
+      />,
     );
     expect(screen.getByPlaceholderText('Search records')).toBeInTheDocument();
   });
@@ -30,15 +37,13 @@ describe('SearchBar', () => {
   it('calls onChange handler when typing', async () => {
     const user = userEvent.setup();
     const handleChange = vi.fn();
-    render(
-      <I18nextProvider i18n={i18n}>
-        <SearchBar
-          onSearch={vi.fn()}
-          onChange={handleChange}
-          inputTestId="search-input"
-          clearButtonAriaLabel="clear"
-        />
-      </I18nextProvider>,
+    renderWithI18n(
+      <SearchBar
+        onSearch={vi.fn()}
+        onChange={handleChange}
+        inputTestId="search-input"
+        clearButtonAriaLabel="clear"
+      />,
     );
 
     await user.type(screen.getByTestId('search-input'), 'team');
@@ -51,7 +56,7 @@ describe('SearchBar', () => {
   it('calls onSearch when search button is clicked', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
-    render(
+    renderWithI18n(
       <SearchBar
         onSearch={handleSearch}
         inputTestId="search-input"
@@ -73,7 +78,7 @@ describe('SearchBar', () => {
   it('submits search when Enter key is pressed', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
-    render(
+    renderWithI18n(
       <SearchBar
         onSearch={handleSearch}
         inputTestId="search-input"
@@ -95,7 +100,7 @@ describe('SearchBar', () => {
     const handleSearch = vi.fn();
     const handleClear = vi.fn();
     const handleChange = vi.fn();
-    render(
+    renderWithI18n(
       <SearchBar
         onSearch={handleSearch}
         onClear={handleClear}
@@ -132,7 +137,7 @@ describe('SearchBar', () => {
         />
       );
     };
-    render(<Example />);
+    renderWithI18n(<Example />);
     const input = screen.getByTestId('search-input');
     expect(input).toHaveValue('initial');
     await user.clear(input);
@@ -145,7 +150,7 @@ describe('SearchBar', () => {
   it('hides the button when showSearchButton is false', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
-    render(
+    renderWithI18n(
       <SearchBar
         onSearch={handleSearch}
         showSearchButton={false}
@@ -167,7 +172,7 @@ describe('SearchBar', () => {
   it('exposes imperative focus and clear helpers via ref', async () => {
     const user = userEvent.setup();
     const ref = React.createRef<InterfaceSearchBarRef>();
-    render(
+    renderWithI18n(
       <SearchBar
         ref={ref}
         onSearch={vi.fn()}
@@ -211,7 +216,7 @@ describe('SearchBar', () => {
   it('triggers onSearch with empty string when clearing without onClear prop', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
-    render(
+    renderWithI18n(
       <SearchBar
         onSearch={handleSearch}
         inputTestId="search-input"
@@ -236,7 +241,7 @@ describe('SearchBar', () => {
   it('hides clear button when disabled', async () => {
     const handleClear = vi.fn();
     const handleChange = vi.fn();
-    render(
+    renderWithI18n(
       <SearchBar
         onSearch={vi.fn()}
         onClear={handleClear}
@@ -258,7 +263,7 @@ describe('SearchBar', () => {
   it('prevents clearing via ref when disabled', async () => {
     const ref = React.createRef<InterfaceSearchBarRef>();
     const handleSearch = vi.fn();
-    render(
+    renderWithI18n(
       <SearchBar
         ref={ref}
         onSearch={handleSearch}
@@ -280,7 +285,7 @@ describe('SearchBar', () => {
   });
 
   it('has accessible search button', () => {
-    render(
+    renderWithI18n(
       <SearchBar
         onSearch={vi.fn()}
         buttonTestId="search-button"
@@ -293,14 +298,12 @@ describe('SearchBar', () => {
 
   it('uses default aria-label from i18n when clearButtonAriaLabel is undefined', async () => {
     const user = userEvent.setup();
-    render(
-      <I18nextProvider i18n={i18n}>
-        <SearchBar
-          onSearch={vi.fn()}
-          inputTestId="search-input"
-          clearButtonTestId="clear-search"
-        />
-      </I18nextProvider>,
+    renderWithI18n(
+      <SearchBar
+        onSearch={vi.fn()}
+        inputTestId="search-input"
+        clearButtonTestId="clear-search"
+      />,
     );
 
     const input = screen.getByTestId('search-input');
@@ -314,7 +317,7 @@ describe('SearchBar', () => {
 
   it('handles missing onSearch prop gracefully', async () => {
     const user = userEvent.setup();
-    render(
+    renderWithI18n(
       <SearchBar inputTestId="search-input" clearButtonAriaLabel="clear" />,
     );
 
@@ -324,7 +327,7 @@ describe('SearchBar', () => {
 
   describe('showTrailingIcon feature', () => {
     it('renders trailing search icon when showTrailingIcon is true', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           showTrailingIcon={true}
@@ -338,7 +341,7 @@ describe('SearchBar', () => {
     });
 
     it('does not render trailing search icon when showTrailingIcon is false', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           showTrailingIcon={false}
@@ -352,7 +355,9 @@ describe('SearchBar', () => {
     });
 
     it('does not render trailing icon by default', () => {
-      render(<SearchBar onSearch={vi.fn()} inputTestId="search-input" />);
+      renderWithI18n(
+        <SearchBar onSearch={vi.fn()} inputTestId="search-input" />,
+      );
 
       // By default, showTrailingIcon is false, so icon should not be present
       const trailingIcon = screen.queryByTestId('trailing-icon');
@@ -361,7 +366,7 @@ describe('SearchBar', () => {
 
     it('renders both clear button and trailing icon when both are enabled', async () => {
       const user = userEvent.setup();
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           showTrailingIcon={true}
@@ -382,7 +387,7 @@ describe('SearchBar', () => {
     });
 
     it('positions trailing icon correctly in the input wrapper', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           showTrailingIcon={true}
@@ -390,15 +395,17 @@ describe('SearchBar', () => {
         />,
       );
 
-      // Verify that the trailing icon exists and is properly positioned
+      // Verify proper DOM relationship: trailing icon should be a child of input wrapper
+      const input = screen.getByTestId('search-input');
+      const inputWrapper = input.parentElement;
       const trailingIcon = screen.getByTestId('trailing-icon');
-      expect(trailingIcon).toBeInTheDocument();
+      expect(inputWrapper).toContainElement(trailingIcon);
     });
   });
 
   describe('Visual variants and sizes', () => {
     it('applies filled variant styles', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           variant="filled"
@@ -410,7 +417,7 @@ describe('SearchBar', () => {
     });
 
     it('applies ghost variant styles', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           variant="ghost"
@@ -422,7 +429,7 @@ describe('SearchBar', () => {
     });
 
     it('applies small size styles', () => {
-      render(
+      renderWithI18n(
         <SearchBar onSearch={vi.fn()} size="sm" inputTestId="search-input" />,
       );
       const input = screen.getByTestId('search-input');
@@ -430,7 +437,7 @@ describe('SearchBar', () => {
     });
 
     it('applies large size styles', () => {
-      render(
+      renderWithI18n(
         <SearchBar onSearch={vi.fn()} size="lg" inputTestId="search-input" />,
       );
       const input = screen.getByTestId('search-input');
@@ -438,7 +445,7 @@ describe('SearchBar', () => {
     });
 
     it('applies combined variant and size styles', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           variant="filled"
@@ -455,7 +462,7 @@ describe('SearchBar', () => {
 
   describe('Icon customization', () => {
     it('renders with showLeadingIcon enabled', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           showLeadingIcon={true}
@@ -468,7 +475,7 @@ describe('SearchBar', () => {
 
     it('renders with custom icon', () => {
       const CustomIcon = <span data-testid="custom-icon">🔍</span>;
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           showLeadingIcon={true}
@@ -480,7 +487,9 @@ describe('SearchBar', () => {
     });
 
     it('does not render leading icon by default', () => {
-      render(<SearchBar onSearch={vi.fn()} inputTestId="search-input" />);
+      renderWithI18n(
+        <SearchBar onSearch={vi.fn()} inputTestId="search-input" />,
+      );
       // By default, showLeadingIcon is false, so icon should not be present
       const leadingIcon = screen.queryByTestId('leading-icon');
       expect(leadingIcon).not.toBeInTheDocument();
@@ -489,7 +498,7 @@ describe('SearchBar', () => {
 
   describe('Button customization', () => {
     it('renders search button with custom label', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           buttonLabel="Search Now"
@@ -501,7 +510,7 @@ describe('SearchBar', () => {
     });
 
     it('renders search button with custom aria-label', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           buttonAriaLabel="Find records"
@@ -513,7 +522,7 @@ describe('SearchBar', () => {
     });
 
     it('renders search button in loading state', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           isLoading={true}
@@ -525,7 +534,7 @@ describe('SearchBar', () => {
     });
 
     it('disables search button when disabled prop is true', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           disabled={true}
@@ -537,7 +546,7 @@ describe('SearchBar', () => {
     });
 
     it('renders icon-only button without label', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           buttonTestId="search-button"
@@ -552,7 +561,7 @@ describe('SearchBar', () => {
 
   describe('Input attributes', () => {
     it('supports custom autoComplete attribute', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           autoComplete="on"
@@ -564,7 +573,7 @@ describe('SearchBar', () => {
     });
 
     it('supports custom type attribute', () => {
-      render(
+      renderWithI18n(
         <SearchBar onSearch={vi.fn()} type="text" inputTestId="search-input" />,
       );
       const input = screen.getByTestId('search-input');
@@ -573,7 +582,7 @@ describe('SearchBar', () => {
 
     it('supports disabled input', async () => {
       const user = userEvent.setup();
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           disabled={true}
@@ -591,7 +600,7 @@ describe('SearchBar', () => {
 
   describe('CSS class customization', () => {
     it('applies custom className to container', () => {
-      const { container } = render(
+      const { container } = renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           className="custom-container"
@@ -603,7 +612,7 @@ describe('SearchBar', () => {
     });
 
     it('applies custom inputClassName', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           inputClassName="custom-input"
@@ -615,7 +624,7 @@ describe('SearchBar', () => {
     });
 
     it('applies custom buttonClassName', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           buttonClassName="custom-button"
@@ -631,7 +640,7 @@ describe('SearchBar', () => {
     it('handles onChange callback without event parameter', async () => {
       const handleChange = vi.fn();
       const ref = React.createRef<InterfaceSearchBarRef>();
-      render(
+      renderWithI18n(
         <SearchBar
           ref={ref}
           onSearch={vi.fn()}
@@ -651,7 +660,7 @@ describe('SearchBar', () => {
     });
 
     it('handles controlled mode with value prop provided', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           value="controlled value"
@@ -662,19 +671,21 @@ describe('SearchBar', () => {
       expect(input).toHaveValue('controlled value');
     });
 
-    it('handles controlled mode when value changes from null to string', async () => {
-      const { rerender } = render(
+    it('handles controlled mode when value changes from empty string to string', async () => {
+      const { rerender } = renderWithI18n(
         <SearchBar onSearch={vi.fn()} value="" inputTestId="search-input" />,
       );
       const input = screen.getByTestId('search-input');
       expect(input).toHaveValue('');
 
       rerender(
-        <SearchBar
-          onSearch={vi.fn()}
-          value="new value"
-          inputTestId="search-input"
-        />,
+        <I18nextProvider i18n={i18n}>
+          <SearchBar
+            onSearch={vi.fn()}
+            value="new value"
+            inputTestId="search-input"
+          />
+        </I18nextProvider>,
       );
       await waitFor(() => {
         expect(input).toHaveValue('new value');
@@ -682,7 +693,7 @@ describe('SearchBar', () => {
     });
 
     it('handles controlled mode with undefined value', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           value={undefined}
@@ -694,7 +705,7 @@ describe('SearchBar', () => {
     });
 
     it('updates internal state when value changes from undefined to string in controlled mode', async () => {
-      const { rerender } = render(
+      const { rerender } = renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           value={undefined}
@@ -705,11 +716,13 @@ describe('SearchBar', () => {
       expect(input).toHaveValue('');
 
       rerender(
-        <SearchBar
-          onSearch={vi.fn()}
-          value="updated"
-          inputTestId="search-input"
-        />,
+        <I18nextProvider i18n={i18n}>
+          <SearchBar
+            onSearch={vi.fn()}
+            value="updated"
+            inputTestId="search-input"
+          />
+        </I18nextProvider>,
       );
       await waitFor(() => {
         expect(input).toHaveValue('updated');
@@ -719,7 +732,7 @@ describe('SearchBar', () => {
     it('clears value in controlled mode via ref', async () => {
       const handleChange = vi.fn();
       const ref = React.createRef<InterfaceSearchBarRef>();
-      render(
+      renderWithI18n(
         <SearchBar
           ref={ref}
           onSearch={vi.fn()}
@@ -744,7 +757,7 @@ describe('SearchBar', () => {
     });
 
     it('hides clear button when input is empty', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           inputTestId="search-input"
@@ -756,7 +769,7 @@ describe('SearchBar', () => {
 
     it('hides clear button when showClearButton is false', async () => {
       const user = userEvent.setup();
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           showClearButton={false}
@@ -772,7 +785,7 @@ describe('SearchBar', () => {
     });
 
     it('handles uncontrolled mode with defaultValue', () => {
-      render(
+      renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           defaultValue="initial value"
@@ -784,7 +797,7 @@ describe('SearchBar', () => {
     });
 
     it('syncs internal state when value prop changes in controlled mode', async () => {
-      const { rerender } = render(
+      const { rerender } = renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
           value="first"
@@ -795,11 +808,13 @@ describe('SearchBar', () => {
       expect(input).toHaveValue('first');
 
       rerender(
-        <SearchBar
-          onSearch={vi.fn()}
-          value="second"
-          inputTestId="search-input"
-        />,
+        <I18nextProvider i18n={i18n}>
+          <SearchBar
+            onSearch={vi.fn()}
+            value="second"
+            inputTestId="search-input"
+          />
+        </I18nextProvider>,
       );
       await waitFor(() => {
         expect(input).toHaveValue('second');
