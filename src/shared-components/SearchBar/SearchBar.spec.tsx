@@ -325,7 +325,9 @@ describe('SearchBar', () => {
     await user.type(input, 'test{enter}');
 
     // Verify component doesn't crash and maintains input value
-    expect(input).toHaveValue('test');
+    await waitFor(() => {
+      expect(input).toHaveValue('test');
+    });
   });
 
   describe('showTrailingIcon feature', () => {
@@ -695,7 +697,7 @@ describe('SearchBar', () => {
       });
     });
 
-    it('handles controlled mode with undefined value', () => {
+    it('handles uncontrolled mode with undefined value', () => {
       renderWithI18n(
         <SearchBar
           onSearch={vi.fn()}
