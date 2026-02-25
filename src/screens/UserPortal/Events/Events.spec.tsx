@@ -1451,24 +1451,22 @@ describe('Testing Events Screen [User Portal]', () => {
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
+    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
+    await userEvent.clear(endDatePicker);
+
+    // Should handle null values without crashing
     await waitFor(
       () => {
         expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
       },
       { timeout: 3000 },
     );
-
-    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
-    await userEvent.clear(endDatePicker);
-
-    // Should handle null values without crashing
-    expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
   });
 
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1500,7 +1498,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1856,7 +1854,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should create an event with recurrence rule successfully', async () => {
-    const today = new Date();
+    const today = new Date(TEST_DATE);
     const weekDayByJs = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
     const dayOfWeek = today.getUTCDay();
 
@@ -1910,14 +1908,14 @@ describe('Testing Events Screen [User Portal]', () => {
             id: 'newRecurringEvent1',
             name: 'Recurring Test Event',
             description: 'Recurring Test Description',
-            startAt: new Date().toISOString(),
-            endAt: new Date().toISOString(),
+            startAt: new Date(TEST_DATE).toISOString(),
+            endAt: new Date(TEST_DATE).toISOString(),
             allDay: true,
             location: 'Recurring Test Location',
             isPublic: true,
             isRegisterable: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(TEST_DATE).toISOString(),
+            updatedAt: new Date(TEST_DATE).toISOString(),
             isRecurringEventTemplate: true,
             hasExceptions: false,
             sequenceNumber: 1,
