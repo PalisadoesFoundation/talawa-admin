@@ -141,7 +141,7 @@ describe('OrganizationModal Component', () => {
     setup();
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
-    expect(screen.getByTestId('modal-submit-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('submitOrganizationForm')).toBeInTheDocument();
   });
 
   test('updates input fields correctly', async () => {
@@ -184,7 +184,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    const submitButton = screen.getByTestId('modal-submit-btn');
+    const submitButton = screen.getByTestId('submitOrganizationForm');
     await userEvent.click(submitButton);
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
@@ -270,7 +270,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });
@@ -430,7 +430,7 @@ describe('OrganizationModal Component', () => {
     };
 
     setup();
-    const submitButton = screen.getByTestId('modal-submit-btn');
+    const submitButton = screen.getByTestId('submitOrganizationForm');
 
     await userEvent.click(submitButton);
     await waitFor(() => {
@@ -647,7 +647,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });
