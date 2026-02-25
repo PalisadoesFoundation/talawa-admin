@@ -38,15 +38,7 @@ import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import DataTable from 'shared-components/DataTable/DataTable';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { InterfaceVolunteerGroupViewModalProps } from 'types/shared-components/VolunteerGroupViewModal/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
@@ -59,6 +51,11 @@ const VolunteerGroupViewModal: React.FC<
 
   const { leader, creator, name, volunteersRequired, description, volunteers } =
     group;
+
+  const volunteerRows = (volunteers ?? []).map((v, index) => ({
+    ...v,
+    __serial: index + 1,
+  }));
 
   return (
     <ViewModal
@@ -148,42 +145,24 @@ const VolunteerGroupViewModal: React.FC<
               {t('volunteers')}
             </h3>
 
-            <TableContainer
-              component={Paper}
-              variant="outlined"
-              className={styles.modalTable}
-            >
-              <Table aria-label={t('groupTable')}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell className="fw-bold">
-                      {tCommon('serialNumber')}
-                    </TableCell>
-                    <TableCell className="fw-bold">{tCommon('name')}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {volunteers.map((volunteer, index) => {
-                    const { name: volunteerName } = volunteer.user;
-                    return (
-                      <TableRow
-                        key={volunteer.id}
-                        sx={{
-                          '&:last-child td, &:last-child th': { border: 0 },
-                        }}
-                      >
-                        <TableCell component="th" scope="row">
-                          {index + 1}
-                        </TableCell>
-                        <TableCell component="th" scope="row">
-                          {volunteerName}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <DataTable
+              data={volunteerRows}
+              columns={[
+                {
+                  id: 'serialNumber',
+                  header: tCommon('serialNumber'),
+                  accessor: '__serial',
+                },
+                {
+                  id: 'name',
+                  header: tCommon('name'),
+                  accessor: (volunteer) => volunteer.user.name,
+                },
+              ]}
+              loading={false}
+              ariaLabel={t('groupTable')}
+              tableClassName={styles.modalTable}
+            />
           </div>
         )}
       </div>
