@@ -943,14 +943,14 @@ describe('Testing Events Screen [User Portal]', () => {
             id: 'newEvent1',
             name: 'New Test Event',
             description: 'New Test Description',
-            startAt: new Date().toISOString(),
-            endAt: new Date().toISOString(),
+            startAt: new Date(TEST_DATE).toISOString(),
+            endAt: new Date(TEST_DATE).toISOString(),
             allDay: true,
             location: 'New Test Location',
             isPublic: true,
             isRegisterable: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(TEST_DATE).toISOString(),
+            updatedAt: new Date(TEST_DATE).toISOString(),
             isRecurringEventTemplate: false,
             hasExceptions: false,
             sequenceNumber: null,
@@ -1067,14 +1067,14 @@ describe('Testing Events Screen [User Portal]', () => {
             id: 'newEvent2',
             name: 'New Non All Day Event',
             description: 'New Test Description Non All Day',
-            startAt: new Date().toISOString(),
-            endAt: new Date().toISOString(),
+            startAt: new Date(TEST_DATE).toISOString(),
+            endAt: new Date(TEST_DATE).toISOString(),
             allDay: false,
             location: 'New Test Location',
             isPublic: true,
             isRegisterable: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(TEST_DATE).toISOString(),
+            updatedAt: new Date(TEST_DATE).toISOString(),
             isRecurringEventTemplate: false,
             hasExceptions: false,
             sequenceNumber: null,
@@ -1256,8 +1256,10 @@ describe('Testing Events Screen [User Portal]', () => {
       'End Time',
     ) as HTMLInputElement;
     // Verify time inputs are disabled but contain values
-    expect(startTimeInputWhenAllDay).toBeDisabled();
-    expect(endTimeInputWhenAllDay).toBeDisabled();
+    await waitFor(() => {
+      expect(startTimeInputWhenAllDay).toBeDisabled();
+      expect(endTimeInputWhenAllDay).toBeDisabled();
+    });
 
     // Capture the initial values while disabled
     const initialStartTime = startTimeInputWhenAllDay.value;
@@ -1274,12 +1276,14 @@ describe('Testing Events Screen [User Portal]', () => {
     )) as HTMLInputElement;
 
     // AFTER toggle → visible + enabled
-    expect(startTimeInput).not.toBeDisabled();
-    expect(endTimeInput).not.toBeDisabled();
+    await waitFor(() => {
+      expect(startTimeInput).not.toBeDisabled();
+      expect(endTimeInput).not.toBeDisabled();
 
-    // Values should match what was there initially (or default)
-    expect(startTimeInput.value).toBe(initialStartTime);
-    expect(endTimeInput.value).toBe(initialEndTime);
+      // Values should match what was there initially (or default)
+      expect(startTimeInput.value).toBe(initialStartTime);
+      expect(endTimeInput.value).toBe(initialEndTime);
+    });
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
@@ -1326,7 +1330,9 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // All toggles should work without errors
-    expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument(),
+    );
   });
 
   it('Should handle date picker changes', async () => {
@@ -1426,10 +1432,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.type(endTimePicker, '11:00:00');
 
     // Time pickers should accept the changes - re-query as elements might have been detached
-    await waitFor(() => {
-      expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
-      expect(screen.getByLabelText('End Time')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
+        expect(screen.getByLabelText('End Time')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should handle null date values gracefully', async () => {
@@ -1468,7 +1477,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1500,7 +1509,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1576,9 +1585,11 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.type(locationInput, 'Test Location');
 
     // Verify values
-    expect(titleInput).toHaveValue('Test Title');
-    expect(descriptionInput).toHaveValue('Test Description');
-    expect(locationInput).toHaveValue('Test Location');
+    await waitFor(() => {
+      expect(titleInput).toHaveValue('Test Title');
+      expect(descriptionInput).toHaveValue('Test Description');
+      expect(locationInput).toHaveValue('Test Location');
+    });
   });
 
   it('Should test userRole as administrator', async () => {
@@ -1759,7 +1770,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await userEvent.click(monthChangeBtn);
 
-    expect(monthChangeBtn).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('monthChangeBtn')).toBeInTheDocument();
+    });
   });
 
   it('Should handle create event returning null (no data) gracefully', async () => {
@@ -2100,14 +2113,16 @@ describe('Testing Events Screen [User Portal]', () => {
 
   describe('computeCalendarFromStartDate', () => {
     it('should compute calendar from null startDate using current date', () => {
-      const now = new Date();
-      const { month, year } = computeCalendarFromStartDate(null, now);
-      expect(month).toBe(dayjs(now).month());
-      expect(year).toBe(dayjs(now).year());
+      const { month, year } = computeCalendarFromStartDate(
+        null,
+        new Date(TEST_DATE),
+      );
+      expect(month).toBe(TEST_DATE.getUTCMonth());
+      expect(year).toBe(TEST_DATE.getUTCFullYear());
     });
 
     it('should compute calendar from a specific startDate', () => {
-      const testDate = new Date(2025, 5, 15); // June 15, 2025
+      const testDate = new Date(Date.UTC(2025, 5, 15)); // June 15, 2025 UTC
       const { month, year } = computeCalendarFromStartDate(testDate);
       expect(month).toBe(5); // June is month 5 (0-indexed)
       expect(year).toBe(2025);
