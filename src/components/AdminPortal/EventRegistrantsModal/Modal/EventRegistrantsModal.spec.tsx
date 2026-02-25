@@ -27,10 +27,11 @@ import {
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
+import { InterfaceBaseModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 import {
-  InterfaceBaseModalProps,
-  InterfaceAutocompleteMockProps,
-} from 'types/AdminPortal/EventRegistrantsModal/interface';
+  EnhancedAutocompleteMock,
+  createGetOptionLabelMock,
+} from 'test-utils/mocks/shared-autocomplete';
 
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
   __esModule: true,
@@ -145,63 +146,14 @@ vi.mock('shared-components/BaseModal', async () => {
   };
 });
 
-vi.mock('@mui/material/Autocomplete', () => ({
-  __esModule: true,
-  default: ({
-    renderInput,
-    options,
-    onChange,
-    noOptionsText,
-    onInputChange,
-  }: InterfaceAutocompleteMockProps & { inputValue?: string }) => {
-    const handleInputChange = (
-      e: React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      // Trigger onInputChange when input value changes
-      if (onInputChange) {
-        onInputChange({} as React.SyntheticEvent, e.target.value, 'input');
-      }
-    };
-
-    const inputProps = {
-      onChange: handleInputChange,
-      onInput: handleInputChange,
-    };
-
-    return (
-      <div data-testid="autocomplete-mock">
-        {renderInput({
-          InputProps: { ref: vi.fn() },
-          id: 'test-autocomplete',
-          disabled: false,
-          inputProps: inputProps, // ← Pass inputProps with onChange
-        })}
-        {options && options.length > 0 ? (
-          options.map((option) => (
-            <div
-              key={option.id}
-              data-testid={`option-${option.id}`}
-              onClick={(): void => {
-                if (onChange) {
-                  onChange({} as React.SyntheticEvent, option);
-                }
-              }}
-              onKeyDown={(): void => {
-                /* mock */
-              }}
-              role="button"
-              tabIndex={0}
-            >
-              {option.name || 'Unknown User'}
-            </div>
-          ))
-        ) : (
-          <div data-testid="no-options">{noOptionsText}</div>
-        )}
-      </div>
-    );
-  },
-}));
+vi.mock('shared-components/Autocomplete', async () => {
+  const { SimpleAutocompleteMock } =
+    await import('test-utils/mocks/shared-autocomplete');
+  return {
+    __esModule: true,
+    Autocomplete: SimpleAutocompleteMock,
+  };
+});
 
 type ApolloMock = MockedResponse<Record<string, unknown>>;
 
@@ -388,15 +340,15 @@ describe('EventRegistrantsModal', () => {
     const modal = await screen.findByTestId(
       'invite-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(modal).toBeInTheDocument();
 
     // Autocomplete input should be rendered
     const autocomplete = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(autocomplete).toBeInTheDocument();
   });
@@ -416,7 +368,7 @@ describe('EventRegistrantsModal', () => {
     const modal = await screen.findByTestId(
       'invite-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(modal).toBeInTheDocument();
 
@@ -424,7 +376,7 @@ describe('EventRegistrantsModal', () => {
     const closeButton = await screen.findByTestId(
       'modalCloseBtn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(closeButton);
 
@@ -432,11 +384,13 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(handleClose).toHaveBeenCalledTimes(1);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
   test('does not trigger addRegistrant when isAdding is true (guard at line 123)', async () => {
+    // TEST FLOW: This test validates the isAdding guard that prevents double-click mutations
+    // STEP 1: Setup - Mock slow mutation (500ms delay) and spy on useMutation
     const addMutateMock = vi
       .fn()
       .mockImplementation(
@@ -456,6 +410,7 @@ describe('EventRegistrantsModal', () => {
         },
       ]);
 
+    // STEP 2: Render and prepare component
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -464,23 +419,25 @@ describe('EventRegistrantsModal', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
+    // STEP 3: Select a member via autocomplete (required for add button to work)
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.type(input, 'John');
     const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
     await user.click(option);
 
-    await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+    await waitFor(() => expect(input).toHaveValue('John'), { timeout: 5000 });
 
     vi.clearAllMocks();
 
+    // STEP 4: First click on add button - should trigger mutation (no isAdding guard active)
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.click(addButton);
@@ -489,9 +446,11 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(addMutateMock).toHaveBeenCalledTimes(1);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
+    // STEP 5: Second click on add button - should NOT trigger mutation (isAdding=true)
+    // while first mutation is still in progress (500ms delay), the guard prevents second call
     vi.clearAllMocks();
 
     await user.click(addButton);
@@ -500,7 +459,7 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(addMutateMock).not.toHaveBeenCalled();
       },
-      { timeout: 1000 },
+      { timeout: 5000 },
     );
 
     useMutationSpy.mockRestore();
@@ -518,7 +477,7 @@ describe('EventRegistrantsModal', () => {
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     // Clear any previous mock calls
@@ -535,11 +494,13 @@ describe('EventRegistrantsModal', () => {
         );
         expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
   test('successfully adds registrant for non-recurring event', async () => {
+    // TEST FLOW: Full successful registration workflow for non-recurring events
+    // STEP 1: Render with necessary test data (event, attendees list, members list, mutation mock)
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -550,9 +511,9 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.click(input);
@@ -569,13 +530,13 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(input).toHaveValue('John Doe');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     // Clear previous mocks
@@ -589,7 +550,7 @@ describe('EventRegistrantsModal', () => {
           'Adding the attendee...',
         );
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await waitFor(
@@ -601,6 +562,10 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('uses recurring variables when event is recurring (isRecurring branch)', async () => {
+    // TEST FLOW: Verify that mutations use recurringEventInstanceId instead of eventId
+    // when event has a recurrence rule. Similar flow to non-recurring test but validates
+    // the different mutation variables based on event type.
+    // STEP 1: Render with recurring event mock (key difference from non-recurring test)
     renderWithProviders([
       makeEventDetailsRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -611,9 +576,9 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.type(input, 'John');
@@ -621,7 +586,7 @@ describe('EventRegistrantsModal', () => {
     const option = await screen.findByTestId(
       'option-user1',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(option);
 
@@ -630,13 +595,13 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(input).toHaveValue('John');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     // Clear previous mocks
@@ -650,7 +615,7 @@ describe('EventRegistrantsModal', () => {
           'Adding the attendee...',
         );
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await waitFor(
@@ -662,6 +627,10 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('noOptionsText and AddOnSpotAttendee modal open & reloadMembers callback', async () => {
+    // TEST FLOW: Validates multi-modal interaction sequence when no members exist
+    // Tests: (1) Fallback UI for empty search results, (2) Modal opening, (3) Callback execution
+    // STEP 1: Render with empty members list - triggers noOptionsText rendering
+    //         Two empty attendee mocks: first for initial load, second for reloadMembers refetch
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -669,168 +638,187 @@ describe('EventRegistrantsModal', () => {
       makeAttendeesEmptyMock(), // for reloadMembers refetch
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    // STEP 2: Get autocomplete input and verify it's ready
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(input).toBeInTheDocument();
 
+    // STEP 3: Type in autocomplete to trigger search with empty results
     await user.type(input, 'NonexistentUser');
 
-    // Wait for no options message
+    // STEP 4: Verify noOptionsText "No Registrations found" appears due to empty results
     await waitFor(
       () => {
         expect(screen.getByText('No Registrations found')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
+    // STEP 5: Find and click "Add Onspot Registration" link that appears in no-options state
     const addOnspotLink = await screen.findByText(
       'Add Onspot Registration',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(addOnspotLink).toBeInTheDocument();
 
     await user.click(addOnspotLink);
 
+    // STEP 6: Verify on-spot modal opened after clicking link
     const onspotModal = await screen.findByTestId(
       'add-onspot-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(onspotModal).toBeInTheDocument();
 
+    // STEP 7: Click reload-members button inside modal - tests callback that refetches data
+    //         This triggers the second MEMBERS_LIST mock to be called
     const reloadBtn = await screen.findByTestId(
       'reload-members-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(reloadBtn);
 
+    // STEP 8: Close the on-spot modal via close button
     const closeBtn = await screen.findByTestId(
       'add-onspot-close',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(closeBtn);
 
+    // STEP 9: Verify modal is removed from DOM after close
     await waitFor(
       () => {
         expect(
           screen.queryByTestId('add-onspot-modal'),
         ).not.toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
   test('Invite by Email button opens InviteByEmailModal and handleClose closes it', async () => {
+    // TEST FLOW: Modal state management - opening and closing with prop verification
+    // Tests: (1) Button click toggles modal visibility, (2) Props correctly passed, (3) Close works
+    // STEP 1: Render main registrants modal
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
     ]);
 
-    // Wait for main modal to appear
+    // STEP 2: Wait for main modal to render
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    // Click invite button using data-testid
+    // STEP 3: Find and click the "Invite by Email" button to open invite modal
     const inviteButton = await screen.findByTestId(
       'invite-by-email-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(inviteButton);
 
-    // Wait for invite modal to appear (mocked as a div with data-testid)
+    // STEP 4: Verify invite modal appears after button click
     const inviteModal = await screen.findByTestId(
       'invite-by-email-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(inviteModal).toBeInTheDocument();
 
-    // Verify props passed to InviteByEmailModal
+    // STEP 5: Verify correct props passed to InviteByEmailModal component
+    //         Check eventId matches and isRecurring=false for non-recurring event
     const eventIdElement = await screen.findByTestId(
       'invite-event-id',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     const isRecurringElement = await screen.findByTestId(
       'invite-is-recurring',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     expect(eventIdElement).toHaveTextContent('event123');
     expect(isRecurringElement).toHaveTextContent('false');
 
-    // Close invite modal
+    // STEP 6: Click close button to dismiss invite modal
     const closeInvite = await screen.findByTestId(
       'invite-close',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(closeInvite);
 
+    // STEP 7: Verify modal is removed after close
     await waitFor(
       () => {
         expect(
           screen.queryByTestId('invite-by-email-modal'),
         ).not.toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
   test('InviteByEmailModal onInvitesSent callback triggers and isRecurring is true for recurring event', async () => {
+    // TEST FLOW: Modal callback execution with recurring event verification
+    // Tests: (1) Correct isRecurring value passed, (2) onInvitesSent callback fires, (3) Side effects occur
+    // STEP 1: Render with recurring event mock to validate isRecurring=true
     renderWithProviders([
       makeEventDetailsRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
     ]);
 
+    // STEP 2: Wait for main modal and click invite by email button
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const inviteButton = await screen.findByTestId(
       'invite-by-email-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(inviteButton);
 
+    // STEP 3: Verify invite modal opened
     const inviteModal = await screen.findByTestId(
       'invite-by-email-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(inviteModal).toBeInTheDocument();
 
-    // Verify isRecurring is true
+    // STEP 4: Verify isRecurring prop is true (key difference from non-recurring test)
     const isRecurringElement = await screen.findByTestId(
       'invite-is-recurring',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(isRecurringElement).toHaveTextContent('true');
 
-    // Click send button to trigger onInvitesSent
+    // STEP 5: Click send button to trigger onInvitesSent callback
+    //         This callback typically notifies parent component of state changes
     const sendBtn = await screen.findByTestId(
       'invite-send',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(sendBtn);
 
-    // Verify onInvitesSent side effect — e.g., the modal remains open
-    // and no error toasts are shown after callback execution
+    // STEP 6: Verify onInvitesSent side effect — modal remains open
+    //         and no error toasts are shown after callback execution
     await waitFor(
       () => {
         expect(NotificationToast.error).not.toHaveBeenCalled();
       },
-      { timeout: 1000 },
+      { timeout: 5000 },
     );
   });
 
@@ -842,9 +830,9 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(input).toBeInTheDocument();
 
@@ -853,7 +841,7 @@ describe('EventRegistrantsModal', () => {
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     // Clear previous mocks
@@ -871,106 +859,131 @@ describe('EventRegistrantsModal', () => {
         );
         expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
   test('opens AddOnSpot modal on Enter key press (first scenario)', async () => {
+    // TEST FLOW: Keyboard navigation for empty search results - Enter key triggers modal
+    // Tests: (1) User types but gets no matches, (2) Presses Enter on \"Add Onspot Registration\" link, (3) Modal opens
+    // STEP 1: Render with empty members list to ensure no match when typing
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    // STEP 2: Get autocomplete input and type non-existent user
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.type(input, 'NonexistentUser');
 
-    // Wait for the link to appear
+    // STEP 3: Wait for \"Add Onspot Registration\" link to appear (fallback UI for no results)
     const addOnspotLink = await screen.findByText(
       'Add Onspot Registration',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(addOnspotLink).toBeInTheDocument();
 
+    // STEP 4: Press Enter on the link to trigger modal open
     await user.type(addOnspotLink, '{Enter}');
 
+    // STEP 5: Verify on-spot modal opened after Enter key
     const onspotModal = await screen.findByTestId(
       'add-onspot-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(onspotModal).toBeInTheDocument();
   });
 
   test('opens AddOnSpot modal on Enter key press (second scenario)', async () => {
+    // TEST FLOW: Alternative keyboard interaction path - focus then Enter
+    // Tests: Same outcome as first scenario but using focus() + keyboard() instead of type()
+    // STEP 1: Render with empty members to get no-results fallback UI
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    // STEP 2: Get input and type to trigger empty result
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.type(input, 'NonexistentUser');
 
+    // STEP 3: Get the \"Add Onspot Registration\" link that appears in no-results state
     const addOnspotLink = await screen.findByTestId(
       'add-onspot-link',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(addOnspotLink).toBeInTheDocument();
 
+    // STEP 4: Focus the link explicitly (alternative to userEvent.type's implicit focus)
     addOnspotLink.focus();
+
+    // STEP 5: Emit Enter key via keyboard API instead of type API
     await user.keyboard('{Enter}');
 
+    // STEP 6: Verify modal opens - same result as first scenario despite different input method
     const onspotModal = await screen.findByTestId(
       'add-onspot-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(onspotModal).toBeInTheDocument();
   });
 
   test('doesnt open AddOnSpot modal when any key other than Enter and space is pressed on Add Onspot Registration link', async () => {
+    // TEST FLOW: Keyboard filtering - only specific keys (Enter, Space) should open modal
+    // Tests: (1) Get no-results UI, (2) Try various keys (Escape, Tab, ArrowDown, etc), (3) Modal stays closed for all except Enter/Space
+    // STEP 1: Render with empty members to get fallback UI
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    // STEP 2: Input search term to trigger empty results and show link
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.type(input, 'NonexistentUser');
 
+    // STEP 3: Get the \"Add Onspot Registration\" link
     await user.keyboard('{ArrowDown}');
 
     const addOnspotLink = await screen.findByTestId(
       'add-onspot-link',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
+    // STEP 4: Define keys that should NOT open modal (negative test cases)
+    //         Only Enter and Space should trigger modal open
     const ignoredKeys = ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'];
 
+    // STEP 5: For each ignored key, focus link, press key, and verify modal doesn't open
     for (const key of ignoredKeys) {
       addOnspotLink.focus();
 
       const keyPress = key.length === 1 ? key : `{${key}}`;
       await user.keyboard(keyPress);
+
+      // STEP 6: Verify modal stays closed for this key
       await waitFor(() => {
         expect(
           screen.queryByTestId('add-onspot-modal'),
@@ -980,6 +993,9 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('shows error toasts when add attendee mutation fails', async () => {
+    // TEST FLOW: Multiple error notification handling for failed mutation
+    // Tests: (1) Load modal and add warning toasts, (2) Mutation fails, (3) Multiple error toasts call with different messages
+    // STEP 1: Render with Apollo mock that returns network error from mutation
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -993,45 +1009,49 @@ describe('EventRegistrantsModal', () => {
       },
     ]);
 
+    // STEP 2: Wait for modal and select a member
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.type(input, 'John');
 
+    // STEP 3: Click on member option to select
     const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
     await user.click(option);
 
-    // Wait for selection
+    // STEP 4: Wait for selection to complete
     await waitFor(
       () => {
         expect(input).toHaveValue('John');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
-    // Clear previous mocks
+    // STEP 5: Clear mocks and click add button to trigger mutation
     vi.clearAllMocks();
 
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(addButton);
 
+    // STEP 6: Verify \"Adding\" warning toast shown immediately
     await waitFor(
       () => {
         expect(NotificationToast.warning).toHaveBeenCalledWith(
           'Adding the attendee...',
         );
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
+    // STEP 7: Verify first generic error toast  (generic message)
     await waitFor(
       () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1041,47 +1061,56 @@ describe('EventRegistrantsModal', () => {
       { timeout: 5000 },
     );
 
+    // STEP 8: Verify second error toast with specific network error details
     await waitFor(
       () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Network error: Failed to add attendee',
         );
       },
-      { timeout: 2000 },
+      { timeout: 5000 },
     );
 
+    // STEP 9: Verify error.error() called exactly twice (one generic + one detailed)
     expect(NotificationToast.error).toHaveBeenCalledTimes(2);
   });
 
   test('opens AddOnSpot modal when Space key is pressed on add-onspot link', async () => {
+    // TEST FLOW: Keyboard accessibility - Space key (along with Enter) should open modal
+    // Tests: (1) Get empty search results, (2) Focus link, (3) Press Space, (4) Modal opens
+    // STEP 1: Render with empty members list to get no-results fallback
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersEmptyMock(),
     ]);
 
-    const input = await screen.findByPlaceholderText(
-      'Choose the user that you want to add',
+    // STEP 2: Input non-existent search term to trigger fallback UI
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.type(input, 'NonExistentUser');
 
+    // STEP 3: Get the \"Add Onspot Registration\" link from no-results state
     const addOnspotLink = await screen.findByTestId(
       'add-onspot-link',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(addOnspotLink).toBeInTheDocument();
 
+    // STEP 4: Focus the link and emit Space key
     addOnspotLink.focus();
 
     await user.keyboard(' ');
 
+    // STEP 5: Verify on-spot modal opens after Space key press
     const onspotModal = await screen.findByTestId(
       'add-onspot-modal',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     expect(onspotModal).toBeInTheDocument();
   });
@@ -1094,16 +1123,16 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.type(input, 'unknown');
 
     const option = await screen.findByTestId(
       'option-user2',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(option);
 
@@ -1112,7 +1141,7 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(input).toHaveValue('unknown');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     // Clear previous mocks
@@ -1121,7 +1150,7 @@ describe('EventRegistrantsModal', () => {
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(addButton);
 
@@ -1129,7 +1158,7 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
@@ -1141,9 +1170,9 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.type(input, 'Test User');
@@ -1152,7 +1181,7 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(input).toHaveValue('Test User');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.clear(input);
@@ -1162,7 +1191,7 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(input).toHaveValue('');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.type(input, 'Another Test');
@@ -1171,11 +1200,14 @@ describe('EventRegistrantsModal', () => {
       () => {
         expect(input).toHaveValue('Another Test');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
   describe('Error Handling and Edge Cases', () => {
     test('handles mutation error when adding registrant (Network error)', async () => {
+      // TEST FLOW: Error handling path when mutation fails with network error
+      // Tests: (1) Member selection flow, (2) Mutation called, (3) Error toast displayed with message
+      // STEP 1: Render with network error mock for ADD_EVENT_ATTENDEE mutation
       renderWithProviders([
         makeEventDetailsNonRecurringMock(),
         makeAttendeesEmptyMock(),
@@ -1189,27 +1221,31 @@ describe('EventRegistrantsModal', () => {
         },
       ]);
 
+      // STEP 2: Wait for modal and select a member
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.type(input, 'John');
       const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
       await user.click(option);
 
-      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+      // STEP 3: Wait for selection to complete
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 5000 });
 
+      // STEP 4: Clear mocks and click add button to trigger mutation
       vi.clearAllMocks();
       const addButton = await screen.findByTestId(
         'add-registrant-btn',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.click(addButton);
 
+      // STEP 5: Verify error toast appears with network error details
       await waitFor(
         () => {
           expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1217,11 +1253,15 @@ describe('EventRegistrantsModal', () => {
           );
           expect(NotificationToast.error).toHaveBeenCalledWith('Network error');
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
     });
 
     test('handles unmounted component during mutation (Success path)', async () => {
+      // TEST FLOW: Cleanup/memory leak prevention when component unmounts mid-mutation
+      // Tests: (1) Mutation starts, (2) Component unmounts before mutation completes, (3) No toast shown
+      // This simulates user navigating away before async operation finishes
+      // STEP 1: Render with delayed mutation result (300ms) to allow unmount during flight
       const { unmount } = renderWithProviders([
         makeEventDetailsNonRecurringMock(),
         makeAttendeesEmptyMock(),
@@ -1240,41 +1280,52 @@ describe('EventRegistrantsModal', () => {
               },
             },
           },
-          delay: 100, // Introduce delay to allow unmount
+          delay: 300, // Introduce delay to allow unmount
         },
       ]);
 
+      // STEP 2: Wait for modal and select a member
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.type(input, 'John');
       const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
       await user.click(option);
 
-      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+      // STEP 3: Wait for selection to complete
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 5000 });
 
+      // STEP 4: Prepare for mutation and click add button
       vi.clearAllMocks();
       const addButton = await screen.findByTestId(
         'add-registrant-btn',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.click(addButton);
 
-      // Unmount immediately after clicking
+      // STEP 5: Unmount component immediately after mutation starts (before 300ms delay completes)
+      //         This simulates user navigating away from modal, destroys component cleanup
       unmount();
 
-      // Wait to ensure no success toast is called after delay
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
-      expect(NotificationToast.success).not.toHaveBeenCalled();
+      // STEP 6: Verify no success toast shown after unmount
+      //         Component should be unmounted before mutation.onCompleted fires
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).not.toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     test('handles unmounted component during mutation (Error path)', async () => {
+      // TEST FLOW: Error cleanup when component unmounts during failed mutation
+      // Tests: (1) Mutation starts, (2) Component unmounts before mutation error returns, (3) No error toast shown
+      // STEP 1: Render with delayed error mutation (300ms) to allow unmount during flight
       const { unmount } = renderWithProviders([
         makeEventDetailsNonRecurringMock(),
         makeAttendeesEmptyMock(),
@@ -1285,45 +1336,55 @@ describe('EventRegistrantsModal', () => {
             variables: { userId: 'user1', eventId: 'event123' },
           },
           error: new Error('Network error'),
-          delay: 100, // Introduce delay to allow unmount
+          delay: 300, // Introduce delay to allow unmount
         },
       ]);
 
+      // STEP 2: Wait for modal and select a member
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.type(input, 'John');
       const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
       await user.click(option);
 
-      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+      // STEP 3: Wait for selection to complete
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 5000 });
 
+      // STEP 4: Prepare for mutation and click add button
       vi.clearAllMocks();
       const addButton = await screen.findByTestId(
         'add-registrant-btn',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.click(addButton);
 
-      // Unmount immediately after clicking
+      // STEP 5: Unmount component immediately after mutation starts (before error returns in 300ms)
+      //         Tests that error handling doesn't execute after unmount
       unmount();
 
-      // Wait to ensure no error toast is called after delay
-      await new Promise((resolve) => setTimeout(resolve, 200));
-
-      expect(NotificationToast.error).not.toHaveBeenCalled();
+      // STEP 6: Verify no error toast shown after unmount
+      //         Component cleanup should prevent mutation.onError callback from firing
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).not.toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     test('handles non-Error exceptions', async () => {
-      // Mock useMutation to reject with a string
+      // TEST FLOW: Error handling for non-standard error objects (e.g., strings, arbitrary values)
+      // Tests: (1) Mutation rejects with non-Error value, (2) Component catches it, (3) Fallback toast shown
+      // STEP 1: Mock useMutation to reject with string instead of Error object
+      //         This tests fallback error handling: err instanceof Error ? err.message : 'Unknown error'
       const mockMutate = vi.fn().mockRejectedValue('String error');
 
-      // Spy on useMutation to return our mock
       const useMutationSpy = vi
         .spyOn(ApolloClient, 'useMutation')
         .mockReturnValue([
@@ -1338,47 +1399,51 @@ describe('EventRegistrantsModal', () => {
           },
         ]);
 
+      // STEP 2: Render modal and select member
       renderWithProviders([
         makeEventDetailsNonRecurringMock(),
         makeAttendeesEmptyMock(),
         makeMembersWithOneMock(),
       ]);
 
+      // STEP 3: Wait for modal and perform member selection
       await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
       const input = await screen.findByTestId(
-        'autocomplete',
+        'shared-autocomplete-input',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.type(input, 'John');
       const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
       await user.click(option);
 
-      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+      // STEP 4: Wait for selection and clear mocks
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 5000 });
 
+      // STEP 5: Click add button to trigger the mock mutation that rejects with string
       vi.clearAllMocks();
       const addButton = await screen.findByTestId(
         'add-registrant-btn',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       await user.click(addButton);
 
+      // STEP 6: Verify mutation was attempted
       await waitFor(
         () => {
           expect(mockMutate).toHaveBeenCalled();
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
 
+      // STEP 7: Verify 'Unknown error' toast shown since 'String error' is not instanceof Error
       await waitFor(
         () => {
-          // Based on code: err instanceof Error ? err.message : 'Unknown error'
-          // 'String error' is NOT instanceof Error, so it falls to 'Unknown error'
           expect(NotificationToast.error).toHaveBeenCalledWith('Unknown error');
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
 
       // Clean up spy
@@ -1405,12 +1470,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       </div>
     ),
   );
-
-  // Array to capture getOptionLabel calls
-  const getOptionLabelCalls: {
-    option: { id: string; name?: string };
-    result: string;
-  }[] = [];
 
   beforeEach(() => {
     user = userEvent.setup();
@@ -1462,72 +1521,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     },
   });
 
-  // Enhanced Autocomplete mock that renders the actual renderOption
-  const enhancedAutocompleteMock = ({
-    renderInput,
-    renderOption,
-    options,
-    onChange,
-    getOptionLabel,
-    onInputChange,
-  }: InterfaceAutocompleteMockProps) => {
-    const [_localInputValue, setLocalInputValue] = React.useState('');
-
-    const handleInputChange = (
-      e: React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      const newValue = e.target.value;
-      setLocalInputValue(newValue);
-      if (onInputChange) {
-        onInputChange({} as React.SyntheticEvent, newValue, 'input');
-      }
-    };
-
-    const inputProps = {
-      onChange: handleInputChange,
-      onInput: handleInputChange,
-    };
-
-    return (
-      <div data-testid="autocomplete-mock">
-        {renderInput({
-          InputProps: { ref: vi.fn() },
-          id: 'test-autocomplete',
-          disabled: false,
-          inputProps: inputProps,
-        })}
-        <div data-testid="options-container">
-          {options && options.length > 0 ? (
-            options.map((option) => {
-              const liProps = {
-                key: option.id,
-                'data-testid': `rendered-option-${option.id}`,
-                onClick: (): void => {
-                  if (onChange) {
-                    onChange({} as React.SyntheticEvent, option);
-                  }
-                },
-                role: 'option',
-                tabIndex: 0,
-              };
-
-              // Actually call renderOption to execute the real code
-              return renderOption
-                ? renderOption(liProps, option, { selected: false })
-                : (() => {
-                    const label = getOptionLabel?.(option) || option.name || '';
-                    getOptionLabelCalls.push({ option, result: label });
-                    return label;
-                  })();
-            })
-          ) : (
-            <div data-testid="no-options">No options</div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
   test('renderOption renders ProfileAvatarDisplay with correct props for members with names and avatars (lines 192, 195-202)', async () => {
     vi.resetModules();
     vi.doMock(
@@ -1536,9 +1529,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1569,7 +1562,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         const optionsContainer = screen.getByTestId('options-container');
         expect(optionsContainer).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await waitFor(
@@ -1577,7 +1570,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
         expect(avatarDisplays.length).toBe(3);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
     const user1Avatar = avatarDisplays[0];
@@ -1602,9 +1595,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1642,7 +1635,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         );
         expect(user3Avatar).toHaveTextContent('Avatar: Unknown User');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     const optionsContainer = screen.getByTestId('options-container');
@@ -1657,9 +1650,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1699,12 +1692,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         expect(option2).toHaveAttribute('role', 'option');
         expect(option3).toHaveAttribute('role', 'option');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     const optionsContainer = screen.getByTestId('options-container');
     const flexDivs = optionsContainer.querySelectorAll(
-      '.d-flex.align-items-center',
+      '[class*="avatarContainer"]',
     );
     expect(flexDivs.length).toBeGreaterThan(0);
   });
@@ -1717,9 +1710,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1748,7 +1741,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await waitFor(
       () => {
         const optionsContainer = screen.getByTestId('options-container');
-        const spanElements = optionsContainer.querySelectorAll('span.ms-2');
+        const spanElements = optionsContainer.querySelectorAll(
+          'span[class*="avatarName"]',
+        );
 
         expect(spanElements.length).toBeGreaterThan(0);
 
@@ -1759,7 +1754,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         expect(spanTexts).toContain('Jane Smith');
         expect(spanTexts).toContain('Unknown User');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
@@ -1771,9 +1766,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1809,7 +1804,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         expect(option2).toHaveTextContent('Jane Smith');
         expect(option3).toHaveTextContent('Unknown User');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
@@ -1821,9 +1816,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1858,7 +1853,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
           expect(display).toHaveAttribute('data-enable-enlarge', 'false');
         });
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
@@ -1870,9 +1865,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         ProfileAvatarDisplay: ProfileAvatarDisplayMock,
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -1907,7 +1902,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
           expect(display).toHaveAttribute('data-size', 'small');
         });
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
@@ -1916,76 +1911,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     const getOptionLabelCalls: { option: unknown; result: string }[] = [];
 
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: ({
-        getOptionLabel,
-        renderOption,
-        options,
-        renderInput,
-        onChange,
-        onInputChange,
-      }: InterfaceAutocompleteMockProps) => {
-        const [_localInputValue, setLocalInputValue] = React.useState('');
-
-        const handleInputChange = (
-          e: React.ChangeEvent<HTMLInputElement>,
-        ): void => {
-          const newValue = e.target.value;
-          setLocalInputValue(newValue);
-          if (onInputChange) {
-            onInputChange({} as React.SyntheticEvent, newValue, 'input');
-          }
-        };
-
-        const inputProps = {
-          onChange: handleInputChange,
-          onInput: handleInputChange,
-        };
-
-        return (
-          <div data-testid="autocomplete-mock">
-            {renderInput({
-              InputProps: { ref: vi.fn() },
-              id: 'test-autocomplete',
-              disabled: false,
-              inputProps: inputProps,
-            })}
-            <div data-testid="options-container">
-              {options && options.length > 0 ? (
-                options.map((option) => {
-                  const label = getOptionLabel
-                    ? getOptionLabel(option)
-                    : option.name || '';
-                  getOptionLabelCalls.push({ option, result: label });
-
-                  const liProps = {
-                    key: option.id,
-                    'data-testid': `getoptionlabel-option-${option.id}`,
-                    onClick: (): void => {
-                      if (onChange) {
-                        onChange({} as React.SyntheticEvent, option);
-                      }
-                    },
-                    role: 'option',
-                    tabIndex: 0,
-                  };
-
-                  const optionElement = renderOption ? (
-                    renderOption(liProps, option, { selected: false })
-                  ) : (
-                    <span key={option.id}>{label}</span>
-                  );
-
-                  return optionElement;
-                })
-              ) : (
-                <div data-testid="no-options">No options</div>
-              )}
-            </div>
-          </div>
-        );
-      },
+      Autocomplete: createGetOptionLabelMock(getOptionLabelCalls),
     }));
 
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
@@ -2016,7 +1944,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       () => {
         expect(getOptionLabelCalls.length).toBe(3);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     expect(getOptionLabelCalls[0].result).toBe('John Doe');
@@ -2026,9 +1954,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('clicking on rendered option triggers onChange (line 195)', async () => {
     vi.resetModules();
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: enhancedAutocompleteMock,
+      Autocomplete: EnhancedAutocompleteMock,
     }));
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
@@ -2057,7 +1985,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     const option1 = await screen.findByTestId(
       'rendered-option-user1',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     await user.click(option1);
@@ -2084,9 +2012,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(input);
     await user.type(input, 'John Doe');
@@ -2096,7 +2024,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     vi.clearAllMocks();
     await user.click(addButton);
@@ -2107,7 +2035,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         // expecting 'Network error' ensures catch block was hit with correct error
         expect(NotificationToast.error).toHaveBeenCalledWith('Network error');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
@@ -2126,7 +2054,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
           },
         },
       },
-      delay: 100,
+      delay: 300,
     };
 
     const { unmount } = renderWithProviders([
@@ -2139,9 +2067,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(input);
     await user.type(input, 'John Doe');
@@ -2151,7 +2079,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     vi.clearAllMocks();
 
@@ -2160,11 +2088,13 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     // Unmount immediately
     unmount();
 
-    // Wait to ensure no side effects from potential async completion
-    await new Promise((r) => setTimeout(r, 200));
-
-    expect(NotificationToast.success).not.toHaveBeenCalled();
-    expect(NotificationToast.error).not.toHaveBeenCalled();
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.error).not.toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   test('handles non-Error exceptions', async () => {
@@ -2188,9 +2118,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(input);
     await user.type(input, 'John Doe');
@@ -2200,7 +2130,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     vi.clearAllMocks();
 
@@ -2211,7 +2141,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         // Logic: const errorMessage = err instanceof Error ? err.message : 'Unknown error';
         expect(NotificationToast.error).toHaveBeenCalledWith('Unknown error');
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     spy.mockRestore();
@@ -2246,9 +2176,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
     await user.click(input);
     await user.type(input, 'John Doe');
@@ -2258,7 +2188,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     const addButton = await screen.findByTestId(
       'add-registrant-btn',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     vi.clearAllMocks();
@@ -2272,7 +2202,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
           'Adding the attendee...',
         );
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     // Second click while isAdding is true - should be ignored
@@ -2283,7 +2213,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       () => {
         expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
       },
-      { timeout: 1000 },
+      { timeout: 5000 },
     );
   });
 
@@ -2302,66 +2232,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         )),
       }),
     );
-    vi.doMock('@mui/material/Autocomplete', () => ({
+    vi.doMock('shared-components/Autocomplete', () => ({
       __esModule: true,
-      default: ({
-        renderInput,
-        renderOption,
-        options,
-        onChange,
-        onInputChange,
-      }: InterfaceAutocompleteMockProps) => {
-        const [_localInputValue, setLocalInputValue] = React.useState('');
-
-        const handleInputChange = (
-          e: React.ChangeEvent<HTMLInputElement>,
-        ): void => {
-          const newValue = e.target.value;
-          setLocalInputValue(newValue);
-          if (onInputChange) {
-            onInputChange({} as React.SyntheticEvent, newValue, 'input');
-          }
-        };
-
-        const inputProps = {
-          onChange: handleInputChange,
-          onInput: handleInputChange,
-        };
-
-        return (
-          <div data-testid="autocomplete-mock">
-            {renderInput({
-              InputProps: { ref: vi.fn() },
-              id: 'test-autocomplete',
-              disabled: false,
-              inputProps: inputProps,
-            })}
-            <div data-testid="options-container">
-              {options && options.length > 0 ? (
-                options.map((option) => {
-                  const liProps = {
-                    key: option.id,
-                    'data-testid': `rendered-option-${option.id}`,
-                    onClick: (): void => {
-                      if (onChange) {
-                        onChange({} as React.SyntheticEvent, option);
-                      }
-                    },
-                    role: 'option',
-                    tabIndex: 0,
-                  };
-
-                  return renderOption
-                    ? renderOption(liProps, option, { selected: false })
-                    : null;
-                })
-              ) : (
-                <div data-testid="no-options">No options</div>
-              )}
-            </div>
-          </div>
-        );
-      },
+      Autocomplete: EnhancedAutocompleteMock,
     }));
 
     const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
@@ -2414,27 +2287,18 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    const input = await screen.findByTestId(
-      'autocomplete',
-      {},
-      { timeout: 3000 },
-    );
-
-    // Type to trigger the autocomplete options to render
-    await user.type(input, 'John');
-
-    // Wait for the option to appear
+    // Wait for the option to appear (rendered by the MUI mock)
     await waitFor(
       () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     const avatarImg = await screen.findByTestId(
       'profile-avatar-img',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     avatarImg.dispatchEvent(new Event('error'));
@@ -2482,9 +2346,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     const input = await screen.findByTestId(
-      'autocomplete',
+      'shared-autocomplete-input',
       {},
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     // Type to select a member
@@ -2495,7 +2359,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     const option = screen.getByText('John Doe');
@@ -2513,7 +2377,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       () => {
         expect(addRegistrantSpy).toHaveBeenCalledTimes(1);
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 });

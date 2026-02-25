@@ -23,21 +23,19 @@ export interface InterfaceBaseModalProps {
 
 /**
  * Props for Autocomplete mock component used in tests.
+ * Mirrors the shared Autocomplete component's prop contract.
  */
 export interface InterfaceAutocompleteMockProps {
-  renderInput: (params: Record<string, unknown>) => JSX.Element;
+  renderInput?: (params: Record<string, unknown>) => JSX.Element;
   options?: { id: string; name?: string }[];
-  onChange?: (
-    event: React.SyntheticEvent,
-    value: { id: string; name?: string } | null,
-  ) => void;
+  onChange?: (value: { id: string; name?: string } | null) => void;
   onInputChange?: (
     event: React.SyntheticEvent,
     value: string,
     reason: string,
   ) => void;
   inputValue?: string;
-  noOptionsText?: string;
+  noOptionsText?: React.ReactNode;
   renderOption?: (
     props: Record<string, unknown>,
     option: { id: string; name?: string },
@@ -46,4 +44,5 @@ export interface InterfaceAutocompleteMockProps {
     },
   ) => JSX.Element;
   getOptionLabel?: (option: { id: string; name?: string }) => string;
+  dataTestId?: string;
 }
