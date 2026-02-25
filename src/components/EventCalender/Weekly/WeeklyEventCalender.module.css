@@ -1,0 +1,162 @@
+.weeklyCalendar {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+}
+
+.calendarBody {
+  display: flex;
+  flex: 1;
+}
+
+.timeColumn {
+  width: var(--space-11);
+  flex-shrink: 0;
+  border-right: var(--border-1) solid var(--color-gray-200);
+  padding-top: var(--space-10);
+}
+
+.timeHeader {
+  height: var(--space-10);
+}
+
+.timeSlot {
+  height: var(--space-12);
+  position: relative;
+  text-align: right;
+  padding-right: var(--space-3);
+  color: var(--color-gray-500);
+  font-size: var(--font-size-xs);
+}
+
+.timeLabel {
+  position: relative;
+  top: calc(var(--space-1) * -3);
+}
+
+.weekGrid {
+  display: flex;
+  flex: 1;
+}
+
+.dayColumn {
+  flex: 1;
+  border-right: var(--border-1) solid var(--color-gray-200);
+  min-width: var(--space-15);
+}
+
+.dayColumn:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: calc(var(--border-2) * -1);
+}
+
+.eventCard:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: calc(var(--border-2) * -1);
+}
+
+.dayHeader {
+  height: var(--space-11);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-bottom: var(--border-1) solid var(--color-gray-200);
+  background-color: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dayName {
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+  font-size: var(--font-size-xs);
+}
+
+.dayDate {
+  font-size: var(--font-size-2xl);
+  color: var(--color-gray-800);
+}
+
+.todayHighlight .dayDate {
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  width: var(--space-8);
+  height: var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.todayHighlight .dayName {
+  color: var(--color-blue-500);
+}
+
+.dayGrid {
+  position: relative;
+}
+
+.gridCell {
+  height: var(--space-12);
+  border-bottom: var(--border-1) solid var(--color-gray-50);
+}
+
+.eventContainer {
+  position: absolute;
+  /* width and left are set inline by getEventStyle based on collision columns */
+  background-color: var(--color-blue-100);
+  border-left: var(--border-3) solid var(--color-blue-500);
+  border-top: var(--border-3) solid var(--color-blue-500);
+  border-radius: var(--radius-md);
+  overflow: visible;
+  pointer-events: auto;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  /* height is set inline by getEventStyle — do NOT override it here */
+}
+
+/* Inner EventListCard - allow it to size based on content */
+.eventContainer > div:first-child {
+  flex: 0 0 auto;
+  padding: var(--space-1) var(--space-2) !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0;
+  cursor: pointer;
+  min-height: 0 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.eventContainer h2 {
+  font-size: var(--font-size-xs) !important;
+  color: var(--color-blue-700) !important;
+  margin: 0 0 var(--space-1) 0 !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 !important;
+  font-weight: var(--font-weight-medium);
+}
+
+.eventTime {
+  font-size: var(--font-size-xs);
+  color: var(--color-blue-600);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 100%;
+}
+
+.weeklyEvents {
+  margin-bottom: var(--space-7);
+}

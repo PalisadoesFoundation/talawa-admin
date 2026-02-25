@@ -10,7 +10,7 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { FormEvent } from 'react';

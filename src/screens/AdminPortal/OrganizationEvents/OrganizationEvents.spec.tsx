@@ -845,14 +845,37 @@ describe('Organisation Events Page', () => {
     const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
     await userEvent.click(viewTypeDropdown);
 
-    // Find and click the "Year View" option
+    // Find and click the "Year View" option (value = ViewType.YEAR = 'Year View')
     const yearOption = await screen.findByTestId(
       'selectViewType-item-Year View',
     );
     await userEvent.click(yearOption);
 
+    // The dropdown toggle now shows the selected option's label ("Select Year")
     await waitFor(() => {
-      expect(container.textContent).toMatch('Year View');
+      expect(container.textContent).toMatch('Select Year');
+    });
+  });
+
+  test('should switch to week view when ViewType.WEEK is selected', async () => {
+    const { container } = renderWithLink(defaultLink);
+
+    await wait();
+
+    expect(container.textContent).toMatch('Month');
+
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
+    await userEvent.click(viewTypeDropdown);
+
+    // Find and click the "Week View" option (value = ViewType.WEEK = 'Week View')
+    const weekOption = await screen.findByTestId(
+      'selectViewType-item-Week View',
+    );
+    await userEvent.click(weekOption);
+
+    // The dropdown toggle now shows the selected option's label ("Select Week")
+    await waitFor(() => {
+      expect(container.textContent).toMatch('Select Week');
     });
   });
 

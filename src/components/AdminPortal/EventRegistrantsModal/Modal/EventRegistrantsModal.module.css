@@ -1,12 +1,12 @@
 .modalHeader {
   border: none;
   background-color: var(--modalHeader-bg);
-  padding: 1rem;
+  padding: var(--space-5);
   color: var(--modalHeader-color);
 }
 
 .addButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-4);
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
@@ -18,5 +18,24 @@
   cursor: pointer;
   background: none;
   border: none;
-  padding: 0;
+  padding: var(--space-0);
+}
+
+/* Avatar Option Styling */
+.avatarContainer {
+  display: flex;
+  align-items: center;
+}
+
+.avatarName {
+  margin-inline-start: var(--space-3);
+}
+
+/* No Options Text Styling */
+.noOptionsContainer {
+  display: flex;
+}
+
+.noResultsText {
+  margin-inline-end: var(--space-3);
 }

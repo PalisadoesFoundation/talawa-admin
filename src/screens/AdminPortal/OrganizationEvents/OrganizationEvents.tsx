@@ -86,6 +86,7 @@ interface IEventEdge {
 
 export enum ViewType {
   DAY = 'Day',
+  WEEK = 'Week View',
   MONTH = 'Month View',
   YEAR = 'Year View',
 }
@@ -249,9 +250,10 @@ function organizationEvents(): JSX.Element {
                   title: t('viewType'),
                   selected: viewType,
                   options: [
-                    { label: ViewType.MONTH, value: ViewType.MONTH },
-                    { label: ViewType.DAY, value: ViewType.DAY },
-                    { label: ViewType.YEAR, value: ViewType.YEAR },
+                    { label: t('selectMonth'), value: ViewType.MONTH },
+                    { label: t('selectWeek'), value: ViewType.WEEK },
+                    { label: t('selectDay'), value: ViewType.DAY },
+                    { label: t('selectYear'), value: ViewType.YEAR },
                   ],
                   onChange: (value) => handleChangeView(value.toString()),
                   testIdPrefix: 'selectViewType',

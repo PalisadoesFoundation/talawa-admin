@@ -158,8 +158,36 @@ const errorLink = onError(
     }
 
     if (networkError) {
+      const definition = getMainDefinition(operation.query);
+      const isSubscriptionOperation =
+        definition.kind === 'OperationDefinition' &&
+        definition.operation === 'subscription';
+
+      const errorName =
+        (networkError as { name?: string })?.name?.toLowerCase() ?? '';
+      const errorMessage = networkError.message?.toLowerCase() ?? '';
+      const isAbortOrCancelError =
+        errorName.includes('abort') ||
+        errorName.includes('cancel') ||
+        errorMessage.includes('abort') ||
+        errorMessage.includes('cancel');
+
+      const statusCode = (networkError as { statusCode?: number })?.statusCode;
+      const isServerUnavailableError =
+        errorMessage.includes('failed to fetch') ||
+        errorMessage.includes('network error') ||
+        (typeof statusCode === 'number' && statusCode >= 500);
+
+      if (
+        isSubscriptionOperation ||
+        isAbortOrCancelError ||
+        !isServerUnavailableError
+      ) {
+        return;
+      }
+
       NotificationToast.error(
-        'API server unavailable. Check your connection or try again later',
+        { key: 'talawaApiUnavailable', namespace: 'errors' },
         { toastId: 'apiServer' },
       );
     }

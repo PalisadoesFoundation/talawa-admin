@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { MockedProvider } from '@apollo/client/testing';
 import type { MockedResponse } from '@apollo/client/testing';
@@ -89,11 +90,28 @@ const renderComponent = (
 };
 
 describe('AcceptInvitation', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
+  const FIXED_BASE_DATE = dayjs
+    .utc()
+    .year(2025)
+    .month(5)
+    .date(15)
+    .hour(10)
+    .minute(0)
+    .second(0)
+    .millisecond(0)
+    .toISOString();
+
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
   });
 
-  it('should show loader while verifying', () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  it('should show loader while verifying', async () => {
     const mocks = [
       {
         request: {
@@ -114,12 +132,15 @@ describe('AcceptInvitation', () => {
             },
           },
         },
-        delay: 100, // Add delay to ensure loading state is visible
       },
     ];
     renderComponent(mocks, '/invitation/test-token');
-    // This should hit the early return with LoadingState showing the loading spinner
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
   });
 
   it('should show error for invalid token', async () => {
@@ -229,7 +250,14 @@ describe('AcceptInvitation', () => {
               invitationToken: 'test-token',
               eventId: 'event-1',
               organizationId: 'org-1',
-              expiresAt: new Date().toISOString(),
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: dayjs
+                .utc(FIXED_BASE_DATE)
+                .add(1, 'month')
+                .toISOString(),
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -257,6 +285,7 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
               organizationId: 'org-1',
               inviteeEmailMasked: null,
               inviteeName: null,
@@ -278,7 +307,8 @@ describe('AcceptInvitation', () => {
 
   // NEW: Test for displaying all invitation metadata fields
   it('should display all invitation metadata fields correctly', async () => {
-    const expiryDate = dayjs.utc().add(1, 'year').endOf('year').toISOString();
+    const expiryDate = dayjs.utc(FIXED_BASE_DATE).add(2, 'years').toISOString();
+
     const mocks = [
       {
         request: {
@@ -292,19 +322,27 @@ describe('AcceptInvitation', () => {
               eventId: 'event-1',
               organizationId: 'org-1',
               inviteeEmailMasked: 'test@example.com',
+              inviteeName: null,
+              status: null,
               expiresAt: expiryDate,
+              recurringEventInstanceId: null,
             },
           },
         },
       },
     ];
+
     renderComponent(mocks, '/invitation/test-token', 'auth-token');
+
     await waitFor(() => {
       expect(screen.getByText('test@example.com')).toBeInTheDocument();
       expect(screen.getByText('org-1')).toBeInTheDocument();
       expect(screen.getByText('event-1')).toBeInTheDocument();
+
       expect(
-        screen.getByText(new Date(expiryDate).toLocaleString()),
+        screen.getByText((content, element) => {
+          return element?.tagName === 'DD' && content.includes('2027');
+        }),
       ).toBeInTheDocument();
     });
   });
@@ -321,6 +359,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -345,6 +390,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -355,8 +407,14 @@ describe('AcceptInvitation', () => {
       '/invitation/test-token',
     );
     await waitFor(() => {
-      fireEvent.click(screen.getByText('Log in'));
+      const loginButton = screen.getByText('Log in');
+      expect(loginButton).toBeInTheDocument();
+      expect(loginButton).toBeEnabled();
+      // Ensure the component has finished loading and processing the token
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const loginButton = screen.getByText('Log in');
+    await user.click(loginButton);
     await waitFor(() => {
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'pendingInvitationToken',
@@ -377,6 +435,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -384,8 +449,12 @@ describe('AcceptInvitation', () => {
     ];
     renderComponent(mocks, '/invitation/test-token');
     await waitFor(() => {
-      fireEvent.click(screen.getByText('Log in'));
+      const loginButton = screen.getByText('Log in');
+      expect(loginButton).toBeInTheDocument();
+      expect(loginButton).toBeEnabled();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    await user.click(screen.getByText('Log in'));
     await waitFor(() => {
       expect(screen.getByText('Login Page')).toBeInTheDocument();
     });
@@ -403,6 +472,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -413,8 +489,13 @@ describe('AcceptInvitation', () => {
       '/invitation/test-token',
     );
     await waitFor(() => {
-      fireEvent.click(screen.getByText('Sign up'));
+      const signupButton = screen.getByText('Sign up');
+      expect(signupButton).toBeInTheDocument();
+      expect(signupButton).toBeEnabled();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const signupButton = screen.getByText('Sign up');
+    await user.click(signupButton);
     await waitFor(() => {
       expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
         'pendingInvitationToken',
@@ -435,6 +516,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              inviteeName: null,
+              status: null,
+              expiresAt: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -442,8 +530,12 @@ describe('AcceptInvitation', () => {
     ];
     renderComponent(mocks, '/invitation/test-token');
     await waitFor(() => {
-      fireEvent.click(screen.getByText('Sign up'));
+      const signupButton = screen.getByText('Sign up');
+      expect(signupButton).toBeInTheDocument();
+      expect(signupButton).toBeEnabled();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    await user.click(screen.getByText('Sign up'));
     await waitFor(() => {
       expect(screen.getByText('Signup Page')).toBeInTheDocument();
     });
@@ -479,7 +571,42 @@ describe('AcceptInvitation', () => {
       result: {
         data: {
           acceptEventInvitation: {
+            id: null,
+            eventId: null,
+            recurringEventInstanceId: null,
+            invitedBy: null,
+            userId: null,
+            inviteeEmail: null,
+            inviteeName: null,
             invitationToken: 'test-token',
+            status: null,
+            expiresAt: null,
+            respondedAt: null,
+            metadata: null,
+            createdAt: null,
+            updatedAt: null,
+          },
+        },
+      },
+      delay: 100, // Add delay to ensure loading state is visible
+    };
+
+    const verifyMaskedEmailMock = {
+      request: {
+        query: VERIFY_EVENT_INVITATION,
+        variables: { input: { invitationToken: 'test-token' } },
+      },
+      result: {
+        data: {
+          verifyEventInvitation: {
+            invitationToken: 'test-token',
+            eventId: null,
+            organizationId: null,
+            inviteeEmailMasked: 't**@e***.com',
+            inviteeName: null,
+            status: null,
+            expiresAt: null,
+            recurringEventInstanceId: null,
           },
         },
       },
@@ -501,7 +628,7 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      await user.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         expect(screen.getByText('Event Page')).toBeInTheDocument();
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -544,7 +671,7 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      await user.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         expect(screen.getByText('Organizations Page')).toBeInTheDocument();
       });
@@ -570,7 +697,10 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      await user.click(screen.getByTestId('accept-invite-btn'));
+      await waitFor(() => {
+        expect(screen.getByTestId('accept-invite-btn')).toBeEnabled();
+      });
       await waitFor(() => {
         expect(screen.queryByText('Event Page')).not.toBeInTheDocument();
         expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -594,7 +724,7 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      await user.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Acceptance failed',
@@ -620,7 +750,7 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId('accept-invite-btn'));
+      await user.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         // Apollo Client returns "Error message not found." for empty error messages
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -631,8 +761,12 @@ describe('AcceptInvitation', () => {
 
     // NEW: Test button shows loading state during submission
     it('should show loading state on accept button during submission', async () => {
+      const slowAcceptMock = {
+        ...acceptMock,
+        delay: 300,
+      };
       renderComponent(
-        [verifyMock, acceptMock],
+        [verifyMock, slowAcceptMock],
         '/invitation/test-token',
         'auth-token',
       );
@@ -645,7 +779,7 @@ describe('AcceptInvitation', () => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
       const button = screen.getByTestId('accept-invite-btn');
-      fireEvent.click(button);
+      await user.click(button);
 
       // Wait for the loading state to appear
       await waitFor(() => {
@@ -654,60 +788,25 @@ describe('AcceptInvitation', () => {
     });
 
     it('should require confirmation for masked email', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              eventId: 'event-1',
-              organizationId: 'org-1',
-              inviteeEmailMasked: 't**@e***.com',
-              inviteeName: null,
-              status: null,
-              expiresAt: null,
-              recurringEventInstanceId: null,
-            },
-          },
-        },
-      };
-
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
         'auth-token',
       );
       await waitFor(() => {
-        const acceptButton = screen.getByTestId('accept-invite-btn');
-        expect(acceptButton).toBeDisabled();
-        const checkbox = screen.getByLabelText(
-          'I confirm the email address of my account matches the invited address (shown above).',
-        );
-        fireEvent.click(checkbox);
-        expect(acceptButton).not.toBeDisabled();
+        expect(screen.getByTestId('accept-invite-btn')).toBeDisabled();
+      });
+      const checkbox = screen.getByLabelText(
+        'I confirm the email address of my account matches the invited address (shown above).',
+      );
+      await user.click(checkbox);
+      await waitFor(() => {
+        expect(screen.getByTestId('accept-invite-btn')).not.toBeDisabled();
       });
     });
 
     // NEW: Test masked email warning message appears
     it('should show warning message for masked email invitations', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              inviteeEmailMasked: 't**@e***.com',
-            },
-          },
-        },
-      };
-
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
@@ -723,29 +822,17 @@ describe('AcceptInvitation', () => {
     });
 
     it('should allow signing in as a different user', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              inviteeEmailMasked: 't**@e***.com',
-            },
-          },
-        },
-      };
-
       const { mockLocalStorage } = renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
         'auth-token',
       );
       await waitFor(() => {
-        fireEvent.click(screen.getByText('Sign in as a different user'));
+        expect(
+          screen.getByText('Sign in as a different user'),
+        ).toBeInTheDocument();
       });
+      await user.click(screen.getByText('Sign in as a different user'));
       await waitFor(() => {
         expect(screen.getByText('Login Page')).toBeInTheDocument();
         expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('token');
@@ -769,36 +856,24 @@ describe('AcceptInvitation', () => {
 
     // NEW: Test unchecking confirmation checkbox disables button again
     it('should disable accept button when confirmation checkbox is unchecked', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              inviteeEmailMasked: 't**@e***.com',
-            },
-          },
-        },
-      };
-
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
         'auth-token',
       );
       await waitFor(() => {
-        const checkbox = screen.getByLabelText(
-          'I confirm the email address of my account matches the invited address (shown above).',
-        );
-        fireEvent.click(checkbox); // Check
-        const acceptButton = screen.getByTestId('accept-invite-btn');
-        expect(acceptButton).not.toBeDisabled();
-
-        fireEvent.click(checkbox); // Uncheck
-        expect(acceptButton).toBeDisabled();
+        expect(screen.getByTestId('accept-invite-btn')).toBeDisabled();
+      });
+      const checkbox = screen.getByLabelText(
+        'I confirm the email address of my account matches the invited address (shown above).',
+      );
+      await user.click(checkbox); // Check
+      await waitFor(() => {
+        expect(screen.getByTestId('accept-invite-btn')).not.toBeDisabled();
+      });
+      await user.click(checkbox); // Uncheck
+      await waitFor(() => {
+        expect(screen.getByTestId('accept-invite-btn')).toBeDisabled();
       });
     });
   });

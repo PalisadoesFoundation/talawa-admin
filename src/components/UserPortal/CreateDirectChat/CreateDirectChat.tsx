@@ -20,8 +20,7 @@
  * />
  * ```
  */
-import { Paper, TableBody } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -31,12 +30,9 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import Table from '@mui/material/Table';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
@@ -171,6 +167,88 @@ export default function createDirectChatModal({
 
   const currentUserName = currentUser?.name || 'You';
 
+  const memberTableData = useMemo(
+    () =>
+      allUsersData?.organization?.members?.edges
+        ?.filter(
+          ({ node: userDetails }: { node: InterfaceOrganizationMember }) =>
+            userDetails.id !== userId,
+        )
+        .map(
+          (
+            { node: userDetails }: { node: InterfaceOrganizationMember },
+            index: number,
+          ) => ({ ...userDetails, index: index + 1 }),
+        ) ?? [],
+    [allUsersData?.organization?.members?.edges, userId],
+  );
+
+  const memberColumns = useMemo<
+    IColumnDef<InterfaceOrganizationMember & { index: number }>[]
+  >(
+    () => [
+      {
+        id: 'index',
+        header: tCommon('hash', { defaultValue: '#' }),
+        accessor: 'index',
+        meta: { align: 'center' },
+      },
+      {
+        id: 'user',
+        header: t('user', { defaultValue: 'User' }),
+        accessor: 'name',
+        meta: { align: 'center' },
+        render: (value, row) => (
+          <>
+            {row.name}
+            <br />
+            {row.role || t('role.member', { defaultValue: 'Member' })}
+          </>
+        ),
+      },
+      {
+        id: 'action',
+        header: t('chat', { defaultValue: 'Chat' }),
+        accessor: 'id',
+        meta: { align: 'center' },
+        render: (_, row) => (
+          <Button
+            onClick={() => {
+              handleCreateDirectChat(
+                row.id,
+                row.name,
+                chats,
+                t,
+                createChat,
+                createChatMembership,
+                organizationId,
+                userId,
+                currentUserName,
+                chatsListRefetch,
+                toggleCreateDirectChatModal,
+              );
+            }}
+            data-testid="addBtn"
+          >
+            {t('add', { defaultValue: 'Add' })}
+          </Button>
+        ),
+      },
+    ],
+    [
+      t,
+      tCommon,
+      chats,
+      createChat,
+      createChatMembership,
+      organizationId,
+      userId,
+      currentUserName,
+      chatsListRefetch,
+      toggleCreateDirectChatModal,
+    ],
+  );
+
   const handleUserModalSearchChange = (value: string): void => {
     const trimmedName = value.trim();
     allUsersRefetch({
@@ -220,81 +298,17 @@ export default function createDirectChatModal({
                 buttonTestId="submitBtn"
               />
             </div>
-            <TableContainer className={styles.tableContainer} component={Paper}>
-              <Table
-                aria-label={t('organizationMembersTable', {
+            <div className={styles.tableContainer}>
+              <DataTable<InterfaceOrganizationMember & { index: number }>
+                data={memberTableData}
+                columns={memberColumns}
+                rowKey="id"
+                paginationMode="none"
+                ariaLabel={t('organizationMembersTable', {
                   defaultValue: 'Organization Members Table',
                 })}
-              >
-                <TableHead>
-                  <TableRow>
-                    <TableCell>
-                      {tCommon('hash', { defaultValue: '#' })}
-                    </TableCell>
-                    <TableCell align="center">
-                      {t('user', { defaultValue: 'User' })}
-                    </TableCell>
-                    <TableCell align="center">
-                      {t('chat', { defaultValue: 'Chat' })}
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {allUsersData &&
-                    allUsersData.organization?.members?.edges?.length > 0 &&
-                    allUsersData.organization.members.edges
-                      .filter(
-                        ({
-                          node: userDetails,
-                        }: {
-                          node: InterfaceOrganizationMember;
-                        }) => userDetails.id !== userId,
-                      )
-                      .map(
-                        (
-                          {
-                            node: userDetails,
-                          }: { node: InterfaceOrganizationMember },
-                          index: number,
-                        ) => (
-                          <TableRow data-testid="user" key={userDetails.id}>
-                            <TableCell component="th" scope="row">
-                              {index + 1}
-                            </TableCell>
-                            <TableCell align="center">
-                              {userDetails.name}
-                              <br />
-                              {userDetails.role ||
-                                t('role.member', { defaultValue: 'Member' })}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                onClick={() => {
-                                  handleCreateDirectChat(
-                                    userDetails.id,
-                                    userDetails.name,
-                                    chats,
-                                    t,
-                                    createChat,
-                                    createChatMembership,
-                                    organizationId,
-                                    userId,
-                                    currentUserName,
-                                    chatsListRefetch,
-                                    toggleCreateDirectChatModal,
-                                  );
-                                }}
-                                data-testid="addBtn"
-                              >
-                                {t('add', { defaultValue: 'Add' })}
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        ),
-                      )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+              />
+            </div>
           </>
         </LoadingState>
       </BaseModal>

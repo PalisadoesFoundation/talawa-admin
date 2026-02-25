@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import { FaLink, FaTrash } from 'react-icons/fa';
@@ -56,11 +57,11 @@ const AgendaItemsUpdateModal: React.FC<
   agendaItemId,
   itemFormState,
   setItemFormState,
-  t,
   agendaItemCategories,
   agendaFolderData,
   refetchAgendaFolder,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const [newUrl, setNewUrl] = useState('');
   const { orgId } = useParams();
   const organizationId = orgId ?? '';

@@ -344,7 +344,7 @@ export const CREATE_ORGANIZATION_MUTATION_PG = gql`
     $name: String!
     $addressLine1: String
     $addressLine2: String
-    $avatar: Upload
+    $avatar: FileMetadataInput
     $city: String
     $countryCode: Iso3166Alpha2CountryCode
     $description: String
@@ -530,7 +530,7 @@ export const UPDATE_POST_VOTE = gql`
 /**
  * GraphQL mutation to update community profile settings including logo upload.
  *
- * @param logo - Optional logo file (Upload scalar) - sent as multipart request via apollo-upload-client
+ * @param logo - Optional logo metadata (FileMetadataInput) - uploaded via MinIO presigned URL
  * @param name - Community name
  * @param websiteURL - Community website URL
  * @param facebookURL - Facebook profile URL
@@ -547,7 +547,7 @@ export const UPDATE_POST_VOTE = gql`
  */
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
-    $logo: Upload
+    $logo: FileMetadataInput
     $facebookURL: String
     $githubURL: String
     $instagramURL: String
@@ -615,6 +615,37 @@ export const DONATE_TO_ORGANIZATION = gql`
       nameOfUser: $nameOfUser
       amount: $amount
       nameOfOrg: $nameOfOrg
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
+  }
+`;
+
+/**
+ * DONATE_TO_ORGANIZATION_WITH_CURRENCY is the currency-aware variant of DONATE_TO_ORGANIZATION for donations with explicit currency.
+ * Accepts an ISO 4217 `currencyCode` (Iso4217CurrencyCode) while preserving the same returned fields: `_id`, `amount`, `nameOfUser`, and `nameOfOrg`.
+ */
+export const DONATE_TO_ORGANIZATION_WITH_CURRENCY = gql`
+  mutation donateWithCurrency(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+    $currencyCode: Iso4217CurrencyCode!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+      currencyCode: $currencyCode
     ) {
       _id
       amount
