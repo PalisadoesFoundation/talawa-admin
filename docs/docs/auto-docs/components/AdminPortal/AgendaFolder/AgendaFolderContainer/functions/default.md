@@ -28,10 +28,6 @@ Defined in: [src/components/AdminPortal/AgendaFolder/AgendaFolderContainer.tsx:4
 
 () => `void`
 
-#### t
-
-(`key`) => `string`
-
 ## Returns
 
 `Element`
