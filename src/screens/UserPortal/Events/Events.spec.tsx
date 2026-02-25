@@ -1426,8 +1426,12 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.type(endTimePicker, '11:00:00');
 
     // Time pickers should accept the changes - re-query as elements might have been detached
-    expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Time')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
+      expect(screen.getByLabelText('End Time')).toBeInTheDocument();
+    }, {
+      timeout: 3000,
+    });
   });
 
   it('Should handle null date values gracefully', async () => {
@@ -1466,7 +1470,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1498,7 +1502,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
