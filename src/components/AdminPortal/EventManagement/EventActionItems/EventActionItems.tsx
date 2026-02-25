@@ -54,16 +54,12 @@ import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import type { InterfaceEventActionItemsProps } from 'types/AdminPortal/EventManagement/EventActionItems/interface';
 
 enum ItemStatus {
   Pending = 'pending',
   Completed = 'completed',
   Late = 'late',
-}
-
-interface InterfaceEventActionItemsProps {
-  eventId: string;
-  orgActionItemsRefetch?: () => void;
 }
 
 const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
