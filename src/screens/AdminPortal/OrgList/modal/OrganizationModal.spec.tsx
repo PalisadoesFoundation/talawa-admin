@@ -13,7 +13,6 @@ import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from '../../../../state/store';
 import OrganizationModal from './OrganizationModal';
-import i18nForTest from '../../../../utils/i18nForTest';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -132,13 +131,11 @@ describe('OrganizationModal Component', () => {
             formState={formState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
     );
   };
-
   test('renders OrganizationModal correctly', () => {
     setup();
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
@@ -181,12 +178,10 @@ describe('OrganizationModal Component', () => {
             formState={validFormState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
     );
-
     const submitButton = screen.getByTestId('submitOrganizationForm');
     await userEvent.click(submitButton);
     expect(mockCreateOrg).toHaveBeenCalled();
@@ -258,12 +253,10 @@ describe('OrganizationModal Component', () => {
             formState={validFormState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
     );
-
     await userEvent.click(screen.getByTestId('submitOrganizationForm'));
     expect(mockCreateOrg).toHaveBeenCalled();
   });
@@ -411,13 +404,11 @@ describe('OrganizationModal Component', () => {
             formState={completeFormState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
     );
     const submitButton = screen.getByTestId('submitOrganizationForm');
-
     await userEvent.click(submitButton);
     expect(mockCreateOrg).toHaveBeenCalled();
   });
@@ -547,12 +538,10 @@ describe('OrganizationModal Component', () => {
             formState={formState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
     );
-
     expect(screen.getByTestId('modalOrganizationHeader')).toBeVisible();
   });
 
@@ -566,12 +555,10 @@ describe('OrganizationModal Component', () => {
             formState={formState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
     );
-
     expect(
       screen.queryByTestId('modalOrganizationHeader'),
     ).not.toBeInTheDocument();
@@ -615,12 +602,10 @@ describe('OrganizationModal Component', () => {
             formState={validFormState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
     );
-
     const form = screen.getByTestId('submitOrganizationForm').closest('form');
     expect(form).toBeInTheDocument();
 

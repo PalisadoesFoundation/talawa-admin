@@ -545,9 +545,8 @@ function OrgList(): JSX.Element {
         formState={formState}
         setFormState={setFormState}
         createOrg={createOrg}
-        userData={userData as any}
       />
-      {/* Plugin Notification Modal after Org is Created */}
+
       <BaseModal
         show={dialogModalisOpen}
         onHide={toggleDialogModal}

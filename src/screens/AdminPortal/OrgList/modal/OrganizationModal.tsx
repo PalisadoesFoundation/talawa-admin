@@ -5,7 +5,6 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
-import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import styles from './OrganizationModal.module.css';
 import { useTranslation } from 'react-i18next';
 
@@ -27,7 +26,6 @@ export interface InterfaceOrganizationModalProps {
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  userData: InterfaceCurrentUserTypePG | undefined;
 }
 
 const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
