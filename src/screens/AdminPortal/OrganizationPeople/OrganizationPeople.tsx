@@ -31,6 +31,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { languages } from 'utils/languages';
 import Button from 'shared-components/Button';
+import type { InterfaceMemberNode } from 'types/PeopleTab/interface';
 
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -43,15 +44,6 @@ const OPTION_TO_STATE: Record<string, number> = {
   admin: 1,
   users: 2,
 };
-
-interface IMemberNode {
-  id: string;
-  name: string;
-  role: string;
-  avatarURL?: string;
-  createdAt?: string;
-  emailAddress?: string;
-}
 
 function OrganizationPeople(): JSX.Element {
   const { t, i18n } = useTranslation('translation', {
@@ -99,10 +91,21 @@ function OrganizationPeople(): JSX.Element {
       : 'en-US';
   }, [i18n.language]);
 
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        timeZone: 'UTC',
+      }),
+    [locale],
+  );
+
   const visibleCount = useRef(0);
 
   const renderMemberRow = (
-    node: IMemberNode,
+    node: InterfaceMemberNode,
     index: number,
   ): React.ReactNode => {
     if (index === 0) visibleCount.current = 0;
@@ -117,12 +120,7 @@ function OrganizationPeople(): JSX.Element {
     visibleCount.current += 1;
 
     const formattedDate = node.createdAt
-      ? new Intl.DateTimeFormat(locale, {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-          timeZone: 'UTC',
-        }).format(new Date(node.createdAt))
+      ? dateFormatter.format(new Date(node.createdAt))
       : '-';
 
     return (
@@ -265,7 +263,7 @@ function OrganizationPeople(): JSX.Element {
             {state !== 2 ? (
               <CursorPaginationManager<
                 unknown,
-                IMemberNode,
+                InterfaceMemberNode,
                 Record<string, unknown>
               >
                 query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
@@ -275,7 +273,7 @@ function OrganizationPeople(): JSX.Element {
                 }}
                 dataPath="organization.members"
                 itemsPerPage={10}
-                keyExtractor={(node: IMemberNode) => node.id}
+                keyExtractor={(node: InterfaceMemberNode) => node.id}
                 renderItem={renderMemberRow}
                 emptyStateComponent={
                   <span data-testid="organization-people-empty-state">
@@ -286,7 +284,7 @@ function OrganizationPeople(): JSX.Element {
             ) : (
               <CursorPaginationManager<
                 unknown,
-                IMemberNode,
+                InterfaceMemberNode,
                 Record<string, unknown>
               >
                 query={USER_LIST_FOR_TABLE}
@@ -294,7 +292,7 @@ function OrganizationPeople(): JSX.Element {
                 dataPath="allUsers"
                 itemsPerPage={10}
                 refetchTrigger={state}
-                keyExtractor={(node: IMemberNode) => node.id}
+                keyExtractor={(node: InterfaceMemberNode) => node.id}
                 renderItem={renderMemberRow}
                 emptyStateComponent={
                   <span data-testid="organization-people-empty-state">

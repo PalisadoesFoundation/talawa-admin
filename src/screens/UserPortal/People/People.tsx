@@ -23,15 +23,7 @@ import { useParams } from 'react-router';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
-
-interface IMemberNode {
-  id: string;
-  name: string;
-  role: string;
-  avatarURL?: string;
-  createdAt: string;
-  emailAddress?: string;
-}
+import type { InterfaceMemberNode } from 'types/PeopleTab/interface';
 
 export default function People(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'people' });
@@ -115,7 +107,7 @@ export default function People(): React.JSX.Element {
           <div className={styles.people_card_main_container}>
             <CursorPaginationManager<
               unknown,
-              IMemberNode,
+              InterfaceMemberNode,
               Record<string, unknown>
             >
               query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
@@ -125,8 +117,8 @@ export default function People(): React.JSX.Element {
               }}
               dataPath="organization.members"
               itemsPerPage={10}
-              keyExtractor={(node: IMemberNode) => node.id}
-              renderItem={(node: IMemberNode, index: number) => {
+              keyExtractor={(node: InterfaceMemberNode) => node.id}
+              renderItem={(node: InterfaceMemberNode, index: number) => {
                 if (searchTerm) {
                   const lower = searchTerm.toLowerCase();
                   const nameMatch = node.name?.toLowerCase().includes(lower);
