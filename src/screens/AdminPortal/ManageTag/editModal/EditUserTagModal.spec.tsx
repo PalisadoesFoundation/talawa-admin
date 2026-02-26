@@ -59,7 +59,7 @@ describe('EditUserTagModal Component', () => {
     const input = screen.getByTestId('tagNameInput');
     await userEvent.clear(input);
     await userEvent.type(input, 'Updated Tag');
-    expect(defaultProps.setNewTagName).toHaveBeenCalledWith('Updated Tag');
+    expect(defaultProps.setNewTagName).toHaveBeenLastCalledWith('Updated Tag');
   });
 
   it('calls hideEditUserTagModal when cancel button is clicked', async () => {
