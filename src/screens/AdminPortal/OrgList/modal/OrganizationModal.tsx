@@ -249,9 +249,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           </Col>
         </Row>
 
-        <Form.Label htmlFor="orgphoto">
-          {tCommon('displayImage')}
-        </Form.Label>
+        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
 
         <Form.Control
           accept="image/*"
@@ -281,14 +279,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 const { objectName: avatarobjectName } =
                   await uploadFileToMinio(file, 'organization');
                 setFormState({ ...formState, avatar: avatarobjectName });
-                NotificationToast.success(
-                  tCommon('imageUploadSuccess'),
-                );
+                NotificationToast.success(tCommon('imageUploadSuccess'));
               } catch (error) {
                 console.error('Error uploading image:', error);
-                NotificationToast.error(
-                  tCommon('imageUploadError'),
-                );
+                NotificationToast.error(tCommon('imageUploadError'));
               }
             }
           }}

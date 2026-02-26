@@ -132,8 +132,8 @@ describe('OrganizationModal Component', () => {
             formState={formState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-  userData={undefined}
-/>
+            userData={undefined}
+          />
         </BrowserRouter>
       </Provider>,
     );
