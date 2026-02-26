@@ -34,12 +34,32 @@ describe('EditUserTagModal Component', () => {
     vi.clearAllMocks();
   });
 
-  const renderComponent = (props = defaultProps) =>
-    render(
+  const StatefulWrapper = ({
+    props = defaultProps,
+  }: {
+    props?: InterfaceEditUserTagModalProps;
+  }) => {
+    const [name, setName] = React.useState(props.newTagName);
+    return (
       <I18nextProvider i18n={i18n}>
-        <EditUserTagModal {...props} />
-      </I18nextProvider>,
+        <EditUserTagModal
+          {...props}
+          newTagName={name}
+          setNewTagName={(action) => {
+            props.setNewTagName(action);
+            if (typeof action === 'function') {
+              setName(action);
+            } else {
+              setName(action);
+            }
+          }}
+        />
+      </I18nextProvider>
     );
+  };
+
+  const renderComponent = (props = defaultProps) =>
+    render(<StatefulWrapper props={props} />);
 
   it('renders the modal when open', () => {
     renderComponent();
@@ -59,7 +79,9 @@ describe('EditUserTagModal Component', () => {
     const input = screen.getByTestId('tagNameInput');
     await userEvent.clear(input);
     await userEvent.type(input, 'Updated Tag');
+    // Now that we have a real state update, the prop will change and userEvent.type will work as expected.
     expect(defaultProps.setNewTagName).toHaveBeenLastCalledWith('Updated Tag');
+    expect(input).toHaveValue('Updated Tag');
   });
 
   it('calls hideEditUserTagModal when cancel button is clicked', async () => {
