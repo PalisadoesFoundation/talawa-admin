@@ -19,7 +19,6 @@ import {
   MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS,
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
-import type { TFunction } from 'i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const link1 = new StaticMockLink(MOCKS, true);
@@ -56,27 +55,11 @@ const props: InterfaceTagActionsProps[] = [
     tagActionsModalIsOpen: true,
     hideTagActionsModal: () => {},
     tagActionType: 'assignToTags',
-    t: ((key: string) => translations[key]) as TFunction<
-      'translation',
-      'manageTag'
-    >,
-    tCommon: ((key: string) => translations[key]) as TFunction<
-      'common',
-      undefined
-    >,
   },
   {
     tagActionsModalIsOpen: true,
     hideTagActionsModal: () => {},
     tagActionType: 'removeFromTags',
-    t: ((key: string) => translations[key]) as TFunction<
-      'translation',
-      'manageTag'
-    >,
-    tCommon: ((key: string) => translations[key]) as TFunction<
-      'common',
-      undefined
-    >,
   },
 ];
 
@@ -145,14 +128,6 @@ describe('Organisation Tags Page', () => {
       tagActionsModalIsOpen: true,
       hideTagActionsModal: hideTagActionsModalMock,
       tagActionType: 'assignToTags',
-      t: ((key: string) => translations[key]) as TFunction<
-        'translation',
-        'manageTag'
-      >,
-      tCommon: ((key: string) => translations[key]) as TFunction<
-        'common',
-        undefined
-      >,
     };
 
     renderTagActionsModal(props2, link1);

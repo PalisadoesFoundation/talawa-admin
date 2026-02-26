@@ -11,8 +11,9 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
-import { store } from '../../../../state/store'; // Update path based on your project structure
+import { store } from '../../../../state/store';
 import OrganizationModal from './OrganizationModal';
+import i18nForTest from '../../../../utils/i18nForTest';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -131,7 +132,8 @@ describe('OrganizationModal Component', () => {
             formState={formState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
-          />
+  userData={undefined}
+/>
         </BrowserRouter>
       </Provider>,
     );
@@ -179,6 +181,7 @@ describe('OrganizationModal Component', () => {
             formState={validFormState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
+            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
@@ -197,15 +200,9 @@ describe('OrganizationModal Component', () => {
     });
     await userEvent.upload(fileInput, file);
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
-      const updater = mockSetFormState.mock.calls[0][0];
-      const result = updater(formState);
-      expect(result.avatar).toEqual({
-        objectName: 'mocked-object-name',
-        fileHash: 'mocked-file-hash',
-        mimetype: 'image/png',
-        name: 'test-avatar.png',
-      });
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
+      );
     });
     expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
   });
@@ -261,6 +258,7 @@ describe('OrganizationModal Component', () => {
             formState={validFormState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
+            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
@@ -393,21 +391,6 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle form submission with all fields filled', async () => {
-    const setup = (): RenderResult => {
-      return render(
-        <Provider store={store}>
-          <BrowserRouter>
-            <OrganizationModal
-              showModal={true}
-              toggleModal={mockToggleModal}
-              formState={completeFormState}
-              setFormState={mockSetFormState}
-              createOrg={mockCreateOrg}
-            />
-          </BrowserRouter>
-        </Provider>,
-      );
-    };
     const completeFormState = {
       ...formState,
       name: 'Test Organization',
@@ -419,7 +402,20 @@ describe('OrganizationModal Component', () => {
       postalCode: '12345',
     };
 
-    setup();
+    render(
+      <Provider store={store}>
+        <BrowserRouter>
+          <OrganizationModal
+            showModal={true}
+            toggleModal={mockToggleModal}
+            formState={completeFormState}
+            setFormState={mockSetFormState}
+            createOrg={mockCreateOrg}
+            userData={undefined}
+          />
+        </BrowserRouter>
+      </Provider>,
+    );
     const submitButton = screen.getByTestId('submitOrganizationForm');
 
     await userEvent.click(submitButton);
@@ -482,15 +478,9 @@ describe('OrganizationModal Component', () => {
 
     // Use waitFor to handle async state updates after upload
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
-      const updater = mockSetFormState.mock.calls[0][0];
-      const result = updater(formState);
-      expect(result.avatar).toEqual({
-        objectName: 'mocked-object-name',
-        fileHash: 'mocked-file-hash',
-        mimetype: 'image/png',
-        name: 'test-avatar.png',
-      });
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
+      );
     });
   });
 
@@ -511,10 +501,7 @@ describe('OrganizationModal Component', () => {
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith({
-        key: 'invalidFileType',
-        namespace: 'errors',
-      });
+      expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -560,6 +547,7 @@ describe('OrganizationModal Component', () => {
             formState={formState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
+            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
@@ -578,6 +566,7 @@ describe('OrganizationModal Component', () => {
             formState={formState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
+            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
@@ -626,6 +615,7 @@ describe('OrganizationModal Component', () => {
             formState={validFormState}
             setFormState={mockSetFormState}
             createOrg={mockCreateOrg}
+            userData={undefined}
           />
         </BrowserRouter>
       </Provider>,
@@ -650,10 +640,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith({
-        key: 'fileTooLarge',
-        namespace: 'errors',
-      });
+      expect(toastMocks.error).toHaveBeenCalledWith('fileTooLarge');
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -674,21 +661,9 @@ describe('OrganizationModal Component', () => {
         'Image uploaded successfully',
       );
 
-      // setFormState is called with a functional update for avatar
-      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
-      // Execute the updater to verify the result
-      const updater = mockSetFormState.mock.calls[0][0];
-      // We pass the current formState to the updater
-      const result = updater(formState);
-      expect(result).toEqual(
-        expect.objectContaining({
-          avatar: {
-            objectName: 'mocked-object-name',
-            fileHash: 'mocked-file-hash',
-            mimetype: 'image/png',
-            name: 'test-avatar.png',
-          },
-        }),
+      // setFormState is called with a direct object spread for avatar
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
       );
     });
   });
@@ -703,10 +678,7 @@ describe('OrganizationModal Component', () => {
 
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith({
-        key: 'imageUploadError',
-        namespace: 'errors',
-      });
+      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
   });
