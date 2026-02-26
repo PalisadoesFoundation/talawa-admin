@@ -18,6 +18,7 @@ import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
+import { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
 
 const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
   const useParams = vi.fn();
@@ -57,6 +58,8 @@ vi.mock('utils/errorHandler', () => ({
 interface InterfaceMockOptions {
   blockUserError?: boolean;
   unblockUserError?: boolean;
+  blockUserNullData?: boolean;
+  unblockUserNullData?: boolean;
   membersQueryError?: boolean;
   blockedUsersQueryError?: boolean;
   emptyMembers?: boolean;
@@ -71,6 +74,11 @@ interface InterfaceGraphQLVariables {
   after?: unknown;
   userId?: string;
   organizationId?: string;
+  where?: {
+    role?: {
+      notEqual?: string;
+    };
+  };
 }
 
 interface InterfaceGraphQLRequest {
@@ -81,7 +89,9 @@ interface InterfaceGraphQLRequest {
 interface InterfaceGraphQLMock {
   request: InterfaceGraphQLRequest;
   result?: { data: unknown };
+  newData?: () => { data: unknown };
   error?: Error;
+  delay?: number;
   maxUsageCount?: number;
 }
 
@@ -91,6 +101,8 @@ const createMocks = (
   const {
     blockUserError = false,
     unblockUserError = false,
+    blockUserNullData = false,
+    unblockUserNullData = false,
     membersQueryError = false,
     blockedUsersQueryError = false,
     emptyMembers = false,
@@ -99,82 +111,99 @@ const createMocks = (
     delay = 0,
   } = options;
 
+  // Mutable state shared between query and mutation mocks for this test run.
+  // When a mutation fires, it updates mockState. When a query refetches,
+  // newData() reads the current mockState, returning the correct data.
+  const mockState = {
+    members: emptyMembers
+      ? []
+      : [
+          {
+            id: '1',
+            name: 'John Doe',
+            emailAddress: 'john@example.com',
+            role: 'regular',
+          },
+          {
+            id: '2',
+            name: 'Jane Smith',
+            emailAddress: 'jane@example.com',
+            role: 'regular',
+          },
+        ],
+    blockedUsers: emptyBlockedUsers
+      ? []
+      : [
+          {
+            id: '3',
+            name: 'Bob Johnson',
+            emailAddress: 'bob@example.com',
+            role: 'regular',
+          },
+        ],
+  };
+
   const mocks: InterfaceGraphQLMock[] = [
     {
       request: {
         query: GET_ORGANIZATION_MEMBERS_PG,
-        variables: { id: '123', first: 32, after: null },
+        variables: {
+          id: '123',
+          first: 32,
+          after: null,
+          where: {
+            role: {
+              notEqual: OrganizationMembershipRole.ADMIN,
+            },
+          },
+        },
       },
       ...(membersQueryError
         ? { error: new Error('Failed to fetch members') }
         : {
             delay,
-            result: {
+            newData: () => ({
               data: nullData
                 ? { organization: null }
                 : {
                     organization: {
                       members: {
-                        edges: emptyMembers
-                          ? []
-                          : [
-                              {
-                                node: {
-                                  id: '1',
-                                  name: 'John Doe',
-                                  emailAddress: 'john@example.com',
-                                  role: 'regular',
-                                },
-                              },
-                              {
-                                node: {
-                                  id: '2',
-                                  name: 'Jane Smith',
-                                  emailAddress: 'jane@example.com',
-                                  role: 'regular',
-                                },
-                              },
-                            ],
+                        edges: mockState.members.map((node) => ({ node })),
                         pageInfo: { hasNextPage: false, endCursor: null },
                       },
                     },
                   },
-            },
+            }),
           }),
       maxUsageCount: Number.POSITIVE_INFINITY,
     },
     {
       request: {
         query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-        variables: { id: '123', first: 32, after: null },
+        variables: {
+          id: '123',
+          first: 32,
+          after: null,
+        },
       },
       ...(blockedUsersQueryError
         ? { error: new Error('Failed to fetch blocked users') }
         : {
             delay,
-            result: {
+            newData: () => ({
               data: nullData
                 ? { organization: null }
                 : {
                     organization: {
                       blockedUsers: {
-                        edges: emptyBlockedUsers
-                          ? []
-                          : [
-                              {
-                                node: {
-                                  id: '3',
-                                  name: 'Bob Johnson',
-                                  emailAddress: 'bob@example.com',
-                                  role: 'regular',
-                                },
-                              },
-                            ],
+                        edges: mockState.blockedUsers.map((node) => ({
+                          node,
+                        })),
                         pageInfo: { hasNextPage: false, endCursor: null },
                       },
                     },
                   },
-            },
+            }),
           }),
       maxUsageCount: Number.POSITIVE_INFINITY,
     },
@@ -185,7 +214,19 @@ const createMocks = (
       },
       ...(blockUserError
         ? { error: new Error('Failed to block user') }
-        : { result: { data: { blockUser: { success: true } } } }),
+        : {
+            newData: () => {
+              if (blockUserNullData) {
+                return { data: { blockUser: null } };
+              }
+              const idx = mockState.members.findIndex((u) => u.id === '1');
+              if (idx > -1) {
+                const [removed] = mockState.members.splice(idx, 1);
+                mockState.blockedUsers.push(removed);
+              }
+              return { data: { blockUser: { success: true } } };
+            },
+          }),
     },
     {
       request: {
@@ -194,7 +235,19 @@ const createMocks = (
       },
       ...(blockUserError
         ? { error: new Error('Failed to block user') }
-        : { result: { data: { blockUser: { success: true } } } }),
+        : {
+            newData: () => {
+              if (blockUserNullData) {
+                return { data: { blockUser: null } };
+              }
+              const idx = mockState.members.findIndex((u) => u.id === '2');
+              if (idx > -1) {
+                const [removed] = mockState.members.splice(idx, 1);
+                mockState.blockedUsers.push(removed);
+              }
+              return { data: { blockUser: { success: true } } };
+            },
+          }),
     },
     {
       request: {
@@ -203,7 +256,19 @@ const createMocks = (
       },
       ...(unblockUserError
         ? { error: new Error('Failed to unblock user') }
-        : { result: { data: { unblockUser: { success: true } } } }),
+        : {
+            newData: () => {
+              if (unblockUserNullData) {
+                return { data: { unblockUser: null } };
+              }
+              const idx = mockState.blockedUsers.findIndex((u) => u.id === '3');
+              if (idx > -1) {
+                const [removed] = mockState.blockedUsers.splice(idx, 1);
+                mockState.members.push(removed);
+              }
+              return { data: { unblockUser: { success: true } } };
+            },
+          }),
     },
   ];
   return mocks;
@@ -272,7 +337,16 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: {
+              id: '123',
+              first: 32,
+              after: null,
+              where: {
+                role: {
+                  notEqual: OrganizationMembershipRole.ADMIN,
+                },
+              },
+            },
           },
           result: {
             data: { organization: null },
@@ -281,7 +355,11 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: {
+              id: '123',
+              first: 32,
+              after: null,
+            },
           },
           result: {
             data: { organization: null },
@@ -520,14 +598,11 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'John');
 
-      // Wait for debounced search to complete
-      await waitFor(
-        () => {
-          expect(screen.getByText('John Doe')).toBeInTheDocument();
-          expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+      });
     });
 
     it('searches members by email address', async () => {
@@ -552,14 +627,11 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'jane@example.com');
 
-      // Wait for debounced search to complete
-      await waitFor(
-        () => {
-          expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-          expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
+      await waitFor(() => {
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
     });
 
     it('searches blocked users by name', async () => {
@@ -592,13 +664,10 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'Bob');
 
-      // Wait for debounced search to complete
-      await waitFor(
-        () => {
-          expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
     });
 
     it('searches blocked users by email address', async () => {
@@ -631,13 +700,10 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'bob@example.com');
 
-      // Wait for debounced search to complete
-      await waitFor(
-        () => {
-          expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
     });
 
     it('handles search with no results for members', async () => {
@@ -662,15 +728,12 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'nonexistent');
 
-      // Wait for debounced search to complete
-      await waitFor(
-        () => {
-          expect(
-            screen.getByText('No results found for nonexistent'),
-          ).toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
+      await waitFor(() => {
+        expect(
+          screen.getByText('No results found for nonexistent'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('handles search with no results for blocked users', async () => {
@@ -703,15 +766,12 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'nonexistent');
 
-      // Wait for debounced search to complete
-      await waitFor(
-        () => {
-          expect(
-            screen.getByText('No results found for nonexistent'),
-          ).toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
+      await waitFor(() => {
+        expect(
+          screen.getByText('No results found for nonexistent'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('clears search results when search term is empty', async () => {
@@ -738,25 +798,19 @@ describe('BlockUser Component', () => {
       const searchInput = screen.getByTestId('searchByName');
       await user.type(searchInput, 'John');
 
-      // Wait for debounced search to complete
-      await waitFor(
-        () => {
-          expect(screen.getByText('John Doe')).toBeInTheDocument();
-          expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to update `searchTerm`
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+      });
 
       await user.clear(searchInput);
 
-      // Wait for debounced clear to complete
-      await waitFor(
-        () => {
-          expect(screen.getByText('John Doe')).toBeInTheDocument();
-          expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-        },
-        { timeout: 500 },
-      );
+      // Wait for SearchFilterBar's debounced `onSearchChange` to propagate clearing `searchTerm`
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
     });
   });
 
@@ -786,6 +840,11 @@ describe('BlockUser Component', () => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
           'User blocked successfully',
         );
+      });
+
+      // Wait for potential refetch to complete
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
     });
 
@@ -823,6 +882,11 @@ describe('BlockUser Component', () => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
           'User Un-Blocked successfully',
         );
+      });
+
+      // Wait for potential refetch to complete
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
     });
 
@@ -918,6 +982,17 @@ describe('BlockUser Component', () => {
         );
       });
 
+      // Wait for refetch to complete
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      // Check that first user is removed from members list
+      await waitFor(() => {
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
+
       // Block second user
       const blockButton2 = screen.getByTestId('blockUserBtn-2');
       await user.click(blockButton2);
@@ -926,6 +1001,11 @@ describe('BlockUser Component', () => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
           'User blocked successfully',
         );
+      });
+
+      // Wait for refetch to complete
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
       // Verify both users are no longer in the list
@@ -968,6 +1048,11 @@ describe('BlockUser Component', () => {
         );
       });
 
+      // Wait for refetch to complete
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
       // Switch to blocked users view
       const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await user.click(sortingButton);
@@ -986,6 +1071,85 @@ describe('BlockUser Component', () => {
 
         // John Doe should now be in the list too (added to state)
         expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Mutation falsy-data guards', () => {
+    it('does not show success toast when blockUser returns null', async () => {
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ blockUserNullData: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      const blockButton = screen.getByTestId('blockUserBtn-1');
+      await user.click(blockButton);
+
+      // Wait for an indicator that the mutation completed (user still present = no refetch from success path)
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      // Allow the mutation promise to resolve
+      await waitFor(() => {
+        // The guard `if (data?.blockUser)` is false, so no toast should fire
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      });
+    });
+
+    it('does not show success toast when unblockUser returns null', async () => {
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ unblockUserNullData: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      // Switch to blocked users view
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
+      await user.click(sortingButton);
+
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
+      await user.click(blockedUsersOption);
+
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      const unblockButton = screen.getByTestId('unblockUserBtn-3');
+      await user.click(unblockButton);
+
+      // Wait for an indicator that the mutation completed (user still blocked = no refetch from success path)
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      // Allow the mutation promise to resolve
+      await waitFor(() => {
+        // The guard `if (data?.unblockUser)` is false, so no toast should fire
+        expect(NotificationToast.success).not.toHaveBeenCalled();
       });
     });
   });

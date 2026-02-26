@@ -250,6 +250,7 @@ const MOCK_UPDATE_PLEDGE_DATA = {
       },
     },
   },
+  delay: 100,
 };
 
 const MEMBERS_MOCK = {
@@ -318,12 +319,12 @@ describe('PledgeModal', () => {
   });
 
   afterAll(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render edit pledge modal with correct title', async () => {
@@ -339,7 +340,9 @@ describe('PledgeModal', () => {
     const props = { ...pledgeProps[0], hide: hideMock };
     renderPledgeModal(link1, props);
     await user.click(screen.getByTestId('modalCloseBtn'));
-    expect(hideMock).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('should populate form fields with correct values in edit mode', async () => {
@@ -502,17 +505,16 @@ describe('PledgeModal', () => {
   // Coverage for Line 140: Verify updatePledge mutation variables include the correct pledge ID
   it('should call updatePledge mutation with correct variables including id', async () => {
     const updateLink = new StaticMockLink([MOCK_UPDATE_PLEDGE_DATA]);
+    const user = userEvent.setup({ delay: null });
 
     await act(async () => {
       renderPledgeModal(updateLink, pledgeProps[1]); // pledgeProps[1] has id: '1'
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    await act(async () => {
-      await userEvent.clear(amountInput);
-      await userEvent.type(amountInput, '200');
-      await userEvent.click(screen.getByTestId('modal-submit-btn'));
-    });
+    await user.clear(amountInput);
+    await user.type(amountInput, '200');
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       // Ideally we could spy on the mutation call, but with MockedProvider we verify the result.
