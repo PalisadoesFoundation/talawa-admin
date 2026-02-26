@@ -66,8 +66,8 @@ vi.mock('shared-components/SortingButton/SortingButton', () => ({
   ),
 }));
 
-vi.mock('lodash', async () => {
-  const actual = await vi.importActual('lodash');
+vi.mock('utils/performance', async () => {
+  const actual = await vi.importActual('utils/performance');
   return {
     ...actual,
     debounce: vi.fn((fn) => {
@@ -373,7 +373,7 @@ describe('SearchFilterBar', () => {
 
   describe('Debouncing Behavior', () => {
     it('should debounce search changes with default delay', async () => {
-      const { debounce } = await import('lodash');
+      const { debounce } = await import('utils/performance');
       const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
 
       const onSearchChange = vi.fn();
@@ -390,7 +390,7 @@ describe('SearchFilterBar', () => {
     });
 
     it('should debounce search changes with custom delay', async () => {
-      const { debounce } = await import('lodash');
+      const { debounce } = await import('utils/performance');
       const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
 
       const onSearchChange = vi.fn();

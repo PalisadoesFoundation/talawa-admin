@@ -203,7 +203,11 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
       <div className={containerClassName}>
         <div className={wrapperClassName}>
           {showLeadingIcon && (
-            <span className={styles.searchBarIcon} aria-hidden="true">
+            <span
+              className={styles.searchBarIcon}
+              data-testid="leading-icon"
+              aria-hidden="true"
+            >
               {LeadingIcon}
             </span>
           )}
@@ -232,7 +236,11 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
             </Button>
           )}
           {showTrailingIcon && (
-            <span className={styles.searchBarTrailingIcon} aria-hidden="true">
+            <span
+              className={styles.searchBarTrailingIcon}
+              data-testid="trailing-icon"
+              aria-hidden="true"
+            >
               <SearchIcon fontSize="small" />
             </span>
           )}
