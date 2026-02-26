@@ -1,6 +1,6 @@
 import type { DebouncedFunc } from 'lodash';
-import debounce from 'lodash-es/debounce';
-import throttle from 'lodash-es/throttle';
+import debounce from 'lodash/debounce';
+import throttle from 'lodash/throttle';
 
 export { debounce, throttle };
 
