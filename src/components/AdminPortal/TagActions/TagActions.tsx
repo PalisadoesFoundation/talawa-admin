@@ -30,12 +30,12 @@
 import { useMutation } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './TagActions.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
@@ -44,7 +44,6 @@ import {
 import type { TagActionType } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import TagNode from './Node/TagNode';
-import componentStyles from './TagAction.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
@@ -234,7 +233,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         footer={
           <>
             <Button
-              className={`btn btn-danger ${styles.removeButton}`}
+              variant="danger"
+              className={styles.removeButton}
               onClick={(): void => hideTagActionsModal()}
               data-testid="closeTagActionsModalBtn"
             >
@@ -242,17 +242,16 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             </Button>
             <Button
               type="submit"
-              value="add"
               form="tagActionForm"
               data-testid="tagActionSubmitBtn"
-              className={`btn ${styles.addButton}`}
+              className={styles.addButton}
             >
               {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
             </Button>
           </>
         }
       >
-        <Form id="tagActionForm" onSubmit={handleTagAction}>
+        <form id="tagActionForm" onSubmit={handleTagAction}>
           <div className="pb-0">
             <div
               className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
@@ -268,12 +267,15 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
                   >
                     {tag.name}
-                    <button
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
+                    <Button
+                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent p-0`}
                       onClick={() => deSelectTag(tag)}
                       data-testid={`clearSelectedTag${tag._id}`}
                       aria-label={t('remove')}
-                    />
+                      variant="outline"
+                    >
+                      <i className="fa fa-times" />
+                    </Button>
                   </div>
                 ))
               )}
@@ -298,7 +300,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             <ul
               id="scrollableDiv"
               data-testid="scrollableDiv"
-              className={componentStyles.tagActionsScrollableDiv}
+              className={styles.tagActionsScrollableDiv}
               aria-label={t('allTags')}
             >
               {tagActionsModalIsOpen && (
@@ -359,7 +361,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               )}
             </ul>
           </div>
-        </Form>
+        </form>
       </BaseModal>
     </>
   );

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import EditUserTagModal, {
   InterfaceEditUserTagModalProps,
@@ -53,23 +54,23 @@ describe('EditUserTagModal Component', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('calls setNewTagName when input changes', () => {
+  it('calls setNewTagName when input changes', async () => {
     renderComponent();
-    fireEvent.change(screen.getByTestId('tagNameInput'), {
-      target: { value: 'Updated Tag' },
-    });
+    const input = screen.getByTestId('tagNameInput');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Updated Tag');
     expect(defaultProps.setNewTagName).toHaveBeenCalledWith('Updated Tag');
   });
 
-  it('calls hideEditUserTagModal when cancel button is clicked', () => {
+  it('calls hideEditUserTagModal when cancel button is clicked', async () => {
     renderComponent();
-    fireEvent.click(screen.getByTestId('closeEditTagModalBtn'));
+    await userEvent.click(screen.getByTestId('closeEditTagModalBtn'));
     expect(defaultProps.hideEditUserTagModal).toHaveBeenCalled();
   });
 
   it('calls handleEditUserTag when form is valid', async () => {
     renderComponent();
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).toHaveBeenCalled();
     });
@@ -77,7 +78,7 @@ describe('EditUserTagModal Component', () => {
 
   it('does not submit when input is empty', async () => {
     renderComponent({ ...defaultProps, newTagName: '' });
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
     });

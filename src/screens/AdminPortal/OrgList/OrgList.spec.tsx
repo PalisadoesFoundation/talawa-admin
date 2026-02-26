@@ -41,11 +41,8 @@ const mockToast = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
-  ToastContainer: vi
-    .fn()
-    .mockImplementation(() => <div data-testid="toast-container" />),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
@@ -2663,7 +2660,6 @@ describe('Email Verification Actions Tests', () => {
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
         'Verification email has been resent successfully.',
-        expect.anything(),
       );
     });
   });
@@ -2688,10 +2684,7 @@ describe('Email Verification Actions Tests', () => {
     await waitFor(() => {
       // The component uses tLogin('resendFailed') or data message
       // Mock returns 'Failed to resend email'
-      expect(mockToast.error).toHaveBeenCalledWith(
-        'Failed to resend email',
-        expect.anything(),
-      );
+      expect(mockToast.error).toHaveBeenCalledWith('Failed to resend email');
     });
   });
 

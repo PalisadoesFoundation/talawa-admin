@@ -24,7 +24,7 @@
 // translation-check-keyPrefix: manageTag
 import type { FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { BaseModal } from 'shared-components/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
@@ -95,11 +95,9 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
         </>
       }
     >
-      <Form
+      <form
         id={formId}
-        onSubmitCapture={async (
-          e: FormEvent<HTMLFormElement>,
-        ): Promise<void> => {
+        onSubmit={async (e: FormEvent<HTMLFormElement>): Promise<void> => {
           e.preventDefault();
           setIsTouched(true);
 
@@ -118,16 +116,15 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           touched={isTouched}
           error={errorMessage}
         >
-          <Form.Control
+          <input
             id="tagName"
             type="text"
-            className={`mb-3 ${styles.inputField}`}
+            className={`form-control mb-3 ${styles.inputField}`}
             placeholder={t('tagNamePlaceholder')}
             data-testid="tagNameInput"
             autoComplete="off"
             required
             value={newTagName}
-            isInvalid={isTouched && isTagNameInvalid}
             ref={tagNameRef}
             onBlur={() => setIsTouched(true)}
             onChange={(e): void => {
@@ -135,7 +132,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
             }}
           />
         </FormFieldGroup>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L58)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L57)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:58](https://gi
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L60)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L59)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:60](https://gi
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L59)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L58)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:59](https://gi
 
 > **tagActionType**: [`TagActionType`](../../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L61)
+Defined in: [src/components/AdminPortal/TagActions/TagActions.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/TagActions.tsx#L60)
