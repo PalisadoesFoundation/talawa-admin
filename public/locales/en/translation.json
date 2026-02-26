@@ -665,7 +665,8 @@
     "Workshops": "Workshops",
     "selectMonth": "Select Month",
     "selectDay": "Select Day",
-    "selectYear": "Select Year"
+    "selectYear": "Select Year",
+    "selectWeek": "Select Week"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -1694,10 +1695,13 @@
     "title": "Donations",
     "donations": "Donations",
     "searchDonations": "Search donations",
-    "donateForThe": "Donate for the",
+    "donateForThe": "Donate to the",
+    "donor": "Donor",
     "amount": "Amount",
+    "date": "Date",
     "yourPreviousDonations": "Your Previous Donations",
     "donate": "Donate",
+    "loading": "Loading...",
     "nothingToShow": "Nothing to show here.",
     "success": "Donation Successful",
     "invalidAmount": "Please enter a numerical value for the donation amount.",
@@ -1844,6 +1848,7 @@
     "advertisementImageAlt": "Advertisement image #{{index}} for {{name}}",
     "invalidFileType": "Invalid file type: {{fileName}}",
     "fileTooLarge": "File too large: {{fileName}}",
+    "fileUploadError": "Error uploading file: {{fileName}}",
     "invalidArgumentsForAction": "Invalid arguments for this action.",
     "englishCaptions": "English captions",
     "preview": "Preview",
@@ -1868,6 +1873,7 @@
     "newChat": "New Chat",
     "newGroupChat": "New Group Chat",
     "groupInfo": "Group Info",
+    "editImage": "Edit image",
     "description": "Description",
     "hash": "#",
     "members": "Members",
@@ -2595,5 +2601,8 @@
       "sun": "S"
     },
     "expandDay": "Expand day"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Weekly calendar view"
   }
 }

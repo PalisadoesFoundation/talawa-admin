@@ -29,8 +29,8 @@
  */
 // translation-check-keyPrefix: agendaSection
 import React, { useEffect, useState } from 'react';
-import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { JSX } from 'react';
 import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaItemCategoryInfo,
@@ -51,15 +51,13 @@ function AgendaFolderContainer({
   agendaFolderData,
   refetchAgendaFolder,
   agendaItemCategories,
-  t,
 }: {
   agendaFolderConnection: 'Event';
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
   refetchAgendaFolder: () => void;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
-  t: (key: string) => string;
 }): JSX.Element {
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const { getFileFromMinio } = useMinioDownload();
   const { orgId } = useParams();
   const organizationId = orgId ?? 'organization';
@@ -336,8 +334,6 @@ function AgendaFolderContainer({
         onClose={agendaFolderDeleteModal.close}
         agendaFolderId={agendaFolderId}
         refetchAgendaFolder={refetchAgendaFolder}
-        t={t}
-        tCommon={tCommon}
       />
       {/*Agenda Folder Update modal */}
       <AgendaFolderUpdateModal
@@ -347,13 +343,11 @@ function AgendaFolderContainer({
         setFolderFormState={setFolderFormState}
         agendaFolderId={agendaFolderId}
         refetchAgendaFolder={refetchAgendaFolder}
-        t={t}
       />
       <AgendaItemsPreviewModal
         isOpen={agendaItemPreviewModal.isOpen}
         hidePreviewModal={agendaItemPreviewModal.close}
         formState={formState}
-        t={t}
       />
       {/*Agenda Item Update modal */}
       <AgendaItemsUpdateModal
@@ -362,7 +356,6 @@ function AgendaFolderContainer({
         agendaItemId={agendaItemId}
         itemFormState={itemFormState}
         setItemFormState={setItemFormState}
-        t={t}
         agendaItemCategories={agendaItemCategories}
         agendaFolderData={agendaFolderData}
         refetchAgendaFolder={refetchAgendaFolder}
@@ -372,8 +365,6 @@ function AgendaFolderContainer({
         isOpen={agendaItemDeleteModal.isOpen}
         onClose={agendaItemDeleteModal.close}
         agendaItemId={agendaItemId}
-        t={t}
-        tCommon={tCommon}
         refetchAgendaFolder={refetchAgendaFolder}
       />
     </>

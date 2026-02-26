@@ -4,17 +4,26 @@
 
 # Interface: InterfaceAutocompleteMockProps
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L27)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L28)
 
 Props for Autocomplete mock component used in tests.
+Mirrors the shared Autocomplete component's prop contract.
 
 ## Properties
+
+### dataTestId?
+
+> `optional` **dataTestId**: `string`
+
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L47)
+
+***
 
 ### getOptionLabel()?
 
 > `optional` **getOptionLabel**: (`option`) => `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L48)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L46)
 
 #### Parameters
 
@@ -38,29 +47,25 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:48](https:
 
 > `optional` **inputValue**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L39)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L37)
 
 ***
 
 ### noOptionsText?
 
-> `optional` **noOptionsText**: `string`
+> `optional` **noOptionsText**: `ReactNode`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L40)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L38)
 
 ***
 
 ### onChange()?
 
-> `optional` **onChange**: (`event`, `value`) => `void`
+> `optional` **onChange**: (`value`) => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L30)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L31)
 
 #### Parameters
-
-##### event
-
-`SyntheticEvent`
 
 ##### value
 
@@ -82,7 +87,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:30](https:
 
 > `optional` **onInputChange**: (`event`, `value`, `reason`) => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L34)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L32)
 
 #### Parameters
 
@@ -108,7 +113,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:34](https:
 
 > `optional` **options**: `object`[]
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L29)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L30)
 
 #### id
 
@@ -120,11 +125,11 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:29](https:
 
 ***
 
-### renderInput()
+### renderInput()?
 
-> **renderInput**: (`params`) => `Element`
+> `optional` **renderInput**: (`params`) => `Element`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L28)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L29)
 
 #### Parameters
 
@@ -142,7 +147,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:28](https:
 
 > `optional` **renderOption**: (`props`, `option`, `state`) => `Element`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L41)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L39)
 
 #### Parameters
 

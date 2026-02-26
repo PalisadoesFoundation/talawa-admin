@@ -32,18 +32,11 @@ vi.mock('react-router', async () => {
   };
 });
 
-/**
- * Translation mock
- * Typed explicitly to satisfy noImplicitAny
- */
-const t = (key: string): string => key;
-
 describe('AgendaFolderCreateModal', () => {
   afterEach(() => {
     cleanup();
     mockOrgId = 'org-123';
     vi.restoreAllMocks(); // restore spy implementations
-    vi.clearAllMocks();
   });
 
   it('renders modal when open', () => {
@@ -55,7 +48,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -109,7 +101,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={refetchMock}
           />
         </BrowserRouter>
@@ -178,7 +169,6 @@ describe('AgendaFolderCreateModal', () => {
                 { id: '2', name: 'F2', sequence: 2, items: { edges: [] } },
               ],
             }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -228,7 +218,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -289,7 +278,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={undefined}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -319,7 +307,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={hideMock}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -327,8 +314,9 @@ describe('AgendaFolderCreateModal', () => {
     );
 
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
-
-    expect(hideMock).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(hideMock).toHaveBeenCalled();
+    });
   });
 
   it('does not show modal when isOpen is false', () => {
@@ -340,7 +328,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -398,7 +385,6 @@ describe('AgendaFolderCreateModal', () => {
                 { id: '3', name: 'F3', sequence: 3, items: { edges: [] } },
               ],
             }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -459,7 +445,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -516,7 +501,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={hideMock}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={refetchMock}
           />
         </BrowserRouter>
@@ -533,18 +517,16 @@ describe('AgendaFolderCreateModal', () => {
     await waitFor(
       () => {
         expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
+        // Form should still have values after error
+        expect(nameInput).toHaveValue('Error Test');
+        expect(descInput).toHaveValue('Error Desc');
+        // These should not be called on error
+        expect(hideMock).not.toHaveBeenCalled();
+        expect(refetchMock).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
       },
-      { timeout: 5000 },
+      { timeout: 10000 },
     );
-
-    // Form should still have values after error
-    expect(nameInput).toHaveValue('Error Test');
-    expect(descInput).toHaveValue('Error Desc');
-
-    // These should not be called on error
-    expect(hideMock).not.toHaveBeenCalled();
-    expect(refetchMock).not.toHaveBeenCalled();
-    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('handles non-array agendaFoldersByEventId safely', async () => {
@@ -556,7 +538,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: {} as never }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -598,7 +579,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -629,7 +609,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>

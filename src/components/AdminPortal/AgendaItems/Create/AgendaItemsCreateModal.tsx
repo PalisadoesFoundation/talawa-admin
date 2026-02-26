@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Row, Col } from 'react-bootstrap';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
@@ -52,11 +53,11 @@ const AgendaItemsCreateModal: React.FC<
   isOpen,
   hide,
   eventId,
-  t,
   agendaItemCategories,
   agendaFolderData,
   refetchAgendaFolder,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const { orgId } = useParams();
   const organizationId = orgId ?? '';
 

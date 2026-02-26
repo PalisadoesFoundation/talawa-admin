@@ -665,7 +665,8 @@
     "Workshops": "研讨会",
     "selectMonth": "选择月份",
     "selectDay": "选择日期",
-    "selectYear": "选择年份"
+    "selectYear": "选择年份",
+    "selectWeek": "选择周"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -1712,9 +1713,12 @@
     "donations": "捐款",
     "searchDonations": "搜索捐款",
     "donateForThe": "为",
+    "donor": "捐赠者",
     "amount": "数量",
+    "date": "日期",
     "yourPreviousDonations": "您之前的捐款",
     "donate": "捐",
+    "loading": "加载中...",
     "nothingToShow": "这里没有什么可显示的。",
     "success": "捐赠成功",
     "invalidAmount": "请输入捐赠金额的数值。",
@@ -1861,6 +1865,7 @@
     "advertisementImageAlt": "廣告圖片 #{{index}} 用於 {{name}}",
     "invalidFileType": "無效的文件類型：{{fileName}}",
     "fileTooLarge": "文件太大：{{fileName}}",
+    "fileUploadError": "文件上传错误：{{fileName}}",
     "invalidArgumentsForAction": "此操作的參數無效。",
     "englishCaptions": "英文字幕",
     "preview": "預覽",
@@ -1885,6 +1890,7 @@
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
     "groupInfo": "群组信息",
+    "editImage": "编辑图片",
     "description": "描述",
     "hash": "#",
     "members": "会员",
@@ -2595,5 +2601,8 @@
       "sun": "日"
     },
     "expandDay": "展开日期"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "每周日历视图"
   }
 }

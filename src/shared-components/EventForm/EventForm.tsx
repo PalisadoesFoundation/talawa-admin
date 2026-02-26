@@ -169,8 +169,8 @@ const EventForm: React.FC<IEventFormProps> = ({
     let endAtISO: string;
 
     if (formState.allDay) {
-      const startOfDay = dayjs.utc(formState.startDate).startOf('day');
-      const now = dayjs.utc();
+      const startOfDay = dayjs(formState.startDate).startOf('day');
+      const now = dayjs();
 
       // If start of day is in the past, use current time plus a small buffer
       if (startOfDay.isBefore(now)) {
@@ -178,16 +178,14 @@ const EventForm: React.FC<IEventFormProps> = ({
       } else {
         startAtISO = startOfDay.toISOString();
       }
-      endAtISO = dayjs.utc(formState.endDate).endOf('day').toISOString();
+      endAtISO = dayjs(formState.endDate).endOf('day').toISOString();
     } else {
-      startAtISO = dayjs
-        .utc(formState.startDate)
+      startAtISO = dayjs(formState.startDate)
         .hour(parseInt(startTimeParts[0]))
         .minute(parseInt(startTimeParts[1]))
         .second(parseInt(startTimeParts[2]) || 0)
         .toISOString();
-      endAtISO = dayjs
-        .utc(formState.endDate)
+      endAtISO = dayjs(formState.endDate)
         .hour(parseInt(endTimeParts[0]))
         .minute(parseInt(endTimeParts[1]))
         .second(parseInt(endTimeParts[2]) || 0)

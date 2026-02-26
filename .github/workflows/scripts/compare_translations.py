@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Script to encourage more efficient coding practices.
 
 Methodology:

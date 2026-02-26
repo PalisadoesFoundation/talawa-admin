@@ -317,5 +317,8 @@
   "loginSuccessWithName": "Bienvenue, {{name}} !",
   "signupSuccess": "Inscription réussie !",
   "authError": "Erreur d'authentification",
-  "networkError": "Erreur réseau"
+  "networkError": "Erreur réseau",
+  "organizationCard": {
+    "card_aria": "Carte de l'organisation"
+  }
 }

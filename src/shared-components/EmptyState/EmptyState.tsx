@@ -47,7 +47,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, Typography } from '@mui/material';
 import Button, { ButtonVariant } from 'shared-components/Button';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 import type { InterfaceEmptyStateProps } from 'types/shared-components/EmptyState/interface';
 
 /**

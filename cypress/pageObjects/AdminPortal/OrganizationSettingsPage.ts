@@ -6,10 +6,11 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
   private readonly actionItemCategoriesButton = 'actionItemCategoriesSettings';
   private readonly generalTab = 'generalTab';
   private readonly actionItemCategoriesTab = 'actionItemCategoriesTab';
-  private readonly organizationNameInput = '[name="orgName"]';
-  private readonly organizationDescriptionInput = '[name="orgDescrip"]';
-  private readonly organizationLocationInput = '[name="address.line1"]';
+  private readonly organizationNameInput = '#orgName';
+  private readonly organizationDescriptionInput = '#orgDescrip';
+  private readonly organizationLocationInput = '#address\\.line1';
   private readonly isPublicSwitch = 'user-reg-switch';
+  private readonly organizationImageInput = 'organisationImage';
   private readonly saveChangesButton = 'save-org-changes-btn';
   private readonly openDeleteModalButton = 'openDeleteModalBtn';
   private readonly confirmDeleteButton = 'deleteOrganizationBtn';
@@ -24,6 +25,7 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
   openFromDrawer(timeout = 30000): this {
     this.byDataCy(this.settingsDrawerButton, timeout)
       .should('be.visible')
+      .first()
       .click();
     this.assertUrlMatch(/\/admin\/orgsetting\/[a-f0-9-]+/, timeout);
     return this;
@@ -35,11 +37,12 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
     return this;
   }
 
-  openGeneralTab(timeout = 10000): this {
+  openGeneralTab(timeout = 30000): this {
     this.byTestId(this.generalSettingsButton, timeout)
       .should('be.visible')
-      .click();
+      .click({ force: true });
     this.byTestId(this.generalTab, timeout).should('be.visible');
+    this.byTestId(this.saveChangesButton, timeout).should('be.visible');
     return this;
   }
 
@@ -77,6 +80,24 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
 
   toggleIsPublic(timeout = 10000): this {
     this.byTestId(this.isPublicSwitch, timeout).should('be.visible').click();
+    return this;
+  }
+
+  uploadDisplayImageFromFixture(fixturePath: string, timeout = 10000): this {
+    this.byTestId(this.organizationImageInput, timeout)
+      .should('be.visible')
+      .selectFile(`cypress/fixtures/${fixturePath}`, { force: true });
+    return this;
+  }
+
+  assertSelectedDisplayImage(fileName: string, timeout = 10000): this {
+    this.byTestId(this.organizationImageInput, timeout)
+      .should('be.visible')
+      .should(($input) => {
+        const files = ($input[0] as HTMLInputElement).files;
+        expect(files?.length).to.eq(1);
+        expect(files?.[0]?.name).to.eq(fileName);
+      });
     return this;
   }
 

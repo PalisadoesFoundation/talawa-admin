@@ -12,7 +12,7 @@ GraphQL mutation to update community profile settings including logo upload.
 
 ## Param
 
-Optional logo file (Upload scalar) - sent as multipart request via apollo-upload-client
+Optional logo metadata (FileMetadataInput) - uploaded via MinIO presigned URL
 
 ## Param
 

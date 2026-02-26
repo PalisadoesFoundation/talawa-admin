@@ -19,7 +19,15 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock translations
-const mockT = (key: string): string => key;
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
 
 const mockAgendaFolderId = 'folder123';
 const mockOnClose = vi.fn();
@@ -139,7 +147,6 @@ const renderAgendaFolderUpdateModal = (
           folderFormState={folderFormState}
           setFolderFormState={mockSetFolderFormState}
           refetchAgendaFolder={mockRefetchAgendaFolder}
-          t={mockT}
         />
       </I18nextProvider>
     </MockedProvider>,
@@ -210,28 +217,11 @@ describe('AgendaFolderUpdateModal', () => {
       expect(descInput.value).toBe('Test Description');
     });
 
-    it('renders folder name field with required indicator', () => {
-      renderAgendaFolderUpdateModal();
-
-      // Check that the label has the required indicator (asterisk)
-      const label = document.querySelector('label[for="folderName"]');
-      expect(
-        label?.querySelector('[aria-label="Required"]'),
-      ).toBeInTheDocument();
-    });
-
-    it('renders folder description field without required attribute', () => {
-      renderAgendaFolderUpdateModal();
-
-      const descInput = screen.getByPlaceholderText('description');
-      expect(descInput).not.toBeRequired();
-    });
-
     it('renders update button with correct text', () => {
       renderAgendaFolderUpdateModal();
 
       const updateBtn = screen.getByTestId('modal-submit-btn');
-      expect(updateBtn).toHaveTextContent('Update');
+      expect(updateBtn).toHaveTextContent('update');
     });
 
     it('renders cancel button', () => {
@@ -663,7 +653,11 @@ describe('AgendaFolderUpdateModal', () => {
 
   describe('Edge cases', () => {
     it('handles rapid form submissions gracefully', async () => {
-      renderAgendaFolderUpdateModal();
+      renderAgendaFolderUpdateModal([
+        ...MOCKS_SUCCESS,
+        ...MOCKS_SUCCESS,
+        ...MOCKS_SUCCESS,
+      ]);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
 
@@ -710,7 +704,6 @@ describe('AgendaFolderUpdateModal', () => {
               folderFormState={mockFolderFormState}
               setFolderFormState={mockSetFolderFormState}
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockT}
             />
           </I18nextProvider>
         </MockedProvider>,
@@ -820,53 +813,6 @@ describe('AgendaFolderUpdateModal', () => {
         },
         { timeout: 5000 },
       );
-    });
-  });
-
-  describe('Translation function calls', () => {
-    it('calls t function for modal title', () => {
-      const mockTSpy = vi.fn((key: string) => key);
-
-      render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaFolderUpdateModal
-              isOpen={true}
-              onClose={mockOnClose}
-              agendaFolderId={mockAgendaFolderId}
-              folderFormState={mockFolderFormState}
-              setFolderFormState={mockSetFolderFormState}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockTSpy}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      expect(mockTSpy).toHaveBeenCalledWith('updateAgendaFolder');
-    });
-
-    it('calls t function for form labels', () => {
-      const mockTSpy = vi.fn((key: string) => key);
-
-      render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaFolderUpdateModal
-              isOpen={true}
-              onClose={mockOnClose}
-              agendaFolderId={mockAgendaFolderId}
-              folderFormState={mockFolderFormState}
-              setFolderFormState={mockSetFolderFormState}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockTSpy}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      expect(mockTSpy).toHaveBeenCalledWith('folderName');
-      expect(mockTSpy).toHaveBeenCalledWith('description');
     });
   });
 

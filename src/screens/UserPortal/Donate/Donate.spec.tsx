@@ -16,19 +16,29 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
-import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import {
+  DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+  DONATE_TO_ORGANIZATION,
+} from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 
 const MOCK_DATE = `${DUMMY_DATE_TIME_PREFIX}00:00:00.000Z`;
 
-const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
-  mockErrorHandler: vi.fn(),
-  mockUseParams: vi.fn(),
-  mockToast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
+const { mockErrorHandler, mockUseParams, mockToast, mockGetItem } = vi.hoisted(
+  () => ({
+    mockErrorHandler: vi.fn(),
+    mockUseParams: vi.fn(),
+    mockToast: {
+      error: vi.fn(),
+      success: vi.fn(),
+    },
+    mockGetItem: vi.fn((key: string) => {
+      if (key === 'userId') return '123';
+      if (key === 'name') return 'name';
+      return null;
+    }),
+  }),
+);
 
 vi.mock('utils/errorHandler', () => ({
   errorHandler: mockErrorHandler,
@@ -50,11 +60,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    getItem: vi.fn((key) => {
-      if (key === 'userId') return '123';
-      if (key === 'name') return 'name';
-      return null;
-    }),
+    getItem: mockGetItem,
     setItem: vi.fn(),
   })),
 }));
@@ -230,7 +236,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -238,6 +244,7 @@ const MOCKS = [
         nameOfUser: 'name',
         amount: 100,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     result: {
@@ -350,7 +357,7 @@ const DONATION_ERROR_MOCK = [
   },
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -358,6 +365,7 @@ const DONATION_ERROR_MOCK = [
         nameOfUser: 'name',
         amount: 100,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     error: new Error('Donation failed'),
@@ -368,7 +376,7 @@ const BOUNDARY_MOCKS = [
   ...MOCKS,
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -376,6 +384,7 @@ const BOUNDARY_MOCKS = [
         nameOfUser: 'name',
         amount: 1,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     result: {
@@ -393,7 +402,7 @@ const BOUNDARY_MOCKS = [
   },
   {
     request: {
-      query: DONATE_TO_ORGANIZATION,
+      query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
       variables: {
         userId: '123',
         createDonationOrgId2: '',
@@ -401,6 +410,7 @@ const BOUNDARY_MOCKS = [
         nameOfUser: 'name',
         amount: 10000000,
         nameOfOrg: 'anyOrganization2',
+        currencyCode: 'USD',
       },
     },
     result: {
@@ -435,6 +445,11 @@ const renderDonate = (link: ApolloLink = new StaticMockLink(MOCKS, true)) => {
 describe('Donate Component', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: '' });
+    mockGetItem.mockImplementation((key: string) => {
+      if (key === 'userId') return '123';
+      if (key === 'name') return 'name';
+      return null;
+    });
   });
 
   afterEach(() => {
@@ -448,12 +463,18 @@ describe('Donate Component', () => {
     // Wait for initial render to complete
     await screen.findByTestId('searchInput');
 
-    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-    expect(screen.getByTestId('currency-dropdown-toggle')).toBeInTheDocument();
-    expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
-    expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('organization-sidebar')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+      expect(screen.getByTestId('searchButton')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('currency-dropdown-toggle'),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
+      expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('organization-sidebar'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('search input updates value when typed into', async () => {
@@ -462,7 +483,9 @@ describe('Donate Component', () => {
     const searchInput = await screen.findByTestId('searchInput');
     await userEvent.type(searchInput, 'test search');
 
-    expect(searchInput).toHaveValue('test search');
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('test search');
+    });
   });
 
   test('currency switch works correctly', async () => {
@@ -512,6 +535,54 @@ describe('Donate Component', () => {
     });
   });
 
+  test('aborts donation when userId is missing', async () => {
+    mockGetItem.mockImplementation((key: string) => {
+      if (key === 'userId') return null;
+      if (key === 'name') return 'name';
+      return null;
+    });
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    renderDonate();
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Missing required donation identifiers for mutation.',
+        expect.objectContaining({ userId: null, organizationId: '' }),
+      );
+      expect(mockToast.success).not.toHaveBeenCalled();
+      expect(mockErrorHandler).not.toHaveBeenCalled();
+    });
+  });
+
+  test('aborts donation when organizationId is missing', async () => {
+    mockUseParams.mockReturnValue({ orgId: undefined });
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    renderDonate();
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Missing required donation identifiers for mutation.',
+        expect.objectContaining({ userId: '123', organizationId: undefined }),
+      );
+      expect(mockToast.success).not.toHaveBeenCalled();
+      expect(mockErrorHandler).not.toHaveBeenCalled();
+    });
+  });
+
   test('shows error toast for donation amount below minimum', async () => {
     renderDonate();
 
@@ -550,7 +621,7 @@ describe('Donate Component', () => {
     // Wait for organization data to load
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
@@ -571,7 +642,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
@@ -612,6 +683,15 @@ describe('Donate Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('donationCard')).toBeInTheDocument();
     });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable-cell-amount')).toHaveTextContent(
+        '1',
+      );
+      expect(screen.getByTestId('datatable-cell-amount')).not.toHaveTextContent(
+        '$1',
+      );
+    });
   });
 
   test('switches to INR currency', async () => {
@@ -637,6 +717,212 @@ describe('Donate Component', () => {
     });
   });
 
+  test('sends selected currency to donation mutation', async () => {
+    const currencyAwareMocks = [
+      {
+        request: {
+          query: ORGANIZATION_DONATION_CONNECTION_LIST,
+          variables: {
+            orgId: '',
+          },
+        },
+        result: {
+          data: {
+            getDonationByOrgIdConnection: [],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+          variables: {
+            id: '',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '6401ff65ce8e8406b8f07af3',
+                name: 'anyOrganization2',
+                description: 'desc',
+                address: {
+                  city: 'abc',
+                  countryCode: '123',
+                  postalCode: '456',
+                  state: 'def',
+                  __typename: 'Address',
+                },
+                userRegistrationRequired: true,
+                createdAt: '12345678900',
+                creator: {
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  __typename: 'User',
+                },
+                members: [],
+                admins: [],
+                membershipRequests: [],
+                __typename: 'Organization',
+              },
+            ],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+        },
+        variableMatcher: (vars: Record<string, unknown>) =>
+          vars.currencyCode === 'INR' && vars.amount === 100,
+        result: {
+          data: {
+            createDonation: {
+              _id: 'currency-donation',
+              amount: 100,
+              nameOfUser: 'name',
+              nameOfOrg: 'anyOrganization2',
+              __typename: 'Donation',
+            },
+            __typename: 'Mutation',
+          },
+        },
+      },
+    ];
+
+    renderDonate(new StaticMockLink(currencyAwareMocks, true));
+
+    const currencyButton = await screen.findByTestId(
+      'currency-dropdown-toggle',
+    );
+    await userEvent.click(currencyButton);
+    await screen.findByTestId('currency-dropdown-menu');
+    await userEvent.click(
+      await screen.findByTestId('currency-dropdown-item-INR'),
+    );
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
+  });
+
+  test('falls back to legacy donation mutation when currency argument is unsupported', async () => {
+    const legacyFallbackMocks = [
+      {
+        request: {
+          query: ORGANIZATION_DONATION_CONNECTION_LIST,
+          variables: {
+            orgId: '',
+          },
+        },
+        result: {
+          data: {
+            getDonationByOrgIdConnection: [],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+          variables: {
+            id: '',
+          },
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                _id: '6401ff65ce8e8406b8f07af3',
+                name: 'anyOrganization2',
+                description: 'desc',
+                address: {
+                  city: 'abc',
+                  countryCode: '123',
+                  postalCode: '456',
+                  state: 'def',
+                  __typename: 'Address',
+                },
+                userRegistrationRequired: true,
+                createdAt: '12345678900',
+                creator: {
+                  firstName: 'John',
+                  lastName: 'Doe',
+                  __typename: 'User',
+                },
+                members: [],
+                admins: [],
+                membershipRequests: [],
+                __typename: 'Organization',
+              },
+            ],
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+        },
+        variableMatcher: (vars: Record<string, unknown>) =>
+          vars.currencyCode === 'EUR' && vars.amount === 100,
+        error: new Error(
+          'Unknown argument "currencyCode" on field "Mutation.createDonation".',
+        ),
+      },
+      {
+        request: {
+          query: DONATE_TO_ORGANIZATION,
+          variables: {
+            userId: '123',
+            createDonationOrgId2: '',
+            payPalId: 'paypalId',
+            nameOfUser: 'name',
+            amount: 100,
+            nameOfOrg: 'anyOrganization2',
+          },
+        },
+        result: {
+          data: {
+            createDonation: {
+              _id: 'legacy-donation',
+              amount: 100,
+              nameOfUser: 'name',
+              nameOfOrg: 'anyOrganization2',
+              __typename: 'Donation',
+            },
+            __typename: 'Mutation',
+          },
+        },
+      },
+    ];
+
+    renderDonate(new StaticMockLink(legacyFallbackMocks, true));
+
+    const currencyButton = await screen.findByTestId(
+      'currency-dropdown-toggle',
+    );
+    await userEvent.click(currencyButton);
+    await screen.findByTestId('currency-dropdown-menu');
+    await userEvent.click(
+      await screen.findByTestId('currency-dropdown-item-EUR'),
+    );
+
+    const amountInput = await screen.findByTestId('donationAmount');
+    await userEvent.type(amountInput, '100');
+    await userEvent.click(await screen.findByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
+  });
+
   test('displays all three currency options', async () => {
     renderDonate();
 
@@ -649,15 +935,17 @@ describe('Donate Component', () => {
       expect(screen.getByTestId('currency-dropdown-menu')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('currency-dropdown-item-USD')).toHaveTextContent(
-      'USD',
-    );
-    expect(screen.getByTestId('currency-dropdown-item-INR')).toHaveTextContent(
-      'INR',
-    );
-    expect(screen.getByTestId('currency-dropdown-item-EUR')).toHaveTextContent(
-      'EUR',
-    );
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('currency-dropdown-item-USD'),
+      ).toHaveTextContent('USD');
+      expect(
+        screen.getByTestId('currency-dropdown-item-INR'),
+      ).toHaveTextContent('INR');
+      expect(
+        screen.getByTestId('currency-dropdown-item-EUR'),
+      ).toHaveTextContent('EUR');
+    });
   });
 
   test('handles pagination with multiple donations', async () => {
@@ -712,7 +1000,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
   });
@@ -771,13 +1059,19 @@ describe('Donate Component', () => {
     )) as HTMLInputElement;
 
     await userEvent.type(amountInput, '500');
-    expect(amountInput.value).toBe('500');
+    await waitFor(() => {
+      expect(amountInput.value).toBe('500');
+    });
 
     await userEvent.clear(amountInput);
-    expect(amountInput.value).toBe('');
+    await waitFor(() => {
+      expect(amountInput.value).toBe('');
+    });
 
     await userEvent.type(amountInput, '1000');
-    expect(amountInput.value).toBe('1000');
+    await waitFor(() => {
+      expect(amountInput.value).toBe('1000');
+    });
   });
 
   test('renders donation card with correct props', async () => {
@@ -794,7 +1088,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
@@ -814,7 +1108,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('Donate for the anyOrganization2'),
+        screen.getByText('Donate to the anyOrganization2'),
       ).toBeInTheDocument();
     });
 
