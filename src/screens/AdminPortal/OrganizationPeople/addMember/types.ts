@@ -26,11 +26,5 @@ export interface IQueryVariable {
   where?: { role: { equal: 'administrator' | 'regular' } };
 }
 
-/**
- * Represents the role of a user within an organization.
- * Used to define permissions and access levels.
- */
-export enum OrganizationMembershipRole {
-  ADMIN = 'administrator',
-  REGULAR = 'regular',
-}
+// Re-export from shared AdminPortal types module
+export { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
