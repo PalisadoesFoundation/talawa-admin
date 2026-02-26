@@ -319,12 +319,12 @@ describe('PledgeModal', () => {
   });
 
   afterAll(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render edit pledge modal with correct title', async () => {
@@ -340,7 +340,9 @@ describe('PledgeModal', () => {
     const props = { ...pledgeProps[0], hide: hideMock };
     renderPledgeModal(link1, props);
     await user.click(screen.getByTestId('modalCloseBtn'));
-    expect(hideMock).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
   });
 
   it('should populate form fields with correct values in edit mode', async () => {
