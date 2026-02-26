@@ -8,26 +8,53 @@ import { countryOptions } from 'utils/formEnumFields';
 import styles from './OrganizationModal.module.css';
 import { useTranslation } from 'react-i18next';
 
+/**
+ * Interface for the organization form state.
+ */
 interface InterfaceFormStateType {
+  /** Address line 1 of the organization. */
   addressLine1: string;
+  /** Address line 2 of the organization. */
   addressLine2: string;
+  /** Avatar URL or identifier of the organization. */
   avatar: string | null;
+  /** City where the organization is located. */
   city: string;
+  /** Country code of the organization's location. */
   countryCode: string;
+  /** Description of the organization. */
   description: string;
+  /** Name of the organization. */
   name: string;
+  /** Postal code of the organization's location. */
   postalCode: string;
+  /** State or province where the organization is located. */
   state: string;
 }
 
+/**
+ * Interface for the properties of the OrganizationModal component.
+ */
 export interface InterfaceOrganizationModalProps {
+  /** A boolean indicating whether the modal should be displayed. */
   showModal: boolean;
+  /** A function to toggle the visibility of the modal. */
   toggleModal: () => void;
+  /** The state of the form in the organization modal. */
   formState: InterfaceFormStateType;
+  /** A function to update the state of the form in the organization modal. */
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
+  /** A function to handle the submission of the organization creation form. */
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
 }
 
+/**
+ * OrganizationModal component allows administrators to create a new organization.
+ * It provides a form to enter organization details like name, description, address, and an image.
+ *
+ * @param props - The properties for the OrganizationModal component.
+ * @returns A JSX element representing the organization creation modal.
+ */
 const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   showModal,
   toggleModal,
