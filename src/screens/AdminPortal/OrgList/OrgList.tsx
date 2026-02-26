@@ -45,7 +45,7 @@ import RBButton from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 
-interface OrgFormState {
+interface InterfaceOrgFormState {
   addressLine1: string;
   addressLine2: string;
   avatar: string | null;
@@ -148,7 +148,7 @@ function OrgList(): JSX.Element {
   const [searchByName, setSearchByName] = useState('');
   const { isOpen, open, close } = useModalState();
 
-  const [formState, setFormState] = useState<OrgFormState>({
+  const [formState, setFormState] = useState<InterfaceOrgFormState>({
     addressLine1: '',
     addressLine2: '',
     avatar: null,
@@ -539,8 +539,14 @@ function OrgList(): JSX.Element {
        * @param userData - Information about the current user.
        * @returns JSX element representing the `OrganizationModal`.
        */}
-
-
+      <OrganizationModal
+        showModal={isOpen}
+        toggleModal={close}
+        formState={formState}
+        setFormState={setFormState}
+        createOrg={createOrg}
+        userData={userData as any}
+      />
       {/* Plugin Notification Modal after Org is Created */}
       <BaseModal
         show={dialogModalisOpen}
