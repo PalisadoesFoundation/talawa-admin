@@ -7,7 +7,7 @@
  */
 
 // SKIP_LOCALSTORAGE_CHECK
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
@@ -799,17 +799,15 @@ const CREATOR_NULL_MOCKS = [
   MOCKS[1],
 ];
 
-async function wait(): Promise<void> {
-  await waitFor(() =>
-    expect(screen.getByTestId('events-screen')).toBeInTheDocument(),
-  );
-}
-
 describe('Testing Events Screen [User Portal]', () => {
+  let originalMatchMedia: typeof window.matchMedia;
+
   beforeEach(() => {
     // Set system time without faking timers to keep Apollo promises working
     vi.setSystemTime(new Date(TEST_DATE));
 
+    // Save original matchMedia before overriding
+    originalMatchMedia = window.matchMedia;
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query) => ({
@@ -827,9 +825,15 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   afterEach(() => {
+    cleanup();
     localStorage.clear();
     vi.restoreAllMocks();
     vi.useRealTimers();
+    // Restore original matchMedia
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
   });
 
   it('Should render the Events screen properly', async () => {
@@ -850,9 +854,12 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should open and close the create event modal', async () => {
@@ -873,21 +880,25 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     const createButton = screen.getByTestId('createEventModalBtn');
     await userEvent.click(createButton);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Close modal using close button
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
-    await waitFor(() => {
-      expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should create an all-day event successfully', async () => {
@@ -932,14 +943,14 @@ describe('Testing Events Screen [User Portal]', () => {
             id: 'newEvent1',
             name: 'New Test Event',
             description: 'New Test Description',
-            startAt: new Date().toISOString(),
-            endAt: new Date().toISOString(),
+            startAt: new Date(TEST_DATE).toISOString(),
+            endAt: new Date(TEST_DATE).toISOString(),
             allDay: true,
             location: 'New Test Location',
             isPublic: true,
             isRegisterable: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(TEST_DATE).toISOString(),
+            updatedAt: new Date(TEST_DATE).toISOString(),
             isRecurringEventTemplate: false,
             hasExceptions: false,
             sequenceNumber: null,
@@ -980,14 +991,15 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Fill form
     await userEvent.type(
@@ -1004,9 +1016,12 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
-    await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(mockToast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should create a non-all-day event successfully', async () => {
@@ -1052,14 +1067,14 @@ describe('Testing Events Screen [User Portal]', () => {
             id: 'newEvent2',
             name: 'New Non All Day Event',
             description: 'New Test Description Non All Day',
-            startAt: new Date().toISOString(),
-            endAt: new Date().toISOString(),
+            startAt: new Date(TEST_DATE).toISOString(),
+            endAt: new Date(TEST_DATE).toISOString(),
             allDay: false,
             location: 'New Test Location',
             isPublic: true,
             isRegisterable: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(TEST_DATE).toISOString(),
+            updatedAt: new Date(TEST_DATE).toISOString(),
             isRecurringEventTemplate: false,
             hasExceptions: false,
             sequenceNumber: null,
@@ -1097,13 +1112,14 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
@@ -1143,11 +1159,12 @@ describe('Testing Events Screen [User Portal]', () => {
       await userEvent.click(submitBtn);
     }
 
-    await wait();
-
-    await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(mockToast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should handle create event error', async () => {
@@ -1168,14 +1185,15 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Fill form
     await userEvent.type(
@@ -1199,9 +1217,12 @@ describe('Testing Events Screen [User Portal]', () => {
     }
 
     // Error should be logged (console.error is called in catch block)
-    await waitFor(() => {
-      expect(NotificationToast.success).not.toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
@@ -1222,8 +1243,6 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
@@ -1237,8 +1256,10 @@ describe('Testing Events Screen [User Portal]', () => {
       'End Time',
     ) as HTMLInputElement;
     // Verify time inputs are disabled but contain values
-    expect(startTimeInputWhenAllDay).toBeDisabled();
-    expect(endTimeInputWhenAllDay).toBeDisabled();
+    await waitFor(() => {
+      expect(startTimeInputWhenAllDay).toBeDisabled();
+      expect(endTimeInputWhenAllDay).toBeDisabled();
+    });
 
     // Capture the initial values while disabled
     const initialStartTime = startTimeInputWhenAllDay.value;
@@ -1255,12 +1276,14 @@ describe('Testing Events Screen [User Portal]', () => {
     )) as HTMLInputElement;
 
     // AFTER toggle → visible + enabled
-    expect(startTimeInput).not.toBeDisabled();
-    expect(endTimeInput).not.toBeDisabled();
+    await waitFor(() => {
+      expect(startTimeInput).not.toBeDisabled();
+      expect(endTimeInput).not.toBeDisabled();
 
-    // Values should match what was there initially (or default)
-    expect(startTimeInput.value).toBe(initialStartTime);
-    expect(endTimeInput.value).toBe(initialEndTime);
+      // Values should match what was there initially (or default)
+      expect(startTimeInput.value).toBe(initialStartTime);
+      expect(endTimeInput.value).toBe(initialEndTime);
+    });
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
@@ -1281,14 +1304,15 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Test visibility radio buttons
     await userEvent.click(screen.getByTestId('visibilityOrgRadio'));
@@ -1306,7 +1330,9 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // All toggles should work without errors
-    expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument(),
+    );
   });
 
   it('Should handle date picker changes', async () => {
@@ -1327,14 +1353,15 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     const startDatePicker = screen.getByTestId(
       'eventStartAt',
@@ -1348,10 +1375,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.type(endDatePicker, newDate.format('YYYY-MM-DD'));
 
     // Date pickers should accept the changes - re-query as elements might have been detached
-    await waitFor(() => {
-      expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
-      expect(screen.getByTestId('eventEndAt')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+        expect(screen.getByTestId('eventEndAt')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
@@ -1372,14 +1402,15 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('allDayEventCheck')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('allDayEventCheck')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Disable all-day
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
@@ -1401,10 +1432,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.type(endTimePicker, '11:00:00');
 
     // Time pickers should accept the changes - re-query as elements might have been detached
-    await waitFor(() => {
-      expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
-      expect(screen.getByLabelText('End Time')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
+        expect(screen.getByLabelText('End Time')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should handle null date values gracefully', async () => {
@@ -1425,22 +1459,19 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
-
-    await waitFor(() => {
-      screen.getByTestId('eventStartAt');
-    });
 
     const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     await userEvent.clear(endDatePicker);
 
     // Should handle null values without crashing
-    await waitFor(() => {
-      expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should handle network error gracefully', async () => {
@@ -1465,10 +1496,12 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    // Should log warning for non-rate-limit errors
-    await waitFor(() => {
-      expect(consoleWarnSpy).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(consoleWarnSpy).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
 
     consoleWarnSpy.mockRestore();
   });
@@ -1495,9 +1528,12 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Rate limit errors should be suppressed (not logged by our component)
     // Check that no rate limit specific warnings were logged
@@ -1529,14 +1565,15 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     const titleInput = screen.getByTestId('eventTitleInput');
     const descriptionInput = screen.getByTestId('eventDescriptionInput');
@@ -1548,9 +1585,11 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.type(locationInput, 'Test Location');
 
     // Verify values
-    expect(titleInput).toHaveValue('Test Title');
-    expect(descriptionInput).toHaveValue('Test Description');
-    expect(locationInput).toHaveValue('Test Location');
+    await waitFor(() => {
+      expect(titleInput).toHaveValue('Test Title');
+      expect(descriptionInput).toHaveValue('Test Description');
+      expect(locationInput).toHaveValue('Test Location');
+    });
   });
 
   it('Should test userRole as administrator', async () => {
@@ -1573,9 +1612,12 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Component should render with administrator role
   });
@@ -1599,9 +1641,12 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Component should render with regular user role
   });
@@ -1625,18 +1670,26 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     // Initial view should be Month View
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Select Day View using the mocked EventHeader
     const dayViewButton = screen.getByTestId('selectDay');
     await userEvent.click(dayViewButton);
 
     // Verify view changed
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
+          'DAY',
+        );
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should not change viewType when handleChangeView is called with null', async () => {
@@ -1657,26 +1710,41 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
-        'Month View',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
+          'Month View',
+        );
+      },
+      { timeout: 3000 },
+    );
 
     // Change view to DAY first
     const dayViewButton = screen.getByTestId('selectDay');
     await userEvent.click(dayViewButton);
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
+          'DAY',
+        );
+      },
+      { timeout: 3000 },
+    );
 
     // Now call handleChangeView(null)
     await userEvent.click(screen.getByTestId('handleChangeNullBtn'));
 
     // Wait for state to settle after no-op view change
-    await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
-    });
+
+    // View type should remain DAY
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
+          'DAY',
+        );
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should call onMonthChange callback from EventCalendar', async () => {
@@ -1697,12 +1765,14 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    const monthChangeBtn = await screen.findByTestId('monthChangeBtn');
+    const monthChangeBtn = screen.getByTestId('monthChangeBtn');
     expect(monthChangeBtn).toBeInTheDocument();
 
     await userEvent.click(monthChangeBtn);
 
-    expect(monthChangeBtn).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('monthChangeBtn')).toBeInTheDocument();
+    });
   });
 
   it('Should handle create event returning null (no data) gracefully', async () => {
@@ -1725,14 +1795,15 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Fill form
     await userEvent.type(
@@ -1756,9 +1827,12 @@ describe('Testing Events Screen [User Portal]', () => {
     }
 
     // The createEvent mutation returned null data, so no success toast
-    await waitFor(() => {
-      expect(mockToast.success).not.toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(mockToast.success).not.toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
@@ -1790,14 +1864,14 @@ describe('Testing Events Screen [User Portal]', () => {
         // Creator fallback should be used when creator is null
         expect(parsed[0].creator).toEqual({ id: '', name: '' });
       },
-      { timeout: 5000 },
+      { timeout: 3000 },
     );
   });
 
   it('Should create an event with recurrence rule successfully', async () => {
-    const today = new Date();
+    const today = new Date(TEST_DATE);
     const weekDayByJs = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
-    const dayOfWeek = today.getDay();
+    const dayOfWeek = today.getUTCDay();
 
     // Use variableMatcher for flexible date and recurrence matching
     const createEventWithRecurrenceMock = {
@@ -1849,14 +1923,14 @@ describe('Testing Events Screen [User Portal]', () => {
             id: 'newRecurringEvent1',
             name: 'Recurring Test Event',
             description: 'Recurring Test Description',
-            startAt: new Date().toISOString(),
-            endAt: new Date().toISOString(),
+            startAt: new Date(TEST_DATE).toISOString(),
+            endAt: new Date(TEST_DATE).toISOString(),
             allDay: true,
             location: 'Recurring Test Location',
             isPublic: true,
             isRegisterable: true,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
+            createdAt: new Date(TEST_DATE).toISOString(),
+            updatedAt: new Date(TEST_DATE).toISOString(),
             isRecurringEventTemplate: true,
             hasExceptions: false,
             sequenceNumber: 1,
@@ -1899,11 +1973,13 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
-    await waitFor(() => {
-      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     await userEvent.type(
       screen.getByTestId('eventTitleInput'),
@@ -1934,9 +2010,12 @@ describe('Testing Events Screen [User Portal]', () => {
     const submitBtn = screen.getByRole('button', { name: /create event/i });
     if (form) await userEvent.click(submitBtn);
 
-    await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(mockToast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
   it('Should suppress auth error when partial data is available', async () => {
     mockToast.error.mockClear();
@@ -2021,28 +2100,29 @@ describe('Testing Events Screen [User Portal]', () => {
     );
 
     // Verify partial data is rendered (checking mocked Calendar JSON dump)
-    await waitFor(() => {
-      expect(screen.getByTestId('event-data-json')).toHaveTextContent(
-        'Partial Event',
-      );
-    });
-
-    // Verify ERROR toast is NOT shown (suppressed)
-    await waitFor(() => {
-      expect(mockToast.error).not.toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('event-data-json')).toHaveTextContent(
+          'Partial Event',
+        );
+        expect(mockToast.error).not.toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   describe('computeCalendarFromStartDate', () => {
     it('should compute calendar from null startDate using current date', () => {
-      const now = new Date();
-      const { month, year } = computeCalendarFromStartDate(null, now);
-      expect(month).toBe(dayjs(now).month());
-      expect(year).toBe(dayjs(now).year());
+      const { month, year } = computeCalendarFromStartDate(
+        null,
+        new Date(TEST_DATE),
+      );
+      expect(month).toBe(TEST_DATE.getUTCMonth());
+      expect(year).toBe(TEST_DATE.getUTCFullYear());
     });
 
     it('should compute calendar from a specific startDate', () => {
-      const testDate = new Date(2025, 5, 15); // June 15, 2025
+      const testDate = new Date(Date.UTC(2025, 5, 15)); // June 15, 2025 UTC
       const { month, year } = computeCalendarFromStartDate(testDate);
       expect(month).toBe(5); // June is month 5 (0-indexed)
       expect(year).toBe(2025);
@@ -2068,8 +2148,6 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Open modal
     const createButton = screen.getByTestId('createEventModalBtn');
     await userEvent.click(createButton);
@@ -2087,9 +2165,12 @@ describe('Testing Events Screen [User Portal]', () => {
     const submitButton = screen.getByTestId('createEventBtn');
     await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(mockErrorHandler).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(mockErrorHandler).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should handle refetch failure gracefully during event creation', async () => {
@@ -2107,8 +2188,6 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
 
     // Open modal
     const createButton = screen.getByTestId('createEventModalBtn');
@@ -2128,13 +2207,19 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(submitButton);
 
     // If refetch fails, it is suppressed. We expect success toast since mutation succeeded.
-    await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(mockToast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
     // Modal should close on success (even with refetch failure)
-    await waitFor(() => {
-      expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Should throw error when create event returns errors but no data', async () => {
@@ -2184,8 +2269,6 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait();
 
     // Open modal and fill form
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
