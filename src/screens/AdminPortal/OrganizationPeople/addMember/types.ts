@@ -27,4 +27,4 @@ export interface IQueryVariable {
 }
 
 // Re-export from shared AdminPortal types module
-export { OrganizationMembershipRole } from 'screens/AdminPortal/types/organizationMembershipRole';
+export { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';

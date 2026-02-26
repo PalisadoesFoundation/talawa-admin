@@ -18,7 +18,7 @@ import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
-import { OrganizationMembershipRole } from 'screens/AdminPortal/types/organizationMembershipRole';
+import { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
 
 const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
   const useParams = vi.fn();
@@ -58,6 +58,8 @@ vi.mock('utils/errorHandler', () => ({
 interface InterfaceMockOptions {
   blockUserError?: boolean;
   unblockUserError?: boolean;
+  blockUserNullData?: boolean;
+  unblockUserNullData?: boolean;
   membersQueryError?: boolean;
   blockedUsersQueryError?: boolean;
   emptyMembers?: boolean;
@@ -99,6 +101,8 @@ const createMocks = (
   const {
     blockUserError = false,
     unblockUserError = false,
+    blockUserNullData = false,
+    unblockUserNullData = false,
     membersQueryError = false,
     blockedUsersQueryError = false,
     emptyMembers = false,
@@ -212,6 +216,9 @@ const createMocks = (
         ? { error: new Error('Failed to block user') }
         : {
             newData: () => {
+              if (blockUserNullData) {
+                return { data: { blockUser: null } };
+              }
               const idx = mockState.members.findIndex((u) => u.id === '1');
               if (idx > -1) {
                 const [removed] = mockState.members.splice(idx, 1);
@@ -230,6 +237,9 @@ const createMocks = (
         ? { error: new Error('Failed to block user') }
         : {
             newData: () => {
+              if (blockUserNullData) {
+                return { data: { blockUser: null } };
+              }
               const idx = mockState.members.findIndex((u) => u.id === '2');
               if (idx > -1) {
                 const [removed] = mockState.members.splice(idx, 1);
@@ -248,6 +258,9 @@ const createMocks = (
         ? { error: new Error('Failed to unblock user') }
         : {
             newData: () => {
+              if (unblockUserNullData) {
+                return { data: { unblockUser: null } };
+              }
               const idx = mockState.blockedUsers.findIndex((u) => u.id === '3');
               if (idx > -1) {
                 const [removed] = mockState.blockedUsers.splice(idx, 1);
@@ -1058,6 +1071,85 @@ describe('BlockUser Component', () => {
 
         // John Doe should now be in the list too (added to state)
         expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Mutation falsy-data guards', () => {
+    it('does not show success toast when blockUser returns null', async () => {
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ blockUserNullData: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      const blockButton = screen.getByTestId('blockUserBtn-1');
+      await user.click(blockButton);
+
+      // Wait for an indicator that the mutation completed (user still present = no refetch from success path)
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      // Allow the mutation promise to resolve
+      await waitFor(() => {
+        // The guard `if (data?.blockUser)` is false, so no toast should fire
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      });
+    });
+
+    it('does not show success toast when unblockUser returns null', async () => {
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider mocks={createMocks({ unblockUserNullData: true })}>
+            <BrowserRouter>
+              <BlockUser />
+            </BrowserRouter>
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
+      });
+
+      // Switch to blocked users view
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
+      await user.click(sortingButton);
+
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
+      await user.click(blockedUsersOption);
+
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      const unblockButton = screen.getByTestId('unblockUserBtn-3');
+      await user.click(unblockButton);
+
+      // Wait for an indicator that the mutation completed (user still blocked = no refetch from success path)
+      await waitFor(() => {
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+      });
+
+      // Allow the mutation promise to resolve
+      await waitFor(() => {
+        // The guard `if (data?.unblockUser)` is false, so no toast should fire
+        expect(NotificationToast.success).not.toHaveBeenCalled();
       });
     });
   });

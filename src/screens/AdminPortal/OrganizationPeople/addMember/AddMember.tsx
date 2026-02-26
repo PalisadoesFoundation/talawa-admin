@@ -49,7 +49,7 @@ import type { IEdge, IUserDetails, IQueryVariable } from './types';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
-import { OrganizationMembershipRole } from 'screens/AdminPortal/types/organizationMembershipRole';
+import { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
@@ -111,7 +111,7 @@ function AddMember({
           variables: {
             memberId: userId,
             organizationId: currentUrl,
-            role: 'regular',
+            role: OrganizationMembershipRole.REGULAR,
           },
         });
         NotificationToast.success(
