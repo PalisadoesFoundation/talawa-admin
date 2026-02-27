@@ -110,4 +110,38 @@ describe('EditUserTagModal Component', () => {
       expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
     });
   });
+
+  it('focuses input when submitting empty tag name', async () => {
+    renderComponent({ ...defaultProps, newTagName: '' });
+
+    const input = screen.getByTestId('tagNameInput');
+    const focusSpy = vi.spyOn(input, 'focus');
+
+    const form = document.getElementById(
+      'edit-user-tag-form',
+    ) as HTMLFormElement;
+
+    form.dispatchEvent(
+      new Event('submit', { bubbles: true, cancelable: true }),
+    );
+
+    await waitFor(() => {
+      expect(focusSpy).toHaveBeenCalled();
+    });
+  });
+
+  it('sets touched state on blur', async () => {
+    const user = userEvent.setup();
+
+    renderComponent({ ...defaultProps, newTagName: '' });
+
+    const input = screen.getByTestId('tagNameInput');
+
+    await user.click(input);
+    await user.tab(); // triggers blur
+
+    await waitFor(() => {
+      expect(screen.getByText(/required/i)).toBeInTheDocument();
+    });
+  });
 });
