@@ -13,7 +13,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -552,15 +552,12 @@ describe('Organisation Venues Error Handling', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    // Verify breadcrumb navigation is present
-    await waitFor(() => {
-      expect(
-        screen.getByRole('navigation', { name: /breadcrumbs/i }),
-      ).toBeInTheDocument();
+    const breadcrumbsNav = await screen.findByRole('navigation', {
+      name: /breadcrumbs/i,
     });
-
+    expect(breadcrumbsNav).toBeInTheDocument();
     // Verify breadcrumb items
-    const breadcrumbLinks = screen.getAllByRole('link');
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
     expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
 
     // Verify current page breadcrumb (Venues) has aria-current

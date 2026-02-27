@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
@@ -1092,15 +1092,13 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
     );
 
-    // Verify breadcrumb navigation is present
-    await waitFor(() => {
-      expect(
-        screen.getByRole('navigation', { name: /breadcrumbs/i }),
-      ).toBeInTheDocument();
+    const breadcrumbsNav = await screen.findByRole('navigation', {
+      name: /breadcrumbs/i,
     });
+    expect(breadcrumbsNav).toBeInTheDocument();
 
     // Verify breadcrumb items
-    const breadcrumbLinks = screen.getAllByRole('link');
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
     expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
 
     // Verify current page breadcrumb (events) has aria-current

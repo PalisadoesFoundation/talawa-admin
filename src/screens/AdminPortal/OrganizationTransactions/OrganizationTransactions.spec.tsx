@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -77,12 +77,12 @@ describe('OrganizationTransactions', () => {
     renderWithRouter();
 
     // Verify breadcrumb navigation is present
-    expect(
-      screen.getByRole('navigation', { name: /breadcrumbs/i }),
-    ).toBeInTheDocument();
-
+    const breadcrumbsNav = screen.getByRole('navigation', {
+      name: /breadcrumbs/i,
+    });
+    expect(breadcrumbsNav).toBeInTheDocument();
     // Verify breadcrumb items
-    const breadcrumbLinks = screen.getAllByRole('link');
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
     expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
 
     // Verify current page breadcrumb (Transactions) has aria-current
