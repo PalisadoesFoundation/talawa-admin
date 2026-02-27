@@ -59,20 +59,18 @@ export class AdminEventPage {
       'be.visible',
     );
 
-    // Cypress cannot click this due to calendar cards overlapping the button.
-    // This is a known Cypress actionability limitation — force click is required.
-    cy.get('[data-testid="more"]')
-      .filter(':contains("View all")')
-      .each(($btn) => {
-        cy.wrap($btn).click({ force: true });
-      })
-      .then(($buttons) => {
-        // Wait for all clicks to be flushed; branch on whether any buttons existed.
-        if ($buttons.length === 0) {
-          return;
-        }
-        cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
-      });
+    // Expand collapsed calendar cells if "View all" buttons are present.
+    // Uses jQuery DOM lookup to avoid cy.get() timeout when no buttons exist.
+    cy.get('body').then(($body) => {
+      const $buttons = $body.find('[data-testid="more"]:contains("View all")');
+      if ($buttons.length > 0) {
+        $buttons.each((_: number, btn: HTMLElement) => {
+          cy.wrap(btn).click({ force: true });
+        });
+      }
+    });
+
+    cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
 
     return this;
   }

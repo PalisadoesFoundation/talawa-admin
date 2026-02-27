@@ -489,7 +489,8 @@
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé",
     "showPassword": "Afficher le mot de passe",
-    "hidePassword": "Masquer le mot de passe"
+    "hidePassword": "Masquer le mot de passe",
+    "emailNotAvailable": "E-mail non disponible"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -1429,7 +1430,8 @@
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible"
+    "emailNotAvailable": "E-mail non disponible",
+    "membersList": "Liste des membres"
   },
   "userLogin": {
     "login": "Se connecter",

@@ -208,6 +208,7 @@ export const USER_LIST_FOR_TABLE = gql`
           role
           avatarURL
           emailAddress
+          createdAt
         }
       }
     }
