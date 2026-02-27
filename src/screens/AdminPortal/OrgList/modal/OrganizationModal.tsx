@@ -105,11 +105,14 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           autoComplete="off"
         />
 
-        <label className="form-label">{tCommon('address')}</label>
+        <label htmlFor="countrySelect" className="form-label">
+          {tCommon('address')}
+        </label>
 
         <div className="row mb-1">
           <div className="col-sm-6 mb-1">
             <select
+              id="countrySelect"
               required
               data-testid="modalOrganizationCountryCode"
               value={formState.countryCode}
