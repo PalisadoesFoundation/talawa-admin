@@ -150,11 +150,11 @@ describe('Organisation Tags Page', () => {
     });
 
     // Reset any necessary cache or mocks
-    vi.clearAllMocks(); // Clear all mocks to ensure a clean state before each test
+    vi.restoreAllMocks(); // Restore all mocks to ensure a clean state before each test
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 

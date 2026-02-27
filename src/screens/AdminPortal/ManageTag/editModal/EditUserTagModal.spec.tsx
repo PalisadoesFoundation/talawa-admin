@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import EditUserTagModal, {
@@ -27,11 +27,12 @@ describe('EditUserTagModal Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
   });
 
   const StatefulWrapper = ({
@@ -80,8 +81,12 @@ describe('EditUserTagModal Component', () => {
     await userEvent.clear(input);
     await userEvent.type(input, 'Updated Tag');
     // Now that we have a real state update, the prop will change and userEvent.type will work as expected.
-    expect(defaultProps.setNewTagName).toHaveBeenLastCalledWith('Updated Tag');
-    expect(input).toHaveValue('Updated Tag');
+    await waitFor(() => {
+      expect(defaultProps.setNewTagName).toHaveBeenLastCalledWith(
+        'Updated Tag',
+      );
+      expect(input).toHaveValue('Updated Tag');
+    });
   });
 
   it('calls hideEditUserTagModal when cancel button is clicked', async () => {

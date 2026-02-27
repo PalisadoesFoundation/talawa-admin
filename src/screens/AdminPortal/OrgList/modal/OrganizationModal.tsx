@@ -70,7 +70,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
     <BaseModal
       show={showModal}
       onHide={toggleModal}
-      title={t('createOrganization')}
+      title={tCommon('createOrganization')}
       headerClassName={styles.modalHeader}
       dataTestId="modalOrganizationHeader"
     >
