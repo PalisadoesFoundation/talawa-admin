@@ -1,36 +1,23 @@
 /**
  * OrganizationPeople Component
  *
- * This component renders a paginated and searchable table of organization members,
- * administrators, or users. It provides functionality for sorting, searching, and
- * managing members within an organization.
+ * Renders a paginated and searchable card-based list of organization members,
+ * administrators, or users. Uses CursorPaginationManager for cursor-based
+ * pagination with "Load More" pattern.
  *
  * @remarks
- * - Uses Apollo Client's `useLazyQuery` for fetching data.
- * - Uses DataGridWrapper for client-side pagination and display.
- * - Supports filtering by roles (members, administrators, users).
- * - Includes local search functionality for filtering rows by name or email.
+ * - Uses two CursorPaginationManagers: one for members/admins, one for users.
+ * - Supports filtering by roles (members, administrators, users) via a dropdown.
+ * - Includes client-side search filtering by name or email.
  * - Displays a modal for removing members.
- *
- * @example
- * ```tsx
- * <OrganizationPeople />
- * ```
  *
  * @returns A JSX element rendering the organization people table.
  */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
-import { useLazyQuery } from '@apollo/client';
-import {
-  DataGridWrapper,
-  GridCellParams,
-  GridColDef,
-} from 'shared-components/DataGridWrapper';
 import { Delete } from '@mui/icons-material';
-import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
 import styles from './OrganizationPeople.module.css';
 import {
@@ -41,83 +28,22 @@ import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopl
 import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { errorHandler } from 'utils/errorHandler';
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { languages } from 'utils/languages';
 import Button from 'shared-components/Button';
+import type { InterfaceMemberNode } from 'types/PeopleTab/interface';
 
-/**
- * Maps numeric filter state to string option identifiers.
- *
- * @remarks
- * Converts internal numeric state values to their corresponding string filter options:
- * - 0 = 'members': Regular organization members
- * - 1 = 'admin': Organization administrators
- * - 2 = 'users': All users
- *
- * This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
- *
- * @example
- * ```ts
- * const option = STATE_TO_OPTION[0]; // 'members'
- * ```
- */
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
   1: 'admin',
   2: 'users',
 };
 
-/**
- * Maps string option identifiers to numeric filter state.
- *
- * @remarks
- * Converts string filter options to their corresponding internal numeric state values:
- * - 'members' = 0: Regular organization members
- * - 'admin' = 1: Organization administrators
- * - 'users' = 2: All users
- *
- * This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
- *
- * @example
- * ```ts
- * const state = OPTION_TO_STATE['admin']; // 1
- * ```
- */
 const OPTION_TO_STATE: Record<string, number> = {
   members: 0,
   admin: 1,
   users: 2,
 };
-
-interface IProcessedRow {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  createdAt: string;
-  rowNumber: number;
-}
-
-interface IEdges {
-  cursor: string;
-  node: {
-    id: string;
-    name: string;
-    role: string;
-    avatarURL: string;
-    emailAddress: string;
-    createdAt: string;
-  };
-}
-
-interface IQueryVariable {
-  orgId?: string | undefined;
-  first?: number | null;
-  after?: string | null;
-  last?: number | null;
-  before?: string | null;
-  where?: { role: { equal: 'administrator' | 'regular' } };
-}
 
 function OrganizationPeople(): JSX.Element {
   const { t, i18n } = useTranslation('translation', {
@@ -128,7 +54,6 @@ function OrganizationPeople(): JSX.Element {
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
 
-  // State
   const [state, setState] = useState(() => {
     const r = role?.role;
     return r === 0 || r === 1 || r === 2 ? r : 0;
@@ -141,121 +66,13 @@ function OrganizationPeople(): JSX.Element {
   } = useModalState();
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
-  const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
-  const [data, setData] = useState<
-    | {
-        edges: IEdges[];
-        pageInfo: {
-          startCursor?: string;
-          endCursor?: string;
-          hasNextPage: boolean;
-          hasPreviousPage: boolean;
-        };
-      }
-    | undefined
-  >();
+  const whereFilter = useMemo(() => {
+    return state === 1
+      ? { role: { equal: 'administrator' as const } }
+      : undefined;
+  }, [state]);
 
-  // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
-
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
-  );
-
-  // Handle data changes
-  useEffect(() => {
-    if (data) {
-      const { edges } = data;
-      const processedRows = edges.map(
-        (edge: IEdges, index: number): IProcessedRow => ({
-          id: edge.node.id,
-          name: edge.node.name,
-          email: edge.node.emailAddress,
-          image: edge.node.avatarURL,
-          createdAt: edge.node.createdAt || new Date().toISOString(),
-          rowNumber: index + 1,
-        }),
-      );
-
-      setCurrentRows(processedRows);
-    }
-  }, [data]);
-
-  // Handle tab changes (members, admins, users)
-  useEffect(() => {
-    const variables: IQueryVariable = {
-      first: PAGE_SIZE,
-      after: null,
-      last: null,
-      before: null,
-      orgId: currentUrl,
-    };
-
-    if (state === 0) {
-      // All members
-      fetchMembers({ variables });
-    } else if (state === 1) {
-      // Administrators only
-      fetchMembers({
-        variables: {
-          ...variables,
-          where: { role: { equal: 'administrator' } },
-        },
-      });
-    } else if (state === 2) {
-      // Users
-      fetchUsers({ variables });
-    }
-  }, [state, currentUrl, fetchMembers, fetchUsers]);
-
-  // Initial data fetch (members only when on members tab; tab effect handles admin/users)
-  useEffect(() => {
-    if (state === 0) {
-      fetchMembers({
-        variables: {
-          orgId: currentUrl,
-          first: PAGE_SIZE,
-          after: null,
-          last: null,
-          before: null,
-        },
-      });
-    }
-  }, [currentUrl, fetchMembers, state]);
-
-  // Error handling
-  useEffect(() => {
-    if (memberError) {
-      errorHandler(t, memberError);
-    }
-    if (userError) {
-      errorHandler(t, userError);
-    }
-  }, [memberError, userError, t]);
-
-  // Local search implementation
-  const filteredRows = useMemo(() => {
-    if (!searchTerm) return currentRows;
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    return currentRows.filter(
-      (row) =>
-        row.name.toLowerCase().includes(lowerSearchTerm) ||
-        row.email.toLowerCase().includes(lowerSearchTerm),
-    );
-  }, [currentRows, searchTerm]);
-
-  // Modal handlers
-  const toggleRemoveMemberModal = (id: string) => {
+  const toggleRemoveMemberModal = (id: string): void => {
     setSelectedMemId(id);
     openRemoveModal();
   };
@@ -264,146 +81,106 @@ function OrganizationPeople(): JSX.Element {
     setState(OPTION_TO_STATE[value] ?? 0);
   };
 
-  // Column definitions
-  const columns: GridColDef[] = [
-    {
-      field: 'sl_no',
-      headerName: tCommon('sl_no'),
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className={`${styles.flexCenter} ${styles.fullWidthHeight}`}>
-            {params.row.rowNumber}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'profile',
-      headerName: tCommon('profile'),
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.4, 40);
-        // Construct CSS value to avoid i18n linting errors
-        const avatarSizeValue = String(imageSize) + 'px';
-        return (
-          <div
-            className={`${styles.flexCenter} ${styles.flexColumn} ${styles.fullWidthHeight}`}
-          >
-            {params.row?.image ? (
+  const locale = useMemo(() => {
+    const currentLang = languages.find(
+      (lang: { code: string; country_code: string }) =>
+        lang.code === i18n.language,
+    );
+    return currentLang
+      ? `${currentLang.code}-${currentLang.country_code}`
+      : 'en-US';
+  }, [i18n.language]);
+
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        timeZone: 'UTC',
+      }),
+    [locale],
+  );
+
+  const visibleCount = useRef(0);
+
+  const renderMemberRow = (
+    node: InterfaceMemberNode,
+    index: number,
+  ): React.ReactNode => {
+    if (index === 0) visibleCount.current = 0;
+
+    if (searchTerm) {
+      const lower = searchTerm.toLowerCase();
+      const nameMatch = node.name?.toLowerCase().includes(lower);
+      const emailMatch = node.emailAddress?.toLowerCase().includes(lower);
+      if (!nameMatch && !emailMatch) return null;
+    }
+
+    visibleCount.current += 1;
+
+    const formattedDate = node.createdAt
+      ? dateFormatter.format(new Date(node.createdAt))
+      : '-';
+
+    return (
+      <div
+        className={styles.peopleRow}
+        data-testid={`org-people-row-${node.id}`}
+        role="row"
+      >
+        <span
+          className={`d-flex ${styles.people_card_header_col_1}`}
+          role="cell"
+        >
+          <span>{visibleCount.current}</span>
+          <span className={styles.avatarCell}>
+            {node.avatarURL ? (
               <img
-                src={params.row.image}
-                alt={tCommon('avatar')}
+                src={node.avatarURL}
+                alt={node.name}
                 className={styles.avatarImage}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
                 crossOrigin="anonymous"
               />
             ) : (
-              <div
-                className={`${styles.flexCenter} ${styles.avatarPlaceholder} ${styles.avatarPlaceholderSize}`}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
-                data-testid="avatar"
-              >
-                <Avatar name={params.row.name} />
-              </div>
+              <Avatar name={node.name} alt={node.name} size={40} />
             )}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'name',
-      headerName: tCommon('name'),
-      flex: 2,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
+          </span>
+        </span>
+        <span className={styles.people_card_header_col_2} role="cell">
           <Link
-            to={`/admin/member/${currentUrl}/${params.row.id}`}
-            state={{ id: params.row.id }}
-            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
+            to={`/admin/member/${currentUrl}/${node.id}`}
+            state={{ id: node.id }}
+            className={`${styles.membername}`}
           >
-            {params.row.name}
+            {node.name}
           </Link>
-        );
-      },
-    },
-    {
-      field: 'email',
-      headerName: tCommon('email'),
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-    },
-    {
-      field: 'joined',
-      headerName: tCommon('joinedOn'),
-      flex: 2,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const currentLang = languages.find(
-          (lang: { code: string; country_code: string }) =>
-            lang.code === i18n.language,
-        );
-        const locale = currentLang
-          ? `${currentLang.code}-${currentLang.country_code}`
-          : 'en-US';
-        return (
-          <div data-testid={`org-people-joined-${params.row.id}`}>
-            {t('joined')} :{' '}
-            {new Intl.DateTimeFormat(locale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              timeZone: 'UTC',
-            }).format(new Date(params.row.createdAt))}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <Button
-          className={`${styles.removeButton}`}
-          variant="danger"
-          disabled={state === 2}
-          onClick={() => toggleRemoveMemberModal(params.row.id)}
-          aria-label={tCommon('removeMember')}
-          data-testid="removeMemberModalBtn"
+        </span>
+        <span className={styles.people_card_header_col_2} role="cell">
+          {node.emailAddress ?? t('emailNotAvailable')}
+        </span>
+        <span
+          className={styles.people_card_header_col_2}
+          role="cell"
+          data-testid={`org-people-joined-${node.id}`}
         >
-          <Delete />
-        </Button>
-      ),
-    },
-  ];
+          {t('joined')} : {formattedDate}
+        </span>
+        <span className={styles.people_card_header_col_1} role="cell">
+          <Button
+            className={styles.removeButton}
+            variant="danger"
+            disabled={state === 2}
+            onClick={() => toggleRemoveMemberModal(node.id)}
+            aria-label={tCommon('removeMember')}
+            data-testid="removeMemberModalBtn"
+          >
+            <Delete />
+          </Button>
+        </span>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -442,22 +219,90 @@ function OrganizationPeople(): JSX.Element {
           }
         />
 
-        <DataGridWrapper<IProcessedRow>
-          rows={filteredRows}
-          columns={columns}
-          error={state === 2 ? userError?.message : memberError?.message}
-          loading={memberLoading || userLoading}
-          emptyStateProps={{
-            message: tCommon('notFound'),
-            description: tCommon('noDataDescription'),
-            dataTestId: 'organization-people-empty-state',
-          }}
-          paginationConfig={{
-            enabled: true,
-            defaultPageSize: PAGE_SIZE,
-            pageSizeOptions: [10, 25, 50, 100],
-          }}
-        />
+        <div
+          className={styles.people_content}
+          role="table"
+          aria-label={t('title')}
+        >
+          <div role="rowgroup">
+            <div className={styles.people_card_header} role="row">
+              <span
+                className={`d-flex ${styles.people_card_header_col_1}`}
+                role="columnheader"
+              >
+                <span>#</span>
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {tCommon('name')}
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {tCommon('email')}
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {tCommon('joinedOn')}
+              </span>
+              <span
+                className={styles.people_card_header_col_1}
+                role="columnheader"
+              >
+                {tCommon('action')}
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.people_card_main_container} role="rowgroup">
+            {state !== 2 ? (
+              <CursorPaginationManager<
+                unknown,
+                InterfaceMemberNode,
+                Record<string, unknown>
+              >
+                query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
+                queryVariables={{
+                  orgId: currentUrl,
+                  where: whereFilter,
+                }}
+                dataPath="organization.members"
+                itemsPerPage={10}
+                keyExtractor={(node: InterfaceMemberNode) => node.id}
+                renderItem={renderMemberRow}
+                emptyStateComponent={
+                  <span data-testid="organization-people-empty-state">
+                    {t('notFound')}
+                  </span>
+                }
+              />
+            ) : (
+              <CursorPaginationManager<
+                unknown,
+                InterfaceMemberNode,
+                Record<string, unknown>
+              >
+                query={USER_LIST_FOR_TABLE}
+                queryVariables={{}}
+                dataPath="allUsers"
+                itemsPerPage={10}
+                refetchTrigger={state}
+                keyExtractor={(node: InterfaceMemberNode) => node.id}
+                renderItem={renderMemberRow}
+                emptyStateComponent={
+                  <span data-testid="organization-people-empty-state">
+                    {t('notFound')}
+                  </span>
+                }
+              />
+            )}
+          </div>
+        </div>
       </div>
 
       {showRemoveModal && selectedMemId && (
