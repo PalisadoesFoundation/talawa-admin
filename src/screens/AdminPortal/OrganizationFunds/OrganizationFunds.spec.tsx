@@ -295,7 +295,7 @@ describe('OrganizationFunds Screen =>', () => {
     const delayedLink = new StaticMockLink(delayedMocks, true);
 
     renderOrganizationFunds(delayedLink);
-    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable-loading')).toBeInTheDocument();
   });
 
   it('Displays fund names in the table', async () => {
@@ -316,7 +316,7 @@ describe('OrganizationFunds Screen =>', () => {
 
   it('Sort the Pledges list by Earliest created Date', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
+    renderOrganizationFunds(link1);
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -325,16 +325,12 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find and click on the "Created On" column header to trigger sort (ASC)
-    const createdOnHeader = container.querySelector(
-      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
-    );
-
+    // Find and click on the "Created On" column header to trigger sort
+    const createdOnHeader = screen.getByText('Created On');
     expect(createdOnHeader).toBeInTheDocument();
-    if (createdOnHeader) {
-      await user.click(createdOnHeader);
-      await wait(300);
-    }
+
+    await user.click(createdOnHeader);
+    await wait(300);
 
     const allFundNames = screen.getAllByTestId('fundName');
 
@@ -469,7 +465,7 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
-  it('should display "endOfResults" message when funds are displayed', async () => {
+  it('should display funds in DataTable', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
@@ -482,9 +478,10 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Verify "End of results" message is displayed
+    // Verify DataTable is rendered
     await waitFor(() => {
-      expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+      const table = screen.getByRole('table');
+      expect(table).toBeInTheDocument();
     });
   });
 

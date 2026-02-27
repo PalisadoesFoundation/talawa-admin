@@ -4,52 +4,26 @@ import {
   Search,
   WarningAmberRounded,
 } from '@mui/icons-material';
-import { Stack } from '@mui/material';
-import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import TableLoader from 'shared-components/TableLoader/TableLoader';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import type { InterfaceFundInfo } from 'utils/interfaces';
-import {
-  ReportingRow,
-  ReportingTableColumn,
-  ReportingTableGridProps,
-} from 'types/ReportingTable/interface';
-import {
-  PAGE_SIZE,
-  ROW_HEIGHT,
-  dataGridStyle as baseDataGridStyle,
-} from 'types/ReportingTable/utils';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 
-const dataGridStyle = {
-  ...baseDataGridStyle,
-  '& .MuiDataGrid-row': {
-    ...baseDataGridStyle['& .MuiDataGrid-row'],
-    cursor: 'pointer',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-hover-bg)',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-hover-bg)',
-  },
-};
-
 /**
  * `organizationFunds` component displays a list of funds for a specific organization,
  * allowing users to search, sort, view and edit funds.
  *
- * This component utilizes the `DataGrid` from Material-UI to present the list of funds in a tabular format,
+ * This component utilizes the `DataTable` component to present the list of funds in a tabular format,
  * and includes functionality for filtering and sorting. It also handles the opening and closing of modals
  * for creating and editing.
  *
@@ -210,152 +184,104 @@ const organizationFunds = (): JSX.Element => {
     );
   }
 
-  // Header titles for the funds table
-  const headerTitles: string[] = [
-    tCommon('hash'),
-    t('funds.fundName'),
-    tCommon('createdOn'),
-    tCommon('status'),
-    t('funds.associatedCampaigns'),
-    tCommon('action'),
-  ];
-
-  const columns: ReportingTableColumn[] = [
+  // Column definitions for DataTable
+  const columns: Array<IColumnDef<InterfaceFundInfo>> = [
     {
-      field: 'sl_no',
-      headerName: tCommon('hash'),
-      flex: 1,
-      minWidth: 'space-11',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <span className={styles.requestsTableItemIndex}>
-          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
-        </span>
+      id: 'sl_no',
+      header: tCommon('hash'),
+      accessor: (_fund: InterfaceFundInfo, index?: number) =>
+        index !== undefined ? index + 1 : '',
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
+    },
+    {
+      id: 'fundName',
+      header: t('funds.fundName'),
+      accessor: 'name',
+      render: (value, fund) => (
+        <Button
+          variant="link"
+          className="p-0 text-start"
+          onClick={() => handleClick(fund.id)}
+          data-testid="fundName"
+        >
+          {value as string}
+        </Button>
       ),
-    },
-    {
-      field: 'fundName',
-      headerName: t('funds.fundName'),
-      flex: 2,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return <div data-testid="fundName">{params.row.name}</div>;
+      meta: {
+        sortable: false,
+        align: 'center',
       },
     },
     {
-      field: 'createdAt',
-      headerName: tCommon('createdOn'),
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: true,
-      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
-          </div>
-        );
+      id: 'createdAt',
+      header: tCommon('createdOn'),
+      accessor: (fund) => dayjs(fund.createdAt).format('DD/MM/YYYY'),
+      render: (value) => <div data-testid="createdOn">{value as string}</div>,
+      meta: {
+        sortable: true,
+        align: 'center',
+        sortFn: (a, b) =>
+          dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
       },
     },
     {
-      field: 'status',
-      headerName: t('funds.status'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return params.row.isArchived ? t('funds.archived') : tCommon('active');
+      id: 'status',
+      header: t('funds.status'),
+      accessor: (fund) =>
+        fund.isArchived ? t('funds.archived') : tCommon('active'),
+      meta: {
+        sortable: false,
+        align: 'center',
       },
     },
     {
-      field: 'assocCampaigns',
-      headerName: t('funds.assocCampaigns'),
-      flex: 2,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            size="sm"
-            className={styles.editButton}
-            aria-label={t('funds.viewCampaigns')}
-            onClick={() => handleClick(params.row.id as string)}
-            data-testid="viewBtn"
-          >
-            <i className="fa fa-eye me-1" />
-            {t('funds.viewCampaigns')}
-          </Button>
-        );
+      id: 'assocCampaigns',
+      header: t('funds.assocCampaigns'),
+      accessor: () => '',
+      render: (_value, fund) => (
+        <Button
+          size="sm"
+          className={styles.editButton}
+          aria-label={t('funds.viewCampaigns')}
+          onClick={() => handleClick(fund.id)}
+          data-testid="viewBtn"
+        >
+          <i className="fa fa-eye me-1" />
+          {t('funds.viewCampaigns')}
+        </Button>
+      ),
+      meta: {
+        sortable: false,
+        align: 'center',
       },
     },
     {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 2,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            size="sm"
-            // className="me-2 rounded"
-            className={styles.editButton}
-            data-testid="editFundBtn"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOpenModal(params.row as InterfaceFundInfo, 'edit');
-            }}
-          >
-            <i className="fa fa-edit me-1" />
-            {t('funds.editFund')}
-          </Button>
-        );
+      id: 'action',
+      header: tCommon('action'),
+      accessor: () => '',
+      render: (_value, fund) => (
+        <Button
+          size="sm"
+          className={styles.editButton}
+          data-testid="editFundBtn"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenModal(fund, 'edit');
+          }}
+        >
+          <i className="fa fa-edit me-1" />
+          {t('funds.editFund')}
+        </Button>
+      ),
+      meta: {
+        sortable: false,
+        align: 'center',
       },
     },
   ];
-
-  const gridProps: ReportingTableGridProps = {
-    sx: { ...dataGridStyle },
-    paginationMode: 'client',
-    getRowId: (row: InterfaceFundInfo) => row.id,
-    rowCount: filteredAndSortedFunds.length,
-    pageSizeOptions: [PAGE_SIZE],
-    loading: fundLoading,
-    hideFooter: true,
-    slots: {
-      noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('funds.noFundsFound')}
-        </Stack>
-      ),
-    },
-    getRowClassName: () => `${styles.rowBackground} ${styles.overflowVisible}`,
-    isRowSelectable: () => false,
-    disableColumnMenu: true,
-    rowHeight: ROW_HEIGHT,
-    autoHeight: true,
-    onRowClick: (params: { row: { id: string } }) =>
-      handleClick(params.row.id as string),
-  };
 
   return (
     <div>
@@ -403,31 +329,14 @@ const organizationFunds = (): JSX.Element => {
         />
       ) : (
         <div className={styles.listBox}>
-          {fundLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
-          ) : (
-            <ReportingTable
-              rows={
-                filteredAndSortedFunds.map((fund) => ({
-                  ...fund,
-                })) as ReportingRow[]
-              }
-              columns={columns}
-              gridProps={gridProps}
-              listProps={{
-                loader: <TableLoader noOfCols={6} noOfRows={2} />,
-                className: `${styles.listTable} ${styles.overflowVisible}`,
-                ['data-testid']: 'funds-list',
-                scrollThreshold: 0.9,
-                endMessage:
-                  filteredAndSortedFunds.length > 0 ? (
-                    <div className={'w-100 text-center my-4'}>
-                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
-                    </div>
-                  ) : null,
-              }}
-            />
-          )}
+          <DataTable
+            data={filteredAndSortedFunds}
+            columns={columns}
+            loading={fundLoading}
+            rowKey="id"
+            emptyMessage={t('funds.noFundsFound')}
+            tableClassName={styles.listTable}
+          />
         </div>
       )}
 

@@ -6,12 +6,12 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/OrganizationFunds/OrganizationFunds.tsx:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/OrganizationFunds.tsx#L105)
+Defined in: [src/screens/AdminPortal/OrganizationFunds/OrganizationFunds.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/OrganizationFunds.tsx#L79)
 
 `organizationFunds` component displays a list of funds for a specific organization,
 allowing users to search, sort, view and edit funds.
 
-This component utilizes the `DataGrid` from Material-UI to present the list of funds in a tabular format,
+This component utilizes the `DataTable` component to present the list of funds in a tabular format,
 and includes functionality for filtering and sorting. It also handles the opening and closing of modals
 for creating and editing.
 
