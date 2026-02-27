@@ -77,34 +77,36 @@ export default function People(): React.JSX.Element {
           role="table"
           aria-label={t('membersList')}
         >
-          <div className={styles.people_card_header} role="row">
-            <span
-              className={`d-flex ${styles.people_card_header_col_1}`}
-              role="columnheader"
-            >
-              <span>#</span>
-            </span>
-            <span
-              className={styles.people_card_header_col_2}
-              role="columnheader"
-            >
-              {t('name')}
-            </span>
-            <span
-              className={styles.people_card_header_col_2}
-              role="columnheader"
-            >
-              {t('email')}
-            </span>
-            <span
-              className={styles.people_card_header_col_1}
-              role="columnheader"
-            >
-              {t('role')}
-            </span>
+          <div role="rowgroup">
+            <div className={styles.people_card_header} role="row">
+              <span
+                className={`d-flex ${styles.people_card_header_col_1}`}
+                role="columnheader"
+              >
+                <span>#</span>
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {t('name')}
+              </span>
+              <span
+                className={styles.people_card_header_col_2}
+                role="columnheader"
+              >
+                {t('email')}
+              </span>
+              <span
+                className={styles.people_card_header_col_1}
+                role="columnheader"
+              >
+                {t('role')}
+              </span>
+            </div>
           </div>
 
-          <div className={styles.people_card_main_container}>
+          <div className={styles.people_card_main_container} role="rowgroup">
             <CursorPaginationManager<
               unknown,
               InterfaceMemberNode,

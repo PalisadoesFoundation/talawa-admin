@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Shared node shape for member/user rows in People screens
+/** Shared node shape for member/user rows in People screens. */
 export interface InterfaceMemberNode {
   id: string;
   name: string;

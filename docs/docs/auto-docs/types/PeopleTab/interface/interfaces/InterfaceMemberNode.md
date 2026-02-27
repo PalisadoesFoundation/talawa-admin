@@ -6,6 +6,8 @@
 
 Defined in: [src/types/PeopleTab/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L4)
 
+Shared node shape for member/user rows in People screens.
+
 ## Properties
 
 ### avatarURL?
