@@ -13,7 +13,8 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
     '[data-testid="removeMemberModalBtn"]';
   private readonly confirmRemoveMemberButton = 'removeMemberBtn';
   private readonly alertSelector = '[role=alert]';
-  private readonly table = this.tableActions('.MuiDataGrid-root');
+  private readonly tableSelector = '[role="table"]';
+  private readonly rowSelector = '[role="row"][data-testid^="org-people-row-"]';
   private readonly removeMemberModal = this.modalActions('[role="dialog"]');
 
   protected self(): MemberManagementPage {
@@ -42,7 +43,9 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
   }
 
   verifyMemberInList(name: string, timeout = 40000): this {
-    this.table.findRowByText(name, timeout);
+    cy.get(`${this.tableSelector} ${this.rowSelector}`, { timeout })
+      .contains(name)
+      .should('be.visible');
     return this;
   }
 
@@ -90,14 +93,12 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
   deleteMember(name: string, timeout = 40000): this {
     this.searchMemberByName(name, timeout);
 
-    cy.then(() => {
-      this.table.waitVisible(timeout);
-      this.table.clickRowActionByText(
-        name,
-        this.removeMemberActionSelector,
-        timeout,
-      );
-    });
+    cy.get(`${this.tableSelector} ${this.rowSelector}`, { timeout })
+      .contains(name)
+      .closest(this.rowSelector)
+      .find(this.removeMemberActionSelector)
+      .should('be.visible')
+      .click();
 
     this.removeMemberModal
       .waitVisible(timeout)
@@ -119,7 +120,10 @@ export class MemberManagementPage extends BasePage<MemberManagementPage> {
   }
 
   verifyMinRows(minRows: number, timeout = 40000): this {
-    this.table.expectMinRows(minRows, timeout);
+    cy.get(`${this.tableSelector} ${this.rowSelector}`, { timeout }).should(
+      'have.length.at.least',
+      minRows,
+    );
     return this;
   }
 }

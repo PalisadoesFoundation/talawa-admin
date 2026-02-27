@@ -4,7 +4,7 @@
 
 # Interface: InterfacePeopleTabNavbarProps
 
-Defined in: [src/types/PeopleTab/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L24)
+Defined in: [src/types/PeopleTab/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L34)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/PeopleTab/interface.ts:24](https://github.com/PalisadoesF
 
 > `optional` **actions**: `ReactNode`
 
-Defined in: [src/types/PeopleTab/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L41)
+Defined in: [src/types/PeopleTab/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L51)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/PeopleTab/interface.ts:41](https://github.com/PalisadoesF
 
 > `optional` **search**: `object`
 
-Defined in: [src/types/PeopleTab/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L26)
+Defined in: [src/types/PeopleTab/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L36)
 
 #### buttonTestId?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/PeopleTab/interface.ts:26](https://github.com/PalisadoesF
 
 > `optional` **sorting**: `object`[]
 
-Defined in: [src/types/PeopleTab/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L32)
+Defined in: [src/types/PeopleTab/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L42)
 
 #### icon?
 
@@ -96,4 +96,4 @@ Defined in: [src/types/PeopleTab/interface.ts:32](https://github.com/PalisadoesF
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L25)
+Defined in: [src/types/PeopleTab/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L35)
