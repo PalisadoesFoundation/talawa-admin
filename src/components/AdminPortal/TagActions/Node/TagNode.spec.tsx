@@ -4,11 +4,12 @@ import { MockedProvider } from '@apollo/client/testing';
 import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
 import type { InterfaceTagData } from 'utils/interfaces';
-import type { TFunction } from 'i18next';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'utils/i18nForTest';
 
 const mockTag: InterfaceTagData = {
   _id: '1',
@@ -26,8 +27,6 @@ const mockTag: InterfaceTagData = {
 
 const mockCheckedTags: Set<string> = new Set<string>();
 let mockToggleTagSelection: ReturnType<typeof vi.fn>;
-const mockT: TFunction<'translation', 'manageTag'> = ((key: string) =>
-  key) as TFunction<'translation', 'manageTag'>;
 
 let user: ReturnType<typeof userEvent.setup>;
 
@@ -45,14 +44,15 @@ describe('TagNode', () => {
   // Existing tests
   it('renders the tag name', () => {
     render(
-      <MockedProvider mocks={[]}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[]}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     expect(screen.getByText('Parent Tag')).toBeInTheDocument();
@@ -60,14 +60,15 @@ describe('TagNode', () => {
 
   it('calls toggleTagSelection when the checkbox is clicked', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={MOCKS}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const checkbox = screen.getByTestId(`checkTag${mockTag._id}`);
@@ -78,14 +79,15 @@ describe('TagNode', () => {
   // Existing subtag tests
   it('expands and fetches subtags when expand icon is clicked', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={MOCKS}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -99,14 +101,15 @@ describe('TagNode', () => {
 
   it('displays an error message if fetching subtags fails', async () => {
     render(
-      <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -114,21 +117,22 @@ describe('TagNode', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText('errorOccurredWhileLoadingSubTags'),
+        screen.getByText('Error occurred while loading subTags tags'),
       ).toBeInTheDocument();
     });
   });
 
   it('loads more subtags on scroll', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={MOCKS}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -154,14 +158,15 @@ describe('TagNode', () => {
 describe('TagNode with Mocks', () => {
   it('renders parent tag name', () => {
     render(
-      <MockedProvider mocks={[]}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[]}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     expect(screen.getByText('Parent Tag')).toBeInTheDocument();
@@ -169,14 +174,15 @@ describe('TagNode with Mocks', () => {
 
   it('fetches and displays child tags from MOCKS', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={MOCKS}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -190,14 +196,15 @@ describe('TagNode with Mocks', () => {
 
   it('handles pagination correctly with second MOCKS item', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={MOCKS}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -226,14 +233,15 @@ describe('TagNode with Mocks', () => {
 
   it('displays error message with MOCKS_ERROR_SUBTAGS_QUERY', async () => {
     render(
-      <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -242,7 +250,7 @@ describe('TagNode with Mocks', () => {
     // Verify error message
     await waitFor(() => {
       expect(
-        screen.getByText('errorOccurredWhileLoadingSubTags'),
+        screen.getByText('Error occurred while loading subTags tags'),
       ).toBeInTheDocument();
     });
   });
@@ -297,14 +305,15 @@ describe('Edge Cases and Coverage Improvements', () => {
     };
 
     render(
-      <MockedProvider mocks={[]}>
-        <TagNode
-          tag={leafTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[]}>
+          <TagNode
+            tag={leafTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     // Should render the tag name
@@ -364,14 +373,15 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithValidData}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mockWithValidData}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -419,14 +429,15 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithEmptySubTags}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mockWithEmptySubTags}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -496,14 +507,15 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithFetchMoreUndefined}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mockWithFetchMoreUndefined}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -550,14 +562,15 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithNullData}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mockWithNullData}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
@@ -617,14 +630,15 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithUndefinedHasNextPage}>
-        <TagNode
-          tag={mockTag}
-          checkedTags={mockCheckedTags}
-          toggleTagSelection={mockToggleTagSelection}
-          t={mockT}
-        />
-      </MockedProvider>,
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mockWithUndefinedHasNextPage}>
+          <TagNode
+            tag={mockTag}
+            checkedTags={mockCheckedTags}
+            toggleTagSelection={mockToggleTagSelection}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);

@@ -1,4 +1,3 @@
-import type { TFunction } from 'i18next';
 import type { ApolloError } from '@apollo/client';
 
 export interface InterfaceMemberData {
@@ -28,14 +27,13 @@ export interface InterfaceAddPeopleToTagProps {
   addPeopleToTagModalIsOpen: boolean;
   hideAddPeopleToTagModal: () => void;
   refetchAssignedMembersData: () => void;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
 }
 
 export interface InterfacePaginationVariables {
   after?: string | null;
   first?: number | null;
 }
+
 export interface InterfaceBaseQueryResult {
   loading: boolean;
   error?: ApolloError;
