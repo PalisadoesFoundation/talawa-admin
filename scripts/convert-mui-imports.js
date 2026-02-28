@@ -45,10 +45,7 @@ const transformFile = (filePath) => {
     filePath.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS,
   );
 
-  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-
-  const newStatements = [];
-  let modified = false;
+  const edits = [];
 
   sourceFile.statements.forEach((node) => {
     if (
@@ -57,67 +54,53 @@ const transformFile = (filePath) => {
     ) {
       const source = node.moduleSpecifier.text;
 
-      if (source !== MATERIAL && source !== ICONS) {
-        newStatements.push(node);
-        return;
-      }
+      if (
+        (source === MATERIAL || source === ICONS) &&
+        node.importClause &&
+        !node.importClause.isTypeOnly &&
+        node.importClause.namedBindings &&
+        ts.isNamedImports(node.importClause.namedBindings)
+      ) {
+        const start = node.getStart(sourceFile);
+        const end = node.getEnd();
 
-      // Skip type-only imports
-      if (node.importClause && node.importClause.isTypeOnly) {
-        newStatements.push(node);
-        return;
-      }
+        const replacements = node.importClause.namedBindings.elements.map(
+          (element) => {
+            const importedName = element.propertyName
+              ? element.propertyName.text
+              : element.name.text;
 
-      const namedBindings =
-        node.importClause && node.importClause.namedBindings;
+            const localName = element.name.text;
 
-      if (namedBindings && ts.isNamedImports(namedBindings)) {
-        namedBindings.elements.forEach((element) => {
-          const importedName = element.propertyName
-            ? element.propertyName.text
-            : element.name.text;
+            return `import ${localName} from '${source}/${importedName}';`;
+          },
+        );
 
-          const localName = element.name.text;
-
-          const newImport = ts.factory.createImportDeclaration(
-            undefined,
-            ts.factory.createImportClause(
-              false,
-              ts.factory.createIdentifier(localName),
-              undefined,
-            ),
-            ts.factory.createStringLiteral(`${source}/${importedName}`),
-            undefined,
-          );
-
-          newStatements.push(newImport);
+        edits.push({
+          start,
+          end,
+          text: replacements.join('\n'),
         });
-
-        modified = true;
-        return;
       }
-
-      // Preserve default-only imports
-      newStatements.push(node);
-      return;
     }
-
-    newStatements.push(node);
   });
 
-  if (!modified) {
+  if (!edits.length) {
     console.log(`No changes in ${filePath}`);
     return;
   }
 
-  const updatedSourceFile = ts.factory.updateSourceFile(
-    sourceFile,
-    newStatements,
-  );
+  // CRITICAL: apply in reverse order
+  edits.sort((a, b) => b.start - a.start);
 
-  const result = printer.printFile(updatedSourceFile);
+  let newContent = content;
 
-  fs.writeFileSync(filePath, result, 'utf8');
+  for (const edit of edits) {
+    newContent =
+      newContent.slice(0, edit.start) + edit.text + newContent.slice(edit.end);
+  }
+
+  fs.writeFileSync(filePath, newContent, 'utf8');
   console.log(
     green('Converted:'),
     bold(path.relative(process.cwd(), filePath)),
