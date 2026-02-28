@@ -65,7 +65,7 @@ export default function People(): React.JSX.Element {
                   value: index,
                 })),
                 selectedOption: mode,
-                onOptionChange: (value) => setMode(value as number),
+                onOptionChange: (value) => setMode(Number(value)),
                 dataTestIdPrefix: 'modeChangeBtn',
               },
             ]}
