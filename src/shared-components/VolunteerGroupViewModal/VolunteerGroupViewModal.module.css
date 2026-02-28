@@ -5,6 +5,7 @@
 
 .tableimages {
   margin: auto;
+  margin-right: var(--space-2);
 }
 
 .avatarContainer {

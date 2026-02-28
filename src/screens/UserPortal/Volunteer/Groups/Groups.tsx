@@ -203,7 +203,7 @@ function Groups(): JSX.Element {
         const { id, name, avatarURL } = params.row.leader;
         return (
           <div
-            className="d-flex fw-bold align-items-center ms-2"
+            className="d-flex fw-bold align-items-center ms-2 gap-2"
             data-testid="leaderName"
           >
             <ProfileAvatarDisplay
