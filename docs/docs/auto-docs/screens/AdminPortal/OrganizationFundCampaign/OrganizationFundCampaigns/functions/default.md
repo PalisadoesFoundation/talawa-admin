@@ -6,13 +6,13 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx#L80)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx#L55)
 
 `orgFundCampaign` component displays a list of fundraising campaigns for a specific fund within an organization.
 It allows users to search, sort, view and edit campaigns.
 
 ### Functionality
-- Displays a data grid with campaigns information, including their names, start and end dates, funding goals, and actions.
+- Displays a data table with campaigns information, including their names, start and end dates, funding goals, and actions.
 - Provides search functionality to filter campaigns by name.
 - Offers sorting options based on funding goal and end date.
 - Opens modals for creating or editing campaigns.
@@ -31,7 +31,7 @@ It allows users to search, sort, view and edit campaigns.
 - Uses `FUND_CAMPAIGN` query to fetch the list of campaigns based on the provided fund ID, search term, and sorting criteria.
 
 ### Rendering
-- Renders a `ReportingTable` component with campaigns information.
+- Renders a `DataTable` component with campaigns information.
 - Displays modals for creating and editing campaigns.
 - Shows error and loading states using `Loader` and error message components.
 

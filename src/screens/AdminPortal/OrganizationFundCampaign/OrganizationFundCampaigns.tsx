@@ -1,14 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
 import { Typography, Box, CircularProgress } from '@mui/material';
-import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import TableLoader from 'shared-components/TableLoader/TableLoader';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import { currencySymbols } from 'utils/currency';
@@ -17,41 +16,17 @@ import type {
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import {
-  ReportingRow,
-  ReportingTableColumn,
-  ReportingTableGridProps,
-} from 'types/ReportingTable/interface';
-import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button';
-
-const dataGridStyle = {
-  borderRadius: 'var(--table-head-radius)',
-  backgroundColor: 'var(--row-background)',
-  '& .MuiDataGrid-row': {
-    backgroundColor: 'var(--row-background)',
-    cursor: 'pointer',
-    '&:focus-within': { outline: 'none' },
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-hover-bg)',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-hover-bg)',
-  },
-  '& .MuiDataGrid-cell:focus': { outline: 'none' },
-  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
-};
 
 /**
  * `orgFundCampaign` component displays a list of fundraising campaigns for a specific fund within an organization.
  * It allows users to search, sort, view and edit campaigns.
  *
  * ### Functionality
- * - Displays a data grid with campaigns information, including their names, start and end dates, funding goals, and actions.
+ * - Displays a data table with campaigns information, including their names, start and end dates, funding goals, and actions.
  * - Provides search functionality to filter campaigns by name.
  * - Offers sorting options based on funding goal and end date.
  * - Opens modals for creating or editing campaigns.
@@ -71,7 +46,7 @@ const dataGridStyle = {
  * - Uses `FUND_CAMPAIGN` query to fetch the list of campaigns based on the provided fund ID, search term, and sorting criteria.
  *
  * ### Rendering
- * - Renders a `ReportingTable` component with campaigns information.
+ * - Renders a `DataTable` component with campaigns information.
  * - Displays modals for creating and editing campaigns.
  * - Shows error and loading states using `Loader` and error message components.
  *
@@ -165,137 +140,110 @@ const orgFundCampaign = (): JSX.Element => {
     );
   }
 
-  // Header titles for the table loader
-  const headerTitles: string[] = [
-    '#',
-    t('campaignName'),
-    tCommon('startDate'),
-    tCommon('endDate'),
-    t('fundingGoal'),
-    t('raised'),
-    t('progress'),
-    tCommon('action'),
-  ];
-
-  const columns: ReportingTableColumn[] = [
+  // Column definitions for DataTable
+  const columns: Array<IColumnDef<InterfaceCampaignInfo>> = [
     {
-      field: 'id',
-      headerName: '#',
-      flex: 1,
-      minWidth: 'space-11',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <span className={styles.requestsTableItemIndex}>
-          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
-        </span>
+      id: 'id',
+      header: '#',
+      accessor: (_campaign: InterfaceCampaignInfo, index?: number) =>
+        index !== undefined ? index + 1 : '',
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
+    },
+    {
+      id: 'name',
+      header: t('campaignName'),
+      accessor: 'name',
+      render: (value, campaign) => (
+        <Button
+          variant="link"
+          className="p-0 text-start"
+          onClick={() => handleClick(campaign.id)}
+          data-testid="campaignName"
+        >
+          {value as string}
+        </Button>
       ),
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
     },
     {
-      field: 'name',
-      headerName: t('campaignName'),
-      flex: 2,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <div data-testid="campaignName">{params.row.name}</div>
+      id: 'startAt',
+      header: tCommon('startDate'),
+      accessor: (campaign) => dayjs(campaign.startAt).format('DD/MM/YYYY'),
+      meta: {
+        sortable: true,
+        align: 'center',
+        sortFn: (a, b) =>
+          dayjs(a.startAt).valueOf() - dayjs(b.startAt).valueOf(),
+      },
+    },
+    {
+      id: 'endAt',
+      header: tCommon('endDate'),
+      accessor: (campaign) => dayjs(campaign.endAt).format('DD/MM/YYYY'),
+      render: (value) => <div data-testid="endDateCell">{value as string}</div>,
+      meta: {
+        sortable: true,
+        align: 'center',
+        sortFn: (a, b) => dayjs(a.endAt).valueOf() - dayjs(b.endAt).valueOf(),
+      },
+    },
+    {
+      id: 'goalAmount',
+      header: t('fundingGoal'),
+      accessor: () => '',
+      render: (_value, campaign) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="goalCell"
+        >
+          {
+            currencySymbols[
+              campaign.currencyCode as keyof typeof currencySymbols
+            ]
+          }
+          {campaign.goalAmount}
+        </div>
       ),
-    },
-    {
-      field: 'startAt',
-      headerName: tCommon('startDate'),
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: true,
-      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.startAt).format('DD/MM/YYYY'),
-    },
-    {
-      field: 'endAt',
-      headerName: tCommon('endDate'),
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      sortable: true,
-      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="endDateCell">
-            {dayjs(params.row.endAt).format('DD/MM/YYYY')}{' '}
-          </div>
-        );
+      meta: {
+        sortable: true,
+        align: 'center',
       },
     },
     {
-      field: 'goalAmount',
-      headerName: t('fundingGoal'),
-      flex: 1,
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: true,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="goalCell"
-          >
-            {
-              currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.goalAmount as number}
-          </div>
-        );
+      id: 'fundingRaised',
+      header: t('raised'),
+      accessor: () => '',
+      render: (_value, campaign) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="raisedCell"
+        >
+          {
+            currencySymbols[
+              campaign.currencyCode as keyof typeof currencySymbols
+            ]
+          }
+          {campaign.fundingRaised ?? 0}
+        </div>
+      ),
+      meta: {
+        sortable: false,
+        align: 'center',
       },
     },
     {
-      field: 'fundingRaised',
-      headerName: t('raised'),
-      flex: 1,
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="raisedCell"
-          >
-            {
-              currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.fundingRaised ?? 0}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'percentageRaised',
-      headerName: t('percentageRaised'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const raised = params.row.fundingRaised ?? 0;
-        const goal = params.row.goalAmount as number;
+      id: 'percentageRaised',
+      header: t('percentageRaised'),
+      accessor: () => '',
+      render: (_value, campaign) => {
+        const raised = campaign.fundingRaised ?? 0;
+        const goal = campaign.goalAmount;
         const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
 
         return (
@@ -337,51 +285,35 @@ const orgFundCampaign = (): JSX.Element => {
           </Box>
         );
       },
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
     },
     {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 1.5,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
+      id: 'action',
+      header: tCommon('action'),
+      accessor: () => '',
+      render: (_value, campaign) => (
         <Button
           size="sm"
           className={styles.editButton}
           data-testid="editCampaignBtn"
           onClick={(e) => {
             e.stopPropagation();
-            handleOpenModal(params.row as InterfaceCampaignInfo, 'edit');
+            handleOpenModal(campaign, 'edit');
           }}
         >
           <i className="fa fa-edit me-1" />
           {t('editCampaign')}
         </Button>
       ),
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
     },
   ];
-
-  const gridProps: ReportingTableGridProps = {
-    sx: { ...dataGridStyle },
-    paginationMode: 'client',
-    getRowId: (row: InterfaceCampaignInfo) => row.id,
-    rowCount: filteredCampaigns.length,
-    pageSizeOptions: [PAGE_SIZE],
-    loading: campaignLoading,
-    hideFooter: true,
-    compactColumns: columns.length >= 7,
-    getRowClassName: () =>
-      `${styles.rowBackgroundOrganizationFundCampaign} ${styles.overflowVisible}`,
-    isRowSelectable: () => false,
-    disableColumnMenu: true,
-    rowHeight: ROW_HEIGHT,
-    autoHeight: true,
-    onRowClick: (params: { row: { id: string } }) =>
-      handleClick(params.row.id as string),
-  };
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
@@ -442,31 +374,14 @@ const orgFundCampaign = (): JSX.Element => {
         />
       ) : (
         <div className={styles.listBox}>
-          {campaignLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
-          ) : (
-            <ReportingTable
-              rows={
-                filteredCampaigns.map((campaign) => ({
-                  ...campaign,
-                })) as ReportingRow[]
-              }
-              columns={columns}
-              gridProps={gridProps}
-              listProps={{
-                loader: <TableLoader noOfCols={8} noOfRows={2} />,
-                className: `${styles.listTable} ${styles.overflowVisible}`,
-                ['data-testid']: 'campaigns-list',
-                scrollThreshold: 0.9,
-                endMessage:
-                  filteredCampaigns.length > 0 ? (
-                    <div className={'w-100 text-center my-4'}>
-                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
-                    </div>
-                  ) : null,
-              }}
-            />
-          )}
+          <DataTable<InterfaceCampaignInfo>
+            data={filteredCampaigns as unknown as InterfaceCampaignInfo[]}
+            columns={columns}
+            loading={campaignLoading}
+            rowKey="id"
+            emptyMessage={t('noCampaignsFound')}
+            tableClassName={styles.listTable}
+          />
         </div>
       )}
 
