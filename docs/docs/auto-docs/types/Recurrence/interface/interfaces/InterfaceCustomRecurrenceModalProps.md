@@ -118,26 +118,6 @@ Function to update recurrence rule state
 
 > **startDate**: `Date`
 
-Defined in: [src/types/Recurrence/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Recurrence/interface.ts#L29)
-
-Event start date
-
-***
-
-### t()
-
-> **t**: (`key`) => `string`
-
 Defined in: [src/types/Recurrence/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Recurrence/interface.ts#L27)
 
-Translation function
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`
+Event start date

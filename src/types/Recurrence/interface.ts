@@ -23,8 +23,6 @@ export interface InterfaceCustomRecurrenceModalProps {
   setCustomRecurrenceModalIsOpen: (
     state: React.SetStateAction<boolean>,
   ) => void;
-  /** Translation function */
-  t: (key: string) => string;
   /** Event start date */
   startDate: Date;
 }

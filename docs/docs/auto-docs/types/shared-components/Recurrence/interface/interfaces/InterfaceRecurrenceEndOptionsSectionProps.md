@@ -110,13 +110,13 @@ State setter for the recurrence rule.
 
 ***
 
-### t()
+### t()?
 
-> **t**: (`key`) => `string`
+> `optional` **t**: (`key`) => `string`
 
 Defined in: [src/types/shared-components/Recurrence/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L30)
 
-Translation function.
+Translation function
 
 #### Parameters
 

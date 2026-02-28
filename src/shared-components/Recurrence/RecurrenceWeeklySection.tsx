@@ -3,13 +3,14 @@ import { Frequency, Days, daysOptions } from 'utils/recurrenceUtils';
 import styles from './RecurrenceWeeklySection.module.css';
 import Button from 'shared-components/Button';
 import { InterfaceRecurrenceWeeklySectionProps } from 'types/shared-components/Recurrence/interface';
-
+import { useTranslation } from 'react-i18next';
 /**
  * Weekly recurrence day selection section
  */
 export const RecurrenceWeeklySection: React.FC<
   InterfaceRecurrenceWeeklySectionProps
-> = ({ frequency, byDay, onDayClick, onWeekdayKeyDown, t }) => {
+> = ({ frequency, byDay, onDayClick, onWeekdayKeyDown }) => {
+  const { t } = useTranslation();
   if (frequency !== Frequency.WEEKLY) {
     return null;
   }
@@ -29,7 +30,7 @@ export const RecurrenceWeeklySection: React.FC<
             type="button"
             className={`${styles.recurrenceDayButton} ${byDay?.includes(Days[index]) ? styles.selected : ''}`}
             onClick={() => onDayClick(Days[index])}
-            onKeyDown={(e) => {
+            onKeyDown={(e: React.KeyboardEvent<HTMLButtonElement>) => {
               if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 onDayClick(Days[index]);

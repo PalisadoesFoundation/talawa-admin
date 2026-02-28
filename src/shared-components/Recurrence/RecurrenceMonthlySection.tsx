@@ -3,19 +3,15 @@ import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { Frequency, getMonthlyOptions } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceMonthlySectionProps } from 'types/shared-components/Recurrence/interface';
 import styles from './RecurrenceMonthlySection.module.css';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Monthly recurrence options section
  */
 export const RecurrenceMonthlySection: React.FC<
   InterfaceRecurrenceMonthlySectionProps
-> = ({
-  frequency,
-  recurrenceRuleState,
-  setRecurrenceRuleState,
-  startDate,
-  t,
-}) => {
+> = ({ frequency, recurrenceRuleState, setRecurrenceRuleState, startDate }) => {
+  const { t } = useTranslation();
   const monthlyOptions = useMemo(
     () => getMonthlyOptions(startDate),
     [startDate],

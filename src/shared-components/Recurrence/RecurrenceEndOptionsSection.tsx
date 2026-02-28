@@ -12,7 +12,6 @@ import {
   recurrenceEndOptions,
 } from 'utils/recurrenceUtils';
 import styles from './RecurrenceEndOptionsSection.module.css';
-
 import { InterfaceRecurrenceEndOptionsSectionProps } from 'types/shared-components/Recurrence/interface';
 
 /**
@@ -30,9 +29,10 @@ export const RecurrenceEndOptionsSection: React.FC<
   setRecurrenceRuleState,
   t,
 }) => {
+  const translate = t ?? ((key: string) => key);
   return (
     <div className={styles.endOptionsContainer}>
-      <span className="fw-semibold text-secondary">{t('ends')}</span>
+      <span className="fw-semibold text-secondary">{translate('ends')}</span>
       <div className={styles.radioGroupContainer}>
         <div>
           {recurrenceEndOptions
@@ -45,7 +45,7 @@ export const RecurrenceEndOptionsSection: React.FC<
                 <FormCheckField
                   type="radio"
                   id={`radio-${index}`}
-                  label={t(option)}
+                  label={translate(option)}
                   name="recurrenceEndOption"
                   className={styles.radioLabel}
                   value={option}
@@ -85,7 +85,7 @@ export const RecurrenceEndOptionsSection: React.FC<
                     minDate={dayjs()}
                     slotProps={{
                       textField: {
-                        'aria-label': t('endDate'),
+                        'aria-label': translate('endDate'),
                       },
                     }}
                   />
@@ -125,11 +125,11 @@ export const RecurrenceEndOptionsSection: React.FC<
                       disabled={selectedRecurrenceEndOption !== endsAfter}
                       data-testid="customRecurrenceCountInput"
                       data-cy="customRecurrenceCountInput"
-                      aria-label={t('occurrences')}
+                      aria-label={translate('occurrences')}
                       aria-required={selectedRecurrenceEndOption === endsAfter}
                       placeholder="1"
                     />{' '}
-                    {t('occurrences')}
+                    {translate('occurrences')}
                   </>
                 )}
               </div>

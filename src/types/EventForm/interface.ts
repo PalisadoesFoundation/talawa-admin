@@ -70,7 +70,6 @@ export interface IEventFormProps {
   onSubmit: (payload: IEventFormSubmitPayload) => Promise<void> | void;
   onCancel: () => void;
   submitLabel: string;
-  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string, options?: Record<string, unknown>) => string;
   showCreateChat?: boolean;
   showRegisterable?: boolean;

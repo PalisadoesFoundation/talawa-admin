@@ -11,6 +11,16 @@ const defaultProps = {
   t: (key: string) => key,
 };
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
+
 describe('RecurrenceYearlySection', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -262,28 +272,6 @@ describe('RecurrenceYearlySection', () => {
       );
 
       expect(screen.queryByText('yearlyOn')).not.toBeInTheDocument();
-    });
-  });
-
-  describe('Translation Function', () => {
-    it('should use translation function for labels', () => {
-      const t = vi.fn((key: string) => key);
-
-      render(<RecurrenceYearlySection {...defaultProps} t={t} />);
-
-      expect(t).toHaveBeenCalledWith('yearlyOn');
-      expect(t).toHaveBeenCalledWith('yearlyRecurrenceDesc');
-    });
-
-    it('should display translated text', () => {
-      const t = (key: string) => `translated_${key}`;
-
-      render(<RecurrenceYearlySection {...defaultProps} t={t} />);
-
-      expect(screen.getByText('translated_yearlyOn')).toBeInTheDocument();
-      expect(
-        screen.getByText('translated_yearlyRecurrenceDesc'),
-      ).toBeInTheDocument();
     });
   });
 });

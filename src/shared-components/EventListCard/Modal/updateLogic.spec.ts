@@ -17,8 +17,6 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
-import type { TFunction } from 'i18next';
-
 // Mock dependencies
 vi.mock('@apollo/client', async () => {
   const original = await vi.importActual('@apollo/client');
@@ -41,10 +39,6 @@ vi.mock('utils/errorHandler', async () => ({
 }));
 
 const mockUseMutation = useMutation as Mock;
-const mockT = ((key: string) => key) as unknown as TFunction<
-  'translation',
-  undefined
->;
 
 type MockEventListCardProps = InterfaceEvent;
 
@@ -109,7 +103,6 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
   recurrence: null as InterfaceRecurrenceRule | null,
   updateOption: 'single',
   hasRecurrenceChanged: false,
-  t: mockT,
   hideViewModal: vi.fn(),
   eventUpdateModalIsOpen: true,
   closeUpdateModal: vi.fn(),
@@ -330,7 +323,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(errorHandler).toHaveBeenCalledWith(mockT, error);
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
     });
   });
 

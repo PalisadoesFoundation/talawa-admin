@@ -214,7 +214,6 @@ const baseValues: IEventFormValues = {
   createChat: false,
 };
 
-const t = (key: string) => key;
 const tCommon = (key: string) => key;
 
 describe('EventForm', () => {
@@ -231,7 +230,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -267,7 +265,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          t={t}
           tCommon={tCommon}
         />,
       );
@@ -327,7 +324,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          t={t}
           tCommon={tCommon}
         />,
       );
@@ -369,7 +365,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          t={t}
           tCommon={tCommon}
         />,
       );
@@ -416,7 +411,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          t={t}
           tCommon={tCommon}
         />,
       );
@@ -462,7 +456,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -523,7 +516,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -543,7 +535,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -563,7 +554,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -588,7 +578,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -617,7 +606,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -661,7 +649,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -692,7 +679,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -720,7 +706,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -746,7 +731,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -772,7 +756,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -808,7 +791,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Create"
-          t={t}
           tCommon={tCommon}
           showPublicToggle
         />,
@@ -827,7 +809,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          t={t}
           tCommon={tCommon}
           showPublicToggle
         />,
@@ -842,7 +823,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          t={t}
           tCommon={tCommon}
           showPublicToggle
         />,
@@ -861,7 +841,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          t={t}
           tCommon={tCommon}
           showPublicToggle
         />,
@@ -880,7 +859,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          t={t}
           tCommon={tCommon}
           showPublicToggle
         />,
@@ -899,7 +877,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          t={t}
           tCommon={tCommon}
           showPublicToggle
         />,
@@ -919,7 +896,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          t={t}
           tCommon={tCommon}
           showPublicToggle
         />,
@@ -979,7 +955,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRegisterable
       />,
@@ -1008,7 +983,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showCreateChat
       />,
@@ -1037,7 +1011,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1080,7 +1053,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1126,7 +1098,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1172,7 +1143,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1216,7 +1186,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1255,7 +1224,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1296,7 +1264,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1337,7 +1304,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1388,7 +1354,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1432,7 +1397,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1467,7 +1431,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1496,7 +1459,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle={false}
       />,
@@ -1512,7 +1474,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         disableRecurrence
       />,
@@ -1530,7 +1491,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         disableRecurrence
         showRecurrenceToggle
@@ -1555,7 +1515,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1572,7 +1531,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1589,7 +1547,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={handleCancel}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showCancelButton
       />,
@@ -1606,7 +1563,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         submitting
       />,
@@ -1633,7 +1589,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1654,7 +1609,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1673,7 +1627,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1699,7 +1652,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1726,7 +1678,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -1753,7 +1704,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1795,7 +1745,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1837,7 +1786,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1879,7 +1827,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1917,7 +1864,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
         disableRecurrence
@@ -1936,7 +1882,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1959,7 +1904,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -1985,7 +1929,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showPublicToggle={false}
       />,
@@ -2007,7 +1950,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRegisterable={false}
       />,
@@ -2025,7 +1967,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showCreateChat={false}
       />,
@@ -2046,7 +1987,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -2079,7 +2019,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -2114,7 +2053,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
       />,
     );
@@ -2139,7 +2077,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        t={t}
         tCommon={tCommon}
         showRecurrenceToggle
       />,
@@ -2163,5 +2100,56 @@ describe('EventForm', () => {
 
     // If default rule was created (line 120), the modal should be in the document
     expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
+  });
+
+  test('adjusts endDate when new startDate is after current endDate (coverage for startDate branch)', async () => {
+    const handleSubmit = vi.fn();
+
+    const base = dayjs().startOf('day');
+
+    // Start with valid dates where startDate < endDate
+    const startDate = base.add(1, 'day').toDate();
+    const endDate = base.add(2, 'day').toDate();
+
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          startDate,
+          endDate,
+          allDay: true,
+        }}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        tCommon={tCommon}
+      />,
+    );
+
+    // Change startDate to a date AFTER the current endDate via fireEvent.change
+    // (avoids intermediate invalid date values that user.type produces keystroke-by-keystroke)
+    // This triggers the branch: endDate < date.toDate() => endDate = date.toDate()
+    const newStartDate = base.add(5, 'day').format('YYYY-MM-DD');
+    const startDateInput = screen.getByTestId('eventStartAt');
+    await act(async () => {
+      await user.clear(startDateInput);
+      await user.type(startDateInput, newStartDate);
+    });
+
+    await act(async () => {
+      await user.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalled();
+
+    const call = handleSubmit.mock.calls[0][0];
+
+    const submittedStart = dayjs(call.startDate);
+    const submittedEnd = dayjs(call.endDate);
+
+    expect(
+      submittedEnd.isAfter(submittedStart) ||
+        submittedEnd.isSame(submittedStart),
+    ).toBe(true);
   });
 });

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Frequency, monthNames } from '../../utils/recurrenceUtils';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceRecurrenceYearlySectionProps {
   frequency: Frequency;
   startDate: Date;
-  t: (key: string) => string;
 }
 
 /**
@@ -12,7 +12,10 @@ interface InterfaceRecurrenceYearlySectionProps {
  */
 export const RecurrenceYearlySection: React.FC<
   InterfaceRecurrenceYearlySectionProps
-> = ({ frequency, startDate, t }) => {
+> = ({ frequency, startDate }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   if (frequency !== Frequency.YEARLY) {
     return null;
   }

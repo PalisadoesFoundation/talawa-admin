@@ -5,12 +5,14 @@ import styles from './RecurrenceFrequencySection.module.css';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 
 import { InterfaceRecurrenceFrequencySectionProps } from 'types/shared-components/Recurrence/interface';
+import { useTranslation } from 'react-i18next';
 /**
  * Frequency and interval selection section
  */
 export const RecurrenceFrequencySection: React.FC<
   InterfaceRecurrenceFrequencySectionProps
-> = ({ frequency, localInterval, onIntervalChange, onFrequencyChange, t }) => {
+> = ({ frequency, localInterval, onIntervalChange, onFrequencyChange }) => {
+  const { t } = useTranslation();
   const frequencyOptions = useMemo(() => {
     return Object.values(Frequency).map((freq) => ({
       value: freq,

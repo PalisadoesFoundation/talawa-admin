@@ -150,7 +150,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         onSubmit={handleSubmit}
         onCancel={handleClose}
         submitLabel={t('createEvent')}
-        t={t}
         tCommon={tCommon}
         showRegisterable
         showPublicToggle

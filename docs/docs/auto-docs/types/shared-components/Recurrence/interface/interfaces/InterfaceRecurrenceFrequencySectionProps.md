@@ -67,23 +67,3 @@ Callback when the interval changes.
 #### Returns
 
 `void`
-
-***
-
-### t()
-
-> **t**: (`key`) => `string`
-
-Defined in: [src/types/shared-components/Recurrence/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L46)
-
-Translation function.
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`

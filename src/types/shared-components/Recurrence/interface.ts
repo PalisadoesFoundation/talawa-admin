@@ -26,8 +26,8 @@ export interface InterfaceRecurrenceEndOptionsSectionProps {
   setRecurrenceRuleState: (
     state: React.SetStateAction<InterfaceRecurrenceRule>,
   ) => void;
-  /** Translation function. */
-  t: (key: string) => string;
+  /** Translation function */
+  t?: (key: string) => string;
 }
 
 /**
@@ -42,8 +42,6 @@ export interface InterfaceRecurrenceFrequencySectionProps {
   onIntervalChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   /** Callback when the frequency changes. */
   onFrequencyChange: (newFrequency: Frequency) => void;
-  /** Translation function. */
-  t: (key: string) => string;
 }
 
 /**
@@ -60,8 +58,6 @@ export interface InterfaceRecurrenceMonthlySectionProps {
   ) => void;
   /** The start date of the recurrence. */
   startDate: Date;
-  /** Translation function. */
-  t: (key: string) => string;
 }
 
 export interface InterfaceRecurrenceWeeklySectionProps {
@@ -72,5 +68,4 @@ export interface InterfaceRecurrenceWeeklySectionProps {
     e: React.KeyboardEvent<HTMLButtonElement>,
     currentIndex: number,
   ) => void;
-  t: (key: string) => string;
 }
