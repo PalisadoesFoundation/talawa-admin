@@ -466,6 +466,20 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `;
 
+export const UPDATE_USER_PASSWORD = gql`
+  mutation UpdateUserPassword($input: MutationUpdateUserPasswordInput!) {
+    updateUserPassword(input: $input)
+  }
+`;
+
+export const ADMIN_UPDATE_USER_PASSWORD = gql`
+  mutation AdminUpdateUserPassword(
+    $input: MutationAdminUpdateUserPasswordInput!
+  ) {
+    adminUpdateUserPassword(input: $input)
+  }
+`;
+
 export const UPDATE_POST_MUTATION = gql`
   mutation updatePost($input: MutationUpdatePostInput!) {
     updatePost(input: $input) {

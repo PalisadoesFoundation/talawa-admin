@@ -1473,7 +1473,14 @@
     "enterCity": "Enter city name",
     "enterState": "Enter state name",
     "select": "Select",
-    "asYourCountry": "as your country"
+    "asYourCountry": "as your country",
+    "changePassword": "Change Password",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "confirmNewPassword":"Confirm New Password",
+    "passCantBeEmpty": "Password Cannot be Empty",
+    "passNoMatch": "New Password and Confirm Password are not same",
+    "passwordChangedSuccessfully": "Password Changed Successfully"
   },
   "people": {
     "title": "People",
