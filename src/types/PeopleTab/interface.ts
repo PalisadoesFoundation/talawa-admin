@@ -1,5 +1,15 @@
 import React from 'react';
 
+/** Shared node shape for member/user rows in People screens. */
+export interface InterfaceMemberNode {
+  id: string;
+  name: string;
+  role: string;
+  avatarURL?: string;
+  createdAt?: string;
+  emailAddress?: string;
+}
+
 // Props for PageHeader component
 export interface InterfacePageHeaderProps {
   title?: string;

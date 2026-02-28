@@ -484,7 +484,8 @@
     "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario",
     "showPassword": "Mostrar contraseña",
-    "hidePassword": "Ocultar contraseña"
+    "hidePassword": "Ocultar contraseña",
+    "emailNotAvailable": "Correo electrónico no disponible"
   },
   "organizationCard": {
     "join": "Unirse",
@@ -1426,7 +1427,8 @@
     "email": "Correo Electrónico",
     "role": "Rol",
     "loading": "Cargando...",
-    "emailNotAvailable": "Correo electrónico no disponible"
+    "emailNotAvailable": "Correo electrónico no disponible",
+    "membersList": "Lista de miembros"
   },
   "userNavbar": {
     "talawa": "Talawa",
