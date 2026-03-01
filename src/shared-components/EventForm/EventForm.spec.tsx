@@ -10,6 +10,15 @@ dayjs.extend(utc);
 import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+const FIXED_NOW = dayjs()
+  .utc()
+  .year(2023)
+  .month(0)
+  .date(1)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0);
 
 // Mock the wrapper components instead of MUI directly to verify EventForm uses them
 vi.mock('shared-components/DatePicker', () => ({
@@ -73,7 +82,7 @@ vi.mock('shared-components/TimePicker', () => ({
         disabled,
         'data-testid': dataTestId,
       } = props;
-      const today = dayjs().format('YYYY-MM-DD');
+      const today = FIXED_NOW.format('YYYY-MM-DD');
       return (
         <div data-testid="time-picker-wrapper">
           <input
@@ -129,7 +138,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             onClick={() => {
               // Use dynamic date to avoid test staleness
               const newRule = createDefaultRecurrenceRule(
-                dayjs().add(30, 'days').toDate(),
+                FIXED_NOW.add(30, 'days').toDate(),
                 Frequency.DAILY,
               );
               setRecurrenceRuleState(newRule);
@@ -154,7 +163,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             data-testid="updateEndDate"
             onClick={() => {
               // Use dynamic date to avoid test staleness
-              setEndDate(dayjs().add(40, 'days').toDate());
+              setEndDate(FIXED_NOW.add(40, 'days').toDate());
             }}
           >
             Update End Date
@@ -195,8 +204,8 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
 
 // Use future dates to ensure tests don't break when hardcoded dates become past dates
 // These dates are calculated dynamically to always be in the future
-const futureStartDate = dayjs().add(30, 'day').startOf('day').toDate();
-const futureEndDate = dayjs().add(31, 'day').startOf('day').toDate();
+const futureStartDate = FIXED_NOW.add(30, 'day').startOf('day').toDate();
+const futureEndDate = FIXED_NOW.add(31, 'day').startOf('day').toDate();
 
 const baseValues: IEventFormValues = {
   name: 'Test Event',
@@ -218,9 +227,14 @@ const tCommon = (key: string) => key;
 
 describe('EventForm', () => {
   const user = userEvent.setup();
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(FIXED_NOW.toDate());
+  });
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
+    vi.useRealTimers();
   });
   test('submits with computed ISO dates for all-day event with future dates', async () => {
     const handleSubmit = vi.fn();
@@ -351,7 +365,7 @@ describe('EventForm', () => {
     test('all-day event for future date uses midnight start time', async () => {
       const handleSubmit = vi.fn();
       // Use a future date that's definitely not today
-      const futureDate = dayjs().add(7, 'day').toDate();
+      const futureDate = FIXED_NOW.add(7, 'day').toDate();
       const futureValues: IEventFormValues = {
         ...baseValues,
         startDate: futureDate,
@@ -447,7 +461,7 @@ describe('EventForm', () => {
     // Start with a rule so dropdown is visible
     // Use dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -477,7 +491,7 @@ describe('EventForm', () => {
 
   test('formatRecurrenceForPayload formats recurrence rule', () => {
     // Use dynamic date to avoid test staleness
-    const futureDate = dayjs().add(30, 'days').toDate();
+    const futureDate = FIXED_NOW.add(30, 'days').toDate();
     const rule = createDefaultRecurrenceRule(futureDate, Frequency.WEEKLY);
     const result = formatRecurrenceForPayload(rule, futureDate);
     expect(result).toEqual(
@@ -491,7 +505,7 @@ describe('EventForm', () => {
     // Use dynamic date to avoid test staleness
     const result = formatRecurrenceForPayload(
       null,
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
     );
     expect(result).toBeNull();
   });
@@ -504,7 +518,10 @@ describe('EventForm', () => {
     };
     expect(() => {
       // Use dynamic date to avoid test staleness
-      formatRecurrenceForPayload(invalidRule, dayjs().add(30, 'days').toDate());
+      formatRecurrenceForPayload(
+        invalidRule,
+        FIXED_NOW.add(30, 'days').toDate(),
+      );
     }).toThrow();
   });
 
@@ -597,7 +614,7 @@ describe('EventForm', () => {
     // Start with a rule so dropdown is visible
     // Use dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -640,7 +657,7 @@ describe('EventForm', () => {
     const handleSubmit = vi.fn();
     // Use dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -685,7 +702,7 @@ describe('EventForm', () => {
 
     const endDateInput = screen.getByTestId('eventEndAt');
     // Use dynamic date to avoid test staleness
-    const newEndDate = dayjs().add(40, 'days').format('YYYY-MM-DD');
+    const newEndDate = FIXED_NOW.add(40, 'days').format('YYYY-MM-DD');
     await act(async () => {
       await user.clear(endDateInput);
       await user.type(endDateInput, newEndDate);
@@ -1044,7 +1061,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setRecurrenceRuleState with value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1089,7 +1106,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setRecurrenceRuleState with function', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1134,7 +1151,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setEndDate with value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1177,7 +1194,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setEndDate with function', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1215,7 +1232,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - hideCustomRecurrenceModal', async () => {
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1255,7 +1272,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - setCustomRecurrenceModalIsOpen', async () => {
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1295,7 +1312,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - setCustomRecurrenceModalIsOpen with function', async () => {
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1340,7 +1357,7 @@ describe('EventForm', () => {
     const handleSubmit = vi.fn();
     // Set initial times where endTime (14:00) is after startTime (10:00)
     // Use same date for start and end
-    const testDate = dayjs().add(30, 'day').startOf('day');
+    const testDate = FIXED_NOW.add(30, 'day').startOf('day');
     render(
       <EventForm
         initialValues={{
@@ -1383,7 +1400,7 @@ describe('EventForm', () => {
   test('does not adjust end time when new start time is before end time', async () => {
     const handleSubmit = vi.fn();
     // Set initial times where endTime (14:00) is after startTime (10:00)
-    const testDate = dayjs().add(30, 'day').startOf('day');
+    const testDate = FIXED_NOW.add(30, 'day').startOf('day');
     render(
       <EventForm
         initialValues={{
@@ -1576,7 +1593,7 @@ describe('EventForm', () => {
     const invalidDate = new Date('invalid');
     // Need a rule for dropdown to show when showRecurrenceToggle is true
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1600,7 +1617,7 @@ describe('EventForm', () => {
 
   test('currentRecurrenceLabel returns matching preset label', async () => {
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1695,7 +1712,7 @@ describe('EventForm', () => {
   test('selects weekly recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1736,7 +1753,7 @@ describe('EventForm', () => {
   test('selects monthly recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1777,7 +1794,7 @@ describe('EventForm', () => {
   test('selects annually recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1818,7 +1835,7 @@ describe('EventForm', () => {
   test('selects every weekday recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1895,7 +1912,7 @@ describe('EventForm', () => {
   test('handles setEndDate callback with null value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1978,7 +1995,7 @@ describe('EventForm', () => {
   test('creates default recurrence rule when selecting custom without existing rule', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -2010,7 +2027,7 @@ describe('EventForm', () => {
   test('handles recurrence toggle when recurrence is already enabled', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      dayjs().add(30, 'days').toDate(),
+      FIXED_NOW.add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -2105,7 +2122,7 @@ describe('EventForm', () => {
   test('adjusts endDate when new startDate is after current endDate (coverage for startDate branch)', async () => {
     const handleSubmit = vi.fn();
 
-    const base = dayjs().startOf('day');
+    const base = FIXED_NOW.startOf('day');
 
     // Start with valid dates where startDate < endDate
     const startDate = base.add(1, 'day').toDate();
@@ -2131,9 +2148,12 @@ describe('EventForm', () => {
     // This triggers the branch: endDate < date.toDate() => endDate = date.toDate()
     const newStartDate = base.add(5, 'day').format('YYYY-MM-DD');
     const startDateInput = screen.getByTestId('eventStartAt');
+
+    // Import fireEvent locally to avoid modifying the top imports which can be messy
+    const { fireEvent } = await import('@testing-library/react');
+
     await act(async () => {
-      await user.clear(startDateInput);
-      await user.type(startDateInput, newStartDate);
+      fireEvent.change(startDateInput, { target: { value: newStartDate } });
     });
 
     await act(async () => {

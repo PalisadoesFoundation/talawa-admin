@@ -4,7 +4,7 @@
 
 # Interface: InterfaceRecurrenceWeeklySectionProps
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L63)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L71)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:63](https://git
 
 > `optional` **byDay**: [`WeekDays`](../../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/WeekDays.md)[]
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L65)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L73)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:65](https://git
 
 > **frequency**: [`Frequency`](../../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/Frequency.md)
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L64)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L72)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:64](https://git
 
 > **onDayClick**: (`day`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L66)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L74)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:66](https://git
 
 > **onWeekdayKeyDown**: (`e`, `currentIndex`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L67)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L75)
 
 #### Parameters
 

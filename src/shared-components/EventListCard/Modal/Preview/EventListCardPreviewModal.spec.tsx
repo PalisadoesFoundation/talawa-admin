@@ -8,6 +8,18 @@ import {
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+
+// Mock react-i18next so tests can assert raw translation keys
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
+
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
@@ -1407,17 +1419,6 @@ describe('EventListCardPreviewModal', () => {
       customModalProps.hideCustomRecurrenceModal();
 
       expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(false);
-    });
-
-    test('should pass translation function to CustomRecurrenceModal', () => {
-      renderWithRecurrenceModal();
-
-      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-
-      // Verify the t function is passed and works correctly
-      expect(customModalProps.t).toBeDefined();
-      expect(typeof customModalProps.t).toBe('function');
-      expect(customModalProps.t('testKey')).toBe('testKey');
     });
   });
 

@@ -14,8 +14,28 @@ import { UserRole } from 'types/Event/interface';
 import { Frequency, InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { cleanup } from '@testing-library/react';
 
 dayjs.extend(utc);
+const FIXED_NOW = dayjs()
+  .utc()
+  .year(2025)
+  .month(0)
+  .date(1)
+  .hour(10)
+  .minute(0)
+  .second(0)
+  .millisecond(0);
+
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
 
 // Mock dependencies
 vi.mock('@apollo/client', async () => {
@@ -47,8 +67,8 @@ const mockEventListCardProps: MockEventListCardProps = {
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startAt: dayjs().toISOString(),
-  endAt: dayjs().add(2, 'hours').toISOString(),
+  startAt: FIXED_NOW.toISOString(),
+  endAt: FIXED_NOW.add(2, 'hours').toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -117,6 +137,7 @@ describe('useUpdateEventHandler', () => {
   let mockUpdateEntireRecurringEventSeries: Mock;
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -517,8 +538,8 @@ describe('useUpdateEventHandler', () => {
       });
       const { updateEventHandler } = useUpdateEventHandler();
 
-      const newStartDate = dayjs().add(20, 'days').startOf('day').toDate();
-      const newEndDate = dayjs().add(21, 'days').startOf('day').toDate();
+      const newStartDate = FIXED_NOW.add(20, 'days').startOf('day').toDate();
+      const newEndDate = FIXED_NOW.add(21, 'days').startOf('day').toDate();
 
       await updateEventHandler(
         buildHandlerInput({
@@ -562,16 +583,15 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: dayjs().add(2, 'months').toISOString(),
-            endAt: dayjs()
-              .add(2, 'months')
+            startAt: FIXED_NOW.add(2, 'months').toISOString(),
+            endAt: FIXED_NOW.add(2, 'months')
               .add(1, 'day')
               .add(2, 'hours')
               .toISOString(),
           },
           allDayChecked: true,
-          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
-          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
+          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
+          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
         }),
       );
 
@@ -582,10 +602,10 @@ describe('useUpdateEventHandler', () => {
       // When local dates (IST) are converted to UTC, they shift backwards
       // So we need to expect the UTC-converted values, not the local values
       const expectedStartDate = dayjs
-        .utc(dayjs().add(10, 'days').startOf('day').toDate())
+        .utc(FIXED_NOW.add(10, 'days').startOf('day').toDate())
         .startOf('day');
       const expectedEndDate = dayjs
-        .utc(dayjs().add(11, 'days').startOf('day').toDate())
+        .utc(FIXED_NOW.add(11, 'days').startOf('day').toDate())
         .endOf('day');
       expect(calledInputs.startAt).toContain(
         expectedStartDate.format('YYYY-MM-DDTHH:mm:ss'),
@@ -635,7 +655,7 @@ describe('useUpdateEventHandler', () => {
         buildHandlerInput({
           allDayChecked: true,
           eventStartDate: new Date('invalid'),
-          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
+          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -653,7 +673,7 @@ describe('useUpdateEventHandler', () => {
       await updateEventHandler(
         buildHandlerInput({
           allDayChecked: true,
-          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
+          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
           eventEndDate: new Date('invalid'),
           formState: {
             ...mockFormState,
@@ -678,11 +698,11 @@ describe('useUpdateEventHandler', () => {
             ...mockEventListCardProps,
             allDay: true,
             startAt: 'invalid-date',
-            endAt: dayjs().add(2, 'hours').toISOString(),
+            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
           },
           allDayChecked: true,
-          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
-          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
+          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
+          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -705,12 +725,12 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: true,
-            startAt: dayjs().toISOString(),
-            endAt: 'invalid-date',
+            startAt: FIXED_NOW.toISOString(),
+            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
           },
           allDayChecked: true,
-          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
-          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
+          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
+          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -733,20 +753,18 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: dayjs().toISOString(),
-            endAt: dayjs().add(2, 'hours').toISOString(),
+            startAt: FIXED_NOW.toISOString(),
+            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
             startTime: 'invalid-time',
             endTime: '12:00:00',
           },
           allDayChecked: false,
-          eventStartDate: dayjs()
-            .add(10, 'days')
+          eventStartDate: FIXED_NOW.add(10, 'days')
             .hour(11)
             .minute(0)
             .second(0)
             .toDate(),
-          eventEndDate: dayjs()
-            .add(10, 'days')
+          eventEndDate: FIXED_NOW.add(10, 'days')
             .hour(13)
             .minute(0)
             .second(0)
@@ -775,20 +793,18 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: dayjs().toISOString(),
-            endAt: dayjs().add(2, 'hours').toISOString(),
+            startAt: FIXED_NOW.toISOString(),
+            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
             startTime: '10:00:00',
             endTime: 'invalid-time',
           },
           allDayChecked: false,
-          eventStartDate: dayjs()
-            .add(10, 'days')
+          eventStartDate: FIXED_NOW.add(10, 'days')
             .hour(10)
             .minute(0)
             .second(0)
             .toDate(),
-          eventEndDate: dayjs()
-            .add(10, 'days')
+          eventEndDate: FIXED_NOW.add(10, 'days')
             .hour(14)
             .minute(0)
             .second(0)

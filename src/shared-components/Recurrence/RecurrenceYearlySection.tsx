@@ -1,14 +1,16 @@
 import React from 'react';
 import { Frequency, monthNames } from '../../utils/recurrenceUtils';
 import { useTranslation } from 'react-i18next';
-
-interface InterfaceRecurrenceYearlySectionProps {
-  frequency: Frequency;
-  startDate: Date;
-}
+import type { InterfaceRecurrenceYearlySectionProps } from 'types/shared-components/Recurrence/interface';
 
 /**
- * Yearly recurrence options section
+ * Yearly recurrence options section.
+ *
+ * Displays the month and day on which the event will recur annually,
+ * based on the start date of the event.
+ *
+ * @param frequency - The current recurrence frequency.
+ * @param startDate - The start date of the event.
  */
 export const RecurrenceYearlySection: React.FC<
   InterfaceRecurrenceYearlySectionProps

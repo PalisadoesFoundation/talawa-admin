@@ -6,12 +6,22 @@ import styles from './RecurrenceMonthlySection.module.css';
 import { useTranslation } from 'react-i18next';
 
 /**
- * Monthly recurrence options section
+ * Monthly recurrence options section.
+ *
+ * Renders a dropdown to choose between day-of-month (e.g., "on the 15th")
+ * or weekday-based (e.g., "on the third Monday") monthly recurrence.
+ *
+ * @param frequency - The current recurrence frequency.
+ * @param recurrenceRuleState - The current recurrence rule state.
+ * @param setRecurrenceRuleState - Setter for the recurrence rule state.
+ * @param startDate - The start date of the event.
  */
 export const RecurrenceMonthlySection: React.FC<
   InterfaceRecurrenceMonthlySectionProps
 > = ({ frequency, recurrenceRuleState, setRecurrenceRuleState, startDate }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   const monthlyOptions = useMemo(
     () => getMonthlyOptions(startDate),
     [startDate],
@@ -27,6 +37,10 @@ export const RecurrenceMonthlySection: React.FC<
 
   const selectedValue = recurrenceRuleState.byDay ? 'WEEKDAY' : 'DATE';
 
+  /**
+   * Handles selecting between day-of-month and weekday-based recurrence.
+   * @param value - 'DATE' for day-of-month or 'WEEKDAY' for weekday-based recurrence.
+   */
   const handleSelect = (value: string): void => {
     if (value === 'DATE') {
       setRecurrenceRuleState((prev) => ({

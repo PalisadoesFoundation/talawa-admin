@@ -7,6 +7,16 @@ import {
 } from 'utils/recurrenceUtils';
 
 /**
+ * Props for the RecurrenceYearlySection component.
+ */
+export interface InterfaceRecurrenceYearlySectionProps {
+  /** The frequency of the recurrence. */
+  frequency: Frequency;
+  /** The start date of the recurrence. */
+  startDate: Date;
+}
+
+/**
  * Props for the RecurrenceEndOptionsSection component.
  */
 export interface InterfaceRecurrenceEndOptionsSectionProps {
@@ -26,8 +36,6 @@ export interface InterfaceRecurrenceEndOptionsSectionProps {
   setRecurrenceRuleState: (
     state: React.SetStateAction<InterfaceRecurrenceRule>,
   ) => void;
-  /** Translation function */
-  t?: (key: string) => string;
 }
 
 /**

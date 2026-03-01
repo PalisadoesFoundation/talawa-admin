@@ -99,7 +99,7 @@ describe('RecurrenceDropdown', () => {
     );
 
     const toggle = screen.getByTestId('recurrence-toggle');
-    expect(toggle).toHaveAttribute('aria-label', 'recurring');
+    expect(toggle).toHaveAttribute('aria-label', 'Recurring');
   });
 
   it('displays selected option label on toggle', () => {

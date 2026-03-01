@@ -13,9 +13,23 @@ import {
 } from 'utils/recurrenceUtils';
 import styles from './RecurrenceEndOptionsSection.module.css';
 import { InterfaceRecurrenceEndOptionsSectionProps } from 'types/shared-components/Recurrence/interface';
+import { useTranslation } from 'react-i18next';
 
 /**
- * Recurrence end options section (never, on date, after count)
+ * Recurrence end options section.
+ *
+ * Renders radio buttons and inputs for configuring when a recurring event ends:
+ * - Never (no end date)
+ * - On a specific date
+ * - After a certain number of occurrences
+ *
+ * @param frequency - The current recurrence frequency.
+ * @param selectedRecurrenceEndOption - The currently selected end option.
+ * @param recurrenceRuleState - The current recurrence rule state.
+ * @param localCount - The local count value for the "ends after" option.
+ * @param onRecurrenceEndOptionChange - Callback when the end option changes.
+ * @param onCountChange - Callback when the occurrence count changes.
+ * @param setRecurrenceRuleState - Setter for the recurrence rule state.
  */
 export const RecurrenceEndOptionsSection: React.FC<
   InterfaceRecurrenceEndOptionsSectionProps
@@ -27,12 +41,11 @@ export const RecurrenceEndOptionsSection: React.FC<
   onRecurrenceEndOptionChange,
   onCountChange,
   setRecurrenceRuleState,
-  t,
 }) => {
-  const translate = t ?? ((key: string) => key);
+  const { t } = useTranslation();
   return (
     <div className={styles.endOptionsContainer}>
-      <span className="fw-semibold text-secondary">{translate('ends')}</span>
+      <span className="fw-semibold text-secondary">{t('ends')}</span>
       <div className={styles.radioGroupContainer}>
         <div>
           {recurrenceEndOptions
@@ -45,7 +58,7 @@ export const RecurrenceEndOptionsSection: React.FC<
                 <FormCheckField
                   type="radio"
                   id={`radio-${index}`}
-                  label={translate(option)}
+                  label={t(option)}
                   name="recurrenceEndOption"
                   className={styles.radioLabel}
                   value={option}
@@ -85,7 +98,7 @@ export const RecurrenceEndOptionsSection: React.FC<
                     minDate={dayjs()}
                     slotProps={{
                       textField: {
-                        'aria-label': translate('endDate'),
+                        'aria-label': t('endDate'),
                       },
                     }}
                   />
@@ -125,11 +138,11 @@ export const RecurrenceEndOptionsSection: React.FC<
                       disabled={selectedRecurrenceEndOption !== endsAfter}
                       data-testid="customRecurrenceCountInput"
                       data-cy="customRecurrenceCountInput"
-                      aria-label={translate('occurrences')}
+                      aria-label={t('occurrences')}
                       aria-required={selectedRecurrenceEndOption === endsAfter}
                       placeholder="1"
                     />{' '}
-                    {translate('occurrences')}
+                    {t('occurrences')}
                   </>
                 )}
               </div>

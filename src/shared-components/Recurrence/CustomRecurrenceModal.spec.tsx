@@ -7,6 +7,24 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
+const FIXED_NOW = dayjs()
+  .utc()
+  .year(2025)
+  .month(0)
+  .date(1)
+  .hour(10)
+  .minute(0)
+  .second(0)
+  .millisecond(0);
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+});
+
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 // Mock NotificationToast
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -105,16 +123,11 @@ const renderModal = (
     customRecurrenceModalIsOpen: true,
     hideCustomRecurrenceModal,
     setCustomRecurrenceModalIsOpen,
-    // Use dynamic future date to avoid test staleness
-    startDate: dayjs.utc().add(30, 'days').startOf('day').hour(10).toDate(),
+    startDate: FIXED_NOW.add(30, 'days').startOf('day').hour(10).toDate(),
     ...override,
   };
 
-  render(
-    <>
-      <CustomRecurrenceModal {...props} />
-    </>,
-  );
+  render(<CustomRecurrenceModal {...props} />);
 
   return {
     setRecurrenceRuleState,
@@ -330,7 +343,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: dayjs.utc().add(7, 'days').toDate(),
+        endDate: FIXED_NOW.add(7, 'days').toDate(),
       },
     });
 
@@ -357,7 +370,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: dayjs.utc().add(7, 'days').toDate(),
+        endDate: FIXED_NOW.add(7, 'days').toDate(),
       },
     });
 
@@ -372,7 +385,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         ...baseRecurrenceRule,
         never: false,
         count: undefined,
-        endDate: dayjs.utc().add(30, 'days').toDate(),
+        endDate: FIXED_NOW.add(30, 'days').toDate(),
       },
     });
 
@@ -511,7 +524,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         recurrenceRuleState: {
           ...baseRecurrenceRule,
           never: false,
-          endDate: dayjs.utc().add(30, 'days').toDate(),
+          endDate: FIXED_NOW.add(30, 'days').toDate(),
         },
       });
 
@@ -565,7 +578,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid interval', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     const intervalInput = screen.getByTestId(
       'customRecurrenceIntervalInput',
@@ -609,7 +622,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid interval (NaN)', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     const intervalInput = screen.getByTestId(
       'customRecurrenceIntervalInput',
@@ -652,7 +665,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid count for ends after', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     // Select endsAfter option
     await user.click(screen.getByTestId(endsAfter));
@@ -698,7 +711,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid count (NaN) for ends after', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     // Select endsAfter option
     await user.click(screen.getByTestId(endsAfter));
@@ -742,11 +755,8 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
   it('uses fallback error message for invalid interval when translation returns falsy', async () => {
     const user = userEvent.setup();
-    // Create a translation function that returns empty string for invalidDetailsMessage
-    // This will trigger the fallback message on line 321
-
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     const intervalInput = screen.getByTestId(
       'customRecurrenceIntervalInput',
@@ -772,8 +782,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
 
-    // Verify that NotificationToast.error was called with the fallback message (line 321)
-    expect(NotificationToast.error).toHaveBeenCalled();
+    // Verify that NotificationToast.error was called with the key string
     const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(errorCall).toBe('invalidDetailsMessage');
@@ -788,7 +797,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     // This will trigger the fallback message on line 352
 
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     // Select endsAfter option
     await user.click(screen.getByTestId(endsAfter));
@@ -833,7 +842,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         byDay: undefined, // No days selected
       },
     });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -863,7 +872,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         byDay: [], // Empty array
       },
     });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -894,7 +903,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
           byDay: [WeekDays.MO], // At least one day selected
         },
       });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -918,7 +927,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         byDay: undefined, // No days selected
       },
     });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -940,7 +949,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     const { setRecurrenceRuleState } = renderModal({
       // Use dynamic future date to avoid test staleness
-      endDate: dayjs().add(60, 'days').toDate(),
+      endDate: FIXED_NOW.add(60, 'days').toDate(),
     });
 
     await user.click(screen.getByTestId(endsOn));
@@ -1119,7 +1128,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     // Test with date in 1st week (e.g., 1st of a month) with byDay set
     // Using a dynamic date that falls on the 1st of a future month
-    const firstWeekDate = dayjs().add(30, 'days').date(1).toDate();
+    const firstWeekDate = FIXED_NOW.add(30, 'days').date(1).toDate();
     renderModal({
       startDate: firstWeekDate,
       recurrenceRuleState: {
@@ -1140,7 +1149,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     // Test with date in 5th week (e.g., 31st of a month)
     // Ensure we're in a month with 31 days (Jan, Mar, May, Jul, Aug, Oct, Dec)
-    const fifthWeekDate = dayjs.utc().month(0).date(31).toDate(); // January 31st
+    const fifthWeekDate = FIXED_NOW.month(0).date(31).toDate(); // January 31st
     renderModal({
       startDate: fifthWeekDate,
       recurrenceRuleState: {
@@ -1406,7 +1415,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     // Actually, getWeekOfMonth returns 1-5, so we need to test the fallback in getOrdinalString
     // The fallback happens when num > 5 or num is not in the ordinals array
     // Using a dynamic date on the 15th of a future month
-    const thirdWeekDate = dayjs().add(30, 'days').date(15).toDate();
+    const thirdWeekDate = FIXED_NOW.add(30, 'days').date(15).toDate();
     renderModal({
       startDate: thirdWeekDate,
       recurrenceRuleState: {
@@ -1507,7 +1516,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
           ...baseRecurrenceRule,
           never: false,
           // Use dynamic future date to avoid test staleness
-          endDate: dayjs().add(60, 'days').toDate(),
+          endDate: FIXED_NOW.add(60, 'days').toDate(),
         },
       });
 
@@ -1693,7 +1702,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       customRecurrenceModalIsOpen: true,
       hideCustomRecurrenceModal: vi.fn(),
       setCustomRecurrenceModalIsOpen: vi.fn(),
-      startDate: new Date(),
+      startDate: FIXED_NOW.toDate(),
     };
 
     const { rerender } = render(<CustomRecurrenceModal {...props} />);
@@ -1704,7 +1713,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
           ...props,
           recurrenceRuleState: {
             ...props.recurrenceRuleState,
-            endDate: new Date(),
+            endDate: FIXED_NOW.add(5, 'days').toDate(),
           },
         }}
       />,
@@ -1736,7 +1745,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     await user.click(screen.getByTestId(endsOn));
 
     const dateInput = screen.getByTestId('customRecurrenceEndDatePicker');
-    const newDate = dayjs().add(60, 'days').format('YYYY-MM-DD');
+    const newDate = FIXED_NOW.add(60, 'days').format('YYYY-MM-DD');
 
     await user.clear(dateInput);
     await user.type(dateInput, newDate);

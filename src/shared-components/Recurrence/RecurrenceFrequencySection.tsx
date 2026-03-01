@@ -7,7 +7,15 @@ import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { InterfaceRecurrenceFrequencySectionProps } from 'types/shared-components/Recurrence/interface';
 import { useTranslation } from 'react-i18next';
 /**
- * Frequency and interval selection section
+ * Frequency and interval selection section.
+ *
+ * Renders a number input for the recurrence interval (e.g., every 2)
+ * and a dropdown for selecting the frequency unit (day, week, month, year).
+ *
+ * @param frequency - The current recurrence frequency.
+ * @param localInterval - The current interval value.
+ * @param onIntervalChange - Callback when the interval changes.
+ * @param onFrequencyChange - Callback when the frequency changes.
  */
 export const RecurrenceFrequencySection: React.FC<
   InterfaceRecurrenceFrequencySectionProps
