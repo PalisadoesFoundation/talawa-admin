@@ -510,6 +510,8 @@ describe('AgendaFolderCreateModal', () => {
     const nameInput = screen.getByLabelText(/folderName/i);
     const descInput = screen.getByLabelText(/description/i);
 
+    await user.clear(nameInput);
+    await user.clear(descInput);
     await user.type(nameInput, 'Error Test');
     await user.type(descInput, 'Error Desc');
     await user.click(screen.getByTestId('modal-submit-btn'));

@@ -60,6 +60,7 @@ import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/AdminPortal/Venues/VenueCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
@@ -212,6 +213,18 @@ function organizationVenues(): JSX.Element {
 
   return (
     <>
+      <SafeBreadcrumbs
+        items={[
+          {
+            translationKey: 'organization',
+            to: `/admin/orgdash/${orgId}`,
+          },
+          {
+            translationKey: 'venues',
+            isCurrent: true,
+          },
+        ]}
+      />
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
         <SearchFilterBar
           hasDropdowns={true}
