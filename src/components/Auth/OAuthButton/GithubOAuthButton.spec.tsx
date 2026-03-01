@@ -83,7 +83,7 @@ describe('GitHubOAuthButton', () => {
 
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     vi.unstubAllEnvs();
     (window as { location: Location }).location = originalLocation;
     sessionStorage.clear();

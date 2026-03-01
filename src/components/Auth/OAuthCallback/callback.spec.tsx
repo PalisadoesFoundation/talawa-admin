@@ -125,7 +125,6 @@ describe('OAuthCallbackPage', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
     vi.clearAllMocks();
     (window as { location: Location }).location = originalLocation;
     sessionStorage.clear();

@@ -84,7 +84,7 @@ describe('GoogleOAuthButton', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     vi.unstubAllEnvs();
     (window as { location: Location }).location = originalLocation;
     sessionStorage.clear();
