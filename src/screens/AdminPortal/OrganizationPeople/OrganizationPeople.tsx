@@ -32,6 +32,7 @@ import { CursorPaginationManager } from 'components/CursorPaginationManager/Curs
 import { languages } from 'utils/languages';
 import Button from 'shared-components/Button';
 import type { InterfaceMemberNode } from 'types/PeopleTab/interface';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -184,6 +185,18 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
+      <SafeBreadcrumbs
+        items={[
+          {
+            translationKey: 'organization',
+            to: `/admin/orgdash/${currentUrl}`,
+          },
+          {
+            translationKey: 'people',
+            isCurrent: true,
+          },
+        ]}
+      />
       <div className={styles.orgPeopleGrid}>
         <SearchFilterBar
           hasDropdowns={true}

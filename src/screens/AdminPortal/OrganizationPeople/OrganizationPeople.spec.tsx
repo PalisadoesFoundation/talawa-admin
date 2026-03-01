@@ -3,8 +3,13 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-
-import { render, screen, waitFor, cleanup } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
@@ -70,6 +75,28 @@ vi.mock(
   },
 );
 
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => (
+    <nav aria-label="breadcrumbs">
+      <ol>
+        {items.map((item) => (
+          <li key={item.translationKey || item.label}>
+            {item.to ? (
+              <a href={item.to}>{item.translationKey}</a>
+            ) : (
+              <span aria-current="page">{item.translationKey}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  ),
+}));
+
 interface InterfaceMemberEdgeProps {
   cursor?: string;
   id?: string;
@@ -79,7 +106,6 @@ interface InterfaceMemberEdgeProps {
   emailAddress?: string | null;
   createdAt?: string;
 }
-
 const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
@@ -762,6 +788,8 @@ describe('OrganizationPeople Keyboard Accessibility', () => {
     });
 
     const searchInput = screen.getByTestId('member-search-input');
+    // Tab past the breadcrumb navigation link first, then the search input
+    await user.tab();
     await user.tab();
 
     await waitFor(() => {
@@ -973,5 +1001,30 @@ describe('OrganizationPeople Error States', () => {
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
+  });
+
+  test('renders breadcrumbs correctly', async () => {
+    renderOrgPeople([defaultMemberMock]);
+
+    // Wait for data to load
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Verify breadcrumb navigation is present
+    const breadcrumbsNav = await screen.findByRole('navigation', {
+      name: /breadcrumbs/i,
+    });
+    expect(breadcrumbsNav).toBeInTheDocument();
+
+    // Verify breadcrumb items
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (People) has aria-current
+    expect(screen.getByText(/people/i)).toHaveAttribute('aria-current', 'page');
   });
 });

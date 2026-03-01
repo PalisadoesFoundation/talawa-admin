@@ -31,7 +31,7 @@ import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import styles from './BreadcrumbsComponent.module.css';
 import type {
   IBreadcrumbItem,
   IBreadcrumbsComponentProps,
@@ -49,7 +49,7 @@ const BreadcrumbsComponent = ({
 
   return (
     <nav aria-label={t(ariaLabelTranslationKey)}>
-      <Breadcrumbs component="ol">
+      <Breadcrumbs component="ol" className={styles.breadcrumbs}>
         {items.map((item: IBreadcrumbItem, index: number) => {
           const isLast = index === items.length - 1;
           const isCurrent = item.isCurrent === true || isLast;
