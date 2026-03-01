@@ -429,6 +429,29 @@ describe('Organisation Tags Page', () => {
       );
     });
   });
+  test('prevents double submission when creating a tag', async () => {
+    renderOrganizationTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('createTagBtn'));
+
+    await userEvent.type(
+      screen.getByPlaceholderText(translations.tagNamePlaceholder),
+      'userTag 12',
+    );
+
+    const submitBtn = screen.getByTestId('modal-submit-btn');
+    // Click submit twice rapidly
+    await userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledTimes(1);
+    });
+  });
+
   test('creates a new user tag with error', async () => {
     renderOrganizationTags(link3);
 

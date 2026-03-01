@@ -41,7 +41,7 @@ const mockToast = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockToast,
 }));
 

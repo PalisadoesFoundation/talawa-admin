@@ -707,6 +707,50 @@ describe('CreatePostModal Integration Tests', () => {
       // Check if revokeObjectURL was called
       expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
     });
+
+    it('sanitizeBlobUrl rejects non-blob protocol URLs', async () => {
+      // createObjectURL returns an http: URL instead of blob:
+      global.URL.createObjectURL = vi.fn(() => 'https://evil.com/image.png');
+
+      renderComponent();
+
+      const fileInput = screen.getByTestId('addMedia');
+      const mockFile = new File(['content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      await userEvent.upload(fileInput, mockFile);
+
+      // sanitizeBlobUrl returns null for non-blob protocols, no preview shown
+      expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
+
+      global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
+    });
+
+    it('handleClose resets file input ref value', async () => {
+      const onHide = vi.fn();
+      renderComponent({ onHide });
+
+      const fileInput = screen.getByTestId('addMedia') as HTMLInputElement;
+      const mockFile = new File(['content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      await userEvent.upload(fileInput, mockFile);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
+
+      // Close the modal
+      const closeButton = screen.getByRole('button', { name: /close/i });
+      await user.click(closeButton);
+
+      await waitFor(() => {
+        expect(onHide).toHaveBeenCalled();
+      });
+    });
   });
 
   describe('Edit Post Functionality', () => {

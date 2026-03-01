@@ -1337,6 +1337,54 @@ describe('AddMember Screen', () => {
     });
   });
 
+  test('prevents double submission when creating a user', async () => {
+    const orgId = 'org123';
+
+    const registerMock = createRegisterMutationMock({
+      name: 'New User',
+      email: 'newuser@example.com',
+      password: 'password123',
+      role: 'regular',
+      isEmailAddressVerified: true,
+    });
+
+    const addMemberMock = createAddMemberMutationMock({
+      memberId: 'newUser1',
+      role: 'regular',
+    });
+
+    const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const nameInput = screen.getByTestId('firstNameInput');
+    const emailInput = screen.getByTestId('emailInput');
+    const passwordInput = screen.getByTestId('passwordInput');
+    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+
+    fireEvent.change(nameInput, { target: { value: 'New User' } });
+    fireEvent.change(emailInput, { target: { value: 'newuser@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'password123' },
+    });
+
+    const submitBtn = screen.getByTestId('modal-submit-btn');
+    // Click submit twice rapidly
+    await userEvent.click(submitBtn);
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledTimes(1);
+    });
+  });
+
   test('disables submit button when required fields are missing', async () => {
     const orgId = 'org123';
 
@@ -1638,6 +1686,35 @@ describe('AddMember Screen', () => {
     await waitFor(() => {
       expect(confirmPasswordInput).toHaveAttribute('type', 'password');
     });
+  });
+
+  test('does not toggle password visibility for non-Enter/Space keys', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const passwordInput = await screen.findByTestId('passwordInput');
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    const showPasswordToggle = screen.getByTestId('showPassword');
+    fireEvent.keyDown(showPasswordToggle, { key: 'Tab' });
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+
+    const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: 'Tab' });
+
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
   });
 
   test('ignores invalid sort option', async () => {
