@@ -876,14 +876,22 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for a date in the fourth week', () => {
-      const fourthThursday = getNthDayOfWeekInMonth(testMonth, 4, 4); // 4 = Thursday
+      const fourthThursday = getNthDayOfWeekInMonth(testMonth, 4, 4);
       const options = getMonthlyOptions(fourthThursday.toDate());
       const dayOfMonth = fourthThursday.date();
+      const isLast = dayOfMonth + 7 > testMonth.daysInMonth();
 
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
-      expect(options.byWeekday).toBe('Monthly on the fourth Thursday');
+      expect(options.byWeekday).toBe(
+        isLast
+          ? 'Monthly on the last Thursday'
+          : 'Monthly on the fourth Thursday',
+      );
       expect(options.dateValue).toBe(dayOfMonth);
-      expect(options.weekdayValue).toEqual({ week: 4, day: WeekDays.TH });
+      expect(options.weekdayValue).toEqual({
+        week: isLast ? 6 : 4,
+        day: WeekDays.TH,
+      });
     });
 
     it('should return correct options for a Sunday', () => {
