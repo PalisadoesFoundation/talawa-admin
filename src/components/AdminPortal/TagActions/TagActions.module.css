@@ -31,9 +31,18 @@
 }
 
 .tagActionsScrollableDiv {
-  height: 300px;
+  height: var(--space-20);
   overflow: auto;
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.subtagsScrollableDiv {
+  max-height: var(--space-20);
+  overflow: auto;
 }

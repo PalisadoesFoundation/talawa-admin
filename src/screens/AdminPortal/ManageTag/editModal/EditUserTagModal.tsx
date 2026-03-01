@@ -18,19 +18,17 @@
  * - newTagName: tagName
  * - setNewTagName: setTagName
  * - handleEditUserTag: submitHandler
- * - t: t
- * - tCommon: tCommon
  *
  * @returns The rendered edit user tag modal.
  */
 // translation-check-keyPrefix: manageTag
-import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import Button from 'shared-components/Button';
-import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import Button from 'shared-components/Button/Button';
+import { BaseModal } from 'shared-components/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceEditUserTagModalProps {
   editUserTagModalIsOpen: boolean;
@@ -38,8 +36,6 @@ export interface InterfaceEditUserTagModalProps {
   newTagName: string;
   setNewTagName: (state: React.SetStateAction<string>) => void;
   handleEditUserTag: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
 }
 
 const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
@@ -48,14 +44,14 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   newTagName,
   handleEditUserTag,
   setNewTagName,
-  t,
-  tCommon,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
+  const { t: tCommon } = useTranslation('common');
+
   const formId = 'edit-user-tag-form';
   const [isTouched, setIsTouched] = useState(false);
   const tagNameRef = useRef<HTMLInputElement | null>(null);
 
-  // Reset touched state when modal opens to prevent stale validation errors
   useEffect(() => {
     if (editUserTagModalIsOpen) {
       setIsTouched(false);
@@ -63,19 +59,23 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   }, [editUserTagModalIsOpen]);
 
   const isTagNameInvalid = !newTagName.trim();
+  const errorMessage =
+    isTouched && isTagNameInvalid ? tCommon('required') : undefined;
 
   return (
-    <CRUDModalTemplate
-      open={editUserTagModalIsOpen}
-      onClose={hideEditUserTagModal}
+    <BaseModal
+      show={editUserTagModalIsOpen}
+      onHide={hideEditUserTagModal}
+      backdrop="static"
       title={t('tagDetails')}
-      header-testId="modalOrganizationHeader"
-      customFooter={
+      headerClassName={styles.modalHeader}
+      headerTestId="modalOrganizationHeader"
+      footer={
         <>
           <Button
             type="button"
             variant="secondary"
-            onClick={hideEditUserTagModal}
+            onClick={(): void => hideEditUserTagModal()}
             data-testid="closeEditTagModalBtn"
             className={styles.removeButton}
             aria-label={tCommon('cancel')}
@@ -85,6 +85,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           <Button
             type="submit"
             form={formId}
+            value="invite"
             data-testid="editTagSubmitBtn"
             className={styles.addButton}
             aria-label={tCommon('edit')}
@@ -96,12 +97,11 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
     >
       <form
         id={formId}
-        onSubmitCapture={async (e: FormEvent<HTMLFormElement>) => {
+        onSubmit={async (e: FormEvent<HTMLFormElement>): Promise<void> => {
           e.preventDefault();
           setIsTouched(true);
 
           if (isTagNameInvalid) {
-            // Focus input for screen readers
             tagNameRef.current?.focus();
             return;
           }
@@ -109,23 +109,31 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           await handleEditUserTag(e);
         }}
       >
-        <FormTextField
+        <FormFieldGroup
           name="tagName"
           label={t('tagName')}
-          placeholder={t('tagNamePlaceholder')}
-          value={newTagName}
           required
-          autoComplete="off"
-          inputId="tagName"
-          data-testid="tagNameInput"
-          className={`mb-3 ${styles.inputField}`}
-          error={isTagNameInvalid ? t('invalidTagName') : undefined}
           touched={isTouched}
-          onBlur={() => setIsTouched(true)}
-          onChange={setNewTagName}
-        />
+          error={errorMessage}
+        >
+          <input
+            id="tagName"
+            type="text"
+            className={`form-control mb-3 ${styles.inputField}`}
+            placeholder={t('tagNamePlaceholder')}
+            data-testid="tagNameInput"
+            autoComplete="off"
+            required
+            value={newTagName}
+            ref={tagNameRef}
+            onBlur={() => setIsTouched(true)}
+            onChange={(e): void => {
+              setNewTagName(e.target.value);
+            }}
+          />
+        </FormFieldGroup>
       </form>
-    </CRUDModalTemplate>
+    </BaseModal>
   );
 };
 

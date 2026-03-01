@@ -44,15 +44,10 @@ import RBButton from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
-interface InterfaceFormStateType {
+interface InterfaceOrgFormState {
   addressLine1: string;
   addressLine2: string;
-  avatar?: {
-    objectName: string;
-    fileHash: string;
-    mimetype: string;
-    name: string;
-  } | null;
+  avatar: string | null;
   city: string;
   countryCode: string;
   description: string;
@@ -152,7 +147,7 @@ function OrgList(): JSX.Element {
   const [searchByName, setSearchByName] = useState('');
   const { isOpen, open, close } = useModalState();
 
-  const [formState, setFormState] = useState<InterfaceFormStateType>({
+  const [formState, setFormState] = useState<InterfaceOrgFormState>({
     addressLine1: '',
     addressLine2: '',
     avatar: null,
@@ -543,7 +538,6 @@ function OrgList(): JSX.Element {
        * @param userData - Information about the current user.
        * @returns JSX element representing the `OrganizationModal`.
        */}
-
       <OrganizationModal
         showModal={isOpen}
         toggleModal={close}

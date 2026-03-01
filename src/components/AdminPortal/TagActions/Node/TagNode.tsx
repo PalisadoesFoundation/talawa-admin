@@ -9,7 +9,6 @@
  * @param tag - The tag data to be displayed.
  * @param checkedTags - A set of tag IDs that are currently selected.
  * @param toggleTagSelection - Callback function to toggle the selection state of a tag.
- * @param t - Translation function for i18n.
  *
  * @remarks
  * - The component uses the `@apollo/client` `useQuery` hook to fetch subtags.
@@ -22,7 +21,6 @@
  *   tag={tagData}
  *   checkedTags={selectedTags}
  *   toggleTagSelection={handleToggleTag}
- *   t={t}
  * />
  * ```
  *
@@ -42,12 +40,11 @@ import styles from './TagNode.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
-import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
   toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
-  t: TFunction<'translation', 'manageTag'>;
 }
 
 /**
@@ -57,8 +54,8 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   tag,
   checkedTags,
   toggleTagSelection,
-  t,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const [expanded, setExpanded] = useState(false);
 
   const {
@@ -204,7 +201,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                     tag={tag}
                     checkedTags={checkedTags}
                     toggleTagSelection={toggleTagSelection}
-                    t={t}
                   />
                 </div>
               ))}
