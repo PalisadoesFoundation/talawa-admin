@@ -325,9 +325,8 @@ describe('SearchBar', () => {
     await user.type(input, 'test{enter}');
 
     // Verify component doesn't crash and maintains input value
-    await waitFor(() => {
-      expect(input).toHaveValue('test');
-    });
+    //removed waitFor as it was not necessary and could cause false positives if the component re-renders for other reasons
+    expect(input).toHaveValue('test');
   });
 
   describe('showTrailingIcon feature', () => {

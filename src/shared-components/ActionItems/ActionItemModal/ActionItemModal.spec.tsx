@@ -530,13 +530,17 @@ describe('ActionItemModal', () => {
         screen.getByTestId('categorySelect'),
       ).getByRole('combobox');
       await user.click(categoryInput);
-      await user.click(await screen.findByText('Category 1'));
+      await user.click(
+        await screen.findByRole('option', { name: /Category 1/i }),
+      );
 
       const volunteerInput = within(
         screen.getByTestId('volunteerSelect'),
       ).getByRole('combobox');
       await user.click(volunteerInput);
-      await user.click(await screen.findByText('John Doe'));
+      await user.click(
+        await screen.findByRole('option', { name: /John Doe/i }),
+      );
 
       await user.click(screen.getByTestId('modal-submit-btn'));
 
@@ -602,13 +606,17 @@ describe('ActionItemModal', () => {
         screen.getByTestId('categorySelect'),
       ).getByRole('combobox');
       await user.click(categoryInput);
-      await user.click(await screen.findByText('Category 1'));
+      await user.click(
+        await screen.findByRole('option', { name: /Category 1/i }),
+      );
 
       const volunteerInput = within(
         screen.getByTestId('volunteerSelect'),
       ).getByRole('combobox');
       await user.click(volunteerInput);
-      await user.click(await screen.findByText('John Doe'));
+      await user.click(
+        await screen.findByRole('option', { name: /John Doe/i }),
+      );
 
       await user.click(screen.getByTestId('modal-submit-btn'));
 
@@ -650,14 +658,18 @@ describe('ActionItemModal', () => {
         screen.getByTestId('categorySelect'),
       ).getByRole('combobox');
       await user.click(categoryInput);
-      const categoryOption = await screen.findByText('Category 1');
+      const categoryOption = await screen.findByRole('option', {
+        name: /Category 1/i,
+      });
       await user.click(categoryOption);
 
       const volunteerInput = within(
         screen.getByTestId('volunteerSelect'),
       ).getByRole('combobox');
       await user.click(volunteerInput);
-      const volunteerOption = await screen.findByText('John Doe');
+      const volunteerOption = await screen.findByRole('option', {
+        name: /John Doe/i,
+      });
       await user.click(volunteerOption);
 
       await user.click(screen.getByTestId('modal-submit-btn'));
@@ -1190,14 +1202,18 @@ describe('ActionItemModal', () => {
         screen.getByTestId('categorySelect'),
       ).getByRole('combobox');
       await user.click(categoryInput);
-      const categoryOption = await screen.findByText('Category 1');
+      const categoryOption = await screen.findByRole('option', {
+        name: /Category 1/i,
+      });
       await user.click(categoryOption);
 
       const volunteerInput = within(
         screen.getByTestId('volunteerSelect'),
       ).getByRole('combobox');
       await user.click(volunteerInput);
-      const volunteerOption = await screen.findByText('John Doe');
+      const volunteerOption = await screen.findByRole('option', {
+        name: /John Doe/i,
+      });
       await user.click(volunteerOption);
 
       await user.click(screen.getByTestId('modal-submit-btn'));
@@ -1505,10 +1521,10 @@ describe('ActionItemModal', () => {
       // type to filter
       await user.type(volunteerInput, 'John');
 
-      // wait for option text to appear anywhere in DOM (portal-safe)
-      const option = await screen.findByText(
-        'John Doe',
-        {},
+      // wait for option to appear anywhere in DOM (portal-safe)
+      const option = await screen.findByRole(
+        'option',
+        { name: /John Doe/i },
         {
           timeout: ASYNC_TIMEOUT,
         },
