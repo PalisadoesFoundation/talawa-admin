@@ -1,5 +1,7 @@
 import React, { useId } from 'react';
-import { Chip, Box, Typography } from '@mui/material';
+import Chip from '@mui/material/Chip';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import type {
   InterfaceAssignmentTypeSelectorProps,

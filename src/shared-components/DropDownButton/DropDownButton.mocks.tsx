@@ -10,7 +10,7 @@ import type {
   InterfaceDropDownButtonProps,
   InterfaceDropDownOption,
 } from 'types/shared-components/DropDownButton/interface';
-import { ArrowDownwardSharp } from '@mui/icons-material';
+import ArrowDownwardSharp from '@mui/icons-material/ArrowDownwardSharp';
 import { vi } from 'vitest';
 
 export const basicOptions: InterfaceDropDownOption[] = [

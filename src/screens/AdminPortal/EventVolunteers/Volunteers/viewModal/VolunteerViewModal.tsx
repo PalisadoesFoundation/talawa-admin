@@ -10,18 +10,18 @@ import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
+import HistoryToggleOff from '@mui/icons-material/HistoryToggleOff';
+import TaskAlt from '@mui/icons-material/TaskAlt';
+import Cancel from '@mui/icons-material/Cancel';
 
 import type { InterfaceVolunteerViewModalProps } from 'types/AdminPortal/VolunteerViewModal/interface';
 

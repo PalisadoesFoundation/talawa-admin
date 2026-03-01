@@ -13,7 +13,10 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { errorHandler } from 'utils/errorHandler';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
-import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 

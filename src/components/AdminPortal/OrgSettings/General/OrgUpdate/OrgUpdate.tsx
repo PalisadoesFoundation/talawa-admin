@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

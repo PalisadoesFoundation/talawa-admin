@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Autocomplete as MuiAutocomplete,
-  TextField,
-  CircularProgress,
   AutocompleteValue,
   AutocompleteRenderInputParams,
 } from '@mui/material';
+import MuiAutocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import type { IAutocompleteProps } from 'types/shared-components/Autocomplete/interface';
 

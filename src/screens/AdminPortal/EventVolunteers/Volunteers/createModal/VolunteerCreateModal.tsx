@@ -31,7 +31,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import {
   CreateModal,

@@ -2,7 +2,7 @@ import { DataGridWrapper } from './DataGridWrapper';
 import type { InterfaceDataGridWrapperProps } from '../../types/DataGridWrapper/interface';
 import type { Meta, StoryObj } from '@storybook/react';
 import type { GridColDef } from '@mui/x-data-grid';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 

@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';

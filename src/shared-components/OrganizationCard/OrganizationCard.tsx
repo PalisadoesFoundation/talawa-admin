@@ -41,7 +41,7 @@ import React from 'react';
 import TruncatedText from 'shared-components/TruncatedText/TruncatedText';
 import { useTranslation } from 'react-i18next';
 import styles from './OrganizationCard.module.css';
-import { Tooltip } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 import { ApolloError, useMutation } from '@apollo/client';

@@ -11,7 +11,7 @@ import {
 import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import { useTranslation } from 'react-i18next';
-import { Circle } from '@mui/icons-material';
+import Circle from '@mui/icons-material/Circle';
 
 export interface ICategoryViewModalProps {
   isOpen: boolean;

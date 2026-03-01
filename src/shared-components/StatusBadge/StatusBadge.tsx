@@ -14,7 +14,7 @@
  */
 
 import React from 'react';
-import { Chip } from '@mui/material';
+import Chip from '@mui/material/Chip';
 import { useTranslation } from 'react-i18next';
 import styles from './StatusBadge.module.css';
 import type {

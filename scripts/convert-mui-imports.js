@@ -1,13 +1,38 @@
 import fs from 'fs';
 import path from 'path';
+import { createRequire } from 'module';
 import ts from 'typescript';
+
+const require = createRequire(import.meta.url);
 
 const MATERIAL = '@mui/material';
 const ICONS = '@mui/icons-material';
 
 const red = (text) => `\u001b[31m${text}\u001b[0m`;
 const green = (text) => `\u001b[32m${text}\u001b[0m`;
+const yellow = (text) => `\u001b[33m${text}\u001b[0m`;
 const bold = (text) => `\u001b[1m${text}\u001b[0m`;
+
+/**
+ * Check whether `@mui/material/<name>` or `@mui/icons-material/<name>`
+ * resolves to a real module (i.e. has its own directory/entry-point).
+ * Type-only re-exports (AutocompleteProps, SvgIconTypeMap, …) and
+ * utilities shipped under sub-paths (createTheme, ThemeProvider) do NOT
+ * have a top-level deep-import path and must stay as barrel imports.
+ */
+const deepImportExistsCache = new Map();
+const deepImportExists = (source, name) => {
+  const key = `${source}/${name}`;
+  if (deepImportExistsCache.has(key)) return deepImportExistsCache.get(key);
+  try {
+    require.resolve(key);
+    deepImportExistsCache.set(key, true);
+    return true;
+  } catch {
+    deepImportExistsCache.set(key, false);
+    return false;
+  }
+};
 
 const parseArgs = (argv) => {
   const filesFlagIndex = argv.indexOf('--files');
@@ -61,25 +86,66 @@ const transformFile = (filePath) => {
         node.importClause.namedBindings &&
         ts.isNamedImports(node.importClause.namedBindings)
       ) {
+        // Partition specifiers into convertible (has deep-import path)
+        // and non-convertible (type-only re-exports, utilities, etc.)
+        const convertible = [];
+        const kept = [];
+
+        for (const element of node.importClause.namedBindings.elements) {
+          const importedName = element.propertyName
+            ? element.propertyName.text
+            : element.name.text;
+
+          // Skip per-element type-only imports (`import { type Foo }`)
+          if (element.isTypeOnly) {
+            kept.push(element);
+            continue;
+          }
+
+          if (deepImportExists(source, importedName)) {
+            convertible.push(element);
+          } else {
+            console.warn(
+              yellow(
+                `  Skipping "${importedName}" — no deep-import path at ${source}/${importedName}`,
+              ),
+            );
+            kept.push(element);
+          }
+        }
+
+        // Nothing to convert in this import
+        if (convertible.length === 0) return;
+
         const start = node.getStart(sourceFile);
         const end = node.getEnd();
 
-        const replacements = node.importClause.namedBindings.elements.map(
-          (element) => {
-            const importedName = element.propertyName
-              ? element.propertyName.text
-              : element.name.text;
+        // Build the replacement text
+        const deepImports = convertible.map((element) => {
+          const importedName = element.propertyName
+            ? element.propertyName.text
+            : element.name.text;
+          const localName = element.name.text;
+          return `import ${localName} from '${source}/${importedName}';`;
+        });
 
-            const localName = element.name.text;
-
-            return `import ${localName} from '${source}/${importedName}';`;
-          },
-        );
+        // If some specifiers must stay as barrel imports, keep them
+        let barrelImport = '';
+        if (kept.length > 0) {
+          const specifiers = kept.map((element) => {
+            const prefix = element.isTypeOnly ? 'type ' : '';
+            if (element.propertyName) {
+              return `${prefix}${element.propertyName.text} as ${element.name.text}`;
+            }
+            return `${prefix}${element.name.text}`;
+          });
+          barrelImport = `import { ${specifiers.join(', ')} } from '${source}';\n`;
+        }
 
         edits.push({
           start,
           end,
-          text: replacements.join('\n'),
+          text: barrelImport + deepImports.join('\n'),
         });
       }
     }

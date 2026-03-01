@@ -65,7 +65,7 @@ import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Add } from '@mui/icons-material';
+import Add from '@mui/icons-material/Add';
 import { useTranslation } from 'react-i18next';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { FiEdit } from 'react-icons/fi';
