@@ -11,12 +11,14 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+/* eslint-disable no-restricted-imports -- Raw MUI Table used for simple modal table layout; DataTable shared component is a full data-grid abstraction not suitable here */
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+/* eslint-enable no-restricted-imports */
 import {
   UPDATE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_MEMBERSHIP,

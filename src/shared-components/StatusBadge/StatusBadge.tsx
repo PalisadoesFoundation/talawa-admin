@@ -14,6 +14,7 @@
  */
 
 import React from 'react';
+// eslint-disable-next-line no-restricted-imports -- StatusBadge is the shared Chip wrapper itself
 import Chip from '@mui/material/Chip';
 import { useTranslation } from 'react-i18next';
 import styles from './StatusBadge.module.css';
