@@ -17,15 +17,7 @@ import utc from 'dayjs/plugin/utc';
 import { cleanup } from '@testing-library/react';
 
 dayjs.extend(utc);
-const FIXED_NOW = dayjs()
-  .utc()
-  .year(2025)
-  .month(0)
-  .date(1)
-  .hour(10)
-  .minute(0)
-  .second(0)
-  .millisecond(0);
+const FIXED_NOW = dayjs.utc(new Date(Date.UTC(2025, 0, 1, 10)));
 
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
@@ -138,7 +130,7 @@ describe('useUpdateEventHandler', () => {
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   beforeEach(() => {

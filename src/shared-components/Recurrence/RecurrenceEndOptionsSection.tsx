@@ -42,10 +42,11 @@ export const RecurrenceEndOptionsSection: React.FC<
   onCountChange,
   setRecurrenceRuleState,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('organizationEvents');
+  const { t: tRoot } = useTranslation();
   return (
     <div className={styles.endOptionsContainer}>
-      <span className="fw-semibold text-secondary">{t('ends')}</span>
+      <span className="fw-semibold text-secondary">{tRoot('ends')}</span>
       <div className={styles.radioGroupContainer}>
         <div>
           {recurrenceEndOptions

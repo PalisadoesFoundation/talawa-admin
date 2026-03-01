@@ -10,15 +10,7 @@ dayjs.extend(utc);
 import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-const FIXED_NOW = dayjs()
-  .utc()
-  .year(2023)
-  .month(0)
-  .date(1)
-  .hour(0)
-  .minute(0)
-  .second(0)
-  .millisecond(0);
+const FIXED_NOW = dayjs.utc(new Date(Date.UTC(2028, 0, 1)));
 
 // Mock the wrapper components instead of MUI directly to verify EventForm uses them
 vi.mock('shared-components/DatePicker', () => ({
@@ -2149,10 +2141,8 @@ describe('EventForm', () => {
     const newStartDate = base.add(5, 'day').format('YYYY-MM-DD');
     const startDateInput = screen.getByTestId('eventStartAt');
 
-    // Import fireEvent locally to avoid modifying the top imports which can be messy
-    const { fireEvent } = await import('@testing-library/react');
-
     await act(async () => {
+      const { fireEvent } = await import('@testing-library/react');
       fireEvent.change(startDateInput, { target: { value: newStartDate } });
     });
 
@@ -2160,16 +2150,18 @@ describe('EventForm', () => {
       await user.click(screen.getByTestId('createEventBtn'));
     });
 
-    expect(handleSubmit).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(handleSubmit).toHaveBeenCalled();
 
-    const call = handleSubmit.mock.calls[0][0];
+      const call = handleSubmit.mock.calls[0][0];
 
-    const submittedStart = dayjs(call.startDate);
-    const submittedEnd = dayjs(call.endDate);
+      const submittedStart = dayjs(call.startDate);
+      const submittedEnd = dayjs(call.endDate);
 
-    expect(
-      submittedEnd.isAfter(submittedStart) ||
-        submittedEnd.isSame(submittedStart),
-    ).toBe(true);
+      expect(
+        submittedEnd.isAfter(submittedStart) ||
+          submittedEnd.isSame(submittedStart),
+      ).toBe(true);
+    });
   });
 });

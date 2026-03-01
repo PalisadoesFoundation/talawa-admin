@@ -7,15 +7,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-const FIXED_NOW = dayjs()
-  .utc()
-  .year(2025)
-  .month(0)
-  .date(1)
-  .hour(10)
-  .minute(0)
-  .second(0)
-  .millisecond(0);
+const FIXED_NOW = dayjs.utc(new Date(Date.UTC(2025, 0, 1, 10)));
 
 beforeEach(() => {
   vi.restoreAllMocks();
@@ -1104,7 +1096,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     // Test with date in 3rd week (e.g., 15th of a month)
     // Using a dynamic date that falls on the 15th of a future month
     const thirdWeekDate = dayjs
-      .utc()
+      .utc(FIXED_NOW.toDate())
       .add(2, 'months')
       .date(15)
       .hour(10)
@@ -1667,7 +1659,9 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const countInput = screen.getByTestId('customRecurrenceCountInput');
     await user.type(countInput, '5');
 
-    expect(setRecurrenceRuleState).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).not.toHaveBeenCalled();
+    });
   });
 
   it('explicitly covers remove branch in handleDayClick', async () => {

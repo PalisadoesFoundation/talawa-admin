@@ -20,7 +20,15 @@ import { useTranslation } from 'react-i18next';
 export const RecurrenceFrequencySection: React.FC<
   InterfaceRecurrenceFrequencySectionProps
 > = ({ frequency, localInterval, onIntervalChange, onFrequencyChange }) => {
-  const { t } = useTranslation();
+  const { t: translate } = useTranslation();
+  const t = (key: string) => {
+    // Check organizationEvents namespace first; fallback to root
+    // i18n-ignore-next-line
+    const nsKey = `organizationEvents:${key}`;
+    const translated = translate(nsKey);
+
+    return translated !== nsKey ? translated : translate(key);
+  };
   const frequencyOptions = useMemo(() => {
     return Object.values(Frequency).map((freq) => ({
       value: freq,
