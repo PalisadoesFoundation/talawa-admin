@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import React from 'react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import Button from 'shared-components/Button';
@@ -18,6 +18,7 @@ describe('Button', () => {
     user = userEvent.setup();
   });
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 

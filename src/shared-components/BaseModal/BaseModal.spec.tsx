@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from 'react-bootstrap';
 import BaseModal from './BaseModal';
@@ -21,6 +21,7 @@ describe('BaseModal', () => {
   };
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 

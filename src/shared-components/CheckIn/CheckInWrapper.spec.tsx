@@ -47,6 +47,7 @@ beforeEach(() => {
 
 describe('Testing CheckIn Wrapper', () => {
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -98,6 +99,7 @@ describe('CheckInWrapper CSS Tests', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -133,6 +135,7 @@ describe('CheckInWrapper CSS Tests', () => {
 
 describe('CheckInWrapper callback behavior', () => {
   afterEach(() => {
+    cleanup();
     vi.resetModules();
     vi.restoreAllMocks();
   });

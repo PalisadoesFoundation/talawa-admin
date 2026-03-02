@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -225,11 +225,10 @@ const renderItemUpdateStatusModal = (
 };
 
 describe('Testing ItemUpdateStatusModal', () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 

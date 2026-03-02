@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { EmailField } from './EmailField';
@@ -26,11 +26,10 @@ describe('EmailField', () => {
     onChange: vi.fn(),
   };
 
-  beforeEach(() => {
-    vi.restoreAllMocks();
-  });
+  beforeEach(() => {});
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
