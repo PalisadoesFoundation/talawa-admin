@@ -18,7 +18,7 @@ describe('Button', () => {
     user = userEvent.setup();
   });
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('renders with default props', () => {

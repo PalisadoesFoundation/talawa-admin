@@ -44,7 +44,7 @@ describe('BreadcrumbsComponent', () => {
   ];
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   /**

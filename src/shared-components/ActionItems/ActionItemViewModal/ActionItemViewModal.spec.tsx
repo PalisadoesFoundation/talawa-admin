@@ -228,11 +228,11 @@ const renderItemViewModal = (
 
 describe('ItemViewModal - Helper Functions Coverage', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('getUserDisplayName helper function', () => {
@@ -526,11 +526,11 @@ describe('ItemViewModal - Helper Functions Coverage', () => {
 
 describe('Testing ItemViewModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const mockHide = vi.fn();

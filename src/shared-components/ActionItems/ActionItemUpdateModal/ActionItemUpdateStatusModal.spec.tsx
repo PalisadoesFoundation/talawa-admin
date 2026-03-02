@@ -226,11 +226,11 @@ const renderItemUpdateStatusModal = (
 
 describe('Testing ItemUpdateStatusModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('Update Status of Completed ActionItem', async () => {

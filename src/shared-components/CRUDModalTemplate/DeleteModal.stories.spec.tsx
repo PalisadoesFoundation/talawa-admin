@@ -29,7 +29,7 @@ vi.mock('react-i18next', () => ({
 
 describe('DeleteModal Stories', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('BasicUsage Story', () => {

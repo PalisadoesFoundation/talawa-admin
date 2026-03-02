@@ -26,7 +26,7 @@ vi.mock('react-i18next', () => ({
 
 describe('EditModal Stories', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('BasicUsage Story', () => {

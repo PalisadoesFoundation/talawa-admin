@@ -14,7 +14,7 @@ describe('FormField', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     user = userEvent.setup();
   });
 

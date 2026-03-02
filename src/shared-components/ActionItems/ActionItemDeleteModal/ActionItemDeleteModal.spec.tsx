@@ -65,7 +65,7 @@ describe('Testing ItemDeleteModal', () => {
 
   beforeEach(() => {
     // Create fresh mocks for each test
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     testItemProps = {
       isOpen: true,
       hide: vi.fn(),
@@ -114,7 +114,7 @@ describe('Testing ItemDeleteModal', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render ItemDeleteModal', () => {

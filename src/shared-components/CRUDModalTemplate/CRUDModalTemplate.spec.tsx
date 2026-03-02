@@ -36,7 +36,7 @@ const renderWithI18n = (component: React.ReactElement) => {
 };
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('CRUDModalTemplate', () => {

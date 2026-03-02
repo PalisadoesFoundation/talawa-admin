@@ -21,7 +21,7 @@ describe('BaseModal', () => {
   };
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Rendering Tests', () => {
