@@ -24,6 +24,14 @@
   border-bottom-color: var(--color-gray-100);
 }
 
+.dataTableBase tbody tr:hover td {
+  background-color: var(--color-gray-50);
+}
+
+.dataTableBase thead th:hover {
+  background-color: var(--color-gray-100);
+}
+
 .toolbar {
   display: flex;
   align-items: center;
