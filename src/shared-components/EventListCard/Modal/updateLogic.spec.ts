@@ -19,7 +19,6 @@ import { cleanup } from '@testing-library/react';
 dayjs.extend(utc);
 const FIXED_NOW = dayjs.utc(new Date(Date.UTC(2025, 0, 1, 10)));
 
-
 // Mock react-i18next so useTranslation works without React context
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
