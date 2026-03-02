@@ -94,10 +94,6 @@ describe('CheckInWrapper CSS Tests', () => {
     ({ CheckInWrapper } = await import('./CheckInWrapper'));
   });
 
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
