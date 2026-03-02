@@ -4,7 +4,7 @@
 
 # Interface: InterfaceRecurrenceMonthlySectionProps
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L52)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L58)
 
 Props for the RecurrenceMonthlySection component.
 
@@ -14,7 +14,7 @@ Props for the RecurrenceMonthlySection component.
 
 > **frequency**: [`Frequency`](../../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/Frequency.md)
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L54)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L60)
 
 The selected frequency.
 
@@ -24,7 +24,7 @@ The selected frequency.
 
 > **recurrenceRuleState**: [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L56)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L62)
 
 The current state of the recurrence rule being built.
 
@@ -34,7 +34,7 @@ The current state of the recurrence rule being built.
 
 > **setRecurrenceRuleState**: (`state`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L58)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L64)
 
 State setter for the recurrence rule.
 
@@ -54,26 +54,6 @@ State setter for the recurrence rule.
 
 > **startDate**: `Date`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L62)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L68)
 
 The start date of the recurrence.
-
-***
-
-### t()
-
-> **t**: (`key`) => `string`
-
-Defined in: [src/types/shared-components/Recurrence/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L64)
-
-Translation function.
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`

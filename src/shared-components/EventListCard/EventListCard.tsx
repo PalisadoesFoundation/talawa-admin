@@ -86,7 +86,6 @@ function EventListCard(props: IEventListCard): JSX.Element {
         eventListCardProps={props}
         eventModalIsOpen={eventModalIsOpen}
         hideViewModal={hideViewModal}
-        t={t}
         tCommon={tCommon}
       />
     </>
