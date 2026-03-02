@@ -56,9 +56,9 @@ function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
-  tCommon,
 }: InterfaceEventListCardModalsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t: tCommon } = useTranslation('common');
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
@@ -270,7 +270,7 @@ function EventListCardModals({
         eventEndDate,
         recurrence,
         updateOption,
-        hasRecurrenceChanged: hasRecurrenceChanged(),
+        hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
         hideViewModal,
         eventUpdateModalIsOpen,
         closeUpdateModal,
@@ -408,7 +408,6 @@ function EventListCardModals({
         eventModalIsOpen={eventModalIsOpen}
         hideViewModal={hideViewModal}
         toggleDeleteModal={toggleDeleteModal}
-        tCommon={tCommon}
         isRegistered={isRegistered}
         userId={userId as string}
         eventStartDate={eventStartDate}
@@ -438,8 +437,6 @@ function EventListCardModals({
         eventListCardProps={eventListCardProps}
         eventDeleteModalIsOpen={eventDeleteModalIsOpen}
         toggleDeleteModal={toggleDeleteModal}
-        t={t}
-        tCommon={tCommon}
         deleteEventHandler={deleteEventHandler}
       />
 

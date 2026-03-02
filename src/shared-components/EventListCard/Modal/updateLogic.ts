@@ -50,7 +50,7 @@ export const useUpdateEventHandler = () => {
     eventEndDate,
     recurrence,
     updateOption,
-    hasRecurrenceChanged = false,
+    hasRecurrenceChanged = false, // Default to false if not provided
     hideViewModal,
     closeUpdateModal,
     refetchEvents,

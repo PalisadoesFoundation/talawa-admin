@@ -34,6 +34,17 @@ import {
   InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils/recurrenceTypes';
 
+// Mock react-i18next so useTranslation returns bare keys
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
+
 vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
@@ -70,9 +81,6 @@ export const getDateButtonByText = (
 
   return dateButton;
 };
-
-const mockT = (key: string): string => key;
-const mockTCommon = (key: string): string => key;
 
 const mockEventListCardProps = {
   id: 'event123',
@@ -129,8 +137,6 @@ const mockDefaultProps = {
   eventModalIsOpen: true,
   hideViewModal: vi.fn(),
   toggleDeleteModal: vi.fn(),
-  t: mockT,
-  tCommon: mockTCommon,
   isRegistered: false,
   userId: 'user123',
   eventStartDate: dayjs

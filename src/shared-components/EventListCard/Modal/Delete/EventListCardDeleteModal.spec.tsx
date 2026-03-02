@@ -5,11 +5,21 @@ import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import EventListCardDeleteModal from './EventListCardDeleteModal';
 import dayjs from 'dayjs';
-import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 import i18n from 'utils/i18nForTest';
 
+// Mock react-i18next so useTranslation returns bare keys
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
+
 // Mock props for standalone event
-const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
+const mockStandaloneEventProps = {
   eventListCardProps: {
     id: 'standalone-event-1',
     name: 'Standalone Event',
@@ -39,13 +49,11 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
   },
   eventDeleteModalIsOpen: true,
   toggleDeleteModal: vi.fn(),
-  t: (key: string) => key,
-  tCommon: (key: string) => key,
   deleteEventHandler: vi.fn(),
 };
 
 // Mock props for recurring event instance
-const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
+const mockRecurringEventProps = {
   eventListCardProps: {
     id: 'recurring-instance-1',
     name: 'Daily Meeting',
@@ -75,8 +83,6 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
   },
   eventDeleteModalIsOpen: true,
   toggleDeleteModal: vi.fn(),
-  t: (key: string) => key,
-  tCommon: (key: string) => key,
   deleteEventHandler: vi.fn(),
 };
 

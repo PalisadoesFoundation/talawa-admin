@@ -33,6 +33,7 @@
  * ```
  */
 import React, { useId, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 
 import styles from './EventListCardDeleteModal.module.css';
@@ -45,10 +46,10 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   eventListCardProps,
   eventDeleteModalIsOpen,
   toggleDeleteModal,
-  t,
-  tCommon,
   deleteEventHandler,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t: tCommon } = useTranslation('common');
   const [deleteOption, setDeleteOption] = useState<
     'single' | 'following' | 'all'
   >('single');

@@ -34,6 +34,7 @@
  */
 // translation-check-keyPrefix: eventListCard
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
@@ -55,14 +56,12 @@ import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/Custom
 import type { InterfacePreviewEventModalProps } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { InterfaceDropDownOption } from 'types/shared-components/DropDownButton/interface';
-import { useTranslation } from 'react-i18next';
 
 const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
   toggleDeleteModal,
-  tCommon,
   isRegistered,
   userId,
   eventStartDate,
@@ -89,6 +88,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   setCustomRecurrenceModalIsOpen,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t: tCommon } = useTranslation('common');
   const timeToDayJs = (time: string): Dayjs => {
     const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
     return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss');

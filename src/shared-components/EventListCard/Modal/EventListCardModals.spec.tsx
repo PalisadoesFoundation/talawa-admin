@@ -69,6 +69,17 @@ vi.mock('./Delete/EventListCardDeleteModal', () => ({
   default: vi.fn(),
 }));
 
+// Mock react-i18next
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
+
 const mockUseMutation = useMutation as Mock;
 const mockUseNavigate = useNavigate as Mock;
 const mockUseParams = useParams as Mock;
@@ -209,8 +220,6 @@ describe('EventListCardModals', () => {
       eventListCardProps: mockEventListCardProps,
       eventModalIsOpen: true,
       hideViewModal: vi.fn(),
-      t: i18nForTest.t, // Use the actual t function from i18nForTest
-      tCommon: i18nForTest.t, // Use the actual t function from i18nForTest
       ...props,
     };
     return render(
