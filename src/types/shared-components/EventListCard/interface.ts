@@ -1,6 +1,5 @@
 import type { InterfaceEvent } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
-import type { TFunction } from 'i18next';
 
 /**
  * Event list card props extending InterfaceEvent.
@@ -22,9 +21,7 @@ export interface InterfaceEventListCardModalsProps {
   eventListCardProps: InterfaceEventListCard;
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
-  // Use TFunction to match expected types and avoid $TFunctionBrand errors
-  t: TFunction<'translation', undefined>;
-  tCommon: TFunction<'translation', undefined>;
+  tCommon: (key: string, options?: Record<string, unknown>) => string;
 }
 
 /**
@@ -74,7 +71,6 @@ export interface InterfaceUpdateEventHandlerProps {
   recurrence: InterfaceRecurrenceRule | null;
   updateOption: 'single' | 'following' | 'entireSeries';
   hasRecurrenceChanged?: boolean;
-  t: TFunction<'translation', undefined>;
   hideViewModal: () => void;
   eventUpdateModalIsOpen: boolean;
   closeUpdateModal: () => void;

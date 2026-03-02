@@ -803,7 +803,7 @@ describe('Recurrence Utility Functions', () => {
 
   describe('getMonthlyOptions', () => {
     // Use UTC-based dates so getMonthlyOptions (which uses UTC) is stable across TZ
-    const testMonth = getFutureMonth(2);
+    const testMonth = dayjs.utc(new Date(Date.UTC(2024, 9, 1, 10)));
 
     it('should return correct options for a date in the middle of the month', () => {
       const thirdMonday = getNthDayOfWeekInMonth(testMonth, 1, 3); // 1 = Monday, 3 = third occurrence

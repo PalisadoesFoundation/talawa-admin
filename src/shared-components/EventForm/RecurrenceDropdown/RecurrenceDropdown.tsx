@@ -7,6 +7,7 @@ import React, { useCallback, useMemo } from 'react';
 import DropDownButton from 'shared-components/DropDownButton';
 import type { InterfaceRecurrenceDropdownProps } from 'types/shared-components/RecurrenceDropdown/interface';
 import type { InterfaceDropDownOption } from 'types/shared-components/DropDownButton/interface';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Renders a dropdown for selecting recurrence patterns.
@@ -17,8 +18,10 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
   recurrenceOptions,
   currentLabel,
   onSelect,
-  t,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   const dropdownOptions: InterfaceDropDownOption[] = useMemo(
     () =>
       recurrenceOptions.map((option, index) => ({

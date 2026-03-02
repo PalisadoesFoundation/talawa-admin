@@ -7,5 +7,4 @@ export interface InterfaceRecurrenceDropdownProps {
   recurrenceOptions: InterfaceRecurrenceOption[];
   currentLabel: string;
   onSelect: (option: InterfaceRecurrenceOption) => void;
-  t: (key: string) => string;
 }

@@ -375,7 +375,6 @@ export default function Events(): JSX.Element {
           onSubmit={handleCreateEvent}
           onCancel={closeCreateEventModal}
           submitLabel={t('createEvent')}
-          t={t}
           tCommon={tCommon}
           showCreateChat
           showRegisterable

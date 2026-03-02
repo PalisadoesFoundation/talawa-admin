@@ -2,6 +2,8 @@ import { render, screen, act, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+
+// react-i18next mock removed, translations provided by I18nextProvider
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -83,13 +85,8 @@ const mockEventListCardProps: MockEventListCardProps = {
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startAt: dayjs.utc().add(10, 'days').millisecond(0).toISOString(),
-  endAt: dayjs
-    .utc()
-    .add(10, 'days')
-    .add(2, 'hours')
-    .millisecond(0)
-    .toISOString(),
+  startAt: dayjs.utc(new Date(Date.UTC(2023, 0, 1, 10))).toISOString(),
+  endAt: dayjs.utc(new Date(Date.UTC(2023, 0, 1, 12))).toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -117,7 +114,7 @@ const buildRecurringEventProps = (
 
 describe('EventListCardModals', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
   let mockUpdateStandaloneEvent: Mock;
@@ -297,7 +294,9 @@ describe('EventListCardModals', () => {
         },
       },
     });
-    expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      'Event updated successfully.',
+    );
     expect(mockEventListCardProps.refetchEvents).toHaveBeenCalled();
   });
 
@@ -436,7 +435,7 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
-    expect(NotificationToast.info).toHaveBeenCalledWith('noChangesToUpdate');
+    expect(NotificationToast.info).toHaveBeenCalledWith('No changes to update');
   });
 
   test('handles event registration', async () => {
@@ -451,7 +450,7 @@ describe('EventListCardModals', () => {
       variables: { id: 'event1' },
     });
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      'registeredSuccessfully',
+      'Successfully registered for Test Event',
     );
   });
 
@@ -493,7 +492,9 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    expect(screen.getByText('updateRecurringEventMsg')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Choose how you want to update it/i),
+    ).toBeInTheDocument();
 
     const closeButton = screen.getByTestId('eventUpdateModalCloseBtn');
     await userEvent.click(closeButton);
@@ -525,13 +526,15 @@ describe('EventListCardModals', () => {
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
 
-    expect(mockUpdateSingleRecurringEvent).toHaveBeenCalledWith({
-      variables: {
-        input: {
-          id: 'event1',
-          name: 'Updated Instance',
+    await waitFor(() => {
+      expect(mockUpdateSingleRecurringEvent).toHaveBeenCalledWith({
+        variables: {
+          input: {
+            id: 'event1',
+            name: 'Updated Instance',
+          },
         },
-      },
+      });
     });
   });
 
@@ -556,18 +559,24 @@ describe('EventListCardModals', () => {
     });
 
     // Find the "Update this instance" radio button
-    const singleInstanceRadio = screen.getByLabelText('updateThisInstance');
+    const singleInstanceRadio = screen.getByLabelText(
+      /update only this instance/i,
+    );
 
     // Verify it exists and click it
     expect(singleInstanceRadio).toBeInTheDocument();
     await userEvent.click(singleInstanceRadio);
 
     // Assert it is checked (it should be default, but clicking ensures the handler runs)
-    expect(singleInstanceRadio).toBeChecked();
+    await waitFor(() => {
+      expect(singleInstanceRadio).toBeChecked();
+    });
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
-    expect(mockUpdateSingleRecurringEvent).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockUpdateSingleRecurringEvent).toHaveBeenCalled();
+    });
   });
 
   test('handles update of this and following recurring events', async () => {
@@ -587,19 +596,23 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+    const followingRadio = screen.getByLabelText(
+      /update this and all following/i,
+    );
     await userEvent.click(followingRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
 
-    expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith({
-      variables: {
-        input: expect.objectContaining({
-          id: 'event1',
-          name: 'Updated Following',
-        }),
-      },
+    await waitFor(() => {
+      expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith({
+        variables: {
+          input: expect.objectContaining({
+            id: 'event1',
+            name: 'Updated Following',
+          }),
+        },
+      });
     });
   });
 
@@ -621,7 +634,9 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    const entireSeriesRadio = screen.getByLabelText(
+      /update all events in the series/i,
+    );
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -655,7 +670,9 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    const entireSeriesRadio = screen.getByLabelText(
+      /update all events in the series/i,
+    );
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -688,7 +705,9 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    const entireSeriesRadio = screen.getByLabelText(
+      /update all events in the series/i,
+    );
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -711,20 +730,10 @@ describe('EventListCardModals', () => {
       });
       const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
       const newStartDate = dayjs
-        .utc()
-        .add(20, 'days')
-        .hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0)
+        .utc(new Date(Date.UTC(2025, 0, 20, 12)))
         .toDate();
       const newEndDate = dayjs
-        .utc()
-        .add(21, 'days')
-        .hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0)
+        .utc(new Date(Date.UTC(2025, 0, 21, 12)))
         .toDate();
 
       act(() => {
@@ -754,7 +763,9 @@ describe('EventListCardModals', () => {
         eventListCardProps: buildRecurringEventProps({
           recurrenceRule: {
             frequency: Frequency.DAILY,
-            recurrenceEndDate: dayjs.utc().add(1, 'year').toDate(),
+            recurrenceEndDate: dayjs
+              .utc(new Date(Date.UTC(2026, 0, 1)))
+              .toDate(),
           },
         }),
       });
@@ -843,7 +854,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
     });
 
     test('shows error when end date is invalid and allDay is true', async () => {
@@ -857,7 +868,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
     });
 
     test('shows error when start date is invalid and allDay is false', async () => {
@@ -871,7 +882,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
     });
 
     test('shows error when end date is invalid and allDay is false', async () => {
@@ -885,7 +896,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
     });
 
     test('handles invalid eventStartDate in hasOnlyNameOrDescriptionChanged', async () => {
@@ -903,7 +914,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
     });
 
     test('handles invalid startDate in hasOnlyNameOrDescriptionChanged', async () => {
@@ -1051,7 +1062,9 @@ describe('EventListCardModals', () => {
       expect(
         screen.queryByLabelText('updateThisInstance'),
       ).not.toBeInTheDocument();
-      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+      const followingRadio = screen.getByLabelText(
+        /update this and all following/i,
+      );
       expect(followingRadio).toBeChecked();
     });
   });
@@ -1108,7 +1121,9 @@ describe('EventListCardModals', () => {
         });
 
         // Select 'this and following events' to trigger the logic that uses frequency
-        const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+        const followingRadio = screen.getByLabelText(
+          /update this and all following/i,
+        );
         await userEvent.click(followingRadio);
 
         const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -1166,7 +1181,9 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockDeleteStandaloneEvent).toHaveBeenCalled();
-    expect(NotificationToast.success).toHaveBeenCalledWith('eventDeleted');
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      'Event deleted successfully.',
+    );
   });
 
   test('passes setCustomRecurrenceModalIsOpen to preview modal', () => {

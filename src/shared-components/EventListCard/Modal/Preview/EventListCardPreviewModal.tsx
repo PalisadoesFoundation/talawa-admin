@@ -55,13 +55,13 @@ import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/Custom
 import type { InterfacePreviewEventModalProps } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { InterfaceDropDownOption } from 'types/shared-components/DropDownButton/interface';
+import { useTranslation } from 'react-i18next';
 
 const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
   toggleDeleteModal,
-  t,
   tCommon,
   isRegistered,
   userId,
@@ -88,6 +88,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   customRecurrenceModalIsOpen,
   setCustomRecurrenceModalIsOpen,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
   const timeToDayJs = (time: string): Dayjs => {
     const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
     return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss');
@@ -532,7 +533,6 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             setCustomRecurrenceModalIsOpen(false)
           }
           setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-          t={t}
           startDate={eventStartDate}
         />
       )}
