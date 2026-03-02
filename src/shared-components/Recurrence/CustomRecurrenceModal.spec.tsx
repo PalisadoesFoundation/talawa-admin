@@ -1,9 +1,10 @@
 import React from 'react';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -33,10 +34,10 @@ vi.mock('react-i18next', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-i18next')>();
   return {
     ...actual,
-    useTranslation: () => ({
+    useTranslation: vi.fn(() => ({
       t: (key: string) => key,
       i18n: { changeLanguage: vi.fn() },
-    }),
+    })),
   };
 });
 
@@ -756,9 +757,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
   });
 
   it('uses fallback error message for invalid interval when translation returns falsy', async () => {
+    (useTranslation as ReturnType<typeof vi.fn>).mockReturnValue({
+      t: (key: string) => (key.includes('invalidDetailsMessage') ? '' : key),
+      i18n: { changeLanguage: vi.fn() },
+    });
+
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.restoreAllMocks();
 
     const intervalInput = screen.getByTestId(
       'customRecurrenceIntervalInput',
@@ -784,22 +789,24 @@ describe('CustomRecurrenceModal – full coverage', () => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
 
-    // Verify that NotificationToast.error was called with the key string
+    // Verify that NotificationToast.error was called with the fallback string
     const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
-    expect(errorCall).toBe('invalidDetailsMessage');
+    expect(errorCall).toContain('valid interval');
 
     // Verify that modal is NOT closed when validation fails
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
   });
 
   it('uses fallback error message for invalid count when translation returns falsy', async () => {
+    (useTranslation as ReturnType<typeof vi.fn>).mockReturnValue({
+      t: (key: string) => (key.includes('invalidDetailsMessage') ? '' : key),
+      i18n: { changeLanguage: vi.fn() },
+    });
+
     const user = userEvent.setup();
-    // Create a translation function that returns empty string for invalidDetailsMessage
-    // This will trigger the fallback message on line 352
 
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.restoreAllMocks();
 
     // Select endsAfter option
     await user.click(screen.getByTestId(endsAfter));
@@ -831,7 +838,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     expect(NotificationToast.error).toHaveBeenCalled();
     const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
-    expect(errorCall).toBe('invalidDetailsMessage');
+    expect(errorCall).toContain('valid occurrence count');
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
   });
 
@@ -1692,7 +1699,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
   });
 
-  it('covers useEffect auto-select endsOn when endDate prop changes', () => {
+  it('covers useEffect auto-select endsOn when endDate prop changes', async () => {
     const props = {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
@@ -1709,21 +1716,29 @@ describe('CustomRecurrenceModal – full coverage', () => {
       startDate: FIXED_NOW.toDate(),
     };
 
-    const { rerender } = render(<CustomRecurrenceModal {...props} />);
-
-    rerender(
-      <CustomRecurrenceModal
-        {...{
-          ...props,
-          recurrenceRuleState: {
-            ...props.recurrenceRuleState,
-            endDate: FIXED_NOW.add(5, 'days').toDate(),
-          },
-        }}
-      />,
+    const { rerender } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <CustomRecurrenceModal {...props} />
+      </I18nextProvider>,
     );
 
-    expect(screen.getByTestId(endsOn)).toBeChecked();
+    rerender(
+      <I18nextProvider i18n={i18nForTest}>
+        <CustomRecurrenceModal
+          {...{
+            ...props,
+            recurrenceRuleState: {
+              ...props.recurrenceRuleState,
+              endDate: FIXED_NOW.add(5, 'days').toDate(),
+            },
+          }}
+        />
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId(endsOn)).toBeChecked();
+    });
   });
 
   it('covers MONTHLY branch in handleFrequencyChange', async () => {
