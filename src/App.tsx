@@ -117,7 +117,7 @@ const PluginStore = lazy(
 );
 
 const OAuthCallbackPage = lazy(
-  () => import('components/Auth/OAuthCallback/callback'),
+  () => import('components/Auth/OAuthCallback/OAuthCallback'),
 );
 
 const { setItem } = useLocalStorage();

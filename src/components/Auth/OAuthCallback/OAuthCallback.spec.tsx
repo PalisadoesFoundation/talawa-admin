@@ -2,7 +2,7 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
-import OAuthCallbackPage from './callback';
+import OAuthCallbackPage from './OAuthCallback';
 import type { InterfaceAuthenticationPayload } from 'types/Auth/auth';
 import { UserRole, Iso3166Alpha2CountryCode } from 'utils/interfaces';
 import { I18nextProvider } from 'react-i18next';

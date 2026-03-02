@@ -12,7 +12,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { OAUTH_PROVIDERS } from 'config/oauthProviders';
 import useSession from 'utils/useSession';
 import { useTranslation } from 'react-i18next';
-import styles from './callback.module.css';
+import styles from './OAuthCallback.module.css';
 
 /**
  * OAuth callback page component that handles the OAuth authentication flow redirect.

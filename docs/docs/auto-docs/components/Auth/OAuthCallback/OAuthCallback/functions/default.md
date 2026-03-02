@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/Auth/OAuthCallback/callback.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthCallback/callback.tsx#L45)
+Defined in: [src/components/Auth/OAuthCallback/OAuthCallback.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthCallback/OAuthCallback.tsx#L45)
 
 OAuth callback page component that handles the OAuth authentication flow redirect.
 
