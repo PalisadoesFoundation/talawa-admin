@@ -1,4 +1,6 @@
 import React from 'react';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -27,12 +29,16 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock react-i18next to prevent "You will need to pass in an i18next instance" warning
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: { changeLanguage: vi.fn() },
-  }),
-}));
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-i18next')>();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      i18n: { changeLanguage: vi.fn() },
+    }),
+  };
+});
 
 vi.mock('shared-components/DatePicker', () => ({
   __esModule: true,
@@ -119,7 +125,11 @@ const renderModal = (
     ...override,
   };
 
-  render(<CustomRecurrenceModal {...props} />);
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <CustomRecurrenceModal {...props} />
+    </I18nextProvider>,
+  );
 
   return {
     setRecurrenceRuleState,
@@ -1594,7 +1604,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
     });
 
-    const updater = setRecurrenceRuleState.mock.calls[0][0];
+    const updater = setRecurrenceRuleState.mock.calls.at(-1)?.[0];
     expect(typeof updater).toBe('function');
 
     const result = updater(baseRecurrenceRule);
@@ -1623,7 +1633,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
     });
 
-    const callArg = setRecurrenceRuleState.mock.calls[0][0];
+    const callArg = setRecurrenceRuleState.mock.calls.at(-1)?.[0];
     expect(typeof callArg).toBe('function'); // ensures updater branch executed
   });
 

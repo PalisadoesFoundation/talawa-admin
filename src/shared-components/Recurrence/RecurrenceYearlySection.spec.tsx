@@ -4,11 +4,13 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { RecurrenceYearlySection } from './RecurrenceYearlySection';
 import { Frequency } from '../../utils/recurrenceUtils';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const defaultProps = {
   frequency: Frequency.YEARLY,
-  startDate: dayjs().year(2024).month(6).date(21).toDate(), // July 21, 2024
-  t: (key: string) => key,
+  startDate: dayjs.utc(new Date(Date.UTC(2024, 6, 21, 10))).toDate(), // July 21, 2024
 };
 
 vi.mock('react-i18next', async () => {
