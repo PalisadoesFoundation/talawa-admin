@@ -82,6 +82,17 @@ export const MOCKS = [
                   fundingRaised: 0,
                 },
               },
+              {
+                node: {
+                  id: 'campaignIdZeroGoal',
+                  name: 'Campaign Zero Goal',
+                  startAt: BASE_DATE_UTC.add(2, 'month').toISOString(),
+                  endAt: BASE_DATE_UTC.add(14, 'month').toISOString(),
+                  currencyCode: 'USD',
+                  goalAmount: 0,
+                  fundingRaised: null,
+                },
+              },
             ],
           },
         },

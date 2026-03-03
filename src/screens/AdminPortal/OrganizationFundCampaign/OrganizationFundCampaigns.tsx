@@ -60,6 +60,10 @@ const orgFundCampaign = (): JSX.Element => {
 
   const { fundId, orgId } = useParams();
 
+  type CampaignNode =
+    InterfaceQueryOrganizationFundCampaigns['campaigns']['edges'][number]['node'];
+  type CampaignRow = CampaignNode & { slNo: number };
+
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
 
@@ -99,11 +103,16 @@ const orgFundCampaign = (): JSX.Element => {
     skip: !fundId,
   });
 
-  const campaignsData = useMemo(() => {
-    return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
+  const campaignsData = useMemo<CampaignRow[]>(() => {
+    return (
+      campaignData?.fund?.campaigns?.edges.map((edge, index) => ({
+        ...edge.node,
+        slNo: index + 1,
+      })) ?? []
+    );
   }, [campaignData]);
 
-  const filteredCampaigns = useMemo(() => {
+  const filteredCampaigns = useMemo<CampaignRow[]>(() => {
     return campaignsData.filter((campaign) =>
       campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
@@ -112,6 +121,20 @@ const orgFundCampaign = (): JSX.Element => {
   const handleClick = (campaignId: string): void => {
     navigate(`/admin/fundCampaignPledge/${orgId}/${campaignId}`);
   };
+
+  const toCampaignInfo = useCallback(
+    (campaignRow: CampaignRow): InterfaceCampaignInfo => ({
+      id: campaignRow.id,
+      name: campaignRow.name,
+      goalAmount: campaignRow.goalAmount,
+      startAt: new Date(campaignRow.startAt),
+      endAt: new Date(campaignRow.endAt),
+      createdAt: campaignRow.startAt,
+      currencyCode: campaignRow.currencyCode,
+      fundingRaised: campaignRow.fundingRaised,
+    }),
+    [],
+  );
 
   const { fundName, isArchived } = useMemo(() => {
     const fundName = campaignData?.fund?.name || 'Fund';
@@ -141,12 +164,11 @@ const orgFundCampaign = (): JSX.Element => {
   }
 
   // Column definitions for DataTable
-  const columns: Array<IColumnDef<InterfaceCampaignInfo>> = [
+  const columns: Array<IColumnDef<CampaignRow>> = [
     {
       id: 'id',
       header: '#',
-      accessor: (_campaign: InterfaceCampaignInfo, index?: number) =>
-        index !== undefined ? index + 1 : '',
+      accessor: 'slNo',
       meta: {
         sortable: false,
         align: 'center',
@@ -301,7 +323,7 @@ const orgFundCampaign = (): JSX.Element => {
           data-testid="editCampaignBtn"
           onClick={(e) => {
             e.stopPropagation();
-            handleOpenModal(campaign, 'edit');
+            handleOpenModal(toCampaignInfo(campaign), 'edit');
           }}
         >
           <i className="fa fa-edit me-1" />
@@ -374,8 +396,8 @@ const orgFundCampaign = (): JSX.Element => {
         />
       ) : (
         <div className={styles.listBox}>
-          <DataTable<InterfaceCampaignInfo>
-            data={filteredCampaigns as unknown as InterfaceCampaignInfo[]}
+          <DataTable<CampaignRow>
+            data={filteredCampaigns}
             columns={columns}
             loading={campaignLoading}
             rowKey="id"

@@ -443,7 +443,7 @@ describe('FundCampaigns Screen', () => {
     // Wait for campaigns to load
     await waitFor(() => {
       const campaignNameCells = screen.getAllByTestId('campaignName');
-      expect(campaignNameCells.length).toBe(5);
+      expect(campaignNameCells.length).toBe(6);
       expect(campaignNameCells[0]).toHaveTextContent('Campaign 1');
     });
   });
@@ -573,11 +573,11 @@ describe('FundCampaigns Screen', () => {
 
     // Verify that multiple campaign elements are visible (confirming the list is displayed)
     const campaignNameCells = screen.getAllByTestId('campaignName');
-    expect(campaignNameCells.length).toBe(5);
+    expect(campaignNameCells.length).toBe(6);
 
     // Verify goal cells are also visible (confirming table rendering)
     const goalCells = screen.getAllByTestId('goalCell');
-    expect(goalCells.length).toBe(5);
+    expect(goalCells.length).toBe(6);
   });
 
   describe('Keyboard Accessibility', () => {

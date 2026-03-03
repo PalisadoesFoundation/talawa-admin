@@ -91,6 +91,7 @@ const organizationFunds = (): JSX.Element => {
   );
 
   const [searchText, setSearchText] = useState('');
+  type FundRow = InterfaceFundInfo & { slNo: number };
 
   const handleOpenModal = useCallback(
     (selectedFund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -135,15 +136,18 @@ const organizationFunds = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  const funds = useMemo(() => {
+  const funds = useMemo<FundRow[]>(() => {
     return (
       fundData?.organization?.funds?.edges.map(
-        (edge: { node: InterfaceFundInfo }) => edge.node,
+        (edge: { node: InterfaceFundInfo }, index: number) => ({
+          ...edge.node,
+          slNo: index + 1,
+        }),
       ) ?? []
     );
   }, [fundData]);
 
-  const filteredAndSortedFunds = useMemo(() => {
+  const filteredAndSortedFunds = useMemo<FundRow[]>(() => {
     let result = [...funds];
 
     // Apply search filter
@@ -185,12 +189,11 @@ const organizationFunds = (): JSX.Element => {
   }
 
   // Column definitions for DataTable
-  const columns: Array<IColumnDef<InterfaceFundInfo>> = [
+  const columns: Array<IColumnDef<FundRow>> = [
     {
       id: 'sl_no',
       header: tCommon('hash'),
-      accessor: (_fund: InterfaceFundInfo, index?: number) =>
-        index !== undefined ? index + 1 : '',
+      accessor: 'slNo',
       meta: {
         sortable: false,
         align: 'center',
