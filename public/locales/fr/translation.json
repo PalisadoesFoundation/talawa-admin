@@ -1427,6 +1427,7 @@
     "enterState": "Entrez l'état",
     "select": "Sélectionner",
     "asYourCountry": "comme votre pays",
+    "imageUploadError": "Échec du téléchargement de l'image. Veuillez réessayer.",
     "actions": "Actions"
   },
   "people": {

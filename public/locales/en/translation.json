@@ -1472,7 +1472,8 @@
     "enterCity": "Enter city name",
     "enterState": "Enter state name",
     "select": "Select",
-    "asYourCountry": "as your country"
+    "asYourCountry": "as your country",
+    "imageUploadError": "Failed to upload image. Please try again."
   },
   "people": {
     "title": "People",

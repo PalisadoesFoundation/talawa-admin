@@ -1422,6 +1422,7 @@
     "enterState": "राज्य दर्ज करें",
     "select": "चुनें",
     "asYourCountry": "अपने देश के रूप में",
+    "imageUploadError": "छवि अपलोड विफल। कृपया पुनः प्रयास करें।",
     "actions": "कार्रवाई"
   },
   "people": {

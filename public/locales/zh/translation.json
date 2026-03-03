@@ -1427,6 +1427,7 @@
     "enterState": "输入州/省",
     "select": "请选择",
     "asYourCountry": "作为您的国家",
+    "imageUploadError": "图像上传失败。请再试一次。",
     "actions": "操作"
   },
   "userLogin": {

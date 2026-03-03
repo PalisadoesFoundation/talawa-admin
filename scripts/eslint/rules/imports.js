@@ -53,6 +53,18 @@ function makeMuiTableRules() {
 
 const restrictedImports = [
   {
+    id: 'apollo-upload-client',
+    name: 'apollo-upload-client',
+    message:
+      'apollo-upload-client has been removed. All file uploads must use the useMinioUpload hook with presigned URLs. See utils/MinioUpload.ts.',
+  },
+  {
+    id: 'apollo-upload-client-link',
+    name: 'apollo-upload-client/createUploadLink.mjs',
+    message:
+      'apollo-upload-client has been removed. Use HttpLink from @apollo/client instead. All file uploads must use the useMinioUpload hook with presigned URLs.',
+  },
+  {
     id: 'mui-data-grid',
     name: '@mui/x-data-grid',
     message:

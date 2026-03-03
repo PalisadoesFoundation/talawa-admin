@@ -13,7 +13,6 @@ import MemberDetail from './UserContactDetails';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import { urlToFile } from 'utils/urlToFile';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import {
@@ -730,6 +729,17 @@ vi.mock('utils/urlToFile', () => ({
   urlToFile: vi.fn(),
 }));
 
+const mockUploadFileToMinio = vi.fn().mockResolvedValue({
+  objectName: 'mock-object-name',
+  fileHash: 'mock-file-hash',
+});
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: mockUploadFileToMinio,
+  }),
+}));
+
 vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   __esModule: true,
   default: ({
@@ -1175,16 +1185,14 @@ describe('MemberDetail', () => {
     );
   });
 
-  test('handles avatar URL to file conversion failure', async () => {
-    vi.mocked(urlToFile).mockRejectedValueOnce(new Error('Conversion failed'));
-    renderUserProfileScreen(createLink(MOCKS1));
+  test('handles MinIO upload failure gracefully', async () => {
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+    renderMemberDetailScreen(createLink(MOCKS1));
     await waitForLoadingComplete();
 
-    const nameInput = screen.getByTestId('inputName');
-    await user.clear(nameInput);
-    await user.type(nameInput, 'Test Name');
-
-    await user.click(screen.getByTestId('saveChangesBtn'));
+    const fileInput = screen.getByTestId('fileInput');
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    await user.upload(fileInput, file);
 
     await waitFor(
       () => {
@@ -1502,10 +1510,6 @@ describe('MemberDetail', () => {
   });
 
   test('handles successful update', async () => {
-    vi.mocked(urlToFile).mockResolvedValueOnce(
-      new File(['avatar'], 'avatar.png', { type: 'image/png' }),
-    );
-
     renderUserProfileScreen(createLink(UPDATE_MOCK));
     await waitForLoadingComplete();
 
@@ -1524,10 +1528,6 @@ describe('MemberDetail', () => {
   });
 
   test('should update state when avatar is changed', async () => {
-    vi.mocked(urlToFile).mockResolvedValueOnce(
-      new File(['avatar'], 'avatar.png', { type: 'image/png' }),
-    );
-
     renderUserProfileScreen(createLink(UPDATE_MOCK));
     await waitForLoadingComplete();
 

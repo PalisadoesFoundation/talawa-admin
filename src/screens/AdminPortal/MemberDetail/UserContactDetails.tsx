@@ -46,7 +46,6 @@ import {
 } from 'shared-components/DateRangePicker';
 import { sanitizeInput } from '../../../utils/SanitizeInput';
 import {
-  countryOptions,
   educationGradeEnum,
   maritalStatusEnum,
   genderEnum,
@@ -57,8 +56,16 @@ import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { validatePassword } from 'utils/passwordValidator';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
-import { resolveAvatarFile } from './resolveAvatarFile';
-import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
+import { useMinioUpload } from 'utils/MinioUpload';
+import ContactInfoCard from './ContactInfoCard';
+
+/** Metadata for a file uploaded to MinIO via presigned URL */
+interface InterfaceFileMetadata {
+  objectName: string;
+  fileHash: string;
+  mimetype: string;
+  name: string;
+}
 const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   id,
 }): JSX.Element => {
@@ -72,7 +79,10 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   const storedUserId = getItem('id') || getItem('userId');
   const currentId =
     location.state?.id || id || params.userId || storedUserId || '';
-  const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+  const orgId = params.orgId || '';
+  const { uploadFileToMinio } = useMinioUpload();
+  const [avatarMetadata, setAvatarMetadata] =
+    useState<InterfaceFileMetadata | null>(null);
   const [newAvatarUploaded, setNewAvatarUploaded] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
@@ -83,7 +93,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     birthDate: null as string | null,
     emailAddress: '',
     city: '',
-    avatar: selectedAvatar,
     avatarURL: '',
     countryCode: '',
     description: '',
@@ -101,16 +110,14 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     workPhoneNumber: '',
   });
 
-  // Handle preview URL for selected avatar file
+  // Handle preview URL cleanup
   useEffect(() => {
-    if (selectedAvatar) {
-      const url = URL.createObjectURL(selectedAvatar);
-      setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setPreviewUrl(null);
-    }
-  }, [selectedAvatar]);
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
 
   // Compute the avatar URL to display
   const avatarDisplayUrl = useMemo(() => {
@@ -148,20 +155,41 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       birthDate: birthDate ? dayjs(birthDate).format('YYYY-MM-DD') : '',
     }));
   }, [data, error, t]);
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
     const file = e.target?.files?.[0];
     if (!file) return;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    if (!allowedTypes.includes(file.type))
-      return NotificationToast.error(t('invalidFileType'));
-    if (file.size > 5 * 1024 * 1024)
-      return NotificationToast.error(t('fileTooLarge'));
+    if (!allowedTypes.includes(file.type)) {
+      NotificationToast.error(t('invalidFileType'));
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      NotificationToast.error(t('fileTooLarge'));
+      return;
+    }
     const sanitizedFileName = file.name.replace(/[^a-z0-9._-]/gi, '_');
-    const sanitizedFile = new File([file], sanitizedFileName, {
-      type: file.type,
-    });
-    setSelectedAvatar(sanitizedFile);
-    setisUpdated(true);
+
+    // Create a preview URL for local display
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+
+    try {
+      const { objectName, fileHash } = await uploadFileToMinio(file, orgId);
+      setAvatarMetadata({
+        objectName,
+        fileHash,
+        mimetype: file.type,
+        name: sanitizedFileName,
+      });
+      setNewAvatarUploaded(true);
+      setisUpdated(true);
+    } catch (error) {
+      console.error('Error uploading avatar to MinIO:', error);
+      NotificationToast.error(t('imageUploadError'));
+      setPreviewUrl(null);
+    }
   };
   const handleFieldChange = (fieldName: string, value: string) => {
     setisUpdated(true);
@@ -169,15 +197,19 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   };
   const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleFileUpload(e);
-    setNewAvatarUploaded(true);
   };
   const handleUserUpdate = async (): Promise<void> => {
-    const removeEmptyFields = <T extends Record<string, string | File | null>>(
+    const removeEmptyFields = <
+      T extends Record<string, string | InterfaceFileMetadata | null>,
+    >(
       obj: T,
     ) =>
       Object.fromEntries(
         Object.entries(obj).filter(
-          ([, v]) => v != null && (typeof v !== 'string' || v.trim()),
+          ([, v]) =>
+            v != null &&
+            (typeof v !== 'string' || v.trim()) &&
+            (typeof v !== 'object' || Object.keys(v).length > 0),
         ),
       ) as Partial<T>;
     const passwordError = formState.password
@@ -188,13 +220,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       return;
     }
 
-    let avatarFile = await resolveAvatarFile({
-      newAvatarUploaded,
-      selectedAvatar,
-      avatarURL: formState.avatarURL,
-    });
-
-    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> & {
+    const data: Record<string, string | InterfaceFileMetadata | null> & {
       id?: string;
     } = {
       addressLine1: formState.addressLine1,
@@ -215,7 +241,9 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       postalCode: formState.postalCode,
       state: formState.state,
       workPhoneNumber: formState.workPhoneNumber,
-      avatar: selectedAvatar ? selectedAvatar : avatarFile,
+      ...(newAvatarUploaded && avatarMetadata
+        ? { avatar: avatarMetadata }
+        : {}),
       ...(resolvedUserId ? { id: resolvedUserId } : {}),
     };
 
@@ -236,7 +264,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
             item: tCommon('profile'),
           }) as string,
         );
-      setSelectedAvatar(null);
+      setAvatarMetadata(null);
       setNewAvatarUploaded(false);
       setisUpdated(false);
     } catch (e: unknown) {
@@ -245,8 +273,9 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   };
   const resetChanges = (): void => {
     setisUpdated(false);
-    setSelectedAvatar(null);
+    setAvatarMetadata(null);
     setNewAvatarUploaded(false);
+    setPreviewUrl(null);
     if (data?.user) setFormState({ ...data.user });
   };
   if (loading) {
@@ -489,110 +518,13 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
           </Card>
         </Col>
         <Col md={6}>
-          <Card className={`${styles.allRound}`}>
-            <Card.Header className={`py-3 px-4 ${styles.topRadius}`}>
-              <h3 className="m-0 font-black">{t('contactInfoHeading')}</h3>
-            </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <Row className="g-3">
-                <Col md={12}>
-                  <label htmlFor="email" className="form-label">
-                    {tCommon('email')}
-                  </label>
-                  <input
-                    id="email"
-                    value={data?.user?.emailAddress}
-                    className={`form-control ${styles.inputColor}`}
-                    type="email"
-                    name="email"
-                    data-testid="inputEmail"
-                    disabled
-                    placeholder={tCommon('email')}
-                  />
-                </Col>
-                {phoneFieldConfigs.map((field) => (
-                  <Col md={12} key={field.id}>
-                    <label htmlFor={field.id} className="form-label">
-                      {t(field.key)}
-                    </label>
-                    <input
-                      id={field.id}
-                      value={
-                        (formState[
-                          field.key as keyof typeof formState
-                        ] as string) || ''
-                      }
-                      className={`form-control ${styles.inputColor}`}
-                      type="tel"
-                      data-testid={field.testId}
-                      name={field.id}
-                      onChange={(e) =>
-                        handleFieldChange(field.key, e.target.value)
-                      }
-                      placeholder={tCommon('memberDetailNumberExample')}
-                    />
-                  </Col>
-                ))}
-                {addressFieldConfigs.map((field) => (
-                  <Col md={field.colSize} key={field.id}>
-                    <label htmlFor={field.id} className="form-label">
-                      {t(field.key)}
-                    </label>
-                    <input
-                      id={field.id}
-                      value={
-                        (formState[
-                          field.key as keyof typeof formState
-                        ] as string) || ''
-                      }
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
-                      name={field.id}
-                      data-testid={field.testId}
-                      onChange={(e) =>
-                        handleFieldChange(field.key, e.target.value)
-                      }
-                      placeholder={
-                        field.key === 'postalCode'
-                          ? tCommon('postalCode')
-                          : field.key.includes('city')
-                            ? tCommon('enterCity')
-                            : tCommon('memberDetailExampleLane')
-                      }
-                    />
-                  </Col>
-                ))}
-                <Col md={12}>
-                  <FormFieldGroup name="country" label={tCommon('country')}>
-                    <select
-                      id="country"
-                      className={`form-control ${styles.inputColor}`}
-                      value={formState.countryCode}
-                      data-testid="inputCountry"
-                      onChange={(e) =>
-                        handleFieldChange('countryCode', e.target.value)
-                      }
-                    >
-                      <option value="" disabled>
-                        {tCommon('select')} {tCommon('country')}
-                      </option>
-
-                      {[...countryOptions]
-                        .sort((a, b) => a.label.localeCompare(b.label))
-                        .map((country) => (
-                          <option
-                            key={country.value.toUpperCase()}
-                            value={country.value.toLowerCase()}
-                          >
-                            {String(country.label)}
-                          </option>
-                        ))}
-                    </select>
-                  </FormFieldGroup>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
+          <ContactInfoCard
+            t={t}
+            tCommon={tCommon}
+            formState={formState}
+            emailAddress={data?.user?.emailAddress}
+            handleFieldChange={handleFieldChange}
+          />
         </Col>
         {isUpdated && (
           <Col md={12}>
