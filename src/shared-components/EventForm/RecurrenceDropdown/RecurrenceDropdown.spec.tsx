@@ -89,6 +89,58 @@ describe('RecurrenceDropdown', () => {
     });
   });
 
+  it('calls onSelect with the custom option', async () => {
+    const user = userEvent.setup();
+    const onSelect = vi.fn();
+    renderWithI18n(
+      <RecurrenceDropdown
+        recurrenceOptions={mockOptions}
+        currentLabel="Does not repeat"
+        onSelect={onSelect}
+      />,
+    );
+
+    await user.click(screen.getByTestId('recurrence-toggle'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrence-item-2')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('recurrence-item-2'));
+
+    await waitFor(() => {
+      expect(onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({ label: 'Custom', value: 'custom' }),
+      );
+    });
+  });
+
+  it('calls onSelect with null value option', async () => {
+    const user = userEvent.setup();
+    const onSelect = vi.fn();
+    renderWithI18n(
+      <RecurrenceDropdown
+        recurrenceOptions={mockOptions}
+        currentLabel="Daily"
+        onSelect={onSelect}
+      />,
+    );
+
+    await user.click(screen.getByTestId('recurrence-toggle'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('recurrence-item-0'));
+
+    await waitFor(() => {
+      expect(onSelect).toHaveBeenCalledWith(
+        expect.objectContaining({ label: 'Does not repeat', value: null }),
+      );
+    });
+  });
+
   it('renders correct aria-label from translation', () => {
     renderWithI18n(
       <RecurrenceDropdown

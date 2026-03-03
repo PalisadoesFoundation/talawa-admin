@@ -255,7 +255,7 @@
     "avatar": "{{title}} 头像",
     "eventLocation": "活动地点",
     "eventDate": "活动日期",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "发布于：",
     "author": "作者："
   },
@@ -956,7 +956,8 @@
     "noOfAttendees": "参与者数量",
     "noRegistrations": "无注册",
     "registrants": "注册者",
-    "to": "至"
+    "to": "至",
+    "deleteOptionRequired": "必须选择删除选项"
   },
   "funds": {
     "title": "基金",
@@ -1901,7 +1902,7 @@
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
     "groupInfo": "群组信息",
-    "editImage": "编辑图片",
+    "editImage": "编辑图像",
     "description": "描述",
     "hash": "#",
     "members": "会员",
@@ -1937,8 +1938,7 @@
     "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
     "thisUser": "此用户",
     "deleteChatConfirmation": "您确定要删除此聊天吗？",
-    "memberActionsMenu": "成员操作菜单",
-    "editImage": "编辑图像"
+    "memberActionsMenu": "成员操作菜单"
   },
   "userChatRoom": {
     "selectContact": "点击 + 图标以开始新的聊天",

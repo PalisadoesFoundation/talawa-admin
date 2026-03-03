@@ -255,7 +255,7 @@
     "avatar": "{{title}} अवतार",
     "eventLocation": "कार्यक्रम स्थान",
     "eventDate": "कार्यक्रम तिथि",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "प्रकाशित:",
     "author": "लेखक:"
   },
@@ -968,7 +968,8 @@
     "noOfAttendees": "उपस्थित की संख्या",
     "noRegistrations": "कोई पंजीकरण नहीं",
     "registrants": "पंजीकृत",
-    "to": "को"
+    "to": "को",
+    "deleteOptionRequired": "हटाने का विकल्प आवश्यक है"
   },
   "funds": {
     "title": "फंड",
@@ -1899,7 +1900,7 @@
     "description": "विवरण",
     "hash": "#",
     "groupInfo": "समूह जानकारी",
-    "editImage": "छवि संपादित करें",
+    "editImage": "संपादित छवि",
     "members": "सदस्यों",
     "addMembers": "सदस्य जोड़ें",
     "userNotFound": "उपयोगकर्ता नहीं मिला",
@@ -1932,8 +1933,7 @@
     "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
     "thisUser": "इस उपयोगकर्ता",
     "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
-    "memberActionsMenu": "सदस्य क्रियाएं मेनू",
-    "editImage": "संपादित छवि"
+    "memberActionsMenu": "सदस्य क्रियाएं मेनू"
   },
   "userChatRoom": {
     "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",

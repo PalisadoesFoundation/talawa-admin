@@ -226,7 +226,7 @@ export default function Events(): JSX.Element {
       // If createEventData exists, treat as success even if errors are present
       // This handles GraphQL partial success scenarios where mutation succeeds
       // but some non-critical fields may have issues
-      if (createEventData) {
+      if (createEventData?.createEvent) {
         NotificationToast.success(t('eventCreated') as string);
         try {
           await refetch();
@@ -295,9 +295,12 @@ export default function Events(): JSX.Element {
         errorMessage.includes('rate limit') ||
         eventDataError.message?.includes('Please try again later');
       const isAuthError = errorMessage.includes('not authorized');
+      const isServerError =
+        errorMessage.includes('internal server error') ||
+        errorMessage.includes('500');
 
       // Suppress rate limit errors or auth errors if we have partial data
-      if (isRateLimitError || (isAuthError && hasData)) {
+      if (isRateLimitError || ((isAuthError || isServerError) && hasData)) {
         return;
       }
 
@@ -374,8 +377,7 @@ export default function Events(): JSX.Element {
           initialValues={defaultEventValues}
           onSubmit={handleCreateEvent}
           onCancel={closeCreateEventModal}
-          submitLabel={t('createEvent')}
-          tCommon={tCommon}
+          submitLabel={tCommon('create')}
           showCreateChat
           showRegisterable
           showPublicToggle
