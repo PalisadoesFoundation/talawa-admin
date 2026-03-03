@@ -4,11 +4,10 @@ import {
   render,
   screen,
   waitFor,
-  fireEvent,
   cleanup,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import BaseModal from './BaseModal';
 import type { IBaseModalProps } from 'types/shared-components/BaseModal/interface';
 
@@ -191,11 +190,8 @@ describe('BaseModal', () => {
       const modal = screen.getByTestId('test-modal');
       expect(modal).toBeInTheDocument();
 
-      fireEvent.keyDown(modal, {
-        key: 'Escape',
-        code: 'Escape',
-        keyCode: 27,
-      });
+      modal.focus();
+      await userEvent.keyboard('{Escape}');
 
       await waitFor(() => {
         expect(onHide).toHaveBeenCalledTimes(1);
@@ -217,11 +213,8 @@ describe('BaseModal', () => {
       const modal = screen.getByTestId('test-modal');
       expect(modal).toBeInTheDocument();
 
-      fireEvent.keyDown(modal, {
-        key: 'Escape',
-        code: 'Escape',
-        keyCode: 27,
-      });
+      modal.focus();
+      await userEvent.keyboard('{Escape}');
 
       // Wait for any async handlers to complete
       await waitFor(() => {
