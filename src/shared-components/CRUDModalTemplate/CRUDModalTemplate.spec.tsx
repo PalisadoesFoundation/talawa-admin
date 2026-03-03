@@ -5,6 +5,7 @@ import {
   waitFor,
   renderHook,
   act,
+  cleanup,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
@@ -36,7 +37,8 @@ const renderWithI18n = (component: React.ReactElement) => {
 };
 
 afterEach(() => {
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 describe('CRUDModalTemplate', () => {

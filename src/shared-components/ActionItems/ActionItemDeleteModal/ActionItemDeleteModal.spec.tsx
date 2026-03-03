@@ -6,7 +6,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -65,7 +65,6 @@ describe('Testing ItemDeleteModal', () => {
 
   beforeEach(() => {
     // Create fresh mocks for each test
-    vi.clearAllMocks();
     testItemProps = {
       isOpen: true,
       hide: vi.fn(),
@@ -114,7 +113,8 @@ describe('Testing ItemDeleteModal', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should render ItemDeleteModal', () => {

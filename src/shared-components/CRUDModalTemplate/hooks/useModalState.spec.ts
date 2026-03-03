@@ -4,7 +4,7 @@ import { useModalState } from './useModalState';
 
 describe('useModalState', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Initialization', () => {
