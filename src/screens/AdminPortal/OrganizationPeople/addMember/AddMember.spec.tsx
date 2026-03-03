@@ -25,6 +25,13 @@ import {
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
+const MOCK_CREATED_AT_1 = dayjs.utc().year(2024).month(0).date(1).toISOString();
+const MOCK_CREATED_AT_2 = dayjs.utc().year(2024).month(0).date(2).toISOString();
+const MOCK_CREATED_AT_3 = dayjs.utc().year(2024).month(0).date(3).toISOString();
 
 // Mock react-toastify
 const sharedMocks = vi.hoisted(() => ({
@@ -348,7 +355,7 @@ const createMemberConnectionMock = (
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT_1,
               role: 'member',
             },
             cursor: 'cursor1',
@@ -359,10 +366,7 @@ const createMemberConnectionMock = (
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
               avatarURL: null,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(1, 'day')
-                .toISOString(),
+              createdAt: MOCK_CREATED_AT_2,
               role: 'member',
             },
             cursor: 'cursor2',
@@ -472,7 +476,6 @@ function getDataTableBodyRows(): HTMLElement[] {
 describe('AddMember Screen', () => {
   beforeEach(() => {
     setupLocationMock();
-    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -782,7 +785,7 @@ describe('AddMember Screen', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT_1,
             },
           },
         ],
@@ -1036,10 +1039,7 @@ describe('AddMember Screen', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(2, 'days')
-                .toISOString(),
+              createdAt: MOCK_CREATED_AT_3,
             },
           },
         ],
@@ -1451,7 +1451,7 @@ describe('AddMember Screen', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: null,
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT_1,
             },
           },
         ],

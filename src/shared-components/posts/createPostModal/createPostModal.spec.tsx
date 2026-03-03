@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -246,7 +246,8 @@ afterEach(() => {
     Reflect.deleteProperty(HTMLInputElement.prototype, 'accept');
   }
 
-  vi.clearAllMocks();
+  cleanup();
+  vi.restoreAllMocks();
 });
 
 describe('CreatePostModal Integration Tests', () => {

@@ -116,7 +116,7 @@ describe('OrganizationModal Component', () => {
     setup();
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
-    expect(screen.getByTestId('submitOrganizationForm')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-submit-btn')).toBeInTheDocument();
   });
 
   test('updates input fields correctly', async () => {
@@ -160,7 +160,7 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
-    const submitButton = screen.getByTestId('submitOrganizationForm');
+    const submitButton = screen.getByTestId('modal-submit-btn');
     await userEvent.click(submitButton);
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
@@ -241,7 +241,7 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });
@@ -400,7 +400,7 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
-    const submitButton = screen.getByTestId('submitOrganizationForm');
+    const submitButton = screen.getByTestId('modal-submit-btn');
     await userEvent.click(submitButton);
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
@@ -612,10 +612,10 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
-    const form = screen.getByTestId('submitOrganizationForm').closest('form');
+    const form = document.getElementById('crud-create-form');
     expect(form).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });

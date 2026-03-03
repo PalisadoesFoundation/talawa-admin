@@ -150,8 +150,8 @@ describe('Organisation Tags Page', () => {
     });
   });
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
+    vi.restoreAllMocks();
   });
   test('component loads correctly', async () => {
     const { getByText } = renderOrganizationTags(link);

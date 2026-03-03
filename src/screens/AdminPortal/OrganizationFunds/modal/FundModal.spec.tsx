@@ -16,7 +16,24 @@ import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import * as apollo from '@apollo/client';
+
+dayjs.extend(utc);
+
+const MOCK_CREATED_AT = dayjs
+  .utc()
+  .year(2025)
+  .month(5)
+  .date(22)
+  .format('YYYY-MM-DD');
+const MOCK_START_DATE = dayjs
+  .utc()
+  .year(2025)
+  .month(0)
+  .date(1)
+  .format('YYYY-MM-DD');
+const MOCK_END_DATE = dayjs.utc().year(2025).endOf('year').format('YYYY-MM-DD');
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -52,7 +69,7 @@ const fundProps: InterfaceFundModal[] = [
       isTaxDeductible: true,
       isArchived: false,
       isDefault: false,
-      createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+      createdAt: MOCK_CREATED_AT,
       organizationId: 'orgId',
       creator: {
         name: 'John Doe',
@@ -68,10 +85,10 @@ const fundProps: InterfaceFundModal[] = [
           id: 'nodeId',
           name: 'Node Name',
           fundingGoal: 1000,
-          startDate: dayjs().format('YYYY-MM-DD'),
-          endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
+          startDate: MOCK_START_DATE,
+          endDate: MOCK_END_DATE,
           currency: 'USD',
-          createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+          createdAt: MOCK_CREATED_AT,
         },
       },
     },
@@ -324,7 +341,7 @@ describe('PledgeModal', () => {
         isTaxDeductible: false,
         isDefault: true,
         isArchived: true,
-        createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+        createdAt: MOCK_CREATED_AT,
         organizationId: 'orgId',
         creator: {
           name: 'John Doe',
@@ -340,10 +357,10 @@ describe('PledgeModal', () => {
             id: 'nodeId',
             name: 'Node Name',
             fundingGoal: 1000,
-            startDate: dayjs().format('YYYY-MM-DD'),
-            endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
+            startDate: MOCK_START_DATE,
+            endDate: MOCK_END_DATE,
             currency: 'USD',
-            createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+            createdAt: MOCK_CREATED_AT,
           },
         },
       },
