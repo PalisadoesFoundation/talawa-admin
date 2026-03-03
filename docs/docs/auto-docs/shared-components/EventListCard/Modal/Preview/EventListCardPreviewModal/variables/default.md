@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfacePreviewEventModalProps`](../../../../../../types/Event/interface/type-aliases/InterfacePreviewEventModalProps.md)\>
 
-Defined in: [src/shared-components/EventListCard/Modal/Preview/EventListCardPreviewModal.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventListCard/Modal/Preview/EventListCardPreviewModal.tsx#L59)
+Defined in: [src/shared-components/EventListCard/Modal/Preview/EventListCardPreviewModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventListCard/Modal/Preview/EventListCardPreviewModal.tsx#L60)

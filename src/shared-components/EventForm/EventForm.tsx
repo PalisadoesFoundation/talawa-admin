@@ -34,16 +34,15 @@ import {
 import type { EventVisibility, InterfaceRecurrenceOption } from './utils';
 import VisibilitySelector from './VisibilitySelector/VisibilitySelector';
 import RecurrenceDropdown from './RecurrenceDropdown/RecurrenceDropdown';
+import { useTranslation } from 'react-i18next';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
-
 const EventForm: React.FC<IEventFormProps> = ({
   initialValues,
   onSubmit,
   onCancel,
   submitLabel,
-  t,
   tCommon,
   showCreateChat = false,
   showRegisterable = true,
@@ -54,6 +53,9 @@ const EventForm: React.FC<IEventFormProps> = ({
   showRecurrenceToggle = false,
   showCancelButton = false,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   const [formState, setFormState] = useState<IEventFormValues>(initialValues);
   // Default to INVITE_ONLY for new events (no ID/name usually implies new, or explicit logic)
   // But initialValues might be partial.
@@ -169,7 +171,7 @@ const EventForm: React.FC<IEventFormProps> = ({
     let endAtISO: string;
 
     if (formState.allDay) {
-      const startOfDay = dayjs(formState.startDate).startOf('day');
+      const startOfDay = dayjs.utc(formState.startDate).startOf('day');
       const now = dayjs();
 
       // If start of day is in the past, use current time plus a small buffer
@@ -178,7 +180,7 @@ const EventForm: React.FC<IEventFormProps> = ({
       } else {
         startAtISO = startOfDay.toISOString();
       }
-      endAtISO = dayjs(formState.endDate).endOf('day').toISOString();
+      endAtISO = dayjs.utc(formState.endDate).endOf('day').toISOString();
     } else {
       startAtISO = dayjs(formState.startDate)
         .hour(parseInt(startTimeParts[0]))
@@ -477,7 +479,6 @@ const EventForm: React.FC<IEventFormProps> = ({
             recurrenceOptions={recurrenceOptions}
             currentLabel={currentRecurrenceLabel()}
             onSelect={handleRecurrenceSelect}
-            t={t}
           />
         )}
         <Button
@@ -536,7 +537,6 @@ const EventForm: React.FC<IEventFormProps> = ({
             if (next) openCustomRecurrenceModal();
             else closeCustomRecurrenceModal();
           }}
-          t={t}
           startDate={formState.startDate}
         />
       )}

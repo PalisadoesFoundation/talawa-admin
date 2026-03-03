@@ -10,7 +10,6 @@ const defaultProps = {
   localInterval: '1',
   onIntervalChange: vi.fn(),
   onFrequencyChange: vi.fn(),
-  t: (key: string) => key,
 };
 
 describe('RecurrenceFrequencySection', () => {

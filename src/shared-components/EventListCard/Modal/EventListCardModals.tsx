@@ -47,6 +47,7 @@ import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import styles from './EventListCardModals.module.css';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import { useTranslation } from 'react-i18next';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
@@ -55,9 +56,9 @@ function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
-  t,
   tCommon,
 }: InterfaceEventListCardModalsProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
@@ -269,8 +270,7 @@ function EventListCardModals({
         eventEndDate,
         recurrence,
         updateOption,
-        hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
-        t,
+        hasRecurrenceChanged: hasRecurrenceChanged(),
         hideViewModal,
         eventUpdateModalIsOpen,
         closeUpdateModal,
@@ -408,7 +408,6 @@ function EventListCardModals({
         eventModalIsOpen={eventModalIsOpen}
         hideViewModal={hideViewModal}
         toggleDeleteModal={toggleDeleteModal}
-        t={t}
         tCommon={tCommon}
         isRegistered={isRegistered}
         userId={userId as string}
@@ -481,7 +480,6 @@ function EventListCardModals({
                   recurrence,
                   updateOption,
                   hasRecurrenceChanged: hasRecurrenceChanged(),
-                  t,
                   hideViewModal,
                   eventUpdateModalIsOpen,
                   closeUpdateModal,
