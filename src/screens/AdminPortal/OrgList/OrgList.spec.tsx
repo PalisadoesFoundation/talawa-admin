@@ -2022,9 +2022,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Wait for the modal to close, indicating mutations completed
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('modal-submit-btn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modal-submit-btn')).not.toBeInTheDocument();
     });
 
     // Verify organization creation flow completed successfully:
