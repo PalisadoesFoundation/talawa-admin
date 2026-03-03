@@ -519,8 +519,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
         </Col>
         <Col md={6}>
           <ContactInfoCard
-            t={t}
-            tCommon={tCommon}
             formState={formState}
             emailAddress={data?.user?.emailAddress}
             handleFieldChange={handleFieldChange}

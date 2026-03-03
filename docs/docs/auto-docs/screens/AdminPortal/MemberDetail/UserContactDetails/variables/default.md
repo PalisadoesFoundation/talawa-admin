@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceMemberDetailProps`](../../../../../types/AdminPortal/MemberDetail/interface/type-aliases/InterfaceMemberDetailProps.md)\>
 
-Defined in: [src/screens/AdminPortal/MemberDetail/UserContactDetails.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/MemberDetail/UserContactDetails.tsx#L70)
+Defined in: [src/screens/AdminPortal/MemberDetail/UserContactDetails.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/MemberDetail/UserContactDetails.tsx#L69)

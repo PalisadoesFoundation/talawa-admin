@@ -1,0 +1,14 @@
+.allRound {
+  border-radius: var(--space-4);
+}
+
+.inputColor {
+  background: var(--color-gray-100);
+}
+
+.topRadius {
+  border-top-left-radius: var(--space-6);
+  border-top-right-radius: var(--space-6);
+  color: var(--color-gray-700);
+  background: var(--color-gray-200);
+}
