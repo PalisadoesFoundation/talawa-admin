@@ -259,6 +259,8 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
+const origCreateObjectURL = URL.createObjectURL;
+const origRevokeObjectURL = URL.revokeObjectURL;
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
 // Helper Functions
@@ -317,6 +319,8 @@ describe('VenueModal', () => {
   });
 
   afterEach(() => {
+    URL.createObjectURL = origCreateObjectURL;
+    URL.revokeObjectURL = origRevokeObjectURL;
     vi.restoreAllMocks();
     cleanup();
   });
@@ -408,11 +412,11 @@ describe('VenueModal', () => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
 
-    const user = userEvent.setup();
     await user.click(screen.getByTestId('closeimage'));
     await waitFor(() => {
       expect(screen.queryByRole('img')).not.toBeInTheDocument();
@@ -577,16 +581,16 @@ describe('Image Handling', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
     // Use a spy instead of overriding console.error
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    // Restore console.error after each test
     consoleErrorSpy.mockRestore();
-
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
   });
 
   test('displays image preview and clear button when an image is selected', async () => {
@@ -594,9 +598,8 @@ describe('Image Handling', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    const user = userEvent.setup();
+    await user.upload(fileInput, file);
 
     // Wait for the image preview to appear (local preview, no upload needed)
     await waitFor(() => {
@@ -620,12 +623,11 @@ describe('Image Handling', () => {
 
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
+    const user = userEvent.setup();
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    await user.upload(fileInput, file);
 
     await waitFor(() => {
       expect(screen.getByRole('img')).toBeInTheDocument();
@@ -633,10 +635,7 @@ describe('Image Handling', () => {
 
     // Set ref to null before clearing to test the null check
     refValue.current = null as unknown as HTMLInputElement;
-    const user = userEvent.setup();
-    await act(async () => {
-      await user.click(screen.getByTestId('closeimage'));
-    });
+    await user.click(screen.getByTestId('closeimage'));
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
     expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
@@ -652,12 +651,11 @@ describe('Image Handling', () => {
 
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
+    const user = userEvent.setup();
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    await user.upload(fileInput, file);
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -779,7 +777,8 @@ describe('Image Handling', () => {
 // Validation Tests
 describe('Validation', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'test-obj',
       fileHash: 'test-hash',
@@ -869,11 +868,9 @@ describe('Validation', () => {
 
       const submitButton = screen.getByTestId('createVenueBtn');
 
-      act(() => {
-        submitButton.click();
-      });
-
-      expect(submitButton).toBeDisabled();
+      const clickPromise = user.click(submitButton);
+      await waitFor(() => expect(submitButton).toBeDisabled());
+      await clickPromise;
     });
 
     test('shows success toast when a new venue is created and tests result?.data?.createVenue condition', async () => {
@@ -1080,7 +1077,8 @@ describe('Validation', () => {
   // Update Tests
   describe('Venue Updates', () => {
     beforeEach(() => {
-      vi.clearAllMocks();
+      vi.restoreAllMocks();
+      cleanup();
       mockUploadFileToMinio.mockResolvedValue({
         objectName: 'test-obj',
         fileHash: 'test-hash',
@@ -1387,21 +1385,18 @@ describe('Validation', () => {
       );
 
       // Fill in form
-      await act(async () => {
-        const nameInput = screen.getByPlaceholderText('Enter Venue Name');
-        const descInput = screen.getByPlaceholderText(
-          'Enter Venue Description',
-        );
-        const capInput = screen.getByPlaceholderText('Enter Venue Capacity');
+      const user = userEvent.setup();
+      const nameInput = screen.getByPlaceholderText('Enter Venue Name');
+      const descInput = screen.getByPlaceholderText('Enter Venue Description');
+      const capInput = screen.getByPlaceholderText('Enter Venue Capacity');
 
-        await userEvent.type(nameInput, 'Test Venue');
-        await userEvent.type(descInput, 'Test Description');
-        await userEvent.type(capInput, '100');
+      await user.type(nameInput, 'Test Venue');
+      await user.type(descInput, 'Test Description');
+      await user.type(capInput, '100');
 
-        expect(nameInput).toHaveValue('Test Venue');
-        expect(descInput).toHaveValue('Test Description');
-        expect(capInput).toHaveValue('100');
-      });
+      expect(nameInput).toHaveValue('Test Venue');
+      expect(descInput).toHaveValue('Test Description');
+      expect(capInput).toHaveValue('100');
 
       // Completely unmount by setting show to false
       await act(async () => {
@@ -1450,9 +1445,8 @@ describe('Validation', () => {
             'Enter Venue Description',
           );
 
-          await act(async () => {
-            await userEvent.type(descInput, 'New Description');
-          });
+          const user = userEvent.setup();
+          await user.type(descInput, 'New Description');
 
           expect(descInput).toHaveValue('New Description');
         });
@@ -1464,9 +1458,8 @@ describe('Validation', () => {
           );
           const longText = 'a'.repeat(501); // Exceeds 500 char limit
 
-          await act(async () => {
-            await userEvent.type(descInput, longText);
-          });
+          const user = userEvent.setup();
+          await user.type(descInput, longText);
 
           expect(descInput).toHaveValue(longText.slice(0, 500));
         });
@@ -1483,9 +1476,8 @@ describe('Validation', () => {
             new File(['test2'], 'test2.png', { type: 'image/png' }),
           ];
 
-          await act(async () => {
-            await userEvent.upload(fileInput, files);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, files);
 
           // Should only use the first file
           expect(screen.getAllByRole('img')).toHaveLength(1);
@@ -1860,9 +1852,8 @@ describe('Validation', () => {
           const file = new File(['test'], 'test.png', { type: 'image/png' });
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            await userEvent.upload(fileInput, file);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, file);
 
           await waitFor(() => {
             expect(screen.getByRole('img')).toBeInTheDocument();
@@ -2275,9 +2266,8 @@ describe('Validation', () => {
           );
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            await userEvent.upload(fileInput, largeFile);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, largeFile);
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2293,9 +2283,8 @@ describe('Validation', () => {
           const emptyFile = new File([], 'empty.png', { type: 'image/png' });
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            await userEvent.upload(fileInput, emptyFile);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, emptyFile);
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2339,78 +2328,103 @@ describe('Validation', () => {
         });
 
         test('handles clearImageInput with blob URL cleanup', async () => {
-          // Mock URL methods
+          // Mock URL methods - save originals to prevent global leakage
+          const origCreate = URL.createObjectURL;
+          const origRevoke = URL.revokeObjectURL;
           const revokeObjectURLSpy = vi.fn();
           const createObjectURLSpy = vi.fn().mockReturnValue('blob:mock-url');
           global.URL.revokeObjectURL = revokeObjectURLSpy;
           global.URL.createObjectURL = createObjectURLSpy;
 
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          try {
+            renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-          // Upload a file to create a blob URL
-          const file = new File(['test'], 'test.png', { type: 'image/png' });
-          const fileInput = screen.getByTestId('venueImgUrl');
+            // Upload a file to create a blob URL
+            const file = new File(['test'], 'test.png', { type: 'image/png' });
+            const fileInput = screen.getByTestId('venueImgUrl');
 
-          const user = userEvent.setup();
-          await user.upload(fileInput, file);
+            const user = userEvent.setup();
+            await user.upload(fileInput, file);
 
-          // Click the clear button to trigger clearImageInput
-          const clearButton = screen.getByTestId('closeimage');
-          await user.click(clearButton);
+            // Click the clear button to trigger clearImageInput
+            const clearButton = screen.getByTestId('closeimage');
+            await user.click(clearButton);
 
-          // Verify that revokeObjectURL was called
-          expect(revokeObjectURLSpy).toHaveBeenCalled();
+            // Verify that revokeObjectURL was called
+            expect(revokeObjectURLSpy).toHaveBeenCalled();
+          } finally {
+            global.URL.createObjectURL = origCreate;
+            global.URL.revokeObjectURL = origRevoke;
+          }
         });
 
         test('handles component unmount with blob URL cleanup', async () => {
-          // Mock URL methods
+          // Mock URL methods - save originals to prevent global leakage
+          const origCreate = URL.createObjectURL;
+          const origRevoke = URL.revokeObjectURL;
           const revokeObjectURLSpy = vi.fn();
           const createObjectURLSpy = vi.fn().mockReturnValue('blob:mock-url');
           global.URL.revokeObjectURL = revokeObjectURLSpy;
           global.URL.createObjectURL = createObjectURLSpy;
 
-          const { unmount } = renderVenueModal(
-            defaultProps,
-            new StaticMockLink(MOCKS, true),
-          );
+          try {
+            const { unmount } = renderVenueModal(
+              defaultProps,
+              new StaticMockLink(MOCKS, true),
+            );
 
-          // Upload a file to create a blob URL
-          const file = new File(['test'], 'test.png', { type: 'image/png' });
-          const fileInput = screen.getByTestId('venueImgUrl');
+            // Upload a file to create a blob URL
+            const file = new File(['test'], 'test.png', { type: 'image/png' });
+            const fileInput = screen.getByTestId('venueImgUrl');
 
-          const user = userEvent.setup();
-          await user.upload(fileInput, file);
+            const user = userEvent.setup();
+            await user.upload(fileInput, file);
 
-          // Unmount the component to trigger the cleanup useEffect
-          unmount();
+            // Unmount the component to trigger the cleanup useEffect
+            unmount();
 
-          // Verify that revokeObjectURL was called during cleanup
-          expect(revokeObjectURLSpy).toHaveBeenCalled();
+            // Verify that revokeObjectURL was called during cleanup
+            expect(revokeObjectURLSpy).toHaveBeenCalled();
+          } finally {
+            global.URL.createObjectURL = origCreate;
+            global.URL.revokeObjectURL = origRevoke;
+          }
         });
 
         test('handles file upload with existing blob URL cleanup', async () => {
-          // Mock URL methods
+          // Mock URL methods - save originals to prevent global leakage
+          const origCreate = URL.createObjectURL;
+          const origRevoke = URL.revokeObjectURL;
           const revokeObjectURLSpy = vi.fn();
           const createObjectURLSpy = vi.fn().mockReturnValue('blob:mock-url');
           global.URL.revokeObjectURL = revokeObjectURLSpy;
           global.URL.createObjectURL = createObjectURLSpy;
 
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          try {
+            renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-          // Upload first file to create a blob URL
-          const file1 = new File(['test1'], 'test1.png', { type: 'image/png' });
-          const fileInput = screen.getByTestId('venueImgUrl');
+            // Upload first file to create a blob URL
+            const file1 = new File(['test1'], 'test1.png', {
+              type: 'image/png',
+            });
+            const fileInput = screen.getByTestId('venueImgUrl');
 
-          const user = userEvent.setup();
-          await user.upload(fileInput, file1);
+            const user = userEvent.setup();
+            await user.upload(fileInput, file1);
 
-          // Upload second file to trigger cleanup of first blob URL
-          const file2 = new File(['test2'], 'test2.png', { type: 'image/png' });
+            // Upload second file to trigger cleanup of first blob URL
+            const file2 = new File(['test2'], 'test2.png', {
+              type: 'image/png',
+            });
 
-          await user.upload(fileInput, file2);
+            await user.upload(fileInput, file2);
 
-          // Verify that revokeObjectURL was called to cleanup the first blob URL
-          expect(revokeObjectURLSpy).toHaveBeenCalled();
+            // Verify that revokeObjectURL was called to cleanup the first blob URL
+            expect(revokeObjectURLSpy).toHaveBeenCalled();
+          } finally {
+            global.URL.createObjectURL = origCreate;
+            global.URL.revokeObjectURL = origRevoke;
+          }
         });
 
         test('handles mutation error with alreadyExists message', async () => {
@@ -3320,6 +3334,8 @@ describe('Validation', () => {
 
   test('covers line 198 - blob URL cleanup when clearing image', async () => {
     // CRITICAL: Mock MUST return a string starting with 'blob:'
+    const savedCreate = URL.createObjectURL;
+    const savedRevoke = URL.revokeObjectURL;
     const createObjectURLMock = vi.fn(
       () => 'blob:http://localhost:3000/test-uuid',
     );
@@ -3367,10 +3383,14 @@ describe('Validation', () => {
     );
 
     unmount();
+    URL.createObjectURL = savedCreate;
+    URL.revokeObjectURL = savedRevoke;
   });
 
   test('covers line 223 - blob URL cleanup on unmount', async () => {
     // CRITICAL: Mock MUST return a string starting with 'blob:'
+    const savedCreate2 = URL.createObjectURL;
+    const savedRevoke2 = URL.revokeObjectURL;
     const createObjectURLMock = vi.fn(
       () => 'blob:http://localhost:3000/unmount-test',
     );
@@ -3420,5 +3440,8 @@ describe('Validation', () => {
     expect(revokeObjectURLMock).toHaveBeenCalledWith(
       'blob:http://localhost:3000/unmount-test',
     );
+
+    URL.createObjectURL = savedCreate2;
+    URL.revokeObjectURL = savedRevoke2;
   });
 });
