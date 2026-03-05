@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import BreadcrumbsComponent from './BreadcrumbsComponent';
 import SafeBreadcrumbs from './SafeBreadcrumbs';
@@ -27,8 +27,9 @@ describe('SafeBreadcrumbs', () => {
   };
 
   afterEach(() => {
+    cleanup();
     process.env.NODE_ENV = originalEnv;
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('renders BreadcrumbsComponent when inside a Router context', () => {

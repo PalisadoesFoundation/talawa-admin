@@ -15,7 +15,7 @@ interface InterfaceTestResult {
 
 describe('useMutationModal', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Initialization', () => {
