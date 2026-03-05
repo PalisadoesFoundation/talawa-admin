@@ -29,9 +29,36 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
-const MOCK_CREATED_AT_1 = dayjs.utc().year(2024).month(0).date(1).toISOString();
-const MOCK_CREATED_AT_2 = dayjs.utc().year(2024).month(0).date(2).toISOString();
-const MOCK_CREATED_AT_3 = dayjs.utc().year(2024).month(0).date(3).toISOString();
+const MOCK_CREATED_AT_1 = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(1)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toISOString();
+const MOCK_CREATED_AT_2 = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(2)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toISOString();
+const MOCK_CREATED_AT_3 = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(3)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toISOString();
 
 // Mock react-toastify
 const sharedMocks = vi.hoisted(() => ({
@@ -912,7 +939,8 @@ describe('AddMember Screen', () => {
       );
     });
 
-    await userEvent.click(screen.getByRole('button', { name: /close/i }));
+    const user = userEvent.setup({ delay: null });
+    await user.click(screen.getByRole('button', { name: /close/i }));
   });
 
   test('adds an existing user to organization error', async () => {
@@ -1375,10 +1403,11 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
+    const user = userEvent.setup({ delay: null });
     const submitBtn = screen.getByTestId('modal-submit-btn');
     // Click submit twice rapidly
-    await userEvent.click(submitBtn);
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
+    await user.click(submitBtn);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledTimes(1);

@@ -131,8 +131,7 @@ const createPinnedPostMock = {
         __typename: 'Post',
         id: 'test-post-id',
         caption: 'Pinned Post',
-        // Use dynamic past date to avoid test staleness
-        pinnedAt: dayjs().subtract(30, 'days').toISOString(),
+        pinnedAt: dayjs(0).toISOString(),
         attachmentURL: null,
       },
     },
@@ -254,7 +253,7 @@ describe('CreatePostModal Integration Tests', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(async () => {
-    user = userEvent.setup();
+    user = userEvent.setup({ delay: null });
     // Dynamically import styles to get the actual hashed class names
     const mod = await import('./createPostModal.module.css');
     styles = mod.default;
@@ -330,7 +329,9 @@ describe('CreatePostModal Integration Tests', () => {
       const titleInput = screen.getByPlaceholderText('Title of your post...');
       await user.type(titleInput, 'My Test Post');
 
-      expect(titleInput).toHaveValue('My Test Post');
+      await waitFor(() => {
+        expect(titleInput).toHaveValue('My Test Post');
+      });
     });
 
     it('updates post body when typing in body textarea', async () => {
@@ -339,7 +340,9 @@ describe('CreatePostModal Integration Tests', () => {
       const bodyInput = screen.getByPlaceholderText('Body of your post...');
       await user.type(bodyInput, 'This is the body content');
 
-      expect(bodyInput).toHaveValue('This is the body content');
+      await waitFor(() => {
+        expect(bodyInput).toHaveValue('This is the body content');
+      });
     });
 
     it('disables post button when title is empty', () => {
@@ -357,8 +360,10 @@ describe('CreatePostModal Integration Tests', () => {
       await user.type(titleInput, 'Test Title');
 
       const postButton = screen.getByTestId('createPostBtn');
-      expect(postButton).not.toBeDisabled();
-      expect(postButton).not.toHaveClass(styles.postButtonDisabled);
+      await waitFor(() => {
+        expect(postButton).not.toBeDisabled();
+        expect(postButton).not.toHaveClass(styles.postButtonDisabled);
+      });
     });
 
     it('disables post button when title contains only whitespace', async () => {
@@ -368,7 +373,9 @@ describe('CreatePostModal Integration Tests', () => {
       await user.type(titleInput, '   ');
 
       const postButton = screen.getByTestId('createPostBtn');
-      expect(postButton).toBeDisabled();
+      await waitFor(() => {
+        expect(postButton).toBeDisabled();
+      });
     });
   });
 
@@ -384,12 +391,16 @@ describe('CreatePostModal Integration Tests', () => {
       // Click to pin
       await user.click(pinButton);
 
-      expect(pinButton).toHaveAttribute('title', 'Unpin post');
+      await waitFor(() => {
+        expect(pinButton).toHaveAttribute('title', 'Unpin post');
+      });
 
       // Click to unpin
       await user.click(pinButton);
 
-      expect(pinButton).toHaveAttribute('title', 'Pin post');
+      await waitFor(() => {
+        expect(pinButton).toHaveAttribute('title', 'Pin post');
+      });
     });
 
     it('creates pinned post when pin is active', async () => {
@@ -424,7 +435,9 @@ describe('CreatePostModal Integration Tests', () => {
 
       await user.click(photoButton);
 
-      expect(mockClick).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockClick).toHaveBeenCalled();
+      });
     });
   });
 
@@ -454,10 +467,12 @@ describe('CreatePostModal Integration Tests', () => {
       const file = new File(['hello'], 'hello.png', { type: 'image/png' });
       const input = screen.getByTestId('addMedia');
 
-      await userEvent.upload(input, file);
+      await user.upload(input, file);
 
       await user.type(titleInput, 'Test Post Title');
-      expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
     });
 
     it('handles file upload and processes attachments correctly', async () => {
@@ -473,7 +488,7 @@ describe('CreatePostModal Integration Tests', () => {
       });
 
       // Upload the file
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       // Verify preview appears (this confirms file handling works)
       await waitFor(() => {
@@ -490,8 +505,10 @@ describe('CreatePostModal Integration Tests', () => {
       await user.type(titleInput, 'Test Post Title');
 
       // The post button should be enabled
-      const postButton = screen.getByTestId('createPostBtn');
-      expect(postButton).not.toBeDisabled();
+      await waitFor(() => {
+        const postButton = screen.getByTestId('createPostBtn');
+        expect(postButton).not.toBeDisabled();
+      });
     });
 
     const imageTypes = [
@@ -515,7 +532,7 @@ describe('CreatePostModal Integration Tests', () => {
         renderComponent({}, [createPostWithAttachmentMock]);
 
         const fileInput = screen.getByTestId('addMedia');
-        await userEvent.upload(fileInput, file);
+        await user.upload(fileInput, file);
 
         await waitFor(() => {
           expect(screen.getByTestId(testId)).toBeInTheDocument();
@@ -531,7 +548,7 @@ describe('CreatePostModal Integration Tests', () => {
         renderComponent({}, [createPostWithAttachmentMock]);
 
         const fileInput = screen.getByTestId('addMedia');
-        await userEvent.upload(fileInput, file);
+        await user.upload(fileInput, file);
 
         await waitFor(() => {
           expect(screen.getByTestId(testId)).toBeInTheDocument();
@@ -547,7 +564,7 @@ describe('CreatePostModal Integration Tests', () => {
       renderComponent({}, [createPostWithAttachmentMock]);
 
       const fileInput = screen.getByTestId('addMedia');
-      await userEvent.upload(fileInput, aviFile);
+      await user.upload(fileInput, aviFile);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -664,12 +681,14 @@ describe('CreatePostModal Integration Tests', () => {
         type: 'image/jpeg',
       });
 
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       // sanitizeBlobUrl catches the URL parse error and returns null,
       // so no preview should be rendered
-      expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
+      });
 
       // Restore mock for subsequent tests
       global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
@@ -696,7 +715,7 @@ describe('CreatePostModal Integration Tests', () => {
       // Type to ensure component state is active
       await user.type(titleInput, 'Draft Post');
       // Upload file to generate preview
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
         expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
@@ -720,11 +739,13 @@ describe('CreatePostModal Integration Tests', () => {
         type: 'image/jpeg',
       });
 
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       // sanitizeBlobUrl returns null for non-blob protocols, no preview shown
-      expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
-      expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByTestId('imagePreview')).not.toBeInTheDocument();
+        expect(screen.queryByTestId('videoPreview')).not.toBeInTheDocument();
+      });
 
       global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
     });
@@ -738,7 +759,7 @@ describe('CreatePostModal Integration Tests', () => {
         type: 'image/jpeg',
       });
 
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       await waitFor(() => {
         expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
@@ -791,17 +812,23 @@ describe('CreatePostModal Integration Tests', () => {
       await user.type(titleInput, 'Updated Title');
       await user.clear(bodyInput);
       await user.type(bodyInput, 'Updated Body');
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       // Should show preview
-      expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
 
       // Button should be enabled
-      expect(saveButton).not.toBeDisabled();
+      await waitFor(() => {
+        expect(saveButton).not.toBeDisabled();
+      });
 
       // Verify form state
-      expect(titleInput).toHaveValue('Updated Title');
-      expect(bodyInput).toHaveValue('Updated Body');
+      await waitFor(() => {
+        expect(titleInput).toHaveValue('Updated Title');
+        expect(bodyInput).toHaveValue('Updated Body');
+      });
     });
 
     it('handles edit mode when updatePost returns null', async () => {
@@ -960,7 +987,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       await user.type(titleInput, 'Updated Title');
       await user.type(bodyInput, 'Updated Body');
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       // Verify preview appears
       await waitFor(() => {
@@ -1023,10 +1050,12 @@ describe('CreatePostModal Integration Tests', () => {
       expect(fileInput.id).toBe('addMedia');
 
       await user.type(titleInput, 'Post with File');
-      await userEvent.upload(fileInput, mockFile);
+      await user.upload(fileInput, mockFile);
 
       // Verify file was uploaded
-      expect(fileInput.files).toHaveLength(1);
+      await waitFor(() => {
+        expect(fileInput.files).toHaveLength(1);
+      });
 
       await user.click(postButton);
 

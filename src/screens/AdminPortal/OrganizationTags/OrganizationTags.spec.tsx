@@ -140,7 +140,9 @@ const renderOrganizationTags = (link: ApolloLink): RenderResult => {
 };
 
 describe('Organisation Tags Page', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
+    user = userEvent.setup({ delay: null });
     vi.mock('react-router', async () => {
       const actual = await vi.importActual('react-router');
       return {
@@ -176,12 +178,12 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createTagBtn'));
+    await user.click(screen.getByTestId('createTagBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
@@ -193,7 +195,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('tagName')[0]);
+    await user.click(screen.getAllByTestId('tagName')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
@@ -208,7 +210,7 @@ describe('Organisation Tags Page', () => {
 
     const tagName = screen.getAllByTestId('tagName')[0];
     tagName.focus();
-    await userEvent.keyboard('{Enter}');
+    await user.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
@@ -224,7 +226,7 @@ describe('Organisation Tags Page', () => {
 
     const tagName = screen.getAllByTestId('tagName')[0];
     tagName.focus();
-    await userEvent.keyboard(' ');
+    await user.keyboard(' ');
 
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScreen')).toBeInTheDocument();
@@ -237,7 +239,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
+    await user.click(screen.getAllByTestId('manageTagBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
@@ -252,8 +254,8 @@ describe('Organisation Tags Page', () => {
       ).toBeInTheDocument();
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
-    await userEvent.clear(input);
-    await userEvent.type(input, 'searchUserTag');
+    await user.clear(input);
+    await user.type(input, 'searchUserTag');
 
     // Wait for debounced search to complete
     // should render the two searched tags from the mock data
@@ -364,8 +366,8 @@ describe('Organisation Tags Page', () => {
     const input = screen.getByPlaceholderText(translations.searchByName);
 
     // Trigger search by changing the input value
-    await userEvent.clear(input);
-    await userEvent.type(input, 'searchUserTag');
+    await user.clear(input);
+    await user.type(input, 'searchUserTag');
 
     // Wait for the search results to load (searchUserTag1 comes first in DESCENDING order)
     await waitFor(() => {
@@ -374,9 +376,9 @@ describe('Organisation Tags Page', () => {
       );
     });
 
-    await userEvent.click(screen.getByTestId('sortTags-toggle'));
+    await user.click(screen.getByTestId('sortTags-toggle'));
     // Click the "Oldest" button to sort in ascending order
-    await userEvent.click(screen.getByTestId('sortTags-item-oldest'));
+    await user.click(screen.getByTestId('sortTags-item-oldest'));
 
     // Wait for Apollo re-query to complete and tags to be re-ordered (oldest first)
     // In ASCENDING order with search "searchUserTag", searchUserTag2 comes first
@@ -386,7 +388,7 @@ describe('Organisation Tags Page', () => {
       );
     });
 
-    await userEvent.click(screen.getByTestId('sortTags-item-latest'));
+    await user.click(screen.getByTestId('sortTags-item-latest'));
 
     // Wait for Apollo re-query to complete and tags to return to DESCENDING order
     await waitFor(() => {
@@ -404,9 +406,11 @@ describe('Organisation Tags Page', () => {
     });
 
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    await userEvent.click(triggerBtn);
+    await user.click(triggerBtn);
 
-    expect(getByText(translations.createTag)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(getByText(translations.createTag)).toBeInTheDocument(),
+    );
   });
   test('creates a new user tag', async () => {
     const { getByText } = renderOrganizationTags(link);
@@ -414,14 +418,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(getByText(translations.createTag)).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createTagBtn'));
+    await user.click(screen.getByTestId('createTagBtn'));
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 12',
     );
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -435,17 +439,17 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createTagBtn'));
+    await user.click(screen.getByTestId('createTagBtn'));
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 12',
     );
 
     const submitBtn = screen.getByTestId('modal-submit-btn');
     // Click submit twice rapidly
-    await userEvent.click(submitBtn);
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
+    await user.click(submitBtn);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledTimes(1);
@@ -458,14 +462,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createTagBtn'));
+    await user.click(screen.getByTestId('createTagBtn'));
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTagE',
     );
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -496,7 +500,7 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
     });
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    await userEvent.click(triggerBtn);
+    await user.click(triggerBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
@@ -507,10 +511,10 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+      expect(
+        screen.queryByText(/Error occurred.*Organization Tags Data/i),
+      ).not.toBeInTheDocument();
     });
-    expect(
-      screen.queryByText(/Error occurred.*Organization Tags Data/i),
-    ).not.toBeInTheDocument();
   });
   test('creates a new user tag with undefined data', async () => {
     renderOrganizationTags(link);
@@ -518,14 +522,14 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createTagBtn'));
+    await user.click(screen.getByTestId('createTagBtn'));
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'userTag 13',
     );
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -540,7 +544,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createTagBtn'));
+    await user.click(screen.getByTestId('createTagBtn'));
 
     // Initially button should be disabled (empty input)
     await waitFor(() => {
@@ -549,7 +553,7 @@ describe('Organisation Tags Page', () => {
     });
 
     // Type only whitespace in tag name
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       '   ',
     );
@@ -567,7 +571,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createTagBtn'));
+    await user.click(screen.getByTestId('createTagBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagModal')).toBeInTheDocument();
@@ -599,8 +603,8 @@ describe('Organisation Tags Page', () => {
 
     // Search for tags that have parent/ancestor tags
     const input = screen.getByPlaceholderText(translations.searchByName);
-    await userEvent.clear(input);
-    await userEvent.type(input, 'searchUserTag');
+    await user.clear(input);
+    await user.type(input, 'searchUserTag');
 
     // Wait for debounced search to complete
     await waitFor(() => {
@@ -677,8 +681,8 @@ describe('Organisation Tags Page', () => {
 
     const input = screen.getByPlaceholderText(translations.searchByName);
     // Type search term with leading and trailing whitespace
-    await userEvent.clear(input);
-    await userEvent.type(input, '  searchUserTag  ');
+    await user.clear(input);
+    await user.type(input, '  searchUserTag  ');
 
     // Wait for debounced search to complete
     // The component should trim the whitespace before searching
@@ -698,7 +702,7 @@ describe('Organisation Tags Page', () => {
 
     // Trigger infinite scroll
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    await userEvent.click(triggerBtn);
+    await user.click(triggerBtn);
 
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
@@ -914,7 +918,7 @@ describe('Organisation Tags Page', () => {
 
     // Trigger load more
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    await userEvent.click(triggerBtn);
+    await user.click(triggerBtn);
 
     // Should still show the original tag and not crash
     await waitFor(() => {
@@ -1075,8 +1079,8 @@ describe('Organisation Tags Page', () => {
     // Wait for mock data to resolve, then verify initial state is empty (edges null)
     await waitFor(() => {
       expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
+      expect(screen.queryByTestId('manageTagBtn')).not.toBeInTheDocument();
     });
-    expect(screen.queryByTestId('manageTagBtn')).not.toBeInTheDocument();
 
     // Manually trigger load more.
     // This triggers fetchMore.
@@ -1084,7 +1088,7 @@ describe('Organisation Tags Page', () => {
     // prevResult will be the initial result (edges: null).
     // The code `...(prevResult.organization?.tags?.edges || [])` (Line 115) will execute the `|| []` branch.
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    await userEvent.click(triggerBtn);
+    await user.click(triggerBtn);
 
     // Wait for the Apollo cache to update and React to re-render
     await waitFor(() => {
@@ -1096,7 +1100,7 @@ describe('Organisation Tags Page', () => {
     // Let's verify line 102 coverage by clicking again.
     // The component logic is: if (!hasNextPage) return;
     // We force the click. The function loadMoreTags runs. The guard clause returns early.
-    await userEvent.click(triggerBtn);
+    await user.click(triggerBtn);
 
     // Nothing crashes, no network error (mocks would error if unexpected request made).
     await waitFor(() => {

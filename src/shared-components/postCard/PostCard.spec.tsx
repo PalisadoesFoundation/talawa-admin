@@ -17,6 +17,28 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+const MOCK_DATE_BASE = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(1)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0);
+const MOCK_DATE_30_DAYS_AGO = MOCK_DATE_BASE.toISOString();
+const MOCK_DATE_7_DAYS_AGO = dayjs
+  .utc()
+  .year(2024)
+  .month(5)
+  .date(15)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toISOString();
 import type { InterfacePostCard } from '../../utils/interfaces';
 
 import PostCard from './PostCard';
@@ -81,7 +103,7 @@ const commentsQueryMock = {
                   name: 'Jane Smith',
                   avatarURL: null,
                 },
-                createdAt: dayjs().subtract(30, 'days').toISOString(),
+                createdAt: MOCK_DATE_30_DAYS_AGO,
                 upVotesCount: 2,
                 downVotesCount: 0,
                 hasUserVoted: {
@@ -186,7 +208,7 @@ const createCommentMock = {
           lastName: 'Doe',
           email: 'john@example.com',
         },
-        createdAt: dayjs().subtract(7, 'days').toISOString(),
+        createdAt: MOCK_DATE_7_DAYS_AGO,
         likeCount: 0,
       },
     },
@@ -275,7 +297,7 @@ const togglePinPostMock = {
       updatePost: {
         id: '1',
         caption: 'Test Post',
-        pinnedAt: dayjs().subtract(7, 'days').toISOString(),
+        pinnedAt: MOCK_DATE_7_DAYS_AGO,
         attachments: [],
       },
     },
@@ -364,7 +386,7 @@ const mocks = [
             lastName: 'Doe',
             email: 'john@example.com',
           },
-          createdAt: dayjs().subtract(30, 'days').toISOString(),
+          createdAt: MOCK_DATE_30_DAYS_AGO,
           likeCount: 0,
         },
       },
@@ -459,7 +481,7 @@ describe('PostCard', () => {
     mimeType: 'image/jpeg',
     image: 'test-image.jpg',
     video: '',
-    postedAt: dayjs().subtract(30, 'days').toISOString(),
+    postedAt: MOCK_DATE_30_DAYS_AGO,
     upVoteCount: 5,
     downVoteCount: 0,
     commentCount: 3,
@@ -535,14 +557,14 @@ describe('PostCard', () => {
   };
 
   beforeEach(() => {
-    user = userEvent.setup();
+    user = userEvent.setup({ delay: null });
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
   });
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     const { clearAllItems } = useLocalStorage();
     clearAllItems();
   });
@@ -584,7 +606,7 @@ describe('PostCard', () => {
 
   test('displays pinned icon when post is pinned with video', () => {
     renderPostCard({
-      pinnedAt: dayjs().subtract(7, 'days').toISOString(),
+      pinnedAt: MOCK_DATE_7_DAYS_AGO,
       mimeType: 'video/mp4',
       attachmentURL: 'http://example.com/video.mp4',
     });
@@ -842,7 +864,9 @@ describe('PostCard', () => {
     });
 
     // Ensure modal stays open after error to prevent UX regression
-    expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
+    });
   });
 
   it('handles delete post error', async () => {
@@ -1118,7 +1142,7 @@ describe('PostCard', () => {
     };
 
     renderPostCardWithCustomMockAndProps(toggleUnpinPostMock, {
-      pinnedAt: dayjs().subtract(7, 'days').toISOString(),
+      pinnedAt: MOCK_DATE_7_DAYS_AGO,
     });
     // Wait for component to render
     await waitFor(() => {
@@ -1395,7 +1419,7 @@ describe('PostCard', () => {
                     name: 'Test User',
                     avatarURL: null,
                   },
-                  createdAt: dayjs().subtract(i, 'days').toISOString(),
+                  createdAt: MOCK_DATE_BASE.subtract(i, 'days').toISOString(),
                   upVotesCount: i % 5,
                   downVotesCount: 0,
                   hasUserVoted: {
@@ -1643,7 +1667,7 @@ describe('PostCard', () => {
                       name: 'Jane Smith',
                       avatarURL: null,
                     },
-                    createdAt: dayjs().subtract(30, 'days').toISOString(),
+                    createdAt: MOCK_DATE_30_DAYS_AGO,
                     upVotesCount: 2,
                     downVotesCount: 0,
                     hasUserVoted: {
@@ -1666,7 +1690,7 @@ describe('PostCard', () => {
                       name: 'John Doe',
                       avatarURL: null,
                     },
-                    createdAt: dayjs().subtract(7, 'days').toISOString(),
+                    createdAt: MOCK_DATE_7_DAYS_AGO,
                     upVotesCount: 0,
                     downVotesCount: 0,
                     hasUserVoted: {

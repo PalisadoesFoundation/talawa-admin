@@ -26,14 +26,31 @@ const MOCK_CREATED_AT = dayjs
   .year(2025)
   .month(5)
   .date(22)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
   .format('YYYY-MM-DD');
 const MOCK_START_DATE = dayjs
   .utc()
   .year(2025)
   .month(0)
   .date(1)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
   .format('YYYY-MM-DD');
-const MOCK_END_DATE = dayjs.utc().year(2025).endOf('year').format('YYYY-MM-DD');
+const MOCK_END_DATE = dayjs
+  .utc()
+  .year(2025)
+  .month(11)
+  .date(31)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .format('YYYY-MM-DD');
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -150,14 +167,15 @@ describe('PledgeModal', () => {
   });
 
   it('should update Fund Name when input value changes', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
     const fundNameInput = screen.getByLabelText(translations.fundName, {
       exact: false,
     });
     expect(fundNameInput).toHaveValue('Fund 1');
-    await userEvent.clear(fundNameInput);
-    await userEvent.type(fundNameInput, 'Fund 2');
-    expect(fundNameInput).toHaveValue('Fund 2');
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Fund 2');
+    await waitFor(() => expect(fundNameInput).toHaveValue('Fund 2'));
   });
 
   it('should update Fund Reference ID when input value changes', async () => {
@@ -169,90 +187,100 @@ describe('PledgeModal', () => {
     expect(fundIdInput).toHaveValue('1111');
     await user.clear(fundIdInput);
     await user.type(fundIdInput, '2222');
-    expect(fundIdInput).toHaveValue('2222');
+    await waitFor(() => expect(fundIdInput).toHaveValue('2222'));
   });
 
   it('should show required error when Fund Name is empty and touched', async () => {
+    const user = userEvent.setup({ delay: null });
     // Start with a fund that has a name (edit mode)
     renderFundModal(link1, fundProps[1]);
 
     const fundNameInput = await screen.findByLabelText(/fund name/i);
 
     // Clear the input (this already makes it empty)
-    await userEvent.clear(fundNameInput);
+    await user.clear(fundNameInput);
 
     // Trigger blur to mark as touched
-    await userEvent.tab();
+    await user.tab();
 
-    expect(screen.getByText('Required')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Required')).toBeInTheDocument(),
+    );
   });
 
   it('should show required error when Fund Reference ID is empty and touched', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
 
     const fundIdInput = await screen.findByLabelText(/fund \(reference\) id/i);
 
     // Clear the input (now it's empty)
-    await userEvent.clear(fundIdInput);
+    await user.clear(fundIdInput);
 
-    await userEvent.tab();
+    await user.tab();
 
-    expect(screen.getByText('Required')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Required')).toBeInTheDocument(),
+    );
   });
 
   it('should update Tax Deductible Switch when input value changes', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     expect(taxDeductibleSwitch).toBeChecked();
-    await userEvent.click(taxDeductibleSwitch);
-    expect(taxDeductibleSwitch).not.toBeChecked();
+    await user.click(taxDeductibleSwitch);
+    await waitFor(() => expect(taxDeductibleSwitch).not.toBeChecked());
   });
 
   it('should update Tax Default switch when input value changes', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     expect(defaultSwitch).not.toBeChecked();
-    await userEvent.click(defaultSwitch);
-    expect(defaultSwitch).toBeChecked();
+    await user.click(defaultSwitch);
+    await waitFor(() => expect(defaultSwitch).toBeChecked());
   });
 
   it('should update Tax isArchived switch when input value changes', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
     const archivedSwitch = screen.getByTestId('archivedSwitch');
     expect(archivedSwitch).not.toBeChecked();
-    await userEvent.click(archivedSwitch);
-    expect(archivedSwitch).toBeChecked();
+    await user.click(archivedSwitch);
+    await waitFor(() => expect(archivedSwitch).toBeChecked());
   });
 
   it('should not update the fund when no fields are changed', async () => {
+    const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
 
     // Simulate no change to the fields
     const fundNameInput = screen.getByLabelText(translations.fundName, {
       exact: false,
     });
-    await userEvent.clear(fundNameInput);
-    await userEvent.type(fundNameInput, 'Fund 1');
+    await user.clear(fundNameInput);
+    await user.type(fundNameInput, 'Fund 1');
 
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
     });
-    await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '1111');
+    await user.clear(fundIdInput);
+    await user.type(fundIdInput, '1111');
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
-    await userEvent.click(taxDeductibleSwitch);
-    await userEvent.click(taxDeductibleSwitch);
+    await user.click(taxDeductibleSwitch);
+    await user.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
-    await userEvent.click(defaultSwitch);
-    await userEvent.click(defaultSwitch);
+    await user.click(defaultSwitch);
+    await user.click(defaultSwitch);
 
     const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await userEvent.click(archivedSwitch);
-    await userEvent.click(archivedSwitch);
+    await user.click(archivedSwitch);
+    await user.click(archivedSwitch);
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -432,6 +460,7 @@ describe('PledgeModal', () => {
   });
 
   it('should reset touched state when modal reopens', async () => {
+    const user = userEvent.setup({ delay: null });
     const { rerender } = renderFundModal(link1, {
       ...fundProps[1],
       isOpen: true,
@@ -440,10 +469,12 @@ describe('PledgeModal', () => {
     // Wait for modal field to be available
     const fundNameInput = await screen.findByLabelText(/fund name/i);
 
-    await userEvent.clear(fundNameInput);
-    await userEvent.tab();
+    await user.clear(fundNameInput);
+    await user.tab();
 
-    expect(screen.getByText('Required')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Required')).toBeInTheDocument(),
+    );
 
     // Close modal
     rerender(
@@ -475,7 +506,9 @@ describe('PledgeModal', () => {
     await screen.findByLabelText(/fund name/i);
 
     // Error should be gone because touched state is reset
-    expect(screen.queryByText('Required')).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByText('Required')).not.toBeInTheDocument(),
+    );
   });
 
   it('should create fund successfully and call side effects', async () => {

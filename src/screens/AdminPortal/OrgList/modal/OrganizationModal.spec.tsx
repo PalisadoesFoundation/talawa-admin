@@ -68,6 +68,7 @@ describe('OrganizationModal Component', () => {
 
   const mockCreateOrg = vi.fn((e) => e.preventDefault());
   const mockSetFormState = vi.fn();
+  let user: ReturnType<typeof userEvent.setup>;
 
   const formState = {
     addressLine1: '',
@@ -82,7 +83,7 @@ describe('OrganizationModal Component', () => {
   };
 
   beforeEach(() => {
-    vi.restoreAllMocks();
+    user = userEvent.setup({ delay: null });
 
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'mocked-object-name',
@@ -161,7 +162,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
     const submitButton = screen.getByTestId('modal-submit-btn');
-    await userEvent.click(submitButton);
+    await user.click(submitButton);
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });
@@ -173,13 +174,13 @@ describe('OrganizationModal Component', () => {
     const file = new File(['dummy content'], 'test-avatar.png', {
       type: 'image/png',
     });
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith(
         expect.objectContaining({ avatar: 'mocked-object-name' }),
       );
+      expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
     });
-    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
   });
 
   test('handles image upload error correctly', async () => {
@@ -191,7 +192,7 @@ describe('OrganizationModal Component', () => {
     const file = new File(['dummy content'], 'example.png', {
       type: 'image/png',
     });
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -207,7 +208,7 @@ describe('OrganizationModal Component', () => {
   test('closes modal when close button is clicked', async () => {
     setup();
     const closeButton = screen.getByRole('button', { name: /close/i });
-    await userEvent.click(closeButton);
+    await user.click(closeButton);
     await waitFor(() => {
       expect(mockToggleModal).toHaveBeenCalled();
     });
@@ -241,7 +242,7 @@ describe('OrganizationModal Component', () => {
         </BrowserRouter>
       </Provider>,
     );
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });
@@ -312,7 +313,7 @@ describe('OrganizationModal Component', () => {
     const countrySelect = screen.getByTestId(
       'modalOrganizationCountryCode',
     ) as HTMLSelectElement;
-    await userEvent.selectOptions(countrySelect, 'us');
+    await user.selectOptions(countrySelect, 'us');
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith(
@@ -334,7 +335,7 @@ describe('OrganizationModal Component', () => {
     mockSetFormState.mockClear();
 
     // Simulate user selecting this long option
-    await userEvent.selectOptions(countrySelect, longCode);
+    await user.selectOptions(countrySelect, longCode);
 
     // Expect setFormState NOT to be called because 51 > 50
     await waitFor(() => {
@@ -401,7 +402,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
     const submitButton = screen.getByTestId('modal-submit-btn');
-    await userEvent.click(submitButton);
+    await user.click(submitButton);
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });
@@ -459,7 +460,7 @@ describe('OrganizationModal Component', () => {
     });
     const fileInput = screen.getByTestId('organisationImage');
 
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
 
     // Use waitFor to handle async state updates after upload
     await waitFor(() => {
@@ -567,7 +568,7 @@ describe('OrganizationModal Component', () => {
   test('should call toggleModal when close button is clicked', async () => {
     setup();
     const closeButton = screen.getByRole('button', { name: /close/i });
-    await userEvent.click(closeButton);
+    await user.click(closeButton);
     await waitFor(() => {
       expect(mockToggleModal).toHaveBeenCalled();
     });
@@ -576,7 +577,7 @@ describe('OrganizationModal Component', () => {
     setup();
     const countrySelect = screen.getByTestId('modalOrganizationCountryCode');
 
-    await userEvent.selectOptions(countrySelect, 'us');
+    await user.selectOptions(countrySelect, 'us');
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith(
@@ -615,7 +616,7 @@ describe('OrganizationModal Component', () => {
     const form = document.getElementById('crud-create-form');
     expect(form).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
     await waitFor(() => {
       expect(mockCreateOrg).toHaveBeenCalled();
     });
@@ -630,7 +631,7 @@ describe('OrganizationModal Component', () => {
       'organisationImage',
     ) as HTMLInputElement;
 
-    await userEvent.upload(fileInput, largeFile);
+    await user.upload(fileInput, largeFile);
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith(
@@ -648,7 +649,7 @@ describe('OrganizationModal Component', () => {
     });
     const fileInput = screen.getByTestId('organisationImage');
 
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
 
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
@@ -669,7 +670,7 @@ describe('OrganizationModal Component', () => {
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('organisationImage');
 
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
 
     // All assertions inside waitFor to handle async state updates
     await waitFor(() => {

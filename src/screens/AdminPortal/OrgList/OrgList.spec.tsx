@@ -27,6 +27,19 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
+
+const MOCK_BASE_DATE = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(1)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0);
+const MOCK_CREATED_AT = MOCK_BASE_DATE.toISOString();
+const MOCK_UPDATED_AT = MOCK_BASE_DATE.add(1, 'year').toISOString();
+
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -161,7 +174,7 @@ const mockOrgData = {
       name: 'Dogs Care',
       avatarURL: '',
       description: 'Dog care center',
-      createdAt: dayjs().subtract(1, 'year').toISOString(),
+      createdAt: MOCK_CREATED_AT,
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -174,7 +187,7 @@ const mockOrgData = {
       name: 'Dogs Care',
       avatarURL: '',
       description: 'Dog care center',
-      createdAt: dayjs().subtract(1, 'year').toISOString(),
+      createdAt: MOCK_BASE_DATE.toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -185,7 +198,7 @@ const mockOrgData = {
       name: 'Cats Care',
       avatarURL: '',
       description: 'Cat care center',
-      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(1, 'day').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -196,7 +209,7 @@ const mockOrgData = {
       name: 'Birds Care',
       avatarURL: '',
       description: 'Bird care center',
-      createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(2, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -207,7 +220,7 @@ const mockOrgData = {
       name: 'Fish Care',
       avatarURL: '',
       description: 'Fish care center',
-      createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(3, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -218,7 +231,7 @@ const mockOrgData = {
       name: 'Rabbit Care',
       avatarURL: '',
       description: 'Rabbit care center',
-      createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(4, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -229,7 +242,7 @@ const mockOrgData = {
       name: 'Horse Care',
       avatarURL: '',
       description: 'Horse care center',
-      createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(5, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -241,7 +254,7 @@ const mockOrgData = {
     name: `Organization ${i + 1}`,
     avatarURL: '',
     description: `Description ${i + 1}`,
-    createdAt: dayjs().subtract(1, 'year').add(i, 'days').toISOString(),
+    createdAt: MOCK_BASE_DATE.add(i, 'days').toISOString(),
     members: { id: 'members_conn', edges: [] },
     addressLine1: 'Test Address',
     isMember: false,
@@ -252,7 +265,7 @@ const mockOrgData = {
       name: 'Dogs Care 1',
       avatarURL: '',
       description: 'Dog care center 1',
-      createdAt: dayjs().subtract(1, 'year').toISOString(),
+      createdAt: MOCK_BASE_DATE.toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -263,7 +276,7 @@ const mockOrgData = {
       name: 'Cats Care 2',
       avatarURL: '',
       description: 'Cat care center 2',
-      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(1, 'day').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -274,7 +287,7 @@ const mockOrgData = {
       name: 'Birds Care 3',
       avatarURL: '',
       description: 'Bird care center 3',
-      createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(2, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -285,7 +298,7 @@ const mockOrgData = {
       name: 'Fish Care 4',
       avatarURL: '',
       description: 'Fish care center 4',
-      createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(3, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -296,7 +309,7 @@ const mockOrgData = {
       name: 'Rabbit Care 5',
       avatarURL: '',
       description: 'Rabbit care center 5',
-      createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(4, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -307,7 +320,7 @@ const mockOrgData = {
       name: 'Horse Care 6',
       avatarURL: '',
       description: 'Horse care center 6',
-      createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(5, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -318,7 +331,7 @@ const mockOrgData = {
       name: 'Turtle Care 7',
       avatarURL: '',
       description: 'Turtle care center 7',
-      createdAt: dayjs().subtract(1, 'year').add(6, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(6, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -329,7 +342,7 @@ const mockOrgData = {
       name: 'Hamster Care 8',
       avatarURL: '',
       description: 'Hamster care center 8',
-      createdAt: dayjs().subtract(1, 'year').add(7, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(7, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -342,7 +355,7 @@ const mockOrgData = {
       name: 'Dog Shelter North',
       avatarURL: '',
       description: 'Dog care center',
-      createdAt: dayjs().subtract(1, 'year').toISOString(),
+      createdAt: MOCK_BASE_DATE.toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -353,7 +366,7 @@ const mockOrgData = {
       name: 'Cat Rescue Center',
       avatarURL: '',
       description: 'Cat care center',
-      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(1, 'day').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -364,7 +377,7 @@ const mockOrgData = {
       name: 'Dog Training Center',
       avatarURL: '',
       description: 'Dog training facility',
-      createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(2, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -375,7 +388,7 @@ const mockOrgData = {
       name: 'Pet Grooming Service',
       avatarURL: '',
       description: 'Pet grooming',
-      createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(3, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -386,7 +399,7 @@ const mockOrgData = {
       name: 'Dog Walking Service',
       avatarURL: '',
       description: 'Professional dog walking',
-      createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(4, 'days').toISOString(),
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
@@ -402,7 +415,7 @@ const mockOrgData = {
       __typename: 'Organization',
       description: 'Description 1',
       avatarURL: null,
-      createdAt: dayjs().subtract(1, 'year').toISOString(),
+      createdAt: MOCK_CREATED_AT,
       membersCount: 4,
       adminsCount: 2,
 
@@ -432,7 +445,7 @@ const mockOrgData = {
       __typename: 'Organization',
       description: 'Description 2',
       avatarURL: null,
-      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
+      createdAt: MOCK_BASE_DATE.add(1, 'day').toISOString(),
       membersCount: 5,
       adminsCount: 2,
 
@@ -485,7 +498,7 @@ const mockConfigurations = {
               name: 'Dog Shelter North',
               avatarURL: '',
               description: 'Dog care center',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT,
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
@@ -494,10 +507,7 @@ const mockConfigurations = {
               name: 'Dog Training Center',
               avatarURL: '',
               description: 'Dog training facility',
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(2, 'days')
-                .toISOString(),
+              createdAt: MOCK_BASE_DATE.add(2, 'days').toISOString(),
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
@@ -506,10 +516,7 @@ const mockConfigurations = {
               name: 'Dog Walking Service',
               avatarURL: '',
               description: 'Professional dog walking',
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(4, 'days')
-                .toISOString(),
+              createdAt: MOCK_BASE_DATE.add(4, 'days').toISOString(),
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
@@ -534,7 +541,7 @@ const mockConfigurations = {
             birthDate: null,
             city: null,
             countryCode: null,
-            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            createdAt: MOCK_CREATED_AT,
             description: null,
             educationGrade: null,
             emailAddress: 'john.doe@akatsuki.com',
@@ -572,7 +579,7 @@ const mockConfigurations = {
             birthDate: null,
             city: null,
             countryCode: null,
-            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            createdAt: MOCK_CREATED_AT,
             description: null,
             educationGrade: null,
             emailAddress: 'john.unverified@example.com',
@@ -691,7 +698,7 @@ afterEach(() => {
 
 describe('Organisations Page testing as SuperAdmin', () => {
   test('Testing search functionality by pressing enter', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('superAdmin');
 
     renderWithProviders();
@@ -706,7 +713,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing search functionality by Btn click', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('superAdmin');
 
     renderWithProviders();
@@ -721,7 +728,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing search functionality by with empty search bar', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('basic');
 
     renderWithProviders();
@@ -736,7 +743,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('filters organizations based on search input', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('superAdmin');
 
     renderWithMocks(mockConfigurations.searchableMocks);
@@ -746,7 +753,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await user.type(searchBar, 'Dog');
     await user.keyboard('{Enter}');
 
-    expect(searchBar).toHaveValue('Dog');
+    await waitFor(() => expect(searchBar).toHaveValue('Dog'));
 
     await waitFor(() => {
       const cards = screen.getAllByTestId('organization-card-mock');
@@ -756,7 +763,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing immediate search on Enter key press', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('superAdmin');
 
     renderWithProviders();
@@ -806,7 +813,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination rows per page change functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('superAdmin');
     setItem('role', 'administrator');
 
@@ -828,12 +835,14 @@ describe('Organisations Page testing as SuperAdmin', () => {
     });
 
     // OPTIONAL (stronger assertion)
-    const displayedRows = screen.getByText(/of/i);
-    expect(displayedRows.textContent).toMatch(/1–\d+ of/);
+    await waitFor(() => {
+      const displayedRows = screen.getByText(/of/i);
+      expect(displayedRows.textContent).toMatch(/1–\d+ of/);
+    });
   });
 
   test('Testing pagination with search integration', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('superAdmin');
     setItem('role', 'administrator');
 
@@ -880,7 +889,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
 describe('Organisations Page testing as Admin', () => {
   test('Testing sort latest and oldest toggle', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('admin');
 
     renderWithProviders(mockLinks.admin);
@@ -906,7 +915,7 @@ describe('Organisations Page testing as Admin', () => {
       await user.click(latestOption);
     });
 
-    expect(sortDropdown).toBeInTheDocument();
+    await waitFor(() => expect(sortDropdown).toBeInTheDocument());
 
     await act(async () => {
       await user.click(sortToggle);
@@ -920,13 +929,13 @@ describe('Organisations Page testing as Admin', () => {
       await user.click(oldestOption);
     });
 
-    expect(sortDropdown).toBeInTheDocument();
+    await waitFor(() => expect(sortDropdown).toBeInTheDocument());
   });
 });
 
 describe('Plugin Modal Tests', () => {
   test('Testing plugin notification modal functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -982,7 +991,7 @@ describe('Plugin Modal Tests', () => {
 
 describe('Advanced Component Functionality Tests', () => {
   test('Testing pagination edge cases', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1038,7 +1047,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing handleChangePage pagination navigation', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1063,7 +1072,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing sorting organizations by Latest with multiple orgs', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1089,11 +1098,11 @@ describe('Advanced Component Functionality Tests', () => {
     });
 
     // Verify the sort was applied
-    expect(sortButton).toHaveTextContent('Sort');
+    await waitFor(() => expect(sortButton).toHaveTextContent('Sort'));
   });
 
   test('Testing sorting organizations by Earliest with multiple orgs', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1119,11 +1128,11 @@ describe('Advanced Component Functionality Tests', () => {
     });
 
     // Verify the sort was applied
-    expect(sortButton).toHaveTextContent('Sort');
+    await waitFor(() => expect(sortButton).toHaveTextContent('Sort'));
   });
 
   test('Testing successful organization creation with membership', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -1175,7 +1184,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing create organization modal opens and closes', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1198,15 +1207,12 @@ describe('Advanced Component Functionality Tests', () => {
     await user.click(createOrgBtn);
 
     await waitFor(() => {
-      expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     });
-
-    // Verify modal is open
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
   });
 
   test('Testing organization creation flow and form handling', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -1253,13 +1259,14 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Verify form values before submission
-    expect(screen.getByTestId('modalOrganizationName')).toHaveValue(
-      'Test Organization',
-    );
-
-    expect(screen.getByTestId('modalOrganizationCity')).toHaveValue(
-      'Test City',
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('modalOrganizationName')).toHaveValue(
+        'Test Organization',
+      );
+      expect(screen.getByTestId('modalOrganizationCity')).toHaveValue(
+        'Test City',
+      );
+    });
 
     // Submit form
     await user.click(screen.getByTestId('modal-submit-btn'));
@@ -1269,7 +1276,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing successful organization creation triggers plugin modal', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -1323,7 +1330,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing error handling for organization creation', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -1412,7 +1419,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing no results found message when search returns empty', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setupUser('superAdmin');
     setItem('role', 'administrator');
 
@@ -1461,7 +1468,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing sort by Earliest functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1500,11 +1507,11 @@ describe('Advanced Component Functionality Tests', () => {
     });
 
     // Verify sorting changed
-    expect(sortDropdown).toHaveTextContent('Sort');
+    await waitFor(() => expect(sortDropdown).toHaveTextContent('Sort'));
   });
 
   test('Testing sort by Latest functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1532,7 +1539,7 @@ describe('Advanced Component Functionality Tests', () => {
     });
 
     // Verify sorting changed
-    expect(sortDropdown).toHaveTextContent('Sort');
+    await waitFor(() => expect(sortDropdown).toHaveTextContent('Sort'));
 
     // Wait a bit for the sort to be applied
     await waitFor(() => {
@@ -1541,7 +1548,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing date-based sorting with Latest and Earliest', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1574,7 +1581,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing handleChangeRowsPerPage functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1665,7 +1672,7 @@ describe('Advanced Component Functionality Tests', () => {
               birthDate: null,
               city: 'City',
               countryCode: 'US',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT,
               description: '',
               educationGrade: '',
               employmentStatus: '',
@@ -1676,7 +1683,7 @@ describe('Advanced Component Functionality Tests', () => {
               naturalLanguageCode: 'en',
               postalCode: '',
               state: '',
-              updatedAt: dayjs().toISOString(),
+              updatedAt: MOCK_UPDATED_AT,
               workPhoneNumber: '',
               eventsAttended: [],
             },
@@ -1730,7 +1737,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing pagination navigation functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
     setItem('role', 'administrator');
@@ -1758,7 +1765,7 @@ describe('Advanced Component Functionality Tests', () => {
               birthDate: null,
               city: 'City',
               countryCode: 'US',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT,
               description: '',
               educationGrade: '',
               employmentStatus: '',
@@ -1769,7 +1776,7 @@ describe('Advanced Component Functionality Tests', () => {
               naturalLanguageCode: 'en',
               postalCode: '',
               state: '',
-              updatedAt: dayjs().toISOString(),
+              updatedAt: MOCK_UPDATED_AT,
               workPhoneNumber: '',
               eventsAttended: [],
             },
@@ -1797,10 +1804,7 @@ describe('Advanced Component Functionality Tests', () => {
               name: `Organization ${i + 1}`,
               avatarURL: '',
               description: `Description ${i + 1}`,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(i, 'days')
-                .toISOString(),
+              createdAt: MOCK_BASE_DATE.add(i, 'days').toISOString(),
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Test Address',
             })),
@@ -1853,7 +1857,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing organization creation success flow', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -1878,7 +1882,7 @@ describe('Advanced Component Functionality Tests', () => {
               birthDate: null,
               city: null,
               countryCode: null,
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT,
               description: null,
               educationGrade: null,
               employmentStatus: null,
@@ -1918,7 +1922,7 @@ describe('Advanced Component Functionality Tests', () => {
                 name: 'Test Org',
                 avatarURL: '',
                 description: 'Test',
-                createdAt: dayjs().subtract(1, 'year').toISOString(),
+                createdAt: MOCK_CREATED_AT,
                 members: { id: 'members_conn', edges: [] },
                 addressLine1: 'Test Address',
               },
@@ -2034,7 +2038,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing Earliest sorting functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
 
     setItem('id', '123');
     setItem('role', 'user');
@@ -2089,11 +2093,11 @@ describe('Advanced Component Functionality Tests', () => {
       expect(renderedNames).toEqual(expectedNames);
     });
 
-    expect(sortDropdown).toHaveTextContent('Sort');
+    await waitFor(() => expect(sortDropdown).toHaveTextContent('Sort'));
   });
 
   test('Testing closeDialogModal functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'user');
     setItem('role', 'administrator'); // Must be 'administrator' to see create button
@@ -2193,7 +2197,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing toggleDialogModal functionality', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'user');
     setItem('role', 'administrator'); // Must be 'administrator' to see create button
@@ -2300,7 +2304,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing organization creation when CREATE_ORGANIZATION_MUTATION returns null data', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2398,13 +2402,16 @@ describe('Advanced Component Functionality Tests', () => {
       'Afghanistan',
     );
 
+    // Record call count before submit so we can detect new calls
+    const successCallsBefore = mockToast.success.mock.calls.length;
+
     // Submit form
     await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('createOrganizationBtn')).toBeInTheDocument();
       // Verify that toast.success was NOT called since data is null
-      expect(mockToast.success).not.toHaveBeenCalled();
+      expect(mockToast.success.mock.calls.length).toBe(successCallsBefore);
       // Verify that the modal should still be open since the success path wasn't taken
       expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
     });
@@ -2542,7 +2549,7 @@ describe('Email Verification Actions Tests', () => {
           birthDate: null,
           city: null,
           countryCode: null,
-          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          createdAt: MOCK_CREATED_AT,
           description: null,
           educationGrade: null,
           emailAddress: 'john.unverified@example.com',
@@ -2595,7 +2602,7 @@ describe('Email Verification Actions Tests', () => {
   };
 
   test('dismisses warning and clears local storage', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2639,7 +2646,7 @@ describe('Email Verification Actions Tests', () => {
   });
 
   test('handleResendVerification success', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2663,7 +2670,7 @@ describe('Email Verification Actions Tests', () => {
   });
 
   test('handleResendVerification failure (API returns false)', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
@@ -2687,7 +2694,7 @@ describe('Email Verification Actions Tests', () => {
   });
 
   test('handleResendVerification error (catch block)', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     setItem('id', '123');
     setItem('role', 'administrator');
 
