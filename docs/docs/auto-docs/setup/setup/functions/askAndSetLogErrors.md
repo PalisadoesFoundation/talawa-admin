@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **askAndSetLogErrors**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:99](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/setup.ts#L99)
+Defined in: [src/setup/setup.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L99)
 
 Prompts user to configure error logging settings and updates the .env file.
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **isValidSortingOption**(`option`): `option is SortingOption`
 
-Defined in: [src/screens/AdminPortal/Users/Users.tsx:43](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/AdminPortal/Users/Users.tsx#L43)
+Defined in: [src/screens/AdminPortal/Users/Users.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L43)
 
 Type guard that validates if a value is a valid SortingOption.
 

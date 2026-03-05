@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **usePluginDrawerItems**(`userPermissions`, `isAdmin`, `isOrg?`): [`IDrawerExtension`](../../types/interfaces/IDrawerExtension.md)[]
 
-Defined in: [src/plugin/hooks.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/plugin/hooks.ts#L9)
+Defined in: [src/plugin/hooks.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L9)
 
 ## Parameters
 

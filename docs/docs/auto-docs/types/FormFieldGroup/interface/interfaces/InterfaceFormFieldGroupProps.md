@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceFormFieldGroupProps
 
-Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L6)
+Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L6)
 
 Props for FormFieldGroup component.
 
@@ -20,7 +20,7 @@ Props for FormFieldGroup component.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L17)
+Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L17)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/yb175/
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L13)
+Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/yb175/
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:18](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L18)
+Defined in: [src/types/FormFieldGroup/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L18)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:18](https://github.com/yb175/
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L11)
+Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L11)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/yb175/
 
 > `optional` **helpText**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L10)
+Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L10)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/yb175/
 
 > `optional` **hideLabel**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L16)
+Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L16)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/yb175/
 
 > `optional` **inline**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L15)
+Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/yb175/
 
 > `optional` **inputId**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:19](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L19)
+Defined in: [src/types/FormFieldGroup/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L19)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:19](https://github.com/yb175/
 
 > **label**: `ReactNode`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L8)
+Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L8)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/yb175/t
 
 > `optional` **labelClassName**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L14)
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/yb175/
 
 > **name**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L7)
+Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L7)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/yb175/t
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L9)
+Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L9)
 
 ***
 
@@ -116,4 +116,4 @@ Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/yb175/t
 
 > `optional` **touched**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/FormFieldGroup/interface.ts#L12)
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)

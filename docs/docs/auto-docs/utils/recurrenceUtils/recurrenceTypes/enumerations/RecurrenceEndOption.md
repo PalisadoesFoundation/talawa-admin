@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Enumeration: RecurrenceEndOption
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com
 
 > **after**: `"after"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:44](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/recurrenceUtils/recurrenceTypes.ts#L44)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L44)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:44](https://github.com
 
 > **never**: `"never"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com
 
 > **on**: `"on"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/recurrenceUtils/recurrenceTypes.ts#L43)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L43)

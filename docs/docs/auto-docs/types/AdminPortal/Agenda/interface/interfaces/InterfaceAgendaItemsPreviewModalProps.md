@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAgendaItemsPreviewModalProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:282](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L282)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L282)
 
 Props for the AgendaItemsPreviewModal component.
 
@@ -18,7 +18,7 @@ such as updating or deleting an agenda item.
 
 > **formState**: [`InterfaceItemFormStateType`](InterfaceItemFormStateType.md)
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:285](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L285)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L285)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:285](https://github.com/y
 
 > **hidePreviewModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:284](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L284)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L284)
 
 #### Returns
 
@@ -38,4 +38,4 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:284](https://github.com/y
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:283](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L283)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L283)

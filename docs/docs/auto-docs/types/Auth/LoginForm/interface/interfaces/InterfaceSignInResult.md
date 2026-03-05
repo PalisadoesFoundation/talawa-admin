@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceSignInResult
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/LoginForm/interface.ts#L15)
+Defined in: [src/types/Auth/LoginForm/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L15)
 
 Shape of the signIn result from SIGNIN_QUERY, passed to onSuccess so the
 parent can handle session, redirect, and invitation logic.
@@ -15,7 +15,7 @@ parent can handle session, redirect, and invitation logic.
 
 > **authenticationToken**: `string`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/LoginForm/interface.ts#L25)
+Defined in: [src/types/Auth/LoginForm/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L25)
 
 ***
 
@@ -23,7 +23,7 @@ Defined in: [src/types/Auth/LoginForm/interface.ts:25](https://github.com/yb175/
 
 > `optional` **refreshToken**: `string`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/LoginForm/interface.ts#L26)
+Defined in: [src/types/Auth/LoginForm/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L26)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/types/Auth/LoginForm/interface.ts:26](https://github.com/yb175/
 
 > **user**: `object`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/LoginForm/interface.ts#L16)
+Defined in: [src/types/Auth/LoginForm/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L16)
 
 #### avatarURL
 

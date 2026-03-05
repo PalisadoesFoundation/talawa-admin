@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Comment** = `object`
 
-Defined in: [src/types/Comment/type.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L4)
+Defined in: [src/types/Comment/type.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Comment/type.ts:4](https://github.com/yb175/talawa-admin/
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Comment/type.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L6)
+Defined in: [src/types/Comment/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L6)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Comment/type.ts:6](https://github.com/yb175/talawa-admin/
 
 > **creator**: `Partial`\<[`User`](../../../shared-components/User/type/type-aliases/User.md)\>
 
-Defined in: [src/types/Comment/type.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L7)
+Defined in: [src/types/Comment/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L7)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Comment/type.ts:7](https://github.com/yb175/talawa-admin/
 
 > **id**: `string`
 
-Defined in: [src/types/Comment/type.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L5)
+Defined in: [src/types/Comment/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L5)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Comment/type.ts:5](https://github.com/yb175/talawa-admin/
 
 > `optional` **likeCount**: `number`
 
-Defined in: [src/types/Comment/type.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L8)
+Defined in: [src/types/Comment/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L8)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Comment/type.ts:8](https://github.com/yb175/talawa-admin/
 
 > **post**: [`Post`](../../../Post/type/type-aliases/Post.md)
 
-Defined in: [src/types/Comment/type.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L9)
+Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L9)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Comment/type.ts:9](https://github.com/yb175/talawa-admin/
 
 > **text**: `string`
 
-Defined in: [src/types/Comment/type.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L10)
+Defined in: [src/types/Comment/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L10)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/types/Comment/type.ts:10](https://github.com/yb175/talawa-admin
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Comment/type.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Comment/type.ts#L11)
+Defined in: [src/types/Comment/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L11)

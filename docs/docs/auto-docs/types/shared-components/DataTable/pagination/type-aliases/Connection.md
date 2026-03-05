@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Connection**\<`TNode`\> = \{ `edges?`: [`Edge`](Edge.md)\<`TNode`\>[] \| `null`; `pageInfo?`: [`PageInfo`](PageInfo.md) \| `null`; \} \| `null` \| `undefined`
 
-Defined in: [src/types/shared-components/DataTable/pagination.ts:48](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/pagination.ts#L48)
+Defined in: [src/types/shared-components/DataTable/pagination.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/pagination.ts#L48)
 
 GraphQL Relay connection pattern for paginated data.
 

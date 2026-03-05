@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **modifyEnvFile**(): `void`
 
-Defined in: [src/setup/checkEnvFile/checkEnvFile.ts:19](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/checkEnvFile/checkEnvFile.ts#L19)
+Defined in: [src/setup/checkEnvFile/checkEnvFile.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/checkEnvFile/checkEnvFile.ts#L19)
 
 ## Returns
 

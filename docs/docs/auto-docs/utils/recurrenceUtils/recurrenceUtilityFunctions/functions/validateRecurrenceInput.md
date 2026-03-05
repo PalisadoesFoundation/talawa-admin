@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validateRecurrenceInput**(`recurrence`, `startDate`): `object`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L20)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L20)
 
 Validates recurrence input data
 

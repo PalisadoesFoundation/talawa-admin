@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: ITableState
 
-Defined in: [src/types/shared-components/DataTable/types.ts:41](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L41)
+Defined in: [src/types/shared-components/DataTable/types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L41)
 
 Complete state of a table including sorting, filtering, and selection.
 
@@ -16,7 +16,7 @@ Represents the combined state of all table operations for persistence or state m
 
 > `optional` **filters**: [`IFilterState`](IFilterState.md)[]
 
-Defined in: [src/types/shared-components/DataTable/types.ts:45](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L45)
+Defined in: [src/types/shared-components/DataTable/types.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L45)
 
 Array of active column filters
 
@@ -26,7 +26,7 @@ Array of active column filters
 
 > `optional` **globalSearch**: `string`
 
-Defined in: [src/types/shared-components/DataTable/types.ts:47](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L47)
+Defined in: [src/types/shared-components/DataTable/types.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L47)
 
 Global search query string applied across all searchable columns
 
@@ -36,7 +36,7 @@ Global search query string applied across all searchable columns
 
 > `optional` **selectedRows**: `ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/types.ts:49](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L49)
+Defined in: [src/types/shared-components/DataTable/types.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L49)
 
 Immutable set of currently selected row keys
 
@@ -46,6 +46,6 @@ Immutable set of currently selected row keys
 
 > `optional` **sorting**: [`ISortState`](ISortState.md)[]
 
-Defined in: [src/types/shared-components/DataTable/types.ts:43](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L43)
+Defined in: [src/types/shared-components/DataTable/types.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L43)
 
 Array of active sort states (primary sort first)

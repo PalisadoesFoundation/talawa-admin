@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePaginationListProps
 
-Defined in: [src/types/shared-components/PaginationList/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/PaginationList/interface.ts#L7)
+Defined in: [src/types/shared-components/PaginationList/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationList/interface.ts#L7)
 
 InterfacePaginationListProps
 Interface for PaginationList component props
@@ -15,7 +15,7 @@ Interface for PaginationList component props
 
 > **count**: `number`
 
-Defined in: [src/types/shared-components/PaginationList/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/PaginationList/interface.ts#L8)
+Defined in: [src/types/shared-components/PaginationList/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationList/interface.ts#L8)
 
 ***
 
@@ -23,7 +23,7 @@ Defined in: [src/types/shared-components/PaginationList/interface.ts:8](https://
 
 > **onPageChange**: (`event`, `newPage`) => `void`
 
-Defined in: [src/types/shared-components/PaginationList/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/PaginationList/interface.ts#L11)
+Defined in: [src/types/shared-components/PaginationList/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationList/interface.ts#L11)
 
 #### Parameters
 
@@ -45,7 +45,7 @@ Defined in: [src/types/shared-components/PaginationList/interface.ts:11](https:/
 
 > **onRowsPerPageChange**: (`event`) => `void`
 
-Defined in: [src/types/shared-components/PaginationList/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/PaginationList/interface.ts#L15)
+Defined in: [src/types/shared-components/PaginationList/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationList/interface.ts#L15)
 
 #### Parameters
 
@@ -63,7 +63,7 @@ Defined in: [src/types/shared-components/PaginationList/interface.ts:15](https:/
 
 > **page**: `number`
 
-Defined in: [src/types/shared-components/PaginationList/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/PaginationList/interface.ts#L10)
+Defined in: [src/types/shared-components/PaginationList/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationList/interface.ts#L10)
 
 ***
 
@@ -71,4 +71,4 @@ Defined in: [src/types/shared-components/PaginationList/interface.ts:10](https:/
 
 > **rowsPerPage**: `number`
 
-Defined in: [src/types/shared-components/PaginationList/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/PaginationList/interface.ts#L9)
+Defined in: [src/types/shared-components/PaginationList/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationList/interface.ts#L9)

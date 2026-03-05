@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceProfileNavigationOptions
 
-Defined in: [src/utils/profileNavigation.ts:3](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/profileNavigation.ts#L3)
+Defined in: [src/utils/profileNavigation.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/profileNavigation.ts:3](https://github.com/yb175/talawa-a
 
 > `optional` **portal**: [`ProfilePortal`](../type-aliases/ProfilePortal.md)
 
-Defined in: [src/utils/profileNavigation.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/profileNavigation.ts#L4)
+Defined in: [src/utils/profileNavigation.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L4)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/utils/profileNavigation.ts:4](https://github.com/yb175/talawa-a
 
 > `optional` **role**: `string`
 
-Defined in: [src/utils/profileNavigation.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/profileNavigation.ts#L5)
+Defined in: [src/utils/profileNavigation.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L5)

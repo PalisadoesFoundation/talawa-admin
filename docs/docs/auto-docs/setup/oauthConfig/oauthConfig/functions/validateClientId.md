@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validateClientId**(`value`, `provider`): `string` \| `boolean`
 
-Defined in: [src/setup/oauthConfig/oauthConfig.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/oauthConfig/oauthConfig.ts#L23)
+Defined in: [src/setup/oauthConfig/oauthConfig.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L23)
 
 Validates that a client ID is not empty or whitespace-only.
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **itemWithEmptyAssigneeName**: `object`
 
-Defined in: [src/shared-components/ActionItems/ActionItem.mocks.ts:161](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ActionItems/ActionItem.mocks.ts#L161)
+Defined in: [src/shared-components/ActionItems/ActionItem.mocks.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItem.mocks.ts#L161)
 
 ## Type Declaration
 

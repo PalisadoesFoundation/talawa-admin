@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`ReportingTableProps`](../../../../types/ReportingTable/interface/type-aliases/ReportingTableProps.md)\>
 
-Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:87](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ReportingTable/ReportingTable.tsx#L87)
+Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ReportingTable/ReportingTable.tsx#L87)
 
 A flexible reporting table component that wraps MUI DataGrid with optional infinite scroll.
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getPasswordRequirements**(`password`): [`InterfacePasswordRequirements`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfacePasswordRequirements.md)
 
-Defined in: [src/utils/validators/authValidators.ts:87](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/validators/authValidators.ts#L87)
+Defined in: [src/utils/validators/authValidators.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L87)
 
 Checks password requirements status.
 

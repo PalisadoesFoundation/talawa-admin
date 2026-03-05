@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IDonationTableRow
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:19](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L19)
+Defined in: [src/types/UserPortal/Donation/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L19)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:19](https://github.com/y
 
 > **amount**: `number`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:22](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L22)
+Defined in: [src/types/UserPortal/Donation/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L22)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:22](https://github.com/y
 
 > **donor**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:21](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L21)
+Defined in: [src/types/UserPortal/Donation/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L21)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:21](https://github.com/y
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L20)
+Defined in: [src/types/UserPortal/Donation/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L20)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:20](https://github.com/y
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L23)
+Defined in: [src/types/UserPortal/Donation/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L23)

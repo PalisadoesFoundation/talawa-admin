@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **mockUpdateOrgResponse**: `object`
 
-Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:44](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L44)
+Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdateMocks.ts#L44)
 
 Shared updateOrganization mutation response for test mocks; derives from mockOrgData.organization with mutation-specific fields.
 

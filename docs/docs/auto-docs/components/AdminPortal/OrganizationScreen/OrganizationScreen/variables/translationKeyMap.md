@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,6 +6,6 @@
 
 > `const` **translationKeyMap**: [`InterfaceMapType`](../../../../../utils/interfaces/interfaces/InterfaceMapType.md)
 
-Defined in: [src/components/AdminPortal/OrganizationScreen/OrganizationScreen.tsx:171](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/AdminPortal/OrganizationScreen/OrganizationScreen.tsx#L171)
+Defined in: [src/components/AdminPortal/OrganizationScreen/OrganizationScreen.tsx:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrganizationScreen/OrganizationScreen.tsx#L171)
 
 Mapping object to get translation keys based on route

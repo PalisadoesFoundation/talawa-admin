@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceCreateGroupChatProps
 
-Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CreateGroupChat/interface.ts#L6)
+Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateGroupChat/interface.ts#L6)
 
 Props for the CreateGroupChat modal.
 
@@ -14,7 +14,7 @@ Props for the CreateGroupChat modal.
 
 > **chatsListRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CreateGroupChat/interface.ts#L9)
+Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateGroupChat/interface.ts#L9)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:9](https://github
 
 > **createGroupChatModalisOpen**: `boolean`
 
-Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CreateGroupChat/interface.ts#L8)
+Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateGroupChat/interface.ts#L8)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:8](https://github
 
 > **toggleCreateGroupChatModal**: () => `void`
 
-Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CreateGroupChat/interface.ts#L7)
+Defined in: [src/types/UserPortal/CreateGroupChat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateGroupChat/interface.ts#L7)
 
 #### Returns
 

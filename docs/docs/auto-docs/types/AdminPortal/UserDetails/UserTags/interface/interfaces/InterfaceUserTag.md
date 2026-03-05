@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceUserTag
 
-Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:2](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L2)
+Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L2)
 
 UI-mapped representation of a user tag for table display.
 
@@ -14,7 +14,7 @@ UI-mapped representation of a user tag for table display.
 
 > **assignedTo**: `number`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L5)
+Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:5](https://
 
 > **createdAt**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L7)
+Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L7)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:7](https://
 
 > `optional` **createdBy**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L8)
+Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L8)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:8](https://
 
 > **createdOn**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L6)
+Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L6)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:6](https://
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:3](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L3)
+Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L3)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:3](https://
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L4)
+Defined in: [src/types/AdminPortal/UserDetails/UserTags/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserTags/interface.ts#L4)

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **filterByPermissions**\<`T`\>(`items`, `userPermissions`, `isAdmin`): `T`[]
 
-Defined in: [src/plugin/utils.ts:82](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/plugin/utils.ts#L82)
+Defined in: [src/plugin/utils.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/utils.ts#L82)
 
 ## Type Parameters
 

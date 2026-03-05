@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **sanitizeAvatars**(`file`, `fallbackUrl`): `string`
 
-Defined in: [src/utils/sanitizeAvatar.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/sanitizeAvatar.ts#L8)
+Defined in: [src/utils/sanitizeAvatar.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/sanitizeAvatar.ts#L8)
 
 Sanitizes a file-based or URL-based avatar source.
 

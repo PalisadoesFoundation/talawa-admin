@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **User** = `object`
 
-Defined in: [src/types/Event/type.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L5)
+Defined in: [src/types/Event/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L5)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:5](https://github.com/yb175/talawa-admin/bl
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/Event/type.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L9)
+Defined in: [src/types/Event/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L9)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/type.ts:9](https://github.com/yb175/talawa-admin/bl
 
 > `optional` **createdAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L11)
+Defined in: [src/types/Event/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L11)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/type.ts:11](https://github.com/yb175/talawa-admin/b
 
 > **emailAddress**: `string`
 
-Defined in: [src/types/Event/type.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L8)
+Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L8)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Event/type.ts:8](https://github.com/yb175/talawa-admin/bl
 
 > **id**: `string`
 
-Defined in: [src/types/Event/type.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L6)
+Defined in: [src/types/Event/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L6)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Event/type.ts:6](https://github.com/yb175/talawa-admin/bl
 
 > **name**: `string`
 
-Defined in: [src/types/Event/type.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L7)
+Defined in: [src/types/Event/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L7)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Event/type.ts:7](https://github.com/yb175/talawa-admin/bl
 
 > `optional` **natalSex**: `string`
 
-Defined in: [src/types/Event/type.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L13)
+Defined in: [src/types/Event/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L13)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Event/type.ts:13](https://github.com/yb175/talawa-admin/b
 
 > `optional` **role**: `string`
 
-Defined in: [src/types/Event/type.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L10)
+Defined in: [src/types/Event/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L10)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/Event/type.ts:10](https://github.com/yb175/talawa-admin/b
 
 > `optional` **updatedAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/type.ts#L12)
+Defined in: [src/types/Event/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L12)

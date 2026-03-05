@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Props** = `object`
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L6)
+Defined in: [src/components/Auth/OAuthButton/types.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L6)
 
 Props for the OAuthButton component.
 
@@ -16,7 +16,7 @@ Props for the OAuthButton component.
 
 > `optional` **aria-label**: `string`
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L13)
+Defined in: [src/components/Auth/OAuthButton/types.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L13)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components/Auth/OAuthButton/types.ts:13](https://github.com/yb1
 
 > `optional` **children**: `React.ReactNode`
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L14)
+Defined in: [src/components/Auth/OAuthButton/types.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L14)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/components/Auth/OAuthButton/types.ts:14](https://github.com/yb1
 
 > `optional` **className**: `string`
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L12)
+Defined in: [src/components/Auth/OAuthButton/types.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L12)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/components/Auth/OAuthButton/types.ts:12](https://github.com/yb1
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L9)
+Defined in: [src/components/Auth/OAuthButton/types.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L9)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/components/Auth/OAuthButton/types.ts:9](https://github.com/yb17
 
 > `optional` **fullWidth**: `boolean`
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L10)
+Defined in: [src/components/Auth/OAuthButton/types.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L10)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/components/Auth/OAuthButton/types.ts:10](https://github.com/yb1
 
 > `optional` **loading**: `boolean`
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L8)
+Defined in: [src/components/Auth/OAuthButton/types.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L8)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/components/Auth/OAuthButton/types.ts:8](https://github.com/yb17
 
 > **mode**: [`OAuthMode`](../../OAuthButton/type-aliases/OAuthMode.md)
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L7)
+Defined in: [src/components/Auth/OAuthButton/types.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L7)
 
 ***
 
@@ -72,4 +72,4 @@ Defined in: [src/components/Auth/OAuthButton/types.ts:7](https://github.com/yb17
 
 > `optional` **size**: [`OAuthSize`](../../OAuthButton/type-aliases/OAuthSize.md)
 
-Defined in: [src/components/Auth/OAuthButton/types.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthButton/types.ts#L11)
+Defined in: [src/components/Auth/OAuthButton/types.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthButton/types.ts#L11)

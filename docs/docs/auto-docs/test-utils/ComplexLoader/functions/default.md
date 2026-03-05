@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/test-utils/ComplexLoader.tsx:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/test-utils/ComplexLoader.tsx#L11)
+Defined in: [src/test-utils/ComplexLoader.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/ComplexLoader.tsx#L11)
 
 ComplexLoader test utility component.
 

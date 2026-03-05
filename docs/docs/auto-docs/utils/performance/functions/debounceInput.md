@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **debounceInput**\<`T`\>(`fn`, `wait`): `DebouncedFunc`\<`T`\>
 
-Defined in: [src/utils/performance.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/performance.ts#L13)
+Defined in: [src/utils/performance.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/performance.ts#L13)
 
 Debounces an input handler with `leading: false, trailing: true`.
 

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceEventActionItemsProps
 
-Defined in: [src/types/AdminPortal/EventManagement/EventActionItems/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventManagement/EventActionItems/interface.ts#L4)
+Defined in: [src/types/AdminPortal/EventManagement/EventActionItems/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventManagement/EventActionItems/interface.ts#L4)
 
 Props for the EventActionItems component.
 
@@ -14,7 +14,7 @@ Props for the EventActionItems component.
 
 > **eventId**: `string`
 
-Defined in: [src/types/AdminPortal/EventManagement/EventActionItems/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventManagement/EventActionItems/interface.ts#L5)
+Defined in: [src/types/AdminPortal/EventManagement/EventActionItems/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventManagement/EventActionItems/interface.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/EventManagement/EventActionItems/interface.ts
 
 > `optional` **orgActionItemsRefetch**: () => `void`
 
-Defined in: [src/types/AdminPortal/EventManagement/EventActionItems/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventManagement/EventActionItems/interface.ts#L6)
+Defined in: [src/types/AdminPortal/EventManagement/EventActionItems/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventManagement/EventActionItems/interface.ts#L6)
 
 #### Returns
 

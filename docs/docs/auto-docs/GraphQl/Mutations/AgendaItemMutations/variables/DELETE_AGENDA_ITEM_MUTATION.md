@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_AGENDA\_ITEM\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/AgendaItemMutations.ts:44](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/GraphQl/Mutations/AgendaItemMutations.ts#L44)
+Defined in: [src/GraphQl/Mutations/AgendaItemMutations.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AgendaItemMutations.ts#L44)
 
 GraphQL mutation to delete an agenda item.
 

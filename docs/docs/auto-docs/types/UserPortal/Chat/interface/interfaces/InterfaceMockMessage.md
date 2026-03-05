@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceMockMessage
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:156](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L156)
+Defined in: [src/types/UserPortal/Chat/interface.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L156)
 
 **`Internal`**
 
@@ -16,7 +16,7 @@ Interface representing a mock message structure for testing purposes.
 
 > **\_id**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:157](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L157)
+Defined in: [src/types/UserPortal/Chat/interface.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L157)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:157](https://github.com/yb17
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:158](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L158)
+Defined in: [src/types/UserPortal/Chat/interface.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L158)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:158](https://github.com/yb17
 
 > `optional` **media**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:163](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L163)
+Defined in: [src/types/UserPortal/Chat/interface.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L163)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:163](https://github.com/yb17
 
 > **messageContent**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:160](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L160)
+Defined in: [src/types/UserPortal/Chat/interface.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L160)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:160](https://github.com/yb17
 
 > `optional` **replyTo**: `InterfaceMockMessage`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:161](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L161)
+Defined in: [src/types/UserPortal/Chat/interface.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L161)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:161](https://github.com/yb17
 
 > **sender**: [`InterfaceChatUser`](InterfaceChatUser.md)
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:159](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L159)
+Defined in: [src/types/UserPortal/Chat/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L159)
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:159](https://github.com/yb17
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:162](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Chat/interface.ts#L162)
+Defined in: [src/types/UserPortal/Chat/interface.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L162)

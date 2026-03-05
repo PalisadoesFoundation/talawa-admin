@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceUserDropdownProps
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:203](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L203)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L203)
 
 Props interface for UserDropdown subcomponent
 
@@ -14,7 +14,7 @@ Props interface for UserDropdown subcomponent
 
 > **dropDirection**: `"start"` \| `"end"` \| `"up"` \| `"down"`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:217](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L217)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L217)
 
 Dropdown menu direction
 
@@ -24,7 +24,7 @@ Dropdown menu direction
 
 > **finalUserName**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:227](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L227)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L227)
 
 Final resolved user name to display
 
@@ -34,7 +34,7 @@ Final resolved user name to display
 
 > **handleLogout**: () => `void`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:222](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L222)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:222](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L222)
 
 User profile menu items
 
@@ -48,7 +48,7 @@ User profile menu items
 
 > **navigate**: `NavigateFunction`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:232](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L232)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L232)
 
 Navigation function from react-router
 
@@ -58,7 +58,7 @@ Navigation function from react-router
 
 > **PermIdentityIcon**: `OverridableComponent`\<`SvgIconTypeMap`\<`object`, `"svg"`\>\>
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:247](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L247)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:247](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L247)
 
 Material UI icon component for profile display
 
@@ -68,7 +68,7 @@ Material UI icon component for profile display
 
 > **showUserProfile**: `boolean`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:207](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L207)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L207)
 
 Whether to display the user profile dropdown
 
@@ -78,7 +78,7 @@ Whether to display the user profile dropdown
 
 > **styles**: `CSSModuleClasses`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:242](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L242)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L242)
 
 CSS module classes
 
@@ -88,7 +88,7 @@ CSS module classes
 
 > **tCommon**: `TFunction`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:237](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L237)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L237)
 
 i18next translation function
 
@@ -98,6 +98,6 @@ i18next translation function
 
 > **testIdPrefix**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:212](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L212)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L212)
 
 Prefix for test IDs

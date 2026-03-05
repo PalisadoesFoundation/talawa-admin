@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx:96](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx#L96)
+Defined in: [src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx#L95)
 
 Renders the Event Volunteers screen.
 

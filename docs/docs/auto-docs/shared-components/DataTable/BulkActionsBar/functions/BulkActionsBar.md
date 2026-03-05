@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **BulkActionsBar**(`count`): `Element`
 
-Defined in: [src/shared-components/DataTable/BulkActionsBar.tsx:18](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/BulkActionsBar.tsx#L18)
+Defined in: [src/shared-components/DataTable/BulkActionsBar.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/BulkActionsBar.tsx#L18)
 
 BulkActionsBar displays a toolbar when rows are selected.
 Shows the selected count, action buttons, and a clear button.

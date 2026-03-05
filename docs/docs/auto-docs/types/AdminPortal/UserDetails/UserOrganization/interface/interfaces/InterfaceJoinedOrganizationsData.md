@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceJoinedOrganizationsData
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserOrganization/interface.ts#L12)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/interface.ts#L12)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/interface.ts:12]
 
 > **user**: `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/interface.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserOrganization/interface.ts#L13)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/interface.ts#L13)
 
 #### organizationsWhereMember?
 

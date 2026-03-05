@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useSimpleTableData**\<`TRow`, `TData`\>(`result`, `options`): [`IUseSimpleTableDataResult`](../interfaces/IUseSimpleTableDataResult.md)\<`TRow`, `TData`\>
 
-Defined in: [src/shared-components/DataTable/hooks/useSimpleTableData.ts:67](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/hooks/useSimpleTableData.ts#L67)
+Defined in: [src/shared-components/DataTable/hooks/useSimpleTableData.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useSimpleTableData.ts#L67)
 
 Hook for integrating simple array-based GraphQL queries with DataTable.
 Use this for queries that return arrays directly, not connection format.

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaFolderDeleteModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaFolderDeleteModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx:27](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx#L27)
+Defined in: [src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx#L27)
 
 AgendaFolderDeleteModal
 

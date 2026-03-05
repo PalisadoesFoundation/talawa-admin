@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useAuthNotifications**(`t`, `config`): `object`
 
-Defined in: [src/hooks/auth/useAuthNotifications.ts:58](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/hooks/auth/useAuthNotifications.ts#L58)
+Defined in: [src/hooks/auth/useAuthNotifications.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useAuthNotifications.ts#L58)
 
 Hook providing standardized toast notifications for auth flows with i18n support.
 

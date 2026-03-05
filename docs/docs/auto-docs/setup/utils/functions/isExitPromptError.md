@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **isExitPromptError**(`error`): `boolean`
 
-Defined in: [src/setup/utils.ts:21](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/utils.ts#L21)
+Defined in: [src/setup/utils.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/utils.ts#L21)
 
 Checks if an error is an ExitPromptError (user cancelled with CTRL+C)
 

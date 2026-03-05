@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePostNode
 
-Defined in: [src/types/Post/interface.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L23)
+Defined in: [src/types/Post/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:23](https://github.com/yb175/talawa-adm
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L25)
+Defined in: [src/types/Post/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:25](https://github.com/yb175/talawa-adm
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:31](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L31)
+Defined in: [src/types/Post/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L31)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:31](https://github.com/yb175/talawa-adm
 
 > `optional` **creator**: [`InterfacePostCreator`](InterfacePostCreator.md)
 
-Defined in: [src/types/Post/interface.ts:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L29)
+Defined in: [src/types/Post/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L29)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:29](https://github.com/yb175/talawa-adm
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:24](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L24)
+Defined in: [src/types/Post/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L24)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:24](https://github.com/yb175/talawa-adm
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:27](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L27)
+Defined in: [src/types/Post/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L27)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Post/interface.ts:27](https://github.com/yb175/talawa-adm
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:30](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L30)
+Defined in: [src/types/Post/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L30)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Post/interface.ts:30](https://github.com/yb175/talawa-adm
 
 > `optional` **text**: `string`
 
-Defined in: [src/types/Post/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L26)
+Defined in: [src/types/Post/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L26)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Post/interface.ts:26](https://github.com/yb175/talawa-adm
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:28](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/interface.ts#L28)
+Defined in: [src/types/Post/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L28)

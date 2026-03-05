@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceOrgPostCardProps
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L6)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L6)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:6](https://github.c
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L8)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L8)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:8](https://github.c
 
 > **pinned**: `boolean`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L14)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L14)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:14](https://github.
 
 > **postAuthor**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L11)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L11)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:11](https://github.
 
 > **postID**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L7)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L7)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:7](https://github.c
 
 > **postInfo**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L10)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L10)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:10](https://github.
 
 > **postPhoto**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L12)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L12)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:12](https://github.
 
 > **postTitle**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L9)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L9)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/AdminPortal/Organization/interface.ts:9](https://github.c
 
 > **postVideo**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/interface.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/interface.ts#L13)
+Defined in: [src/types/AdminPortal/Organization/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/interface.ts#L13)

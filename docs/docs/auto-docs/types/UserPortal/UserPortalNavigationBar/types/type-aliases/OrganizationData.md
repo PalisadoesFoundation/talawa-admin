@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **OrganizationData** = `object`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:181](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L181)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L181)
 
 Organization data structure (from GraphQL ORGANIZATION_LIST query)
 
@@ -16,7 +16,7 @@ Organization data structure (from GraphQL ORGANIZATION_LIST query)
 
 > `optional` **addressLine1**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:184](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L184)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L184)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:184](https://
 
 > `optional` **adminsCount**: `number`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:188](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L188)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L188)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:188](https://
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:186](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L186)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L186)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:186](https://
 
 > `optional` **createdAt**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:189](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L189)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:189](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L189)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:189](https://
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:185](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L185)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L185)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:185](https://
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:182](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L182)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L182)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:182](https://
 
 > `optional` **membersCount**: `number`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:187](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L187)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L187)
 
 ***
 
@@ -72,4 +72,4 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:187](https://
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:183](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L183)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L183)

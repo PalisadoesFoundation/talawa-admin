@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Class: RegistrationError
 
-Defined in: [src/hooks/auth/useRegistration.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/hooks/auth/useRegistration.ts#L20)
+Defined in: [src/hooks/auth/useRegistration.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L20)
 
 Error thrown when registration validation fails. Callers can use error.code
 with t(error.code) for translated messages.
@@ -19,7 +19,7 @@ with t(error.code) for translated messages.
 
 > **new RegistrationError**(`code`, `message?`): `RegistrationError`
 
-Defined in: [src/hooks/auth/useRegistration.ts:21](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/hooks/auth/useRegistration.ts#L21)
+Defined in: [src/hooks/auth/useRegistration.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L21)
 
 #### Parameters
 
@@ -45,4 +45,4 @@ Defined in: [src/hooks/auth/useRegistration.ts:21](https://github.com/yb175/tala
 
 > `readonly` **code**: [`RegistrationErrorCodeType`](../type-aliases/RegistrationErrorCodeType.md)
 
-Defined in: [src/hooks/auth/useRegistration.ts:22](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/hooks/auth/useRegistration.ts#L22)
+Defined in: [src/hooks/auth/useRegistration.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L22)

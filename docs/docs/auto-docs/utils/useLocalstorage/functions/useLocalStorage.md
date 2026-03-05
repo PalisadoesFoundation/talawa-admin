@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useLocalStorage**(`prefix`): `InterfaceStorageHelper`
 
-Defined in: [src/utils/useLocalstorage.ts:87](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/useLocalstorage.ts#L87)
+Defined in: [src/utils/useLocalstorage.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L87)
 
 Factory function that returns localStorage helper methods with a common prefix.
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **installTypeScript**(): `Promise`\<`void`\>
 
-Defined in: [src/install/os/macos.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/install/os/macos.ts#L4)
+Defined in: [src/install/os/macos.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/os/macos.ts#L4)
 
 ## Returns
 

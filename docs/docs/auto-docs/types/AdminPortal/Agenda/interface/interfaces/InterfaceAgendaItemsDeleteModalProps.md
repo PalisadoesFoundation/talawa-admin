@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAgendaItemsDeleteModalProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:199](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L199)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:199](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L199)
 
 Props for the AgendaItemsDeleteModal component.
 
@@ -14,7 +14,7 @@ Props for the AgendaItemsDeleteModal component.
 
 > **agendaItemId**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:202](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L202)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L202)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:202](https://github.com/y
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:200](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L200)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:200](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L200)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:200](https://github.com/y
 
 > **onClose**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:201](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L201)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:201](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L201)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:201](https://github.com/y
 
 > **refetchAgendaFolder**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:203](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L203)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L203)
 
 #### Returns
 

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePasswordRequirements
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/ValidationInterfaces.ts#L14)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L14)
 
 Password complexity requirements status.
 
@@ -14,7 +14,7 @@ Password complexity requirements status.
 
 > **lowercase**: `boolean`
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/ValidationInterfaces.ts#L16)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L16)
 
 Has lowercase letter
 
@@ -24,7 +24,7 @@ Has lowercase letter
 
 > **numeric**: `boolean`
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/ValidationInterfaces.ts#L20)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L20)
 
 Has numeric digit
 
@@ -34,7 +34,7 @@ Has numeric digit
 
 > **specialChar**: `boolean`
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:22](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/ValidationInterfaces.ts#L22)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L22)
 
 Has special character
 
@@ -44,6 +44,6 @@ Has special character
 
 > **uppercase**: `boolean`
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:18](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/ValidationInterfaces.ts#L18)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L18)
 
 Has uppercase letter

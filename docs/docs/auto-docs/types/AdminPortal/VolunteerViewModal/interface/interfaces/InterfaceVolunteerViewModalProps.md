@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceVolunteerViewModalProps
 
-Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerViewModal/interface.ts#L6)
+Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerViewModal/interface.ts#L6)
 
 Props for VolunteerViewModal component.
 
@@ -14,7 +14,7 @@ Props for VolunteerViewModal component.
 
 > **hide**: () => `void`
 
-Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerViewModal/interface.ts#L8)
+Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerViewModal/interface.ts#L8)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:8](https://gi
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerViewModal/interface.ts#L7)
+Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerViewModal/interface.ts#L7)
 
 ***
 
@@ -34,4 +34,4 @@ Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:7](https://gi
 
 > **volunteer**: [`InterfaceEventVolunteerInfo`](../../../../../utils/interfaces/interfaces/InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerViewModal/interface.ts#L9)
+Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerViewModal/interface.ts#L9)

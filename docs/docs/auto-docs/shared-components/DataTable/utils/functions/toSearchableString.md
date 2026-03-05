@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **toSearchableString**(`v`): `string`
 
-Defined in: [src/shared-components/DataTable/utils.ts:56](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/utils.ts#L56)
+Defined in: [src/shared-components/DataTable/utils.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L56)
 
 Helper for text search interactions.
 

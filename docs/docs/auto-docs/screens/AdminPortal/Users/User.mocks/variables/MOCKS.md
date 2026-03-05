@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after?`: `undefined`; `first?`: `undefined`; `id`: `string`; `orgFirst?`: `undefined`; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `allUsers?`: `undefined`; `organizations?`: `undefined`; `user`: \{ `avatarURL`: `string`; `emailAddress`: `string`; `name`: `string`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `id?`: `undefined`; `orgFirst`: `number`; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `allUsers`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; \}; `organizations?`: `undefined`; `user?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables?`: `undefined`; \}; `result`: \{ `data`: \{ `allUsers?`: `undefined`; `organizations`: `object`[]; `user?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `id?`: `undefined`; `orgFirst`: `number`; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `allUsers`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; \}; `organizations?`: `undefined`; `user?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `id?`: `undefined`; `orgFirst`: `number`; `where`: \{ `name`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `allUsers`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; \}; `organizations?`: `undefined`; `user?`: `undefined`; \}; \}; \})[]
 
-Defined in: [src/screens/AdminPortal/Users/User.mocks.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/AdminPortal/Users/User.mocks.ts#L7)
+Defined in: [src/screens/AdminPortal/Users/User.mocks.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/User.mocks.ts#L7)

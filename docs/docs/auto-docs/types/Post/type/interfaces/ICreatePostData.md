@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: ICreatePostData
 
-Defined in: [src/types/Post/type.ts:156](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/type.ts#L156)
+Defined in: [src/types/Post/type.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L156)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/type.ts:156](https://github.com/yb175/talawa-admin/b
 
 > **createPost**: `object`
 
-Defined in: [src/types/Post/type.ts:157](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Post/type.ts#L157)
+Defined in: [src/types/Post/type.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L157)
 
 #### attachments?
 

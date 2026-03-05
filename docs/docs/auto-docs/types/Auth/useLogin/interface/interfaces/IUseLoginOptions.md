@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IUseLoginOptions
 
-Defined in: [src/types/Auth/useLogin/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/useLogin/interface.ts#L15)
+Defined in: [src/types/Auth/useLogin/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useLogin/interface.ts#L15)
 
 Options for the useLogin hook.
 
@@ -14,7 +14,7 @@ Options for the useLogin hook.
 
 > `optional` **onError**: (`error`) => `void`
 
-Defined in: [src/types/Auth/useLogin/interface.ts:17](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/useLogin/interface.ts#L17)
+Defined in: [src/types/Auth/useLogin/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useLogin/interface.ts#L17)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Auth/useLogin/interface.ts:17](https://github.com/yb175/t
 
 > `optional` **onSuccess**: (`result`) => `void`
 
-Defined in: [src/types/Auth/useLogin/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/useLogin/interface.ts#L16)
+Defined in: [src/types/Auth/useLogin/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useLogin/interface.ts#L16)
 
 #### Parameters
 

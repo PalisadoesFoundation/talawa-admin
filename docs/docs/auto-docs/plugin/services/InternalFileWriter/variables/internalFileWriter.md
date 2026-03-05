@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,6 +6,6 @@
 
 > `const` **internalFileWriter**: [`InternalFileWriter`](../classes/InternalFileWriter.md)
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:459](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/plugin/services/InternalFileWriter.ts#L459)
+Defined in: [src/plugin/services/InternalFileWriter.ts:459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L459)
 
 Singleton instance export

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CampaignWithStatus** = [`InterfaceUserCampaign`](../../../../../utils/interfaces/interfaces/InterfaceUserCampaign.md) & `object`
 
-Defined in: [src/screens/UserPortal/Campaigns/Campaigns.tsx:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/UserPortal/Campaigns/Campaigns.tsx#L23)
+Defined in: [src/screens/UserPortal/Campaigns/Campaigns.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/Campaigns.tsx#L21)
 
 Extended interface for campaigns with computed status
 

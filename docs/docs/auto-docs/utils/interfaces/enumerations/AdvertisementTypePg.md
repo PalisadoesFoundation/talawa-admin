@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Enumeration: AdvertisementTypePg
 
-Defined in: [src/utils/interfaces.ts:324](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L324)
+Defined in: [src/utils/interfaces.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L324)
 
 Represents the type of an advertisement.
 
@@ -14,7 +14,7 @@ Represents the type of an advertisement.
 
 > **BANNER**: `"banner"`
 
-Defined in: [src/utils/interfaces.ts:325](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L325)
+Defined in: [src/utils/interfaces.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L325)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:325](https://github.com/yb175/talawa-admin/
 
 > **MENU**: `"menu"`
 
-Defined in: [src/utils/interfaces.ts:326](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L326)
+Defined in: [src/utils/interfaces.ts:326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L326)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/utils/interfaces.ts:326](https://github.com/yb175/talawa-admin/
 
 > **POP\_UP**: `"pop_up"`
 
-Defined in: [src/utils/interfaces.ts:327](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L327)
+Defined in: [src/utils/interfaces.ts:327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L327)

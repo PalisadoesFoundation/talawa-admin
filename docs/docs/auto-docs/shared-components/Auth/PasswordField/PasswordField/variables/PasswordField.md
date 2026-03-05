@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **PasswordField**: `React.FC`\<[`InterfacePasswordFieldProps`](../../../../../types/shared-components/Auth/PasswordField/interface/interfaces/InterfacePasswordFieldProps.md)\>
 
-Defined in: [src/shared-components/Auth/PasswordField/PasswordField.tsx:30](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/Auth/PasswordField/PasswordField.tsx#L30)
+Defined in: [src/shared-components/Auth/PasswordField/PasswordField.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Auth/PasswordField/PasswordField.tsx#L30)
 
 Reusable password input field with visibility toggle (show/hide password).
 

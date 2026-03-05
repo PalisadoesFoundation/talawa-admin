@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/DateRangePicker/DateRangePicker.tsx:74](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DateRangePicker/DateRangePicker.tsx#L74)
+Defined in: [src/shared-components/DateRangePicker/DateRangePicker.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DateRangePicker/DateRangePicker.tsx#L74)
 
 ## Parameters
 

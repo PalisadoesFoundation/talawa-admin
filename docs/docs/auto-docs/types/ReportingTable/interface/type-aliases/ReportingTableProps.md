@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ReportingTableProps** = `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:76](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/ReportingTable/interface.ts#L76)
+Defined in: [src/types/ReportingTable/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L76)
 
 Props for the ReportingTable component
 
@@ -16,7 +16,7 @@ Props for the ReportingTable component
 
 > **columns**: [`ReportingTableColumn`](ReportingTableColumn.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:78](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/ReportingTable/interface.ts#L78)
+Defined in: [src/types/ReportingTable/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L78)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/ReportingTable/interface.ts:78](https://github.com/yb175/
 
 > `optional` **gridProps**: [`ReportingTableGridProps`](ReportingTableGridProps.md)
 
-Defined in: [src/types/ReportingTable/interface.ts:79](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/ReportingTable/interface.ts#L79)
+Defined in: [src/types/ReportingTable/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L79)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/ReportingTable/interface.ts:79](https://github.com/yb175/
 
 > `optional` **infiniteProps**: [`InfiniteScrollProps`](InfiniteScrollProps.md)
 
-Defined in: [src/types/ReportingTable/interface.ts:81](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/ReportingTable/interface.ts#L81)
+Defined in: [src/types/ReportingTable/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L81)
 
 Optional InfiniteScroll behavior; when provided, wraps the grid
 
@@ -42,7 +42,7 @@ Optional InfiniteScroll behavior; when provided, wraps the grid
 
 > `optional` **listProps**: `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:83](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/ReportingTable/interface.ts#L83)
+Defined in: [src/types/ReportingTable/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L83)
 
 Optional props applied to the InfiniteScroll container
 
@@ -76,4 +76,4 @@ Optional props applied to the InfiniteScroll container
 
 > **rows**: readonly [`ReportingRow`](ReportingRow.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:77](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/ReportingTable/interface.ts#L77)
+Defined in: [src/types/ReportingTable/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L77)

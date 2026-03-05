@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePeopletabUserEventsProps
 
-Defined in: [src/types/PeopleTab/interface.ts:72](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L72)
+Defined in: [src/types/PeopleTab/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L72)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/PeopleTab/interface.ts:72](https://github.com/yb175/talaw
 
 > `optional` **actionIcon**: `ReactNode`
 
-Defined in: [src/types/PeopleTab/interface.ts:79](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L79)
+Defined in: [src/types/PeopleTab/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L79)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/PeopleTab/interface.ts:79](https://github.com/yb175/talaw
 
 > `optional` **actionName**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:80](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L80)
+Defined in: [src/types/PeopleTab/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L80)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/PeopleTab/interface.ts:80](https://github.com/yb175/talaw
 
 > `optional` **endDate**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:76](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L76)
+Defined in: [src/types/PeopleTab/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L76)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/PeopleTab/interface.ts:76](https://github.com/yb175/talaw
 
 > `optional` **endTime**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:74](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L74)
+Defined in: [src/types/PeopleTab/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L74)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/PeopleTab/interface.ts:74](https://github.com/yb175/talaw
 
 > `optional` **eventDescription**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:78](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L78)
+Defined in: [src/types/PeopleTab/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L78)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/PeopleTab/interface.ts:78](https://github.com/yb175/talaw
 
 > `optional` **eventName**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:77](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L77)
+Defined in: [src/types/PeopleTab/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L77)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/PeopleTab/interface.ts:77](https://github.com/yb175/talaw
 
 > `optional` **startDate**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:75](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L75)
+Defined in: [src/types/PeopleTab/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L75)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/PeopleTab/interface.ts:75](https://github.com/yb175/talaw
 
 > `optional` **startTime**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:73](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L73)
+Defined in: [src/types/PeopleTab/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L73)

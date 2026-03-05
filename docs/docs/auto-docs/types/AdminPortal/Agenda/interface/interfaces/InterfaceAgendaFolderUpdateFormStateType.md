@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAgendaFolderUpdateFormStateType
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:233](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L233)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:233](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L233)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:233](https://github.com/y
 
 > **creator**: `object`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:237](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L237)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L237)
 
 #### id
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:237](https://github.com/y
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:236](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L236)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L236)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:236](https://github.com/y
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:234](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L234)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:234](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L234)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:234](https://github.com/y
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:235](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L235)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:235](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L235)

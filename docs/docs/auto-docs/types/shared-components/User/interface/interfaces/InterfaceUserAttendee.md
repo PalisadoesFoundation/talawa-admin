@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceUserAttendee
 
-Defined in: [src/types/shared-components/User/interface.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/User/interface.ts#L25)
+Defined in: [src/types/shared-components/User/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L25)
 
 Props for User in attendee context.
 
@@ -14,7 +14,7 @@ Props for User in attendee context.
 
 > **createdAt**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:34](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/User/interface.ts#L34)
+Defined in: [src/types/shared-components/User/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L34)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/User/interface.ts:34](https://github.co
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/User/interface.ts#L26)
+Defined in: [src/types/shared-components/User/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L26)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/User/interface.ts:26](https://github.co
 
 > **isRegistered**: `boolean`
 
-Defined in: [src/types/shared-components/User/interface.ts:33](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/User/interface.ts#L33)
+Defined in: [src/types/shared-components/User/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L33)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/User/interface.ts:33](https://github.co
 
 > **time**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:35](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/User/interface.ts#L35)
+Defined in: [src/types/shared-components/User/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L35)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/User/interface.ts:35](https://github.co
 
 > **user**: `object`
 
-Defined in: [src/types/shared-components/User/interface.ts:27](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/User/interface.ts#L27)
+Defined in: [src/types/shared-components/User/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L27)
 
 #### avatarURL?
 

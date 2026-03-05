@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceUseUserProfileReturn
 
-Defined in: [src/types/UseUserProfile.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L13)
+Defined in: [src/types/UseUserProfile.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L13)
 
 Return type for the useUserProfile hook.
 
@@ -23,7 +23,7 @@ const { displayedName, userImage, handleLogout } = useUserProfile('user');
 
 > **displayedName**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:24](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L24)
+Defined in: [src/types/UseUserProfile.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L24)
 
 Truncated display name (max 20 characters) with ellipsis if needed.
 Used for UI rendering to prevent layout overflow.
@@ -34,7 +34,7 @@ Used for UI rendering to prevent layout overflow.
 
 > **handleLogout**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/UseUserProfile.ts:56](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L56)
+Defined in: [src/types/UseUserProfile.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L56)
 
 Async function to handle user logout.
 
@@ -57,7 +57,7 @@ Async function to handle user logout.
 
 > **name**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:18](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L18)
+Defined in: [src/types/UseUserProfile.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L18)
 
 Full user name retrieved from localStorage.
 `@defaultValue` Empty string if not found
@@ -68,7 +68,7 @@ Full user name retrieved from localStorage.
 
 > **profileDestination**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:42](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L42)
+Defined in: [src/types/UseUserProfile.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L42)
 
 Destination path for "View Profile" navigation.
 Resolved based on user role and portal context.
@@ -79,7 +79,7 @@ Resolved based on user role and portal context.
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/UseUserProfile.ts:64](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L64)
+Defined in: [src/types/UseUserProfile.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L64)
 
 Translation function for common strings.
 
@@ -102,7 +102,7 @@ Translation function for common strings.
 
 > **userImage**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:36](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L36)
+Defined in: [src/types/UseUserProfile.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L36)
 
 Sanitized avatar URL or empty string if unavailable.
 Handles null, undefined, and string "null" values.
@@ -113,7 +113,7 @@ Handles null, undefined, and string "null" values.
 
 > **userRole**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:30](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UseUserProfile.ts#L30)
+Defined in: [src/types/UseUserProfile.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L30)
 
 User's role in the system (e.g., 'ADMIN', 'USER', 'SUPERADMIN').
 `@defaultValue` Empty string if not found

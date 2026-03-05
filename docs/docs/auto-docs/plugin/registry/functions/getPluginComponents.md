@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getPluginComponents**(`pluginId`): `Record`\<`string`, `ComponentType`\<\{ \}\>\>
 
-Defined in: [src/plugin/registry.tsx:242](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/plugin/registry.tsx#L242)
+Defined in: [src/plugin/registry.tsx:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L242)
 
 Get all components for a plugin
 

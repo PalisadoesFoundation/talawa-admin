@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getEndTypeFromRecurrence**(`recurrence`): [`RecurrenceEndOptionType`](../../recurrenceTypes/type-aliases/RecurrenceEndOptionType.md)
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:259](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L259)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L259)
 
 Determines the end type from a recurrence rule
 

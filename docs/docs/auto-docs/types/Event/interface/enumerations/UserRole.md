@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Enumeration: UserRole
 
-Defined in: [src/types/Event/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L7)
+Defined in: [src/types/Event/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L7)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:7](https://github.com/yb175/talawa-adm
 
 > **ADMINISTRATOR**: `"ADMINISTRATOR"`
 
-Defined in: [src/types/Event/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L8)
+Defined in: [src/types/Event/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L8)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/types/Event/interface.ts:8](https://github.com/yb175/talawa-adm
 
 > **REGULAR**: `"REGULAR"`
 
-Defined in: [src/types/Event/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L9)
+Defined in: [src/types/Event/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L9)

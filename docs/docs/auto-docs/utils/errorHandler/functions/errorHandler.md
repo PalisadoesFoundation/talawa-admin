@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **errorHandler**(`a`, `error`): `void`
 
-Defined in: [src/utils/errorHandler.tsx:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/errorHandler.tsx#L9)
+Defined in: [src/utils/errorHandler.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/errorHandler.tsx#L9)
 
 This function is used to handle api errors in the application.
 It takes in the error object and displays the error message to the user.

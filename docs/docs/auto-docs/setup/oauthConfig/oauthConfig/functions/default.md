@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/oauthConfig/oauthConfig.ts:143](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/oauthConfig/oauthConfig.ts#L143)
+Defined in: [src/setup/oauthConfig/oauthConfig.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/oauthConfig/oauthConfig.ts#L143)
 
 Prompts user to configure OAuth settings and updates the .env file.
 

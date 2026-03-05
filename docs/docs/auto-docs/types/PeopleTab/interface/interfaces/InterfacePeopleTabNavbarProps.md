@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePeopleTabNavbarProps
 
-Defined in: [src/types/PeopleTab/interface.ts:34](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L34)
+Defined in: [src/types/PeopleTab/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L34)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/PeopleTab/interface.ts:34](https://github.com/yb175/talaw
 
 > `optional` **actions**: `ReactNode`
 
-Defined in: [src/types/PeopleTab/interface.ts:51](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L51)
+Defined in: [src/types/PeopleTab/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L51)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/PeopleTab/interface.ts:51](https://github.com/yb175/talaw
 
 > `optional` **search**: `object`
 
-Defined in: [src/types/PeopleTab/interface.ts:36](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L36)
+Defined in: [src/types/PeopleTab/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L36)
 
 #### buttonTestId?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/PeopleTab/interface.ts:36](https://github.com/yb175/talaw
 
 > `optional` **sorting**: `object`[]
 
-Defined in: [src/types/PeopleTab/interface.ts:42](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L42)
+Defined in: [src/types/PeopleTab/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L42)
 
 #### icon?
 
@@ -96,4 +96,4 @@ Defined in: [src/types/PeopleTab/interface.ts:42](https://github.com/yb175/talaw
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:35](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L35)
+Defined in: [src/types/PeopleTab/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L35)

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAddOnSpotAttendeeProps
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L4)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L4)
 
 Defines the props for the AddOnSpotAttendee component.
 
@@ -14,7 +14,7 @@ Defines the props for the AddOnSpotAttendee component.
 
 > **handleClose**: () => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L6)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L6)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:6](https:/
 
 > **reloadMembers**: () => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L7)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L7)
 
 #### Returns
 
@@ -38,4 +38,4 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:7](https:/
 
 > **show**: `boolean`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L5)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L5)

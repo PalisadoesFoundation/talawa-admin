@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceErrorPanelProps
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:53](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L53)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L53)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:53](https://github.
 
 > `optional` **ariaLive**: `"off"` \| `"polite"` \| `"assertive"`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:87](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L87)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L87)
 
 ARIA live region setting (only used when role is not 'alert', defaults to 'assertive')
 
@@ -22,7 +22,7 @@ ARIA live region setting (only used when role is not 'alert', defaults to 'asser
 
 > `optional` **className**: `string`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:77](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L77)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L77)
 
 Additional CSS class name for the container
 
@@ -32,7 +32,7 @@ Additional CSS class name for the container
 
 > **error**: `Error`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:62](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L62)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L62)
 
 The error object containing additional error details
 
@@ -42,7 +42,7 @@ The error object containing additional error details
 
 > **message**: `ReactNode`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:57](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L57)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L57)
 
 The main error message to display (can be a string or React node)
 
@@ -52,7 +52,7 @@ The main error message to display (can be a string or React node)
 
 > **onRetry**: () => `void`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:67](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L67)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L67)
 
 Callback function to retry the failed operation
 
@@ -66,7 +66,7 @@ Callback function to retry the failed operation
 
 > `optional` **retryAriaLabel**: `string`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:92](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L92)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L92)
 
 ARIA label for the retry button (only set if different from button text)
 
@@ -76,7 +76,7 @@ ARIA label for the retry button (only set if different from button text)
 
 > `optional` **role**: `"status"` \| `"alert"` \| `"log"` \| `"marquee"` \| `"timer"`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:82](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L82)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L82)
 
 ARIA role for accessibility (role="alert" implies aria-live="assertive", defaults to 'alert')
 
@@ -86,7 +86,7 @@ ARIA role for accessibility (role="alert" implies aria-live="assertive", default
 
 > `optional` **showErrorDetails**: `boolean`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:98](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L98)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L98)
 
 Whether to show raw error details (for development/debugging)
 When false, displays a sanitized/truncated message instead (defaults to false)
@@ -97,6 +97,6 @@ When false, displays a sanitized/truncated message instead (defaults to false)
 
 > `optional` **testId**: `string`
 
-Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:72](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ErrorPanel/ErrorPanel.tsx#L72)
+Defined in: [src/shared-components/ErrorPanel/ErrorPanel.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorPanel/ErrorPanel.tsx#L72)
 
 Test ID for the error message container (defaults to 'errorMsg')

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IIconComponent
 
-Defined in: [src/types/shared-components/IconComponent/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/IconComponent/interface.ts#L4)
+Defined in: [src/types/shared-components/IconComponent/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/IconComponent/interface.ts#L4)
 
 Props for IconComponent.
 
@@ -14,7 +14,7 @@ Props for IconComponent.
 
 > `optional` **fill**: `string`
 
-Defined in: [src/types/shared-components/IconComponent/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/IconComponent/interface.ts#L6)
+Defined in: [src/types/shared-components/IconComponent/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/IconComponent/interface.ts#L6)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/IconComponent/interface.ts:6](https://g
 
 > `optional` **height**: `string`
 
-Defined in: [src/types/shared-components/IconComponent/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/IconComponent/interface.ts#L7)
+Defined in: [src/types/shared-components/IconComponent/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/IconComponent/interface.ts#L7)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/IconComponent/interface.ts:7](https://g
 
 > **name**: `string`
 
-Defined in: [src/types/shared-components/IconComponent/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/IconComponent/interface.ts#L5)
+Defined in: [src/types/shared-components/IconComponent/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/IconComponent/interface.ts#L5)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/shared-components/IconComponent/interface.ts:5](https://g
 
 > `optional` **width**: `string`
 
-Defined in: [src/types/shared-components/IconComponent/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/IconComponent/interface.ts#L8)
+Defined in: [src/types/shared-components/IconComponent/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/IconComponent/interface.ts#L8)

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Enumeration: UserNatalSex
 
-Defined in: [src/utils/interfaces.ts:302](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L302)
+Defined in: [src/utils/interfaces.ts:302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L302)
 
 Represents the natal sex of a user.
 
@@ -14,7 +14,7 @@ Represents the natal sex of a user.
 
 > **FEMALE**: `"female"`
 
-Defined in: [src/utils/interfaces.ts:303](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L303)
+Defined in: [src/utils/interfaces.ts:303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L303)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:303](https://github.com/yb175/talawa-admin/
 
 > **INTERSEX**: `"intersex"`
 
-Defined in: [src/utils/interfaces.ts:304](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L304)
+Defined in: [src/utils/interfaces.ts:304](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L304)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/utils/interfaces.ts:304](https://github.com/yb175/talawa-admin/
 
 > **MALE**: `"male"`
 
-Defined in: [src/utils/interfaces.ts:305](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L305)
+Defined in: [src/utils/interfaces.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L305)

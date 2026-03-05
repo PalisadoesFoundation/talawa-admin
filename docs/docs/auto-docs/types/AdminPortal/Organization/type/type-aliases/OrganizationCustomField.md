@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **OrganizationCustomField** = `object`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:47](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L47)
+Defined in: [src/types/AdminPortal/Organization/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L47)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:47](https://github.com/y
 
 > **\_id**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L48)
+Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L48)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/y
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L49)
+Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L49)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/y
 
 > **organizationId**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:50](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L50)
+Defined in: [src/types/AdminPortal/Organization/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L50)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:50](https://github.com/y
 
 > **type**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:51](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L51)
+Defined in: [src/types/AdminPortal/Organization/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L51)

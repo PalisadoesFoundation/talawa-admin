@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`id`): `Element`
 
-Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:69](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/UserPortal/CommentCard/CommentCard.tsx#L69)
+Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CommentCard/CommentCard.tsx#L72)
 
 CommentCard Component
 

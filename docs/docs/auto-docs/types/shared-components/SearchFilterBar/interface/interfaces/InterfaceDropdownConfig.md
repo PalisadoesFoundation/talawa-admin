@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceDropdownConfig
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:34](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L34)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L34)
 
 Configuration for a single dropdown (sort or filter) in the SearchFilterBar.
 Each dropdown represents either a sorting control or a filter control,
@@ -16,7 +16,7 @@ and is rendered using the SortingButton component.
 
 > `optional` **containerClassName**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:113](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L113)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L113)
 
 Optional extra class for the dropdown container (e.g. from parent CSS module for styling).
 
@@ -26,7 +26,7 @@ Optional extra class for the dropdown container (e.g. from parent CSS module for
 
 > **dataTestIdPrefix**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:94](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L94)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L94)
 
 The prefix used for generating data-testid attributes for testing.
 This is passed directly to the SortingButton component's `dataTestIdPrefix` prop.
@@ -43,7 +43,7 @@ This is passed directly to the SortingButton component's `dataTestIdPrefix` prop
 
 > `optional` **dropdownTestId**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:108](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L108)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L108)
 
 Optional data-testid for the dropdown element itself.
 **Job:** Enables testing frameworks to identify the entire dropdown component.
@@ -60,7 +60,7 @@ Optional data-testid for the dropdown element itself.
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:40](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L40)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L40)
 
 A unique identifier for this dropdown configuration.
 Used as the React key for stable rendering and should be unique across all dropdowns.
@@ -77,7 +77,7 @@ Used as the React key for stable rendering and should be unique across all dropd
 
 > **label**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:47](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L47)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L47)
 
 The label/title displayed on the dropdown button.
 This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
@@ -94,7 +94,7 @@ This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
 
 > **onOptionChange**: (`value`) => `void`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:87](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L87)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L87)
 
 Callback function triggered when the user selects a different option.
 **Trigger:** User clicks on a dropdown item in the menu.
@@ -124,7 +124,7 @@ onOptionChange={(value) => setSortOrder(value as SortedByType)}
 
 > **options**: [`InterfaceSortingOption`](InterfaceSortingOption.md)[]
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:67](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L67)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L67)
 
 The list of available options for this dropdown.
 Each option contains a label (display text) and a value (underlying data).
@@ -144,7 +144,7 @@ Each option contains a label (display text) and a value (underlying data).
 
 > **selectedOption**: `string` \| `number`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:74](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L74)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L74)
 
 The currently selected option value.
 This should match the `value` field of one of the options in the `options` array.
@@ -161,7 +161,7 @@ This should match the `value` field of one of the options in the `options` array
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:101](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L101)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L101)
 
 Optional title attribute for the dropdown element.
 **Job:** Provides tooltip text when hovering over the dropdown.
@@ -178,7 +178,7 @@ Optional title attribute for the dropdown element.
 
 > `optional` **toggleClassName**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:118](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L118)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L118)
 
 Optional extra class for the dropdown toggle button (e.g. from parent CSS module for styling).
 
@@ -188,7 +188,7 @@ Optional extra class for the dropdown toggle button (e.g. from parent CSS module
 
 > **type**: `"filter"` \| `"sort"`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:54](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SearchFilterBar/interface.ts#L54)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L54)
 
 The type of dropdown control.
 - `'sort'`: Displays a sort icon and is used for ordering data

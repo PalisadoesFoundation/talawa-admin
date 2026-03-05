@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/screens/AdminPortal/PluginStore/components/UninstallConfirmationModal.tsx:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/AdminPortal/PluginStore/components/UninstallConfirmationModal.tsx#L13)
+Defined in: [src/screens/AdminPortal/PluginStore/components/UninstallConfirmationModal.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/PluginStore/components/UninstallConfirmationModal.tsx#L13)
 
 ## Parameters
 

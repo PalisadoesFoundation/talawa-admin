@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validateAdminPluginStructure**(`files`): `object`
 
-Defined in: [src/utils/adminPluginInstaller.ts:198](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/adminPluginInstaller.ts#L198)
+Defined in: [src/utils/adminPluginInstaller.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L198)
 
 Validates admin plugin structure
 

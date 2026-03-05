@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **OrganizationInput** = `object`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:54](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L54)
+Defined in: [src/types/AdminPortal/Organization/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L54)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:54](https://github.com/y
 
 > **address**: [`AddressInput`](../../../address/type-aliases/AddressInput.md)
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:55](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L55)
+Defined in: [src/types/AdminPortal/Organization/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L55)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:55](https://github.com/y
 
 > `optional` **apiUrl**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:56](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L56)
+Defined in: [src/types/AdminPortal/Organization/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L56)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:56](https://github.com/y
 
 > `optional` **attendees**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:57](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L57)
+Defined in: [src/types/AdminPortal/Organization/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L57)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:57](https://github.com/y
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:58](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L58)
+Defined in: [src/types/AdminPortal/Organization/type.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L58)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:58](https://github.com/y
 
 > `optional` **image**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:59](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L59)
+Defined in: [src/types/AdminPortal/Organization/type.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L59)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:59](https://github.com/y
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:60](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L60)
+Defined in: [src/types/AdminPortal/Organization/type.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L60)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:60](https://github.com/y
 
 > `optional` **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:61](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L61)
+Defined in: [src/types/AdminPortal/Organization/type.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L61)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:61](https://github.com/y
 
 > `optional` **visibleInSearch**: `boolean`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:62](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Organization/type.ts#L62)
+Defined in: [src/types/AdminPortal/Organization/type.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L62)

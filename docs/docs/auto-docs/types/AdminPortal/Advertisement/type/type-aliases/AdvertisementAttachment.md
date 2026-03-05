@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **AdvertisementAttachment** = `object`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:30](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Advertisement/type.ts#L30)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L30)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:30](https://github.com/
 
 > **mimetype**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:32](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Advertisement/type.ts#L32)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L32)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:32](https://github.com/
 
 > **url**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:31](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Advertisement/type.ts#L31)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L31)

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceEmptyStateProps`](../../../../types/shared-components/EmptyState/interface/interfaces/InterfaceEmptyStateProps.md)\>
 
-Defined in: [src/shared-components/EmptyState/EmptyState.tsx:74](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/EmptyState/EmptyState.tsx#L74)
+Defined in: [src/shared-components/EmptyState/EmptyState.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EmptyState/EmptyState.tsx#L73)

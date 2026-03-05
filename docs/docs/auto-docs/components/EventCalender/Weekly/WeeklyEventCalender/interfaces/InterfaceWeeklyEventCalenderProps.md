@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceWeeklyEventCalenderProps
 
-Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:47](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L47)
+Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L47)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:47](htt
 
 > **currentDate**: `Date`
 
-Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:48](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L48)
+Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Weekly/WeeklyEventCalender.tsx#L48)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/components/EventCalender/Weekly/WeeklyEventCalender.tsx:48](htt
 
 > `optional` **currentMonth**: `number`
 
-Defined in: [src/types/Event/interface.ts:119](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L119)
+Defined in: [src/types/Event/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L119)
 
 #### Inherited from
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:119](https://github.com/yb175/talawa-a
 
 > `optional` **currentYear**: `number`
 
-Defined in: [src/types/Event/interface.ts:120](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L120)
+Defined in: [src/types/Event/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L120)
 
 #### Inherited from
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/interface.ts:120](https://github.com/yb175/talawa-a
 
 > **eventData**: [`IEvent`](../../../../../types/Event/interface/interfaces/IEvent.md)[]
 
-Defined in: [src/types/Event/interface.ts:112](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L112)
+Defined in: [src/types/Event/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L112)
 
 #### Inherited from
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Event/interface.ts:112](https://github.com/yb175/talawa-a
 
 > `optional` **onMonthChange**: (`month`, `year`) => `void`
 
-Defined in: [src/types/Event/interface.ts:118](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L118)
+Defined in: [src/types/Event/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L118)
 
 #### Parameters
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Event/interface.ts:118](https://github.com/yb175/talawa-a
 
 > `optional` **orgData**: [`IOrgList`](../../../../../types/Event/interface/interfaces/IOrgList.md)
 
-Defined in: [src/types/Event/interface.ts:114](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L114)
+Defined in: [src/types/Event/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L114)
 
 #### Inherited from
 
@@ -98,7 +98,7 @@ Defined in: [src/types/Event/interface.ts:114](https://github.com/yb175/talawa-a
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:113](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L113)
+Defined in: [src/types/Event/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L113)
 
 #### Returns
 
@@ -114,7 +114,7 @@ Defined in: [src/types/Event/interface.ts:113](https://github.com/yb175/talawa-a
 
 > `optional` **userId**: `string`
 
-Defined in: [src/types/Event/interface.ts:116](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L116)
+Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L116)
 
 #### Inherited from
 
@@ -126,7 +126,7 @@ Defined in: [src/types/Event/interface.ts:116](https://github.com/yb175/talawa-a
 
 > `optional` **userRole**: `string`
 
-Defined in: [src/types/Event/interface.ts:115](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L115)
+Defined in: [src/types/Event/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L115)
 
 #### Inherited from
 
@@ -138,7 +138,7 @@ Defined in: [src/types/Event/interface.ts:115](https://github.com/yb175/talawa-a
 
 > `optional` **viewType**: [`ViewType`](../../../../../screens/AdminPortal/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
 
-Defined in: [src/types/Event/interface.ts:117](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Event/interface.ts#L117)
+Defined in: [src/types/Event/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L117)
 
 #### Inherited from
 

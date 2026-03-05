@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **askForCustomPort**(): `Promise`\<`number`\>
 
-Defined in: [src/setup/askForCustomPort/askForCustomPort.ts:32](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/askForCustomPort/askForCustomPort.ts#L32)
+Defined in: [src/setup/askForCustomPort/askForCustomPort.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askForCustomPort/askForCustomPort.ts#L32)
 
 ## Returns
 

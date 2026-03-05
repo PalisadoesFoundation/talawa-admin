@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **LoadingMoreRows**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/LoadingMoreRows.tsx#L29)
+Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L29)
 
 LoadingMoreRows component that displays skeleton rows appended to a table.
 

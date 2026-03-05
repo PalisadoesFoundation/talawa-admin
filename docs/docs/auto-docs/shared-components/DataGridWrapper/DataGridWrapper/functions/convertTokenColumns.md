@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **convertTokenColumns**(`columns`): `GridColDef`[]
 
-Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:46](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L46)
+Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L46)
 
 Converts token-aware column definitions to MUI-compatible GridColDef.
 Transforms spacing token names (e.g., 'space-15') to pixel values (e.g., 150).

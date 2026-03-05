@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceEventVolunteerInfo
 
-Defined in: [src/types/Volunteer/interface.ts:243](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L243)
+Defined in: [src/types/Volunteer/interface.ts:243](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L243)
 
 Defines the structure for event volunteer information.
 
@@ -14,7 +14,7 @@ Defines the structure for event volunteer information.
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:259](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L259)
+Defined in: [src/types/Volunteer/interface.ts:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L259)
 
 The creation date of the volunteer record.
 
@@ -24,7 +24,7 @@ The creation date of the volunteer record.
 
 > **creator**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:285](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L285)
+Defined in: [src/types/Volunteer/interface.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L285)
 
 The user object who created this volunteer record.
 
@@ -46,7 +46,7 @@ The name of the creator
 
 > **event**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:272](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L272)
+Defined in: [src/types/Volunteer/interface.ts:272](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L272)
 
 The event object associated with the volunteer.
 
@@ -84,7 +84,7 @@ The name of the event
 
 > **groups**: `object`[]
 
-Defined in: [src/types/Volunteer/interface.ts:299](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L299)
+Defined in: [src/types/Volunteer/interface.ts:299](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L299)
 
 Array of groups associated with the volunteer.
 
@@ -110,7 +110,7 @@ Array of groups associated with the volunteer.
 
 > **hasAccepted**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:247](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L247)
+Defined in: [src/types/Volunteer/interface.ts:247](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L247)
 
 Indicates if the volunteer has accepted.
 
@@ -120,7 +120,7 @@ Indicates if the volunteer has accepted.
 
 > **hoursVolunteered**: `number`
 
-Defined in: [src/types/Volunteer/interface.ts:251](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L251)
+Defined in: [src/types/Volunteer/interface.ts:251](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L251)
 
 The number of hours volunteered.
 
@@ -130,7 +130,7 @@ The number of hours volunteered.
 
 > **id**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:245](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L245)
+Defined in: [src/types/Volunteer/interface.ts:245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L245)
 
 The unique identifier of the event volunteer.
 
@@ -140,7 +140,7 @@ The unique identifier of the event volunteer.
 
 > **isInstanceException**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:257](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L257)
+Defined in: [src/types/Volunteer/interface.ts:257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L257)
 
 Indicates if this is an exception to a recurring instance.
 
@@ -150,7 +150,7 @@ Indicates if this is an exception to a recurring instance.
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:253](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L253)
+Defined in: [src/types/Volunteer/interface.ts:253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L253)
 
 Indicates if the volunteer profile is public.
 
@@ -160,7 +160,7 @@ Indicates if the volunteer profile is public.
 
 > **isTemplate**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:255](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L255)
+Defined in: [src/types/Volunteer/interface.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L255)
 
 Indicates if this is a template volunteer record.
 
@@ -170,7 +170,7 @@ Indicates if this is a template volunteer record.
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:261](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L261)
+Defined in: [src/types/Volunteer/interface.ts:261](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L261)
 
 The last update date of the volunteer record.
 
@@ -180,7 +180,7 @@ The last update date of the volunteer record.
 
 > **updater**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:292](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L292)
+Defined in: [src/types/Volunteer/interface.ts:292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L292)
 
 The user object who last updated this volunteer record.
 
@@ -202,7 +202,7 @@ The name of the updater
 
 > **user**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:263](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L263)
+Defined in: [src/types/Volunteer/interface.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L263)
 
 The user object information of the volunteer.
 
@@ -230,6 +230,6 @@ The name of the user
 
 > **volunteerStatus**: `"accepted"` \| `"rejected"` \| `"pending"`
 
-Defined in: [src/types/Volunteer/interface.ts:249](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L249)
+Defined in: [src/types/Volunteer/interface.ts:249](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L249)
 
 The status of the volunteer.

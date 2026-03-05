@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **BreadcrumbsComponent**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/BreadcrumbsComponent/BreadcrumbsComponent.tsx:40](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/BreadcrumbsComponent/BreadcrumbsComponent.tsx#L40)
+Defined in: [src/shared-components/BreadcrumbsComponent/BreadcrumbsComponent.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/BreadcrumbsComponent/BreadcrumbsComponent.tsx#L38)
 
 ## Parameters
 

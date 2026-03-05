@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceFormStateType
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:156](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L156)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L156)
 
 Defines the form state structure for viewing/updating an agenda item.
 
@@ -14,7 +14,7 @@ Defines the form state structure for viewing/updating an agenda item.
 
 > **attachments**: [`InterfaceAttachment`](InterfaceAttachment.md)[]
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:163](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L163)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L163)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:163](https://github.com/y
 
 > **category**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:161](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L161)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L161)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:161](https://github.com/y
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:159](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L159)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L159)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:159](https://github.com/y
 
 > **duration**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:160](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L160)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L160)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:160](https://github.com/y
 
 > `optional` **folder**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:165](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L165)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L165)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:165](https://github.com/y
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:157](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L157)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L157)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:157](https://github.com/y
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:158](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L158)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L158)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:158](https://github.com/y
 
 > **notes**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:162](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L162)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L162)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:162](https://github.com/y
 
 > **url**: `string`[]
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:164](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L164)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L164)

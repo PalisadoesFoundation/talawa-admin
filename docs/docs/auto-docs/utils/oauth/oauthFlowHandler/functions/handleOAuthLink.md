@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **handleOAuthLink**(`client`, `provider`, `authorizationCode`, `redirectUri`): `Promise`\<[`InterfaceOAuthLinkResponse`](../../../../types/Auth/auth/interfaces/InterfaceOAuthLinkResponse.md)\>
 
-Defined in: [src/utils/oauth/oauthFlowHandler.ts:102](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/oauth/oauthFlowHandler.ts#L102)
+Defined in: [src/utils/oauth/oauthFlowHandler.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/oauth/oauthFlowHandler.ts#L102)
 
 Links an existing user account with an OAuth provider.
 

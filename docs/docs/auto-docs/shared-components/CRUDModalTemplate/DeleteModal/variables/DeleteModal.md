@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **DeleteModal**: `React.FC`\<[`InterfaceDeleteModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceDeleteModalProps.md)\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/DeleteModal.tsx:61](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/CRUDModalTemplate/DeleteModal.tsx#L61)
+Defined in: [src/shared-components/CRUDModalTemplate/DeleteModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/DeleteModal.tsx#L61)
 
 DeleteModal Component
 

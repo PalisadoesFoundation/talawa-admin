@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ROUTE\_USER\_ORG**(`compId`, `orgId`): `string`
 
-Defined in: [src/Constant/common.ts:76](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/Constant/common.ts#L76)
+Defined in: [src/Constant/common.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L76)
 
 Generates the route for a user component within an organization.
 

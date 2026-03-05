@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAddMemberProps
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L5)
+Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L5)
 
 Props for the AddMember component (organization people "Add Members" dropdown and modals).
 Used to pass styling class names from the parent screen so styles stay decoupled from test IDs.
@@ -15,7 +15,7 @@ Used to pass styling class names from the parent screen so styles stay decoupled
 
 > `optional` **containerClassName**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L9)
+Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L9)
 
 Optional class for the Add Members dropdown container.
 
@@ -25,7 +25,7 @@ Optional class for the Add Members dropdown container.
 
 > `optional` **rootClassName**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L7)
+Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L7)
 
 Optional class for the Add Members header wrapper (e.g. PageHeader root).
 
@@ -35,6 +35,6 @@ Optional class for the Add Members header wrapper (e.g. PageHeader root).
 
 > `optional` **toggleClassName**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L11)
+Defined in: [src/types/AdminPortal/OrganizationPeople/addMember/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/addMember/interface.ts#L11)
 
 Optional class for the Add Members dropdown toggle button.

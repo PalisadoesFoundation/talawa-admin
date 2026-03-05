@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceVolunteerData
 
-Defined in: [src/types/Volunteer/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L4)
+Defined in: [src/types/Volunteer/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L4)
 
 Defines the structure for volunteer data used in mutations.
 
@@ -14,7 +14,7 @@ Defines the structure for volunteer data used in mutations.
 
 > **event**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L6)
+Defined in: [src/types/Volunteer/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L6)
 
 The event ID.
 
@@ -24,7 +24,7 @@ The event ID.
 
 > **group**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L8)
+Defined in: [src/types/Volunteer/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L8)
 
 The group ID, or null for individual volunteering.
 
@@ -34,7 +34,7 @@ The group ID, or null for individual volunteering.
 
 > `optional` **recurringEventInstanceId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L16)
+Defined in: [src/types/Volunteer/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L16)
 
 (Optional) Instance ID for recurring events.
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Volunteer/interface.ts:16](https://github.com/yb175/talaw
 
 > `optional` **scope**: `"ENTIRE_SERIES"` \| `"THIS_INSTANCE_ONLY"`
 
-Defined in: [src/types/Volunteer/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L14)
+Defined in: [src/types/Volunteer/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L14)
 
 (Optional) Scope for recurring events.
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Volunteer/interface.ts:14](https://github.com/yb175/talaw
 
 > **status**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L10)
+Defined in: [src/types/Volunteer/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L10)
 
 The status of the volunteer request.
 
@@ -64,6 +64,6 @@ The status of the volunteer request.
 
 > **userId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L12)
+Defined in: [src/types/Volunteer/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L12)
 
 The user ID of the volunteer.

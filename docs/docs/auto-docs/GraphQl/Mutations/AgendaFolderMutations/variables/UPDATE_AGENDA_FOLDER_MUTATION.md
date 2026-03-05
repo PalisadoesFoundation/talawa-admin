@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_AGENDA\_FOLDER\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/AgendaFolderMutations.ts:34](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/GraphQl/Mutations/AgendaFolderMutations.ts#L34)
+Defined in: [src/GraphQl/Mutations/AgendaFolderMutations.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AgendaFolderMutations.ts#L34)
 
 GraphQL mutation to update an existing agenda folder.
 

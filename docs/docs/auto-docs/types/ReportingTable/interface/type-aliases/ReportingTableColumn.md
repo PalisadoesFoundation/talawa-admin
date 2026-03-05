@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ReportingTableColumn** = `Partial`\<`Omit`\<`GridColDef`, `"width"` \| `"minWidth"` \| `"maxWidth"`\>\> & `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/ReportingTable/interface.ts#L16)
+Defined in: [src/types/ReportingTable/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L16)
 
 ReportingTableColumnDef
 App-level column shape used across the app. It's a thin composition over
