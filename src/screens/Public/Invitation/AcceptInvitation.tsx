@@ -2,7 +2,7 @@
  * Screen to verify and accept an event invitation.
  * Verifies a token, shows invite details, and allows the user to accept the invitation.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useMutation } from '@apollo/client';
 import {
@@ -46,6 +46,14 @@ const AcceptInvitation = (): JSX.Element => {
   const [invite, setInvite] = useState<InviteMetadata>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const run = async () => {
@@ -132,7 +140,9 @@ const AcceptInvitation = (): JSX.Element => {
           t('acceptError', { defaultValue: 'Could not accept invitation' }),
       );
     } finally {
-      setIsSubmitting(false);
+      if (isMountedRef.current) {
+        setIsSubmitting(false);
+      }
     }
   };
 

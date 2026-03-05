@@ -1635,7 +1635,8 @@ describe('Calendar', () => {
       let viewAllButton = screen.queryByTestId('more');
       expect(viewAllButton).toBeInTheDocument();
 
-      // Now test with empty members orgData - should only see public events
+      // Rerender with empty members orgData (e.g. User Portal with ORGANIZATIONS_LIST_BASIC).
+      // filterEvents trusts the backend and shows all returned events, including org-member visibility.
       rerender(
         <Router>
           <MockedProvider link={link}>
@@ -1657,7 +1658,7 @@ describe('Calendar', () => {
 
       await wait();
 
-      // When orgData has no members, should see only public events
+      // When orgData has no members, trust backend: both public and org-member events are shown.
       const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
