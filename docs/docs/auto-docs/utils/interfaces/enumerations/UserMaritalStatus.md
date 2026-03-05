@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Enumeration: UserMaritalStatus
 
-Defined in: [src/utils/interfaces.ts:290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L290)
+Defined in: [src/utils/interfaces.ts:290](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L290)
 
 Represents the marital status of a user.
 
@@ -14,7 +14,7 @@ Represents the marital status of a user.
 
 > **DIVORCED**: `"divorced"`
 
-Defined in: [src/utils/interfaces.ts:291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L291)
+Defined in: [src/utils/interfaces.ts:291](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L291)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:291](https://github.com/PalisadoesFoundatio
 
 > **ENGAGED**: `"engaged"`
 
-Defined in: [src/utils/interfaces.ts:292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L292)
+Defined in: [src/utils/interfaces.ts:292](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L292)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:292](https://github.com/PalisadoesFoundatio
 
 > **MARRIED**: `"married"`
 
-Defined in: [src/utils/interfaces.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L293)
+Defined in: [src/utils/interfaces.ts:293](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L293)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:293](https://github.com/PalisadoesFoundatio
 
 > **SEPARATED**: `"separated"`
 
-Defined in: [src/utils/interfaces.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L294)
+Defined in: [src/utils/interfaces.ts:294](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L294)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:294](https://github.com/PalisadoesFoundatio
 
 > **SINGLE**: `"single"`
 
-Defined in: [src/utils/interfaces.ts:295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L295)
+Defined in: [src/utils/interfaces.ts:295](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L295)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/utils/interfaces.ts:295](https://github.com/PalisadoesFoundatio
 
 > **WIDOWED**: `"widowed"`
 
-Defined in: [src/utils/interfaces.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L296)
+Defined in: [src/utils/interfaces.ts:296](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/interfaces.ts#L296)

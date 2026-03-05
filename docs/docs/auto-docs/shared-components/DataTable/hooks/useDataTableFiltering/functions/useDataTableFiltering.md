@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useDataTableFiltering**\<`T`\>(`options`): `object`
 
-Defined in: [src/shared-components/DataTable/hooks/useDataTableFiltering.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableFiltering.ts#L42)
+Defined in: [src/shared-components/DataTable/hooks/useDataTableFiltering.ts:42](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/hooks/useDataTableFiltering.ts#L42)
 
 Hook to manage DataTable filtering and search logic.
 

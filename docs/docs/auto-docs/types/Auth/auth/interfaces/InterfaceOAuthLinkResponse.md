@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceOAuthLinkResponse
 
-Defined in: [src/types/Auth/auth.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L62)
+Defined in: [src/types/Auth/auth.ts:62](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L62)
 
 Response data returned from linking an OAuth account.
 
@@ -14,7 +14,7 @@ Response data returned from linking an OAuth account.
 
 > **emailAddress**: `string`
 
-Defined in: [src/types/Auth/auth.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L68)
+Defined in: [src/types/Auth/auth.ts:68](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L68)
 
 User's email address
 
@@ -24,7 +24,7 @@ User's email address
 
 > **id**: `string`
 
-Defined in: [src/types/Auth/auth.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L64)
+Defined in: [src/types/Auth/auth.ts:64](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L64)
 
 User's unique identifier
 
@@ -34,7 +34,7 @@ User's unique identifier
 
 > **isEmailAddressVerified**: `boolean`
 
-Defined in: [src/types/Auth/auth.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L70)
+Defined in: [src/types/Auth/auth.ts:70](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L70)
 
 Whether the user's email address has been verified
 
@@ -44,7 +44,7 @@ Whether the user's email address has been verified
 
 > **name**: `string`
 
-Defined in: [src/types/Auth/auth.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L66)
+Defined in: [src/types/Auth/auth.ts:66](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L66)
 
 User's full name
 
@@ -54,7 +54,7 @@ User's full name
 
 > **oauthAccounts**: [`InterfaceOAuthAccount`](InterfaceOAuthAccount.md)[]
 
-Defined in: [src/types/Auth/auth.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L74)
+Defined in: [src/types/Auth/auth.ts:74](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L74)
 
 List of linked OAuth accounts
 
@@ -64,6 +64,6 @@ List of linked OAuth accounts
 
 > **role**: [`UserRole`](../../../../utils/interfaces/enumerations/UserRole.md)
 
-Defined in: [src/types/Auth/auth.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L72)
+Defined in: [src/types/Auth/auth.ts:72](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L72)
 
 User's role in the system

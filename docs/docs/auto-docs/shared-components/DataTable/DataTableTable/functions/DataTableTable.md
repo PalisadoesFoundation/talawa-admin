@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **DataTableTable**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/DataTableTable.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableTable.tsx#L60)
+Defined in: [src/shared-components/DataTable/DataTableTable.tsx:60](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/DataTableTable.tsx#L60)
 
 DataTableTable component for rendering the core table structure.
 

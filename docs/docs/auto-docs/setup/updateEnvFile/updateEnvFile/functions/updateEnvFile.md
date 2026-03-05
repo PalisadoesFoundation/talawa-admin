@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **updateEnvFile**(`key`, `value`): `void`
 
-Defined in: [src/setup/updateEnvFile/updateEnvFile.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/updateEnvFile/updateEnvFile.ts#L25)
+Defined in: [src/setup/updateEnvFile/updateEnvFile.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/updateEnvFile/updateEnvFile.ts#L25)
 
 ## Parameters
 

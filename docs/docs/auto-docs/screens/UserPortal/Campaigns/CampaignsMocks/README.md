@@ -1,0 +1,15 @@
+[**talawa-admin**](../../../../README.md)
+
+***
+
+# screens/UserPortal/Campaigns/CampaignsMocks
+
+## Variables
+
+- [MOCKS](variables/MOCKS.md)
+- [MOCKS\_WITH\_FUND\_NO\_CAMPAIGNS](variables/MOCKS_WITH_FUND_NO_CAMPAIGNS.md)
+- [MOCKS\_WITH\_NO\_FUNDS](variables/MOCKS_WITH_NO_FUNDS.md)
+- [MOCKS\_WITH\_NULL\_ORGANIZATION](variables/MOCKS_WITH_NULL_ORGANIZATION.md)
+- [MOCKS\_WITH\_PENDING\_CAMPAIGN](variables/MOCKS_WITH_PENDING_CAMPAIGN.md)
+- [MOCKS\_WITH\_UNDEFINED\_CAMPAIGNS](variables/MOCKS_WITH_UNDEFINED_CAMPAIGNS.md)
+- [USER\_FUND\_CAMPAIGNS\_ERROR](variables/USER_FUND_CAMPAIGNS_ERROR.md)

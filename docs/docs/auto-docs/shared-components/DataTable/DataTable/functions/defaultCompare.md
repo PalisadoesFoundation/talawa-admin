@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **defaultCompare**(`a`, `b`): `number`
 
-Defined in: [src/shared-components/DataTable/DataTable.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTable.tsx#L52)
+Defined in: [src/shared-components/DataTable/DataTable.tsx:52](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/DataTable.tsx#L52)
 
 **`Internal`**
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useTableData**\<`TNode`, `TRow`, `TData`\>(`result`, `options`): [`IUseTableDataResult`](../../../../../types/shared-components/DataTable/hooks/interfaces/IUseTableDataResult.md)\<`TRow`, `TData`\>
 
-Defined in: [src/shared-components/DataTable/hooks/useTableData.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useTableData.ts#L12)
+Defined in: [src/shared-components/DataTable/hooks/useTableData.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/hooks/useTableData.ts#L12)
 
 Extract GraphQL connection data into table rows with optional node transform; filters null nodes.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **GET\_POST\_COMMENTS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/CommentQueries.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/CommentQueries.ts#L14)
+Defined in: [src/GraphQl/Queries/CommentQueries.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/GraphQl/Queries/CommentQueries.ts#L14)
 
 GraphQL query to retrieve post comments with cursor-based pagination.
 

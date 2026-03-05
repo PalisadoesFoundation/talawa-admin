@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **areOptionsEqual**(`option`, `value`): `boolean`
 
-Defined in: [src/utils/autocompleteHelpers.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/autocompleteHelpers.ts#L10)
+Defined in: [src/utils/autocompleteHelpers.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/autocompleteHelpers.ts#L10)
 
 Compares two user options by their IDs to determine equality in Autocomplete.
 

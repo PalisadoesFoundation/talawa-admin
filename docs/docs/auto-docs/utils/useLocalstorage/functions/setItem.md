@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **setItem**(`prefix`, `key`, `value`): `void`
 
-Defined in: [src/utils/useLocalstorage.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L48)
+Defined in: [src/utils/useLocalstorage.ts:48](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/useLocalstorage.ts#L48)
 
 Sets the value for the given key in local storage.
 

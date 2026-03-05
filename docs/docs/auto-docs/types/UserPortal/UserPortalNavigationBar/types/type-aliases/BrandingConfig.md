@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **BrandingConfig** = `object`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L74)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:74](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L74)
 
 Branding configuration for the navbar
 
@@ -16,7 +16,7 @@ Branding configuration for the navbar
 
 > `optional` **brandName**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L85)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:85](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L85)
 
 Brand name to display next to logo
 
@@ -32,7 +32,7 @@ Brand name to display next to logo
 
 > `optional` **logo**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L79)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:79](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L79)
 
 Logo image source URL or path
 
@@ -48,7 +48,7 @@ Talawa logo from assets/images/talawa-logo-600x600.png
 
 > `optional` **logoAltText**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L91)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:91](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L91)
 
 Alt text for logo image
 
@@ -64,7 +64,7 @@ Translation key 'userNavbar.talawaBranding'
 
 > `optional` **onBrandClick**: () => `void`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L97)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:97](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L97)
 
 Click handler for brand/logo
 

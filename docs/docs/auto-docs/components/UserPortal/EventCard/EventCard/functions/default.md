@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`id`): `Element`
 
-Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L72)
+Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:72](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/UserPortal/EventCard/EventCard.tsx#L72)
 
 EventCard Component
 

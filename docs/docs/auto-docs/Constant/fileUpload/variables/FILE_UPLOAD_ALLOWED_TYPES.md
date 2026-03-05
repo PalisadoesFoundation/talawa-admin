@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **FILE\_UPLOAD\_ALLOWED\_TYPES**: `string`[]
 
-Defined in: [src/Constant/fileUpload.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/fileUpload.ts#L7)
+Defined in: [src/Constant/fileUpload.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/Constant/fileUpload.ts#L7)

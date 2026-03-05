@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaFolderUpdateModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaFolderUpdateModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx#L31)
+Defined in: [src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx:31](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx#L31)
 
 AgendaFolderUpdateModal
 

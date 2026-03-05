@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **askForTalawaApiUrl**(`useDocker`): `Promise`\<`string`\>
 
-Defined in: [src/setup/askForTalawaApiUrl/askForTalawaApiUrl.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askForTalawaApiUrl/askForTalawaApiUrl.ts#L3)
+Defined in: [src/setup/askForTalawaApiUrl/askForTalawaApiUrl.ts:3](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/setup/askForTalawaApiUrl/askForTalawaApiUrl.ts#L3)
 
 ## Parameters
 

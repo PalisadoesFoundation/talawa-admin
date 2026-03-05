@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceVolunteerMembership
 
-Defined in: [src/types/Volunteer/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L174)
+Defined in: [src/types/Volunteer/interface.ts:174](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L174)
 
 Defines the structure for volunteer membership information.
 
@@ -14,7 +14,7 @@ Defines the structure for volunteer membership information.
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L180)
+Defined in: [src/types/Volunteer/interface.ts:180](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L180)
 
 The creation date of the volunteer membership record.
 
@@ -24,7 +24,7 @@ The creation date of the volunteer membership record.
 
 > **createdBy**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L225)
+Defined in: [src/types/Volunteer/interface.ts:225](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L225)
 
 The user object who created this membership.
 
@@ -46,7 +46,7 @@ The name of the creator
 
 > **event**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L184)
+Defined in: [src/types/Volunteer/interface.ts:184](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L184)
 
 The event object associated with the volunteer membership.
 
@@ -88,7 +88,7 @@ The start of the event
 
 > `optional` **group**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L218)
+Defined in: [src/types/Volunteer/interface.ts:218](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L218)
 
 (Optional) The group object associated with the membership.
 
@@ -110,7 +110,7 @@ The name of the group
 
 > **id**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L176)
+Defined in: [src/types/Volunteer/interface.ts:176](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L176)
 
 The unique identifier of the volunteer membership.
 
@@ -120,7 +120,7 @@ The unique identifier of the volunteer membership.
 
 > **status**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L178)
+Defined in: [src/types/Volunteer/interface.ts:178](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L178)
 
 The status of the volunteer membership.
 
@@ -130,7 +130,7 @@ The status of the volunteer membership.
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L182)
+Defined in: [src/types/Volunteer/interface.ts:182](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L182)
 
 The last update date of the volunteer membership record.
 
@@ -140,7 +140,7 @@ The last update date of the volunteer membership record.
 
 > **updatedBy**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L232)
+Defined in: [src/types/Volunteer/interface.ts:232](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L232)
 
 The user object who last updated this membership.
 
@@ -162,7 +162,7 @@ The name of the updater
 
 > **volunteer**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L198)
+Defined in: [src/types/Volunteer/interface.ts:198](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L198)
 
 The volunteer object associated with the membership.
 

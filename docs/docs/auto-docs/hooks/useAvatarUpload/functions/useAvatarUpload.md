@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useAvatarUpload**(`initialUrl?`): `object`
 
-Defined in: [src/hooks/useAvatarUpload.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/useAvatarUpload.ts#L23)
+Defined in: [src/hooks/useAvatarUpload.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/hooks/useAvatarUpload.ts#L23)
 
 Custom hook for handling avatar file uploads with validation.
 

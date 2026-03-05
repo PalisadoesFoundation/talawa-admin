@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: ISortChangeEvent\<T\>
 
-Defined in: [src/types/shared-components/DataTable/types.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L60)
+Defined in: [src/types/shared-components/DataTable/types.ts:60](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L60)
 
 Event object passed to onSortChange callback when sort state changes.
 
@@ -25,7 +25,7 @@ The type of data for each row in the table
 
 > **column**: [`IColumnDef`](../../column/interfaces/IColumnDef.md)\<`T`, `unknown`\>
 
-Defined in: [src/types/shared-components/DataTable/types.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L66)
+Defined in: [src/types/shared-components/DataTable/types.ts:66](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L66)
 
 Column definition that triggered the sort change
 
@@ -35,7 +35,7 @@ Column definition that triggered the sort change
 
 > **sortBy**: [`ISortState`](ISortState.md)[]
 
-Defined in: [src/types/shared-components/DataTable/types.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L62)
+Defined in: [src/types/shared-components/DataTable/types.ts:62](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L62)
 
 Array of sort states (primary sort first, can include multiple columns)
 
@@ -45,6 +45,6 @@ Array of sort states (primary sort first, can include multiple columns)
 
 > **sortDirection**: [`SortDirection`](../type-aliases/SortDirection.md)
 
-Defined in: [src/types/shared-components/DataTable/types.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/types.ts#L64)
+Defined in: [src/types/shared-components/DataTable/types.ts:64](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/types.ts#L64)
 
 Direction of the primary sort

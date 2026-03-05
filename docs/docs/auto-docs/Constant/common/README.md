@@ -1,0 +1,29 @@
+[**talawa-admin**](../../README.md)
+
+***
+
+# Constant/common
+
+## Variables
+
+- [DATE\_FORMAT](variables/DATE_FORMAT.md)
+- [DATE\_FORMAT\_ISO\_DATE](variables/DATE_FORMAT_ISO_DATE.md)
+- [DATE\_TIME\_SEPARATOR](variables/DATE_TIME_SEPARATOR.md)
+- [DUMMY\_DATE\_TIME\_PREFIX](variables/DUMMY_DATE_TIME_PREFIX.md)
+- [IDENTIFIER\_ID](variables/IDENTIFIER_ID.md)
+- [IDENTIFIER\_USER\_ID](variables/IDENTIFIER_USER_ID.md)
+- [MAX\_NAME\_LENGTH](variables/MAX_NAME_LENGTH.md)
+
+## Functions
+
+- [FILE\_NAME\_TEMPLATE\_BACKUP\_ENV](functions/FILE_NAME_TEMPLATE_BACKUP_ENV.md)
+- [ROUTE\_USER](functions/ROUTE_USER.md)
+- [ROUTE\_USER\_ORG](functions/ROUTE_USER_ORG.md)
+- [TEST\_ID\_DELETE\_EVENT\_MODAL](functions/TEST_ID_DELETE_EVENT_MODAL.md)
+- [TEST\_ID\_PEOPLE\_CARD](functions/TEST_ID_PEOPLE_CARD.md)
+- [TEST\_ID\_PEOPLE\_EMAIL](functions/TEST_ID_PEOPLE_EMAIL.md)
+- [TEST\_ID\_PEOPLE\_IMAGE](functions/TEST_ID_PEOPLE_IMAGE.md)
+- [TEST\_ID\_PEOPLE\_NAME](functions/TEST_ID_PEOPLE_NAME.md)
+- [TEST\_ID\_PEOPLE\_ROLE](functions/TEST_ID_PEOPLE_ROLE.md)
+- [TEST\_ID\_PEOPLE\_SNO](functions/TEST_ID_PEOPLE_SNO.md)
+- [TEST\_ID\_UPDATE\_EVENT\_MODAL](functions/TEST_ID_UPDATE_EVENT_MODAL.md)

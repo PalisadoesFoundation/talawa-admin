@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceRecurrenceDropdownProps
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L6)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/RecurrenceDropdown/interface.ts#L6)
 
 Props for the RecurrenceDropdown component.
 
@@ -14,7 +14,7 @@ Props for the RecurrenceDropdown component.
 
 > **currentLabel**: `string`
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L8)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/RecurrenceDropdown/interface.ts#L8)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](http
 
 > **onSelect**: (`option`) => `void`
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L9)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/RecurrenceDropdown/interface.ts#L9)
 
 #### Parameters
 
@@ -40,4 +40,4 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](http
 
 > **recurrenceOptions**: [`InterfaceRecurrenceOption`](../../../../../shared-components/EventForm/utils/recurrenceOptions/interfaces/InterfaceRecurrenceOption.md)[]
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L7)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/RecurrenceDropdown/interface.ts#L7)

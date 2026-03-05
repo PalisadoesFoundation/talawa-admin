@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **TokenAwareGridColDef**\<`TRow`, `TValue`, `TFormattedValue`\> = `Omit`\<`GridColDef`\<`TRow`, `TValue`, `TFormattedValue`\>, `"width"` \| `"minWidth"` \| `"maxWidth"`\> & `object`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L24)
+Defined in: [src/types/DataGridWrapper/interface.ts:24](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/DataGridWrapper/interface.ts#L24)
 
 Extended column definition that accepts design tokens for width properties.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/Auth/OAuthCallback/OAuthCallback.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthCallback/OAuthCallback.tsx#L45)
+Defined in: [src/components/Auth/OAuthCallback/OAuthCallback.tsx:45](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/components/Auth/OAuthCallback/OAuthCallback.tsx#L45)
 
 OAuth callback page component that handles the OAuth authentication flow redirect.
 

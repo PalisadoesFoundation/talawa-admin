@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfacePageHeaderProps
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L6)
+Defined in: [src/types/shared-components/Navbar/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Navbar/interface.ts#L6)
 
 Interface for PageHeader component props.
 
@@ -14,7 +14,7 @@ Interface for PageHeader component props.
 
 > `optional` **actions**: `ReactNode`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L25)
+Defined in: [src/types/shared-components/Navbar/interface.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Navbar/interface.ts#L25)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:25](https://github.
 
 > `optional` **rootClassName**: `string`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L26)
+Defined in: [src/types/shared-components/Navbar/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Navbar/interface.ts#L26)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:26](https://github.
 
 > `optional` **search**: `object`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L8)
+Defined in: [src/types/shared-components/Navbar/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Navbar/interface.ts#L8)
 
 #### buttonTestId?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:8](https://github.c
 
 > `optional` **sorting**: `object`[]
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L14)
+Defined in: [src/types/shared-components/Navbar/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Navbar/interface.ts#L14)
 
 #### containerClassName?
 
@@ -114,4 +114,4 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:14](https://github.
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L7)
+Defined in: [src/types/shared-components/Navbar/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Navbar/interface.ts#L7)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceVolunteerGroupData
 
-Defined in: [src/types/Volunteer/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L22)
+Defined in: [src/types/Volunteer/interface.ts:22](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L22)
 
 Defines the structure for volunteer group data used in mutations.
 
@@ -14,7 +14,7 @@ Defines the structure for volunteer group data used in mutations.
 
 > **description**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L30)
+Defined in: [src/types/Volunteer/interface.ts:30](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L30)
 
 The description of the volunteer group.
 
@@ -24,7 +24,7 @@ The description of the volunteer group.
 
 > **eventId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L24)
+Defined in: [src/types/Volunteer/interface.ts:24](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L24)
 
 The event ID, can be undefined for recurring events when baseEvent is used.
 
@@ -34,7 +34,7 @@ The event ID, can be undefined for recurring events when baseEvent is used.
 
 > `optional` **leaderId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L26)
+Defined in: [src/types/Volunteer/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L26)
 
 (Optional) leader ID for the volunteer group.
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Volunteer/interface.ts:26](https://github.com/PalisadoesF
 
 > **name**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L28)
+Defined in: [src/types/Volunteer/interface.ts:28](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L28)
 
 The name of the volunteer group.
 
@@ -54,7 +54,7 @@ The name of the volunteer group.
 
 > `optional` **recurringEventInstanceId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L38)
+Defined in: [src/types/Volunteer/interface.ts:38](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L38)
 
 (Optional) instance ID for recurring events.
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Volunteer/interface.ts:38](https://github.com/PalisadoesF
 
 > `optional` **scope**: `"ENTIRE_SERIES"` \| `"THIS_INSTANCE_ONLY"`
 
-Defined in: [src/types/Volunteer/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L36)
+Defined in: [src/types/Volunteer/interface.ts:36](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L36)
 
 (Optional) scope for recurring events.
 
@@ -74,7 +74,7 @@ Defined in: [src/types/Volunteer/interface.ts:36](https://github.com/PalisadoesF
 
 > **volunteersRequired**: `number`
 
-Defined in: [src/types/Volunteer/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L32)
+Defined in: [src/types/Volunteer/interface.ts:32](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L32)
 
 The number of volunteers required, or null if not specified.
 
@@ -84,6 +84,6 @@ The number of volunteers required, or null if not specified.
 
 > **volunteerUserIds**: `string`[]
 
-Defined in: [src/types/Volunteer/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L34)
+Defined in: [src/types/Volunteer/interface.ts:34](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Volunteer/interface.ts#L34)
 
 Array of user IDs for volunteer group members.

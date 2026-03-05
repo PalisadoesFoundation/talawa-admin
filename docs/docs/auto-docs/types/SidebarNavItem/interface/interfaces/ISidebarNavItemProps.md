@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: ISidebarNavItemProps
 
-Defined in: [src/types/SidebarNavItem/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L7)
+Defined in: [src/types/SidebarNavItem/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L7)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:7](https://github.com/Palisad
 
 > `optional` **dataCy**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L25)
+Defined in: [src/types/SidebarNavItem/interface.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:25](https://github.com/Palisa
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L17)
+Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L17)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/Palisa
 
 > **icon**: `ReactNode`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L11)
+Defined in: [src/types/SidebarNavItem/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L11)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:11](https://github.com/Palisa
 
 > `optional` **iconType**: `"svg"` \| `"react-icon"`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L23)
+Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L23)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/Palisa
 
 > **label**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L13)
+Defined in: [src/types/SidebarNavItem/interface.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L13)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:13](https://github.com/Palisa
 
 > `optional` **onClick**: () => `void`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L19)
+Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L19)
 
 #### Returns
 
@@ -64,7 +64,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/Palisa
 
 > **testId**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L15)
+Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L15)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/Palisa
 
 > **to**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L9)
+Defined in: [src/types/SidebarNavItem/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L9)
 
 ***
 
@@ -80,4 +80,4 @@ Defined in: [src/types/SidebarNavItem/interface.ts:9](https://github.com/Palisad
 
 > `optional` **useSimpleButton**: `boolean`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L21)
+Defined in: [src/types/SidebarNavItem/interface.ts:21](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarNavItem/interface.ts#L21)

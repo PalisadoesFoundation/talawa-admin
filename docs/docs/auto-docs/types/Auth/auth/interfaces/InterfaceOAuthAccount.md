@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceOAuthAccount
 
-Defined in: [src/types/Auth/auth.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L48)
+Defined in: [src/types/Auth/auth.ts:48](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L48)
 
 Represents a linked OAuth account.
 
@@ -14,7 +14,7 @@ Represents a linked OAuth account.
 
 > **email**: `string`
 
-Defined in: [src/types/Auth/auth.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L52)
+Defined in: [src/types/Auth/auth.ts:52](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L52)
 
 Email address associated with the OAuth account
 
@@ -24,7 +24,7 @@ Email address associated with the OAuth account
 
 > **lastUsedAt**: `string`
 
-Defined in: [src/types/Auth/auth.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L56)
+Defined in: [src/types/Auth/auth.ts:56](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L56)
 
 Date when the account was last used for authentication
 
@@ -34,7 +34,7 @@ Date when the account was last used for authentication
 
 > **linkedAt**: `string`
 
-Defined in: [src/types/Auth/auth.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L54)
+Defined in: [src/types/Auth/auth.ts:54](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L54)
 
 Date when the account was linked
 
@@ -44,6 +44,6 @@ Date when the account was linked
 
 > **provider**: `string`
 
-Defined in: [src/types/Auth/auth.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/auth.ts#L50)
+Defined in: [src/types/Auth/auth.ts:50](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/auth.ts#L50)
 
 OAuth provider name

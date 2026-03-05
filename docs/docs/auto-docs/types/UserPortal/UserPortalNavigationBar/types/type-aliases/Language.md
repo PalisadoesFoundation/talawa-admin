@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Language** = `object`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L66)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:66](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L66)
 
 Language configuration (from utils/languages)
 
@@ -16,7 +16,7 @@ Language configuration (from utils/languages)
 
 > **code**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L67)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:67](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L67)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:67](https://g
 
 > **country\_code**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L69)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:69](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L69)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:69](https://g
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L68)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:68](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L68)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IColumnDef\<T, TValue\>
 
-Defined in: [src/types/shared-components/DataTable/column.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/column.ts#L13)
+Defined in: [src/types/shared-components/DataTable/column.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/column.ts#L13)
 
 Column definition for DataTable.
 
@@ -31,7 +31,7 @@ The type of the value extracted by the accessor (defaults to unknown)
 
 > **accessor**: [`Accessor`](../../types/type-aliases/Accessor.md)\<`T`, `TValue`\>
 
-Defined in: [src/types/shared-components/DataTable/column.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/column.ts#L19)
+Defined in: [src/types/shared-components/DataTable/column.ts:19](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/column.ts#L19)
 
 Accessor function or key to extract the value from row data
 
@@ -41,7 +41,7 @@ Accessor function or key to extract the value from row data
 
 > **header**: [`HeaderRender`](../../types/type-aliases/HeaderRender.md)
 
-Defined in: [src/types/shared-components/DataTable/column.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/column.ts#L17)
+Defined in: [src/types/shared-components/DataTable/column.ts:17](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/column.ts#L17)
 
 Column header text or React component to render
 
@@ -51,7 +51,7 @@ Column header text or React component to render
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/DataTable/column.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/column.ts#L15)
+Defined in: [src/types/shared-components/DataTable/column.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/column.ts#L15)
 
 Unique identifier for this column
 
@@ -61,7 +61,7 @@ Unique identifier for this column
 
 > `optional` **meta**: `object`
 
-Defined in: [src/types/shared-components/DataTable/column.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/column.ts#L32)
+Defined in: [src/types/shared-components/DataTable/column.ts:32](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/column.ts#L32)
 
 Metadata and configuration for column behavior.
 
@@ -180,7 +180,7 @@ CSS width for this column (e.g., '100px', '20%')
 
 > `optional` **render**: (`value`, `row`) => `ReactNode`
 
-Defined in: [src/types/shared-components/DataTable/column.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/column.ts#L28)
+Defined in: [src/types/shared-components/DataTable/column.ts:28](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/column.ts#L28)
 
 Optional custom render function for cell values.
 Receives the extracted value and the full row data.

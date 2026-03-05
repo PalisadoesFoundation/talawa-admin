@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **SEARCH\_EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts#L208)
+Defined in: [src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts:208](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts#L208)
 
 ## Type Declaration
 

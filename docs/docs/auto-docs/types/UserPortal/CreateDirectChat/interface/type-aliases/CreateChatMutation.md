@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CreateChatMutation** = (`options?`) => `Promise`\<`FetchResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L15)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CreateDirectChat/interface.ts#L15)
 
 ## Parameters
 

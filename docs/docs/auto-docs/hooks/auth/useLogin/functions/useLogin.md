@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useLogin**(`opts?`): `object`
 
-Defined in: [src/hooks/auth/useLogin.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useLogin.ts#L28)
+Defined in: [src/hooks/auth/useLogin.ts:28](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/hooks/auth/useLogin.ts#L28)
 
 Custom hook for user login.
 Encapsulates login GraphQL logic with consistent error/success handling.

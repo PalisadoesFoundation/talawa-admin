@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IUseDataTableFilteringOptions\<T\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L96)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:96](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L96)
 
 Configuration options for table data filtering and search functionality.
 
@@ -26,7 +26,7 @@ The type of data for each row in the table
 
 > `optional` **columnFilters**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L108)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:108](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L108)
 
 Record of column-specific filter values, keyed by column ID
 
@@ -36,7 +36,7 @@ Record of column-specific filter values, keyed by column ID
 
 > **columns**: [`IColumnDef`](../../column/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L100)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:100](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L100)
 
 Column definitions that determine which columns are searchable or filterable
 
@@ -46,7 +46,7 @@ Column definitions that determine which columns are searchable or filterable
 
 > `optional` **data**: `T`[]
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L98)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:98](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L98)
 
 Array of row data to filter and search
 
@@ -56,7 +56,7 @@ Array of row data to filter and search
 
 > `optional` **globalSearch**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L104)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:104](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L104)
 
 Current global search query string to match against row data
 
@@ -66,7 +66,7 @@ Current global search query string to match against row data
 
 > `optional` **initialGlobalSearch**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L102)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:102](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L102)
 
 Initial value for global search query, used on mount
 
@@ -76,7 +76,7 @@ Initial value for global search query, used on mount
 
 > `optional` **onColumnFiltersChange**: (`filters`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L110)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:110](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L110)
 
 Callback fired when column filters change, receives updated filter record
 
@@ -96,7 +96,7 @@ Callback fired when column filters change, receives updated filter record
 
 > `optional` **onGlobalSearchChange**: (`q`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L106)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:106](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L106)
 
 Callback fired when global search query changes, receives new query string
 
@@ -116,7 +116,7 @@ Callback fired when global search query changes, receives new query string
 
 > `optional` **onPageReset**: () => `void`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L118)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:118](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L118)
 
 Callback to reset pagination to first page when filters change
 
@@ -130,7 +130,7 @@ Callback to reset pagination to first page when filters change
 
 > `optional` **paginationMode**: `"client"` \| `"server"` \| `"none"`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L116)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:116](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L116)
 
 Current pagination mode: 'client' for local paging, 'server' for remote paging, 'none' for no pagination
 
@@ -140,7 +140,7 @@ Current pagination mode: 'client' for local paging, 'server' for remote paging, 
 
 > `optional` **serverFilter**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L114)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:114](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L114)
 
 Whether column filtering is handled server-side instead of client-side
 
@@ -150,6 +150,6 @@ Whether column filtering is handled server-side instead of client-side
 
 > `optional` **serverSearch**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L112)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:112](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/hooks.ts#L112)
 
 Whether search functionality is handled server-side instead of client-side

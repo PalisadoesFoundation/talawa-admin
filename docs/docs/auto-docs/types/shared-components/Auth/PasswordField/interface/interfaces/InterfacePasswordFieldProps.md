@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
 # Interface: InterfacePasswordFieldProps
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L7)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L7)
 
 Props interface for the PasswordField component.
 Extends basic form field functionality with password visibility toggle features.
@@ -15,7 +15,7 @@ Extends basic form field functionality with password visibility toggle features.
 
 > `optional` **dataCy**: `string`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L16)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L16)
 
 Optional data-cy for e2e (Cypress) selectors
 
@@ -25,7 +25,7 @@ Optional data-cy for e2e (Cypress) selectors
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L13)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:13](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L13)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:13](htt
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L8)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L8)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:8](http
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L9)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L9)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:9](http
 
 > **onChange**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L11)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L11)
 
 #### Parameters
 
@@ -67,7 +67,7 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:11](htt
 
 > `optional` **onToggleVisibility**: () => `void`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L18)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:18](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L18)
 
 #### Returns
 
@@ -79,7 +79,7 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:18](htt
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L12)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L12)
 
 ***
 
@@ -87,7 +87,7 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:12](htt
 
 > `optional` **showPassword**: `boolean`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L17)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:17](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L17)
 
 ***
 
@@ -95,7 +95,7 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:17](htt
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L14)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L14)
 
 ***
 
@@ -103,4 +103,4 @@ Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:14](htt
 
 > **value**: `string`
 
-Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/PasswordField/interface.ts#L10)
+Defined in: [src/types/shared-components/Auth/PasswordField/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/Auth/PasswordField/interface.ts#L10)

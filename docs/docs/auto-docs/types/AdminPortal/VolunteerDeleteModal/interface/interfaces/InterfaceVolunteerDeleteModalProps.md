@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceVolunteerDeleteModalProps
 
-Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L6)
+Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L6)
 
 Props for VolunteerDeleteModal component.
 
@@ -14,7 +14,7 @@ Props for VolunteerDeleteModal component.
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L12)
+Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L12)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:12](https:/
 
 > **hide**: () => `void`
 
-Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L8)
+Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L8)
 
 #### Returns
 
@@ -34,7 +34,7 @@ Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:8](https://
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L7)
+Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L7)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:7](https://
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L11)
+Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L11)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:11](https:/
 
 > **refetchVolunteers**: () => `void`
 
-Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L10)
+Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L10)
 
 #### Returns
 
@@ -62,4 +62,4 @@ Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:10](https:/
 
 > **volunteer**: [`InterfaceEventVolunteerInfo`](../../../../../utils/interfaces/interfaces/InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L9)
+Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L9)

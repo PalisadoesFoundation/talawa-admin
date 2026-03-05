@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: ILoginCredentials
 
-Defined in: [src/types/Auth/useLogin/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useLogin/interface.ts#L6)
+Defined in: [src/types/Auth/useLogin/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/useLogin/interface.ts#L6)
 
 Credentials required for login.
 
@@ -14,7 +14,7 @@ Credentials required for login.
 
 > **email**: `string`
 
-Defined in: [src/types/Auth/useLogin/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useLogin/interface.ts#L7)
+Defined in: [src/types/Auth/useLogin/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/useLogin/interface.ts#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Auth/useLogin/interface.ts:7](https://github.com/Palisado
 
 > **password**: `string`
 
-Defined in: [src/types/Auth/useLogin/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useLogin/interface.ts#L8)
+Defined in: [src/types/Auth/useLogin/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/useLogin/interface.ts#L8)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/Auth/useLogin/interface.ts:8](https://github.com/Palisado
 
 > `optional` **recaptchaToken**: `string`
 
-Defined in: [src/types/Auth/useLogin/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useLogin/interface.ts#L9)
+Defined in: [src/types/Auth/useLogin/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/Auth/useLogin/interface.ts#L9)

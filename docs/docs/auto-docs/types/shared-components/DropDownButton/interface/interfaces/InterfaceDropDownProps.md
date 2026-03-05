@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceDropDownProps
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L30)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:30](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DropDownButton/interface.ts#L30)
 
 Interface for dropdown component props.
 
@@ -24,7 +24,7 @@ Styling props:
 
 > `optional` **btnStyle**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L41)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:41](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DropDownButton/interface.ts#L41)
 
 Base class(es) for the toggle button. Applied first; often set by the wrapping component.
 Use this for default button layout/theme.
@@ -35,7 +35,7 @@ Use this for default button layout/theme.
 
 > `optional` **containerClassName**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L53)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:53](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DropDownButton/interface.ts#L53)
 
 Consumer override: extra class name(s) for the dropdown container, merged with
 parentContainerStyle. Use from parent screens (e.g. CSS module classes) to style the
@@ -47,7 +47,7 @@ container without coupling to test IDs.
 
 > `optional` **menuClassName**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L46)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:46](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DropDownButton/interface.ts#L46)
 
 Custom class name for the dropdown menu.
 
@@ -57,7 +57,7 @@ Custom class name for the dropdown menu.
 
 > `optional` **parentContainerStyle**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L35)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:35](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DropDownButton/interface.ts#L35)
 
 Base class(es) for the dropdown container. Applied first; often set by the wrapping component
 (e.g. SortingButton, Navbar). Use this for default layout/theme.
@@ -68,7 +68,7 @@ Base class(es) for the dropdown container. Applied first; often set by the wrapp
 
 > `optional` **toggleClassName**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L60)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:60](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DropDownButton/interface.ts#L60)
 
 Consumer override: extra class name(s) for the toggle button, merged with btnStyle.
 Use from parent screens (e.g. CSS module classes) to style the toggle without

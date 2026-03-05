@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L6)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L6)
 
 Defines the structure for agenda item category information.
 
@@ -14,7 +14,7 @@ Defines the structure for agenda item category information.
 
 > **creator**: `object`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L10)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L10)
 
 #### id
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:10](https://github.com/Pa
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L9)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L9)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:9](https://github.com/Pal
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L7)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L7)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:7](https://github.com/Pal
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L8)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Agenda/interface.ts#L8)

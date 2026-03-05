@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **InterfaceUserOrganizationsProps** = `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L1)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:1](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L1)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:1](https
 
 > `optional` **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L1)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:1](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L1)

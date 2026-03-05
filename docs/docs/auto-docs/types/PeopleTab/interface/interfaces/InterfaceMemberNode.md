@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceMemberNode
 
-Defined in: [src/types/PeopleTab/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L4)
+Defined in: [src/types/PeopleTab/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L4)
 
 Shared node shape for member/user rows in People screens.
 
@@ -14,7 +14,7 @@ Shared node shape for member/user rows in People screens.
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L8)
+Defined in: [src/types/PeopleTab/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L8)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/PeopleTab/interface.ts:8](https://github.com/PalisadoesFo
 
 > `optional` **createdAt**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L9)
+Defined in: [src/types/PeopleTab/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L9)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/PeopleTab/interface.ts:9](https://github.com/PalisadoesFo
 
 > `optional` **emailAddress**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L10)
+Defined in: [src/types/PeopleTab/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L10)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/PeopleTab/interface.ts:10](https://github.com/PalisadoesF
 
 > **id**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L5)
+Defined in: [src/types/PeopleTab/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L5)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/PeopleTab/interface.ts:5](https://github.com/PalisadoesFo
 
 > **name**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L6)
+Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L6)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/PalisadoesFo
 
 > **role**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L7)
+Defined in: [src/types/PeopleTab/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L7)

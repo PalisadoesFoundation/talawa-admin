@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceMemberData
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L3)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:3](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:3](https://github.com/Palisa
 
 > **\_id**: `string`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L4)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L4)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:4](https://github.com/Palisa
 
 > **firstName**: `string`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L5)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L5)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:5](https://github.com/Palisa
 
 > **lastName**: `string`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L6)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L6)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getSpacingValue**(`token`): `number`
 
-Defined in: [src/utils/tokenValues.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tokenValues.ts#L66)
+Defined in: [src/utils/tokenValues.ts:66](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/utils/tokenValues.ts#L66)
 
 Converts a spacing token name to its pixel value.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **EmailField**: `React.FC`\<[`InterfaceEmailFieldProps`](../../../../../types/shared-components/Auth/EmailField/interface/interfaces/InterfaceEmailFieldProps.md)\>
 
-Defined in: [src/shared-components/Auth/EmailField/EmailField.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Auth/EmailField/EmailField.tsx#L35)
+Defined in: [src/shared-components/Auth/EmailField/EmailField.tsx:35](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/Auth/EmailField/EmailField.tsx#L35)
 
 Reusable email input field component.
 

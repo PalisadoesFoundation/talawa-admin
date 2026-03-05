@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfacePaginationControlsProps
 
-Defined in: [src/types/shared-components/DataTable/pagination.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/pagination.ts#L64)
+Defined in: [src/types/shared-components/DataTable/pagination.ts:64](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/pagination.ts#L64)
 
 Props for a pagination controls component.
 
@@ -17,7 +17,7 @@ allowing users to move between pages of data.
 
 > **onPageChange**: (`page`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/pagination.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/pagination.ts#L76)
+Defined in: [src/types/shared-components/DataTable/pagination.ts:76](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/pagination.ts#L76)
 
 Callback fired when user navigates to a different page.
 
@@ -39,7 +39,7 @@ The new page number
 
 > **page**: `number`
 
-Defined in: [src/types/shared-components/DataTable/pagination.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/pagination.ts#L66)
+Defined in: [src/types/shared-components/DataTable/pagination.ts:66](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/pagination.ts#L66)
 
 Current page number (typically 1-indexed)
 
@@ -49,7 +49,7 @@ Current page number (typically 1-indexed)
 
 > **pageSize**: `number`
 
-Defined in: [src/types/shared-components/DataTable/pagination.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/pagination.ts#L68)
+Defined in: [src/types/shared-components/DataTable/pagination.ts:68](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/pagination.ts#L68)
 
 Number of items per page
 
@@ -59,6 +59,6 @@ Number of items per page
 
 > **totalItems**: `number`
 
-Defined in: [src/types/shared-components/DataTable/pagination.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/pagination.ts#L70)
+Defined in: [src/types/shared-components/DataTable/pagination.ts:70](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DataTable/pagination.ts#L70)
 
 Total number of items across all pages

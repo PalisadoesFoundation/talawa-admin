@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceEventRegistrantsModalProps
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L5)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L5)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:5](https:/
 
 > **eventId**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L7)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L7)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:7](https:/
 
 > **handleClose**: () => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L9)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L9)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:9](https:/
 
 > **orgId**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L8)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L8)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:8](https:/
 
 > **show**: `boolean`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L6)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L6)

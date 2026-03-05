@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceTableLoaderProps
 
-Defined in: [src/types/shared-components/TableLoader/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TableLoader/interface.ts#L8)
+Defined in: [src/types/shared-components/TableLoader/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TableLoader/interface.ts#L8)
 
 Props for the TableLoader component.
 `@property` noOfRows - The number of rows to render in the table body.
@@ -18,7 +18,7 @@ Props for the TableLoader component.
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/shared-components/TableLoader/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TableLoader/interface.ts#L12)
+Defined in: [src/types/shared-components/TableLoader/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TableLoader/interface.ts#L12)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/types/shared-components/TableLoader/interface.ts:12](https://gi
 
 > `optional` **headerTitles**: `string`[]
 
-Defined in: [src/types/shared-components/TableLoader/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TableLoader/interface.ts#L10)
+Defined in: [src/types/shared-components/TableLoader/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TableLoader/interface.ts#L10)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/types/shared-components/TableLoader/interface.ts:10](https://gi
 
 > `optional` **noOfCols**: `number`
 
-Defined in: [src/types/shared-components/TableLoader/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TableLoader/interface.ts#L11)
+Defined in: [src/types/shared-components/TableLoader/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TableLoader/interface.ts#L11)
 
 ***
 
@@ -42,4 +42,4 @@ Defined in: [src/types/shared-components/TableLoader/interface.ts:11](https://gi
 
 > **noOfRows**: `number`
 
-Defined in: [src/types/shared-components/TableLoader/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TableLoader/interface.ts#L9)
+Defined in: [src/types/shared-components/TableLoader/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TableLoader/interface.ts#L9)

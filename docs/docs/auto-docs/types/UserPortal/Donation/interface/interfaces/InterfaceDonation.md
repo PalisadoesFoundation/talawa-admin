@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceDonation
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L1)
+Defined in: [src/types/UserPortal/Donation/interface.ts:1](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:1](https://github.com/Pa
 
 > **\_id**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L2)
+Defined in: [src/types/UserPortal/Donation/interface.ts:2](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L2)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:2](https://github.com/Pa
 
 > **amount**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L4)
+Defined in: [src/types/UserPortal/Donation/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L4)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:4](https://github.com/Pa
 
 > **nameOfUser**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L3)
+Defined in: [src/types/UserPortal/Donation/interface.ts:3](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L3)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:3](https://github.com/Pa
 
 > **payPalId**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L6)
+Defined in: [src/types/UserPortal/Donation/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L6)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:6](https://github.com/Pa
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L7)
+Defined in: [src/types/UserPortal/Donation/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L7)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/UserPortal/Donation/interface.ts:7](https://github.com/Pa
 
 > **userId**: `string`
 
-Defined in: [src/types/UserPortal/Donation/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Donation/interface.ts#L5)
+Defined in: [src/types/UserPortal/Donation/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/Donation/interface.ts#L5)

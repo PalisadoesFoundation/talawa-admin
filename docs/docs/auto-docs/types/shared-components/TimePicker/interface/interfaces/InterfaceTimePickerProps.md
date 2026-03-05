@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceTimePickerProps
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L7)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L7)
 
 Component Props for TimePicker
 
@@ -14,7 +14,7 @@ Component Props for TimePicker
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L27)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:27](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L27)
 
 Additional CSS class name to be applied to the root element
 
@@ -24,7 +24,7 @@ Additional CSS class name to be applied to the root element
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L29)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L29)
 
 Test ID for testing purposes, applied to the underlying input
 
@@ -34,7 +34,7 @@ Test ID for testing purposes, applied to the underlying input
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L25)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L25)
 
 Whether the time picker is disabled
 
@@ -44,7 +44,7 @@ Whether the time picker is disabled
 
 > `optional` **disableOpenPicker**: `boolean`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L37)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:37](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L37)
 
 Whether to disable the open picker button
 
@@ -54,7 +54,7 @@ Whether to disable the open picker button
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L9)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L9)
 
 Label displayed for the time picker
 
@@ -64,7 +64,7 @@ Label displayed for the time picker
 
 > `optional` **maxTime**: `Dayjs`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L23)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L23)
 
 Maximum selectable time constraint
 
@@ -74,7 +74,7 @@ Maximum selectable time constraint
 
 > `optional` **minTime**: `Dayjs`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L21)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:21](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L21)
 
 Minimum selectable time constraint
 
@@ -84,7 +84,7 @@ Minimum selectable time constraint
 
 > **onChange**: (`date`) => `void`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L19)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:19](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L19)
 
 Callback fired when the time changes.
 
@@ -106,7 +106,7 @@ The new time value.
 
 > `optional` **slotProps**: `Partial`\<`TimePickerSlotProps`\<`false`\>\>
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L31)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:31](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L31)
 
 Additional props passed to MUI TimePicker slots (e.g., actionBar, layout)
 
@@ -116,7 +116,7 @@ Additional props passed to MUI TimePicker slots (e.g., actionBar, layout)
 
 > `optional` **slots**: `Record`\<`string`, `React.ElementType`\>
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L33)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:33](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L33)
 
 Custom slot component overrides (e.g., openPickerIcon, leftArrowIcon)
 
@@ -126,7 +126,7 @@ Custom slot component overrides (e.g., openPickerIcon, leftArrowIcon)
 
 > `optional` **timeSteps**: `object`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L35)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:35](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L35)
 
 Step increments for time controls (hours, minutes, seconds)
 
@@ -148,7 +148,7 @@ Step increments for time controls (hours, minutes, seconds)
 
 > `optional` **value**: `Dayjs`
 
-Defined in: [src/types/shared-components/TimePicker/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/TimePicker/interface.ts#L14)
+Defined in: [src/types/shared-components/TimePicker/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/TimePicker/interface.ts#L14)
 
 Current time value.
 Represented as a Dayjs object or null if no time is selected.

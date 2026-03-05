@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/AddMember.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/AddMember.tsx#L59)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/AddMember.tsx:59](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/AdminPortal/OrganizationPeople/addMember/AddMember.tsx#L59)
 
 ## Parameters
 

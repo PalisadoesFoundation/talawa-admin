@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceEventCardProps
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L6)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L6)
 
 Interface for EventCard component props.
 
@@ -14,7 +14,7 @@ Interface for EventCard component props.
 
 > **attendees**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>[]
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L26)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L26)
 
 List of users attending the event
 
@@ -24,7 +24,7 @@ List of users attending the event
 
 > **creator**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L24)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:24](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L24)
 
 Information about the user who created the event
 
@@ -34,7 +34,7 @@ Information about the user who created the event
 
 > **description**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L12)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L12)
 
 Detailed description of the event
 
@@ -44,7 +44,7 @@ Detailed description of the event
 
 > **endAt**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L18)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:18](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L18)
 
 ISO string for the event end date/time
 
@@ -54,7 +54,7 @@ ISO string for the event end date/time
 
 > `optional` **endTime**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L22)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:22](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L22)
 
 formatted end time string (optional)
 
@@ -64,7 +64,7 @@ formatted end time string (optional)
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L8)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L8)
 
 Unique identifier for the event
 
@@ -74,7 +74,7 @@ Unique identifier for the event
 
 > **isInviteOnly**: `boolean`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L31)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:31](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L31)
 
 Determines if the event is restricted to invited participants only.
 When true, only invited users can see and access the event.
@@ -85,7 +85,7 @@ When true, only invited users can see and access the event.
 
 > **location**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L14)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L14)
 
 Physical or virtual location of the event
 
@@ -95,7 +95,7 @@ Physical or virtual location of the event
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L10)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L10)
 
 Name or title of the event
 
@@ -105,7 +105,7 @@ Name or title of the event
 
 > **startAt**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L16)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L16)
 
 ISO string for the event start date/time
 
@@ -115,6 +115,6 @@ ISO string for the event start date/time
 
 > `optional` **startTime**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L20)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/EventCard/interface.ts#L20)
 
 formatted start time string (optional)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceEventRegistrantsWrapperProps
 
-Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L4)
+Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L4)
 
 Props for EventRegistrantsWrapper component.
 
@@ -14,7 +14,7 @@ Props for EventRegistrantsWrapper component.
 
 > **eventId**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L5)
+Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:5](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:5](https
 
 > `optional` **onUpdate**: () => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L7)
+Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L7)
 
 #### Returns
 
@@ -34,4 +34,4 @@ Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:7](https
 
 > **orgId**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L6)
+Defined in: [src/types/AdminPortal/EventRegistrantsWrapper/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/EventRegistrantsWrapper/interface.ts#L6)

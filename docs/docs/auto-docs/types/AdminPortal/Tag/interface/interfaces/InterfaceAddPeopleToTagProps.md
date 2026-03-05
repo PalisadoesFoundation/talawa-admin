@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceAddPeopleToTagProps
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L26)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L26)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:26](https://github.com/Palis
 
 > **addPeopleToTagModalIsOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L27)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:27](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L27)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:27](https://github.com/Palis
 
 > **hideAddPeopleToTagModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L28)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:28](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L28)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:28](https://github.com/Palis
 
 > **refetchAssignedMembersData**: () => `void`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L29)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L29)
 
 #### Returns
 

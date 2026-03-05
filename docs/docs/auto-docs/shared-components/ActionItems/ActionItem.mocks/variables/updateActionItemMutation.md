@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **updateActionItemMutation**: `object`
 
-Defined in: [src/shared-components/ActionItems/ActionItem.mocks.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItem.mocks.ts#L334)
+Defined in: [src/shared-components/ActionItems/ActionItem.mocks.ts:334](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/ActionItems/ActionItem.mocks.ts#L334)
 
 ## Type Declaration
 

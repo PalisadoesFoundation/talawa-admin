@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: ISidebarBaseProps
 
-Defined in: [src/types/SidebarBase/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L4)
+Defined in: [src/types/SidebarBase/interface.ts:4](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L4)
 
 Interface for SidebarBase component props.
 
@@ -14,7 +14,7 @@ Interface for SidebarBase component props.
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [src/types/SidebarBase/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L18)
+Defined in: [src/types/SidebarBase/interface.ts:18](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L18)
 
 (Optional) Background color override
 
@@ -24,7 +24,7 @@ Defined in: [src/types/SidebarBase/interface.ts:18](https://github.com/Palisadoe
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/SidebarBase/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L12)
+Defined in: [src/types/SidebarBase/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L12)
 
 Navigation items and other content
 
@@ -34,7 +34,7 @@ Navigation items and other content
 
 > `optional` **footerContent**: `ReactNode`
 
-Defined in: [src/types/SidebarBase/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L16)
+Defined in: [src/types/SidebarBase/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L16)
 
 (Optional) Footer content
 
@@ -44,7 +44,7 @@ Defined in: [src/types/SidebarBase/interface.ts:16](https://github.com/Palisadoe
 
 > `optional` **headerContent**: `ReactNode`
 
-Defined in: [src/types/SidebarBase/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L14)
+Defined in: [src/types/SidebarBase/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L14)
 
 (Optional) Content after branding (e.g., org section)
 
@@ -54,7 +54,7 @@ Defined in: [src/types/SidebarBase/interface.ts:14](https://github.com/Palisadoe
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/types/SidebarBase/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L6)
+Defined in: [src/types/SidebarBase/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L6)
 
 State indicating whether the sidebar is hidden
 
@@ -64,7 +64,7 @@ State indicating whether the sidebar is hidden
 
 > `optional` **persistToggleState**: `boolean`
 
-Defined in: [src/types/SidebarBase/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L20)
+Defined in: [src/types/SidebarBase/interface.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L20)
 
 (Optional) Whether to persist toggle state to localStorage
 
@@ -74,7 +74,7 @@ Defined in: [src/types/SidebarBase/interface.ts:20](https://github.com/Palisadoe
 
 > **portalType**: `"user"` \| `"admin"`
 
-Defined in: [src/types/SidebarBase/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L10)
+Defined in: [src/types/SidebarBase/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L10)
 
 Type of portal (admin or user)
 
@@ -84,6 +84,6 @@ Type of portal (admin or user)
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/SidebarBase/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L8)
+Defined in: [src/types/SidebarBase/interface.ts:8](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/SidebarBase/interface.ts#L8)
 
 Function to toggle sidebar visibility

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IOrganizationData
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L12)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L12)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:12](http
 
 > `optional` **addressLine1**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L23)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L23)
 
 Primary address line
 
@@ -22,7 +22,7 @@ Primary address line
 
 > `optional` **addressLine2**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L26)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:26](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L26)
 
 Secondary address line
 
@@ -32,7 +32,7 @@ Secondary address line
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L41)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:41](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L41)
 
 URL of the organization's avatar or logo image
 
@@ -42,7 +42,7 @@ URL of the organization's avatar or logo image
 
 > `optional` **city**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L29)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L29)
 
 City where the organization is located
 
@@ -52,7 +52,7 @@ City where the organization is located
 
 > `optional` **countryCode**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L38)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:38](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L38)
 
 ISO country code representing the organization's country
 
@@ -62,7 +62,7 @@ ISO country code representing the organization's country
 
 > **createdAt**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L44)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:44](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L44)
 
 ISO timestamp string indicating when the organization was created
 
@@ -72,7 +72,7 @@ ISO timestamp string indicating when the organization was created
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L20)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L20)
 
 Optional short description of the organization
 
@@ -82,7 +82,7 @@ Optional short description of the organization
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L14)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L14)
 
 Unique identifier of the organization
 
@@ -92,7 +92,7 @@ Unique identifier of the organization
 
 > `optional` **isUserRegistrationRequired**: `boolean`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L48)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:48](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L48)
 
 Indicates whether user registration is required
 before accessing organization resources
@@ -103,7 +103,7 @@ before accessing organization resources
 
 > **name**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L17)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:17](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L17)
 
 Display name of the organization
 
@@ -113,7 +113,7 @@ Display name of the organization
 
 > `optional` **postalCode**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L35)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:35](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L35)
 
 Postal or ZIP code
 
@@ -123,6 +123,6 @@ Postal or ZIP code
 
 > `optional` **state**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L32)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:32](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/SidebarOrgSection/interface.ts#L32)
 
 State or province of the organization

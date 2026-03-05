@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,6 +6,6 @@
 
 > `const` **DATE\_TIME\_SEPARATOR**: `"T"` = `'T'`
 
-Defined in: [src/Constant/common.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L14)
+Defined in: [src/Constant/common.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/Constant/common.ts#L14)
 
 Separator for ISO date time strings.

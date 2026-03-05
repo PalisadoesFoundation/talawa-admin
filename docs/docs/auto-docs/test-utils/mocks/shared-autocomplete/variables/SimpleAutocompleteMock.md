@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **SimpleAutocompleteMock**: `React.FC`\<[`InterfaceAutocompleteMockProps`](../../../../types/AdminPortal/EventRegistrantsModal/interface/interfaces/InterfaceAutocompleteMockProps.md)\>
 
-Defined in: [src/test-utils/mocks/shared-autocomplete/SimpleAutocompleteMock.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/shared-autocomplete/SimpleAutocompleteMock.tsx#L10)
+Defined in: [src/test-utils/mocks/shared-autocomplete/SimpleAutocompleteMock.tsx:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/test-utils/mocks/shared-autocomplete/SimpleAutocompleteMock.tsx#L10)
 
 Barrel export for shared-autocomplete test mocks.
 

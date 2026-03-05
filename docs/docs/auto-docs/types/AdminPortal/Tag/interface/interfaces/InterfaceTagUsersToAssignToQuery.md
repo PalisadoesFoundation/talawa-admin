@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceTagUsersToAssignToQuery
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L53)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:53](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L53)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:53](https://github.com/Palis
 
 > `optional` **data**: `object`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L54)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:54](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L54)
 
 #### getUsersToAssignTo
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:54](https://github.com/Palis
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L39)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L39)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/Palis
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L57)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:57](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L57)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:57](https://github.com/Palis
 
 > **loading**: `boolean`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L38)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:38](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L38)
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:38](https://github.com/Palis
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L40)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:40](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Tag/interface.ts#L40)
 
 #### Returns
 

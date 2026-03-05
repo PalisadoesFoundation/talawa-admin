@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useUpdateEventHandler**(): `object`
 
-Defined in: [src/shared-components/EventListCard/Modal/updateLogic.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventListCard/Modal/updateLogic.ts#L29)
+Defined in: [src/shared-components/EventListCard/Modal/updateLogic.ts:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/EventListCard/Modal/updateLogic.ts#L29)
 
 Creates the update handler for EventListCard modal edits, managing mutations for standalone and recurring events.
 

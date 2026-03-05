@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **USER\_JOINED\_ORGANIZATIONS\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L151)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:151](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/GraphQl/Queries/OrganizationQueries.ts#L151)

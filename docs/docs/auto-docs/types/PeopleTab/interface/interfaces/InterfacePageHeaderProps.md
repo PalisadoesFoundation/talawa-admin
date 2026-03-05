@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfacePageHeaderProps
 
-Defined in: [src/types/PeopleTab/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L14)
+Defined in: [src/types/PeopleTab/interface.ts:14](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L14)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/PeopleTab/interface.ts:14](https://github.com/PalisadoesF
 
 > `optional` **actions**: `ReactNode`
 
-Defined in: [src/types/PeopleTab/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L31)
+Defined in: [src/types/PeopleTab/interface.ts:31](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L31)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/PeopleTab/interface.ts:31](https://github.com/PalisadoesF
 
 > `optional` **search**: `object`
 
-Defined in: [src/types/PeopleTab/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L16)
+Defined in: [src/types/PeopleTab/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L16)
 
 #### buttonTestId?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/PeopleTab/interface.ts:16](https://github.com/PalisadoesF
 
 > `optional` **sorting**: `object`[]
 
-Defined in: [src/types/PeopleTab/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L22)
+Defined in: [src/types/PeopleTab/interface.ts:22](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L22)
 
 #### icon?
 
@@ -96,4 +96,4 @@ Defined in: [src/types/PeopleTab/interface.ts:22](https://github.com/PalisadoesF
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L15)
+Defined in: [src/types/PeopleTab/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/PeopleTab/interface.ts#L15)

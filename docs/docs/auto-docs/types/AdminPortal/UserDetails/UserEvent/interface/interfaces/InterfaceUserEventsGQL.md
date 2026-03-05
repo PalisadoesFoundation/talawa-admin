@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
 # Interface: InterfaceUserEventsGQL
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L49)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:49](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L49)
 
 Represents detailed event data returned by GraphQL,
 including metadata, attendees, creator, and organization.
@@ -15,7 +15,7 @@ including metadata, attendees, creator, and organization.
 
 > **allDay**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L55)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:55](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L55)
 
 ***
 
@@ -23,7 +23,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:55](https:
 
 > **attendees**: [`InterfaceGQLUser`](InterfaceGQLUser.md)[]
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L63)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:63](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L63)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:63](https:
 
 > **createdAt**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L60)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:60](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L60)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:60](https:
 
 > **creator**: [`InterfaceGQLUser`](InterfaceGQLUser.md) & `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L65)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:65](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L65)
 
 #### Type Declaration
 
@@ -53,7 +53,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:65](https:
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L52)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:52](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L52)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:52](https:
 
 > **endAt**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L54)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:54](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L54)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:54](https:
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L50)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:50](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L50)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:50](https:
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L57)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:57](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L57)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:57](https:
 
 > **isRecurringEventTemplate**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L58)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:58](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L58)
 
 ***
 
@@ -93,7 +93,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:58](https:
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L59)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:59](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L59)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:59](https:
 
 > **location**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L56)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:56](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L56)
 
 ***
 
@@ -109,7 +109,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:56](https:
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L51)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:51](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L51)
 
 ***
 
@@ -117,7 +117,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:51](https:
 
 > **organization**: [`InterfaceGQLOrganization`](InterfaceGQLOrganization.md)
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L69)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:69](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L69)
 
 ***
 
@@ -125,7 +125,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:69](https:
 
 > **startAt**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L53)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:53](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L53)
 
 ***
 
@@ -133,4 +133,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:53](https:
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L61)
+Defined in: [src/types/AdminPortal/UserDetails/UserEvent/interface.ts:61](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/UserDetails/UserEvent/interface.ts#L61)

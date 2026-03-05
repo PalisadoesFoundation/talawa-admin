@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getPledgeColumns**(`props`): [`TokenAwareGridColDef`](../../../../../types/DataGridWrapper/interface/type-aliases/TokenAwareGridColDef.md)[]
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx#L42)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx:42](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx#L42)
 
 Returns the column definitions for the pledges DataGrid.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **renderHeader**(`header`): `ReactNode`
 
-Defined in: [src/shared-components/DataTable/utils.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L12)
+Defined in: [src/shared-components/DataTable/utils.ts:12](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/shared-components/DataTable/utils.ts#L12)
 
 Renders the header of a column.
 

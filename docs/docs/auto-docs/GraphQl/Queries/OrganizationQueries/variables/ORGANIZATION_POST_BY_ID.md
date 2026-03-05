@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_POST\_BY\_ID**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L122)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:122](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/GraphQl/Queries/OrganizationQueries.ts#L122)
 
 GraphQL query to retrieve a single post by its ID.
 

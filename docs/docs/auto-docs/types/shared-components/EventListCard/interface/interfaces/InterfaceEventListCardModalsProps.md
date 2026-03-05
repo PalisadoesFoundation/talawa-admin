@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceEventListCardModalsProps
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L20)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:20](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/EventListCard/interface.ts#L20)
 
 Props for EventListCardModals component.
 
@@ -34,7 +34,7 @@ Translation function for common strings.
 
 > **eventListCardProps**: [`InterfaceEventListCard`](InterfaceEventListCard.md)
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L21)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:21](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/EventListCard/interface.ts#L21)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:21](https://
 
 > **eventModalIsOpen**: `boolean`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L22)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:22](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/EventListCard/interface.ts#L22)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:22](https://
 
 > **hideViewModal**: () => `void`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L23)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:23](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/EventListCard/interface.ts#L23)
 
 #### Returns
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:23](https://
 
 > **tCommon**: (`key`, `options?`) => `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L24)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:24](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/EventListCard/interface.ts#L24)
 
 #### Parameters
 

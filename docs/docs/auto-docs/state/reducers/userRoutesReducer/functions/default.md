@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`state`, `action`): `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L17)
+Defined in: [src/state/reducers/userRoutesReducer.ts:17](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/state/reducers/userRoutesReducer.ts#L17)
 
 ## Parameters
 

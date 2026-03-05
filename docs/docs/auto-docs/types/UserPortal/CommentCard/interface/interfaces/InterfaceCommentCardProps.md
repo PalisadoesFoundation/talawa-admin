@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceCommentCardProps
 
-Defined in: [src/types/UserPortal/CommentCard/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CommentCard/interface.ts#L6)
+Defined in: [src/types/UserPortal/CommentCard/interface.ts:6](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CommentCard/interface.ts#L6)
 
 Props for CommentCard component.
 
@@ -14,7 +14,7 @@ Props for CommentCard component.
 
 > **creator**: `object`
 
-Defined in: [src/types/UserPortal/CommentCard/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CommentCard/interface.ts#L15)
+Defined in: [src/types/UserPortal/CommentCard/interface.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CommentCard/interface.ts#L15)
 
 The creator of the comment, including their ID, name, and optional avatar URL.
 
@@ -36,7 +36,7 @@ The creator of the comment, including their ID, name, and optional avatar URL.
 
 > `optional` **hasUserVoted**: `object`
 
-Defined in: [src/types/UserPortal/CommentCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CommentCard/interface.ts#L24)
+Defined in: [src/types/UserPortal/CommentCard/interface.ts:24](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CommentCard/interface.ts#L24)
 
 Object indicating if current user has voted and the vote type.
 
@@ -50,7 +50,7 @@ Object indicating if current user has voted and the vote type.
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/CommentCard/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CommentCard/interface.ts#L10)
+Defined in: [src/types/UserPortal/CommentCard/interface.ts:10](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CommentCard/interface.ts#L10)
 
 The unique identifier of the comment.
 
@@ -60,7 +60,7 @@ The unique identifier of the comment.
 
 > `optional` **refetchComments**: () => `void`
 
-Defined in: [src/types/UserPortal/CommentCard/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CommentCard/interface.ts#L39)
+Defined in: [src/types/UserPortal/CommentCard/interface.ts:39](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CommentCard/interface.ts#L39)
 
 Optional callback to refresh comments after modifications.
 
@@ -74,7 +74,7 @@ Optional callback to refresh comments after modifications.
 
 > **text**: `string`
 
-Defined in: [src/types/UserPortal/CommentCard/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CommentCard/interface.ts#L34)
+Defined in: [src/types/UserPortal/CommentCard/interface.ts:34](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CommentCard/interface.ts#L34)
 
 The text content of the comment.
 
@@ -84,6 +84,6 @@ The text content of the comment.
 
 > **upVoteCount**: `number`
 
-Defined in: [src/types/UserPortal/CommentCard/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CommentCard/interface.ts#L29)
+Defined in: [src/types/UserPortal/CommentCard/interface.ts:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/CommentCard/interface.ts#L29)
 
 The number of upvotes (likes) on the comment.

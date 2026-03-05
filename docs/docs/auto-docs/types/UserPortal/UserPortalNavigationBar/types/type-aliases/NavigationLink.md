@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **NavigationLink** = `object`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L103)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:103](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L103)
 
 Navigation link configuration
 
@@ -16,7 +16,7 @@ Navigation link configuration
 
 > `optional` **icon**: `React.ComponentType`\<\{ `className?`: `string`; \}\>
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L128)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:128](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L128)
 
 Icon component (optional)
 
@@ -26,7 +26,7 @@ Icon component (optional)
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L107)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:107](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L107)
 
 Unique identifier for the link (used for active state)
 
@@ -36,7 +36,7 @@ Unique identifier for the link (used for active state)
 
 > `optional` **isActive**: `boolean`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L134)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:134](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L134)
 
 Whether this link is currently active
 
@@ -52,7 +52,7 @@ false (will be determined by comparing id with currentPage)
 
 > **label**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L112)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:112](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L112)
 
 Display text for the link
 
@@ -62,7 +62,7 @@ Display text for the link
 
 > `optional` **onClick**: () => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L139)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:139](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L139)
 
 Click handler (optional, overrides
 
@@ -82,7 +82,7 @@ navigation)
 
 > **path**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L117)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:117](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L117)
 
 URL path or route
 
@@ -92,7 +92,7 @@ URL path or route
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L144)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:144](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L144)
 
 Additional data attributes for testing
 
@@ -102,7 +102,7 @@ Additional data attributes for testing
 
 > `optional` **translationKey**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L123)
+Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:123](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/UserPortal/UserPortalNavigationBar/types.ts#L123)
 
 Translation key (optional, overrides label if provided)
 Should be in format 'namespace:key' or just 'key' (uses default namespace)

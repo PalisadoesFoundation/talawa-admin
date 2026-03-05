@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **AdvertisementEdge** = `object`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L44)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:44](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Advertisement/type.ts#L44)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:44](https://github.com/
 
 > `optional` **cursor**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L45)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:45](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Advertisement/type.ts#L45)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:45](https://github.com/
 
 > `optional` **node**: [`Advertisement`](Advertisement.md)
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L46)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:46](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/AdminPortal/Advertisement/type.ts#L46)

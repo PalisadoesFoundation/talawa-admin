@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceDatePickerProps
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L7)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:7](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L7)
 
 Component Props for DatePicker
 
@@ -14,7 +14,7 @@ Component Props for DatePicker
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L41)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:41](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L41)
 
 Additional CSS class name to be applied to the root element
 
@@ -24,7 +24,7 @@ Additional CSS class name to be applied to the root element
 
 > `optional` **data-cy**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L45)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:45](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L45)
 
 Test ID for Cypress testing purposes
 
@@ -34,7 +34,7 @@ Test ID for Cypress testing purposes
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L43)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:43](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L43)
 
 Test ID for testing purposes, applied to the underlying input
 
@@ -44,7 +44,7 @@ Test ID for testing purposes, applied to the underlying input
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L31)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:31](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L31)
 
 Whether the date picker is disabled
 
@@ -54,7 +54,7 @@ Whether the date picker is disabled
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L35)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:35](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L35)
 
 Error message to display when validation fails
 
@@ -64,7 +64,7 @@ Error message to display when validation fails
 
 > `optional` **format**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L51)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:51](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L51)
 
 Format of the date displayed in the input (e.g., "MM/DD/YYYY", "YYYY-MM-DD")
 
@@ -74,7 +74,7 @@ Format of the date displayed in the input (e.g., "MM/DD/YYYY", "YYYY-MM-DD")
 
 > `optional` **helpText**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L39)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:39](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L39)
 
 Additional help text displayed below the field
 
@@ -84,7 +84,7 @@ Additional help text displayed below the field
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L11)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:11](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L11)
 
 Label displayed for the date picker
 
@@ -94,7 +94,7 @@ Label displayed for the date picker
 
 > `optional` **maxDate**: `Dayjs`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L29)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:29](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L29)
 
 Maximum selectable date constraint
 
@@ -104,7 +104,7 @@ Maximum selectable date constraint
 
 > `optional` **minDate**: `Dayjs`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L27)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:27](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L27)
 
 Minimum selectable date constraint
 
@@ -114,7 +114,7 @@ Minimum selectable date constraint
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L9)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:9](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L9)
 
 Unique name identifier for the field
 
@@ -124,7 +124,7 @@ Unique name identifier for the field
 
 > `optional` **onBlur**: () => `void`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L25)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:25](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L25)
 
 Callback fired when the field is blurred (for touch tracking)
 
@@ -138,7 +138,7 @@ Callback fired when the field is blurred (for touch tracking)
 
 > **onChange**: (`date`) => `void`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L21)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:21](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L21)
 
 Callback fired when the date changes.
 
@@ -160,7 +160,7 @@ The new date value.
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L33)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:33](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L33)
 
 Whether the field is required
 
@@ -170,7 +170,7 @@ Whether the field is required
 
 > `optional` **slotProps**: `Partial`\<`DatePickerSlotProps`\<`false`\>\>
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L47)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:47](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L47)
 
 Additional props passed to MUI DatePicker slots (e.g., actionBar, layout)
 
@@ -180,7 +180,7 @@ Additional props passed to MUI DatePicker slots (e.g., actionBar, layout)
 
 > `optional` **slots**: `Record`\<`string`, `React.ElementType`\>
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L49)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:49](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L49)
 
 Custom slot component overrides (e.g., openPickerIcon, leftArrowIcon)
 
@@ -190,7 +190,7 @@ Custom slot component overrides (e.g., openPickerIcon, leftArrowIcon)
 
 > `optional` **touched**: `boolean`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L37)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:37](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L37)
 
 Whether the field has been touched (for validation UX)
 
@@ -200,7 +200,7 @@ Whether the field has been touched (for validation UX)
 
 > `optional` **value**: `Dayjs`
 
-Defined in: [src/types/shared-components/DatePicker/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L16)
+Defined in: [src/types/shared-components/DatePicker/interface.ts:16](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/types/shared-components/DatePicker/interface.ts#L16)
 
 Current date value.
 Represented as a Dayjs object or null if no date is selected.

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **CREATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L15)
+Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:15](https://github.com/yb175/talawa-admin/blob/fce1167047be7ffe368e3ca73cbf38141b19703e/src/GraphQl/Mutations/CampaignMutation.ts#L15)
 
 GraphQL mutation to create a new fund Campaign.
 
