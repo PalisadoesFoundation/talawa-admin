@@ -1,10 +1,10 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import {
   LocalizationProvider,
@@ -41,6 +41,30 @@ vi.mock('utils/useLocalstorage', () => {
     }),
   };
 });
+
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => {
+    return (
+      <nav aria-label="breadcrumbs">
+        <ol>
+          {items.map((item) => (
+            <li key={item.translationKey || item.label}>
+              {item.to ? (
+                <a href={item.to}>{item.translationKey}</a>
+              ) : (
+                <span aria-current="page">{item.translationKey}</span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    );
+  },
+}));
 
 const theme = createTheme({
   palette: {
@@ -196,17 +220,22 @@ describe('Organisation Events Page', () => {
   const renderWithLink = (link: StaticMockLink) =>
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </LocalizationProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -790,17 +819,22 @@ describe('Organisation Events Page', () => {
 
     render(
       <MockedProvider link={loadingLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </LocalizationProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -1049,6 +1083,27 @@ describe('Organisation Events Page', () => {
       });
     });
   });
+
+  test('renders breadcrumbs correctly', async () => {
+    renderWithLink(defaultLink);
+
+    // Wait for page to load
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const breadcrumbsNav = await screen.findByRole('navigation', {
+      name: /breadcrumbs/i,
+    });
+    expect(breadcrumbsNav).toBeInTheDocument();
+
+    // Verify breadcrumb items
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (events) has aria-current
+    expect(screen.getByText('events')).toHaveAttribute('aria-current', 'page');
+  });
 });
 
 const ERROR_MOCK = [
@@ -1076,17 +1131,22 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
 
     render(
       <MockedProvider link={errorLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </Provider>
           </LocalizationProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -1126,17 +1186,22 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
 
     render(
       <MockedProvider link={emptyLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </Provider>
           </LocalizationProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -1167,17 +1232,22 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
 
     render(
       <MockedProvider link={nullLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </Provider>
           </LocalizationProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 

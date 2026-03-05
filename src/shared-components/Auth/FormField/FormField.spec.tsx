@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { FormField } from './FormField';
 import userEvent from '@testing-library/user-event';
@@ -14,11 +14,11 @@ describe('FormField', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
     user = userEvent.setup();
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 

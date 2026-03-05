@@ -8,6 +8,9 @@ import {
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+
+// Removed react-i18next mock to use real translations with I18nextProvider
+
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
@@ -203,7 +206,7 @@ describe('EventListCardPreviewModal', () => {
   test('renders modal with event details when open', () => {
     renderComponent();
 
-    expect(screen.getByText('eventDetails')).toBeInTheDocument();
+    expect(screen.getByText(/event details/i)).toBeInTheDocument();
     expect(screen.getByDisplayValue('Test Event')).toBeInTheDocument();
     expect(
       screen.getByDisplayValue('Test event description'),
@@ -214,7 +217,7 @@ describe('EventListCardPreviewModal', () => {
   test('does not render modal when closed', () => {
     renderComponent({ eventModalIsOpen: false });
 
-    expect(screen.queryByText('eventDetails')).not.toBeInTheDocument();
+    expect(screen.queryByText(/event details/i)).not.toBeInTheDocument();
   });
 
   test('closes modal when close button is clicked', async () => {
@@ -292,11 +295,11 @@ describe('EventListCardPreviewModal', () => {
     const nameField = screen.getByTestId('updateName');
     await user.type(nameField, 'X');
 
-    // Check that setFormState was called, indicating the onChange handler works
-    expect(mockSetFormState).toHaveBeenCalled();
-    // Verify that the name field is being updated in the calls
-    const calls = mockSetFormState.mock.calls;
-    expect(calls.some((call) => call[0].name.includes('X'))).toBe(true);
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalled();
+      const calls = mockSetFormState.mock.calls;
+      expect(calls.some((call) => call[0].name.includes('X'))).toBe(true);
+    });
   });
 
   test('updates form state when description field changes', async () => {
@@ -307,13 +310,13 @@ describe('EventListCardPreviewModal', () => {
     const descriptionField = screen.getByTestId('updateDescription');
     await user.type(descriptionField, 'Y');
 
-    // Check that setFormState was called, indicating the onChange handler works
-    expect(mockSetFormState).toHaveBeenCalled();
-    // Verify that the eventDescription field is being updated in the calls
-    const calls = mockSetFormState.mock.calls;
-    expect(calls.some((call) => call[0].eventDescription.includes('Y'))).toBe(
-      true,
-    );
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalled();
+      const calls = mockSetFormState.mock.calls;
+      expect(calls.some((call) => call[0].eventDescription.includes('Y'))).toBe(
+        true,
+      );
+    });
   });
 
   test('updates form state when location field changes', async () => {
@@ -324,11 +327,11 @@ describe('EventListCardPreviewModal', () => {
     const locationField = screen.getByTestId('updateLocation');
     await user.type(locationField, 'Z');
 
-    // Check that setFormState was called, indicating the onChange handler works
-    expect(mockSetFormState).toHaveBeenCalled();
-    // Verify that the location field is being updated in the calls
-    const calls = mockSetFormState.mock.calls;
-    expect(calls.some((call) => call[0].location.includes('Z'))).toBe(true);
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalled();
+      const calls = mockSetFormState.mock.calls;
+      expect(calls.some((call) => call[0].location.includes('Z'))).toBe(true);
+    });
   });
 
   test('truncates long event names to 100 characters', () => {
@@ -425,9 +428,9 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.getByLabelText('public')).toBeInTheDocument();
-    expect(screen.getByLabelText('organizationMembers')).toBeInTheDocument();
-    expect(screen.getByLabelText('inviteOnly')).toBeInTheDocument();
+    expect(screen.getByLabelText(/public/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/organization members/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/invite only/i)).toBeInTheDocument();
   });
 
   test('selects public radio button when event is public', () => {
@@ -436,7 +439,7 @@ describe('EventListCardPreviewModal', () => {
       inviteOnlyChecked: false,
     });
 
-    const publicRadio = screen.getByLabelText('public') as HTMLInputElement;
+    const publicRadio = screen.getByLabelText(/public/i) as HTMLInputElement;
     expect(publicRadio.checked).toBe(true);
   });
 
@@ -447,7 +450,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const orgMembersRadio = screen.getByLabelText(
-      'organizationMembers',
+      /organization members/i,
     ) as HTMLInputElement;
     expect(orgMembersRadio.checked).toBe(true);
   });
@@ -459,7 +462,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const inviteOnlyRadio = screen.getByLabelText(
-      'inviteOnly',
+      /invite only/i,
     ) as HTMLInputElement;
     expect(inviteOnlyRadio.checked).toBe(true);
   });
@@ -475,7 +478,7 @@ describe('EventListCardPreviewModal', () => {
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
     });
 
-    const publicRadio = screen.getByLabelText('public');
+    const publicRadio = screen.getByLabelText(/public/i);
     await user.click(publicRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(true);
@@ -493,7 +496,7 @@ describe('EventListCardPreviewModal', () => {
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
     });
 
-    const orgMembersRadio = screen.getByLabelText('organizationMembers');
+    const orgMembersRadio = screen.getByLabelText(/organization members/i);
     await user.click(orgMembersRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
@@ -511,7 +514,7 @@ describe('EventListCardPreviewModal', () => {
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
     });
 
-    const inviteOnlyRadio = screen.getByLabelText('inviteOnly');
+    const inviteOnlyRadio = screen.getByLabelText(/invite only/i);
     await user.click(inviteOnlyRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
@@ -528,12 +531,12 @@ describe('EventListCardPreviewModal', () => {
       userId: 'user456',
     });
 
-    const publicRadio = screen.getByLabelText('public') as HTMLInputElement;
+    const publicRadio = screen.getByLabelText(/public/i) as HTMLInputElement;
     const orgMembersRadio = screen.getByLabelText(
-      'organizationMembers',
+      /organization members/i,
     ) as HTMLInputElement;
     const inviteOnlyRadio = screen.getByLabelText(
-      'inviteOnly',
+      /invite only/i,
     ) as HTMLInputElement;
 
     expect(publicRadio.disabled).toBe(true);
@@ -550,7 +553,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const radioGroup = screen.getByRole('radiogroup');
-    expect(radioGroup).toHaveAttribute('aria-label', 'visibility');
+    expect(radioGroup).toHaveAttribute('aria-label', 'Visibility');
   });
 
   test('toggles registrable checkbox', async () => {
@@ -567,8 +570,8 @@ describe('EventListCardPreviewModal', () => {
   test('hides time pickers when all-day is checked', () => {
     renderComponent({ allDayChecked: true });
 
-    expect(screen.queryByText('startTime')).not.toBeInTheDocument();
-    expect(screen.queryByText('endTime')).not.toBeInTheDocument();
+    expect(screen.queryByText(/start time/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/end time/i)).not.toBeInTheDocument();
   });
 
   test('shows time pickers when all-day is not checked', () => {
@@ -623,7 +626,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.getByLabelText('showEventDashboard')).toBeInTheDocument();
+    expect(screen.getByLabelText(/show event dashboard/i)).toBeInTheDocument();
   });
 
   test('verifies aria-label for edit event button', () => {
@@ -634,7 +637,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.getByLabelText('editEvent')).toBeInTheDocument();
+    expect(screen.getByLabelText(/edit event/i)).toBeInTheDocument();
   });
 
   test('verifies aria-label for delete event button', () => {
@@ -645,7 +648,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.getByLabelText('deleteEvent')).toBeInTheDocument();
+    expect(screen.getByLabelText(/delete event/i)).toBeInTheDocument();
   });
 
   test('hides action buttons for regular users without edit permissions', () => {
@@ -693,7 +696,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const alreadyRegisteredBtn = screen
-      .getByText('alreadyRegistered')
+      .getByText(/already registered/i)
       .closest('button');
     expect(alreadyRegisteredBtn).toBeInTheDocument();
     expect(alreadyRegisteredBtn).toBeDisabled();
@@ -712,7 +715,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     expect(screen.queryByTestId('registerEventBtn')).not.toBeInTheDocument();
-    expect(screen.queryByText('alreadyRegistered')).not.toBeInTheDocument();
+    expect(screen.queryByText(/already registered/i)).not.toBeInTheDocument();
   });
 
   test('calls registerEventHandler when register button is clicked', async () => {
@@ -1074,8 +1077,8 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({ allDayChecked: true });
 
     // Time pickers should not be visible when all-day is checked
-    expect(screen.queryByText('startTime')).not.toBeInTheDocument();
-    expect(screen.queryByText('endTime')).not.toBeInTheDocument();
+    expect(screen.queryByText(/start time/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/end time/i)).not.toBeInTheDocument();
   });
 
   test('renders CustomRecurrenceModal when recurrence is set and event is recurring', () => {
@@ -1105,19 +1108,18 @@ describe('EventListCardPreviewModal', () => {
     const mockSetEventEndDate = vi.fn();
 
     // Simulate the onChange handler logic from the actual component
+    const baseDate = dayjs.utc(new Date(Date.UTC(2024, 0, 1)));
     const handleStartDateChange = (date: Dayjs | null) => {
       if (date) {
         mockSetEventStartDate(date.toDate());
-        // Simulate the logic: if end date is before new start date, update end date
-        const currentEndDate = dayjs().subtract(5, 'days').toDate();
+        const currentEndDate = baseDate.subtract(5, 'days').toDate();
         if (currentEndDate < date.toDate()) {
           mockSetEventEndDate(date.toDate());
         }
       }
     };
 
-    // Trigger the handler with a new date
-    const targetDate = dayjs().add(5, 'days');
+    const targetDate = baseDate.add(5, 'days');
     handleStartDateChange(targetDate);
 
     // Check that the functions were called and verify the date values
@@ -1148,7 +1150,9 @@ describe('EventListCardPreviewModal', () => {
     };
 
     // Trigger the handler with a new date
-    const targetDate = dayjs().add(10, 'days');
+    const targetDate = dayjs
+      .utc(new Date(Date.UTC(2023, 0, 1)))
+      .add(10, 'days');
     handleEndDateChange(targetDate);
 
     expect(mockSetEventEndDate).toHaveBeenCalled();
@@ -1171,8 +1175,9 @@ describe('EventListCardPreviewModal', () => {
       endTime: '09:00:00', // End time before start time
     };
 
+    const fixedDate = dayjs(new Date(2024, 0, 1));
     const timeToDayJs = (time: string) => {
-      const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
+      const dateTimeString = fixedDate.format('YYYY-MM-DD') + ' ' + time;
       return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
     };
 
@@ -1191,8 +1196,7 @@ describe('EventListCardPreviewModal', () => {
       }
     };
 
-    // Trigger the handler with a new time
-    handleStartTimeChange(dayjs().hour(14).minute(30).second(0));
+    handleStartTimeChange(fixedDate.hour(14).minute(30).second(0));
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -1223,7 +1227,12 @@ describe('EventListCardPreviewModal', () => {
     };
 
     // Trigger the handler with a new time
-    handleEndTimeChange(dayjs().hour(16).minute(45).second(0));
+    handleEndTimeChange(
+      dayjs(new Date(2020, 0, 1))
+        .hour(16)
+        .minute(45)
+        .second(0),
+    );
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -1258,7 +1267,7 @@ describe('EventListCardPreviewModal', () => {
         },
         recurrence,
       });
-      expect(screen.getByText('daily')).toBeInTheDocument();
+      expect(screen.getByText(/daily/i)).toBeInTheDocument();
     });
 
     test('opens custom recurrence modal when recurrence is custom', () => {
@@ -1303,7 +1312,7 @@ describe('EventListCardPreviewModal', () => {
         recurrence: null,
       });
       expect(
-        screen.queryByText('selectRecurrencePattern'),
+        screen.queryByText(/select recurrence pattern/i),
       ).not.toBeInTheDocument();
     });
 
@@ -1374,13 +1383,14 @@ describe('EventListCardPreviewModal', () => {
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
       const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-      const newDate = dayjs().add(4, 'months').toDate();
+      const baseDate = dayjs(new Date(2020, 0, 1));
+      const newDate = baseDate.add(4, 'months').toDate();
       const updateFn = () => newDate;
       customModalProps.setEndDate(updateFn);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(expect.any(Function));
 
-      const prevState = dayjs().toDate();
+      const prevState = baseDate.toDate();
       const passedFn = mockSetEventEndDate.mock.calls[0][0];
       const newState = passedFn(prevState);
       expect(newState).toEqual(newDate);
@@ -1391,7 +1401,9 @@ describe('EventListCardPreviewModal', () => {
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
       const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-      const newDate = dayjs().add(4, 'months').toDate();
+      const newDate = dayjs(new Date(2020, 0, 1))
+        .add(4, 'months')
+        .toDate();
       customModalProps.setEndDate(newDate);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(newDate);
@@ -1408,17 +1420,6 @@ describe('EventListCardPreviewModal', () => {
 
       expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(false);
     });
-
-    test('should pass translation function to CustomRecurrenceModal', () => {
-      renderWithRecurrenceModal();
-
-      const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-
-      // Verify the t function is passed and works correctly
-      expect(customModalProps.t).toBeDefined();
-      expect(typeof customModalProps.t).toBe('function');
-      expect(customModalProps.t('testKey')).toBe('testKey');
-    });
   });
 
   describe('Date and Time Picker onChange handlers', () => {
@@ -1427,7 +1428,7 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
       // Set the end date to an early date (5th of current month) so selecting 20th will be later
-      const earlyDate = dayjs().date(5).toDate();
+      const earlyDate = dayjs.utc(new Date(Date.UTC(2025, 0, 5))).toDate();
       renderComponent({
         eventStartDate: earlyDate,
         eventEndDate: earlyDate,
@@ -1479,7 +1480,12 @@ describe('EventListCardPreviewModal', () => {
         }
       };
 
-      handleStartTimeChange(dayjs().hour(12).minute(0).second(0));
+      handleStartTimeChange(
+        dayjs(new Date(2025, 0, 1))
+          .hour(12)
+          .minute(0)
+          .second(0),
+      );
 
       expect(mockSetFormState).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -1493,13 +1499,12 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
 
-      // Simulate the simplified onChange handler logic from the actual component
+      const fixedNow = dayjs(new Date(Date.UTC(2020, 0, 1)));
       const handleStartDateChange = (date: Dayjs | null) => {
         if (date) {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
-          // Auto-adjust end date if it's before the new start date
-          const currentEndDate = dayjs().toDate();
+          const currentEndDate = fixedNow.toDate();
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1535,13 +1540,12 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
 
-      // Simulate the simplified onChange handler logic from the actual component
+      const fixedNow = dayjs(new Date(Date.UTC(2020, 0, 1)));
       const handleStartDateChange = (date: Dayjs | null) => {
         if (date) {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
-          // Auto-adjust end date if it's before the new start date
-          const currentEndDate = dayjs().add(10, 'days').toDate(); // Later than the new start date
+          const currentEndDate = fixedNow.add(10, 'days').toDate(); // Later than the new start date
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1549,7 +1553,7 @@ describe('EventListCardPreviewModal', () => {
       };
 
       // Trigger the handler with a date that's before the current end date
-      handleStartDateChange(dayjs().add(5, 'days'));
+      handleStartDateChange(fixedNow.add(5, 'days'));
 
       // Verify that start date is updated but end date is not
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1560,13 +1564,12 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
 
-      // Simulate the simplified onChange handler logic from the actual component
+      const baseDate = dayjs(new Date(2023, 0, 1));
       const handleStartDateChange = (date: Dayjs | null) => {
         if (date) {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
-          // Auto-adjust end date if it's before the new start date
-          const currentEndDate = dayjs().subtract(5, 'days').toDate(); // Earlier than the new start date
+          const currentEndDate = baseDate.subtract(5, 'days').toDate(); // Earlier than the new start date
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1574,7 +1577,7 @@ describe('EventListCardPreviewModal', () => {
       };
 
       // Trigger the handler with a date that's after the current end date
-      handleStartDateChange(dayjs().add(5, 'days'));
+      handleStartDateChange(baseDate.add(5, 'days'));
 
       // Verify that both start date and end date are updated
       expect(mockSetEventStartDate).toHaveBeenCalled();

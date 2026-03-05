@@ -4,12 +4,24 @@ import { cleanup, render, screen } from '@testing-library/react';
 import { RecurrenceYearlySection } from './RecurrenceYearlySection';
 import { Frequency } from '../../utils/recurrenceUtils';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const defaultProps = {
   frequency: Frequency.YEARLY,
-  startDate: dayjs().year(2024).month(6).date(21).toDate(), // July 21, 2024
-  t: (key: string) => key,
+  startDate: dayjs.utc(new Date(Date.UTC(2024, 6, 21, 10))).toDate(), // July 21, 2024
 };
+
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
 
 describe('RecurrenceYearlySection', () => {
   beforeEach(() => {
@@ -262,28 +274,6 @@ describe('RecurrenceYearlySection', () => {
       );
 
       expect(screen.queryByText('yearlyOn')).not.toBeInTheDocument();
-    });
-  });
-
-  describe('Translation Function', () => {
-    it('should use translation function for labels', () => {
-      const t = vi.fn((key: string) => key);
-
-      render(<RecurrenceYearlySection {...defaultProps} t={t} />);
-
-      expect(t).toHaveBeenCalledWith('yearlyOn');
-      expect(t).toHaveBeenCalledWith('yearlyRecurrenceDesc');
-    });
-
-    it('should display translated text', () => {
-      const t = (key: string) => `translated_${key}`;
-
-      render(<RecurrenceYearlySection {...defaultProps} t={t} />);
-
-      expect(screen.getByText('translated_yearlyOn')).toBeInTheDocument();
-      expect(
-        screen.getByText('translated_yearlyRecurrenceDesc'),
-      ).toBeInTheDocument();
     });
   });
 });
