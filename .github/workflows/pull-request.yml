@@ -449,10 +449,41 @@ jobs:
         MinIO-Compliance-Check,
         Python-Compliance,
         Translation-Tag-Check,
+        Check-Pagination-Usage,
       ]
     steps:
       - name: This job intentionally does nothing
         run: echo "This job intentionally does nothing"
+
+  Check-Pagination-Usage:
+    name: Check Pagination Usage in Screens
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm@10.4.1
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Run pagination usage check
+        run: pnpm run check-pagination-usage -- --scan-entire-repo
 
   Check-Route-Prefix:
     name: Check Route Prefix
