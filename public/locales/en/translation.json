@@ -1477,7 +1477,9 @@
     "changePassword": "Change Password",
     "oldPassword": "Old Password",
     "newPassword": "New Password",
-    "confirmNewPassword":"Confirm New Password",
+    "password": "Password",
+    "updatePassword": "Update Password",
+    "confirmNewPassword": "Confirm New Password",
     "passCantBeEmpty": "Password Cannot be Empty",
     "passNoMatch": "New Password and Confirm Password are not same",
     "passwordChangedSuccessfully": "Password Changed Successfully"
