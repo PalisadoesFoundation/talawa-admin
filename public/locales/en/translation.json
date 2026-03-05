@@ -1482,7 +1482,8 @@
     "confirmNewPassword": "Confirm New Password",
     "passCantBeEmpty": "Password Cannot be Empty",
     "passNoMatch": "New Password and Confirm Password are not same",
-    "passwordChangedSuccessfully": "Password Changed Successfully"
+    "passwordChangedSuccessfully": "Password Changed Successfully",
+    "enterCurrentPassword": "Please enter your current password"
   },
   "people": {
     "title": "People",

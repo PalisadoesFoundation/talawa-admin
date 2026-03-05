@@ -1415,7 +1415,8 @@
     "confirmNewPassword": "Confirmar nueva contraseña",
     "passCantBeEmpty": "La contraseña no puede estar vacía",
     "passNoMatch": "La nueva contraseña y la confirmación no coinciden",
-    "passwordChangedSuccessfully": "Contraseña cambiada con éxito"
+    "passwordChangedSuccessfully": "Contraseña cambiada con éxito",
+    "enterCurrentPassword": "Por favor ingrese su contraseña actual"
   },
   "plugin": {
     "error": "Error del complemento",

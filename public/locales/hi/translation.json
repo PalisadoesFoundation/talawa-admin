@@ -1432,7 +1432,8 @@
     "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
     "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड समान नहीं हैं",
-    "passwordChangedSuccessfully": "पासवर्ड सफलतापूर्वक बदल दिया गया"
+    "passwordChangedSuccessfully": "पासवर्ड सफलतापूर्वक बदल दिया गया",
+    "enterCurrentPassword": "कृपया अपना वर्तमान पासवर्ड दर्ज करें"
   },
   "people": {
     "title": "लोग",

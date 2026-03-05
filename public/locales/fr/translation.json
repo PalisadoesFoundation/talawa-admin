@@ -1437,7 +1437,8 @@
     "confirmNewPassword": "Confirmer le nouveau mot de passe",
     "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
     "passNoMatch": "Le nouveau mot de passe et la confirmation ne correspondent pas",
-    "passwordChangedSuccessfully": "Mot de passe modifié avec succès"
+    "passwordChangedSuccessfully": "Mot de passe modifié avec succès",
+    "enterCurrentPassword": "Veuillez saisir votre mot de passe actuel"
   },
   "people": {
     "title": "Personnes",
