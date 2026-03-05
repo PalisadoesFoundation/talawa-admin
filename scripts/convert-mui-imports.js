@@ -8,6 +8,21 @@ const require = createRequire(import.meta.url);
 const MATERIAL = '@mui/material';
 const ICONS = '@mui/icons-material';
 
+const WRAPPER_ENFORCED_SKIP = new Set([
+  'Chip',
+  'Autocomplete',
+  'TextField',
+  'FormControl',
+  'Button',
+  'Table',
+  'TableBody',
+  'TableCell',
+  'TableContainer',
+  'TableHead',
+  'TableRow',
+  'TablePagination',
+]);
+
 const red = (text) => `\u001b[31m${text}\u001b[0m`;
 const green = (text) => `\u001b[32m${text}\u001b[0m`;
 const yellow = (text) => `\u001b[33m${text}\u001b[0m`;
@@ -98,6 +113,12 @@ const transformFile = (filePath) => {
 
           // Skip per-element type-only imports (`import { type Foo }`)
           if (element.isTypeOnly) {
+            kept.push(element);
+            continue;
+          }
+
+          // Skip wrapper-enforced components
+          if (WRAPPER_ENFORCED_SKIP.has(importedName)) {
             kept.push(element);
             continue;
           }
