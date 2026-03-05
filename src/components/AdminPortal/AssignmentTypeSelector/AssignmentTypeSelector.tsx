@@ -1,8 +1,5 @@
 import React, { useId } from 'react';
-// eslint-disable-next-line no-restricted-imports -- Chip used as interactive toggle selector, not a status badge; StatusBadge does not support onClick, variant, color, or sx props
-import Chip from '@mui/material/Chip';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Chip, Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import type {
   InterfaceAssignmentTypeSelectorProps,

@@ -53,6 +53,7 @@ import useLocalStorage from '../../utils/useLocalstorage';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { CursorPaginationManager } from '../../components/CursorPaginationManager/CursorPaginationManager';
+import { spacingTokens } from '../../utils/tokenValues';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation');
@@ -233,7 +234,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }}
             PaperProps={{
               sx: {
-                minWidth: 'var(--space-15)',
+                minWidth: spacingTokens['space-15'],
                 '& .MuiMenuItem-root': {
                   px: 2,
                   py: 1,

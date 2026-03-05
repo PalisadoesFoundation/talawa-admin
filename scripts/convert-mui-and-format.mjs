@@ -28,10 +28,7 @@ if (!args.includes('--files')) {
 
 const runCommand = (cmd, cmdArgs) => {
   return new Promise((resolve, reject) => {
-    // Build a single string so shell:true doesn't trigger DEP0190 (args-array warning).
-    // Quotes args that contain spaces; works on Windows, macOS, and Linux.
-    const fullCmd = [cmd, ...cmdArgs.map((a) => (a.includes(' ') ? `"${a}"` : a))].join(' ');
-    const child = spawn(fullCmd, { cwd: root, stdio: 'inherit', shell: true });
+    const child = spawn(cmd, cmdArgs, { cwd: root, stdio: 'inherit', shell: false });
 
     child.on('error', reject);
     child.on('close', (code) => {

@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/postCard/PostCard.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/postCard/PostCard.tsx#L57)
+Defined in: [src/shared-components/postCard/PostCard.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/postCard/PostCard.tsx#L58)
 
 ## Parameters
 

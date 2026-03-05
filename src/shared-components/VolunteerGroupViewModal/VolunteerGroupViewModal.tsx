@@ -38,15 +38,15 @@ import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import Paper from '@mui/material/Paper';
-/* eslint-disable no-restricted-imports -- Raw MUI Table used for simple read-only modal table; DataTable shared component is a full data-grid abstraction not suitable here */
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-/* eslint-enable no-restricted-imports */
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { InterfaceVolunteerGroupViewModalProps } from 'types/shared-components/VolunteerGroupViewModal/interface';

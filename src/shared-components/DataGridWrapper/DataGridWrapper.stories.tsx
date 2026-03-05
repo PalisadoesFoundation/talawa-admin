@@ -5,6 +5,7 @@ import type { GridColDef } from '@mui/x-data-grid';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { spacingTokens } from '../../utils/tokenValues';
 
 // Sample data type
 type User = {
@@ -105,10 +106,10 @@ const sampleUsers: User[] = [
 
 // Column definitions
 const columns: GridColDef[] = [
-  { field: 'name', headerName: 'Name', width: 200 },
-  { field: 'email', headerName: 'Email', width: 250 },
-  { field: 'role', headerName: 'Role', width: 150 },
-  { field: 'status', headerName: 'Status', width: 120 },
+  { field: 'name', headerName: 'Name', width: spacingTokens['space-17'] },
+  { field: 'email', headerName: 'Email', width: spacingTokens['space-18'] },
+  { field: 'role', headerName: 'Role', width: spacingTokens['space-15'] },
+  { field: 'status', headerName: 'Status', width: spacingTokens['space-14'] },
 ];
 
 const meta: Meta<typeof DataGridWrapper> = {

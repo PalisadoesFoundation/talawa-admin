@@ -31,6 +31,7 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
 import UserPortalCard from '../UserPortalCard/UserPortalCard';
 import type { InterfaceCommentCardProps } from 'types/UserPortal/CommentCard/interface';
 import { IDENTIFIER_USER_ID } from 'Constant/common';
+import { spacingTokens } from '../../../utils/tokenValues';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -45,8 +46,8 @@ const CommentContent = styled(Typography)({
 });
 
 const VoteCount = styled(Typography)(() => ({
-  fontSize: '0.75rem',
-  minWidth: 20,
+  fontSize: 'var(--font-size-xs)',
+  minWidth: spacingTokens['space-6'],
   textAlign: 'center',
 }));
 
