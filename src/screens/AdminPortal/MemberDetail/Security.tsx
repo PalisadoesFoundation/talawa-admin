@@ -14,6 +14,18 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { validatePassword } from 'utils/passwordValidator';
 import styles from './Security.module.css';
 
+/**
+ * Security component.
+ *
+ * @remarks
+ * Displays security settings for a user, allowing them to update their password.
+ * Administrators can also reset passwords for other users without requiring the
+ * current password. The component opens a {@link PasswordUpdateModal} for handling
+ * password updates and performs validation before executing the appropriate
+ * GraphQL mutation.
+ *
+ * @returns A card containing password management controls.
+ */
 const Security = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
 
@@ -74,12 +86,10 @@ const Security = (): JSX.Element => {
 
     try {
       if (isAdminEditingOtherUser) {
-        if (!userId) return;
-
         await adminUpdateUserPassword({
           variables: {
             input: {
-              id: userId,
+              id: resolvedUserId,
               newPassword,
               confirmNewPassword,
             },
