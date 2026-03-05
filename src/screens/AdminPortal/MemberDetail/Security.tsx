@@ -12,6 +12,7 @@ import { useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { validatePassword } from 'utils/passwordValidator';
+import styles from './Security.module.css';
 
 const Security = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
@@ -73,6 +74,8 @@ const Security = (): JSX.Element => {
 
     try {
       if (isAdminEditingOtherUser) {
+        if (!userId) return;
+
         await adminUpdateUserPassword({
           variables: {
             input: {
@@ -111,13 +114,7 @@ const Security = (): JSX.Element => {
   return (
     <>
       <div className="w-100">
-        <Card
-          className="mt-4"
-          style={{
-            borderRadius: 14,
-            width: '100%',
-          }}
-        >
+        <Card className={`mt-4 ${styles.securityCard}`}>
           <Card.Body className="d-flex justify-content-between align-items-center">
             <div>
               <h5 className="mb-1 fw-semibold">{t('password')}</h5>

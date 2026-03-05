@@ -1,0 +1,4 @@
+.securityCard {
+  border-radius: var(--radius-xl);
+  width: 100%;
+}

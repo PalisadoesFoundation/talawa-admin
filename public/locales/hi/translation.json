@@ -1423,7 +1423,16 @@
     "enterState": "राज्य दर्ज करें",
     "select": "चुनें",
     "asYourCountry": "अपने देश के रूप में",
-    "actions": "कार्रवाई"
+    "actions": "कार्रवाई",
+    "changePassword": "पासवर्ड बदलें",
+    "oldPassword": "पुराना पासवर्ड",
+    "newPassword": "नया पासवर्ड",
+    "password": "पासवर्ड",
+    "updatePassword": "पासवर्ड अपडेट करें",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
+    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड समान नहीं हैं",
+    "passwordChangedSuccessfully": "पासवर्ड सफलतापूर्वक बदल दिया गया"
   },
   "people": {
     "title": "लोग",

@@ -1406,7 +1406,16 @@
     "enterState": "Ingrese el estado",
     "select": "Seleccionar",
     "asYourCountry": "Como su país",
-    "actions": "Acciones"
+    "actions": "Acciones",
+    "changePassword": "Cambiar contraseña",
+    "oldPassword": "Contraseña antigua",
+    "newPassword": "Nueva contraseña",
+    "password": "Contraseña",
+    "updatePassword": "Actualizar contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "passCantBeEmpty": "La contraseña no puede estar vacía",
+    "passNoMatch": "La nueva contraseña y la confirmación no coinciden",
+    "passwordChangedSuccessfully": "Contraseña cambiada con éxito"
   },
   "plugin": {
     "error": "Error del complemento",

@@ -466,12 +466,18 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to update the password of the currently authenticated user.
+ */
 export const UPDATE_USER_PASSWORD = gql`
   mutation UpdateUserPassword($input: MutationUpdateUserPasswordInput!) {
     updateUserPassword(input: $input)
   }
 `;
 
+/**
+ * GraphQL mutation allowing an administrator to update another user's password.
+ */
 export const ADMIN_UPDATE_USER_PASSWORD = gql`
   mutation AdminUpdateUserPassword(
     $input: MutationAdminUpdateUserPasswordInput!
