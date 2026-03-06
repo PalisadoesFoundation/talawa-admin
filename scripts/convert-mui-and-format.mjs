@@ -28,7 +28,7 @@ if (!args.includes('--files')) {
 
 const runCommand = (cmd, cmdArgs) => {
   return new Promise((resolve, reject) => {
-    const child = spawn(cmd, cmdArgs, { cwd: root, stdio: 'inherit', shell: false });
+    const child = spawn(cmd, cmdArgs, { cwd: root, stdio: 'inherit', shell: true });
 
     child.on('error', reject);
     child.on('close', (code) => {
