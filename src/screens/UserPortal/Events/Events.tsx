@@ -150,7 +150,7 @@ export default function Events(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  // Query to fetch organization details (basic org fields only; avoids admin-only metadata)
+  // Basic org fields only (avoids admin-only metadata). No variables; current org resolved via orgData.organizations.find(organizationId).
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST_BASIC);
 
   // Mutation to create a new event

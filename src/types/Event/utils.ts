@@ -1,15 +1,15 @@
-export interface InterfaceHoliday {
-  name: string;
-  date: string; // Format: MM-DD
-  month: string;
-}
-
 import type {
   InterfaceEvent,
   InterfaceIOrgList,
   InterfaceOrgForEventFilter,
 } from './interface';
 import { UserRole } from './interface';
+
+export interface InterfaceHoliday {
+  name: string;
+  date: string; // Format: MM-DD
+  month: string;
+}
 
 export const holidays: InterfaceHoliday[] = [
   { name: 'May Day / Labour Day', date: '05-01', month: 'May' },

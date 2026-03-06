@@ -4,7 +4,7 @@
 
 # Interface: InterfaceHoliday
 
-Defined in: [src/types/Event/utils.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L1)
+Defined in: [src/types/Event/utils.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L8)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/utils.ts:1](https://github.com/PalisadoesFoundation
 
 > **date**: `string`
 
-Defined in: [src/types/Event/utils.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L3)
+Defined in: [src/types/Event/utils.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L10)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/utils.ts:3](https://github.com/PalisadoesFoundation
 
 > **month**: `string`
 
-Defined in: [src/types/Event/utils.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L4)
+Defined in: [src/types/Event/utils.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L11)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Event/utils.ts:4](https://github.com/PalisadoesFoundation
 
 > **name**: `string`
 
-Defined in: [src/types/Event/utils.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L2)
+Defined in: [src/types/Event/utils.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L9)

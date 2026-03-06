@@ -14,6 +14,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
+import type { IInviteMetadata } from './AcceptInvitation.interface';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
@@ -32,24 +33,13 @@ const AcceptInvitation = (): JSX.Element => {
   const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
 
   const [loading, setLoading] = useState(true);
-  type InviteMetadata = {
-    invitationToken: string;
-    inviteeEmailMasked?: string | null;
-    inviteeName?: string | null;
-    status?: string | null;
-    expiresAt?: string | null;
-    eventId?: string | null;
-    recurringEventInstanceId?: string | null;
-    organizationId?: string | null;
-  } | null;
 
-  const [invite, setInvite] = useState<InviteMetadata>(null);
+  const [invite, setInvite] = useState<IInviteMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isMountedRef = useRef(true);
 
   useEffect(() => {
-    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
     };
@@ -77,7 +67,7 @@ const AcceptInvitation = (): JSX.Element => {
           },
         });
         if (data && data.verifyEventInvitation) {
-          setInvite(data.verifyEventInvitation as InviteMetadata);
+          setInvite(data.verifyEventInvitation as IInviteMetadata);
         } else {
           setError(
             t('invitationNotFound', {
