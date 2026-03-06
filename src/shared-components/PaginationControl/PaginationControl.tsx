@@ -26,7 +26,7 @@
  * ```
  */
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
 import styles from './PaginationControl.module.css';
@@ -56,8 +56,14 @@ export function PaginationControl({
   onPageChange,
   onPageSizeChange,
   disabled = false,
-}: IPaginationControlProps): JSX.Element {
+  enableJumpToPage = false,
+  onJumpToPage,
+}: IPaginationControlProps & {
+  enableJumpToPage?: boolean;
+  onJumpToPage?: (page: number) => void;
+}): JSX.Element {
   const { t: tCommon } = useTranslation('common');
+  const paginationRef = useRef<HTMLDivElement>(null);
 
   // Clamp safeguards (mirrors DataTable/Pagination.tsx defensive pattern)
   const safeTotalPages = Math.max(1, totalPages);
@@ -77,26 +83,47 @@ export function PaginationControl({
     [disabled, onPageChange],
   );
 
-  // Arrow-key keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent): void => {
+  // Arrow-key keyboard navigation - scoped to the component
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>): void => {
       if (disabled) return;
       const tag = (e.target as HTMLElement).tagName;
       if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
       if (e.key === 'ArrowLeft' && canPrev) goTo(safePage - 1);
       if (e.key === 'ArrowRight' && canNext) goTo(safePage + 1);
-    };
+    },
+    [disabled, canPrev, canNext, safePage, goTo],
+  );
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [disabled, canPrev, canNext, safePage, goTo]);
+  const handleJumpToPage = (
+    e:
+      | React.FocusEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>,
+  ) => {
+    if (disabled) return;
+    if (e.type === 'keydown' && (e as React.KeyboardEvent).key !== 'Enter')
+      return;
+
+    const value = parseInt((e.target as HTMLInputElement).value, 10);
+    if (!isNaN(value)) {
+      const clampedValue = Math.min(Math.max(1, value), safeTotalPages);
+      if (onJumpToPage) {
+        onJumpToPage(clampedValue);
+      } else {
+        goTo(clampedValue);
+      }
+    }
+  };
 
   return (
     <div
+      ref={paginationRef}
       className={styles.paginationWrap}
       role="navigation"
       aria-label={tCommon('paginationControl')}
       data-testid="pagination-control"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
     >
       {/* Navigation buttons */}
       <div className={styles.navGroup}>
@@ -184,6 +211,25 @@ export function PaginationControl({
           total: safeTotalItems,
         })}
       </span>
+
+      {/* Jump to page */}
+      {enableJumpToPage && (
+        <label className={styles.pageSizeLabel}>
+          {tCommon('jumpToPage') || 'Jump to page'}
+          <input
+            type="number"
+            min={1}
+            max={safeTotalPages}
+            className={`${styles.pageSizeSelect} ${styles.jumpToPageInput}`}
+            defaultValue={safePage}
+            disabled={disabled}
+            onBlur={handleJumpToPage}
+            onKeyDown={handleJumpToPage}
+            aria-label={tCommon('jumpToPage') || 'Jump to page'}
+            data-testid="pagination-jump"
+          />
+        </label>
+      )}
     </div>
   );
 }

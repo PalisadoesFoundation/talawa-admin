@@ -117,9 +117,6 @@ function checkFile(filePath: string): IViolation[] {
   // Skip test files
   if (TEST_FILE_RE.test(basename)) return violations;
 
-  // Skip PaginationControl source itself
-  if (basename.startsWith('PaginationControl')) return violations;
-
   if (!existsSync(filePath)) return violations;
 
   let content: string;

@@ -14,7 +14,11 @@
 
   /* Viewport Widths — modal & layout patterns */
   --vw-100: 100vw;
+  --vw-100: 100vw;
   --vw-80: 80vw;
   --vw-13: 13vw;
   --vw-8: 8vw;
+
+  /* Breakpoints */
+  --breakpoint-sm: 480px;
 }

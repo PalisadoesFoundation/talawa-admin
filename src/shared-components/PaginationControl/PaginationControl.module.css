@@ -15,14 +15,14 @@
 }
 
 .pageInfo {
-  font-size: var(--space-4);
+  font-size: var(--font-size-sm);
   color: var(--color-gray-600);
   min-width: var(--space-20);
   text-align: center;
 }
 
 .rangeInfo {
-  font-size: var(--space-4);
+  font-size: var(--font-size-sm);
   color: var(--color-gray-600);
 }
 
@@ -81,8 +81,13 @@
   cursor: not-allowed;
 }
 
+.jumpToPageInput {
+  width: var(--space-16);
+  padding: var(--space-1);
+}
+
 /* Responsive: hide page-size selector on very small screens */
-@media (max-width: 480px) {
+@media (max-width: var(--breakpoint-sm)) {
   .pageSizeLabel {
     display: none;
   }

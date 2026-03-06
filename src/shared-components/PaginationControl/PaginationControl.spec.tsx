@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PaginationControl } from './PaginationControl';
 
@@ -36,10 +36,11 @@ const defaultProps = {
 
 describe('PaginationControl', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -104,7 +105,9 @@ describe('PaginationControl', () => {
         <PaginationControl {...defaultProps} onPageChange={onPageChange} />,
       );
       await user.click(screen.getByLabelText('First'));
-      expect(onPageChange).toHaveBeenCalledWith(1);
+      await waitFor(() => {
+        expect(onPageChange).toHaveBeenCalledWith(1);
+      });
     });
 
     it('calls onPageChange(currentPage - 1) when Previous is clicked', async () => {
@@ -118,7 +121,9 @@ describe('PaginationControl', () => {
         />,
       );
       await user.click(screen.getByLabelText('Previous'));
-      expect(onPageChange).toHaveBeenCalledWith(2);
+      await waitFor(() => {
+        expect(onPageChange).toHaveBeenCalledWith(2);
+      });
     });
 
     it('calls onPageChange(currentPage + 1) when Next is clicked', async () => {
@@ -132,7 +137,9 @@ describe('PaginationControl', () => {
         />,
       );
       await user.click(screen.getByLabelText('Next'));
-      expect(onPageChange).toHaveBeenCalledWith(3);
+      await waitFor(() => {
+        expect(onPageChange).toHaveBeenCalledWith(3);
+      });
     });
 
     it('calls onPageChange(totalPages) when Last is clicked', async () => {
@@ -146,7 +153,9 @@ describe('PaginationControl', () => {
         />,
       );
       await user.click(screen.getByLabelText('Last'));
-      expect(onPageChange).toHaveBeenCalledWith(5);
+      await waitFor(() => {
+        expect(onPageChange).toHaveBeenCalledWith(5);
+      });
     });
   });
 
@@ -196,7 +205,9 @@ describe('PaginationControl', () => {
         />,
       );
       await user.click(screen.getByLabelText('Next'));
-      expect(onPageChange).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(onPageChange).not.toHaveBeenCalled();
+      });
     });
   });
 
@@ -211,7 +222,9 @@ describe('PaginationControl', () => {
         />,
       );
       await user.selectOptions(screen.getByLabelText('Rows per page'), '25');
-      expect(onPageSizeChange).toHaveBeenCalledWith(25);
+      await waitFor(() => {
+        expect(onPageSizeChange).toHaveBeenCalledWith(25);
+      });
     });
 
     it('shows the current pageSize as selected', () => {
@@ -233,8 +246,11 @@ describe('PaginationControl', () => {
       render(
         <PaginationControl {...defaultProps} onPageChange={onPageChange} />,
       );
+      screen.getByRole('navigation').focus();
       await user.keyboard('{ArrowRight}');
-      expect(onPageChange).toHaveBeenCalledWith(3);
+      await waitFor(() => {
+        expect(onPageChange).toHaveBeenCalledWith(3);
+      });
     });
 
     it('calls onPageChange with prev page on ArrowLeft', async () => {
@@ -243,8 +259,11 @@ describe('PaginationControl', () => {
       render(
         <PaginationControl {...defaultProps} onPageChange={onPageChange} />,
       );
+      screen.getByRole('navigation').focus();
       await user.keyboard('{ArrowLeft}');
-      expect(onPageChange).toHaveBeenCalledWith(1);
+      await waitFor(() => {
+        expect(onPageChange).toHaveBeenCalledWith(1);
+      });
     });
 
     it('does not navigate past first page with ArrowLeft', async () => {
@@ -257,8 +276,11 @@ describe('PaginationControl', () => {
           onPageChange={onPageChange}
         />,
       );
+      screen.getByRole('navigation').focus();
       await user.keyboard('{ArrowLeft}');
-      expect(onPageChange).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(onPageChange).not.toHaveBeenCalled();
+      });
     });
 
     it('does not navigate past last page with ArrowRight', async () => {
@@ -271,8 +293,11 @@ describe('PaginationControl', () => {
           onPageChange={onPageChange}
         />,
       );
+      screen.getByRole('navigation').focus();
       await user.keyboard('{ArrowRight}');
-      expect(onPageChange).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(onPageChange).not.toHaveBeenCalled();
+      });
     });
 
     it('does not navigate when disabled and ArrowRight pressed', async () => {
@@ -285,8 +310,11 @@ describe('PaginationControl', () => {
           onPageChange={onPageChange}
         />,
       );
+      screen.getByRole('navigation').focus();
       await user.keyboard('{ArrowRight}');
-      expect(onPageChange).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(onPageChange).not.toHaveBeenCalled();
+      });
     });
 
     it('does not navigate when focus is inside a select element', async () => {
@@ -299,7 +327,9 @@ describe('PaginationControl', () => {
       // triggering the SELECT guard in the component's keydown handler.
       await user.click(screen.getByLabelText('Rows per page'));
       await user.keyboard('{ArrowRight}');
-      expect(onPageChange).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(onPageChange).not.toHaveBeenCalled();
+      });
     });
   });
 
