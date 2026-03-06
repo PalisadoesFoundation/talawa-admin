@@ -1,3 +1,6 @@
+import type { ChangeEvent } from 'react';
+
+/** Props for the shared PasswordUpdateModal component. */
 export interface InterfacePasswordUpdateModalProps {
   open: boolean;
   onClose: () => void;
@@ -9,7 +12,7 @@ export interface InterfacePasswordUpdateModalProps {
     confirmNewPassword: string;
   };
 
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 
   hidePreviousPassword?: boolean;
   title: string;
