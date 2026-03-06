@@ -1,16 +1,19 @@
+import React from 'react';
 import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+
 import PasswordUpdateModal from './PasswordUpdateModal';
 import type { InterfacePasswordUpdateModalProps } from 'types/shared-components/PasswordUpdateModal/interface';
 
-/* ---------------- MOCK i18n ---------------- */
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
+const renderWithI18n = (props: InterfacePasswordUpdateModalProps) =>
+  render(
+    <I18nextProvider i18n={i18nForTest}>
+      <PasswordUpdateModal {...props} />
+    </I18nextProvider>,
+  );
 
 describe('PasswordUpdateModal', () => {
   let user: ReturnType<typeof userEvent.setup>;
@@ -45,25 +48,26 @@ describe('PasswordUpdateModal', () => {
     },
   };
 
-  it('renders modal correctly', () => {
-    render(<PasswordUpdateModal {...defaultProps} />);
+  it('renders modal with title', () => {
+    renderWithI18n(defaultProps);
 
     expect(screen.getByTestId('update-password-modal')).toBeInTheDocument();
     expect(screen.getByText('Update Password')).toBeInTheDocument();
   });
 
   it('renders all password fields when hidePreviousPassword is false', () => {
-    render(<PasswordUpdateModal {...defaultProps} />);
+    renderWithI18n(defaultProps);
 
     expect(screen.getByTestId('previousPasswordField')).toBeInTheDocument();
     expect(screen.getByTestId('newPasswordField')).toBeInTheDocument();
     expect(screen.getByTestId('confirmPasswordField')).toBeInTheDocument();
   });
 
-  it('hides previous password field when hidePreviousPassword is true', () => {
-    render(
-      <PasswordUpdateModal {...defaultProps} hidePreviousPassword={true} />,
-    );
+  it('does not render previous password field for admin flow', () => {
+    renderWithI18n({
+      ...defaultProps,
+      hidePreviousPassword: true,
+    });
 
     expect(
       screen.queryByTestId('previousPasswordField'),
@@ -73,58 +77,66 @@ describe('PasswordUpdateModal', () => {
     expect(screen.getByTestId('confirmPasswordField')).toBeInTheDocument();
   });
 
-  it('renders correct field values', () => {
-    render(<PasswordUpdateModal {...defaultProps} />);
+  it('renders password values correctly', () => {
+    renderWithI18n(defaultProps);
 
     expect(screen.getByDisplayValue('old123')).toBeInTheDocument();
     expect(screen.getAllByDisplayValue('new123')).toHaveLength(2);
   });
 
   it('handles undefined oldPassword safely', () => {
-    const props: InterfacePasswordUpdateModalProps = {
+    renderWithI18n({
       ...defaultProps,
       values: {
         oldPassword: undefined,
         newPassword: '',
         confirmNewPassword: '',
       },
-    };
+    });
 
-    render(<PasswordUpdateModal {...props} />);
-
-    const previousField = screen.getByTestId(
+    const previousPasswordField = screen.getByTestId(
       'previousPasswordField',
     ) as HTMLInputElement;
 
-    expect(previousField.value).toBe('');
+    expect(previousPasswordField.value).toBe('');
   });
 
-  it('calls onChange when typing in new password field', async () => {
-    render(<PasswordUpdateModal {...defaultProps} />);
+  it('calls onChange when user types new password', async () => {
+    renderWithI18n(defaultProps);
 
-    const input = screen.getByTestId('newPasswordField');
+    const newPasswordInput = screen.getByTestId('newPasswordField');
 
-    await user.type(input, 'x');
+    await user.type(newPasswordInput, 'x');
 
     expect(mockOnChange).toHaveBeenCalled();
   });
 
-  it('calls onSubmit when primary button clicked', async () => {
-    render(<PasswordUpdateModal {...defaultProps} />);
+  it('calls onSubmit when save button clicked', async () => {
+    renderWithI18n(defaultProps);
 
-    const button = screen.getByText('Save');
+    const saveButton = screen.getByRole('button', { name: /save/i });
 
-    await user.click(button);
+    await user.click(saveButton);
 
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onClose when modal close button clicked', async () => {
-    render(<PasswordUpdateModal {...defaultProps} />);
+  it('calls onClose when cancel button clicked', async () => {
+    renderWithI18n(defaultProps);
 
-    const closeButtons = screen.getAllByRole('button');
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
 
-    await user.click(closeButtons[0]);
+    await user.click(cancelButton);
+
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls onClose when close button clicked', async () => {
+    renderWithI18n(defaultProps);
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+
+    await user.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalled();
   });
