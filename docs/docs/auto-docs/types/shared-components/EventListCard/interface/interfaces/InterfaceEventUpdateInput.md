@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventUpdateInput
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L30)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L29)
 
 Input payload for updating an event. Optional fields are included only when changed.
 
@@ -14,7 +14,7 @@ Input payload for updating an event. Optional fields are included only when chan
 
 > `optional` **allDay**: `boolean`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L38)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L37)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:38](https://
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L33)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L32)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:33](https://
 
 > `optional` **endAt**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L40)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L39)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:40](https://
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L31)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L30)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:31](https://
 
 > `optional` **isInviteOnly**: `boolean`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L37)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L36)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:37](https://
 
 > `optional` **isPublic**: `boolean`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L35)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L34)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:35](https://
 
 > `optional` **isRegisterable**: `boolean`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L36)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L35)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:36](https://
 
 > `optional` **location**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L34)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L33)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:34](https://
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L32)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L31)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:32](https://
 
 > `optional` **recurrence**: [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L45)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L44)
 
 Recurrence rule for the event.
 This field is used for updating the recurrence pattern.
@@ -97,4 +97,4 @@ This field is used for updating the recurrence pattern.
 
 > `optional` **startAt**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L39)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L38)

@@ -260,7 +260,7 @@
     "avatar": "Avatar de {{title}}",
     "eventLocation": "Lieu de l'événement",
     "eventDate": "Date de l'événement",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Publié le :",
     "author": "Auteur :"
   },
@@ -956,7 +956,8 @@
     "noOfAttendees": "Nombre de Participants",
     "noRegistrations": "Aucune Inscription",
     "registrants": "Inscrits",
-    "to": "À"
+    "to": "À",
+    "deleteOptionRequired": "L'option de suppression est requise"
   },
   "funds": {
     "title": "Fonds",
@@ -1937,8 +1938,7 @@
     "conversationAlreadyExists": "Une conversation avec {{userName}} existe déjà !",
     "thisUser": "cet utilisateur",
     "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?",
-    "memberActionsMenu": "Menu des actions des membres",
-    "editImage": "Modifier l'image"
+    "memberActionsMenu": "Menu des actions des membres"
   },
   "userChatRoom": {
     "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",

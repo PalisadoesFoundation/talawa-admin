@@ -430,7 +430,7 @@
     "avatar": "{{title}} avatar",
     "eventLocation": "Event Location",
     "eventDate": "Event Date",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Posted on:",
     "author": "Author:"
   },
@@ -865,14 +865,14 @@
   },
   "eventListCard": {
     "dogsCare": "Dogs Care",
-    "deleteEvent": "Delete Event",
+    "deleteEvent": "Delete",
     "deleteEventMsg": "Do you want to remove this event?",
     "deleteRecurringEventMsg": "This is a recurring event. Choose how you want to delete it:",
     "deleteThisInstance": "Delete only this instance",
     "deleteThisAndFollowing": "Delete this and all following events",
     "deleteAllEvents": "Delete all events in this series",
-    "editEvent": "Edit Event",
-    "showEventDashboard": "Show Event Dashboard",
+    "editEvent": "Edit",
+    "showEventDashboard": "Show Dashboard",
     "updateEvent": "Update Event",
     "updateRecurringEventMsg": "This is a recurring event. Choose how you want to update it:",
     "updateThisInstance": "Update only this instance",
@@ -956,7 +956,8 @@
     "noOfAttendees": "No. of Attendees",
     "noRegistrations": "No Registrations",
     "registrants": "Registrants",
-    "to": "To"
+    "to": "To",
+    "deleteOptionRequired": "Delete option is required"
   },
   "funds": {
     "title": "Funds",
@@ -1884,7 +1885,7 @@
     "newChat": "New Chat",
     "newGroupChat": "New Group Chat",
     "groupInfo": "Group Info",
-    "editImage": "Edit image",
+    "editImage": "Edit Image",
     "description": "Description",
     "hash": "#",
     "members": "Members",
@@ -1920,8 +1921,7 @@
     "conversationAlreadyExists": "A conversation with {{userName}} already exists!",
     "thisUser": "this user",
     "deleteChatConfirmation": "Are you sure you want to delete this chat?",
-    "memberActionsMenu": "Member Actions Menu",
-    "editImage": "Edit Image"
+    "memberActionsMenu": "Member Actions Menu"
   },
   "userChatRoom": {
     "selectContact": "Click the + icon to start a new chat",

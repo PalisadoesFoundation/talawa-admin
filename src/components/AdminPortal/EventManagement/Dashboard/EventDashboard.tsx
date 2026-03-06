@@ -133,7 +133,6 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
-          tCommon={t}
         />
         <div className="d-flex px-6" data-testid="event-stats">
           {/* Attendees data not available in new query; adjust or remove */}
