@@ -35,3 +35,15 @@ export interface InterfaceAddressFieldConfig {
 }
 /** Props for the MemberDetail screen component. */
 export type InterfaceMemberDetailProps = { id?: string };
+
+/**
+ * Props for the ContactInfoCard component.
+ */
+export interface InterfaceContactInfoCardProps {
+  /** Form state containing field values */
+  formState: Record<string, string | null>;
+  /** Email address to display (read-only) */
+  emailAddress?: string;
+  /** Handler for field value changes */
+  handleFieldChange: (fieldName: string, value: string) => void;
+}

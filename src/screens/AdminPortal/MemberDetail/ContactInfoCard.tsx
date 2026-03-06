@@ -9,14 +9,9 @@ import { Card, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { countryOptions } from 'utils/formEnumFields';
+import { InterfaceContactInfoCardProps } from 'types/AdminPortal/MemberDetail/interface';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
 import styles from './ContactInfoCard.module.css';
-
-interface InterfaceContactInfoCardProps {
-  formState: Record<string, string | null>;
-  emailAddress?: string;
-  handleFieldChange: (fieldName: string, value: string) => void;
-}
 
 const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
   formState,
@@ -39,7 +34,7 @@ const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
             </label>
             <input
               id="email"
-              value={emailAddress}
+              value={emailAddress ?? ''}
               className={`form-control ${styles.inputColor}`}
               type="email"
               name="email"
@@ -56,7 +51,7 @@ const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
               <input
                 id={field.id}
                 value={
-                  (formState[field.key as keyof typeof formState] as string) ||
+                  (formState[field.key as keyof typeof formState] as string) ??
                   ''
                 }
                 className={`form-control ${styles.inputColor}`}
@@ -76,7 +71,7 @@ const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
               <input
                 id={field.id}
                 value={
-                  (formState[field.key as keyof typeof formState] as string) ||
+                  (formState[field.key as keyof typeof formState] as string) ??
                   ''
                 }
                 className={`form-control ${styles.inputColor}`}
@@ -99,7 +94,7 @@ const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
               <select
                 id="country"
                 className={`form-control ${styles.inputColor}`}
-                value={formState.countryCode as string}
+                value={(formState.countryCode as string) ?? ''}
                 data-testid="inputCountry"
                 onChange={(e) =>
                   handleFieldChange('countryCode', e.target.value)
