@@ -23,11 +23,6 @@ const WRAPPER_ENFORCED_SKIP = new Set([
   'TablePagination',
 ]);
 
-const red = (text) => `\u001b[31m${text}\u001b[0m`;
-const green = (text) => `\u001b[32m${text}\u001b[0m`;
-const yellow = (text) => `\u001b[33m${text}\u001b[0m`;
-const bold = (text) => `\u001b[1m${text}\u001b[0m`;
-
 /**
  * Check whether `@mui/material/<name>` or `@mui/icons-material/<name>`
  * resolves to a real module (i.e. has its own directory/entry-point).
@@ -58,9 +53,7 @@ const parseArgs = (argv) => {
 
   if (!rawFiles.length) {
     console.error(
-      red(
-        'No files provided. Usage: node scripts/convert-mui-imports.js --files <file ...>',
-      ),
+      'No files provided. Usage: node scripts/convert-mui-imports.js --files <file ...>',
     );
     process.exitCode = 1;
     return [];
@@ -71,7 +64,7 @@ const parseArgs = (argv) => {
 
 const transformFile = (filePath) => {
   if (!fs.existsSync(filePath)) {
-    console.warn(red(`Skipping missing file: ${filePath}`));
+    console.warn(`Skipping missing file: ${filePath}`);
     return;
   }
 
@@ -127,9 +120,7 @@ const transformFile = (filePath) => {
             convertible.push(element);
           } else {
             console.warn(
-              yellow(
-                `  Skipping "${importedName}" — no deep-import path at ${source}/${importedName}`,
-              ),
+              `  Skipping "${importedName}" — no deep-import path at ${source}/${importedName}`,
             );
             kept.push(element);
           }
@@ -189,8 +180,8 @@ const transformFile = (filePath) => {
 
   fs.writeFileSync(filePath, newContent, 'utf8');
   console.log(
-    green('Converted:'),
-    bold(path.relative(process.cwd(), filePath)),
+    'Converted:',
+    path.relative(process.cwd(), filePath),
   );
 };
 
@@ -204,7 +195,7 @@ const main = () => {
     try {
       transformFile(file);
     } catch (error) {
-      console.error(red(`Error processing ${file}:`), error);
+      console.error(`Error processing ${file}:`, error);
       errorCount++;
     }
   }
@@ -212,7 +203,7 @@ const main = () => {
   if (errorCount > 0) {
     process.exitCode = 1;
   } else {
-    console.log(green('✓ MUI import conversion completed successfully.'));
+    console.log('✓ MUI import conversion completed successfully.');
   }
 };
 

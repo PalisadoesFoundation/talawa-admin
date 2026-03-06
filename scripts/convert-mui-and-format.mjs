@@ -16,7 +16,7 @@ const args = process.argv.slice(2);
 
 if (!args.includes('--files')) {
   console.error(
-    '\u001b[31mError: --files flag is required.\u001b[0m\n' +
+    'Error: --files flag is required.\n' +
       'Usage: pnpm convert-mui:fix --files <file1> <file2> ...\n\n' +
       'Examples:\n' +
       '  pnpm convert-mui:fix --files src/components/Button.tsx\n' +
@@ -44,14 +44,14 @@ const runCommand = (cmd, cmdArgs) => {
 const main = async () => {
   try {
     console.log(
-      '\u001b[1m\u001b[36m📦 Converting MUI barrel imports to deep imports...\u001b[0m\n',
+      '📦 Converting MUI barrel imports to deep imports...\n',
     );
 
     // Run the codemod with the provided files
     await runCommand('node', ['scripts/convert-mui-imports.js', ...args]);
 
     console.log(
-      '\n\u001b[1m\u001b[36m✨ Formatting converted files...\u001b[0m\n',
+      '\n✨ Formatting converted files...\n',
     );
 
     // Extract file paths from args
@@ -68,11 +68,11 @@ const main = async () => {
     ]);
 
     console.log(
-      '\n\u001b[1m\u001b[32m✅ MUI import conversion and formatting completed!\u001b[0m\n',
+      '\n✅ MUI import conversion and formatting completed!\n',
     );
   } catch (error) {
     console.error(
-      '\u001b[1m\u001b[31m❌ Error:\u001b[0m',
+      '❌ Error:',
       error.message,
       '\n',
     );
