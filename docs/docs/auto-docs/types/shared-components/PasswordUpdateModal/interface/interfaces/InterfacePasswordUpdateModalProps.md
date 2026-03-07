@@ -26,6 +26,14 @@ Defined in: [src/types/shared-components/PasswordUpdateModal/interface.ts:17](ht
 
 ***
 
+### loading?
+
+> `optional` **loading**: `boolean`
+
+Defined in: [src/types/shared-components/PasswordUpdateModal/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PasswordUpdateModal/interface.ts#L14)
+
+***
+
 ### newPasswordLabel
 
 > **newPasswordLabel**: `string`
@@ -74,13 +82,13 @@ Defined in: [src/types/shared-components/PasswordUpdateModal/interface.ts:6](htt
 
 ### onSubmit()
 
-> **onSubmit**: () => `void`
+> **onSubmit**: () => `void` \| `Promise`\<`void`\>
 
 Defined in: [src/types/shared-components/PasswordUpdateModal/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PasswordUpdateModal/interface.ts#L7)
 
 #### Returns
 
-`void`
+`void` \| `Promise`\<`void`\>
 
 ***
 
