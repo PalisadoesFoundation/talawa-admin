@@ -25,13 +25,11 @@ vi.mock('react-router', async () => {
   };
 });
 
+const mockGetItem = vi.fn();
+
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
-    getItem: (key: string): string | null => {
-      if (key === 'id') return 'loggedInUser';
-      if (key === 'userId') return 'loggedInUser';
-      return null;
-    },
+    getItem: mockGetItem,
   }),
 }));
 
@@ -112,7 +110,13 @@ const renderSecurity = (mocks: MockedResponse[] = []) =>
 
 describe('Security', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockGetItem.mockReset();
+
+    mockGetItem.mockImplementation((key: string) => {
+      if (key === 'id') return 'loggedInUser';
+      if (key === 'userId') return 'loggedInUser';
+      return null;
+    });
   });
 
   afterEach(() => {
@@ -130,6 +134,22 @@ describe('Security', () => {
     });
 
     it('opens modal when button clicked', async () => {
+      vi.mocked(useParams).mockReturnValue({});
+
+      renderSecurity();
+
+      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+
+      expect(screen.getByTestId('passwordModal')).toBeInTheDocument();
+    });
+
+    it('falls back to userId when id not present in localStorage', async () => {
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'id') return null;
+        if (key === 'userId') return 'fallbackUser';
+        return null;
+      });
+
       vi.mocked(useParams).mockReturnValue({});
 
       renderSecurity();
@@ -354,6 +374,44 @@ describe('Security', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith('Mutation failed');
+      });
+    });
+
+    it('handles non-Error mutation failure gracefully', async () => {
+      vi.mocked(validatePassword).mockReturnValue(null);
+
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: UPDATE_USER_PASSWORD,
+            variables: {
+              input: {
+                oldPassword: 'old123',
+                newPassword: 'new123',
+                confirmNewPassword: 'new123',
+              },
+            },
+          },
+          error: 'string-error' as unknown as Error,
+        },
+      ];
+
+      vi.mocked(useParams).mockReturnValue({});
+
+      renderSecurity(mocks);
+
+      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+
+      await userEvent.type(screen.getByTestId('oldPassword'), 'old123');
+      await userEvent.type(screen.getByTestId('newPassword'), 'new123');
+      await userEvent.type(screen.getByTestId('confirmPassword'), 'new123');
+
+      await userEvent.click(screen.getByText('submit'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).not.toHaveBeenCalledWith(
+          'string-error',
+        );
       });
     });
   });
