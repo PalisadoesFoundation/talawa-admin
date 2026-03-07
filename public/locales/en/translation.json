@@ -1485,6 +1485,13 @@
     "passwordChangedSuccessfully": "Password Changed Successfully",
     "enterCurrentPassword": "Please enter your current password"
   },
+  "passwordValidation": {
+    "minLength": "Password must be at least 8 characters long.",
+    "uppercaseRequired": "Password must contain at least one uppercase letter.",
+    "lowercaseRequired": "Password must contain at least one lowercase letter.",
+    "numberRequired": "Password must contain at least one number.",
+    "specialCharRequired": "Password must contain at least one special character."
+  },
   "people": {
     "title": "People",
     "searchUsers": "Search users",

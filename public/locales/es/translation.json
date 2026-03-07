@@ -1418,6 +1418,13 @@
     "passwordChangedSuccessfully": "Contraseña cambiada con éxito",
     "enterCurrentPassword": "Por favor ingrese su contraseña actual"
   },
+  "passwordValidation": {
+    "minLength": "La contraseña debe tener al menos 8 caracteres.",
+    "uppercaseRequired": "La contraseña debe contener al menos una letra mayúscula.",
+    "lowercaseRequired": "La contraseña debe contener al menos una letra minúscula.",
+    "numberRequired": "La contraseña debe contener al menos un número.",
+    "specialCharRequired": "La contraseña debe contener al menos un carácter especial."
+  },
   "plugin": {
     "error": "Error del complemento",
     "failedToLoad": "Error al cargar el componente: <1>{{componentName}}</1>",

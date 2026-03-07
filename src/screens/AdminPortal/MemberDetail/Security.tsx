@@ -28,6 +28,7 @@ import styles from './Security.module.css';
  */
 const Security = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
+  const { t: tValidation } = useTranslation('translation');
 
   const { getItem } = useLocalStorage();
   const { userId } = useParams();
@@ -38,6 +39,7 @@ const Security = (): JSX.Element => {
   const isAdminEditingOtherUser = loggedInUserId !== resolvedUserId;
 
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [updateUserPassword] = useMutation(UPDATE_USER_PASSWORD);
   const [adminUpdateUserPassword] = useMutation(ADMIN_UPDATE_USER_PASSWORD);
@@ -65,6 +67,7 @@ const Security = (): JSX.Element => {
   };
 
   const handleSubmit = async (): Promise<void> => {
+    if (isSubmitting) return;
     const { oldPassword, newPassword, confirmNewPassword } = form;
 
     if (!newPassword || !confirmNewPassword) {
@@ -80,10 +83,10 @@ const Security = (): JSX.Element => {
     const checkPassword = validatePassword(newPassword);
 
     if (checkPassword) {
-      NotificationToast.error(checkPassword);
+      NotificationToast.error(tValidation(checkPassword));
       return;
     }
-
+    setIsSubmitting(true);
     try {
       if (isAdminEditingOtherUser) {
         await adminUpdateUserPassword({
@@ -118,6 +121,8 @@ const Security = (): JSX.Element => {
       if (err instanceof Error) {
         NotificationToast.error(err.message);
       }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -147,6 +152,7 @@ const Security = (): JSX.Element => {
         onSubmit={handleSubmit}
         values={form}
         onChange={handleChange}
+        loading={isSubmitting}
         hidePreviousPassword={isAdminEditingOtherUser}
         title={t('changePassword')}
         saveText={t('updatePassword')}

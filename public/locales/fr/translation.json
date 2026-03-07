@@ -1440,6 +1440,13 @@
     "passwordChangedSuccessfully": "Mot de passe modifié avec succès",
     "enterCurrentPassword": "Veuillez saisir votre mot de passe actuel"
   },
+  "passwordValidation": {
+    "minLength": "Le mot de passe doit contenir au moins 8 caractères.",
+    "uppercaseRequired": "Le mot de passe doit contenir au moins une lettre majuscule.",
+    "lowercaseRequired": "Le mot de passe doit contenir au moins une lettre minuscule.",
+    "numberRequired": "Le mot de passe doit contenir au moins un chiffre.",
+    "specialCharRequired": "Le mot de passe doit contenir au moins un caractère spécial."
+  },
   "people": {
     "title": "Personnes",
     "searchUsers": "Rechercher des utilisateurs",

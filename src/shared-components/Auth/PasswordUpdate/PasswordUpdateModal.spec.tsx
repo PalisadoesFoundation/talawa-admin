@@ -17,36 +17,39 @@ const renderWithI18n = (props: InterfacePasswordUpdateModalProps) =>
 
 describe('PasswordUpdateModal', () => {
   let user: ReturnType<typeof userEvent.setup>;
+  let mockOnClose: ReturnType<typeof vi.fn>;
+  let mockOnSubmit: ReturnType<typeof vi.fn>;
+  let mockOnChange: ReturnType<typeof vi.fn>;
+  let defaultProps: InterfacePasswordUpdateModalProps;
 
   beforeEach(() => {
     user = userEvent.setup();
+    mockOnClose = vi.fn();
+    mockOnSubmit = vi.fn();
+    mockOnChange = vi.fn();
+
+    defaultProps = {
+      open: true,
+      onClose: mockOnClose,
+      onSubmit: mockOnSubmit,
+      onChange: mockOnChange,
+      title: 'Update Password',
+      saveText: 'Save',
+      oldPasswordLabel: 'Old Password',
+      newPasswordLabel: 'New Password',
+      confirmPasswordLabel: 'Confirm Password',
+      values: {
+        oldPassword: 'old123',
+        newPassword: 'new123',
+        confirmNewPassword: 'new123',
+      },
+    };
   });
 
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
   });
-
-  const mockOnClose = vi.fn();
-  const mockOnSubmit = vi.fn();
-  const mockOnChange = vi.fn();
-
-  const defaultProps: InterfacePasswordUpdateModalProps = {
-    open: true,
-    onClose: mockOnClose,
-    onSubmit: mockOnSubmit,
-    onChange: mockOnChange,
-    title: 'Update Password',
-    saveText: 'Save',
-    oldPasswordLabel: 'Old Password',
-    newPasswordLabel: 'New Password',
-    confirmPasswordLabel: 'Confirm Password',
-    values: {
-      oldPassword: 'old123',
-      newPassword: 'new123',
-      confirmNewPassword: 'new123',
-    },
-  };
 
   it('renders modal with title', () => {
     renderWithI18n(defaultProps);

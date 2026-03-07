@@ -1440,6 +1440,13 @@
     "passwordChangedSuccessfully": "密码修改成功",
     "enterCurrentPassword": "请输入当前密码"
   },
+  "passwordValidation": {
+    "minLength": "密码长度必须至少为 8 个字符。",
+    "uppercaseRequired": "密码必须包含至少一个大写字母。",
+    "lowercaseRequired": "密码必须包含至少一个小写字母。",
+    "numberRequired": "密码必须包含至少一个数字。",
+    "specialCharRequired": "密码必须包含至少一个特殊字符。"
+  },
   "userLogin": {
     "login": "登录",
     "loginIntoYourAccount": "登录您的帐户",

@@ -9,6 +9,7 @@
  * - Organizations: Lists organizations the member belongs to.
  * - Events: Shows events associated with the member.
  * - Tags: Displays tags assigned to the member.
+ * - Security: Allows password updates.
  *
  * The component determines which member to display from the URL parameters
  * `orgId` and `userId` using `useParams`. The `userId` is passed to child

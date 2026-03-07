@@ -1435,6 +1435,13 @@
     "passwordChangedSuccessfully": "पासवर्ड सफलतापूर्वक बदल दिया गया",
     "enterCurrentPassword": "कृपया अपना वर्तमान पासवर्ड दर्ज करें"
   },
+  "passwordValidation": {
+    "minLength": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए।",
+    "uppercaseRequired": "पासवर्ड में कम से कम एक बड़ा अक्षर होना चाहिए।",
+    "lowercaseRequired": "पासवर्ड में कम से कम एक छोटा अक्षर होना चाहिए।",
+    "numberRequired": "पासवर्ड में कम से कम एक संख्या होनी चाहिए।",
+    "specialCharRequired": "पासवर्ड में कम से कम एक विशेष चिन्ह होना चाहिए।"
+  },
   "people": {
     "title": "लोग",
     "searchUsers": "उपयोगकर्ताओं को खोजें",

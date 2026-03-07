@@ -37,6 +37,7 @@ export const PasswordUpdateModal: React.FC<
   oldPasswordLabel,
   newPasswordLabel,
   confirmPasswordLabel,
+  loading,
 }) => {
   return (
     <CRUDModalTemplate
@@ -45,6 +46,7 @@ export const PasswordUpdateModal: React.FC<
       onClose={onClose}
       onPrimary={onSubmit}
       primaryText={saveText}
+      loading={loading}
       data-testid="update-password-modal"
     >
       {!hidePreviousPassword && (

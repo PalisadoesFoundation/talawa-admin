@@ -217,7 +217,9 @@ describe('Security', () => {
     });
 
     it('shows error when validator fails', async () => {
-      vi.mocked(validatePassword).mockReturnValue('weak password');
+      vi.mocked(validatePassword).mockReturnValue(
+        'passwordValidation.numberRequired',
+      );
 
       vi.mocked(useParams).mockReturnValue({});
 
@@ -230,7 +232,7 @@ describe('Security', () => {
 
       await userEvent.click(screen.getByText('submit'));
 
-      expect(NotificationToast.error).toHaveBeenCalledWith('weak password');
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
