@@ -77,10 +77,10 @@ const Security = (): JSX.Element => {
       return;
     }
 
-    const passwordError = validatePassword(newPassword);
+    const checkPassword = validatePassword(newPassword);
 
-    if (passwordError) {
-      NotificationToast.error(passwordError);
+    if (checkPassword) {
+      NotificationToast.error(checkPassword);
       return;
     }
 
