@@ -53,7 +53,7 @@ const parseArgs = (argv) => {
 
   if (!rawFiles.length) {
     console.error(
-      'No files provided. Usage: node scripts/convert-mui-imports.js --files <file ...>',
+      'No files provided. Usage: node scripts/codemods/convert-mui-imports.js --files <file ...>',
     );
     process.exitCode = 1;
     return [];

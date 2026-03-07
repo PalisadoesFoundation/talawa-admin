@@ -9,7 +9,7 @@ const root = join(__dirname, '..', '..');
 
 /**
  * Runs the MUI import conversion codemod, then formats the converted files.
- * Usage: node scripts/convert-mui-and-format.mjs --files <file1> <file2> ...
+ * Usage: node scripts/codemods/convert-mui-and-format.mjs --files <file1> <file2> ...
  */
 
 const args = process.argv.slice(2);
