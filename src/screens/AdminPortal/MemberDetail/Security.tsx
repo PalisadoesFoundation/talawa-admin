@@ -33,7 +33,7 @@ const Security = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const { userId } = useParams();
 
-  const loggedInUserId = getItem('id') || getItem('userId');
+  const loggedInUserId = getItem('userId');
   const resolvedUserId = userId || loggedInUserId;
 
   const isAdminEditingOtherUser = loggedInUserId !== resolvedUserId;

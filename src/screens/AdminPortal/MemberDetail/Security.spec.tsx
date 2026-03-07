@@ -109,11 +109,12 @@ const renderSecurity = (mocks: MockedResponse[] = []) =>
   );
 
 describe('Security', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
+    user = userEvent.setup();
     mockGetItem.mockReset();
 
     mockGetItem.mockImplementation((key: string) => {
-      if (key === 'id') return 'loggedInUser';
       if (key === 'userId') return 'loggedInUser';
       return null;
     });
@@ -138,25 +139,21 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       expect(screen.getByTestId('passwordModal')).toBeInTheDocument();
     });
 
-    it('falls back to userId when id not present in localStorage', async () => {
-      mockGetItem.mockImplementation((key: string) => {
-        if (key === 'id') return null;
-        if (key === 'userId') return 'fallbackUser';
-        return null;
-      });
+    it('treats user as admin when loggedInUserId is null', async () => {
+      mockGetItem.mockImplementation(() => null);
 
-      vi.mocked(useParams).mockReturnValue({});
+      vi.mocked(useParams).mockReturnValue({ userId: 'otherUser' });
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
-      expect(screen.getByTestId('passwordModal')).toBeInTheDocument();
+      expect(screen.getByTestId('hidePrevious')).toHaveTextContent('true');
     });
   });
 
@@ -166,7 +163,7 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('newPassword'), 'abc123');
 
@@ -178,7 +175,7 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('newPassword'), '123');
 
@@ -194,7 +191,7 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.click(screen.getByText('submit'));
 
@@ -206,7 +203,7 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('newPassword'), '123');
       await userEvent.type(screen.getByTestId('confirmPassword'), '456');
@@ -225,7 +222,7 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('newPassword'), '123');
       await userEvent.type(screen.getByTestId('confirmPassword'), '123');
@@ -244,7 +241,7 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('newPassword'), '123');
       await userEvent.type(screen.getByTestId('confirmPassword'), '123');
@@ -277,7 +274,7 @@ describe('Security', () => {
 
       renderSecurity(mocks);
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('oldPassword'), 'old123');
       await userEvent.type(screen.getByTestId('newPassword'), 'new123');
@@ -297,7 +294,7 @@ describe('Security', () => {
 
       renderSecurity();
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       expect(screen.getByTestId('hidePrevious')).toHaveTextContent('true');
     });
@@ -329,7 +326,7 @@ describe('Security', () => {
 
       renderSecurity(mocks);
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('newPassword'), 'new123');
       await userEvent.type(screen.getByTestId('confirmPassword'), 'new123');
@@ -366,7 +363,7 @@ describe('Security', () => {
 
       renderSecurity(mocks);
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('oldPassword'), 'old123');
       await userEvent.type(screen.getByTestId('newPassword'), 'new123');
@@ -402,7 +399,7 @@ describe('Security', () => {
 
       renderSecurity(mocks);
 
-      await userEvent.click(screen.getByTestId('changePasswordBtn'));
+      await user.click(screen.getByTestId('changePasswordBtn'));
 
       await userEvent.type(screen.getByTestId('oldPassword'), 'old123');
       await userEvent.type(screen.getByTestId('newPassword'), 'new123');
