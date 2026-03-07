@@ -151,7 +151,12 @@ const transformFile = (filePath) => {
             }
             return `${prefix}${element.name.text}`;
           });
-          barrelImport = `import { ${specifiers.join(', ')} } from '${source}';\n`;
+          barrelImport =
+            'import { ' +
+            specifiers.join(', ') +
+            " } from '" +
+            source +
+            "';\n";
         }
 
         edits.push({

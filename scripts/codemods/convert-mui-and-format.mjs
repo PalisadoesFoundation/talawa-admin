@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const root = join(__dirname, '..');
+const root = join(__dirname, '..', '..');
 
 /**
  * Runs the MUI import conversion codemod, then formats the converted files.
@@ -48,7 +48,7 @@ const main = async () => {
     );
 
     // Run the codemod with the provided files
-    await runCommand('node', ['scripts/convert-mui-imports.js', ...args]);
+    await runCommand('node', ['scripts/codemods/convert-mui-imports.js', ...args]);
 
     console.log(
       '\n✨ Formatting converted files...\n',
