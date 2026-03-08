@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
+import type {
   AutocompleteValue,
   AutocompleteRenderInputParams,
-} from '@mui/material';
+} from '@mui/material/Autocomplete';
 import MuiAutocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
