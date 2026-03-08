@@ -165,7 +165,7 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('newPassword'), 'abc123');
+      await user.type(screen.getByTestId('newPassword'), 'abc123');
 
       expect(screen.getByTestId('newPassword')).toHaveValue('abc123');
     });
@@ -177,9 +177,8 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('newPassword'), '123');
-
-      await userEvent.click(screen.getByText('close'));
+      await user.type(screen.getByTestId('newPassword'), '123');
+      await user.click(screen.getByText('close'));
 
       expect(screen.queryByTestId('passwordModal')).not.toBeInTheDocument();
     });
@@ -193,7 +192,7 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.click(screen.getByText('submit'));
+      await user.click(screen.getByText('submit'));
 
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -205,10 +204,9 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('newPassword'), '123');
-      await userEvent.type(screen.getByTestId('confirmPassword'), '456');
-
-      await userEvent.click(screen.getByText('submit'));
+      await user.type(screen.getByTestId('newPassword'), '123');
+      await user.type(screen.getByTestId('confirmPassword'), '456');
+      await user.click(screen.getByText('submit'));
 
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -224,10 +222,9 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('newPassword'), '123');
-      await userEvent.type(screen.getByTestId('confirmPassword'), '123');
-
-      await userEvent.click(screen.getByText('submit'));
+      await user.type(screen.getByTestId('newPassword'), '123');
+      await user.type(screen.getByTestId('confirmPassword'), '123');
+      await user.click(screen.getByText('submit'));
 
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -243,10 +240,9 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('newPassword'), '123');
-      await userEvent.type(screen.getByTestId('confirmPassword'), '123');
-
-      await userEvent.click(screen.getByText('submit'));
+      await user.type(screen.getByTestId('newPassword'), '123');
+      await user.type(screen.getByTestId('confirmPassword'), '123');
+      await user.click(screen.getByText('submit'));
 
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -276,11 +272,10 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('oldPassword'), 'old123');
-      await userEvent.type(screen.getByTestId('newPassword'), 'new123');
-      await userEvent.type(screen.getByTestId('confirmPassword'), 'new123');
-
-      await userEvent.click(screen.getByText('submit'));
+      await user.type(screen.getByTestId('oldPassword'), 'old123');
+      await user.type(screen.getByTestId('newPassword'), 'new123');
+      await user.type(screen.getByTestId('confirmPassword'), 'new123');
+      await user.click(screen.getByText('submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -328,10 +323,9 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('newPassword'), 'new123');
-      await userEvent.type(screen.getByTestId('confirmPassword'), 'new123');
-
-      await userEvent.click(screen.getByText('submit'));
+      await user.type(screen.getByTestId('newPassword'), 'new123');
+      await user.type(screen.getByTestId('confirmPassword'), 'new123');
+      await user.click(screen.getByText('submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -365,11 +359,10 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('oldPassword'), 'old123');
-      await userEvent.type(screen.getByTestId('newPassword'), 'new123');
-      await userEvent.type(screen.getByTestId('confirmPassword'), 'new123');
-
-      await userEvent.click(screen.getByText('submit'));
+      await user.type(screen.getByTestId('oldPassword'), 'old123');
+      await user.type(screen.getByTestId('newPassword'), 'new123');
+      await user.type(screen.getByTestId('confirmPassword'), 'new123');
+      await user.click(screen.getByText('submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith('Mutation failed');
@@ -401,11 +394,11 @@ describe('Security', () => {
 
       await user.click(screen.getByTestId('changePasswordBtn'));
 
-      await userEvent.type(screen.getByTestId('oldPassword'), 'old123');
-      await userEvent.type(screen.getByTestId('newPassword'), 'new123');
-      await userEvent.type(screen.getByTestId('confirmPassword'), 'new123');
+      await user.type(screen.getByTestId('oldPassword'), 'old123');
+      await user.type(screen.getByTestId('newPassword'), 'new123');
+      await user.type(screen.getByTestId('confirmPassword'), 'new123');
 
-      await userEvent.click(screen.getByText('submit'));
+      await user.click(screen.getByText('submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).not.toHaveBeenCalledWith(
