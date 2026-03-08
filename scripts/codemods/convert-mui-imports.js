@@ -1,3 +1,26 @@
+/**
+ * Converts MUI barrel imports into deep imports.
+ *
+ * This codemod scans the provided files and replaces imports from
+ * `@mui/material` and `@mui/icons-material` with their corresponding
+ * deep import paths when available.
+ *
+ * Example:
+ *   import { Dialog } from '@mui/material';
+ *
+ * becomes:
+ *   import Dialog from '@mui/material/Dialog';
+ *
+ * Imports that do not have a valid deep import path, type-only imports,
+ * or wrapper-enforced components (e.g. Autocomplete, Chip, Table) are
+ * preserved as barrel imports to avoid breaking changes.
+ *
+ * Usage:
+ *   node scripts/codemods/convert-mui-imports.js --files <file1> <file2> ...
+ *
+ * Example:
+ *   pnpm convert-mui --files src/components/Button.tsx
+ */
 import fs from 'fs';
 import path from 'path';
 import { createRequire } from 'module';

@@ -1,16 +1,30 @@
 #!/usr/bin/env node
-
+/**
+ * Wrapper script for the MUI import codemod.
+ *
+ * This script runs the MUI codemod that converts barrel imports
+ * (e.g. `@mui/material`, `@mui/icons-material`) to safe deep imports,
+ * and then formats the modified files using Prettier.
+ *
+ * Example conversion:
+ *   import { Dialog } from '@mui/material'
+ *   → import Dialog from '@mui/material/Dialog'
+ *
+ * Usage:
+ *   pnpm convert-mui:fix --files <file1> <file2> ...
+ *
+ * Example:
+ *   pnpm convert-mui:fix --files src/components/Button.tsx
+ *
+ * Only the converted files are formatted to avoid running
+ * formatting across the entire repository.
+ */
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = join(__dirname, '..', '..');
-
-/**
- * Runs the MUI import conversion codemod, then formats the converted files.
- * Usage: node scripts/codemods/convert-mui-and-format.mjs --files <file1> <file2> ...
- */
 
 const args = process.argv.slice(2);
 
