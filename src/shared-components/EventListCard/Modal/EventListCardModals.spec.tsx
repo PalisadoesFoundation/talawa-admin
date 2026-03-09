@@ -498,11 +498,13 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    expect(
-      screen.getByText(
-        'This is a recurring event. Choose how you want to update it:',
-      ),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'This is a recurring event. Choose how you want to update it:',
+        ),
+      ).toBeInTheDocument();
+    });
 
     const closeButton = screen.getByTestId('eventUpdateModalCloseBtn');
     await userEvent.click(closeButton);
