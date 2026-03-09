@@ -3,44 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
-// react-i18next mock to return english strings expected by tests
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string) => {
-        const translations: Record<string, string> = {
-          updateThisInstance: 'Update only this instance',
-          updateThisAndFollowing: 'Update this and all following events',
-          updateEntireSeries: 'Update all events in the series',
-          deleteThisInstance: 'Delete only this instance',
-          deleteThisAndFollowing: 'Delete this and all following events',
-          deleteAllEvents: 'Delete all events in this series',
-          deleteEvent: 'Delete Event',
-          updateEvent: 'Update Event',
-          eventDetails: 'Event Details',
-          deleteEventMsg: 'Do you want to remove this event?',
-          deleteRecurringEventMsg:
-            'This is a recurring event. Choose how you want to delete it:',
-          updateRecurringEventMsg:
-            'This is a recurring event. Choose how you want to update it:',
-          alreadyRegistered: 'Already registered',
-          cancel: 'Cancel',
-          update: 'Update',
-          done: 'Done',
-          noChangesToUpdate: 'No changes to update',
-          invalidDate: 'Invalid Date',
-          registeredSuccessfully: 'Successfully registered for Test Event',
-          eventDeleted: 'Event deleted successfully.',
-          eventUpdated: 'Event updated successfully.',
-          deleteOptionRequired: 'Delete option is required',
-        };
-        return translations[key] || key;
-      },
-    }),
-  };
-});
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -162,7 +124,6 @@ const buildRecurringEventProps = (
 
 describe('EventListCardModals', () => {
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
     cleanup();
   });

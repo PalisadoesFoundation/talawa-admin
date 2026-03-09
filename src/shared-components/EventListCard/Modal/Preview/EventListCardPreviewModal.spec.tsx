@@ -30,70 +30,7 @@ import PreviewModal from './EventListCardPreviewModal';
 import { UserRole } from 'types/Event/interface';
 import { Frequency } from 'utils/recurrenceUtils/recurrenceTypes';
 
-// Mock react-i18next so useTranslation returns bare keys
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, params?: Record<string, unknown>) => {
-        const translations: Record<string, string> = {
-          eventDetails: 'Event Details',
-          organizationMembers: 'Organization Members',
-          inviteOnly: 'Invite Only',
-          public: 'Public',
-          showEventDashboard: 'Show Dashboard',
-          editEvent: 'Edit Event',
-          deleteEvent: 'Delete Event',
-          alreadyRegistered: 'Already registered',
-          visibility: 'Visibility',
-          eventName: 'Name',
-          description: 'Description',
-          location: 'Location',
-          startDate: 'Start Date',
-          endDate: 'End Date',
-          startTime: 'Start Time',
-          endTime: 'End Time',
-          allDay: 'All Day',
-          isRegistrable: 'Is Registrable',
-          register: 'Register',
-          daily: 'Daily',
-          weeklyOn: `Weekly on ${params?.day}`,
-          monthlyOnDay: `Monthly on day ${params?.day}`,
-          annuallyOn: `Annually on ${params?.month} ${params?.day}`,
-          everyWeekday: 'Every weekday',
-          customOption: 'Custom...',
-          monday: 'Monday',
-          tuesday: 'Tuesday',
-          wednesday: 'Wednesday',
-          thursday: 'Thursday',
-          friday: 'Friday',
-          saturday: 'Saturday',
-          sunday: 'Sunday',
-          january: 'January',
-          february: 'February',
-          march: 'March',
-          april: 'April',
-          may: 'May',
-          june: 'June',
-          july: 'July',
-          august: 'August',
-          september: 'September',
-          october: 'October',
-          november: 'November',
-          december: 'December',
-          eventVisibility: 'Event Visibility',
-          edit: 'Edit',
-          delete: 'Delete',
-          publicEvent: 'Public',
-          organizationEvent: 'Organization',
-          inviteOnlyEvent: 'Invite Only',
-        };
-        return translations[key] || key;
-      },
-    }),
-  };
-});
+// Mock the wrapper components instead of MUI directly
 
 vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
   __esModule: true,

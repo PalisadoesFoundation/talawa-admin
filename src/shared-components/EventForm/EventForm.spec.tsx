@@ -51,6 +51,11 @@ vi.mock('react-i18next', async () => {
         return translations[key] || key;
       },
     }),
+    I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
+    },
   };
 });
 
@@ -58,17 +63,6 @@ dayjs.extend(utc);
 import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-  I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: {
-    type: '3rdParty',
-    init: vi.fn(),
-  },
-}));
 
 // Mock the wrapper components instead of MUI directly to verify EventForm uses them
 vi.mock('shared-components/DatePicker', () => ({

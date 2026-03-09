@@ -12,27 +12,30 @@ vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
   return {
     ...actual,
-    useTranslation: () => ({
-      t: (key: string) => {
-        const translations: Record<string, string> = {
-          deleteEvent: 'Delete Event',
-          deleteEventMsg: 'Do you want to remove this event?',
-          deleteRecurringEventMsg:
-            'This is a recurring event. Choose how you want to delete it:',
-          deleteThisInstance: 'Delete only this instance',
-          deleteThisAndFollowing: 'Delete this and all following events',
-          deleteAllEvents: 'Delete all events in this series',
-        };
-        return translations[key] || key;
-      },
-      tCommon: (key: string) => {
-        const translations: Record<string, string> = {
-          yes: 'Yes',
-          no: 'No',
-        };
-        return translations[key] || key;
-      },
-    }),
+    useTranslation: (ns?: string | string[]) => {
+      const isCommon = Array.isArray(ns)
+        ? ns.includes('common')
+        : ns === 'common';
+      const translations: Record<string, string> = {
+        deleteEvent: 'Delete Event',
+        deleteEventMsg: 'Do you want to remove this event?',
+        deleteRecurringEventMsg:
+          'This is a recurring event. Choose how you want to delete it:',
+        deleteThisInstance: 'Delete only this instance',
+        deleteThisAndFollowing: 'Delete this and all following events',
+        deleteAllEvents: 'Delete all events in this series',
+      };
+      const translationsCommon: Record<string, string> = {
+        yes: 'Yes',
+        no: 'No',
+      };
+      return {
+        t: (key: string) => {
+          if (isCommon) return translationsCommon[key] || key;
+          return translations[key] || key;
+        },
+      };
+    },
   };
 });
 
