@@ -9,8 +9,6 @@
  * @param eventListCardProps - The properties of the event to be deleted.
  * @param eventDeleteModalIsOpen - Determines if the modal is open.
  * @param toggleDeleteModal - Function to toggle the modal visibility.
- * @param t - Translation function for event-specific strings.
- * @param tCommon - Translation function for common strings.
  * @param deleteEventHandler - Function to handle the event deletion.
  *
  * @returns A modal component for confirming event deletion.
@@ -26,8 +24,6 @@
  *   eventListCardProps={event}
  *   eventDeleteModalIsOpen={isModalOpen}
  *   toggleDeleteModal={toggleModal}
- *   t={translate}
- *   tCommon={translateCommon}
  *   deleteEventHandler={handleDelete}
  * />
  * ```

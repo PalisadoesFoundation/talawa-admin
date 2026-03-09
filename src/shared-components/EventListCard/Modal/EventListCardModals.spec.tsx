@@ -116,13 +116,24 @@ type MockEventListCardProps = InterfaceEvent & {
   refetchEvents?: Mock;
 };
 
+const FIXED_BASE_DATE = new Date(['2025', '01', '01T10:00:00.000Z'].join('-'));
+
 const mockEventListCardProps: MockEventListCardProps = {
   id: 'event1',
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startAt: dayjs.utc(new Date(Date.UTC(2023, 0, 1, 10))).toISOString(),
-  endAt: dayjs.utc(new Date(Date.UTC(2023, 0, 1, 12))).toISOString(),
+  startAt: dayjs
+    .utc(FIXED_BASE_DATE)
+    .add(10, 'days')
+    .millisecond(0)
+    .toISOString(),
+  endAt: dayjs
+    .utc(FIXED_BASE_DATE)
+    .add(10, 'days')
+    .add(2, 'hours')
+    .millisecond(0)
+    .toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -166,8 +177,6 @@ describe('EventListCardModals', () => {
   let mockNavigate: Mock;
 
   beforeEach(() => {
-    vi.clearAllMocks();
-
     mockUpdateStandaloneEvent = vi
       .fn()
       .mockResolvedValue({ data: { updateStandaloneEvent: {} } });
@@ -528,7 +537,9 @@ describe('EventListCardModals', () => {
     });
 
     expect(
-      screen.getByText(/Choose how you want to update it/i),
+      screen.getByText(
+        'This is a recurring event. Choose how you want to update it:',
+      ),
     ).toBeInTheDocument();
 
     const closeButton = screen.getByTestId('eventUpdateModalCloseBtn');
@@ -561,15 +572,13 @@ describe('EventListCardModals', () => {
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
 
-    await waitFor(() => {
-      expect(mockUpdateSingleRecurringEvent).toHaveBeenCalledWith({
-        variables: {
-          input: {
-            id: 'event1',
-            name: 'Updated Instance',
-          },
+    expect(mockUpdateSingleRecurringEvent).toHaveBeenCalledWith({
+      variables: {
+        input: {
+          id: 'event1',
+          name: 'Updated Instance',
         },
-      });
+      },
     });
   });
 
@@ -594,24 +603,20 @@ describe('EventListCardModals', () => {
     });
 
     // Find the "Update this instance" radio button
-    const singleInstanceRadio = screen.getByLabelText(
-      /update only this instance/i,
-    );
+    const singleInstanceRadio = screen.getByTestId('update-single-radio');
 
     // Verify it exists and click it
     expect(singleInstanceRadio).toBeInTheDocument();
     await userEvent.click(singleInstanceRadio);
 
     // Assert it is checked (it should be default, but clicking ensures the handler runs)
-    await waitFor(() => {
-      expect(singleInstanceRadio).toBeChecked();
-    });
+    await waitFor(() => expect(singleInstanceRadio).toBeChecked());
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
-    await waitFor(() => {
-      expect(mockUpdateSingleRecurringEvent).toHaveBeenCalled();
-    });
+    await waitFor(() =>
+      expect(mockUpdateSingleRecurringEvent).toHaveBeenCalled(),
+    );
   });
 
   test('handles update of this and following recurring events', async () => {
@@ -631,15 +636,13 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const followingRadio = screen.getByLabelText(
-      /update this and all following/i,
-    );
+    const followingRadio = screen.getByTestId('update-following-radio');
     await userEvent.click(followingRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
 
-    await waitFor(() => {
+    await waitFor(() =>
       expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith({
         variables: {
           input: expect.objectContaining({
@@ -647,8 +650,8 @@ describe('EventListCardModals', () => {
             name: 'Updated Following',
           }),
         },
-      });
-    });
+      }),
+    );
   });
 
   test('handles update of an entire recurring event series', async () => {
@@ -669,23 +672,23 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText(
-      /update all events in the series/i,
-    );
+    const entireSeriesRadio = screen.getByTestId('update-entire-series-radio');
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
 
-    expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
-      variables: {
-        input: {
-          id: 'event1',
-          name: 'Updated Series',
-          description: 'Updated Series Description',
+    await waitFor(() =>
+      expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
+        variables: {
+          input: {
+            id: 'event1',
+            name: 'Updated Series',
+            description: 'Updated Series Description',
+          },
         },
-      },
-    });
+      }),
+    );
   });
 
   test('handles update of an entire recurring event series with only name change', async () => {
@@ -705,22 +708,22 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText(
-      /update all events in the series/i,
-    );
+    const entireSeriesRadio = screen.getByTestId('update-entire-series-radio');
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
 
-    expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
-      variables: {
-        input: {
-          id: 'event1',
-          name: 'Updated Series Name',
+    await waitFor(() =>
+      expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
+        variables: {
+          input: {
+            id: 'event1',
+            name: 'Updated Series Name',
+          },
         },
-      },
-    });
+      }),
+    );
   });
 
   test('handles update of an entire recurring event series with only description change', async () => {
@@ -740,22 +743,22 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText(
-      /update all events in the series/i,
-    );
+    const entireSeriesRadio = screen.getByTestId('update-entire-series-radio');
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
     await userEvent.click(confirmButton);
 
-    expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
-      variables: {
-        input: {
-          id: 'event1',
-          description: 'Updated Series Event Description',
+    await waitFor(() =>
+      expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
+        variables: {
+          input: {
+            id: 'event1',
+            description: 'Updated Series Event Description',
+          },
         },
-      },
-    });
+      }),
+    );
   });
 
   describe('date validation and handling', () => {
@@ -765,10 +768,20 @@ describe('EventListCardModals', () => {
       });
       const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
       const newStartDate = dayjs
-        .utc(new Date(Date.UTC(2025, 0, 20, 12)))
+        .utc(FIXED_BASE_DATE)
+        .add(20, 'days')
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
         .toDate();
       const newEndDate = dayjs
-        .utc(new Date(Date.UTC(2025, 0, 21, 12)))
+        .utc(FIXED_BASE_DATE)
+        .add(21, 'days')
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
         .toDate();
 
       act(() => {
@@ -799,7 +812,8 @@ describe('EventListCardModals', () => {
           recurrenceRule: {
             frequency: Frequency.DAILY,
             recurrenceEndDate: dayjs
-              .utc(new Date(Date.UTC(2026, 0, 1)))
+              .utc(FIXED_BASE_DATE)
+              .add(1, 'year')
               .toDate(),
           },
         }),
@@ -1040,6 +1054,25 @@ describe('EventListCardModals', () => {
     });
   });
 
+  test('shows error when delete is attempted on recurring instance without delete option', async () => {
+    renderComponent({
+      eventListCardProps: buildRecurringEventProps(),
+    });
+    const deleteProps = MockDeleteModal.mock.calls[0][0];
+
+    // Call with no arg (or undefined) to hit the !deleteOption branch in deleteEventHandler
+    await act(async () => {
+      await deleteProps.deleteEventHandler(undefined);
+    });
+
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      'Delete option is required',
+    );
+    expect(mockDeleteSingleInstance).not.toHaveBeenCalled();
+    expect(mockDeleteThisAndFollowing).not.toHaveBeenCalled();
+    expect(mockDeleteEntireSeries).not.toHaveBeenCalled();
+  });
+
   test('handles GraphQL error during update', async () => {
     const error = new Error('GraphQL Error');
     mockUpdateStandaloneEvent.mockRejectedValue(error);
@@ -1095,12 +1128,10 @@ describe('EventListCardModals', () => {
 
       // The 'single' option should be gone, and 'following' should be checked.
       expect(
-        screen.queryByLabelText('updateThisInstance'),
+        screen.queryByTestId('update-single-radio'),
       ).not.toBeInTheDocument();
-      const followingRadio = screen.getByLabelText(
-        /update this and all following/i,
-      );
-      expect(followingRadio).toBeChecked();
+      const followingRadio = screen.getByTestId('update-following-radio');
+      await waitFor(() => expect(followingRadio).toBeChecked());
     });
   });
 
@@ -1156,20 +1187,20 @@ describe('EventListCardModals', () => {
         });
 
         // Select 'this and following events' to trigger the logic that uses frequency
-        const followingRadio = screen.getByLabelText(
-          /update this and all following/i,
-        );
+        const followingRadio = screen.getByTestId('update-following-radio');
         await userEvent.click(followingRadio);
 
         const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
         await userEvent.click(confirmButton);
 
-        expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith(
-          expect.objectContaining({
-            variables: expect.objectContaining({
-              input: expect.objectContaining({}),
+        await waitFor(() =>
+          expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith(
+            expect.objectContaining({
+              variables: expect.objectContaining({
+                input: expect.objectContaining({}),
+              }),
             }),
-          }),
+          ),
         );
       });
     });
@@ -1219,25 +1250,5 @@ describe('EventListCardModals', () => {
     expect(NotificationToast.success).toHaveBeenCalledWith(
       'Event deleted successfully.',
     );
-  });
-
-  test('passes setCustomRecurrenceModalIsOpen to preview modal', () => {
-    renderComponent({
-      eventListCardProps: {
-        ...mockEventListCardProps,
-      },
-    });
-
-    // Grab the first call to the mocked preview modal
-    const previewProps = MockPreviewModal.mock.calls[0][0];
-
-    expect(previewProps.setCustomRecurrenceModalIsOpen).toBeDefined();
-    expect(typeof previewProps.setCustomRecurrenceModalIsOpen).toBe('function');
-
-    // Optionally: verify invocation opens the modal
-    // act(() => {
-    //   previewProps.setCustomRecurrenceModalIsOpen(true);
-    // });
-    // expect(screen.getByText('customRecurrenceModalTitle')).toBeInTheDocument();
   });
 });

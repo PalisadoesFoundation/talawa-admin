@@ -6,4 +6,4 @@
 
 > **InterfaceStatsModal** = [`IStatsModal`](../interfaces/IStatsModal.md)
 
-Defined in: [src/types/Event/interface.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L287)
+Defined in: [src/types/Event/interface.ts:291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L291)

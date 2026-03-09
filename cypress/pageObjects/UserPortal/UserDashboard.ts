@@ -17,7 +17,8 @@ export class UserDashboardPage {
     cy.get(this._manageButton, { timeout })
       .should('be.visible')
       .first()
-      .click();
+      .as('firstManageBtn');
+    cy.get('@firstManageBtn').click();
     cy.url({ timeout }).should('match', /\/user\/organization\/[a-f0-9-]+/);
     return this;
   }

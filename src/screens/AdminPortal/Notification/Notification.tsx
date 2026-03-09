@@ -16,7 +16,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
-import { NotificationsNone } from '@mui/icons-material';
+import NotificationsNone from '@mui/icons-material/NotificationsNone';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';

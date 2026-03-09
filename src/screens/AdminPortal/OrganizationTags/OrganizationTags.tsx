@@ -21,7 +21,7 @@
  *
  */
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';

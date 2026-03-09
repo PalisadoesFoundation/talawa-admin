@@ -6,8 +6,6 @@
  * @param eventListCardProps - The properties of the event card, including event details and refetch function.
  * @param eventModalIsOpen - Boolean indicating whether the event modal is open.
  * @param hideViewModal - Function to hide the view modal.
- * @param t - Translation function for localized strings.
- * @param tCommon - Translation function for common localized strings.
  *
  * @returns JSX.Element - The rendered modals for event list card actions.
  *
@@ -188,6 +186,7 @@ function EventListCardModals({
   const {
     isOpen: customRecurrenceModalIsOpen,
     open: openCustomRecurrenceModal,
+    close: closeCustomRecurrenceModal,
   } = useModalState();
 
   // Derive startTime/endTime from startAt/endAt when the API fields are absent.
@@ -312,7 +311,12 @@ function EventListCardModals({
         });
         data = result.data;
       } else {
-        // Recurring instance - handle based on selected option
+        // Recurring instance - delete option is required
+        if (deleteOption === undefined) {
+          NotificationToast.error(t('deleteOptionRequired') as string);
+          return;
+        }
+        // Handle based on selected option
         switch (deleteOption) {
           case 'single': {
             const singleResult = await deleteSingleInstance({
@@ -359,7 +363,7 @@ function EventListCardModals({
         }
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      errorHandler(tCommon, error);
     }
   };
 
@@ -390,7 +394,7 @@ function EventListCardModals({
           hideViewModal();
         }
       } catch (error: unknown) {
-        errorHandler(t, error);
+        errorHandler(tCommon, error);
       }
     }
   };
@@ -430,7 +434,15 @@ function EventListCardModals({
         recurrence={recurrence}
         setRecurrence={setRecurrence}
         customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-        setCustomRecurrenceModalIsOpen={openCustomRecurrenceModal}
+        setCustomRecurrenceModalIsOpen={(state) => {
+          const next =
+            typeof state === 'function'
+              ? state(customRecurrenceModalIsOpen)
+              : state;
+          if (next) openCustomRecurrenceModal();
+          else closeCustomRecurrenceModal();
+        }}
+        hideCustomRecurrenceModal={closeCustomRecurrenceModal}
       />
 
       <EventListCardDeleteModal

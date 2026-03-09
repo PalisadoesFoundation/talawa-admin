@@ -1,3 +1,10 @@
+/* Wrapper for Name, Description, Location – no horizontal margin so content stays inside modal */
+.textFieldsSection {
+  margin-left: var(--space-5);
+  margin-right: var(--space-6);
+  padding-right: var(--space-1);
+}
+
 .datedivEvents {
   display: flex;
   flex-direction: row;
@@ -80,16 +87,16 @@
 }
 
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--addButton-font, #555555);
-  background-color: var(--light-blue);
-  border-color: var(--addButton-bg, #a8c7fa);
-  --bs-btn-focus-box-shadow: none;
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-100);
+  padding: var(--space-2) var(--space-4);
+  font-weight: var(--font-weight-medium);
 }
 
-.addButton.addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover, #1778f2);
-  border-color: var(--addButton-border-hover, #555555);
+.addButton:hover {
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
 }
 
 .switch input {
@@ -118,4 +125,24 @@
   margin-left: calc(-1 * var(--space-11));
   margin-top: var(--space-4);
   flex-shrink: 0;
+}
+
+.createModalSeparator {
+  border-top: var(--border-1) solid var(--color-gray-200);
+  margin-top: var(--space-4);
+  /* The standard Bootstrap padding value ensures it perfectly cancels out parent padding */
+  margin-left: calc(-1 * var(--bs-modal-padding, var(--space-6)));
+  margin-right: calc(-1 * var(--bs-modal-padding, var(--space-6)));
+  padding-top: var(--space-3);
+}
+
+.footerActions {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.addButton.footerButton {
+  margin-bottom: var(--space-0);
 }

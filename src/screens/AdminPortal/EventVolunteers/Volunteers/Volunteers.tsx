@@ -50,7 +50,8 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
-import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
+import VolunteerActivism from '@mui/icons-material/VolunteerActivism';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

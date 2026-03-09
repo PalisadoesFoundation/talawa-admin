@@ -1,4 +1,5 @@
 // translation-check-keyPrefix: eventListCard
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_EVENT_MUTATION,
@@ -14,7 +15,6 @@ import type {
   InterfaceEventUpdateInput,
   InterfaceUpdateEventHandlerProps,
 } from 'types/shared-components/EventListCard/interface';
-import { useTranslation } from 'react-i18next';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);

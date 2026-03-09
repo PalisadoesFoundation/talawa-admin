@@ -26,7 +26,9 @@
  * - Requires i18n key `breadcrumbs` in the `common` namespace for aria-label.
  * - Intended as the standard breadcrumb implementation.
  */
-import { Breadcrumbs, Link as MuiLink, Typography } from '@mui/material';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import MuiLink from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import styles from './BreadcrumbsComponent.module.css';

@@ -13,8 +13,11 @@ export class AdminEventPage {
   }
 
   createEvent(title: string, description: string, location: string): this {
-    // Set up intercept for specific events query (not all GraphQL operations)
+    // Set up intercepts for GraphQL operations (create mutation + events list query)
     cy.intercept('POST', '**/graphql', (req) => {
+      if (req.body.operationName === 'CreateEvent') {
+        req.alias = 'CreateEvent';
+      }
       if (req.body.operationName === 'GetOrganizationEvents') {
         req.alias = 'eventsQuery';
       }
@@ -44,6 +47,11 @@ export class AdminEventPage {
     // Submit the form
     cy.get(this._createEventBtn).should('be.visible').and('be.enabled').click();
 
+    // Wait for CreateEvent mutation to complete before asserting toast/UI
+    cy.wait('@CreateEvent', { timeout: 15000 })
+      .its('response.statusCode')
+      .should('eq', 200);
+
     // Assert success toast
     cy.assertToast('Congratulations! The Event is created.');
 
@@ -59,15 +67,14 @@ export class AdminEventPage {
       'be.visible',
     );
 
-    // Expand collapsed calendar cells if "View all" buttons are present.
-    // Uses jQuery DOM lookup to avoid cy.get() timeout when no buttons exist.
+    // Expand collapsed calendar cells if "View all" buttons are present (case-insensitive).
     cy.get('body').then(($body) => {
-      const $buttons = $body.find('[data-testid="more"]:contains("View all")');
-      if ($buttons.length > 0) {
-        $buttons.each((_: number, btn: HTMLElement) => {
-          cy.wrap(btn).click({ force: true });
-        });
-      }
+      const $allMore = $body.find('[data-testid="more"]');
+      $allMore.each((_: number, el: HTMLElement) => {
+        if (/view all/i.test(el.innerText || el.textContent || '')) {
+          cy.wrap(el).click({ force: true });
+        }
+      });
     });
 
     cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
@@ -92,24 +99,29 @@ export class AdminEventPage {
     newDescription: string,
     newLocation: string,
   ): this {
-    // Find and click on the event card
+    // Find and click on the event card (opens preview modal with unified EventForm)
     this.openEventDetails(existingName);
 
-    // Wait for edit form to load and update fields, breaking up command chains
-    cy.get('[data-cy="updateName"]', { timeout: 10000 }).should('be.visible');
-    cy.get('[data-cy="updateName"]').clear();
-    cy.get('[data-cy="updateName"]').type(newName);
-    cy.get('[data-cy="updateName"]').should('have.value', newName);
+    // Wait for preview/edit form to load and update fields (same selectors as create).
+    // Use delay when typing so React controlled inputs apply each keystroke (avoids dropped chars).
+    const typeOpts = { delay: 30 };
+    cy.get(this._eventTitleInput, { timeout: 10000 }).should('be.visible');
+    cy.get(this._eventTitleInput).clear();
+    cy.get(this._eventTitleInput).should('have.value', '');
+    cy.get(this._eventTitleInput).type(newName, typeOpts);
+    cy.get(this._eventTitleInput).should('have.value', newName);
 
-    cy.get('[data-cy="updateDescription"]').should('be.visible');
-    cy.get('[data-cy="updateDescription"]').clear();
-    cy.get('[data-cy="updateDescription"]').type(newDescription);
+    cy.get(this._eventDescriptionInput).clear();
+    cy.get(this._eventDescriptionInput).should('have.value', '');
+    cy.get(this._eventDescriptionInput).type(newDescription, typeOpts);
+    cy.get(this._eventDescriptionInput).should('have.value', newDescription);
 
-    cy.get('[data-cy="updateLocation"]').should('be.visible');
-    cy.get('[data-cy="updateLocation"]').clear();
-    cy.get('[data-cy="updateLocation"]').type(newLocation);
+    cy.get(this._eventLocationInput).clear();
+    cy.get(this._eventLocationInput).should('have.value', '');
+    cy.get(this._eventLocationInput).type(newLocation, typeOpts);
+    cy.get(this._eventLocationInput).should('have.value', newLocation);
 
-    // Click update button
+    // Click update button (footer "Edit" in preview modal)
     cy.get('[data-cy="previewUpdateEventBtn"]')
       .should('be.visible')
       .and('be.enabled')

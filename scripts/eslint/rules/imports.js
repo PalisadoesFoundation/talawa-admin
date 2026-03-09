@@ -53,6 +53,18 @@ function makeMuiTableRules() {
 
 const restrictedImports = [
   {
+    id: 'mui-barrel',
+    name: '@mui/material',
+    message:
+      'Barrel imports from @mui/material are not allowed. Use deep path imports (e.g., `import Box from "@mui/material/Box"`) instead.',
+  },
+  {
+    id: 'mui-icons-barrel',
+    name: '@mui/icons-material',
+    message:
+      'Barrel imports from @mui/icons-material are not allowed. Use deep path imports (e.g., `import SearchIcon from "@mui/icons-material/Search"`) instead.',
+  },
+  {
     id: 'mui-data-grid',
     name: '@mui/x-data-grid',
     message:

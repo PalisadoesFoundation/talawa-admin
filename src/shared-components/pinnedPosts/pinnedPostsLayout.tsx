@@ -36,7 +36,8 @@ import {
 } from 'types/Post/interface';
 import PinnedPostCard from './pinnedPostCard';
 import styles from './pinnedPostsLayout.module.css';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+import ChevronRight from '@mui/icons-material/ChevronRight';
 import Button from 'shared-components/Button';
 
 const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({

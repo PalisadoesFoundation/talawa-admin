@@ -18,6 +18,16 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](http
 
 ***
 
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L11)
+
+If true, the dropdown is disabled (view-only mode)
+
+***
+
 ### onSelect()
 
 > **onSelect**: (`option`) => `void`

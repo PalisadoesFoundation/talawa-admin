@@ -47,7 +47,7 @@ import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import gold from 'assets/images/gold.png';
 import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
