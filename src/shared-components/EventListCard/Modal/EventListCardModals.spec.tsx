@@ -34,6 +34,7 @@ vi.mock('react-i18next', async () => {
           registeredSuccessfully: 'Successfully registered for Test Event',
           eventDeleted: 'Event deleted successfully.',
           eventUpdated: 'Event updated successfully.',
+          deleteOptionRequired: 'Delete option is required',
         };
         return translations[key] || key;
       },
