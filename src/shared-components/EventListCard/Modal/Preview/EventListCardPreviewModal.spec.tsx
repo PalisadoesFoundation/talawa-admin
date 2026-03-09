@@ -40,7 +40,55 @@ vi.mock('react-i18next', async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string) => key,
+      t: (key: string, params?: Record<string, unknown>) => {
+        const translations: Record<string, string> = {
+          eventDetails: 'Event Details',
+          organizationMembers: 'Organization Members',
+          inviteOnly: 'Invite Only',
+          public: 'Public',
+          showEventDashboard: 'Show Event Dashboard',
+          editEvent: 'Edit Event',
+          deleteEvent: 'Delete Event',
+          alreadyRegistered: 'Already Registered',
+          visibility: 'Visibility',
+          eventName: 'Name',
+          description: 'Description',
+          location: 'Location',
+          startDate: 'Start Date',
+          endDate: 'End Date',
+          startTime: 'Start Time',
+          endTime: 'End Time',
+          allDay: 'All Day',
+          isRegistrable: 'Is Registrable',
+          register: 'Register',
+          daily: 'Daily',
+          weeklyOn: `Weekly on ${params?.day}`,
+          monthlyOnDay: `Monthly on day ${params?.day}`,
+          annuallyOn: `Annually on ${params?.month} ${params?.day}`,
+          everyWeekday: 'Every weekday',
+          customOption: 'Custom...',
+          monday: 'Monday',
+          tuesday: 'Tuesday',
+          wednesday: 'Wednesday',
+          thursday: 'Thursday',
+          friday: 'Friday',
+          saturday: 'Saturday',
+          sunday: 'Sunday',
+          january: 'January',
+          february: 'February',
+          march: 'March',
+          april: 'April',
+          may: 'May',
+          june: 'June',
+          july: 'July',
+          august: 'August',
+          september: 'September',
+          october: 'October',
+          november: 'November',
+          december: 'December',
+        };
+        return translations[key] || key;
+      },
     }),
   };
 });
@@ -584,8 +632,8 @@ describe('EventListCardPreviewModal', () => {
     renderComponent({ allDayChecked: false });
 
     // Use getAllByText to find multiple elements and check they exist
-    const startTimeElements = screen.getAllByText('startTime');
-    const endTimeElements = screen.getAllByText('endTime');
+    const startTimeElements = screen.getAllByText('Start Time');
+    const endTimeElements = screen.getAllByText('End Time');
 
     expect(startTimeElements.length).toBeGreaterThan(0);
     expect(endTimeElements.length).toBeGreaterThan(0);

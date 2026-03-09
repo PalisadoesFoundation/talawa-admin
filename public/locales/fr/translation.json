@@ -948,6 +948,8 @@
     "isRegisterable": "Peut S'enregistrer",
     "creator": "Créateur",
     "edit": "Modifier",
+    "invalidDetailsMessage": "Veuillez entrer une valeur valide",
+    "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour",
     "delete": "Supprimer",
     "viewDetails": "Afficher les Détails",
     "noEventsFound": "Aucun événement trouvé",

@@ -131,6 +131,7 @@ describe('useUpdateEventHandler', () => {
 
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

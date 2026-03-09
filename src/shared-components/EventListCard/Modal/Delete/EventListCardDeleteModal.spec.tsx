@@ -13,7 +13,25 @@ vi.mock('react-i18next', async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string) => key,
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          deleteEvent: 'Delete Event',
+          deleteEventMsg: 'Are you sure you want to delete this event?',
+          deleteRecurringEventMsg:
+            'This is a recurring event. How would you like to delete it?',
+          deleteThisInstance: 'Delete only this instance',
+          deleteThisAndFollowing: 'Delete this and following events',
+          deleteAllEvents: 'Delete all events in the series',
+        };
+        return translations[key] || key;
+      },
+      tCommon: (key: string) => {
+        const translations: Record<string, string> = {
+          yes: 'Yes',
+          no: 'No',
+        };
+        return translations[key] || key;
+      },
     }),
   };
 });
@@ -125,9 +143,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should show simple delete message, not recurring options
-      expect(screen.getByText('deleteEventMsg')).toBeInTheDocument();
       expect(
-        screen.queryByText('deleteRecurringEventMsg'),
+        screen.getByText('Are you sure you want to delete this event?'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'This is a recurring event. How would you like to delete it?',
+        ),
       ).not.toBeInTheDocument();
     });
   });
@@ -165,7 +187,7 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Find and click the "single" radio button (Line 90)
-      const singleRadio = screen.getByLabelText('deleteThisInstance');
+      const singleRadio = screen.getByLabelText('Delete only this instance');
       await user.click(singleRadio);
 
       // Verify it's checked
@@ -191,19 +213,25 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // First select a different option (following) to ensure single is not selected
-      const followingRadio = screen.getByLabelText('deleteThisAndFollowing');
+      const followingRadio = screen.getByLabelText(
+        'Delete this and following events',
+      );
       await user.click(followingRadio);
       expect(followingRadio).toBeChecked();
-      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
+      expect(
+        screen.getByLabelText('Delete only this instance'),
+      ).not.toBeChecked();
 
       // Now click the "single" radio button to trigger onChange (Line 94)
-      const singleRadio = screen.getByLabelText('deleteThisInstance');
+      const singleRadio = screen.getByLabelText('Delete only this instance');
       await user.click(singleRadio);
 
       // Verify single is now checked and others are not
       expect(singleRadio).toBeChecked();
       expect(followingRadio).not.toBeChecked();
-      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+      expect(
+        screen.getByLabelText('Delete all events in the series'),
+      ).not.toBeChecked();
 
       // Click delete button to verify the correct option is passed
       const deleteButton = screen.getByTestId('deleteEventBtn');
@@ -225,13 +253,19 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Find and click the "following" radio button (Line 100)
-      const followingRadio = screen.getByLabelText('deleteThisAndFollowing');
+      const followingRadio = screen.getByLabelText(
+        'Delete this and following events',
+      );
       await user.click(followingRadio);
 
       // Verify it's checked and others are not
       expect(followingRadio).toBeChecked();
-      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
-      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+      expect(
+        screen.getByLabelText('Delete only this instance'),
+      ).not.toBeChecked();
+      expect(
+        screen.getByLabelText('Delete all events in the series'),
+      ).not.toBeChecked();
 
       // Click delete button
       const deleteButton = screen.getByTestId('deleteEventBtn');
@@ -253,13 +287,17 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Find and click the "all" radio button (Line 110)
-      const allRadio = screen.getByLabelText('deleteAllEvents');
+      const allRadio = screen.getByLabelText('Delete all events in the series');
       await user.click(allRadio);
 
       // Verify it's checked and others are not
       expect(allRadio).toBeChecked();
-      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
-      expect(screen.getByLabelText('deleteThisAndFollowing')).not.toBeChecked();
+      expect(
+        screen.getByLabelText('Delete only this instance'),
+      ).not.toBeChecked();
+      expect(
+        screen.getByLabelText('Delete this and following events'),
+      ).not.toBeChecked();
 
       // Click delete button
       const deleteButton = screen.getByTestId('deleteEventBtn');
@@ -279,15 +317,25 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should show recurring delete message and options
-      expect(screen.getByText('deleteRecurringEventMsg')).toBeInTheDocument();
-      expect(screen.getByLabelText('deleteThisInstance')).toBeInTheDocument();
       expect(
-        screen.getByLabelText('deleteThisAndFollowing'),
+        screen.getByText(
+          'This is a recurring event. How would you like to delete it?',
+        ),
       ).toBeInTheDocument();
-      expect(screen.getByLabelText('deleteAllEvents')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('Delete only this instance'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('Delete this and following events'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('Delete all events in the series'),
+      ).toBeInTheDocument();
 
       // Should not show simple delete message
-      expect(screen.queryByText('deleteEventMsg')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Are you sure you want to delete this event?'),
+      ).not.toBeInTheDocument();
     });
 
     it('should have "single" option selected by default', () => {
@@ -298,9 +346,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Default selection should be "single"
-      expect(screen.getByLabelText('deleteThisInstance')).toBeChecked();
-      expect(screen.getByLabelText('deleteThisAndFollowing')).not.toBeChecked();
-      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+      expect(screen.getByLabelText('Delete only this instance')).toBeChecked();
+      expect(
+        screen.getByLabelText('Delete this and following events'),
+      ).not.toBeChecked();
+      expect(
+        screen.getByLabelText('Delete all events in the series'),
+      ).not.toBeChecked();
     });
 
     it('should use larger modal size for recurring events', () => {
@@ -367,9 +419,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should show simple confirmation, not recurring options
-      expect(screen.getByText('deleteEventMsg')).toBeInTheDocument();
       expect(
-        screen.queryByText('deleteRecurringEventMsg'),
+        screen.getByText('Are you sure you want to delete this event?'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'This is a recurring event. How would you like to delete it?',
+        ),
       ).not.toBeInTheDocument();
 
       // Click delete button
@@ -396,9 +452,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should treat as standalone because isRecurringTemplate=true
-      expect(screen.getByText('deleteEventMsg')).toBeInTheDocument();
       expect(
-        screen.queryByText('deleteRecurringEventMsg'),
+        screen.getByText('Are you sure you want to delete this event?'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'This is a recurring event. How would you like to delete it?',
+        ),
       ).not.toBeInTheDocument();
     });
   });
