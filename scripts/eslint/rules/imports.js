@@ -75,6 +75,16 @@ const restrictedImports = [
     name: 'apollo-upload-client/createUploadLink',
     message:
       'apollo-upload-client has been removed. Use HttpLink from @apollo/client instead. All file uploads must use the useMinioUpload hook with presigned URLs.',
+    id: 'mui-barrel',
+    name: '@mui/material',
+    message:
+      'Barrel imports from @mui/material are not allowed. Use deep path imports (e.g., `import Box from "@mui/material/Box"`) instead.',
+  },
+  {
+    id: 'mui-icons-barrel',
+    name: '@mui/icons-material',
+    message:
+      'Barrel imports from @mui/icons-material are not allowed. Use deep path imports (e.g., `import SearchIcon from "@mui/icons-material/Search"`) instead.',
   },
   {
     id: 'mui-data-grid',

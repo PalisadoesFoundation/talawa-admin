@@ -61,6 +61,7 @@ export interface IEvent {
    * When true, only invited users can see and access the event.
    */
   isInviteOnly: boolean;
+  createChat?: boolean;
   attendees: Partial<User>[];
   creator: Partial<User>;
   averageFeedbackScore?: number;
@@ -140,8 +141,6 @@ export interface IDeleteEventModalProps {
   eventListCardProps: IEventListCard;
   eventDeleteModalIsOpen: boolean;
   toggleDeleteModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
   deleteEventHandler: (
     deleteOption?: 'single' | 'following' | 'all',
   ) => Promise<void>;
@@ -152,7 +151,6 @@ export interface IPreviewEventModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   toggleDeleteModal: () => void;
-  tCommon: (key: string) => string;
   isRegistered?: boolean;
   userId: string;
   eventStartDate: Date;
@@ -186,8 +184,11 @@ export interface IPreviewEventModalProps {
   openEventDashboard: () => void;
   recurrence: InterfaceRecurrenceRule | null;
   setRecurrence: Dispatch<SetStateAction<InterfaceRecurrenceRule | null>>;
-  customRecurrenceModalIsOpen: boolean;
-  setCustomRecurrenceModalIsOpen: Dispatch<SetStateAction<boolean>>;
+  customRecurrenceModalIsOpen?: boolean;
+  setCustomRecurrenceModalIsOpen?: (
+    state: boolean | ((prev: boolean) => boolean),
+  ) => void;
+  hideCustomRecurrenceModal?: () => void;
 }
 
 export interface IUpdateEventModalProps {

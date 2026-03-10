@@ -55,26 +55,23 @@ export class OrganizationSettingsPage extends BasePage<OrganizationSettingsPage>
   }
 
   updateOrganizationName(name: string, timeout = 10000): this {
-    cy.get(this.organizationNameInput, { timeout })
-      .should('be.visible')
-      .clear()
-      .type(name);
+    cy.get(this.organizationNameInput, { timeout }).should('be.visible');
+    cy.get(this.organizationNameInput).clear();
+    cy.get(this.organizationNameInput).type(name);
     return this;
   }
 
   updateOrganizationDescription(description: string, timeout = 10000): this {
-    cy.get(this.organizationDescriptionInput, { timeout })
-      .should('be.visible')
-      .clear()
-      .type(description);
+    cy.get(this.organizationDescriptionInput, { timeout }).should('be.visible');
+    cy.get(this.organizationDescriptionInput).clear();
+    cy.get(this.organizationDescriptionInput).type(description);
     return this;
   }
 
   updateOrganizationLocation(location: string, timeout = 10000): this {
-    cy.get(this.organizationLocationInput, { timeout })
-      .should('be.visible')
-      .clear()
-      .type(location);
+    cy.get(this.organizationLocationInput, { timeout }).should('be.visible');
+    cy.get(this.organizationLocationInput).clear();
+    cy.get(this.organizationLocationInput).type(location);
     return this;
   }
 

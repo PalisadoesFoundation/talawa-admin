@@ -35,7 +35,7 @@ import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import {
   DataGrid,
   type GridCellParams,
@@ -43,7 +43,7 @@ import {
   type TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import CategoryModal from './Modal/ActionItemCategoryModal';
 import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';

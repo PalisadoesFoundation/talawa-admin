@@ -951,7 +951,8 @@
     "noOfAttendees": "Número de Asistentes",
     "noRegistrations": "Sin Registros",
     "registrants": "Registrados",
-    "to": "A"
+    "to": "A",
+    "deleteOptionRequired": "Se requiere una opción de eliminación"
   },
   "funds": {
     "title": "Fondos",
@@ -1407,6 +1408,24 @@
     "asYourCountry": "Como su país",
     "imageUploadError": "Error al cargar la imagen. Por favor, inténtelo de nuevo.",
     "actions": "Acciones"
+    "actions": "Acciones",
+    "changePassword": "Cambiar contraseña",
+    "oldPassword": "Contraseña antigua",
+    "newPassword": "Nueva contraseña",
+    "password": "Contraseña",
+    "updatePassword": "Actualizar contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "passCantBeEmpty": "La contraseña no puede estar vacía",
+    "passNoMatch": "La nueva contraseña y la confirmación no coinciden",
+    "passwordChangedSuccessfully": "Contraseña cambiada con éxito",
+    "enterCurrentPassword": "Por favor ingrese su contraseña actual"
+  },
+  "passwordValidation": {
+    "minLength": "La contraseña debe tener al menos 8 caracteres.",
+    "uppercaseRequired": "La contraseña debe contener al menos una letra mayúscula.",
+    "lowercaseRequired": "La contraseña debe contener al menos una letra minúscula.",
+    "numberRequired": "La contraseña debe contener al menos un número.",
+    "specialCharRequired": "La contraseña debe contener al menos un carácter especial."
   },
   "plugin": {
     "error": "Error del complemento",
@@ -1921,8 +1940,7 @@
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
     "thisUser": "este usuario",
     "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?",
-    "memberActionsMenu": "Menú de acciones del miembro",
-    "editImage": "Editar imagen"
+    "memberActionsMenu": "Menú de acciones del miembro"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",

@@ -548,6 +548,88 @@ describe('Organisation Events Page', () => {
     ).toBe(false);
   });
 
+  test('rate-limit eventDataError with "rate limit" message is silently suppressed', async () => {
+    const mockWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const rateLimitLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+            variables: buildEventsVariables(),
+          },
+          variableMatcher: () => true,
+          error: new Error('Rate limit exceeded'),
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+            variables: buildOrgVariables(),
+          },
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(rateLimitLink);
+    await wait();
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    expect(window.location.pathname).toBe('/admin/orglist');
+    const messages = mockWarn.mock.calls.map((args) => args.join(' '));
+    expect(messages.some((msg) => msg.includes('Non-critical error'))).toBe(
+      false,
+    );
+  });
+
+  test('rate-limit eventDataError with "Please try again later" is silently suppressed', async () => {
+    const mockWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const rateLimitLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+            variables: buildEventsVariables(),
+          },
+          variableMatcher: () => true,
+          error: new Error('Please try again later'),
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+            variables: buildOrgVariables(),
+          },
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(rateLimitLink);
+    await wait();
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    expect(window.location.pathname).toBe('/admin/orglist');
+    const messages = mockWarn.mock.calls.map((args) => args.join(' '));
+    expect(messages.some((msg) => msg.includes('Non-critical error'))).toBe(
+      false,
+    );
+  });
+
   test('non-rate-limit eventDataError logs warning', async () => {
     const mockWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
@@ -692,6 +774,79 @@ describe('Organisation Events Page', () => {
     );
 
     renderWithLink(emptyEventsLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+  });
+
+  test('normalizes event data with null description, null location, and allDay true', async () => {
+    const eventDay = dayjs().add(30, 'days').startOf('day');
+    const startAt = eventDay.toISOString();
+    const endAt = eventDay.endOf('day').toISOString();
+
+    const mappingCoverageLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+            variables: buildEventsVariables(),
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              organization: {
+                events: {
+                  edges: [
+                    {
+                      cursor: 'cursor1',
+                      node: {
+                        id: '1',
+                        name: 'All-Day Null Fields Event',
+                        description: null,
+                        startAt,
+                        endAt,
+                        allDay: true,
+                        location: null,
+                        isPublic: true,
+                        isRegisterable: true,
+                        isRecurringEventTemplate: false,
+                        baseEvent: null,
+                        sequenceNumber: null,
+                        totalCount: null,
+                        hasExceptions: false,
+                        progressLabel: null,
+                        recurrenceDescription: null,
+                        recurrenceRule: null,
+                        attachments: [],
+                        creator: { id: '1', name: 'Creator' },
+                        organization: { id: '1', name: 'Org' },
+                        createdAt: startAt,
+                        updatedAt: startAt,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+            variables: buildOrgVariables(),
+          },
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(mappingCoverageLink);
 
     await waitFor(() =>
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
@@ -978,6 +1133,36 @@ describe('Organisation Events Page', () => {
     await wait(50);
 
     expect(searchInput.value).toBe('Conference Room');
+  });
+
+  test('filter uses matchesDescription when search term matches only description', async () => {
+    renderWithLink(defaultLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const searchInput = screen.getByTestId('searchEvent') as HTMLInputElement;
+    await userEvent.type(searchInput, 'This is a timed');
+    await userEvent.keyboard('{Enter}');
+    await wait(50);
+
+    expect(searchInput.value).toBe('This is a timed');
+  });
+
+  test('filter uses matchesLocation when search term matches only location', async () => {
+    renderWithLink(defaultLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const searchInput = screen.getByTestId('searchEvent') as HTMLInputElement;
+    await userEvent.type(searchInput, 'Meeting Room B');
+    await userEvent.keyboard('{Enter}');
+    await wait(50);
+
+    expect(searchInput.value).toBe('Meeting Room B');
   });
 
   test('returns all events when search term is empty', async () => {

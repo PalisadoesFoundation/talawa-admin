@@ -31,7 +31,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete } from 'shared-components/Autocomplete/Autocomplete';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import {
   CreateModal,
@@ -180,9 +180,10 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
       {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
       <div className="d-flex mb-3 w-100">
         <Autocomplete
+          id="membersSelect"
           className={`${styles.noOutline} w-100`}
           limitTags={2}
-          data-testid="membersSelect"
+          dataTestId="membersSelect"
           options={members}
           value={
             members.find((m: InterfaceUserInfo) => m.id === userId) || null
@@ -190,7 +191,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           isOptionEqualToValue={(option, value) => option.id === value.id}
           filterSelectedOptions={true}
           getOptionLabel={(member: InterfaceUserInfo): string => member.name}
-          onChange={(_, newVolunteer): void => {
+          onChange={(newVolunteer): void => {
             setUserId(newVolunteer?.id ?? '');
           }}
           renderInput={(params) => (

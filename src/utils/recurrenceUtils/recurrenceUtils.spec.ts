@@ -879,6 +879,7 @@ describe('Recurrence Utility Functions', () => {
       const fourthThursday = getNthDayOfWeekInMonth(testMonth, 4, 4);
       const options = getMonthlyOptions(fourthThursday.toDate());
       const dayOfMonth = fourthThursday.date();
+      // When fourth Thursday + 7 crosses month boundary it is "last" (week 6)
       const isLast = dayOfMonth + 7 > testMonth.daysInMonth();
 
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
