@@ -32,7 +32,7 @@ Unique identifier for the field
 
 ### key
 
-> **key**: `string`
+> **key**: [`ContactInfoField`](../type-aliases/ContactInfoField.md)
 
 Defined in: [src/types/AdminPortal/MemberDetail/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/MemberDetail/interface.ts#L32)
 

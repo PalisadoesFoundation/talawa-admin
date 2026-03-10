@@ -18,7 +18,7 @@ export interface InterfacePhoneFieldConfig {
   /** Test ID used for automated testing selectors */
   testId: string;
   /** Key used to map the field to data in the form or state */
-  key: string;
+  key: ContactInfoField;
 }
 /**
  * Interface representing the configuration for an address input field.
@@ -29,7 +29,7 @@ export interface InterfaceAddressFieldConfig {
   /** Test ID used for automated testing selectors */
   testId: string;
   /** Key used to map the field to data in the form or state */
-  key: string;
+  key: ContactInfoField;
   /** Optional column size for layout/grid purposes */
   colSize?: number;
 }

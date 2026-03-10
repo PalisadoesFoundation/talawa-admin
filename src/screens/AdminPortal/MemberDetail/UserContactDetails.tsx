@@ -59,6 +59,23 @@ import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/inter
 import { useMinioUpload } from 'utils/MinioUpload';
 import ContactInfoCard from './ContactInfoCard';
 
+/**
+ * Normalizes raw user data from the query into form state,
+ * preserving local-only fields like password.
+ */
+function normalizeUserToFormState(
+  user: Record<string, unknown>,
+): Record<string, string> {
+  const { birthDate, ...rest } = user;
+  return {
+    ...Object.fromEntries(Object.entries(rest).map(([k, v]) => [k, v ?? ''])),
+    birthDate:
+      birthDate && typeof birthDate === 'string'
+        ? dayjs(birthDate).format('YYYY-MM-DD')
+        : '',
+  } as Record<string, string>;
+}
+
 /** Metadata for a file uploaded to MinIO via presigned URL */
 interface InterfaceFileMetadata {
   objectName: string;
@@ -148,11 +165,9 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       return;
     }
     if (!data?.user) return;
-    const { birthDate, ...rest } = data.user;
     setFormState((prev) => ({
       ...prev,
-      ...rest,
-      birthDate: birthDate ? dayjs(birthDate).format('YYYY-MM-DD') : '',
+      ...normalizeUserToFormState(data.user),
     }));
   }, [data, error, t]);
   const handleFileUpload = async (
@@ -191,6 +206,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       setPreviewUrl(null);
       setAvatarMetadata(null);
       setNewAvatarUploaded(false);
+    } finally {
+      e.currentTarget.value = '';
     }
   };
   const handleFieldChange = (fieldName: string, value: string) => {
@@ -279,7 +296,12 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     setAvatarMetadata(null);
     setNewAvatarUploaded(false);
     setPreviewUrl(null);
-    if (data?.user) setFormState({ ...data.user });
+    if (data?.user) {
+      setFormState((prev) => ({
+        ...prev,
+        ...normalizeUserToFormState(data.user),
+      }));
+    }
   };
   if (loading) {
     return <div data-testid="loader">{tCommon('loading')}</div>;

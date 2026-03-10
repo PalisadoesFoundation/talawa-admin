@@ -75,6 +75,8 @@ const restrictedImports = [
     name: 'apollo-upload-client/createUploadLink',
     message:
       'apollo-upload-client has been removed. Use HttpLink from @apollo/client instead. All file uploads must use the useMinioUpload hook with presigned URLs.',
+  },
+  {
     id: 'mui-barrel',
     name: '@mui/material',
     message:
