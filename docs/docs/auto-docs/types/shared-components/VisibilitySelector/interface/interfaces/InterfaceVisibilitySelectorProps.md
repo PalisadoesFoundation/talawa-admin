@@ -10,6 +10,16 @@ Props for the VisibilitySelector component.
 
 ## Properties
 
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L10)
+
+If true, all radio buttons are disabled (view-only mode)
+
+***
+
 ### setVisibility()
 
 > **setVisibility**: (`visibility`) => `void`
@@ -25,24 +35,6 @@ Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](http
 #### Returns
 
 `void`
-
-***
-
-### tCommon()
-
-> **tCommon**: (`key`) => `string`
-
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L9)
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`
 
 ***
 

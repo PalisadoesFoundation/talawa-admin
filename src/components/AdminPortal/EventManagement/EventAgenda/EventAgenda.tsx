@@ -33,7 +33,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../shared-components/Button';
 
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 
 import { useQuery } from '@apollo/client';
 import {

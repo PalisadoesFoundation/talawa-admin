@@ -1,5 +1,6 @@
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { useUpdateEventHandler } from './updateLogic';
+import { renderHook, cleanup } from '@testing-library/react';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_EVENT_MUTATION,
@@ -14,20 +15,10 @@ import { UserRole } from 'types/Event/interface';
 import { Frequency, InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { cleanup } from '@testing-library/react';
 
 dayjs.extend(utc);
-const FIXED_NOW = dayjs.utc(new Date(Date.UTC(2025, 0, 1, 10)));
 
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string) => key,
-    }),
-  };
-});
+import type { TFunction } from 'i18next';
 
 // Mock dependencies
 vi.mock('@apollo/client', async () => {
@@ -51,16 +42,28 @@ vi.mock('utils/errorHandler', async () => ({
 }));
 
 const mockUseMutation = useMutation as Mock;
+const mockT = ((key: string) => key) as unknown as TFunction<
+  'translation',
+  undefined
+>;
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: mockT,
+  }),
+}));
 
 type MockEventListCardProps = InterfaceEvent;
+
+const BASE_DATE = dayjs(['2025', '01', '01T10:00:00.000Z'].join('-'));
 
 const mockEventListCardProps: MockEventListCardProps = {
   id: 'event1',
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startAt: FIXED_NOW.toISOString(),
-  endAt: FIXED_NOW.add(2, 'hours').toISOString(),
+  startAt: BASE_DATE.toISOString(),
+  endAt: BASE_DATE.add(2, 'hours').toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -157,12 +160,14 @@ describe('useUpdateEventHandler', () => {
   });
 
   it('initializes updateEventHandler function correctly', () => {
-    const { updateEventHandler } = useUpdateEventHandler();
+    const { result } = renderHook(() => useUpdateEventHandler());
+    const { updateEventHandler } = result.current;
     expect(updateEventHandler).toBeInstanceOf(Function);
   });
 
   it('calls info toast when no changes are made', async () => {
-    const { updateEventHandler } = useUpdateEventHandler();
+    const { result } = renderHook(() => useUpdateEventHandler());
+    const { updateEventHandler } = result.current;
     await updateEventHandler(buildHandlerInput());
 
     expect(NotificationToast.info).toHaveBeenCalledWith('noChangesToUpdate');
@@ -177,7 +182,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -199,7 +205,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -220,7 +227,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -241,7 +249,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -259,7 +268,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -277,7 +287,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -296,7 +307,8 @@ describe('useUpdateEventHandler', () => {
         data: { updateEvent: {} },
       });
 
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       const hideViewModal = vi.fn();
       const closeUpdateModal = vi.fn();
@@ -325,7 +337,8 @@ describe('useUpdateEventHandler', () => {
     it('calls errorHandler when mutation throws', async () => {
       const error = new Error('network');
       mockUpdateStandaloneEvent.mockRejectedValueOnce(error);
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -336,7 +349,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
+      expect(errorHandler).toHaveBeenCalledWith(mockT, error);
     });
   });
 
@@ -345,7 +358,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateSingleRecurringEventInstance.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -368,7 +382,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateThisAndFollowingEvents.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -394,7 +409,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateThisAndFollowingEvents.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       const recurrenceRule: InterfaceRecurrenceRule = {
         frequency: Frequency.DAILY,
@@ -425,7 +441,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -448,7 +465,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -471,7 +489,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -501,7 +520,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       const props = buildRecurringEventProps();
       delete (props as Partial<MockEventListCardProps>).isInviteOnly;
@@ -528,10 +548,11 @@ describe('useUpdateEventHandler', () => {
       mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
-      const newStartDate = FIXED_NOW.add(20, 'days').startOf('day').toDate();
-      const newEndDate = FIXED_NOW.add(21, 'days').startOf('day').toDate();
+      const newStartDate = BASE_DATE.add(20, 'days').startOf('day').toDate();
+      const newEndDate = BASE_DATE.add(21, 'days').startOf('day').toDate();
 
       await updateEventHandler(
         buildHandlerInput({
@@ -568,22 +589,24 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: FIXED_NOW.add(2, 'months').toISOString(),
-            endAt: FIXED_NOW.add(2, 'months')
+            startAt: dayjs().add(2, 'months').toISOString(),
+            endAt: dayjs()
+              .add(2, 'months')
               .add(1, 'day')
               .add(2, 'hours')
               .toISOString(),
           },
           allDayChecked: true,
-          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
-          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
+          eventStartDate: BASE_DATE.add(10, 'days').startOf('day').toDate(),
+          eventEndDate: BASE_DATE.add(11, 'days').startOf('day').toDate(),
         }),
       );
 
@@ -594,10 +617,10 @@ describe('useUpdateEventHandler', () => {
       // When local dates (IST) are converted to UTC, they shift backwards
       // So we need to expect the UTC-converted values, not the local values
       const expectedStartDate = dayjs
-        .utc(FIXED_NOW.add(10, 'days').startOf('day').toDate())
+        .utc(BASE_DATE.add(10, 'days').startOf('day').toDate())
         .startOf('day');
       const expectedEndDate = dayjs
-        .utc(FIXED_NOW.add(11, 'days').startOf('day').toDate())
+        .utc(BASE_DATE.add(11, 'days').startOf('day').toDate())
         .endOf('day');
       expect(calledInputs.startAt).toContain(
         expectedStartDate.format('YYYY-MM-DDTHH:mm:ss'),
@@ -612,7 +635,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -627,7 +651,8 @@ describe('useUpdateEventHandler', () => {
     });
 
     it('shows error toast when computed dates are invalid', async () => {
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -641,13 +666,14 @@ describe('useUpdateEventHandler', () => {
     });
 
     it('shows error toast when all-day eventStartDate is invalid', async () => {
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
           allDayChecked: true,
           eventStartDate: new Date('invalid'),
-          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
+          eventEndDate: BASE_DATE.add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -660,12 +686,13 @@ describe('useUpdateEventHandler', () => {
     });
 
     it('shows error toast when all-day eventEndDate is invalid', async () => {
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
           allDayChecked: true,
-          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
+          eventStartDate: BASE_DATE.add(10, 'days').startOf('day').toDate(),
           eventEndDate: new Date('invalid'),
           formState: {
             ...mockFormState,
@@ -682,7 +709,8 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
@@ -690,11 +718,11 @@ describe('useUpdateEventHandler', () => {
             ...mockEventListCardProps,
             allDay: true,
             startAt: 'invalid-date',
-            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
+            endAt: BASE_DATE.add(2, 'hours').toISOString(),
           },
           allDayChecked: true,
-          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
-          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
+          eventStartDate: BASE_DATE.add(10, 'days').startOf('day').toDate(),
+          eventEndDate: BASE_DATE.add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -710,19 +738,20 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: true,
-            startAt: FIXED_NOW.toISOString(),
-            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
+            startAt: BASE_DATE.toISOString(),
+            endAt: 'invalid-date',
           },
           allDayChecked: true,
-          eventStartDate: FIXED_NOW.add(10, 'days').startOf('day').toDate(),
-          eventEndDate: FIXED_NOW.add(11, 'days').startOf('day').toDate(),
+          eventStartDate: BASE_DATE.add(10, 'days').startOf('day').toDate(),
+          eventEndDate: BASE_DATE.add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -738,25 +767,28 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: FIXED_NOW.toISOString(),
-            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
+            startAt: BASE_DATE.toISOString(),
+            endAt: BASE_DATE.add(2, 'hours').toISOString(),
             startTime: 'invalid-time',
             endTime: '12:00:00',
           },
           allDayChecked: false,
-          eventStartDate: FIXED_NOW.add(10, 'days')
+          eventStartDate: dayjs(BASE_DATE)
+            .add(10, 'days')
             .hour(11)
             .minute(0)
             .second(0)
             .toDate(),
-          eventEndDate: FIXED_NOW.add(10, 'days')
+          eventEndDate: dayjs(BASE_DATE)
+            .add(10, 'days')
             .hour(13)
             .minute(0)
             .second(0)
@@ -778,25 +810,28 @@ describe('useUpdateEventHandler', () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },
       });
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       await updateEventHandler(
         buildHandlerInput({
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: FIXED_NOW.toISOString(),
-            endAt: FIXED_NOW.add(2, 'hours').toISOString(),
+            startAt: BASE_DATE.toISOString(),
+            endAt: BASE_DATE.add(2, 'hours').toISOString(),
             startTime: '10:00:00',
             endTime: 'invalid-time',
           },
           allDayChecked: false,
-          eventStartDate: FIXED_NOW.add(10, 'days')
+          eventStartDate: dayjs(BASE_DATE)
+            .add(10, 'days')
             .hour(10)
             .minute(0)
             .second(0)
             .toDate(),
-          eventEndDate: FIXED_NOW.add(10, 'days')
+          eventEndDate: dayjs(BASE_DATE)
+            .add(10, 'days')
             .hour(14)
             .minute(0)
             .second(0)
@@ -821,7 +856,8 @@ describe('useUpdateEventHandler', () => {
         data: null,
       });
 
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       const hideViewModal = vi.fn();
       const closeUpdateModal = vi.fn();
@@ -851,7 +887,8 @@ describe('useUpdateEventHandler', () => {
         data: { updateEvent: {} },
       });
 
-      const { updateEventHandler } = useUpdateEventHandler();
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
 
       const hideViewModal = vi.fn();
       const closeUpdateModal = vi.fn();

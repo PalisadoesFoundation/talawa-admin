@@ -7,4 +7,6 @@ export interface InterfaceRecurrenceDropdownProps {
   recurrenceOptions: InterfaceRecurrenceOption[];
   currentLabel: string;
   onSelect: (option: InterfaceRecurrenceOption) => void;
+  /** If true, the dropdown is disabled (view-only mode) */
+  disabled?: boolean;
 }

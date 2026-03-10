@@ -1,12 +1,14 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 import EventListCardDeleteModal from './EventListCardDeleteModal';
 import dayjs from 'dayjs';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 import i18n from 'utils/i18nForTest';
+
+const FIXED_BASE_DATE = new Date(['2025', '01', '01T10:00:00.000Z'].join('-'));
 
 // Mock props for standalone event
 const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
@@ -14,8 +16,8 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
     id: 'standalone-event-1',
     name: 'Standalone Event',
     description: 'A standalone event',
-    startAt: dayjs().add(10, 'days').toISOString(),
-    endAt: dayjs().add(10, 'days').add(1, 'hour').toISOString(),
+    startAt: dayjs(FIXED_BASE_DATE).add(10, 'days').toISOString(),
+    endAt: dayjs(FIXED_BASE_DATE).add(10, 'days').add(1, 'hour').toISOString(),
     startTime: '10:00:00',
     endTime: '11:00:00',
     allDay: false,
@@ -39,8 +41,6 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
   },
   eventDeleteModalIsOpen: true,
   toggleDeleteModal: vi.fn(),
-  t: (key: string) => key,
-  tCommon: (key: string) => key,
   deleteEventHandler: vi.fn(),
 };
 
@@ -50,8 +50,11 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
     id: 'recurring-instance-1',
     name: 'Daily Meeting',
     description: 'Daily team meeting',
-    startAt: dayjs().add(10, 'days').subtract(1, 'hour').toISOString(),
-    endAt: dayjs().add(10, 'days').toISOString(),
+    startAt: dayjs(FIXED_BASE_DATE)
+      .add(10, 'days')
+      .subtract(1, 'hour')
+      .toISOString(),
+    endAt: dayjs(FIXED_BASE_DATE).add(10, 'days').toISOString(),
     startTime: '09:00:00',
     endTime: '10:00:00',
     allDay: false,
@@ -75,17 +78,13 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
   },
   eventDeleteModalIsOpen: true,
   toggleDeleteModal: vi.fn(),
-  t: (key: string) => key,
-  tCommon: (key: string) => key,
   deleteEventHandler: vi.fn(),
 };
 
 describe('EventListCardDeleteModal', () => {
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
-  });
-  beforeEach(() => {
-    vi.clearAllMocks();
   });
 
   describe('Standalone Event Tests', () => {
@@ -119,9 +118,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should show simple delete message, not recurring options
-      expect(screen.getByText('deleteEventMsg')).toBeInTheDocument();
       expect(
-        screen.queryByText('deleteRecurringEventMsg'),
+        screen.getByText('Do you want to remove this event?'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'This is a recurring event. Choose how you want to delete it:',
+        ),
       ).not.toBeInTheDocument();
     });
   });
@@ -159,7 +162,7 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Find and click the "single" radio button (Line 90)
-      const singleRadio = screen.getByLabelText('deleteThisInstance');
+      const singleRadio = screen.getByTestId('deleteThisInstance');
       await user.click(singleRadio);
 
       // Verify it's checked
@@ -185,19 +188,19 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // First select a different option (following) to ensure single is not selected
-      const followingRadio = screen.getByLabelText('deleteThisAndFollowing');
+      const followingRadio = screen.getByTestId('deleteThisAndFollowing');
       await user.click(followingRadio);
       expect(followingRadio).toBeChecked();
-      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
+      expect(screen.getByTestId('deleteThisInstance')).not.toBeChecked();
 
       // Now click the "single" radio button to trigger onChange (Line 94)
-      const singleRadio = screen.getByLabelText('deleteThisInstance');
+      const singleRadio = screen.getByTestId('deleteThisInstance');
       await user.click(singleRadio);
 
       // Verify single is now checked and others are not
       expect(singleRadio).toBeChecked();
       expect(followingRadio).not.toBeChecked();
-      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+      expect(screen.getByTestId('deleteAllEvents')).not.toBeChecked();
 
       // Click delete button to verify the correct option is passed
       const deleteButton = screen.getByTestId('deleteEventBtn');
@@ -219,13 +222,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Find and click the "following" radio button (Line 100)
-      const followingRadio = screen.getByLabelText('deleteThisAndFollowing');
+      const followingRadio = screen.getByTestId('deleteThisAndFollowing');
       await user.click(followingRadio);
 
       // Verify it's checked and others are not
       expect(followingRadio).toBeChecked();
-      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
-      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+      expect(screen.getByTestId('deleteThisInstance')).not.toBeChecked();
+      expect(screen.getByTestId('deleteAllEvents')).not.toBeChecked();
 
       // Click delete button
       const deleteButton = screen.getByTestId('deleteEventBtn');
@@ -247,13 +250,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Find and click the "all" radio button (Line 110)
-      const allRadio = screen.getByLabelText('deleteAllEvents');
+      const allRadio = screen.getByTestId('deleteAllEvents');
       await user.click(allRadio);
 
       // Verify it's checked and others are not
       expect(allRadio).toBeChecked();
-      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
-      expect(screen.getByLabelText('deleteThisAndFollowing')).not.toBeChecked();
+      expect(screen.getByTestId('deleteThisInstance')).not.toBeChecked();
+      expect(screen.getByTestId('deleteThisAndFollowing')).not.toBeChecked();
 
       // Click delete button
       const deleteButton = screen.getByTestId('deleteEventBtn');
@@ -273,15 +276,19 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should show recurring delete message and options
-      expect(screen.getByText('deleteRecurringEventMsg')).toBeInTheDocument();
-      expect(screen.getByLabelText('deleteThisInstance')).toBeInTheDocument();
       expect(
-        screen.getByLabelText('deleteThisAndFollowing'),
+        screen.getByText(
+          'This is a recurring event. Choose how you want to delete it:',
+        ),
       ).toBeInTheDocument();
-      expect(screen.getByLabelText('deleteAllEvents')).toBeInTheDocument();
+      expect(screen.getByTestId('deleteThisInstance')).toBeInTheDocument();
+      expect(screen.getByTestId('deleteThisAndFollowing')).toBeInTheDocument();
+      expect(screen.getByTestId('deleteAllEvents')).toBeInTheDocument();
 
       // Should not show simple delete message
-      expect(screen.queryByText('deleteEventMsg')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Do you want to remove this event?'),
+      ).not.toBeInTheDocument();
     });
 
     it('should have "single" option selected by default', () => {
@@ -292,9 +299,9 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Default selection should be "single"
-      expect(screen.getByLabelText('deleteThisInstance')).toBeChecked();
-      expect(screen.getByLabelText('deleteThisAndFollowing')).not.toBeChecked();
-      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+      expect(screen.getByTestId('deleteThisInstance')).toBeChecked();
+      expect(screen.getByTestId('deleteThisAndFollowing')).not.toBeChecked();
+      expect(screen.getByTestId('deleteAllEvents')).not.toBeChecked();
     });
 
     it('should use larger modal size for recurring events', () => {
@@ -361,9 +368,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should show simple confirmation, not recurring options
-      expect(screen.getByText('deleteEventMsg')).toBeInTheDocument();
       expect(
-        screen.queryByText('deleteRecurringEventMsg'),
+        screen.getByText('Do you want to remove this event?'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'This is a recurring event. Choose how you want to delete it:',
+        ),
       ).not.toBeInTheDocument();
 
       // Click delete button
@@ -390,9 +401,13 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Should treat as standalone because isRecurringTemplate=true
-      expect(screen.getByText('deleteEventMsg')).toBeInTheDocument();
       expect(
-        screen.queryByText('deleteRecurringEventMsg'),
+        screen.getByText('Do you want to remove this event?'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'This is a recurring event. Choose how you want to delete it:',
+        ),
       ).not.toBeInTheDocument();
     });
   });

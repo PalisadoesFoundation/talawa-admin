@@ -9,6 +9,7 @@
  * - Organizations: Lists organizations the member belongs to.
  * - Events: Shows events associated with the member.
  * - Tags: Displays tags assigned to the member.
+ * - Security: Allows password updates.
  *
  * The component determines which member to display from the URL parameters
  * `orgId` and `userId` using `useParams`. The `userId` is passed to child
@@ -49,16 +50,21 @@ import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
 import UserTags from 'components/UserDetails/UserTags';
 import { useParams } from 'react-router-dom';
+import Security from './Security';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const MemberDetail: React.FC = (): JSX.Element => {
-  const { userId, orgId } = useParams<{ userId: string; orgId: string }>();
+  const { getItem } = useLocalStorage();
+  const storedUserId = getItem<string>('userId');
+  const { userId: paramUserId, orgId } = useParams<{
+    userId?: string;
+    orgId?: string;
+  }>();
+  const userId = paramUserId ?? storedUserId;
   const { t: tCommon } = useTranslation('common');
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
   if (!userId) {
     return <div>{tCommon('noUserId')}</div>;
-  }
-  if (!orgId) {
-    return <div>{tCommon('noOrgId')}</div>;
   }
   return (
     <div className={styles.peopleTabComponent}>
@@ -69,6 +75,12 @@ const MemberDetail: React.FC = (): JSX.Element => {
             icon={'/images/svg/material-symbols_dashboard-outline.svg'}
             isActive={activeTab === tCommon('overview')}
             action={() => setActiveTab(tCommon('overview'))}
+          />
+          <PeopleTabNavbarButton
+            title={tCommon('security')}
+            icon={'/images/svg/shield-user.svg'}
+            isActive={activeTab === tCommon('security')}
+            action={() => setActiveTab(tCommon('security'))}
           />
           <PeopleTabNavbarButton
             title={tCommon('organizations')}
@@ -94,6 +106,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
           {activeTab === tCommon('overview') && (
             <UserContactDetails id={userId} />
           )}
+          {activeTab === tCommon('security') && <Security />}
           {activeTab === tCommon('organizations') && <UserOrganizations />}
           {activeTab === tCommon('events') && (
             <UserEvents orgId={orgId} userId={userId} />

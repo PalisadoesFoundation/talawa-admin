@@ -13,7 +13,10 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { errorHandler } from 'utils/errorHandler';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
-import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
+import { Autocomplete } from 'shared-components/Autocomplete/Autocomplete';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
@@ -257,8 +260,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       {userData?.user?.role !== 'regular' && (
         <div className="d-flex mb-3 w-100">
           <Autocomplete
+            id="pledgerSelect"
             className={`${styles.noOutline} w-100`}
-            data-testid="pledgerSelect"
+            dataTestId="pledgerSelect"
             options={[...pledgers, ...pledgeUsers].filter(
               (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
             )}
@@ -269,7 +273,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             getOptionLabel={(member: InterfaceUserInfoPG): string =>
               getMemberLabel(member)
             }
-            onChange={(_, newPledger): void => {
+            onChange={(newPledger): void => {
               setFormState({
                 ...formState,
                 pledgeUsers: newPledger ? [newPledger] : [],

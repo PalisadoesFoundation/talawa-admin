@@ -5,7 +5,8 @@
  * in a consistent manner with other overlays (loading, empty state).
  */
 import React from 'react';
-import { Stack, Typography } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import IconComponent from 'shared-components/IconComponent/IconComponent';
 
 interface InterfaceDataGridErrorOverlayProps {

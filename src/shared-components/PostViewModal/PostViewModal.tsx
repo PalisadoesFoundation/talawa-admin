@@ -40,7 +40,7 @@
  */
 import React from 'react';
 import { Button } from 'shared-components/Button';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import PostCard from 'shared-components/postCard/PostCard';
 import { useTranslation } from 'react-i18next';
