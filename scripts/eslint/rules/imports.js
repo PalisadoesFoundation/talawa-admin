@@ -65,6 +65,18 @@ const restrictedImports = [
       'apollo-upload-client has been removed. Use HttpLink from @apollo/client instead. All file uploads must use the useMinioUpload hook with presigned URLs.',
   },
   {
+    id: 'apollo-upload-client-link-js',
+    name: 'apollo-upload-client/createUploadLink.js',
+    message:
+      'apollo-upload-client has been removed. Use HttpLink from @apollo/client instead. All file uploads must use the useMinioUpload hook with presigned URLs.',
+  },
+  {
+    id: 'apollo-upload-client-link-bare',
+    name: 'apollo-upload-client/createUploadLink',
+    message:
+      'apollo-upload-client has been removed. Use HttpLink from @apollo/client instead. All file uploads must use the useMinioUpload hook with presigned URLs.',
+  },
+  {
     id: 'mui-data-grid',
     name: '@mui/x-data-grid',
     message:
@@ -230,7 +242,7 @@ const restrictedImports = [
     id: 'mui-autocomplete-path',
     name: '@mui/material/Autocomplete',
     message:
-    'Do not import Autocomplete from `@mui/material`. Use the shared Autocomplete component from src/shared-components/Autocomplete/ instead.',
+      'Do not import Autocomplete from `@mui/material`. Use the shared Autocomplete component from src/shared-components/Autocomplete/ instead.',
   },
 ];
 

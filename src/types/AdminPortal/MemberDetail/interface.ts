@@ -37,13 +37,27 @@ export interface InterfaceAddressFieldConfig {
 export type InterfaceMemberDetailProps = { id?: string };
 
 /**
+ * Union of all valid contact-info field names used in the ContactInfoCard.
+ */
+export type ContactInfoField =
+  | 'mobilePhoneNumber'
+  | 'workPhoneNumber'
+  | 'homePhoneNumber'
+  | 'addressLine1'
+  | 'addressLine2'
+  | 'postalCode'
+  | 'city'
+  | 'state'
+  | 'countryCode';
+
+/**
  * Props for the ContactInfoCard component.
  */
 export interface InterfaceContactInfoCardProps {
   /** Form state containing field values */
-  formState: Record<string, string | null>;
+  formState: Record<ContactInfoField, string | null>;
   /** Email address to display (read-only) */
   emailAddress?: string;
   /** Handler for field value changes */
-  handleFieldChange: (fieldName: string, value: string) => void;
+  handleFieldChange: (fieldName: ContactInfoField, value: string) => void;
 }

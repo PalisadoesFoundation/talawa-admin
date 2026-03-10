@@ -9,7 +9,10 @@ import { Card, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { countryOptions } from 'utils/formEnumFields';
-import { InterfaceContactInfoCardProps } from 'types/AdminPortal/MemberDetail/interface';
+import {
+  InterfaceContactInfoCardProps,
+  type ContactInfoField,
+} from 'types/AdminPortal/MemberDetail/interface';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
 import styles from './ContactInfoCard.module.css';
 
@@ -50,15 +53,17 @@ const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
               </label>
               <input
                 id={field.id}
-                value={
-                  (formState[field.key as keyof typeof formState] as string) ??
-                  ''
-                }
+                value={formState[field.key as ContactInfoField] ?? ''}
                 className={`form-control ${styles.inputColor}`}
                 type="tel"
                 data-testid={field.testId}
                 name={field.id}
-                onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange(
+                    field.key as ContactInfoField,
+                    e.target.value,
+                  )
+                }
                 placeholder={tCommon('memberDetailNumberExample')}
               />
             </Col>
@@ -70,15 +75,17 @@ const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
               </label>
               <input
                 id={field.id}
-                value={
-                  (formState[field.key as keyof typeof formState] as string) ??
-                  ''
-                }
+                value={formState[field.key as ContactInfoField] ?? ''}
                 className={`form-control ${styles.inputColor}`}
                 type="text"
                 name={field.id}
                 data-testid={field.testId}
-                onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                onChange={(e) =>
+                  handleFieldChange(
+                    field.key as ContactInfoField,
+                    e.target.value,
+                  )
+                }
                 placeholder={
                   field.key === 'postalCode'
                     ? tCommon('postalCode')
@@ -94,7 +101,7 @@ const ContactInfoCard: React.FC<InterfaceContactInfoCardProps> = ({
               <select
                 id="country"
                 className={`form-control ${styles.inputColor}`}
-                value={(formState.countryCode as string) ?? ''}
+                value={formState.countryCode ?? ''}
                 data-testid="inputCountry"
                 onChange={(e) =>
                   handleFieldChange('countryCode', e.target.value)

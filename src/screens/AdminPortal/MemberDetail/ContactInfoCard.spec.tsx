@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -50,13 +50,13 @@ const renderComponent = (
 
 describe('ContactInfoCard', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
     user = userEvent.setup();
   });
 
@@ -170,10 +170,12 @@ describe('ContactInfoCard', () => {
       const mobileInput = screen.getByTestId('inputMobilePhoneNumber');
       await user.clear(mobileInput);
       await user.type(mobileInput, '+5555555555');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'mobilePhoneNumber',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'mobilePhoneNumber',
+          expect.any(String),
+        );
+      });
     });
 
     it('calls handleFieldChange when address field changes', async () => {
@@ -183,10 +185,12 @@ describe('ContactInfoCard', () => {
       const addressInput = screen.getByTestId('inputAddressLine1');
       await user.clear(addressInput);
       await user.type(addressInput, '456 Oak Ave');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'addressLine1',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'addressLine1',
+          expect.any(String),
+        );
+      });
     });
 
     it('calls handleFieldChange when city field changes', async () => {
@@ -196,10 +200,12 @@ describe('ContactInfoCard', () => {
       const cityInput = screen.getByTestId('inputCity');
       await user.clear(cityInput);
       await user.type(cityInput, 'NewCity');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'city',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'city',
+          expect.any(String),
+        );
+      });
     });
 
     it('calls handleFieldChange when postal code field changes', async () => {
@@ -209,10 +215,12 @@ describe('ContactInfoCard', () => {
       const postalInput = screen.getByTestId('inputPostalCode');
       await user.clear(postalInput);
       await user.type(postalInput, '99999');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'postalCode',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'postalCode',
+          expect.any(String),
+        );
+      });
     });
 
     it('calls handleFieldChange when country changes', async () => {
@@ -221,7 +229,9 @@ describe('ContactInfoCard', () => {
 
       const countrySelect = screen.getByTestId('inputCountry');
       await user.selectOptions(countrySelect, 'gb');
-      expect(handleFieldChange).toHaveBeenCalledWith('countryCode', 'gb');
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith('countryCode', 'gb');
+      });
     });
 
     it('calls handleFieldChange for work phone changes', async () => {
@@ -231,10 +241,12 @@ describe('ContactInfoCard', () => {
       const workInput = screen.getByTestId('inputWorkPhoneNumber');
       await user.clear(workInput);
       await user.type(workInput, '+7777777777');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'workPhoneNumber',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'workPhoneNumber',
+          expect.any(String),
+        );
+      });
     });
 
     it('calls handleFieldChange for home phone changes', async () => {
@@ -244,10 +256,12 @@ describe('ContactInfoCard', () => {
       const homeInput = screen.getByTestId('inputHomePhoneNumber');
       await user.clear(homeInput);
       await user.type(homeInput, '+8888888888');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'homePhoneNumber',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'homePhoneNumber',
+          expect.any(String),
+        );
+      });
     });
 
     it('calls handleFieldChange for addressLine2 changes', async () => {
@@ -257,10 +271,12 @@ describe('ContactInfoCard', () => {
       const addr2Input = screen.getByTestId('inputAddressLine2');
       await user.clear(addr2Input);
       await user.type(addr2Input, 'Suite 100');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'addressLine2',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'addressLine2',
+          expect.any(String),
+        );
+      });
     });
 
     it('calls handleFieldChange for state field changes', async () => {
@@ -270,10 +286,12 @@ describe('ContactInfoCard', () => {
       const stateInput = screen.getByTestId('inputState');
       await user.clear(stateInput);
       await user.type(stateInput, 'NewState');
-      expect(handleFieldChange).toHaveBeenCalledWith(
-        'state',
-        expect.any(String),
-      );
+      await waitFor(() => {
+        expect(handleFieldChange).toHaveBeenCalledWith(
+          'state',
+          expect.any(String),
+        );
+      });
     });
   });
 

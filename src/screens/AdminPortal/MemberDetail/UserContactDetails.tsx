@@ -189,6 +189,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       console.error('Error uploading avatar to MinIO:', error);
       NotificationToast.error(t('imageUploadError'));
       setPreviewUrl(null);
+      setAvatarMetadata(null);
+      setNewAvatarUploaded(false);
     }
   };
   const handleFieldChange = (fieldName: string, value: string) => {
@@ -266,6 +268,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
         );
       setAvatarMetadata(null);
       setNewAvatarUploaded(false);
+      setPreviewUrl(null);
       setisUpdated(false);
     } catch (e: unknown) {
       errorHandler(t, e);

@@ -17,7 +17,7 @@ export interface InterfaceUserPortalCardProps {
   /** (Optional) Right section (buttons, badges, counters) */
   actionsSlot?: React.ReactNode;
   /** Visual density preset controlling padding and spacing */
-  variant?: 'compact' | 'standard' | 'expanded';
+  variant?: 'compact' | 'expanded' | 'standard';
   /** (Optional) Additional class for the outer container */
   className?: string;
   /** (Optional) Test id prefix for unit/e2e testing */
