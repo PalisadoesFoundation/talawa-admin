@@ -14,17 +14,26 @@ vi.mock('react-i18next', async (importOriginal) => {
     ...actual,
     useTranslation: () => ({
       t: (key: string, params?: Record<string, unknown>) => {
-        // Handle translations with parameters
-        if (key === 'weeklyOn' && params?.day) return `Weekly on ${params.day}`;
-        if (key === 'monthlyOnDay' && params?.day)
-          return `Monthly on day ${params.day}`;
-        if (key === 'annuallyOn' && params?.month && params?.day)
-          return `Annually on ${params.month} ${params.day}`;
-        if (key === 'everyWeekday') return 'Every weekday';
-        if (key === 'doesNotRepeat') return 'Does not repeat';
-        if (key === 'daily') return 'Daily';
-        if (key === 'custom') return 'Custom';
-        return key;
+        const translations: Record<string, string> = {
+          eventDetails: 'Event Details',
+          createEvent: 'Create Event',
+          eventCreated: 'Congratulations! The Event is created.',
+          eventName: 'Name',
+          allDay: 'All Day',
+          recurring: 'Recurring',
+          registerable: 'Is Registerable',
+          createChat: 'Create Chat',
+          enterName: 'Enter Name',
+          enterDescription: 'Enter Description',
+          weeklyOn: `Weekly on ${params?.day}`,
+          monthlyOnDay: `Monthly on day ${params?.day}`,
+          annuallyOn: `Annually on ${params?.month} ${params?.day}`,
+          everyWeekday: 'Every weekday',
+          doesNotRepeat: 'Does not repeat',
+          daily: 'Daily',
+          custom: 'Custom',
+        };
+        return translations[key] || key;
       },
     }),
   };
@@ -335,7 +344,7 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    expect(screen.getByText(/eventDetails/i)).toBeInTheDocument();
+    expect(screen.getByText(/event details/i)).toBeInTheDocument();
     expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     expect(screen.getByTestId('eventDescriptionInput')).toBeInTheDocument();
     expect(screen.getByTestId('eventLocationInput')).toBeInTheDocument();
@@ -351,7 +360,7 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    expect(screen.queryByText(/eventDetails/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/event details/i)).not.toBeInTheDocument();
   });
 
   it('calls onClose when close button is clicked', async () => {

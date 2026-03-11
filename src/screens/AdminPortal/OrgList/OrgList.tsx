@@ -37,7 +37,8 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { Link } from 'react-router';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import { Group, Search } from '@mui/icons-material';
+import Group from '@mui/icons-material/Group';
+import Search from '@mui/icons-material/Search';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { Alert } from 'react-bootstrap';
 import RBButton from 'shared-components/Button';

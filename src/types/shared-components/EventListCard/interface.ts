@@ -21,7 +21,6 @@ export interface InterfaceEventListCardModalsProps {
   eventListCardProps: InterfaceEventListCard;
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
-  tCommon: (key: string, options?: Record<string, unknown>) => string;
 }
 
 /**

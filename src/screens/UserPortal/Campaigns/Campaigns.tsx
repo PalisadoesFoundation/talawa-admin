@@ -10,8 +10,10 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { Campaign, WarningAmberRounded } from '@mui/icons-material';
-import { Box, Typography } from '@mui/material';
+import Campaign from '@mui/icons-material/Campaign';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Button from 'shared-components/Button/Button';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 

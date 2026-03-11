@@ -55,25 +55,3 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:23](https://
 #### Returns
 
 `void`
-
-***
-
-### tCommon()
-
-> **tCommon**: (`key`, `options?`) => `string`
-
-Defined in: [src/types/shared-components/EventListCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L24)
-
-#### Parameters
-
-##### key
-
-`string`
-
-##### options?
-
-`Record`\<`string`, `unknown`\>
-
-#### Returns
-
-`string`

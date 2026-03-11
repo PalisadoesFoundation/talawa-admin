@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx#L95)
+Defined in: [src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/EventVolunteers/Volunteers/Volunteers.tsx#L96)
 
 Renders the Event Volunteers screen.
 

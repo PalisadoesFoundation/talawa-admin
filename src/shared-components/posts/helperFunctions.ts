@@ -11,26 +11,24 @@ import type { InterfacePostCard } from 'utils/interfaces';
  * and formatting dates safely.
  *
  * @param post - The raw post object from the API
- * @param t - Translation function for internationalized text
  * @param refetch - Function to refetch posts data, typically from Apollo Client
  *
  * @returns An object formatted to match the InterfacePostCard interface
  *
  * @example
  * ```tsx
- * const formattedPost = formatPostForCard(rawPost, t, refetch);
+ * const formattedPost = formatPostForCard(rawPost, refetch);
  * <PostCard {...formattedPost} />
  * ```
  */
 export const formatPostForCard = (
   post: InterfacePost,
-  t: (key: string) => string,
   refetch: () => Promise<unknown>,
 ): Omit<InterfacePostCard, 'image' | 'video'> => ({
   id: post.id,
   creator: {
     id: post.creator?.id ?? 'unknown',
-    name: post.creator?.name ?? t('unknownUser'),
+    name: post.creator?.name ?? 'Unknown User',
     avatarURL: post.creator?.avatarURL,
   },
   hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },

@@ -37,7 +37,8 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   setCustomRecurrenceModalIsOpen,
   startDate,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t: tCommon } = useTranslation('common');
   const { frequency, byDay, interval = 1, count, never } = recurrenceRuleState;
   const [selectedRecurrenceEndOption, setSelectedRecurrenceEndOption] =
     useState<RecurrenceEndOptionType>(() => {
@@ -317,7 +318,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
       title={t('customRecurrence')}
       data-testid="customRecurrenceModal"
       onPrimary={handleCustomRecurrenceSubmit}
-      primaryText={t('done')}
+      primaryText={tCommon('done')}
       hideSecondary
     >
       <RecurrenceFrequencySection

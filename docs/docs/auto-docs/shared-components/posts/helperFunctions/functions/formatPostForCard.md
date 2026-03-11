@@ -4,9 +4,9 @@
 
 # Function: formatPostForCard()
 
-> **formatPostForCard**(`post`, `t`, `refetch`): `Omit`\<[`InterfacePostCard`](../../../../utils/interfaces/interfaces/InterfacePostCard.md), `"image"` \| `"video"`\>
+> **formatPostForCard**(`post`, `refetch`): `Omit`\<[`InterfacePostCard`](../../../../utils/interfaces/interfaces/InterfacePostCard.md), `"image"` \| `"video"`\>
 
-Defined in: [src/shared-components/posts/helperFunctions.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/helperFunctions.ts#L25)
+Defined in: [src/shared-components/posts/helperFunctions.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/helperFunctions.ts#L24)
 
 Formats a post object to match the PostCard component's expected interface.
 
@@ -21,12 +21,6 @@ and formatting dates safely.
 [`InterfacePost`](../../../../types/Post/interface/interfaces/InterfacePost.md)
 
 The raw post object from the API
-
-### t
-
-(`key`) => `string`
-
-Translation function for internationalized text
 
 ### refetch
 
@@ -43,6 +37,6 @@ An object formatted to match the InterfacePostCard interface
 ## Example
 
 ```tsx
-const formattedPost = formatPostForCard(rawPost, t, refetch);
+const formattedPost = formatPostForCard(rawPost, refetch);
 <PostCard {...formattedPost} />
 ```

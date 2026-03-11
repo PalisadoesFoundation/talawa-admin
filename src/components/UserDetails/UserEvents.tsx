@@ -34,7 +34,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './UserEvents.module.css';
 import PeopleTabUserEvents from 'shared-components/PeopleTabUserEvents/PeopleTabUserEvents';
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import { useQuery } from '@apollo/client';
 import { GET_EVENTS_BY_ORGANIZATION_ID } from 'GraphQl/Queries/Queries';

@@ -33,7 +33,7 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import { Tooltip } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import Button from 'shared-components/Button';
 import styles from './EventAttendance.module.css';
 import { useLazyQuery } from '@apollo/client';

@@ -167,6 +167,7 @@
   "workPhoneNumber": "Número de teléfono del trabajo",
   "showPassword": "Mostrar contraseña",
   "hidePassword": "Ocultar contraseña",
+  "security": "Seguridad",
   "volunteer": "Voluntario",
   "moreCount": "+{{count}} más",
   "togglePledgedRaised": "Alternar entre cantidades prometidas y recaudadas",

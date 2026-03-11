@@ -255,7 +255,7 @@
     "avatar": "{{title}} अवतार",
     "eventLocation": "कार्यक्रम स्थान",
     "eventDate": "कार्यक्रम तिथि",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "प्रकाशित:",
     "author": "लेखक:"
   },
@@ -960,6 +960,8 @@
     "isRegisterable": "पंजीकरणीय है",
     "creator": "निर्माता",
     "edit": "संपादित करें",
+    "invalidDetailsMessage": "कृपया एक मान्य मान दर्ज करें",
+    "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें",
     "delete": "हटाएँ",
     "viewDetails": "विवरण देखें",
     "noEventsFound": "कोई ईवेंट नहीं मिला",
@@ -968,7 +970,8 @@
     "noOfAttendees": "उपस्थित की संख्या",
     "noRegistrations": "कोई पंजीकरण नहीं",
     "registrants": "पंजीकृत",
-    "to": "को"
+    "to": "को",
+    "deleteOptionRequired": "हटाने का विकल्प आवश्यक है"
   },
   "funds": {
     "title": "फंड",
@@ -1422,7 +1425,24 @@
     "enterState": "राज्य दर्ज करें",
     "select": "चुनें",
     "asYourCountry": "अपने देश के रूप में",
-    "actions": "कार्रवाई"
+    "actions": "कार्रवाई",
+    "changePassword": "पासवर्ड बदलें",
+    "oldPassword": "पुराना पासवर्ड",
+    "newPassword": "नया पासवर्ड",
+    "password": "पासवर्ड",
+    "updatePassword": "पासवर्ड अपडेट करें",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
+    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड समान नहीं हैं",
+    "passwordChangedSuccessfully": "पासवर्ड सफलतापूर्वक बदल दिया गया",
+    "enterCurrentPassword": "कृपया अपना वर्तमान पासवर्ड दर्ज करें"
+  },
+  "passwordValidation": {
+    "minLength": "पासवर्ड कम से कम 8 अक्षरों का होना चाहिए।",
+    "uppercaseRequired": "पासवर्ड में कम से कम एक बड़ा अक्षर होना चाहिए।",
+    "lowercaseRequired": "पासवर्ड में कम से कम एक छोटा अक्षर होना चाहिए।",
+    "numberRequired": "पासवर्ड में कम से कम एक संख्या होनी चाहिए।",
+    "specialCharRequired": "पासवर्ड में कम से कम एक विशेष चिन्ह होना चाहिए।"
   },
   "people": {
     "title": "लोग",
@@ -1899,7 +1919,7 @@
     "description": "विवरण",
     "hash": "#",
     "groupInfo": "समूह जानकारी",
-    "editImage": "छवि संपादित करें",
+    "editImage": "संपादित छवि",
     "members": "सदस्यों",
     "addMembers": "सदस्य जोड़ें",
     "userNotFound": "उपयोगकर्ता नहीं मिला",
@@ -1932,8 +1952,7 @@
     "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
     "thisUser": "इस उपयोगकर्ता",
     "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
-    "memberActionsMenu": "सदस्य क्रियाएं मेनू",
-    "editImage": "संपादित छवि"
+    "memberActionsMenu": "सदस्य क्रियाएं मेनू"
   },
   "userChatRoom": {
     "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",

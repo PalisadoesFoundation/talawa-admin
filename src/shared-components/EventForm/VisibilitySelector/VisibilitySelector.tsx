@@ -1,5 +1,6 @@
 // translation-check-keyPrefix: common
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import type { InterfaceVisibilitySelectorProps } from 'types/shared-components/VisibilitySelector/interface';
 
@@ -13,10 +14,11 @@ import styles from './VisibilitySelector.module.css';
 const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
   visibility,
   setVisibility,
-  tCommon,
+  disabled = false,
 }) => {
+  const { t: tCommon } = useTranslation('common');
   return (
-    <fieldset className="mb-3">
+    <fieldset className="mb-3" aria-label={tCommon('eventVisibility')}>
       <legend className={`form-label ${styles.visibilityLabel}`}>
         {tCommon('eventVisibility')}
       </legend>
@@ -38,6 +40,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           onChange={() => setVisibility('PUBLIC')}
           className={styles.visibilityOption}
           data-testid="visibilityPublicRadio"
+          disabled={disabled}
         />
         <FormCheckField
           type="radio"
@@ -55,6 +58,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           onChange={() => setVisibility('ORGANIZATION')}
           className={styles.visibilityOption}
           data-testid="visibilityOrgRadio"
+          disabled={disabled}
         />
         <FormCheckField
           type="radio"
@@ -72,6 +76,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           onChange={() => setVisibility('INVITE_ONLY')}
           className={styles.visibilityOption}
           data-testid="visibilityInviteRadio"
+          disabled={disabled}
         />
       </div>
     </fieldset>

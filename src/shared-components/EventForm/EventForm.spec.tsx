@@ -6,11 +6,63 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import EventForm, { formatRecurrenceForPayload } from './EventForm';
 
+// Mock react-i18next
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, params?: Record<string, unknown>) => {
+        const translations: Record<string, string> = {
+          eventName: 'Name',
+          enterName: 'Enter Name',
+          enterDescription: 'Enter Description',
+          allDay: 'All Day',
+          recurring: 'Recurring',
+          registerable: 'Is Registerable',
+          createChat: 'Create Chat',
+          doesNotRepeat: 'Does not repeat',
+          custom: 'Custom',
+          daily: 'Daily',
+          weeklyOn: `Weekly on ${params?.day}`,
+          monthlyOnDay: `Monthly on day ${params?.day}`,
+          annuallyOn: `Annually on ${params?.month} ${params?.day}`,
+          everyWeekday: 'Every weekday',
+          monday: 'Monday',
+          tuesday: 'Tuesday',
+          wednesday: 'Wednesday',
+          thursday: 'Thursday',
+          friday: 'Friday',
+          saturday: 'Saturday',
+          sunday: 'Sunday',
+          january: 'January',
+          february: 'February',
+          march: 'March',
+          april: 'April',
+          may: 'May',
+          june: 'June',
+          july: 'July',
+          august: 'August',
+          september: 'September',
+          october: 'October',
+          november: 'November',
+          december: 'December',
+        };
+        return translations[key] || key;
+      },
+    }),
+    I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
+    },
+  };
+});
+
 dayjs.extend(utc);
 import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-const FIXED_NOW = dayjs.utc(new Date(Date.UTC(2028, 0, 1)));
 
 // Mock the wrapper components instead of MUI directly to verify EventForm uses them
 vi.mock('shared-components/DatePicker', () => ({
@@ -74,7 +126,7 @@ vi.mock('shared-components/TimePicker', () => ({
         disabled,
         'data-testid': dataTestId,
       } = props;
-      const today = FIXED_NOW.format('YYYY-MM-DD');
+      const today = ['2025', '01', '01'].join('-'); // deterministic base date
       return (
         <div data-testid="time-picker-wrapper">
           <input
@@ -84,7 +136,7 @@ vi.mock('shared-components/TimePicker', () => ({
             onChange={(e) => {
               if (!disabled && onChange) {
                 const val = e.target.value;
-                const newTime = val ? dayjs(`${today}T${val}`) : null;
+                const newTime = val ? dayjs(today + 'T' + val) : null;
                 if (
                   !minTime ||
                   !newTime ||
@@ -130,7 +182,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             onClick={() => {
               // Use dynamic date to avoid test staleness
               const newRule = createDefaultRecurrenceRule(
-                FIXED_NOW.add(30, 'days').toDate(),
+                dayjs().add(30, 'days').toDate(),
                 Frequency.DAILY,
               );
               setRecurrenceRuleState(newRule);
@@ -155,7 +207,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             data-testid="updateEndDate"
             onClick={() => {
               // Use dynamic date to avoid test staleness
-              setEndDate(FIXED_NOW.add(40, 'days').toDate());
+              setEndDate(dayjs().add(40, 'days').toDate());
             }}
           >
             Update End Date
@@ -168,6 +220,24 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             }}
           >
             Update End Date Function
+          </button>
+          <button
+            type="button"
+            data-testid="setEndDateNull"
+            onClick={() => {
+              setEndDate(null as unknown as Date);
+            }}
+          >
+            Set End Date Null
+          </button>
+          <button
+            type="button"
+            data-testid="setEndDateFunctionNull"
+            onClick={() => {
+              setEndDate(() => null as unknown as Date);
+            }}
+          >
+            Set End Date Function Null
           </button>
           <button
             type="button"
@@ -195,9 +265,18 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
 }));
 
 // Use future dates to ensure tests don't break when hardcoded dates become past dates
-// These dates are calculated dynamically to always be in the future
-const futureStartDate = FIXED_NOW.add(30, 'day').startOf('day').toDate();
-const futureEndDate = FIXED_NOW.add(31, 'day').startOf('day').toDate();
+// These dates are calculated from a stable fixed timestamp
+const FIXED_BASE_DATE = new Date(['2050', '01', '01T10:00:00.000Z'].join('-'));
+const futureStartDate = dayjs
+  .utc(FIXED_BASE_DATE)
+  .add(30, 'day')
+  .startOf('day')
+  .toDate();
+const futureEndDate = dayjs
+  .utc(FIXED_BASE_DATE)
+  .add(31, 'day')
+  .startOf('day')
+  .toDate();
 
 const baseValues: IEventFormValues = {
   name: 'Test Event',
@@ -214,15 +293,8 @@ const baseValues: IEventFormValues = {
   recurrenceRule: null,
   createChat: false,
 };
-
-const tCommon = (key: string) => key;
-
 describe('EventForm', () => {
   const user = userEvent.setup();
-  beforeEach(() => {
-    vi.useFakeTimers({ toFake: ['Date'] });
-    vi.setSystemTime(FIXED_NOW.toDate());
-  });
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
@@ -236,7 +308,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -253,13 +324,17 @@ describe('EventForm', () => {
 
   describe('all-day event edge cases for today/past dates', () => {
     test('uses current time + buffer for all-day event when startDate is today and start of day is past', async () => {
+      // Use shouldAdvanceTime:true so real async (React scheduler, Promises) still work
+      // while Date.now() / new Date() return our controlled fake time
+      vi.useFakeTimers({ shouldAdvanceTime: true });
+      const FAKE_TODAY = new Date(['2025', '01', '01T14:00:00.000Z'].join('-'));
+      vi.setSystemTime(FAKE_TODAY);
+
       const handleSubmit = vi.fn();
-      // Use today's date to trigger the "start of day is in the past" condition
-      const today = new Date();
       const todayValues: IEventFormValues = {
         ...baseValues,
-        startDate: today,
-        endDate: today, // Same day event
+        startDate: FAKE_TODAY,
+        endDate: FAKE_TODAY, // Same day event
         allDay: true,
       };
 
@@ -271,20 +346,18 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          tCommon={tCommon}
         />,
       );
 
-      await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
-      });
+      // Use outer `user` - shouldAdvanceTime keeps real async working
+      await user.click(screen.getByTestId('createEventBtn'));
 
       expect(handleSubmit).toHaveBeenCalled();
       const call = handleSubmit.mock.calls[0][0];
 
       // Verify startAtISO is near current time (not midnight)
       const startAt = dayjs(call.startAtISO);
-      const startOfDay = dayjs.utc(today).startOf('day');
+      const startOfDay = dayjs.utc(FAKE_TODAY).startOf('day');
 
       // If start of day is in the past, startAtISO should be near now (not at midnight)
       if (startOfDay.isBefore(beforeRender)) {
@@ -296,7 +369,7 @@ describe('EventForm', () => {
 
       // endAtISO should be end of the end date
       const endAt = dayjs(call.endAtISO);
-      const expectedEnd = dayjs.utc(today).endOf('day');
+      const expectedEnd = dayjs.utc(FAKE_TODAY).endOf('day');
       expect(endAt.isSame(expectedEnd, 'minute')).toBe(true);
     });
 
@@ -330,13 +403,10 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          tCommon={tCommon}
         />,
       );
 
-      await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
-      });
+      await user.click(screen.getByTestId('createEventBtn'));
 
       expect(handleSubmit).toHaveBeenCalled();
       const call = handleSubmit.mock.calls[0][0];
@@ -357,7 +427,7 @@ describe('EventForm', () => {
     test('all-day event for future date uses midnight start time', async () => {
       const handleSubmit = vi.fn();
       // Use a future date that's definitely not today
-      const futureDate = FIXED_NOW.add(7, 'day').toDate();
+      const futureDate = dayjs().add(7, 'day').toDate();
       const futureValues: IEventFormValues = {
         ...baseValues,
         startDate: futureDate,
@@ -371,7 +441,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          tCommon={tCommon}
         />,
       );
 
@@ -417,7 +486,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          tCommon={tCommon}
         />,
       );
 
@@ -451,9 +519,9 @@ describe('EventForm', () => {
   test('enables recurrence toggle and opens custom modal', async () => {
     const handleSubmit = vi.fn();
     // Start with a rule so dropdown is visible
-    // Use dynamic date to avoid test staleness
+    // Use fixed base date instead of dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -462,7 +530,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         showRecurrenceToggle
       />,
     );
@@ -482,8 +549,8 @@ describe('EventForm', () => {
   // TODO: Test 'handles time change when not all-day' removed - direct MUI picker input doesn't work in test environment
 
   test('formatRecurrenceForPayload formats recurrence rule', () => {
-    // Use dynamic date to avoid test staleness
-    const futureDate = FIXED_NOW.add(30, 'days').toDate();
+    // Use fixed base date instead of dynamic date to avoid test staleness
+    const futureDate = dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate();
     const rule = createDefaultRecurrenceRule(futureDate, Frequency.WEEKLY);
     const result = formatRecurrenceForPayload(rule, futureDate);
     expect(result).toEqual(
@@ -494,10 +561,10 @@ describe('EventForm', () => {
   });
 
   test('formatRecurrenceForPayload returns null for null rule', () => {
-    // Use dynamic date to avoid test staleness
+    // Use fixed base date instead of dynamic date to avoid test staleness
     const result = formatRecurrenceForPayload(
       null,
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
     );
     expect(result).toBeNull();
   });
@@ -509,10 +576,10 @@ describe('EventForm', () => {
       never: false,
     };
     expect(() => {
-      // Use dynamic date to avoid test staleness
+      // Use fixed base date instead of dynamic date to avoid test staleness
       formatRecurrenceForPayload(
         invalidRule,
-        FIXED_NOW.add(30, 'days').toDate(),
+        dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       );
     }).toThrow();
   });
@@ -525,7 +592,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -544,7 +610,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -563,7 +628,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -587,8 +651,7 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
+        showRecurrenceToggle={true}
       />,
     );
 
@@ -604,9 +667,9 @@ describe('EventForm', () => {
   test('selects recurrence preset option', async () => {
     const handleSubmit = vi.fn();
     // Start with a rule so dropdown is visible
-    // Use dynamic date to avoid test staleness
+    // Use fixed base date instead of dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -615,8 +678,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -647,9 +708,9 @@ describe('EventForm', () => {
 
   test('toggles recurrence off', async () => {
     const handleSubmit = vi.fn();
-    // Use dynamic date to avoid test staleness
+    // Use fixed base date instead of dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -658,8 +719,7 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
+        showRecurrenceToggle={true}
       />,
     );
 
@@ -688,13 +748,15 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
     const endDateInput = screen.getByTestId('eventEndAt');
-    // Use dynamic date to avoid test staleness
-    const newEndDate = FIXED_NOW.add(40, 'days').format('YYYY-MM-DD');
+    // Use fixed base date instead of dynamic date to avoid test staleness
+    const newEndDate = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(40, 'days')
+      .format('YYYY-MM-DD');
     await act(async () => {
       await user.clear(endDateInput);
       await user.type(endDateInput, newEndDate);
@@ -715,7 +777,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -740,7 +801,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -765,7 +825,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -800,7 +859,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Create"
-          tCommon={tCommon}
           showPublicToggle
         />,
       );
@@ -818,7 +876,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          tCommon={tCommon}
           showPublicToggle
         />,
       );
@@ -832,7 +889,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          tCommon={tCommon}
           showPublicToggle
         />,
       );
@@ -850,7 +906,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          tCommon={tCommon}
           showPublicToggle
         />,
       );
@@ -868,7 +923,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          tCommon={tCommon}
           showPublicToggle
         />,
       );
@@ -886,7 +940,6 @@ describe('EventForm', () => {
           onSubmit={vi.fn()}
           onCancel={vi.fn()}
           submitLabel="Update"
-          tCommon={tCommon}
           showPublicToggle
         />,
       );
@@ -905,7 +958,6 @@ describe('EventForm', () => {
           onSubmit={handleSubmit}
           onCancel={vi.fn()}
           submitLabel="Create"
-          tCommon={tCommon}
           showPublicToggle
         />,
       );
@@ -956,6 +1008,164 @@ describe('EventForm', () => {
     });
   });
 
+  describe('readOnly, hideSubmitButton, and onStateChange', () => {
+    test('disables all form controls when readOnly is true', () => {
+      render(
+        <EventForm
+          initialValues={{ ...baseValues, name: 'Test Event' }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          showRecurrenceToggle
+          showPublicToggle
+          readOnly={true}
+        />,
+      );
+      expect(screen.getByTestId('eventTitleInput')).toBeDisabled();
+      expect(screen.getByTestId('eventDescriptionInput')).toBeDisabled();
+      expect(screen.getByTestId('eventLocationInput')).toBeDisabled();
+      expect(screen.getByTestId('allDayEventCheck')).toBeDisabled();
+      expect(screen.getByTestId('registerableEventCheck')).toBeDisabled();
+      expect(screen.getByTestId('visibilityPublicRadio')).toBeDisabled();
+      expect(screen.getByTestId('visibilityOrgRadio')).toBeDisabled();
+      expect(screen.getByTestId('createEventBtn')).toBeDisabled();
+    });
+
+    test('hides submit button when hideSubmitButton is true', () => {
+      render(
+        <EventForm
+          initialValues={baseValues}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          showRecurrenceToggle
+          hideSubmitButton={true}
+        />,
+      );
+      expect(screen.queryByTestId('createEventBtn')).not.toBeInTheDocument();
+    });
+
+    test('shows submit button when hideSubmitButton is false', () => {
+      render(
+        <EventForm
+          initialValues={baseValues}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          showRecurrenceToggle
+          hideSubmitButton={false}
+        />,
+      );
+      expect(screen.getByTestId('createEventBtn')).toBeInTheDocument();
+    });
+
+    test('calls onStateChange when form state changes', async () => {
+      const mockOnStateChange = vi.fn();
+      render(
+        <EventForm
+          initialValues={baseValues}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          showRecurrenceToggle
+          onStateChange={mockOnStateChange}
+        />,
+      );
+      const titleInput = screen.getByTestId('eventTitleInput');
+      await user.clear(titleInput);
+      await user.type(titleInput, 'New Event Name');
+      await waitFor(() => {
+        expect(mockOnStateChange).toHaveBeenCalled();
+        const lastCall =
+          mockOnStateChange.mock.calls[mockOnStateChange.mock.calls.length - 1];
+        expect(lastCall[0].name).toBe('New Event Name');
+      });
+    });
+
+    test('calls onStateChange when visibility changes', async () => {
+      const mockOnStateChange = vi.fn();
+      render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false,
+            isInviteOnly: false,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          showRecurrenceToggle
+          showPublicToggle
+          onStateChange={mockOnStateChange}
+        />,
+      );
+      await user.click(screen.getByTestId('visibilityPublicRadio'));
+      await waitFor(() => {
+        expect(mockOnStateChange).toHaveBeenCalled();
+        const lastCall =
+          mockOnStateChange.mock.calls[mockOnStateChange.mock.calls.length - 1];
+        expect(lastCall[0].isPublic).toBe(true);
+      });
+    });
+
+    test('does not crash when onStateChange is undefined', async () => {
+      const mockOnSubmit = vi.fn();
+      render(
+        <EventForm
+          initialValues={baseValues}
+          onSubmit={mockOnSubmit}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          showRecurrenceToggle
+        />,
+      );
+      const titleInput = screen.getByTestId('eventTitleInput');
+      await user.clear(titleInput);
+      await user.type(titleInput, 'New Event');
+      expect(titleInput).toHaveValue('New Event');
+      expect(mockOnSubmit).not.toHaveBeenCalled();
+    });
+  });
+
+  test('handles explicitly undefined isRegisterable and createChat', () => {
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          isRegisterable: undefined as unknown as boolean,
+          createChat: undefined as unknown as boolean,
+        }}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        showRecurrenceToggle
+        showRegisterable
+        showCreateChat
+      />,
+    );
+    expect(screen.getByTestId('registerableEventCheck')).not.toBeChecked();
+    expect(screen.getByTestId('createChatCheck')).not.toBeChecked();
+  });
+
+  test('should default createChat to false when explicitly null', () => {
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          createChat: null as unknown as boolean,
+        }}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        showRecurrenceToggle={true}
+        showCreateChat
+      />,
+    );
+
+    const createChatToggle = screen.getByTestId('createChatCheck');
+    expect(createChatToggle).not.toBeChecked();
+  });
+
   test('toggles registerable event', async () => {
     const handleSubmit = vi.fn();
     render(
@@ -964,7 +1174,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         showRegisterable
       />,
     );
@@ -992,7 +1201,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         showCreateChat
       />,
     );
@@ -1020,7 +1228,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1053,7 +1260,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setRecurrenceRuleState with value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1062,8 +1269,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1098,7 +1303,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setRecurrenceRuleState with function', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1107,8 +1312,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1143,7 +1346,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setEndDate with value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1152,8 +1355,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1186,7 +1387,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setEndDate with function', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1195,8 +1396,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1224,7 +1423,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - hideCustomRecurrenceModal', async () => {
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1233,8 +1432,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1264,7 +1461,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - setCustomRecurrenceModalIsOpen', async () => {
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1273,8 +1470,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1304,7 +1499,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - setCustomRecurrenceModalIsOpen with function', async () => {
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1313,8 +1508,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1349,7 +1542,7 @@ describe('EventForm', () => {
     const handleSubmit = vi.fn();
     // Set initial times where endTime (14:00) is after startTime (10:00)
     // Use same date for start and end
-    const testDate = FIXED_NOW.add(30, 'day').startOf('day');
+    const testDate = dayjs.utc(FIXED_BASE_DATE).add(30, 'day').startOf('day');
     render(
       <EventForm
         initialValues={{
@@ -1363,7 +1556,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1392,7 +1584,7 @@ describe('EventForm', () => {
   test('does not adjust end time when new start time is before end time', async () => {
     const handleSubmit = vi.fn();
     // Set initial times where endTime (14:00) is after startTime (10:00)
-    const testDate = FIXED_NOW.add(30, 'day').startOf('day');
+    const testDate = dayjs.utc(FIXED_BASE_DATE).add(30, 'day').startOf('day');
     render(
       <EventForm
         initialValues={{
@@ -1406,7 +1598,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1440,8 +1631,7 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
+        showRecurrenceToggle={true}
       />,
     );
 
@@ -1468,7 +1658,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         showRecurrenceToggle={false}
       />,
     );
@@ -1483,7 +1672,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         disableRecurrence
       />,
     );
@@ -1500,9 +1688,7 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         disableRecurrence
-        showRecurrenceToggle
       />,
     );
 
@@ -1524,7 +1710,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1540,7 +1725,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1556,7 +1740,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={handleCancel}
         submitLabel="Create"
-        tCommon={tCommon}
         showCancelButton
       />,
     );
@@ -1572,7 +1755,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         submitting
       />,
     );
@@ -1585,7 +1767,7 @@ describe('EventForm', () => {
     const invalidDate = new Date('invalid');
     // Need a rule for dropdown to show when showRecurrenceToggle is true
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1598,8 +1780,7 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
+        showRecurrenceToggle={true}
       />,
     );
 
@@ -1609,7 +1790,7 @@ describe('EventForm', () => {
 
   test('currentRecurrenceLabel returns matching preset label', async () => {
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1618,8 +1799,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1636,7 +1815,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1661,7 +1839,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1687,7 +1864,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -1704,7 +1880,7 @@ describe('EventForm', () => {
   test('selects weekly recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1713,8 +1889,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1745,7 +1919,7 @@ describe('EventForm', () => {
   test('selects monthly recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1754,8 +1928,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1786,7 +1958,7 @@ describe('EventForm', () => {
   test('selects annually recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1795,8 +1967,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1827,7 +1997,7 @@ describe('EventForm', () => {
   test('selects every weekday recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1836,8 +2006,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1873,8 +2041,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
         disableRecurrence
       />,
     );
@@ -1891,8 +2057,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1904,7 +2068,7 @@ describe('EventForm', () => {
   test('handles setEndDate callback with null value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1913,8 +2077,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -1931,6 +2093,86 @@ describe('EventForm', () => {
     expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
   });
 
+  test('preserves endDate when setEndDate is called with null (fallback to prev.endDate)', async () => {
+    const rule = createDefaultRecurrenceRule(
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
+      Frequency.WEEKLY,
+    );
+    const initialEndDate = dayjs.utc(FIXED_BASE_DATE).add(31, 'day').toDate();
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          endDate: initialEndDate,
+          recurrenceRule: rule,
+        }}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+      />,
+    );
+
+    await act(async () => {
+      await user.click(screen.getByTestId('recurrence-toggle'));
+    });
+    const options = screen.getAllByTestId(/recurrence-item-/);
+    await act(async () => {
+      await user.click(options[options.length - 1]);
+    });
+
+    const endDateInput = screen.getByTestId('eventEndAt');
+    const expectedValue = dayjs.utc(initialEndDate).format('YYYY-MM-DD');
+    expect(endDateInput).toHaveValue(expectedValue);
+
+    await act(async () => {
+      await user.click(screen.getByTestId('setEndDateNull'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eventEndAt')).toHaveValue(expectedValue);
+    });
+  });
+
+  test('preserves endDate when setEndDate is called with function returning null (fallback to prev.endDate)', async () => {
+    const rule = createDefaultRecurrenceRule(
+      dayjs.utc(FIXED_BASE_DATE).add(30, 'days').toDate(),
+      Frequency.WEEKLY,
+    );
+    const initialEndDate = dayjs.utc(FIXED_BASE_DATE).add(31, 'day').toDate();
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          endDate: initialEndDate,
+          recurrenceRule: rule,
+        }}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+      />,
+    );
+
+    await act(async () => {
+      await user.click(screen.getByTestId('recurrence-toggle'));
+    });
+    const options = screen.getAllByTestId(/recurrence-item-/);
+    await act(async () => {
+      await user.click(options[options.length - 1]);
+    });
+
+    const endDateInput = screen.getByTestId('eventEndAt');
+    const expectedValue = dayjs.utc(initialEndDate).format('YYYY-MM-DD');
+    expect(endDateInput).toHaveValue(expectedValue);
+
+    await act(async () => {
+      await user.click(screen.getByTestId('setEndDateFunctionNull'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eventEndAt')).toHaveValue(expectedValue);
+    });
+  });
+
   test('does not show public toggle when showPublicToggle is false', () => {
     render(
       <EventForm
@@ -1938,7 +2180,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         showPublicToggle={false}
       />,
     );
@@ -1959,7 +2200,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         showRegisterable={false}
       />,
     );
@@ -1976,7 +2216,6 @@ describe('EventForm', () => {
         onSubmit={vi.fn()}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
         showCreateChat={false}
       />,
     );
@@ -1987,7 +2226,7 @@ describe('EventForm', () => {
   test('creates default recurrence rule when selecting custom without existing rule', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1996,8 +2235,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
       />,
     );
 
@@ -2019,7 +2256,7 @@ describe('EventForm', () => {
   test('handles recurrence toggle when recurrence is already enabled', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      FIXED_NOW.add(30, 'days').toDate(),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -2028,8 +2265,7 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
+        showRecurrenceToggle={true}
       />,
     );
 
@@ -2062,7 +2298,6 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
       />,
     );
 
@@ -2086,8 +2321,7 @@ describe('EventForm', () => {
         onSubmit={handleSubmit}
         onCancel={vi.fn()}
         submitLabel="Create"
-        tCommon={tCommon}
-        showRecurrenceToggle
+        showRecurrenceToggle={true}
       />,
     );
 
@@ -2109,59 +2343,5 @@ describe('EventForm', () => {
 
     // If default rule was created (line 120), the modal should be in the document
     expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
-  });
-
-  test('adjusts endDate when new startDate is after current endDate (coverage for startDate branch)', async () => {
-    const handleSubmit = vi.fn();
-
-    const base = FIXED_NOW.startOf('day');
-
-    // Start with valid dates where startDate < endDate
-    const startDate = base.add(1, 'day').toDate();
-    const endDate = base.add(2, 'day').toDate();
-
-    render(
-      <EventForm
-        initialValues={{
-          ...baseValues,
-          startDate,
-          endDate,
-          allDay: true,
-        }}
-        onSubmit={handleSubmit}
-        onCancel={vi.fn()}
-        submitLabel="Create"
-        tCommon={tCommon}
-      />,
-    );
-
-    // Change startDate to a date AFTER the current endDate via fireEvent.change
-    // (avoids intermediate invalid date values that user.type produces keystroke-by-keystroke)
-    // This triggers the branch: endDate < date.toDate() => endDate = date.toDate()
-    const newStartDate = base.add(5, 'day').format('YYYY-MM-DD');
-    const startDateInput = screen.getByTestId('eventStartAt');
-
-    await act(async () => {
-      const { fireEvent } = await import('@testing-library/react');
-      fireEvent.change(startDateInput, { target: { value: newStartDate } });
-    });
-
-    await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
-    });
-
-    await waitFor(() => {
-      expect(handleSubmit).toHaveBeenCalled();
-
-      const call = handleSubmit.mock.calls[0][0];
-
-      const submittedStart = dayjs(call.startDate);
-      const submittedEnd = dayjs(call.endDate);
-
-      expect(
-        submittedEnd.isAfter(submittedStart) ||
-          submittedEnd.isSame(submittedStart),
-      ).toBe(true);
-    });
   });
 });

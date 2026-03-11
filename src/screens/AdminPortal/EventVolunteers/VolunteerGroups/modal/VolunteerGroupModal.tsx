@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete } from '@mui/material';
+import { Autocomplete } from 'shared-components/Autocomplete/Autocomplete';
 import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -292,9 +292,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           touched={false}
         >
           <Autocomplete
+            id="leaderSelect"
             className={`${styles.noOutline} w-100`}
             limitTags={2}
-            data-testid="leaderSelect"
+            dataTestId="leaderSelect"
             options={members}
             value={leader}
             disabled={mode === 'edit'}
@@ -303,7 +304,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             getOptionLabel={(member: InterfaceUserInfoPG): string =>
               getMemberLabel(member)
             }
-            onChange={(_, newLeader): void => {
+            onChange={(newLeader): void => {
               setFormState({
                 ...formState,
                 leader: newLeader,
@@ -330,10 +331,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
 
       <div className="d-flex mb-3 w-100">
         <Autocomplete
+          id="volunteerSelect"
           multiple
           className={`${styles.noOutline} w-100`}
           limitTags={2}
-          data-testid="volunteerSelect"
+          dataTestId="volunteerSelect"
           options={availableVolunteers}
           value={volunteerUsers}
           isOptionEqualToValue={areOptionsEqual}
@@ -343,7 +345,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           }
           disabled={mode === 'edit'}
           aria-label={t('volunteers')}
-          onChange={(_, newUsers): void => {
+          onChange={(newUsers): void => {
             setFormState({
               ...formState,
               volunteerUsers: newUsers,
