@@ -6,21 +6,63 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import EventForm, { formatRecurrenceForPayload } from './EventForm';
 
+// Mock react-i18next
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, params?: Record<string, unknown>) => {
+        const translations: Record<string, string> = {
+          eventName: 'Name',
+          enterName: 'Enter Name',
+          enterDescription: 'Enter Description',
+          allDay: 'All Day',
+          recurring: 'Recurring',
+          registerable: 'Is Registerable',
+          createChat: 'Create Chat',
+          doesNotRepeat: 'Does not repeat',
+          custom: 'Custom',
+          daily: 'Daily',
+          weeklyOn: `Weekly on ${params?.day}`,
+          monthlyOnDay: `Monthly on day ${params?.day}`,
+          annuallyOn: `Annually on ${params?.month} ${params?.day}`,
+          everyWeekday: 'Every weekday',
+          monday: 'Monday',
+          tuesday: 'Tuesday',
+          wednesday: 'Wednesday',
+          thursday: 'Thursday',
+          friday: 'Friday',
+          saturday: 'Saturday',
+          sunday: 'Sunday',
+          january: 'January',
+          february: 'February',
+          march: 'March',
+          april: 'April',
+          may: 'May',
+          june: 'June',
+          july: 'July',
+          august: 'August',
+          september: 'September',
+          october: 'October',
+          november: 'November',
+          december: 'December',
+        };
+        return translations[key] || key;
+      },
+    }),
+    I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
+    },
+  };
+});
+
 dayjs.extend(utc);
 import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-  I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: {
-    type: '3rdParty',
-    init: vi.fn(),
-  },
-}));
 
 // Mock the wrapper components instead of MUI directly to verify EventForm uses them
 vi.mock('shared-components/DatePicker', () => ({

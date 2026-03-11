@@ -960,6 +960,8 @@
     "isRegisterable": "पंजीकरणीय है",
     "creator": "निर्माता",
     "edit": "संपादित करें",
+    "invalidDetailsMessage": "कृपया एक मान्य मान दर्ज करें",
+    "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें",
     "delete": "हटाएँ",
     "viewDetails": "विवरण देखें",
     "noEventsFound": "कोई ईवेंट नहीं मिला",

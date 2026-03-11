@@ -269,7 +269,7 @@ function EventListCardModals({
         eventEndDate,
         recurrence,
         updateOption,
-        hasRecurrenceChanged: hasRecurrenceChanged(),
+        hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
         hideViewModal,
         eventUpdateModalIsOpen,
         closeUpdateModal,

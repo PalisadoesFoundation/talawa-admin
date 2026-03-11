@@ -2,6 +2,7 @@ import { render, screen, act, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
+
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -216,8 +217,6 @@ describe('EventListCardModals', () => {
       eventListCardProps: mockEventListCardProps,
       eventModalIsOpen: true,
       hideViewModal: vi.fn(),
-      t: i18nForTest.t, // Use the actual t function from i18nForTest
-      tCommon: i18nForTest.t, // Use the actual t function from i18nForTest
       ...props,
     };
     return render(
@@ -499,11 +498,13 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    expect(
-      screen.getByText(
-        'This is a recurring event. Choose how you want to update it:',
-      ),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(
+          'This is a recurring event. Choose how you want to update it:',
+        ),
+      ).toBeInTheDocument();
+    });
 
     const closeButton = screen.getByTestId('eventUpdateModalCloseBtn');
     await userEvent.click(closeButton);
