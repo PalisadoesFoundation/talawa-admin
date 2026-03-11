@@ -195,8 +195,6 @@ export interface IUpdateEventModalProps {
   eventListCardProps: IEventListCard;
   recurringEventUpdateModalIsOpen: boolean;
   toggleRecurringEventUpdateModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
   updateEventHandler: () => Promise<void>;
 }
 

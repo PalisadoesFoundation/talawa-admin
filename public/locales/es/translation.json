@@ -943,6 +943,8 @@
     "isRegisterable": "Es Registrable",
     "creator": "Creador",
     "edit": "Editar",
+    "invalidDetailsMessage": "Por favor, introduzca un valor válido",
+    "selectAtLeastOneDay": "Por favor, seleccione al menos un día",
     "delete": "Eliminar",
     "viewDetails": "Ver Detalles",
     "noEventsFound": "No se encontraron eventos",

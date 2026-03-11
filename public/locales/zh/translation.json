@@ -948,6 +948,8 @@
     "isRegisterable": "可注册",
     "creator": "创建者",
     "edit": "编辑",
+    "invalidDetailsMessage": "请输入有效值",
+    "selectAtLeastOneDay": "请至少选择一天",
     "delete": "删除",
     "viewDetails": "查看详情",
     "noEventsFound": "未找到事件",

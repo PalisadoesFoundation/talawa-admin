@@ -948,6 +948,8 @@
     "isRegisterable": "Registerable",
     "creator": "Creator",
     "edit": "Edit",
+    "invalidDetailsMessage": "Please enter a valid value",
+    "selectAtLeastOneDay": "Please select at least one day",
     "delete": "Delete",
     "viewDetails": "View Details",
     "noEventsFound": "No events found",
