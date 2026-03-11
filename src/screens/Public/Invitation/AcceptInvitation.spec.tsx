@@ -785,6 +785,11 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
       });
+
+      // Wait for the loading state to finish to prevent async leak
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
     });
 
     it('should require confirmation for masked email', async () => {
