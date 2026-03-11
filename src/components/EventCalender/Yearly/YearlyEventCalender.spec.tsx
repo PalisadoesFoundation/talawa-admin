@@ -992,7 +992,11 @@ describe('Calendar Component', () => {
     // Look for expand buttons that may contain events
 
     // Check if there are events by clicking expand buttons and checking content
-    await clickExpandForDate(container, new Date(publicEvent.startAt), user);
+    await clickExpandForDate(
+      container,
+      new Date(publicEvent.startAt ?? todayISO),
+      user,
+    );
     await waitFor(() => {
       expect(screen.getByText('Public Event')).toBeInTheDocument();
       expect(screen.queryByText('Private Event')).toBeNull();

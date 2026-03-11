@@ -2603,6 +2603,7 @@
     "expandDay": "Développer le jour"
   },
   "weeklyEventCalender": {
+    "allDay": "Toute la journée",
     "weeklyCalendarAriaLabel": "Vue du calendrier hebdomadaire"
   }
 }

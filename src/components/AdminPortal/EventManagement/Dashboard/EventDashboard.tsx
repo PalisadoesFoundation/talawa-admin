@@ -96,8 +96,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
       return '08:00';
     }
 
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    // Use local timezone hours/minutes, not UTC
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   };
 

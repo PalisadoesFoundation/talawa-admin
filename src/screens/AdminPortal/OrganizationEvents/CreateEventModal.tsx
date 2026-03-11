@@ -105,10 +105,25 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         : undefined;
 
       // Build input object with shared typed interface
+      // All-day events: use startDate/endDate (YYYY-MM-DD strings)
+      // Timed events: use startAt/endAt (ISO timestamps)
       const input: ICreateEventInput = {
         name: payload.name,
-        startAt: payload.startAtISO,
-        endAt: payload.endAtISO,
+        ...(payload.allDay
+          ? {
+              startDate: payload.startDate.toISOString().slice(0, 10),
+              // For all-day events, endDate is exclusive (RFC 5545)
+              // Add 1 day to represent the first day NOT included
+              endDate: (() => {
+                const exclusiveEnd = new Date(payload.endDate);
+                exclusiveEnd.setDate(exclusiveEnd.getDate() + 1);
+                return exclusiveEnd.toISOString().slice(0, 10);
+              })(),
+            }
+          : {
+              startAt: payload.startAtISO,
+              endAt: payload.endAtISO,
+            }),
         organizationId: currentUrl,
         allDay: payload.allDay,
         isPublic: payload.isPublic,

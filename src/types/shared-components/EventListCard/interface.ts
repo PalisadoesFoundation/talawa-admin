@@ -7,7 +7,7 @@ import type { TFunction } from 'i18next';
  * @remarks refetchEvents is optional and triggers a refresh when provided.
  */
 export interface InterfaceEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
+  refetchEvents?: () => void | Promise<void>;
 }
 
 /**
@@ -41,6 +41,8 @@ export interface InterfaceEventUpdateInput {
   allDay?: boolean;
   startAt?: string;
   endAt?: string;
+  startDate?: string;
+  endDate?: string;
   /**
    * Recurrence rule for the event.
    * This field is used for updating the recurrence pattern.

@@ -46,8 +46,10 @@ interface IEventEdge {
     id: string;
     name: string;
     description?: string | null;
-    startAt: string;
-    endAt: string;
+    startAt: string | null;
+    endAt: string | null;
+    startDate?: string | null;
+    endDate?: string | null;
     allDay: boolean;
     location?: string | null;
     isPublic: boolean;
@@ -159,37 +161,53 @@ function organizationEvents(): JSX.Element {
   // Normalize event data for EventCalendar with proper typing
   const allEvents: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
-  ).map((edge: IEventEdge) => ({
-    id: edge.node.id,
-    name: edge.node.name,
-    description: edge.node.description || '',
-    startAt: edge.node.startAt,
-    endAt: edge.node.endAt,
-    startTime: edge.node.allDay
-      ? null
-      : dayjs(edge.node.startAt).format('HH:mm:ss'),
-    endTime: edge.node.allDay
-      ? null
-      : dayjs(edge.node.endAt).format('HH:mm:ss'),
-    allDay: edge.node.allDay,
-    location: edge.node.location || '',
-    isPublic: edge.node.isPublic,
-    isRegisterable: edge.node.isRegisterable,
-    // Add recurring event information
-    isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-    baseEvent: edge.node.baseEvent,
-    sequenceNumber: edge.node.sequenceNumber,
-    totalCount: edge.node.totalCount,
-    hasExceptions: edge.node.hasExceptions,
-    progressLabel: edge.node.progressLabel,
-    recurrenceDescription: edge.node.recurrenceDescription,
-    recurrenceRule: edge.node.recurrenceRule,
-    creator: {
-      id: edge.node.creator.id,
-      name: edge.node.creator.name,
-    },
-    attendees: [], // Adjust if attendees are added to schema
-  }));
+  ).map((edge: IEventEdge) => {
+    console.log('OrganizationEvents: Mapping event from query', {
+      id: edge.node.id,
+      allDay: edge.node.allDay,
+      startDate: edge.node.startDate,
+      endDate: edge.node.endDate,
+      startAt: edge.node.startAt,
+      endAt: edge.node.endAt,
+    });
+    return {
+      id: edge.node.id,
+      name: edge.node.name,
+      description: edge.node.description || '',
+      startAt: edge.node.startAt,
+      endAt: edge.node.endAt,
+      startDate: edge.node.startDate,
+      endDate: edge.node.endDate,
+      startTime: edge.node.allDay
+        ? null
+        : edge.node.startAt
+          ? dayjs(edge.node.startAt).format('HH:mm:ss')
+          : null,
+      endTime: edge.node.allDay
+        ? null
+        : edge.node.endAt
+          ? dayjs(edge.node.endAt).format('HH:mm:ss')
+          : null,
+      allDay: edge.node.allDay,
+      location: edge.node.location || '',
+      isPublic: edge.node.isPublic,
+      isRegisterable: edge.node.isRegisterable,
+      // Add recurring event information
+      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+      baseEvent: edge.node.baseEvent,
+      sequenceNumber: edge.node.sequenceNumber,
+      totalCount: edge.node.totalCount,
+      hasExceptions: edge.node.hasExceptions,
+      progressLabel: edge.node.progressLabel,
+      recurrenceDescription: edge.node.recurrenceDescription,
+      recurrenceRule: edge.node.recurrenceRule,
+      creator: {
+        id: edge.node.creator.id,
+        name: edge.node.creator.name,
+      },
+      attendees: [], // Adjust if attendees are added to schema
+    };
+  });
 
   // Filter events based on search term (case-insensitive search across name, description, and location)
   const events: InterfaceEvent[] = useMemo(() => {

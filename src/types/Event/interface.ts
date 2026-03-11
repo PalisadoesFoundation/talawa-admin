@@ -44,8 +44,10 @@ export interface IEvent {
   location: string;
   name: string;
   description: string;
-  startAt: string;
-  endAt: string;
+  startAt: string | null;
+  endAt: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
   startTime?: string | null;
   endTime?: string | null;
   allDay: boolean;
@@ -217,8 +219,10 @@ export interface IEventEdge {
     id: string;
     name: string;
     description?: string | null;
-    startAt: string;
-    endAt: string;
+    startAt: string | null;
+    endAt: string | null;
+    startDate?: string | null;
+    endDate?: string | null;
     allDay: boolean;
     location?: string | null;
     /**
@@ -266,8 +270,10 @@ export interface IEventEdge {
  */
 export interface ICreateEventInput {
   name: string;
-  startAt: string;
-  endAt: string;
+  startAt?: string;
+  endAt?: string;
+  startDate?: string;
+  endDate?: string;
   organizationId: string | undefined;
   allDay: boolean;
   /**

@@ -104,8 +104,12 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
   publicChecked: mockEventListCardProps.isPublic,
   registerableChecked: mockEventListCardProps.isRegisterable,
   inviteOnlyChecked: mockEventListCardProps.isInviteOnly,
-  eventStartDate: new Date(mockEventListCardProps.startAt),
-  eventEndDate: new Date(mockEventListCardProps.endAt),
+  eventStartDate: new Date(
+    mockEventListCardProps.startAt ?? dayjs().toISOString(),
+  ),
+  eventEndDate: new Date(
+    mockEventListCardProps.endAt ?? dayjs().add(2, 'hours').toISOString(),
+  ),
   recurrence: null as InterfaceRecurrenceRule | null,
   updateOption: 'single',
   hasRecurrenceChanged: false,

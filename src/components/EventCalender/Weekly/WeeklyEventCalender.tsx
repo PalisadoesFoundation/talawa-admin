@@ -154,14 +154,31 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
 
       const eventsForDate =
         events?.filter((event) => {
-          const eventStart = dayjs.utc(event.startAt).local().startOf('day');
-          const eventEnd = dayjs.utc(event.endAt).local().startOf('day');
           const current = dayjs(tempDate).startOf('day');
-          return (
-            current.isSame(eventStart) ||
-            current.isSame(eventEnd) ||
-            (current.isAfter(eventStart) && current.isBefore(eventEnd))
-          );
+
+          if (event.allDay) {
+            // For all-day events, use startDate and endDate
+            if (!event.startDate) return false;
+            const eventStart = dayjs(event.startDate).startOf('day');
+            const eventEnd = event.endDate
+              ? dayjs(event.endDate).startOf('day')
+              : eventStart;
+            return (
+              current.isSame(eventStart) ||
+              current.isSame(eventEnd) ||
+              (current.isAfter(eventStart) && current.isBefore(eventEnd))
+            );
+          } else {
+            // For timed events, use startAt and endAt
+            if (!event.startAt || !event.endAt) return false;
+            const eventStart = dayjs.utc(event.startAt).local().startOf('day');
+            const eventEnd = dayjs.utc(event.endAt).local().startOf('day');
+            return (
+              current.isSame(eventStart) ||
+              current.isSame(eventEnd) ||
+              (current.isAfter(eventStart) && current.isBefore(eventEnd))
+            );
+          }
         }) || [];
 
       const dayLabel = dayjs(tempDate).format('dddd, MMMM D, YYYY');
@@ -201,6 +218,28 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
               ></div>
             ))}
             {eventsForDate.map((event) => {
+              // Handle all-day events differently
+              if (event.allDay) {
+                return (
+                  <div
+                    key={event.id}
+                    className={`${styles.eventContainer} ${styles.eventCard} ${styles.allDayEvent}`}
+                    tabIndex={0}
+                  >
+                    <EventListCard
+                      {...event}
+                      refetchEvents={refetchEvents}
+                      userRole={userRole}
+                      userId={userId}
+                    />
+                    <div className={styles.eventTime}>{t('allDay')}</div>
+                  </div>
+                );
+              }
+
+              // Handle timed events
+              if (!event.startAt || !event.endAt) return null;
+
               return (
                 <div
                   key={event.id}

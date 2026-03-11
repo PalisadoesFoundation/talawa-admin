@@ -204,10 +204,25 @@ export default function Events(): JSX.Element {
         : undefined;
 
       // Build input object with shared typed interface
+      // All-day events: use startDate/endDate (YYYY-MM-DD strings)
+      // Timed events: use startAt/endAt (ISO timestamps)
       const input: ICreateEventInput = {
         name: payload.name,
-        startAt: payload.startAtISO,
-        endAt: payload.endAtISO,
+        ...(payload.allDay
+          ? {
+              startDate: payload.startDate.toISOString().slice(0, 10),
+              // For all-day events, endDate is exclusive (RFC 5545)
+              // Add 1 day to represent the first day NOT included
+              endDate: (() => {
+                const exclusiveEnd = new Date(payload.endDate);
+                exclusiveEnd.setDate(exclusiveEnd.getDate() + 1);
+                return exclusiveEnd.toISOString().slice(0, 10);
+              })(),
+            }
+          : {
+              startAt: payload.startAtISO,
+              endAt: payload.endAtISO,
+            }),
         organizationId,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
@@ -254,12 +269,18 @@ export default function Events(): JSX.Element {
       description: edge.node.description || '',
       startAt: edge.node.startAt,
       endAt: edge.node.endAt,
+      startDate: edge.node.startDate,
+      endDate: edge.node.endDate,
       startTime: edge.node.allDay
         ? null
-        : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
+        : edge.node.startAt
+          ? dayjs(edge.node.startAt).format('HH:mm:ss')
+          : null,
       endTime: edge.node.allDay
         ? null
-        : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
+        : edge.node.endAt
+          ? dayjs(edge.node.endAt).format('HH:mm:ss')
+          : null,
       allDay: edge.node.allDay,
       location: edge.node.location || '',
       isPublic: edge.node.isPublic,

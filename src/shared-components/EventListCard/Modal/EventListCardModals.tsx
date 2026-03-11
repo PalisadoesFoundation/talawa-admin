@@ -47,6 +47,7 @@ import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import styles from './EventListCardModals.module.css';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import { useTranslation } from 'react-i18next';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
@@ -55,9 +56,11 @@ function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
-  t,
-  tCommon,
 }: InterfaceEventListCardModalsProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventListCard',
+  });
+  const { t: tCommon } = useTranslation('common');
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
@@ -90,10 +93,23 @@ function EventListCardModals({
     'single' | 'following' | 'entireSeries'
   >('single');
   const [eventStartDate, setEventStartDate] = useState(
-    new Date(eventListCardProps.startAt),
+    eventListCardProps.allDay && eventListCardProps.startDate
+      ? new Date(`${eventListCardProps.startDate}T00:00:00.000Z`)
+      : eventListCardProps.startAt
+        ? new Date(eventListCardProps.startAt)
+        : new Date(),
   );
   const [eventEndDate, setEventEndDate] = useState(
-    new Date(eventListCardProps.endAt),
+    eventListCardProps.allDay && eventListCardProps.endDate
+      ? (() => {
+          // Subtract 1 day for RFC 5545 exclusive end date
+          const date = new Date(`${eventListCardProps.endDate}T00:00:00.000Z`);
+          date.setUTCDate(date.getUTCDate() - 1);
+          return date;
+        })()
+      : eventListCardProps.endAt
+        ? new Date(eventListCardProps.endAt)
+        : new Date(),
   );
   // Initialize recurrence with default pattern for recurring events
   const [recurrence, setRecurrence] = useState<InterfaceRecurrenceRule | null>(
@@ -134,6 +150,66 @@ function EventListCardModals({
         : null,
     );
   }, [eventListCardProps.recurrenceRule]);
+
+  // Sync form state with props when event data changes (after refetch)
+  useEffect(() => {
+    console.log('EventListCardModals: Props changed, updating state', {
+      eventId: eventListCardProps.id,
+      allDay: eventListCardProps.allDay,
+      startDate: eventListCardProps.startDate,
+      endDate: eventListCardProps.endDate,
+      startAt: eventListCardProps.startAt,
+      endAt: eventListCardProps.endAt,
+    });
+
+    setAllDayChecked(eventListCardProps.allDay);
+    setPublicChecked(eventListCardProps.isPublic);
+    setRegisterableChecked(eventListCardProps.isRegisterable);
+    setInviteOnlyChecked(Boolean(eventListCardProps.isInviteOnly));
+
+    // Update start date
+    const newStartDate =
+      eventListCardProps.allDay && eventListCardProps.startDate
+        ? new Date(`${eventListCardProps.startDate}T00:00:00.000Z`)
+        : eventListCardProps.startAt
+          ? new Date(eventListCardProps.startAt)
+          : new Date();
+
+    setEventStartDate(newStartDate);
+
+    // Update end date
+    // For all-day events, subtract 1 day from endDate because it's stored as exclusive (RFC 5545)
+    // but displayed as inclusive to the user
+    const newEndDate =
+      eventListCardProps.allDay && eventListCardProps.endDate
+        ? (() => {
+            const date = new Date(
+              `${eventListCardProps.endDate}T00:00:00.000Z`,
+            );
+            date.setUTCDate(date.getUTCDate() - 1);
+            return date;
+          })()
+        : eventListCardProps.endAt
+          ? new Date(eventListCardProps.endAt)
+          : new Date();
+
+    setEventEndDate(newEndDate);
+
+    console.log('EventListCardModals: State updated', {
+      newStartDate,
+      newEndDate,
+    });
+  }, [
+    eventListCardProps.id,
+    eventListCardProps.allDay,
+    eventListCardProps.isPublic,
+    eventListCardProps.isRegisterable,
+    eventListCardProps.isInviteOnly,
+    eventListCardProps.startDate,
+    eventListCardProps.endDate,
+    eventListCardProps.startAt,
+    eventListCardProps.endAt,
+  ]);
 
   // Helper function to check if recurrence rule has changed
   const hasRecurrenceChanged = (): boolean => {
@@ -200,11 +276,43 @@ function EventListCardModals({
     location: eventListCardProps.location,
     startTime:
       eventListCardProps.startTime?.split('.')[0] ||
-      deriveLocalTime(eventListCardProps.startAt),
+      (eventListCardProps.startAt
+        ? deriveLocalTime(eventListCardProps.startAt)
+        : '00:00:00'),
     endTime:
       eventListCardProps.endTime?.split('.')[0] ||
-      deriveLocalTime(eventListCardProps.endAt),
+      (eventListCardProps.endAt
+        ? deriveLocalTime(eventListCardProps.endAt)
+        : '23:59:59'),
   });
+
+  // Sync formState with props when event data changes (after refetch)
+  useEffect(() => {
+    setFormState({
+      name: eventListCardProps.name,
+      eventDescription: eventListCardProps.description,
+      location: eventListCardProps.location,
+      startTime:
+        eventListCardProps.startTime?.split('.')[0] ||
+        (eventListCardProps.startAt
+          ? deriveLocalTime(eventListCardProps.startAt)
+          : '00:00:00'),
+      endTime:
+        eventListCardProps.endTime?.split('.')[0] ||
+        (eventListCardProps.endAt
+          ? deriveLocalTime(eventListCardProps.endAt)
+          : '23:59:59'),
+    });
+  }, [
+    eventListCardProps.id,
+    eventListCardProps.name,
+    eventListCardProps.description,
+    eventListCardProps.location,
+    eventListCardProps.startTime,
+    eventListCardProps.endTime,
+    eventListCardProps.startAt,
+    eventListCardProps.endAt,
+  ]);
 
   // Automatically switch to "following" option when recurrence rule changes
   useEffect(() => {
@@ -352,11 +460,11 @@ function EventListCardModals({
 
       if (data) {
         NotificationToast.success(t('eventDeleted') as string);
+        if (refetchEvents) {
+          await refetchEvents();
+        }
         closeDeleteModal();
         hideViewModal();
-        if (refetchEvents) {
-          refetchEvents();
-        }
       }
     } catch (error: unknown) {
       errorHandler(t, error);

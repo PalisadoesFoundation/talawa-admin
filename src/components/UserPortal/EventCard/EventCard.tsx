@@ -76,6 +76,9 @@ function EventCard({
   location,
   startAt,
   endAt,
+  startDate,
+  endDate,
+  allDay,
   startTime,
   endTime,
   creator,
@@ -179,7 +182,14 @@ function EventCard({
             {dayjs(`${DUMMY_DATE_TIME_PREFIX}${startTime}`).format('h:mm:ss A')}
           </b>
         ) : null}
-        <b> {dayjs(startAt).format('D MMMM YYYY')}</b>
+        <b>
+          {' '}
+          {allDay && startDate
+            ? dayjs(startDate).format('D MMMM YYYY')
+            : startAt
+              ? dayjs(startAt).format('D MMMM YYYY')
+              : 'N/A'}
+        </b>
       </div>
       <div className={styles.eventDetails}>
         {`${t('ends')} `}
@@ -188,7 +198,14 @@ function EventCard({
             {dayjs(`${DUMMY_DATE_TIME_PREFIX}${endTime}`).format('h:mm:ss A')}
           </b>
         ) : null}
-        <b> {dayjs(endAt).format('D MMMM YYYY')}</b>
+        <b>
+          {' '}
+          {allDay && endDate
+            ? dayjs(endDate).format('D MMMM YYYY')
+            : endAt
+              ? dayjs(endAt).format('D MMMM YYYY')
+              : 'N/A'}
+        </b>
       </div>
       <span>
         {`${t('creator')} `}
