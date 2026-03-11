@@ -190,6 +190,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     const url = URL.createObjectURL(file);
     setPreviewUrl(url);
 
+    const inputElement = e.currentTarget;
     try {
       const { objectName, fileHash } = await uploadFileToMinio(file, orgId);
       setAvatarMetadata({
@@ -207,7 +208,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       setAvatarMetadata(null);
       setNewAvatarUploaded(false);
     } finally {
-      e.currentTarget.value = '';
+      if (inputElement) inputElement.value = '';
     }
   };
   const handleFieldChange = (fieldName: string, value: string) => {

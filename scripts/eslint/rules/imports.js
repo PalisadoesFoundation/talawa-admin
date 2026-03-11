@@ -56,7 +56,7 @@ const restrictedImports = [
     id: 'apollo-upload-client',
     name: 'apollo-upload-client',
     message:
-      'apollo-upload-client has been removed. All file uploads must use the useMinioUpload hook with presigned URLs. See utils/MinioUpload.ts.',
+      'apollo-upload-client has been removed. Use the useMinioUpload hook with presigned URLs instead. See utils/MinioUpload.ts.',
   },
   {
     id: 'apollo-upload-client-link',
