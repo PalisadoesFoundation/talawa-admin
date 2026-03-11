@@ -2,7 +2,6 @@ import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -260,6 +259,8 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
+const origCreateObjectURL = URL.createObjectURL;
+const origRevokeObjectURL = URL.revokeObjectURL;
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
 // Helper Functions
@@ -318,11 +319,14 @@ describe('VenueModal', () => {
   });
 
   afterEach(() => {
+    URL.createObjectURL = origCreateObjectURL;
+    URL.revokeObjectURL = origRevokeObjectURL;
     vi.restoreAllMocks();
     cleanup();
   });
 
   test('creates a new venue successfully', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
@@ -331,21 +335,22 @@ describe('VenueModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: 'Test Venue' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      'Test Venue',
+    );
 
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-      target: { value: 'Test Description' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Description'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Description'),
+      'Test Description',
+    );
 
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '100' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '100');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -371,21 +376,23 @@ describe('VenueModal', () => {
       }),
     }));
 
+    const user = userEvent.setup();
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: 'Existing Venue' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-      target: { value: 'Test Description' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '100' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      'Existing Venue',
+    );
+    await user.clear(screen.getByPlaceholderText('Enter Venue Description'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Description'),
+      'Test Description',
+    );
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '100');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       // Should use the fallback message
@@ -405,11 +412,12 @@ describe('VenueModal', () => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
 
-    fireEvent.click(screen.getByTestId('closeimage'));
+    await user.click(screen.getByTestId('closeimage'));
     await waitFor(() => {
       expect(screen.queryByRole('img')).not.toBeInTheDocument();
     });
@@ -433,8 +441,9 @@ describe('Rendering', () => {
   });
 
   test('calls onHide when close button is clicked', async () => {
+    const user = userEvent.setup();
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-    fireEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
       expect(defaultProps.onHide).toHaveBeenCalled();
     });
@@ -485,21 +494,22 @@ describe('Form Fields', () => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
+
     // Set name
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: 'Test Venue' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      'Test Venue',
+    );
 
     // Leave description undefined/null by not setting it
 
     // Set capacity
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '100' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '100');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     // Verify success toast
     await waitFor(() => {
@@ -543,20 +553,19 @@ describe('Form Fields', () => {
       new StaticMockLink(emptyDescriptionMock, true),
     );
 
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: '  Test Venue  ' },
-    });
+    const user = userEvent.setup();
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      '  Test Venue  ',
+    );
     // Leave description empty to test the trim() || '' fallback
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-      target: { value: '   ' }, // Only whitespace
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '100' },
-    });
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Description'),
+      '   ',
+    ); // Only whitespace
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '100');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -572,16 +581,16 @@ describe('Image Handling', () => {
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
     // Use a spy instead of overriding console.error
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    // Restore console.error after each test
     consoleErrorSpy.mockRestore();
-
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
   });
 
   test('displays image preview and clear button when an image is selected', async () => {
@@ -589,9 +598,8 @@ describe('Image Handling', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    const user = userEvent.setup();
+    await user.upload(fileInput, file);
 
     // Wait for the image preview to appear (local preview, no upload needed)
     await waitFor(() => {
@@ -615,12 +623,11 @@ describe('Image Handling', () => {
 
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
+    const user = userEvent.setup();
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    await user.upload(fileInput, file);
 
     await waitFor(() => {
       expect(screen.getByRole('img')).toBeInTheDocument();
@@ -628,10 +635,7 @@ describe('Image Handling', () => {
 
     // Set ref to null before clearing to test the null check
     refValue.current = null as unknown as HTMLInputElement;
-
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('closeimage'));
-    });
+    await user.click(screen.getByTestId('closeimage'));
 
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
     expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
@@ -647,12 +651,11 @@ describe('Image Handling', () => {
 
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
+    const user = userEvent.setup();
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    await user.upload(fileInput, file);
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -677,11 +680,8 @@ describe('Image Handling', () => {
       { type: 'image/png' },
     );
 
-    await act(async () => {
-      fireEvent.change(screen.getByTestId('venueImgUrl'), {
-        target: { files: [largeFile] },
-      });
-    });
+    const user = userEvent.setup();
+    await user.upload(screen.getByTestId('venueImgUrl'), largeFile);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -698,11 +698,8 @@ describe('Image Handling', () => {
       type: 'application/pdf',
     });
 
-    await act(async () => {
-      fireEvent.change(screen.getByTestId('venueImgUrl'), {
-        target: { files: [pdfFile] },
-      });
-    });
+    const user = userEvent.setup({ applyAccept: false });
+    await user.upload(screen.getByTestId('venueImgUrl'), pdfFile);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -761,9 +758,8 @@ describe('Image Handling', () => {
     // Get file input and upload the empty file
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [emptyFile] } });
-    });
+    const user = userEvent.setup();
+    await user.upload(fileInput, emptyFile);
 
     // Check that toast.error was called with the expected message
     await waitFor(() => {
@@ -781,7 +777,8 @@ describe('Image Handling', () => {
 // Validation Tests
 describe('Validation', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'test-obj',
       fileHash: 'test-hash',
@@ -791,15 +788,13 @@ describe('Validation', () => {
   });
 
   test('shows error when venue name is empty', async () => {
+    const user = userEvent.setup();
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '100' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '100');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -810,18 +805,18 @@ describe('Validation', () => {
   });
 
   test('shows error when venue capacity is not a positive number', async () => {
+    const user = userEvent.setup();
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: 'Test Venue' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '-1' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      'Test Venue',
+    );
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '-1');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -832,19 +827,19 @@ describe('Validation', () => {
   });
 
   test('validates capacity edge cases', async () => {
+    const user = userEvent.setup();
     renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
     // Test zero capacity
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: 'Test Venue' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '0' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      'Test Venue',
+    );
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '0');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -857,19 +852,25 @@ describe('Validation', () => {
   // Mutation Tests
   describe('Mutations', () => {
     test('disables submit button during mutation loading state', async () => {
+      const user = userEvent.setup();
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Test Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
+      await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Name'),
+        'Test Venue',
+      );
+      await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Capacity'),
+        '100',
+      );
 
       const submitButton = screen.getByTestId('createVenueBtn');
-      fireEvent.click(submitButton);
 
-      expect(submitButton).toBeDisabled();
+      const clickPromise = user.click(submitButton);
+      await waitFor(() => expect(submitButton).toBeDisabled());
+      await clickPromise;
     });
 
     test('shows success toast when a new venue is created and tests result?.data?.createVenue condition', async () => {
@@ -898,19 +899,24 @@ describe('Validation', () => {
         </MockedProvider>,
       );
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Test Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-        target: { value: 'Test Venue Desc' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
+      const user = userEvent.setup();
+      await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Name'),
+        'Test Venue',
+      );
+      await user.clear(screen.getByPlaceholderText('Enter Venue Description'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Description'),
+        'Test Venue Desc',
+      );
+      await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Capacity'),
+        '100',
+      );
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+      await user.click(screen.getByTestId('createVenueBtn'));
 
       // No success toast should be called with null data
       expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -927,19 +933,24 @@ describe('Validation', () => {
         </MockedProvider>,
       );
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Test Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-        target: { value: 'Test Venue Desc' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
+      const user2 = userEvent.setup();
+      await user2.clear(screen.getByPlaceholderText('Enter Venue Name'));
+      await user2.type(
+        screen.getByPlaceholderText('Enter Venue Name'),
+        'Test Venue',
+      );
+      await user2.clear(screen.getByPlaceholderText('Enter Venue Description'));
+      await user2.type(
+        screen.getByPlaceholderText('Enter Venue Description'),
+        'Test Venue Desc',
+      );
+      await user2.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+      await user2.type(
+        screen.getByPlaceholderText('Enter Venue Capacity'),
+        '100',
+      );
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+      await user2.click(screen.getByTestId('createVenueBtn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -970,20 +981,20 @@ describe('Validation', () => {
       // First render with mock that will not trigger success path
       renderVenueModal(editProps, new StaticMockLink(mockWithoutData, true));
 
-      fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-        target: { value: 'Updated Venue' },
-      });
-      fireEvent.change(
-        screen.getByDisplayValue('Updated description for venue 1'),
-        { target: { value: 'Updated description' } },
+      const user = userEvent.setup();
+      const nameInput = screen.getByDisplayValue('Venue 1');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Updated Venue');
+      const descInput = screen.getByDisplayValue(
+        'Updated description for venue 1',
       );
-      fireEvent.change(screen.getByDisplayValue('100'), {
-        target: { value: '200' },
-      });
+      await user.clear(descInput);
+      await user.type(descInput, 'Updated description');
+      const capInput = screen.getByDisplayValue('100');
+      await user.clear(capInput);
+      await user.type(capInput, '200');
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      });
+      await user.click(screen.getByTestId('updateVenueBtn'));
 
       // No success toast should be called with null data
       expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -1008,19 +1019,24 @@ describe('Validation', () => {
         new StaticMockLink([duplicateNameMock], true),
       );
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Existing Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-        target: { value: 'Test Description' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
+      const user = userEvent.setup();
+      await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Name'),
+        'Existing Venue',
+      );
+      await user.clear(screen.getByPlaceholderText('Enter Venue Description'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Description'),
+        'Test Description',
+      );
+      await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Capacity'),
+        '100',
+      );
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+      await user.click(screen.getByTestId('createVenueBtn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -1031,21 +1047,26 @@ describe('Validation', () => {
     });
 
     test('handles network error during venue creation', async () => {
+      const user = userEvent.setup();
       renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Network Test Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-        target: { value: 'Test Description' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
+      await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Name'),
+        'Network Test Venue',
+      );
+      await user.clear(screen.getByPlaceholderText('Enter Venue Description'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Description'),
+        'Test Description',
+      );
+      await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Capacity'),
+        '100',
+      );
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+      await user.click(screen.getByTestId('createVenueBtn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
@@ -1056,7 +1077,8 @@ describe('Validation', () => {
   // Update Tests
   describe('Venue Updates', () => {
     beforeEach(() => {
-      vi.clearAllMocks();
+      vi.restoreAllMocks();
+      cleanup();
       mockUploadFileToMinio.mockResolvedValue({
         objectName: 'test-obj',
         fileHash: 'test-hash',
@@ -1066,22 +1088,22 @@ describe('Validation', () => {
     });
 
     test('shows success toast when an existing venue is updated', async () => {
+      const user = userEvent.setup();
       renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
 
-      fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-        target: { value: 'Updated Venue' },
-      });
-      fireEvent.change(
-        screen.getByDisplayValue('Updated description for venue 1'),
-        { target: { value: 'Updated description' } },
+      const nameInput = screen.getByDisplayValue('Venue 1');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Updated Venue');
+      const descInput = screen.getByDisplayValue(
+        'Updated description for venue 1',
       );
-      fireEvent.change(screen.getByDisplayValue('100'), {
-        target: { value: '200' },
-      });
+      await user.clear(descInput);
+      await user.type(descInput, 'Updated description');
+      const capInput = screen.getByDisplayValue('100');
+      await user.clear(capInput);
+      await user.type(capInput, '200');
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      });
+      await user.click(screen.getByTestId('updateVenueBtn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -1135,17 +1157,16 @@ describe('Validation', () => {
         new StaticMockLink(editMockWithFallbacks, true),
       );
 
-      fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-        target: { value: 'Updated Venue' },
-      });
+      const user = userEvent.setup();
+      const nameInput = screen.getByDisplayValue('Venue 1');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Updated Venue');
       // Don't set a description value
-      fireEvent.change(screen.getByDisplayValue('100'), {
-        target: { value: '200' },
-      });
+      const capInput = screen.getByDisplayValue('100');
+      await user.clear(capInput);
+      await user.type(capInput, '200');
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      });
+      await user.click(screen.getByTestId('updateVenueBtn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -1156,6 +1177,7 @@ describe('Validation', () => {
     });
 
     test('handles multiple successive updates correctly', async () => {
+      const user = userEvent.setup();
       const mockLink = new StaticMockLink(MOCKS, true);
       const onHide = vi.fn();
       const refetchVenues = vi.fn();
@@ -1165,26 +1187,22 @@ describe('Validation', () => {
       renderVenueModal(props, mockLink);
 
       // First update
-      fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-        target: { value: 'Updated Venue 1' },
-      });
+      const nameInput = screen.getByDisplayValue('Venue 1');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Updated Venue 1');
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      });
+      await user.click(screen.getByTestId('updateVenueBtn'));
 
       await waitFor(() => {
         expect(refetchVenues).toHaveBeenCalledTimes(1);
       });
 
       // Second update
-      fireEvent.change(screen.getByDisplayValue('Updated Venue 1'), {
-        target: { value: 'Updated Venue 2' },
-      });
+      const nameInput2 = screen.getByDisplayValue('Updated Venue 1');
+      await user.clear(nameInput2);
+      await user.type(nameInput2, 'Updated Venue 2');
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      });
+      await user.click(screen.getByTestId('updateVenueBtn'));
 
       await waitFor(() => {
         expect(refetchVenues).toHaveBeenCalledTimes(2);
@@ -1193,22 +1211,20 @@ describe('Validation', () => {
     });
 
     test('handles unchanged name in edit mode', async () => {
+      const user = userEvent.setup();
       renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
 
-      fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-        target: { value: 'Venue 1' }, // Same name
-      });
-      fireEvent.change(screen.getByDisplayValue('100'), {
-        target: { value: '150' },
-      });
-      fireEvent.change(
-        screen.getByDisplayValue('Updated description for venue 1'),
-        { target: { value: 'Changed description' } },
+      // Keep name the same - just re-type it to simulate no change
+      const capInput = screen.getByDisplayValue('100');
+      await user.clear(capInput);
+      await user.type(capInput, '150');
+      const descInput = screen.getByDisplayValue(
+        'Updated description for venue 1',
       );
+      await user.clear(descInput);
+      await user.type(descInput, 'Changed description');
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('updateVenueBtn'));
-      });
+      await user.click(screen.getByTestId('updateVenueBtn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -1238,17 +1254,17 @@ describe('Validation', () => {
 
         renderVenueModal(editProps, new StaticMockLink(errorMock, true));
 
-        fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-          target: { value: 'Updated Venue' },
-        });
-        fireEvent.change(
-          screen.getByDisplayValue('Updated description for venue 1'),
-          { target: { value: 'Test Description' } },
+        const user = userEvent.setup();
+        const nameInput = screen.getByDisplayValue('Venue 1');
+        await user.clear(nameInput);
+        await user.type(nameInput, 'Updated Venue');
+        const descInput = screen.getByDisplayValue(
+          'Updated description for venue 1',
         );
+        await user.clear(descInput);
+        await user.type(descInput, 'Test Description');
 
-        await act(async () => {
-          fireEvent.click(screen.getByTestId('updateVenueBtn'));
-        });
+        await user.click(screen.getByTestId('updateVenueBtn'));
 
         await waitFor(() => {
           expect(NotificationToast.error).toHaveBeenCalled();
@@ -1275,21 +1291,20 @@ describe('Validation', () => {
         new StaticMockLink([duplicateNameMock], true),
       );
 
-      await act(async () => {
-        await userEvent.type(
-          screen.getByPlaceholderText('Enter Venue Name'),
-          'Duplicate Venue',
-        );
-        await userEvent.type(
-          screen.getByPlaceholderText('Enter Venue Description'),
-          'Test Description',
-        );
-        await userEvent.type(
-          screen.getByPlaceholderText('Enter Venue Capacity'),
-          '100',
-        );
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+      const user = userEvent.setup();
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Name'),
+        'Duplicate Venue',
+      );
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Description'),
+        'Test Description',
+      );
+      await user.type(
+        screen.getByPlaceholderText('Enter Venue Capacity'),
+        '100',
+      );
+      await user.click(screen.getByTestId('createVenueBtn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -1317,21 +1332,20 @@ describe('Validation', () => {
 
         renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
 
-        await act(async () => {
-          await userEvent.type(
-            screen.getByPlaceholderText('Enter Venue Name'),
-            'Test Venue',
-          );
-          await userEvent.type(
-            screen.getByPlaceholderText('Enter Venue Description'),
-            'Test Description',
-          );
-          await userEvent.type(
-            screen.getByPlaceholderText('Enter Venue Capacity'),
-            '100',
-          );
-          fireEvent.click(screen.getByTestId('createVenueBtn'));
-        });
+        const user = userEvent.setup();
+        await user.type(
+          screen.getByPlaceholderText('Enter Venue Name'),
+          'Test Venue',
+        );
+        await user.type(
+          screen.getByPlaceholderText('Enter Venue Description'),
+          'Test Description',
+        );
+        await user.type(
+          screen.getByPlaceholderText('Enter Venue Capacity'),
+          '100',
+        );
+        await user.click(screen.getByTestId('createVenueBtn'));
 
         await waitFor(() => {
           expect(NotificationToast.error).toHaveBeenCalled();
@@ -1354,9 +1368,8 @@ describe('Validation', () => {
 
         renderVenueModal(editProps, new StaticMockLink([errorMock], true));
 
-        await act(async () => {
-          fireEvent.click(screen.getByTestId('updateVenueBtn'));
-        });
+        const user = userEvent.setup();
+        await user.click(screen.getByTestId('updateVenueBtn'));
 
         await waitFor(() => {
           expect(NotificationToast.error).toHaveBeenCalled();
@@ -1372,21 +1385,18 @@ describe('Validation', () => {
       );
 
       // Fill in form
-      await act(async () => {
-        const nameInput = screen.getByPlaceholderText('Enter Venue Name');
-        const descInput = screen.getByPlaceholderText(
-          'Enter Venue Description',
-        );
-        const capInput = screen.getByPlaceholderText('Enter Venue Capacity');
+      const user = userEvent.setup();
+      const nameInput = screen.getByPlaceholderText('Enter Venue Name');
+      const descInput = screen.getByPlaceholderText('Enter Venue Description');
+      const capInput = screen.getByPlaceholderText('Enter Venue Capacity');
 
-        await userEvent.type(nameInput, 'Test Venue');
-        await userEvent.type(descInput, 'Test Description');
-        await userEvent.type(capInput, '100');
+      await user.type(nameInput, 'Test Venue');
+      await user.type(descInput, 'Test Description');
+      await user.type(capInput, '100');
 
-        expect(nameInput).toHaveValue('Test Venue');
-        expect(descInput).toHaveValue('Test Description');
-        expect(capInput).toHaveValue('100');
-      });
+      expect(nameInput).toHaveValue('Test Venue');
+      expect(descInput).toHaveValue('Test Description');
+      expect(capInput).toHaveValue('100');
 
       // Completely unmount by setting show to false
       await act(async () => {
@@ -1435,9 +1445,8 @@ describe('Validation', () => {
             'Enter Venue Description',
           );
 
-          await act(async () => {
-            await userEvent.type(descInput, 'New Description');
-          });
+          const user = userEvent.setup();
+          await user.type(descInput, 'New Description');
 
           expect(descInput).toHaveValue('New Description');
         });
@@ -1449,9 +1458,8 @@ describe('Validation', () => {
           );
           const longText = 'a'.repeat(501); // Exceeds 500 char limit
 
-          await act(async () => {
-            await userEvent.type(descInput, longText);
-          });
+          const user = userEvent.setup();
+          await user.type(descInput, longText);
 
           expect(descInput).toHaveValue(longText.slice(0, 500));
         });
@@ -1468,9 +1476,8 @@ describe('Validation', () => {
             new File(['test2'], 'test2.png', { type: 'image/png' }),
           ];
 
-          await act(async () => {
-            await userEvent.upload(fileInput, files);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, files);
 
           // Should only use the first file
           expect(screen.getAllByRole('img')).toHaveLength(1);
@@ -1478,16 +1485,18 @@ describe('Validation', () => {
         // Validation Edge Cases
         describe('Validation Edge Cases', () => {
           test('handles empty venue name', async () => {
+            const user = userEvent.setup();
             renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-            fireEvent.change(
+            await user.clear(
               screen.getByPlaceholderText('Enter Venue Capacity'),
-              { target: { value: '100' } },
+            );
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              '100',
             );
 
-            await act(async () => {
-              fireEvent.click(screen.getByTestId('createVenueBtn'));
-            });
+            await user.click(screen.getByTestId('createVenueBtn'));
 
             await waitFor(() => {
               expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -1515,17 +1524,16 @@ describe('Validation', () => {
 
             renderVenueModal(defaultProps, mockLink);
 
-            await act(async () => {
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Name'),
-                'Test Venue',
-              );
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Capacity'),
-                '100',
-              );
-              fireEvent.click(screen.getByTestId('createVenueBtn'));
-            });
+            const user = userEvent.setup();
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Name'),
+              'Test Venue',
+            );
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              '100',
+            );
+            await user.click(screen.getByTestId('createVenueBtn'));
 
             await waitFor(() => {
               expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -1553,21 +1561,20 @@ describe('Validation', () => {
 
             renderVenueModal(defaultProps, mockLink);
 
-            await act(async () => {
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Name'),
-                'Test Venue',
-              );
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Description'),
-                'Test Description',
-              );
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Capacity'),
-                '100',
-              );
-              fireEvent.click(screen.getByTestId('createVenueBtn'));
-            });
+            const user = userEvent.setup();
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Name'),
+              'Test Venue',
+            );
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              'Test Description',
+            );
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              '100',
+            );
+            await user.click(screen.getByTestId('createVenueBtn'));
 
             await waitFor(() => {
               expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -1596,21 +1603,20 @@ describe('Validation', () => {
 
             renderVenueModal(defaultProps, mockLink);
 
-            await act(async () => {
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Name'),
-                'Test Venue',
-              );
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Description'),
-                'Test Description',
-              );
-              await userEvent.type(
-                screen.getByPlaceholderText('Enter Venue Capacity'),
-                '100',
-              );
-              fireEvent.click(screen.getByTestId('createVenueBtn'));
-            });
+            const user = userEvent.setup();
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Name'),
+              'Test Venue',
+            );
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Description'),
+              'Test Description',
+            );
+            await user.type(
+              screen.getByPlaceholderText('Enter Venue Capacity'),
+              '100',
+            );
+            await user.click(screen.getByTestId('createVenueBtn'));
 
             await waitFor(() => {
               // Check that error handling is called for generic errors
@@ -1623,9 +1629,8 @@ describe('Validation', () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
           const nameInput = screen.getByPlaceholderText('Enter Venue Name');
 
-          await act(async () => {
-            await userEvent.type(nameInput, '!@#$%^&*()');
-          });
+          const user = userEvent.setup();
+          await user.type(nameInput, '!@#$%^&*()');
 
           expect(nameInput).toHaveValue('!@#$%^&*()');
         });
@@ -1636,13 +1641,10 @@ describe('Validation', () => {
             'Enter Venue Capacity',
           );
 
-          await act(async () => {
-            await userEvent.type(capacityInput, 'abc');
-          });
+          const user = userEvent.setup();
+          await user.type(capacityInput, 'abc');
 
-          await act(async () => {
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -1659,10 +1661,8 @@ describe('Validation', () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            // Simulate file input event with no files
-            fireEvent.change(fileInput, { target: { files: null } });
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, []);
 
           // Verify that the form state remains unchanged
           expect(screen.getByPlaceholderText('Enter Venue Name')).toHaveValue(
@@ -1689,21 +1689,20 @@ describe('Validation', () => {
             new StaticMockLink([createVenueMock], true),
           );
 
-          await act(async () => {
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Name'),
-              'Test Venue',
-            );
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              '   ', // Only whitespace
-            );
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              '100',
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            '   ',
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalled();
@@ -1740,12 +1739,11 @@ describe('Validation', () => {
             new StaticMockLink([updateMock], true),
           );
 
-          await act(async () => {
-            fireEvent.change(screen.getByDisplayValue('Original Venue'), {
-              target: { value: 'Updated Venue' },
-            });
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          const nameInput = screen.getByDisplayValue('Original Venue');
+          await user.clear(nameInput);
+          await user.type(nameInput, 'Updated Venue');
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -1765,9 +1763,8 @@ describe('Validation', () => {
           renderVenueModal(editPropsWithUndefinedVenueData, mockLink);
 
           // Attempt to submit form
-          await act(async () => {
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           // This test ensures no runtime errors occur
           expect(screen.getByTestId('updateVenueBtn')).toBeInTheDocument();
@@ -1781,9 +1778,8 @@ describe('Validation', () => {
 
           const longDescription = 'a'.repeat(600); // More than 500 characters
 
-          await act(async () => {
-            await userEvent.type(descInput, longDescription);
-          });
+          const user = userEvent.setup();
+          await user.type(descInput, longDescription);
 
           // Verify that the description is truncated to 500 characters
           expect(descInput).toHaveValue(longDescription.slice(0, 500));
@@ -1805,21 +1801,20 @@ describe('Validation', () => {
 
           renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
 
-          await act(async () => {
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Name'),
-              'Test Venue',
-            );
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              'Test Description',
-            );
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              '100',
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            'Test Description',
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalled();
@@ -1830,10 +1825,8 @@ describe('Validation', () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            // Simulate file input event with no files
-            fireEvent.change(fileInput, { target: { files: null } });
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, []);
 
           // Verify that no image preview is shown
           expect(screen.queryByRole('img')).not.toBeInTheDocument();
@@ -1843,10 +1836,8 @@ describe('Validation', () => {
           renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            // Simulate file input event with empty files array
-            fireEvent.change(fileInput, { target: { files: [] } });
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, []);
 
           // Verify that no image preview is shown
           expect(screen.queryByRole('img')).not.toBeInTheDocument();
@@ -1861,9 +1852,8 @@ describe('Validation', () => {
           const file = new File(['test'], 'test.png', { type: 'image/png' });
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            await userEvent.upload(fileInput, file);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, file);
 
           await waitFor(() => {
             expect(screen.getByRole('img')).toBeInTheDocument();
@@ -1991,21 +1981,20 @@ describe('Validation', () => {
           );
 
           // Fill form and submit without uploading any file
-          await act(async () => {
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Name'),
-              'Test Venue',
-            );
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              'Test Description',
-            );
-            await userEvent.type(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              '100',
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            'Test Description',
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2036,15 +2025,14 @@ describe('Validation', () => {
           );
 
           // Update form and submit without uploading any file
-          await act(async () => {
-            fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-              target: { value: 'Updated Venue' },
-            });
-            fireEvent.change(screen.getByDisplayValue('100'), {
-              target: { value: '200' },
-            });
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          const nameInput = screen.getByDisplayValue('Venue 1');
+          await user.clear(nameInput);
+          await user.type(nameInput, 'Updated Venue');
+          const capInput = screen.getByDisplayValue('100');
+          await user.clear(capInput);
+          await user.type(capInput, '200');
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2075,9 +2063,8 @@ describe('Validation', () => {
           );
 
           // Click clear image button - this should work without errors
-          await act(async () => {
-            fireEvent.click(screen.getByTestId('closeimage'));
-          });
+          const user = userEvent.setup();
+          await user.click(screen.getByTestId('closeimage'));
 
           // Verify that the image preview is removed
           expect(screen.queryByRole('img')).not.toBeInTheDocument();
@@ -2088,19 +2075,19 @@ describe('Validation', () => {
           const emptyMocks: never[] = [];
           renderVenueModal(defaultProps, new StaticMockLink(emptyMocks, true));
 
-          fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-            target: { value: 'Test Venue' },
-          });
-          fireEvent.change(
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
             screen.getByPlaceholderText('Enter Venue Capacity'),
-            {
-              target: { value: '0' },
-            },
+            '0',
           );
 
-          await act(async () => {
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2115,19 +2102,19 @@ describe('Validation', () => {
           const emptyMocks: never[] = [];
           renderVenueModal(defaultProps, new StaticMockLink(emptyMocks, true));
 
-          fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-            target: { value: 'Test Venue' },
-          });
-          fireEvent.change(
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
             screen.getByPlaceholderText('Enter Venue Capacity'),
-            {
-              target: { value: '-5' },
-            },
+            '-5',
           );
 
-          await act(async () => {
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2157,19 +2144,19 @@ describe('Validation', () => {
             new StaticMockLink([createVenueWithDecimalCapacityMock], true),
           );
 
-          fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-            target: { value: 'Test Venue' },
-          });
-          fireEvent.change(
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
             screen.getByPlaceholderText('Enter Venue Capacity'),
-            {
-              target: { value: '10.5' },
-            },
+            '10.5',
           );
 
-          await act(async () => {
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2184,19 +2171,19 @@ describe('Validation', () => {
           const emptyMocks: never[] = [];
           renderVenueModal(defaultProps, new StaticMockLink(emptyMocks, true));
 
-          fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-            target: { value: 'Test Venue' },
-          });
-          fireEvent.change(
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
             screen.getByPlaceholderText('Enter Venue Capacity'),
-            {
-              target: { value: 'not-a-number' },
-            },
+            'not-a-number',
           );
 
-          await act(async () => {
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2257,9 +2244,8 @@ describe('Validation', () => {
           const file = new File(['test'], 'test.txt', { type: 'text/plain' });
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            fireEvent.change(fileInput, { target: { files: [file] } });
-          });
+          const user = userEvent.setup({ applyAccept: false });
+          await user.upload(fileInput, file);
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2280,9 +2266,8 @@ describe('Validation', () => {
           );
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            await userEvent.upload(fileInput, largeFile);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, largeFile);
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2298,9 +2283,8 @@ describe('Validation', () => {
           const emptyFile = new File([], 'empty.png', { type: 'image/png' });
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            await userEvent.upload(fileInput, emptyFile);
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, emptyFile);
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2329,12 +2313,11 @@ describe('Validation', () => {
           );
 
           // Only change capacity, keep name the same
-          await act(async () => {
-            fireEvent.change(screen.getByDisplayValue('100'), {
-              target: { value: '150' },
-            });
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          const capInput = screen.getByDisplayValue('100');
+          await user.clear(capInput);
+          await user.type(capInput, '150');
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2345,93 +2328,103 @@ describe('Validation', () => {
         });
 
         test('handles clearImageInput with blob URL cleanup', async () => {
-          // Mock URL methods
+          // Mock URL methods - save originals to prevent global leakage
+          const origCreate = URL.createObjectURL;
+          const origRevoke = URL.revokeObjectURL;
           const revokeObjectURLSpy = vi.fn();
           const createObjectURLSpy = vi.fn().mockReturnValue('blob:mock-url');
           global.URL.revokeObjectURL = revokeObjectURLSpy;
           global.URL.createObjectURL = createObjectURLSpy;
 
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          try {
+            renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-          // Upload a file to create a blob URL
-          const file = new File(['test'], 'test.png', { type: 'image/png' });
-          const fileInput = screen.getByTestId('venueImgUrl');
+            // Upload a file to create a blob URL
+            const file = new File(['test'], 'test.png', { type: 'image/png' });
+            const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            fireEvent.change(fileInput, {
-              target: { files: [file] },
-            });
-          });
+            const user = userEvent.setup();
+            await user.upload(fileInput, file);
 
-          // Click the clear button to trigger clearImageInput
-          const clearButton = screen.getByTestId('closeimage');
-          await act(async () => {
-            fireEvent.click(clearButton);
-          });
+            // Click the clear button to trigger clearImageInput
+            const clearButton = screen.getByTestId('closeimage');
+            await user.click(clearButton);
 
-          // Verify that revokeObjectURL was called
-          expect(revokeObjectURLSpy).toHaveBeenCalled();
+            // Verify that revokeObjectURL was called
+            expect(revokeObjectURLSpy).toHaveBeenCalled();
+          } finally {
+            global.URL.createObjectURL = origCreate;
+            global.URL.revokeObjectURL = origRevoke;
+          }
         });
 
         test('handles component unmount with blob URL cleanup', async () => {
-          // Mock URL methods
+          // Mock URL methods - save originals to prevent global leakage
+          const origCreate = URL.createObjectURL;
+          const origRevoke = URL.revokeObjectURL;
           const revokeObjectURLSpy = vi.fn();
           const createObjectURLSpy = vi.fn().mockReturnValue('blob:mock-url');
           global.URL.revokeObjectURL = revokeObjectURLSpy;
           global.URL.createObjectURL = createObjectURLSpy;
 
-          const { unmount } = renderVenueModal(
-            defaultProps,
-            new StaticMockLink(MOCKS, true),
-          );
+          try {
+            const { unmount } = renderVenueModal(
+              defaultProps,
+              new StaticMockLink(MOCKS, true),
+            );
 
-          // Upload a file to create a blob URL
-          const file = new File(['test'], 'test.png', { type: 'image/png' });
-          const fileInput = screen.getByTestId('venueImgUrl');
+            // Upload a file to create a blob URL
+            const file = new File(['test'], 'test.png', { type: 'image/png' });
+            const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            fireEvent.change(fileInput, {
-              target: { files: [file] },
-            });
-          });
+            const user = userEvent.setup();
+            await user.upload(fileInput, file);
 
-          // Unmount the component to trigger the cleanup useEffect
-          unmount();
+            // Unmount the component to trigger the cleanup useEffect
+            unmount();
 
-          // Verify that revokeObjectURL was called during cleanup
-          expect(revokeObjectURLSpy).toHaveBeenCalled();
+            // Verify that revokeObjectURL was called during cleanup
+            expect(revokeObjectURLSpy).toHaveBeenCalled();
+          } finally {
+            global.URL.createObjectURL = origCreate;
+            global.URL.revokeObjectURL = origRevoke;
+          }
         });
 
         test('handles file upload with existing blob URL cleanup', async () => {
-          // Mock URL methods
+          // Mock URL methods - save originals to prevent global leakage
+          const origCreate = URL.createObjectURL;
+          const origRevoke = URL.revokeObjectURL;
           const revokeObjectURLSpy = vi.fn();
           const createObjectURLSpy = vi.fn().mockReturnValue('blob:mock-url');
           global.URL.revokeObjectURL = revokeObjectURLSpy;
           global.URL.createObjectURL = createObjectURLSpy;
 
-          renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+          try {
+            renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-          // Upload first file to create a blob URL
-          const file1 = new File(['test1'], 'test1.png', { type: 'image/png' });
-          const fileInput = screen.getByTestId('venueImgUrl');
-
-          await act(async () => {
-            fireEvent.change(fileInput, {
-              target: { files: [file1] },
+            // Upload first file to create a blob URL
+            const file1 = new File(['test1'], 'test1.png', {
+              type: 'image/png',
             });
-          });
+            const fileInput = screen.getByTestId('venueImgUrl');
 
-          // Upload second file to trigger cleanup of first blob URL
-          const file2 = new File(['test2'], 'test2.png', { type: 'image/png' });
+            const user = userEvent.setup();
+            await user.upload(fileInput, file1);
 
-          await act(async () => {
-            fireEvent.change(fileInput, {
-              target: { files: [file2] },
+            // Upload second file to trigger cleanup of first blob URL
+            const file2 = new File(['test2'], 'test2.png', {
+              type: 'image/png',
             });
-          });
 
-          // Verify that revokeObjectURL was called to cleanup the first blob URL
-          expect(revokeObjectURLSpy).toHaveBeenCalled();
+            await user.upload(fileInput, file2);
+
+            // Verify that revokeObjectURL was called to cleanup the first blob URL
+            expect(revokeObjectURLSpy).toHaveBeenCalled();
+          } finally {
+            global.URL.createObjectURL = origCreate;
+            global.URL.revokeObjectURL = origRevoke;
+          }
         });
 
         test('handles mutation error with alreadyExists message', async () => {
@@ -2453,24 +2446,25 @@ describe('Validation', () => {
             new StaticMockLink([createVenueAlreadyExistsMock], true),
           );
 
-          await act(async () => {
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-              target: { value: 'Test Venue' },
-            });
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              {
-                target: { value: 'Test Description' },
-              },
-            );
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              {
-                target: { value: '100' },
-              },
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(
+            screen.getByPlaceholderText('Enter Venue Description'),
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            'Test Description',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2499,24 +2493,25 @@ describe('Validation', () => {
             new StaticMockLink([createVenueAlreadyExistsMock], true),
           );
 
-          await act(async () => {
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-              target: { value: 'Test Venue' },
-            });
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              {
-                target: { value: 'Test Description' },
-              },
-            );
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              {
-                target: { value: '100' },
-              },
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(
+            screen.getByPlaceholderText('Enter Venue Description'),
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            'Test Description',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2545,12 +2540,11 @@ describe('Validation', () => {
             new StaticMockLink([updateVenueWithNameChangeMock], true),
           );
 
-          await act(async () => {
-            fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-              target: { value: 'New Venue Name' },
-            });
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          const nameInput = screen.getByDisplayValue('Venue 1');
+          await user.clear(nameInput);
+          await user.type(nameInput, 'New Venue Name');
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2564,23 +2558,15 @@ describe('Validation', () => {
           renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
 
           // Fill in the form with unchanged name but invalid capacity
-          const nameInput = screen.getByDisplayValue('Venue 1');
-          const capacityInput = screen.getByDisplayValue('100');
-
-          await act(async () => {
-            fireEvent.change(nameInput, {
-              target: { value: 'Venue 1' }, // Same as original name
-            });
-            fireEvent.change(capacityInput, {
-              target: { value: 'invalid' }, // Invalid capacity
-            });
-          });
+          const user = userEvent.setup();
+          // Keep name the same, change capacity to NaN
+          const capInput = screen.getByDisplayValue('100');
+          await user.clear(capInput);
+          await user.type(capInput, 'invalid');
 
           // Submit the form
           const submitButton = screen.getByTestId('updateVenueBtn');
-          await act(async () => {
-            fireEvent.click(submitButton);
-          });
+          await user.click(submitButton);
 
           // Verify error toast is shown
           expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2607,12 +2593,8 @@ describe('Validation', () => {
             new StaticMockLink([falsyResultMock], true),
           );
 
-          await act(async () => {
-            fireEvent.change(screen.getByDisplayValue('100'), {
-              target: { value: '100' },
-            });
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           // Should not show success toast when result is falsy
           expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -2637,24 +2619,25 @@ describe('Validation', () => {
             new StaticMockLink([falsyResultMock], true),
           );
 
-          await act(async () => {
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-              target: { value: 'Test Venue' },
-            });
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              {
-                target: { value: 'Test description' },
-              },
-            );
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              {
-                target: { value: '100' },
-              },
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(
+            screen.getByPlaceholderText('Enter Venue Description'),
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            'Test description',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           // Should not show success toast when result is falsy
           expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -2676,24 +2659,25 @@ describe('Validation', () => {
 
           renderVenueModal(defaultProps, new StaticMockLink([errorMock], true));
 
-          await act(async () => {
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-              target: { value: 'Test Venue' },
-            });
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              {
-                target: { value: 'Test description' },
-              },
-            );
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              {
-                target: { value: '100' },
-              },
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(
+            screen.getByPlaceholderText('Enter Venue Description'),
+          );
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Description'),
+            'Test description',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
@@ -2721,16 +2705,12 @@ describe('Validation', () => {
             new StaticMockLink([emptyDescriptionMock], true),
           );
 
-          await act(async () => {
-            // Clear the description field
-            fireEvent.change(
-              screen.getByDisplayValue('Updated description for venue 1'),
-              {
-                target: { value: '' },
-              },
-            );
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          const descField = screen.getByDisplayValue(
+            'Updated description for venue 1',
+          );
+          await user.clear(descField);
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2747,17 +2727,12 @@ describe('Validation', () => {
           const file = new File(['test'], 'test.png', { type: 'image/png' });
           const fileInput = screen.getByTestId('venueImgUrl');
 
-          await act(async () => {
-            fireEvent.change(fileInput, {
-              target: { files: [file] },
-            });
-          });
+          const user = userEvent.setup();
+          await user.upload(fileInput, file);
 
           // Click the clear button
           const clearButton = screen.getByTestId('closeimage');
-          await act(async () => {
-            fireEvent.click(clearButton);
-          });
+          await user.click(clearButton);
 
           // Verify the file input value is cleared
           expect((fileInput as HTMLInputElement).value).toBe('');
@@ -2781,16 +2756,12 @@ describe('Validation', () => {
             new StaticMockLink([updateVenueWithNullDescriptionMock], true),
           );
 
-          await act(async () => {
-            // Set description to null/undefined to test the fallback
-            fireEvent.change(
-              screen.getByDisplayValue('Updated description for venue 1'),
-              {
-                target: { value: '' },
-              },
-            );
-            fireEvent.click(screen.getByTestId('updateVenueBtn'));
-          });
+          const user = userEvent.setup();
+          const descField2 = screen.getByDisplayValue(
+            'Updated description for venue 1',
+          );
+          await user.clear(descField2);
+          await user.click(screen.getByTestId('updateVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2819,24 +2790,18 @@ describe('Validation', () => {
             new StaticMockLink([createVenueWithNullDescriptionMock], true),
           );
 
-          await act(async () => {
-            fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-              target: { value: 'Test Venue' },
-            });
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Description'),
-              {
-                target: { value: '' }, // Empty description
-              },
-            );
-            fireEvent.change(
-              screen.getByPlaceholderText('Enter Venue Capacity'),
-              {
-                target: { value: '100' },
-              },
-            );
-            fireEvent.click(screen.getByTestId('createVenueBtn'));
-          });
+          const user = userEvent.setup();
+          await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Name'),
+            'Test Venue',
+          );
+          await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+          await user.type(
+            screen.getByPlaceholderText('Enter Venue Capacity'),
+            '100',
+          );
+          await user.click(screen.getByTestId('createVenueBtn'));
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -2884,18 +2849,19 @@ describe('Validation', () => {
       </MockedProvider>,
     );
 
-    // Fill form
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: 'Test Venue' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '100' },
-    });
+    const user = userEvent.setup();
+    await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      'Test Venue',
+    );
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '100');
 
     // Upload a file
     const file = new File(['test'], 'test-image.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
-    await userEvent.upload(fileInput, file);
+    await user.upload(fileInput, file);
 
     // Wait for upload to complete
     await waitFor(() => {
@@ -2904,9 +2870,7 @@ describe('Validation', () => {
     });
 
     // Submit
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       expect(mutationSpy).toHaveBeenCalled();
@@ -2942,18 +2906,18 @@ describe('Validation', () => {
 
     renderVenueModal(editProps, new StaticMockLink([unchangedNameMock], true));
 
+    const user = userEvent.setup();
     // Don't change the name - leave it as 'Venue 1'
-    fireEvent.change(screen.getByDisplayValue('100'), {
-      target: { value: '150' },
-    });
-    fireEvent.change(
-      screen.getByDisplayValue('Updated description for venue 1'),
-      { target: { value: 'Changed description' } },
+    const capInput = screen.getByDisplayValue('100');
+    await user.clear(capInput);
+    await user.type(capInput, '150');
+    const descInputEl = screen.getByDisplayValue(
+      'Updated description for venue 1',
     );
+    await user.clear(descInputEl);
+    await user.type(descInputEl, 'Changed description');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('updateVenueBtn'));
-    });
+    await user.click(screen.getByTestId('updateVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -3007,16 +2971,15 @@ describe('Validation', () => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     // Change name (this triggers the full update path with name included)
-    fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-      target: { value: 'New Venue Name' },
-    });
+    const nameInput = screen.getByDisplayValue('Venue 1');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'New Venue Name');
 
     // Upload file
     const fileInput = screen.getByTestId('venueImgUrl');
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    await user.upload(fileInput, file);
 
     // Wait for upload to complete
     await waitFor(() => {
@@ -3024,9 +2987,7 @@ describe('Validation', () => {
       expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('updateVenueBtn'));
-    });
+    await user.click(screen.getByTestId('updateVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -3081,22 +3042,24 @@ describe('Validation', () => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     // Fill form
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-      target: { value: 'New Venue' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-      target: { value: 'Test Description' },
-    });
-    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-      target: { value: '100' },
-    });
+    await user.clear(screen.getByPlaceholderText('Enter Venue Name'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Name'),
+      'New Venue',
+    );
+    await user.clear(screen.getByPlaceholderText('Enter Venue Description'));
+    await user.type(
+      screen.getByPlaceholderText('Enter Venue Description'),
+      'Test Description',
+    );
+    await user.clear(screen.getByPlaceholderText('Enter Venue Capacity'));
+    await user.type(screen.getByPlaceholderText('Enter Venue Capacity'), '100');
 
     // Upload file
     const fileInput = screen.getByTestId('venueImgUrl');
-    await act(async () => {
-      await userEvent.upload(fileInput, file);
-    });
+    await user.upload(fileInput, file);
 
     // Wait for upload to complete
     await waitFor(() => {
@@ -3104,9 +3067,7 @@ describe('Validation', () => {
       expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createVenueBtn'));
-    });
+    await user.click(screen.getByTestId('createVenueBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
@@ -3135,18 +3096,15 @@ describe('Validation', () => {
     const file = new File(['test'], 'test-image.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [file] } });
-    });
+    const user = userEvent.setup();
+    await user.upload(fileInput, file);
 
     // Verify blob was created
     expect(createObjectURLSpy).toHaveBeenCalled();
 
     // Clear the image
     const clearButton = screen.getByTestId('closeimage');
-    await act(async () => {
-      fireEvent.click(clearButton);
-    });
+    await user.click(clearButton);
 
     // Verify blob URL was revoked
     expect(revokeObjectURLSpy).toHaveBeenCalledWith(
@@ -3176,9 +3134,8 @@ describe('Validation', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [file] } });
-    });
+    const user = userEvent.setup();
+    await user.upload(fileInput, file);
 
     await waitFor(() => {
       expect(screen.getByRole('img')).toBeInTheDocument();
@@ -3219,17 +3176,12 @@ describe('Validation', () => {
 
     renderVenueModal(editProps, new StaticMockLink([falsyResultMock], true));
 
-    // Change the name to trigger the name change path (line 169)
-    fireEvent.change(screen.getByDisplayValue('Venue 1'), {
-      target: { value: 'Updated Venue Name' },
-    });
-    fireEvent.change(screen.getByDisplayValue('100'), {
-      target: { value: '100' },
-    });
+    const user = userEvent.setup();
+    const nameInput = screen.getByDisplayValue('Venue 1');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Updated Venue Name');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('updateVenueBtn'));
-    });
+    await user.click(screen.getByTestId('updateVenueBtn'));
 
     // Should not show success toast when result is falsy
     await waitFor(() => {
@@ -3295,19 +3247,16 @@ describe('Validation', () => {
 
     // DON'T change the name - keep it as 'Original Name'
     // Only change capacity and description
-    const capacityInput = screen.getByDisplayValue('100');
-    const descInput = screen.getByDisplayValue('Original description');
-
-    await act(async () => {
-      fireEvent.change(capacityInput, { target: { value: '150' } });
-      fireEvent.change(descInput, { target: { value: 'Updated description' } });
-    });
+    const user = userEvent.setup();
+    const capInput = screen.getByDisplayValue('100');
+    await user.clear(capInput);
+    await user.type(capInput, '150');
+    const descInputEl = screen.getByDisplayValue('Original description');
+    await user.clear(descInputEl);
+    await user.type(descInputEl, 'Updated description');
 
     const updateBtn = screen.getByTestId('updateVenueBtn');
-
-    await act(async () => {
-      fireEvent.click(updateBtn);
-    });
+    await user.click(updateBtn);
 
     // Wait for the success path to execute
     await waitFor(() => {
@@ -3356,27 +3305,26 @@ describe('Validation', () => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     // Fill the form
-    await act(async () => {
-      fireEvent.change(screen.getByPlaceholderText(/Enter Venue Name/i), {
-        target: { value: 'Brand New Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText(/Enter Venue Capacity/i), {
-        target: { value: '200' },
-      });
-      fireEvent.change(
-        screen.getByPlaceholderText(/Enter Venue Description/i),
-        {
-          target: { value: 'Test description' },
-        },
-      );
-    });
+    await user.clear(screen.getByPlaceholderText(/Enter Venue Name/i));
+    await user.type(
+      screen.getByPlaceholderText(/Enter Venue Name/i),
+      'Brand New Venue',
+    );
+    await user.clear(screen.getByPlaceholderText(/Enter Venue Capacity/i));
+    await user.type(
+      screen.getByPlaceholderText(/Enter Venue Capacity/i),
+      '200',
+    );
+    await user.clear(screen.getByPlaceholderText(/Enter Venue Description/i));
+    await user.type(
+      screen.getByPlaceholderText(/Enter Venue Description/i),
+      'Test description',
+    );
 
     const createBtn = screen.getByTestId('createVenueBtn');
-
-    await act(async () => {
-      fireEvent.click(createBtn);
-    });
+    await user.click(createBtn);
 
     // Wait for the success to be called
     await waitFor(() => {
@@ -3386,6 +3334,8 @@ describe('Validation', () => {
 
   test('covers line 198 - blob URL cleanup when clearing image', async () => {
     // CRITICAL: Mock MUST return a string starting with 'blob:'
+    const savedCreate = URL.createObjectURL;
+    const savedRevoke = URL.revokeObjectURL;
     const createObjectURLMock = vi.fn(
       () => 'blob:http://localhost:3000/test-uuid',
     );
@@ -3414,9 +3364,8 @@ describe('Validation', () => {
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [file] } });
-    });
+    const user = userEvent.setup();
+    await user.upload(fileInput, file);
 
     // Verify blob URL was created
     await waitFor(() => {
@@ -3426,10 +3375,7 @@ describe('Validation', () => {
 
     // Now click the clear button to trigger clearImageInput
     const clearBtn = screen.getByTestId('closeimage');
-
-    await act(async () => {
-      fireEvent.click(clearBtn);
-    });
+    await user.click(clearBtn);
 
     // Verify line 198 was executed - revokeObjectURL should be called
     expect(revokeObjectURLMock).toHaveBeenCalledWith(
@@ -3437,10 +3383,14 @@ describe('Validation', () => {
     );
 
     unmount();
+    URL.createObjectURL = savedCreate;
+    URL.revokeObjectURL = savedRevoke;
   });
 
   test('covers line 223 - blob URL cleanup on unmount', async () => {
     // CRITICAL: Mock MUST return a string starting with 'blob:'
+    const savedCreate2 = URL.createObjectURL;
+    const savedRevoke2 = URL.revokeObjectURL;
     const createObjectURLMock = vi.fn(
       () => 'blob:http://localhost:3000/unmount-test',
     );
@@ -3469,9 +3419,8 @@ describe('Validation', () => {
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('venueImgUrl');
 
-    await act(async () => {
-      fireEvent.change(fileInput, { target: { files: [file] } });
-    });
+    const user = userEvent.setup();
+    await user.upload(fileInput, file);
 
     // Verify blob URL was created
     await waitFor(() => {
@@ -3491,5 +3440,8 @@ describe('Validation', () => {
     expect(revokeObjectURLMock).toHaveBeenCalledWith(
       'blob:http://localhost:3000/unmount-test',
     );
+
+    URL.createObjectURL = savedCreate2;
+    URL.revokeObjectURL = savedRevoke2;
   });
 });

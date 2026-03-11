@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -181,7 +181,7 @@ describe('CustomRecurrenceModal', () => {
       },
     });
 
-    expect(screen.getByText('repeatsOn')).toBeInTheDocument();
+    expect(screen.getByText('Repeats On')).toBeInTheDocument();
 
     const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
     expect(dayButtons).toHaveLength(7);

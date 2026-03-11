@@ -53,7 +53,7 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'shared-components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router';
@@ -79,7 +79,7 @@ import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import {
   REMOVE_USER_TAG,
   UNASSIGN_USER_TAG,
@@ -578,16 +578,12 @@ function ManageTag(): JSX.Element {
         addPeopleToTagModalIsOpen={addPeopleToTagModal.isOpen}
         hideAddPeopleToTagModal={addPeopleToTagModal.close}
         refetchAssignedMembersData={userTagAssignedMembersRefetch}
-        t={t}
-        tCommon={tCommon}
       />
       {/* Assign People To Tags Modal */}
       <TagActions
         tagActionsModalIsOpen={tagActionsModal.isOpen}
         hideTagActionsModal={tagActionsModal.close}
         tagActionType={tagActionType}
-        t={t}
-        tCommon={tCommon}
       />
       {/* Unassign User Tag Modal */}
       <UnassignUserTagModal
@@ -602,8 +598,6 @@ function ManageTag(): JSX.Element {
         newTagName={newTagName}
         setNewTagName={setNewTagName}
         handleEditUserTag={handleEditUserTag}
-        t={t}
-        tCommon={tCommon}
       />
       {/* Remove User Tag Modal */}
       <RemoveUserTagModal

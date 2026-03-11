@@ -107,6 +107,15 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "Compte lié avec succès.",
+    "successfullyLoggedIn": "Connecté avec succès.",
+    "oauthProviderError": "Erreur du fournisseur OAuth : {{error}}",
+    "noAuthCodeReceived": "Aucun code d'autorisation reçu du fournisseur OAuth.",
+    "oauthAuthenticationFailed": "Échec de l'authentification OAuth. Veuillez réessayer.",
+    "oauthConfigurationNotFound": "Configuration OAuth introuvable pour le fournisseur.",
+    "csrfValidationFailed": "La validation CSRF a échoué. Veuillez réessayer."
+  },
   "verifyEmail": {
     "title": "Vérifier l'Email",
     "loginRequired": "Connexion requise",
@@ -251,7 +260,7 @@
     "avatar": "Avatar de {{title}}",
     "eventLocation": "Lieu de l'événement",
     "eventDate": "Date de l'événement",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Publié le :",
     "author": "Auteur :"
   },
@@ -489,7 +498,8 @@
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé",
     "showPassword": "Afficher le mot de passe",
-    "hidePassword": "Masquer le mot de passe"
+    "hidePassword": "Masquer le mot de passe",
+    "emailNotAvailable": "E-mail non disponible"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -938,6 +948,8 @@
     "isRegisterable": "Peut S'enregistrer",
     "creator": "Créateur",
     "edit": "Modifier",
+    "invalidDetailsMessage": "Veuillez entrer une valeur valide",
+    "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour",
     "delete": "Supprimer",
     "viewDetails": "Afficher les Détails",
     "noEventsFound": "Aucun événement trouvé",
@@ -946,7 +958,8 @@
     "noOfAttendees": "Nombre de Participants",
     "noRegistrations": "Aucune Inscription",
     "registrants": "Inscrits",
-    "to": "À"
+    "to": "À",
+    "deleteOptionRequired": "L'option de suppression est requise"
   },
   "funds": {
     "title": "Fonds",
@@ -1417,7 +1430,24 @@
     "enterState": "Entrez l'état",
     "select": "Sélectionner",
     "asYourCountry": "comme votre pays",
-    "actions": "Actions"
+    "actions": "Actions",
+    "changePassword": "Changer le mot de passe",
+    "oldPassword": "Ancien mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "password": "Mot de passe",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
+    "passNoMatch": "Le nouveau mot de passe et la confirmation ne correspondent pas",
+    "passwordChangedSuccessfully": "Mot de passe modifié avec succès",
+    "enterCurrentPassword": "Veuillez saisir votre mot de passe actuel"
+  },
+  "passwordValidation": {
+    "minLength": "Le mot de passe doit contenir au moins 8 caractères.",
+    "uppercaseRequired": "Le mot de passe doit contenir au moins une lettre majuscule.",
+    "lowercaseRequired": "Le mot de passe doit contenir au moins une lettre minuscule.",
+    "numberRequired": "Le mot de passe doit contenir au moins un chiffre.",
+    "specialCharRequired": "Le mot de passe doit contenir au moins un caractère spécial."
   },
   "people": {
     "title": "Personnes",
@@ -1429,7 +1459,8 @@
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible"
+    "emailNotAvailable": "E-mail non disponible",
+    "membersList": "Liste des membres"
   },
   "userLogin": {
     "login": "Se connecter",
@@ -1926,8 +1957,7 @@
     "conversationAlreadyExists": "Une conversation avec {{userName}} existe déjà !",
     "thisUser": "cet utilisateur",
     "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?",
-    "memberActionsMenu": "Menu des actions des membres",
-    "editImage": "Modifier l'image"
+    "memberActionsMenu": "Menu des actions des membres"
   },
   "userChatRoom": {
     "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",

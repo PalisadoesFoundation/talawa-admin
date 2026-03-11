@@ -107,6 +107,15 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "Cuenta vinculada exitosamente",
+    "successfullyLoggedIn": "Inicio de sesión exitoso",
+    "oauthProviderError": "Error del proveedor OAuth: {{error}}",
+    "noAuthCodeReceived": "No se recibió código de autorización del proveedor OAuth",
+    "oauthAuthenticationFailed": "Autenticación OAuth fallida. Por favor, inténtalo de nuevo.",
+    "oauthConfigurationNotFound": "Configuración OAuth no encontrada para el proveedor.",
+    "csrfValidationFailed": "La validación CSRF falló. Por favor, inténtalo de nuevo."
+  },
   "verifyEmail": {
     "title": "Verificar Email",
     "loginRequired": "Inicio de sesión requerido",
@@ -484,7 +493,8 @@
     "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario",
     "showPassword": "Mostrar contraseña",
-    "hidePassword": "Ocultar contraseña"
+    "hidePassword": "Ocultar contraseña",
+    "emailNotAvailable": "Correo electrónico no disponible"
   },
   "organizationCard": {
     "join": "Unirse",
@@ -933,6 +943,8 @@
     "isRegisterable": "Es Registrable",
     "creator": "Creador",
     "edit": "Editar",
+    "invalidDetailsMessage": "Por favor, introduzca un valor válido",
+    "selectAtLeastOneDay": "Por favor, seleccione al menos un día",
     "delete": "Eliminar",
     "viewDetails": "Ver Detalles",
     "noEventsFound": "No se encontraron eventos",
@@ -941,7 +953,8 @@
     "noOfAttendees": "Número de Asistentes",
     "noRegistrations": "Sin Registros",
     "registrants": "Registrados",
-    "to": "A"
+    "to": "A",
+    "deleteOptionRequired": "Se requiere una opción de eliminación"
   },
   "funds": {
     "title": "Fondos",
@@ -1395,7 +1408,24 @@
     "enterState": "Ingrese el estado",
     "select": "Seleccionar",
     "asYourCountry": "Como su país",
-    "actions": "Acciones"
+    "actions": "Acciones",
+    "changePassword": "Cambiar contraseña",
+    "oldPassword": "Contraseña antigua",
+    "newPassword": "Nueva contraseña",
+    "password": "Contraseña",
+    "updatePassword": "Actualizar contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "passCantBeEmpty": "La contraseña no puede estar vacía",
+    "passNoMatch": "La nueva contraseña y la confirmación no coinciden",
+    "passwordChangedSuccessfully": "Contraseña cambiada con éxito",
+    "enterCurrentPassword": "Por favor ingrese su contraseña actual"
+  },
+  "passwordValidation": {
+    "minLength": "La contraseña debe tener al menos 8 caracteres.",
+    "uppercaseRequired": "La contraseña debe contener al menos una letra mayúscula.",
+    "lowercaseRequired": "La contraseña debe contener al menos una letra minúscula.",
+    "numberRequired": "La contraseña debe contener al menos un número.",
+    "specialCharRequired": "La contraseña debe contener al menos un carácter especial."
   },
   "plugin": {
     "error": "Error del complemento",
@@ -1426,7 +1456,8 @@
     "email": "Correo Electrónico",
     "role": "Rol",
     "loading": "Cargando...",
-    "emailNotAvailable": "Correo electrónico no disponible"
+    "emailNotAvailable": "Correo electrónico no disponible",
+    "membersList": "Lista de miembros"
   },
   "userNavbar": {
     "talawa": "Talawa",
@@ -1909,8 +1940,7 @@
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
     "thisUser": "este usuario",
     "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?",
-    "memberActionsMenu": "Menú de acciones del miembro",
-    "editImage": "Editar imagen"
+    "memberActionsMenu": "Menú de acciones del miembro"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",

@@ -315,8 +315,8 @@ describe('PostViewModal', () => {
     });
   });
 
-  describe('Translation integration', () => {
-    test('uses translation for unknown user', () => {
+  describe('Creator display fallback', () => {
+    test('renders "Unknown User" when creator is null', () => {
       const postWithoutCreator: InterfacePost = {
         ...mockPost,
         creator: null,

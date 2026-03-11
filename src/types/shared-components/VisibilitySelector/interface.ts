@@ -6,5 +6,6 @@ import type { EventVisibility } from 'shared-components/EventForm/utils';
 export interface InterfaceVisibilitySelectorProps {
   visibility: EventVisibility;
   setVisibility: (visibility: EventVisibility) => void;
-  tCommon: (key: string) => string;
+  /** If true, all radio buttons are disabled (view-only mode) */
+  disabled?: boolean;
 }

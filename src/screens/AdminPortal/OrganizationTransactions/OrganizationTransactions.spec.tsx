@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -13,6 +13,28 @@ const sharedMocks = vi.hoisted(() => ({
 }));
 
 vi.mock('plugin', () => sharedMocks);
+
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => (
+    <nav aria-label="breadcrumbs">
+      <ol>
+        {items.map((item) => (
+          <li key={item.translationKey || item.label}>
+            {item.to ? (
+              <a href={item.to}>{item.translationKey}</a>
+            ) : (
+              <span aria-current="page">{item.translationKey}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  ),
+}));
 
 describe('OrganizationTransactions', () => {
   beforeEach(() => {
@@ -49,5 +71,24 @@ describe('OrganizationTransactions', () => {
     renderWithRouter();
 
     expect(document.title).toBe('Transactions');
+  });
+
+  it('renders breadcrumbs correctly', () => {
+    renderWithRouter();
+
+    // Verify breadcrumb navigation is present
+    const breadcrumbsNav = screen.getByRole('navigation', {
+      name: /breadcrumbs/i,
+    });
+    expect(breadcrumbsNav).toBeInTheDocument();
+    // Verify breadcrumb items
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (Transactions) has aria-current
+    expect(screen.getByText(/transactions/i)).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 });

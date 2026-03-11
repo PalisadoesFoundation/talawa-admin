@@ -50,6 +50,7 @@
   "desc": "描述",
   "enterPassword": "输入密码",
   "password": "密码",
+  "security": "安全",
   "confirmPassword": "确认密码",
   "forgotPassword": "忘记密码？",
   "talawaAdminPortal": "Talawa 管理门户",
@@ -317,5 +318,8 @@
   "loginSuccessWithName": "欢迎，{{name}}！",
   "signupSuccess": "注册成功！",
   "authError": "认证错误",
-  "networkError": "网络错误"
+  "networkError": "网络错误",
+  "organizationCard": {
+    "card_aria": "机构卡片"
+  }
 }

@@ -15,7 +15,8 @@
  * @returns \{JSX.Element\} The rendered `AddMember` component.
  */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close } from '@mui/icons-material';
+import Check from '@mui/icons-material/Check';
+import Close from '@mui/icons-material/Close';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   CREATE_MEMBER_PG,
@@ -49,6 +50,7 @@ import type { IEdge, IUserDetails, IQueryVariable } from './types';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
+import { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
@@ -110,7 +112,7 @@ function AddMember({
           variables: {
             memberId: userId,
             organizationId: currentUrl,
-            role: 'regular',
+            role: OrganizationMembershipRole.REGULAR,
           },
         });
         NotificationToast.success(
@@ -142,10 +144,6 @@ function AddMember({
     password: '',
     confirmPassword: '',
   });
-  enum OrganizationMembershipRole {
-    ADMIN = 'administrator',
-    REGULAR = 'regular',
-  }
   const handleCreateUser = async (): Promise<void> => {
     if (
       !(

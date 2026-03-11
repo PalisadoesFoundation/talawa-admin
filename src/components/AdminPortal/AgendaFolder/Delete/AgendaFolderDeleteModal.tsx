@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 
 import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
@@ -25,7 +26,8 @@ import type { InterfaceAgendaFolderDeleteModalProps } from 'types/AdminPortal/Ag
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderDeleteModal: React.FC<
   InterfaceAgendaFolderDeleteModalProps
-> = ({ isOpen, onClose, agendaFolderId, refetchAgendaFolder, t }) => {
+> = ({ isOpen, onClose, agendaFolderId, refetchAgendaFolder }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const [deleteAgendaFolder] = useMutation(DELETE_AGENDA_FOLDER_MUTATION);
 
   /**

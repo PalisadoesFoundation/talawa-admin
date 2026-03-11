@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Edit } from '@mui/icons-material';
+import Edit from '@mui/icons-material/Edit';
 import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
@@ -134,8 +134,6 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
-          t={tEventList}
-          tCommon={t}
         />
         <div className="d-flex px-6" data-testid="event-stats">
           {/* Attendees data not available in new query; adjust or remove */}

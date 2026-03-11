@@ -212,6 +212,7 @@
   "enterCityName": "शहर का नाम दर्ज करें",
   "enterStateName": "राज्य का नाम दर्ज करें",
   "select": "चुनें",
+  "security": "सुरक्षा",
   "selectAsYourCountry": "{{country}} को अपने देश के रूप में चुनें",
   "selectACountry": "एक देश चुनें",
   "passwordLengthRequirement": "पासवर्ड कम से कम {{length}} अक्षरों का होना चाहिए।",
@@ -317,5 +318,8 @@
   "loginSuccessWithName": "स्वागत है, {{name}}!",
   "signupSuccess": "पंजीकरण सफल!",
   "authError": "प्रमाणीकरण त्रुटि",
-  "networkError": "नेटवर्क त्रुटि"
+  "networkError": "नेटवर्क त्रुटि",
+  "organizationCard": {
+    "card_aria": "संस्था कार्ड"
+  }
 }

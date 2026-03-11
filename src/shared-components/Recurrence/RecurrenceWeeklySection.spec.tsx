@@ -12,7 +12,6 @@ const defaultProps = {
   byDay: [WeekDays.MO, WeekDays.WE],
   onDayClick: vi.fn(),
   onWeekdayKeyDown: vi.fn(),
-  t: (key: string) => key,
 };
 
 vi.mock('react-i18next', async () => {
@@ -49,7 +48,7 @@ describe('RecurrenceWeeklySection', () => {
     it('should render when frequency is WEEKLY', () => {
       renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
-      expect(screen.getByText('repeatsOn')).toBeInTheDocument();
+      expect(screen.getByText('Repeats On')).toBeInTheDocument();
       const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
       expect(dayButtons).toHaveLength(7);
     });
@@ -93,7 +92,7 @@ describe('RecurrenceWeeklySection', () => {
       renderWithI18n(<RecurrenceWeeklySection {...defaultProps} />);
 
       const group = screen.getByRole('group');
-      expect(group).toHaveAttribute('aria-label', 'repeatsOn');
+      expect(group).toHaveAttribute('aria-label', 'Repeats On');
     });
   });
 
@@ -263,7 +262,7 @@ describe('RecurrenceWeeklySection', () => {
       dayButtons.forEach((button) => {
         expect(button).toHaveAttribute(
           'aria-label',
-          expect.stringContaining('select'),
+          expect.stringContaining('Select'),
         );
       });
     });
@@ -322,7 +321,7 @@ describe('RecurrenceWeeklySection', () => {
         <RecurrenceWeeklySection {...defaultProps} />,
       );
 
-      expect(screen.getByText('repeatsOn')).toBeInTheDocument();
+      expect(screen.getByText('Repeats On')).toBeInTheDocument();
 
       rerender(
         <RecurrenceWeeklySection
@@ -331,7 +330,7 @@ describe('RecurrenceWeeklySection', () => {
         />,
       );
 
-      expect(screen.queryByText('repeatsOn')).not.toBeInTheDocument();
+      expect(screen.queryByText('Repeats On')).not.toBeInTheDocument();
     });
   });
 

@@ -1,7 +1,24 @@
 import { cleanup, render, screen } from '@testing-library/react';
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { DataTable } from './DataTable';
+import { LoadingMoreRows } from './LoadingMoreRows';
 import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
+
+/**
+ * Shared column definitions used across test suites
+ */
+const baseColumns: IColumnDef<{ name: string; email: string }>[] = [
+  {
+    id: 'name',
+    header: 'Name',
+    accessor: 'name' as const,
+  },
+  {
+    id: 'email',
+    header: 'Email',
+    accessor: 'email' as const,
+  },
+];
 
 /**
  * Tests for LoadingMoreRows functionality (loadingMore prop in DataTable)
@@ -20,20 +37,8 @@ import type { IColumnDef } from '../../types/shared-components/DataTable/interfa
 describe('LoadingMoreRows (loadingMore functionality)', () => {
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
   });
-
-  const baseColumns: IColumnDef<{ name: string; email: string }>[] = [
-    {
-      id: 'name',
-      header: 'Name',
-      accessor: 'name' as const,
-    },
-    {
-      id: 'email',
-      header: 'Email',
-      accessor: 'email' as const,
-    },
-  ];
 
   describe('Basic Rendering', () => {
     it('renders skeleton rows with default count (5) when loadingMore is true', () => {
@@ -693,5 +698,109 @@ describe('LoadingMoreRows (loadingMore functionality)', () => {
       const skeletonRows = screen.queryAllByTestId(/^skeleton-append-/);
       expect(skeletonRows).toHaveLength(0);
     });
+  });
+});
+
+/**
+ * Direct tests for LoadingMoreRows component
+ *
+ * These tests render LoadingMoreRows directly (not through DataTable)
+ * to achieve 100% branch coverage, particularly testing default parameter values.
+ */
+describe('LoadingMoreRows (direct component tests)', () => {
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  /**
+   * Helper function to render LoadingMoreRows within a table structure
+   */
+  const renderLoadingMoreRows = <T,>(
+    props: Parameters<typeof LoadingMoreRows<T>>[0],
+  ) => {
+    return render(
+      <table>
+        <tbody>
+          <LoadingMoreRows {...props} />
+        </tbody>
+      </table>,
+    );
+  };
+
+  it('uses default skeletonRows value (5) when not provided', () => {
+    renderLoadingMoreRows({
+      columns: baseColumns,
+      effectiveSelectable: false,
+      hasRowActions: false,
+      // skeletonRows not provided, should default to 5
+    });
+
+    const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+    expect(skeletonRows).toHaveLength(5);
+  });
+
+  it('renders selection column when effectiveSelectable is true', () => {
+    renderLoadingMoreRows({
+      columns: baseColumns,
+      effectiveSelectable: true,
+      hasRowActions: false,
+      skeletonRows: 1,
+    });
+
+    const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+    expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 1 selection + 2 data columns = 3 TDs
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(3);
+  });
+
+  it('does not render selection column when effectiveSelectable is false', () => {
+    renderLoadingMoreRows({
+      columns: baseColumns,
+      effectiveSelectable: false,
+      hasRowActions: false,
+      skeletonRows: 1,
+    });
+
+    const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+    expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 2 data columns only = 2 TDs
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(2);
+  });
+
+  it('renders actions column when hasRowActions is true', () => {
+    renderLoadingMoreRows({
+      columns: baseColumns,
+      effectiveSelectable: false,
+      hasRowActions: true,
+      skeletonRows: 1,
+    });
+
+    const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+    expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 2 data columns + 1 actions = 3 TDs
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(3);
+  });
+
+  it('does not render actions column when hasRowActions is false', () => {
+    renderLoadingMoreRows({
+      columns: baseColumns,
+      effectiveSelectable: true,
+      hasRowActions: false,
+      skeletonRows: 1,
+    });
+
+    const skeletonRows = screen.getAllByTestId(/^skeleton-append-/);
+    expect(skeletonRows).toHaveLength(1);
+
+    // Verify cell count: 1 selection + 2 data columns = 3 TDs (no actions column)
+    const cells = skeletonRows[0].querySelectorAll('td');
+    expect(cells).toHaveLength(3);
   });
 });

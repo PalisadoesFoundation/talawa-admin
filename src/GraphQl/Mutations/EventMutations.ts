@@ -17,8 +17,6 @@ export const CREATE_EVENT_MUTATION = gql`
       isPublic
       isRegisterable
       isInviteOnly
-      createdAt
-      updatedAt
       # Recurring event fields (available for recurring events)
       isRecurringEventTemplate
 

@@ -37,7 +37,7 @@ import Button from 'shared-components/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { GrAttachment } from 'react-icons/gr';
 import SendIcon from '@mui/icons-material/Send';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from './MessageInput.module.css';
 import type { ChangeEvent } from 'react';

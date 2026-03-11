@@ -4,6 +4,7 @@
  */
 // translation-check-keyPrefix: organizationEvents
 import React, { useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import DropDownButton from 'shared-components/DropDownButton';
 import type { InterfaceRecurrenceDropdownProps } from 'types/shared-components/RecurrenceDropdown/interface';
 import type { InterfaceDropDownOption } from 'types/shared-components/DropDownButton/interface';
@@ -17,8 +18,11 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
   recurrenceOptions,
   currentLabel,
   onSelect,
-  t,
+  disabled = false,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   const dropdownOptions: InterfaceDropDownOption[] = useMemo(
     () =>
       recurrenceOptions.map((option, index) => ({
@@ -56,6 +60,7 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
       variant="outline-secondary"
       ariaLabel={t('recurring')}
       dataTestIdPrefix="recurrence"
+      disabled={disabled}
     />
   );
 };

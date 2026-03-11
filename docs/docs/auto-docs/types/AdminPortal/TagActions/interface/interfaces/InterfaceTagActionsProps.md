@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L4)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L6)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L5)
 
 #### Returns
 
@@ -20,19 +20,11 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:6](https://github.com
 
 ***
 
-### t
-
-> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
-
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L8)
-
-***
-
 ### tagActionsModalIsOpen
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L5)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L4)
 
 ***
 
@@ -40,12 +32,4 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com
 
 > **tagActionType**: [`TagActionType`](../../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L7)
-
-***
-
-### tCommon
-
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
-
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L9)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L6)

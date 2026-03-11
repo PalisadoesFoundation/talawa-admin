@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ExtensionOutlined } from '@mui/icons-material';
+import ExtensionOutlined from '@mui/icons-material/ExtensionOutlined';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import PluginCard from './PluginCard';
 import type { IPluginMeta } from 'plugin';

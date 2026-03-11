@@ -27,7 +27,8 @@ import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
 
-import { WarningAmberRounded, Group } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
+import Group from '@mui/icons-material/Group';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
@@ -43,7 +44,8 @@ import {
   type TokenAwareGridColDef,
   convertTokenColumns,
 } from 'shared-components/DataGridWrapper';
-import { debounce, Stack } from '@mui/material';
+import { debounceInput } from 'utils/performance';
+import Stack from '@mui/material/Stack';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
@@ -53,16 +55,12 @@ import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import type { InterfaceEventActionItemsProps } from 'types/AdminPortal/EventManagement/EventActionItems/interface';
 
 enum ItemStatus {
   Pending = 'pending',
   Completed = 'completed',
   Late = 'late',
-}
-
-interface InterfaceEventActionItemsProps {
-  eventId: string;
-  orgActionItemsRefetch?: () => void;
 }
 
 const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
@@ -138,9 +136,15 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   });
 
   const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
+    () => debounceInput((value: string) => setSearchTerm(value), 300),
     [],
   );
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   useEffect(() => {
     if (eventData && eventData.event) {

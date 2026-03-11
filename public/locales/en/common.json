@@ -129,6 +129,7 @@
   "assignedTo": "Assigned to",
   "eventType": "Event Type",
   "overview": "Overview",
+  "security": "Security",
   "events": "Events",
   "tags": "Tags",
   "toggleOptions": "Toggle options",
@@ -317,5 +318,8 @@
   "loginSuccessWithName": "Welcome, {{name}}!",
   "signupSuccess": "Registration successful!",
   "authError": "Authentication error",
-  "networkError": "Network error"
+  "networkError": "Network error",
+  "organizationCard": {
+    "card_aria": "Organization card"
+  }
 }

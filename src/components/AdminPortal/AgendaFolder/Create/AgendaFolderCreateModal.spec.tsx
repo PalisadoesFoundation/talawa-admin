@@ -32,12 +32,6 @@ vi.mock('react-router', async () => {
   };
 });
 
-/**
- * Translation mock
- * Typed explicitly to satisfy noImplicitAny
- */
-const t = (key: string): string => key;
-
 describe('AgendaFolderCreateModal', () => {
   afterEach(() => {
     cleanup();
@@ -54,7 +48,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -108,7 +101,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={refetchMock}
           />
         </BrowserRouter>
@@ -177,7 +169,6 @@ describe('AgendaFolderCreateModal', () => {
                 { id: '2', name: 'F2', sequence: 2, items: { edges: [] } },
               ],
             }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -227,7 +218,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -288,7 +278,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={undefined}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -318,7 +307,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={hideMock}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -340,7 +328,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -398,7 +385,6 @@ describe('AgendaFolderCreateModal', () => {
                 { id: '3', name: 'F3', sequence: 3, items: { edges: [] } },
               ],
             }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -459,7 +445,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -516,7 +501,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={hideMock}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={refetchMock}
           />
         </BrowserRouter>
@@ -526,6 +510,8 @@ describe('AgendaFolderCreateModal', () => {
     const nameInput = screen.getByLabelText(/folderName/i);
     const descInput = screen.getByLabelText(/description/i);
 
+    await user.clear(nameInput);
+    await user.clear(descInput);
     await user.type(nameInput, 'Error Test');
     await user.type(descInput, 'Error Desc');
     await user.click(screen.getByTestId('modal-submit-btn'));
@@ -554,7 +540,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: {} as never }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -596,7 +581,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>
@@ -627,7 +611,6 @@ describe('AgendaFolderCreateModal', () => {
             hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
             refetchAgendaFolder={vi.fn()}
           />
         </BrowserRouter>

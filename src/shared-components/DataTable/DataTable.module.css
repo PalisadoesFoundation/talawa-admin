@@ -3,7 +3,33 @@
 }
 
 .dataTableBase {
-  font-size: var(--font-size-15);
+  font-size: var(--font-size-sm);
+}
+
+/* Header cells: match DataGridWrapper typography and density */
+.dataTableBase thead th {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-700);
+  background-color: var(--color-gray-50);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-2) solid var(--color-gray-200);
+  white-space: nowrap;
+}
+
+/* Body cells: consistent padding and vertical alignment */
+.dataTableBase tbody td {
+  padding: var(--space-3) var(--space-4);
+  vertical-align: middle;
+  border-bottom-color: var(--color-gray-100);
+}
+
+.dataTableBase tbody tr:hover td {
+  background-color: var(--color-gray-50);
+}
+
+.dataTableBase thead th:hover {
+  background-color: var(--color-gray-100);
 }
 
 .toolbar {
