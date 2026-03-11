@@ -124,7 +124,7 @@ function OrgList(): JSX.Element {
         );
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      errorHandler(tCommon, error);
     }
   };
 
@@ -316,7 +316,7 @@ function OrgList(): JSX.Element {
         close();
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      errorHandler(tCommon, error);
     }
   };
 
@@ -471,18 +471,22 @@ function OrgList(): JSX.Element {
                         <h5
                           className={styles.shimmerText}
                           title={t('orgList.orgName')}
+                          aria-label={t('orgList.orgName')}
                         ></h5>
                         <h6
                           className={styles.shimmerText}
                           title={t('orgList.location')}
+                          aria-label={t('orgList.location')}
                         ></h6>
                         <h6
                           className={styles.shimmerText}
                           title={t('orgList.admins')}
+                          aria-label={t('orgList.admins')}
                         ></h6>
                         <h6
                           className={styles.shimmerText}
                           title={t('orgList.members')}
+                          aria-label={t('orgList.members')}
                         ></h6>
                       </div>
                     </div>

@@ -129,7 +129,7 @@ i18n.init({
   resources: {
     en: {
       translation: {
-        eventListCard: {
+        yearlyCalendar: {
           january: 'January',
           february: 'February',
           march: 'March',
@@ -142,20 +142,14 @@ i18n.init({
           october: 'October',
           november: 'November',
           december: 'December',
-        },
-        userEvents: {
           noEventAvailable: 'No Event Available!',
-        },
-        yearlyCalendar: {
-          weekdaysShorthand: {
-            mon: 'M',
-            tue: 'T',
-            wed: 'W',
-            thu: 'T',
-            fri: 'F',
-            sat: 'S',
-            sun: 'S',
-          },
+          weekdaysShorthandMon: 'M',
+          weekdaysShorthandTue: 'T',
+          weekdaysShorthandWed: 'W',
+          weekdaysShorthandThu: 'T',
+          weekdaysShorthandFri: 'F',
+          weekdaysShorthandSat: 'S',
+          weekdaysShorthandSun: 'S',
           expandDay: 'Expand day',
         },
         common: {
