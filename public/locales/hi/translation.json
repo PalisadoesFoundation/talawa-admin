@@ -1969,12 +1969,10 @@
     "delete": "हटाएं",
     "noMessages": "अभी तक कोई संदेश नहीं",
     "you": "आप",
-    "errorBoundary": {
-      "title": "कुछ गलत हो गया",
-      "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
-      "resetButton": "फिर से प्रयास करें",
-      "resetButtonAriaLabel": "फिर से प्रयास करें"
-    },
+    "errorBoundaryTitle": "कुछ गलत हो गया",
+    "errorBoundaryMessage": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
+    "errorBoundaryResetButton": "फिर से प्रयास करें",
+    "errorBoundaryResetButtonAriaLabel": "फिर से प्रयास करें",
     "messageActions": "संदेश क्रियाएं",
     "addAttachment": "संलग्नक जोड़ें",
     "removeAttachment": "संलग्नक हटाएँ",

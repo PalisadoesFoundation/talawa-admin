@@ -120,12 +120,7 @@ interface IOrgData {
 }
 
 export default function Organizations(): React.JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userOrganizations',
-  });
-  const { t: tLogin } = useTranslation('translation', {
-    keyPrefix: 'loginPage',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const { getItem, setItem, removeItem } = useLocalStorage();
@@ -179,9 +174,9 @@ export default function Organizations(): React.JSX.Element {
     try {
       const { data } = await resendVerificationEmail();
       if (data?.sendVerificationEmail?.success) {
-        NotificationToast.success(tLogin('emailResent'));
+        NotificationToast.success(t('loginPage.emailResent'));
       } else {
-        NotificationToast.info(tLogin('resendFailed'));
+        NotificationToast.info(t('loginPage.resendFailed'));
       }
     } catch (error) {
       errorHandler(tCommon, error);
@@ -218,9 +213,11 @@ export default function Organizations(): React.JSX.Element {
   const role = getItem('role') === 'administrator' ? 'administrator' : 'user';
 
   const modes = [
-    t('allOrganizations'),
-    t('joinedOrganizations'),
-    ...(role === 'administrator' ? [t('createdOrganizations')] : []),
+    t('userOrganizations.allOrganizations'),
+    t('userOrganizations.joinedOrganizations'),
+    ...(role === 'administrator'
+      ? [t('userOrganizations.createdOrganizations')]
+      : []),
   ];
 
   const userId: string | null = getItem('userId');
@@ -358,7 +355,7 @@ export default function Organizations(): React.JSX.Element {
         >
           <div className={styles.selectOrganizationContainer}>
             <div className={styles.organizationsFlexContainer}>
-              <h1>{t('selectOrganization')}</h1>
+              <h1>{t('userOrganizations.selectOrganization')}</h1>
             </div>
           </div>
 
@@ -374,7 +371,7 @@ export default function Organizations(): React.JSX.Element {
             >
               <div className={styles.selectOrganizationContainer}>
                 <div>
-                  <strong>{tLogin('emailNotVerified')}</strong>
+                  <strong>{t('loginPage.emailNotVerified')}</strong>
                 </div>
                 <Button
                   variant="outline-warning"
@@ -385,7 +382,7 @@ export default function Organizations(): React.JSX.Element {
                 >
                   {resendLoading
                     ? tCommon('loading')
-                    : tLogin('resendVerification')}
+                    : t('loginPage.resendVerification')}
                 </Button>
               </div>
             </Alert>
@@ -398,7 +395,7 @@ export default function Organizations(): React.JSX.Element {
               dropdowns={[
                 {
                   id: 'filter',
-                  label: t('filter'),
+                  label: t('userOrganizations.filter'),
                   type: 'filter',
                   options: modes.map((value, index) => ({
                     label: value,
@@ -412,7 +409,7 @@ export default function Organizations(): React.JSX.Element {
               searchValue={searchText}
               onSearchChange={setSearchText}
               onSearchSubmit={() => doSearch(searchText)}
-              searchPlaceholder={t('searchOrganizations')}
+              searchPlaceholder={t('userOrganizations.searchOrganizations')}
               searchInputTestId="searchInput"
               searchButtonTestId="searchBtn"
             />
@@ -427,7 +424,9 @@ export default function Organizations(): React.JSX.Element {
                   role="status"
                 >
                   <HourglassBottomIcon />{' '}
-                  <span aria-live="polite">{t('loading')}</span>
+                  <span aria-live="polite">
+                    {t('userOrganizations.loading')}
+                  </span>
                 </div>
               ) : (
                 <>
@@ -487,7 +486,7 @@ export default function Organizations(): React.JSX.Element {
                     </div>
                   ) : (
                     <span data-testid="no-organizations-message">
-                      {t('nothingToShow')}
+                      {t('userOrganizations.nothingToShow')}
                     </span>
                   )}
                 </>

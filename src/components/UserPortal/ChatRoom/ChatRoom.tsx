@@ -56,9 +56,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
-  const { t: tErrors } = useTranslation('translation', {
-    keyPrefix: 'userChatRoom.errorBoundary',
-  });
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -410,10 +407,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   return (
     <ErrorBoundaryWrapper
-      fallbackTitle={tErrors('title')}
-      fallbackErrorMessage={tErrors('message')}
-      resetButtonText={tErrors('resetButton')}
-      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      fallbackTitle={t('errorBoundaryTitle')}
+      fallbackErrorMessage={t('errorBoundaryMessage')}
+      resetButtonText={t('errorBoundaryResetButton')}
+      resetButtonAriaLabel={t('errorBoundaryResetButtonAriaLabel')}
     >
       <div className={styles.chatAreaContainer} id="chat-area">
         {!props.selectedContact ? (

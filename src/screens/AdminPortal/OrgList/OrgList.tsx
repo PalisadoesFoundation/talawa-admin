@@ -76,11 +76,8 @@ function OrgList(): JSX.Element {
     }),
     [],
   );
-  const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
-  const { t: tLogin } = useTranslation('translation', {
-    keyPrefix: 'loginPage',
-  });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
 
@@ -120,19 +117,19 @@ function OrgList(): JSX.Element {
       const { data } = await resendVerificationEmail();
 
       if (data?.sendVerificationEmail?.success) {
-        NotificationToast.success(tLogin('emailResent'));
+        NotificationToast.success(t('loginPage.emailResent'));
       } else {
         NotificationToast.error(
-          data?.sendVerificationEmail?.message || tLogin('resendFailed'),
+          data?.sendVerificationEmail?.message || t('loginPage.resendFailed'),
         );
       }
     } catch (error: unknown) {
-      errorHandler(tLogin, error);
+      errorHandler(t, error);
     }
   };
 
   useEffect(() => {
-    document.title = t('title');
+    document.title = t('orgList.title');
   }, [t]);
 
   const perPageResult = 8;
@@ -302,7 +299,7 @@ function OrgList(): JSX.Element {
       });
 
       if (data) {
-        NotificationToast.success(t('congratulationOrgCreated'));
+        NotificationToast.success(t('orgList.congratulationOrgCreated'));
         refetchOrgs();
         openDialogModal(data.createOrganization.id);
         setFormState({
@@ -379,7 +376,7 @@ function OrgList(): JSX.Element {
         >
           <div className={styles.notVerifiedContainer}>
             <div>
-              <strong>{tLogin('emailNotVerified')}</strong>
+              <strong>{t('loginPage.emailNotVerified')}</strong>
             </div>
             <RBButton
               variant="outline-primary"
@@ -390,7 +387,7 @@ function OrgList(): JSX.Element {
             >
               {resendLoading
                 ? tCommon('loading')
-                : tLogin('resendVerification')}
+                : t('loginPage.resendVerification')}
             </RBButton>
           </div>
         </Alert>
@@ -400,7 +397,7 @@ function OrgList(): JSX.Element {
       <div className={styles.calendar__header}>
         <SearchFilterBar
           hasDropdowns={true}
-          searchPlaceholder={t('searchOrganizations')}
+          searchPlaceholder={t('orgList.searchOrganizations')}
           searchValue={typedValue}
           onSearchChange={handleChangeFilter}
           searchInputTestId="searchInput"
@@ -411,8 +408,8 @@ function OrgList(): JSX.Element {
               label: tCommon('sort'),
               type: 'sort',
               options: [
-                { label: t('Latest'), value: 'Latest' },
-                { label: t('Earliest'), value: 'Earliest' },
+                { label: t('orgList.Latest'), value: 'Latest' },
+                { label: t('orgList.Earliest'), value: 'Earliest' },
               ],
               selectedOption: sortingState.selectedOption,
               onOptionChange: (value) => handleSortChange(value.toString()),
@@ -429,7 +426,7 @@ function OrgList(): JSX.Element {
                   data-testid="createOrganizationBtn"
                 >
                   <i className={`fa fa-plus ${styles.plusIcon}`} />
-                  {t('createOrganization')}
+                  {t('orgList.createOrganization')}
                 </RBButton>
               )}
             </>
@@ -445,8 +442,8 @@ function OrgList(): JSX.Element {
       (!userData || adminFor.length === 0) ? (
         <EmptyState
           icon={<Group />}
-          message={t('noOrgErrorTitle')}
-          description={t('noOrgErrorDescription')}
+          message={t('orgList.noOrgErrorTitle')}
+          description={t('orgList.noOrgErrorDescription')}
           dataTestId="orglist-no-orgs-empty"
         />
       ) : !isLoading &&
@@ -473,19 +470,19 @@ function OrgList(): JSX.Element {
                       <div className={styles.content}>
                         <h5
                           className={styles.shimmerText}
-                          title={t('orgName')}
+                          title={t('orgList.orgName')}
                         ></h5>
                         <h6
                           className={styles.shimmerText}
-                          title={t('location')}
+                          title={t('orgList.location')}
                         ></h6>
                         <h6
                           className={styles.shimmerText}
-                          title={t('admins')}
+                          title={t('orgList.admins')}
                         ></h6>
                         <h6
                           className={styles.shimmerText}
-                          title={t('members')}
+                          title={t('orgList.members')}
                         ></h6>
                       </div>
                     </div>
@@ -551,7 +548,7 @@ function OrgList(): JSX.Element {
       <BaseModal
         show={dialogModalisOpen}
         onHide={toggleDialogModal}
-        title={t('manageFeatures')}
+        title={t('orgList.manageFeatures')}
         headerClassName={styles.modalHeader}
         headerTestId="pluginNotificationHeader"
         dataTestId="pluginNotificationModal"
@@ -559,7 +556,7 @@ function OrgList(): JSX.Element {
         <section id={styles.grid_wrapper}>
           <div>
             <h4 className={styles.titlemodaldialog}>
-              {t('manageFeaturesInfo')}
+              {t('orgList.manageFeaturesInfo')}
             </h4>
 
             <div className={styles.pluginStoreBtnContainer}>
@@ -568,7 +565,7 @@ function OrgList(): JSX.Element {
                 data-testid="goToStore"
                 to={storeUrl}
               >
-                {t('goToStore')}
+                {t('orgList.goToStore')}
               </Link>
               <RBButton
                 type="submit"
@@ -577,7 +574,7 @@ function OrgList(): JSX.Element {
                 value="invite"
                 data-testid="enableEverythingForm"
               >
-                {t('enableEverything')}
+                {t('orgList.enableEverything')}
               </RBButton>
             </div>
           </div>

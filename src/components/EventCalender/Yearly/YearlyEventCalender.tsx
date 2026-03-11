@@ -56,38 +56,34 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 }) => {
   const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
-  const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
-  const { t: tRoot } = useTranslation('translation');
-  const { t: tYearlyCalendar } = useTranslation('translation', {
-    keyPrefix: 'yearlyCalendar',
-  });
+  const { t } = useTranslation('translation');
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expandedY, setExpandedY] = useState<string | null>(null);
 
   const weekdaysShorthand = [
-    tYearlyCalendar('weekdaysShorthand.mon'),
-    tYearlyCalendar('weekdaysShorthand.tue'),
-    tYearlyCalendar('weekdaysShorthand.wed'),
-    tYearlyCalendar('weekdaysShorthand.thu'),
-    tYearlyCalendar('weekdaysShorthand.fri'),
-    tYearlyCalendar('weekdaysShorthand.sat'),
-    tYearlyCalendar('weekdaysShorthand.sun'),
+    t('yearlyCalendar.weekdaysShorthand.mon'),
+    t('yearlyCalendar.weekdaysShorthand.tue'),
+    t('yearlyCalendar.weekdaysShorthand.wed'),
+    t('yearlyCalendar.weekdaysShorthand.thu'),
+    t('yearlyCalendar.weekdaysShorthand.fri'),
+    t('yearlyCalendar.weekdaysShorthand.sat'),
+    t('yearlyCalendar.weekdaysShorthand.sun'),
   ];
   const months = [
-    tRoot('eventListCard.january'),
-    tRoot('eventListCard.february'),
-    tRoot('eventListCard.march'),
-    tRoot('eventListCard.april'),
-    tRoot('eventListCard.may'),
-    tRoot('eventListCard.june'),
-    tRoot('eventListCard.july'),
-    tRoot('eventListCard.august'),
-    tRoot('eventListCard.september'),
-    tRoot('eventListCard.october'),
-    tRoot('eventListCard.november'),
-    tRoot('eventListCard.december'),
+    t('eventListCard.january'),
+    t('eventListCard.february'),
+    t('eventListCard.march'),
+    t('eventListCard.april'),
+    t('eventListCard.may'),
+    t('eventListCard.june'),
+    t('eventListCard.july'),
+    t('eventListCard.august'),
+    t('eventListCard.september'),
+    t('eventListCard.october'),
+    t('eventListCard.november'),
+    t('eventListCard.december'),
   ];
 
   useEffect(() => {
@@ -205,7 +201,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   aria-label={
                     expandedY === expandKey
                       ? tCommon('close')
-                      : tYearlyCalendar('expandDay')
+                      : t('yearlyCalendar.expandDay')
                   }
                 >
                   {expandedY === expandKey ? (
@@ -227,7 +223,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   aria-label={
                     expandedY === expandKey
                       ? tCommon('close')
-                      : tYearlyCalendar('expandDay')
+                      : t('yearlyCalendar.expandDay')
                   }
                 >
                   {expandedY === expandKey ? (
@@ -240,7 +236,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                           styles.closebtnYearlyEventCalenderBottomSpacing
                         }
                       >
-                        {t('noEventAvailable')}
+                        {t('userEvents.noEventAvailable')}
                       </div>
                       <p>{tCommon('close')}</p>
                     </div>

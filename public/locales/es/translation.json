@@ -1957,12 +1957,10 @@
     "delete": "Eliminar",
     "noMessages": "Aún no hay mensajes",
     "you": "Tú",
-    "errorBoundary": {
-      "title": "Algo salió mal",
-      "message": "Ocurrió un error inesperado en la sala de chat",
-      "resetButton": "Intentar de nuevo",
-      "resetButtonAriaLabel": "Intentar de nuevo"
-    },
+    "errorBoundaryTitle": "Algo salió mal",
+    "errorBoundaryMessage": "Ocurrió un error inesperado en la sala de chat",
+    "errorBoundaryResetButton": "Intentar de nuevo",
+    "errorBoundaryResetButtonAriaLabel": "Intentar de nuevo",
     "messageActions": "Acción del mensaje",
     "addAttachment": "Agregar archivo adjunto",
     "removeAttachment": "Eliminar archivo adjunto",

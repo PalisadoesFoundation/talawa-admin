@@ -1957,12 +1957,10 @@
     "delete": "Delete",
     "noMessages": "No messages yet",
     "you": "You",
-    "errorBoundary": {
-      "title": "Something went wrong",
-      "message": "An unexpected error occurred in the chat room",
-      "resetButton": "Try Again",
-      "resetButtonAriaLabel": "Try again"
-    },
+    "errorBoundaryTitle": "Something went wrong",
+    "errorBoundaryMessage": "An unexpected error occurred in the chat room",
+    "errorBoundaryResetButton": "Try Again",
+    "errorBoundaryResetButtonAriaLabel": "Try again",
     "messageActions": "Message actions",
     "addAttachment": "Add Attachment",
     "removeAttachment": "Remove Attachment",
