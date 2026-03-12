@@ -2005,6 +2005,7 @@
     "venueUpdated": "场地详情更新成功",
     "sort": "种类",
     "highestCapacity": "最高容量",
+    "deleteVenue": "删除场地",
     "lowestCapacity": "最低容量",
     "noVenues": "未找到场地！",
     "view": "看法",

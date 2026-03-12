@@ -79,8 +79,8 @@ function EventListCardModals({
   );
   const {
     isOpen: eventDeleteModalIsOpen,
-    open: openDeleteModal,
     close: closeDeleteModal,
+    toggle: toggleDeleteModal,
   } = useModalState();
   const {
     isOpen: eventUpdateModalIsOpen,
@@ -361,10 +361,6 @@ function EventListCardModals({
     } catch (error: unknown) {
       errorHandler(t, error);
     }
-  };
-
-  const toggleDeleteModal = (): void => {
-    openDeleteModal();
   };
 
   const isInitiallyRegistered = eventListCardProps?.attendees?.some(

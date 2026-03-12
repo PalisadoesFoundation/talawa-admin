@@ -2005,6 +2005,7 @@
     "venueUpdated": "Les détails du lieu ont été mis à jour avec succès",
     "sort": "Trier",
     "highestCapacity": "Capacité la plus élevée",
+    "deleteVenue": "Supprimer le lieu",
     "lowestCapacity": "Capacité la plus basse",
     "noVenues": "Aucun lieu trouvé !",
     "view": "Voir",
