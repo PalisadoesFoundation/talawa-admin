@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
@@ -29,6 +29,20 @@ import {
   type TagEdge,
 } from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
+
+// Mock react-redux and state/store to avoid loading use-sync-external-store (CJS/ESM interop failure in Vitest)
+vi.mock('react-redux', () => ({
+  Provider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useDispatch: () => () => {},
+  useSelector: () => undefined,
+}));
+vi.mock('state/store', () => ({
+  store: {
+    getState: vi.fn(() => ({})),
+    subscribe: vi.fn(() => () => {}),
+    dispatch: vi.fn(),
+  },
+}));
 
 // Mock react-infinite-scroll-component to allow manual triggering of 'next'
 // This is essential to test the `next={loadMoreTags}` function even when dataLength is 0 or hasNextPage is false.
@@ -81,14 +95,6 @@ const link5 = new StaticMockLink(MOCKS_UNDEFINED_USER_TAGS, true);
 const link6 = new StaticMockLink(MOCKS_NULL_END_CURSOR, true);
 const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES, true);
 const link8 = new StaticMockLink(MOCKS_FETCHMORE_UNDEFINED, true);
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const loadingOverlaySpy = vi.fn();
 
@@ -158,13 +164,11 @@ describe('Organisation Tags Page', () => {
     });
   });
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
   test('component loads correctly', async () => {
     const { getByText } = renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(getByText(translations.createTag)).toBeInTheDocument();
@@ -172,8 +176,6 @@ describe('Organisation Tags Page', () => {
   });
   test('render error component on unsuccessful userTags query', async () => {
     const { queryByText } = renderOrganizationTags(link2);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -184,8 +186,6 @@ describe('Organisation Tags Page', () => {
   });
   test('opens and closes the create tag modal', async () => {
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
@@ -208,8 +208,6 @@ describe('Organisation Tags Page', () => {
   test('navigates to sub tags screen after clicking on a tag', async () => {
     renderOrganizationTags(link);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
@@ -222,8 +220,6 @@ describe('Organisation Tags Page', () => {
   test('navigates to manage tag page after clicking manage tag option', async () => {
     renderOrganizationTags(link);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
@@ -235,8 +231,6 @@ describe('Organisation Tags Page', () => {
   });
   test('searchs for tags where the name matches the provided search input', async () => {
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -349,8 +343,6 @@ describe('Organisation Tags Page', () => {
     );
 
     renderOrganizationTags(linkWithAllMocks);
-    await wait();
-
     await waitFor(() => {
       expect(
         screen.getByPlaceholderText(translations.searchByName),
@@ -404,8 +396,6 @@ describe('Organisation Tags Page', () => {
   test('fetches more tags with infinite scroll', async () => {
     const { getByText } = renderOrganizationTags(link);
 
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.createTag)).toBeInTheDocument();
     });
@@ -417,8 +407,6 @@ describe('Organisation Tags Page', () => {
   });
   test('creates a new user tag', async () => {
     const { getByText } = renderOrganizationTags(link);
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.createTag)).toBeInTheDocument();
     });
@@ -440,8 +428,9 @@ describe('Organisation Tags Page', () => {
   test('creates a new user tag with error', async () => {
     renderOrganizationTags(link3);
 
-    await wait();
-
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('createTagBtn'));
 
     await userEvent.type(
@@ -460,8 +449,6 @@ describe('Organisation Tags Page', () => {
   test('renders the no tags found message when there are no tags', async () => {
     renderOrganizationTags(link4);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
@@ -469,9 +456,6 @@ describe('Organisation Tags Page', () => {
   test('sets dataLength to 0 when userTagsList is undefined', async () => {
     renderOrganizationTags(link5);
 
-    await wait();
-
-    // Wait for the component to render
     await waitFor(() => {
       const userTags = screen.queryAllByTestId('user-tag');
       expect(userTags).toHaveLength(0);
@@ -480,8 +464,9 @@ describe('Organisation Tags Page', () => {
   test('Null endCursor', async () => {
     renderOrganizationTags(link6);
 
-    await wait();
-
+    await waitFor(() => {
+      expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
+    });
     const triggerBtn = screen.getByTestId('trigger-load-more');
     await userEvent.click(triggerBtn);
 
@@ -492,8 +477,6 @@ describe('Organisation Tags Page', () => {
   test('Null Page available', async () => {
     renderOrganizationTags(link7);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
@@ -503,8 +486,6 @@ describe('Organisation Tags Page', () => {
   });
   test('creates a new user tag with undefined data', async () => {
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
@@ -527,8 +508,6 @@ describe('Organisation Tags Page', () => {
 
   test('shows error toast when trying to create tag with whitespace-only name', async () => {
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
@@ -553,9 +532,11 @@ describe('Organisation Tags Page', () => {
   test('renders ancestor tags breadcrumbs correctly', async () => {
     renderOrganizationTags(link);
 
-    await wait();
-
-    // Search for tags that have parent/ancestor tags
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
     const input = screen.getByPlaceholderText(translations.searchByName);
     await userEvent.clear(input);
     await userEvent.type(input, 'searchUserTag');
@@ -576,8 +557,6 @@ describe('Organisation Tags Page', () => {
   test('displays tag name correctly when there are no ancestor tags', async () => {
     renderOrganizationTags(link);
 
-    await wait();
-
     await waitFor(() => {
       const tagNames = screen.getAllByTestId('tagName');
       // Tags without parentTag should not show breadcrumbs
@@ -592,8 +571,6 @@ describe('Organisation Tags Page', () => {
 
   test('navigates to subTags page when clicking totalSubTags link', async () => {
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
@@ -613,8 +590,6 @@ describe('Organisation Tags Page', () => {
   test('navigates to manageTag page when clicking totalAssignedUsers link', async () => {
     renderOrganizationTags(link);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
@@ -632,8 +607,6 @@ describe('Organisation Tags Page', () => {
 
   test('search input trims whitespace correctly', async () => {
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -661,8 +634,6 @@ describe('Organisation Tags Page', () => {
   test('handles fetchMore when fetchMoreResult is undefined (line 129)', async () => {
     renderOrganizationTags(link8);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
     });
@@ -671,9 +642,9 @@ describe('Organisation Tags Page', () => {
     const triggerBtn = screen.getByTestId('trigger-load-more');
     await userEvent.click(triggerBtn);
 
-    await wait();
-
-    expect(screen.getByText('userTag 1')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('userTag 1')).toBeInTheDocument();
+    });
   });
 
   test('renders noRowsOverlay when no tags are found - validates line 309 loadingOverlay code path', async () => {
@@ -681,9 +652,6 @@ describe('Organisation Tags Page', () => {
     // This ensures the loadingOverlay (line 309) and noRowsOverlay (line 305) are accessible
     renderOrganizationTags(link4);
 
-    await wait();
-
-    // When no tags exist, the noRowsOverlay should render
     await waitFor(() => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
@@ -694,8 +662,6 @@ describe('Organisation Tags Page', () => {
 
   test('loads and renders all necessary table components and configuration (including loading overlay at line 316)', async () => {
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -730,8 +696,6 @@ describe('Organisation Tags Page', () => {
     // is part of the slots object in gridProps passed to ReportingTable
 
     renderOrganizationTags(link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -795,8 +759,6 @@ describe('Organisation Tags Page', () => {
 
     const linkNullCounts = new StaticMockLink(MOCKS_NULL_COUNTS, true);
     renderOrganizationTags(linkNullCounts);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Null Count Tag')).toBeInTheDocument();
@@ -887,16 +849,15 @@ describe('Organisation Tags Page', () => {
     const linkNullEdges = new StaticMockLink(MOCKS_NULL_EDGES_FETCHMORE, true);
     renderOrganizationTags(linkNullEdges);
 
-    await wait();
-
-    // Trigger load more
+    await waitFor(() => {
+      expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
+    });
     const triggerBtn = screen.getByTestId('trigger-load-more');
     await userEvent.click(triggerBtn);
 
-    await wait();
-
-    // Should still show the original tag and not crash
-    expect(screen.getByText('tag 1')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('tag 1')).toBeInTheDocument();
+    });
   });
 
   test('line 294: renders aria-label correctly when tag name is null', async () => {
@@ -948,9 +909,9 @@ describe('Organisation Tags Page', () => {
     const linkNullName = new StaticMockLink(MOCKS_NULL_NAME, true);
     renderOrganizationTags(linkNullName);
 
-    await wait();
-
-    // Find the manage tag button
+    await waitFor(() => {
+      expect(screen.getByTestId('manageTagBtn')).toBeInTheDocument();
+    });
     const manageButtons = screen.getAllByTestId('manageTagBtn');
     expect(manageButtons.length).toBe(1);
 
@@ -1047,21 +1008,20 @@ describe('Organisation Tags Page', () => {
     const linkPrevResult = new StaticMockLink(MOCKS_NULL_INITIAL_EDGES, true);
     renderOrganizationTags(linkPrevResult);
 
-    await wait();
-
-    // Verify initial state is empty (edges null)
-    expect(screen.queryByTestId('manageTagBtn')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('manageTagBtn')).not.toBeInTheDocument();
+    });
 
     // Manually trigger load more.
     // This triggers fetchMore.
     // updateQuery will run.
     // prevResult will be the initial result (edges: null).
     // The code `...(prevResult.organization?.tags?.edges || [])` (Line 115) will execute the `|| []` branch.
+    await waitFor(() => {
+      expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
+    });
     const triggerBtn = screen.getByTestId('trigger-load-more');
     await userEvent.click(triggerBtn);
-
-    // Wait for the Apollo cache to update and React to re-render
-    await wait(1000);
 
     // Check if we can find the new tag or just verify the component didn't crash
     // The fetchMore should have been called but cache merging with null edges is tricky
@@ -1074,11 +1034,9 @@ describe('Organisation Tags Page', () => {
     // We force the click. The function loadMoreTags runs. The guard clause returns early.
     await userEvent.click(triggerBtn);
 
-    // Nothing crashes, no network error (mocks would error if unexpected request made).
-    await wait();
-
-    // The test passes as long as no errors are thrown and the component remains stable
-    expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
+    });
   });
 
   test('line 374: dataLength logic coverage when userTagsList is empty during loading', async () => {
