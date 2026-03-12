@@ -1,6 +1,10 @@
 import { useQuery } from '@apollo/client';
-import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
-import { Typography, Box, CircularProgress } from '@mui/material';
+import Campaign from '@mui/icons-material/Campaign';
+import Search from '@mui/icons-material/Search';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';

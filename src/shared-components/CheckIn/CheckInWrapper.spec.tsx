@@ -47,7 +47,8 @@ beforeEach(() => {
 
 describe('Testing CheckIn Wrapper', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('The button to open the modal should work properly', async () => {
@@ -93,12 +94,9 @@ describe('CheckInWrapper CSS Tests', () => {
     ({ CheckInWrapper } = await import('./CheckInWrapper'));
   });
 
-  beforeEach(() => {
-    cleanup();
-  });
-
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   const props = {
@@ -133,8 +131,9 @@ describe('CheckInWrapper CSS Tests', () => {
 
 describe('CheckInWrapper callback behavior', () => {
   afterEach(() => {
+    cleanup();
     vi.resetModules();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should call onCheckInUpdate callback when check-in is updated', async () => {

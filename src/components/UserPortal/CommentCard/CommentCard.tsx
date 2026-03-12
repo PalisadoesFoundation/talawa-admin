@@ -1,23 +1,19 @@
 import React from 'react';
-import {
-  IconButton,
-  Typography,
-  Stack,
-  Box,
-  CircularProgress,
-  Modal,
-  Menu,
-  MenuItem,
-  Input,
-} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Modal from '@mui/material/Modal';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Input from '@mui/material/Input';
 import Button from 'shared-components/Button';
-import {
-  MoreHoriz,
-  ThumbUp,
-  ThumbUpOutlined,
-  EditOutlined,
-  DeleteOutline,
-} from '@mui/icons-material';
+import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import ThumbUp from '@mui/icons-material/ThumbUp';
+import ThumbUpOutlined from '@mui/icons-material/ThumbUpOutlined';
+import EditOutlined from '@mui/icons-material/EditOutlined';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -35,6 +31,7 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
 import UserPortalCard from '../UserPortalCard/UserPortalCard';
 import type { InterfaceCommentCardProps } from 'types/UserPortal/CommentCard/interface';
 import { IDENTIFIER_USER_ID } from 'Constant/common';
+import { spacingTokens } from '../../../utils/tokenValues';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -49,8 +46,8 @@ const CommentContent = styled(Typography)({
 });
 
 const VoteCount = styled(Typography)(() => ({
-  fontSize: '0.75rem',
-  minWidth: 20,
+  fontSize: 'var(--font-size-xs)',
+  minWidth: spacingTokens['space-6'],
   textAlign: 'center',
 }));
 

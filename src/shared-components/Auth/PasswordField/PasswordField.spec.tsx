@@ -26,7 +26,7 @@ describe('PasswordField', () => {
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const defaultProps = {

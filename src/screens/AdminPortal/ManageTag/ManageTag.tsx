@@ -53,7 +53,7 @@
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'shared-components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router';
@@ -79,7 +79,7 @@ import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import {
   REMOVE_USER_TAG,
   UNASSIGN_USER_TAG,

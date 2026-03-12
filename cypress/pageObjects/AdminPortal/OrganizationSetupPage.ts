@@ -170,7 +170,11 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
       .contains(name, { timeout })
       .closest(`[data-cy="${this.organizationCardContainer}"]`)
       .find(`[data-cy="${this.organizationManageButton}"]`, { timeout })
-      .should('be.visible')
+      .should('be.visible');
+    this.byDataCy(this.organizationCardContainer, timeout)
+      .contains(name, { timeout })
+      .closest(`[data-cy="${this.organizationCardContainer}"]`)
+      .find(`[data-cy="${this.organizationManageButton}"]`, { timeout })
       .click();
     this.assertUrlMatch(/\/admin\/orgdash\/[^/?#]+/, timeout);
     return this;

@@ -1,10 +1,8 @@
 import { useQuery } from '@apollo/client';
-import {
-  AccountBalanceWallet,
-  Search,
-  WarningAmberRounded,
-} from '@mui/icons-material';
-import { Stack } from '@mui/material';
+import AccountBalanceWallet from '@mui/icons-material/AccountBalanceWallet';
+import Search from '@mui/icons-material/Search';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
+import Stack from '@mui/material/Stack';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
