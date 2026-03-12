@@ -149,20 +149,33 @@ vi.mock('@mui/material', async (importOriginal) => {
   };
 });
 
-// Mock PageHeader to expose sorting options
+// Mock PageHeader to expose sorting options and optional class name props
 vi.mock('shared-components/Navbar/Navbar', () => ({
   default: ({
+    rootClassName,
     sorting,
   }: {
+    rootClassName?: string;
     sorting: Array<{
       testIdPrefix: string;
       options: Array<{ value: string; label: string }>;
       onChange: (value: string) => void;
+      containerClassName?: string;
+      toggleClassName?: string;
     }>;
   }) => (
-    <div data-testid="page-header">
+    <div
+      data-testid="page-header"
+      data-root-class-name={rootClassName ?? ''}
+      className={rootClassName}
+    >
       {sorting.map((sort, index) => (
-        <div key={index} data-testid={sort.testIdPrefix}>
+        <div
+          key={index}
+          data-testid={sort.testIdPrefix}
+          data-container-class-name={sort.containerClassName ?? ''}
+          data-toggle-class-name={sort.toggleClassName ?? ''}
+        >
           {sort.options.map((opt) => (
             <button
               type="button"
@@ -401,6 +414,11 @@ type RenderConfig = {
   mocks?: MockedResponse[];
   link?: StaticMockLink;
   initialEntry?: string;
+  memberProps?: {
+    rootClassName?: string;
+    containerClassName?: string;
+    toggleClassName?: string;
+  };
 };
 
 const DEFAULT_ROUTE = '/admin/orgpeople/org123';
@@ -409,12 +427,20 @@ const renderAddMemberView = ({
   mocks = [],
   link,
   initialEntry = DEFAULT_ROUTE,
+  memberProps,
 }: RenderConfig) => {
   const content = (
     <MemoryRouter initialEntries={[initialEntry]}>
       <I18nextProvider i18n={i18nForTest}>
         <Routes>
-          <Route path="/admin/orgpeople/:orgId" element={<AddMember />} />
+          <Route
+            path="/admin/orgpeople/:orgId"
+            element={<AddMember {...memberProps} />}
+          />
+          <Route
+            path="/admin/orgpeople-no-org"
+            element={<AddMember {...memberProps} />}
+          />
         </Routes>
       </I18nextProvider>
     </MemoryRouter>
@@ -461,6 +487,35 @@ describe('AddMember Screen', () => {
     renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     expect(await screen.findByTestId('addMembers')).toBeInTheDocument();
+  });
+
+  test('passes optional rootClassName, containerClassName, and toggleClassName to PageHeader', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({
+      mocks,
+      initialEntry: `/admin/orgpeople/${orgId}`,
+      memberProps: {
+        rootClassName: 'test-root',
+        containerClassName: 'test-container',
+        toggleClassName: 'test-toggle',
+      },
+    });
+
+    const pageHeader = await screen.findByTestId('page-header');
+    expect(pageHeader).toHaveAttribute('data-root-class-name', 'test-root');
+    expect(pageHeader).toHaveClass('test-root');
+
+    const addMembersBlock = screen.getByTestId('addMembers');
+    expect(addMembersBlock).toHaveAttribute(
+      'data-container-class-name',
+      'test-container',
+    );
+    expect(addMembersBlock).toHaveAttribute(
+      'data-toggle-class-name',
+      'test-toggle',
+    );
   });
 
   test('opens existing user modal and shows user list', async () => {
@@ -905,6 +960,59 @@ describe('AddMember Screen', () => {
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('createMember does nothing when orgId is missing (no success toast)', async () => {
+    const userListMock = createUserListMock({
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const orgNoIdMock = {
+      request: {
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: undefined },
+      },
+      result: { data: { organization: null } },
+    };
+
+    const mocks = [
+      orgNoIdMock,
+      userListMock,
+      createAddMemberMutationMock({
+        memberId: 'user1',
+        organizationId: '',
+        role: 'regular',
+      }),
+    ];
+
+    renderAddMemberView({
+      mocks,
+      initialEntry: '/admin/orgpeople-no-org',
+    });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
+    );
+
+    const addButtons = await screen.findAllByTestId('addBtn');
+    fireEvent.click(addButtons[0]);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
     });
   });
 

@@ -7,10 +7,12 @@ import DatePicker from '../DatePicker';
 import TimePicker from '../TimePicker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks';
 import styles from './EventForm.module.css';
 import type {
   IEventFormProps,
@@ -30,20 +32,17 @@ import {
   getVisibilityType,
   buildRecurrenceOptions,
 } from './utils';
-import type { EventVisibility } from './utils';
+import type { EventVisibility, InterfaceRecurrenceOption } from './utils';
 import VisibilitySelector from './VisibilitySelector/VisibilitySelector';
 import RecurrenceDropdown from './RecurrenceDropdown/RecurrenceDropdown';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
-
 const EventForm: React.FC<IEventFormProps> = ({
   initialValues,
   onSubmit,
   onCancel,
   submitLabel,
-  t,
-  tCommon,
   showCreateChat = false,
   showRegisterable = true,
   showPublicToggle = true,
@@ -52,7 +51,17 @@ const EventForm: React.FC<IEventFormProps> = ({
   submitting = false,
   showRecurrenceToggle = false,
   showCancelButton = false,
+  readOnly = false,
+  hideSubmitButton = false,
+  onStateChange,
+  customRecurrenceModalIsOpen: customRecurrenceModalIsOpenProp,
+  setCustomRecurrenceModalIsOpen: setCustomRecurrenceModalIsOpenProp,
+  hideCustomRecurrenceModal: hideCustomRecurrenceModalProp,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
+  const { t: tCommon } = useTranslation('common');
   const [formState, setFormState] = useState<IEventFormValues>(initialValues);
   // Default to INVITE_ONLY for new events (no ID/name usually implies new, or explicit logic)
   // But initialValues might be partial.
@@ -78,32 +87,91 @@ const EventForm: React.FC<IEventFormProps> = ({
     );
   });
 
-  const [recurrenceDropdownOpen, setRecurrenceDropdownOpen] = useState(false);
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
+  const internalRecurrenceModal = useModalState();
+  const customRecurrenceModalIsOpen =
+    customRecurrenceModalIsOpenProp ?? internalRecurrenceModal.isOpen;
+  const openCustomRecurrenceModal = setCustomRecurrenceModalIsOpenProp
+    ? () => setCustomRecurrenceModalIsOpenProp(true)
+    : internalRecurrenceModal.open;
+  const closeCustomRecurrenceModal =
+    hideCustomRecurrenceModalProp ?? internalRecurrenceModal.close;
+  const setCustomRecurrenceModalIsOpen =
+    setCustomRecurrenceModalIsOpenProp ??
+    ((state: boolean | ((prev: boolean) => boolean)) => {
+      const next =
+        typeof state === 'function'
+          ? state(internalRecurrenceModal.isOpen)
+          : state;
+      if (next) internalRecurrenceModal.open();
+      else internalRecurrenceModal.close();
+    });
   const [recurrenceEnabled, setRecurrenceEnabled] = useState(
     !disableRecurrence &&
       (!!initialValues.recurrenceRule || !showRecurrenceToggle),
   );
 
   useEffect(() => {
-    setFormState(initialValues);
-    setRecurrenceEnabled(
-      !disableRecurrence &&
-        (!!initialValues.recurrenceRule || !showRecurrenceToggle),
-    );
+    setFormState((prev) => {
+      // Shallow compare to avoid creating new object refs if values are unchanged
+      if (
+        prev.name === initialValues.name &&
+        prev.description === initialValues.description &&
+        prev.location === initialValues.location &&
+        prev.startDate === initialValues.startDate &&
+        prev.endDate === initialValues.endDate &&
+        prev.startTime === initialValues.startTime &&
+        prev.endTime === initialValues.endTime &&
+        prev.allDay === initialValues.allDay &&
+        prev.isPublic === initialValues.isPublic &&
+        prev.isInviteOnly === initialValues.isInviteOnly &&
+        prev.recurrenceRule === initialValues.recurrenceRule &&
+        prev.isRegisterable === (initialValues.isRegisterable ?? false) &&
+        prev.createChat === (initialValues.createChat ?? false)
+      ) {
+        return prev;
+      }
+      return {
+        ...prev,
+        name: initialValues.name,
+        description: initialValues.description,
+        location: initialValues.location,
+        startDate: initialValues.startDate,
+        endDate: initialValues.endDate,
+        startTime: initialValues.startTime,
+        endTime: initialValues.endTime,
+        allDay: initialValues.allDay,
+        isPublic: initialValues.isPublic,
+        isInviteOnly: initialValues.isInviteOnly,
+        recurrenceRule: initialValues.recurrenceRule,
+        isRegisterable: initialValues.isRegisterable ?? false,
+        createChat: initialValues.createChat ?? false,
+      };
+    });
+
+    setRecurrenceEnabled((prev) => {
+      const next =
+        !disableRecurrence &&
+        (!!initialValues.recurrenceRule || !showRecurrenceToggle);
+      return prev !== next ? next : prev;
+    });
+
     // Sync visibility state with initialValues
-    if (
-      !initialValues.name &&
-      !initialValues.isPublic &&
-      !initialValues.isInviteOnly
-    ) {
-      setVisibility('INVITE_ONLY');
-    } else {
-      setVisibility(
-        getVisibilityType(initialValues.isPublic, initialValues.isInviteOnly),
-      );
-    }
+    setVisibility((prev) => {
+      let next: EventVisibility;
+      if (
+        !initialValues.name &&
+        !initialValues.isPublic &&
+        !initialValues.isInviteOnly
+      ) {
+        next = 'INVITE_ONLY';
+      } else {
+        next = getVisibilityType(
+          initialValues.isPublic,
+          initialValues.isInviteOnly,
+        );
+      }
+      return prev !== next ? next : prev;
+    });
   }, [initialValues, disableRecurrence, showRecurrenceToggle]);
 
   const recurrenceOptions = useMemo(
@@ -111,10 +179,7 @@ const EventForm: React.FC<IEventFormProps> = ({
     [formState.startDate, t],
   );
 
-  const handleRecurrenceSelect = (option: {
-    label: string;
-    value: InterfaceRecurrenceRule | 'custom' | null;
-  }): void => {
+  const handleRecurrenceSelect = (option: InterfaceRecurrenceOption): void => {
     if (option.value === 'custom') {
       if (!formState.recurrenceRule) {
         setFormState((prev) => ({
@@ -125,15 +190,29 @@ const EventForm: React.FC<IEventFormProps> = ({
           ),
         }));
       }
-      setCustomRecurrenceModalIsOpen(true);
+      openCustomRecurrenceModal();
     } else {
       setFormState((prev) => ({
         ...prev,
         recurrenceRule: option.value as InterfaceRecurrenceRule | null,
       }));
     }
-    setRecurrenceDropdownOpen(false);
   };
+
+  // Stabilize onStateChange callback
+  const onStateChangeRef = useRef(onStateChange);
+  useEffect(() => {
+    onStateChangeRef.current = onStateChange;
+  }, [onStateChange]);
+
+  // Sync internal formState and visibility back to parent if requested
+  useEffect(() => {
+    onStateChangeRef.current?.({
+      ...formState,
+      isPublic: visibility === 'PUBLIC',
+      isInviteOnly: visibility === 'INVITE_ONLY',
+    });
+  }, [formState, visibility]);
 
   const currentRecurrenceLabel = (): string => {
     if (!formState.recurrenceRule) return t('doesNotRepeat');
@@ -181,14 +260,12 @@ const EventForm: React.FC<IEventFormProps> = ({
       }
       endAtISO = dayjs.utc(formState.endDate).endOf('day').toISOString();
     } else {
-      startAtISO = dayjs
-        .utc(formState.startDate)
+      startAtISO = dayjs(formState.startDate)
         .hour(parseInt(startTimeParts[0]))
         .minute(parseInt(startTimeParts[1]))
         .second(parseInt(startTimeParts[2]) || 0)
         .toISOString();
-      endAtISO = dayjs
-        .utc(formState.endDate)
+      endAtISO = dayjs(formState.endDate)
         .hour(parseInt(endTimeParts[0]))
         .minute(parseInt(endTimeParts[1]))
         .second(parseInt(endTimeParts[2]) || 0)
@@ -254,41 +331,50 @@ const EventForm: React.FC<IEventFormProps> = ({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <FormTextField
-          name="eventTitle"
-          label={t('eventName')}
-          placeholder={t('enterName')}
-          required
-          value={formState.name}
-          className={styles.inputField}
-          onChange={(value) => setFormState({ ...formState, name: value })}
-          data-testid="eventTitleInput"
-          data-cy="eventTitleInput"
-        />
-        <FormTextField
-          name="eventDescription"
-          label={tCommon('description')}
-          placeholder={t('enterDescription')}
-          required
-          value={formState.description}
-          className={styles.inputField}
-          onChange={(value) =>
-            setFormState({ ...formState, description: value })
-          }
-          data-testid="eventDescriptionInput"
-          data-cy="eventDescriptionInput"
-        />
-        <FormTextField
-          name="eventLocation"
-          label={tCommon('location')}
-          placeholder={tCommon('enterLocation')}
-          required
-          value={formState.location}
-          className={styles.inputField}
-          onChange={(value) => setFormState({ ...formState, location: value })}
-          data-testid="eventLocationInput"
-          data-cy="eventLocationInput"
-        />
+        <div className={styles.textFieldsSection}>
+          <FormTextField
+            name="eventTitle"
+            label={t('eventName')}
+            placeholder={t('enterName')}
+            required
+            value={formState.name}
+            className={styles.inputField}
+            onChange={(value) => setFormState({ ...formState, name: value })}
+            data-testid="eventTitleInput"
+            data-cy="eventTitleInput"
+            disabled={readOnly}
+            maxLength={100}
+          />
+          <FormTextField
+            name="eventDescription"
+            label={tCommon('description')}
+            placeholder={t('enterDescription')}
+            required
+            value={formState.description}
+            className={styles.inputField}
+            onChange={(value) =>
+              setFormState({ ...formState, description: value })
+            }
+            data-testid="eventDescriptionInput"
+            data-cy="eventDescriptionInput"
+            disabled={readOnly}
+            maxLength={256}
+          />
+          <FormTextField
+            name="eventLocation"
+            label={tCommon('location')}
+            placeholder={tCommon('enterLocation')}
+            required
+            value={formState.location}
+            className={styles.inputField}
+            onChange={(value) =>
+              setFormState({ ...formState, location: value })
+            }
+            data-testid="eventLocationInput"
+            data-cy="eventLocationInput"
+            disabled={readOnly}
+          />
+        </div>
         <div className={styles.datedivEvents}>
           <div>
             <DatePicker
@@ -309,6 +395,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 }
               }}
               data-testid="eventStartAt"
+              disabled={readOnly}
               slotProps={{
                 textField: {
                   'aria-label': tCommon('startDate'),
@@ -332,6 +419,7 @@ const EventForm: React.FC<IEventFormProps> = ({
               }}
               minDate={dayjs(formState.startDate)}
               data-testid="eventEndAt"
+              disabled={readOnly}
               slotProps={{
                 textField: {
                   'aria-label': tCommon('endDate'),
@@ -340,78 +428,81 @@ const EventForm: React.FC<IEventFormProps> = ({
             />
           </div>
         </div>
-        <div className={styles.datediv}>
-          <div className="mr-3">
-            <TimePicker
-              label={tCommon('startTime')}
-              data-testid="startTime"
-              className={styles.dateboxEvents}
-              timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-              value={timeToDayJs(formState.startTime)}
-              onChange={(time): void => {
-                if (time) {
-                  setFormState((prev) => {
-                    const newStartTime = time.format('HH:mm:ss');
-                    const currentEndTime = timeToDayJs(prev.endTime);
-                    // Compare times by converting to minutes since midnight
-                    const newStartMinutes = time.hour() * 60 + time.minute();
-                    const currentEndMinutes =
-                      currentEndTime.hour() * 60 + currentEndTime.minute();
-                    return {
+        {!formState.allDay && (
+          <div className={styles.datediv}>
+            <div className="mr-3">
+              <TimePicker
+                label={tCommon('startTime')}
+                data-testid="startTime"
+                className={styles.dateboxEvents}
+                timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                value={timeToDayJs(formState.startTime)}
+                onChange={(time): void => {
+                  if (time) {
+                    setFormState((prev) => {
+                      const newStartTime = time.format('HH:mm:ss');
+                      const currentEndTime = timeToDayJs(prev.endTime);
+                      // Compare times by converting to minutes since midnight
+                      const newStartMinutes = time.hour() * 60 + time.minute();
+                      const currentEndMinutes =
+                        currentEndTime.hour() * 60 + currentEndTime.minute();
+                      return {
+                        ...prev,
+                        startTime: newStartTime,
+                        endTime:
+                          currentEndMinutes < newStartMinutes
+                            ? newStartTime
+                            : prev.endTime,
+                      };
+                    });
+                  }
+                }}
+                disabled={readOnly}
+                slotProps={{
+                  textField: {
+                    'aria-label': tCommon('startTime'),
+                  },
+                }}
+              />
+            </div>
+            <div>
+              <TimePicker
+                label={tCommon('endTime')}
+                data-testid="endTime"
+                className={styles.dateboxEvents}
+                timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                value={timeToDayJs(formState.endTime)}
+                onChange={(time): void => {
+                  if (time) {
+                    setFormState((prev) => ({
                       ...prev,
-                      startTime: newStartTime,
-                      endTime:
-                        currentEndMinutes < newStartMinutes
-                          ? newStartTime
-                          : prev.endTime,
-                    };
-                  });
-                }
-              }}
-              disabled={formState.allDay}
-              slotProps={{
-                textField: {
-                  'aria-label': tCommon('startTime'),
-                },
-              }}
-            />
+                      endTime: time.format('HH:mm:ss'),
+                    }));
+                  }
+                }}
+                minTime={timeToDayJs(formState.startTime)}
+                disabled={readOnly}
+                slotProps={{
+                  textField: {
+                    'aria-label': tCommon('endTime'),
+                  },
+                }}
+              />
+            </div>
           </div>
-          <div>
-            <TimePicker
-              label={tCommon('endTime')}
-              data-testid="endTime"
-              className={styles.dateboxEvents}
-              timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-              value={timeToDayJs(formState.endTime)}
-              onChange={(time): void => {
-                if (time) {
-                  setFormState((prev) => ({
-                    ...prev,
-                    endTime: time.format('HH:mm:ss'),
-                  }));
-                }
-              }}
-              minTime={timeToDayJs(formState.startTime)}
-              disabled={formState.allDay}
-              slotProps={{
-                textField: {
-                  'aria-label': tCommon('endTime'),
-                },
-              }}
-            />
-          </div>
-        </div>
+        )}
         <div className={styles.checkboxdivEvents}>
           <div className={styles.dispflexEvents}>
             <FormCheckField
               className={`me-4 ${styles.switch}`}
               id="allday"
               name="allDay"
-              label={`${t('allDay')}?`}
+              label={t('allDay')}
               type="switch"
               checked={formState.allDay}
               data-testid="allDayEventCheck"
               onChange={toggleAllDay}
+              disabled={readOnly}
             />
           </div>
           {showRecurrenceToggle && (
@@ -420,11 +511,12 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="recurring"
                 name="recurring"
-                label={`${t('recurring')}:`}
+                label={t('recurring')}
                 type="switch"
                 checked={recurrenceEnabled}
                 data-testid="recurringEventCheck"
                 onChange={toggleRecurrence}
+                disabled={readOnly}
               />
             </div>
           )}
@@ -434,7 +526,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="registrable"
                 name="registrable"
-                label={`${t('registerable')}?`}
+                label={t('registerable')}
                 type="switch"
                 checked={formState.isRegisterable}
                 data-testid="registerableEventCheck"
@@ -444,6 +536,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                     isRegisterable: !prev.isRegisterable,
                   }))
                 }
+                disabled={readOnly}
               />
             </div>
           )}
@@ -453,7 +546,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="chat"
                 name="createChat"
-                label={`${t('createChat')}?`}
+                label={t('createChat')}
                 type="switch"
                 data-testid="createChatCheck"
                 checked={formState.createChat}
@@ -463,6 +556,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                     createChat: !prev.createChat,
                   }))
                 }
+                disabled={readOnly}
               />
             </div>
           )}
@@ -471,7 +565,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           <VisibilitySelector
             visibility={visibility}
             setVisibility={setVisibility}
-            tCommon={tCommon}
+            disabled={readOnly}
           />
         )}
 
@@ -479,31 +573,36 @@ const EventForm: React.FC<IEventFormProps> = ({
           <RecurrenceDropdown
             recurrenceOptions={recurrenceOptions}
             currentLabel={currentRecurrenceLabel()}
-            isOpen={recurrenceDropdownOpen}
-            onToggle={setRecurrenceDropdownOpen}
             onSelect={handleRecurrenceSelect}
-            t={t}
+            disabled={readOnly}
           />
         )}
-        <Button
-          type="submit"
-          className={styles.addButton}
-          value="createevent"
-          data-testid="createEventBtn"
-          data-cy="createEventBtn"
-          disabled={submitting}
-        >
-          {submitLabel}
-        </Button>
-        {showCancelButton && (
-          <Button
-            variant="secondary"
-            onClick={onCancel}
-            data-testid="eventFormCancelBtn"
-          >
-            {tCommon('cancel')}
-          </Button>
+        {submitLabel === tCommon('create') && (
+          <div className={styles.createModalSeparator}></div>
         )}
+        <div className={styles.footerActions}>
+          {!hideSubmitButton && (
+            <Button
+              type="submit"
+              className={`${styles.addButton} ${styles.footerButton}`}
+              value="createevent"
+              data-testid="createEventBtn"
+              data-cy="createEventBtn"
+              disabled={submitting || readOnly}
+            >
+              {submitLabel}
+            </Button>
+          )}
+          {showCancelButton && (
+            <Button
+              variant="secondary"
+              onClick={onCancel}
+              data-testid="eventFormCancelBtn"
+            >
+              {tCommon('cancel')}
+            </Button>
+          )}
+        </div>
       </form>
 
       {recurrenceEnabled && formState.recurrenceRule && (
@@ -532,11 +631,8 @@ const EventForm: React.FC<IEventFormProps> = ({
             }));
           }}
           customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-          hideCustomRecurrenceModal={(): void =>
-            setCustomRecurrenceModalIsOpen(false)
-          }
+          hideCustomRecurrenceModal={closeCustomRecurrenceModal}
           setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-          t={t}
           startDate={formState.startDate}
         />
       )}

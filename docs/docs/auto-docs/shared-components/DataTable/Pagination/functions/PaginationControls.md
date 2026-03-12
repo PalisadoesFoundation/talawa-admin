@@ -6,7 +6,7 @@
 
 > **PaginationControls**(`page`): `Element`
 
-Defined in: [src/shared-components/DataTable/Pagination.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/Pagination.tsx#L24)
+Defined in: [src/shared-components/DataTable/Pagination.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/Pagination.tsx#L25)
 
 PaginationControls component for navigating through paginated data.
 
@@ -31,4 +31,4 @@ Current page number (1-indexed)
 
 `Element`
 
-Pagination navigation controls
+JSX Element Pagination navigation controls

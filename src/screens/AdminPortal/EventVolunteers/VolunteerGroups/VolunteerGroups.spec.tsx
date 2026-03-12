@@ -681,4 +681,44 @@ describe('Testing VolunteerGroups Screen', () => {
       expect(groupNames.length).toBeGreaterThan(0);
     });
   });
+
+  describe('Keyboard Accessibility', () => {
+    it('should open create modal when Enter is pressed on create button', async () => {
+      mockRouteParams();
+      renderVolunteerGroups(link1);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createGroupBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createGroupBtn');
+      createBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getAllByText(t.createGroup)).toHaveLength(1);
+      });
+    });
+
+    it('should close modal when Escape is pressed', async () => {
+      mockRouteParams();
+      renderVolunteerGroups(link1);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createGroupBtn')).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByTestId('createGroupBtn'));
+
+      await waitFor(() => {
+        expect(screen.getAllByText(t.createGroup)).toHaveLength(1);
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(screen.queryByText(t.createGroup)).not.toBeInTheDocument();
+      });
+    });
+  });
 });

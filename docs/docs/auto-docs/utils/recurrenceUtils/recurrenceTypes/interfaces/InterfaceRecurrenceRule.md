@@ -35,6 +35,16 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:16](https://github.com
 
 ***
 
+### bySetPos?
+
+> `optional` **bySetPos**: `number`[]
+
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L18)
+
+RFC 5545 BYSETPOS: which occurrence of byDay within the month (e.g. [3] = 3rd Monday)
+
+***
+
 ### count?
 
 > `optional` **count**: `number`

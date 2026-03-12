@@ -6,8 +6,6 @@
  * @param eventListCardProps - The properties of the event card, including event details and refetch function.
  * @param eventModalIsOpen - Boolean indicating whether the event modal is open.
  * @param hideViewModal - Function to hide the view modal.
- * @param t - Translation function for localized strings.
- * @param tCommon - Translation function for common localized strings.
  *
  * @returns JSX.Element - The rendered modals for event list card actions.
  *
@@ -47,6 +45,7 @@ import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import styles from './EventListCardModals.module.css';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import { useTranslation } from 'react-i18next';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
@@ -55,9 +54,9 @@ function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
-  t,
-  tCommon,
 }: InterfaceEventListCardModalsProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t: tCommon } = useTranslation('common');
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
@@ -187,14 +186,24 @@ function EventListCardModals({
   const {
     isOpen: customRecurrenceModalIsOpen,
     open: openCustomRecurrenceModal,
+    close: closeCustomRecurrenceModal,
   } = useModalState();
+
+  // Derive startTime/endTime from startAt/endAt when the API fields are absent.
+  // This ensures the TimePicker shows the same time as the calendar grid position.
+  const deriveLocalTime = (isoString: string): string =>
+    dayjs(isoString).format('HH:mm:ss');
 
   const [formState, setFormState] = useState({
     name: eventListCardProps.name,
     eventDescription: eventListCardProps.description,
     location: eventListCardProps.location,
-    startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
-    endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
+    startTime:
+      eventListCardProps.startTime?.split('.')[0] ||
+      deriveLocalTime(eventListCardProps.startAt),
+    endTime:
+      eventListCardProps.endTime?.split('.')[0] ||
+      deriveLocalTime(eventListCardProps.endAt),
   });
 
   // Automatically switch to "following" option when recurrence rule changes
@@ -261,7 +270,6 @@ function EventListCardModals({
         recurrence,
         updateOption,
         hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
-        t,
         hideViewModal,
         eventUpdateModalIsOpen,
         closeUpdateModal,
@@ -303,7 +311,12 @@ function EventListCardModals({
         });
         data = result.data;
       } else {
-        // Recurring instance - handle based on selected option
+        // Recurring instance - delete option is required
+        if (deleteOption === undefined) {
+          NotificationToast.error(t('deleteOptionRequired') as string);
+          return;
+        }
+        // Handle based on selected option
         switch (deleteOption) {
           case 'single': {
             const singleResult = await deleteSingleInstance({
@@ -350,7 +363,7 @@ function EventListCardModals({
         }
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      errorHandler(tCommon, error);
     }
   };
 
@@ -381,7 +394,7 @@ function EventListCardModals({
           hideViewModal();
         }
       } catch (error: unknown) {
-        errorHandler(t, error);
+        errorHandler(tCommon, error);
       }
     }
   };
@@ -399,8 +412,6 @@ function EventListCardModals({
         eventModalIsOpen={eventModalIsOpen}
         hideViewModal={hideViewModal}
         toggleDeleteModal={toggleDeleteModal}
-        t={t}
-        tCommon={tCommon}
         isRegistered={isRegistered}
         userId={userId as string}
         eventStartDate={eventStartDate}
@@ -423,15 +434,21 @@ function EventListCardModals({
         recurrence={recurrence}
         setRecurrence={setRecurrence}
         customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-        setCustomRecurrenceModalIsOpen={openCustomRecurrenceModal}
+        setCustomRecurrenceModalIsOpen={(state) => {
+          const next =
+            typeof state === 'function'
+              ? state(customRecurrenceModalIsOpen)
+              : state;
+          if (next) openCustomRecurrenceModal();
+          else closeCustomRecurrenceModal();
+        }}
+        hideCustomRecurrenceModal={closeCustomRecurrenceModal}
       />
 
       <EventListCardDeleteModal
         eventListCardProps={eventListCardProps}
         eventDeleteModalIsOpen={eventDeleteModalIsOpen}
         toggleDeleteModal={toggleDeleteModal}
-        t={t}
-        tCommon={tCommon}
         deleteEventHandler={deleteEventHandler}
       />
 
@@ -472,7 +489,6 @@ function EventListCardModals({
                   recurrence,
                   updateOption,
                   hasRecurrenceChanged: hasRecurrenceChanged(),
-                  t,
                   hideViewModal,
                   eventUpdateModalIsOpen,
                   closeUpdateModal,

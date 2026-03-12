@@ -36,14 +36,15 @@ import dayjs from 'dayjs';
 import Button from 'shared-components/Button';
 import React, { useState, useEffect, type JSX } from 'react';
 import styles from './YearlyEventCalender.module.css';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+import ChevronRight from '@mui/icons-material/ChevronRight';
 import {
   type InterfaceEvent,
   type InterfaceCalendarProps,
-  type InterfaceIOrgList,
   UserRole,
 } from 'types/Event/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { filterEvents } from 'types/Event/utils';
 import { useTranslation } from 'react-i18next';
 
 const Calendar: React.FC<InterfaceCalendarProps> = ({
@@ -56,74 +57,41 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
+  const { t: tRoot } = useTranslation('translation');
+  const { t: tYearlyCalendar } = useTranslation('translation', {
+    keyPrefix: 'yearlyCalendar',
+  });
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expandedY, setExpandedY] = useState<string | null>(null);
 
-  const weekdaysShorthand = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+  const weekdaysShorthand = [
+    tYearlyCalendar('weekdaysShorthand.mon'),
+    tYearlyCalendar('weekdaysShorthand.tue'),
+    tYearlyCalendar('weekdaysShorthand.wed'),
+    tYearlyCalendar('weekdaysShorthand.thu'),
+    tYearlyCalendar('weekdaysShorthand.fri'),
+    tYearlyCalendar('weekdaysShorthand.sat'),
+    tYearlyCalendar('weekdaysShorthand.sun'),
+  ];
   const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    tRoot('eventListCard.january'),
+    tRoot('eventListCard.february'),
+    tRoot('eventListCard.march'),
+    tRoot('eventListCard.april'),
+    tRoot('eventListCard.may'),
+    tRoot('eventListCard.june'),
+    tRoot('eventListCard.july'),
+    tRoot('eventListCard.august'),
+    tRoot('eventListCard.september'),
+    tRoot('eventListCard.october'),
+    tRoot('eventListCard.november'),
+    tRoot('eventListCard.december'),
   ];
 
-  /**
-   * Filters events based on user role, organization data, and user ID.
-   *
-   * @param eventData - Array of event data to filter.
-   * @param orgData - Organization data for filtering events (includes members).
-   * @param userRole - Role of the user for access control (ADMINISTRATOR or REGULAR).
-   * @param userId - ID of the user for filtering events they are attending.
-   * @returns Filtered array of event data.
-   */
-  const filterData = (
-    eventData: InterfaceEvent[],
-    orgData?: InterfaceIOrgList,
-    userRole?: UserRole,
-    userId?: string,
-  ): InterfaceEvent[] => {
-    const filteredEvents: InterfaceEvent[] = [];
-
-    if (!eventData) return filteredEvents;
-
-    if (!userRole || !userId) {
-      return eventData.filter((event) => event.isPublic);
-    }
-
-    if (userRole === UserRole.ADMINISTRATOR) {
-      return eventData; // Administrators see all events
-    }
-
-    // For REGULAR users
-    eventData.forEach((event) => {
-      if (event.isPublic) {
-        filteredEvents.push(event);
-        return;
-      }
-
-      const isMember = orgData?.members?.edges.some(
-        (edge) => edge.node.id === userId,
-      );
-      if (isMember) {
-        filteredEvents.push(event);
-      }
-    });
-
-    return filteredEvents;
-  };
-
   useEffect(() => {
-    const filteredEvents = filterData(
+    const filteredEvents = filterEvents(
       eventData,
       orgData,
       userRole as UserRole | undefined,
@@ -234,10 +202,17 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`expand-btn-${expandKey}`}
+                  aria-label={
+                    expandedY === expandKey
+                      ? tCommon('close')
+                      : tYearlyCalendar('expandDay')
+                  }
                 >
                   {expandedY === expandKey ? (
                     <div className={styles.closebtnYearlyEventCalender}>
-                      <br />
+                      <div
+                        className={styles.closebtnYearlyEventCalenderTopSpacing}
+                      ></div>
                       <p>{tCommon('close')}</p>
                     </div>
                   ) : (
@@ -249,13 +224,24 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   className={styles.btn__more}
                   onClick={() => toggleExpand(expandKey)}
                   data-testid={`no-events-btn-${expandKey}`}
+                  aria-label={
+                    expandedY === expandKey
+                      ? tCommon('close')
+                      : tYearlyCalendar('expandDay')
+                  }
                 >
                   {expandedY === expandKey ? (
                     <div className={styles.closebtnYearlyEventCalender}>
-                      <br />
-                      <br />
-                      {t('noEventAvailable')}
-                      <br />
+                      <div
+                        className={styles.closebtnYearlyEventCalenderTopSpacing}
+                      ></div>
+                      <div
+                        className={
+                          styles.closebtnYearlyEventCalenderBottomSpacing
+                        }
+                      >
+                        {t('noEventAvailable')}
+                      </div>
                       <p>{tCommon('close')}</p>
                     </div>
                   ) : (
@@ -274,9 +260,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             <h6 className={styles.cardHeaderYearlyEventCalender}>
               {months[monthIdx]}
             </h6>
-            <div className={styles.calendar__weekdays}>
+            <div
+              className={styles.weekdayHeaderRow}
+              data-testid="weekday-header-row"
+            >
               {weekdaysShorthand.map((weekday, idx) => (
-                <div key={idx} className={styles.weekday__yearly}>
+                <div
+                  key={idx}
+                  className={styles.weekdayHeaderCell}
+                  data-testid="weekday-header-cell"
+                >
                   {weekday}
                 </div>
               ))}

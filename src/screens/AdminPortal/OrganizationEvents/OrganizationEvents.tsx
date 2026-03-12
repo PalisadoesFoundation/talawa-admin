@@ -39,6 +39,7 @@ import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -86,6 +87,7 @@ interface IEventEdge {
 
 export enum ViewType {
   DAY = 'Day',
+  WEEK = 'Week View',
   MONTH = 'Month View',
   YEAR = 'Year View',
 }
@@ -105,9 +107,6 @@ function organizationEvents(): JSX.Element {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
-
-  const showCreateEventModal = (): void => createEventModal.open();
-  const hideCreateEventModal = (): void => createEventModal.close();
 
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
@@ -236,6 +235,18 @@ function organizationEvents(): JSX.Element {
   return (
     <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
       <>
+        <SafeBreadcrumbs
+          items={[
+            {
+              translationKey: 'organization',
+              to: `/admin/orgdash/${currentUrl}`,
+            },
+            {
+              translationKey: 'events',
+              isCurrent: true,
+            },
+          ]}
+        />
         <div className={styles.mainpageright}>
           <div className={styles.justifyspOrganizationEvents}>
             <PageHeader
@@ -252,9 +263,10 @@ function organizationEvents(): JSX.Element {
                   title: t('viewType'),
                   selected: viewType,
                   options: [
-                    { label: ViewType.MONTH, value: ViewType.MONTH },
-                    { label: ViewType.DAY, value: ViewType.DAY },
-                    { label: ViewType.YEAR, value: ViewType.YEAR },
+                    { label: t('selectMonth'), value: ViewType.MONTH },
+                    { label: t('selectWeek'), value: ViewType.WEEK },
+                    { label: t('selectDay'), value: ViewType.DAY },
+                    { label: t('selectYear'), value: ViewType.YEAR },
                   ],
                   onChange: (value) => handleChangeView(value.toString()),
                   testIdPrefix: 'selectViewType',
@@ -263,7 +275,7 @@ function organizationEvents(): JSX.Element {
               actions={
                 <Button
                   className={styles.dropdown}
-                  onClick={showCreateEventModal}
+                  onClick={createEventModal.open}
                   data-testid="createEventModalBtn"
                   data-cy="createEventModalBtn"
                 >
@@ -290,7 +302,7 @@ function organizationEvents(): JSX.Element {
 
         <CreateEventModal
           isOpen={createEventModal.isOpen}
-          onClose={hideCreateEventModal}
+          onClose={createEventModal.close}
           onEventCreated={refetchEvents}
           currentUrl={currentUrl || ''}
         />

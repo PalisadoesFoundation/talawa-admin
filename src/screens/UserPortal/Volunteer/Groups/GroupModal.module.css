@@ -1,12 +1,12 @@
 .groupModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+  max-width: var(--vw-80);
+  margin-top: var(--vh-2);
+  margin-left: var(--vw-13);
 }
 
 .groupModal .modal-dialog {
-  max-width: 80vw;
-  margin: 2vh auto;
+  max-width: var(--vw-80);
+  margin: var(--vh-2) auto;
 }
 
 .groupModal .modal-content {
@@ -15,13 +15,13 @@
 
 @media (max-width: 768px) {
   .groupModal {
-    margin: 10vh auto;
+    margin: var(--vh-10) auto;
     max-width: 90%;
   }
 
   .groupModal .modal-dialog {
     max-width: 90%;
-    margin: 10vh auto;
+    margin: var(--vh-10) auto;
   }
 }
 
@@ -112,7 +112,7 @@
 }
 
 .regBtn:focus-visible {
-  outline: var(--border-1) solid var(--color-blue-300);
+  outline: var(--border-1) solid var();
   outline-offset: var(--space-1);
 }
 

@@ -11,21 +11,35 @@ import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 import i18n from 'i18next';
 
 // Helper to get toggle button (expand or no-events) for a given Date
+// Uses midday dates to avoid timezone boundary issues
 function getToggleButtonForDate(
   container: HTMLElement,
   date: Date,
 ): HTMLButtonElement | null {
-  const monthIdx = date.getMonth();
-  const monthStart = new Date(date.getFullYear(), monthIdx, 1);
+  // Create date at midday to avoid boundary issues
+  const middayDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    12,
+    0,
+    0,
+  );
+  const monthIdx = middayDate.getMonth();
+  const monthStart = new Date(middayDate.getFullYear(), monthIdx, 1, 12, 0, 0);
   const dayOfWeek = monthStart.getDay();
-  const diff = monthStart.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Monday start
-  const gridStart = new Date(monthStart);
-  gridStart.setDate(diff);
+  const diff = monthStart.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+  const gridStart = new Date(
+    middayDate.getFullYear(),
+    monthIdx,
+    diff,
+    12,
+    0,
+    0,
+  );
   const msPerDay = 24 * 60 * 60 * 1000;
   const dayIdx = Math.floor(
-    (new Date(date.toDateString()).getTime() -
-      new Date(gridStart.toDateString()).getTime()) /
-      msPerDay,
+    (middayDate.getTime() - gridStart.getTime()) / msPerDay,
   );
 
   const expandSelector = `[data-testid="expand-btn-${monthIdx}-${dayIdx}"]`;
@@ -115,19 +129,47 @@ i18n.init({
   resources: {
     en: {
       translation: {
+        eventListCard: {
+          january: 'January',
+          february: 'February',
+          march: 'March',
+          april: 'April',
+          may: 'May',
+          june: 'June',
+          july: 'July',
+          august: 'August',
+          september: 'September',
+          october: 'October',
+          november: 'November',
+          december: 'December',
+        },
         userEvents: {
           noEventAvailable: 'No Event Available!',
         },
-      },
-      common: {
-        none: 'None',
-        close: 'Close',
-      },
-      errors: {
-        defaultErrorMessage: 'An error occurred',
-        title: 'Error',
-        resetButtonAriaLabel: 'Reset',
-        resetButton: 'Reset',
+        yearlyCalendar: {
+          weekdaysShorthand: {
+            mon: 'M',
+            tue: 'T',
+            wed: 'W',
+            thu: 'T',
+            fri: 'F',
+            sat: 'S',
+            sun: 'S',
+          },
+          expandDay: 'Expand day',
+        },
+        common: {
+          none: 'None',
+          close: 'Close',
+          previousYear: 'Previous Year',
+          nextYear: 'Next Year',
+        },
+        errors: {
+          defaultErrorMessage: 'An error occurred',
+          title: 'Error',
+          resetButtonAriaLabel: 'Reset',
+          resetButton: 'Reset',
+        },
       },
     },
   },
@@ -183,11 +225,12 @@ describe('Calendar Component', () => {
     user = userEvent.setup();
   });
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
   const mockRefetchEvents = vi.fn();
-  const today = new Date();
+  const today = new Date(Date.UTC(2026, 3, 15, 10, 0, 0));
+  const todayISO = today.toISOString();
 
   const mockEventData = [
     {
@@ -195,8 +238,8 @@ describe('Calendar Component', () => {
       location: 'Test Location',
       name: 'Test Event',
       description: 'Test Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -217,8 +260,8 @@ describe('Calendar Component', () => {
       location: 'Private Location',
       name: 'Private Event',
       description: 'Private Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '12:00',
       endTime: '13:00',
       allDay: false,
@@ -272,7 +315,7 @@ describe('Calendar Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setMockOrgId('org1');
   });
 
@@ -282,9 +325,7 @@ describe('Calendar Component', () => {
     );
 
     await waitFor(() => {
-      expect(
-        getByText(new Date().getFullYear().toString()),
-      ).toBeInTheDocument();
+      expect(getByText(today.getFullYear().toString())).toBeInTheDocument();
     });
 
     expect(getByText('January')).toBeInTheDocument();
@@ -313,12 +354,31 @@ describe('Calendar Component', () => {
     expect(days.length).toBeGreaterThan(0);
   });
 
+  it('renders weekday labels in each month column', async () => {
+    renderWithRouterAndPath(
+      <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
+    });
+
+    const weekdayHeaderRows = screen.getAllByTestId('weekday-header-row');
+    expect(weekdayHeaderRows.length).toBe(12);
+
+    // Verify each header row has exactly 7 weekday cells
+    weekdayHeaderRows.forEach((row) => {
+      const cells = row.querySelectorAll('[data-testid="weekday-header-cell"]');
+      expect(cells.length).toBe(7);
+    });
+  });
+
   it('handles year navigation correctly', async () => {
     const { getByText } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
 
     const prevButton = screen.getByLabelText('previousYear');
     const nextButton = screen.getByLabelText('nextYear');
@@ -350,7 +410,7 @@ describe('Calendar Component', () => {
   });
 
   it("filters events correctly for ADMINISTRATOR role with today's event", async () => {
-    const janFirst = new Date(new Date().getFullYear(), 0, 1, 12, 0, 0);
+    const janFirst = new Date(today.getFullYear(), 0, 1, 12, 0, 0);
     const mockEvent = {
       ...mockEventData[0],
       startAt: janFirst.toISOString(),
@@ -371,11 +431,10 @@ describe('Calendar Component', () => {
   });
 
   it('filters events correctly for REGULAR role', async () => {
-    const todayDate = new Date();
     const mockEvent = {
       ...mockEventData[0],
-      startAt: todayDate.toISOString(),
-      endAt: todayDate.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
     };
 
     renderWithRouterAndPath(
@@ -393,16 +452,9 @@ describe('Calendar Component', () => {
   });
 
   it('toggles expansion state when clicked', async () => {
-    const todayDate = new Date();
-    const mockEvent = {
-      ...mockEventData[0],
-      startAt: todayDate.toISOString(),
-      endAt: todayDate.toISOString(),
-    };
-
     renderWithRouterAndPath(
       <Calendar
-        eventData={[mockEvent]}
+        eventData={[mockEventData[0]]}
         refetchEvents={mockRefetchEvents}
         orgData={mockOrgData}
         userRole={UserRole.REGULAR}
@@ -410,30 +462,15 @@ describe('Calendar Component', () => {
       />,
     );
 
-    // Wait for calendar to render
     await waitFor(() => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
     });
 
-    // Verify the component rendered correctly
     expect(screen.getByText('January')).toBeInTheDocument();
-    expect(
-      screen.getByText(new Date().getFullYear().toString()),
-    ).toBeInTheDocument();
+    expect(screen.getByText(String(today.getFullYear()))).toBeInTheDocument();
 
-    // Verify that events are rendered for today's date
-    // This tests the event filtering and rendering logic
-    const todayDayElements = screen.getAllByTestId('day');
-    const todayElement = todayDayElements.find((element) =>
-      element.textContent?.includes(todayDate.getDate().toString()),
-    );
-
-    expect(todayElement).toBeInTheDocument();
-
-    // Test that the event data is properly passed to the component
-    // This covers the event data flow and filtering logic
-    expect(mockEvent.name).toBe('Test Event');
-    expect(mockEvent.isPublic).toBe(true);
+    const allDays = screen.getAllByTestId('day');
+    expect(allDays.length).toBeGreaterThan(0);
   });
 
   it('displays "No Event Available!" message when no events exist', async () => {
@@ -454,8 +491,8 @@ describe('Calendar Component', () => {
     const mockEvent = {
       ...mockEventData[0],
       name: 'Test Event',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
     };
 
     const { rerender, container } = renderWithRouterAndPath(
@@ -502,11 +539,10 @@ describe('Calendar Component', () => {
   });
 
   it('filters events correctly for ADMINISTRATOR role with private events', async () => {
-    const todayDate = new Date();
     const mockEvent = {
       ...mockEventData[1],
-      startAt: todayDate.toISOString(),
-      endAt: todayDate.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
     };
 
     renderWithRouterAndPath(
@@ -527,8 +563,8 @@ describe('Calendar Component', () => {
     const multiMonthEvents = [
       {
         ...mockEventData[0],
-        startAt: new Date(today.getFullYear(), 0, 15).toISOString(),
-        endAt: new Date(today.getFullYear(), 1, 15).toISOString(),
+        startAt: new Date(today.getFullYear(), 3, 15, 12, 0, 0).toISOString(),
+        endAt: new Date(today.getFullYear(), 4, 15, 12, 0, 0).toISOString(),
       },
     ];
 
@@ -564,7 +600,7 @@ describe('Calendar Component', () => {
       expect(buttons.length).toBeGreaterThan(0);
     });
 
-    const start = new Date(today.getFullYear(), 0, 15);
+    const start = new Date(today.getFullYear(), 3, 15, 12, 0, 0);
     await clickExpandForDate(container, start, user);
   });
 
@@ -577,7 +613,7 @@ describe('Calendar Component', () => {
       />,
     );
 
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
 
     const prevButton = screen.getByLabelText('previousYear');
     const nextButton = screen.getByLabelText('nextYear');
@@ -610,16 +646,9 @@ describe('Calendar Component', () => {
   });
 
   it('collapses expanded event list when clicked again', async () => {
-    const todayDate = new Date();
-    const mockEvent = {
-      ...mockEventData[0],
-      startAt: todayDate.toISOString(),
-      endAt: todayDate.toISOString(),
-    };
-
     renderWithRouterAndPath(
       <Calendar
-        eventData={[mockEvent]}
+        eventData={[mockEventData[0]]}
         refetchEvents={mockRefetchEvents}
         orgData={mockOrgData}
         userRole={UserRole.REGULAR}
@@ -627,32 +656,20 @@ describe('Calendar Component', () => {
       />,
     );
 
-    // Wait for calendar to render
     await waitFor(() => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
     });
 
-    // Verify the component rendered correctly
     expect(screen.getByText('January')).toBeInTheDocument();
-    expect(
-      screen.getByText(new Date().getFullYear().toString()),
-    ).toBeInTheDocument();
+    expect(screen.getByText(String(today.getFullYear()))).toBeInTheDocument();
 
-    // Test event data filtering and processing
-    // This covers the filterData function logic
-    expect(mockEvent.id).toBe('1');
-    expect(mockEvent.location).toBe('Test Location');
-    expect(mockEvent.description).toBe('Test Description');
-
-    // Test that the component handles event data correctly
-    // This covers the event state management and rendering
     const dayElements = screen.getAllByTestId('day');
     expect(dayElements.length).toBeGreaterThan(0);
   });
 
   it('includes private events for REGULAR users who are org members', async () => {
     // Use a date format that matches the component's date filtering
-    const janFirst = new Date(new Date().getFullYear(), 0, 1, 12, 0, 0);
+    const janFirst = new Date(today.getFullYear(), 0, 1, 12, 0, 0);
     const privateEventToday = {
       ...mockEventData[1],
       name: 'Member Private Event',
@@ -700,19 +717,20 @@ describe('Calendar Component', () => {
     // Verify the component rendered correctly
     expect(screen.getByText('January')).toBeInTheDocument();
     expect(
-      screen.getByText(new Date().getFullYear().toString()),
+      screen.getByText(today.getFullYear().toString()),
     ).toBeInTheDocument();
   });
 
   it('excludes private events for REGULAR users who are not members and toggles no-events panel', async () => {
-    const todayDate = new Date();
     const privateEventToday = {
       ...mockEventData[1],
       name: 'NonMember Private Event',
       isPublic: false,
       isInviteOnly: false,
-      startDate: todayDate.toISOString(),
-      endDate: todayDate.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
+      startDate: todayISO,
+      endDate: todayISO,
       startTime: '12:00:00',
       endTime: '13:00:00',
     };
@@ -794,15 +812,13 @@ describe('Calendar Component', () => {
   });
 
   it('renders event card when attendees is undefined (covers attendees fallback)', async () => {
-    // Use a date format that matches the component's date filtering
-    const janFirst = new Date(new Date().getFullYear(), 0, 1, 12, 0, 0);
     const eventWithoutAttendees: CalendarEventItem = {
       id: 'no-attendees',
       location: 'Loc',
       name: 'No Attendees Event',
       description: 'Desc',
-      startAt: janFirst.toISOString(),
-      endAt: janFirst.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '09:00:00',
       endTime: '10:00:00',
       allDay: false,
@@ -823,27 +839,12 @@ describe('Calendar Component', () => {
       />,
     );
 
-    // Wait for calendar to render
     await waitFor(() => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0);
     });
 
-    // Verify the component rendered correctly
     expect(screen.getByText('January')).toBeInTheDocument();
-    expect(
-      screen.getByText(new Date().getFullYear().toString()),
-    ).toBeInTheDocument();
-
-    // Test that the event with undefined attendees is handled correctly
-    // This covers the attendees fallback logic in the component
-    expect(eventWithoutAttendees.attendees).toBeUndefined();
-    expect(eventWithoutAttendees.name).toBe('No Attendees Event');
-    expect(eventWithoutAttendees.isPublic).toBe(true);
-
-    // Test that the component processes the event data correctly
-    // This covers the event data validation and processing
-    expect(eventWithoutAttendees.id).toBe('no-attendees');
-    expect(eventWithoutAttendees.location).toBe('Loc');
+    expect(screen.getByText(String(today.getFullYear()))).toBeInTheDocument();
   });
 
   test('filters events correctly when userRole is undefined but eventData contains events', async () => {
@@ -852,8 +853,8 @@ describe('Calendar Component', () => {
       location: 'Public Location',
       name: 'Public Event',
       description: 'Public Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -873,8 +874,8 @@ describe('Calendar Component', () => {
       location: 'Private Location',
       name: 'Private Event',
       description: 'Private Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '12:00:00',
       endTime: '13:00:00',
       allDay: false,
@@ -901,7 +902,7 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
@@ -932,8 +933,8 @@ describe('Calendar Component', () => {
       location: 'Public Location',
       name: 'Public Event',
       description: 'Public Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -953,8 +954,8 @@ describe('Calendar Component', () => {
       location: 'Private Location',
       name: 'Private Event',
       description: 'Private Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '12:00:00',
       endTime: '13:00:00',
       allDay: false,
@@ -983,7 +984,7 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
@@ -1004,8 +1005,8 @@ describe('Calendar Component', () => {
       location: 'Private Location',
       name: 'Private Event',
       description: 'Private Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -1034,7 +1035,7 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
@@ -1056,8 +1057,8 @@ describe('Calendar Component', () => {
       location: 'Private Location',
       name: 'Private Event',
       description: 'Private Description',
-      startAt: new Date().toISOString(),
-      endAt: new Date().toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -1094,7 +1095,7 @@ describe('Calendar Component', () => {
     );
 
     // Wait for component to render
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
@@ -1111,14 +1112,14 @@ describe('Calendar Component', () => {
   });
 
   test('processes multiple events for REGULAR user when user is a member', async () => {
-    const today = new Date();
+    const eventDate = todayISO;
     const publicEvent: CalendarEventItem = {
       id: 'public-event',
       location: 'Public Location',
       name: 'Public Event',
       description: 'Public Description',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: eventDate,
+      endAt: eventDate,
       startTime: '10:00:00',
       endTime: '11:00:00',
       allDay: false,
@@ -1138,8 +1139,8 @@ describe('Calendar Component', () => {
       location: 'Private Location 1',
       name: 'Private Event 1',
       description: 'Private Description 1',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '12:00:00',
       endTime: '13:00:00',
       allDay: false,
@@ -1159,8 +1160,8 @@ describe('Calendar Component', () => {
       location: 'Private Location 2',
       name: 'Private Event 2',
       description: 'Private Description 2',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: todayISO,
+      endAt: todayISO,
       startTime: '14:00:00',
       endTime: '15:00:00',
       allDay: false,
@@ -1209,7 +1210,7 @@ describe('Calendar Component', () => {
     await findAllByTestId('day');
 
     // Verify component renders successfully with events
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
@@ -1228,7 +1229,7 @@ describe('Calendar Component', () => {
       </BrowserRouter>,
     );
 
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
     const prevButton = getByLabelText('previousYear'); // fixed
     const nextButton = getByLabelText('nextYear');
 
@@ -1354,7 +1355,7 @@ describe('Calendar Component', () => {
 
   it('collapses previously expanded day when a new day is expanded', async () => {
     // Use fixed mid-month dates to avoid month boundary issues
-    const currentYear = new Date().getFullYear();
+    const currentYear = today.getFullYear();
     const dayOne = new Date(currentYear, 5, 10, 12, 0, 0); // June 10
     const dayTwo = new Date(currentYear, 5, 11, 12, 0, 0); // June 11
 
@@ -1408,12 +1409,14 @@ describe('Calendar Component', () => {
       expect(screen.getByText('Event B')).toBeInTheDocument(),
     );
 
-    expect(screen.queryByText('Event A')).toBeNull();
+    await waitFor(() => {
+      expect(screen.queryByText('Event A')).toBeNull();
+    });
   });
 
   it('handles month layout correctly when month starts on Sunday', async () => {
     // Find a month in the current year where the 1st is Sunday.
-    const year = new Date().getFullYear();
+    const year = today.getFullYear();
     let sundayMonth = -1;
     for (let m = 0; m < 12; m++) {
       if (new Date(year, m, 1).getDay() === 0) {

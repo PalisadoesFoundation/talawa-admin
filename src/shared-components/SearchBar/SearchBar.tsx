@@ -10,11 +10,12 @@ import React, {
 import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
-import styles from 'style/app-fixed.module.css';
+import styles from './SearchBar.module.css';
 import type {
   InterfaceSearchBarProps,
   InterfaceSearchBarRef,
 } from 'types/SearchBar/interface';
+import Button from 'shared-components/Button';
 
 const mergeClassNames = (
   ...classes: Array<string | false | undefined>
@@ -202,7 +203,11 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
       <div className={containerClassName}>
         <div className={wrapperClassName}>
           {showLeadingIcon && (
-            <span className={styles.searchBarIcon} aria-hidden="true">
+            <span
+              className={styles.searchBarIcon}
+              data-testid="leading-icon"
+              aria-hidden="true"
+            >
               {LeadingIcon}
             </span>
           )}
@@ -220,7 +225,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
             {...rest}
           />
           {showClearButton && currentValue.length > 0 && !disabled && (
-            <button
+            <Button
               type="button"
               className={styles.searchBarClearButton}
               aria-label={clearButtonAriaLabel}
@@ -228,16 +233,20 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
               data-testid={clearButtonTestId}
             >
               <CloseRoundedIcon fontSize="small" />
-            </button>
+            </Button>
           )}
           {showTrailingIcon && (
-            <span className={styles.searchBarTrailingIcon} aria-hidden="true">
+            <span
+              className={styles.searchBarTrailingIcon}
+              data-testid="trailing-icon"
+              aria-hidden="true"
+            >
               <SearchIcon fontSize="small" />
             </span>
           )}
         </div>
         {showSearchButton && (
-          <button
+          <Button
             type="button"
             className={buttonClassNames}
             onClick={handleButtonClick}
@@ -256,7 +265,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
                 {buttonAriaLabel || 'Search'}
               </span>
             )}
-          </button>
+          </Button>
         )}
       </div>
     );

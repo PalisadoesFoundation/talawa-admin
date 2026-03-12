@@ -1,19 +1,20 @@
 import React from 'react';
-import { toast } from 'react-toastify';
+import { NotificationToast } from '../../src/shared-components/NotificationToast/NotificationToast';
+import Button from '../../src/shared-components/Button/Button';
 
 // Single component containing all violations (JSX text, attrs, toasts)
 export function ViolationsFixture() {
   React.useEffect(() => {
-    toast.error('Something went wrong');
-    toast.success('Operation completed successfully');
-    toast.warning('Please check your input');
-    toast.info('New update available');
+    NotificationToast.error('Something went wrong');
+    NotificationToast.success('Operation completed successfully');
+    NotificationToast.warning('Please check your input');
+    NotificationToast.info('New update available');
   }, []);
 
   return (
     <div>
       <h1>Welcome to Dashboard</h1>
-      <button>Click Me</button>
+      <Button>Click Me</Button>
       <p>This is hardcoded text</p>
       <input
         placeholder="Enter your name"

@@ -57,6 +57,7 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
       avatarMimeType
       avatarURL
       updatedAt
+      isUserRegistrationRequired
     }
   }
 `;
@@ -343,7 +344,7 @@ export const CREATE_ORGANIZATION_MUTATION_PG = gql`
     $name: String!
     $addressLine1: String
     $addressLine2: String
-    $avatar: Upload
+    $avatar: FileMetadataInput
     $city: String
     $countryCode: Iso3166Alpha2CountryCode
     $description: String
@@ -465,6 +466,26 @@ export const FORGOT_PASSWORD_MUTATION = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to update the password of the currently authenticated user.
+ */
+export const UPDATE_USER_PASSWORD = gql`
+  mutation UpdateUserPassword($input: MutationUpdateUserPasswordInput!) {
+    updateUserPassword(input: $input)
+  }
+`;
+
+/**
+ * GraphQL mutation allowing an administrator to update another user's password.
+ */
+export const ADMIN_UPDATE_USER_PASSWORD = gql`
+  mutation AdminUpdateUserPassword(
+    $input: MutationAdminUpdateUserPasswordInput!
+  ) {
+    adminUpdateUserPassword(input: $input)
+  }
+`;
+
 export const UPDATE_POST_MUTATION = gql`
   mutation updatePost($input: MutationUpdatePostInput!) {
     updatePost(input: $input) {
@@ -529,7 +550,7 @@ export const UPDATE_POST_VOTE = gql`
 /**
  * GraphQL mutation to update community profile settings including logo upload.
  *
- * @param logo - Optional logo file (Upload scalar) - sent as multipart request via apollo-upload-client
+ * @param logo - Optional logo metadata (FileMetadataInput) - uploaded via MinIO presigned URL
  * @param name - Community name
  * @param websiteURL - Community website URL
  * @param facebookURL - Facebook profile URL
@@ -546,7 +567,7 @@ export const UPDATE_POST_VOTE = gql`
  */
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
-    $logo: Upload
+    $logo: FileMetadataInput
     $facebookURL: String
     $githubURL: String
     $instagramURL: String
@@ -614,6 +635,37 @@ export const DONATE_TO_ORGANIZATION = gql`
       nameOfUser: $nameOfUser
       amount: $amount
       nameOfOrg: $nameOfOrg
+    ) {
+      _id
+      amount
+      nameOfUser
+      nameOfOrg
+    }
+  }
+`;
+
+/**
+ * DONATE_TO_ORGANIZATION_WITH_CURRENCY is the currency-aware variant of DONATE_TO_ORGANIZATION for donations with explicit currency.
+ * Accepts an ISO 4217 `currencyCode` (Iso4217CurrencyCode) while preserving the same returned fields: `_id`, `amount`, `nameOfUser`, and `nameOfOrg`.
+ */
+export const DONATE_TO_ORGANIZATION_WITH_CURRENCY = gql`
+  mutation donateWithCurrency(
+    $userId: ID!
+    $createDonationOrgId2: ID!
+    $payPalId: ID!
+    $nameOfUser: String!
+    $amount: Float!
+    $nameOfOrg: String!
+    $currencyCode: Iso4217CurrencyCode!
+  ) {
+    createDonation(
+      userId: $userId
+      orgId: $createDonationOrgId2
+      payPalId: $payPalId
+      nameOfUser: $nameOfUser
+      amount: $amount
+      nameOfOrg: $nameOfOrg
+      currencyCode: $currencyCode
     ) {
       _id
       amount
@@ -708,6 +760,60 @@ export const GET_FILE_PRESIGNEDURL = gql`
   mutation createGetfileUrl($input: MutationCreateGetfileUrlInput!) {
     createGetfileUrl(input: $input) {
       presignedUrl
+    }
+  }
+`;
+
+/** Links an OAuth provider account to the currently authenticated user. */
+export const LINK_OAUTH_ACCOUNT = gql`
+  mutation LinkOAuthAccount($input: OAuthLoginInput!) {
+    linkOAuthAccount(input: $input) {
+      id
+      name
+      emailAddress
+      isEmailAddressVerified
+      role
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Unlinks an OAuth provider account from the currently authenticated user. */
+export const UNLINK_OAUTH_ACCOUNT = gql`
+  mutation UnlinkOAuthAccount($provider: OAuthProvider!) {
+    unlinkOAuthAccount(provider: $provider) {
+      id
+      emailAddress
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
+/** Authenticates a user using an OAuth provider and returns authentication tokens. */
+export const SIGN_IN_WITH_OAUTH = gql`
+  mutation SignInWithOAuth($input: OAuthLoginInput!) {
+    signInWithOAuth(input: $input) {
+      authenticationToken
+      refreshToken
+      user {
+        id
+        name
+        emailAddress
+        role
+        countryCode
+        avatarURL
+        isEmailAddressVerified
+      }
     }
   }
 `;

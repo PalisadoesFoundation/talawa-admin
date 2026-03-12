@@ -4,7 +4,6 @@
  * A reusable component that provides consistent loading experiences across the application.
  * Supports full-screen spinner with overlay, inline loading indicators, and skeleton placeholders.
  *
- * @component
  * @example
  * ```tsx
  * // Full-screen loading
@@ -32,9 +31,9 @@
 import React from 'react';
 import { Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './LoadingState.module.css';
 import type { InterfaceLoadingStateProps } from 'types/shared-components/LoadingState/interface';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 
 const LoadingState = ({
   isLoading,

@@ -14,7 +14,9 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Close, InsertPhotoOutlined, PushPin } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
+import InsertPhotoOutlined from '@mui/icons-material/InsertPhotoOutlined';
+import PushPin from '@mui/icons-material/PushPin';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './createPostModal.module.css';
 import { useMutation } from '@apollo/client';
@@ -29,6 +31,7 @@ import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import Button from 'shared-components/Button';
 
 function CreatePostModal({
   show,
@@ -204,7 +207,7 @@ function CreatePostModal({
   return (
     <>
       {/* Backdrop overlay */}
-      <button
+      <Button
         className={`${styles.backdrop} ${show ? styles.backdropShow : ''}`}
         onClick={!isLoading ? handleClose : undefined}
         data-testid="modalBackdrop"
@@ -236,7 +239,7 @@ function CreatePostModal({
               </span>
             </div>
           </div>
-          <button
+          <Button
             className={styles.closeButton}
             onClick={!isLoading ? handleClose : undefined}
             aria-label={t('createPostModal.close')}
@@ -244,7 +247,7 @@ function CreatePostModal({
             type="button"
           >
             <Close />
-          </button>
+          </Button>
         </div>
 
         {/* Content Area */}
@@ -305,7 +308,7 @@ function CreatePostModal({
         {/* Footer */}
         <div className={styles.modalFooter}>
           <div className={styles.mediaActions}>
-            <button
+            <Button
               type="button"
               className={styles.mediaButton}
               aria-label={t('createPostModal.addAttachment')}
@@ -325,8 +328,8 @@ function CreatePostModal({
                 hidden
                 onChange={handleImageSelect}
               />
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
               className={styles.mediaButton}
               aria-label={
@@ -349,12 +352,12 @@ function CreatePostModal({
                   color: isPinned ? '#0a66c2' : '',
                 }}
               />
-            </button>
+            </Button>
           </div>
 
           <div className={styles.postActions}>
             <form onSubmit={createPostHandler}>
-              <button
+              <Button
                 className={`${styles.postButton} ${
                   isPostDisabled || isLoading ? styles.postButtonDisabled : ''
                 }`}
@@ -369,7 +372,7 @@ function CreatePostModal({
                 ) : (
                   t('createPostModal.saveChanges')
                 )}
-              </button>
+              </Button>
             </form>
           </div>
         </div>

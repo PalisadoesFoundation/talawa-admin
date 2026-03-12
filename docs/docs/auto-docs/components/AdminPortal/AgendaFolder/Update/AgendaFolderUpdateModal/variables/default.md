@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaFolderUpdateModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaFolderUpdateModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx#L30)
+Defined in: [src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx#L31)
 
 AgendaFolderUpdateModal
 

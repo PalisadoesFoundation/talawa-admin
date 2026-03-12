@@ -57,12 +57,15 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import { useTranslation } from 'react-i18next';
 import Row from 'react-bootstrap/Row';
+import Add from '@mui/icons-material/Add';
+import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
 import PostCard from 'shared-components/postCard/PostCard';
 import styles from './posts.module.css';
-import { Box, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
@@ -356,7 +359,6 @@ export default function PostsPage() {
                 testIdPrefix: 'sortpost',
               },
             ]}
-            showEventTypeFilter={false}
           />
 
           <div className={`row ${styles.list_box}`}>
@@ -413,7 +415,7 @@ export default function PostsPage() {
                   {postsToDisplay.map((post) => (
                     <PostCard
                       key={post.id}
-                      {...formatPostForCard(post, t, refetch)}
+                      {...formatPostForCard(post, refetch)}
                     />
                   ))}
                 </Box>

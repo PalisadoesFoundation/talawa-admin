@@ -19,7 +19,6 @@ import {
   MOCKS,
   MOCKS_ERROR,
 } from './AddPeopleToTagsMocks';
-import type { TFunction } from 'i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const link = new StaticMockLink(MOCKS, true);
@@ -60,22 +59,12 @@ const defaultProps: InterfaceAddPeopleToTagProps = {
   addPeopleToTagModalIsOpen: false,
   hideAddPeopleToTagModal: vi.fn(),
   refetchAssignedMembersData: vi.fn(),
-  t: ((key: string) => key) as TFunction<'translation', 'manageTag'>,
-  tCommon: ((key: string) => key) as TFunction<'common', undefined>,
 };
 
 const props: InterfaceAddPeopleToTagProps = {
   addPeopleToTagModalIsOpen: true,
   hideAddPeopleToTagModal: () => {},
   refetchAssignedMembersData: () => {},
-  t: ((key: string) => translations[key]) as TFunction<
-    'translation',
-    'manageTag'
-  >,
-  tCommon: ((key: string) => translations[key]) as TFunction<
-    'common',
-    undefined
-  >,
 };
 
 const cache = new InMemoryCache({
@@ -161,11 +150,11 @@ describe('Organisation Tags Page', () => {
     });
 
     // Reset any necessary cache or mocks
-    vi.clearAllMocks(); // Clear all mocks to ensure a clean state before each test
+    vi.restoreAllMocks(); // Restore all mocks to ensure a clean state before each test
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 
@@ -444,8 +433,12 @@ describe('Organisation Tags Page', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText('firstName')).toHaveValue('');
-      expect(screen.getByPlaceholderText('lastName')).toHaveValue('');
+      expect(screen.getByPlaceholderText(translations.firstName)).toHaveValue(
+        '',
+      );
+      expect(screen.getByPlaceholderText(translations.lastName)).toHaveValue(
+        '',
+      );
     });
   });
 

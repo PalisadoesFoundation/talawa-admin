@@ -4,11 +4,9 @@
 
 # Interface: ISidebarPluginSectionProps
 
-Defined in: [src/types/SidebarPluginSection/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L13)
+Defined in: [src/types/SidebarPluginSection/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L6)
 
 Interface for SidebarPluginSection component props.
-
- ISidebarPluginSectionProps
 
 ## Properties
 
@@ -16,7 +14,7 @@ Interface for SidebarPluginSection component props.
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/types/SidebarPluginSection/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L15)
+Defined in: [src/types/SidebarPluginSection/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L10)
 
 Whether the drawer is hidden/collapsed
 
@@ -26,9 +24,9 @@ Whether the drawer is hidden/collapsed
 
 > `optional` **onItemClick**: () => `void`
 
-Defined in: [src/types/SidebarPluginSection/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L17)
+Defined in: [src/types/SidebarPluginSection/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L14)
 
-Handler for plugin item clicks
+(Optional) Handler for plugin item clicks
 
 #### Returns
 
@@ -40,9 +38,9 @@ Handler for plugin item clicks
 
 > `optional` **orgId**: `string`
 
-Defined in: [src/types/SidebarPluginSection/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L16)
+Defined in: [src/types/SidebarPluginSection/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L12)
 
-Organization ID for org-specific plugins
+(Optional) Organization ID for org-specific plugins
 
 ***
 
@@ -50,7 +48,7 @@ Organization ID for org-specific plugins
 
 > **pluginItems**: [`IDrawerExtension`](../../../../plugin/types/interfaces/IDrawerExtension.md)[]
 
-Defined in: [src/types/SidebarPluginSection/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L14)
+Defined in: [src/types/SidebarPluginSection/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L8)
 
 Array of plugin drawer items
 
@@ -60,6 +58,6 @@ Array of plugin drawer items
 
 > `optional` **useSimpleButton**: `boolean`
 
-Defined in: [src/types/SidebarPluginSection/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L18)
+Defined in: [src/types/SidebarPluginSection/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarPluginSection/interface.ts#L16)
 
-Use simple button style (for org drawers)
+(Optional) Use simple button style (for org drawers)

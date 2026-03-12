@@ -20,6 +20,8 @@ export type ButtonVariant =
   | BootstrapButtonVariant
   | 'outlined'
   | 'outline'
+  | 'contained'
+  | 'text'
   | (string & {});
 
 /**

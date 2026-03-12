@@ -4,9 +4,9 @@
 
 # Interface: InterfaceOrganizationModalProps
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L68)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L38)
 
-Represents the properties of the OrganizationModal component.
+Interface for the properties of the OrganizationModal component.
 
 ## Properties
 
@@ -14,7 +14,9 @@ Represents the properties of the OrganizationModal component.
 
 > **createOrg**: (`e`) => `Promise`\<`void`\>
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L73)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L48)
+
+A function to handle the submission of the organization creation form.
 
 #### Parameters
 
@@ -32,7 +34,9 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:73](htt
 
 > **formState**: `InterfaceFormStateType`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L71)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L44)
+
+The state of the form in the organization modal.
 
 ***
 
@@ -40,7 +44,9 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:71](htt
 
 > **setFormState**: (`state`) => `void`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L72)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L46)
+
+A function to update the state of the form in the organization modal.
 
 #### Parameters
 
@@ -58,43 +64,9 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:72](htt
 
 > **showModal**: `boolean`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L69)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L40)
 
-***
-
-### t()
-
-> **t**: (`key`) => `string`
-
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L74)
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`
-
-***
-
-### tCommon()
-
-> **tCommon**: (`key`) => `string`
-
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L75)
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`
+A boolean indicating whether the modal should be displayed.
 
 ***
 
@@ -102,7 +74,9 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:75](htt
 
 > **toggleModal**: () => `void`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L70)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L42)
+
+A function to toggle the visibility of the modal.
 
 #### Returns
 

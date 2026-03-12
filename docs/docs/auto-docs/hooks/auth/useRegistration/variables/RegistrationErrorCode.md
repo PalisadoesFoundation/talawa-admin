@@ -6,7 +6,7 @@
 
 > `const` **RegistrationErrorCode**: `object`
 
-Defined in: [src/hooks/auth/useRegistration.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L7)
+Defined in: [src/hooks/auth/useRegistration.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L8)
 
 Error codes for registration validation (use as i18n keys in errors namespace).
 

@@ -57,3 +57,7 @@
   color: var(--color-white);
   border-color: var(--color-gray-500);
 }
+
+.tabContent {
+  padding: 0 var(--space-3);
+}

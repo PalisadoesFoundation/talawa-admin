@@ -6,7 +6,7 @@
 
 > **useRegistration**(`__namedParameters`): `object`
 
-Defined in: [src/hooks/auth/useRegistration.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L63)
+Defined in: [src/hooks/auth/useRegistration.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L64)
 
 Custom hook for user registration using SIGNUP_MUTATION.
 
@@ -19,6 +19,10 @@ Custom hook for user registration using SIGNUP_MUTATION.
 ## Returns
 
 `object`
+
+### error
+
+> **error**: `Error`
 
 ### loading
 

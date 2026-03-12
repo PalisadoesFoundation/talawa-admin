@@ -206,25 +206,28 @@ const VolunteerManagement = (): JSX.Element => {
         switch (tab) {
           case 'upcomingEvents':
             return (
-              <div data-testid="upcomingEventsTab">
+              <div
+                className={styles.tabContent}
+                data-testid="upcomingEventsTab"
+              >
                 <UpcomingEvents />
               </div>
             );
           case 'invitations':
             return (
-              <div data-testid="invitationsTab">
+              <div className={styles.tabContent} data-testid="invitationsTab">
                 <Invitations />
               </div>
             );
           case 'actions':
             return (
-              <div data-testid="actionsTab">
+              <div className={styles.tabContent} data-testid="actionsTab">
                 <Actions />
               </div>
             );
           case 'groups':
             return (
-              <div data-testid="groupsTab">
+              <div className={styles.tabContent} data-testid="groupsTab">
                 <Groups />
               </div>
             );

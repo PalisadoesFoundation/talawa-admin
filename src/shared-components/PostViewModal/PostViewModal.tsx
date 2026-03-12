@@ -28,7 +28,7 @@
  * @remarks
  * - Returns null early if no post is provided
  * - Formats post data to match PostCard component requirements
- * - Handles missing creator data with fallback to translated "unknownUser"
+ * - Handles missing creator data with fallback within formatPostForCard
  * - Includes error handling for date formatting failures
  * - Uses BaseModal for consistent modal behavior and styling
  * - Provides a close button with accessibility attributes
@@ -40,7 +40,7 @@
  */
 import React from 'react';
 import { Button } from 'shared-components/Button';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import PostCard from 'shared-components/postCard/PostCard';
 import { useTranslation } from 'react-i18next';
@@ -78,7 +78,7 @@ const PostViewModal: React.FC<InterfacePostViewModalProps> = ({
           <Close aria-hidden="true" />
         </Button>
         {/* Render the post */}
-        <PostCard {...formatPostForCard(post, t, refetch)} />
+        <PostCard {...formatPostForCard(post, refetch)} />
       </div>
     </BaseModal>
   );

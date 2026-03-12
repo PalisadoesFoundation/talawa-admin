@@ -10,7 +10,7 @@ interface InterfaceTestFormData {
 
 describe('useFormModal', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Initialization', () => {

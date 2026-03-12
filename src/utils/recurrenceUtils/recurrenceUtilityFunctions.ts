@@ -290,7 +290,9 @@ export const areRecurrenceRulesEqual = (
     JSON.stringify(rule1.byMonth?.sort()) ===
       JSON.stringify(rule2.byMonth?.sort()) &&
     JSON.stringify(rule1.byMonthDay?.sort()) ===
-      JSON.stringify(rule2.byMonthDay?.sort())
+      JSON.stringify(rule2.byMonthDay?.sort()) &&
+    JSON.stringify(rule1.bySetPos?.sort()) ===
+      JSON.stringify(rule2.bySetPos?.sort())
   );
 };
 

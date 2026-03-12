@@ -161,7 +161,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
       >
         <FormFieldGroup name="recipients" label={t('emailsLabel')}>
           {recipients.map((r) => (
-            <div key={r.id} className="d-flex align-items-center mb-2">
+            <div key={r.id} className={styles.recipientsContainer}>
               <FormTextField
                 name={`recipient-email-${r.id}`}
                 label={t('email')}
@@ -206,7 +206,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
             </div>
           ))}
 
-          <div className="mb-2">
+          <div className={styles.setRecipientsButton}>
             <Button
               variant="outline-primary"
               onClick={() =>
@@ -220,7 +220,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
             </Button>
           </div>
 
-          <small className="text-muted">{t('emailsHelp')}</small>
+          <small className={styles.emailHelp}>{t('emailsHelp')}</small>
         </FormFieldGroup>
 
         <FormFieldGroup name="message" label={t('messageLabel')}>

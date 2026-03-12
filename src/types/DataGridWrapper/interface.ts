@@ -4,6 +4,39 @@ import type {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import type { InterfaceEmptyStateProps } from '../shared-components/EmptyState/interface';
+import type { SpacingToken } from '../../utils/tokenValues';
+
+/**
+ * Extended column definition that accepts design tokens for width properties.
+ *
+ * MUI DataGrid requires numeric values for width, minWidth, and maxWidth.
+ * This type allows using spacing token names (e.g., 'space-15') which are
+ * converted to pixel values by DataGridWrapper before passing to MUI.
+ *
+ * @example
+ * ```tsx
+ * const columns: TokenAwareGridColDef[] = [
+ *   { field: 'name', headerName: 'Name', minWidth: 'space-15' }, // 150px
+ *   { field: 'email', headerName: 'Email', width: 'space-17' },  // 220px
+ * ];
+ * ```
+ */
+export type TokenAwareGridColDef<
+  TRow extends GridValidRowModel = GridValidRowModel,
+  TValue = unknown,
+  TFormattedValue = TValue,
+  // i18n-ignore-next-line
+> = Omit<
+  GridColDef<TRow, TValue, TFormattedValue>,
+  'width' | 'minWidth' | 'maxWidth'
+> & {
+  /** Column width - accepts number (pixels) or spacing token name */
+  width?: number | SpacingToken;
+  /** Minimum column width - accepts number (pixels) or spacing token name */
+  minWidth?: number | SpacingToken;
+  /** Maximum column width - accepts number (pixels) or spacing token name */
+  maxWidth?: number | SpacingToken;
+};
 /**
  * Props for the DataGridWrapper component.
  *
@@ -22,8 +55,19 @@ export interface InterfaceDataGridWrapperProps<
   /**
    * Configuration for the grid columns.
    * Defines headers, widths, and cell rendering logic.
+   *
+   * Supports design tokens for width properties (width, minWidth, maxWidth).
+   * Token names like 'space-15' are automatically converted to pixel values.
+   *
+   * @example
+   * ```tsx
+   * columns={[
+   *   { field: 'name', headerName: 'Name', minWidth: 'space-15' },  // 150px
+   *   { field: 'email', headerName: 'Email', minWidth: 200 },       // raw pixel value still works
+   * ]}
+   * ```
    */
-  columns?: GridColDef[];
+  columns?: TokenAwareGridColDef[];
 
   /**
    * If `true`, displays a loading indicator (e.g., Progress Bar) overlaying the grid.

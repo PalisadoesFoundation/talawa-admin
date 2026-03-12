@@ -15,7 +15,8 @@
  * @returns \{JSX.Element\} The rendered `AddMember` component.
  */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close } from '@mui/icons-material';
+import Check from '@mui/icons-material/Check';
+import Close from '@mui/icons-material/Close';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   CREATE_MEMBER_PG,
@@ -42,17 +43,24 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from './AddMember.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
-import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
+import { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
-function AddMember(): JSX.Element {
+import type { InterfaceAddMemberProps } from 'types/AdminPortal/OrganizationPeople/addMember/interface';
+
+function AddMember({
+  rootClassName,
+  containerClassName,
+  toggleClassName,
+}: InterfaceAddMemberProps = {}): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
@@ -99,11 +107,12 @@ function AddMember(): JSX.Element {
   const createMember = useCallback(
     async (userId: string): Promise<void> => {
       try {
+        if (!currentUrl) return;
         await addMember({
           variables: {
             memberId: userId,
             organizationId: currentUrl,
-            role: 'regular',
+            role: OrganizationMembershipRole.REGULAR,
           },
         });
         NotificationToast.success(
@@ -135,10 +144,6 @@ function AddMember(): JSX.Element {
     password: '',
     confirmPassword: '',
   });
-  enum OrganizationMembershipRole {
-    ADMIN = 'administrator',
-    REGULAR = 'regular',
-  }
   const handleCreateUser = async (): Promise<void> => {
     if (
       !(
@@ -166,6 +171,7 @@ function AddMember(): JSX.Element {
           },
         });
         const createdUserId = registeredUser?.data.createUser.user.id;
+        if (!createdUserId) return;
         await createMember(createdUserId);
         closeCreateNewUserModal();
         setCreateUserVariables({
@@ -361,6 +367,7 @@ function AddMember(): JSX.Element {
   return (
     <>
       <PageHeader
+        rootClassName={rootClassName}
         sorting={[
           {
             title: translateOrgPeople('addMembers'),
@@ -374,6 +381,8 @@ function AddMember(): JSX.Element {
             selected: translateOrgPeople('addMembers'),
             onChange: (value) => handleSortChange(value.toString()),
             testIdPrefix: 'addMembers',
+            containerClassName,
+            toggleClassName,
           },
         ]}
       />
@@ -408,24 +417,12 @@ function AddMember(): JSX.Element {
           tableClassName={styles.dataTable}
           ariaLabel={translateOrgPeople('users')}
         />
-        <TablePagination
-          component="div"
+        <PaginationList
           count={-1}
           rowsPerPage={PAGE_SIZE}
           page={page}
           onPageChange={handleChangePage}
-          rowsPerPageOptions={[PAGE_SIZE]}
-          backIconButtonProps={{
-            disabled: !paginationMeta.hasPreviousPage,
-            'aria-label': tCommon('previousPage'),
-          }}
-          nextIconButtonProps={{
-            disabled: !paginationMeta.hasNextPage,
-            'aria-label': tCommon('nextPage'),
-          }}
-          labelDisplayedRows={({ page }) =>
-            tCommon('pageNumber', { page: page + 1 })
-          }
+          onRowsPerPageChange={() => {}}
         />
       </BaseModal>
       <BaseModal

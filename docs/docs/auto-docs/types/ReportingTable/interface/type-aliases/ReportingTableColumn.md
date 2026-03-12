@@ -4,9 +4,9 @@
 
 # Type Alias: ReportingTableColumn
 
-> **ReportingTableColumn** = `Partial`\<`GridColDef`\> & `object`
+> **ReportingTableColumn** = `Partial`\<`Omit`\<`GridColDef`, `"width"` \| `"minWidth"` \| `"maxWidth"`\>\> & `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L15)
+Defined in: [src/types/ReportingTable/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L16)
 
 ReportingTableColumnDef
 App-level column shape used across the app. It's a thin composition over
@@ -50,11 +50,17 @@ Additional class applied to the header cell
 
 Header name for the column
 
+### maxWidth?
+
+> `optional` **maxWidth**: `number` \| [`SpacingToken`](../../../../utils/tokenValues/type-aliases/SpacingToken.md)
+
+Maximum width for the column - accepts number (pixels) or spacing token name
+
 ### minWidth?
 
-> `optional` **minWidth**: `number`
+> `optional` **minWidth**: `number` \| [`SpacingToken`](../../../../utils/tokenValues/type-aliases/SpacingToken.md)
 
-Minimum width for the column
+Minimum width for the column - accepts number (pixels) or spacing token name
 
 ### renderCell()?
 
@@ -105,3 +111,9 @@ Custom value getter for the cell
 #### Returns
 
 `unknown`
+
+### width?
+
+> `optional` **width**: `number` \| [`SpacingToken`](../../../../utils/tokenValues/type-aliases/SpacingToken.md)
+
+Column width - accepts number (pixels) or spacing token name

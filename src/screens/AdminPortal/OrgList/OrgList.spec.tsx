@@ -41,11 +41,8 @@ const mockToast = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
-  ToastContainer: vi
-    .fn()
-    .mockImplementation(() => <div data-testid="toast-container" />),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
@@ -78,12 +75,12 @@ const mockLinks = {
 const mockUsers = {
   superAdmin: {
     id: '123',
-    SuperAdmin: true,
+    role: 'administrator',
     AdminFor: [{ name: 'adi', _id: '1234', image: '' }],
   },
   admin: {
     id: '123',
-    SuperAdmin: false,
+    role: 'administrator',
     AdminFor: [{ name: 'adi', _id: 'a0', image: '' }],
   },
   basic: {
@@ -97,7 +94,6 @@ const setupUser = (userType: keyof typeof mockUsers) => {
   const user = mockUsers[userType];
   setItem('id', user.id);
   setItem('token', 'mock-token');
-  if ('SuperAdmin' in user) setItem('SuperAdmin', user.SuperAdmin);
   if ('AdminFor' in user) setItem('AdminFor', user.AdminFor);
   if ('role' in user) setItem('role', user.role);
 };
@@ -988,7 +984,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing pagination edge cases', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1044,7 +1040,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing handleChangePage pagination navigation', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1069,7 +1065,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing sorting organizations by Latest with multiple orgs', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1099,7 +1095,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing sorting organizations by Earliest with multiple orgs', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1182,7 +1178,7 @@ describe('Advanced Component Functionality Tests', () => {
     const user = userEvent.setup();
     setItem('id', '123');
     setItem('role', 'administrator');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     const mockWithOrgs = createOrgMock(mockOrgData.singleOrg);
@@ -1467,7 +1463,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing sort by Earliest functionality', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1510,7 +1506,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing sort by Latest functionality', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1547,7 +1543,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing date-based sorting with Latest and Earliest', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1580,7 +1576,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing handleChangeRowsPerPage functionality', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1620,7 +1616,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing error handler clears localStorage and redirects', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
 
     // Mock window.location.assign
@@ -1736,7 +1732,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing pagination navigation functionality', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -2043,7 +2039,7 @@ describe('Advanced Component Functionality Tests', () => {
     const user = userEvent.setup();
 
     setItem('id', '123');
-    setItem('SuperAdmin', false);
+    setItem('role', 'user');
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -2101,7 +2097,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing closeDialogModal functionality', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', false);
+    setItem('role', 'user');
     setItem('role', 'administrator'); // Must be 'administrator' to see create button
     setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
 
@@ -2201,7 +2197,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing toggleDialogModal functionality', async () => {
     const user = userEvent.setup();
     setItem('id', '123');
-    setItem('SuperAdmin', false);
+    setItem('role', 'user');
     setItem('role', 'administrator'); // Must be 'administrator' to see create button
     setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
 
@@ -2418,7 +2414,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing missing token scenario', async () => {
     setItem('id', '123');
     setItem('role', 'administrator');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     const missingTokenMocks = [
@@ -2454,7 +2450,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing CURRENT_USER query without token in localStorage', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
     // Explicitly do NOT set token to test the else branch
 
@@ -2664,7 +2660,6 @@ describe('Email Verification Actions Tests', () => {
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
         'Verification email has been resent successfully.',
-        expect.anything(),
       );
     });
   });
@@ -2689,10 +2684,7 @@ describe('Email Verification Actions Tests', () => {
     await waitFor(() => {
       // The component uses tLogin('resendFailed') or data message
       // Mock returns 'Failed to resend email'
-      expect(mockToast.error).toHaveBeenCalledWith(
-        'Failed to resend email',
-        expect.anything(),
-      );
+      expect(mockToast.error).toHaveBeenCalledWith('Failed to resend email');
     });
   });
 

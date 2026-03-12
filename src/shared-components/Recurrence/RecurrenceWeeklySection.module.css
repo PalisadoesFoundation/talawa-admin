@@ -1,0 +1,43 @@
+.recurrenceDayButton {
+  width: var(--space-7);
+  height: var(--space-7);
+  border: var(--border-1) solid var(--color-gray-400);
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: var(--space-3);
+  border-radius: var(--radius-full);
+  position: relative;
+  outline: none;
+}
+
+.recurrenceDayButton:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-700);
+  outline-offset: var(--space-2);
+}
+
+.recurrenceDayButton:hover {
+  background-color: var(--color-gray-400);
+}
+
+.recurrenceDayButton span {
+  color: var(--color-gray-400);
+  padding: var(--space-2);
+  text-align: center;
+}
+
+.recurrenceDayButton:hover span {
+  color: var(--color-white);
+}
+
+.recurrenceDayButton.selected {
+  background-color: var(--color-blue-700);
+  border-color: var(--color-blue-700);
+  color: var(--color-white);
+}
+
+.recurrenceDayButton.selected span {
+  color: var(--color-white);
+}

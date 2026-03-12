@@ -55,8 +55,6 @@ export interface IEventFormSubmitPayload extends IEventFormBase {
  * - `onSubmit`: Callback fired when form is submitted with valid data
  * - `onCancel`: Callback fired when form is cancelled
  * - `submitLabel`: Label text for the submit button
- * - `t`: Translation function for event-specific keys
- * - `tCommon`: Translation function for common keys
  * - `showCreateChat`: Whether to show the "Create Chat" toggle
  * - `showRegisterable`: Whether to show the "Is Registerable" toggle
  * - `showPublicToggle`: Whether to show the "Is Public" toggle
@@ -64,14 +62,15 @@ export interface IEventFormSubmitPayload extends IEventFormBase {
  * - `submitting`: Whether the form is currently submitting
  * - `showRecurrenceToggle`: Whether to show the recurrence toggle
  * - `showCancelButton`: Whether to show the cancel button
+ * - `readOnly`: If true, all fields are disabled (view-only/preview mode for non-editors)
+ * - `hideSubmitButton`: If true, the built-in submit button is hidden (parent manages footer)
+ * - `onStateChange`: Callback fired when the form state changes
  */
 export interface IEventFormProps {
   initialValues: IEventFormValues;
   onSubmit: (payload: IEventFormSubmitPayload) => Promise<void> | void;
   onCancel: () => void;
   submitLabel: string;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string, options?: Record<string, unknown>) => string;
   showCreateChat?: boolean;
   showRegisterable?: boolean;
   showPublicToggle?: boolean;
@@ -80,4 +79,27 @@ export interface IEventFormProps {
   submitting?: boolean;
   showRecurrenceToggle?: boolean;
   showCancelButton?: boolean;
+  /**
+   * If true, all form fields are disabled (view-only mode).
+   * Used when the PreviewModal is opened by a user who can't edit the event.
+   */
+  readOnly?: boolean;
+  /**
+   * If true, the built-in submit button is hidden.
+   * Use when the parent component manages its own footer action buttons.
+   */
+  hideSubmitButton?: boolean;
+  /**
+   * Optional callback fired whenever the internal form state changes.
+   * Useful for syncing state to a parent component that manages complex layout or options before submit.
+   */
+  onStateChange?: (state: IEventFormValues) => void;
+  /**
+   * Optional. When provided (e.g. from EventListCardModals), the recurrence modal is controlled by the parent.
+   */
+  customRecurrenceModalIsOpen?: boolean;
+  setCustomRecurrenceModalIsOpen?: (
+    state: boolean | ((prev: boolean) => boolean),
+  ) => void;
+  hideCustomRecurrenceModal?: () => void;
 }

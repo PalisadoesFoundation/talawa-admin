@@ -4,7 +4,7 @@
 
 # Interface: InterfacePeopletabUserEventsProps
 
-Defined in: [src/types/PeopleTab/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L62)
+Defined in: [src/types/PeopleTab/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L72)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/PeopleTab/interface.ts:62](https://github.com/PalisadoesF
 
 > `optional` **actionIcon**: `ReactNode`
 
-Defined in: [src/types/PeopleTab/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L69)
+Defined in: [src/types/PeopleTab/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L79)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/PeopleTab/interface.ts:69](https://github.com/PalisadoesF
 
 > `optional` **actionName**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L70)
+Defined in: [src/types/PeopleTab/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L80)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/PeopleTab/interface.ts:70](https://github.com/PalisadoesF
 
 > `optional` **endDate**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L66)
+Defined in: [src/types/PeopleTab/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L76)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/PeopleTab/interface.ts:66](https://github.com/PalisadoesF
 
 > `optional` **endTime**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L64)
+Defined in: [src/types/PeopleTab/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L74)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/PeopleTab/interface.ts:64](https://github.com/PalisadoesF
 
 > `optional` **eventDescription**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L68)
+Defined in: [src/types/PeopleTab/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L78)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/PeopleTab/interface.ts:68](https://github.com/PalisadoesF
 
 > `optional` **eventName**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L67)
+Defined in: [src/types/PeopleTab/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L77)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/PeopleTab/interface.ts:67](https://github.com/PalisadoesF
 
 > `optional` **startDate**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L65)
+Defined in: [src/types/PeopleTab/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L75)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/PeopleTab/interface.ts:65](https://github.com/PalisadoesF
 
 > `optional` **startTime**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L63)
+Defined in: [src/types/PeopleTab/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L73)

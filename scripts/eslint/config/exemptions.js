@@ -92,11 +92,47 @@ export const wrapperExemptions = [
   },
   createWrapperExemption({
     componentName: 'DataTable',
-    allowedIds: ['rb-table', 'rb-table-path'],
+    allowedIds: [
+      'rb-table',
+      'rb-table-path',
+      'mui-table-table',
+      'mui-table-table-path',
+      'mui-table-body',
+      'mui-table-body-path',
+      'mui-table-cell',
+      'mui-table-cell-path',
+      'mui-table-container',
+      'mui-table-container-path',
+      'mui-table-head',
+      'mui-table-head-path',
+      'mui-table-row',
+      'mui-table-row-path',
+      'mui-table-pagination',
+      'mui-table-pagination-path',
+    ],
   }),
   createWrapperExemption({
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
+  }),
+  createWrapperExemption({
+    componentName: 'PaginationList',
+    allowedIds: ['mui-table-pagination', 'mui-table-pagination-path'],
+  }),
+  {
+    files: [
+      'src/components/AdminPortal/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx',
+    ],
+    rules: restrictImportsExcept(['mui-autocomplete', 'mui-autocomplete-path']),
+  },
+  createWrapperExemption({
+    componentName: 'Autocomplete',
+    allowedIds: [
+      'mui-autocomplete',
+      'mui-autocomplete-path',
+      'mui-textfield',
+      'mui-textfield-path',
+    ],
   }),
 ];
 

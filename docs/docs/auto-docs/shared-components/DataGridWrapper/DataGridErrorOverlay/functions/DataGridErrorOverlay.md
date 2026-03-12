@@ -6,7 +6,7 @@
 
 > **DataGridErrorOverlay**(`props`): `Element`
 
-Defined in: [src/shared-components/DataGridWrapper/DataGridErrorOverlay.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridErrorOverlay.tsx#L27)
+Defined in: [src/shared-components/DataGridWrapper/DataGridErrorOverlay.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridErrorOverlay.tsx#L25)
 
 Error overlay component for DataGrid
 

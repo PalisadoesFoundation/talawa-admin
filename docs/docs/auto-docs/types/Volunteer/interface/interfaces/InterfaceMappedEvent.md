@@ -4,11 +4,7 @@
 
 # Interface: InterfaceMappedEvent
 
-Defined in: [src/types/Volunteer/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L113)
-
-InterfaceMappedEvent
-
-## Description
+Defined in: [src/types/Volunteer/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L93)
 
 Defines the structure for mapped event objects used in the UI.
 
@@ -18,7 +14,7 @@ Defines the structure for mapped event objects used in the UI.
 
 > **\_id**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L114)
+Defined in: [src/types/Volunteer/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L95)
 
 Legacy ID format.
 
@@ -28,7 +24,7 @@ Legacy ID format.
 
 > **baseEventId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L126)
+Defined in: [src/types/Volunteer/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L119)
 
 The base event ID for recurring events.
 
@@ -38,7 +34,7 @@ The base event ID for recurring events.
 
 > **description**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L118)
+Defined in: [src/types/Volunteer/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L103)
 
 The description of the event.
 
@@ -48,7 +44,7 @@ The description of the event.
 
 > **endAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L122)
+Defined in: [src/types/Volunteer/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L111)
 
 The original endAt field.
 
@@ -58,7 +54,7 @@ The original endAt field.
 
 > **endDate**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L120)
+Defined in: [src/types/Volunteer/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L107)
 
 The end date (mapped from endAt).
 
@@ -68,7 +64,7 @@ The end date (mapped from endAt).
 
 > **id**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L115)
+Defined in: [src/types/Volunteer/interface.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L97)
 
 The unique identifier of the event.
 
@@ -78,7 +74,7 @@ The unique identifier of the event.
 
 > **isRecurringInstance**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L125)
+Defined in: [src/types/Volunteer/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L117)
 
 Indicates if this is a recurring instance.
 
@@ -88,7 +84,7 @@ Indicates if this is a recurring instance.
 
 > **location**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L123)
+Defined in: [src/types/Volunteer/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L113)
 
 The location of the event.
 
@@ -98,7 +94,7 @@ The location of the event.
 
 > **name**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L116)
+Defined in: [src/types/Volunteer/interface.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L99)
 
 The name of the event.
 
@@ -108,9 +104,9 @@ The name of the event.
 
 > `optional` **recurrenceRule**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L127)
+Defined in: [src/types/Volunteer/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L121)
 
-The recurrence rule for recurring events.
+(Optional) The recurrence rule for recurring events.
 
 #### frequency
 
@@ -126,7 +122,7 @@ The recurrence rule for recurring events.
 
 > **recurring**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L124)
+Defined in: [src/types/Volunteer/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L115)
 
 Indicates if the event is recurring.
 
@@ -136,7 +132,7 @@ Indicates if the event is recurring.
 
 > **startAt**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L121)
+Defined in: [src/types/Volunteer/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L109)
 
 The original startAt field.
 
@@ -146,7 +142,7 @@ The original startAt field.
 
 > **startDate**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L119)
+Defined in: [src/types/Volunteer/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L105)
 
 The start date (mapped from startAt).
 
@@ -156,7 +152,7 @@ The start date (mapped from startAt).
 
 > **title**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L117)
+Defined in: [src/types/Volunteer/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L101)
 
 The title of the event (mapped from name).
 
@@ -166,7 +162,7 @@ The title of the event (mapped from name).
 
 > **volunteerGroups**: `object`[]
 
-Defined in: [src/types/Volunteer/interface.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L131)
+Defined in: [src/types/Volunteer/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L126)
 
 Array of volunteer groups with mapped structure.
 
@@ -196,7 +192,7 @@ Array of volunteer groups with mapped structure.
 
 > **volunteers**: `object`[]
 
-Defined in: [src/types/Volunteer/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L145)
+Defined in: [src/types/Volunteer/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L141)
 
 Array of volunteers.
 

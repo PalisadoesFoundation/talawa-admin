@@ -929,7 +929,7 @@ export interface InterfaceVenuePg {
   capacity?: number | null;
   attachments?: Array<{
     url: string;
-    mimeType: string;
+    mimetype: string;
   }>;
   createdAt: string;
   updatedAt: string;
@@ -1393,6 +1393,26 @@ export interface InterfaceQueryBlockPageMemberListItem {
   organizationsBlockedBy: {
     _id: string;
   }[];
+}
+
+/**
+ * GraphQL response type for user list queries.
+ */
+export interface InterfaceUserListQueryResponse {
+  allUsers?: {
+    edges?:
+      | Array<
+          | {
+              cursor?: string;
+              node: InterfaceQueryUserListItem | null | undefined;
+            }
+          | null
+          | undefined
+        >
+      | null
+      | undefined;
+    pageInfo?: InterfacePageInfoPg | null;
+  } | null;
 }
 
 /**

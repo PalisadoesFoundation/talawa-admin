@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
@@ -36,8 +37,8 @@ const AgendaFolderUpdateModal: React.FC<
   setFolderFormState,
   agendaFolderId,
   refetchAgendaFolder,
-  t,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
 
   /**

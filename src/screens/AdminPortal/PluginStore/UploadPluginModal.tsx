@@ -18,7 +18,7 @@ import {
   validateAdminPluginZip,
   type IAdminPluginManifest,
   type IAdminPluginZipStructure,
-} from '../../../utils/adminPluginInstaller';
+} from 'utils/adminPluginInstaller';
 import { useTranslation } from 'react-i18next';
 
 interface IUploadPluginModalProps {
@@ -150,7 +150,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
           </p>
         </div>
 
-        <button
+        <Button
           type="button"
           className={styles.dropzone}
           onClick={handleUploadClick}
@@ -162,7 +162,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
           <div className={styles.dropzoneHint}>
             {tCommon('clickToBrowseFile')}
           </div>
-        </button>
+        </Button>
 
         <input
           ref={fileInputRef}

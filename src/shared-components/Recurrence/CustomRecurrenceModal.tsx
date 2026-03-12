@@ -20,6 +20,7 @@ import { RecurrenceMonthlySection } from './RecurrenceMonthlySection';
 import { RecurrenceYearlySection } from './RecurrenceYearlySection';
 import { RecurrenceEndOptionsSection } from './RecurrenceEndOptionsSection';
 import type { InterfaceCustomRecurrenceModalProps } from 'types/Recurrence/interface';
+import { useTranslation } from 'react-i18next';
 
 /**
  * CustomRecurrenceModal Component
@@ -34,9 +35,10 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   customRecurrenceModalIsOpen,
   hideCustomRecurrenceModal,
   setCustomRecurrenceModalIsOpen,
-  t,
   startDate,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t: tCommon } = useTranslation('common');
   const { frequency, byDay, interval = 1, count, never } = recurrenceRuleState;
   const [selectedRecurrenceEndOption, setSelectedRecurrenceEndOption] =
     useState<RecurrenceEndOptionType>(() => {
@@ -316,7 +318,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
       title={t('customRecurrence')}
       data-testid="customRecurrenceModal"
       onPrimary={handleCustomRecurrenceSubmit}
-      primaryText={t('done')}
+      primaryText={tCommon('done')}
       hideSecondary
     >
       <RecurrenceFrequencySection
@@ -324,7 +326,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         localInterval={localInterval}
         onIntervalChange={handleIntervalChange}
         onFrequencyChange={handleFrequencyChange}
-        t={t}
       />
 
       <RecurrenceWeeklySection
@@ -332,7 +333,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         byDay={byDay}
         onDayClick={handleDayClick}
         onWeekdayKeyDown={handleWeekdayKeyDown}
-        t={t}
       />
 
       <RecurrenceMonthlySection
@@ -340,14 +340,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         recurrenceRuleState={recurrenceRuleState}
         setRecurrenceRuleState={setRecurrenceRuleState}
         startDate={startDate}
-        t={t}
       />
 
-      <RecurrenceYearlySection
-        frequency={frequency}
-        startDate={startDate}
-        t={t}
-      />
+      <RecurrenceYearlySection frequency={frequency} startDate={startDate} />
 
       <RecurrenceEndOptionsSection
         frequency={frequency}
@@ -357,7 +352,6 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         onRecurrenceEndOptionChange={handleRecurrenceEndOptionChange}
         onCountChange={handleCountChange}
         setRecurrenceRuleState={setRecurrenceRuleState}
-        t={t}
       />
     </CRUDModalTemplate>
   );

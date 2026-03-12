@@ -52,7 +52,6 @@ export const FormFieldGroup: React.FC<
   return (
     <Form.Group controlId={effectiveInputId} className={className}>
       <Form.Label
-        htmlFor={effectiveInputId}
         className={`${hideLabel ? 'visually-hidden' : ''} ${disabled ? 'text-muted' : ''} ${labelClassName || ''}`.trim()}
       >
         {label}

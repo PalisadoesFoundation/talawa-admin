@@ -212,6 +212,7 @@
   "enterCityName": "शहर का नाम दर्ज करें",
   "enterStateName": "राज्य का नाम दर्ज करें",
   "select": "चुनें",
+  "security": "सुरक्षा",
   "selectAsYourCountry": "{{country}} को अपने देश के रूप में चुनें",
   "selectACountry": "एक देश चुनें",
   "passwordLengthRequirement": "पासवर्ड कम से कम {{length}} अक्षरों का होना चाहिए।",
@@ -303,5 +304,22 @@
   "searchPlaceholder": "खोजें...",
   "noOptionsFound": "कोई विकल्प नहीं मिला",
   "noUserId": "उपयोगकर्ता आईडी उपलब्ध नहीं है",
-  "noTagsFound": "कोई टैग नहीं मिले"
+  "noOrgId": "ऑर्ग आईडी उपलब्ध नहीं है",
+  "noTagsFound": "कोई टैग नहीं मिले",
+  "searchTags": "टैग खोजें",
+  "sortBy": "इसके द्वारा क्रमबद्ध करें",
+  "unknownMember": "अज्ञानी सदस्य",
+  "workshops": "कार्यशालाएँ",
+  "previousYear": "पिछला वर्ष",
+  "nextYear": "अगला वर्ष",
+  "navigateToProfile": "प्रोफ़ाइल पर जाएं",
+  "monthlyOn": "हर माह को",
+  "loginSuccess": "स्वागत है!",
+  "loginSuccessWithName": "स्वागत है, {{name}}!",
+  "signupSuccess": "पंजीकरण सफल!",
+  "authError": "प्रमाणीकरण त्रुटि",
+  "networkError": "नेटवर्क त्रुटि",
+  "organizationCard": {
+    "card_aria": "संस्था कार्ड"
+  }
 }

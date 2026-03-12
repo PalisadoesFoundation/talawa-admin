@@ -6,13 +6,13 @@
 
 > `const` **UPDATE\_COMMUNITY\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:547](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L547)
+Defined in: [src/GraphQl/Mutations/mutations.ts:568](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L568)
 
 GraphQL mutation to update community profile settings including logo upload.
 
 ## Param
 
-Optional logo file (Upload scalar) - sent as multipart request via apollo-upload-client
+Optional logo metadata (FileMetadataInput) - uploaded via MinIO presigned URL
 
 ## Param
 

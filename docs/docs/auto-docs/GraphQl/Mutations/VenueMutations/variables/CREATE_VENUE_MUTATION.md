@@ -24,7 +24,7 @@ Description of the venue.
 
 ## Param
 
-Image file for the venue.
+Image file metadata for the venue.
 
 ## Param
 

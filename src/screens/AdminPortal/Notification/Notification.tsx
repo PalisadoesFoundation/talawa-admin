@@ -16,7 +16,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
-import { NotificationsNone } from '@mui/icons-material';
+import NotificationsNone from '@mui/icons-material/NotificationsNone';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -169,20 +169,22 @@ const Notification: React.FC = () => {
         </ListGroup>
         {(page > 0 || notifications.length > 1) && (
           <div className={styles.paginationFooter}>
-            <button
+            <Button
               className={styles.paginationButton}
               onClick={handlePrev}
               disabled={page === 0}
+              data-testid="prev-button"
             >
               {t('prev')}
-            </button>
-            <button
+            </Button>
+            <Button
               className={styles.paginationButton}
               onClick={handleNext}
               disabled={notifications.length < pageSize}
+              data-testid="next-button"
             >
               {t('next')}
-            </button>
+            </Button>
           </div>
         )}
       </div>

@@ -14,7 +14,7 @@ Props for User in attendee context.
 
 > **createdAt**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L33)
+Defined in: [src/types/shared-components/User/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L34)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/User/interface.ts:26](https://github.co
 
 > **isRegistered**: `boolean`
 
-Defined in: [src/types/shared-components/User/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L32)
+Defined in: [src/types/shared-components/User/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L33)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/User/interface.ts:32](https://github.co
 
 > **time**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L34)
+Defined in: [src/types/shared-components/User/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L35)
 
 ***
 
@@ -47,6 +47,10 @@ Defined in: [src/types/shared-components/User/interface.ts:34](https://github.co
 > **user**: `object`
 
 Defined in: [src/types/shared-components/User/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L27)
+
+#### avatarURL?
+
+> `optional` **avatarURL**: `string`
 
 #### emailAddress
 

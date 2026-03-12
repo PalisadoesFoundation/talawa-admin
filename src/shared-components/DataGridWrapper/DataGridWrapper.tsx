@@ -9,8 +9,12 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
 import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+import type { GridColDef } from '@mui/x-data-grid';
 import { useTranslation } from 'react-i18next';
-import type { InterfaceDataGridWrapperProps } from '../../types/DataGridWrapper/interface';
+import type {
+  InterfaceDataGridWrapperProps,
+  TokenAwareGridColDef,
+} from '../../types/DataGridWrapper/interface';
 import styles from './DataGridWrapper.module.css';
 
 import SearchBar from '../SearchBar/SearchBar';
@@ -20,6 +24,52 @@ import SortingButton from '../SortingButton/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataGridLoadingOverlay } from './DataGridLoadingOverlay';
 import { DataGridErrorOverlay } from './DataGridErrorOverlay';
+import { isSpacingToken, getSpacingValue } from '../../utils/tokenValues';
+
+/**
+ * Converts token-aware column definitions to MUI-compatible GridColDef.
+ * Transforms spacing token names (e.g., 'space-15') to pixel values (e.g., 150).
+ *
+ * Use this function when passing columns to raw DataGrid instead of DataGridWrapper.
+ *
+ * @param columns - Array of TokenAwareGridColDef with token names for width properties
+ * @returns Array of GridColDef with numeric pixel values
+ *
+ * @example
+ * ```tsx
+ * const columns: TokenAwareGridColDef[] = [
+ *   { field: 'name', minWidth: 'space-15' },
+ * ];
+ * <DataGrid columns={convertTokenColumns(columns)} />
+ * ```
+ */
+export function convertTokenColumns(
+  columns: TokenAwareGridColDef[],
+): GridColDef[] {
+  return columns.map((col) => {
+    const converted: GridColDef = { ...col } as GridColDef;
+
+    if (col.width !== undefined) {
+      converted.width = isSpacingToken(col.width)
+        ? getSpacingValue(col.width)
+        : col.width;
+    }
+
+    if (col.minWidth !== undefined) {
+      converted.minWidth = isSpacingToken(col.minWidth)
+        ? getSpacingValue(col.minWidth)
+        : col.minWidth;
+    }
+
+    if (col.maxWidth !== undefined) {
+      converted.maxWidth = isSpacingToken(col.maxWidth)
+        ? getSpacingValue(col.maxWidth)
+        : col.maxWidth;
+    }
+
+    return converted;
+  });
+}
 /**
  * A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
  *
@@ -171,18 +221,24 @@ export function DataGridWrapper<T extends { id: string | number }>(
     return [];
   }, [selectedSort]);
 
-  const actionCol = actionColumn
+  const actionCol: GridColDef[] = actionColumn
     ? [
         {
           field: '__actions__',
           headerName: 'Actions',
           sortable: false,
-          width: 150,
+          width: getSpacingValue('space-15'),
           renderCell: (params: GridRenderCellParams<T>) =>
             actionColumn(params.row),
         },
       ]
     : [];
+
+  // Convert token-aware columns to MUI-compatible columns
+  const processedColumns = useMemo(
+    () => convertTokenColumns(columns),
+    [columns],
+  );
 
   return (
     <div>
@@ -276,7 +332,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
       </div>
       <DataGrid
         rows={filtered}
-        columns={[...columns, ...actionCol]}
+        columns={[...processedColumns, ...actionCol]}
         loading={loading}
         slots={{
           loadingOverlay: DataGridLoadingOverlay,

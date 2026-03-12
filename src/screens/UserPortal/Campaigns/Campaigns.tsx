@@ -10,8 +10,10 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { Campaign, WarningAmberRounded } from '@mui/icons-material';
-import { Box, Typography } from '@mui/material';
+import Campaign from '@mui/icons-material/Campaign';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Button from 'shared-components/Button/Button';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
@@ -185,7 +187,7 @@ const Campaigns = (): JSX.Element => {
       field: 'id',
       headerName: t('campaignIndex'),
       flex: 1,
-      minWidth: 60,
+      minWidth: 'space-11',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -254,7 +256,7 @@ const Campaigns = (): JSX.Element => {
       field: 'fundingGoal',
       headerName: t('fundGoal'),
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -270,7 +272,7 @@ const Campaigns = (): JSX.Element => {
       field: 'amountRaised',
       headerName: t('amountRaised'),
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -285,7 +287,7 @@ const Campaigns = (): JSX.Element => {
       field: 'percentageRaised',
       headerName: t('percentRaised'),
       flex: 1,
-      minWidth: 120,
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -300,7 +302,7 @@ const Campaigns = (): JSX.Element => {
       field: 'action',
       headerName: t('addPledge'),
       flex: 1.5,
-      minWidth: 120,
+      minWidth: 'space-14',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,

@@ -375,7 +375,6 @@ const renderAgendaFolderContainer = (
           agendaFolderData={agendaFolderData}
           refetchAgendaFolder={mockRefetchAgendaFolder}
           agendaItemCategories={agendaItemCategories}
-          t={(key: string) => key}
         />
       </I18nextProvider>
     </BrowserRouter>,
@@ -940,7 +939,6 @@ describe('AgendaFolderContainer', () => {
               agendaFolderData={updatedFolders}
               refetchAgendaFolder={mockRefetchAgendaFolder}
               agendaItemCategories={mockAgendaItemCategories}
-              t={(key: string) => key}
             />
           </I18nextProvider>
         </BrowserRouter>,

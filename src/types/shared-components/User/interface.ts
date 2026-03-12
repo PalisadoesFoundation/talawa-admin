@@ -28,6 +28,7 @@ export interface InterfaceUserAttendee {
     id: string;
     name: string;
     emailAddress: string;
+    avatarURL?: string;
   };
   isRegistered: boolean;
   createdAt: string;

@@ -228,13 +228,13 @@ export default defineConfig({
     responseTimeout: 50000,
     pageLoadTimeout: 50000,
 
-    testIsolation: false, // Keep state between tests in same spec
+    testIsolation: true, // Reset browser context between tests
     experimentalRunAllSpecs: true,
 
     watchForFileChanges: true,
     chromeWebSecurity: false,
     retries: {
-      runMode: 3,
+      runMode: 2,
       openMode: 0,
     },
 

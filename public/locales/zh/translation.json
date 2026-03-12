@@ -1,15 +1,21 @@
 {
+  "workshops": "研讨会",
   "securedRouteForUser": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
   "securedRoute": {
     "sessionExpired": "请重新登录；您的会话已过期。"
   },
+  "oauth": {
+    "continueWith": "继续使用 {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
   "frequency": "频率",
   "repeatsEvery": "每重复一次",
+  "repeatsOn": "重复开启",
   "day": "天",
   "week": "周",
   "month": "月",
@@ -100,6 +106,15 @@
     "emailNotVerified": "您的电子邮件未验证。请检查收件箱中的验证链接。",
     "resendVerification": "重新发送验证邮件",
     "resendFailed": "重新发送验证邮件失败，请重试。"
+  },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "账户绑定成功",
+    "successfullyLoggedIn": "登录成功",
+    "oauthProviderError": "OAuth 提供商错误：{{error}}",
+    "noAuthCodeReceived": "未从 OAuth 提供商收到授权代码",
+    "oauthAuthenticationFailed": "OAuth 认证失败。请重试。",
+    "oauthConfigurationNotFound": "未找到提供商的 OAuth 配置。",
+    "csrfValidationFailed": "CSRF 验证失败。请重试。"
   },
   "verifyEmail": {
     "title": "验证邮箱",
@@ -192,7 +207,8 @@
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
-    "logout": "登出"
+    "logout": "登出",
+    "notAvailable": "不可用"
   },
   "leftDrawerOrg": {
     "Dashboard": "仪表板",
@@ -239,7 +255,7 @@
     "avatar": "{{title}} 头像",
     "eventLocation": "活动地点",
     "eventDate": "活动日期",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "发布于：",
     "author": "作者："
   },
@@ -326,7 +342,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "errorLoadingRequests": "加载会员申请时出错"
   },
   "users": {
     "membershipStatus": {
@@ -481,7 +498,8 @@
     "createUser": "创建用户",
     "notFound": "未找到成员",
     "showPassword": "显示密码",
-    "hidePassword": "隐藏密码"
+    "hidePassword": "隐藏密码",
+    "emailNotAvailable": "电子邮件不可用"
   },
   "organizationCard": {
     "join": "加入",
@@ -657,7 +675,8 @@
     "Workshops": "研讨会",
     "selectMonth": "选择月份",
     "selectDay": "选择日期",
-    "selectYear": "选择年份"
+    "selectYear": "选择年份",
+    "selectWeek": "选择周"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -929,6 +948,8 @@
     "isRegisterable": "可注册",
     "creator": "创建者",
     "edit": "编辑",
+    "invalidDetailsMessage": "请输入有效值",
+    "selectAtLeastOneDay": "请至少选择一天",
     "delete": "删除",
     "viewDetails": "查看详情",
     "noEventsFound": "未找到事件",
@@ -937,7 +958,8 @@
     "noOfAttendees": "参与者数量",
     "noRegistrations": "无注册",
     "registrants": "注册者",
-    "to": "至"
+    "to": "至",
+    "deleteOptionRequired": "必须选择删除选项"
   },
   "funds": {
     "title": "基金",
@@ -1181,7 +1203,9 @@
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "noResultsFoundFor": "未找到结果",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "加载被阻止用户时发生错误",
+    "errorLoadingMembers": "加载成员时发生错误"
   },
   "eventManagement": {
     "name": "事件管理",
@@ -1265,7 +1289,8 @@
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
     "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
-    "cancel": "取消"
+    "cancel": "取消",
+    "successfullyDeletedOrganization": "组织已成功删除"
   },
   "userUpdate": {
     "appLanguageCode": "默认语言",
@@ -1279,13 +1304,6 @@
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消"
-  },
-  "membershipRequest": {
-    "accept": "接受",
-    "reject": "拒绝",
-    "memberAdded": "它被接受",
-    "joined": "已加入",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
   "orgUpdate": {
     "city": "城市",
@@ -1401,6 +1419,10 @@
     "tags": "标签",
     "invalidFileType": "无效的文件类型",
     "fileTooLarge": "文件过大",
+    "ascendingOrder": "升序",
+    "descendingOrder": "降序",
+    "searchCreatedEvents": "搜索已创建的活动",
+    "sortByName": "按名称排序",
     "memberDetailNumberExample": "例如: 1234",
     "memberDetailExampleLane": "例如: 街道名称",
     "memberDetailPostalExample": "例如: 邮政编码",
@@ -1408,7 +1430,24 @@
     "enterState": "输入州/省",
     "select": "请选择",
     "asYourCountry": "作为您的国家",
-    "actions": "操作"
+    "actions": "操作",
+    "changePassword": "更改密码",
+    "oldPassword": "旧密码",
+    "newPassword": "新密码",
+    "password": "密码",
+    "updatePassword": "更新密码",
+    "confirmNewPassword": "确认新密码",
+    "passCantBeEmpty": "密码不能为空",
+    "passNoMatch": "新密码和确认密码不一致",
+    "passwordChangedSuccessfully": "密码修改成功",
+    "enterCurrentPassword": "请输入当前密码"
+  },
+  "passwordValidation": {
+    "minLength": "密码长度必须至少为 8 个字符。",
+    "uppercaseRequired": "密码必须包含至少一个大写字母。",
+    "lowercaseRequired": "密码必须包含至少一个小写字母。",
+    "numberRequired": "密码必须包含至少一个数字。",
+    "specialCharRequired": "密码必须包含至少一个特殊字符。"
   },
   "userLogin": {
     "login": "登录",
@@ -1434,26 +1473,8 @@
     "email": "邮箱",
     "role": "角色",
     "loading": "加载中...",
-    "emailNotAvailable": "邮箱不可用"
-  },
-  "userRegister": {
-    "enterFirstName": "输入您的名字",
-    "enterLastName": "输入您的姓氏",
-    "enterConfirmPassword": "输入您的密码进行确认",
-    "alreadyhaveAnAccount": "已经有帐户？",
-    "login": "登录",
-    "afterRegister": "注册成功。",
-    "passwordNotMatch": "密码不匹配。",
-    "invalidDetailsMessage": "请输入有效的详细信息。",
-    "register": "注册",
-    "firstName": "名字",
-    "lastName": "姓氏",
-    "emailAddress": "电子邮件地址",
-    "enterEmail": "输入电子邮件",
-    "password": "密码",
-    "enterPassword": "输入密码",
-    "confirmPassword": "确认密码",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
+    "emailNotAvailable": "邮箱不可用",
+    "membersList": "成员列表"
   },
   "userNavbar": {
     "talawa": "塔拉瓦",
@@ -1599,6 +1620,7 @@
     "Admin": "管理员",
     "loading": "加载中...",
     "noAttendees": "未找到参与者",
+    "unknownMember": "未知成员",
     "attendeeCount": "参与人数",
     "maleAttendees": "男性参与者",
     "femaleAttendees": "女性参与者",
@@ -1666,9 +1688,7 @@
     "country": "国家",
     "resetChanges": "重置更改",
     "profileDetails": "个人资料详情",
-    "deleteUserMessage": "通过单击\"删除用户\"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
     "copyLink": "复制个人资料链接",
-    "deleteUser": "删除用户",
     "otherSettings": "其他设置",
     "changeLanguage": "改变语言",
     "sgender": "选择性别",
@@ -1733,9 +1753,12 @@
     "donations": "捐款",
     "searchDonations": "搜索捐款",
     "donateForThe": "为",
+    "donor": "捐赠者",
     "amount": "数量",
+    "date": "日期",
     "yourPreviousDonations": "您之前的捐款",
     "donate": "捐",
+    "loading": "加载中...",
     "nothingToShow": "这里没有什么可显示的。",
     "success": "捐赠成功",
     "invalidAmount": "请输入捐赠金额的数值。",
@@ -1823,7 +1846,9 @@
     "presetThisMonth": "本月",
     "presetNext7Days": "未来 7 天",
     "presetNext30Days": "未来 30 天",
-    "presetNextMonth": "下个月"
+    "presetNextMonth": "下个月",
+    "repeatsOn": "重复开启",
+    "select": "请选择"
   },
   "userEventCard": {
     "failedToRegister": "无法注册该活动",
@@ -1880,6 +1905,7 @@
     "advertisementImageAlt": "廣告圖片 #{{index}} 用於 {{name}}",
     "invalidFileType": "無效的文件類型：{{fileName}}",
     "fileTooLarge": "文件太大：{{fileName}}",
+    "fileUploadError": "文件上传错误：{{fileName}}",
     "invalidArgumentsForAction": "此操作的參數無效。",
     "englishCaptions": "英文字幕",
     "preview": "預覽",
@@ -1904,6 +1930,7 @@
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
     "groupInfo": "群组信息",
+    "editImage": "编辑图像",
     "description": "描述",
     "hash": "#",
     "members": "会员",
@@ -1962,7 +1989,10 @@
       "resetButton": "重试",
       "resetButtonAriaLabel": "重试"
     },
-    "messageActions": "消息操作"
+    "messageActions": "消息操作",
+    "addAttachment": "添加附件",
+    "removeAttachment": "删除附件",
+    "closeReply": "关闭回复"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
@@ -2496,7 +2526,8 @@
     "loading": "加载中...",
     "selectRow": "选择第 {{rowKey}} 行",
     "previousYear": "上一年",
-    "nextYear": "下一年"
+    "nextYear": "下一年",
+    "member": "成员"
   },
   "donation": {
     "amount_label": "金额",
@@ -2597,5 +2628,20 @@
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "一",
+      "tue": "二",
+      "wed": "三",
+      "thu": "四",
+      "fri": "五",
+      "sat": "六",
+      "sun": "日"
+    },
+    "expandDay": "展开日期"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "每周日历视图"
   }
 }

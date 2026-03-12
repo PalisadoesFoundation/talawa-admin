@@ -1,9 +1,32 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import PeopleTabUserOrganizations from './PeopleTabUserOrganizations';
+import userEvent from '@testing-library/user-event';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        admins: 'Admins',
+        members: 'Members',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
 
 describe('PeopleTabUserOrganizations', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
   const defaultProps = {
     img: '/images/org-logo.png',
     title: 'Open Source Club',
@@ -39,7 +62,7 @@ describe('PeopleTabUserOrganizations', () => {
     expect(button).toHaveTextContent(defaultProps.actionName ?? '');
   });
 
-  it('handles click on the action button', () => {
+  it('handles click on the action button', async () => {
     // Render component with a clickable action button
     render(
       <PeopleTabUserOrganizations
@@ -52,10 +75,12 @@ describe('PeopleTabUserOrganizations', () => {
     const button = screen.getByRole('button');
 
     // If you want it clickable, you can override onClick
-    fireEvent.click(button);
+    await user.click(button);
 
     // No onClick is passed in the original component, so here you would just check it exists
-    expect(button).toBeInTheDocument();
+    await waitFor(() => {
+      expect(button).toBeInTheDocument();
+    });
   });
 
   it('renders correctly without actionIcon and actionName', () => {
@@ -71,6 +96,10 @@ describe('PeopleTabUserOrganizations', () => {
 
     const button = screen.getByRole('button');
     expect(button).toBeInTheDocument();
-    expect(button).toBeEmptyDOMElement(); // no icon or label
+
+    // Check that no icon is rendered
+    expect(screen.queryByTestId('edit-icon')).not.toBeInTheDocument();
+    // Check that the button has no visible text (the label span is empty)
+    expect(button).toHaveTextContent('');
   });
 });

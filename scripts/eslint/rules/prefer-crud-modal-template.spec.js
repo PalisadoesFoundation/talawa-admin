@@ -87,6 +87,18 @@ describe('prefer-crud-modal-template', () => {
         options: [{ ignorePaths: ['src/test/**'] }],
       },
 
+      // Valid: ignorePaths with ** double-star glob (covers matchesGlob double-star branch)
+      {
+        filename: 'src/deeply/nested/dir/file.tsx',
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+        options: [{ ignorePaths: ['src/**/file.tsx'] }],
+      },
+
       // Valid: JSX Member Expression not matching target
       {
         code: `
@@ -137,7 +149,7 @@ describe('prefer-crud-modal-template', () => {
         `,
       },
 
-      // hasFormInExpression with ConditionalExpression (no JSX)
+      // hasFormInExpression with ConditionalExpression (no JSX — covers false return)
       {
         code: `
           import { BaseModal } from 'shared-components/BaseModal';
@@ -172,7 +184,7 @@ describe('prefer-crud-modal-template', () => {
         `,
       },
 
-      // Test ignorePaths with simple filename (line 40)
+      // Test ignorePaths with simple filename
       {
         filename: 'test.tsx',
         code: `
@@ -184,8 +196,7 @@ describe('prefer-crud-modal-template', () => {
         options: [{ ignorePaths: ['test.tsx'] }],
       },
 
-
-      // Test when specifier.imported.type !== Identifier
+      // Test when specifier.imported.type !== Identifier (string literal import)
       {
         code: `
           import { "base-modal" as BaseModal } from 'shared-components/BaseModal';
@@ -213,13 +224,97 @@ describe('prefer-crud-modal-template', () => {
           function Component() {
             return (
               <BaseModal onClose={() => {}}>
-                <UI.Form>  {/* JSXMemberExpression, not JSXIdentifier */}
+                <UI.Form>
                   <input />
                 </UI.Form>
               </BaseModal>
             );
           }
         `,
+      },
+
+      // Valid: BaseModal with plain text child (JSXText node — covers the default
+      // return false branch in hasFormElement for non-matching child types)
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                Just some plain text
+              </BaseModal>
+            );
+          }
+        `,
+      },
+
+      // Valid: JSXExpressionContainer with a plain expression (non-JSX call/identifier —
+      // covers the false return in hasFormInExpression for non-matching expression types)
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                {someVariable}
+              </BaseModal>
+            );
+          }
+        `,
+      },
+
+      // Valid: JSXExpressionContainer with a call expression (another non-JSX expression type)
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                {renderContent()}
+              </BaseModal>
+            );
+          }
+        `,
+      },
+
+      // Valid: Named import that is NOT in variants list (covers the
+      // `importedName && variants.includes(importedName)` false branch where
+      // importedName is valid Identifier but not in variants)
+      {
+        code: `
+          import { OtherComponent } from 'shared-components/BaseModal';
+          function Component() {
+            return <OtherComponent onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Valid: importPathPatterns non-wildcard matching via endsWith
+      // (covers `importPath.endsWith(\`/\${pattern}\`)` branch)
+      {
+        code: `
+          import { SomeModal } from 'some/prefix/CustomModal';
+          function Component() {
+            return <SomeModal onClose={() => {}} />;
+          }
+        `,
+        options: [
+          { importPathPatterns: ['CustomModal'], variants: ['SomeModal'] },
+        ],
+      },
+
+      // Valid: importPathPatterns non-wildcard matching via includes (middle segment)
+      // (covers `importPath.includes(\`/\${pattern}/\`)` branch)
+      {
+        code: `
+          import { SomeModal } from 'some/CustomModal/variants';
+          function Component() {
+            return <SomeModal onClose={() => {}} />;
+          }
+        `,
+        options: [
+          { importPathPatterns: ['CustomModal'], variants: ['SomeModal'] },
+        ],
       },
     ],
 
@@ -1162,7 +1257,7 @@ import * as AllModals from 'shared-components/BaseModal';
         `,
       },
 
-      // Invalid test - tests imported !== local (aliased)  
+      // Invalid test - tests imported !== local (aliased)
       {
         code: `
           import { BaseModal as MyModal, Something as Alias } from 'shared-components/BaseModal';
@@ -1194,6 +1289,105 @@ import { Something as Alias } from 'shared-components/BaseModal';
 import { type SomeType, Button as Btn } from 'shared-components/BaseModal';
           function Component() {
             return <BaseModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      {
+        code: `
+          import { BaseModal, Button, Card } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+        errors: [{ messageId: 'preferCrud', line: 4 }],
+        output: `
+          import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { Button, Card } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Invalid: importPathPatterns non-wildcard endsWith match (covers
+      // `importPath.endsWith(\`/\${pattern}\`)` branch in isTargetModalPath)
+      {
+        code: `
+          import { SomeModal } from 'some/prefix/SomeModal';
+          function Component() {
+            return <SomeModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+        options: [
+          { importPathPatterns: ['SomeModal'], variants: ['SomeModal'] },
+        ],
+        errors: [{ messageId: 'preferCrud', line: 4 }],
+        output: `
+          import { CRUDModalTemplate as SomeModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+          function Component() {
+            return <SomeModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Invalid: importPathPatterns non-wildcard includes match (covers
+      // `importPath.includes(\`/\${pattern}/\`)` branch in isTargetModalPath)
+      {
+        code: `
+          import { SomeModal } from 'some/SomeModal/variants';
+          function Component() {
+            return <SomeModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+        options: [
+          { importPathPatterns: ['SomeModal'], variants: ['SomeModal'] },
+        ],
+        errors: [{ messageId: 'preferCrud', line: 4 }],
+        output: `
+          import { CRUDModalTemplate as SomeModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+          function Component() {
+            return <SomeModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Invalid: Form detection via JSXElement whose opening element has
+      // a JSXIdentifier name that is NOT 'form'/'Form' but whose children
+      // contain a form — exercises the recursive hasFormElement(child.children)
+      // path for a non-form JSXElement child (already covered above, but this
+      // variant adds a sibling non-matching child first to exercise the
+      // Array.some short-circuit returning false then true)
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                <section>
+                  <aside>No form here</aside>
+                  <div>
+                    <form onSubmit={handleSubmit}><input /></form>
+                  </div>
+                </section>
+              </BaseModal>
+            );
+          }
+        `,
+        errors: [{ messageId: 'preferCrud', line: 5 }],
+        output: `
+          import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                <section>
+                  <aside>No form here</aside>
+                  <div>
+                    <form onSubmit={handleSubmit}><input /></form>
+                  </div>
+                </section>
+              </BaseModal>
+            );
           }
         `,
       },

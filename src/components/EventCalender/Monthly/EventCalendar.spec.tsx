@@ -1,6 +1,6 @@
 import React from 'react';
 import Calendar from './EventCalender';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -62,6 +62,134 @@ async function wait(ms = 200): Promise<void> {
 
 describe('Calendar', () => {
   const onMonthChange = vi.fn();
+
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
+  });
+
+  it('should navigate previous week in WEEK view (lines 130-132)', async () => {
+    const mockOnMonthChange = vi.fn();
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.WEEK}
+              onMonthChange={mockOnMonthChange}
+              currentMonth={5}
+              currentYear={2024}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    const prevButton = screen.getByTestId('prevmonthordate');
+    await userEvent.click(prevButton);
+
+    expect(mockOnMonthChange).toHaveBeenCalled();
+  });
+
+  it('should navigate next week in WEEK view (lines 146-148)', async () => {
+    const mockOnMonthChange = vi.fn();
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.WEEK}
+              onMonthChange={mockOnMonthChange}
+              currentMonth={5}
+              currentYear={2024}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    const nextButton = screen.getByTestId('nextmonthordate');
+    await userEvent.click(nextButton);
+
+    expect(mockOnMonthChange).toHaveBeenCalled();
+  });
+
+  it('should render WeeklyEventCalender when viewType is WEEK (line 582)', async () => {
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={[]}
+              viewType={ViewType.WEEK}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    await wait();
+
+    expect(await screen.findByText('12 AM')).toBeInTheDocument();
+  });
+
+  it('should navigate across month boundary when going back 7 days in WEEK view', async () => {
+    const mockOnMonthChange = vi.fn();
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.WEEK}
+              onMonthChange={mockOnMonthChange}
+              currentMonth={0}
+              currentYear={2024}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    const prevButton = screen.getByTestId('prevmonthordate');
+    await userEvent.click(prevButton);
+
+    expect(mockOnMonthChange).toHaveBeenCalled();
+  });
+
+  it('should navigate across month boundary when going forward 7 days in WEEK view', async () => {
+    const mockOnMonthChange = vi.fn();
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.WEEK}
+              onMonthChange={mockOnMonthChange}
+              currentMonth={11}
+              currentYear={2024}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    const nextButton = screen.getByTestId('nextmonthordate');
+    await userEvent.click(nextButton);
+
+    expect(mockOnMonthChange).toHaveBeenCalled();
+  });
+
   it('renders weekdays', () => {
     render(
       <Router>
@@ -103,7 +231,8 @@ describe('Calendar', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should render the current month and year', () => {
@@ -176,7 +305,7 @@ describe('Calendar', () => {
       </MockedProvider>,
     );
     await wait();
-    const prevButton = screen.getByLabelText(/previousYear/i);
+    const prevButton = screen.getByLabelText(/Previous Year/i);
     const nextButton = screen.getByTestId('nextYear');
 
     // click previous year
@@ -242,25 +371,6 @@ describe('Calendar', () => {
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={currentDayEventMock}
-              userRole={'SUPERADMIN'}
-              onMonthChange={onMonthChange}
-              currentMonth={new Date().getMonth()}
-              currentYear={new Date().getFullYear()}
-            />
-          </I18nextProvider>
-        </MockedProvider>
-        ,
-      </Router>,
-    );
-  });
-
-  it('Test for superadmin case', () => {
-    render(
-      <Router>
-        <MockedProvider link={link}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Calendar
-              eventData={eventData}
               userRole={'SUPERADMIN'}
               onMonthChange={onMonthChange}
               currentMonth={new Date().getMonth()}
@@ -499,9 +609,9 @@ describe('Calendar', () => {
     await wait();
     // Verify that the year view renders by checking for year navigation
     const prevYearButton = screen.getByRole('button', {
-      name: /previousYear/i,
+      name: /Previous Year/i,
     });
-    const nextYearButton = screen.getByRole('button', { name: /nextYear/i });
+    const nextYearButton = screen.getByRole('button', { name: /Next Year/i });
     expect(prevYearButton).toBeInTheDocument();
     expect(nextYearButton).toBeInTheDocument();
   });

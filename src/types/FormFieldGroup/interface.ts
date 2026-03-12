@@ -1,9 +1,11 @@
+import type { ReactNode } from 'react';
+
 /**
  * Props for FormFieldGroup component.
  */
 export interface InterfaceFormFieldGroupProps {
   name: string;
-  label: string;
+  label: ReactNode;
   required?: boolean;
   helpText?: string;
   error?: string;
@@ -22,8 +24,8 @@ export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
   placeholder?: string;
   value: string;
   onChange?: (v: string) => void;
-  startAdornment?: React.ReactNode;
-  endAdornment?: React.ReactNode;
+  startAdornment?: ReactNode;
+  endAdornment?: ReactNode;
   disabled?: boolean;
   /** Additional HTML input attributes passed through to the underlying control */
   [x: string]: unknown;

@@ -65,7 +65,13 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
         'input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), select:not([disabled])',
       );
       if (firstInput) {
-        setTimeout(() => firstInput.focus(), 100);
+        const timer = setTimeout(() => {
+          // Only auto-focus when no form element already has focus
+          if (!formRef.current?.contains(document.activeElement)) {
+            firstInput.focus();
+          }
+        }, 100);
+        return () => clearTimeout(timer);
       }
     }
   }, [isOpen]);

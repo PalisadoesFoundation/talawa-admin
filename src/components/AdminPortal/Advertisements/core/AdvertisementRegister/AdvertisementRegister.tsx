@@ -70,6 +70,7 @@ import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { BaseModal } from 'shared-components/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { useMinioUpload } from 'utils/MinioUpload';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -88,10 +89,8 @@ function AdvertisementRegister({
 
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
+  const { uploadFileToMinio } = useMinioUpload();
 
-  if (currentOrg === undefined) {
-    return <PageNotFound />;
-  }
   /*
    * Mutation to add advertisement and refetch the advertisement list
    */
@@ -135,7 +134,20 @@ function AdvertisementRegister({
     attachments: [],
   });
 
+  // Ref to track attachments for cleanup on unmount
+  const attachmentsRef = React.useRef(formState.attachments);
+  useEffect(() => {
+    attachmentsRef.current = formState.attachments;
+  }, [formState.attachments]);
+
   const handleClose = (): void => {
+    // Revoke all blob URLs when closing/resetting form
+    formState.attachments.forEach((attachment) => {
+      if (attachment.previewUrl) {
+        URL.revokeObjectURL(attachment.previewUrl);
+      }
+    });
+
     setFormState({
       name: '',
       type: 'banner',
@@ -146,6 +158,17 @@ function AdvertisementRegister({
     });
     setShow(false);
   };
+
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      attachmentsRef.current.forEach((attachment) => {
+        if (attachment.previewUrl) {
+          URL.revokeObjectURL(attachment.previewUrl);
+        }
+      });
+    };
+  }, []);
 
   const handleShow = (): void => setShow(true); // Shows the modal
 
@@ -171,21 +194,61 @@ function AdvertisementRegister({
         }
       });
 
-      if (validFiles.length > 0) {
-        setFormState((prev) => ({
-          ...prev,
-          attachments: [...prev.attachments, ...validFiles],
-        }));
+      if (validFiles.length > 0 && currentOrg) {
+        const uploadedMetadata: {
+          objectName: string;
+          fileHash: string;
+          mimetype: string;
+          name: string;
+          previewUrl: string;
+        }[] = [];
+        for (const file of validFiles) {
+          try {
+            const { objectName, fileHash } = await uploadFileToMinio(
+              file,
+              currentOrg,
+            );
+            uploadedMetadata.push({
+              objectName,
+              fileHash,
+              mimetype: file.type,
+              name: file.name,
+              previewUrl: URL.createObjectURL(file),
+            });
+          } catch (error) {
+            console.error('Error uploading file:', error);
+            NotificationToast.error(
+              t('fileUploadError', { fileName: file.name }),
+            );
+            // Revoke blob URL if created before failure
+            const previewUrl = URL.createObjectURL(file);
+            URL.revokeObjectURL(previewUrl);
+          }
+        }
+
+        if (uploadedMetadata.length > 0) {
+          setFormState((prev) => ({
+            ...prev,
+            attachments: [...prev.attachments, ...uploadedMetadata],
+          }));
+        }
       }
     }
   };
 
   // Handle file removal
   const removeFile = (index: number): void => {
-    setFormState((prev) => ({
-      ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index),
-    }));
+    setFormState((prev) => {
+      // Revoke blob URL before removing attachment
+      const attachment = prev.attachments[index];
+      if (attachment?.previewUrl) {
+        URL.revokeObjectURL(attachment.previewUrl);
+      }
+      return {
+        ...prev,
+        attachments: prev.attachments.filter((_, i) => i !== index),
+      };
+    });
   };
 
   // Set form state if editing
@@ -233,13 +296,33 @@ function AdvertisementRegister({
         type: string;
         startAt: string;
         endAt: string;
+        attachments:
+          | {
+              objectName: string;
+              fileHash: string;
+              mimetype: string;
+              name: string;
+              previewUrl?: string;
+            }[]
+          | undefined;
         description?: string | null;
       } = {
-        organizationId: currentOrg,
+        organizationId: currentOrg ?? '',
         name: formState.name as string,
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
+        attachments:
+          formState.attachments.length > 0
+            ? formState.attachments.map(
+                ({ objectName, fileHash, mimetype, name }) => ({
+                  objectName,
+                  fileHash,
+                  mimetype,
+                  name: name || '',
+                }),
+              )
+            : undefined,
       };
 
       if (formState.description !== null) {
@@ -381,6 +464,10 @@ function AdvertisementRegister({
   const modalTitle =
     formStatus === 'register' ? t('addNew') : t('editAdvertisement');
 
+  if (currentOrg === undefined) {
+    return <PageNotFound />;
+  }
+
   return (
     //If register show register button else show edit button
     <ErrorBoundaryWrapper
@@ -461,11 +548,11 @@ function AdvertisementRegister({
               {/* Preview section */}
               {formState.attachments.map((file, index) => (
                 <div key={index}>
-                  {file.type.startsWith('video/') ? (
+                  {file.mimetype.startsWith('video/') ? (
                     <video
                       data-testid="mediaPreview"
                       controls
-                      src={encodeURI(URL.createObjectURL(file))}
+                      src={file.previewUrl}
                       className={styles.previewAdvertisementRegister}
                     >
                       <track
@@ -477,7 +564,7 @@ function AdvertisementRegister({
                   ) : (
                     <img
                       data-testid="mediaPreview"
-                      src={encodeURI(URL.createObjectURL(file))}
+                      src={file.previewUrl}
                       alt={t('preview')}
                       className={styles.previewAdvertisementRegister}
                     />
@@ -487,6 +574,7 @@ function AdvertisementRegister({
                     data-testid="closePreview"
                     className={styles.removeButton}
                     onClick={() => removeFile(index)}
+                    aria-label={tCommon('remove')}
                   >
                     <FaTrashCan />
                   </Button>

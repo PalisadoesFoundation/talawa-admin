@@ -1,104 +1,80 @@
-/**
- * OrganizationModal component.
- *
- * This component renders a modal for creating or editing an organization.
- * It includes a form with fields for organization details such as name,
- * description, address, and an option to upload a display image.
- *
- * @param props - Component props for the modal. See {@link InterfaceOrganizationModalProps}.
- *
- * @remarks
- * Props:
- * - showModal: Determines whether the modal is visible.
- * - toggleModal: Function to toggle the visibility of the modal.
- * - formState: The current state of the form fields.
- * - setFormState: Function to update the form state.
- * - createOrg: Function to handle form submission for creating an organization.
- * - t: Translation function for component-specific strings.
- * - tCommon: Translation function for common strings.
- * - userData: Current user data, if available.
- *
- * - The form includes validation for input fields such as name, description, and address.
- * - The `uploadFileToMinio` function is used to handle image uploads to MinIO storage.
- * - Displays success or error messages using `NotificationToast` for image upload feedback.
- *
- * @example
- * ```tsx
- * <OrganizationModal
- * showModal={true}
- * toggleModal={handleToggleModal}
- * formState={formState}
- * setFormState={setFormState}
- * createOrg={handleCreateOrg}
- * t={translate}
- * tCommon={translateCommon}
- * userData={currentUser}
- * />
- * ```
- *
- * @returns The rendered organization modal.
- */
 import React, { type ChangeEvent } from 'react';
-import Button from 'shared-components/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
+import Button from 'shared-components/Button/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
 import styles from './OrganizationModal.module.css';
+import { useTranslation } from 'react-i18next';
 
+/**
+ * Interface for the organization form state.
+ */
 interface InterfaceFormStateType {
+  /** Address line 1 of the organization. */
   addressLine1: string;
+  /** Address line 2 of the organization. */
   addressLine2: string;
+  /** Avatar URL or identifier of the organization. */
   avatar: string | null;
+  /** City where the organization is located. */
   city: string;
+  /** Country code of the organization's location. */
   countryCode: string;
+  /** Description of the organization. */
   description: string;
+  /** Name of the organization. */
   name: string;
+  /** Postal code of the organization's location. */
   postalCode: string;
+  /** State or province where the organization is located. */
   state: string;
 }
 
 /**
- * Represents the properties of the OrganizationModal component.
+ * Interface for the properties of the OrganizationModal component.
  */
 export interface InterfaceOrganizationModalProps {
+  /** A boolean indicating whether the modal should be displayed. */
   showModal: boolean;
+  /** A function to toggle the visibility of the modal. */
   toggleModal: () => void;
+  /** The state of the form in the organization modal. */
   formState: InterfaceFormStateType;
+  /** A function to update the state of the form in the organization modal. */
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
+  /** A function to handle the submission of the organization creation form. */
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
 }
 
 /**
- * Represents the organization modal component.
+ * OrganizationModal component allows administrators to create a new organization.
+ * It provides a form to enter organization details like name, description, address, and an image.
+ *
+ * @param props - The properties for the OrganizationModal component.
+ * @returns A JSX element representing the organization creation modal.
  */
-
 const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   showModal,
   toggleModal,
   formState,
   setFormState,
   createOrg,
-  t,
-  tCommon,
 }) => {
+  const { t } = useTranslation();
+  const { t: tCommon } = useTranslation('common');
   const { uploadFileToMinio } = useMinioUpload();
 
   return (
     <BaseModal
       show={showModal}
       onHide={toggleModal}
-      title={t('createOrganization')}
+      title={tCommon('createOrganization')}
       headerClassName={styles.modalHeader}
       dataTestId="modalOrganizationHeader"
     >
-      <Form onSubmitCapture={createOrg}>
+      <form onSubmit={createOrg}>
         <FormTextField
           name="orgname"
           label={tCommon('name')}
@@ -128,21 +104,25 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           data-testid="modalOrganizationDescription"
           autoComplete="off"
         />
-        <Form.Label>{tCommon('address')}</Form.Label>
-        <Row className="mb-1">
-          <Col sm={6} className="mb-1">
-            <Form.Control
+
+        <label htmlFor="countrySelect" className="form-label">
+          {tCommon('address')}
+        </label>
+
+        <div className="row mb-1">
+          <div className="col-sm-6 mb-1">
+            <select
+              id="countrySelect"
               required
-              as="select"
               data-testid="modalOrganizationCountryCode"
               value={formState.countryCode}
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length <= 50) {
-                  setFormState({ ...formState, countryCode: e.target.value });
+                  setFormState({ ...formState, countryCode: inputText });
                 }
               }}
-              className={`mb-3 ${styles.inputField}`}
+              className={`form-control mb-3 ${styles.inputField}`}
             >
               <option value="" disabled>
                 {tCommon('selectACountry')}
@@ -155,9 +135,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   {country.label}
                 </option>
               ))}
-            </Form.Control>
-          </Col>
-          <Col sm={6} className="mb-1">
+            </select>
+          </div>
+
+          <div className="col-sm-6 mb-1">
             <FormTextField
               name="state"
               label={tCommon('state')}
@@ -172,10 +153,11 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               data-testid="modalOrganizationState"
               autoComplete="off"
             />
-          </Col>
-        </Row>
-        <Row className="mb-1">
-          <Col sm={6} className="mb-1">
+          </div>
+        </div>
+
+        <div className="row mb-1">
+          <div className="col-sm-6 mb-1">
             <FormTextField
               name="city"
               label={tCommon('city')}
@@ -190,8 +172,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               data-testid="modalOrganizationCity"
               autoComplete="off"
             />
-          </Col>
-          <Col sm={6} className="mb-1">
+          </div>
+
+          <div className="col-sm-6 mb-1">
             <FormTextField
               name="postalCode"
               label={tCommon('postalCode')}
@@ -205,10 +188,11 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               data-testid="modalOrganizationPostalCode"
               autoComplete="off"
             />
-          </Col>
-        </Row>
-        <Row className="mb-1">
-          <Col sm={6} className="mb-1">
+          </div>
+        </div>
+
+        <div className="row mb-1">
+          <div className="col-sm-6 mb-1">
             <FormTextField
               name="addressLine1"
               label={tCommon('addressLine1')}
@@ -223,8 +207,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               data-testid="modalOrganizationAddressLine1"
               autoComplete="off"
             />
-          </Col>
-          <Col sm={6} className="mb-1">
+          </div>
+
+          <div className="col-sm-6 mb-1">
             <FormTextField
               name="addressLine2"
               label={tCommon('addressLine2')}
@@ -238,60 +223,63 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               data-testid="modalOrganizationAddressLine2"
               autoComplete="off"
             />
-          </Col>
-        </Row>
-        <Row className="mb-1"></Row>
-        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
-        <Form.Control
+          </div>
+        </div>
+
+        <label htmlFor="orgphoto" className="form-label">
+          {tCommon('displayImage')}
+        </label>
+
+        <input
           accept="image/*"
           id="orgphoto"
-          className={`mb-3 ${styles.inputField}`}
+          className={`form-control mb-3 ${styles.inputField}`}
           name="photo"
           type="file"
-          multiple={false}
-          onChange={async (e: React.ChangeEvent): Promise<void> => {
+          data-testid="organisationImage"
+          onChange={async (e): Promise<void> => {
             const target = e.target as HTMLInputElement;
-            const file = target.files && target.files[0];
+            const file = target.files?.[0];
 
-            if (file) {
-              // Check file size (5MB limit)
-              const maxSize = 5 * 1024 * 1024;
-              if (file.size > maxSize) {
-                NotificationToast.error(tCommon('fileTooLarge'));
-                return;
-              }
+            if (!file) return;
 
-              // Check file type
-              const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-              if (!allowedTypes.includes(file.type)) {
-                NotificationToast.error(tCommon('invalidFileType'));
-                return;
-              }
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+              NotificationToast.error(tCommon('fileTooLarge'));
+              return;
+            }
 
-              try {
-                const { objectName: avatarobjectName } =
-                  await uploadFileToMinio(file, 'organization');
-                setFormState({ ...formState, avatar: avatarobjectName });
-                NotificationToast.success(tCommon('imageUploadSuccess'));
-              } catch (error) {
-                console.error('Error uploading image:', error);
-                NotificationToast.error(tCommon('imageUploadError'));
-              }
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+              NotificationToast.error(tCommon('invalidFileType'));
+              return;
+            }
+
+            try {
+              const { objectName } = await uploadFileToMinio(
+                file,
+                'organization',
+              );
+              setFormState({ ...formState, avatar: objectName });
+              NotificationToast.success(tCommon('imageUploadSuccess'));
+            } catch (error) {
+              console.error('Error uploading image:', error);
+              NotificationToast.error(tCommon('imageUploadError'));
             }
           }}
-          data-testid="organisationImage"
         />
-        <Col className={styles.sampleOrgSection}>
+
+        <div className={styles.sampleOrgSection}>
           <Button
-            className="addButton"
             type="submit"
             value="invite"
             data-testid="submitOrganizationForm"
+            className="addButton"
           >
             {tCommon('createOrganization')}
           </Button>
-        </Col>
-      </Form>
+        </div>
+      </form>
     </BaseModal>
   );
 };

@@ -1,0 +1,92 @@
+/**
+ * Shared styles for DataTable components to avoid code duplication.
+ * These classes should be composed locally where needed.
+ */
+
+.dataTableWrapper {
+  width: 100%;
+  position: relative;
+  overflow-x: auto;
+}
+
+.dataSkeletonCell {
+  height: var(--space-5);
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-gray-200) 25%,
+    var(--color-gray-100) 50%,
+    var(--color-gray-200) 75%
+  );
+  background-size: 200px 100%;
+  border-radius: var(--radius-sm);
+  animation: datatable-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes datatable-loading {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: var(--space-0-5);
+  height: var(--space-0-5);
+  padding: 0;
+  margin: calc(var(--space-0-5) * -1);
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.selectCol {
+  width: var(--space-10);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.selectCol input[type='checkbox'] {
+  cursor: pointer;
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.actionsCol {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.bulkBtn {
+  border: var(--border-1) solid var(--color-gray-200);
+  background-color: var(--color-white);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: background-color 0.15s ease;
+}
+
+.bulkBtn:hover:not(:disabled) {
+  background-color: var(--color-gray-100);
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dataLoadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background-color: var(--color-white-60);
+  z-index: 1;
+}

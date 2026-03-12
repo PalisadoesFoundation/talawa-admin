@@ -47,43 +47,54 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
-  const { t: tCommon } = useTranslation('common');
 
   const [create, { loading: createLoading }] = useMutation(
     CREATE_EVENT_MUTATION,
+    { errorPolicy: 'all' },
   );
 
-  // Default to today's date for better UX - form submission handles past times
-  // by adding a buffer when needed (see EventForm.handleSubmit)
-  const now = new Date();
-  const todayUTC = new Date(
-    Date.UTC(
-      now.getUTCFullYear(),
-      now.getUTCMonth(),
-      now.getUTCDate(),
-      0,
-      0,
-      0,
-      0,
-    ),
-  );
+  const { t: tCommon } = useTranslation('common');
 
-  const defaultValues: IEventFormValues = {
-    name: '',
-    description: '',
-    location: '',
-    startDate: todayUTC,
-    endDate: todayUTC,
-    startTime: '08:00:00',
-    endTime: '18:00:00',
-    allDay: true,
-    isPublic: false,
-    isInviteOnly: true,
-    isRegisterable: false,
+  const defaultValues: IEventFormValues = React.useMemo(() => {
+    // Default to today's date for better UX - form submission handles past times
+    // by adding a buffer when needed (see EventForm.handleSubmit)
+    const now = new Date();
+    const todayUTC = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        0,
+        0,
+        0,
+        0,
+      ),
+    );
 
-    recurrenceRule: null,
-    createChat: false,
-  };
+    const nextHour = new Date(now);
+    const nextHourValue = Math.min(now.getHours() + 1, 23);
+    nextHour.setHours(nextHourValue, 0, 0, 0);
+    const twoHoursLater = new Date(nextHour);
+    const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
+    twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
+
+    return {
+      name: '',
+      description: '',
+      location: '',
+      startDate: todayUTC,
+      endDate: todayUTC,
+      startTime: nextHour.toTimeString().split(' ')[0],
+      endTime: twoHoursLater.toTimeString().split(' ')[0],
+      allDay: true,
+      isPublic: false,
+      isInviteOnly: true,
+      isRegisterable: false,
+
+      recurrenceRule: null,
+      createChat: false,
+    };
+  }, []);
   const [formResetKey, setFormResetKey] = useState(0);
 
   const handleClose = (): void => {
@@ -117,7 +128,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         variables: { input },
       });
 
-      if (createEventData) {
+      if (createEventData?.createEvent) {
         NotificationToast.success(t('eventCreated') as string);
         onEventCreated();
         setFormResetKey((prev) => prev + 1);
@@ -142,9 +153,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         initialValues={defaultValues}
         onSubmit={handleSubmit}
         onCancel={handleClose}
-        submitLabel={t('createEvent')}
-        t={t}
-        tCommon={tCommon}
+        submitLabel={tCommon('create')}
         showRegisterable
         showPublicToggle
         showRecurrenceToggle

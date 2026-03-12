@@ -136,7 +136,7 @@ describe('Event Management', () => {
     cleanup();
     clearAllItems();
 
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Navigation Tests', () => {
@@ -147,8 +147,9 @@ describe('Event Management', () => {
       });
     });
 
-    it('Testing back button navigation when userType is SuperAdmin', async () => {
-      setItem('SuperAdmin', true);
+    it('Testing back button navigation when userType is ADMIN', async () => {
+      setItem('role', 'administrator');
+
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
@@ -159,8 +160,7 @@ describe('Event Management', () => {
     });
 
     it('Testing back button navigation when userType is USER', async () => {
-      setItem('SuperAdmin', false);
-      setItem('AdminFor', []);
+      setItem('role', 'user');
 
       renderEventManagement();
 
@@ -172,10 +172,8 @@ describe('Event Management', () => {
         expect(userEventsScreen).toBeInTheDocument();
       });
     });
-
-    it('Testing back button navigation when userType is ADMIN', async () => {
-      setItem('SuperAdmin', false);
-      setItem('AdminFor', ['someOrg']);
+    it('Testing back button navigation when userType is SUPERUSER', async () => {
+      setItem('role', 'superuser');
 
       renderEventManagement();
 
@@ -183,8 +181,7 @@ describe('Event Management', () => {
       await user.click(backButton);
 
       await waitFor(() => {
-        const eventsScreen = screen.getByTestId('eventsScreen');
-        expect(eventsScreen).toBeInTheDocument();
+        expect(screen.getByTestId('eventsScreen')).toBeInTheDocument();
       });
     });
     it('redirects to orglist when params are missing', async () => {

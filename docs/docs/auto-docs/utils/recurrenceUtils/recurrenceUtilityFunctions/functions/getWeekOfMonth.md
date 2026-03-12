@@ -6,7 +6,7 @@
 
 > **getWeekOfMonth**(`date`): `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L323)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L325)
 
 Calculates which week of the month a given date falls in (calendar row), using UTC.
 

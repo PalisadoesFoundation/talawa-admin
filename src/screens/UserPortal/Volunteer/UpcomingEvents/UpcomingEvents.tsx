@@ -271,6 +271,7 @@ const UpcomingEvents = (): JSX.Element => {
         searchButtonTestId="searchBtn"
         hasDropdowns={true}
         dropdowns={[searchByDropdown]}
+        containerClassName={styles.searchFilterContainer}
       />
       {events.length === 0 ? (
         <EmptyState

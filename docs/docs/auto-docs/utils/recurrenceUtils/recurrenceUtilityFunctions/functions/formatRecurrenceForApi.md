@@ -6,7 +6,7 @@
 
 > **formatRecurrenceForApi**(`recurrence`): `Omit`\<[`InterfaceRecurrenceRule`](../../recurrenceTypes/interfaces/InterfaceRecurrenceRule.md), `"endDate"`\> & `object`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L303)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L305)
 
 Formats a recurrence rule for API submission.
 Converts Date object to ISO string for `endDate`.

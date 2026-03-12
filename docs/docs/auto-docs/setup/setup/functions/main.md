@@ -6,7 +6,7 @@
 
 > **main**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L159)
+Defined in: [src/setup/setup.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L143)
 
 Main setup orchestrator for Talawa Admin initial configuration.
 
@@ -24,7 +24,8 @@ Executes the following steps in order:
 3. Configures Docker options
 4. Sets up port (if not using Docker) and API URL
 5. Configures reCAPTCHA settings
-6. Configures error logging preferences
+6. Configures OAuth providers (Google/GitHub)
+7. Configures error logging preferences
 
 If any step fails, exits with error code 1.
 Can be cancelled with CTRL+C (exits with code 130).

@@ -5,7 +5,7 @@
   display: flex;
   min-height: var(--space-25);
   background: var(--color-white);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 }
 
 .closeButton {
@@ -29,8 +29,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-top-left-radius: 12px;
-  border-bottom-left-radius: 12px;
+  border-top-left-radius: var(--radius-lg);
+  border-bottom-left-radius: var(--radius-lg);
   border-right: var(--border-1) solid var(--color-gray-100);
 }
 
@@ -69,6 +69,12 @@
 }
 
 .actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  width: 100%;
   height: var(--space-9);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -90,8 +96,8 @@
   flex: 1;
   background: var(--color-white);
   color: var(--color-gray-900);
-  border-top-right-radius: 12px;
-  border-bottom-right-radius: 12px;
+  border-top-right-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
   padding: var(--space-0);
   display: flex;
   flex-direction: column;
@@ -115,7 +121,7 @@
   align-items: center;
   justify-content: center;
   animation: fadeIn 0.3s ease-out;
-  border-radius: 0 12px 12px 0;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
 }
 
 .screenshotHeader {
@@ -131,10 +137,10 @@
 }
 
 .backButton {
-  background: rgba(255, 255, 255, 0.95);
+  background: var(--color-white);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: var(--border-1) solid rgba(0, 0, 0, 0.1);
+  border: var(--border-1) solid var(--color-black);
   border-radius: var(--radius-md);
   padding: var(--space-4) var(--space-5);
   color: var(--color-gray-600);
@@ -145,17 +151,19 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 90%);
 }
 
 .backButton:hover {
   background: var(--color-white);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 85%);
 }
 
 .screenshotCounter {
-  background: rgba(255, 255, 255, 0.95);
+  background: color-mix(in srgb, var(--color-white), transparent 5%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: var(--color-gray-700);
@@ -163,18 +171,21 @@
   border-radius: var(--radius-xl);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
-  border: var(--border-1) solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: var(--border-1) solid
+    color-mix(in srgb, var(--color-black), transparent 90%);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 90%);
 }
 
 .navigationButton {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.95);
+  background: color-mix(in srgb, var(--color-white), transparent 5%);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: var(--border-1) solid rgba(0, 0, 0, 0.1);
+  border: var(--border-1) solid
+    color-mix(in srgb, var(--color-black), transparent 90%);
   border-radius: var(--radius-full);
   width: var(--space-10);
   height: var(--space-10);
@@ -186,13 +197,14 @@
   cursor: pointer;
   z-index: 10;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-black), transparent 90%);
 }
 
 .navigationButton:hover {
   background: var(--color-white);
   transform: translateY(-50%) scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black), transparent 85%);
 }
 
 .navigationButtonLeft {
@@ -221,10 +233,12 @@
   object-fit: contain;
   border-radius: var(--radius-md);
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    0 4px 16px rgba(0, 0, 0, 0.08);
+    0 var(--shadow-offset-lg) var(--shadow-blur-2xl)
+      color-mix(in srgb, var(--color-black), transparent 88%),
+    0 var(--shadow-offset-md) var(--shadow-offset-xl)
+      color-mix(in srgb, var(--color-black), transparent 92%);
   background: var(--color-white);
-  border: var(--border-1) solid rgba(0, 0, 0, 0.1);
+  border: var(--border-1) solid var(--color-black);
   animation: imageSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -243,7 +257,7 @@
   height: var(--space-3);
   border-radius: var(--radius-full);
   border: none;
-  background: rgba(73, 80, 87, 0.3);
+  background: var(--color-gray-800);
   cursor: pointer;
   transition: all 0.2s ease;
   transform: scale(1);
@@ -259,7 +273,7 @@
   display: flex;
   border-bottom: var(--border-1) solid var(--color-gray-100);
   background: var(--color-gray-50);
-  border-top-right-radius: 12px;
+  border-top-right-radius: var(--radius-lg);
 }
 
 .tab {
@@ -284,7 +298,7 @@
   flex: 1;
   padding: var(--space-8) var(--space-9);
   min-height: var(--space-24);
-  max-height: 70vh;
+  max-height: var(--vh-70);
   overflow-y: auto;
   transition:
     min-height 0.2s,
@@ -318,7 +332,7 @@
   width: var(--space-14);
   height: var(--space-12);
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: calc(var(--border-4) + var(--border-2));
   border: var(--border-1) solid var(--color-gray-100);
   background: var(--color-gray-50);
   cursor: pointer;
@@ -407,4 +421,19 @@
 
 .iconTrash {
   font-size: var(--font-size-sm);
+}
+
+.pluginActive {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-3);
+}
+
+.common {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+  width: 100%;
 }

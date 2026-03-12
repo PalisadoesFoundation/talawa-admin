@@ -28,7 +28,7 @@ import type {
 } from 'shared-components/DataGridWrapper';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import styles from 'style/app-fixed.module.css';
+import styles from './CheckInModal.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 import { BaseModal } from 'shared-components/BaseModal';
@@ -106,11 +106,11 @@ export const CheckInModal = ({
 
   // Define columns for the DataGrid
   const columns: GridColDef[] = [
-    { field: 'userName', headerName: t('user'), width: 300 }, // Column for user names
+    { field: 'userName', headerName: t('user'), flex: 1 }, // Column for user names
     {
       field: 'checkInData',
       headerName: t('checkInStatus'),
-      width: 400,
+      flex: 2,
       renderCell: (props) => (
         // Render a custom row component for check-in status
         <TableRow

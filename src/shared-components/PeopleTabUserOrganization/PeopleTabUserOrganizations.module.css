@@ -1,0 +1,85 @@
+.peopleTabUserOrganizationsCard {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-1) solid var(--color-gray-100);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  background-color: var(--color-white);
+  width: 100%;
+  height: var(--space-18);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg) var(--color-black);
+  align-items: center;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardContent {
+  display: flex;
+  gap: var(--space-10);
+}
+
+.peopleTabUserOrganizationsCardImage {
+  width: var(--space-17);
+  height: var(--space-16);
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background-color: var(--color-gray-100);
+  border: var(--border-2) solid var(--color-gray-100);
+  box-shadow:
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black),
+    0 var(--shadow-offset-sm) var(--shadow-blur-md) var(--color-black);
+}
+
+.peopleTabUserOrganizationsCardText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardTitle {
+  font-size: var(--space-5);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--space-0);
+}
+
+.peopleTabUserOrganizationsCardDescription {
+  font-size: var(--space-4);
+  color: var(--color-gray-600);
+  margin: var(--space-2) 0;
+}
+
+.peopleTabUserOrganizationsCardStats {
+  font-size: var(--space-4);
+  color: var(--color-gray-800);
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.peopleTabUserOrganizationsCardAction {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--space-4);
+  width: 100%;
+}
+
+.peopleTabUserOrganizationsEditButton {
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--color-blue-200);
+  border: none;
+  border-radius: var(--radius-lg);
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: var(--space-12);
+  height: var(--space-8);
+}
+
+.peopleTabUserOrganizationsEditButton:hover {
+  background-color: var(--color-blue-500);
+}

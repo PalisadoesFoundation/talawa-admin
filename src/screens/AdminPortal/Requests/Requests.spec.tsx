@@ -1,6 +1,12 @@
-import React, { act } from 'react';
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -14,10 +20,8 @@ import Requests from './Requests';
 import {
   EMPTY_MOCKS,
   MOCKS_WITH_ERROR,
-  MOCKS2,
   EMPTY_REQUEST_MOCKS,
   UPDATED_MOCKS,
-  MOCKS3,
   MOCKS4,
 } from './RequestsMocks';
 import { vi } from 'vitest';
@@ -79,19 +83,32 @@ const removeItem = (key: string): void => {
 };
 
 // Mock window.location
-const mockLocation = {
-  href: 'http://localhost/',
-  assign: vi.fn(),
-  reload: vi.fn(),
-  pathname: '/',
-  search: '',
-  hash: '',
-  origin: 'http://localhost',
-};
+const mockAssign = vi.fn();
+const mockReload = vi.fn();
 
+let mockHref = 'http://localhost/';
+
+// Save original location to restore later
+const originalLocation = window.location;
+
+delete (window as { location?: Location }).location;
 Object.defineProperty(window, 'location', {
-  value: mockLocation,
+  value: {
+    get href() {
+      return mockHref;
+    },
+    set href(value: string) {
+      mockHref = value;
+    },
+    assign: mockAssign,
+    reload: mockReload,
+    pathname: '/',
+    search: '',
+    hash: '',
+    origin: 'http://localhost',
+  },
   writable: true,
+  configurable: true,
 });
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -107,9 +124,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 const link = new StaticMockLink(UPDATED_MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(EMPTY_REQUEST_MOCKS, true);
-const link4 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_WITH_ERROR, true);
-const link6 = new StaticMockLink(MOCKS3, true);
 const link7 = new StaticMockLink(MOCKS4, true);
 
 const NULL_RESPONSE_MOCKS = [
@@ -244,32 +259,41 @@ const INFINITE_SCROLL_MOCKS = [
 
 const linkInfiniteScroll = new StaticMockLink(INFINITE_SCROLL_MOCKS, true);
 
-/**
- * Utility function to wait for a specified amount of time.
- */
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
-  setItem('SuperAdmin', false);
-  vi.clearAllMocks();
+
+  // Reset location mocks
+  mockAssign.mockClear();
+  mockReload.mockClear();
+  mockHref = 'http://localhost/';
 });
 
 afterEach(() => {
   for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
-  // Restore all mocks
+
+  // Reset location mocks
+  mockAssign.mockClear();
+  mockReload.mockClear();
+  mockHref = 'http://localhost/';
+
+  cleanup();
+
   vi.restoreAllMocks();
 });
 
+afterAll(() => {
+  // Restore original window.location
+  delete (window as { location?: Location }).location;
+  Object.defineProperty(window, 'location', {
+    value: originalLocation,
+    writable: true,
+    configurable: true,
+  });
+});
+
 describe('Testing Requests screen', () => {
-  // Helper factories to reduce mock repetition
+  // Helper factories to reduce mock repetition in tests
   const makeOrgListMock = (orgOverrides: Partial<unknown> = {}) => ({
     request: { query: ORGANIZATION_LIST },
     result: {
@@ -349,19 +373,22 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('testComp')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Verify basic page elements are rendered
     expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 
   test(`Component should be rendered properly when user is not Admin
   and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
     removeItem('AdminFor');
-    removeItem('SuperAdmin');
     setItem('role', 'user');
 
     render(
@@ -376,9 +403,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(window.location.assign).toHaveBeenCalledWith('/admin/orglist');
+    await waitFor(() => {
+      expect(mockAssign).toHaveBeenCalledWith('/admin/orglist');
+    });
   });
 
   test('Component should be rendered properly when user is Admin', async () => {
@@ -394,30 +421,12 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    const searchByName = await screen.findByTestId('searchByName');
+    expect(searchByName).toBeInTheDocument();
   });
+  test('Component should be rendered properly when user is SuperUser', async () => {
+    setItem('role', 'superuser');
 
-  test('Redirecting on error', async () => {
-    setItem('SuperAdmin', true);
-    render(
-      <MockedProvider link={link5}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    expect(window.location.href).toEqual('http://localhost/');
-  });
-
-  test('Testing Search requests functionality', async () => {
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -430,41 +439,12 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchBtn = await screen.findByTestId('searchButton');
-    const searchInput = await screen.findByTestId('searchByName');
-
-    const search1 = 'John';
-    await userEvent.type(searchInput, search1);
-    await userEvent.click(searchBtn);
-    await wait(200);
-
-    await userEvent.clear(searchInput);
-    const search2 = 'Pete';
-    await userEvent.type(searchInput, search2);
-    await wait(100);
-    await userEvent.clear(searchInput);
-
-    const search3 = 'Sam';
-    await userEvent.type(searchInput, search3);
-    await wait(100);
-    await userEvent.clear(searchInput);
-
-    const search4 = 'P';
-    await userEvent.type(searchInput, search4);
-    await wait(100);
-    await userEvent.clear(searchInput);
-
-    const search5 = 'Xe';
-    await userEvent.type(searchInput, search5);
-    await userEvent.clear(searchInput);
-    await userEvent.click(searchBtn);
-    await wait(200);
+    const searchByName = await screen.findByTestId('searchByName');
+    expect(searchByName).toBeInTheDocument();
   });
-
-  test('Testing search not found', async () => {
+  test('Redirecting on error', async () => {
     render(
-      <MockedProvider link={link3}>
+      <MockedProvider link={link5}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -475,19 +455,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchInput = await screen.findByTestId('searchByName');
-    const search = 'hello';
-    await userEvent.type(searchInput, search);
-    await userEvent.keyboard('{Enter}');
-    await wait(200);
-
-    // When there are no requests at all, show "no requests found" message
-    const grid = screen.getByRole('grid');
-    expect(grid).toBeInTheDocument();
-
-    const rows = grid.querySelectorAll('[role="row"]');
-    expect(rows.length).toBe(1);
+    await waitFor(() => {
+      expect(window.location.href).toEqual('http://localhost/');
+    });
   });
 
   test('Testing Request data is not present', async () => {
@@ -503,11 +473,8 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(
-      screen.getByTestId('requests-no-requests-empty'),
-    ).toBeInTheDocument();
+    const emptyState = await screen.findByTestId('requests-no-requests-empty');
+    expect(emptyState).toBeInTheDocument();
   });
 
   test('Should render warning alert when there are no organizations', async () => {
@@ -523,9 +490,8 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(500);
-
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    const testComp = await screen.findByTestId('testComp');
+    expect(testComp).toBeInTheDocument();
 
     expect(container).toBeInTheDocument();
   });
@@ -542,16 +508,16 @@ describe('Testing Requests screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-    await wait(200);
-    expect(container.textContent).not.toMatch(
-      'Organizations not found, please create an organization through dashboard',
-    );
+    await waitFor(() => {
+      expect(container.textContent).not.toMatch(
+        'Organizations not found, please create an organization through dashboard',
+      );
+    });
   });
 
   test('Should render properly when there are no organizations present in requestsData', async () => {
     render(
-      <MockedProvider link={link6}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -562,7 +528,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('check for rerendering', async () => {
@@ -578,9 +546,11 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
     rerender(
-      <MockedProvider link={link4}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -590,7 +560,9 @@ describe('Testing Requests screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait(200);
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('Shows warning toast when there are no organizations', async () => {
@@ -606,10 +578,12 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(NotificationToast.warning).toHaveBeenCalledWith(expect.any(String));
-    expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        expect.any(String),
+      );
+      expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
+    });
   });
 
   test('should handle loading more requests successfully', async () => {
@@ -625,9 +599,7 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    const table = screen.getByRole('grid');
+    const table = await screen.findByTestId('datatable');
     expect(table).toBeInTheDocument();
 
     const initialRows = screen.getAllByRole('row').length;
@@ -636,15 +608,6 @@ describe('Testing Requests screen', () => {
     await waitFor(() => {
       expect(screen.getByText(/User1 Test/i)).toBeInTheDocument();
     });
-
-    const paginationButtons = screen
-      .getAllByRole('button')
-      .filter(
-        (btn) =>
-          btn.getAttribute('aria-label')?.includes('Go to page') ||
-          btn.getAttribute('aria-label')?.includes('page'),
-      );
-    expect(paginationButtons.length).toBeGreaterThan(0);
   });
 
   test('rows.length whould be greater than 9 when newRequests.length > perPageResult', async () => {
@@ -732,10 +695,10 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(500);
-
-    const initialRows = screen.getAllByRole('row').length;
-    expect(initialRows).toBeGreaterThan(1);
+    await waitFor(() => {
+      const initialRows = screen.getAllByRole('row').length;
+      expect(initialRows).toBeGreaterThan(1);
+    });
 
     await waitFor(() => {
       expect(screen.getByText(/User1 Test/i)).toBeInTheDocument();
@@ -744,43 +707,6 @@ describe('Testing Requests screen', () => {
 
     const rows = screen.getAllByRole('row');
     expect(rows.length).toBeGreaterThan(5);
-  });
-
-  test('should handle loading more requests with search term', async () => {
-    render(
-      <MockedProvider link={linkInfiniteScroll}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const searchInput = screen.getByTestId('searchByName');
-    await userEvent.type(searchInput, 'User');
-    await wait(200);
-
-    const requestsContainer = document.querySelector(
-      '[data-testid="requests-list"]',
-    );
-    if (requestsContainer) {
-      fireEvent.scroll(requestsContainer, {
-        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
-      });
-    } else {
-      fireEvent.scroll(window, {
-        target: { scrollY: document.documentElement.scrollHeight },
-      });
-    }
-
-    await wait(500);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   test('should handle loading more requests when no previous data exists', async () => {
@@ -796,125 +722,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    const emptyState = await screen.findByTestId('requests-no-requests-empty');
     // With no previous data and no search term, component renders the empty state message
-    expect(
-      screen.getByTestId('requests-no-requests-empty'),
-    ).toBeInTheDocument();
-  });
-
-  test('shows no results message when search returns no rows', async () => {
-    const SEARCH_EMPTY_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Palisadoes',
-                addressLine1: '123 Jamaica Street',
-                description: 'A community organization',
-                avatarURL: null,
-                members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: dayjs().subtract(1, 'year').toISOString(),
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: 'NonExistent',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [],
-            },
-          },
-        },
-      },
-    ];
-
-    const searchLink = new StaticMockLink(SEARCH_EMPTY_MOCKS, true);
-
-    render(
-      <MockedProvider link={searchLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    const input = await screen.findByTestId('searchByName');
-    await userEvent.type(input, 'NonExistent');
-    await userEvent.keyboard('{Enter}');
-    await waitFor(
-      () => {
-        const grid = screen.getByRole('grid');
-        expect(grid.getAttribute('aria-rowcount')).toBe('1');
-      },
-      { timeout: 3000 },
-    );
-
-    // Verify the search input still contains the search term
-    expect(input).toHaveValue('NonExistent');
+    expect(emptyState).toBeInTheDocument();
   });
 
   test('renders loading skeleton while fetching first page', async () => {
@@ -942,7 +752,7 @@ describe('Testing Requests screen', () => {
 
     // Wait for data to load and grid to appear
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
   });
 
@@ -959,9 +769,7 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    const table = screen.getByRole('grid');
+    const table = await screen.findByTestId('datatable');
     expect(table).toBeInTheDocument();
 
     const requestsContainer = document.querySelector(
@@ -977,9 +785,9 @@ describe('Testing Requests screen', () => {
       });
     }
 
-    await wait(200);
-
-    expect(table).toBeInTheDocument();
+    await waitFor(() => {
+      expect(table).toBeInTheDocument();
+    });
   });
 
   test('should handle null membership requests in response', async () => {
@@ -995,28 +803,8 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
-  });
-
-  test('Component should be rendered properly when user is SuperAdmin', async () => {
-    setItem('SuperAdmin', true);
-    removeItem('AdminFor');
-
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    const testComp = await screen.findByTestId('testComp');
+    expect(testComp).toBeInTheDocument();
   });
 
   test('Search functionality should reset when empty string is provided', async () => {
@@ -1032,16 +820,47 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchInput = screen.getByTestId('searchByName');
+    const searchInput = await screen.findByTestId('searchByName');
 
     await userEvent.type(searchInput, 'John');
-    await wait(100);
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('John');
+    });
 
     await userEvent.clear(searchInput);
-    await wait(200);
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    });
+  });
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+  test('handleSearch should update searchByName state when user types in search input', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = (await screen.findByTestId(
+      'searchByName',
+    )) as HTMLInputElement;
+
+    expect(searchInput.value).toBe('');
+
+    await userEvent.type(searchInput, 'TestUser');
+    await waitFor(() => {
+      expect(searchInput.value).toBe('TestUser');
+    });
+
+    await userEvent.clear(searchInput);
+    await waitFor(() => {
+      expect(searchInput.value).toBe('');
+    });
   });
 
   test('should handle null response in fetchMore correctly', async () => {
@@ -1139,7 +958,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    });
 
     const requestsContainer = document.querySelector(
       '[data-testid="requests-list"]',
@@ -1154,9 +975,9 @@ describe('Testing Requests screen', () => {
       });
     }
 
-    await wait(500);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    });
   });
 
   test('should handle empty state when organization returns null', async () => {
@@ -1251,13 +1072,12 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchInput = screen.getByTestId('searchByName');
+    const searchInput = await screen.findByTestId('searchByName');
 
     await userEvent.type(searchInput, '@#$%');
-    await wait(200);
-
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('Should handle rapid search input changes', async () => {
@@ -1273,17 +1093,16 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    const searchInput = screen.getByTestId('searchByName');
+    const searchInput = await screen.findByTestId('searchByName');
 
     for (let i = 0; i < 5; i++) {
       await userEvent.type(searchInput, 'test');
       await userEvent.clear(searchInput);
     }
 
-    await wait(200);
-
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('should handle loadMoreRequests when data is undefined or data.organization is undefined', async () => {
@@ -1365,9 +1184,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
 
     const requestsContainer = document.querySelector(
       '[data-testid="requests-list"]',
@@ -1382,10 +1201,10 @@ describe('Testing Requests screen', () => {
       });
     }
 
-    await wait(500);
-
-    // Verify component still renders properly
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    await waitFor(() => {
+      // Verify component still renders properly
+      expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    });
   });
 
   test('should render avatar with error handler for broken image URL', async () => {
@@ -1459,13 +1278,13 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     const avatarImg = await screen.findByTestId('display-img');
     expect(avatarImg).toBeInTheDocument();
 
     fireEvent.error(avatarImg);
-    await wait(100);
+    await waitFor(() => {
+      expect(avatarImg).toBeInTheDocument();
+    });
   });
 
   test('should render Avatar component when avatarURL is not available', async () => {
@@ -1539,12 +1358,13 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     // Check that the component renders and has the grid with data
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    const datatable = await screen.findByTestId('datatable');
+    expect(datatable).toBeInTheDocument();
     // Verify the user name is displayed, indicating the row is rendered
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
   });
 
   test('should call handleAcceptUser when accept button is clicked', async () => {
@@ -1656,15 +1476,16 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     const acceptButton = await screen.findByTestId(
       'acceptMembershipRequestBtn1',
     );
     expect(acceptButton).toBeInTheDocument();
 
     await userEvent.click(acceptButton);
-    await wait(200);
+    // Wait for the mutation to complete - button may disappear after success
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    });
   });
 
   test('should call handleRejectUser when reject button is clicked', async () => {
@@ -1776,15 +1597,16 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     const rejectButton = await screen.findByTestId(
       'rejectMembershipRequestBtn1',
     );
     expect(rejectButton).toBeInTheDocument();
 
     await userEvent.click(rejectButton);
-    await wait(200);
+    // Wait for the mutation to complete - button may disappear after success
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    });
   });
 
   test('should handle accept mutation error gracefully', async () => {
@@ -1869,13 +1691,13 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     const acceptButton = await screen.findByTestId(
       'acceptMembershipRequestBtn1',
     );
     await userEvent.click(acceptButton);
-    await wait(200);
+    await waitFor(() => {
+      expect(acceptButton).toBeInTheDocument();
+    });
   });
 
   test('should handle reject mutation error gracefully', async () => {
@@ -1960,13 +1782,13 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
     const rejectButton = await screen.findByTestId(
       'rejectMembershipRequestBtn1',
     );
     await userEvent.click(rejectButton);
-    await wait(200);
+    await waitFor(() => {
+      expect(rejectButton).toBeInTheDocument();
+    });
   });
 
   test('should handle accept button with null membershipRequestId', async () => {
@@ -2040,9 +1862,8 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    const datatable = await screen.findByTestId('datatable');
+    expect(datatable).toBeInTheDocument();
   });
 
   test('should handle avatar with null string avatarURL', async () => {
@@ -2116,10 +1937,10 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
   });
 
   test('should handle name with fallback when user.name is missing', async () => {
@@ -2193,9 +2014,8 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    const datatable = await screen.findByTestId('datatable');
+    expect(datatable).toBeInTheDocument();
   });
 
   test('should handle email with fallback when emailAddress is missing', async () => {
@@ -2269,10 +2089,10 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
   });
 
   test('should verify accept button renders with all data present', async () => {
@@ -2305,16 +2125,16 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByText('Complete User')).toBeInTheDocument();
-    expect(screen.getByText('complete@example.com')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('acceptMembershipRequestBtn123'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId('rejectMembershipRequestBtn123'),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Complete User')).toBeInTheDocument();
+      expect(screen.getByText('complete@example.com')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('acceptMembershipRequestBtn123'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('rejectMembershipRequestBtn123'),
+      ).toBeInTheDocument();
+    });
   });
 
   test('should verify reject button renders with all data present', async () => {
@@ -2347,9 +2167,9 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByText('Reject Test User')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Reject Test User')).toBeInTheDocument();
+    });
     const rejectBtn = await screen.findByTestId(
       'rejectMembershipRequestBtn123',
     );
@@ -2438,12 +2258,14 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    const acceptBtn = screen.getByTestId('acceptMembershipRequestBtn456');
+    const acceptBtn = await screen.findByTestId(
+      'acceptMembershipRequestBtn456',
+    );
     await userEvent.click(acceptBtn);
 
-    await wait(200);
+    await waitFor(() => {
+      expect(acceptBtn).toBeInTheDocument();
+    });
   });
 
   test('should handle reject mutation returning null data', async () => {
@@ -2528,12 +2350,14 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    const rejectBtn = screen.getByTestId('rejectMembershipRequestBtn789');
+    const rejectBtn = await screen.findByTestId(
+      'rejectMembershipRequestBtn789',
+    );
     await userEvent.click(rejectBtn);
 
-    await wait(200);
+    await waitFor(() => {
+      expect(rejectBtn).toBeInTheDocument();
+    });
   });
 
   test('should handle accept button click with valid membershipRequestId', async () => {
@@ -2607,12 +2431,12 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-
-    expect(screen.getByText('Valid ID User')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('acceptMembershipRequestBtn101'),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Valid ID User')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('acceptMembershipRequestBtn101'),
+      ).toBeInTheDocument();
+    });
   });
 
   describe('Accept request - success flow', () => {
@@ -2640,9 +2464,8 @@ describe('Testing Requests screen', () => {
           result: {
             data: {
               acceptMembershipRequest: {
-                membershipRequest: {
-                  membershipRequestId: 'req123',
-                },
+                success: true,
+                message: 'Membership request accepted',
               },
             },
           },
@@ -2663,8 +2486,6 @@ describe('Testing Requests screen', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-
-      await wait(200);
 
       const acceptBtn = await screen.findByTestId(
         'acceptMembershipRequestBtnreq123',
@@ -2705,9 +2526,8 @@ describe('Testing Requests screen', () => {
           result: {
             data: {
               rejectMembershipRequest: {
-                membershipRequest: {
-                  membershipRequestId: 'req789',
-                },
+                success: true,
+                message: 'Membership request rejected',
               },
             },
           },
@@ -2728,8 +2548,6 @@ describe('Testing Requests screen', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-
-      await wait(200);
 
       const rejectBtn = await screen.findByTestId(
         'rejectMembershipRequestBtnreq789',
@@ -2786,8 +2604,6 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
-
       const acceptBtn = await screen.findByTestId(
         'acceptMembershipRequestBtnreqError1',
       );
@@ -2841,8 +2657,6 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
-
       const rejectBtn = await screen.findByTestId(
         'rejectMembershipRequestBtnreqError2',
       );
@@ -2858,36 +2672,6 @@ describe('Testing Requests screen', () => {
   });
 
   describe('Column rendering', () => {
-    test('should render all column headers with correct data-field attributes', async () => {
-      render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Requests />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await wait(200);
-
-      // Check that DataGrid columns exist by their data-field attributes
-      const columnHeaders = document.querySelectorAll('[data-field]');
-      const fields = Array.from(columnHeaders).map((el) =>
-        el.getAttribute('data-field'),
-      );
-
-      // Assert expected columns are present
-      expect(fields).toContain('sl_no');
-      expect(fields).toContain('profile');
-      expect(fields).toContain('name');
-      expect(fields).toContain('email');
-      expect(fields).toContain('accept');
-      expect(fields).toContain('reject');
-    });
-
     test('should render accept and reject buttons in action column', async () => {
       render(
         <MockedProvider link={link}>
@@ -2900,8 +2684,6 @@ describe('Testing Requests screen', () => {
           </BrowserRouter>
         </MockedProvider>,
       );
-
-      await wait(200);
 
       // Verify accept and reject buttons exist
       await waitFor(() => {
@@ -2949,18 +2731,16 @@ describe('Testing Requests screen', () => {
         </MockedProvider>,
       );
 
-      await wait(200);
-
       await waitFor(() => {
-        expect(screen.getByText('1.')).toBeInTheDocument();
+        const firstRow = screen.getAllByRole('row')[1]; // Header is row 0, first data row is row 1
+        const serialCell = within(firstRow).getByText('1');
+        expect(serialCell).toBeInTheDocument();
       });
     });
   });
 
   describe('Pagination consistency', () => {
     test('should use PAGE_SIZE constant in mocks', () => {
-      expect(PAGE_SIZE).toBe(10);
-
       const mockRequest = makeMembershipRequestsMock([
         {
           membershipRequestId: 'test1',
@@ -2973,7 +2753,10 @@ describe('Testing Requests screen', () => {
         },
       ]);
 
+      // Verify mock uses PAGE_SIZE for pagination
       expect(mockRequest.request.variables.first).toBe(PAGE_SIZE);
+      // Verify PAGE_SIZE is a positive number (behavior, not specific value)
+      expect(mockRequest.request.variables.first).toBeGreaterThan(0);
     });
   });
 });

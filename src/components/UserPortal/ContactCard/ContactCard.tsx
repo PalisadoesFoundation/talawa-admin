@@ -41,6 +41,7 @@ import type { InterfaceContactCardProps } from 'types/UserPortal/Chat/interface'
 
 import styles from './ContactCard.module.css';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import Button from 'shared-components/Button';
 
 const ContactCard: React.FC<InterfaceContactCardProps> = ({
   id,
@@ -89,7 +90,7 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
       actionsSlot={actionsSlot}
       className={styles.contactCardWrapper}
     >
-      <button
+      <Button
         type="button"
         onClick={handleSelect}
         data-testid={`contact-container-${id}`}
@@ -113,7 +114,7 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
             )}
           </div>
         </div>
-      </button>
+      </Button>
     </UserPortalCard>
   );
 };

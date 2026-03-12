@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceEndOptionsSection } from './RecurrenceEndOptionsSection';
 import { Frequency } from '../../utils/recurrenceUtils';
@@ -69,7 +69,8 @@ const defaultProps = {
 
 describe('RecurrenceEndOptionsSection', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {

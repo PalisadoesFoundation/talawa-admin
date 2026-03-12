@@ -1,5 +1,8 @@
 import React, { useMemo } from 'react';
-import { DataGrid } from 'shared-components/DataGridWrapper';
+import {
+  DataGrid,
+  convertTokenColumns,
+} from 'shared-components/DataGridWrapper';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type {
   ReportingTableProps,
@@ -9,7 +12,7 @@ import type {
 /**
  * Adjusts column widths for compact display mode.
  * In compact mode:
- * - First column gets flex: 0.5 and minWidth: 50 (typically for row numbers)
+ * - First column gets flex: 0.5 and minWidth: space-10 (typically for row numbers)
  * - Second column gets flex capped at 1.5 (typically for names)
  * - Remaining columns are unchanged
  *
@@ -32,7 +35,7 @@ export const adjustColumnsForCompactMode = (
       return {
         ...col,
         flex: 0.5,
-        minWidth: 50,
+        minWidth: 'space-10',
       };
     }
     if (index === 1) {
@@ -89,15 +92,18 @@ const ReportingTable: React.FC<ReportingTableProps> = ({
   listProps,
 }) => {
   // Apply compact column widths when compactColumns is enabled (for tables with 7 or more columns)
-  const adjustedColumns = useMemo(
-    () =>
-      adjustColumnsForCompactMode(columns, gridProps?.compactColumns ?? false),
-    [columns, gridProps?.compactColumns],
-  );
+  // Then convert token names to pixel values
+  const processedColumns = useMemo(() => {
+    const adjusted = adjustColumnsForCompactMode(
+      columns,
+      gridProps?.compactColumns ?? false,
+    );
+    return convertTokenColumns(adjusted);
+  }, [columns, gridProps?.compactColumns]);
 
   const grid = (
     <div className="datatable">
-      <DataGrid {...(gridProps ?? {})} rows={rows} columns={adjustedColumns} />
+      <DataGrid {...(gridProps ?? {})} rows={rows} columns={processedColumns} />
     </div>
   );
 

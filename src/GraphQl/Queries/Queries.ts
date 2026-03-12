@@ -208,6 +208,7 @@ export const USER_LIST_FOR_TABLE = gql`
           role
           avatarURL
           emailAddress
+          createdAt
         }
       }
     }
@@ -379,6 +380,7 @@ export const EVENT_REGISTRANTS = gql`
         id
         name
         emailAddress
+        avatarURL
       }
       isRegistered
       isInvited
@@ -460,9 +462,14 @@ export const GET_USER_BY_ID = gql`
 `;
 
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
-  query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
+  query GetOrganizationMembers(
+    $id: String!
+    $first: Int
+    $after: String
+    $where: MembersWhereInput
+  ) {
     organization(input: { id: $id }) {
-      members(first: $first, after: $after) {
+      members(first: $first, after: $after, where: $where) {
         edges {
           node {
             id
@@ -553,6 +560,10 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
+            attendees {
+              id
+              name
+            }
             baseEvent {
               id
               name
@@ -1283,6 +1294,21 @@ export const GET_USER_TAGS = gql`
       creator {
         id
         name
+      }
+    }
+  }
+`;
+
+export const GET_EVENTS_BY_ORGANIZATION_ID = gql`
+  query GetEventsByOrganizationId($organizationId: ID!) {
+    eventsByOrganizationId(input: { organizationId: $organizationId }) {
+      id
+      name
+      description
+      startAt
+      endAt
+      creator {
+        id
       }
     }
   }

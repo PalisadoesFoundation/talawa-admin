@@ -4,11 +4,7 @@
 
 # Interface: InterfaceEventEdge
 
-Defined in: [src/types/Volunteer/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L48)
-
-InterfaceEventEdge
-
-## Description
+Defined in: [src/types/Volunteer/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L44)
 
 Defines the structure for GraphQL event edge from queries.
 
@@ -18,7 +14,7 @@ Defines the structure for GraphQL event edge from queries.
 
 > **node**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L49)
+Defined in: [src/types/Volunteer/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L46)
 
 The event node containing all event data.
 

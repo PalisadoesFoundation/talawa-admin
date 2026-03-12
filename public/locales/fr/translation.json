@@ -1,15 +1,21 @@
 {
+  "workshops": "Ateliers",
   "securedRouteForUser": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
   "securedRoute": {
     "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
+  "oauth": {
+    "continueWith": "Continuer avec {{provider}}",
+    "ariaLabel": "{{provider}} {{mode}}"
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
   "frequency": "Fréquence",
   "repeatsEvery": "Répète chaque",
+  "repeatsOn": "Répétition activée",
   "day": "Jour",
   "week": "Semaine",
   "month": "Mois",
@@ -100,6 +106,15 @@
     "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
+  },
+  "oauthCallback": {
+    "accountLinkedSuccessfully": "Compte lié avec succès.",
+    "successfullyLoggedIn": "Connecté avec succès.",
+    "oauthProviderError": "Erreur du fournisseur OAuth : {{error}}",
+    "noAuthCodeReceived": "Aucun code d'autorisation reçu du fournisseur OAuth.",
+    "oauthAuthenticationFailed": "Échec de l'authentification OAuth. Veuillez réessayer.",
+    "oauthConfigurationNotFound": "Configuration OAuth introuvable pour le fournisseur.",
+    "csrfValidationFailed": "La validation CSRF a échoué. Veuillez réessayer."
   },
   "verifyEmail": {
     "title": "Vérifier l'Email",
@@ -192,7 +207,8 @@
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
     "users": "utilisateurs",
-    "logout": "déconnexion"
+    "logout": "déconnexion",
+    "notAvailable": "Non disponible"
   },
   "leftDrawerOrg": {
     "Dashboard": "Tableau de bord",
@@ -244,7 +260,7 @@
     "avatar": "Avatar de {{title}}",
     "eventLocation": "Lieu de l'événement",
     "eventDate": "Date de l'événement",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Publié le :",
     "author": "Auteur :"
   },
@@ -331,7 +347,8 @@
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
     "placeholderAvatarAlt": "Avatar par défaut",
-    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici",
+    "errorLoadingRequests": "Erreur lors du chargement des demandes d'adhésion"
   },
   "users": {
     "membershipStatus": {
@@ -481,7 +498,8 @@
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé",
     "showPassword": "Afficher le mot de passe",
-    "hidePassword": "Masquer le mot de passe"
+    "hidePassword": "Masquer le mot de passe",
+    "emailNotAvailable": "E-mail non disponible"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -657,7 +675,8 @@
     "Workshops": "Ateliers",
     "selectMonth": "Sélectionner le mois",
     "selectDay": "Sélectionner le jour",
-    "selectYear": "Sélectionner l’année"
+    "selectYear": "Sélectionner l’année",
+    "selectWeek": "Sélectionner la semaine"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -929,6 +948,8 @@
     "isRegisterable": "Peut S'enregistrer",
     "creator": "Créateur",
     "edit": "Modifier",
+    "invalidDetailsMessage": "Veuillez entrer une valeur valide",
+    "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour",
     "delete": "Supprimer",
     "viewDetails": "Afficher les Détails",
     "noEventsFound": "Aucun événement trouvé",
@@ -937,7 +958,8 @@
     "noOfAttendees": "Nombre de Participants",
     "noRegistrations": "Aucune Inscription",
     "registrants": "Inscrits",
-    "to": "À"
+    "to": "À",
+    "deleteOptionRequired": "L'option de suppression est requise"
   },
   "funds": {
     "title": "Fonds",
@@ -1164,7 +1186,9 @@
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "errorLoadingBlockedUsers": "Error loading blocked users",
+    "errorLoadingMembers": "Error loading members"
   },
   "eventManagement": {
     "name": "Gestion d'événements",
@@ -1265,7 +1289,8 @@
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
     "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "successfullyDeletedOrganization": "Organisation supprimée avec succès"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",
@@ -1279,13 +1304,6 @@
     "displayImage": "Image d'affichage",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
-  },
-  "membershipRequest": {
-    "accept": "Accepter",
-    "reject": "Rejeter",
-    "memberAdded": "c'est accepté",
-    "joined": "Rejoint",
-    "talawaApiUnavailable": "API Talawa non disponible"
   },
   "orgUpdate": {
     "city": "Ville",
@@ -1401,6 +1419,10 @@
     "tags": "Étiquettes",
     "invalidFileType": "Type de fichier invalide",
     "fileTooLarge": "Fichier trop volumineux",
+    "ascendingOrder": "Ordre croissant",
+    "descendingOrder": "Ordre décroissant",
+    "searchCreatedEvents": "Rechercher des événements créés",
+    "sortByName": "Trier par nom",
     "memberDetailNumberExample": "Exemple de numéro",
     "memberDetailExampleLane": "Exemple de rue",
     "memberDetailPostalExample": "Exemple de code postal",
@@ -1408,7 +1430,24 @@
     "enterState": "Entrez l'état",
     "select": "Sélectionner",
     "asYourCountry": "comme votre pays",
-    "actions": "Actions"
+    "actions": "Actions",
+    "changePassword": "Changer le mot de passe",
+    "oldPassword": "Ancien mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "password": "Mot de passe",
+    "updatePassword": "Mettre à jour le mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
+    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
+    "passNoMatch": "Le nouveau mot de passe et la confirmation ne correspondent pas",
+    "passwordChangedSuccessfully": "Mot de passe modifié avec succès",
+    "enterCurrentPassword": "Veuillez saisir votre mot de passe actuel"
+  },
+  "passwordValidation": {
+    "minLength": "Le mot de passe doit contenir au moins 8 caractères.",
+    "uppercaseRequired": "Le mot de passe doit contenir au moins une lettre majuscule.",
+    "lowercaseRequired": "Le mot de passe doit contenir au moins une lettre minuscule.",
+    "numberRequired": "Le mot de passe doit contenir au moins un chiffre.",
+    "specialCharRequired": "Le mot de passe doit contenir au moins un caractère spécial."
   },
   "people": {
     "title": "Personnes",
@@ -1420,7 +1459,8 @@
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible"
+    "emailNotAvailable": "E-mail non disponible",
+    "membersList": "Liste des membres"
   },
   "userLogin": {
     "login": "Se connecter",
@@ -1434,25 +1474,6 @@
     "password": "Mot de passe",
     "enterPassword": "Entrer le mot de passe",
     "register": "Inscription",
-    "talawaApiUnavailable": "API Talawa non disponible"
-  },
-  "userRegister": {
-    "enterFirstName": "Entrez votre prénom",
-    "enterLastName": "Entrez votre nom de famille",
-    "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
-    "alreadyhaveAnAccount": "Vous avez déjà un compte?",
-    "login": "Se connecter",
-    "afterRegister": "Enregistré avec succès. ",
-    "passwordNotMatch": "Le mot de passe ne correspond pas. ",
-    "invalidDetailsMessage": "Veuillez saisir des informations valides.",
-    "register": "Inscription",
-    "firstName": "Prénom",
-    "lastName": "Nom de famille",
-    "emailAddress": "Adresse email",
-    "enterEmail": "Entrer l'email",
-    "password": "Mot de passe",
-    "enterPassword": "Entrer le mot de passe",
-    "confirmPassword": "Confirmer le mot de passe",
     "talawaApiUnavailable": "API Talawa non disponible"
   },
   "userNavbar": {
@@ -1599,6 +1620,7 @@
     "Admin": "Administrateur",
     "loading": "Chargement...",
     "noAttendees": "Aucun participant trouvé",
+    "unknownMember": "Membre inconnu",
     "attendeeCount": "Nombre de participants",
     "maleAttendees": "Participants masculins",
     "femaleAttendees": "Participantes féminines",
@@ -1665,9 +1687,7 @@
     "country": "Pays",
     "resetChanges": "Réinitialiser les modifications",
     "profileDetails": "Détails du profil",
-    "deleteUserMessage": "En cliquant sur le bouton Supprimer l'utilisateur, votre utilisateur sera définitivement supprimé ainsi que ses événements, balises et toutes les données associées.",
     "copyLink": "Copier le lien du profil",
-    "deleteUser": "Supprimer l'utilisateur",
     "otherSettings": "Autres réglages",
     "changeLanguage": "Changer de langue",
     "sgender": "Sélectionnez le sexe",
@@ -1733,9 +1753,12 @@
     "donations": "Des dons",
     "searchDonations": "Rechercher des dons",
     "donateForThe": "Faites un don pour le",
+    "donor": "Donateur",
     "amount": "Montant",
+    "date": "Date",
     "yourPreviousDonations": "Vos dons précédents",
     "donate": "Faire un don",
+    "loading": "Chargement...",
     "nothingToShow": "Rien à montrer ici.",
     "success": "Don réussi",
     "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
@@ -1823,7 +1846,9 @@
     "presetThisMonth": "Ce Mois",
     "presetNext7Days": "7 Prochains Jours",
     "presetNext30Days": "30 Prochains Jours",
-    "presetNextMonth": "Mois Prochain"
+    "presetNextMonth": "Mois Prochain",
+    "repeatsOn": "Répétition activée",
+    "select": "Sélectionner"
   },
   "userEventCard": {
     "failedToRegister": "Échec de l'inscription à l'événement",
@@ -1880,6 +1905,7 @@
     "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
     "invalidFileType": "Type de fichier invalide : {{fileName}}",
     "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "fileUploadError": "Erreur lors du téléchargement du fichier : {{fileName}}",
     "invalidArgumentsForAction": "Arguments invalides pour cette action.",
     "englishCaptions": "Légendes en anglais",
     "preview": "Aperçu",
@@ -1913,6 +1939,7 @@
     "groupName": "Nom du groupe",
     "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
+    "editImage": "Modifier l'image",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
     "userNotFound": "Utilisateur non trouvé",
@@ -1962,7 +1989,10 @@
       "resetButton": "Réessayer",
       "resetButtonAriaLabel": "Réessayer"
     },
-    "messageActions": "Actions de message"
+    "messageActions": "Actions de message",
+    "addAttachment": "Ajouter une pièce jointe",
+    "removeAttachment": "Supprimer la pièce jointe",
+    "closeReply": "Fermer la réponse"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
@@ -2496,7 +2526,8 @@
     "loading": "Chargement...",
     "selectRow": "Sélectionner la ligne {{rowKey}}",
     "previousYear": "Année précédente",
-    "nextYear": "Année suivante"
+    "nextYear": "Année suivante",
+    "member": "Membre"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2597,5 +2628,20 @@
   },
   "csv": {
     "demographics": "Démographie de {{category}}"
+  },
+  "yearlyCalendar": {
+    "weekdaysShorthand": {
+      "mon": "L",
+      "tue": "M",
+      "wed": "M",
+      "thu": "J",
+      "fri": "V",
+      "sat": "S",
+      "sun": "D"
+    },
+    "expandDay": "Développer le jour"
+  },
+  "weeklyEventCalender": {
+    "weeklyCalendarAriaLabel": "Vue du calendrier hebdomadaire"
   }
 }

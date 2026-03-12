@@ -1,187 +1,230 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { EventManager } from './event-manager';
 
-describe('EventManager', () => {
+describe('EventManager Coverage Suite', () => {
   let manager: EventManager;
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    manager = new EventManager();
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
+  // ----------------------------------------------------------------
+  // 1. on() Method Coverage
+  // ----------------------------------------------------------------
   describe('on()', () => {
-    it('registers a listener for a new event', () => {
-      manager = new EventManager();
-      const cb = vi.fn();
+    it('registers a new listener for a new event', () => {
+      const callback = vi.fn();
 
-      manager.on('test', cb);
+      manager.on('test:event', callback);
 
-      expect(manager.getListenerCount('test')).toBe(1);
+      expect(manager.getListenerCount('test:event')).toBe(1);
+      expect(manager.getEvents()).toContain('test:event');
     });
 
-    it('registers multiple listeners for the same event', () => {
-      manager = new EventManager();
+    it('adds multiple listeners to the same event', () => {
       const cb1 = vi.fn();
       const cb2 = vi.fn();
 
-      manager.on('test', cb1);
-      manager.on('test', cb2);
+      manager.on('multi:event', cb1);
+      manager.on('multi:event', cb2);
 
-      expect(manager.getListenerCount('test')).toBe(2);
+      expect(manager.getListenerCount('multi:event')).toBe(2);
     });
 
-    it('logs error for invalid event or callback', () => {
-      manager = new EventManager();
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    it('registers multiple distinct events and tracks them independently', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
 
+      manager.on('broken:event', cb1);
+      manager.on('another:event', cb2);
+
+      const events = manager.getEvents();
+
+      expect(events).toContain('broken:event');
+      expect(events).toContain('another:event');
+      expect(manager.getListenerCount('broken:event')).toBe(1);
+      expect(manager.getListenerCount('another:event')).toBe(1);
+    });
+
+    it('logs error when event name is invalid', () => {
       manager.on('', vi.fn());
-      manager.on('test', null as unknown as () => void);
 
-      expect(spy).toHaveBeenCalledTimes(2);
-    });
-
-    it('covers defensive else branch when listeners map is corrupted', () => {
-      manager = new EventManager();
-      const cb = vi.fn();
-
-      /**
-       * NOTE:
-       * The fallback `else` branch in EventManager.on() is defensive and
-       * unreachable in normal execution because the eventListeners map
-       * is always initialized before access.
-       *
-       * To meet the required coverage threshold without ignoring lines
-       * or modifying production code, this test intentionally simulates
-       * an invalid internal Map state.
-       *
-       * This couples the test to implementation details by design and
-       * is acceptable here purely for coverage validation.
-       */
-      const internalManager = manager as unknown as {
-        eventListeners: Map<
-          string,
-          Array<(...args: unknown[]) => void> | undefined
-        >;
-      };
-
-      internalManager.eventListeners.set('corrupt', undefined);
-
-      manager.on('corrupt', cb);
-
-      const listeners = internalManager.eventListeners.get('corrupt');
-
-      expect(listeners).toEqual([cb]);
-    });
-  });
-
-  describe('off()', () => {
-    it('removes a registered listener', () => {
-      manager = new EventManager();
-      const cb = vi.fn();
-
-      manager.on('test', cb);
-      manager.off('test', cb);
-
-      expect(manager.getListenerCount('test')).toBe(0);
-      expect(manager.getEvents()).toEqual([]);
-    });
-
-    it('does nothing if listener does not exist', () => {
-      manager = new EventManager();
-      const cb = vi.fn();
-
-      manager.on('test', cb);
-      manager.off('test', vi.fn());
-
-      expect(manager.getListenerCount('test')).toBe(1);
-    });
-
-    it('logs error for invalid event or callback', () => {
-      manager = new EventManager();
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-      manager.off('', vi.fn());
-      manager.off('test', null as unknown as () => void);
-
-      expect(spy).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  describe('emit()', () => {
-    it('calls listeners with provided arguments', () => {
-      manager = new EventManager();
-      const cb = vi.fn();
-
-      manager.on('test', cb);
-      manager.emit('test', 1, 'a');
-
-      expect(cb).toHaveBeenCalledWith(1, 'a');
-    });
-
-    it('logs error when listener throws', () => {
-      manager = new EventManager();
-      const errorCb = vi.fn(() => {
-        throw new Error('boom');
-      });
-
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-      manager.on('test', errorCb);
-      manager.emit('test');
-
-      expect(spy).toHaveBeenCalledOnce();
-      expect(spy).toHaveBeenCalledWith(
-        'Error in event listener for test:',
-        expect.objectContaining({ message: 'boom' }),
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Invalid event name or callback provided',
       );
     });
 
-    it('logs error for invalid event name', () => {
-      manager = new EventManager();
-      const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    it('logs error when callback is invalid', () => {
+      manager.on('invalid:event', null as unknown as () => void);
 
-      manager.emit('');
-
-      expect(spy).toHaveBeenCalledOnce();
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Invalid event name or callback provided',
+      );
     });
   });
 
-  describe('removeAllListeners()', () => {
-    it('removes listeners for a specific event', () => {
-      manager = new EventManager();
-      manager.on('a', vi.fn());
-      manager.on('b', vi.fn());
+  // ----------------------------------------------------------------
+  // 2. off() Method Coverage
+  // ----------------------------------------------------------------
+  describe('off()', () => {
+    it('removes a specific listener', () => {
+      const cb = vi.fn();
 
-      manager.removeAllListeners('a');
+      manager.on('remove:event', cb);
+      manager.off('remove:event', cb);
 
-      expect(manager.getEvents()).toEqual(['b']);
+      expect(manager.getListenerCount('remove:event')).toBe(0);
+      expect(manager.getEvents()).not.toContain('remove:event');
     });
 
-    it('removes all listeners when no event is provided', () => {
-      manager = new EventManager();
-      manager.on('a', vi.fn());
-      manager.on('b', vi.fn());
+    it('does nothing if callback is not found', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      manager.on('event', cb1);
+      manager.off('event', cb2);
+
+      expect(manager.getListenerCount('event')).toBe(1);
+    });
+
+    it('logs error when invalid input provided', () => {
+      manager.off('', vi.fn());
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Invalid event name or callback provided',
+      );
+    });
+
+    it('does nothing if event does not exist', () => {
+      manager.off('nonexistent', vi.fn());
+
+      expect(manager.getListenerCount('nonexistent')).toBe(0);
+    });
+  });
+
+  // ----------------------------------------------------------------
+  // 3. emit() Method Coverage
+  // ----------------------------------------------------------------
+  describe('emit()', () => {
+    it('calls all registered listeners with arguments', () => {
+      const cb = vi.fn();
+
+      manager.on('emit:event', cb);
+      manager.emit('emit:event', 1, 2, 3);
+
+      expect(cb).toHaveBeenCalledWith(1, 2, 3);
+    });
+
+    it('handles multiple listeners correctly', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      manager.on('multi:emit', cb1);
+      manager.on('multi:emit', cb2);
+
+      manager.emit('multi:emit', 'data');
+
+      expect(cb1).toHaveBeenCalledWith('data');
+      expect(cb2).toHaveBeenCalledWith('data');
+    });
+
+    it('continues execution if a listener throws', () => {
+      const failingCallback = vi.fn(() => {
+        throw new Error('Listener failure');
+      });
+      const safeCallback = vi.fn();
+
+      manager.on('error:event', failingCallback);
+      manager.on('error:event', safeCallback);
+
+      manager.emit('error:event', 'payload');
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Error in event listener for error:event:'),
+        expect.any(Error),
+      );
+      expect(safeCallback).toHaveBeenCalledWith('payload');
+    });
+
+    it('logs error when emitting with invalid event name', () => {
+      manager.emit('');
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Invalid event name provided for emission',
+      );
+    });
+
+    it('does nothing when emitting non-existent event', () => {
+      expect(() => manager.emit('ghost:event')).not.toThrow();
+    });
+  });
+
+  // ----------------------------------------------------------------
+  // 4. removeAllListeners()
+  // ----------------------------------------------------------------
+  describe('removeAllListeners()', () => {
+    it('removes all listeners for a specific event', () => {
+      const cb = vi.fn();
+
+      manager.on('specific:event', cb);
+      manager.removeAllListeners('specific:event');
+
+      expect(manager.getListenerCount('specific:event')).toBe(0);
+    });
+
+    it('removes all listeners globally when no event specified', () => {
+      manager.on('event1', vi.fn());
+      manager.on('event2', vi.fn());
 
       manager.removeAllListeners();
 
-      expect(manager.getEvents()).toEqual([]);
+      expect(manager.getListenerCount('event1')).toBe(0);
+      expect(manager.getListenerCount('event2')).toBe(0);
+      expect(manager.getEvents()).toHaveLength(0);
     });
   });
 
+  // ----------------------------------------------------------------
+  // 5. getListenerCount()
+  // ----------------------------------------------------------------
   describe('getListenerCount()', () => {
-    it('returns 0 for unknown event', () => {
-      manager = new EventManager();
+    it('returns correct number of listeners', () => {
+      const cb = vi.fn();
 
-      expect(manager.getListenerCount('missing')).toBe(0);
+      manager.on('count:event', cb);
+      manager.on('count:event', vi.fn());
+
+      expect(manager.getListenerCount('count:event')).toBe(2);
+    });
+
+    it('returns 0 for unknown event', () => {
+      expect(manager.getListenerCount('unknown')).toBe(0);
     });
   });
 
+  // ----------------------------------------------------------------
+  // 6. getEvents()
+  // ----------------------------------------------------------------
   describe('getEvents()', () => {
     it('returns all registered event names', () => {
-      manager = new EventManager();
-      manager.on('a', vi.fn());
-      manager.on('b', vi.fn());
+      manager.on('eventA', vi.fn());
+      manager.on('eventB', vi.fn());
 
-      expect(manager.getEvents().sort()).toEqual(['a', 'b']);
+      const events = manager.getEvents();
+
+      expect(events).toContain('eventA');
+      expect(events).toContain('eventB');
+      expect(events).toHaveLength(2);
+    });
+
+    it('returns empty array when no events registered', () => {
+      expect(manager.getEvents()).toEqual([]);
     });
   });
 });

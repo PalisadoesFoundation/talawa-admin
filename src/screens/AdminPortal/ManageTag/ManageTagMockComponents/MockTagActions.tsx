@@ -28,6 +28,7 @@
 import React from 'react';
 import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';
 import { useTranslation } from 'react-i18next';
+import Button from 'shared-components/Button';
 
 const MockTagActions: React.FC<InterfaceTagActionsProps> = ({
   tagActionsModalIsOpen,
@@ -47,14 +48,14 @@ const MockTagActions: React.FC<InterfaceTagActionsProps> = ({
           <h2 id="modalTitle" className="sr-only">
             {t('tagActions')}
           </h2>
-          <button
+          <Button
             type="button"
             data-testid="closeTagActionsModalBtn"
             aria-label={tCommon('closeModal')}
             onClick={hideTagActionsModal}
           >
             {tCommon('close')}
-          </button>
+          </Button>
         </div>
       )}
     </>

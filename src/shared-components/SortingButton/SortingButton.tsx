@@ -27,6 +27,8 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   type = 'sort',
   ariaLabel,
   icon,
+  containerClassName,
+  toggleClassName,
 }) => {
   // Determine the icon based on the type
   const IconComponent = type === 'filter' ? FilterAltOutlined : SortIcon;
@@ -50,6 +52,8 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
       buttonLabel={buttonLabel || String(selectedOption ?? '')}
       parentContainerStyle={className}
       variant="outline-secondary"
+      containerClassName={containerClassName}
+      toggleClassName={toggleClassName}
       icon={
         icon ? (
           <img
@@ -85,6 +89,8 @@ SortingButton.propTypes = {
   buttonLabel: PropTypes.string, // Optional prop for custom button label
   type: PropTypes.oneOf(['sort', 'filter']), // Type to determine the icon
   ariaLabel: PropTypes.string, // Accessible label for screen readers
+  containerClassName: PropTypes.string,
+  toggleClassName: PropTypes.string,
 };
 
 export default SortingButton;

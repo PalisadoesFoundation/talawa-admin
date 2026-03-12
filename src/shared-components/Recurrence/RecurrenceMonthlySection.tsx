@@ -1,70 +1,84 @@
-import React from 'react';
-import { Dropdown } from 'react-bootstrap';
-import { Frequency, getMonthlyOptions } from '../../utils/recurrenceUtils';
-import type { InterfaceRecurrenceRule } from '../../utils/recurrenceUtils';
-
-interface InterfaceRecurrenceMonthlySectionProps {
-  frequency: Frequency;
-  recurrenceRuleState: InterfaceRecurrenceRule;
-  setRecurrenceRuleState: (
-    state: React.SetStateAction<InterfaceRecurrenceRule>,
-  ) => void;
-  startDate: Date;
-  t: (key: string) => string;
-}
+import React, { useMemo } from 'react';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
+import { Frequency, getMonthlyOptions } from 'utils/recurrenceUtils';
+import type { InterfaceRecurrenceMonthlySectionProps } from 'types/shared-components/Recurrence/interface';
+import styles from './RecurrenceMonthlySection.module.css';
+import { useTranslation } from 'react-i18next';
 
 /**
- * Monthly recurrence options section
+ * Monthly recurrence options section.
+ *
+ * Renders a dropdown to choose between day-of-month (e.g., "on the 15th")
+ * or weekday-based (e.g., "on the third Monday") monthly recurrence.
+ *
+ * @param frequency - The current recurrence frequency.
+ * @param recurrenceRuleState - The current recurrence rule state.
+ * @param setRecurrenceRuleState - Setter for the recurrence rule state.
+ * @param startDate - The start date of the event.
  */
 export const RecurrenceMonthlySection: React.FC<
   InterfaceRecurrenceMonthlySectionProps
-> = ({
-  frequency,
-  recurrenceRuleState,
-  setRecurrenceRuleState,
-  startDate,
-  t,
-}) => {
+> = ({ frequency, recurrenceRuleState, setRecurrenceRuleState, startDate }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
+  const monthlyOptions = useMemo(
+    () => getMonthlyOptions(startDate),
+    [startDate],
+  );
+
+  const options = useMemo(
+    () => [
+      { label: monthlyOptions.byDate, value: 'DATE' },
+      { label: monthlyOptions.byWeekday, value: 'WEEKDAY' },
+    ],
+    [monthlyOptions],
+  );
+
+  const selectedValue = recurrenceRuleState.byDay ? 'WEEKDAY' : 'DATE';
+
+  /**
+   * Handles selecting between day-of-month and weekday-based recurrence.
+   * @param value - 'DATE' for day-of-month or 'WEEKDAY' for weekday-based recurrence.
+   */
+  const handleSelect = (value: string): void => {
+    if (value === 'DATE') {
+      setRecurrenceRuleState((prev) => ({
+        ...prev,
+        byMonthDay: [monthlyOptions.dateValue],
+        byDay: undefined,
+        bySetPos: undefined,
+      }));
+    } else {
+      setRecurrenceRuleState((prev) => ({
+        ...prev,
+        byDay: [monthlyOptions.weekdayValue.day],
+        bySetPos: [monthlyOptions.weekdayValue.week],
+        byMonthDay: undefined,
+      }));
+    }
+  };
+
   if (frequency !== Frequency.MONTHLY) {
     return null;
   }
-
-  const monthlyOptions = getMonthlyOptions(startDate);
 
   return (
     <div className="mb-4">
       <span className="fw-semibold text-secondary">{t('monthlyOn')}</span>
       <br />
       <div className="mx-2 mt-3">
-        <Dropdown className="d-inline-block">
-          <Dropdown.Toggle
-            className="py-2"
-            variant="outline-secondary"
-            id="monthly-dropdown"
-            data-testid="monthlyRecurrenceDropdown"
-            data-cy="monthlyRecurrenceDropdown"
-            aria-label={t('monthlyOn')}
-          >
-            {recurrenceRuleState.byDay
-              ? monthlyOptions.byWeekday
-              : monthlyOptions.byDate}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item
-              onClick={() => {
-                setRecurrenceRuleState((prev) => ({
-                  ...prev,
-                  byMonthDay: [monthlyOptions.dateValue],
-                  byDay: undefined,
-                }));
-              }}
-              data-testid="monthlyByDate"
-              data-cy="monthlyByDate"
-            >
-              {monthlyOptions.byDate}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        <DropDownButton
+          id="monthly-dropdown"
+          options={options}
+          selectedValue={selectedValue}
+          onSelect={handleSelect}
+          variant="outline-secondary"
+          dataTestIdPrefix="monthlyRecurrenceDropdown"
+          ariaLabel={t('monthlyOn')}
+          menuClassName={styles.dropdownMenu}
+          parentContainerStyle={styles.dropdown}
+        />
       </div>
     </div>
   );

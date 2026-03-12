@@ -6,7 +6,7 @@
 
 > **askAndSetLogErrors**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L116)
+Defined in: [src/setup/setup.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L99)
 
 Prompts user to configure error logging settings and updates the .env file.
 

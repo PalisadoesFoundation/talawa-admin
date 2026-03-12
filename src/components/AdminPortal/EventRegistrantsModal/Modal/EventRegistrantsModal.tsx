@@ -38,7 +38,8 @@
  * - `NotificationToast` for toast notifications.
  * - `react-i18next` for translations.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import Button from 'shared-components/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -48,7 +49,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Autocomplete from '@mui/material/Autocomplete';
+import { Autocomplete } from 'shared-components/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
@@ -70,6 +71,14 @@ export const EventRegistrantsModal = ({
   const [inviteOpen, setInviteOpen] = useState(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
+
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
@@ -102,30 +111,48 @@ export const EventRegistrantsModal = ({
     variables: { organizationId: orgId },
   });
 
+  const [isAdding, setIsAdding] = useState(false);
   // Function to add a new registrant to the event
-  const addRegistrant = (): void => {
+  const addRegistrant = async (): Promise<void> => {
     if (member == null) {
       NotificationToast.warning(t('selectUserFirst'));
       return;
     }
+
+    if (isAdding) {
+      return;
+    }
+
+    setIsAdding(true);
     NotificationToast.warning(t('addingAttendee'));
+
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
 
-    addRegistrantMutation({
-      variables: addVariables,
-    })
-      .then(() => {
-        NotificationToast.success(
-          tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
-        );
-        attendeesRefetch(); // Refresh the list of attendees
-      })
-      .catch((err) => {
-        NotificationToast.error(t('errorAddingAttendee') as string);
-        NotificationToast.error(err.message);
+    try {
+      await addRegistrantMutation({
+        variables: addVariables,
       });
+
+      if (!isMountedRef.current) return;
+
+      NotificationToast.success(
+        tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
+      );
+
+      setMember(null);
+      setInputValue('');
+
+      await attendeesRefetch();
+    } catch (err) {
+      if (!isMountedRef.current) return;
+      NotificationToast.error(t('errorAddingAttendee') as string);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      NotificationToast.error(errorMessage);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -173,30 +200,56 @@ export const EventRegistrantsModal = ({
                 className={styles.addButton}
                 data-testid="add-registrant-btn"
                 onClick={addRegistrant}
+                disabled={isAdding}
               >
                 {t('addRegistrantButton')}
               </Button>
             </div>
           }
         >
-          <Autocomplete
+          <Autocomplete<InterfaceUser>
             disablePortal
             inputValue={inputValue}
             onInputChange={(_, value) => setInputValue(value)}
             id="addRegistrant"
-            onChange={(_, newMember): void => {
+            onChange={(newMember) => {
               setMember(newMember);
             }}
+            getOptionLabel={(member: InterfaceUser): string =>
+              member.name || t('unknownUser')
+            }
+            renderOption={(props, option: InterfaceUser) => (
+              <li {...props} key={option.id}>
+                <div className={styles.avatarContainer}>
+                  <ProfileAvatarDisplay
+                    imageUrl={option.avatarURL}
+                    fallbackName={option.name || t('unknownUser')}
+                    size="small"
+                    onError={() => {
+                      console.warn(
+                        `Failed to load avatar for user: ${option.id}`,
+                      );
+                    }}
+                    enableEnlarge={false}
+                  />
+                  <span className={styles.avatarName}>
+                    {option.name || t('unknownUser')}
+                  </span>
+                </div>
+              </li>
+            )}
             noOptionsText={
-              <div className="d-flex ">
-                <p className="me-2">{t('noRegistrationsFound')}</p>
-                <button
-                  type="button"
+              <div className={styles.noOptionsContainer}>
+                <p className={styles.noResultsText}>
+                  {t('noRegistrationsFound')}
+                </p>
+                <Button
                   data-testid="add-onspot-link"
-                  className={`underline ${styles.underlineText}`}
+                  variant="link"
+                  className={styles.underlineText}
                   onClick={() => setOpen(true)}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onKeyDown={(e) => {
+                  onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+                  onKeyDown={(e: React.KeyboardEvent) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       setOpen(true);
@@ -204,14 +257,11 @@ export const EventRegistrantsModal = ({
                   }}
                 >
                   {t('addOnspotRegistrationLink')}
-                </button>
+                </Button>
               </div>
             }
             options={memberData?.usersByOrganizationId || []}
-            getOptionLabel={(member: InterfaceUser): string =>
-              member.name || t('unknownUser')
-            }
-            renderInput={(params): React.ReactNode => (
+            renderInput={(params) => (
               <FormTextField
                 name="addRegistrant"
                 label={t('addRegistrantLabel') as string}
@@ -231,6 +281,7 @@ export const EventRegistrantsModal = ({
                 }}
               />
             )}
+            value={member}
           />
           <br />
         </BaseModal>

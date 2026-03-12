@@ -1,10 +1,10 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import {
   LocalizationProvider,
@@ -41,6 +41,30 @@ vi.mock('utils/useLocalstorage', () => {
     }),
   };
 });
+
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => {
+    return (
+      <nav aria-label="breadcrumbs">
+        <ol>
+          {items.map((item) => (
+            <li key={item.translationKey || item.label}>
+              {item.to ? (
+                <a href={item.to}>{item.translationKey}</a>
+              ) : (
+                <span aria-current="page">{item.translationKey}</span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    );
+  },
+}));
 
 const theme = createTheme({
   palette: {
@@ -147,6 +171,16 @@ vi.mock('./CreateEventModal', () => ({
     onClose: () => void;
     onEventCreated: () => void;
   }) => {
+    React.useEffect(() => {
+      const handleKeyDown = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape' && isOpen) {
+          onClose();
+        }
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, onClose]);
+
     if (!isOpen) return null;
     return (
       <div data-testid="createEventModal">
@@ -180,22 +214,28 @@ describe('Organisation Events Page', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const renderWithLink = (link: StaticMockLink) =>
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </LocalizationProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -508,6 +548,88 @@ describe('Organisation Events Page', () => {
     ).toBe(false);
   });
 
+  test('rate-limit eventDataError with "rate limit" message is silently suppressed', async () => {
+    const mockWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const rateLimitLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+            variables: buildEventsVariables(),
+          },
+          variableMatcher: () => true,
+          error: new Error('Rate limit exceeded'),
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+            variables: buildOrgVariables(),
+          },
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(rateLimitLink);
+    await wait();
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    expect(window.location.pathname).toBe('/admin/orglist');
+    const messages = mockWarn.mock.calls.map((args) => args.join(' '));
+    expect(messages.some((msg) => msg.includes('Non-critical error'))).toBe(
+      false,
+    );
+  });
+
+  test('rate-limit eventDataError with "Please try again later" is silently suppressed', async () => {
+    const mockWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const rateLimitLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+            variables: buildEventsVariables(),
+          },
+          variableMatcher: () => true,
+          error: new Error('Please try again later'),
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+            variables: buildOrgVariables(),
+          },
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(rateLimitLink);
+    await wait();
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    expect(window.location.pathname).toBe('/admin/orglist');
+    const messages = mockWarn.mock.calls.map((args) => args.join(' '));
+    expect(messages.some((msg) => msg.includes('Non-critical error'))).toBe(
+      false,
+    );
+  });
+
   test('non-rate-limit eventDataError logs warning', async () => {
     const mockWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
@@ -658,6 +780,79 @@ describe('Organisation Events Page', () => {
     );
   });
 
+  test('normalizes event data with null description, null location, and allDay true', async () => {
+    const eventDay = dayjs().add(30, 'days').startOf('day');
+    const startAt = eventDay.toISOString();
+    const endAt = eventDay.endOf('day').toISOString();
+
+    const mappingCoverageLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+            variables: buildEventsVariables(),
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              organization: {
+                events: {
+                  edges: [
+                    {
+                      cursor: 'cursor1',
+                      node: {
+                        id: '1',
+                        name: 'All-Day Null Fields Event',
+                        description: null,
+                        startAt,
+                        endAt,
+                        allDay: true,
+                        location: null,
+                        isPublic: true,
+                        isRegisterable: true,
+                        isRecurringEventTemplate: false,
+                        baseEvent: null,
+                        sequenceNumber: null,
+                        totalCount: null,
+                        hasExceptions: false,
+                        progressLabel: null,
+                        recurrenceDescription: null,
+                        recurrenceRule: null,
+                        attachments: [],
+                        creator: { id: '1', name: 'Creator' },
+                        organization: { id: '1', name: 'Org' },
+                        createdAt: startAt,
+                        updatedAt: startAt,
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+            variables: buildOrgVariables(),
+          },
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(mappingCoverageLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+  });
+
   test('unmount does not crash (cleanup effect)', async () => {
     const { unmount } = renderWithLink(defaultLink);
 
@@ -779,17 +974,22 @@ describe('Organisation Events Page', () => {
 
     render(
       <MockedProvider link={loadingLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </LocalizationProvider>
           </Provider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -834,14 +1034,37 @@ describe('Organisation Events Page', () => {
     const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
     await userEvent.click(viewTypeDropdown);
 
-    // Find and click the "Year View" option
+    // Find and click the "Year View" option (value = ViewType.YEAR = 'Year View')
     const yearOption = await screen.findByTestId(
       'selectViewType-item-Year View',
     );
     await userEvent.click(yearOption);
 
+    // The dropdown toggle now shows the selected option's label ("Select Year")
     await waitFor(() => {
-      expect(container.textContent).toMatch('Year View');
+      expect(container.textContent).toMatch('Select Year');
+    });
+  });
+
+  test('should switch to week view when ViewType.WEEK is selected', async () => {
+    const { container } = renderWithLink(defaultLink);
+
+    await wait();
+
+    expect(container.textContent).toMatch('Month');
+
+    const viewTypeDropdown = screen.getByTestId('selectViewType-toggle');
+    await userEvent.click(viewTypeDropdown);
+
+    // Find and click the "Week View" option (value = ViewType.WEEK = 'Week View')
+    const weekOption = await screen.findByTestId(
+      'selectViewType-item-Week View',
+    );
+    await userEvent.click(weekOption);
+
+    // The dropdown toggle now shows the selected option's label ("Select Week")
+    await waitFor(() => {
+      expect(container.textContent).toMatch('Select Week');
     });
   });
 
@@ -912,6 +1135,36 @@ describe('Organisation Events Page', () => {
     expect(searchInput.value).toBe('Conference Room');
   });
 
+  test('filter uses matchesDescription when search term matches only description', async () => {
+    renderWithLink(defaultLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const searchInput = screen.getByTestId('searchEvent') as HTMLInputElement;
+    await userEvent.type(searchInput, 'This is a timed');
+    await userEvent.keyboard('{Enter}');
+    await wait(50);
+
+    expect(searchInput.value).toBe('This is a timed');
+  });
+
+  test('filter uses matchesLocation when search term matches only location', async () => {
+    renderWithLink(defaultLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const searchInput = screen.getByTestId('searchEvent') as HTMLInputElement;
+    await userEvent.type(searchInput, 'Meeting Room B');
+    await userEvent.keyboard('{Enter}');
+    await wait(50);
+
+    expect(searchInput.value).toBe('Meeting Room B');
+  });
+
   test('returns all events when search term is empty', async () => {
     renderWithLink(defaultLink);
 
@@ -971,6 +1224,71 @@ describe('Organisation Events Page', () => {
 
     expect(searchInput.value).toBe('NonexistentEvent12345');
   });
+
+  describe('Keyboard Accessibility', () => {
+    test('should open create event modal when Enter is pressed on create event button', async () => {
+      renderWithLink(defaultLink);
+
+      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+      });
+
+      const createBtn = screen.getByTestId('createEventModalBtn');
+      createBtn.focus();
+      await userEvent.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModal')).toBeInTheDocument();
+      });
+    });
+
+    test('should close modal when Escape is pressed', async () => {
+      renderWithLink(defaultLink);
+
+      await wait();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+      });
+
+      await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('createEventModal')).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('createEventModal'),
+        ).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  test('renders breadcrumbs correctly', async () => {
+    renderWithLink(defaultLink);
+
+    // Wait for page to load
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const breadcrumbsNav = await screen.findByRole('navigation', {
+      name: /breadcrumbs/i,
+    });
+    expect(breadcrumbsNav).toBeInTheDocument();
+
+    // Verify breadcrumb items
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (events) has aria-current
+    expect(screen.getByText('events')).toHaveAttribute('aria-current', 'page');
+  });
 });
 
 const ERROR_MOCK = [
@@ -998,17 +1316,22 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
 
     render(
       <MockedProvider link={errorLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </Provider>
           </LocalizationProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -1048,17 +1371,22 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
 
     render(
       <MockedProvider link={emptyLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </Provider>
           </LocalizationProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 
@@ -1089,17 +1417,22 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
 
     render(
       <MockedProvider link={nullLink}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
+                  <Routes>
+                    <Route
+                      path="/admin/orgdash/:orgId/events"
+                      element={<OrganizationEvents />}
+                    />
+                  </Routes>
                 </I18nextProvider>
               </ThemeProvider>
             </Provider>
           </LocalizationProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>,
     );
 

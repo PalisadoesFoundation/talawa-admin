@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { debounce } from 'lodash';
+import { debounce } from 'utils/performance';
 import { useTranslation } from 'react-i18next';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
@@ -129,6 +129,8 @@ const SearchFilterBar: React.FC<InterfaceSearchFilterBarProps> = ({
                 buttonLabel={dropdown.label}
                 type={dropdown.type}
                 ariaLabel={`${translations.dropdownAriaLabel} ${dropdown.label}`}
+                containerClassName={dropdown.containerClassName}
+                toggleClassName={dropdown.toggleClassName}
               />
             ))}
           {additionalButtons}

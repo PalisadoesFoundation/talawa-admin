@@ -1,0 +1,16 @@
+id: assertions-after-async-must-use-waitfor
+language: typescript
+rule:
+  kind: call_expression
+  pattern: expect($$$)
+  follows:
+    stopBy: end
+    pattern: await userEvent.$METHOD($$$)
+  not:
+    inside:
+      any:
+        - pattern: waitFor(() => { $$$ })
+        - pattern: waitFor(async () => { $$$ })
+        - pattern: waitFor(() => $$$)
+message: 'Assertion after async operation must be inside waitFor'
+severity: error

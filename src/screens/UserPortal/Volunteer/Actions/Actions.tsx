@@ -121,7 +121,7 @@ function Actions(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} />
-        <h6 className="fw-bold text-danger text-center">
+        <h6 className={styles.loadingHeading}>
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
       </div>
@@ -139,17 +139,14 @@ function Actions(): JSX.Element {
         const name = user?.name ?? group?.name;
 
         return (
-          <div
-            className="d-flex fw-bold align-items-center"
-            data-testid="assigneeName"
-          >
+          <div className={styles.assigneeName} data-testid="assigneeName">
             <Avatar
               name={name}
               alt={name}
               containerStyle={styles.imageContainer}
               avatarStyle={styles.tableImage}
             />
-            <span className="ms-2">{name}</span>
+            <span className={styles.name}>{name}</span>
           </div>
         );
       },

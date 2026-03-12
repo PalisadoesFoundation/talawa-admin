@@ -1,4 +1,5 @@
 // translation-check-keyPrefix: eventListCard
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_EVENT_MUTATION,
@@ -26,6 +27,7 @@ import { DATE_FORMAT_ISO_DATE, DATE_TIME_SEPARATOR } from 'Constant/common';
  * - updateEventHandler: `(args: IUpdateEventHandlerProps) => Promise<void>` - Asynchronous function that handles the event update process, including validation and mutation execution.
  */
 export const useUpdateEventHandler = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
   const [updateStandaloneEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [updateSingleRecurringEventInstance] = useMutation(
     UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
@@ -49,7 +51,6 @@ export const useUpdateEventHandler = () => {
     recurrence,
     updateOption,
     hasRecurrenceChanged = false, // Default to false if not provided
-    t,
     hideViewModal,
     closeUpdateModal,
     refetchEvents,

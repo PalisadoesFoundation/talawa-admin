@@ -10,6 +10,7 @@ import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import inquirer from 'inquirer';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
+import askAndSetOAuth from './oauthConfig/oauthConfig';
 
 vi.mock('./backupEnvFile/backupEnvFile', () => ({
   backupEnvFile: vi.fn().mockResolvedValue('path/to/backup'),
@@ -50,6 +51,9 @@ vi.mock('./askAndUpdatePort/askAndUpdatePort', () => ({
   default: vi.fn(),
 }));
 vi.mock('./askForDocker/askForDocker');
+vi.mock('./oauthConfig/oauthConfig', () => ({
+  default: vi.fn(),
+}));
 
 describe('Talawa Admin Setup', () => {
   beforeEach(() => {
@@ -66,6 +70,7 @@ describe('Talawa Admin Setup', () => {
     vi.mocked(askAndSetDockerOption).mockResolvedValue(undefined);
     vi.mocked(askAndUpdatePort).mockResolvedValue(undefined);
     vi.mocked(askAndUpdateTalawaApiUrl).mockResolvedValue(undefined);
+    vi.mocked(askAndSetOAuth).mockResolvedValue(undefined);
     vi.mocked(modifyEnvFile).mockImplementation(() => undefined);
     vi.mocked(updateEnvFile).mockImplementation(() => undefined);
 
@@ -582,6 +587,75 @@ describe('Talawa Admin Setup', () => {
     );
 
     removeListenerSpy.mockRestore();
+    exitMock.mockRestore();
+  });
+
+  it('should call askAndSetOAuth during setup flow', async () => {
+    vi.spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockResolvedValueOnce({ shouldLogErrors: false });
+
+    await main();
+
+    expect(askAndSetOAuth).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle errors when askAndSetOAuth fails', async () => {
+    const mockError = new Error('OAuth setup failed');
+
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldUseRecaptcha: false,
+    });
+
+    vi.mocked(askAndSetOAuth).mockRejectedValueOnce(mockError);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    const consoleSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(consoleSpy).toHaveBeenCalledWith('\n❌ Setup failed:', mockError);
+    expect(exitMock).toHaveBeenCalledWith(1);
+
+    consoleSpy.mockRestore();
+    exitMock.mockRestore();
+  });
+
+  it('should handle ExitPromptError from askAndSetOAuth and exit with code 130', async () => {
+    const exitPromptError = new Error('User cancelled OAuth setup');
+    (exitPromptError as { name: string }).name = 'ExitPromptError';
+
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldUseRecaptcha: false,
+    });
+
+    vi.mocked(askAndSetOAuth).mockRejectedValueOnce(exitPromptError);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    const consoleLogSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+
+    await expect(main()).rejects.toThrow('process.exit called with code 130');
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      '\n\n⚠️  Setup cancelled by user.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(130);
+
+    consoleLogSpy.mockRestore();
     exitMock.mockRestore();
   });
 });

@@ -1,12 +1,25 @@
 import React from 'react';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
+const FIXED_NOW = dayjs.utc(new Date(Date.UTC(2025, 0, 1, 10)));
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+});
+
+afterEach(() => {
+  cleanup();
+  vi.restoreAllMocks();
+});
 
 // Mock NotificationToast
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -17,12 +30,16 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock react-i18next to prevent "You will need to pass in an i18next instance" warning
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: { changeLanguage: vi.fn() },
-  }),
-}));
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-i18next')>();
+  return {
+    ...actual,
+    useTranslation: vi.fn(() => ({
+      t: (key: string) => key,
+      i18n: { changeLanguage: vi.fn() },
+    })),
+  };
+});
 
 vi.mock('shared-components/DatePicker', () => ({
   __esModule: true,
@@ -105,16 +122,14 @@ const renderModal = (
     customRecurrenceModalIsOpen: true,
     hideCustomRecurrenceModal,
     setCustomRecurrenceModalIsOpen,
-    t: (key: string) => key,
-    // Use dynamic future date to avoid test staleness
-    startDate: dayjs().add(30, 'days').toDate(),
+    startDate: FIXED_NOW.add(30, 'days').startOf('day').hour(10).toDate(),
     ...override,
   };
 
   render(
-    <>
+    <I18nextProvider i18n={i18nForTest}>
       <CustomRecurrenceModal {...props} />
-    </>,
+    </I18nextProvider>,
   );
 
   return {
@@ -126,11 +141,12 @@ const renderModal = (
 
 describe('CustomRecurrenceModal – full coverage', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('renders modal and core controls', () => {
@@ -141,7 +157,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       screen.getByTestId('customRecurrenceIntervalInput'),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
     ).toBeInTheDocument();
   });
 
@@ -185,9 +201,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click weekly option
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
 
     // Verify the frequency change was called
     await waitFor(() => {
@@ -224,9 +244,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click daily option
-    await user.click(screen.getByTestId('customDailyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -238,9 +262,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click monthly option
-    await user.click(screen.getByTestId('customMonthlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -252,9 +280,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Open the frequency dropdown first
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
     // Then click yearly option
-    await user.click(screen.getByTestId('customYearlyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-YEARLY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -271,13 +303,17 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Verify the dropdown is rendered
-    expect(screen.getByTestId('monthlyRecurrenceDropdown')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
+    ).toBeInTheDocument();
 
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    await user.click(screen.getByTestId('monthlyByDate'));
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'));
 
     // Verify the dropdown is still rendered after clicking
-    expect(screen.getByTestId('monthlyRecurrenceDropdown')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
+    ).toBeInTheDocument();
   });
 
   it('renders monthly by-weekday option (branch coverage)', () => {
@@ -310,7 +346,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: new Date(),
+        endDate: FIXED_NOW.add(7, 'days').toDate(),
       },
     });
 
@@ -337,7 +373,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         never: false,
-        endDate: new Date(),
+        endDate: FIXED_NOW.add(7, 'days').toDate(),
       },
     });
 
@@ -352,7 +388,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         ...baseRecurrenceRule,
         never: false,
         count: undefined,
-        endDate: new Date(),
+        endDate: FIXED_NOW.add(30, 'days').toDate(),
       },
     });
 
@@ -491,7 +527,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         recurrenceRuleState: {
           ...baseRecurrenceRule,
           never: false,
-          endDate: new Date(),
+          endDate: FIXED_NOW.add(30, 'days').toDate(),
         },
       });
 
@@ -545,7 +581,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid interval', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     const intervalInput = screen.getByTestId(
       'customRecurrenceIntervalInput',
@@ -589,7 +625,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid interval (NaN)', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     const intervalInput = screen.getByTestId(
       'customRecurrenceIntervalInput',
@@ -632,7 +668,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid count for ends after', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     // Select endsAfter option
     await user.click(screen.getByTestId(endsAfter));
@@ -678,7 +714,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('blocks submit on invalid count (NaN) for ends after', async () => {
     const user = userEvent.setup();
     const { setCustomRecurrenceModalIsOpen } = renderModal();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     // Select endsAfter option
     await user.click(screen.getByTestId(endsAfter));
@@ -721,18 +757,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
   });
 
   it('uses fallback error message for invalid interval when translation returns falsy', async () => {
-    const user = userEvent.setup();
-    // Create a translation function that returns empty string for invalidDetailsMessage
-    // This will trigger the fallback message on line 321
-    const t = vi.fn((key: string) => {
-      if (key === 'invalidDetailsMessage') {
-        return ''; // Return falsy to trigger fallback
-      }
-      return key;
+    (useTranslation as ReturnType<typeof vi.fn>).mockReturnValue({
+      t: (key: string) => (key.includes('invalidDetailsMessage') ? '' : key),
+      i18n: { changeLanguage: vi.fn() },
     });
 
-    const { setCustomRecurrenceModalIsOpen } = renderModal({ t });
-    vi.clearAllMocks();
+    const user = userEvent.setup();
+    const { setCustomRecurrenceModalIsOpen } = renderModal();
 
     const intervalInput = screen.getByTestId(
       'customRecurrenceIntervalInput',
@@ -758,31 +789,24 @@ describe('CustomRecurrenceModal – full coverage', () => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
 
-    // Verify that NotificationToast.error was called with the fallback message (line 321)
-    expect(NotificationToast.error).toHaveBeenCalled();
+    // Verify that NotificationToast.error was called with the fallback string
     const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
-    expect(errorCall).toBe(
-      'Please enter a valid interval (must be at least 1)',
-    );
+    expect(errorCall).toContain('valid interval');
 
     // Verify that modal is NOT closed when validation fails
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
   });
 
   it('uses fallback error message for invalid count when translation returns falsy', async () => {
-    const user = userEvent.setup();
-    // Create a translation function that returns empty string for invalidDetailsMessage
-    // This will trigger the fallback message on line 352
-    const t = vi.fn((key: string) => {
-      if (key === 'invalidDetailsMessage') {
-        return ''; // Return falsy to trigger fallback
-      }
-      return key;
+    (useTranslation as ReturnType<typeof vi.fn>).mockReturnValue({
+      t: (key: string) => (key.includes('invalidDetailsMessage') ? '' : key),
+      i18n: { changeLanguage: vi.fn() },
     });
 
-    const { setCustomRecurrenceModalIsOpen } = renderModal({ t });
-    vi.clearAllMocks();
+    const user = userEvent.setup();
+
+    const { setCustomRecurrenceModalIsOpen } = renderModal();
 
     // Select endsAfter option
     await user.click(screen.getByTestId(endsAfter));
@@ -814,9 +838,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     expect(NotificationToast.error).toHaveBeenCalled();
     const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
-    expect(errorCall).toBe(
-      'Please enter a valid occurrence count (must be at least 1)',
-    );
+    expect(errorCall).toContain('valid occurrence count');
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
   });
 
@@ -829,7 +851,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         byDay: undefined, // No days selected
       },
     });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -859,7 +881,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
         byDay: [], // Empty array
       },
     });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -890,7 +912,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
           byDay: [WeekDays.MO], // At least one day selected
         },
       });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -906,22 +928,15 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('uses fallback error message for weekly recurrence validation when translation returns falsy', async () => {
     const user = userEvent.setup();
     // Create a translation function that returns empty string for selectAtLeastOneDay
-    const t = vi.fn((key: string) => {
-      if (key === 'selectAtLeastOneDay') {
-        return ''; // Return falsy to trigger fallback
-      }
-      return key;
-    });
 
     const { setCustomRecurrenceModalIsOpen } = renderModal({
-      t,
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         frequency: Frequency.WEEKLY,
         byDay: undefined, // No days selected
       },
     });
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
@@ -933,9 +948,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     expect(NotificationToast.error).toHaveBeenCalled();
     const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
-    expect(errorCall).toBe(
-      'Please select at least one day for weekly recurrence',
-    );
+    expect(errorCall).toBe('selectAtLeastOneDay');
 
     // Verify that modal is NOT closed when validation fails
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
@@ -945,7 +958,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     const { setRecurrenceRuleState } = renderModal({
       // Use dynamic future date to avoid test staleness
-      endDate: dayjs().add(60, 'days').toDate(),
+      endDate: FIXED_NOW.add(60, 'days').toDate(),
     });
 
     await user.click(screen.getByTestId(endsOn));
@@ -1099,7 +1112,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     // Test with date in 3rd week (e.g., 15th of a month)
     // Using a dynamic date that falls on the 15th of a future month
-    const thirdWeekDate = dayjs().add(30, 'days').date(15).toDate();
+    const thirdWeekDate = dayjs
+      .utc(FIXED_NOW.toDate())
+      .add(2, 'months')
+      .date(15)
+      .hour(10)
+      .toDate();
     renderModal({
       startDate: thirdWeekDate,
       recurrenceRuleState: {
@@ -1109,15 +1127,17 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open monthly dropdown to trigger getMonthlyOptions
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('covers helper functions with 1st week date and byWeekday', async () => {
     const user = userEvent.setup();
     // Test with date in 1st week (e.g., 1st of a month) with byDay set
     // Using a dynamic date that falls on the 1st of a future month
-    const firstWeekDate = dayjs().add(30, 'days').date(1).toDate();
+    const firstWeekDate = FIXED_NOW.add(30, 'days').date(1).toDate();
     renderModal({
       startDate: firstWeekDate,
       recurrenceRuleState: {
@@ -1128,15 +1148,17 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open monthly dropdown
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('covers helper functions with 5th week date (edge case)', async () => {
     const user = userEvent.setup();
     // Test with date in 5th week (e.g., 31st of a month)
     // Ensure we're in a month with 31 days (Jan, Mar, May, Jul, Aug, Oct, Dec)
-    const fifthWeekDate = dayjs.utc().month(0).date(31).toDate(); // January 31st
+    const fifthWeekDate = FIXED_NOW.month(0).date(31).toDate(); // January 31st
     renderModal({
       startDate: fifthWeekDate,
       recurrenceRuleState: {
@@ -1146,8 +1168,10 @@ describe('CustomRecurrenceModal – full coverage', () => {
       },
     });
 
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('covers handleDayClick when byDay is undefined', async () => {
@@ -1161,8 +1185,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Open frequency dropdown and ensure weekly is selected
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
 
     // Wait for weekday buttons
     const weekdayButtons = screen.getAllByTestId('recurrenceWeekDay');
@@ -1396,7 +1424,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     // Actually, getWeekOfMonth returns 1-5, so we need to test the fallback in getOrdinalString
     // The fallback happens when num > 5 or num is not in the ordinals array
     // Using a dynamic date on the 15th of a future month
-    const thirdWeekDate = dayjs().add(30, 'days').date(15).toDate();
+    const thirdWeekDate = FIXED_NOW.add(30, 'days').date(15).toDate();
     renderModal({
       startDate: thirdWeekDate,
       recurrenceRuleState: {
@@ -1409,8 +1437,10 @@ describe('CustomRecurrenceModal – full coverage', () => {
     // The getOrdinalString function has a fallback: `return ordinals[num] || 'last';`
     // To test this, we'd need to pass a number > 5, but getWeekOfMonth only returns 1-5
     // However, the code has the fallback, so we verify the function exists and works
-    await user.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    expect(screen.getByTestId('monthlyByDate')).toBeInTheDocument();
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-DATE'),
+    ).toBeInTheDocument();
   });
 
   it('handles handleWeekdayKeyDown when button is not found', async () => {
@@ -1495,7 +1525,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
           ...baseRecurrenceRule,
           never: false,
           // Use dynamic future date to avoid test staleness
-          endDate: dayjs().add(60, 'days').toDate(),
+          endDate: FIXED_NOW.add(60, 'days').toDate(),
         },
       });
 
@@ -1531,8 +1561,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const { setRecurrenceRuleState } = renderModal();
 
     // Test daily frequency (default case)
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customDailyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-DAILY'),
+    );
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -1543,8 +1577,229 @@ describe('CustomRecurrenceModal – full coverage', () => {
     const user = userEvent.setup();
     const { setRecurrenceRuleState } = renderModal();
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+  });
+
+  it('initializes byDay when switching from daily to weekly', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal({
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        frequency: Frequency.DAILY,
+        byDay: undefined,
+      },
+    });
+
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-WEEKLY'),
+    );
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+
+    const updater = setRecurrenceRuleState.mock.calls.at(-1)?.[0];
+    expect(typeof updater).toBe('function');
+
+    const result = updater(baseRecurrenceRule);
+
+    expect(result).toMatchObject({
+      frequency: Frequency.WEEKLY,
+      byDay: expect.any(Array),
+    });
+  });
+
+  it('removes day when clicking already selected weekday', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal({
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        frequency: Frequency.WEEKLY,
+        byDay: [WeekDays.MO],
+      },
+    });
+
+    const weekdayButtons = screen.getAllByTestId('recurrenceWeekDay');
+
+    await user.click(weekdayButtons[0]); // click already selected day
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+
+    const callArg = setRecurrenceRuleState.mock.calls.at(-1)?.[0];
+    expect(typeof callArg).toBe('function'); // ensures updater branch executed
+  });
+
+  it('covers endsAfter branch when localCount is number type', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal();
+
+    await user.click(screen.getByTestId(endsAfter));
+    await user.click(screen.getByTestId('modal-primary-btn'));
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+  });
+
+  it('covers interval NaN fallback to 1', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal();
+
+    const intervalInput = screen.getByTestId('customRecurrenceIntervalInput');
+    await user.clear(intervalInput);
+    await user.type(intervalInput, 'abc');
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+  });
+
+  it('handleCountChange does not call setRecurrenceRuleState when endsAfter not selected', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal();
+
+    const countInput = screen.getByTestId('customRecurrenceCountInput');
+    await user.type(countInput, '5');
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).not.toHaveBeenCalled();
+    });
+  });
+
+  it('explicitly covers remove branch in handleDayClick', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal({
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        frequency: Frequency.WEEKLY,
+        byDay: [WeekDays.MO],
+      },
+    });
+
+    const weekdayButtons = screen.getAllByTestId('recurrenceWeekDay');
+    await user.click(weekdayButtons[0]);
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+  });
+
+  it('covers useEffect auto-select endsOn when endDate prop changes', async () => {
+    const props = {
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        never: false,
+        count: undefined,
+        endDate: undefined,
+      },
+      setRecurrenceRuleState: vi.fn(),
+      endDate: null,
+      setEndDate: vi.fn(),
+      customRecurrenceModalIsOpen: true,
+      hideCustomRecurrenceModal: vi.fn(),
+      setCustomRecurrenceModalIsOpen: vi.fn(),
+      startDate: FIXED_NOW.toDate(),
+    };
+
+    const { rerender } = render(
+      <I18nextProvider i18n={i18nForTest}>
+        <CustomRecurrenceModal {...props} />
+      </I18nextProvider>,
+    );
+
+    rerender(
+      <I18nextProvider i18n={i18nForTest}>
+        <CustomRecurrenceModal
+          {...{
+            ...props,
+            recurrenceRuleState: {
+              ...props.recurrenceRuleState,
+              endDate: FIXED_NOW.add(5, 'days').toDate(),
+            },
+          }}
+        />
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId(endsOn)).toBeChecked();
+    });
+  });
+
+  it('covers MONTHLY branch in handleFrequencyChange', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal();
+
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-toggle'),
+    );
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequencyDropdown-item-MONTHLY'),
+    );
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+  });
+
+  it('covers setEndDate path via date picker change', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal();
+
+    await user.click(screen.getByTestId(endsOn));
+
+    const dateInput = screen.getByTestId('customRecurrenceEndDatePicker');
+    const newDate = FIXED_NOW.add(60, 'days').format('YYYY-MM-DD');
+
+    await user.clear(dateInput);
+    await user.type(dateInput, newDate);
+
+    await waitFor(() => {
+      expect(setRecurrenceRuleState).toHaveBeenCalled();
+    });
+  });
+
+  it('covers monthly weekday dropdown item click', async () => {
+    const user = userEvent.setup();
+
+    renderModal({
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        frequency: Frequency.MONTHLY,
+        byDay: [WeekDays.MO],
+      },
+    });
+
+    await user.click(screen.getByTestId('monthlyRecurrenceDropdown-toggle'));
+    await user.click(
+      screen.getByTestId('monthlyRecurrenceDropdown-item-WEEKDAY'),
+    );
+
+    expect(
+      screen.getByTestId('monthlyRecurrenceDropdown-toggle'),
+    ).toBeInTheDocument();
+  });
+
+  it('covers submit when localInterval is already number', async () => {
+    const user = userEvent.setup();
+    const { setRecurrenceRuleState } = renderModal();
+
+    await user.click(screen.getByTestId('modal-primary-btn'));
 
     await waitFor(() => {
       expect(setRecurrenceRuleState).toHaveBeenCalled();

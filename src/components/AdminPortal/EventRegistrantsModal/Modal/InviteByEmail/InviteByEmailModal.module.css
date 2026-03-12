@@ -7,18 +7,32 @@
 }
 
 .nameField {
-  width: 220px;
-  margin-left: 12px;
+  width: var(--space-17);
+  margin-left: var(--space-4);
 }
 
 .removeButton {
-  margin-left: 8px;
+  margin-left: var(--space-3);
 }
 
 .addButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-4);
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
   --bs-btn-focus-box-shadow: none;
+}
+
+.recipientsContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-3);
+}
+
+.setRecipientsButton {
+  margin-bottom: var(--space-3);
+}
+
+.emailHelp {
+  color: var(--color-gray-600);
 }
