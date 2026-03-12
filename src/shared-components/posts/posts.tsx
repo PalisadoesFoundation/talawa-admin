@@ -455,7 +455,7 @@ export default function PostsPage() {
                       {postsToDisplay.map((post) => (
                         <PostCard
                           key={post.id}
-                          {...formatPostForCard(post, t, refetch)}
+                          {...formatPostForCard(post, refetch)}
                         />
                       ))}
                     </Box>
