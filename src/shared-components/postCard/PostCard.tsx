@@ -418,7 +418,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               size="medium"
               data-testid="like-btn"
               aria-label={
-                isLikedByUser ? t('postCard.unlike') : t('postCard.like')
+                isLikedByUser
+                  ? t('postCard.unlikePost')
+                  : t('postCard.likePost')
               }
             >
               {likeLoading ? (
@@ -434,7 +436,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               fontWeight="bold"
               className={postCardStyles.actionLabel}
             >
-              {t('like')}
+              {t('postCard.like')}
             </Typography>
           </Box>
 
@@ -455,7 +457,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               fontWeight="bold"
               className={postCardStyles.actionLabel}
             >
-              {t('comment')}
+              {t('postCard.comment')}
             </Typography>
           </Box>
 
@@ -463,7 +465,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <IconButton
               className={postCardStyles.actionIcon}
               size="medium"
-              aria-label={t('postCard.share')}
+              aria-label={t('postCard.sharePost')}
               data-testid="share-post-quick-button"
             >
               <Share fontSize="small" />
@@ -473,7 +475,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               fontWeight="bold"
               className={postCardStyles.actionLabel}
             >
-              {t('share')}
+              {t('postCard.share')}
             </Typography>
           </Box>
         </Box>
