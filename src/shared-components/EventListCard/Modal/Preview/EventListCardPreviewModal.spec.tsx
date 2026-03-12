@@ -30,6 +30,9 @@ import PreviewModal from './EventListCardPreviewModal';
 import { UserRole } from 'types/Event/interface';
 import { Frequency } from 'utils/recurrenceUtils/recurrenceTypes';
 
+// Use I18nextProvider with i18nForTest for translation handling
+// This ensures that tests use the same translation logic as the app
+
 vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
   __esModule: true,
   default: vi.fn(({ ...props }) => (

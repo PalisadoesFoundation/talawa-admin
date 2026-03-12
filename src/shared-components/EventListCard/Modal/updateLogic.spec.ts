@@ -18,7 +18,16 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
-import type { TFunction } from 'i18next';
+// Mock react-i18next so useTranslation works without React context
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: mockT,
+    }),
+  };
+});
 
 // Mock dependencies
 vi.mock('@apollo/client', async () => {
@@ -42,16 +51,7 @@ vi.mock('utils/errorHandler', async () => ({
 }));
 
 const mockUseMutation = useMutation as Mock;
-const mockT = ((key: string) => key) as unknown as TFunction<
-  'translation',
-  undefined
->;
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: mockT,
-  }),
-}));
+const mockT = (key: string) => key;
 
 type MockEventListCardProps = InterfaceEvent;
 
@@ -133,7 +133,7 @@ describe('useUpdateEventHandler', () => {
 
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {

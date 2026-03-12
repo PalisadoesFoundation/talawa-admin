@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
@@ -11,7 +11,7 @@ import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Popover } from '@mui/material';
+import Popover from '@mui/material/Popover';
 import Avatar from 'shared-components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';

@@ -34,10 +34,13 @@ vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: '1' }),
+    useParams: vi.fn(() => ({ orgId: '1' })),
     useNavigate: vi.fn(),
   };
 });
+
+import { useParams } from 'react-router';
+const mockUseParams = useParams as unknown as ReturnType<typeof vi.fn>;
 
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
@@ -72,6 +75,7 @@ const translations = {
 
 describe('Testing Advertisement Register Component', () => {
   beforeEach(() => {
+    mockUseParams.mockReturnValue({ orgId: '1' });
     mockUseMutation = vi.fn();
     mockUseMutation.mockReturnValue([vi.fn()]);
     mockUploadFileToMinio.mockResolvedValue({
@@ -438,6 +442,7 @@ describe('Testing Advertisement Register Component', () => {
 
   it('create advertisement', async () => {
     const createAdMock = vi.fn();
+    mockUseParams.mockReturnValue({ orgId: '1' });
     mockUseMutation.mockReturnValue([createAdMock]);
     render(
       <ApolloProvider client={client}>
@@ -1461,6 +1466,7 @@ describe('Testing Advertisement Register Component', () => {
         },
       },
     });
+    mockUseParams.mockReturnValue({ orgId: '1' });
     mockUseMutation.mockReturnValue([createAdMock]);
 
     const setAfterActiveMock = vi.fn();

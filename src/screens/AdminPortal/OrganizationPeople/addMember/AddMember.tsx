@@ -15,7 +15,8 @@
  * @returns \{JSX.Element\} The rendered `AddMember` component.
  */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close } from '@mui/icons-material';
+import Check from '@mui/icons-material/Check';
+import Close from '@mui/icons-material/Close';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   CREATE_MEMBER_PG,

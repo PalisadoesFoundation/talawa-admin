@@ -3,7 +3,7 @@ import { usePluginInjectors } from '../hooks';
 import { getPluginComponent } from '../registry';
 import type { IInjectorExtension } from '../types';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import { Extension } from '@mui/icons-material';
+import Extension from '@mui/icons-material/Extension';
 import { useTranslation } from 'react-i18next';
 
 interface IPluginInjectorProps {

@@ -948,6 +948,8 @@
     "isRegisterable": "Registerable",
     "creator": "Creator",
     "edit": "Edit",
+    "invalidDetailsMessage": "Please enter a valid value",
+    "selectAtLeastOneDay": "Please select at least one day",
     "delete": "Delete",
     "viewDetails": "View Details",
     "noEventsFound": "No events found",
@@ -1473,7 +1475,24 @@
     "enterCity": "Enter city name",
     "enterState": "Enter state name",
     "select": "Select",
-    "asYourCountry": "as your country"
+    "asYourCountry": "as your country",
+    "changePassword": "Change Password",
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "password": "Password",
+    "updatePassword": "Update Password",
+    "confirmNewPassword": "Confirm New Password",
+    "passCantBeEmpty": "Password Cannot be Empty",
+    "passNoMatch": "New Password and Confirm Password are not same",
+    "passwordChangedSuccessfully": "Password Changed Successfully",
+    "enterCurrentPassword": "Please enter your current password"
+  },
+  "passwordValidation": {
+    "minLength": "Password must be at least 8 characters long.",
+    "uppercaseRequired": "Password must contain at least one uppercase letter.",
+    "lowercaseRequired": "Password must contain at least one lowercase letter.",
+    "numberRequired": "Password must contain at least one number.",
+    "specialCharRequired": "Password must contain at least one special character."
   },
   "people": {
     "title": "People",

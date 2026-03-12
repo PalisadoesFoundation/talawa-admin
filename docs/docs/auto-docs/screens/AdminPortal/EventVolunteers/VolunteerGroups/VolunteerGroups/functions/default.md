@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/EventVolunteers/VolunteerGroups/VolunteerGroups.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/EventVolunteers/VolunteerGroups/VolunteerGroups.tsx#L59)
+Defined in: [src/screens/AdminPortal/EventVolunteers/VolunteerGroups/VolunteerGroups.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/EventVolunteers/VolunteerGroups/VolunteerGroups.tsx#L60)
 
 Renders the Volunteer Groups management screen.
 

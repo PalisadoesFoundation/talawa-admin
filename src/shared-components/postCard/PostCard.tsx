@@ -12,31 +12,27 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
-import {
-  IconButton,
-  Input,
-  InputAdornment,
-  Box,
-  Typography,
-  Divider,
-  CircularProgress,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import Input from '@mui/material/Input';
+import InputAdornment from '@mui/material/InputAdornment';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import CircularProgress from '@mui/material/CircularProgress';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import { Button } from 'shared-components/Button';
-import {
-  Favorite,
-  ChatBubbleOutline,
-  PushPinOutlined,
-  PushPin,
-  Share,
-  MoreHoriz,
-  Send,
-  DeleteOutline,
-  EditOutlined,
-} from '@mui/icons-material';
+import Favorite from '@mui/icons-material/Favorite';
+import ChatBubbleOutline from '@mui/icons-material/ChatBubbleOutline';
+import PushPinOutlined from '@mui/icons-material/PushPinOutlined';
+import PushPin from '@mui/icons-material/PushPin';
+import Share from '@mui/icons-material/Share';
+import MoreHoriz from '@mui/icons-material/MoreHoriz';
+import Send from '@mui/icons-material/Send';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import EditOutlined from '@mui/icons-material/EditOutlined';
 import UserDefault from '../../assets/images/defaultImg.png';
 import type {
   InterfaceComment,
@@ -57,6 +53,7 @@ import useLocalStorage from '../../utils/useLocalstorage';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { CursorPaginationManager } from '../../components/CursorPaginationManager/CursorPaginationManager';
+import { spacingTokens } from '../../utils/tokenValues';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation');
@@ -237,7 +234,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }}
             PaperProps={{
               sx: {
-                minWidth: 'var(--space-15)',
+                minWidth: spacingTokens['space-15'],
                 '& .MuiMenuItem-root': {
                   px: 2,
                   py: 1,

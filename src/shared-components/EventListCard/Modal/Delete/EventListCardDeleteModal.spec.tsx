@@ -5,13 +5,44 @@ import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 import EventListCardDeleteModal from './EventListCardDeleteModal';
 import dayjs from 'dayjs';
-import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 import i18n from 'utils/i18nForTest';
+
+// Mock react-i18next so useTranslation returns values matching translation.json
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: (ns?: string | string[]) => {
+      const isCommon = Array.isArray(ns)
+        ? ns.includes('common')
+        : ns === 'common';
+      const translations: Record<string, string> = {
+        deleteEvent: 'Delete Event',
+        deleteEventMsg: 'Do you want to remove this event?',
+        deleteRecurringEventMsg:
+          'This is a recurring event. Choose how you want to delete it:',
+        deleteThisInstance: 'Delete only this instance',
+        deleteThisAndFollowing: 'Delete this and all following events',
+        deleteAllEvents: 'Delete all events in this series',
+      };
+      const translationsCommon: Record<string, string> = {
+        yes: 'Yes',
+        no: 'No',
+      };
+      return {
+        t: (key: string) => {
+          if (isCommon) return translationsCommon[key] || key;
+          return translations[key] || key;
+        },
+      };
+    },
+  };
+});
 
 const FIXED_BASE_DATE = new Date(['2025', '01', '01T10:00:00.000Z'].join('-'));
 
 // Mock props for standalone event
-const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
+const mockStandaloneEventProps = {
   eventListCardProps: {
     id: 'standalone-event-1',
     name: 'Standalone Event',
@@ -45,7 +76,7 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
 };
 
 // Mock props for recurring event instance
-const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
+const mockRecurringEventProps = {
   eventListCardProps: {
     id: 'recurring-instance-1',
     name: 'Daily Meeting',
