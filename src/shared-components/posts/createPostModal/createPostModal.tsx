@@ -8,7 +8,8 @@
  */
 
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import { InsertPhotoOutlined, PushPin } from '@mui/icons-material';
+import InsertPhotoOutlined from '@mui/icons-material/InsertPhotoOutlined';
+import PushPin from '@mui/icons-material/PushPin';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './createPostModal.module.css';
 import { useMutation } from '@apollo/client';
