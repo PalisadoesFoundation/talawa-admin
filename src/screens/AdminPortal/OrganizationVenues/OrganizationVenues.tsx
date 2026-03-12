@@ -57,6 +57,10 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Navigate, useParams } from 'react-router';
 import VenueModal from 'components/AdminPortal/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
+import {
+  DeleteModal,
+  useModalState,
+} from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/AdminPortal/Venues/VenueCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
@@ -103,16 +107,40 @@ function organizationVenues(): JSX.Element {
   });
 
   // GraphQL mutation for deleting a venue
-  const [deleteVenue] = useMutation(DELETE_VENUE_MUTATION);
+  const [deleteVenue, { loading: deletingVenue }] = useMutation(
+    DELETE_VENUE_MUTATION,
+  );
+
+  // Modal state for delete confirmation
+  const {
+    isOpen: deleteVenueModalOpen,
+    open: openDeleteVenueModal,
+    close: closeDeleteVenueModal,
+  } = useModalState();
+
+  // The venue id pending deletion
+  const [selectedVenueId, setSelectedVenueId] = React.useState<string | null>(
+    null,
+  );
 
   /**
-   * Handles the deletion of a venue by ID.
-   * @param venueId - The ID of the venue to delete.
+   * Request deletion (opens confirmation modal)
    */
-  const handleDelete = async (venueId: string): Promise<void> => {
+  const handleDelete = (venueId: string): void => {
+    setSelectedVenueId(venueId);
+    openDeleteVenueModal();
+  };
+
+  /**
+   * Confirmed deletion executed after user confirms in modal
+   */
+  const confirmDelete = async (): Promise<void> => {
+    if (!selectedVenueId) return;
     try {
-      await deleteVenue({ variables: { id: venueId } });
+      await deleteVenue({ variables: { id: selectedVenueId } });
+      setSelectedVenueId(null);
       venueRefetch();
+      closeDeleteVenueModal();
     } catch (error) {
       errorHandler(t, error);
     }
@@ -286,8 +314,8 @@ function organizationVenues(): JSX.Element {
                   (venueItem: InterfaceQueryVenueListItem, index: number) => (
                     <VenueCard
                       venueItem={venueItem}
-                      handleDelete={handleDelete}
                       showEditVenueModal={showEditVenueModal}
+                      handleDelete={handleDelete}
                       key={index}
                     />
                   ),
@@ -306,6 +334,18 @@ function organizationVenues(): JSX.Element {
         orgId={orgId}
         edit={venueModalMode === 'edit' ? true : false}
         venueData={editVenueData}
+      />
+      <DeleteModal
+        open={deleteVenueModalOpen}
+        title={t('deleteVenue')}
+        onClose={closeDeleteVenueModal}
+        onDelete={confirmDelete}
+        loading={deletingVenue}
+        entityName={
+          venues.find((v) => v.node.id === selectedVenueId)?.node.name ??
+          undefined
+        }
+        data-testid="deleteVenueModal"
       />
     </>
   );

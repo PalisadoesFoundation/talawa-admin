@@ -517,6 +517,10 @@ describe('Organisation Venues Error Handling', () => {
 
     await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
 
+    // Modal should open; confirm deletion via modal delete button
+    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
+    await userEvent.click(modalDeleteBtn);
+
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),

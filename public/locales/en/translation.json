@@ -2018,6 +2018,7 @@
     "delete": "delete",
     "name": "name",
     "desc": "desc",
+    "deleteVenue": "Delete venue",
     "venueImagePreview": "Preview of venue image",
     "sortVenues": "Sort Venues",
     "closeImagePreview": "Close image preview"

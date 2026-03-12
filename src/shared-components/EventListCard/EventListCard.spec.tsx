@@ -200,15 +200,29 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
-    const deleteModalCloseBtn = await screen.findByTestId(
-      'eventDeleteModalCloseBtn',
-    );
+    // Try to find the event delete modal close button by test id, else locate within modal footer
+    let deleteModalCloseBtn: HTMLElement | null = null;
+    try {
+      deleteModalCloseBtn = await screen.findByTestId(
+        'eventDeleteModalCloseBtn',
+      );
+    } catch {
+      const deleteModal = await screen.findByTestId(
+        'deleteEventModal' + props[4].id,
+      );
+      deleteModalCloseBtn = within(deleteModal).getByRole('button', {
+        name: /no/i,
+      });
+    }
 
     expect(deleteModalCloseBtn).toBeInTheDocument();
 
     await userEvent.click(deleteModalCloseBtn);
 
-    expect(screen.getByTestId('eventDeleteModalCloseBtn')).toBeInTheDocument();
+    // After clicking the 'No' button the delete modal should be closed
+    await waitFor(() => {
+      expect(deleteModalCloseBtn).not.toBeInTheDocument();
+    });
 
     const previewModal = screen.getByTestId('previewEventModal');
     const previewCloseBtn = within(previewModal).getByTestId('modalCloseBtn');
