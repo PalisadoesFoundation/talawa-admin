@@ -6,7 +6,7 @@
 
 > **filterEvents**(`eventData`, `orgData?`, `userRole?`, `userId?`): [`IEvent`](../../interface/interfaces/IEvent.md)[]
 
-Defined in: [src/types/Event/utils.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L32)
+Defined in: [src/types/Event/utils.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L36)
 
 ## Parameters
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/utils.ts:32](https://github.com/PalisadoesFoundatio
 
 ### orgData?
 
-[`IOrgList`](../../interface/interfaces/IOrgList.md)
+[`IOrgList`](../../interface/interfaces/IOrgList.md) | [`InterfaceOrgForEventFilter`](../../interface/interfaces/InterfaceOrgForEventFilter.md)
 
 ### userRole?
 
