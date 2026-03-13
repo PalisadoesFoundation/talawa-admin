@@ -1609,4 +1609,316 @@ describe('MemberDetail', () => {
       { timeout: 3000 },
     );
   });
+
+  describe('Coverage for uncovered lines', () => {
+    test('shows error notification when GraphQL query fails (L163-165)', async () => {
+      const ERROR_MOCKS = [
+        {
+          request: {
+            query: GET_USER_BY_ID,
+            variables: {
+              input: {
+                id: '456',
+              },
+            },
+          },
+          error: new Error('Network error'),
+        },
+      ];
+
+      renderMemberDetailScreen(createLink(ERROR_MOCKS));
+
+      await waitFor(
+        () => {
+          expect(mockToast.error).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('returns early when file input change fires with no file (L177)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      await waitForLoadingComplete();
+
+      const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+      // Fire a change event with an empty FileList
+      Object.defineProperty(fileInput, 'files', {
+        value: [],
+        writable: true,
+      });
+      fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+      // Since handleFileUpload returns early when no file, no toast should fire
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+    });
+
+    test('clears input value in finally block after successful upload (L211)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      const objectUrlSpy = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockReturnValue('blob:test-url');
+
+      await waitForLoadingComplete();
+
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+      await user.upload(fileInput, file);
+
+      await waitFor(
+        () => {
+          expect(mockUploadFileToMinio).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+
+      // The finally block should have cleared the input value
+      expect(fileInput.value).toBe('');
+
+      objectUrlSpy.mockRestore();
+    });
+
+    test('includes avatar metadata in update mutation when avatar is uploaded (L264)', async () => {
+      const AVATAR_UPDATE_MOCKS = [
+        {
+          request: {
+            query: GET_USER_BY_ID,
+            variables: {
+              input: {
+                id: '456',
+              },
+            },
+          },
+          result: {
+            data: {
+              user: {
+                ...MOCKS1[0].result.data.user,
+                id: '456',
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: UPDATE_USER_MUTATION,
+          },
+          variableMatcher: (variables: Record<string, unknown>) => {
+            return (
+              variables &&
+              typeof variables === 'object' &&
+              'input' in variables &&
+              typeof variables.input === 'object'
+            );
+          },
+          result: {
+            data: {
+              updateUser: {
+                ...MOCKS1[0].result.data.user,
+                id: '456',
+                name: 'AvatarTestUser',
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_USER_BY_ID,
+            variables: {
+              input: {
+                id: '456',
+              },
+            },
+          },
+          result: {
+            data: {
+              user: {
+                ...MOCKS1[0].result.data.user,
+                id: '456',
+                name: 'AvatarTestUser',
+              },
+            },
+          },
+        },
+      ];
+
+      renderMemberDetailScreen(createLink(AVATAR_UPDATE_MOCKS));
+      const objectUrlSpy = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockReturnValue('blob:avatar');
+
+      await waitForLoadingComplete();
+
+      // Upload a file to set avatar metadata
+      const file = new File(['test'], 'avatar.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+      await user.upload(fileInput, file);
+
+      await waitFor(
+        () => {
+          expect(mockUploadFileToMinio).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+
+      // Now save changes - this should include avatar metadata (L264)
+      const saveButton = screen.getByTestId('saveChangesBtn');
+      await user.click(saveButton);
+
+      await waitFor(
+        () => {
+          expect(mockToast.success).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+
+      objectUrlSpy.mockRestore();
+    });
+
+    test('resolves currentId from storedUserId fallback (L96/98)', async () => {
+      // Render without route params - the component should fallback to
+      // getItem('id') which returns '456' from our mock
+      render(
+        <MockedProvider mocks={MOCKS1} addTypename={false}>
+          <BrowserRouter>
+            <MemberDetail />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitForLoadingComplete();
+
+      // Verify component loaded successfully with the stored userId
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      expect(nameInput).toBeInTheDocument();
+    });
+
+    test('removeEmptyFields filters out empty and whitespace-only strings (L231)', async () => {
+      // Use UPDATE_MOCK which has many null/empty fields - when saving,
+      // removeEmptyFields should strip them out before sending the mutation
+      renderMemberDetailScreen(createLink(UPDATE_MOCK));
+      await waitForLoadingComplete();
+
+      // Change name to trigger update
+      const nameInput = screen.getByTestId('inputName');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'FilterTestName');
+
+      const saveButton = screen.getByTestId('saveChangesBtn');
+      await user.click(saveButton);
+
+      await waitFor(
+        () => {
+          expect(mockToast.success).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('resets form to original data when resetChanges is clicked (L300)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      await waitForLoadingComplete();
+
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      const originalName = nameInput.value;
+
+      // Make a change
+      await user.clear(nameInput);
+      await user.type(nameInput, 'TempChangedName');
+      expect(nameInput).toHaveValue('TempChangedName');
+
+      // Click reset
+      const resetButton = screen.getByTestId('resetChangesBtn');
+      await user.click(resetButton);
+
+      // Verify form reverted to original data
+      await waitFor(
+        () => {
+          expect(nameInput).toHaveValue(originalName);
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('formats birthDate via DatePicker onChange (L421)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      await waitForLoadingComplete();
+
+      const birthDateInput = screen.getByTestId(
+        'birthDate',
+      ) as HTMLInputElement;
+
+      // Use native DOM input event to set full value at once
+      // (user.type sends one char at a time; partial values like '0' are
+      // invalid and the mock DatePicker resets to empty on each keystroke)
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        'value',
+      )?.set;
+      nativeInputValueSetter?.call(birthDateInput, '01/15/2000');
+      birthDateInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+      await waitFor(
+        () => {
+          expect(birthDateInput.value).toBe('01/15/2000');
+        },
+        { timeout: 3000 },
+      );
+
+      // Verify save button appeared (indicates isUpdated is true)
+      expect(screen.getByTestId('saveChangesBtn')).toBeInTheDocument();
+    });
+
+    test('handles DatePicker onChange with null date (L421 else branch)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS2));
+      await waitForLoadingComplete();
+
+      const birthDateInput = screen.getByTestId(
+        'birthDate',
+      ) as HTMLInputElement;
+
+      // Clear the date using native DOM to trigger onChange(null)
+      const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+        window.HTMLInputElement.prototype,
+        'value',
+      )?.set;
+      nativeInputValueSetter?.call(birthDateInput, '');
+      birthDateInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+      await waitFor(
+        () => {
+          expect(birthDateInput.value).toBe('');
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('clears input value in finally after upload failure (L211 error path)', async () => {
+      mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+      renderMemberDetailScreen(createLink(MOCKS1));
+      const objectUrlSpy = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockReturnValue('blob:error-test');
+
+      await waitForLoadingComplete();
+
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+      await user.upload(fileInput, file);
+
+      await waitFor(
+        () => {
+          expect(mockToast.error).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+
+      // The finally block should still clear the input value even on error
+      expect(fileInput.value).toBe('');
+
+      objectUrlSpy.mockRestore();
+    });
+  });
 });

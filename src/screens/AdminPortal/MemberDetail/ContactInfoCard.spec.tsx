@@ -155,6 +155,16 @@ describe('ContactInfoCard', () => {
       expect(screen.getByTestId('inputCity')).toHaveValue('');
     });
 
+    it('renders empty country select when countryCode is null', () => {
+      const nullCountryState: Record<string, string | null> = {
+        ...defaultFormState,
+        countryCode: null,
+      };
+      renderComponent({ formState: nullCountryState });
+      const countrySelect = screen.getByTestId('inputCountry');
+      expect(countrySelect).toHaveValue('');
+    });
+
     it('renders empty string when emailAddress is undefined', () => {
       renderComponent({ emailAddress: undefined });
       const emailInput = screen.getByTestId('inputEmail');
