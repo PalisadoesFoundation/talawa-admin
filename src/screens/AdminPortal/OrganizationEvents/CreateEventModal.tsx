@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
+import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
@@ -116,14 +117,11 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         name: payload.name,
         ...(payload.allDay
           ? {
-              startDate: payload.startDate.toISOString().slice(0, 10),
-              // For all-day events, endDate is exclusive (RFC 5545)
-              // Add 1 day to represent the first day NOT included
-              endDate: (() => {
-                const exclusiveEnd = new Date(payload.endDate);
-                exclusiveEnd.setDate(exclusiveEnd.getDate() + 1);
-                return exclusiveEnd.toISOString().slice(0, 10);
-              })(),
+              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
+              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate)
+                .add(1, 'day')
+                .format('YYYY-MM-DD'),
             }
           : {
               startAt: payload.startAtISO,

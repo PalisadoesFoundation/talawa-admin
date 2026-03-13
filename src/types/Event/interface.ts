@@ -305,15 +305,17 @@ export interface IEventFormInput {
 export type ICreateEventInput = IEventFormInput;
 
 /**
- * Strict input shape accepted by `MutationCreateEventInput` in GraphQL.
+ * Input shape accepted by `MutationCreateEventInput` in GraphQL.
  *
- * Unlike `ICreateEventInput` (UI/form-friendly), this contract requires
- * concrete `startAt` and `endAt` timestamps and does not allow date-only fields.
+ * It supports either timed (`startAt`/`endAt`) or all-day (`startDate`/`endDate`)
+ * payloads depending on the `allDay` flag.
  */
 export interface IMutationCreateEventInput {
   name: string;
-  startAt: string;
-  endAt: string;
+  startAt?: string;
+  endAt?: string;
+  startDate?: string;
+  endDate?: string;
   organizationId: string;
   allDay: boolean;
   /**

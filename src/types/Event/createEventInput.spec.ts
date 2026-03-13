@@ -48,7 +48,7 @@ describe('mapCreateEventInputToMutationInput', () => {
     expect(mapped.organizationId).toBe('org123');
   });
 
-  it('maps date-only all-day input to start/end timestamps', () => {
+  it('maps date-only all-day input to date-only mutation fields', () => {
     const startDate = dayjs().add(30, 'days').format('YYYY-MM-DD');
     const endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
 
@@ -61,15 +61,24 @@ describe('mapCreateEventInputToMutationInput', () => {
 
     const mapped = mapCreateEventInputToMutationInput(input);
 
-    expect(mapped.startAt).toBe(
-      dayjs.utc(startDate).startOf('day').toISOString(),
-    );
-    expect(mapped.endAt).toBe(
-      dayjs
-        .utc(endDate)
-        .startOf('day')
-        .subtract(1, 'millisecond')
-        .toISOString(),
+    expect(mapped.startDate).toBe(startDate);
+    expect(mapped.endDate).toBe(endDate);
+    expect(mapped.startAt).toBeUndefined();
+    expect(mapped.endAt).toBeUndefined();
+  });
+
+  it('throws when all-day endDate is not after startDate', () => {
+    const startDate = dayjs().add(30, 'days').format('YYYY-MM-DD');
+
+    const input: IEventFormInput = {
+      ...baseInput,
+      allDay: true,
+      startDate,
+      endDate: startDate,
+    };
+
+    expect(() => mapCreateEventInputToMutationInput(input)).toThrow(
+      'endDate must be greater than startDate.',
     );
   });
 
@@ -86,13 +95,30 @@ describe('mapCreateEventInputToMutationInput', () => {
     );
   });
 
-  it('throws when neither timestamps nor date-only values are provided', () => {
+  it('throws when all-day event is missing dates', () => {
     const input: IEventFormInput = {
       ...baseInput,
     };
 
     expect(() => mapCreateEventInputToMutationInput(input)).toThrow(
-      'Either startAt/endAt or startDate must be provided for createEvent.',
+      'startDate and endDate are required when allDay is true.',
+    );
+  });
+
+  it('throws when all-day event provides timestamps', () => {
+    const startDate = dayjs().add(45, 'days').format('YYYY-MM-DD');
+    const endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
+
+    const input: IEventFormInput = {
+      ...baseInput,
+      startAt: dayjs.utc(Date.UTC(2026, 2, 13, 10, 0, 0)).toISOString(),
+      endAt: dayjs.utc(Date.UTC(2026, 2, 13, 11, 0, 0)).toISOString(),
+      startDate,
+      endDate,
+    };
+
+    expect(() => mapCreateEventInputToMutationInput(input)).toThrow(
+      'Cannot provide startAt/endAt when allDay is true. Use startDate/endDate instead.',
     );
   });
 });

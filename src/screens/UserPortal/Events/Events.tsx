@@ -209,14 +209,11 @@ export default function Events(): JSX.Element {
         name: payload.name,
         ...(payload.allDay
           ? {
-              startDate: payload.startDate.toISOString().slice(0, 10),
-              // For all-day events, endDate is exclusive (RFC 5545)
-              // Add 1 day to represent the first day NOT included
-              endDate: (() => {
-                const exclusiveEnd = new Date(payload.endDate);
-                exclusiveEnd.setDate(exclusiveEnd.getDate() + 1);
-                return exclusiveEnd.toISOString().slice(0, 10);
-              })(),
+              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
+              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate)
+                .add(1, 'day')
+                .format('YYYY-MM-DD'),
             }
           : {
               startAt: payload.startAtISO,
