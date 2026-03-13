@@ -624,6 +624,99 @@ describe('Calendar', () => {
     expect(renderHourComponent).toBeInTheDocument();
   });
 
+  it('shows all-day event in day view when startDate matches current date', () => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const todayDateString = dayjs(now).format('YYYY-MM-DD');
+
+    const allDayEventOnCurrentDay: InterfaceEvent[] = [
+      {
+        id: 'all-day-day-view',
+        name: 'All Day Day View Event',
+        description: 'All day event shown in day view',
+        startAt: null,
+        endAt: null,
+        startDate: todayDateString,
+        endDate: todayDateString,
+        location: 'Anywhere',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator-day', name: 'Creator Day' },
+      },
+    ];
+
+    render(
+      <Router>
+        <Calendar
+          eventData={allDayEventOnCurrentDay}
+          viewType={ViewType.DAY}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="admin1"
+          onMonthChange={onMonthChange}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+        />
+      </Router>,
+    );
+
+    expect(screen.queryByText('No events available')).not.toBeInTheDocument();
+  });
+
+  it('shows all-day event in month grid when startDate matches the cell date', () => {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+    const todayDateString = dayjs(now).format('YYYY-MM-DD');
+
+    const allDayEventOnMonthCell: InterfaceEvent[] = [
+      {
+        id: 'all-day-month-view',
+        name: 'All Day Month View Event',
+        description: 'All day event shown in month view',
+        startAt: null,
+        endAt: null,
+        startDate: todayDateString,
+        endDate: todayDateString,
+        location: 'Anywhere',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator-month', name: 'Creator Month' },
+      },
+    ];
+
+    render(
+      <Router>
+        <Calendar
+          eventData={allDayEventOnMonthCell}
+          viewType={ViewType.MONTH}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="admin1"
+          onMonthChange={onMonthChange}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+        />
+      </Router>,
+    );
+
+    const dayCells = screen.getAllByTestId('day');
+    const cellsWithEvents = dayCells.filter(
+      (cell) => cell.getAttribute('data-has-events') === 'true',
+    );
+
+    expect(cellsWithEvents.length).toBeGreaterThan(0);
+  });
+
   it('should handle date navigation boundary conditions in day view', async () => {
     const mockOnMonthChange = vi.fn();
 

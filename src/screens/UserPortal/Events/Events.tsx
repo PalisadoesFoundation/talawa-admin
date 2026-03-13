@@ -69,6 +69,7 @@ import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEve
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
+import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import styles from './Events.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -231,8 +232,10 @@ export default function Events(): JSX.Element {
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
+      const mutationInput = mapCreateEventInputToMutationInput(input);
+
       const { data: createEventData, errors } = await create({
-        variables: { input },
+        variables: { input: mutationInput },
       });
 
       // Handle partial success: prioritize data over errors

@@ -298,6 +298,34 @@ export interface ICreateEventInput {
     | null;
 }
 
+/**
+ * Strict input shape accepted by `MutationCreateEventInput` in GraphQL.
+ *
+ * Unlike `ICreateEventInput` (UI/form-friendly), this contract requires
+ * concrete `startAt` and `endAt` timestamps and does not allow date-only fields.
+ */
+export interface IMutationCreateEventInput {
+  name: string;
+  startAt: string;
+  endAt: string;
+  organizationId: string;
+  allDay: boolean;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
+  isPublic: boolean;
+  isRegisterable: boolean;
+  isInviteOnly: boolean;
+  description?: string;
+  location?: string;
+  recurrence?:
+    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+        endDate?: string;
+      })
+    | null;
+}
+
 // Legacy interface exports for backward compatibility
 export type InterfaceMember = IMember;
 export type InterfaceEvent = IEvent;

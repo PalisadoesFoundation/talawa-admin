@@ -12,6 +12,7 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import type { ICreateEventInput } from 'types/Event/interface';
+import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 interface ICreateEventModalProps {
@@ -139,8 +140,10 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
+      const mutationInput = mapCreateEventInputToMutationInput(input);
+
       const { data: createEventData } = await create({
-        variables: { input },
+        variables: { input: mutationInput },
       });
 
       if (createEventData?.createEvent) {
