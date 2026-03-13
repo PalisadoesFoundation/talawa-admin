@@ -239,27 +239,19 @@ const endDate = dayjs(new Date(currentYear, currentMonth, 1))
 const allDayStartDate = dayjs(TEST_DATE).format('YYYY-MM-DD');
 const allDayEndDate = dayjs(TEST_DATE).add(1, 'day').format('YYYY-MM-DD');
 
-const allDayStartAt = dayjs.utc(allDayStartDate).startOf('day').toISOString();
-const allDayEndAt = dayjs
-  .utc(allDayEndDate)
-  .startOf('day')
-  .subtract(1, 'millisecond')
-  .toISOString();
-
 const isExclusiveEndDate = (
-  startAtValue: string,
-  endAtValue: string,
+  startDateValue: string,
+  endDateValue: string,
 ): boolean => {
-  const startAtDate = dayjs(startAtValue);
-  const endAtDate = dayjs(endAtValue);
+  const startDate = dayjs(startDateValue, 'YYYY-MM-DD', true);
+  const endDate = dayjs(endDateValue, 'YYYY-MM-DD', true);
 
-  if (!startAtDate.isValid() || !endAtDate.isValid()) {
+  if (!startDate.isValid() || !endDate.isValid()) {
     return false;
   }
 
-  // For all-day events created by the form, endAt should represent
-  // the exclusive end date minus 1 millisecond.
-  return endAtDate.diff(startAtDate, 'millisecond') === 86_399_999;
+  // For all-day events, endDate should be the exclusive next day.
+  return endDate.diff(startDate, 'day') === 1;
 };
 
 const MOCKS = [
@@ -628,8 +620,8 @@ const CREATE_EVENT_ERROR_MOCKS = [
         input: {
           name: 'New Test Event',
           description: 'New Test Description',
-          startAt: allDayStartAt,
-          endAt: allDayEndAt,
+          startDate: allDayStartDate,
+          endDate: allDayEndDate,
           organizationId: 'org123',
           allDay: true,
           location: 'New Test Location',
@@ -653,8 +645,8 @@ const CREATE_EVENT_NULL_MOCKS = [
         input: {
           name: 'New Test Event',
           description: 'New Test Description',
-          startAt: allDayStartAt,
-          endAt: allDayEndAt,
+          startDate: allDayStartDate,
+          endDate: allDayEndDate,
           organizationId: 'org123',
           allDay: true,
           location: 'New Test Location',
@@ -678,8 +670,8 @@ const CREATE_EVENT_WITH_GRAPHQL_ERRORS_MOCKS = [
         input: {
           name: 'New Test Event',
           description: 'New Test Description',
-          startAt: allDayStartAt,
-          endAt: allDayEndAt,
+          startDate: allDayStartDate,
+          endDate: allDayEndDate,
           organizationId: 'org123',
           allDay: true,
           location: 'New Test Location',
@@ -708,8 +700,8 @@ const REFETCH_FAILURE_MOCKS = [
       input: {
         name: string;
         description?: string;
-        startAt: string;
-        endAt: string;
+        startDate: string;
+        endDate: string;
         organizationId: string;
         allDay: boolean;
         location?: string;
@@ -728,7 +720,7 @@ const REFETCH_FAILURE_MOCKS = [
         input.isPublic === false &&
         input.isRegisterable === true &&
         input.isInviteOnly === true &&
-        isExclusiveEndDate(input.startAt, input.endAt)
+        isExclusiveEndDate(input.startDate, input.endDate)
       );
     },
     result: {
@@ -922,8 +914,8 @@ describe('Testing Events Screen [User Portal]', () => {
         input: {
           name: string;
           description?: string;
-          startAt: string;
-          endAt: string;
+          startDate: string;
+          endDate: string;
           organizationId: string;
           allDay: boolean;
           location?: string;
@@ -942,7 +934,7 @@ describe('Testing Events Screen [User Portal]', () => {
           input.isPublic === false &&
           input.isRegisterable === true &&
           input.isInviteOnly === true &&
-          isExclusiveEndDate(input.startAt, input.endAt)
+          isExclusiveEndDate(input.startDate, input.endDate)
         );
       },
       result: {
@@ -1879,8 +1871,8 @@ describe('Testing Events Screen [User Portal]', () => {
         input: {
           name: string;
           description?: string;
-          startAt: string;
-          endAt: string;
+          startDate: string;
+          endDate: string;
           organizationId: string;
           allDay: boolean;
           location?: string;
@@ -1906,7 +1898,7 @@ describe('Testing Events Screen [User Portal]', () => {
           input.isPublic === false &&
           input.isRegisterable === true &&
           input.isInviteOnly === true &&
-          isExclusiveEndDate(input.startAt, input.endAt) &&
+          isExclusiveEndDate(input.startDate, input.endDate) &&
           input.recurrence &&
           input.recurrence.frequency === Frequency.WEEKLY &&
           input.recurrence.interval === 1 &&
@@ -2231,8 +2223,8 @@ describe('Testing Events Screen [User Portal]', () => {
           input: {
             name: 'Unique Error Event',
             description: 'Error Description',
-            startAt: allDayStartAt,
-            endAt: allDayEndAt,
+            startDate: allDayStartDate,
+            endDate: allDayEndDate,
             organizationId: 'org123',
             allDay: true,
             location: 'Error Location',
