@@ -1,11 +1,15 @@
+import type {
+  InterfaceEvent,
+  InterfaceIOrgList,
+  InterfaceOrgForEventFilter,
+} from './interface';
+import { UserRole } from './interface';
+
 export interface InterfaceHoliday {
   name: string;
   date: string; // Format: MM-DD
   month: string;
 }
-
-import type { InterfaceEvent, InterfaceIOrgList } from './interface';
-import { UserRole } from './interface';
 
 export const holidays: InterfaceHoliday[] = [
   { name: 'May Day / Labour Day', date: '05-01', month: 'May' },
@@ -31,7 +35,7 @@ export const weekdays: string[] = [
 
 export function filterEvents(
   eventData: InterfaceEvent[],
-  orgData?: InterfaceIOrgList,
+  orgData?: InterfaceIOrgList | InterfaceOrgForEventFilter,
   userRole?: string,
   userId?: string,
 ): InterfaceEvent[] {
@@ -62,9 +66,17 @@ export function filterEvents(
       return isCreator || isAttendee;
     }
 
-    const isMember =
-      orgData?.members?.edges?.some((edge) => edge.node.id === userId) ?? false;
+    // Org-member visibility: show if user is in org's members list.
+    // When orgData has no members (e.g. User Portal uses ORGANIZATIONS_LIST_BASIC),
+    // trust the backend: it already returned only events the user may see.
+    const hasMembersData =
+      Array.isArray(orgData?.members?.edges) &&
+      orgData.members.edges.length > 0;
+    const isMember = hasMembersData
+      ? (orgData?.members?.edges?.some((edge) => edge.node.id === userId) ??
+        false)
+      : true;
 
-    return isMember || false;
+    return isMember;
   });
 }
