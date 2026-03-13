@@ -1,17 +1,20 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { OAuthSection } from './OAuthSection';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 
-const mockOAuthProviders = vi.hoisted(() => ({
-  GOOGLE: { enabled: true },
-  GITHUB: { enabled: true },
-}));
+const mockOAuthProviders = vi.hoisted(
+  () =>
+    ({
+      GOOGLE: { enabled: true },
+      GITHUB: { enabled: true },
+    }) as Record<string, { enabled: boolean }>,
+);
 
 // Mock child OAuth buttons to keep this a unit test
 vi.mock('../OAuthButton/GoogleOAuthButton', () => ({
   default: ({ mode }: { mode: string }) => (
-    <button data-testid="google-oauth-button" data-mode={mode}>
+    <button data-testid="google-oauth-button" data-mode={mode} type="button">
       Google
     </button>
   ),
@@ -19,7 +22,7 @@ vi.mock('../OAuthButton/GoogleOAuthButton', () => ({
 
 vi.mock('../OAuthButton/GitHubOAuthButton', () => ({
   default: ({ mode }: { mode: string }) => (
-    <button data-testid="github-oauth-button" data-mode={mode}>
+    <button data-testid="github-oauth-button" data-mode={mode} type="button">
       GitHub
     </button>
   ),
@@ -45,7 +48,9 @@ vi.mock('./OAuthSection.module.css', () => ({
 afterEach(() => {
   mockOAuthProviders.GOOGLE.enabled = true;
   mockOAuthProviders.GITHUB.enabled = true;
-  vi.clearAllMocks();
+  delete mockOAuthProviders.UNKNOWN;
+  vi.restoreAllMocks();
+  cleanup();
 });
 
 describe('OAuthSection', () => {
@@ -106,6 +111,17 @@ describe('OAuthSection', () => {
 
     expect(container).toBeEmptyDOMElement();
     expect(screen.queryByText('OR')).not.toBeInTheDocument();
+  });
+
+  it('ignores enabled providers without a matching button component', () => {
+    mockOAuthProviders.UNKNOWN = { enabled: true };
+
+    const { container } = render(<OAuthSection mode="login" />);
+
+    expect(screen.getAllByRole('button')).toHaveLength(2);
+    expect(screen.getByTestId('google-oauth-button')).toBeInTheDocument();
+    expect(screen.getByTestId('github-oauth-button')).toBeInTheDocument();
+    expect(container.querySelector('.oauthRow')?.children).toHaveLength(2);
   });
 
   // Mode forwarding — login

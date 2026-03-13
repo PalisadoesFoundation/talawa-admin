@@ -4,6 +4,7 @@ import type { OAuthMode } from '../OAuthButton/OAuthButton';
 import { OAUTH_PROVIDERS } from 'config/oauthProviders';
 import styles from './OAuthSection.module.css';
 import { useTranslation } from 'react-i18next';
+import type { ComponentType } from 'react';
 
 /**
  * Props for the OAuthSection component.
@@ -26,14 +27,21 @@ type Props = {
  * <OAuthSection mode="login" />
  * ```
  */
+const providerButtonComponents: Partial<
+  Record<keyof typeof OAUTH_PROVIDERS, ComponentType<{ mode: OAuthMode }>>
+> = {
+  GOOGLE: GoogleOAuthButton,
+  GITHUB: GitHubOAuthButton,
+};
+
 export const OAuthSection = ({ mode }: Props) => {
   const { t: tCommon } = useTranslation('common');
 
-  const isGoogleEnabled = OAUTH_PROVIDERS.GOOGLE.enabled !== false;
-  const isGitHubEnabled = OAUTH_PROVIDERS.GITHUB.enabled !== false;
-  const hasAnyEnabledProvider = isGoogleEnabled || isGitHubEnabled;
+  const enabledProviders = Object.entries(OAUTH_PROVIDERS).filter(
+    ([, config]) => config.enabled !== false,
+  );
 
-  if (!hasAnyEnabledProvider) {
+  if (enabledProviders.length === 0) {
     return null;
   }
 
@@ -41,8 +49,16 @@ export const OAuthSection = ({ mode }: Props) => {
     <div>
       <div className={styles.divider}>{tCommon('OR')}</div>
       <div className={styles.oauthRow}>
-        {isGoogleEnabled && <GoogleOAuthButton mode={mode} />}
-        {isGitHubEnabled && <GitHubOAuthButton mode={mode} />}
+        {enabledProviders.map(([providerKey]) => {
+          const ProviderButton =
+            providerButtonComponents[
+              providerKey as keyof typeof providerButtonComponents
+            ];
+
+          return ProviderButton ? (
+            <ProviderButton key={providerKey} mode={mode} />
+          ) : null;
+        })}
       </div>
     </div>
   );
