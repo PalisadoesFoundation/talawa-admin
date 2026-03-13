@@ -1,6 +1,6 @@
-import GoogleOAuthButton from '../OAuthButton/GoogleOAuthButton';
-import GitHubOAuthButton from '../OAuthButton/GitHubOAuthButton';
-import type { OAuthMode } from '../OAuthButton/OAuthButton';
+import GoogleOAuthButton from 'components/Auth/OAuthButton/GoogleOAuthButton';
+import GitHubOAuthButton from 'components/Auth/OAuthButton/GitHubOAuthButton';
+import type { OAuthMode } from 'components/Auth/OAuthButton/OAuthButton';
 import { OAUTH_PROVIDERS } from 'config/oauthProviders';
 import styles from './OAuthSection.module.css';
 import { useTranslation } from 'react-i18next';
