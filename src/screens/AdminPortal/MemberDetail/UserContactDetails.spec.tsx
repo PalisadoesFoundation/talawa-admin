@@ -2066,5 +2066,236 @@ describe('MemberDetail', () => {
 
       objectUrlSpy.mockRestore();
     });
+
+    test('resolves currentId from id prop when no route params (L98 id prop branch)', async () => {
+      // Pass id directly as a prop - tests the `id` path in L98
+      render(
+        <MockedProvider mocks={MOCKS1} addTypename={false}>
+          <MemoryRouter initialEntries={['/some/path']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Routes>
+                  <Route
+                    path="/some/path"
+                    element={<MemberDetail id="456" />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      await waitForLoadingComplete();
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      expect(nameInput).toBeInTheDocument();
+      expect(nameInput.value).toBeTruthy();
+    });
+
+    test('resolvedUserId is empty when all id sources are null (L98 empty fallback, L267 falsy branch)', async () => {
+      // Override mockGetItem so both 'id' and 'userId' return null
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'sidebar') return 'false';
+        return null;
+      });
+
+      const EMPTY_ID_MOCKS = [
+        {
+          request: {
+            query: GET_USER_BY_ID,
+            variables: {
+              input: {
+                id: '',
+              },
+            },
+          },
+          result: {
+            data: {
+              user: {
+                ...MOCKS1[0].result.data.user,
+                id: '',
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: UPDATE_USER_MUTATION,
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              updateUser: {
+                ...MOCKS1[0].result.data.user,
+                id: '',
+                name: 'EmptyIdTest',
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_USER_BY_ID,
+            variables: {
+              input: {
+                id: '',
+              },
+            },
+          },
+          result: {
+            data: {
+              user: {
+                ...MOCKS1[0].result.data.user,
+                id: '',
+                name: 'EmptyIdTest',
+              },
+            },
+          },
+        },
+      ];
+
+      // Render without route params and no id prop → resolvedUserId = ''
+      render(
+        <MockedProvider link={createLink(EMPTY_ID_MOCKS)} addTypename={false}>
+          <MemoryRouter initialEntries={['/profile']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Routes>
+                  <Route path="/profile" element={<MemberDetail />} />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      await waitForLoadingComplete();
+
+      // Type in name field to enable save
+      const nameInput = screen.getByTestId('inputName');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'EmptyIdTest');
+
+      // Save - triggers handleUserUpdate where resolvedUserId is ''
+      // L267: ...(resolvedUserId ? { id: resolvedUserId } : {}) → spreads {}
+      const saveButton = screen.getByTestId('saveChangesBtn');
+      await user.click(saveButton);
+
+      await waitFor(
+        () => {
+          expect(mockToast.success).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+
+      // Restore default mock
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'id') return '456';
+        if (key === 'sidebar') return 'false';
+        return null;
+      });
+    });
+
+    test('handles mutation returning no data (L281 falsy branch)', async () => {
+      const NO_DATA_UPDATE_MOCKS = [
+        {
+          request: {
+            query: GET_USER_BY_ID,
+            variables: {
+              input: {
+                id: '456',
+              },
+            },
+          },
+          result: {
+            data: {
+              user: {
+                ...MOCKS1[0].result.data.user,
+                id: '456',
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: UPDATE_USER_MUTATION,
+          },
+          variableMatcher: () => true,
+          result: {
+            data: null as Record<string, unknown> | null,
+          },
+        },
+      ];
+
+      renderMemberDetailScreen(createLink(NO_DATA_UPDATE_MOCKS));
+      await waitForLoadingComplete();
+
+      const nameInput = screen.getByTestId('inputName');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'NoDataResponse');
+
+      const saveButton = screen.getByTestId('saveChangesBtn');
+      await user.click(saveButton);
+
+      // Wait for mutation to complete, then verify success toast was NOT called
+      // L281: if (updateData) → false, so no success notification
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByTestId('saveChangesBtn'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+      expect(mockToast.success).not.toHaveBeenCalled();
+    });
+
+    test('resetChanges when data.user is null (L300 falsy branch)', async () => {
+      const NULL_USER_MOCKS = [
+        {
+          request: {
+            query: GET_USER_BY_ID,
+            variables: {
+              input: {
+                id: '456',
+              },
+            },
+          },
+          result: {
+            data: {
+              user: null,
+            },
+          },
+        },
+      ];
+
+      renderMemberDetailScreen(createLink(NULL_USER_MOCKS));
+
+      // Wait for loading to finish (user is null, but component still renders)
+      await waitFor(
+        () =>
+          expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
+        { timeout: 3000 },
+      );
+
+      // Type in name field to trigger isUpdated = true
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      await user.type(nameInput, 'SomeName');
+
+      // Reset button should appear since isUpdated is true
+      const resetButton = screen.getByTestId('resetChangesBtn');
+      await user.click(resetButton);
+
+      // L300: if (data?.user) → false → setFormState is NOT called
+      // The form should just clear isUpdated without restoring from data.user
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByTestId('resetChangesBtn'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+    });
   });
 });
