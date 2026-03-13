@@ -26,7 +26,7 @@
  * ```
  */
 
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
 import styles from './PaginationControl.module.css';
@@ -45,7 +45,7 @@ const DEFAULT_PAGE_SIZE_OPTIONS = [10, 25, 50, 100];
  * @param onPageChange - Called with the new page number when navigation occurs.
  * @param onPageSizeChange - Called with the new page size when the selector changes.
  * @param disabled - Disables all controls (e.g. during a loading state).
- * @returns JSX.Element
+ * @returns React.JSX.Element
  */
 export function PaginationControl({
   currentPage,
@@ -61,7 +61,7 @@ export function PaginationControl({
 }: IPaginationControlProps & {
   enableJumpToPage?: boolean;
   onJumpToPage?: (page: number) => void;
-}): JSX.Element {
+}): React.JSX.Element {
   const { t: tCommon } = useTranslation('common');
   const paginationRef = useRef<HTMLDivElement>(null);
 
@@ -69,6 +69,14 @@ export function PaginationControl({
   const safeTotalPages = Math.max(1, totalPages);
   const safePage = Math.min(Math.max(1, currentPage), safeTotalPages);
   const safeTotalItems = Math.max(0, totalItems);
+
+  // Local state for the jump-to-page input string
+  const [jumpInput, setJumpInput] = useState(safePage.toString());
+
+  // Sync input state when parent-driven page changes occur
+  useEffect(() => {
+    setJumpInput(safePage.toString());
+  }, [safePage]);
 
   const canPrev = safePage > 1;
   const canNext = safePage < safeTotalPages;
@@ -104,7 +112,7 @@ export function PaginationControl({
     if (e.type === 'keydown' && (e as React.KeyboardEvent).key !== 'Enter')
       return;
 
-    const value = parseInt((e.target as HTMLInputElement).value, 10);
+    const value = parseInt(jumpInput, 10);
     if (!isNaN(value)) {
       const clampedValue = Math.min(Math.max(1, value), safeTotalPages);
       if (onJumpToPage) {
@@ -112,6 +120,11 @@ export function PaginationControl({
       } else {
         goTo(clampedValue);
       }
+      // Sync state with clamped value to ensure visibility matches action
+      setJumpInput(clampedValue.toString());
+    } else {
+      // Revert to current page on invalid input
+      setJumpInput(safePage.toString());
     }
   };
 
@@ -221,7 +234,8 @@ export function PaginationControl({
             min={1}
             max={safeTotalPages}
             className={`${styles.pageSizeSelect} ${styles.jumpToPageInput}`}
-            defaultValue={safePage}
+            value={jumpInput}
+            onChange={(e) => setJumpInput(e.target.value)}
             disabled={disabled}
             onBlur={handleJumpToPage}
             onKeyDown={handleJumpToPage}

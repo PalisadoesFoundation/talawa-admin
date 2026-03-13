@@ -245,6 +245,7 @@
   "paginationPageOf": "Página {{page}} de {{total}}",
   "paginationRowsPerPage": "Filas por página",
   "paginationShowing": "Mostrando {{start}}–{{end}} de {{total}}",
+  "jumpToPage": "Ir a la página",
   "closeModal": "Cerrar modal",
   "errorLoadingUsers": "Error al cargar usuarios",
   "noUsersFound": "No se encontraron usuarios",

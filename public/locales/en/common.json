@@ -248,6 +248,7 @@
   "paginationPageOf": "Page {{page}} of {{total}}",
   "paginationRowsPerPage": "Rows per page",
   "paginationShowing": "Showing {{start}}–{{end}} of {{total}}",
+  "jumpToPage": "Jump to page",
   "closeModal": "Close modal",
   "errorLoadingUsers": "Error loading users",
   "noUsersFound": "No users found",

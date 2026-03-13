@@ -242,6 +242,7 @@
   "paginationPageOf": "第 {{page}} 页，共 {{total}} 页",
   "paginationRowsPerPage": "每页行数",
   "paginationShowing": "显示第 {{start}}–{{end}} 条，共 {{total}} 条",
+  "jumpToPage": "跳转至页面",
   "closeModal": "关闭弹窗",
   "errorLoadingUsers": "加载用户出错",
   "noUsersFound": "未找到用户",

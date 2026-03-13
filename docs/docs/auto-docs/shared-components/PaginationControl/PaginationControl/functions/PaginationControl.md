@@ -22,4 +22,4 @@ Current active page (1-indexed).
 
 `Element`
 
-JSX.Element
+React.JSX.Element

@@ -242,6 +242,7 @@
   "paginationPageOf": "पृष्ठ {{page}} / {{total}}",
   "paginationRowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
   "paginationShowing": "{{start}}–{{end}} / {{total}} दिखाया जा रहा है",
+  "jumpToPage": "पृष्ठ पर जाएँ",
   "closeModal": "मोडल बंद करें",
   "errorLoadingUsers": "उपयोगकर्ताओं को लोड करने में त्रुटि",
   "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",

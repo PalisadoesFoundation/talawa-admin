@@ -247,6 +247,7 @@
   "paginationPageOf": "Page {{page}} sur {{total}}",
   "paginationRowsPerPage": "Lignes par page",
   "paginationShowing": "Affichage de {{start}}–{{end}} sur {{total}}",
+  "jumpToPage": "Aller à la page",
   "closeModal": "Fermer la fenêtre modale",
   "errorLoadingUsers": "Erreur de chargement des utilisateurs",
   "noUsersFound": "Aucun utilisateur trouvé",

@@ -19,6 +19,7 @@ vi.mock('react-i18next', () => ({
         paginationLast: '»',
         paginationRowsPerPage: 'Rows per page',
         paginationShowing: `Showing ${opts?.start}–${opts?.end} of ${opts?.total}`,
+        jumpToPage: 'Jump to page',
       };
       return map[key] ?? key;
     },
@@ -233,6 +234,116 @@ describe('PaginationControl', () => {
         'Rows per page',
       ) as HTMLSelectElement;
       expect(select.value).toBe('25');
+    });
+  });
+
+  describe('Jump to page', () => {
+    it('renders the jump-to-page input when enableJumpToPage is true', () => {
+      render(<PaginationControl {...defaultProps} enableJumpToPage />);
+      expect(screen.getByLabelText('Jump to page')).toBeInTheDocument();
+      expect(screen.getByTestId('pagination-jump')).toHaveValue(2);
+    });
+
+    it('calls onJumpToPage with clamped value when Enter is pressed', async () => {
+      const user = userEvent.setup();
+      const onJumpToPage = vi.fn();
+      render(
+        <PaginationControl
+          {...defaultProps}
+          enableJumpToPage
+          onJumpToPage={onJumpToPage}
+        />,
+      );
+
+      const input = screen.getByTestId('pagination-jump');
+      await user.clear(input);
+      await user.type(input, '4{Enter}');
+
+      await waitFor(() => {
+        expect(onJumpToPage).toHaveBeenCalledWith(4);
+      });
+    });
+
+    it('calls onJumpToPage with clamped value on blur', async () => {
+      const user = userEvent.setup();
+      const onJumpToPage = vi.fn();
+      render(
+        <PaginationControl
+          {...defaultProps}
+          enableJumpToPage
+          onJumpToPage={onJumpToPage}
+          totalPages={10}
+        />,
+      );
+
+      const input = screen.getByTestId('pagination-jump');
+      await user.clear(input);
+      await user.type(input, '15');
+      input.blur(); // Trigger blur
+
+      await waitFor(() => {
+        expect(onJumpToPage).toHaveBeenCalledWith(10);
+      });
+      // Verify input state is also synced back to clamped value
+      expect(input).toHaveValue(10);
+    });
+
+    it('falls back to onPageChange if onJumpToPage is not provided', async () => {
+      const user = userEvent.setup();
+      const onPageChange = vi.fn();
+      render(
+        <PaginationControl
+          {...defaultProps}
+          enableJumpToPage
+          onPageChange={onPageChange}
+        />,
+      );
+
+      const input = screen.getByTestId('pagination-jump');
+      await user.clear(input);
+      await user.type(input, '3{Enter}');
+
+      await waitFor(() => {
+        expect(onPageChange).toHaveBeenCalledWith(3);
+      });
+    });
+
+    it('disables input when disabled prop is true', () => {
+      render(<PaginationControl {...defaultProps} enableJumpToPage disabled />);
+      const input = screen.getByTestId('pagination-jump');
+      expect(input).toBeDisabled();
+    });
+
+    it('reverts to safePage on invalid input', async () => {
+      const user = userEvent.setup();
+      render(<PaginationControl {...defaultProps} enableJumpToPage />);
+
+      const input = screen.getByTestId('pagination-jump');
+      await user.clear(input);
+      await user.type(input, 'abc{Enter}');
+
+      expect(input).toHaveValue(2);
+    });
+
+    it('syncs input value with safePage changes', async () => {
+      const { rerender } = render(
+        <PaginationControl
+          {...defaultProps}
+          enableJumpToPage
+          currentPage={2}
+        />,
+      );
+      const input = screen.getByTestId('pagination-jump');
+      expect(input).toHaveValue(2);
+
+      rerender(
+        <PaginationControl
+          {...defaultProps}
+          enableJumpToPage
+          currentPage={4}
+        />,
+      );
+      expect(input).toHaveValue(4);
     });
   });
 
