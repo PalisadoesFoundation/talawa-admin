@@ -22,7 +22,7 @@ dayjs.extend(customParseFormat);
 
 import {
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
-  ORGANIZATIONS_LIST,
+  ORGANIZATIONS_LIST_BASIC,
 } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -475,11 +475,10 @@ const MOCKS = [
       },
     },
   },
-  // Mock for ORGANIZATIONS_LIST
+  // Mock for ORGANIZATIONS_LIST_BASIC used by Events.tsx to resolve orgData
   {
     request: {
-      query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
+      query: ORGANIZATIONS_LIST_BASIC,
     },
     result: {
       data: {
@@ -495,18 +494,6 @@ const MOCKS = [
             postalCode: '12345',
             countryCode: 'US',
             avatarURL: '',
-            createdAt: dayjs(TEST_DATE).toISOString(),
-            updatedAt: dayjs(TEST_DATE).toISOString(),
-            creator: {
-              id: 'user1',
-              name: 'Creator User',
-              emailAddress: 'creator@test.com',
-            },
-            updater: {
-              id: 'user1',
-              name: 'Creator User',
-              emailAddress: 'creator@test.com',
-            },
           },
         ],
       },
@@ -568,8 +555,7 @@ const ERROR_MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
+      query: ORGANIZATIONS_LIST_BASIC,
     },
     result: {
       data: {
@@ -597,8 +583,7 @@ const RATE_LIMIT_MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
+      query: ORGANIZATIONS_LIST_BASIC,
     },
     result: {
       data: {

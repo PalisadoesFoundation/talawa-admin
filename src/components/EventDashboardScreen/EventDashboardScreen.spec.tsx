@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
@@ -30,6 +30,19 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 let mockID: string | undefined = '123';
+
+// Mock react-i18next to avoid loading Trans (imports Children from react; ESM interop failure in Vitest)
+vi.mock('react-i18next', () => ({
+  I18nextProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  useTranslation: (_ns?: string, opts?: { keyPrefix?: string }) => ({
+    t: (k: string) =>
+      opts?.keyPrefix === 'dashboard' && k === 'title' ? 'Dashboard' : k,
+    i18n: {},
+  }),
+  initReactI18next: { type: '3rdParty', init: vi.fn() },
+}));
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -105,6 +118,7 @@ const clickToggleMenuBtn = async (toggleButton: HTMLElement): Promise<void> => {
 
 describe('EventDashboardScreen Component', () => {
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
   it('does not render main content when orgId is undefined', async () => {
