@@ -2,7 +2,7 @@
  * Screen to verify and accept an event invitation.
  * Verifies a token, shows invite details, and allows the user to accept the invitation.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useMutation } from '@apollo/client';
 import {
@@ -14,6 +14,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
+import type { IInviteMetadata } from './AcceptInvitation.interface';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
@@ -32,20 +33,17 @@ const AcceptInvitation = (): JSX.Element => {
   const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
 
   const [loading, setLoading] = useState(true);
-  type InviteMetadata = {
-    invitationToken: string;
-    inviteeEmailMasked?: string | null;
-    inviteeName?: string | null;
-    status?: string | null;
-    expiresAt?: string | null;
-    eventId?: string | null;
-    recurringEventInstanceId?: string | null;
-    organizationId?: string | null;
-  } | null;
 
-  const [invite, setInvite] = useState<InviteMetadata>(null);
+  const [invite, setInvite] = useState<IInviteMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const run = async () => {
@@ -69,7 +67,7 @@ const AcceptInvitation = (): JSX.Element => {
           },
         });
         if (data && data.verifyEventInvitation) {
-          setInvite(data.verifyEventInvitation as InviteMetadata);
+          setInvite(data.verifyEventInvitation as IInviteMetadata);
         } else {
           setError(
             t('invitationNotFound', {
@@ -132,7 +130,9 @@ const AcceptInvitation = (): JSX.Element => {
           t('acceptError', { defaultValue: 'Could not accept invitation' }),
       );
     } finally {
-      setIsSubmitting(false);
+      if (isMountedRef.current) {
+        setIsSubmitting(false);
+      }
     }
   };
 

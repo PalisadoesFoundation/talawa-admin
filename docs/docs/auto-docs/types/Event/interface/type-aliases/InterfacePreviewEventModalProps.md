@@ -6,4 +6,4 @@
 
 > **InterfacePreviewEventModalProps** = [`IPreviewEventModalProps`](../interfaces/IPreviewEventModalProps.md)
 
-Defined in: [src/types/Event/interface.ts:301](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L301)
+Defined in: [src/types/Event/interface.ts:309](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L309)

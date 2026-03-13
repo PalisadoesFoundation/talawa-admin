@@ -101,6 +101,14 @@ export interface IOrgList {
   };
 }
 
+/** Org shape for event filtering when members may be absent (e.g. User Portal basic org query). */
+export interface InterfaceOrgForEventFilter {
+  id: string;
+  members?: {
+    edges?: Array<{ node: { id: string } }>;
+  };
+}
+
 export interface IStatsModal {
   data: {
     event: {
@@ -114,7 +122,7 @@ export interface IStatsModal {
 export interface ICalendarProps {
   eventData: IEvent[];
   refetchEvents?: () => void;
-  orgData?: IOrgList;
+  orgData?: IOrgList | InterfaceOrgForEventFilter;
   userRole?: string;
   userId?: string;
   viewType?: ViewType;
