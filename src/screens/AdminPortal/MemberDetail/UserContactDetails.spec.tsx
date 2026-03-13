@@ -663,13 +663,18 @@ const createLink = (mocks: ReadonlyArray<MockedResponse>) =>
 
 let user: ReturnType<typeof userEvent.setup>;
 
-const { mockToast } = vi.hoisted(() => ({
+const { mockToast, mockGetItem } = vi.hoisted(() => ({
   mockToast: {
     success: vi.fn(),
     error: vi.fn(),
     warning: vi.fn(),
     info: vi.fn(),
   },
+  mockGetItem: vi.fn((key: string) => {
+    if (key === 'id') return '456';
+    if (key === 'sidebar') return 'false';
+    return null;
+  }),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -791,11 +796,7 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
 
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
-    getItem: (key: string) => {
-      if (key === 'id') return '456';
-      if (key === 'sidebar') return 'false';
-      return null;
-    },
+    getItem: mockGetItem,
     setItem: vi.fn(),
     removeItem: vi.fn(),
     clearAllItems: vi.fn(),
@@ -1775,7 +1776,7 @@ describe('MemberDetail', () => {
       objectUrlSpy.mockRestore();
     });
 
-    test('resolves currentId from storedUserId fallback (L96/98)', async () => {
+    test('resolves currentId from storedUserId fallback via getItem(id) (L96/98)', async () => {
       // Render without route params - the component should fallback to
       // getItem('id') which returns '456' from our mock
       render(
@@ -1791,6 +1792,151 @@ describe('MemberDetail', () => {
       // Verify component loaded successfully with the stored userId
       const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
       expect(nameInput).toBeInTheDocument();
+    });
+
+    test('falls back to getItem(userId) when getItem(id) is null (L96)', async () => {
+      // Override mock so getItem('id') returns null, forcing fallback to getItem('userId')
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'userId') return '456';
+        if (key === 'sidebar') return 'false';
+        return null;
+      });
+
+      render(
+        <MockedProvider mocks={MOCKS1} addTypename={false}>
+          <BrowserRouter>
+            <MemberDetail />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitForLoadingComplete();
+
+      // Verify component loaded successfully using the userId fallback
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      expect(nameInput).toBeInTheDocument();
+
+      // Restore default mock behavior
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'id') return '456';
+        if (key === 'sidebar') return 'false';
+        return null;
+      });
+    });
+
+    test('resolves currentId from location.state.id (L98)', async () => {
+      // Render with location.state.id - component should use this first
+      render(
+        <MockedProvider mocks={MOCKS1} addTypename={false}>
+          <MemoryRouter
+            initialEntries={[
+              {
+                pathname: '/user/settings/profile',
+                state: { id: '456' },
+              },
+            ]}
+          >
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Routes>
+                  <Route
+                    path="/user/settings/profile"
+                    element={<MemberDetail />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      await waitForLoadingComplete();
+
+      // Component should load successfully using location.state.id
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      expect(nameInput).toBeInTheDocument();
+    });
+
+    test('resolvedUserId is included as id in mutation input (L267)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      await waitForLoadingComplete();
+
+      const nameInput = screen.getByTestId('inputName');
+      await user.clear(nameInput);
+      await user.type(nameInput, 'TestIdInMutation');
+
+      const saveButton = screen.getByTestId('saveChangesBtn');
+      await user.click(saveButton);
+
+      // L281: updateData is truthy -> success toast fires
+      await waitFor(
+        () => {
+          expect(mockToast.success).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('resetChanges restores form to data.user values (L300)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      await waitForLoadingComplete();
+
+      // Get original values from loaded data
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      const descInput = screen.getByTestId(
+        'inputDescription',
+      ) as HTMLInputElement;
+      const originalName = nameInput.value;
+      const originalDesc = descInput.value;
+
+      // Make changes to multiple fields
+      await user.clear(nameInput);
+      await user.type(nameInput, 'ChangedForReset');
+      await user.clear(descInput);
+      await user.type(descInput, 'ChangedDesc');
+
+      // Click reset - this triggers resetChanges() which checks if (data?.user) on L300
+      const resetButton = screen.getByTestId('resetChangesBtn');
+      await user.click(resetButton);
+
+      // L300: data.user exists -> form state is restored from data.user
+      await waitFor(
+        () => {
+          expect(nameInput).toHaveValue(originalName);
+          expect(descInput).toHaveValue(originalDesc);
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('finally block resets input after successful upload (L211)', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      const objectUrlSpy = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockReturnValue('blob:finally-test');
+
+      await waitForLoadingComplete();
+
+      const file = new File(['img'], 'photo.png', { type: 'image/png' });
+      const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+      await user.upload(fileInput, file);
+
+      // Wait for the upload to complete
+      await waitFor(
+        () => {
+          expect(mockUploadFileToMinio).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+
+      // L211: if (inputElement) inputElement.value = '' in finally block
+      expect(fileInput.value).toBe('');
+
+      // Verify save button appeared (from setisUpdated(true))
+      expect(screen.getByTestId('saveChangesBtn')).toBeInTheDocument();
+
+      objectUrlSpy.mockRestore();
     });
 
     test('removeEmptyFields filters out empty and whitespace-only strings (L231)', async () => {
