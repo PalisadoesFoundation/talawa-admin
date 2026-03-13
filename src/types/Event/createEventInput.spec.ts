@@ -2,13 +2,13 @@ import { describe, expect, it } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { mapCreateEventInputToMutationInput } from './createEventInput';
-import type { ICreateEventInput } from './interface';
+import type { IEventFormInput } from './interface';
 
 dayjs.extend(utc);
 
 describe('mapCreateEventInputToMutationInput', () => {
   const baseInput: Omit<
-    ICreateEventInput,
+    IEventFormInput,
     | 'name'
     | 'organizationId'
     | 'allDay'
@@ -34,7 +34,7 @@ describe('mapCreateEventInputToMutationInput', () => {
   it('maps timestamp-based input directly', () => {
     const fixedStartMs = Date.UTC(2026, 2, 13, 10, 0, 0);
     const fixedEndMs = Date.UTC(2026, 2, 13, 11, 0, 0);
-    const input: ICreateEventInput = {
+    const input: IEventFormInput = {
       ...baseInput,
       allDay: false,
       startAt: dayjs.utc(fixedStartMs).toISOString(),
@@ -52,7 +52,7 @@ describe('mapCreateEventInputToMutationInput', () => {
     const startDate = dayjs().add(30, 'days').format('YYYY-MM-DD');
     const endDate = dayjs(startDate).add(1, 'day').format('YYYY-MM-DD');
 
-    const input: ICreateEventInput = {
+    const input: IEventFormInput = {
       ...baseInput,
       allDay: true,
       startDate,
@@ -74,7 +74,7 @@ describe('mapCreateEventInputToMutationInput', () => {
   });
 
   it('throws when organizationId is missing', () => {
-    const input: ICreateEventInput = {
+    const input: IEventFormInput = {
       ...baseInput,
       organizationId: undefined,
       startAt: dayjs.utc(Date.UTC(2026, 2, 13, 10, 0, 0)).toISOString(),
@@ -87,7 +87,7 @@ describe('mapCreateEventInputToMutationInput', () => {
   });
 
   it('throws when neither timestamps nor date-only values are provided', () => {
-    const input: ICreateEventInput = {
+    const input: IEventFormInput = {
       ...baseInput,
     };
 

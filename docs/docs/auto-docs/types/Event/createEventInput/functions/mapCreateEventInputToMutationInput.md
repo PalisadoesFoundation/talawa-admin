@@ -20,7 +20,7 @@ For date-only payloads, `endDate` is treated as an exclusive date when present.
 
 ### input
 
-[`ICreateEventInput`](../../interface/interfaces/ICreateEventInput.md)
+[`IEventFormInput`](../../interface/interfaces/IEventFormInput.md)
 
 ## Returns
 

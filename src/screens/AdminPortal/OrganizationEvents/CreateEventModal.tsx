@@ -11,7 +11,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
-import type { ICreateEventInput } from 'types/Event/interface';
+import type { IEventFormInput } from 'types/Event/interface';
 import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
@@ -112,7 +112,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
       // Build input object with shared typed interface
       // All-day events: use startDate/endDate (YYYY-MM-DD strings)
       // Timed events: use startAt/endAt (ISO timestamps)
-      const input: ICreateEventInput = {
+      const input: IEventFormInput = {
         name: payload.name,
         ...(payload.allDay
           ? {

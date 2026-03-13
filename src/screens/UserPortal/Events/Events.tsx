@@ -68,7 +68,7 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
+import type { IEventEdge, IEventFormInput } from 'types/Event/interface';
 import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import styles from './Events.module.css';
 import EventForm, {
@@ -205,7 +205,7 @@ export default function Events(): JSX.Element {
       // Build input object with shared typed interface
       // All-day events: use startDate/endDate (YYYY-MM-DD strings)
       // Timed events: use startAt/endAt (ISO timestamps)
-      const input: ICreateEventInput = {
+      const input: IEventFormInput = {
         name: payload.name,
         ...(payload.allDay
           ? {

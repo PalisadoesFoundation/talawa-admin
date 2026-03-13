@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import type { ICreateEventInput, IMutationCreateEventInput } from './interface';
+import type { IEventFormInput, IMutationCreateEventInput } from './interface';
 
 dayjs.extend(utc);
 
@@ -23,7 +23,7 @@ const ensureValidTimestamp = (value: string, fieldName: string): string => {
  * For date-only payloads, `endDate` is treated as an exclusive date when present.
  */
 export const mapCreateEventInputToMutationInput = (
-  input: ICreateEventInput,
+  input: IEventFormInput,
 ): IMutationCreateEventInput => {
   if (!input.organizationId || input.organizationId.trim() === '') {
     throw new Error('organizationId is required to create an event.');

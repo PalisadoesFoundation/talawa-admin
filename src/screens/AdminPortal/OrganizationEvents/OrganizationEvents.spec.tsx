@@ -105,7 +105,10 @@ Object.defineProperty(window, 'location', {
   },
 });
 
-const defaultLink = new StaticMockLink(MOCKS, true);
+const defaultLink = new StaticMockLink(
+  MOCKS.map((mock) => ({ ...mock, variableMatcher: () => true })),
+  true,
+);
 
 async function wait(ms = 0): Promise<void> {
   await act(
@@ -201,6 +204,30 @@ vi.mock('./CreateEventModal', () => ({
         >
           Create Event Success
         </button>
+      </div>
+    );
+  },
+}));
+
+vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
+  __esModule: true,
+  default: ({
+    eventData,
+    onMonthChange,
+  }: {
+    eventData?: unknown[];
+    onMonthChange?: (month: number, year: number) => void;
+  }) => {
+    return (
+      <div>
+        <button
+          type="button"
+          data-testid="nextmonthordate"
+          onClick={() => onMonthChange?.(1, 2023)}
+        />
+        <pre data-testid="event-data-json">
+          {JSON.stringify(eventData ?? [])}
+        </pre>
       </div>
     );
   },
@@ -1288,6 +1315,33 @@ describe('Organisation Events Page', () => {
 
     // Verify current page breadcrumb (events) has aria-current
     expect(screen.getByText('events')).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('correctly sets startTime and endTime for events', async () => {
+    renderWithLink(defaultLink);
+
+    await waitFor(() => {
+      const jsonPre = screen.getByTestId('event-data-json');
+      const parsedEvents = JSON.parse(jsonPre.textContent || '[]');
+
+      expect(parsedEvents).toBeInstanceOf(Array);
+      expect(parsedEvents.length).toBe(3);
+
+      // Event 1: Timed event (allDay: false)
+      expect(parsedEvents[0].startTime).toBe('09:00:00');
+      expect(parsedEvents[0].endTime).toBe('17:00:00');
+      expect(parsedEvents[0].allDay).toBe(false);
+
+      // Event 2: All day event (allDay: true)
+      expect(parsedEvents[1].startTime).toBeNull();
+      expect(parsedEvents[1].endTime).toBeNull();
+      expect(parsedEvents[1].allDay).toBe(true);
+
+      // Event 3: Timed event (allDay: false)
+      expect(parsedEvents[2].startTime).toBe('14:30:00');
+      expect(parsedEvents[2].endTime).toBe('16:30:00');
+      expect(parsedEvents[2].allDay).toBe(false);
+    });
   });
 });
 

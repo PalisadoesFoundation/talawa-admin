@@ -268,13 +268,13 @@ export interface IEventEdge {
 }
 
 /**
- * Input interface for creating events via CREATE_EVENT_MUTATION.
- * Used by both Admin Portal (CreateEventModal) and User Portal (Events).
+ * UI/form-friendly input for event creation.
  *
- * Note: The recurrence property type matches the return type of
- * formatRecurrenceForPayload from EventForm.tsx
+ * This model may contain date-only fields (`startDate`, `endDate`) for all-day
+ * workflows and is intentionally mapped to GraphQL's strict mutation input via
+ * `mapCreateEventInputToMutationInput` before calling `CreateEvent`.
  */
-export interface ICreateEventInput {
+export interface IEventFormInput {
   name: string;
   startAt?: string;
   endAt?: string;
@@ -297,6 +297,12 @@ export interface ICreateEventInput {
       })
     | null;
 }
+
+/**
+ * @deprecated Use `IEventFormInput` for UI data and map it using
+ * `mapCreateEventInputToMutationInput` before mutations.
+ */
+export type ICreateEventInput = IEventFormInput;
 
 /**
  * Strict input shape accepted by `MutationCreateEventInput` in GraphQL.

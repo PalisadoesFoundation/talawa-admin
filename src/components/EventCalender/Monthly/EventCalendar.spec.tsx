@@ -23,12 +23,22 @@ import { eventData, MOCKS } from '../EventCalenderMocks';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 
+vi.mock('shared-components/EventListCard/EventListCard', () => {
+  return {
+    __esModule: true,
+    default: (props: { name?: string }) => (
+      <div data-testid="event-list-card">{props.name}</div>
+    ),
+  };
+});
+
 const link = new StaticMockLink(MOCKS, true);
 
 const FIXED_EVENT_START_MS = Date.UTC(2025, 0, 1, 10, 0, 0);
 const FIXED_EVENT_END_MS = Date.UTC(2025, 0, 1, 12, 0, 0);
 const FIXED_EVENT_START_ISO = dayjs.utc(FIXED_EVENT_START_MS).toISOString();
 const FIXED_EVENT_END_ISO = dayjs.utc(FIXED_EVENT_END_MS).toISOString();
+const FIXED_ALL_DAY_TEST_MS = Date.UTC(2025, 0, 15, 0, 0, 0);
 
 const { mockHolidays } = vi.hoisted(() => {
   return {
@@ -544,9 +554,8 @@ describe('Calendar', () => {
     expect(viewAllButtons.length).toBeGreaterThan(0);
     await userEvent.click(viewAllButtons[0]);
 
-    // Ensure Event 5 is not shown yet if collapsed by default
-    const event5 = screen.queryByText('Event 5');
-    expect(event5).toBeNull();
+    // After expanding, later events should be visible
+    expect(screen.getByText('Event 5')).toBeInTheDocument();
 
     const viewLessButtons = screen.getAllByText('View Less');
     expect(viewLessButtons.length).toBeGreaterThan(0);
@@ -625,18 +634,20 @@ describe('Calendar', () => {
   });
 
   it('shows all-day event in day view when startDate matches current date', () => {
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
-    const todayDateString = dayjs(now).format('YYYY-MM-DD');
+    const fixedNow = dayjs.utc(FIXED_ALL_DAY_TEST_MS);
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow.toDate());
+    const currentMonth = fixedNow.month();
+    const currentYear = fixedNow.year();
+    const todayDateString = fixedNow.format('YYYY-MM-DD');
 
     const allDayEventOnCurrentDay: InterfaceEvent[] = [
       {
         id: 'all-day-day-view',
         name: 'All Day Day View Event',
         description: 'All day event shown in day view',
-        startAt: null,
-        endAt: null,
+        startAt: fixedNow.hour(10).toISOString(),
+        endAt: fixedNow.hour(12).toISOString(),
         startDate: todayDateString,
         endDate: todayDateString,
         location: 'Anywhere',
@@ -651,36 +662,47 @@ describe('Calendar', () => {
       },
     ];
 
-    render(
-      <Router>
-        <Calendar
-          eventData={allDayEventOnCurrentDay}
-          viewType={ViewType.DAY}
-          userRole={UserRole.ADMINISTRATOR}
-          userId="admin1"
-          onMonthChange={onMonthChange}
-          currentMonth={currentMonth}
-          currentYear={currentYear}
-        />
-      </Router>,
-    );
+    try {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={allDayEventOnCurrentDay}
+                viewType={ViewType.DAY}
+                userRole={UserRole.ADMINISTRATOR}
+                userId="admin1"
+                onMonthChange={onMonthChange}
+                currentMonth={currentMonth}
+                currentYear={currentYear}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
 
-    expect(screen.queryByText('No events available')).not.toBeInTheDocument();
+      expect(screen.queryByText('No events available')).not.toBeInTheDocument();
+      expect(screen.getByText('All Day Day View Event')).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('shows all-day event in month grid when startDate matches the cell date', () => {
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
-    const todayDateString = dayjs(now).format('YYYY-MM-DD');
+    const fixedNow = dayjs.utc(FIXED_ALL_DAY_TEST_MS);
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow.toDate());
+    const currentMonth = fixedNow.month();
+    const currentYear = fixedNow.year();
+    const todayDateString = fixedNow.format('YYYY-MM-DD');
 
     const allDayEventOnMonthCell: InterfaceEvent[] = [
       {
         id: 'all-day-month-view',
         name: 'All Day Month View Event',
         description: 'All day event shown in month view',
-        startAt: null,
-        endAt: null,
+        startAt: fixedNow.hour(10).toISOString(),
+        endAt: fixedNow.hour(12).toISOString(),
         startDate: todayDateString,
         endDate: todayDateString,
         location: 'Anywhere',
@@ -695,26 +717,35 @@ describe('Calendar', () => {
       },
     ];
 
-    render(
-      <Router>
-        <Calendar
-          eventData={allDayEventOnMonthCell}
-          viewType={ViewType.MONTH}
-          userRole={UserRole.ADMINISTRATOR}
-          userId="admin1"
-          onMonthChange={onMonthChange}
-          currentMonth={currentMonth}
-          currentYear={currentYear}
-        />
-      </Router>,
-    );
+    try {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={allDayEventOnMonthCell}
+                viewType={ViewType.MONTH}
+                userRole={UserRole.ADMINISTRATOR}
+                userId="admin1"
+                onMonthChange={onMonthChange}
+                currentMonth={currentMonth}
+                currentYear={currentYear}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
 
-    const dayCells = screen.getAllByTestId('day');
-    const cellsWithEvents = dayCells.filter(
-      (cell) => cell.getAttribute('data-has-events') === 'true',
-    );
+      const dayCells = screen.getAllByTestId('day');
+      const cellsWithEvents = dayCells.filter(
+        (cell) => cell.getAttribute('data-has-events') === 'true',
+      );
 
-    expect(cellsWithEvents.length).toBeGreaterThan(0);
+      expect(cellsWithEvents).toHaveLength(1);
+      expect(screen.getByText('All Day Month View Event')).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('should handle date navigation boundary conditions in day view', async () => {

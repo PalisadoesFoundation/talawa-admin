@@ -4,7 +4,7 @@
 
 # Interface: IMutationCreateEventInput
 
-Defined in: [src/types/Event/interface.ts:307](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L307)
+Defined in: [src/types/Event/interface.ts:313](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L313)
 
 Strict input shape accepted by `MutationCreateEventInput` in GraphQL.
 
@@ -17,7 +17,7 @@ concrete `startAt` and `endAt` timestamps and does not allow date-only fields.
 
 > **allDay**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:312](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L312)
+Defined in: [src/types/Event/interface.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L318)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [src/types/Event/interface.ts:312](https://github.com/PalisadoesFoun
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/Event/interface.ts:320](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L320)
+Defined in: [src/types/Event/interface.ts:326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L326)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [src/types/Event/interface.ts:320](https://github.com/PalisadoesFoun
 
 > **endAt**: `string`
 
-Defined in: [src/types/Event/interface.ts:310](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L310)
+Defined in: [src/types/Event/interface.ts:316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L316)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [src/types/Event/interface.ts:310](https://github.com/PalisadoesFoun
 
 > **isInviteOnly**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L319)
+Defined in: [src/types/Event/interface.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L325)
 
 ***
 
@@ -49,7 +49,7 @@ Defined in: [src/types/Event/interface.ts:319](https://github.com/PalisadoesFoun
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L317)
+Defined in: [src/types/Event/interface.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L323)
 
 Determines if the event is visible to the entire community.
 Often referred to as "Community Visible" in the UI.
@@ -60,7 +60,7 @@ Often referred to as "Community Visible" in the UI.
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L318)
+Defined in: [src/types/Event/interface.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L324)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Event/interface.ts:318](https://github.com/PalisadoesFoun
 
 > `optional` **location**: `string`
 
-Defined in: [src/types/Event/interface.ts:321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L321)
+Defined in: [src/types/Event/interface.ts:327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L327)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Event/interface.ts:321](https://github.com/PalisadoesFoun
 
 > **name**: `string`
 
-Defined in: [src/types/Event/interface.ts:308](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L308)
+Defined in: [src/types/Event/interface.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L314)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/Event/interface.ts:308](https://github.com/PalisadoesFoun
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Event/interface.ts:311](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L311)
+Defined in: [src/types/Event/interface.ts:317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L317)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [src/types/Event/interface.ts:311](https://github.com/PalisadoesFoun
 
 > `optional` **recurrence**: `Omit`\<[`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md), `"endDate"`\> & `object`
 
-Defined in: [src/types/Event/interface.ts:322](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L322)
+Defined in: [src/types/Event/interface.ts:328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L328)
 
 #### Type Declaration
 
@@ -106,4 +106,4 @@ Defined in: [src/types/Event/interface.ts:322](https://github.com/PalisadoesFoun
 
 > **startAt**: `string`
 
-Defined in: [src/types/Event/interface.ts:309](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L309)
+Defined in: [src/types/Event/interface.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L315)

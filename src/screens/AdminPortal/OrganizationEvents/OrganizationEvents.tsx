@@ -163,14 +163,6 @@ function organizationEvents(): JSX.Element {
   const allEvents: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => {
-    console.log('OrganizationEvents: Mapping event from query', {
-      id: edge.node.id,
-      allDay: edge.node.allDay,
-      startDate: edge.node.startDate,
-      endDate: edge.node.endDate,
-      startAt: edge.node.startAt,
-      endAt: edge.node.endAt,
-    });
     return {
       id: edge.node.id,
       name: edge.node.name,

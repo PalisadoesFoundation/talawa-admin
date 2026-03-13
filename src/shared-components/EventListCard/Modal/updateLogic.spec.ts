@@ -900,9 +900,322 @@ describe('useUpdateEventHandler', () => {
       expect(calledInputs.startAt).toBeUndefined();
       expect(calledInputs.endAt).toBe(changedEndAt);
     });
+
+    it('sets only endDate when all-day entire series startDate is unchanged but endDate differs', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
+
+      const stableStartDate = BASE_DATE.add(25, 'days').startOf('day').toDate();
+      const changedEndDate = BASE_DATE.add(26, 'days').startOf('day').toDate();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            allDay: true,
+            startDate: dayjs.utc(stableStartDate).format('YYYY-MM-DD'),
+            endDate: dayjs
+              .utc(changedEndDate)
+              .add(3, 'days')
+              .format('YYYY-MM-DD'),
+          }),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+          allDayChecked: true,
+          eventStartDate: stableStartDate,
+          eventEndDate: changedEndDate,
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.startDate).toBeUndefined();
+      expect(calledInputs.endDate).toBe(
+        dayjs.utc(changedEndDate).add(1, 'day').format('YYYY-MM-DD'),
+      );
+    });
   });
 
   describe('date validation and handling', () => {
+    it('updates only endAt when timed standalone startAt is unchanged but endAt differs', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
+
+      const unchangedStartDate = BASE_DATE.add(5, 'days').toDate();
+      const changedEndDate = BASE_DATE.add(5, 'days').add(4, 'hours').toDate();
+      const unchangedStartAt = dayjs(unchangedStartDate)
+        .hour(10)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
+        .toISOString();
+      const changedEndAt = dayjs(changedEndDate)
+        .hour(14)
+        .minute(30)
+        .second(0)
+        .millisecond(0)
+        .toISOString();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: false,
+            startAt: unchangedStartAt,
+            endAt: dayjs(changedEndDate)
+              .hour(12)
+              .minute(0)
+              .second(0)
+              .millisecond(0)
+              .toISOString(),
+          },
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+            startTime: '10:00:00',
+            endTime: '14:30:00',
+          },
+          allDayChecked: false,
+          eventStartDate: unchangedStartDate,
+          eventEndDate: changedEndDate,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.startAt).toBeUndefined();
+      expect(calledInputs.endAt).toBe(changedEndAt);
+    });
+
+    it('uses startDate/endDate template originals when existing event is all-day with date fields', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
+
+      const nextStartDate = BASE_DATE.add(30, 'days').toDate();
+      const nextEndDate = BASE_DATE.add(31, 'days').toDate();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: true,
+            startDate: dayjs(nextStartDate).format('YYYY-MM-DD'),
+            endDate: dayjs(nextEndDate).format('YYYY-MM-DD'),
+            startAt: null,
+            endAt: null,
+          },
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+            startTime: '09:00:00',
+            endTime: '17:00:00',
+          },
+          allDayChecked: false,
+          eventStartDate: nextStartDate,
+          eventEndDate: nextEndDate,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.startAt).toBe(
+        dayjs(nextStartDate)
+          .hour(9)
+          .minute(0)
+          .second(0)
+          .millisecond(0)
+          .toISOString(),
+      );
+      expect(calledInputs.endAt).toBe(
+        dayjs(nextEndDate)
+          .hour(17)
+          .minute(0)
+          .second(0)
+          .millisecond(0)
+          .toISOString(),
+      );
+    });
+
+    it('falls back to hour 0 when startTime/endTime hour segments are invalid', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
+
+      const targetStartDate = BASE_DATE.add(7, 'days').toDate();
+      const targetEndDate = BASE_DATE.add(7, 'days').add(1, 'hours').toDate();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+            startTime: 'invalid:30:00',
+            endTime: 'oops:45:00',
+          },
+          allDayChecked: false,
+          eventStartDate: targetStartDate,
+          eventEndDate: targetEndDate,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.startAt).toBe(
+        dayjs(targetStartDate)
+          .hour(0)
+          .minute(30)
+          .second(0)
+          .millisecond(0)
+          .toISOString(),
+      );
+      expect(calledInputs.endAt).toBe(
+        dayjs(targetEndDate)
+          .hour(0)
+          .minute(45)
+          .second(0)
+          .millisecond(0)
+          .toISOString(),
+      );
+    });
+
+    it('uses empty-string original start/end fallbacks when non-all-day event has null timestamps', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
+
+      const fallbackStartDate = BASE_DATE.add(9, 'days').toDate();
+      const fallbackEndDate = BASE_DATE.add(9, 'days').add(2, 'hours').toDate();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: false,
+            startAt: null,
+            endAt: null,
+          },
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+            startTime: '09:15:00',
+            endTime: '11:45:00',
+          },
+          allDayChecked: false,
+          eventStartDate: fallbackStartDate,
+          eventEndDate: fallbackEndDate,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.startAt).toBe(
+        dayjs(fallbackStartDate)
+          .hour(9)
+          .minute(15)
+          .second(0)
+          .millisecond(0)
+          .toISOString(),
+      );
+      expect(calledInputs.endAt).toBe(
+        dayjs(fallbackEndDate)
+          .hour(11)
+          .minute(45)
+          .second(0)
+          .millisecond(0)
+          .toISOString(),
+      );
+    });
+
+    it('sets only endDate when all-day startDate is unchanged but endDate differs', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
+
+      const sameStartDate = BASE_DATE.add(15, 'days').startOf('day').toDate();
+      const changedEndDate = BASE_DATE.add(16, 'days').startOf('day').toDate();
+      const unchangedStartDateText = dayjs(sameStartDate).format('YYYY-MM-DD');
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: false,
+            startDate: unchangedStartDateText,
+            endDate: dayjs(changedEndDate).add(2, 'days').format('YYYY-MM-DD'),
+          },
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+          allDayChecked: true,
+          eventStartDate: sameStartDate,
+          eventEndDate: changedEndDate,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.startDate).toBeUndefined();
+      expect(calledInputs.endDate).toBe(
+        dayjs(changedEndDate).add(1, 'day').format('YYYY-MM-DD'),
+      );
+    });
+
+    it('shows invalidDate toast and returns when all-day updateInput date fields are empty strings', async () => {
+      const formatSpy = vi
+        .spyOn(Object.getPrototypeOf(dayjs()), 'format')
+        .mockReturnValueOnce('')
+        .mockReturnValueOnce('');
+
+      const { result } = renderHook(() => useUpdateEventHandler());
+      const { updateEventHandler } = result.current;
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+          allDayChecked: true,
+          eventStartDate: BASE_DATE.add(12, 'days').startOf('day').toDate(),
+          eventEndDate: BASE_DATE.add(13, 'days').startOf('day').toDate(),
+        }),
+      );
+
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
+      formatSpy.mockRestore();
+    });
+
     it('computes all-day startAt and endAt correctly', async () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },

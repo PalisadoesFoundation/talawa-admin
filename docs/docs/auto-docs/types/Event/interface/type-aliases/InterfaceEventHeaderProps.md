@@ -6,4 +6,4 @@
 
 > **InterfaceEventHeaderProps** = [`IEventHeaderProps`](../interfaces/IEventHeaderProps.md)
 
-Defined in: [src/types/Event/interface.ts:335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L335)
+Defined in: [src/types/Event/interface.ts:341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L341)
