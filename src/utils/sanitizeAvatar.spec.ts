@@ -18,7 +18,6 @@ describe('sanitizeAvatars', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    vi.restoreAllMocks();
   });
 
   it('should create object URL for valid image file', () => {
