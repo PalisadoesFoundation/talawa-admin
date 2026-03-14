@@ -217,7 +217,9 @@ export default function Events(): JSX.Element {
         ...(payload.allDay
           ? {
               startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
-              endDate: dayjs(payload.endDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate)
+                .add(1, 'day')
+                .format('YYYY-MM-DD'),
             }
           : {
               startAt: payload.startAtISO,
