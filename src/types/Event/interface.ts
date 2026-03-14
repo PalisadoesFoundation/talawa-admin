@@ -272,8 +272,14 @@ export interface IEventEdge {
  */
 export interface ICreateEventInput {
   name: string;
-  startAt: string;
-  endAt: string;
+  /** ISO DateTime string — required when allDay is false, must NOT be sent when allDay is true */
+  startAt?: string;
+  /** ISO DateTime string — required when allDay is false, must NOT be sent when allDay is true */
+  endAt?: string;
+  /** YYYY-MM-DD date string — required when allDay is true, must NOT be sent when allDay is false */
+  startDate?: string;
+  /** YYYY-MM-DD date string — required when allDay is true, must NOT be sent when allDay is false */
+  endDate?: string;
   organizationId: string | undefined;
   allDay: boolean;
   /**

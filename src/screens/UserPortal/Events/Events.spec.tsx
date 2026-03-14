@@ -683,8 +683,8 @@ const REFETCH_FAILURE_MOCKS = [
       input: {
         name: string;
         description?: string;
-        startAt: string;
-        endAt: string;
+        startDate?: string;
+        endDate?: string;
         organizationId: string;
         allDay: boolean;
         location?: string;
@@ -703,8 +703,8 @@ const REFETCH_FAILURE_MOCKS = [
         input.isPublic === false &&
         input.isRegisterable === true &&
         input.isInviteOnly === true &&
-        typeof input.startAt === 'string' &&
-        typeof input.endAt === 'string'
+        typeof input.startDate === 'string' &&
+        typeof input.endDate === 'string'
       );
     },
     result: {
@@ -898,8 +898,8 @@ describe('Testing Events Screen [User Portal]', () => {
         input: {
           name: string;
           description?: string;
-          startAt: string;
-          endAt: string;
+          startDate?: string;
+          endDate?: string;
           organizationId: string;
           allDay: boolean;
           location?: string;
@@ -918,8 +918,8 @@ describe('Testing Events Screen [User Portal]', () => {
           input.isPublic === false &&
           input.isRegisterable === true &&
           input.isInviteOnly === true &&
-          typeof input.startAt === 'string' &&
-          typeof input.endAt === 'string'
+          typeof input.startDate === 'string' &&
+          typeof input.endDate === 'string'
         );
       },
       result: {
@@ -1860,8 +1860,8 @@ describe('Testing Events Screen [User Portal]', () => {
         input: {
           name: string;
           description?: string;
-          startAt: string;
-          endAt: string;
+          startDate?: string;
+          endDate?: string;
           organizationId: string;
           allDay: boolean;
           location?: string;
@@ -1887,8 +1887,8 @@ describe('Testing Events Screen [User Portal]', () => {
           input.isPublic === false &&
           input.isRegisterable === true &&
           input.isInviteOnly === true &&
-          typeof input.startAt === 'string' &&
-          typeof input.endAt === 'string' &&
+          typeof input.startDate === 'string' &&
+          typeof input.endDate === 'string' &&
           input.recurrence &&
           input.recurrence.frequency === Frequency.WEEKLY &&
           input.recurrence.interval === 1 &&
@@ -2201,10 +2201,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should throw error when create event returns errors but no data', async () => {
-    // Determine expected start/end times based on TEST_DATE and potential test execution time drift (10s observed)
-    // Using simple ISO string matching the component's default behavior for this test environment
-    const expectedStartAt = dayjs(TEST_DATE).add(10, 'second').toISOString();
-    const expectedEndAt = dayjs(TEST_DATE).endOf('day').toISOString();
+    // Determine expected start/end dates for all-day event
+    const expectedStartDate = dayjs(TEST_DATE).format('YYYY-MM-DD');
+    const expectedEndDate = dayjs(TEST_DATE).format('YYYY-MM-DD');
 
     // Mock that returns errors but no data, triggering the specific else if path
     const mutationErrorMock = {
@@ -2214,8 +2213,8 @@ describe('Testing Events Screen [User Portal]', () => {
           input: {
             name: 'Unique Error Event',
             description: 'Error Description',
-            startAt: expectedStartAt,
-            endAt: expectedEndAt,
+            startDate: expectedStartDate,
+            endDate: expectedEndDate,
             organizationId: 'org123',
             allDay: true,
             location: 'Error Location',

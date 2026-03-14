@@ -201,11 +201,11 @@ export default function Events(): JSX.Element {
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
 
-      // Build input object with shared typed interface
+      // Build input conditionally based on allDay flag:
+      // allDay=true  → use startDate/endDate (YYYY-MM-DD), must NOT include startAt/endAt
+      // allDay=false → use startAt/endAt (DateTime ISO), must NOT include startDate/endDate
       const input: ICreateEventInput = {
         name: payload.name,
-        startAt: payload.startAtISO,
-        endAt: payload.endAtISO,
         organizationId,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
@@ -214,6 +214,15 @@ export default function Events(): JSX.Element {
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
+        ...(payload.allDay
+          ? {
+              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate).format('YYYY-MM-DD'),
+            }
+          : {
+              startAt: payload.startAtISO,
+              endAt: payload.endAtISO,
+            }),
       };
 
       const { data: createEventData, errors } = await create({

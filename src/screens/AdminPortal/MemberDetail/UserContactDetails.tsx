@@ -208,7 +208,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       setAvatarMetadata(null);
       setNewAvatarUploaded(false);
     } finally {
-      if (inputElement) inputElement.value = '';
+      inputElement.value = '';
     }
   };
   const handleFieldChange = (fieldName: string, value: string) => {

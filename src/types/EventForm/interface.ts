@@ -41,8 +41,8 @@ export interface IEventFormValues extends IEventFormBase {
  * Extends base fields with ISO timestamp strings for API transmission.
  */
 export interface IEventFormSubmitPayload extends IEventFormBase {
-  startAtISO: string;
-  endAtISO: string;
+  startAtISO?: string;
+  endAtISO?: string;
   startDate: Date;
   endDate: Date;
 }

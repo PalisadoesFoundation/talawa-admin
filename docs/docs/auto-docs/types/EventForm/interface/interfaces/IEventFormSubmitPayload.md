@@ -51,9 +51,9 @@ Defined in: [src/types/EventForm/interface.ts:9](https://github.com/PalisadoesFo
 
 ***
 
-### endAtISO
+### endAtISO?
 
-> **endAtISO**: `string`
+> `optional` **endAtISO**: `string`
 
 Defined in: [src/types/EventForm/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L45)
 
@@ -145,9 +145,9 @@ Defined in: [src/types/EventForm/interface.ts:24](https://github.com/PalisadoesF
 
 ***
 
-### startAtISO
+### startAtISO?
 
-> **startAtISO**: `string`
+> `optional` **startAtISO**: `string`
 
 Defined in: [src/types/EventForm/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L44)
 

@@ -242,24 +242,14 @@ const EventForm: React.FC<IEventFormProps> = ({
     const startTimeParts = formState.startTime.split(':');
     const endTimeParts = formState.endTime.split(':');
 
-    // For all-day events, calculate start and end times
-    // For startAt: use start of day, but if that's in the past, use current time + 10 seconds
-    // This handles the case where we're creating an "all day" event for "today"
-    let startAtISO: string;
-    let endAtISO: string;
+    // For non-all-day events, compute ISO timestamps from date + time parts.
+    // For all-day events, startAtISO/endAtISO are left undefined;
+    // mutation callers will use startDate/endDate (YYYY-MM-DD) instead,
+    // per the API schema which forbids startAt/endAt when allDay is true.
+    let startAtISO: string | undefined;
+    let endAtISO: string | undefined;
 
-    if (formState.allDay) {
-      const startOfDay = dayjs.utc(formState.startDate).startOf('day');
-      const now = dayjs.utc();
-
-      // If start of day is in the past, use current time plus a small buffer
-      if (startOfDay.isBefore(now)) {
-        startAtISO = now.add(10, 'second').toISOString();
-      } else {
-        startAtISO = startOfDay.toISOString();
-      }
-      endAtISO = dayjs.utc(formState.endDate).endOf('day').toISOString();
-    } else {
+    if (!formState.allDay) {
       startAtISO = dayjs(formState.startDate)
         .hour(parseInt(startTimeParts[0]))
         .minute(parseInt(startTimeParts[1]))

@@ -300,7 +300,7 @@ describe('EventForm', () => {
     vi.restoreAllMocks();
     vi.useRealTimers();
   });
-  test('submits with computed ISO dates for all-day event with future dates', async () => {
+  test('submits with startDate/endDate for all-day event (no startAtISO/endAtISO)', async () => {
     const handleSubmit = vi.fn();
     render(
       <EventForm
@@ -312,82 +312,21 @@ describe('EventForm', () => {
     );
 
     await user.click(screen.getByTestId('createEventBtn'));
-    expect(handleSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'Test Event',
-        // For future dates, startAtISO should be at midnight (start of day)
-        startAtISO: dayjs.utc(futureStartDate).startOf('day').toISOString(),
-        endAtISO: dayjs.utc(futureEndDate).endOf('day').toISOString(),
-      }),
-    );
+    expect(handleSubmit).toHaveBeenCalled();
+    const call = handleSubmit.mock.calls[0][0];
+
+    // All-day events should NOT have startAtISO/endAtISO
+    expect(call.startAtISO).toBeUndefined();
+    expect(call.endAtISO).toBeUndefined();
+
+    // All-day events should have startDate/endDate as Date objects
+    expect(call.startDate).toEqual(futureStartDate);
+    expect(call.endDate).toEqual(futureEndDate);
+    expect(call.allDay).toBe(true);
   });
 
-  describe('all-day event edge cases for today/past dates', () => {
-    test('uses current time + buffer for all-day event when startDate is today and start of day is past', async () => {
-      // Use shouldAdvanceTime:true so real async (React scheduler, Promises) still work
-      // while Date.now() / new Date() return our controlled fake time
-      vi.useFakeTimers({ shouldAdvanceTime: true });
-      const FAKE_TODAY = new Date(['2025', '01', '01T14:00:00.000Z'].join('-'));
-      vi.setSystemTime(FAKE_TODAY);
-
-      const handleSubmit = vi.fn();
-      const todayValues: IEventFormValues = {
-        ...baseValues,
-        startDate: FAKE_TODAY,
-        endDate: FAKE_TODAY, // Same day event
-        allDay: true,
-      };
-
-      const beforeRender = dayjs.utc();
-
-      render(
-        <EventForm
-          initialValues={todayValues}
-          onSubmit={handleSubmit}
-          onCancel={vi.fn()}
-          submitLabel="Create"
-        />,
-      );
-
-      // Use outer `user` - shouldAdvanceTime keeps real async working
-      await user.click(screen.getByTestId('createEventBtn'));
-
-      expect(handleSubmit).toHaveBeenCalled();
-      const call = handleSubmit.mock.calls[0][0];
-
-      // Verify startAtISO is near current time (not midnight)
-      const startAt = dayjs(call.startAtISO);
-      const startOfDay = dayjs.utc(FAKE_TODAY).startOf('day');
-
-      // If start of day is in the past, startAtISO should be near now (not at midnight)
-      if (startOfDay.isBefore(beforeRender)) {
-        // startAtISO should be close to "now" (within a reasonable window)
-        expect(startAt.isAfter(beforeRender.subtract(1, 'minute'))).toBe(true);
-        // It should also be in the future (now + buffer)
-        expect(startAt.isAfter(beforeRender)).toBe(true);
-      }
-
-      // endAtISO should be end of the end date
-      const endAt = dayjs(call.endAtISO);
-      const expectedEnd = dayjs.utc(FAKE_TODAY).endOf('day');
-      expect(endAt.isSame(expectedEnd, 'minute')).toBe(true);
-    });
-
-    test('all-day event for today late at night results in short duration (known limitation)', async () => {
-      // This test documents the current behavior when creating an all-day event
-      // for "today" late in the day. The startAtISO gets adjusted to now + 10s,
-      // but endAtISO remains endOf('day'), resulting in a potentially short event.
-      //
-      // IMPORTANT: This is a known limitation. If user creates an "all-day" event
-      // at 11 PM for today:
-      //   - startAtISO = ~11:00:10 PM
-      //   - endAtISO = ~11:59:59 PM
-      //   - Duration = ~1 hour (not a full day)
-      //
-      // This behavior is intentional to allow the API validation to pass
-      // (startAt must be in the future). The alternative would be to push
-      // the event to start the next day, but that changes user intent.
-
+  describe('all-day event payload shape', () => {
+    test('all-day event for today has no ISO timestamps', async () => {
       const handleSubmit = vi.fn();
       const today = new Date();
       const todayValues: IEventFormValues = {
@@ -407,26 +346,20 @@ describe('EventForm', () => {
       );
 
       await user.click(screen.getByTestId('createEventBtn'));
-
       expect(handleSubmit).toHaveBeenCalled();
       const call = handleSubmit.mock.calls[0][0];
 
-      const startAt = dayjs(call.startAtISO);
-      const endAt = dayjs(call.endAtISO);
+      // All-day events should NOT compute startAtISO/endAtISO
+      expect(call.startAtISO).toBeUndefined();
+      expect(call.endAtISO).toBeUndefined();
 
-      // Verify end is after start (event is valid)
-      expect(endAt.isAfter(startAt)).toBe(true);
-
-      // Document: the duration may be less than a full day
-      // when start of day has already passed
-      const durationHours = endAt.diff(startAt, 'hour');
-      // Duration will be <= 24 hours (could be much less if created late in day)
-      expect(durationHours).toBeLessThanOrEqual(24);
+      // Dates are passed through as Date objects
+      expect(call.startDate).toEqual(today);
+      expect(call.endDate).toEqual(today);
     });
 
-    test('all-day event for future date uses midnight start time', async () => {
+    test('all-day event for future date has no ISO timestamps', async () => {
       const handleSubmit = vi.fn();
-      // Use a future date that's definitely not today
       const futureDate = dayjs().add(7, 'day').toDate();
       const futureValues: IEventFormValues = {
         ...baseValues,
@@ -451,34 +384,22 @@ describe('EventForm', () => {
       expect(handleSubmit).toHaveBeenCalled();
       const call = handleSubmit.mock.calls[0][0];
 
-      const startAt = dayjs(call.startAtISO);
-      const expectedStart = dayjs.utc(futureDate).startOf('day');
-
-      // For future dates, start should be at midnight (start of day)
-      expect(startAt.isSame(expectedStart)).toBe(true);
-
-      // End should be end of the day
-      const endAt = dayjs(call.endAtISO);
-      const expectedEnd = dayjs.utc(futureDate).endOf('day');
-      expect(endAt.isSame(expectedEnd, 'minute')).toBe(true);
-
-      // Duration should be ~24 hours for a full day event
-      const durationHours = endAt.diff(startAt, 'hour');
-      expect(durationHours).toBeGreaterThanOrEqual(23); // Allow for slight rounding
+      expect(call.startAtISO).toBeUndefined();
+      expect(call.endAtISO).toBeUndefined();
+      expect(call.startDate).toEqual(futureDate);
+      expect(call.endDate).toEqual(futureDate);
     });
 
-    test('all-day event spanning multiple days with past start adjusts only start time', async () => {
+    test('all-day multi-day event has no ISO timestamps', async () => {
       const handleSubmit = vi.fn();
       const today = new Date();
       const tomorrow = dayjs(today).add(1, 'day').toDate();
       const multiDayValues: IEventFormValues = {
         ...baseValues,
-        startDate: today, // Start today (past start of day)
-        endDate: tomorrow, // End tomorrow
+        startDate: today,
+        endDate: tomorrow,
         allDay: true,
       };
-
-      const beforeRender = dayjs.utc();
 
       render(
         <EventForm
@@ -496,23 +417,10 @@ describe('EventForm', () => {
       expect(handleSubmit).toHaveBeenCalled();
       const call = handleSubmit.mock.calls[0][0];
 
-      const startAt = dayjs(call.startAtISO);
-      const endAt = dayjs(call.endAtISO);
-
-      // Start should be adjusted if today's midnight has passed
-      const startOfToday = dayjs.utc(today).startOf('day');
-      if (startOfToday.isBefore(beforeRender)) {
-        // startAtISO should be near "now", not at midnight
-        expect(startAt.isAfter(beforeRender.subtract(1, 'minute'))).toBe(true);
-      }
-
-      // End should be end of tomorrow regardless
-      const expectedEnd = dayjs.utc(tomorrow).endOf('day');
-      expect(endAt.isSame(expectedEnd, 'minute')).toBe(true);
-
-      // Event should span more than 24 hours when spanning to next day
-      const durationHours = endAt.diff(startAt, 'hour');
-      expect(durationHours).toBeGreaterThan(12); // At least half a day to next day's end
+      expect(call.startAtISO).toBeUndefined();
+      expect(call.endAtISO).toBeUndefined();
+      expect(call.startDate).toEqual(today);
+      expect(call.endDate).toEqual(tomorrow);
     });
   });
 
