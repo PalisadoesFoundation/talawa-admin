@@ -567,6 +567,9 @@ describe('PostCard', () => {
     vi.restoreAllMocks();
     const { clearAllItems } = useLocalStorage();
     clearAllItems();
+    document.body.className = '';
+    document.body.removeAttribute('style');
+    document.body.removeAttribute('data-rr-ui-modal-open');
   });
 
   test('opens and closes edit modal', async () => {

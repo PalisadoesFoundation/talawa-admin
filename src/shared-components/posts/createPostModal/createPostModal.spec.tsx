@@ -247,6 +247,9 @@ afterEach(() => {
 
   cleanup();
   vi.restoreAllMocks();
+  document.body.className = '';
+  document.body.removeAttribute('style');
+  document.body.removeAttribute('data-rr-ui-modal-open');
 });
 
 describe('CreatePostModal Integration Tests', () => {
