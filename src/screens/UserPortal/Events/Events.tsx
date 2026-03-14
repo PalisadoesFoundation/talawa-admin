@@ -50,7 +50,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
-  ORGANIZATIONS_LIST,
+  ORGANIZATIONS_LIST_BASIC,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
 } from 'GraphQl/Queries/Queries';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
@@ -150,10 +150,8 @@ export default function Events(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  // Query to fetch organization details
-  const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { id: organizationId },
-  });
+  // Basic org fields only (avoids admin-only metadata). No variables; current org resolved via orgData.organizations.find(organizationId).
+  const { data: orgData } = useQuery(ORGANIZATIONS_LIST_BASIC);
 
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION, {
@@ -348,7 +346,9 @@ export default function Events(): JSX.Element {
         viewType={viewType}
         eventData={events}
         refetchEvents={refetch}
-        orgData={orgData}
+        orgData={orgData?.organizations?.find(
+          (o: { id: string }) => o.id === organizationId,
+        )}
         userRole={userRole}
         userId={userId}
         onMonthChange={(month, year) => {

@@ -612,6 +612,32 @@ describe('AcceptInvitation', () => {
       },
     };
 
+    it('should not update submitting state after component unmounts during accept', async () => {
+      const slowAcceptMock = {
+        ...acceptMock,
+        delay: 400,
+      };
+
+      const { unmount } = renderComponent(
+        [verifyMock, slowAcceptMock],
+        '/invitation/test-token',
+        'auth-token',
+      );
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      await user.click(screen.getByTestId('accept-invite-btn'));
+
+      // Unmount before the delayed mutation resolves to exercise the
+      // isMountedRef.current === false branch in the finally block.
+      unmount();
+
+      // Wait past the mutation delay to ensure the promise chain settles
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    });
+
     it('should show accept button for authenticated user', async () => {
       renderComponent([verifyMock], '/invitation/test-token', 'auth-token');
       await waitFor(() => {
