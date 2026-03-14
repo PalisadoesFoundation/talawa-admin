@@ -10,8 +10,6 @@ export const CREATE_EVENT_MUTATION = gql`
       description
       startAt
       endAt
-      startDate
-      endDate
       allDay
       location
       isPublic
