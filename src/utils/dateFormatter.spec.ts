@@ -7,7 +7,7 @@ dayjs.extend(utc);
 
 describe('formatDate', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('formats date with st suffix', () => {

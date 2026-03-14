@@ -10,7 +10,7 @@ import {
 
 describe('authValidators', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('validateEmail', () => {
