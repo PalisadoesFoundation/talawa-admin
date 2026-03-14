@@ -33,7 +33,7 @@ describe('oauthFlowHandler', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('handleOAuthLogin', () => {

@@ -12,7 +12,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 describe('userUpdateUtils', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -231,7 +231,7 @@ describe('validateImageFile (single allowed type)', () => {
   afterEach(() => {
     vi.doUnmock('../Constant/fileUpload');
     vi.resetModules();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('formats allowed types correctly when only one type is allowed', async () => {

@@ -4,7 +4,7 @@ import { urlToFile } from './urlToFile'; // adjust import path as needed
 describe('urlToFile', () => {
   beforeEach(() => {
     // Clear all mocks before each test
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {

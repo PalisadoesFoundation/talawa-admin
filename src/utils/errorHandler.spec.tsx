@@ -24,7 +24,7 @@ vi.mock('utils/i18n', () => ({
 
 describe('Test if errorHandler is working properly', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
@@ -102,7 +102,7 @@ describe('Test if errorHandler is working properly', () => {
       expect.any(Object),
     );
 
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     errorHandler(
       null,
@@ -138,7 +138,7 @@ describe('Test if errorHandler is working properly', () => {
       expect.any(Object),
     );
 
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     errorHandler(null, 'Direct error message');
     expect(toast.error).toHaveBeenCalledWith(
