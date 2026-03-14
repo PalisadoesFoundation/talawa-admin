@@ -15,6 +15,7 @@ import type {
 import type { IEventFormInput } from 'types/Event/interface';
 import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import dayjs from 'dayjs';
 
 interface ICreateEventModalProps {
   /** Whether the modal is currently open/visible */
@@ -85,7 +86,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
       description: '',
       location: '',
       startDate: todayUTC,
-      endDate: todayUTC,
+      endDate: dayjs(todayUTC).add(1, 'day').toDate(),
       startTime: nextHour.toTimeString().split(' ')[0],
       endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,

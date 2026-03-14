@@ -178,7 +178,7 @@ export default function Events(): JSX.Element {
       description: '',
       location: '',
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: dayjs().add(1, 'day').toDate(),
       startTime: nextHour.toTimeString().split(' ')[0],
       endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,
