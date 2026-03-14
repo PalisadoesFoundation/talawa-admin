@@ -1,18 +1,13 @@
 export class AdminEventPage {
-  private readonly _eventsTabButton =
-    '[data-cy="leftDrawerButton-Events"]';
-  private readonly _createEventModalButton =
-    '[data-cy="createEventModalBtn"]';
+  private readonly _eventsTabButton = '[data-cy="leftDrawerButton-Events"]';
+  private readonly _createEventModalButton = '[data-cy="createEventModalBtn"]';
   private readonly _eventTitleInput = '[data-cy="eventTitleInput"]';
-  private readonly _eventDescriptionInput =
-    '[data-cy="eventDescriptionInput"]';
-  private readonly _eventLocationInput =
-    '[data-cy="eventLocationInput"]';
+  private readonly _eventDescriptionInput = '[data-cy="eventDescriptionInput"]';
+  private readonly _eventLocationInput = '[data-cy="eventLocationInput"]';
   private readonly _createEventBtn = '[data-cy="createEventBtn"]';
   private readonly _eventCard = '[data-testid="card"]';
   // Selectors that match all-day event renderers in FullCalendar
-  private readonly _allDayChip =
-    '[data-cy="calendar-all-day-chip"]';
+  private readonly _allDayChip = '[data-cy="calendar-all-day-chip"]';
   private readonly _fcEvent = '.fc-event, .fc-daygrid-event';
 
   /**
@@ -20,32 +15,21 @@ export class AdminEventPage {
    * and all-day event renderers (chips / FullCalendar elements).
    */
   private anyEventSelector(): string {
-    return [this._eventCard, this._allDayChip, this._fcEvent].join(
-      ', ',
-    );
+    return [this._eventCard, this._allDayChip, this._fcEvent].join(', ');
   }
 
   visitEventPage(): void {
     cy.get(this._eventsTabButton).should('be.visible').click();
-    cy.url().should(
-      'match',
-      /\/admin\/orgevents\/[a-f0-9-]+/,
-    );
+    cy.url().should('match', /\/admin\/orgevents\/[a-f0-9-]+/);
   }
 
-  createEvent(
-    title: string,
-    description: string,
-    location: string,
-  ): this {
+  createEvent(title: string, description: string, location: string): this {
     // Set up intercepts for GraphQL operations
     cy.intercept('POST', '**/graphql', (req) => {
       if (req.body.operationName === 'CreateEvent') {
         req.alias = 'CreateEvent';
       }
-      if (
-        req.body.operationName === 'GetOrganizationEvents'
-      ) {
+      if (req.body.operationName === 'GetOrganizationEvents') {
         req.alias = 'eventsQuery';
       }
     });
@@ -58,9 +42,7 @@ export class AdminEventPage {
     });
 
     // Wait for modal form to be fully rendered
-    cy.get(this._eventTitleInput)
-      .should('be.visible')
-      .and('be.enabled');
+    cy.get(this._eventTitleInput).should('be.visible').and('be.enabled');
 
     // Clear and type each field
     cy.get(this._eventTitleInput).clear();
@@ -69,23 +51,14 @@ export class AdminEventPage {
 
     cy.get(this._eventDescriptionInput).clear();
     cy.get(this._eventDescriptionInput).type(description);
-    cy.get(this._eventDescriptionInput).should(
-      'have.value',
-      description,
-    );
+    cy.get(this._eventDescriptionInput).should('have.value', description);
 
     cy.get(this._eventLocationInput).clear();
     cy.get(this._eventLocationInput).type(location);
-    cy.get(this._eventLocationInput).should(
-      'have.value',
-      location,
-    );
+    cy.get(this._eventLocationInput).should('have.value', location);
 
     // Submit the form
-    cy.get(this._createEventBtn)
-      .should('be.visible')
-      .and('be.enabled')
-      .click();
+    cy.get(this._createEventBtn).should('be.visible').and('be.enabled').click();
 
     // Wait for CreateEvent mutation to complete
     cy.wait('@CreateEvent', { timeout: 15000 })
@@ -111,11 +84,7 @@ export class AdminEventPage {
     cy.get('body').then(($body) => {
       const $allMore = $body.find('[data-testid="more"]');
       $allMore.each((_: number, el: HTMLElement) => {
-        if (
-          /view all/i.test(
-            el.innerText || el.textContent || '',
-          )
-        ) {
+        if (/view all/i.test(el.innerText || el.textContent || '')) {
           cy.wrap(el).click({ force: true });
         }
       });
@@ -150,44 +119,21 @@ export class AdminEventPage {
     this.openEventDetails(existingName);
 
     const typeOpts = { delay: 30 };
-    cy.get(this._eventTitleInput, { timeout: 10000 }).should(
-      'be.visible',
-    );
+    cy.get(this._eventTitleInput, { timeout: 10000 }).should('be.visible');
     cy.get(this._eventTitleInput).clear();
     cy.get(this._eventTitleInput).should('have.value', '');
     cy.get(this._eventTitleInput).type(newName, typeOpts);
-    cy.get(this._eventTitleInput).should(
-      'have.value',
-      newName,
-    );
+    cy.get(this._eventTitleInput).should('have.value', newName);
 
     cy.get(this._eventDescriptionInput).clear();
-    cy.get(this._eventDescriptionInput).should(
-      'have.value',
-      '',
-    );
-    cy.get(this._eventDescriptionInput).type(
-      newDescription,
-      typeOpts,
-    );
-    cy.get(this._eventDescriptionInput).should(
-      'have.value',
-      newDescription,
-    );
+    cy.get(this._eventDescriptionInput).should('have.value', '');
+    cy.get(this._eventDescriptionInput).type(newDescription, typeOpts);
+    cy.get(this._eventDescriptionInput).should('have.value', newDescription);
 
     cy.get(this._eventLocationInput).clear();
-    cy.get(this._eventLocationInput).should(
-      'have.value',
-      '',
-    );
-    cy.get(this._eventLocationInput).type(
-      newLocation,
-      typeOpts,
-    );
-    cy.get(this._eventLocationInput).should(
-      'have.value',
-      newLocation,
-    );
+    cy.get(this._eventLocationInput).should('have.value', '');
+    cy.get(this._eventLocationInput).type(newLocation, typeOpts);
+    cy.get(this._eventLocationInput).should('have.value', newLocation);
 
     cy.get('[data-cy="previewUpdateEventBtn"]')
       .should('be.visible')
@@ -208,19 +154,14 @@ export class AdminEventPage {
       .should('be.visible')
       .click();
 
-    cy.get('[data-testid="deleteEventBtn"]')
-      .should('be.visible')
-      .click();
+    cy.get('[data-testid="deleteEventBtn"]').should('be.visible').click();
 
     cy.assertToast('Event deleted successfully.');
 
     return this;
   }
 
-  verifyEventNotInList(
-    eventTitle: string,
-    timeout = 40000,
-  ): this {
+  verifyEventNotInList(eventTitle: string, timeout = 40000): this {
     // Verify the event doesn't appear in any event renderer
     cy.contains(this.anyEventSelector(), eventTitle, {
       timeout,
