@@ -115,18 +115,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
       // Timed events: use startAt/endAt (ISO timestamps)
       const input: IEventFormInput = {
         name: payload.name,
-        ...(payload.allDay
-          ? {
-              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
-              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
-              endDate: dayjs(payload.endDate)
-                .add(1, 'day')
-                .format('YYYY-MM-DD'),
-            }
-          : {
-              startAt: payload.startAtISO,
-              endAt: payload.endAtISO,
-            }),
         organizationId: currentUrl,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
@@ -136,9 +124,16 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
+        ...(payload.allDay
+          ? {
+              startDate: payload.startAtISO.slice(0, 10), // "YYYY-MM-DD"
+              endDate: payload.endAtISO.slice(0, 10),
+            }
+          : {
+              startAt: payload.startAtISO,
+              endAt: payload.endAtISO,
+            }),
       };
-
-      const mutationInput = mapCreateEventInputToMutationInput(input);
 
       const { data: createEventData } = await create({
         variables: { input: mutationInput },

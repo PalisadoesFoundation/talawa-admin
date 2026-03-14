@@ -17,7 +17,6 @@
  * @remarks
  * - Uses Apollo Client hooks for fetching and updating user data.
  * - Handles avatar uploads with file type and size validation.
- * - Provides form validation for sensitive fields such as passwords.
  * - Uses react-bootstrap components and MUI-based date pickers for UI.
  * - Supports localization via react-i18next.
  *

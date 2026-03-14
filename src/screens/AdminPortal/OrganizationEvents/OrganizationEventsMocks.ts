@@ -35,15 +35,15 @@ function buildCreateEventVariables() {
   const parsedEndDate = dayjs('03/30/2022', 'MM/DD/YYYY');
   const startDateObj = parsedStartDate.toDate();
   const endDateObj = parsedEndDate.toDate();
-  const startAt = dayjs.utc(startDateObj).startOf('day').toISOString();
-  const endAt = dayjs.utc(endDateObj).endOf('day').toISOString();
+  const startDate = dayjs.utc(startDateObj).startOf('day').toISOString();
+  const endDate = dayjs.utc(endDateObj).endOf('day').toISOString();
 
   return {
     input: {
       name: 'Dummy Org',
       description: 'This is a dummy organization',
-      startAt,
-      endAt,
+      startDate,
+      endDate,
       organizationId: '',
       allDay: true,
       location: 'New Delhi',
