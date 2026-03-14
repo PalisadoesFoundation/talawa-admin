@@ -3,7 +3,7 @@ import { isValidLink } from './linkValidator';
 
 describe('Testing link validator', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('returns true for a valid link', () => {

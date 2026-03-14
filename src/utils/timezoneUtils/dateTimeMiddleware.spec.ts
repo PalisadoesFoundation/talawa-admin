@@ -19,7 +19,7 @@ const DUMMY_QUERY: DocumentNode = gql`
 
 describe('Date Time Middleware Tests', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Request Middleware', () => {

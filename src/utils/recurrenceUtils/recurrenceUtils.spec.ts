@@ -101,7 +101,7 @@ const getDayNameFromIndex = (index: number): string => {
 
 describe('Recurrence Utility Functions', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   // Use a dynamic date for general tests (UTC only)

@@ -10,7 +10,7 @@ import { mapVolunteerStatusToVariant } from './volunteerStatusMapper';
 
 describe('volunteerStatusMapper', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
   describe('mapVolunteerStatusToVariant', () => {
     it('should map "requested" status to "pending" variant', () => {

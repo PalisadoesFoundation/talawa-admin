@@ -5,7 +5,7 @@ describe('sanitizeAvatars', () => {
   let mockCreateObjectURL: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     mockCreateObjectURL = vi.fn();
     global.URL.createObjectURL = mockCreateObjectURL;
     mockCreateObjectURL.mockReturnValue('blob:mock-url');
@@ -17,7 +17,7 @@ describe('sanitizeAvatars', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.restoreAllMocks();
   });
 

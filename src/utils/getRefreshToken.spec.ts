@@ -56,7 +56,7 @@ describe('refreshToken', () => {
       writable: true,
     });
 
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
       writable: true,
@@ -64,7 +64,7 @@ describe('refreshToken', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('returns true when the token is refreshed successfully via HTTP-Only cookies', async () => {
@@ -150,7 +150,7 @@ describe('handleTokenRefresh', () => {
       writable: true,
     });
 
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
       writable: true,
@@ -158,7 +158,7 @@ describe('handleTokenRefresh', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('reloads page on successful token refresh', async () => {
