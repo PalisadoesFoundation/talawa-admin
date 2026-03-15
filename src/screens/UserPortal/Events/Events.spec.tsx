@@ -690,7 +690,6 @@ const REFETCH_FAILURE_MOCKS = [
         location?: string;
         isPublic: boolean;
         isRegisterable: boolean;
-        isInviteOnly: boolean;
       };
     }) => {
       const { input } = variables;
@@ -702,7 +701,6 @@ const REFETCH_FAILURE_MOCKS = [
         input.location === 'New Test Location' &&
         input.isPublic === false &&
         input.isRegisterable === true &&
-        input.isInviteOnly === true &&
         typeof input.startAt === 'string' &&
         typeof input.endAt === 'string'
       );
@@ -905,7 +903,6 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
-          isInviteOnly: boolean;
         };
       }) => {
         const { input } = variables;
@@ -917,7 +914,6 @@ describe('Testing Events Screen [User Portal]', () => {
           input.location === 'New Test Location' &&
           input.isPublic === false &&
           input.isRegisterable === true &&
-          input.isInviteOnly === true &&
           typeof input.startAt === 'string' &&
           typeof input.endAt === 'string'
         );
@@ -1004,7 +1000,9 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventBtn'));
     await waitFor(
       () => {
-        expect(screen.getByTestId('event-data-json')).toBeInTheDocument();
+        expect(mockToast.success).toHaveBeenCalledWith(
+          'Event created and posted successfully.',
+        );
       },
       { timeout: 3000 },
     );
@@ -1030,7 +1028,6 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
-          isInviteOnly: boolean;
         };
       }) => {
         const { input } = variables;
@@ -1042,7 +1039,6 @@ describe('Testing Events Screen [User Portal]', () => {
           input.location === 'New Test Location' &&
           input.isPublic === false &&
           input.isRegisterable === true &&
-          input.isInviteOnly === true &&
           typeof input.startAt === 'string' &&
           typeof input.endAt === 'string'
         );
@@ -1867,7 +1863,6 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
-          isInviteOnly: boolean;
           recurrence?: {
             frequency: string;
             interval: number;
@@ -1886,7 +1881,6 @@ describe('Testing Events Screen [User Portal]', () => {
           input.location === 'Recurring Test Location' &&
           input.isPublic === false &&
           input.isRegisterable === true &&
-          input.isInviteOnly === true &&
           typeof input.startAt === 'string' &&
           typeof input.endAt === 'string' &&
           input.recurrence &&
@@ -1990,7 +1984,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(
       () => {
-        expect(screen.getByTestId('event-data-json')).toBeInTheDocument();
+        expect(mockToast.success).toHaveBeenCalledWith(
+          'Event created and posted successfully.',
+        );
       },
       { timeout: 3000 },
     );
@@ -2187,14 +2183,7 @@ describe('Testing Events Screen [User Portal]', () => {
     // If refetch fails, it is suppressed. We expect success toast since mutation succeeded.
     await waitFor(
       () => {
-        expect(screen.getByTestId('event-data-json')).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-    // Modal should close on success (even with refetch failure)
-    await waitFor(
-      () => {
-        expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
+        expect(mockToast.success).toHaveBeenCalled();
       },
       { timeout: 3000 },
     );

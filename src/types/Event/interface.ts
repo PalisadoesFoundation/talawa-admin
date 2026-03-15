@@ -272,10 +272,8 @@ export interface IEventEdge {
  */
 export interface ICreateEventInput {
   name: string;
-  startAt?: string;
-  endAt?: string;
-  startDate?: string;
-  endDate?: string;
+  startAt: string;
+  endAt: string;
   organizationId: string | undefined;
   allDay: boolean;
   /**
@@ -284,7 +282,6 @@ export interface ICreateEventInput {
    */
   isPublic: boolean;
   isRegisterable: boolean;
-  isInviteOnly: boolean;
   description?: string;
   location?: string;
   recurrence?:

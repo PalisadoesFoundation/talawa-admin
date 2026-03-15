@@ -204,23 +204,16 @@ export default function Events(): JSX.Element {
       // Build input object with shared typed interface
       const input: ICreateEventInput = {
         name: payload.name,
+        startAt: payload.startAtISO,
+        endAt: payload.endAtISO,
         organizationId,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
-        isInviteOnly: payload.isInviteOnly,
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
-
-      if (payload.allDay) {
-        input.startDate = payload.startAtISO;
-        input.endDate = payload.endAtISO;
-      } else {
-        input.startAt = payload.startAtISO;
-        input.endAt = payload.endAtISO;
-      }
 
       const { data: createEventData, errors } = await create({
         variables: { input },
