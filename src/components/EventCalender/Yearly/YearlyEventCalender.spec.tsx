@@ -1500,4 +1500,42 @@ describe('Calendar Component', () => {
 
     expect(screen.queryByText('BadDateEvent')).toBeNull();
   });
+
+  it('collapses the same day when clicked twice', async () => {
+    const eventDate = new Date(today.getFullYear(), 5, 12, 12);
+
+    const event = {
+      ...mockEventData[0],
+      id: 'collapse-test',
+      name: 'Collapse Event',
+      startAt: eventDate.toISOString(),
+      endAt: eventDate.toISOString(),
+    };
+
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[event]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.REGULAR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() =>
+      expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+    );
+
+    const btn = await clickExpandForDate(container, eventDate, user);
+
+    await waitFor(() =>
+      expect(screen.getByText('Collapse Event')).toBeInTheDocument(),
+    );
+
+    await user.click(btn);
+
+    await waitFor(() => {
+      expect(screen.queryByText('Collapse Event')).toBeNull();
+    });
+  });
 });

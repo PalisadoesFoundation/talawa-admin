@@ -77,9 +77,7 @@ function OrgList(): JSX.Element {
   );
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
-  const { t: tLogin } = useTranslation('translation', {
-    keyPrefix: 'loginPage',
-  });
+  const { t: tLogin } = useTranslation('translation');
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
 
@@ -119,10 +117,11 @@ function OrgList(): JSX.Element {
       const { data } = await resendVerificationEmail();
 
       if (data?.sendVerificationEmail?.success) {
-        NotificationToast.success(tLogin('emailResent'));
+        NotificationToast.success(tLogin('loginPage.emailResent'));
       } else {
         NotificationToast.error(
-          data?.sendVerificationEmail?.message || tLogin('resendFailed'),
+          data?.sendVerificationEmail?.message ||
+            tLogin('loginPage.resendFailed'),
         );
       }
     } catch (error: unknown) {
@@ -378,7 +377,7 @@ function OrgList(): JSX.Element {
         >
           <div className={styles.notVerifiedContainer}>
             <div>
-              <strong>{tLogin('emailNotVerified')}</strong>
+              <strong>{tLogin('loginPage.emailNotVerified')}</strong>
             </div>
             <RBButton
               variant="outline-primary"
@@ -389,7 +388,7 @@ function OrgList(): JSX.Element {
             >
               {resendLoading
                 ? tCommon('loading')
-                : tLogin('resendVerification')}
+                : tLogin('loginPage.resendVerification')}
             </RBButton>
           </div>
         </Alert>

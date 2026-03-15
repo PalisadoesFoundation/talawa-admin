@@ -23,6 +23,39 @@ vi.mock('react-bootstrap', async () => {
   return { ...actual, ...mocks };
 });
 
+// At the top of the file with other vi.mock calls — replace the existing
+// GroupChatDetails usage with a spy-able version that exposes chatRefetch.
+let _capturedChatRefetch: (() => Promise<unknown>) | null = null;
+
+vi.mock('components/UserPortal/GroupChatDetails/GroupChatDetails', () => {
+  return {
+    default: ({
+      toggleGroupChatDetailsModal,
+      _groupChatDetailsModalisOpen,
+      chatRefetch,
+    }: {
+      toggleGroupChatDetailsModal: () => void;
+      _groupChatDetailsModalisOpen?: boolean;
+      chatRefetch: () => Promise<unknown>;
+    }) => {
+      _capturedChatRefetch = chatRefetch;
+      return (
+        <div data-testid="groupChatDetailsModal">
+          <button aria-label="close" onClick={toggleGroupChatDetailsModal}>
+            Close
+          </button>
+          <button
+            data-testid="groupChatDetailsRefetch"
+            onClick={() => chatRefetch()}
+          >
+            Refetch
+          </button>
+        </div>
+      );
+    },
+  };
+});
+
 const mockUploadFileToMinio = vi.fn(async () => ({
   objectName: 'uploaded_obj',
 }));
@@ -68,6 +101,7 @@ import ChatRoom from './ChatRoom';
 import ChatHeader from './ChatHeader';
 import EmptyChatState from './EmptyChatState';
 import MessageImage from './MessageImage';
+import type { INewChat } from './types';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import {
   MARK_CHAT_MESSAGES_AS_READ,
@@ -2224,27 +2258,53 @@ describe('ChatRoom Component', () => {
   });
 
   it('does not open group chat details when isGroup is false', async () => {
-    const { container } = renderChatRoom();
+    // Use a 2-member chat so derivedIsGroup is false and ChatHeader will not
+    // fire onGroupClick, meaning groupChatDetailsModalisOpen stays false.
+    const CHAT_TWO_MEMBERS_DIRECT = {
+      request: {
+        query: CHAT_BY_ID,
+        variables: {
+          input: { id: 'chat123' },
+          first: 15,
+          lastMessages: 15,
+          beforeMessages: null,
+        },
+      },
+      result: {
+        data: {
+          chat: {
+            ...mockChatData,
+            members: {
+              edges: [
+                mockChatData.members.edges[0],
+                mockChatData.members.edges[1],
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const { container } = renderChatRoom([CHAT_TWO_MEMBERS_DIRECT]);
 
     await waitFor(() => {
-      expect(screen.getByText('Test Chat')).toBeInTheDocument();
+      expect(screen.getByText('Other User')).toBeInTheDocument();
     });
 
-    // Verify modal is not rendered initially
+    // Modal must not be present initially.
     expect(
       container.querySelector('[data-testid="groupChatDetailsModal"]'),
     ).toBeNull();
 
     const user = userEvent.setup();
-    // Click on the header - for non-group chats, onClick handler returns null
     const userDetails = screen
-      .getByText('Test Chat')
+      .getByText('Other User')
       .closest('[class*="userDetails"]');
     if (userDetails) {
       await user.click(userDetails);
     }
 
-    // Wait a bit and verify modal is still not rendered
+    // After clicking a non-group chat header, modal must still be absent.
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(
       container.querySelector('[data-testid="groupChatDetailsModal"]'),
@@ -3542,5 +3602,507 @@ describe('ChatRoom Component', () => {
 
       consoleErrorSpy.mockRestore();
     });
+  });
+  it('sets supportsMarkRead to false when markChatMessagesAsRead fails on initial message', async () => {
+    // Must render manually to exclude the default succeeding MARK_READ_MOCK,
+    // so the error mock is the only handler for the msg1 mark-read call.
+    const MARK_READ_MSG1_ERROR = {
+      request: {
+        query: MARK_CHAT_MESSAGES_AS_READ,
+        variables: { input: { chatId: 'chat123', messageId: 'msg1' } },
+      },
+      error: new Error('mark read failed'),
+    };
+
+    const consoleDebugSpy = vi
+      .spyOn(console, 'debug')
+      .mockImplementation(() => {});
+
+    const chatListRefetch = vi.fn();
+    const { setItem } = useLocalStorage();
+    setItem('userId', 'user123');
+
+    render(
+      <MockedProvider
+        mocks={[
+          CHAT_BY_ID_MOCK,
+          UNREAD_CHATS_MOCK,
+          MARK_READ_MSG1_ERROR,
+          MESSAGE_SENT_SUBSCRIPTION_MOCK,
+        ]}
+      >
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom
+                selectedContact="chat123"
+                chatListRefetch={chatListRefetch}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Hello World')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(consoleDebugSpy).toHaveBeenCalledWith(
+        'markChatMessagesAsRead not supported; skipping.',
+        expect.any(Error),
+      );
+    });
+
+    consoleDebugSpy.mockRestore();
+  });
+
+  it('skips markChatMessagesAsRead when supportsMarkRead is already false', async () => {
+    // After the first mark-read fails (flipping supportsMarkRead→false),
+    // a subscription message arrives; the second markReadIfSupported call must
+    // return early, covering the `if (!supportsMarkRead) return` branch.
+    const MARK_READ_MSG1_ERROR = {
+      request: {
+        query: MARK_CHAT_MESSAGES_AS_READ,
+        variables: { input: { chatId: 'chat123', messageId: 'msg1' } },
+      },
+      error: new Error('mark read failed'),
+    };
+
+    const SECOND_SUBSCRIPTION_MOCK = {
+      request: {
+        query: MESSAGE_SENT_TO_CHAT,
+        variables: { input: { id: 'chat123' } },
+      },
+      result: {
+        data: {
+          chatMessageCreate: {
+            __typename: 'ChatMessage',
+            id: 'secondSubMsg',
+            body: 'Second subscription message',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
+            chat: { __typename: 'Chat', id: 'chat123' },
+            creator: {
+              __typename: 'User',
+              id: 'otherUser123',
+              name: 'Other User',
+              avatarMimeType: 'image/jpeg',
+              avatarURL: 'https://example.com/other.jpg',
+            },
+            parentMessage: null,
+          },
+        },
+      },
+    };
+
+    const consoleDebugSpy = vi
+      .spyOn(console, 'debug')
+      .mockImplementation(() => {});
+
+    const chatListRefetch = vi.fn();
+    const { setItem } = useLocalStorage();
+    setItem('userId', 'user123');
+
+    render(
+      <MockedProvider
+        mocks={[
+          CHAT_BY_ID_MOCK,
+          UNREAD_CHATS_MOCK,
+          MARK_READ_MSG1_ERROR,
+          // No MARK_READ mock for secondSubMsg — if the early-return branch is NOT
+          // taken, Apollo would throw "no mock found" and the test would fail.
+          SECOND_SUBSCRIPTION_MOCK,
+        ]}
+      >
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <ChatRoom
+                selectedContact="chat123"
+                chatListRefetch={chatListRefetch}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Hello World')).toBeInTheDocument();
+    });
+
+    // Wait for first failure to flip supportsMarkRead → false.
+    await waitFor(() => {
+      expect(consoleDebugSpy).toHaveBeenCalledWith(
+        'markChatMessagesAsRead not supported; skipping.',
+        expect.any(Error),
+      );
+    });
+
+    // Subscription message arrives; markReadIfSupported must return early
+    // (no mock provided for secondSubMsg's mark-read — would error if called).
+    await waitFor(() => {
+      expect(chatListRefetch).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Second subscription message'),
+      ).toBeInTheDocument();
+    });
+
+    consoleDebugSpy.mockRestore();
+  });
+  it('resolves the chatRefetch Promise passed to GroupChatDetails (covers line 491)', async () => {
+    const user = userEvent.setup();
+    renderChatRoom([CHAT_BY_ID_GROUP_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByText(mockGroupChatData.name)).toBeInTheDocument();
+    });
+
+    const headerNode = screen.getByText(mockGroupChatData.name).closest('div');
+    if (!headerNode) throw new Error('header node not found');
+    await user.click(headerNode);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('groupChatDetailsModal')).toBeInTheDocument();
+    });
+
+    // Click the Refetch button — this calls the chatRefetch prop directly,
+    // executing the Promise.resolve arrow function on line 491.
+    await user.click(screen.getByTestId('groupChatDetailsRefetch'));
+
+    // Also assert the captured function resolves with the expected shape.
+    expect(_capturedChatRefetch).not.toBeNull();
+    if (!_capturedChatRefetch) throw new Error('Refetch not captured');
+    const result = await _capturedChatRefetch();
+    expect((result as { data: { chat: INewChat } }).data.chat).toBeTruthy();
+  });
+  // ─── GROUP 1: avatarURL falsy branch (L204, L218) ────────────────────────
+  // handleQueryResult: `chatData.avatarURL || ''` — the '' fallback is never
+  // reached because all mocks supply an avatarURL. Provide one without it.
+
+  it('falls back to empty string when chatData.avatarURL is undefined (covers L204, L218)', async () => {
+    const CHAT_NO_AVATAR_URL = {
+      request: {
+        query: CHAT_BY_ID,
+        variables: {
+          input: { id: 'chat123' },
+          first: 15,
+          lastMessages: 15,
+          beforeMessages: null,
+        },
+      },
+      result: {
+        data: {
+          chat: {
+            ...mockGroupChatData,
+            avatarURL: undefined, // forces the || '' fallback on L204 and L218
+          },
+        },
+      },
+    };
+
+    renderChatRoom([CHAT_NO_AVATAR_URL]);
+
+    await waitFor(() => {
+      const elements = screen.getAllByText(mockGroupChatData.name);
+      expect(elements.length).toBeGreaterThan(0);
+    });
+  });
+
+  // ─── GROUP 2: querySelector scroll true-branch (L298, L333) ──────────────
+  // Both `if (el)` branches require querySelector to return a real element.
+  // L298: scroll after sendMessage succeeds.
+  // L333: scroll when subscription message is from the current user.
+
+  it('scrolls chat messages container after send when el is found (covers L298)', async () => {
+    const user = userEvent.setup();
+    const { chatListRefetch } = renderChatRoom([CHAT_BY_ID_AFTER_SEND_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Chat')).toBeInTheDocument();
+    });
+
+    const fakeEl = { scrollTop: 0, scrollHeight: 800 };
+    const querySelectorSpy = vi
+      .spyOn(document, 'querySelector')
+      .mockImplementation((selector: string) => {
+        if (selector.includes('chatMessages')) {
+          return fakeEl as unknown as Element;
+        }
+        return document.querySelector.call(document, selector);
+      });
+
+    const messageInput = screen.getByTestId('messageInput') as HTMLInputElement;
+    await user.type(messageInput, 'Test message');
+    await user.click(screen.getByTestId('sendMessage'));
+
+    await waitFor(() => {
+      expect(chatListRefetch).toHaveBeenCalled();
+    });
+
+    expect(fakeEl.scrollTop).toBe(800);
+    querySelectorSpy.mockRestore();
+  });
+
+  it('scrolls chat messages container when subscription message is from current user (covers L333)', async () => {
+    const SUBSCRIPTION_OWN_USER = {
+      request: {
+        query: MESSAGE_SENT_TO_CHAT,
+        variables: { input: { id: 'chat123' } },
+      },
+      result: {
+        data: {
+          chatMessageCreate: {
+            __typename: 'ChatMessage',
+            id: 'ownSubMsg',
+            body: 'My subscription message',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
+            chat: { __typename: 'Chat', id: 'chat123' },
+            creator: {
+              __typename: 'User',
+              id: 'user123', // same as current userId → triggers L333 branch
+              name: 'Current User',
+              avatarMimeType: 'image/jpeg',
+              avatarURL: 'https://example.com/user.jpg',
+            },
+            parentMessage: null,
+          },
+        },
+      },
+    };
+
+    const MARK_READ_OWN_SUB = {
+      request: {
+        query: MARK_CHAT_MESSAGES_AS_READ,
+        variables: { input: { chatId: 'chat123', messageId: 'ownSubMsg' } },
+      },
+      result: { data: { markChatAsRead: true } },
+    };
+
+    const fakeEl = { scrollTop: 0, scrollHeight: 600 };
+    const querySelectorSpy = vi
+      .spyOn(document, 'querySelector')
+      .mockImplementation((selector: string) => {
+        if (selector.includes('chatMessages')) {
+          return fakeEl as unknown as Element;
+        }
+        return document.querySelector.call(document, selector);
+      });
+
+    const { chatListRefetch } = renderChatRoom([
+      SUBSCRIPTION_OWN_USER,
+      MARK_READ_OWN_SUB,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Chat')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(chatListRefetch).toHaveBeenCalled();
+    });
+
+    expect(fakeEl.scrollTop).toBe(600);
+    querySelectorSpy.mockRestore();
+  });
+
+  // ─── GROUP 3: parentMessage.creator null branch (L358) ───────────────────
+  // The ternary `newMessage.parentMessage.creator ? {...} : { id: '', name: '' }`
+  // false branch requires a subscription message with parentMessage.creator = null.
+  // The existing 'SUBSCRIPTION_WITH_ERROR' test has this but its mock may not
+  // fire correctly through the full subscription path. Provide an explicit test.
+
+  it('uses empty creator when subscription parentMessage.creator is null (covers L358)', async () => {
+    const SUBSCRIPTION_NULL_PM_CREATOR = {
+      request: {
+        query: MESSAGE_SENT_TO_CHAT,
+        variables: { input: { id: 'chat123' } },
+      },
+      result: {
+        data: {
+          chatMessageCreate: {
+            __typename: 'ChatMessage',
+            id: 'nullCreatorMsg',
+            body: 'Message with null parent creator',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
+            chat: { __typename: 'Chat', id: 'chat123' },
+            creator: {
+              __typename: 'User',
+              id: 'otherUser123',
+              name: 'Other User',
+              avatarMimeType: 'image/jpeg',
+              avatarURL: 'https://example.com/other.jpg',
+            },
+            parentMessage: {
+              id: 'parentX',
+              body: 'Parent body',
+              createdAt: dayjs.utc().subtract(1, 'hour').toISOString(),
+              creator: null, // ← drives the false branch: { id: '', name: '' }
+            },
+          },
+        },
+      },
+    };
+
+    const MARK_READ_NULL_CREATOR = {
+      request: {
+        query: MARK_CHAT_MESSAGES_AS_READ,
+        variables: {
+          input: { chatId: 'chat123', messageId: 'nullCreatorMsg' },
+        },
+      },
+      result: { data: { markChatAsRead: true } },
+    };
+
+    const { chatListRefetch } = renderChatRoom([
+      SUBSCRIPTION_NULL_PM_CREATOR,
+      MARK_READ_NULL_CREATOR,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Chat')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(chatListRefetch).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Message with null parent creator'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  // ─── GROUP 4: handleImageChange gaps (L390, L397, L398-402, L477) ────────
+  // L390: `if (!file) return` true-branch — upload with no file selected.
+  // L397: `fileInputRef.current.value = ''` in try after successful upload.
+  // L398-402: catch block when uploadFileToMinio rejects.
+  // L477: `fileInputRef.current.value = ''` in onRemoveAttachment.
+  //
+  // L390 needs a genuine empty-files upload event (not user-event which skips).
+  // L397, L477 need fileInputRef.current to be non-null (it is — it's the real input).
+  // L398-402 are in the catch block — covered by existing error test BUT
+  // vi.clearAllMocks() in beforeEach resets the spy. Use a manual render here
+  // to guarantee ordering.
+
+  it('returns early in handleImageChange when files list is empty (covers L390)', async () => {
+    renderChatRoom();
+    await waitFor(() =>
+      expect(screen.getByText('Hello World')).toBeInTheDocument(),
+    );
+
+    const fileInput = screen.getByTestId(
+      'hidden-file-input',
+    ) as HTMLInputElement;
+
+    // Dispatch a change event with an empty FileList so e.target.files?.[0] is
+    // undefined, hitting the `if (!file) return` true-branch on L390.
+    Object.defineProperty(fileInput, 'files', {
+      value: {
+        length: 0,
+        item: () => null,
+        [Symbol.iterator]: [][Symbol.iterator],
+      },
+      configurable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+
+    // No attachment should appear — the function returned early.
+    await new Promise((r) => setTimeout(r, 100));
+    expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
+  });
+
+  it('clears fileInputRef value after successful upload (covers L397)', async () => {
+    const user = userEvent.setup();
+    renderChatRoom();
+    await waitFor(() =>
+      expect(screen.getByText('Hello World')).toBeInTheDocument(),
+    );
+
+    const fileInput = screen.getByTestId(
+      'hidden-file-input',
+    ) as HTMLInputElement;
+    const file = new File(['data'], 'pic.png', { type: 'image/png' });
+    await user.upload(fileInput, file);
+
+    // After a successful upload the try-block sets fileInputRef.current.value = ''.
+    // The attachment preview appears, confirming the full try path including L397 ran.
+    await waitFor(() => {
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
+    });
+    // fileInputRef.current.value is reset to '' by L397 — verify it.
+    expect(fileInput.value).toBe('');
+  });
+
+  it('catch block clears attachment state and resets fileInput on upload failure (covers L398-402)', async () => {
+    const user = userEvent.setup();
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    // Reject before the test starts so clearAllMocks in beforeEach cannot interfere.
+    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
+
+    renderChatRoom();
+    await waitFor(() =>
+      expect(screen.getByText('Hello World')).toBeInTheDocument(),
+    );
+
+    const fileInput = screen.getByTestId(
+      'hidden-file-input',
+    ) as HTMLInputElement;
+    const file = new File(['data'], 'fail.png', { type: 'image/png' });
+    await user.upload(fileInput, file);
+
+    await waitFor(() => {
+      // L399: console.error was called
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error uploading file:',
+        expect.any(Error),
+      );
+    });
+
+    // L400-401: state cleared — no attachment shown
+    expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
+    // L402: fileInput value reset
+    expect(fileInput.value).toBe('');
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('resets fileInputRef value when attachment is removed (covers L477)', async () => {
+    const user = userEvent.setup();
+    renderChatRoom();
+    await waitFor(() =>
+      expect(screen.getByText('Hello World')).toBeInTheDocument(),
+    );
+
+    const fileInput = screen.getByTestId(
+      'hidden-file-input',
+    ) as HTMLInputElement;
+    const file = new File(['data'], 'pic.png', { type: 'image/png' });
+    await user.upload(fileInput, file);
+
+    await waitFor(() => {
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
+    });
+
+    // Clicking remove triggers onRemoveAttachment which sets
+    // fileInputRef.current.value = '' on L477.
+    await user.click(screen.getByTestId('removeAttachment'));
+
+    await waitFor(() => {
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
+    });
+    // L477 executed — fileInput value is reset.
+    expect(fileInput.value).toBe('');
   });
 });

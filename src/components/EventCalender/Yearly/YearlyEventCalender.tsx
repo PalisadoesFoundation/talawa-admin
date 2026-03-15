@@ -55,24 +55,20 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 }) => {
   const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
-  const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tRoot } = useTranslation('translation');
-  const { t: tYearlyCalendar } = useTranslation('translation', {
-    keyPrefix: 'yearlyCalendar',
-  });
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expandedY, setExpandedY] = useState<string | null>(null);
 
   const weekdaysShorthand = [
-    tYearlyCalendar('weekdaysShorthand.mon'),
-    tYearlyCalendar('weekdaysShorthand.tue'),
-    tYearlyCalendar('weekdaysShorthand.wed'),
-    tYearlyCalendar('weekdaysShorthand.thu'),
-    tYearlyCalendar('weekdaysShorthand.fri'),
-    tYearlyCalendar('weekdaysShorthand.sat'),
-    tYearlyCalendar('weekdaysShorthand.sun'),
+    tRoot('yearlyCalendar.weekdaysShorthand.mon'),
+    tRoot('yearlyCalendar.weekdaysShorthand.tue'),
+    tRoot('yearlyCalendar.weekdaysShorthand.wed'),
+    tRoot('yearlyCalendar.weekdaysShorthand.thu'),
+    tRoot('yearlyCalendar.weekdaysShorthand.fri'),
+    tRoot('yearlyCalendar.weekdaysShorthand.sat'),
+    tRoot('yearlyCalendar.weekdaysShorthand.sun'),
   ];
   const months = [
     tRoot('eventListCard.january'),
@@ -204,7 +200,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   aria-label={
                     expandedY === expandKey
                       ? tCommon('close')
-                      : tYearlyCalendar('expandDay')
+                      : tRoot('yearlyCalendar.expandDay')
                   }
                 >
                   {expandedY === expandKey ? (
@@ -226,7 +222,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   aria-label={
                     expandedY === expandKey
                       ? tCommon('close')
-                      : tYearlyCalendar('expandDay')
+                      : tRoot('yearlyCalendar.expandDay')
                   }
                 >
                   {expandedY === expandKey ? (
@@ -239,7 +235,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                           styles.closebtnYearlyEventCalenderBottomSpacing
                         }
                       >
-                        {t('noEventAvailable')}
+                        {tRoot('userEvents.noEventAvailable')}
                       </div>
                       <p>{tCommon('close')}</p>
                     </div>

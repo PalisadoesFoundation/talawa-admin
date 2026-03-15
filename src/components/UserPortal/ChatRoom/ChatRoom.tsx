@@ -53,12 +53,7 @@ interface IChatRoomProps {
 }
 
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChatRoom',
-  });
-  const { t: tErrors } = useTranslation('translation', {
-    keyPrefix: 'userChatRoom.errorBoundary',
-  });
+  const { t } = useTranslation('translation');
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -219,7 +214,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             }
           } else if (derivedIsGroup) {
             title = chatData.name;
-            subtitle = `${chatData.members?.edges?.length || 0} ${t('members')}`;
+            subtitle = `${chatData.members?.edges?.length || 0} ${t('userChatRoom.members')}`;
             image = chatData.avatarURL || '';
           }
 
@@ -270,7 +265,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           updatedAt: now,
           creator: {
             id: userId as string,
-            name: t('you'),
+            name: t('userChatRoom.you'),
             avatarMimeType: undefined,
             avatarURL: undefined,
           },
@@ -410,14 +405,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   return (
     <ErrorBoundaryWrapper
-      fallbackTitle={tErrors('title')}
-      fallbackErrorMessage={tErrors('message')}
-      resetButtonText={tErrors('resetButton')}
-      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      fallbackTitle={t('userChatRoom.errorBoundary.title')}
+      fallbackErrorMessage={t('userChatRoom.errorBoundary.message')}
+      resetButtonText={t('userChatRoom.errorBoundary.resetButton')}
+      resetButtonAriaLabel={t(
+        'userChatRoom.errorBoundary.resetButtonAriaLabel',
+      )}
     >
       <div className={styles.chatAreaContainer} id="chat-area">
         {!props.selectedContact ? (
-          <EmptyChatState message={t('selectContact')} />
+          <EmptyChatState message={t('userChatRoom.selectContact')} />
         ) : (
           <>
             <ChatHeader
@@ -464,7 +461,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   />
                 )}
                 emptyStateComponent={
-                  <EmptyChatState message={t('noMessages')} />
+                  <EmptyChatState message={t('userChatRoom.noMessages')} />
                 }
               />
             </div>
@@ -482,7 +479,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 if (fileInputRef.current) fileInputRef.current.value = '';
               }}
               onCloseReply={() => setReplyToDirectMessage(null)}
-              sendMessagePlaceholder={t('sendMessage')}
+              sendMessagePlaceholder={t('userChatRoom.sendMessage')}
               fileInputRef={fileInputRef}
             />
           </>
