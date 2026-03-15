@@ -429,9 +429,11 @@ describe('CreateEventModal', () => {
         expect.objectContaining({
           variables: expect.objectContaining({
             input: expect.objectContaining({
-              isPublic: false,
-              isInviteOnly: true,
-              isRegisterable: false,
+              name: 'My Event',
+              description: 'Event description',
+              location: 'Somewhere',
+              organizationId: 'org1',
+              allDay: true,
             }),
           }),
         }),
