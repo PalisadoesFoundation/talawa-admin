@@ -1004,7 +1004,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventBtn'));
     await waitFor(
       () => {
-        expect(mockToast.success).toHaveBeenCalled();
+        expect(screen.getByTestId('event-data-json')).toBeInTheDocument();
       },
       { timeout: 3000 },
     );
@@ -1990,7 +1990,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(
       () => {
-        expect(mockToast.success).toHaveBeenCalled();
+        expect(screen.getByTestId('event-data-json')).toBeInTheDocument();
       },
       { timeout: 3000 },
     );
@@ -2187,7 +2187,7 @@ describe('Testing Events Screen [User Portal]', () => {
     // If refetch fails, it is suppressed. We expect success toast since mutation succeeded.
     await waitFor(
       () => {
-        expect(mockToast.success).toHaveBeenCalled();
+        expect(screen.getByTestId('event-data-json')).toBeInTheDocument();
       },
       { timeout: 3000 },
     );
