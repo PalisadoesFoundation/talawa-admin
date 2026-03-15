@@ -736,7 +736,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     await user.type(input, 'Test');
 
-    expect(input).toHaveValue('Test');
+    await waitFor(() => {
+      expect(input).toHaveValue('Test');
+    });
   });
   test('Testing search functionality by pressing enter', async () => {
     const user = userEvent.setup();
@@ -1385,11 +1387,9 @@ describe('Advanced Component Functionality Tests', () => {
     // Submit form
     await user.click(screen.getByTestId('submitOrganizationForm'));
 
-    const pluginModal = screen.queryByTestId('pluginNotificationModal');
+    const pluginModal = await screen.findByTestId('pluginNotificationModal');
 
-    if (pluginModal) {
-      expect(pluginModal).toBeInTheDocument();
-    }
+    expect(pluginModal).toBeInTheDocument();
   });
 
   test('Testing error handling for organization creation', async () => {

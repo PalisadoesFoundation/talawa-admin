@@ -272,8 +272,10 @@ export interface IEventEdge {
  */
 export interface ICreateEventInput {
   name: string;
-  startAt: string;
-  endAt: string;
+  startAt?: string;
+  endAt?: string;
+  startDate?: string;
+  endDate?: string;
   organizationId: string | undefined;
   allDay: boolean;
   /**

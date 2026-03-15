@@ -111,8 +111,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
       // Build input object with shared typed interface
       const input: ICreateEventInput = {
         name: payload.name,
-        startAt: payload.startAtISO,
-        endAt: payload.endAtISO,
         organizationId: currentUrl,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
@@ -123,6 +121,14 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
+
+      if (payload.allDay) {
+        input.startDate = payload.startAtISO;
+        input.endDate = payload.endAtISO;
+      } else {
+        input.startAt = payload.startAtISO;
+        input.endAt = payload.endAtISO;
+      }
 
       const { data: createEventData } = await create({
         variables: { input },

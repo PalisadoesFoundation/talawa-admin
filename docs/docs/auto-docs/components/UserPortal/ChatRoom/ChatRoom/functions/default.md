@@ -4,13 +4,13 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
 Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L55)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
 `IChatRoomProps`
 

@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  within,
+  cleanup,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -41,10 +47,15 @@ vi.mock('components/UserPortal/GroupChatDetails/GroupChatDetails', () => {
       _capturedChatRefetch = chatRefetch;
       return (
         <div data-testid="groupChatDetailsModal">
-          <button aria-label="close" onClick={toggleGroupChatDetailsModal}>
+          <button
+            type="button"
+            aria-label="close"
+            onClick={toggleGroupChatDetailsModal}
+          >
             Close
           </button>
           <button
+            type="button"
             data-testid="groupChatDetailsRefetch"
             onClick={() => chatRefetch()}
           >
@@ -110,6 +121,11 @@ import {
   EDIT_CHAT_MESSAGE,
   DELETE_CHAT_MESSAGE,
 } from 'GraphQl/Mutations/OrganizationMutations';
+
+export const FIXED_UTC = new Date(Date.UTC(2023, 0, 1)).toISOString();
+export const FIXED_UTC_MINUS_ONE_DAY = new Date(
+  Date.UTC(2022, 11, 31),
+).toISOString();
 
 // Mock data
 export const mockChatData = {
@@ -787,10 +803,11 @@ describe('ChatRoom Component', () => {
   });
 
   afterEach(() => {
+    cleanup();
     const { clearAllItems } = useLocalStorage();
     clearAllItems();
 
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('renders loading state initially', () => {
@@ -2305,10 +2322,11 @@ describe('ChatRoom Component', () => {
     }
 
     // After clicking a non-group chat header, modal must still be absent.
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(
-      container.querySelector('[data-testid="groupChatDetailsModal"]'),
-    ).toBeNull();
+    await waitFor(() => {
+      expect(
+        container.querySelector('[data-testid="groupChatDetailsModal"]'),
+      ).toBeNull();
+    });
   });
 
   it('handles chat with undefined members edges length', async () => {
@@ -4016,8 +4034,9 @@ describe('ChatRoom Component', () => {
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     // No attachment should appear — the function returned early.
-    await new Promise((r) => setTimeout(r, 100));
-    expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
+    });
   });
 
   it('clears fileInputRef value after successful upload (covers L397)', async () => {

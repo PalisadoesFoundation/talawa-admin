@@ -52,7 +52,10 @@ interface IChatRoomProps {
   ) => Promise<ApolloQueryResult<{ chatList: INewChat[] }>>;
 }
 
-export default function chatRoom(props: IChatRoomProps): JSX.Element {
+export default function ChatRoom({
+  selectedContact,
+  chatListRefetch,
+}: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation');
   const isMountedRef = useRef<boolean>(true);
 
@@ -66,10 +69,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const userId = getItem('userId') || getItem('id');
 
   useEffect(() => {
-    if (props.selectedContact) {
-      setItem('selectedChatId', props.selectedContact);
+    if (selectedContact) {
+      setItem('selectedChatId', selectedContact);
     }
-  }, [props.selectedContact, setItem]);
+  }, [selectedContact, setItem]);
   const [chatTitle, setChatTitle] = useState('');
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [chatImage, setChatImage] = useState('');
@@ -129,7 +132,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [sendMessageToChat] = useMutation(SEND_MESSAGE_TO_CHAT, {
     variables: {
       input: {
-        chatId: props.selectedContact,
+        chatId: selectedContact,
         parentMessageId: replyToDirectMessage?.id,
         body: newMessage,
       },
@@ -287,7 +290,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         await sendMessageToChat({
           variables: {
             input: {
-              chatId: props.selectedContact,
+              chatId: selectedContact,
               parentMessageId: replyToDirectMessage?.id,
               body: messageBody,
             },
@@ -303,7 +306,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       setNewMessage('');
       setAttachment(null);
       setAttachmentObjectName(null);
-      await props.chatListRefetch({ id: userId as string });
+      await chatListRefetch({ id: userId as string });
     } catch (error) {
       console.error('Error sending message:', error);
       if (!editMessage) {
@@ -317,15 +320,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   useSubscription(MESSAGE_SENT_TO_CHAT, {
     variables: {
       input: {
-        id: props.selectedContact,
+        id: selectedContact,
       },
     },
-    skip: !props.selectedContact,
+    skip: !selectedContact,
     onData: async (messageSubscriptionData) => {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
         messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-          props.selectedContact
+          selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
@@ -334,7 +337,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             el.scrollTop = el.scrollHeight;
           }
         }
-        await markReadIfSupported(props.selectedContact, newMessage.id).catch(
+        await markReadIfSupported(selectedContact, newMessage.id).catch(
           () => {},
         );
 
@@ -372,7 +375,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           paginationRef.current?.addItem(newItem, 'end');
         }
       }
-      props.chatListRefetch();
+      chatListRefetch();
       unreadChatListRefetch();
     },
   });
@@ -413,7 +416,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       )}
     >
       <div className={styles.chatAreaContainer} id="chat-area">
-        {!props.selectedContact ? (
+        {!selectedContact ? (
           <EmptyChatState message={t('userChatRoom.selectContact')} />
         ) : (
           <>
@@ -428,7 +431,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               <CursorPaginationManager
                 query={CHAT_BY_ID}
                 queryVariables={{
-                  input: { id: props.selectedContact },
+                  input: { id: selectedContact },
                   first: 15,
                 }}
                 dataPath="chat.messages"
