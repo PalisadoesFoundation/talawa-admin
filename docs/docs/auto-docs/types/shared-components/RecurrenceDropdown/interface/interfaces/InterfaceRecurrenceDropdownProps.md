@@ -18,6 +18,16 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](http
 
 ***
 
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L11)
+
+If true, the dropdown is disabled (view-only mode)
+
+***
+
 ### onSelect()
 
 > **onSelect**: (`option`) => `void`
@@ -41,21 +51,3 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](http
 > **recurrenceOptions**: [`InterfaceRecurrenceOption`](../../../../../shared-components/EventForm/utils/recurrenceOptions/interfaces/InterfaceRecurrenceOption.md)[]
 
 Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L7)
-
-***
-
-### t()
-
-> **t**: (`key`) => `string`
-
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L10)
-
-#### Parameters
-
-##### key
-
-`string`
-
-#### Returns
-
-`string`

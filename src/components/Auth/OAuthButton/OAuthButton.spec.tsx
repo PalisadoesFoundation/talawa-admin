@@ -31,7 +31,7 @@ vi.mock('./OAuthButton.module.css', () => ({
 }));
 
 afterEach(() => {
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
   cleanup();
 });
 

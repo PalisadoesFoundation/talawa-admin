@@ -243,14 +243,23 @@ describe('WeeklyEventCalender Component', () => {
       },
     ];
 
-    // Ensure user is NOT a member
+    // Org has members, but user2 is not in the list (so not a member)
     const nonMemberOrgData: InterfaceIOrgList = {
       ...mockOrgData,
       members: {
-        edges: [],
+        edges: [
+          {
+            node: {
+              id: 'otherUser',
+              name: 'Other User',
+              emailAddress: 'other@example.com',
+            },
+            cursor: 'cursor1',
+          },
+        ],
         pageInfo: {
           hasNextPage: false,
-          endCursor: '',
+          endCursor: 'cursor1',
         },
       },
     };
@@ -259,11 +268,11 @@ describe('WeeklyEventCalender Component', () => {
       eventData: privateEventData,
       orgData: nonMemberOrgData,
       userRole: UserRole.REGULAR, // Regular user
-      userId: 'user2', // Not 'user1' (member) or 'admin1'
+      userId: 'user2', // Not in members list
       currentDate: today,
     });
 
-    // Should not see private event
+    // Should not see private event when user is not an org member
     expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
   });
 

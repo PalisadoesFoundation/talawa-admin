@@ -36,7 +36,8 @@ import dayjs from 'dayjs';
 import Button from 'shared-components/Button';
 import React, { useState, useEffect, type JSX } from 'react';
 import styles from './YearlyEventCalender.module.css';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import ChevronLeft from '@mui/icons-material/ChevronLeft';
+import ChevronRight from '@mui/icons-material/ChevronRight';
 import {
   type InterfaceEvent,
   type InterfaceCalendarProps,

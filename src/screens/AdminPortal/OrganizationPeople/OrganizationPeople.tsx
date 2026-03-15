@@ -17,7 +17,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
-import { Delete } from '@mui/icons-material';
+import Delete from '@mui/icons-material/Delete';
 
 import styles from './OrganizationPeople.module.css';
 import {
@@ -32,6 +32,7 @@ import { CursorPaginationManager } from 'components/CursorPaginationManager/Curs
 import { languages } from 'utils/languages';
 import Button from 'shared-components/Button';
 import type { InterfaceMemberNode } from 'types/PeopleTab/interface';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -184,6 +185,18 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
+      <SafeBreadcrumbs
+        items={[
+          {
+            translationKey: 'organization',
+            to: `/admin/orgdash/${currentUrl}`,
+          },
+          {
+            translationKey: 'people',
+            isCurrent: true,
+          },
+        ]}
+      />
       <div className={styles.orgPeopleGrid}>
         <SearchFilterBar
           hasDropdowns={true}

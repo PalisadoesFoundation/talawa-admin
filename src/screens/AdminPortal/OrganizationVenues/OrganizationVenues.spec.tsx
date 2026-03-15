@@ -13,7 +13,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -165,6 +165,28 @@ afterEach(() => {
   window.alert = originalAlert;
   vi.restoreAllMocks();
 });
+
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  default: ({
+    items,
+  }: {
+    items: Array<{ translationKey?: string; label?: string; to?: string }>;
+  }) => (
+    <nav aria-label="breadcrumbs">
+      <ol>
+        {items.map((item) => (
+          <li key={item.translationKey || item.label}>
+            {item.to ? (
+              <a href={item.to}>{item.translationKey}</a>
+            ) : (
+              <span aria-current="page">{item.translationKey}</span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  ),
+}));
 
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   return render(
@@ -521,5 +543,24 @@ describe('Organisation Venues Error Handling', () => {
       const venues = screen.getAllByTestId(/^venue-item/);
       expect(venues).toHaveLength(3);
     });
+  });
+
+  test('renders breadcrumbs correctly', async () => {
+    renderOrganizationVenue(link);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    const breadcrumbsNav = await screen.findByRole('navigation', {
+      name: /breadcrumbs/i,
+    });
+    expect(breadcrumbsNav).toBeInTheDocument();
+    // Verify breadcrumb items
+    const breadcrumbLinks = within(breadcrumbsNav).getAllByRole('link');
+    expect(breadcrumbLinks).toHaveLength(1); // Only "organization" is a link
+
+    // Verify current page breadcrumb (Venues) has aria-current
+    expect(screen.getByText(/venues/i)).toHaveAttribute('aria-current', 'page');
   });
 });

@@ -9,8 +9,6 @@
  * @param eventListCardProps - The properties of the event to be deleted.
  * @param eventDeleteModalIsOpen - Determines if the modal is open.
  * @param toggleDeleteModal - Function to toggle the modal visibility.
- * @param t - Translation function for event-specific strings.
- * @param tCommon - Translation function for common strings.
  * @param deleteEventHandler - Function to handle the event deletion.
  *
  * @returns A modal component for confirming event deletion.
@@ -26,13 +24,12 @@
  *   eventListCardProps={event}
  *   eventDeleteModalIsOpen={isModalOpen}
  *   toggleDeleteModal={toggleModal}
- *   t={translate}
- *   tCommon={translateCommon}
  *   deleteEventHandler={handleDelete}
  * />
  * ```
  */
 import React, { useId, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 
 import styles from './EventListCardDeleteModal.module.css';
@@ -45,10 +42,10 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   eventListCardProps,
   eventDeleteModalIsOpen,
   toggleDeleteModal,
-  t,
-  tCommon,
   deleteEventHandler,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+  const { t: tCommon } = useTranslation('common');
   const [deleteOption, setDeleteOption] = useState<
     'single' | 'following' | 'all'
   >('single');

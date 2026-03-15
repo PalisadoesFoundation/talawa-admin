@@ -27,7 +27,8 @@ import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
 
-import { WarningAmberRounded, Group } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
+import Group from '@mui/icons-material/Group';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
@@ -44,7 +45,7 @@ import {
   convertTokenColumns,
 } from 'shared-components/DataGridWrapper';
 import { debounceInput } from 'utils/performance';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';

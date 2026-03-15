@@ -61,6 +61,7 @@ export interface IEvent {
    * When true, only invited users can see and access the event.
    */
   isInviteOnly: boolean;
+  createChat?: boolean;
   attendees: Partial<User>[];
   creator: Partial<User>;
   averageFeedbackScore?: number;
@@ -98,6 +99,14 @@ export interface IOrgList {
   };
 }
 
+/** Org shape for event filtering when members may be absent (e.g. User Portal basic org query). */
+export interface InterfaceOrgForEventFilter {
+  id: string;
+  members?: {
+    edges?: Array<{ node: { id: string } }>;
+  };
+}
+
 export interface IStatsModal {
   data: {
     event: {
@@ -111,7 +120,7 @@ export interface IStatsModal {
 export interface ICalendarProps {
   eventData: IEvent[];
   refetchEvents?: () => void;
-  orgData?: IOrgList;
+  orgData?: IOrgList | InterfaceOrgForEventFilter;
   userRole?: string;
   userId?: string;
   viewType?: ViewType;
@@ -140,8 +149,6 @@ export interface IDeleteEventModalProps {
   eventListCardProps: IEventListCard;
   eventDeleteModalIsOpen: boolean;
   toggleDeleteModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
   deleteEventHandler: (
     deleteOption?: 'single' | 'following' | 'all',
   ) => Promise<void>;
@@ -152,8 +159,6 @@ export interface IPreviewEventModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   toggleDeleteModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
   isRegistered?: boolean;
   userId: string;
   eventStartDate: Date;
@@ -187,16 +192,17 @@ export interface IPreviewEventModalProps {
   openEventDashboard: () => void;
   recurrence: InterfaceRecurrenceRule | null;
   setRecurrence: Dispatch<SetStateAction<InterfaceRecurrenceRule | null>>;
-  customRecurrenceModalIsOpen: boolean;
-  setCustomRecurrenceModalIsOpen: Dispatch<SetStateAction<boolean>>;
+  customRecurrenceModalIsOpen?: boolean;
+  setCustomRecurrenceModalIsOpen?: (
+    state: boolean | ((prev: boolean) => boolean),
+  ) => void;
+  hideCustomRecurrenceModal?: () => void;
 }
 
 export interface IUpdateEventModalProps {
   eventListCardProps: IEventListCard;
   recurringEventUpdateModalIsOpen: boolean;
   toggleRecurringEventUpdateModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
   updateEventHandler: () => Promise<void>;
 }
 

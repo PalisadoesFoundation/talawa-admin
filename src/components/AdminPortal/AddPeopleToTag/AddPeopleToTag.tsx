@@ -51,10 +51,10 @@ import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
 import styles from './AddPeopleToTag.module.css';
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useTranslation } from 'react-i18next';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type {

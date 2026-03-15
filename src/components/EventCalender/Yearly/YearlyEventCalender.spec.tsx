@@ -1021,7 +1021,8 @@ describe('Calendar Component', () => {
       },
     };
 
-    // Test with undefined orgData
+    // When orgData is undefined (e.g. User Portal), filterEvents trusts the backend
+    // and shows org-member events, so the private event is visible.
     const { container } = render(
       <BrowserRouter>
         <Calendar
@@ -1034,24 +1035,18 @@ describe('Calendar Component', () => {
       </BrowserRouter>,
     );
 
-    // Wait for component to render
     const currentYear = today.getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
-    // Since orgData is undefined, private events should be filtered out
-    // Assert that the private event is not present
-    expect(screen.queryByText('Private Event')).toBeNull();
-
-    // There should be no expand buttons since no events are visible
-    const expandButtons = container.querySelectorAll(
-      '[data-testid^="expand-btn-"]',
-    );
-    expect(expandButtons).toHaveLength(0);
+    // Event is shown (trust backend); day with event has an expand button.
+    const expandBtn = getToggleButtonForDate(container, today);
+    expect(expandBtn).toBeTruthy();
+    expect(expandBtn?.getAttribute('data-testid')).toMatch(/^expand-btn-/);
   });
 
-  test('handles orgData with empty members edges', async () => {
+  test('handles orgData with empty members edges (trust backend for User Portal)', async () => {
     const privateEvent: CalendarEventItem = {
       id: 'private-event',
       location: 'Private Location',
@@ -1081,7 +1076,8 @@ describe('Calendar Component', () => {
       },
     };
 
-    // Test with empty member edges
+    // When orgData has empty members (e.g. User Portal uses ORGANIZATIONS_LIST_BASIC),
+    // filterEvents trusts the backend and shows org-member events so they are not hidden.
     const { container } = render(
       <BrowserRouter>
         <Calendar
@@ -1094,21 +1090,20 @@ describe('Calendar Component', () => {
       </BrowserRouter>,
     );
 
-    // Wait for component to render
     const currentYear = today.getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
-    // Since user is not in the members list (empty edges), private events should be filtered out
-    // Assert that the private event is not present
-    expect(screen.queryByText('Private Event')).toBeNull();
-
-    // There should be no expand buttons since no events are visible to this user
-    const expandButtons = container.querySelectorAll(
-      '[data-testid^="expand-btn-"]',
-    );
-    expect(expandButtons).toHaveLength(0);
+    // Org-member event is shown when members list is empty (trust backend).
+    // Yearly view shows event names only when expanded; assert expand button for that day.
+    const expandBtn = getToggleButtonForDate(container, today);
+    expect(expandBtn).toBeTruthy();
+    expect(expandBtn?.getAttribute('data-testid')).toMatch(/^expand-btn-/);
+    if (expandBtn) await user.click(expandBtn);
+    await waitFor(() => {
+      expect(screen.getByText('Private Event')).toBeInTheDocument();
+    });
   });
 
   test('processes multiple events for REGULAR user when user is a member', async () => {

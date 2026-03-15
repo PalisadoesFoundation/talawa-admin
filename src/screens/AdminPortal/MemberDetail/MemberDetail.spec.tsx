@@ -12,6 +12,19 @@ const mockUseParams = vi.fn((): { userId?: string; orgId?: string } => ({
   orgId: '456',
 }));
 
+// mock useLocalStorage
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: vi.fn().mockReturnValue(null),
+    setItem: vi.fn(),
+  }),
+}));
+
+// mock Security component
+vi.mock('./Security', () => ({
+  default: () => <div data-testid="security-panel" />,
+}));
+
 vi.mock('react-router-dom', () => ({
   useParams: () => mockUseParams(),
 }));
@@ -43,8 +56,8 @@ vi.mock('components/UserDetails/UserOrganizations', () => ({
 }));
 
 vi.mock('components/UserDetails/UserEvents', () => ({
-  default: ({ orgId, userId }: { orgId?: string; userId?: string }) => (
-    <div data-testid="user-events" data-orgid={orgId} data-userid={userId} />
+  default: ({ userId }: { userId?: string }) => (
+    <div data-testid="user-events" data-userid={userId} />
   ),
 }));
 
@@ -103,23 +116,11 @@ describe('MemberDetail', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('renders noOrgId message when orgId is not provided', () => {
-    // Override params → userId exists but orgId missing
-    mockUseParams.mockReturnValueOnce({
-      userId: '123',
-      orgId: undefined,
-    });
-
+  it('renders full UI when userId is present but orgId is absent', () => {
+    mockUseParams.mockReturnValueOnce({ userId: '123', orgId: undefined });
     render(<MemberDetail />);
-
-    // Should render the noOrgId message
-    expect(screen.getByText('noOrgId')).toBeInTheDocument();
-
-    // Should NOT render tabs or member content
-    expect(screen.queryByTestId('tab-overview')).not.toBeInTheDocument();
-    expect(
-      screen.queryByTestId('user-contact-details'),
-    ).not.toBeInTheDocument();
+    expect(screen.getByTestId('tab-overview')).toBeInTheDocument();
+    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
   });
 
   it('renders overview tab by default with userId from route', () => {
@@ -151,10 +152,6 @@ describe('MemberDetail', () => {
 
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
     expect(screen.getByTestId('user-events')).toHaveAttribute(
-      'data-orgid',
-      '456',
-    );
-    expect(screen.getByTestId('user-events')).toHaveAttribute(
       'data-userid',
       '123',
     );
@@ -171,6 +168,16 @@ describe('MemberDetail', () => {
 
     expect(screen.getByTestId('user-tags')).toHaveTextContent('123');
     expect(screen.getByTestId('tab-tags')).toHaveAttribute(
+      'data-active',
+      'true',
+    );
+  });
+
+  it('switches to security tab', async () => {
+    render(<MemberDetail />);
+    await userEvent.click(screen.getByTestId('tab-security'));
+    expect(screen.getByTestId('security-panel')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-security')).toHaveAttribute(
       'data-active',
       'true',
     );

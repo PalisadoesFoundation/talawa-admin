@@ -36,7 +36,7 @@ import { useQuery } from '@apollo/client';
 import PeopleTabUserOrganizations from 'shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations';
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 import styles from './UserOrganizations.module.css';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useLocation } from 'react-router';
