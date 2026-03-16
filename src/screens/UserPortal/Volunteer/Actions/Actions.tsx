@@ -3,7 +3,8 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
-import { Circle, WarningAmberRounded } from '@mui/icons-material';
+import Circle from '@mui/icons-material/Circle';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';

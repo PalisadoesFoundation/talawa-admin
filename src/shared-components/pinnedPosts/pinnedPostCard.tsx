@@ -31,26 +31,22 @@
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import {
-  Card,
-  CardContent,
-  CardMedia,
-  Typography,
-  Box,
-  IconButton,
-  Container,
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import {
-  PushPin,
-  MoreVert,
-  Visibility,
-  DeleteOutline,
-  PushPinOutlined,
-} from '@mui/icons-material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Container from '@mui/material/Container';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import PushPin from '@mui/icons-material/PushPin';
+import MoreVert from '@mui/icons-material/MoreVert';
+import Visibility from '@mui/icons-material/Visibility';
+import DeleteOutline from '@mui/icons-material/DeleteOutline';
+import PushPinOutlined from '@mui/icons-material/PushPinOutlined';
 import { InterfacePinnedPostCardProps } from 'types/Post/interface';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
