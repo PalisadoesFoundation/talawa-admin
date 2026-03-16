@@ -410,6 +410,32 @@ describe('Organisation Venues', () => {
     });
   });
 
+  test('confirms deletion when modal delete is clicked', async () => {
+    renderOrganizationVenue(link);
+
+    // Wait for venues to load before interacting
+    await waitFor(() =>
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
+    );
+
+    // Open the delete confirmation modal
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+
+    // Find and click the modal delete button to confirm
+    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
+    await userEvent.click(modalDeleteBtn);
+
+    // Wait for mutation to complete and modal to close
+    await wait(100);
+
+    await waitFor(() => {
+      // Modal delete button should no longer be present (modal closed)
+      expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument();
+      // Venue list should still be rendered after refetch
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+    });
+  });
+
   test('displays loader when data is loading', () => {
     renderOrganizationVenue(link);
     expect(screen.getByTestId('loading-state')).toBeInTheDocument();
