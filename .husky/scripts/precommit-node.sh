@@ -85,6 +85,7 @@ fi
 pnpm run check-mock-cleanup || exit 1
 pnpm run check-route-prefix || exit 1
 pnpm run check-localstorage || exit 1
+pnpm run check-pagination-usage || exit 1
 
 git add docs/docs/auto-docs
 

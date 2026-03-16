@@ -11,10 +11,10 @@ vi.mock('react-i18next', () => ({
         paginationFirst: '«',
         paginationFirstLabel: 'First',
         paginationPreviousChar: '‹',
-        paginationPrevLabel: 'Previous',
+        paginationPrevLabel: 'Previous page',
         paginationPageOf: `Page ${opts?.page} of ${opts?.total}`,
         paginationNextChar: '›',
-        paginationNextLabel: 'Next',
+        paginationNextLabel: 'Next page',
         paginationLastLabel: 'Last',
         paginationLast: '»',
         paginationRowsPerPage: 'Rows per page',
@@ -49,8 +49,8 @@ describe('PaginationControl', () => {
     it('renders all navigation buttons', () => {
       render(<PaginationControl {...defaultProps} />);
       expect(screen.getByLabelText('First')).toBeInTheDocument();
-      expect(screen.getByLabelText('Previous')).toBeInTheDocument();
-      expect(screen.getByLabelText('Next')).toBeInTheDocument();
+      expect(screen.getByLabelText('Previous page')).toBeInTheDocument();
+      expect(screen.getByLabelText('Next page')).toBeInTheDocument();
       expect(screen.getByLabelText('Last')).toBeInTheDocument();
     });
 
@@ -121,7 +121,7 @@ describe('PaginationControl', () => {
           onPageChange={onPageChange}
         />,
       );
-      await user.click(screen.getByLabelText('Previous'));
+      await user.click(screen.getByLabelText('Previous page'));
       await waitFor(() => {
         expect(onPageChange).toHaveBeenCalledWith(2);
       });
@@ -137,7 +137,7 @@ describe('PaginationControl', () => {
           onPageChange={onPageChange}
         />,
       );
-      await user.click(screen.getByLabelText('Next'));
+      await user.click(screen.getByLabelText('Next page'));
       await waitFor(() => {
         expect(onPageChange).toHaveBeenCalledWith(3);
       });
@@ -164,32 +164,32 @@ describe('PaginationControl', () => {
     it('disables First and Previous when on first page', () => {
       render(<PaginationControl {...defaultProps} currentPage={1} />);
       expect(screen.getByLabelText('First')).toBeDisabled();
-      expect(screen.getByLabelText('Previous')).toBeDisabled();
-      expect(screen.getByLabelText('Next')).not.toBeDisabled();
+      expect(screen.getByLabelText('Previous page')).toBeDisabled();
+      expect(screen.getByLabelText('Next page')).not.toBeDisabled();
       expect(screen.getByLabelText('Last')).not.toBeDisabled();
     });
 
     it('disables Next and Last when on last page', () => {
       render(<PaginationControl {...defaultProps} currentPage={5} />);
       expect(screen.getByLabelText('First')).not.toBeDisabled();
-      expect(screen.getByLabelText('Previous')).not.toBeDisabled();
-      expect(screen.getByLabelText('Next')).toBeDisabled();
+      expect(screen.getByLabelText('Previous page')).not.toBeDisabled();
+      expect(screen.getByLabelText('Next page')).toBeDisabled();
       expect(screen.getByLabelText('Last')).toBeDisabled();
     });
 
     it('enables all buttons on a middle page', () => {
       render(<PaginationControl {...defaultProps} currentPage={3} />);
       expect(screen.getByLabelText('First')).not.toBeDisabled();
-      expect(screen.getByLabelText('Previous')).not.toBeDisabled();
-      expect(screen.getByLabelText('Next')).not.toBeDisabled();
+      expect(screen.getByLabelText('Previous page')).not.toBeDisabled();
+      expect(screen.getByLabelText('Next page')).not.toBeDisabled();
       expect(screen.getByLabelText('Last')).not.toBeDisabled();
     });
 
     it('disables all controls when disabled prop is true', () => {
       render(<PaginationControl {...defaultProps} currentPage={3} disabled />);
       expect(screen.getByLabelText('First')).toBeDisabled();
-      expect(screen.getByLabelText('Previous')).toBeDisabled();
-      expect(screen.getByLabelText('Next')).toBeDisabled();
+      expect(screen.getByLabelText('Previous page')).toBeDisabled();
+      expect(screen.getByLabelText('Next page')).toBeDisabled();
       expect(screen.getByLabelText('Last')).toBeDisabled();
       expect(screen.getByLabelText('Rows per page')).toBeDisabled();
     });
@@ -205,7 +205,7 @@ describe('PaginationControl', () => {
           onPageChange={onPageChange}
         />,
       );
-      await user.click(screen.getByLabelText('Next'));
+      await user.click(screen.getByLabelText('Next page'));
       await waitFor(() => {
         expect(onPageChange).not.toHaveBeenCalled();
       });
@@ -513,8 +513,8 @@ describe('PaginationControl', () => {
         />,
       );
       expect(screen.getByLabelText('First')).toBeDisabled();
-      expect(screen.getByLabelText('Previous')).toBeDisabled();
-      expect(screen.getByLabelText('Next')).toBeDisabled();
+      expect(screen.getByLabelText('Previous page')).toBeDisabled();
+      expect(screen.getByLabelText('Next page')).toBeDisabled();
       expect(screen.getByLabelText('Last')).toBeDisabled();
     });
 

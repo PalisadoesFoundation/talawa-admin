@@ -26,4 +26,13 @@ export interface IPaginationControlProps {
   onPageChange: (page: number) => void;
   onPageSizeChange: (size: number) => void;
   disabled?: boolean;
+  /**
+   * When true, renders the optional "Jump to page" input control.
+   */
+  enableJumpToPage?: boolean;
+  /**
+   * Optional override invoked when the jump-to-page input submits.
+   * Defaults to calling `onPageChange`.
+   */
+  onJumpToPage?: (page: number) => void;
 }

@@ -14,7 +14,7 @@ PaginationControl renders a full-featured pagination bar.
 
 ### currentPage
 
-[`IPaginationControlProps`](../../../../types/shared-components/PaginationControl/interface/interfaces/IPaginationControlProps.md) & `object`
+[`IPaginationControlProps`](../../../../types/shared-components/PaginationControl/interface/interfaces/IPaginationControlProps.md)
 
 Current active page (1-indexed).
 

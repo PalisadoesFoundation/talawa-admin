@@ -58,6 +58,37 @@ Defined in: [src/types/shared-components/PaginationControl/interface.ts:28](http
 
 ***
 
+### enableJumpToPage?
+
+> `optional` **enableJumpToPage**: `boolean`
+
+Defined in: [src/types/shared-components/PaginationControl/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationControl/interface.ts#L32)
+
+When true, renders the optional "Jump to page" input control.
+
+***
+
+### onJumpToPage()?
+
+> `optional` **onJumpToPage**: (`page`) => `void`
+
+Defined in: [src/types/shared-components/PaginationControl/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PaginationControl/interface.ts#L37)
+
+Optional override invoked when the jump-to-page input submits.
+Defaults to calling `onPageChange`.
+
+#### Parameters
+
+##### page
+
+`number`
+
+#### Returns
+
+`void`
+
+***
+
 ### onPageChange()
 
 > **onPageChange**: (`page`) => `void`

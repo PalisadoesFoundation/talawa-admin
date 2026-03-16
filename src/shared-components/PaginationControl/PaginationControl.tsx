@@ -58,12 +58,9 @@ export function PaginationControl({
   disabled = false,
   enableJumpToPage = false,
   onJumpToPage,
-}: IPaginationControlProps & {
-  enableJumpToPage?: boolean;
-  onJumpToPage?: (page: number) => void;
-}): React.JSX.Element {
+}: IPaginationControlProps) {
   const { t: tCommon } = useTranslation('common');
-  const paginationRef = useRef<HTMLDivElement>(null);
+  const paginationRef = useRef<HTMLElement>(null);
 
   // Clamp safeguards (mirrors DataTable/Pagination.tsx defensive pattern)
   const safeTotalPages = Math.max(1, totalPages);
@@ -93,7 +90,7 @@ export function PaginationControl({
 
   // Arrow-key keyboard navigation - scoped to the component
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>): void => {
+    (e: React.KeyboardEvent<HTMLElement>): void => {
       if (disabled) return;
       const tag = (e.target as HTMLElement).tagName;
       if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
@@ -129,10 +126,9 @@ export function PaginationControl({
   };
 
   return (
-    <div
+    <nav
       ref={paginationRef}
       className={styles.paginationWrap}
-      role="navigation"
       aria-label={tCommon('paginationControl')}
       data-testid="pagination-control"
       tabIndex={0}
@@ -205,7 +201,6 @@ export function PaginationControl({
           value={pageSize}
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
           disabled={disabled}
-          aria-label={tCommon('paginationRowsPerPage')}
           data-testid="pagination-page-size"
         >
           {pageSizeOptions.map((n) => (
@@ -244,7 +239,7 @@ export function PaginationControl({
           />
         </label>
       )}
-    </div>
+    </nav>
   );
 }
 

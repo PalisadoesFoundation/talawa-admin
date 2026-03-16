@@ -88,6 +88,7 @@
     "setup": "tsx src/setup/setup.ts",
     "install-deps": "tsx src/install/index.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
+    "check-pagination-usage": "tsx scripts/githooks/check-pagination-usage.ts --staged",
     "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node scripts/docs/fix-repo-url.js",
     "generate-docs": "typedoc && pnpm run postgenerate-docs && node scripts/docs/fix-readme-links.js",
     "convert-mui": "node scripts/codemods/convert-mui-imports.js",

@@ -87,7 +87,7 @@
 }
 
 /* Responsive: hide page-size selector on very small screens */
-@media (max-width: var(--vw-80)) {
+@media (max-width: 640px) {
   .pageSizeLabel {
     display: none;
   }
