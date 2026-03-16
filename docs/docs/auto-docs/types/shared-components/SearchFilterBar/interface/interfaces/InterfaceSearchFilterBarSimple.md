@@ -75,7 +75,7 @@ default 300
 
 > **hasDropdowns**: `false`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L236)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L237)
 
 Discriminator property indicating this variant has no dropdowns.
 

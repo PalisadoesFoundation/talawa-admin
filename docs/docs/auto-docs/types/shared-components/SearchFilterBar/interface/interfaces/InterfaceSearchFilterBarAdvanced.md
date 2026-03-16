@@ -4,7 +4,7 @@
 
 # Interface: InterfaceSearchFilterBarAdvanced
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L302)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L303)
 
 Configuration for SearchFilterBar with search and dropdown functionality.
 
@@ -78,7 +78,7 @@ sorting/filtering dropdowns.
 
 > `optional` **additionalButtons**: `ReactNode`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:343](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L343)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L345)
 
 Optional additional React elements to render after the dropdowns.
 **Job:** Allows inserting custom buttons or components (e.g., "Upload Plugin" button).
@@ -145,7 +145,7 @@ default 300
 
 > **dropdowns**: [`InterfaceDropdownConfig`](InterfaceDropdownConfig.md)[]
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L328)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:330](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L330)
 
 Array of dropdown configurations for sorting and filtering.
 **Job:** Defines all the dropdown controls that appear alongside the search bar.
@@ -173,7 +173,7 @@ dropdowns={[
 
 > **hasDropdowns**: `true`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:307](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L307)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:309](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L309)
 
 Discriminator property indicating this variant has dropdowns.
 **Job:** When `true`, the `dropdowns` property must be provided.

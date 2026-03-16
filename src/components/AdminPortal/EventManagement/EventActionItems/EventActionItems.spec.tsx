@@ -453,10 +453,12 @@ const renderEventActionItems = (
 };
 
 describe('EventActionItems', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(async () => {
-    const { default: SortingButton } = await import(
-      'shared-components/SortingButton/SortingButton'
-    );
+    user = userEvent.setup();
+    const { default: SortingButton } =
+      await import('shared-components/SortingButton/SortingButton');
     // Define the type locally for the cast
     type SortingButtonMock = { resetFilterCount: () => void };
     (SortingButton as unknown as SortingButtonMock).resetFilterCount?.();
@@ -620,11 +622,11 @@ describe('EventActionItems', () => {
       });
 
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
-      await userEvent.click(searchToggleBtn);
+      await user.click(searchToggleBtn);
 
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'Category');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'Category');
 
       await waitFor(() => {
         expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -641,8 +643,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'John');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'John');
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -659,17 +661,17 @@ describe('EventActionItems', () => {
       });
 
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
-      await userEvent.click(searchToggleBtn);
+      await user.click(searchToggleBtn);
 
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'Category 2');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'Category 2');
 
       // Ensure `searchBy` state has applied before the debounced search term resolves.
       // This avoids a race where the first debounced search runs while still in "assignee" mode.
       await new Promise((resolve) => setTimeout(resolve, 0));
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'Category 2');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'Category 2');
 
       await waitFor(() => {
         expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -685,8 +687,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'JOHN');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'JOHN');
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -704,17 +706,17 @@ describe('EventActionItems', () => {
 
       const searchInput = screen.getByTestId('searchBy');
       const searchButton = screen.getByTestId('searchBtn');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'John');
-      await userEvent.click(searchButton);
+      await user.clear(searchInput);
+      await user.type(searchInput, 'John');
+      await user.click(searchButton);
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
 
-      await userEvent.clear(searchInput);
-      await userEvent.click(searchButton);
+      await user.clear(searchInput);
+      await user.click(searchButton);
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
         expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
@@ -729,8 +731,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'nonexistent');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'nonexistent');
 
       await waitFor(() => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
@@ -800,8 +802,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'Group Search');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'Group Search');
 
       await waitFor(() => {
         expect(screen.getAllByText('Group Search')).toHaveLength(2);
@@ -862,7 +864,7 @@ describe('EventActionItems', () => {
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
-      await userEvent.click(sortBtn);
+      await user.click(sortBtn);
 
       await waitFor(() => {
         expect(
@@ -925,8 +927,8 @@ describe('EventActionItems', () => {
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
-      await userEvent.click(sortBtn);
-      await userEvent.click(sortBtn);
+      await user.click(sortBtn);
+      await user.click(sortBtn);
 
       await waitFor(() => {
         expect(
@@ -986,7 +988,7 @@ describe('EventActionItems', () => {
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
-      await userEvent.click(sortBtn);
+      await user.click(sortBtn);
 
       await waitFor(() => {
         expect(
@@ -1127,7 +1129,7 @@ describe('EventActionItems', () => {
 
       // Click filter button once to filter by Pending
       const filterBtn = screen.getByTestId('filterBtn');
-      await userEvent.click(filterBtn);
+      await user.click(filterBtn);
 
       // Verify only pending item (John Doe) is visible
       await waitFor(() => {
@@ -1149,7 +1151,7 @@ describe('EventActionItems', () => {
       const filterBtn = screen.getByTestId('filterBtn');
 
       // Click twice to get to Completed filter
-      await userEvent.click(filterBtn);
+      await user.click(filterBtn);
 
       // Small delay between clicks to ensure state updates
       await waitFor(() => {
@@ -1157,7 +1159,7 @@ describe('EventActionItems', () => {
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
 
-      await userEvent.click(filterBtn);
+      await user.click(filterBtn);
 
       // Verify only completed item (Bob Wilson) is visible
       await waitFor(
@@ -1183,13 +1185,13 @@ describe('EventActionItems', () => {
       const filterBtn = screen.getByTestId('filterBtn');
 
       // Click three times to cycle through all states
-      await userEvent.click(filterBtn);
+      await user.click(filterBtn);
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      await userEvent.click(filterBtn);
+      await user.click(filterBtn);
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      await userEvent.click(filterBtn);
+      await user.click(filterBtn);
 
       // Both items should be visible again
       await waitFor(
@@ -1211,7 +1213,7 @@ describe('EventActionItems', () => {
       });
 
       const createBtn = screen.getByTestId('createActionItemBtn');
-      await userEvent.click(createBtn);
+      await user.click(createBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
@@ -1228,7 +1230,7 @@ describe('EventActionItems', () => {
       });
 
       const viewBtn = screen.getByTestId('viewItemBtnactionItemId1');
-      await userEvent.click(viewBtn);
+      await user.click(viewBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('view-modal')).toBeInTheDocument();
@@ -1245,7 +1247,7 @@ describe('EventActionItems', () => {
       });
 
       const editBtn = screen.getByTestId('editItemBtnactionItemId1');
-      await userEvent.click(editBtn);
+      await user.click(editBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
@@ -1262,7 +1264,7 @@ describe('EventActionItems', () => {
       });
 
       const deleteBtn = screen.getByTestId('deleteItemBtnactionItemId1');
-      await userEvent.click(deleteBtn);
+      await user.click(deleteBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
@@ -1279,7 +1281,7 @@ describe('EventActionItems', () => {
       });
 
       const statusCheckbox = screen.getByTestId('statusCheckboxactionItemId1');
-      await userEvent.click(statusCheckbox);
+      await user.click(statusCheckbox);
 
       await waitFor(() => {
         expect(screen.getByTestId('status-modal')).toBeInTheDocument();
@@ -1404,8 +1406,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'test search');
+      await user.clear(searchInput);
+      await user.type(searchInput, 'test search');
 
       await waitFor(() => {
         expect(searchInput).toHaveValue('test search');
@@ -1748,7 +1750,7 @@ describe('EventActionItems', () => {
       });
 
       const deleteBtn = screen.getByTestId('deleteItemBtnactionItemId1');
-      await userEvent.click(deleteBtn);
+      await user.click(deleteBtn);
 
       await waitFor(() => {
         // Asserting that the delete modal is present, which implies toggleModal(ModalState.DELETE) logic worked
@@ -1766,7 +1768,7 @@ describe('EventActionItems', () => {
       });
 
       const viewBtn = screen.getByTestId('viewItemBtnactionItemId1');
-      await userEvent.click(viewBtn);
+      await user.click(viewBtn);
 
       await waitFor(() => {
         // Asserting that the view modal is present, which implies toggleModal(ModalState.VIEW) logic worked
@@ -1784,7 +1786,7 @@ describe('EventActionItems', () => {
       });
 
       const statusCheckbox = screen.getByTestId('statusCheckboxactionItemId1');
-      await userEvent.click(statusCheckbox);
+      await user.click(statusCheckbox);
 
       await waitFor(() => {
         // Asserting that the status modal is present, which implies toggleModal(ModalState.STATUS) logic worked
@@ -1802,7 +1804,7 @@ describe('EventActionItems', () => {
       });
 
       const editBtn = screen.getByTestId('editItemBtnactionItemId1');
-      await userEvent.click(editBtn);
+      await user.click(editBtn);
 
       await waitFor(() => {
         // The modal should be open (edit mode)
@@ -1822,7 +1824,7 @@ describe('EventActionItems', () => {
       });
 
       const editBtn = screen.getByTestId('editItemBtnactionItemId1');
-      await userEvent.click(editBtn);
+      await user.click(editBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
@@ -1837,7 +1839,7 @@ describe('EventActionItems', () => {
       });
 
       const createBtn = screen.getByTestId('createActionItemBtn');
-      await userEvent.click(createBtn);
+      await user.click(createBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
@@ -1897,7 +1899,7 @@ describe('EventActionItems', () => {
 
       // Click the sort button to trigger sorting
       const sortBtn = screen.getByTestId('sortBtn');
-      await userEvent.click(sortBtn);
+      await user.click(sortBtn);
 
       // Verify items are rendered (sorting logic is tested via the component's behavior)
       await waitFor(() => {
@@ -1949,8 +1951,8 @@ describe('EventActionItems', () => {
 
       // Click twice to cycle through sort options (first click: DESC, second click: ASC)
       const sortBtn = screen.getByTestId('sortBtn');
-      await userEvent.click(sortBtn);
-      await userEvent.click(sortBtn);
+      await user.click(sortBtn);
+      await user.click(sortBtn);
 
       // Verify items are rendered
       await waitFor(() => {

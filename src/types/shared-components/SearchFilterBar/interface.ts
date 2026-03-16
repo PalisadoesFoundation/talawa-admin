@@ -227,8 +227,7 @@ interface InterfaceSearchFilterBarBase {
  * />
  * ```
  */
-export interface InterfaceSearchFilterBarSimple
-  extends InterfaceSearchFilterBarBase {
+export interface InterfaceSearchFilterBarSimple extends InterfaceSearchFilterBarBase {
   /**
    * Discriminator property indicating this variant has no dropdowns.
    *
@@ -300,8 +299,7 @@ export interface InterfaceSearchFilterBarSimple
  * />
  * ```
  */
-export interface InterfaceSearchFilterBarAdvanced
-  extends InterfaceSearchFilterBarBase {
+export interface InterfaceSearchFilterBarAdvanced extends InterfaceSearchFilterBarBase {
   /**
    * Discriminator property indicating this variant has dropdowns.
    * **Job:** When `true`, the `dropdowns` property must be provided.

@@ -243,9 +243,8 @@ describe('validateImageFile (single allowed type)', () => {
     }));
 
     const { validateImageFile } = await import('./userUpdateUtils');
-    const { NotificationToast } = await import(
-      'components/NotificationToast/NotificationToast'
-    );
+    const { NotificationToast } =
+      await import('components/NotificationToast/NotificationToast');
 
     const mockTCommon = vi
       .fn()
