@@ -272,8 +272,6 @@ export interface IEventEdge {
  */
 export interface ICreateEventInput {
   name: string;
-  startAt: string;
-  endAt: string;
   organizationId: string | undefined;
   allDay: boolean;
   /**
@@ -282,7 +280,12 @@ export interface ICreateEventInput {
    */
   isPublic: boolean;
   isRegisterable: boolean;
-  isInviteOnly: boolean;
+  /** Timed events (allDay=false): full ISO datetime strings */
+  startAt?: string;
+  endAt?: string;
+  /** All-day events (allDay=true): date-only strings (YYYY-MM-DD) */
+  startDate?: string;
+  endDate?: string;
   description?: string;
   location?: string;
   recurrence?:

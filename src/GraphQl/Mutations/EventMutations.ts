@@ -10,11 +10,12 @@ export const CREATE_EVENT_MUTATION = gql`
       description
       startAt
       endAt
+      startDate
+      endDate
       allDay
       location
       isPublic
       isRegisterable
-      isInviteOnly
       # Recurring event fields (available for recurring events)
       isRecurringEventTemplate
 
@@ -57,7 +58,6 @@ export const UPDATE_EVENT_MUTATION = gql`
       location
       isPublic
       isRegisterable
-      isInviteOnly
       creator {
         id
         name
@@ -124,7 +124,6 @@ export const UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION = gql`
       location
       isPublic
       isRegisterable
-      isInviteOnly
       allDay
       progressLabel
       sequenceNumber
@@ -146,7 +145,6 @@ export const UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION = gql`
       location
       isPublic
       isRegisterable
-      isInviteOnly
       allDay
       progressLabel
       sequenceNumber

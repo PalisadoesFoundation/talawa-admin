@@ -204,13 +204,20 @@ export default function Events(): JSX.Element {
       // Build input object with shared typed interface
       const input: ICreateEventInput = {
         name: payload.name,
-        startAt: payload.startAtISO,
-        endAt: payload.endAtISO,
         organizationId,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
-        isInviteOnly: payload.isInviteOnly,
+        // Conditionally send date fields based on allDay flag
+        ...(payload.allDay
+          ? {
+              startDate: payload.startDate.toISOString().slice(0, 10),
+              endDate: payload.endDate.toISOString().slice(0, 10),
+            }
+          : {
+              startAt: payload.startAtISO,
+              endAt: payload.endAtISO,
+            }),
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
