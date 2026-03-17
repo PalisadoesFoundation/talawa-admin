@@ -4,6 +4,7 @@ import {
   PluginManager,
   getPluginManager,
   resetPluginManager,
+  initializePluginSystemOnce,
 } from '../manager';
 import { PluginStatus } from '../types';
 
@@ -86,7 +87,10 @@ vi.mock('../graphql-service', () => ({
     deletePlugin: vi.fn().mockResolvedValue({}),
   })),
 }));
-
+// Also mock plugin/registry at top of file:
+vi.mock('plugin/registry', () => ({
+  discoverAndRegisterAllPlugins: vi.fn().mockResolvedValue(undefined),
+}));
 const mockApolloClient = {
   query: vi.fn(),
   mutate: vi.fn(),
@@ -593,5 +597,63 @@ describe('resetPluginManager', () => {
     resetPluginManager();
     const manager2 = getPluginManager();
     expect(manager1).not.toBe(manager2);
+  });
+});
+
+describe('initializePluginSystemOnce', () => {
+  beforeEach(async () => {
+    resetPluginManager();
+    vi.clearAllMocks();
+
+    const { DiscoveryManager } = await import('../managers/discovery');
+    vi.mocked(DiscoveryManager).mockImplementation(
+      () =>
+        ({
+          loadPluginIndexFromGraphQL: vi.fn().mockResolvedValue(undefined),
+          discoverPlugins: vi.fn().mockResolvedValue([]),
+          setGraphQLService: vi.fn(),
+          isPluginActivated: vi.fn().mockReturnValue(true),
+          isPluginInstalled: vi.fn().mockReturnValue(true),
+        }) as unknown as InstanceType<typeof DiscoveryManager>,
+    );
+  });
+  afterEach(() => {
+    resetPluginManager();
+    vi.clearAllMocks();
+  });
+
+  it('initializes the plugin system once and calls discoverAndRegisterAllPlugins', async () => {
+    const { discoverAndRegisterAllPlugins } = await import('plugin/registry');
+    await initializePluginSystemOnce();
+    expect(vi.mocked(discoverAndRegisterAllPlugins)).toHaveBeenCalledTimes(1);
+  });
+
+  it('deduplicates concurrent calls — creates only one in-flight promise', async () => {
+    const { discoverAndRegisterAllPlugins } = await import('plugin/registry');
+    await Promise.all([
+      initializePluginSystemOnce(),
+      initializePluginSystemOnce(),
+      initializePluginSystemOnce(),
+    ]);
+    expect(vi.mocked(discoverAndRegisterAllPlugins)).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns immediately on subsequent calls once initialized', async () => {
+    const { discoverAndRegisterAllPlugins } = await import('plugin/registry');
+    await initializePluginSystemOnce();
+    await initializePluginSystemOnce(); // second call
+    expect(vi.mocked(discoverAndRegisterAllPlugins)).toHaveBeenCalledTimes(1);
+  });
+
+  it('resets initializing to null on failure, allowing retry', async () => {
+    const { discoverAndRegisterAllPlugins } = await import('plugin/registry');
+    vi.mocked(discoverAndRegisterAllPlugins)
+      .mockRejectedValueOnce(new Error('first failure'))
+      .mockResolvedValue(undefined);
+
+    await expect(initializePluginSystemOnce()).rejects.toThrow('first failure');
+    // retry should succeed
+    await expect(initializePluginSystemOnce()).resolves.not.toThrow();
+    expect(vi.mocked(discoverAndRegisterAllPlugins)).toHaveBeenCalledTimes(2);
   });
 });

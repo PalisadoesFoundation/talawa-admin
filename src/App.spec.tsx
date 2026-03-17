@@ -667,9 +667,7 @@ describe('Testing the App Component', () => {
   });
   it('should NOT initialize plugin system on public routes', async () => {
     renderApp(link, '/'); // public route
-
-    await waitFor(() => {
-      expect(mockInitializePluginSystemOnce).not.toHaveBeenCalled();
-    });
+    await screen.findByTestId('app-footer');
+    expect(mockInitializePluginSystemOnce).not.toHaveBeenCalled();
   });
 });
