@@ -515,12 +515,17 @@ describe('PluginManager', () => {
       );
 
       resetPluginManager();
-      await createInitializedManager();
+      const manager = new PluginManager();
+      await expect(manager.initializePluginSystem()).rejects.toThrow(
+        'GraphQL error',
+      );
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to initialize plugins:',
         expect.any(Error),
       );
+
+      expect(manager.isSystemInitialized()).toBe(false);
 
       consoleErrorSpy.mockRestore();
     });

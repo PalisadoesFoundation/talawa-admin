@@ -175,8 +175,9 @@ function App(): React.ReactElement {
   const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
 
   // Initialize plugin system on app startup
+  const isPublic = isPublicRoute(location.pathname);
   useEffect(() => {
-    if (isPublicRoute(location.pathname)) return;
+    if (isPublic) return;
 
     const init = async () => {
       try {
@@ -191,7 +192,7 @@ function App(): React.ReactElement {
     };
 
     void init();
-  }, [location.pathname, apolloClient]);
+  }, [isPublic, apolloClient]);
 
   useEffect(() => {
     if (!loading && data?.user) {

@@ -73,7 +73,7 @@ export class PluginManager {
       this.markAsInitialized();
     } catch (error) {
       console.error('Failed to initialize plugins:', error);
-      this.markAsInitialized();
+      throw error;
     }
   }
 
