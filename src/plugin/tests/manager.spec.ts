@@ -91,7 +91,12 @@ const mockApolloClient = {
   query: vi.fn(),
   mutate: vi.fn(),
 } as unknown as ApolloClient<unknown>;
-
+const createInitializedManager = async () => {
+  resetPluginManager();
+  const manager = new PluginManager();
+  await manager.initializePluginSystem();
+  return manager;
+};
 describe('PluginManager', () => {
   let pluginManager: PluginManager;
 
@@ -349,7 +354,7 @@ describe('PluginManager', () => {
         .spyOn(console, 'warn')
         .mockImplementation(() => {});
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      const pluginManager = await createInitializedManager();
 
       expect(pluginManager.isSystemInitialized()).toBe(true);
 
@@ -404,11 +409,7 @@ describe('PluginManager', () => {
       );
 
       resetPluginManager();
-      new PluginManager();
-
-      // Wait for async initialization to complete
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
+      await createInitializedManager();
       expect(mockDiscoveryInstance.discoverPlugins).toHaveBeenCalled();
       expect(mockLifecycleInstance.loadPlugin).toHaveBeenCalledWith('plugin1');
       expect(mockLifecycleInstance.loadPlugin).toHaveBeenCalledWith('plugin2');
@@ -457,12 +458,7 @@ describe('PluginManager', () => {
             typeof LifecycleManager
           >,
       );
-
-      resetPluginManager();
-      new PluginManager();
-
-      // Wait for async initialization to complete
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await createInitializedManager();
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining('Failed to load plugin failing-plugin'),
@@ -519,10 +515,7 @@ describe('PluginManager', () => {
       );
 
       resetPluginManager();
-      new PluginManager();
-
-      // Wait for async initialization to complete
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await createInitializedManager();
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to initialize plugins:',
@@ -560,11 +553,7 @@ describe('PluginManager', () => {
           >,
       );
 
-      resetPluginManager();
-      const manager = new PluginManager();
-
-      // Wait for async initialization to complete
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      const manager = await createInitializedManager();
 
       expect(mockDiscoveryInstance.discoverPlugins).toHaveBeenCalled();
       expect(mockEventInstance.emit).toHaveBeenCalledWith(
