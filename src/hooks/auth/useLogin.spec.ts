@@ -26,7 +26,6 @@ const createWrapper = (mocks: MockedResponse[]) =>
   function Wrapper({ children }: { children: React.ReactNode }) {
     return React.createElement(MockedProvider, {
       mocks,
-      addTypename: false,
       children,
     });
   };
