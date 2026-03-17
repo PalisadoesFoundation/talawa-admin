@@ -748,6 +748,215 @@ describe('Calendar', () => {
     }
   });
 
+  it('shows timed event in day view when startAt matches current date', () => {
+    const fixedNow = dayjs.utc(FIXED_ALL_DAY_TEST_MS);
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow.toDate());
+
+    const timedEventOnCurrentDay: InterfaceEvent[] = [
+      {
+        id: 'timed-day-view',
+        name: 'Timed Day View Event',
+        description: 'Timed event shown in day view',
+        startAt: fixedNow.hour(10).toISOString(),
+        endAt: fixedNow.hour(12).toISOString(),
+        location: 'Anywhere',
+        startTime: '10:00',
+        endTime: '12:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator-timed-day', name: 'Creator Timed Day' },
+      },
+    ];
+
+    try {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={timedEventOnCurrentDay}
+                viewType={ViewType.DAY}
+                userRole={UserRole.ADMINISTRATOR}
+                userId="admin1"
+                onMonthChange={onMonthChange}
+                currentMonth={fixedNow.month()}
+                currentYear={fixedNow.year()}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
+
+      expect(screen.getByText('Timed Day View Event')).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('filters out invalid day-view events when neither startDate nor startAt exists', () => {
+    const fixedNow = dayjs.utc(FIXED_ALL_DAY_TEST_MS);
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow.toDate());
+
+    const invalidDayViewEvent = [
+      {
+        id: 'invalid-day-view',
+        name: 'Invalid Day View Event',
+        description: 'Missing startDate/startAt',
+        location: 'Anywhere',
+        startTime: null,
+        endTime: null,
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator-invalid-day', name: 'Creator Invalid Day' },
+      },
+    ] as unknown as InterfaceEvent[];
+
+    try {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={invalidDayViewEvent}
+                viewType={ViewType.DAY}
+                userRole={UserRole.ADMINISTRATOR}
+                userId="admin1"
+                onMonthChange={onMonthChange}
+                currentMonth={fixedNow.month()}
+                currentYear={fixedNow.year()}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
+
+      expect(
+        screen.queryByText('Invalid Day View Event'),
+      ).not.toBeInTheDocument();
+      expect(screen.getByText('No events available')).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('shows timed event in month grid when startAt matches a local date cell', () => {
+    const fixedNow = dayjs.utc(FIXED_ALL_DAY_TEST_MS);
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow.toDate());
+
+    const timedMonthEvent: InterfaceEvent[] = [
+      {
+        id: 'timed-month-view',
+        name: 'Timed Month View Event',
+        description: 'Timed event shown in month grid',
+        startAt: fixedNow.hour(14).toISOString(),
+        endAt: fixedNow.hour(15).toISOString(),
+        location: 'Anywhere',
+        startTime: '14:00',
+        endTime: '15:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator-timed-month', name: 'Creator Timed Month' },
+      },
+    ];
+
+    try {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={timedMonthEvent}
+                viewType={ViewType.MONTH}
+                userRole={UserRole.ADMINISTRATOR}
+                userId="admin1"
+                onMonthChange={onMonthChange}
+                currentMonth={fixedNow.month()}
+                currentYear={fixedNow.year()}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
+
+      const dayCells = screen.getAllByTestId('day');
+      const cellsWithEvents = dayCells.filter(
+        (cell) => cell.getAttribute('data-has-events') === 'true',
+      );
+
+      expect(cellsWithEvents.length).toBeGreaterThan(0);
+      expect(screen.getByText('Timed Month View Event')).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('filters out invalid month-grid events when neither startDate nor startAt exists', () => {
+    const fixedNow = dayjs.utc(FIXED_ALL_DAY_TEST_MS);
+    vi.useFakeTimers();
+    vi.setSystemTime(fixedNow.toDate());
+
+    const invalidMonthEvent = [
+      {
+        id: 'invalid-month-view',
+        name: 'Invalid Month View Event',
+        description: 'Missing startDate/startAt',
+        location: 'Anywhere',
+        startTime: null,
+        endTime: null,
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator-invalid-month', name: 'Creator Invalid Month' },
+      },
+    ] as unknown as InterfaceEvent[];
+
+    try {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={invalidMonthEvent}
+                viewType={ViewType.MONTH}
+                userRole={UserRole.ADMINISTRATOR}
+                userId="admin1"
+                onMonthChange={onMonthChange}
+                currentMonth={fixedNow.month()}
+                currentYear={fixedNow.year()}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
+
+      const dayCells = screen.getAllByTestId('day');
+      const cellsWithEvents = dayCells.filter(
+        (cell) => cell.getAttribute('data-has-events') === 'true',
+      );
+
+      expect(cellsWithEvents).toHaveLength(0);
+      expect(
+        screen.queryByText('Invalid Month View Event'),
+      ).not.toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('should handle date navigation boundary conditions in day view', async () => {
     const mockOnMonthChange = vi.fn();
 

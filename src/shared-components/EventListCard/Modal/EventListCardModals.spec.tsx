@@ -271,6 +271,120 @@ describe('EventListCardModals', () => {
     expect(previewProps.userId).toBe('user2');
   });
 
+  test('derives form startTime and endTime from startAt and endAt when API time fields are absent', () => {
+    const startAt = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(1, 'day')
+      .hour(13)
+      .minute(5)
+      .second(7)
+      .millisecond(0)
+      .toISOString();
+    const endAt = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(1, 'day')
+      .hour(15)
+      .minute(45)
+      .second(9)
+      .millisecond(0)
+      .toISOString();
+
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        startAt,
+        endAt,
+        startTime: undefined,
+        endTime: undefined,
+      },
+    });
+
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+
+    expect(previewProps.formState.startTime).toBe(
+      dayjs(startAt).format('HH:mm:ss'),
+    );
+    expect(previewProps.formState.endTime).toBe(
+      dayjs(endAt).format('HH:mm:ss'),
+    );
+  });
+
+  test('re-derives form startTime and endTime when startAt and endAt props change', () => {
+    const initialStartAt = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(2, 'day')
+      .hour(9)
+      .minute(0)
+      .second(0)
+      .millisecond(0)
+      .toISOString();
+    const initialEndAt = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(2, 'day')
+      .hour(11)
+      .minute(0)
+      .second(0)
+      .millisecond(0)
+      .toISOString();
+
+    const { rerender } = renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        startAt: initialStartAt,
+        endAt: initialEndAt,
+        startTime: undefined,
+        endTime: undefined,
+      },
+    });
+
+    const updatedStartAt = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(3, 'day')
+      .hour(16)
+      .minute(20)
+      .second(30)
+      .millisecond(0)
+      .toISOString();
+    const updatedEndAt = dayjs
+      .utc(FIXED_BASE_DATE)
+      .add(3, 'day')
+      .hour(18)
+      .minute(40)
+      .second(50)
+      .millisecond(0)
+      .toISOString();
+
+    rerender(
+      <MockedProvider>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <EventListCardModals
+              eventListCardProps={{
+                ...mockEventListCardProps,
+                startAt: updatedStartAt,
+                endAt: updatedEndAt,
+                startTime: undefined,
+                endTime: undefined,
+              }}
+              eventModalIsOpen={true}
+              hideViewModal={vi.fn()}
+            />
+          </I18nextProvider>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const latestPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
+
+    expect(latestPreviewProps.formState.startTime).toBe(
+      dayjs(updatedStartAt).format('HH:mm:ss'),
+    );
+    expect(latestPreviewProps.formState.endTime).toBe(
+      dayjs(updatedEndAt).format('HH:mm:ss'),
+    );
+  });
+
   test('handles standalone event update successfully', async () => {
     renderComponent();
 

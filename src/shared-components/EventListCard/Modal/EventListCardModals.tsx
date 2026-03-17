@@ -149,15 +149,6 @@ function EventListCardModals({
 
   // Sync form state with props when event data changes (after refetch)
   useEffect(() => {
-    console.log('EventListCardModals: Props changed, updating state', {
-      eventId: eventListCardProps.id,
-      allDay: eventListCardProps.allDay,
-      startDate: eventListCardProps.startDate,
-      endDate: eventListCardProps.endDate,
-      startAt: eventListCardProps.startAt,
-      endAt: eventListCardProps.endAt,
-    });
-
     setAllDayChecked(eventListCardProps.allDay);
     setPublicChecked(eventListCardProps.isPublic);
     setRegisterableChecked(eventListCardProps.isRegisterable);
@@ -190,11 +181,6 @@ function EventListCardModals({
           : new Date();
 
     setEventEndDate(newEndDate);
-
-    console.log('EventListCardModals: State updated', {
-      newStartDate,
-      newEndDate,
-    });
   }, [
     eventListCardProps.id,
     eventListCardProps.allDay,

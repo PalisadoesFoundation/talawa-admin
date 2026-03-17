@@ -661,6 +661,122 @@ describe('WeeklyEventCalender Component', () => {
     expect(screen.queryByText('All Day Missing Start')).not.toBeInTheDocument();
   });
 
+  it('does not render timed events when startAt is missing', () => {
+    const timedEventMissingStartAt: InterfaceEvent[] = [
+      {
+        ...mockEventData[0],
+        id: 'timed-missing-start-at',
+        name: 'Timed Missing StartAt',
+        allDay: false,
+        startAt: null,
+        endAt: dayjs(today)
+          .startOf('week')
+          .add(2, 'day')
+          .hour(12)
+          .minute(0)
+          .second(0)
+          .utc()
+          .toISOString(),
+      },
+    ];
+
+    renderComponent({
+      eventData: timedEventMissingStartAt,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.queryByText('Timed Missing StartAt')).not.toBeInTheDocument();
+  });
+
+  it('does not render timed events when endAt is missing', () => {
+    const timedEventMissingEndAt: InterfaceEvent[] = [
+      {
+        ...mockEventData[0],
+        id: 'timed-missing-end-at',
+        name: 'Timed Missing EndAt',
+        allDay: false,
+        startAt: dayjs(today)
+          .startOf('week')
+          .add(2, 'day')
+          .hour(10)
+          .minute(0)
+          .second(0)
+          .utc()
+          .toISOString(),
+        endAt: null,
+      },
+    ];
+
+    renderComponent({
+      eventData: timedEventMissingEndAt,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.queryByText('Timed Missing EndAt')).not.toBeInTheDocument();
+  });
+
+  it('short-circuits timed filtering before UTC parsing when startAt or endAt is missing', () => {
+    const utcSpy = vi.spyOn(dayjs, 'utc');
+
+    const timedEventsMissingBounds: InterfaceEvent[] = [
+      {
+        ...mockEventData[0],
+        id: 'timed-missing-start-bound',
+        name: 'Timed Missing Start Bound',
+        allDay: false,
+        startAt: null,
+        endAt: dayjs(today)
+          .startOf('week')
+          .add(2, 'day')
+          .hour(12)
+          .minute(0)
+          .second(0)
+          .utc()
+          .toISOString(),
+      },
+      {
+        ...mockEventData[0],
+        id: 'timed-missing-end-bound',
+        name: 'Timed Missing End Bound',
+        allDay: false,
+        startAt: dayjs(today)
+          .startOf('week')
+          .add(2, 'day')
+          .hour(10)
+          .minute(0)
+          .second(0)
+          .utc()
+          .toISOString(),
+        endAt: null,
+      },
+    ];
+
+    renderComponent({
+      eventData: timedEventsMissingBounds,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(
+      screen.queryByText('Timed Missing Start Bound'),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Timed Missing End Bound'),
+    ).not.toBeInTheDocument();
+    expect(utcSpy).not.toHaveBeenCalled();
+  });
+
   it('renders an all-day event on exactly one day when endDate is not provided', () => {
     const allDayDate = dayjs(today)
       .startOf('week')
