@@ -1343,6 +1343,130 @@ describe('Organisation Events Page', () => {
       expect(parsedEvents[2].allDay).toBe(false);
     });
   });
+
+  test('maps non-all-day startTime/endTime from startAt/endAt and null when bounds are missing', async () => {
+    const timedStartAt = dayjs().add(15, 'day').hour(9).minute(5).toISOString();
+    const timedEndAt = dayjs().add(15, 'day').hour(11).minute(45).toISOString();
+
+    const branchEventsMock = {
+      request: {
+        query: GET_ORGANIZATION_EVENTS_PG,
+        variables: buildEventsVariables(),
+      },
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  cursor: 'branch-cursor-1',
+                  node: {
+                    id: 'timed-with-bounds',
+                    name: 'Timed With Bounds',
+                    description: 'Has startAt/endAt',
+                    startAt: timedStartAt,
+                    endAt: timedEndAt,
+                    startDate: null,
+                    endDate: null,
+                    allDay: false,
+                    location: 'Room A',
+                    isPublic: true,
+                    isRegisterable: true,
+                    isInviteOnly: false,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    attachments: [],
+                    creator: { id: '1', name: 'Creator User' },
+                    organization: { id: '1', name: 'Test Organization' },
+                    createdAt: dayjs().toISOString(),
+                    updatedAt: dayjs().toISOString(),
+                  },
+                },
+                {
+                  cursor: 'branch-cursor-2',
+                  node: {
+                    id: 'timed-missing-bounds',
+                    name: 'Timed Missing Bounds',
+                    description: 'Missing startAt/endAt',
+                    startAt: null,
+                    endAt: null,
+                    startDate: null,
+                    endDate: null,
+                    allDay: false,
+                    location: 'Room B',
+                    isPublic: true,
+                    isRegisterable: true,
+                    isInviteOnly: false,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    attachments: [],
+                    creator: { id: '2', name: 'Creator User 2' },
+                    organization: { id: '1', name: 'Test Organization' },
+                    createdAt: dayjs().toISOString(),
+                    updatedAt: dayjs().toISOString(),
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const branchOrgMock = {
+      request: {
+        query: GET_ORGANIZATION_DATA_PG,
+        variables: buildOrgVariables(),
+      },
+      result: {
+        data: {
+          organization: {
+            id: '1',
+            name: 'Test Organization',
+          },
+        },
+      },
+    };
+
+    const branchLink = new StaticMockLink(
+      [branchEventsMock, branchOrgMock].map((mock) => ({
+        ...mock,
+        variableMatcher: () => true,
+      })),
+      true,
+    );
+
+    renderWithLink(branchLink);
+
+    await waitFor(() => {
+      const jsonPre = screen.getByTestId('event-data-json');
+      const parsedEvents = JSON.parse(jsonPre.textContent || '[]');
+
+      const withBounds = parsedEvents.find(
+        (event: { id: string }) => event.id === 'timed-with-bounds',
+      );
+      const missingBounds = parsedEvents.find(
+        (event: { id: string }) => event.id === 'timed-missing-bounds',
+      );
+
+      expect(withBounds.startTime).toBe(dayjs(timedStartAt).format('HH:mm:ss'));
+      expect(withBounds.endTime).toBe(dayjs(timedEndAt).format('HH:mm:ss'));
+      expect(missingBounds.startTime).toBeNull();
+      expect(missingBounds.endTime).toBeNull();
+    });
+  });
 });
 
 const ERROR_MOCK = [

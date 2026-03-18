@@ -863,6 +863,147 @@ describe('Testing Events Screen [User Portal]', () => {
     );
   });
 
+  it('Should map non-all-day startTime/endTime from startAt/endAt and return null when missing', async () => {
+    const timedStartAt = dayjs(TEST_DATE)
+      .add(3, 'day')
+      .hour(9)
+      .minute(15)
+      .second(0)
+      .toISOString();
+    const timedEndAt = dayjs(TEST_DATE)
+      .add(3, 'day')
+      .hour(11)
+      .minute(45)
+      .second(0)
+      .toISOString();
+
+    const mappingBranchMocks = [
+      {
+        request: {
+          query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+          variables: {
+            id: 'org123',
+            first: 100,
+            after: null,
+            startDate,
+            endDate,
+            includeRecurring: true,
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              events: {
+                edges: [
+                  {
+                    node: {
+                      id: 'timed-with-bounds',
+                      name: 'Timed With Bounds',
+                      description: 'Uses startAt/endAt fallback formatting',
+                      startAt: timedStartAt,
+                      endAt: timedEndAt,
+                      startDate: null,
+                      endDate: null,
+                      location: 'Room A',
+                      allDay: false,
+                      isPublic: true,
+                      isRegisterable: true,
+                      isInviteOnly: false,
+                      isRecurringEventTemplate: false,
+                      baseEvent: null,
+                      sequenceNumber: null,
+                      totalCount: null,
+                      hasExceptions: false,
+                      progressLabel: null,
+                      recurrenceDescription: null,
+                      recurrenceRule: null,
+                      creator: { id: 'u1', name: 'User 1' },
+                      attendees: [],
+                      attachments: [],
+                      organization: { id: 'org123', name: 'Test Org' },
+                    },
+                    cursor: 'cursor-timed-1',
+                  },
+                  {
+                    node: {
+                      id: 'timed-missing-bounds',
+                      name: 'Timed Missing Bounds',
+                      description: 'Missing startAt/endAt should map to null',
+                      startAt: null,
+                      endAt: null,
+                      startDate: null,
+                      endDate: null,
+                      location: 'Room B',
+                      allDay: false,
+                      isPublic: true,
+                      isRegisterable: true,
+                      isInviteOnly: false,
+                      isRecurringEventTemplate: false,
+                      baseEvent: null,
+                      sequenceNumber: null,
+                      totalCount: null,
+                      hasExceptions: false,
+                      progressLabel: null,
+                      recurrenceDescription: null,
+                      recurrenceRule: null,
+                      creator: { id: 'u2', name: 'User 2' },
+                      attendees: [],
+                      attachments: [],
+                      organization: { id: 'org123', name: 'Test Org' },
+                    },
+                    cursor: 'cursor-timed-2',
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  endCursor: 'cursor-timed-2',
+                },
+              },
+            },
+          },
+        },
+      },
+      MOCKS[2],
+    ];
+
+    const cache = new InMemoryCache({ addTypename: false });
+    render(
+      <MockedProvider mocks={mappingBranchMocks} cache={cache}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Events />
+              </I18nextProvider>
+            </ThemeProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        const jsonPre = screen.getByTestId('event-data-json');
+        const parsed = JSON.parse(jsonPre.textContent || '[]');
+
+        const withBounds = parsed.find(
+          (event: { id: string }) => event.id === 'timed-with-bounds',
+        );
+        const missingBounds = parsed.find(
+          (event: { id: string }) => event.id === 'timed-missing-bounds',
+        );
+
+        expect(withBounds.startTime).toBe(
+          dayjs(timedStartAt).format('HH:mm:ss'),
+        );
+        expect(withBounds.endTime).toBe(dayjs(timedEndAt).format('HH:mm:ss'));
+        expect(missingBounds.startTime).toBeNull();
+        expect(missingBounds.endTime).toBeNull();
+      },
+      { timeout: 3000 },
+    );
+  });
+
   it('Should open and close the create event modal', async () => {
     const cache = new InMemoryCache({ addTypename: false });
     render(
