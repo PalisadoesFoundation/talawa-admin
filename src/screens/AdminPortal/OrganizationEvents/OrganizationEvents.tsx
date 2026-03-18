@@ -19,7 +19,7 @@
  */
 
 import React, { useState, useEffect, useMemo, JSX } from 'react';
-import { NetworkStatus, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import styles from './OrganizationEvents.module.css';
@@ -107,21 +107,8 @@ function organizationEvents(): JSX.Element {
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [queryMonth, setQueryMonth] = useState(currentMonth);
-  const [queryYear, setQueryYear] = useState(currentYear);
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
-
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setQueryMonth(currentMonth);
-      setQueryYear(currentYear);
-    }, 400);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
-  }, [currentMonth, currentYear]);
 
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
@@ -135,9 +122,6 @@ function organizationEvents(): JSX.Element {
 
   const {
     data: eventData,
-    previousData: previousEventData,
-    loading: eventLoading,
-    networkStatus: eventNetworkStatus,
     error: eventDataError,
     refetch: refetchEvents,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
@@ -145,10 +129,10 @@ function organizationEvents(): JSX.Element {
       id: currentUrl,
       first: 199,
       after: null,
-      startDate: dayjs(new Date(queryYear, queryMonth, 1))
+      startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
         .toISOString(),
-      endDate: dayjs(new Date(queryYear, queryMonth, 1))
+      endDate: dayjs(new Date(currentYear, currentMonth, 1))
         .endOf('month')
         .toISOString(),
       includeRecurring: true,
@@ -157,10 +141,6 @@ function organizationEvents(): JSX.Element {
     errorPolicy: 'all',
     fetchPolicy: 'cache-and-network',
   });
-
-  const effectiveEventData = eventData ?? previousEventData;
-  const isEventQueryBusy =
-    eventLoading || eventNetworkStatus === NetworkStatus.setVariables;
 
   const {
     data: orgData,
@@ -181,7 +161,7 @@ function organizationEvents(): JSX.Element {
 
   // Normalize event data for EventCalendar with proper typing
   const allEvents: InterfaceEvent[] = (
-    effectiveEventData?.organization?.events?.edges || []
+    eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => {
     return {
       id: edge.node.id,
@@ -328,7 +308,6 @@ function organizationEvents(): JSX.Element {
           onMonthChange={handleMonthChange}
           currentMonth={currentMonth}
           currentYear={currentYear}
-          isNavigationDisabled={isEventQueryBusy}
         />
 
         <CreateEventModal

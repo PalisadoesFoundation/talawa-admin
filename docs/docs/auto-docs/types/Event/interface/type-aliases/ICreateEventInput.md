@@ -6,7 +6,7 @@
 
 > **ICreateEventInput** = [`IEventFormInput`](../interfaces/IEventFormInput.md)
 
-Defined in: [src/types/Event/interface.ts:306](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L306)
+Defined in: [src/types/Event/interface.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L305)
 
 ## Deprecated
 
