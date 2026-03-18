@@ -86,6 +86,9 @@ describe('Testing Advertisement Register Component', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     cleanup();
+    document.body.className = '';
+    document.body.removeAttribute('style');
+    document.body.removeAttribute('data-rr-ui-modal-open');
   });
   test('AdvertismentRegister component loads correctly in register mode', async () => {
     const { getByText } = render(

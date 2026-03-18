@@ -208,6 +208,7 @@ export default function Events(): JSX.Element {
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly,
         // Conditionally send date fields based on allDay flag
         ...(payload.allDay
           ? {

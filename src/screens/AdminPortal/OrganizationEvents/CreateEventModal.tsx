@@ -115,6 +115,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly,
         // Conditionally send date fields based on allDay flag
         ...(payload.allDay
           ? {

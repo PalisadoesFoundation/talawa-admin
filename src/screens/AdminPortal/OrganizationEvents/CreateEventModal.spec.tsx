@@ -430,8 +430,8 @@ describe('CreateEventModal', () => {
           variables: expect.objectContaining({
             input: expect.objectContaining({
               isPublic: false,
-              isInviteOnly: true,
               isRegisterable: false,
+              isInviteOnly: true,
             }),
           }),
         }),

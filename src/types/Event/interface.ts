@@ -280,6 +280,7 @@ export interface ICreateEventInput {
    */
   isPublic: boolean;
   isRegisterable: boolean;
+  isInviteOnly: boolean;
   /** Timed events (allDay=false): full ISO datetime strings */
   startAt?: string;
   endAt?: string;

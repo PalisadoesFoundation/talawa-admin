@@ -6,4 +6,4 @@
 
 > **InterfaceDeleteEventModalProps** = [`IDeleteEventModalProps`](../interfaces/IDeleteEventModalProps.md)
 
-Defined in: [src/types/Event/interface.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L305)
+Defined in: [src/types/Event/interface.ts:306](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L306)
