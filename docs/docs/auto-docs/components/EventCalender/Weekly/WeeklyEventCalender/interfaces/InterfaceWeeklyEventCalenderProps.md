@@ -56,6 +56,18 @@ Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoun
 
 ***
 
+### isNavigationDisabled?
+
+> `optional` **isNavigationDisabled**: `boolean`
+
+Defined in: [src/types/Event/interface.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L132)
+
+#### Inherited from
+
+`InterfaceCalendarProps.isNavigationDisabled`
+
+***
+
 ### onMonthChange()?
 
 > `optional` **onMonthChange**: (`month`, `year`) => `void`
