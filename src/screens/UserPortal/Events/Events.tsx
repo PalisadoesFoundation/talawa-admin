@@ -172,12 +172,16 @@ export default function Events(): JSX.Element {
     const twoHoursLater = new Date(nextHour);
     const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
     twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+
     return {
       name: '',
       description: '',
       location: '',
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: tomorrow,
       startTime: nextHour.toTimeString().split(' ')[0],
       endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,

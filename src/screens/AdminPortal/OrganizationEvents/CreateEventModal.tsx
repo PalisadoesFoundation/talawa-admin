@@ -78,12 +78,15 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
     twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
 
+    const tomorrowUTC = new Date(todayUTC);
+    tomorrowUTC.setUTCDate(tomorrowUTC.getUTCDate() + 1);
+
     return {
       name: '',
       description: '',
       location: '',
       startDate: todayUTC,
-      endDate: todayUTC,
+      endDate: tomorrowUTC,
       startTime: nextHour.toTimeString().split(' ')[0],
       endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,
