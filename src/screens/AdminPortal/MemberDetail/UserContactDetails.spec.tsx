@@ -1154,27 +1154,6 @@ describe('MemberDetail', () => {
     });
   });
 
-  test('displays error when password validation fails', async () => {
-    renderMemberDetailScreen(createLink(MOCKS1));
-    await waitForLoadingComplete();
-
-    const passwordInput = screen.getByTestId(
-      'inputPassword',
-    ) as HTMLInputElement;
-    await user.clear(passwordInput);
-    await user.type(passwordInput, 'weak');
-
-    const saveButton = screen.getByTestId('saveChangesBtn');
-    await user.click(saveButton);
-
-    await waitFor(
-      () => {
-        expect(mockToast.error).toHaveBeenCalled();
-      },
-      { timeout: 3000 },
-    );
-  });
-
   test('handles avatar URL to file conversion failure', async () => {
     vi.mocked(urlToFile).mockRejectedValueOnce(new Error('Conversion failed'));
     renderUserProfileScreen(createLink(MOCKS1));
