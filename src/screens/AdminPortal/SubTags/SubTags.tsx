@@ -277,7 +277,15 @@ function SubTags(): JSX.Element {
                       <div
                         className={styles.subTagsLink}
                         data-testid="tagName"
+                        role="button"
+                        tabIndex={0}
                         onClick={() => redirectToSubTags(tag._id)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            redirectToSubTags(tag._id);
+                          }
+                        }}
                       >
                         {tag.name}
                         <i className={'ms-2 fa fa-caret-right'} />

@@ -136,6 +136,34 @@ describe('Organisation Tags Page', () => {
     });
   });
 
+  it('navigates to sub tags screen when pressing Enter on a tag name', async () => {
+    const user = userEvent.setup();
+    renderSubTags(link);
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+    const tagName = screen.getAllByTestId('tagName')[0];
+    tagName.focus();
+    await user.keyboard('{Enter}');
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('navigates to sub tags screen when pressing Space on a tag name', async () => {
+    const user = userEvent.setup();
+    renderSubTags(link);
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+    const tagName = screen.getAllByTestId('tagName')[0];
+    tagName.focus();
+    await user.keyboard(' ');
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
   it('navigates to the different sub tag screen screen after clicking a tag in the breadcrumbs', async () => {
     renderSubTags(link);
     await waitFor(() => {

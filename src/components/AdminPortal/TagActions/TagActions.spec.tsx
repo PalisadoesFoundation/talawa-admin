@@ -1,7 +1,14 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  cleanup,
+  waitFor,
+  act,
+  within,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -233,7 +240,6 @@ describe('Organisation Tags Page', () => {
 
     // CursorPaginationManager renders a load-more button for subtags pagination
     const subTagsContainer = screen.getByTestId('subTagsScrollableDiv1');
-    const { within } = await import('@testing-library/react');
     const loadMoreButton =
       within(subTagsContainer).getByTestId('load-more-button');
     await user.click(loadMoreButton);
