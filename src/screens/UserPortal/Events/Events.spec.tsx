@@ -123,7 +123,7 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
+vi.mock('shared-components/EventCalender/Monthly/EventCalender', () => ({
   __esModule: true,
   default: ({
     onMonthChange,
@@ -152,7 +152,7 @@ vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
   },
 }));
 
-vi.mock('components/EventCalender/Header/EventHeader', () => ({
+vi.mock('shared-components/EventCalender/Header/EventHeader', () => ({
   __esModule: true,
   default: ({
     viewType,

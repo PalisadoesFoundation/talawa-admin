@@ -15,8 +15,8 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { useQuery } from '@apollo/client';
 
-import ProfileCard from 'components/ProfileCard/ProfileCard';
-import SignOut from 'components/SignOut/SignOut';
+import ProfileCard from 'shared-components/ProfileCard/ProfileCard';
+import SignOut from 'shared-components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
 import useLocalStorage from 'utils/useLocalstorage';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';

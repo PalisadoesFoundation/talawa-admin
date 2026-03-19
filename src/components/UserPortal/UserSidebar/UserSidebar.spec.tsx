@@ -83,7 +83,7 @@ vi.mock('react-i18next', () => ({
   },
 }));
 
-vi.mock('components/ProfileCard/ProfileCard', () => ({
+vi.mock('shared-components/ProfileCard/ProfileCard', () => ({
   default: vi.fn(() => (
     <div data-testid="profile-dropdown">
       <div data-testid="display-name">Test User</div>
@@ -93,7 +93,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
   )),
 }));
 
-vi.mock('components/SignOut/SignOut', () => ({
+vi.mock('shared-components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out

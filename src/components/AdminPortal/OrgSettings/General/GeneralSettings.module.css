@@ -1,0 +1,63 @@
+.settingsBody {
+  margin: var(--space-9) var(--space-0);
+  padding: var(--space-0);
+}
+
+.deleteCardHeader {
+  background-color: var(--activeTab-bg);
+  border-top-left-radius: var(--border-radius-4) !important;
+  border-top-right-radius: var(--border-radius-4) !important;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
+}
+
+.cardHeading {
+  padding-left: var(--space-1) !important;
+}
+
+.cardBody {
+  padding: var(--space-5) var(--space-0);
+  display: flex;
+  width: 100% !important;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .cardBody {
+    min-height: var(--space-14);
+  }
+}
+
+.orgCardSettings {
+  width: 95% !important;
+}
+
+.cardHeader .cardTitle {
+  font-size: var(--font-size-19);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cardHeader .cardTitle {
+  font-size: var(--font-size-19);
+  font-weight: var(--font-weight-semibold);
+}
+
+.cardHeader .cardTitle {
+  font-size: var(--font-size-2xl);
+}
+
+.cardBody .textBox {
+  margin: var(--space-0) var(--space-0) var(--space-10) var(--space-0);
+  padding: var(--space-4);
+  color: var(--cardBody-color);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.textBox {
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-8);
+}

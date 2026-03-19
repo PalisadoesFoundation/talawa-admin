@@ -32,7 +32,7 @@ import React from 'react';
 import { TablePagination, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import Pagination from 'components/Pagination/Navigator/Pagination';
+import Pagination from 'shared-components/Pagination/Navigator/Pagination';
 import styles from './PaginationList.module.css';
 import type { InterfacePaginationListProps } from 'types/shared-components/PaginationList/interface';
 
@@ -47,7 +47,7 @@ const PaginationList = ({
     keyPrefix: 'paginationList',
   });
 
-  const isSmallScreen = useMediaQuery('(max-width: 600px)');
+  const isSmallScreen = useMediaQuery('(max-width: var(--space-26))');
 
   return (
     <>

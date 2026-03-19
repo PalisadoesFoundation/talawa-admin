@@ -22,11 +22,14 @@ vi.mock('./OrgUpdate/OrgUpdate', () => ({
   ),
 }));
 
-vi.mock('components/ChangeLanguageDropdown/ChangeLanguageDropDown', () => ({
-  default: () => (
-    <div data-testid="change-language">ChangeLanguageDropDown</div>
-  ),
-}));
+vi.mock(
+  'shared-components/ChangeLanguageDropdown/ChangeLanguageDropDown',
+  () => ({
+    default: () => (
+      <div data-testid="change-language">ChangeLanguageDropDown</div>
+    ),
+  }),
+);
 
 describe('GeneralSettings Component', () => {
   const ORG_ID = '123e4567-e89b-12d3-a456-426614174000';

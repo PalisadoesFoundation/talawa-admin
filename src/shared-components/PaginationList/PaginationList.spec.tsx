@@ -8,7 +8,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 
 // Mock the Pagination component
-vi.mock('components/Pagination/Navigator/Pagination', () => ({
+vi.mock('shared-components/Pagination/Navigator/Pagination', () => ({
   default: ({
     onPageChange,
     page,

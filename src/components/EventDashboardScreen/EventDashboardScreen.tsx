@@ -35,7 +35,7 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './EventDashboardScreen.module.css';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import ProfileDropdown from 'shared-components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceMapType } from 'utils/interfaces';
 import Button from 'shared-components/Button';

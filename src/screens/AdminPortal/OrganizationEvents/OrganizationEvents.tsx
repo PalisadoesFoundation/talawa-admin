@@ -21,7 +21,7 @@
 import React, { useState, useEffect, useMemo, JSX } from 'react';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
+import EventCalendar from 'shared-components/EventCalender/Monthly/EventCalender';
 import styles from './OrganizationEvents.module.css';
 import {
   GET_ORGANIZATION_EVENTS_PG,

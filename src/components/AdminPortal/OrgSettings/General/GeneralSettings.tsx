@@ -1,10 +1,10 @@
 import React, { type FC } from 'react';
-import { Card, Col, Form, Row } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import { Card, Col, Row } from 'react-bootstrap';
+import styles from './GeneralSettings.module.css';
 import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
 import { useTranslation } from 'react-i18next';
-import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import ChangeLanguageDropDown from 'shared-components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 
 /**
  * Props for the `GeneralSettings` component.
@@ -54,9 +54,9 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
           </Card.Header>
           <Card.Body className={styles.cardBody}>
             <div className={styles.textBox}>
-              <Form.Label className={'text-secondary fw-bold'}>
+              <label className={'text-secondary fw-bold'}>
                 {t('changeLanguage')}
-              </Form.Label>
+              </label>
               <ChangeLanguageDropDown />
             </div>
           </Card.Body>

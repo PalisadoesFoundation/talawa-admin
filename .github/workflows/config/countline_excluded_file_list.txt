@@ -6,7 +6,7 @@ src/components/EventListCard/EventListCardModals.tsx
 src/components/TagActions/TagActionsMocks.tsx
 src/utils/interfaces.ts
 src/components/OrgPostCard/OrgPostCard.tsx
-src/components/UsersTableItem/UsersTableItem.tsx
+src/components/AdminPortal/UsersTableItem/UsersTableItem.tsx
 src/components/UserPortal/ChatRoom/ChatRoom.tsx
 src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx
 src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx

@@ -1,0 +1,24 @@
+.changeLanguageBtn {
+  border-width: var(--border-width-2);
+  background-color: var(--changelangauge-btn-bg);
+  color: var(--changelangauge-btn-color);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--border-radius-2);
+  border-color: var(--changelangauge-btn-border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--space-11);
+  width: auto;
+  font-size: var(--font-size-sm);
+}
+
+.changeLanguageBtn:hover,
+.changeLanguageBtn:active,
+.changeLanguageBtn:focus {
+  background-color: var(--color-white) !important;
+  color: var(--changelangauge-btn-color) !important;
+  border-color: var(--changelangauge-btn-border) !important;
+  box-shadow: var(--space-0-5) var(--space-2) var(--space-3)
+    var(--color-black-10);
+}

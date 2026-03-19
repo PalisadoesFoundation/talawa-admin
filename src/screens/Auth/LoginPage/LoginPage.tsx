@@ -31,7 +31,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
+import ChangeLanguageDropDown from 'shared-components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import { LoginForm } from 'components/Auth/LoginForm/LoginForm';
 import { RegistrationForm } from 'components/Auth/RegistrationForm/RegistrationForm';
 import {

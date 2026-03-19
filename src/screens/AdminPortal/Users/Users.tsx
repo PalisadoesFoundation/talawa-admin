@@ -7,7 +7,7 @@ import {
   USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'shared-components/TableLoader/TableLoader';
-import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
+import UsersTableItem from 'components/AdminPortal/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type {
   InterfaceQueryUserListItemForAdmin,
