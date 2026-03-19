@@ -808,7 +808,7 @@ describe('WeeklyEventCalender Component', () => {
     expect(screen.getAllByText('Single Day All Day')).toHaveLength(1);
   });
 
-  it('renders all-day events across startDate to endDate range', () => {
+  it('renders all-day events across startDate to exclusive endDate range', () => {
     const rangeStart = dayjs(today)
       .startOf('week')
       .add(1, 'day')
@@ -840,7 +840,7 @@ describe('WeeklyEventCalender Component', () => {
       currentDate: today,
     });
 
-    expect(screen.getAllByText('Range All Day')).toHaveLength(3);
+    expect(screen.getAllByText('Range All Day')).toHaveLength(2);
   });
 
   // ── Accessibility ────────────────────────────────────────────────────────

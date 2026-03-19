@@ -116,13 +116,13 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:72](https://
 
 ### refetchEvents()?
 
-> `optional` **refetchEvents**: () => `void`
+> `optional` **refetchEvents**: () => `void` \| `Promise`\<`void`\>
 
 Defined in: [src/types/shared-components/EventListCard/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L78)
 
 #### Returns
 
-`void`
+`void` \| `Promise`\<`void`\>
 
 ***
 

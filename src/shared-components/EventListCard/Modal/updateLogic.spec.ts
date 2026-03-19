@@ -197,9 +197,10 @@ describe('useUpdateEventHandler', () => {
     const { updateEventHandler } = result.current;
 
     const initialStartAt =
-      mockEventListCardProps.startAt ?? dayjs().toISOString();
+      mockEventListCardProps.startAt ?? dayjs(BASE_DATE).toISOString();
     const initialEndAt =
-      mockEventListCardProps.endAt ?? dayjs().add(2, 'hours').toISOString();
+      mockEventListCardProps.endAt ??
+      dayjs(BASE_DATE).add(2, 'hours').toISOString();
 
     const alignedStartAt = dayjs(new Date(initialStartAt))
       .hour(parseInt(mockFormState.startTime.split(':')[0], 10) || 0)
@@ -1288,7 +1289,7 @@ describe('useUpdateEventHandler', () => {
       expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
-    it('shows error toast when all-day eventStartDate is invalid', async () => {
+    it('shows error toast and does not mutate when all-day eventStartDate is invalid', async () => {
       const { result } = renderHook(() => useUpdateEventHandler());
       const { updateEventHandler } = result.current;
 
@@ -1304,13 +1305,11 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      const calledInputs =
-        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
-      expect(calledInputs.startDate).toBe('Invalid Date');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
-    it('shows error toast when all-day eventEndDate is invalid', async () => {
+    it('shows error toast and does not mutate when all-day eventEndDate is invalid', async () => {
       const { result } = renderHook(() => useUpdateEventHandler());
       const { updateEventHandler } = result.current;
 
@@ -1326,10 +1325,8 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      const calledInputs =
-        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
-      expect(calledInputs.endDate).toBe('Invalid Date');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
     it('handles originalStartAt calculation when event is all-day but startAt is invalid', async () => {

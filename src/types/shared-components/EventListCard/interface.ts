@@ -75,5 +75,5 @@ export interface InterfaceUpdateEventHandlerProps {
   hideViewModal: () => void;
   eventUpdateModalIsOpen: boolean;
   closeUpdateModal: () => void;
-  refetchEvents?: () => void;
+  refetchEvents?: () => void | Promise<void>;
 }

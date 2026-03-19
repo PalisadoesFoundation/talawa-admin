@@ -962,7 +962,7 @@ describe('EventListCardModals', () => {
       });
     });
 
-    test('allows update with invalid original end date when allDay is true', async () => {
+    test('shows error when original endDate is invalid and allDay is true', async () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
@@ -982,7 +982,8 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
     test('allows update with invalid original end date when allDay is false', async () => {
@@ -1020,7 +1021,8 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
     test('shows error when end date is invalid and allDay is true', async () => {
@@ -1035,7 +1037,8 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
     test('shows error when start date is invalid and allDay is false', async () => {
@@ -1086,10 +1089,11 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
-    test('handles invalid startDate in hasOnlyNameOrDescriptionChanged', async () => {
+    test('shows error when props startDate is invalid for all-day event', async () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
@@ -1109,10 +1113,8 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      const calledInput =
-        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
-      expect(calledInput.id).toBe('event1');
-      expect(calledInput.startDate).toBe('Invalid Date');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Invalid Date');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
   });
 

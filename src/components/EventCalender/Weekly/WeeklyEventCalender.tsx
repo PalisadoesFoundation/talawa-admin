@@ -160,13 +160,14 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
             // For all-day events, use startDate and endDate
             if (!event.startDate) return false;
             const eventStart = dayjs(event.startDate).startOf('day');
-            const eventEnd = event.endDate
+            // Backend stores all-day endDate as exclusive (RFC 5545)
+            const eventEndExclusive = event.endDate
               ? dayjs(event.endDate).startOf('day')
-              : eventStart;
+              : eventStart.add(1, 'day');
             return (
               current.isSame(eventStart) ||
-              current.isSame(eventEnd) ||
-              (current.isAfter(eventStart) && current.isBefore(eventEnd))
+              (current.isAfter(eventStart) &&
+                current.isBefore(eventEndExclusive))
             );
           } else {
             // For timed events, use startAt and endAt

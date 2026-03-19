@@ -65,6 +65,11 @@ function EventListCardModals({
   const { orgId } = useParams();
   const navigate = useNavigate();
 
+  const parseDateOnlyToLocalDate = (value: string): Date => {
+    const [year, month, day] = value.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   const [allDayChecked, setAllDayChecked] = useState(eventListCardProps.allDay);
   const [publicChecked, setPublicChecked] = useState(
     eventListCardProps.isPublic,
@@ -90,7 +95,7 @@ function EventListCardModals({
   >('single');
   const [eventStartDate, setEventStartDate] = useState(
     eventListCardProps.allDay && eventListCardProps.startDate
-      ? new Date(`${eventListCardProps.startDate}T00:00:00.000Z`)
+      ? parseDateOnlyToLocalDate(eventListCardProps.startDate)
       : eventListCardProps.startAt
         ? new Date(eventListCardProps.startAt)
         : new Date(),
@@ -99,8 +104,8 @@ function EventListCardModals({
     eventListCardProps.allDay && eventListCardProps.endDate
       ? (() => {
           // Subtract 1 day for RFC 5545 exclusive end date
-          const date = new Date(`${eventListCardProps.endDate}T00:00:00.000Z`);
-          date.setUTCDate(date.getUTCDate() - 1);
+          const date = parseDateOnlyToLocalDate(eventListCardProps.endDate);
+          date.setDate(date.getDate() - 1);
           return date;
         })()
       : eventListCardProps.endAt
@@ -157,7 +162,7 @@ function EventListCardModals({
     // Update start date
     const newStartDate =
       eventListCardProps.allDay && eventListCardProps.startDate
-        ? new Date(`${eventListCardProps.startDate}T00:00:00.000Z`)
+        ? parseDateOnlyToLocalDate(eventListCardProps.startDate)
         : eventListCardProps.startAt
           ? new Date(eventListCardProps.startAt)
           : new Date();
@@ -170,10 +175,8 @@ function EventListCardModals({
     const newEndDate =
       eventListCardProps.allDay && eventListCardProps.endDate
         ? (() => {
-            const date = new Date(
-              `${eventListCardProps.endDate}T00:00:00.000Z`,
-            );
-            date.setUTCDate(date.getUTCDate() - 1);
+            const date = parseDateOnlyToLocalDate(eventListCardProps.endDate);
+            date.setDate(date.getDate() - 1);
             return date;
           })()
         : eventListCardProps.endAt

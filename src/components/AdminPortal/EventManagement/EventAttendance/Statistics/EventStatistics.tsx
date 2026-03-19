@@ -173,10 +173,17 @@ export const AttendanceStatisticsModal: React.FC<
       paginatedRecurringEvents.map((event: InterfaceEvent) => {
         const date = (() => {
           try {
-            if (!event.startAt) {
+            const iso =
+              event.startAt ??
+              (event.allDay && event.startDate
+                ? `${event.startDate}T00:00:00Z`
+                : null);
+
+            if (!iso) {
               return 'Invalid date';
             }
-            const eventDate = new Date(event.startAt);
+
+            const eventDate = new Date(iso);
             if (Number.isNaN(eventDate.getTime())) {
               console.error(`Invalid date for event: ${event.id}`);
 

@@ -99,7 +99,7 @@ export default defineConfig({
         'scripts/eslint/config/**', // Exclude ESLint config modules from coverage
         'config/**', // Exclude configuration files
       ],
-      reporter: ['lcov', 'json', 'text', 'text-summary'],
+      reporter: ['html','lcov', 'json', 'text', 'text-summary'],
     },
   },
 });

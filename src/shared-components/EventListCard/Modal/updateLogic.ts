@@ -193,13 +193,24 @@ export const useUpdateEventHandler = () => {
             : ''
         : eventListCardProps.endAt || '';
 
+      const allDayStartDate = dayjs(eventStartDate);
+      const allDayEndDate = dayjs(eventEndDate);
+
+      if (
+        allDayChecked &&
+        (!allDayStartDate.isValid() || !allDayEndDate.isValid())
+      ) {
+        NotificationToast.error(t('invalidDate'));
+        return;
+      }
+
       // Only include timing changes if they actually changed
       if (newStartAt !== originalStartAt || newEndAt !== originalEndAt) {
         if (allDayChecked) {
           // For all-day events, use date fields (YYYY-MM-DD format)
-          const startDate = dayjs(eventStartDate).format(DATE_FORMAT_ISO_DATE);
+          const startDate = allDayStartDate.format(DATE_FORMAT_ISO_DATE);
           // Add +1 day to endDate for RFC 5545 exclusive end dates
-          const endDate = dayjs(eventEndDate)
+          const endDate = allDayEndDate
             .add(1, 'day')
             .format(DATE_FORMAT_ISO_DATE);
 
