@@ -1,11 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../../utils/i18nForTest';
 import { OrgSelector } from './OrgSelector';
 import type { InterfaceOrgOption } from '../../../types/Auth/OrgSelector/interface';
-import styles from '../../../style/app-fixed.module.css';
 
 describe('OrgSelector', () => {
   const mockOrganizations: InterfaceOrgOption[] = [
@@ -79,10 +79,11 @@ describe('OrgSelector', () => {
 
   describe('Search and Filtering', () => {
     test('shows dropdown when input is focused', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         const dropdown = screen.getByTestId('org-selector-dropdown');
@@ -91,11 +92,13 @@ describe('OrgSelector', () => {
     });
 
     test('filters organizations based on search input', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
-      fireEvent.change(input, { target: { value: 'One' } });
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, 'One');
 
       await waitFor(() => {
         expect(screen.getByText('Organization One')).toBeInTheDocument();
@@ -107,10 +110,11 @@ describe('OrgSelector', () => {
     });
 
     test('shows all organizations when search is empty', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByText('Organization One')).toBeInTheDocument();
@@ -120,11 +124,13 @@ describe('OrgSelector', () => {
     });
 
     test('shows no results message when no organizations match', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
-      fireEvent.change(input, { target: { value: 'NonExistent' } });
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, 'NonExistent');
 
       await waitFor(() => {
         expect(
@@ -134,11 +140,13 @@ describe('OrgSelector', () => {
     });
 
     test('search is case-insensitive', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
-      fireEvent.change(input, { target: { value: 'organization one' } });
+      await user.click(input);
+      await user.clear(input);
+      await user.type(input, 'organization one');
 
       await waitFor(() => {
         expect(screen.getByText('Organization One')).toBeInTheDocument();
@@ -155,16 +163,19 @@ describe('OrgSelector', () => {
     });
 
     test('calls onChange with selected organization ID when option is clicked', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
-        const option = screen.getByText('Organization Two');
-        fireEvent.click(option);
+        expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
+
+      const option = screen.getByText('Organization Two');
+      await user.click(option);
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith('org2');
@@ -178,17 +189,18 @@ describe('OrgSelector', () => {
     });
 
     test('closes dropdown when clicking outside', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       // Click outside the component
-      fireEvent.mouseDown(document.body);
+      await user.click(document.body);
 
       await waitFor(() => {
         expect(
@@ -198,11 +210,12 @@ describe('OrgSelector', () => {
     });
 
     test('updates highlighted index on mouse enter', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
@@ -210,10 +223,10 @@ describe('OrgSelector', () => {
 
       // Hover over the second option
       const option2 = screen.getByTestId('org-option-org2');
-      fireEvent.mouseEnter(option2);
+      await user.hover(option2);
 
       // Click to select (should select org2 since it's highlighted)
-      fireEvent.click(option2);
+      await user.click(option2);
 
       expect(onChange).toHaveBeenCalledWith('org2');
     });
@@ -221,10 +234,12 @@ describe('OrgSelector', () => {
 
   describe('Keyboard Navigation', () => {
     test('opens dropdown on ArrowDown key', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      await user.click(input);
+      await user.keyboard('{ArrowDown}');
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
@@ -232,33 +247,35 @@ describe('OrgSelector', () => {
     });
 
     test('selects option on Enter key when highlighted', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
-      fireEvent.keyDown(input, { key: 'Enter' });
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{Enter}');
 
       expect(onChange).toHaveBeenCalledWith('org1');
     });
 
     test('closes dropdown on Escape key', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
-      fireEvent.keyDown(input, { key: 'Escape' });
+      await user.keyboard('{Escape}');
 
       await waitFor(() => {
         expect(
@@ -268,59 +285,65 @@ describe('OrgSelector', () => {
     });
 
     test('navigates up with ArrowUp key and selects correct option', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       // Move down twice (highlight index: -1 -> 0 -> 1)
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{ArrowDown}');
 
       // Move up once (highlight index: 1 -> 0)
-      fireEvent.keyDown(input, { key: 'ArrowUp' });
+      await user.keyboard('{ArrowUp}');
 
       // Select the highlighted option (org1)
-      fireEvent.keyDown(input, { key: 'Enter' });
+      await user.keyboard('{Enter}');
 
       expect(onChange).toHaveBeenCalledWith('org1');
     });
 
     test('activates option with Enter key when option is focused', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       const option = screen.getByTestId('org-option-org2');
-      fireEvent.keyDown(option, { key: 'Enter' });
+      await user.hover(option);
+      await user.keyboard('{Enter}');
 
       expect(onChange).toHaveBeenCalledWith('org2');
     });
 
     test('activates option with Space key when option is focused', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       const option = screen.getByTestId('org-option-org3');
-      fireEvent.keyDown(option, { key: ' ' });
+      // Move focus to the option, then trigger Space key
+      option.focus();
+      await user.keyboard(' ');
 
       expect(onChange).toHaveBeenCalledWith('org3');
     });
@@ -341,11 +364,12 @@ describe('OrgSelector', () => {
       expect(input).not.toBeDisabled();
     });
 
-    test('does not open dropdown when disabled', () => {
+    test('does not open dropdown when disabled', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} disabled />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       expect(
         screen.queryByTestId('org-selector-dropdown'),
@@ -459,24 +483,26 @@ describe('OrgSelector', () => {
     });
 
     test('dropdown has proper role and id', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         const dropdown = screen.getByRole('listbox');
-        const input = screen.getByRole('combobox');
-        const controlsId = input.getAttribute('aria-controls');
+        const inputEl = screen.getByRole('combobox');
+        const controlsId = inputEl.getAttribute('aria-controls');
         expect(dropdown).toHaveAttribute('id', controlsId);
       });
     });
 
     test('option elements have proper tabIndex for focusability', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
@@ -489,10 +515,11 @@ describe('OrgSelector', () => {
 
   describe('Edge Cases', () => {
     test('handles empty options array gracefully', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} options={[]} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(
@@ -502,11 +529,12 @@ describe('OrgSelector', () => {
     });
 
     test('handles single organization option', async () => {
+      const user = userEvent.setup();
       const singleOrg = [{ _id: 'org1', name: 'Only Organization' }];
       renderWithI18n(<OrgSelector {...defaultProps} options={singleOrg} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByText('Only Organization')).toBeInTheDocument();
@@ -514,6 +542,7 @@ describe('OrgSelector', () => {
     });
 
     test('handles organizations with special characters in names', async () => {
+      const user = userEvent.setup();
       const specialOrgs = [
         { _id: 'org1', name: "O'Reilly & Associates" },
         { _id: 'org2', name: 'Org <Test>' },
@@ -521,7 +550,7 @@ describe('OrgSelector', () => {
       renderWithI18n(<OrgSelector {...defaultProps} options={specialOrgs} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByText("O'Reilly & Associates")).toBeInTheDocument();
@@ -532,6 +561,7 @@ describe('OrgSelector', () => {
 
   describe('Coverage Boundary Cases', () => {
     test('does not increment index beyond list length on ArrowDown', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <OrgSelector
           {...defaultProps}
@@ -539,82 +569,90 @@ describe('OrgSelector', () => {
         />,
       );
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       // Press ArrowDown twice on a list of 1 item
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{ArrowDown}');
 
-      fireEvent.keyDown(input, { key: 'Enter' });
+      await user.keyboard('{Enter}');
       expect(defaultProps.onChange).toHaveBeenCalledWith('org1');
     });
 
     test('resets highlight to -1 when pressing ArrowUp at the start', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       // ArrowDown once (+1), then ArrowUp once (-1)
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
-      fireEvent.keyDown(input, { key: 'ArrowUp' });
+      await user.keyboard('{ArrowDown}');
+      await user.keyboard('{ArrowUp}');
 
-      fireEvent.keyDown(input, { key: 'Enter' });
+      await user.keyboard('{Enter}');
       expect(onChange).not.toHaveBeenCalled();
     });
 
     test('does nothing when Enter is pressed with no highlighted index', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
       const input = screen.getByRole('combobox');
 
-      fireEvent.keyDown(input, { key: 'Enter' });
+      await user.click(input);
+      await user.keyboard('{Enter}');
       expect(onChange).not.toHaveBeenCalled();
     });
 
     test('highlights the currently selected organization in the list', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} value="org2" />);
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         const selectedOption = screen.getByTestId('org-option-org2');
-        expect(selectedOption).toHaveClass(styles.orgSelectorOptionSelected);
+        expect(selectedOption).toHaveAttribute('aria-selected', 'true');
       });
     });
 
     test('does not call onChange when an unknown key is pressed on an option', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       const option = screen.getByTestId('org-option-org1');
-      fireEvent.keyDown(option, { key: 'Tab' }); // Tab is not Enter or Space
+      await user.hover(option);
+      await user.keyboard('{Tab}'); // Tab is not Enter or Space
 
       expect(onChange).not.toHaveBeenCalled();
     });
 
-    test('does not handle keydown when disabled', () => {
+    test('does not handle keydown when disabled', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       renderWithI18n(
         <OrgSelector {...defaultProps} disabled onChange={onChange} />,
       );
       const input = screen.getByRole('combobox');
 
-      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      await user.click(input);
+      await user.keyboard('{ArrowDown}');
       // Dropdown should not open, highlighted index should not change
       expect(
         screen.queryByTestId('org-selector-dropdown'),
@@ -623,17 +661,18 @@ describe('OrgSelector', () => {
     });
 
     test('does not close dropdown when clicking inside the component', async () => {
+      const user = userEvent.setup();
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const input = screen.getByRole('combobox');
-      fireEvent.focus(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
       });
 
       // Click inside the component (e.g., on the input)
-      fireEvent.mouseDown(input);
+      await user.click(input);
 
       await waitFor(() => {
         expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
