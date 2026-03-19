@@ -1,0 +1,19 @@
+[Admin Docs](/)
+
+***
+
+# Function: default()
+
+> **default**(`__namedParameters`): `Element`
+
+Defined in: [src/shared-components/ProfileDropdown/ProfileDropdown.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileDropdown/ProfileDropdown.tsx#L50)
+
+## Parameters
+
+### \_\_namedParameters
+
+[`InterfaceProfileDropdownProps`](types\shared-components\ProfileDropdown\interface\README\interfaces\InterfaceProfileDropdownProps.md)
+
+## Returns
+
+`Element`

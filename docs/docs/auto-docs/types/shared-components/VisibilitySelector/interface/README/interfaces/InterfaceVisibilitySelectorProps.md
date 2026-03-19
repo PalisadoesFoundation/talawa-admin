@@ -1,0 +1,45 @@
+[Admin Docs](/)
+
+***
+
+# Interface: InterfaceVisibilitySelectorProps
+
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L6)
+
+Props for the VisibilitySelector component.
+
+## Properties
+
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L10)
+
+If true, all radio buttons are disabled (view-only mode)
+
+***
+
+### setVisibility()
+
+> **setVisibility**: (`visibility`) => `void`
+
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L8)
+
+#### Parameters
+
+##### visibility
+
+[`EventVisibility`](shared-components\EventForm\utils\visibilityUtils\README\type-aliases\EventVisibility.md)
+
+#### Returns
+
+`void`
+
+***
+
+### visibility
+
+> **visibility**: [`EventVisibility`](shared-components\EventForm\utils\visibilityUtils\README\type-aliases\EventVisibility.md)
+
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L7)

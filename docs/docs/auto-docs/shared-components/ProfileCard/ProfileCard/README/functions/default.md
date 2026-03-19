@@ -1,0 +1,19 @@
+[Admin Docs](/)
+
+***
+
+# Function: default()
+
+> **default**(`__namedParameters`): `Element`
+
+Defined in: [src/shared-components/ProfileCard/ProfileCard.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileCard/ProfileCard.tsx#L52)
+
+## Parameters
+
+### \_\_namedParameters
+
+[`InterfaceProfileCardProps`](types\shared-components\ProfileCard\interface\README\interfaces\InterfaceProfileCardProps.md)
+
+## Returns
+
+`Element`

@@ -1,0 +1,9 @@
+[Admin Docs](/)
+
+***
+
+# Variable: default
+
+> `const` **default**: `React.FC`\<[`InterfacePeopleTabUserOrganizationProps`](types\PeopleTab\interface\README\interfaces\InterfacePeopleTabUserOrganizationProps.md)\>
+
+Defined in: [src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations.tsx#L45)

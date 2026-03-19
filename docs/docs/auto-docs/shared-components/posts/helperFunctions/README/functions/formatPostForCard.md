@@ -1,0 +1,42 @@
+[Admin Docs](/)
+
+***
+
+# Function: formatPostForCard()
+
+> **formatPostForCard**(`post`, `refetch`): `Omit`\<[`InterfacePostCard`](utils\interfaces\README\interfaces\InterfacePostCard.md), `"video"` \| `"image"`\>
+
+Defined in: [src/shared-components/posts/helperFunctions.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/helperFunctions.ts#L24)
+
+Formats a post object to match the PostCard component's expected interface.
+
+This function transforms a raw post object from the GraphQL API into the format
+required by the PostCard component, handling missing values with appropriate fallbacks
+and formatting dates safely.
+
+## Parameters
+
+### post
+
+[`InterfacePost`](types\Post\interface\README\interfaces\InterfacePost.md)
+
+The raw post object from the API
+
+### refetch
+
+() => `Promise`\<`unknown`\>
+
+Function to refetch posts data, typically from Apollo Client
+
+## Returns
+
+`Omit`\<[`InterfacePostCard`](utils\interfaces\README\interfaces\InterfacePostCard.md), `"video"` \| `"image"`\>
+
+An object formatted to match the InterfacePostCard interface
+
+## Example
+
+```tsx
+const formattedPost = formatPostForCard(rawPost, refetch);
+<PostCard {...formattedPost} />
+```

@@ -1,0 +1,23 @@
+[Admin Docs](/)
+
+***
+
+# Interface: InterfaceQueryUserTagsMembersToAssignTo
+
+Defined in: [src/types/AdminPortal/Tag/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L48)
+
+## Properties
+
+### name
+
+> **name**: `string`
+
+Defined in: [src/types/AdminPortal/Tag/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L49)
+
+***
+
+### usersToAssignTo
+
+> **usersToAssignTo**: [`InterfaceTagMembersData`](types\AdminPortal\Tag\interface\README\interfaces\InterfaceTagMembersData.md)
+
+Defined in: [src/types/AdminPortal/Tag/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L50)
