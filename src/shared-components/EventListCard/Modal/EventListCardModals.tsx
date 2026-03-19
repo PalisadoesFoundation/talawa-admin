@@ -65,6 +65,11 @@ function EventListCardModals({
   const { orgId } = useParams();
   const navigate = useNavigate();
 
+  const parseDateOnlyToLocalDate = (value: string): Date => {
+    const [year, month, day] = value.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
+
   const [allDayChecked, setAllDayChecked] = useState(eventListCardProps.allDay);
   const [publicChecked, setPublicChecked] = useState(
     eventListCardProps.isPublic,
@@ -89,10 +94,23 @@ function EventListCardModals({
     'single' | 'following' | 'entireSeries'
   >('single');
   const [eventStartDate, setEventStartDate] = useState(
-    new Date(eventListCardProps.startAt),
+    eventListCardProps.allDay && eventListCardProps.startDate
+      ? parseDateOnlyToLocalDate(eventListCardProps.startDate)
+      : eventListCardProps.startAt
+        ? new Date(eventListCardProps.startAt)
+        : new Date(),
   );
   const [eventEndDate, setEventEndDate] = useState(
-    new Date(eventListCardProps.endAt),
+    eventListCardProps.allDay && eventListCardProps.endDate
+      ? (() => {
+          // Subtract 1 day for RFC 5545 exclusive end date
+          const date = parseDateOnlyToLocalDate(eventListCardProps.endDate);
+          date.setDate(date.getDate() - 1);
+          return date;
+        })()
+      : eventListCardProps.endAt
+        ? new Date(eventListCardProps.endAt)
+        : new Date(),
   );
   // Initialize recurrence with default pattern for recurring events
   const [recurrence, setRecurrence] = useState<InterfaceRecurrenceRule | null>(
@@ -133,6 +151,50 @@ function EventListCardModals({
         : null,
     );
   }, [eventListCardProps.recurrenceRule]);
+
+  // Sync form state with props when event data changes (after refetch)
+  useEffect(() => {
+    setAllDayChecked(eventListCardProps.allDay);
+    setPublicChecked(eventListCardProps.isPublic);
+    setRegisterableChecked(eventListCardProps.isRegisterable);
+    setInviteOnlyChecked(Boolean(eventListCardProps.isInviteOnly));
+
+    // Update start date
+    const newStartDate =
+      eventListCardProps.allDay && eventListCardProps.startDate
+        ? parseDateOnlyToLocalDate(eventListCardProps.startDate)
+        : eventListCardProps.startAt
+          ? new Date(eventListCardProps.startAt)
+          : new Date();
+
+    setEventStartDate(newStartDate);
+
+    // Update end date
+    // For all-day events, subtract 1 day from endDate because it's stored as exclusive (RFC 5545)
+    // but displayed as inclusive to the user
+    const newEndDate =
+      eventListCardProps.allDay && eventListCardProps.endDate
+        ? (() => {
+            const date = parseDateOnlyToLocalDate(eventListCardProps.endDate);
+            date.setDate(date.getDate() - 1);
+            return date;
+          })()
+        : eventListCardProps.endAt
+          ? new Date(eventListCardProps.endAt)
+          : new Date();
+
+    setEventEndDate(newEndDate);
+  }, [
+    eventListCardProps.id,
+    eventListCardProps.allDay,
+    eventListCardProps.isPublic,
+    eventListCardProps.isRegisterable,
+    eventListCardProps.isInviteOnly,
+    eventListCardProps.startDate,
+    eventListCardProps.endDate,
+    eventListCardProps.startAt,
+    eventListCardProps.endAt,
+  ]);
 
   // Helper function to check if recurrence rule has changed
   const hasRecurrenceChanged = (): boolean => {
@@ -200,11 +262,43 @@ function EventListCardModals({
     location: eventListCardProps.location,
     startTime:
       eventListCardProps.startTime?.split('.')[0] ||
-      deriveLocalTime(eventListCardProps.startAt),
+      (eventListCardProps.startAt
+        ? deriveLocalTime(eventListCardProps.startAt)
+        : '00:00:00'),
     endTime:
       eventListCardProps.endTime?.split('.')[0] ||
-      deriveLocalTime(eventListCardProps.endAt),
+      (eventListCardProps.endAt
+        ? deriveLocalTime(eventListCardProps.endAt)
+        : '23:59:59'),
   });
+
+  // Sync formState with props when event data changes (after refetch)
+  useEffect(() => {
+    setFormState({
+      name: eventListCardProps.name,
+      eventDescription: eventListCardProps.description,
+      location: eventListCardProps.location,
+      startTime:
+        eventListCardProps.startTime?.split('.')[0] ||
+        (eventListCardProps.startAt
+          ? deriveLocalTime(eventListCardProps.startAt)
+          : '00:00:00'),
+      endTime:
+        eventListCardProps.endTime?.split('.')[0] ||
+        (eventListCardProps.endAt
+          ? deriveLocalTime(eventListCardProps.endAt)
+          : '23:59:59'),
+    });
+  }, [
+    eventListCardProps.id,
+    eventListCardProps.name,
+    eventListCardProps.description,
+    eventListCardProps.location,
+    eventListCardProps.startTime,
+    eventListCardProps.endTime,
+    eventListCardProps.startAt,
+    eventListCardProps.endAt,
+  ]);
 
   // Automatically switch to "following" option when recurrence rule changes
   useEffect(() => {
@@ -356,11 +450,11 @@ function EventListCardModals({
 
       if (data) {
         NotificationToast.success(t('eventDeleted') as string);
+        if (refetchEvents) {
+          await refetchEvents();
+        }
         closeDeleteModal();
         hideViewModal();
-        if (refetchEvents) {
-          refetchEvents();
-        }
       }
     } catch (error: unknown) {
       errorHandler(tCommon, error);

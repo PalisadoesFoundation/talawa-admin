@@ -1121,6 +1121,261 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     consoleErrorSpy.mockRestore();
   });
 
+  it('uses Invalid date label when a recurring event has no startAt', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    const mockExportToCSV = vi.fn();
+    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
+
+    const mocksWithMissingStartAt = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Test Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              isRecurringEventTemplate: false,
+              baseEvent: { id: 'base123' },
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: { baseRecurringEventId: 'base123' },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                attendees: [{ id: 'user1', natalSex: 'male' }],
+              },
+              {
+                id: 'event2',
+                startAt: dayjs
+                  .utc()
+                  .add(11, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
+                attendees: [{ id: 'user2', natalSex: 'female' }],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithMissingStartAt}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    const exportButton = screen.getByTestId('export-toggle');
+    await userEvent.click(exportButton);
+
+    const trendsExport = screen.getByTestId('export-item-trends');
+    await userEvent.click(trendsExport);
+
+    expect(mockExportToCSV).toHaveBeenCalled();
+
+    const exportedRows =
+      mockExportToCSV.mock.calls[mockExportToCSV.mock.calls.length - 1][0];
+    const containsInvalidDateLabel =
+      Array.isArray(exportedRows) &&
+      exportedRows.some(
+        (row: unknown) =>
+          Array.isArray(row) &&
+          typeof row[0] === 'string' &&
+          row[0].includes('Invalid date'),
+      );
+
+    expect(containsInvalidDateLabel).toBe(true);
+  });
+
+  it('uses startDate label when an all-day recurring event has no startAt', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+    const allDayStartDate = dayjs.utc().add(27, 'days').format('YYYY-MM-DD');
+    const expectedAllDayLabel = new Date(
+      `${allDayStartDate}T00:00:00Z`,
+    ).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    });
+
+    const mockExportToCSV = vi.fn();
+    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
+
+    const mocksWithAllDayDateOnly = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Test Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              isRecurringEventTemplate: false,
+              baseEvent: { id: 'base123' },
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: { baseRecurringEventId: 'base123' },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                allDay: true,
+                startDate: allDayStartDate,
+                attendees: [{ id: 'user1', natalSex: 'male' }],
+              },
+              {
+                id: 'event2',
+                startAt: dayjs
+                  .utc()
+                  .add(11, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
+                attendees: [{ id: 'user2', natalSex: 'female' }],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithAllDayDateOnly}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    const exportButton = screen.getByTestId('export-toggle');
+    await userEvent.click(exportButton);
+
+    const trendsExport = screen.getByTestId('export-item-trends');
+    await userEvent.click(trendsExport);
+
+    expect(mockExportToCSV).toHaveBeenCalled();
+
+    const exportedRows =
+      mockExportToCSV.mock.calls[mockExportToCSV.mock.calls.length - 1][0];
+    const containsExpectedAllDayLabel =
+      Array.isArray(exportedRows) &&
+      exportedRows.some(
+        (row: unknown) =>
+          Array.isArray(row) &&
+          typeof row[0] === 'string' &&
+          row[0].includes(expectedAllDayLabel),
+      );
+
+    expect(containsExpectedAllDayLabel).toBe(true);
+  });
+
   it('handles error during date formatting', async () => {
     mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
 

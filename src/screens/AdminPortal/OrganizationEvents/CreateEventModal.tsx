@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
+import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
@@ -11,7 +12,8 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
-import type { ICreateEventInput } from 'types/Event/interface';
+import type { IEventFormInput } from 'types/Event/interface';
+import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 interface ICreateEventModalProps {
@@ -109,10 +111,22 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         : undefined;
 
       // Build input object with shared typed interface
-      const input: ICreateEventInput = {
+      // All-day events: use startDate/endDate (YYYY-MM-DD strings)
+      // Timed events: use startAt/endAt (ISO timestamps)
+      const input: IEventFormInput = {
         name: payload.name,
-        startAt: payload.startAtISO,
-        endAt: payload.endAtISO,
+        ...(payload.allDay
+          ? {
+              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
+              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate)
+                .add(1, 'day')
+                .format('YYYY-MM-DD'),
+            }
+          : {
+              startAt: payload.startAtISO,
+              endAt: payload.endAtISO,
+            }),
         organizationId: currentUrl,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
@@ -124,8 +138,10 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
+      const mutationInput = mapCreateEventInputToMutationInput(input);
+
       const { data: createEventData } = await create({
-        variables: { input },
+        variables: { input: mutationInput },
       });
 
       if (createEventData?.createEvent) {

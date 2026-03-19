@@ -187,10 +187,19 @@ const Calendar: React.FC<
     const currentDateEvents =
       events?.filter((datas) => {
         const currDate = new Date(currentYear, currentMonth, currentDate);
-        return (
-          dayjs(datas.startAt).format('YYYY-MM-DD') ===
-          dayjs(currDate).format('YYYY-MM-DD')
-        );
+        const currDateStr = dayjs(currDate).format('YYYY-MM-DD');
+
+        // For all-day events, use startDate
+        if (datas.allDay && datas.startDate) {
+          return datas.startDate === currDateStr;
+        }
+
+        // For timed events, use startAt
+        if (datas.startAt) {
+          return dayjs(datas.startAt).format('YYYY-MM-DD') === currDateStr;
+        }
+
+        return false;
       }) || [];
 
     // Map events to EventListCard components
@@ -206,6 +215,8 @@ const Calendar: React.FC<
           description={datas.description}
           startAt={datas.startAt}
           endAt={datas.endAt}
+          startDate={datas.startDate}
+          endDate={datas.endDate}
           startTime={datas.startTime}
           endTime={datas.endTime}
           allDay={datas.allDay}
@@ -407,11 +418,24 @@ const Calendar: React.FC<
 
       const allEventsList: JSX.Element[] =
         events
-          ?.filter(
-            (datas) =>
-              dayjs.utc(datas.startAt).local().format('YYYY-MM-DD') ===
-              dayjs.utc(date).local().format('YYYY-MM-DD'),
-          )
+          ?.filter((datas) => {
+            const dateStr = dayjs.utc(date).local().format('YYYY-MM-DD');
+
+            // For all-day events, use startDate
+            if (datas.allDay && datas.startDate) {
+              return datas.startDate === dateStr;
+            }
+
+            // For timed events, use startAt
+            if (datas.startAt) {
+              return (
+                dayjs.utc(datas.startAt).local().format('YYYY-MM-DD') ===
+                dateStr
+              );
+            }
+
+            return false;
+          })
           .map((datas: InterfaceEvent) => (
             <EventListCard
               refetchEvents={refetchEvents}
@@ -423,6 +447,8 @@ const Calendar: React.FC<
               description={datas.description}
               startAt={datas.startAt}
               endAt={datas.endAt}
+              startDate={datas.startDate}
+              endDate={datas.endDate}
               startTime={datas.startTime}
               endTime={datas.endTime}
               allDay={datas.allDay}

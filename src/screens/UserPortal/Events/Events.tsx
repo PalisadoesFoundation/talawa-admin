@@ -68,7 +68,8 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
+import type { IEventEdge, IEventFormInput } from 'types/Event/interface';
+import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import styles from './Events.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -202,10 +203,22 @@ export default function Events(): JSX.Element {
         : undefined;
 
       // Build input object with shared typed interface
-      const input: ICreateEventInput = {
+      // All-day events: use startDate/endDate (YYYY-MM-DD strings)
+      // Timed events: use startAt/endAt (ISO timestamps)
+      const input: IEventFormInput = {
         name: payload.name,
-        startAt: payload.startAtISO,
-        endAt: payload.endAtISO,
+        ...(payload.allDay
+          ? {
+              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
+              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate)
+                .add(1, 'day')
+                .format('YYYY-MM-DD'),
+            }
+          : {
+              startAt: payload.startAtISO,
+              endAt: payload.endAtISO,
+            }),
         organizationId,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
@@ -216,8 +229,10 @@ export default function Events(): JSX.Element {
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
+      const mutationInput = mapCreateEventInputToMutationInput(input);
+
       const { data: createEventData, errors } = await create({
-        variables: { input },
+        variables: { input: mutationInput },
       });
 
       // Handle partial success: prioritize data over errors
@@ -252,12 +267,18 @@ export default function Events(): JSX.Element {
       description: edge.node.description || '',
       startAt: edge.node.startAt,
       endAt: edge.node.endAt,
+      startDate: edge.node.startDate,
+      endDate: edge.node.endDate,
       startTime: edge.node.allDay
         ? null
-        : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
+        : edge.node.startAt
+          ? dayjs(edge.node.startAt).format('HH:mm:ss')
+          : null,
       endTime: edge.node.allDay
         ? null
-        : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
+        : edge.node.endAt
+          ? dayjs(edge.node.endAt).format('HH:mm:ss')
+          : null,
       allDay: edge.node.allDay,
       location: edge.node.location || '',
       isPublic: edge.node.isPublic,

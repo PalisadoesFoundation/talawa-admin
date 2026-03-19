@@ -2633,6 +2633,7 @@
     "expandDay": "展开日期"
   },
   "weeklyEventCalender": {
+    "allDay": "一整天",
     "weeklyCalendarAriaLabel": "每周日历视图"
   }
 }
