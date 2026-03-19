@@ -1,46 +1,19 @@
 /**
  * Component: TagNode
  *
- * This component renders a tag node that can be expanded to display its subtags.
- * It supports infinite scrolling for loading subtags and allows users to select tags
- * using checkboxes. The component is recursive, enabling nested subtags to be displayed.
- *
- * @param props - The props for the TagNode component.
- * @param tag - The tag data to be displayed.
- * @param checkedTags - A set of tag IDs that are currently selected.
- * @param toggleTagSelection - Callback function to toggle the selection state of a tag.
- *
- * @remarks
- * - The component uses the `@apollo/client` `useQuery` hook to fetch subtags.
- * - Infinite scrolling is implemented using the `react-infinite-scroll-component` library.
- * - Displays a loader while fetching subtags and handles errors gracefully.
- *
- * @example
- * ```tsx
- * <TagNode
- *   tag={tagData}
- *   checkedTags={selectedTags}
- *   toggleTagSelection={handleToggleTag}
- * />
- * ```
- *
- * @returns A React functional component that renders a tag node with optional subtags.
+ * Renders a tag node that can be expanded to display its subtags.
+ * Uses CursorPaginationManager for paginated loading of subtags.
+ * The component is recursive, enabling nested subtags to be displayed.
  */
 // translation-check-keyPrefix: manageTag
-import { useQuery } from '@apollo/client';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
-import type {
-  InterfaceQueryUserTagChildTags,
-  InterfaceTagData,
-} from 'utils/interfaces';
-import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
+import type { InterfaceTagData } from 'utils/interfaces';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from './TagNode.module.css';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
-import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { useTranslation } from 'react-i18next';
+
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
@@ -58,64 +31,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const [expanded, setExpanded] = useState(false);
 
-  const {
-    data: subTagsData,
-    loading: subTagsLoading,
-    error: subTagsError,
-    fetchMore: fetchMoreSubTags,
-  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
-    variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
-    skip: !expanded,
-  });
-
-  const loadMoreSubTags = (): void => {
-    fetchMoreSubTags({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          getChildTags: {
-            ...fetchMoreResult.getChildTags,
-            childTags: {
-              ...fetchMoreResult.getChildTags.childTags,
-              edges: [
-                ...prevResult.getChildTags.childTags.edges,
-                ...fetchMoreResult.getChildTags.childTags.edges,
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
-
-  if (subTagsError) {
-    return (
-      <div className={styles.errorContainer}>
-        <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className={styles.loadingError}>
-            {t('errorOccurredWhileLoadingSubTags')}
-          </h6>
-        </div>
-      </div>
-    );
-  }
-
-  const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
-
   const handleTagClick = (): void => {
     setExpanded(!expanded);
   };
@@ -129,7 +44,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   return (
     <div className={styles.childTags}>
       <div>
-        {tag.childTags.totalCount ? (
+        {tag.childTags?.totalCount ? (
           <>
             <span
               onClick={handleTagClick}
@@ -168,43 +83,29 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         {tag.name}
       </div>
 
-      {expanded && subTagsLoading && (
-        <div className={styles.simpleLoaderContainer}>
-          <div className={styles.simpleLoader}>
-            <div className={styles.spinner} />
-          </div>
-        </div>
-      )}
-      {expanded && subTagsList?.length && (
+      {expanded && (
         <div className={styles.subTagsScrollableContainer}>
           <div
-            // i18n-ignore-next-line
-            id={`subTagsScrollableDiv${tag._id}`}
             // i18n-ignore-next-line
             data-testid={`subTagsScrollableDiv${tag._id}`}
             className={styles.subTagsScrollableDiv}
           >
-            <InfiniteScroll
-              dataLength={subTagsList?.length ?? 0}
-              next={loadMoreSubTags}
-              hasMore={
-                subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                false
-              }
-              loader={<InfiniteScrollLoader />}
-              // i18n-ignore-next-line
-              scrollableTarget={`subTagsScrollableDiv${tag._id}`}
-            >
-              {subTagsList.map((tag: InterfaceTagData) => (
-                <div key={tag._id} data-testid="orgUserSubTags">
+            <CursorPaginationManager
+              query={USER_TAG_SUB_TAGS}
+              queryVariables={{ id: tag._id }}
+              dataPath="getChildTags.childTags"
+              itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
+              keyExtractor={(subTag: InterfaceTagData) => subTag._id}
+              renderItem={(subTag: InterfaceTagData) => (
+                <div data-testid="orgUserSubTags">
                   <TagNode
-                    tag={tag}
+                    tag={subTag}
                     checkedTags={checkedTags}
                     toggleTagSelection={toggleTagSelection}
                   />
                 </div>
-              ))}
-            </InfiniteScroll>
+              )}
+            />
           </div>
         </div>
       )}

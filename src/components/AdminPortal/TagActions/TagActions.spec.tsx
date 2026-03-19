@@ -146,7 +146,7 @@ describe('Organisation Tags Page', () => {
 
   test('Renders error component when when subTags query is unsuccessful', async () => {
     const user = userEvent.setup();
-    const { getByText } = renderTagActionsModal(props[0], link2);
+    renderTagActionsModal(props[0], link2);
 
     await wait();
 
@@ -156,10 +156,9 @@ describe('Organisation Tags Page', () => {
     });
     await user.click(screen.getByTestId('expandSubTags1'));
 
+    // CursorPaginationManager renders its own error state with the raw error message
     await waitFor(() => {
-      expect(
-        getByText(translations.errorOccurredWhileLoadingSubTags),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
     });
   });
 
@@ -228,19 +227,16 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('subTagsScrollableDiv1')).toBeInTheDocument();
     });
-    // Find the infinite scroll div for subtags by test ID or another selector
-    const subTagsScrollableDiv1 = screen.getByTestId('subTagsScrollableDiv1');
 
     const initialTagsDataLength =
       screen.getAllByTestId('orgUserSubTags').length;
 
-    // Set scroll position to the bottom
-    act(() => {
-      subTagsScrollableDiv1.scrollTop = subTagsScrollableDiv1.scrollHeight;
-      subTagsScrollableDiv1.dispatchEvent(
-        new Event('scroll', { bubbles: true }),
-      );
-    });
+    // CursorPaginationManager renders a load-more button for subtags pagination
+    const subTagsContainer = screen.getByTestId('subTagsScrollableDiv1');
+    const { within } = await import('@testing-library/react');
+    const loadMoreButton =
+      within(subTagsContainer).getByTestId('load-more-button');
+    await user.click(loadMoreButton);
 
     await waitFor(() => {
       const finalTagsDataLength =

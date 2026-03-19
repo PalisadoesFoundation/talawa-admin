@@ -7,6 +7,7 @@ export const MOCKS1 = [
       variables: {
         id: '1',
         first: 10,
+        after: null,
       },
     },
     result: {
@@ -16,8 +17,28 @@ export const MOCKS1 = [
           childTags: {
             __typename: 'ChildTagsConnection',
             edges: [
-              { node: { _id: 'subTag1', name: 'subTag 1', __typename: 'Tag' } },
-              { node: { _id: 'subTag2', name: 'subTag 2', __typename: 'Tag' } },
+              {
+                cursor: 'subTag1',
+                node: {
+                  _id: 'subTag1',
+                  name: 'subTag 1',
+                  __typename: 'Tag',
+                  childTags: { totalCount: 0 },
+                  usersAssignedTo: { totalCount: 0 },
+                  ancestorTags: [],
+                },
+              },
+              {
+                cursor: 'subTag2',
+                node: {
+                  _id: 'subTag2',
+                  name: 'subTag 2',
+                  __typename: 'Tag',
+                  childTags: { totalCount: 0 },
+                  usersAssignedTo: { totalCount: 0 },
+                  ancestorTags: [],
+                },
+              },
             ],
             pageInfo: {
               __typename: 'PageInfo',
@@ -46,7 +67,15 @@ export const MOCKS1 = [
             __typename: 'ChildTagsConnection',
             edges: [
               {
-                node: { _id: 'subTag11', name: 'subTag 11', __typename: 'Tag' },
+                cursor: 'subTag11',
+                node: {
+                  _id: 'subTag11',
+                  name: 'subTag 11',
+                  __typename: 'Tag',
+                  childTags: { totalCount: 0 },
+                  usersAssignedTo: { totalCount: 0 },
+                  ancestorTags: [],
+                },
               },
             ],
             pageInfo: {
@@ -68,6 +97,7 @@ export const MOCKS_ERROR_SUBTAGS_QUERY1 = [
       variables: {
         id: '1',
         first: 10,
+        after: null,
       },
     },
     error: new Error('Mock GraphQL Error for fetching subtags'),

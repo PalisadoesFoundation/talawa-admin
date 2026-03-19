@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { describe, it, expect, vi } from 'vitest';
@@ -6,7 +6,6 @@ import TagNode from './TagNode';
 import type { InterfaceTagData } from 'utils/interfaces';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
-import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
@@ -41,7 +40,6 @@ afterEach(() => {
 });
 
 describe('TagNode', () => {
-  // Existing tests
   it('renders the tag name', () => {
     render(
       <I18nextProvider i18n={i18n}>
@@ -76,7 +74,6 @@ describe('TagNode', () => {
     expect(mockToggleTagSelection).toHaveBeenCalledWith(mockTag, true);
   });
 
-  // Existing subtag tests
   it('expands and fetches subtags when expand icon is clicked', async () => {
     render(
       <I18nextProvider i18n={i18n}>
@@ -99,7 +96,7 @@ describe('TagNode', () => {
     });
   });
 
-  it('displays an error message if fetching subtags fails', async () => {
+  it('displays error state if fetching subtags fails', async () => {
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
@@ -116,13 +113,11 @@ describe('TagNode', () => {
     await user.click(expandIcon);
 
     await waitFor(() => {
-      expect(
-        screen.getByText('Error occurred while loading subTags tags'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
     });
   });
 
-  it('loads more subtags on scroll', async () => {
+  it('loads more subtags via load more button', async () => {
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={MOCKS}>
@@ -142,19 +137,16 @@ describe('TagNode', () => {
       expect(screen.getByText('subTag 1')).toBeInTheDocument();
     });
 
-    const scrollableDiv = screen.getByTestId(
-      `subTagsScrollableDiv${mockTag._id}`,
-    );
-    await act(async () => {
-      scrollableDiv.scrollTop = 100;
-      scrollableDiv.dispatchEvent(new Event('scroll', { bubbles: true }));
-    });
+    // CursorPaginationManager renders a load-more button when hasNextPage is true
+    const loadMoreButton = screen.getByTestId('load-more-button');
+    await user.click(loadMoreButton);
 
     await waitFor(() => {
       expect(screen.getByText('subTag 11')).toBeInTheDocument();
     });
   });
 });
+
 describe('TagNode with Mocks', () => {
   it('renders parent tag name', () => {
     render(
@@ -194,7 +186,7 @@ describe('TagNode with Mocks', () => {
     });
   });
 
-  it('handles pagination correctly with second MOCKS item', async () => {
+  it('handles pagination correctly with load more button', async () => {
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={MOCKS}>
@@ -210,28 +202,21 @@ describe('TagNode with Mocks', () => {
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
     await user.click(expandIcon);
 
-    // Verify first set of subtags
     await waitFor(() => {
       expect(screen.getByText('subTag 1')).toBeInTheDocument();
       expect(screen.getByText('subTag 2')).toBeInTheDocument();
     });
 
-    // Trigger load more
-    const scrollableDiv = screen.getByTestId(
-      `subTagsScrollableDiv${mockTag._id}`,
-    );
-    await act(async () => {
-      scrollableDiv.scrollTop = 100;
-      scrollableDiv.dispatchEvent(new Event('scroll', { bubbles: true }));
-    });
+    // Trigger load more via CursorPaginationManager button
+    const loadMoreButton = screen.getByTestId('load-more-button');
+    await user.click(loadMoreButton);
 
-    // Verify paginated subtags
     await waitFor(() => {
       expect(screen.getByText('subTag 11')).toBeInTheDocument();
     });
   });
 
-  it('displays error message with MOCKS_ERROR_SUBTAGS_QUERY', async () => {
+  it('displays error state with MOCKS_ERROR_SUBTAGS_QUERY', async () => {
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
@@ -247,11 +232,8 @@ describe('TagNode with Mocks', () => {
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
     await user.click(expandIcon);
 
-    // Verify error message
     await waitFor(() => {
-      expect(
-        screen.getByText('Error occurred while loading subTags tags'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
     });
   });
 });
@@ -261,7 +243,11 @@ describe('MOCKS Structure Validation', () => {
     const firstMock = MOCKS1[0];
 
     expect(firstMock.request.query).toBeDefined();
-    expect(firstMock.request.variables).toEqual({ id: '1', first: 10 });
+    expect(firstMock.request.variables).toEqual({
+      id: '1',
+      first: 10,
+      after: null,
+    });
     expect(firstMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
       2,
     );
@@ -285,7 +271,11 @@ describe('MOCKS Structure Validation', () => {
     const errorMock = MOCKS_ERROR_SUBTAGS_QUERY1[0];
 
     expect(errorMock.request.query).toBeDefined();
-    expect(errorMock.request.variables).toEqual({ id: '1', first: 10 });
+    expect(errorMock.request.variables).toEqual({
+      id: '1',
+      first: 10,
+      after: null,
+    });
     expect(errorMock.error).toBeInstanceOf(Error);
     expect(errorMock.error?.message).toBe(
       'Mock GraphQL Error for fetching subtags',
@@ -298,7 +288,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     const leafTag: InterfaceTagData = {
       _id: 'leaf-tag',
       name: 'Leaf Tag',
-      childTags: { totalCount: 0 }, // No child tags
+      childTags: { totalCount: 0 },
       parentTag: { _id: 'parent' },
       usersAssignedTo: { totalCount: 0 },
       ancestorTags: [],
@@ -316,65 +306,17 @@ describe('Edge Cases and Coverage Improvements', () => {
       </I18nextProvider>,
     );
 
-    // Should render the tag name
     expect(screen.getByText('Leaf Tag')).toBeInTheDocument();
-
-    // Should show the leaf tag icon (●) instead of expand/collapse icon
     expect(screen.getByText('●')).toBeInTheDocument();
-
-    // Should not show expand/collapse functionality
     expect(
       screen.queryByTestId(`expandSubTags${leafTag._id}`),
     ).not.toBeInTheDocument();
   });
 
-  it('exercises nullish coalescing operator for subTagsList length when dataLength is evaluated', async () => {
-    // This test exercises line 194: dataLength={subTagsList?.length ?? 0}
-    // by creating a scenario where InfiniteScroll renders and the dataLength calculation is executed
-    // We provide valid data with one subtag to ensure InfiniteScroll renders
-    const mockWithValidData = [
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
-        },
-        result: {
-          data: {
-            getChildTags: {
-              __typename: 'GetChildTagsPayload',
-              childTags: {
-                __typename: 'ChildTagsConnection',
-                edges: [
-                  {
-                    node: {
-                      _id: 'subTag1',
-                      name: 'subTag 1',
-                      __typename: 'Tag',
-                      usersAssignedTo: { totalCount: 0 },
-                      childTags: { totalCount: 0 },
-                      ancestorTags: [],
-                    },
-                  },
-                ],
-                pageInfo: {
-                  __typename: 'PageInfo',
-                  hasNextPage: false,
-                  endCursor: 'subTag1',
-                  startCursor: 'subTag1',
-                  hasPreviousPage: false,
-                },
-                totalCount: 1,
-              },
-              ancestorTags: [],
-            },
-          },
-        },
-      },
-    ];
-
+  it('shows CursorPaginationManager when expanded with valid data', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mockWithValidData}>
+        <MockedProvider mocks={MOCKS1}>
           <TagNode
             tag={mockTag}
             checkedTags={mockCheckedTags}
@@ -388,49 +330,19 @@ describe('Edge Cases and Coverage Improvements', () => {
     await user.click(expandIcon);
 
     await waitFor(() => {
-      // The InfiniteScroll should render and the dataLength={subTagsList?.length ?? 0}
-      // expression on line 194 will be evaluated
-      // This covers the nullish coalescing operator when subTagsList has a valid length
       expect(
-        screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
+        screen.getByTestId(`subTagsScrollableDiv${mockTag._id}`),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('cursor-pagination-manager'),
       ).toBeInTheDocument();
     });
   });
 
-  it('handles empty subTagsList array in InfiniteScroll rendering', async () => {
-    // Create a mock that returns empty edges array
-    const mockWithEmptySubTags = [
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
-        },
-        result: {
-          data: {
-            getChildTags: {
-              __typename: 'GetChildTagsPayload',
-              childTags: {
-                __typename: 'ChildTagsConnection',
-                edges: [], // Empty array - this will make subTagsList.length = 0
-                pageInfo: {
-                  __typename: 'PageInfo',
-                  hasNextPage: false,
-                  endCursor: null,
-                  startCursor: null,
-                  hasPreviousPage: false,
-                },
-                totalCount: 0,
-              },
-              ancestorTags: [],
-            },
-          },
-        },
-      },
-    ];
-
+  it('collapses subtags when expand icon is clicked again', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mockWithEmptySubTags}>
+        <MockedProvider mocks={MOCKS1}>
           <TagNode
             tag={mockTag}
             checkedTags={mockCheckedTags}
@@ -441,215 +353,21 @@ describe('Edge Cases and Coverage Improvements', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    await user.click(expandIcon);
 
+    // Expand
+    await user.click(expandIcon);
     await waitFor(() => {
-      // When subTagsList is an empty array, the InfiniteScroll component is not rendered
-      // because of the condition: {expanded && subTagsList?.length && (...)}
-      // This test verifies behavior when subTagsList.length === 0 (empty array case)
-      // Note: This does NOT exercise the nullish coalescing operator (?? 0) on line 194
+      expect(
+        screen.getByTestId(`subTagsScrollableDiv${mockTag._id}`),
+      ).toBeInTheDocument();
+    });
+
+    // Collapse
+    await user.click(expandIcon);
+    await waitFor(() => {
       expect(
         screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
       ).not.toBeInTheDocument();
-    });
-  });
-
-  it('handles fetchMoreSubTags with undefined fetchMoreResult in updateQuery', async () => {
-    // This test covers line 90: if (!fetchMoreResult) return prevResult;
-    // We need to simulate the scenario where fetchMore returns undefined
-    const mockWithFetchMoreUndefined = [
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
-        },
-        result: {
-          data: {
-            getChildTags: {
-              __typename: 'GetChildTagsPayload',
-              childTags: {
-                __typename: 'ChildTagsConnection',
-                edges: [
-                  {
-                    node: {
-                      _id: 'subTag1',
-                      name: 'subTag 1',
-                      __typename: 'Tag',
-                      usersAssignedTo: { totalCount: 0 },
-                      childTags: { totalCount: 0 },
-                      ancestorTags: [],
-                    },
-                  },
-                ],
-                pageInfo: {
-                  __typename: 'PageInfo',
-                  hasNextPage: true,
-                  endCursor: 'subTag1',
-                  startCursor: 'subTag1',
-                  hasPreviousPage: false,
-                },
-                totalCount: 1,
-              },
-              ancestorTags: [],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10, after: 'subTag1' },
-        },
-        result: {
-          data: undefined, // This simulates fetchMoreResult being undefined
-        },
-      },
-    ];
-
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mockWithFetchMoreUndefined}>
-          <TagNode
-            tag={mockTag}
-            checkedTags={mockCheckedTags}
-            toggleTagSelection={mockToggleTagSelection}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    await user.click(expandIcon);
-
-    await waitFor(() => {
-      // Wait for initial data to load
-      expect(
-        screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
-      ).toBeInTheDocument();
-    });
-
-    // Simulate scroll to trigger fetchMore
-    const scrollableDiv = screen.getByTestId(
-      `subTagsScrollableDiv${mockTag._id}`,
-    );
-    await act(async () => {
-      scrollableDiv.scrollTop = 1000;
-      scrollableDiv.dispatchEvent(new Event('scroll', { bubbles: true }));
-    });
-
-    await waitFor(() => {
-      // The component should still render after fetchMore returns undefined
-      // This covers line 90: if (!fetchMoreResult) return prevResult;
-      expect(
-        screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it('handles nullish coalescing operator for subTagsList length when data is null', async () => {
-    // This test covers the scenario where the GraphQL query returns null data
-    // and the nullish coalescing operator ?? 0 is used on line 194
-    const mockWithNullData = [
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
-        },
-        result: {
-          data: null, // This will make subTagsData null, so subTagsList will be []
-        },
-      },
-    ];
-
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mockWithNullData}>
-          <TagNode
-            tag={mockTag}
-            checkedTags={mockCheckedTags}
-            toggleTagSelection={mockToggleTagSelection}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    await user.click(expandIcon);
-
-    await waitFor(() => {
-      // When data is null, subTagsList will be [] (empty array), so the InfiniteScroll won't render
-      // due to the condition: {expanded && subTagsList?.length && (...)}
-      // This still covers the ?? 0 fallback in the dataLength prop
-      expect(
-        screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  it('exercises nullish coalescing operator for hasNextPage with undefined value', async () => {
-    // This test exercises the nullish coalescing operator on line 197: hasNextPage ?? false
-    // by setting hasNextPage to undefined in the mock
-    const mockWithUndefinedHasNextPage = [
-      {
-        request: {
-          query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
-        },
-        result: {
-          data: {
-            getChildTags: {
-              __typename: 'GetChildTagsPayload',
-              childTags: {
-                __typename: 'ChildTagsConnection',
-                edges: [
-                  {
-                    node: {
-                      _id: 'subTag1',
-                      name: 'subTag 1',
-                      __typename: 'Tag',
-                      usersAssignedTo: { totalCount: 0 },
-                      childTags: { totalCount: 0 },
-                      ancestorTags: [],
-                    },
-                  },
-                ],
-                pageInfo: {
-                  __typename: 'PageInfo',
-                  hasNextPage: undefined, // This will exercise the ?? false fallback on line 197
-                  endCursor: 'subTag1',
-                  startCursor: 'subTag1',
-                  hasPreviousPage: false,
-                },
-                totalCount: 1,
-              },
-              ancestorTags: [],
-            },
-          },
-        },
-      },
-    ];
-
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mockWithUndefinedHasNextPage}>
-          <TagNode
-            tag={mockTag}
-            checkedTags={mockCheckedTags}
-            toggleTagSelection={mockToggleTagSelection}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    await user.click(expandIcon);
-
-    await waitFor(() => {
-      // The InfiniteScroll should render and the nullish coalescing operator ?? false
-      // on line 197 should be exercised when hasNextPage is undefined
-      expect(
-        screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
-      ).toBeInTheDocument();
     });
   });
 });

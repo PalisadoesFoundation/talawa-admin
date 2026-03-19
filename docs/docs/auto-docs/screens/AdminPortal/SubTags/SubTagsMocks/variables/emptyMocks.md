@@ -6,7 +6,7 @@
 
 > `const` **emptyMocks**: `object`[]
 
-Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L267)
+Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:272](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L272)
 
 ## Type Declaration
 
@@ -21,6 +21,10 @@ Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:267](https://github
 #### request.variables
 
 > **variables**: `object`
+
+#### request.variables.after
+
+> **after**: `any` = `null`
 
 #### request.variables.first
 

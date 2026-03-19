@@ -32,6 +32,7 @@ export const MOCKS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -106,6 +107,7 @@ export const MOCKS = [
       variables: {
         id: 'subTag1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -146,6 +148,7 @@ export const MOCKS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: 'searchSubTag' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -191,6 +194,7 @@ export const MOCKS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } }, // Fixed: Empty search for standard sort test
         sortedBy: { id: 'ASCENDING' },
       },
@@ -256,6 +260,7 @@ export const MOCKS_ERROR_SUB_TAGS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -271,6 +276,7 @@ export const emptyMocks = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -301,6 +307,7 @@ export const MOCKS_CREATE_TAG_ERROR = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
