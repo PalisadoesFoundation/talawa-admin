@@ -20,7 +20,7 @@ all content and text controlled by consuming components.
 
 > `optional` **actionsSlot**: `ReactNode`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L18)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L20)
 
 (Optional) Right section (buttons, badges, counters)
 
@@ -30,7 +30,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:18](https://github
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L26)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L32)
 
 (Optional) Accessible label for the card container (i18n required)
 
@@ -40,7 +40,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:26](https://github
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L16)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L17)
 
 Main content area (required)
 
@@ -50,7 +50,7 @@ Main content area (required)
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L22)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L26)
 
 (Optional) Additional class for the outer container
 
@@ -60,7 +60,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:22](https://github
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L24)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L29)
 
 (Optional) Test id prefix for unit/e2e testing
 
@@ -80,6 +80,6 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:14](https://github
 
 > `optional` **variant**: `"standard"` \| `"compact"` \| `"expanded"`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L20)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L23)
 
 Visual density preset controlling padding and spacing

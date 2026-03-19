@@ -29,7 +29,8 @@
  * ```
  */
 import React from 'react';
-import { TablePagination, useMediaQuery } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import TablePagination from '@mui/material/TablePagination';
 import { useTranslation } from 'react-i18next';
 
 import Pagination from 'shared-components/Pagination/Navigator/Pagination';

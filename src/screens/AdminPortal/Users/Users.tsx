@@ -16,7 +16,7 @@ import type {
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import { PersonOff } from '@mui/icons-material';
+import PersonOff from '@mui/icons-material/PersonOff';
 import ErrorPanel from 'shared-components/ErrorPanel';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
