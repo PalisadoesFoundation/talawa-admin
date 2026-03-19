@@ -6,4 +6,4 @@
 
 > **InterfaceAttendanceStatisticsModalProps** = [`IAttendanceStatisticsModalProps`](../interfaces/IAttendanceStatisticsModalProps.md)
 
-Defined in: [src/types/Event/interface.ts:310](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L310)
+Defined in: [src/types/Event/interface.ts:316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L316)

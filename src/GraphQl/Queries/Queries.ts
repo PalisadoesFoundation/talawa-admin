@@ -553,6 +553,8 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             description
             startAt
             endAt
+            startDate
+            endDate
             allDay
             location
             isPublic
@@ -639,6 +641,8 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
             description
             startAt
             endAt
+            startDate
+            endDate
             allDay
             location
             isPublic

@@ -257,39 +257,47 @@ export default function Events(): JSX.Element {
 
   // Normalize event data for EventCalendar with proper typing
   const events = (data?.organization?.events?.edges || []).map(
-    (edge: IEventEdge) => ({
-      id: edge.node.id || '',
+    (edge: IEventEdge) => {
+      // For all-day events the API returns startDate/endDate instead of startAt/endAt.
+      const startAt =
+        edge.node.startAt ??
+        dayjs.utc(edge.node.startDate).startOf('day').toISOString();
+      const endAt =
+        edge.node.endAt ??
+        dayjs.utc(edge.node.endDate).endOf('day').toISOString();
 
-      name: edge.node.name || '',
-      description: edge.node.description || '',
-      startAt: edge.node.startAt,
-      endAt: edge.node.endAt,
-      startTime: edge.node.allDay
-        ? null
-        : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
-      endTime: edge.node.allDay
-        ? null
-        : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
-      allDay: edge.node.allDay,
-      location: edge.node.location || '',
-      isPublic: edge.node.isPublic,
-      isRegisterable: edge.node.isRegisterable,
-      isInviteOnly: edge.node.isInviteOnly,
-      // Add recurring event information
-      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-      baseEvent: edge.node.baseEvent,
-      sequenceNumber: edge.node.sequenceNumber,
-      totalCount: edge.node.totalCount,
-      hasExceptions: edge.node.hasExceptions,
-      progressLabel: edge.node.progressLabel,
-      recurrenceDescription: edge.node.recurrenceDescription,
-      recurrenceRule: edge.node.recurrenceRule,
-      creator: edge.node.creator || {
-        id: '',
-        name: '',
-      },
-      attendees: edge.node.attendees || [],
-    }),
+      return {
+        id: edge.node.id || '',
+
+        name: edge.node.name || '',
+        description: edge.node.description || '',
+        startAt,
+        endAt,
+        startTime: edge.node.allDay
+          ? null
+          : dayjs.utc(startAt).format('HH:mm:ss'),
+        endTime: edge.node.allDay ? null : dayjs.utc(endAt).format('HH:mm:ss'),
+        allDay: edge.node.allDay,
+        location: edge.node.location || '',
+        isPublic: edge.node.isPublic,
+        isRegisterable: edge.node.isRegisterable,
+        isInviteOnly: edge.node.isInviteOnly,
+        // Add recurring event information
+        isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+        baseEvent: edge.node.baseEvent,
+        sequenceNumber: edge.node.sequenceNumber,
+        totalCount: edge.node.totalCount,
+        hasExceptions: edge.node.hasExceptions,
+        progressLabel: edge.node.progressLabel,
+        recurrenceDescription: edge.node.recurrenceDescription,
+        recurrenceRule: edge.node.recurrenceRule,
+        creator: edge.node.creator || {
+          id: '',
+          name: '',
+        },
+        attendees: edge.node.attendees || [],
+      };
+    },
   ); // Handle errors gracefully
   React.useEffect(() => {
     if (eventDataError) {

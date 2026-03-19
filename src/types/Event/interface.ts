@@ -223,8 +223,14 @@ export interface IEventEdge {
     id: string;
     name: string;
     description?: string | null;
-    startAt: string;
-    endAt: string;
+    /** Timed events: full ISO datetime. Null for all-day events. */
+    startAt: string | null;
+    /** Timed events: full ISO datetime. Null for all-day events. */
+    endAt: string | null;
+    /** All-day events: date-only string (YYYY-MM-DD). Null for timed events. */
+    startDate?: string | null;
+    /** All-day events: date-only string (YYYY-MM-DD). Null for timed events. */
+    endDate?: string | null;
     allDay: boolean;
     location?: string | null;
     /**

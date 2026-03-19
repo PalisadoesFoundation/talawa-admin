@@ -28,6 +28,8 @@ import {
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
@@ -47,8 +49,10 @@ interface IEventEdge {
     id: string;
     name: string;
     description?: string | null;
-    startAt: string;
-    endAt: string;
+    startAt: string | null;
+    endAt: string | null;
+    startDate?: string | null;
+    endDate?: string | null;
     allDay: boolean;
     location?: string | null;
     isPublic: boolean;
@@ -160,37 +164,44 @@ function organizationEvents(): JSX.Element {
   // Normalize event data for EventCalendar with proper typing
   const allEvents: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
-  ).map((edge: IEventEdge) => ({
-    id: edge.node.id,
-    name: edge.node.name,
-    description: edge.node.description || '',
-    startAt: edge.node.startAt,
-    endAt: edge.node.endAt,
-    startTime: edge.node.allDay
-      ? null
-      : dayjs(edge.node.startAt).format('HH:mm:ss'),
-    endTime: edge.node.allDay
-      ? null
-      : dayjs(edge.node.endAt).format('HH:mm:ss'),
-    allDay: edge.node.allDay,
-    location: edge.node.location || '',
-    isPublic: edge.node.isPublic,
-    isRegisterable: edge.node.isRegisterable,
-    // Add recurring event information
-    isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-    baseEvent: edge.node.baseEvent,
-    sequenceNumber: edge.node.sequenceNumber,
-    totalCount: edge.node.totalCount,
-    hasExceptions: edge.node.hasExceptions,
-    progressLabel: edge.node.progressLabel,
-    recurrenceDescription: edge.node.recurrenceDescription,
-    recurrenceRule: edge.node.recurrenceRule,
-    creator: {
-      id: edge.node.creator.id,
-      name: edge.node.creator.name,
-    },
-    attendees: [], // Adjust if attendees are added to schema
-  }));
+  ).map((edge: IEventEdge) => {
+    // For all-day events the API returns startDate/endDate (YYYY-MM-DD) instead of startAt/endAt.
+    // Derive ISO timestamps so the calendar can position events correctly.
+    const startAt =
+      edge.node.startAt ??
+      dayjs.utc(edge.node.startDate).startOf('day').toISOString();
+    const endAt =
+      edge.node.endAt ??
+      dayjs.utc(edge.node.endDate).endOf('day').toISOString();
+
+    return {
+      id: edge.node.id,
+      name: edge.node.name,
+      description: edge.node.description || '',
+      startAt,
+      endAt,
+      startTime: edge.node.allDay ? null : dayjs(startAt).format('HH:mm:ss'),
+      endTime: edge.node.allDay ? null : dayjs(endAt).format('HH:mm:ss'),
+      allDay: edge.node.allDay,
+      location: edge.node.location || '',
+      isPublic: edge.node.isPublic,
+      isRegisterable: edge.node.isRegisterable,
+      // Add recurring event information
+      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+      baseEvent: edge.node.baseEvent,
+      sequenceNumber: edge.node.sequenceNumber,
+      totalCount: edge.node.totalCount,
+      hasExceptions: edge.node.hasExceptions,
+      progressLabel: edge.node.progressLabel,
+      recurrenceDescription: edge.node.recurrenceDescription,
+      recurrenceRule: edge.node.recurrenceRule,
+      creator: {
+        id: edge.node.creator.id,
+        name: edge.node.creator.name,
+      },
+      attendees: [], // Adjust if attendees are added to schema
+    };
+  });
 
   // Filter events based on search term (case-insensitive search across name, description, and location)
   const events: InterfaceEvent[] = useMemo(() => {
