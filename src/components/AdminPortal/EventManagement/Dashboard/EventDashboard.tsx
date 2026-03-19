@@ -31,6 +31,7 @@ import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
+import dayjs from 'dayjs';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import Edit from '@mui/icons-material/Edit';
 import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals';
@@ -96,8 +97,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
       return '08:00';
     }
 
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    // Use local timezone hours/minutes, not UTC
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
   };
 
@@ -110,6 +112,8 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     description: eventData.event.description || '',
     startAt: eventData.event.startAt,
     endAt: eventData.event.endAt,
+    startDate: eventData.event.startDate ?? null,
+    endDate: eventData.event.endDate ?? null,
     // Fix: Extract actual time values instead of null
     startTime: eventData.event.allDay
       ? '00:00'
@@ -125,6 +129,20 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     creator: eventData.event.creator,
     userId: userId as string,
   };
+
+  const displayStart = eventData.event.allDay
+    ? eventData.event.startDate
+      ? `${eventData.event.startDate}T00:00:00Z`
+      : null
+    : eventData.event.startAt;
+
+  const displayEnd = eventData.event.allDay
+    ? eventData.event.endDate
+      ? `${dayjs(eventData.event.endDate).subtract(1, 'day').format('YYYY-MM-DD')}T00:00:00Z`
+      : eventData.event.startDate
+        ? `${eventData.event.startDate}T00:00:00Z`
+        : null
+    : eventData.event.endAt;
 
   return (
     <div data-testid="event-dashboard">
@@ -201,9 +219,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.startDate} data-testid="start-date">
-                  {eventData.event.startAt
-                    ? formatDate(eventData.event.startAt)
-                    : ''}{' '}
+                  {displayStart ? formatDate(displayStart) : ''}{' '}
                 </span>
               </p>
               <p className={styles.to}>{t('to')}</p>
@@ -214,9 +230,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.endDate} data-testid="end-date">
-                  {eventData.event.endAt
-                    ? formatDate(eventData.event.endAt)
-                    : ''}{' '}
+                  {displayEnd ? formatDate(displayEnd) : ''}{' '}
                 </span>
               </p>
             </div>

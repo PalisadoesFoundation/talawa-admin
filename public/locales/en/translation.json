@@ -2633,6 +2633,7 @@
     "expandDay": "Expand day"
   },
   "weeklyEventCalender": {
+    "allDay": "All Day",
     "weeklyCalendarAriaLabel": "Weekly calendar view"
   }
 }

@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_NO\_LOCATION**: `object`[]
 
-Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L126)
+Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L128)
 
 ## Type Declaration
 

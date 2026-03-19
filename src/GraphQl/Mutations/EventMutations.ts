@@ -10,6 +10,8 @@ export const CREATE_EVENT_MUTATION = gql`
       description
       startAt
       endAt
+      startDate
+      endDate
       allDay
       location
       isPublic
@@ -53,6 +55,8 @@ export const UPDATE_EVENT_MUTATION = gql`
       description
       startAt
       endAt
+      startDate
+      endDate
       allDay
       location
       isPublic
@@ -121,6 +125,8 @@ export const UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION = gql`
       description
       startAt
       endAt
+      startDate
+      endDate
       location
       isPublic
       isRegisterable
@@ -143,6 +149,8 @@ export const UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION = gql`
       description
       startAt
       endAt
+      startDate
+      endDate
       location
       isPublic
       isRegisterable

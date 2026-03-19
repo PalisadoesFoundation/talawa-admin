@@ -170,6 +170,16 @@ vi.mock('shared-components/PeopleTabUserEvents/PeopleTabUserEvents', () => ({
   ),
 }));
 
+vi.mock('@mui/material/IconButton', () => ({
+  default: ({ children }: { children: React.ReactNode }) => (
+    <button type="button">{children}</button>
+  ),
+}));
+
+vi.mock('@mui/icons-material/Edit', () => ({
+  default: () => <span>EditIcon</span>,
+}));
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,

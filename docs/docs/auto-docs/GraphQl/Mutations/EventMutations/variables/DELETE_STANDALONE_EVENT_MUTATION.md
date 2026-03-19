@@ -6,4 +6,4 @@
 
 > `const` **DELETE\_STANDALONE\_EVENT\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventMutations.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L73)
+Defined in: [src/GraphQl/Mutations/EventMutations.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L77)

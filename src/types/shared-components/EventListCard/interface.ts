@@ -6,7 +6,7 @@ import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTy
  * @remarks refetchEvents is optional and triggers a refresh when provided.
  */
 export interface InterfaceEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
+  refetchEvents?: () => void | Promise<void>;
 }
 
 /**
@@ -37,6 +37,8 @@ export interface InterfaceEventUpdateInput {
   allDay?: boolean;
   startAt?: string;
   endAt?: string;
+  startDate?: string;
+  endDate?: string;
   /**
    * Recurrence rule for the event.
    * This field is used for updating the recurrence pattern.
@@ -73,5 +75,5 @@ export interface InterfaceUpdateEventHandlerProps {
   hideViewModal: () => void;
   eventUpdateModalIsOpen: boolean;
   closeUpdateModal: () => void;
-  refetchEvents?: () => void;
+  refetchEvents?: () => void | Promise<void>;
 }
