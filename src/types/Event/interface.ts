@@ -44,8 +44,10 @@ export interface IEvent {
   location: string;
   name: string;
   description: string;
-  startAt: string;
-  endAt: string;
+  startAt: string | null;
+  endAt: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
   startTime?: string | null;
   endTime?: string | null;
   allDay: boolean;
@@ -223,13 +225,9 @@ export interface IEventEdge {
     id: string;
     name: string;
     description?: string | null;
-    /** Timed events: full ISO datetime. Null for all-day events. */
     startAt: string | null;
-    /** Timed events: full ISO datetime. Null for all-day events. */
     endAt: string | null;
-    /** All-day events: date-only string (YYYY-MM-DD). Null for timed events. */
     startDate?: string | null;
-    /** All-day events: date-only string (YYYY-MM-DD). Null for timed events. */
     endDate?: string | null;
     allDay: boolean;
     location?: string | null;
@@ -270,14 +268,18 @@ export interface IEventEdge {
 }
 
 /**
- * Input interface for creating events via CREATE_EVENT_MUTATION.
- * Used by both Admin Portal (CreateEventModal) and User Portal (Events).
+ * UI/form-friendly input for event creation.
  *
- * Note: The recurrence property type matches the return type of
- * formatRecurrenceForPayload from EventForm.tsx
+ * This model may contain date-only fields (`startDate`, `endDate`) for all-day
+ * workflows and is intentionally mapped to GraphQL's strict mutation input via
+ * `mapCreateEventInputToMutationInput` before calling `CreateEvent`.
  */
-export interface ICreateEventInput {
+export interface IEventFormInput {
   name: string;
+  startAt?: string;
+  endAt?: string;
+  startDate?: string;
+  endDate?: string;
   organizationId: string | undefined;
   allDay: boolean;
   /**
@@ -287,12 +289,42 @@ export interface ICreateEventInput {
   isPublic: boolean;
   isRegisterable: boolean;
   isInviteOnly: boolean;
-  /** Timed events (allDay=false): full ISO datetime strings */
+  description?: string;
+  location?: string;
+  recurrence?:
+    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+        endDate?: string;
+      })
+    | null;
+}
+
+/**
+ * @deprecated Use `IEventFormInput` for UI data and map it using
+ * `mapCreateEventInputToMutationInput` before mutations.
+ */
+export type ICreateEventInput = IEventFormInput;
+
+/**
+ * Input shape accepted by `MutationCreateEventInput` in GraphQL.
+ *
+ * It supports either timed (`startAt`/`endAt`) or all-day (`startDate`/`endDate`)
+ * payloads depending on the `allDay` flag.
+ */
+export interface IMutationCreateEventInput {
+  name: string;
   startAt?: string;
   endAt?: string;
-  /** All-day events (allDay=true): date-only strings (YYYY-MM-DD) */
   startDate?: string;
   endDate?: string;
+  organizationId: string;
+  allDay: boolean;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
+  isPublic: boolean;
+  isRegisterable: boolean;
+  isInviteOnly: boolean;
   description?: string;
   location?: string;
   recurrence?:

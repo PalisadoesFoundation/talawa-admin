@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFormState
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L50)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L52)
 
 Form state captured from the EventListCard edit modal.
 
@@ -14,7 +14,7 @@ Form state captured from the EventListCard edit modal.
 
 > **endTime**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L55)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L57)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:55](https://
 
 > **eventDescription**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L52)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L54)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:52](https://
 
 > **location**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L53)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L55)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:53](https://
 
 > **name**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L51)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L53)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:51](https://
 
 > **startTime**: `string`
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L54)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L56)

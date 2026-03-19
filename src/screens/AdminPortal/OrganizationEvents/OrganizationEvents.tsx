@@ -28,8 +28,6 @@ import {
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
@@ -129,7 +127,7 @@ function organizationEvents(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 100,
+      first: 199,
       after: null,
       startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
@@ -165,23 +163,24 @@ function organizationEvents(): JSX.Element {
   const allEvents: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => {
-    // For all-day events the API returns startDate/endDate (YYYY-MM-DD) instead of startAt/endAt.
-    // Derive ISO timestamps so the calendar can position events correctly.
-    const startAt =
-      edge.node.startAt ??
-      dayjs.utc(edge.node.startDate).startOf('day').toISOString();
-    const endAt =
-      edge.node.endAt ??
-      dayjs.utc(edge.node.endDate).endOf('day').toISOString();
-
     return {
       id: edge.node.id,
       name: edge.node.name,
       description: edge.node.description || '',
-      startAt,
-      endAt,
-      startTime: edge.node.allDay ? null : dayjs(startAt).format('HH:mm:ss'),
-      endTime: edge.node.allDay ? null : dayjs(endAt).format('HH:mm:ss'),
+      startAt: edge.node.startAt,
+      endAt: edge.node.endAt,
+      startDate: edge.node.startDate,
+      endDate: edge.node.endDate,
+      startTime: edge.node.allDay
+        ? null
+        : edge.node.startAt
+          ? dayjs(edge.node.startAt).format('HH:mm:ss')
+          : null,
+      endTime: edge.node.allDay
+        ? null
+        : edge.node.endAt
+          ? dayjs(edge.node.endAt).format('HH:mm:ss')
+          : null,
       allDay: edge.node.allDay,
       location: edge.node.location || '',
       isPublic: edge.node.isPublic,

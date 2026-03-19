@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgForEventFilter
 
-Defined in: [src/types/Event/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L103)
+Defined in: [src/types/Event/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L105)
 
 Org shape for event filtering when members may be absent (e.g. User Portal basic org query).
 
@@ -14,7 +14,7 @@ Org shape for event filtering when members may be absent (e.g. User Portal basic
 
 > **id**: `string`
 
-Defined in: [src/types/Event/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L104)
+Defined in: [src/types/Event/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L106)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/interface.ts:104](https://github.com/PalisadoesFoun
 
 > `optional` **members**: `object`
 
-Defined in: [src/types/Event/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L105)
+Defined in: [src/types/Event/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L107)
 
 #### edges?
 

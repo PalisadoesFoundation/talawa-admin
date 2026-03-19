@@ -10,11 +10,21 @@ Interface for EventCard component props.
 
 ## Properties
 
+### allDay?
+
+> `optional` **allDay**: `boolean`
+
+Defined in: [src/types/UserPortal/EventCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L24)
+
+Whether the event is all day
+
+***
+
 ### attendees
 
 > **attendees**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>[]
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L26)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L32)
 
 List of users attending the event
 
@@ -24,7 +34,7 @@ List of users attending the event
 
 > **creator**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L24)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L30)
 
 Information about the user who created the event
 
@@ -46,7 +56,17 @@ Detailed description of the event
 
 Defined in: [src/types/UserPortal/EventCard/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L18)
 
-ISO string for the event end date/time
+ISO string for the event end date/time (nullable for all-day events)
+
+***
+
+### endDate?
+
+> `optional` **endDate**: `string`
+
+Defined in: [src/types/UserPortal/EventCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L22)
+
+Date string (YYYY-MM-DD) for all-day event end
 
 ***
 
@@ -54,7 +74,7 @@ ISO string for the event end date/time
 
 > `optional` **endTime**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L22)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L28)
 
 formatted end time string (optional)
 
@@ -74,7 +94,7 @@ Unique identifier for the event
 
 > **isInviteOnly**: `boolean`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L31)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L37)
 
 Determines if the event is restricted to invited participants only.
 When true, only invited users can see and access the event.
@@ -107,7 +127,17 @@ Name or title of the event
 
 Defined in: [src/types/UserPortal/EventCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L16)
 
-ISO string for the event start date/time
+ISO string for the event start date/time (nullable for all-day events)
+
+***
+
+### startDate?
+
+> `optional` **startDate**: `string`
+
+Defined in: [src/types/UserPortal/EventCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L20)
+
+Date string (YYYY-MM-DD) for all-day event start
 
 ***
 
@@ -115,6 +145,6 @@ ISO string for the event start date/time
 
 > `optional` **startTime**: `string`
 
-Defined in: [src/types/UserPortal/EventCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L20)
+Defined in: [src/types/UserPortal/EventCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/EventCard/interface.ts#L26)
 
 formatted start time string (optional)

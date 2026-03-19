@@ -122,6 +122,12 @@
   /* height is set inline by getEventStyle — do NOT override it here */
 }
 
+.allDayEvent {
+  top: var(--space-0);
+  left: 2.5%;
+  height: var(--space-10-75);
+}
+
 /* Inner EventListCard - allow it to size based on content */
 .eventContainer > div:first-child {
   flex: 0 0 auto;

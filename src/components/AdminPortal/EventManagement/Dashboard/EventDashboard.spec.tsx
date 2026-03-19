@@ -27,6 +27,7 @@ import {
   MOCKS_UNDEFINED_INVITE_ONLY,
   MOCKS_EMPTY_DATE_STRINGS,
 } from './EventDashboard.mocks';
+import { formatDate } from 'utils/dateFormatter';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import {
   vi,
@@ -192,7 +193,66 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('end-time')).toHaveTextContent('');
     expect(getByTestId('start-date')).toBeInTheDocument();
     expect(getByTestId('end-date')).toBeInTheDocument();
+    // All-day endDate is exclusive in storage and should display as inclusive day.
+    expect(getByTestId('start-date').textContent).toBe(
+      getByTestId('end-date').textContent,
+    );
+
+    const latestModalCall =
+      mockEventListCardModals.mock.calls[
+        mockEventListCardModals.mock.calls.length - 1
+      ][0];
+    expect(latestModalCall.eventListCardProps.startDate).toBeTruthy();
+    expect(latestModalCall.eventListCardProps.endDate).toBeTruthy();
     expect(getByTestId('event-time')).toBeInTheDocument();
+  });
+
+  it('Should render start date from startDate field for all-day events', async () => {
+    const startDate = dayjs.utc().add(10, 'days').format('YYYY-MM-DD');
+    const mockAllDayDateOnly = new StaticMockLink(
+      [
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: {
+            data: {
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+                description: 'Test Description',
+                location: 'India',
+                allDay: true,
+                isPublic: true,
+                isRegisterable: true,
+                isInviteOnly: false,
+                startAt: null,
+                endAt: null,
+                startDate,
+                endDate: dayjs(startDate).add(1, 'day').format('YYYY-MM-DD'),
+                creator: {
+                  id: 'creator1',
+                  name: 'John Doe',
+                  emailAddress: 'john.doe@example.com',
+                },
+              },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    const { getByTestId } = renderEventDashboard(mockAllDayDateOnly);
+
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
+    expect(getByTestId('start-time')).toHaveTextContent('');
+    expect(getByTestId('start-date')).toHaveTextContent(
+      formatDate(`${startDate}T00:00:00Z`),
+    );
   });
 
   it('Should show loader while data is being fetched', async () => {

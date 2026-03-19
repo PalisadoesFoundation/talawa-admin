@@ -159,6 +159,8 @@ export const USER_VOLUNTEER_MEMBERSHIP = gql`
         name
         startAt
         endAt
+        startDate
+        endDate
         recurrenceRule {
           id
         }
@@ -206,6 +208,8 @@ export const USER_EVENTS_VOLUNTEER = gql`
             description
             startAt
             endAt
+            startDate
+            endDate
             location
             allDay
             isRecurringEventTemplate

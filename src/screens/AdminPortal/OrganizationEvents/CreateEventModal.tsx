@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
+import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
@@ -11,7 +12,8 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
-import type { ICreateEventInput } from 'types/Event/interface';
+import type { IEventFormInput } from 'types/Event/interface';
+import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 interface ICreateEventModalProps {
@@ -78,15 +80,12 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
     twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
 
-    const tomorrowUTC = new Date(todayUTC);
-    tomorrowUTC.setUTCDate(tomorrowUTC.getUTCDate() + 1);
-
     return {
       name: '',
       description: '',
       location: '',
       startDate: todayUTC,
-      endDate: tomorrowUTC,
+      endDate: todayUTC,
       startTime: nextHour.toTimeString().split(' ')[0],
       endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,
@@ -112,30 +111,37 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         : undefined;
 
       // Build input object with shared typed interface
-      const input: ICreateEventInput = {
+      // All-day events: use startDate/endDate (YYYY-MM-DD strings)
+      // Timed events: use startAt/endAt (ISO timestamps)
+      const input: IEventFormInput = {
         name: payload.name,
-        organizationId: currentUrl,
-        allDay: payload.allDay,
-        isPublic: payload.isPublic,
-        isRegisterable: payload.isRegisterable,
-        isInviteOnly: payload.isInviteOnly,
-        // Conditionally send date fields based on allDay flag
         ...(payload.allDay
           ? {
-              startDate: payload.startDate.toISOString().slice(0, 10),
-              endDate: payload.endDate.toISOString().slice(0, 10),
+              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
+              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate)
+                .add(1, 'day')
+                .format('YYYY-MM-DD'),
             }
           : {
               startAt: payload.startAtISO,
               endAt: payload.endAtISO,
             }),
+        organizationId: currentUrl,
+        allDay: payload.allDay,
+        isPublic: payload.isPublic,
+        isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly,
+
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
+      const mutationInput = mapCreateEventInputToMutationInput(input);
+
       const { data: createEventData } = await create({
-        variables: { input },
+        variables: { input: mutationInput },
       });
 
       if (createEventData?.createEvent) {

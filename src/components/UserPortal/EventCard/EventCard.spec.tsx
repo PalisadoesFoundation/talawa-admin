@@ -312,4 +312,144 @@ describe('Event card when start and end time are not given', () => {
     expect(screen.queryByTestId('startTime')).not.toBeInTheDocument();
     expect(screen.queryByTestId('endTime')).not.toBeInTheDocument();
   });
+
+  it('renders start and end date from startDate/endDate when allDay is true', () => {
+    const allDayStartDate = dayjs.utc().add(30, 'day').format('YYYY-MM-DD');
+    const allDayEndDate = dayjs.utc().add(32, 'day').format('YYYY-MM-DD');
+    const timedStartAt = dayjs.utc().add(200, 'day').hour(10).toISOString();
+    const timedEndAt = dayjs.utc().add(201, 'day').hour(10).toISOString();
+
+    const allDayDateProps = {
+      ...props,
+      allDay: true,
+      startDate: allDayStartDate,
+      endDate: allDayEndDate,
+      startAt: timedStartAt,
+      endAt: timedEndAt,
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...allDayDateProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(
+      screen.getByText(dayjs(allDayStartDate).format('D MMMM YYYY')),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs(allDayEndDate).format('D MMMM YYYY')),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(dayjs(timedStartAt).format('D MMMM YYYY')),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(dayjs(timedEndAt).format('D MMMM YYYY')),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders start and end date from startAt/endAt when allDay is false', () => {
+    const allDayStartDate = dayjs.utc().add(40, 'day').format('YYYY-MM-DD');
+    const allDayEndDate = dayjs.utc().add(42, 'day').format('YYYY-MM-DD');
+    const timedStartAt = dayjs.utc().add(220, 'day').hour(10).toISOString();
+    const timedEndAt = dayjs.utc().add(221, 'day').hour(10).toISOString();
+
+    const timedDateProps = {
+      ...props,
+      allDay: false,
+      startDate: allDayStartDate,
+      endDate: allDayEndDate,
+      startAt: timedStartAt,
+      endAt: timedEndAt,
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...timedDateProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(
+      screen.getByText(dayjs(timedStartAt).format('D MMMM YYYY')),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs(timedEndAt).format('D MMMM YYYY')),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(dayjs(allDayStartDate).format('D MMMM YYYY')),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(dayjs(allDayEndDate).format('D MMMM YYYY')),
+    ).not.toBeInTheDocument();
+  });
+
+  it('falls back to startAt and endAt when allDay is true but startDate and endDate are missing', () => {
+    const fallbackStartAt = dayjs.utc().add(260, 'day').hour(8).toISOString();
+    const fallbackEndAt = dayjs.utc().add(261, 'day').hour(21).toISOString();
+
+    const allDayMissingDateProps = {
+      ...props,
+      allDay: true,
+      startDate: undefined,
+      endDate: undefined,
+      startAt: fallbackStartAt,
+      endAt: fallbackEndAt,
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...allDayMissingDateProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(
+      screen.getByText(dayjs(fallbackStartAt).format('D MMMM YYYY')),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs(fallbackEndAt).format('D MMMM YYYY')),
+    ).toBeInTheDocument();
+  });
+
+  it('renders N/A when allDay is false and both startAt and endAt are missing', () => {
+    const missingDateProps = {
+      ...props,
+      allDay: false,
+      startDate: undefined,
+      endDate: undefined,
+      startAt: null,
+      endAt: null,
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...missingDateProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getAllByText('N/A')).toHaveLength(2);
+  });
 });

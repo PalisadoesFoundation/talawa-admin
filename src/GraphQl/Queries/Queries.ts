@@ -305,6 +305,8 @@ export const EVENT_DETAILS = gql`
       isInviteOnly
       startAt
       endAt
+      startDate
+      endDate
       createdAt
       updatedAt
       isRecurringEventTemplate

@@ -68,7 +68,8 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
+import type { IEventEdge, IEventFormInput } from 'types/Event/interface';
+import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import styles from './Events.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -172,16 +173,12 @@ export default function Events(): JSX.Element {
     const twoHoursLater = new Date(nextHour);
     const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
     twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
-    const tomorrow = new Date(now);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
-
     return {
       name: '',
       description: '',
       location: '',
       startDate: new Date(),
-      endDate: tomorrow,
+      endDate: new Date(),
       startTime: nextHour.toTimeString().split(' ')[0],
       endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,
@@ -206,30 +203,36 @@ export default function Events(): JSX.Element {
         : undefined;
 
       // Build input object with shared typed interface
-      const input: ICreateEventInput = {
+      // All-day events: use startDate/endDate (YYYY-MM-DD strings)
+      // Timed events: use startAt/endAt (ISO timestamps)
+      const input: IEventFormInput = {
         name: payload.name,
-        organizationId,
-        allDay: payload.allDay,
-        isPublic: payload.isPublic,
-        isRegisterable: payload.isRegisterable,
-        isInviteOnly: payload.isInviteOnly,
-        // Conditionally send date fields based on allDay flag
         ...(payload.allDay
           ? {
-              startDate: payload.startDate.toISOString().slice(0, 10),
-              endDate: payload.endDate.toISOString().slice(0, 10),
+              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
+              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
+              endDate: dayjs(payload.endDate)
+                .add(1, 'day')
+                .format('YYYY-MM-DD'),
             }
           : {
               startAt: payload.startAtISO,
               endAt: payload.endAtISO,
             }),
+        organizationId,
+        allDay: payload.allDay,
+        isPublic: payload.isPublic,
+        isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly,
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
+      const mutationInput = mapCreateEventInputToMutationInput(input);
+
       const { data: createEventData, errors } = await create({
-        variables: { input },
+        variables: { input: mutationInput },
       });
 
       // Handle partial success: prioritize data over errors
@@ -257,47 +260,45 @@ export default function Events(): JSX.Element {
 
   // Normalize event data for EventCalendar with proper typing
   const events = (data?.organization?.events?.edges || []).map(
-    (edge: IEventEdge) => {
-      // For all-day events the API returns startDate/endDate instead of startAt/endAt.
-      const startAt =
-        edge.node.startAt ??
-        dayjs.utc(edge.node.startDate).startOf('day').toISOString();
-      const endAt =
-        edge.node.endAt ??
-        dayjs.utc(edge.node.endDate).endOf('day').toISOString();
+    (edge: IEventEdge) => ({
+      id: edge.node.id || '',
 
-      return {
-        id: edge.node.id || '',
-
-        name: edge.node.name || '',
-        description: edge.node.description || '',
-        startAt,
-        endAt,
-        startTime: edge.node.allDay
-          ? null
-          : dayjs.utc(startAt).format('HH:mm:ss'),
-        endTime: edge.node.allDay ? null : dayjs.utc(endAt).format('HH:mm:ss'),
-        allDay: edge.node.allDay,
-        location: edge.node.location || '',
-        isPublic: edge.node.isPublic,
-        isRegisterable: edge.node.isRegisterable,
-        isInviteOnly: edge.node.isInviteOnly,
-        // Add recurring event information
-        isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-        baseEvent: edge.node.baseEvent,
-        sequenceNumber: edge.node.sequenceNumber,
-        totalCount: edge.node.totalCount,
-        hasExceptions: edge.node.hasExceptions,
-        progressLabel: edge.node.progressLabel,
-        recurrenceDescription: edge.node.recurrenceDescription,
-        recurrenceRule: edge.node.recurrenceRule,
-        creator: edge.node.creator || {
-          id: '',
-          name: '',
-        },
-        attendees: edge.node.attendees || [],
-      };
-    },
+      name: edge.node.name || '',
+      description: edge.node.description || '',
+      startAt: edge.node.startAt,
+      endAt: edge.node.endAt,
+      startDate: edge.node.startDate,
+      endDate: edge.node.endDate,
+      startTime: edge.node.allDay
+        ? null
+        : edge.node.startAt
+          ? dayjs(edge.node.startAt).format('HH:mm:ss')
+          : null,
+      endTime: edge.node.allDay
+        ? null
+        : edge.node.endAt
+          ? dayjs(edge.node.endAt).format('HH:mm:ss')
+          : null,
+      allDay: edge.node.allDay,
+      location: edge.node.location || '',
+      isPublic: edge.node.isPublic,
+      isRegisterable: edge.node.isRegisterable,
+      isInviteOnly: edge.node.isInviteOnly,
+      // Add recurring event information
+      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+      baseEvent: edge.node.baseEvent,
+      sequenceNumber: edge.node.sequenceNumber,
+      totalCount: edge.node.totalCount,
+      hasExceptions: edge.node.hasExceptions,
+      progressLabel: edge.node.progressLabel,
+      recurrenceDescription: edge.node.recurrenceDescription,
+      recurrenceRule: edge.node.recurrenceRule,
+      creator: edge.node.creator || {
+        id: '',
+        name: '',
+      },
+      attendees: edge.node.attendees || [],
+    }),
   ); // Handle errors gracefully
   React.useEffect(() => {
     if (eventDataError) {
