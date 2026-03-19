@@ -16,10 +16,7 @@ import dayjs from 'dayjs';
 import { urlToFile } from 'utils/urlToFile';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-import {
-  UPDATE_CURRENT_USER_MUTATION,
-  UPDATE_USER_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 
@@ -156,51 +153,6 @@ const MOCKS1 = [
       data: {
         unassignUserTag: {
           _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
-    },
-    variableMatcher: (variables: Record<string, unknown>) => {
-      return (
-        variables &&
-        typeof variables === 'object' &&
-        'input' in variables &&
-        typeof variables.input === 'object'
-      );
-    },
-    result: {
-      data: {
-        updateCurrentUser: {
-          id: 'rishav-jha-mech',
-          name: 'Rishav Jha',
-          emailAddress: 'test221@gmail.com',
-          role: 'administrator',
-          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
-          updatedAt: dayjs.utc().toISOString(),
-          birthDate: '',
-          gender: 'male',
-          addressLine1: 'Line 1',
-          addressLine2: 'Line 2',
-          city: 'city',
-          state: 'State1',
-          countryCode: 'in',
-          postalCode: '111111',
-          description: 'This is a description',
-          mobilePhoneNumber: '+9999999999',
-          homePhoneNumber: '+9999999998',
-          workPhoneNumber: '+9999999998',
-          educationGrade: 'grade_8',
-          employmentStatus: 'employed',
-          maritalStatus: 'engaged',
-          natalSex: 'male',
-          naturalLanguageCode: 'en',
-          isEmailAddressVerified: false,
-          avatarURL: 'http://example.com/avatar.jpg',
-          avatarMimeType: 'image/jpeg',
         },
       },
     },
@@ -349,51 +301,6 @@ const MOCKS2 = [
           createdOrganizations: [],
           eventsAttended: [],
           __typename: 'User',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
-    },
-    variableMatcher: (variables: Record<string, unknown>) => {
-      return (
-        variables &&
-        typeof variables === 'object' &&
-        'input' in variables &&
-        typeof variables.input === 'object'
-      );
-    },
-    result: {
-      data: {
-        updateCurrentUser: {
-          id: '0194d80f-03cd-79cd-8135-683494b187a1',
-          name: 'Rishav Jha',
-          emailAddress: 'test221@gmail.com',
-          role: 'regular',
-          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
-          updatedAt: dayjs.utc().toISOString(),
-          birthDate: '2000-01-01',
-          gender: 'male',
-          addressLine1: 'Line 1',
-          addressLine2: 'Line 2',
-          city: 'nyc',
-          state: 'State1',
-          countryCode: 'bb',
-          postalCode: '111111',
-          description: 'This is a description',
-          mobilePhoneNumber: '+9999999999',
-          homePhoneNumber: '+9999999998',
-          workPhoneNumber: '+9999999998',
-          educationGrade: 'grade_8',
-          employmentStatus: 'employed',
-          maritalStatus: 'engaged',
-          natalSex: 'male',
-          naturalLanguageCode: 'en',
-          isEmailAddressVerified: false,
-          avatarURL: 'http://example.com/avatar.jpg',
-          avatarMimeType: 'image/jpeg',
         },
       },
     },
@@ -1152,27 +1059,6 @@ describe('MemberDetail', () => {
       await waitForLoadingComplete();
       expect(screen.getByTestId('fileInput')).toBeInTheDocument();
     });
-  });
-
-  test('displays error when password validation fails', async () => {
-    renderMemberDetailScreen(createLink(MOCKS1));
-    await waitForLoadingComplete();
-
-    const passwordInput = screen.getByTestId(
-      'inputPassword',
-    ) as HTMLInputElement;
-    await user.clear(passwordInput);
-    await user.type(passwordInput, 'weak');
-
-    const saveButton = screen.getByTestId('saveChangesBtn');
-    await user.click(saveButton);
-
-    await waitFor(
-      () => {
-        expect(mockToast.error).toHaveBeenCalled();
-      },
-      { timeout: 3000 },
-    );
   });
 
   test('handles avatar URL to file conversion failure', async () => {

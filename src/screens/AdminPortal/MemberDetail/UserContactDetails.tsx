@@ -17,7 +17,6 @@
  * @remarks
  * - Uses Apollo Client hooks for fetching and updating user data.
  * - Handles avatar uploads with file type and size validation.
- * - Provides form validation for sensitive fields such as passwords.
  * - Uses react-bootstrap components and MUI-based date pickers for UI.
  * - Supports localization via react-i18next.
  *
@@ -54,7 +53,6 @@ import {
 } from 'utils/formEnumFields';
 import dayjs from 'dayjs';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
-import { validatePassword } from 'utils/passwordValidator';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { resolveAvatarFile } from './resolveAvatarFile';
@@ -95,7 +93,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     name: '',
     natalSex: '',
     naturalLanguageCode: '',
-    password: '',
     postalCode: '',
     state: '',
     workPhoneNumber: '',
@@ -180,13 +177,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
           ([, v]) => v != null && (typeof v !== 'string' || v.trim()),
         ),
       ) as Partial<T>;
-    const passwordError = formState.password
-      ? validatePassword(formState.password)
-      : null;
-    if (passwordError) {
-      NotificationToast.error(passwordError);
-      return;
-    }
 
     let avatarFile = await resolveAvatarFile({
       newAvatarUploaded,
@@ -211,7 +201,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       name: formState.name,
       natalSex: formState.natalSex,
       naturalLanguageCode: formState.naturalLanguageCode,
-      password: formState.password,
       postalCode: formState.postalCode,
       state: formState.state,
       workPhoneNumber: formState.workPhoneNumber,
@@ -448,23 +437,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       variant="outline-secondary"
                     />
                   </div>
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="password" className="form-label">
-                    {tCommon('password')}
-                  </label>
-                  <input
-                    id="password"
-                    value={formState.password}
-                    className={`form-control ${styles.inputColor}`}
-                    type="password"
-                    name="password"
-                    onChange={(e) =>
-                      handleFieldChange('password', e.target.value)
-                    }
-                    data-testid="inputPassword"
-                    placeholder={tCommon('enterPassword')}
-                  />
                 </Col>
                 <Col md={12}>
                   <label htmlFor="description" className="form-label">
