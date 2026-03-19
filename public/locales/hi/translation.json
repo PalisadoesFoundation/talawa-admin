@@ -2633,6 +2633,7 @@
     "expandDay": "दिन विस्तारित करें"
   },
   "weeklyEventCalender": {
+    "allDay": "पूरे दिन",
     "weeklyCalendarAriaLabel": "साप्ताहिक कैलेंडर दृश्य"
   }
 }

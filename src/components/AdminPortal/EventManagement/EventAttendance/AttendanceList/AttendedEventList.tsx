@@ -72,7 +72,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
             />
             <div>
               <div>{row.name}</div>
-              <div>{formatDate(row.startAt)}</div>
+              <div>{row.startAt ? formatDate(row.startAt) : ''}</div>
             </div>
           </Link>
         ),

@@ -34,6 +34,14 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:39](https://
 
 ***
 
+### endDate?
+
+> `optional` **endDate**: `string`
+
+Defined in: [src/types/shared-components/EventListCard/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L41)
+
+***
+
 ### id
 
 > **id**: `string`
@@ -86,7 +94,7 @@ Defined in: [src/types/shared-components/EventListCard/interface.ts:31](https://
 
 > `optional` **recurrence**: [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/shared-components/EventListCard/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L44)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L46)
 
 Recurrence rule for the event.
 This field is used for updating the recurrence pattern.
@@ -98,3 +106,11 @@ This field is used for updating the recurrence pattern.
 > `optional` **startAt**: `string`
 
 Defined in: [src/types/shared-components/EventListCard/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L38)
+
+***
+
+### startDate?
+
+> `optional` **startDate**: `string`
+
+Defined in: [src/types/shared-components/EventListCard/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L40)

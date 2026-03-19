@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx#L44)
+Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx#L45)
 
 ## Parameters
 

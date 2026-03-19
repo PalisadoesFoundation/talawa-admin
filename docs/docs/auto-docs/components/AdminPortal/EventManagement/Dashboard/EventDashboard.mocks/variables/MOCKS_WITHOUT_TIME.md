@@ -72,7 +72,11 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 #### result.data.event.endAt
 
-> **endAt**: `string`
+> **endAt**: `any` = `null`
+
+#### result.data.event.endDate
+
+> **endDate**: `string`
 
 #### result.data.event.id
 
@@ -120,7 +124,11 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 #### result.data.event.startAt
 
-> **startAt**: `string`
+> **startAt**: `any` = `null`
+
+#### result.data.event.startDate
+
+> **startDate**: `string`
 
 #### result.data.event.updatedAt
 

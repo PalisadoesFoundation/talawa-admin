@@ -4,7 +4,7 @@
 
 # Interface: IEventEdge
 
-Defined in: [src/types/Event/interface.ts:221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L221)
+Defined in: [src/types/Event/interface.ts:223](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L223)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:221](https://github.com/PalisadoesFoun
 
 > **cursor**: `string`
 
-Defined in: [src/types/Event/interface.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L263)
+Defined in: [src/types/Event/interface.ts:267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L267)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:263](https://github.com/PalisadoesFoun
 
 > **node**: `object`
 
-Defined in: [src/types/Event/interface.ts:222](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L222)
+Defined in: [src/types/Event/interface.ts:224](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L224)
 
 #### allDay
 
@@ -61,6 +61,10 @@ Defined in: [src/types/Event/interface.ts:222](https://github.com/PalisadoesFoun
 #### endAt
 
 > **endAt**: `string`
+
+#### endDate?
+
+> `optional` **endDate**: `string`
 
 #### hasExceptions?
 
@@ -119,6 +123,10 @@ Often referred to as "Community Visible" in the UI.
 #### startAt
 
 > **startAt**: `string`
+
+#### startDate?
+
+> `optional` **startDate**: `string`
 
 #### totalCount?
 

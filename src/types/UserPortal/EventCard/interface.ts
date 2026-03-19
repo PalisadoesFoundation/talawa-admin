@@ -12,10 +12,16 @@ export interface InterfaceEventCardProps {
   description: string;
   /** Physical or virtual location of the event */
   location: string;
-  /** ISO string for the event start date/time */
-  startAt: string;
-  /** ISO string for the event end date/time */
-  endAt: string;
+  /** ISO string for the event start date/time (nullable for all-day events) */
+  startAt: string | null;
+  /** ISO string for the event end date/time (nullable for all-day events) */
+  endAt: string | null;
+  /** Date string (YYYY-MM-DD) for all-day event start */
+  startDate?: string | null;
+  /** Date string (YYYY-MM-DD) for all-day event end */
+  endDate?: string | null;
+  /** Whether the event is all day */
+  allDay?: boolean;
   /** formatted start time string (optional) */
   startTime?: string | null;
   /** formatted end time string (optional) */

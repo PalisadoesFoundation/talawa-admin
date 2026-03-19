@@ -154,4 +154,41 @@ describe('Testing AttendedEventList', () => {
       ).toBeInTheDocument();
     });
   });
+
+  it('renders empty start date when event startAt is missing', async () => {
+    const missingStartAtMock = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Missing StartAt Event',
+              startAt: null,
+              location: 'No Date Location',
+            },
+          },
+        },
+      },
+    ];
+
+    const { queryByText } = render(
+      <MockedProvider mocks={missingStartAtMock}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <AttendedEventList {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(queryByText('Missing StartAt Event')).toBeInTheDocument();
+      // No fallback date text is rendered when startAt is missing.
+      expect(queryByText('N/A')).not.toBeInTheDocument();
+    });
+  });
 });
