@@ -300,6 +300,44 @@ export const emptyMocks = [
   },
 ];
 
+export const MOCKS_WITH_ANCESTORS = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [
+              createTagNode('subTag1', 'subTag 1', 5, 5, [
+                { _id: 'grandparent1', name: 'Grandparent Tag' },
+                { _id: '1', name: 'userTag 1' },
+              ]),
+            ],
+            pageInfo: {
+              startCursor: 'subTag1',
+              endCursor: 'subTag1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 1,
+          },
+          ancestorTags: [{ _id: 'grandparent1', name: 'Grandparent Tag' }],
+        },
+      },
+    },
+  },
+];
+
 export const MOCKS_CREATE_TAG_ERROR = [
   {
     request: {

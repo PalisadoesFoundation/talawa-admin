@@ -16,6 +16,7 @@ import {
   MOCKS,
   MOCKS_CREATE_TAG_ERROR,
   MOCKS_ERROR_SUB_TAGS,
+  MOCKS_WITH_ANCESTORS,
 } from './SubTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
@@ -385,6 +386,43 @@ describe('Organisation Tags Page', () => {
     renderSubTags(emptyLink);
     await waitFor(() => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
+    });
+  });
+
+  it('renders breadcrumbs with ancestor tags and caret separators', async () => {
+    const ancestorLink = new StaticMockLink(MOCKS_WITH_ANCESTORS, true);
+    renderSubTags(ancestorLink);
+
+    // Wait for ancestor breadcrumb to appear
+    await waitFor(() => {
+      expect(screen.getByText('Grandparent Tag')).toBeInTheDocument();
+    });
+
+    const breadcrumbs = screen.getAllByTestId('redirectToSubTags');
+    // 2 breadcrumbs: ancestor "Grandparent Tag" + current "userTag 1"
+    expect(breadcrumbs.length).toBe(2);
+
+    // First breadcrumb (ancestor) should have a caret separator
+    const firstBreadcrumb = breadcrumbs[0];
+    expect(firstBreadcrumb.querySelector('.fa-caret-right')).toBeTruthy();
+
+    // Last breadcrumb (current tag) should NOT have a caret separator
+    const lastBreadcrumb = breadcrumbs[1];
+    expect(lastBreadcrumb.querySelector('.fa-caret-right')).toBeNull();
+  });
+
+  it('does not navigate when pressing Tab on tag name', async () => {
+    const user = userEvent.setup();
+    renderSubTags(link);
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
+    });
+    const tagName = screen.getAllByTestId('tagName')[0];
+    tagName.focus();
+    await user.keyboard('{Tab}');
+    // Should remain on the same page — no navigation
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
   });
 });
