@@ -58,10 +58,10 @@ export const OAuthSection = ({ mode }: Props) => {
     <div role="group" aria-label={tCommon('oauthSectionAriaLabel')}>
       <div className={styles.divider}>{tCommon('OR')}</div>
       <div className={styles.oauthButtonsWrapper}>
-        {renderableProviders.map(
-          ([providerKey, ProviderButton]) =>
-            ProviderButton && <ProviderButton key={providerKey} mode={mode} />,
-        )}
+        {renderableProviders.map(([providerKey, providerButton]) => {
+          const ProviderButton = providerButton;
+          return <ProviderButton key={providerKey} mode={mode} />;
+        })}
       </div>
     </div>
   );

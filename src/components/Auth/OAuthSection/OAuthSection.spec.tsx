@@ -109,7 +109,7 @@ describe('OAuthSection', () => {
   it('ignores enabled providers without a matching button component', () => {
     mockOAuthProviders.UNKNOWN = { enabled: true };
 
-    const { container } = render(<OAuthSection mode="login" />);
+    render(<OAuthSection mode="login" />);
 
     expect(screen.getAllByRole('button')).toHaveLength(2);
     expect(screen.getByTestId('google-oauth-button')).toBeInTheDocument();
