@@ -327,9 +327,7 @@ const LoginPage = (): JSX.Element => {
                     {tCommon('forgotPassword')}
                   </Link>
                 </div>
-                <div>
-                  <OAuthSection mode="login" />
-                </div>
+                <OAuthSection mode="login" />
                 {location.pathname !== '/admin' && (
                   <div className="position-relative my-2">
                     <hr />

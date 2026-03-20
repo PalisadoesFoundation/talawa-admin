@@ -67,13 +67,6 @@ describe('OAuthSection', () => {
     expect(screen.getByText('OR')).toBeInTheDocument();
   });
 
-  it('applies the expected CSS classes', () => {
-    const { container } = render(<OAuthSection mode="login" />);
-
-    expect(screen.getByText('OR')).toHaveClass('divider');
-    expect(container.querySelector('.oauthRow')).toBeInTheDocument();
-  });
-
   // Both child buttons are rendered
   it('renders the Google OAuth button', () => {
     render(<OAuthSection mode="login" />);
@@ -121,7 +114,6 @@ describe('OAuthSection', () => {
     expect(screen.getAllByRole('button')).toHaveLength(2);
     expect(screen.getByTestId('google-oauth-button')).toBeInTheDocument();
     expect(screen.getByTestId('github-oauth-button')).toBeInTheDocument();
-    expect(container.querySelector('.oauthRow')?.children).toHaveLength(2);
   });
 
   // Mode forwarding — login

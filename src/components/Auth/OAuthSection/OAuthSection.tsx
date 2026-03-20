@@ -37,28 +37,31 @@ const providerButtonComponents: Partial<
 export const OAuthSection = ({ mode }: Props) => {
   const { t: tCommon } = useTranslation('common');
 
-  const enabledProviders = Object.entries(OAUTH_PROVIDERS).filter(
-    ([, config]) => config.enabled !== false,
+  const renderableProviders = Object.entries(OAUTH_PROVIDERS).flatMap(
+    ([providerKey, config]) => {
+      if (config.enabled !== true) return [];
+
+      const ProviderButton =
+        providerButtonComponents[
+          providerKey as keyof typeof providerButtonComponents
+        ];
+
+      return ProviderButton ? [[providerKey, ProviderButton] as const] : [];
+    },
   );
 
-  if (enabledProviders.length === 0) {
+  if (renderableProviders.length === 0) {
     return null;
   }
 
   return (
-    <div>
+    <div role="group" aria-label={tCommon('oauthSectionAriaLabel')}>
       <div className={styles.divider}>{tCommon('OR')}</div>
-      <div className={styles.oauthRow}>
-        {enabledProviders.map(([providerKey]) => {
-          const ProviderButton =
-            providerButtonComponents[
-              providerKey as keyof typeof providerButtonComponents
-            ];
-
-          return ProviderButton ? (
-            <ProviderButton key={providerKey} mode={mode} />
-          ) : null;
-        })}
+      <div className={styles.oauthButtonsWrapper}>
+        {renderableProviders.map(
+          ([providerKey, ProviderButton]) =>
+            ProviderButton && <ProviderButton key={providerKey} mode={mode} />,
+        )}
       </div>
     </div>
   );
