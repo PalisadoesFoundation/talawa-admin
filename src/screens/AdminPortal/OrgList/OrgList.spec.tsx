@@ -58,6 +58,20 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockToast,
 }));
 
+// Mock react-redux and state/store to avoid loading use-sync-external-store (CJS/ESM interop failure in Vitest)
+vi.mock('react-redux', () => ({
+  Provider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useDispatch: () => () => {},
+  useSelector: () => undefined,
+}));
+vi.mock('state/store', () => ({
+  store: {
+    getState: vi.fn(() => ({})),
+    subscribe: vi.fn(() => () => {}),
+    dispatch: vi.fn(),
+  },
+}));
+
 vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   default: ({ data }: { data: InterfaceOrganizationCardProps }) => (
     <div data-testid="organization-card-mock">{data.name}</div>
