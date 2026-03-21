@@ -2010,7 +2010,6 @@
     "lowestCapacity": "Lowest Capacity",
     "noVenues": "No Venues Found!",
     "view": "View",
-    "testConfirmDelete": "Test: Confirm delete",
     "venueTitleError": "Venue title cannot be empty!",
     "venueCapacityError": "Capacity must be a positive number!",
     "searchBy": "Search By",

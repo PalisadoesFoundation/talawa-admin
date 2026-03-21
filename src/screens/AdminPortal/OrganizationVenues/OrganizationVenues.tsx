@@ -57,10 +57,8 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Navigate, useParams } from 'react-router';
 import VenueModal from 'components/AdminPortal/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
-import {
-  DeleteModal,
-  useModalState,
-} from 'shared-components/CRUDModalTemplate';
+import useVenueDeletion from '../../../hooks/useVenueDeletion';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/AdminPortal/Venues/VenueCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
@@ -70,11 +68,9 @@ import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcru
  * OrganizationVenues component
  *
  * @param refetchVenues - optional injected refetch function for tests
- * @param testExposeConfirm - expose a test-only confirm button when true
  */
 function organizationVenues(props?: {
   refetchVenues?: () => Promise<unknown>;
-  testExposeConfirm?: boolean;
 }): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
@@ -106,59 +102,44 @@ function organizationVenues(props?: {
     variables: { orgId },
   });
 
-  const [deleteVenue, { loading: deletingVenue }] = useMutation(
-    DELETE_VENUE_MUTATION,
+  const [deleteVenue] = useMutation(DELETE_VENUE_MUTATION);
+
+  // Allow tests to inject a custom refetch function via props.refetchVenues.
+  // Prefer the injected function when present, otherwise use the query's refetch.
+  const deletion = useVenueDeletion(
+    deleteVenue,
+    props?.refetchVenues ?? venueRefetch,
   );
 
   const {
-    isOpen: deleteVenueModalOpen,
-    open: openDeleteVenueModal,
-    close: closeDeleteVenueModal,
-  } = useModalState();
+    open: handleDelete,
+    close: handleCloseDeleteVenueModal,
+    confirmDelete,
+    isOpen: deleteVenueModalOpenHook,
+    deleting: deletingHook,
+  } = deletion;
 
-  const [selectedVenueId, setSelectedVenueId] = React.useState<string | null>(
-    null,
-  );
+  // Cache selected venue id and name locally to avoid scanning the venues array
+  // on every render when the modal is rendered. This improves performance for
+  // large lists and preserves the canonical deletion logic in the hook.
+  const [selectedVenue, setSelectedVenue] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
 
-  /**
-   * Open delete confirmation for given venue id
-   *
-   * @param venueId - id of the venue to mark for deletion and confirm
-   */
-  const handleDelete = (venueId: string): void => {
-    setSelectedVenueId(venueId);
-    openDeleteVenueModal();
+  const openDeleteModal = (venueId: string): void => {
+    const venue = venues.find((v) => v.node.id === venueId);
+    setSelectedVenue(
+      venue
+        ? { id: venueId, name: venue.node.name }
+        : { id: venueId, name: '' },
+    );
+    handleDelete(venueId);
   };
 
-  /**
-   * Consolidated close handler for delete modal
-   *
-   * Clears any selected venue and closes the DeleteModal.
-   */
-  const handleCloseDeleteVenueModal = (): void => {
-    setSelectedVenueId(null);
-    closeDeleteVenueModal();
-  };
-
-  /**
-   * Perform deletion for selected venue and refetch list
-   *
-   * This function is invoked when the user confirms deletion in the
-   * DeleteModal. It performs the GraphQL mutation to delete the venue,
-   * awaits a refetch of the venue list (either injected for tests or
-   * from the query), and then cleans up modal state. Errors are routed
-   * through the global errorHandler so UI can show localized messages.
-   */
-  const confirmDelete = async (): Promise<void> => {
-    if (!selectedVenueId) return;
-    try {
-      await deleteVenue({ variables: { id: selectedVenueId } });
-      const refetchFn = props?.refetchVenues ?? venueRefetch;
-      await refetchFn();
-      handleCloseDeleteVenueModal();
-    } catch (error) {
-      errorHandler(t, error);
-    }
+  const handleCloseAndClear = (): void => {
+    setSelectedVenue(null);
+    handleCloseDeleteVenueModal();
   };
 
   /**
@@ -323,7 +304,7 @@ function organizationVenues(props?: {
                   <VenueCard
                     venueItem={venueItem}
                     showEditVenueModal={showEditVenueModal}
-                    handleDelete={handleDelete}
+                    handleDelete={openDeleteModal}
                     key={venueItem.node.id}
                   />
                 ))
@@ -344,26 +325,13 @@ function organizationVenues(props?: {
         venueData={editVenueData}
       />
 
-      {props?.testExposeConfirm ? (
-        <Button
-          variant="secondary"
-          data-testid="test-confirm-delete"
-          onClick={confirmDelete}
-        >
-          {t('testConfirmDelete')}
-        </Button>
-      ) : null}
-
       <DeleteModal
-        open={deleteVenueModalOpen}
+        open={deleteVenueModalOpenHook}
         title={t('deleteVenue')}
-        onClose={handleCloseDeleteVenueModal}
+        onClose={handleCloseAndClear}
         onDelete={confirmDelete}
-        loading={deletingVenue}
-        entityName={
-          venues.find((v) => v.node.id === selectedVenueId)?.node.name ??
-          undefined
-        }
+        loading={deletingHook}
+        entityName={selectedVenue?.name ?? undefined}
         data-testid="deleteVenueModal"
       />
     </>

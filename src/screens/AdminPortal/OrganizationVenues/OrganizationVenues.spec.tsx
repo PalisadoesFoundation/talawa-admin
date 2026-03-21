@@ -13,7 +13,15 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  waitFor,
+  within,
+  renderHook,
+  cleanup,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -28,6 +36,7 @@ import type { ApolloLink } from '@apollo/client';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { errorHandler } from 'utils/errorHandler';
+import useVenueDeletion from '../../../hooks/useVenueDeletion';
 
 const MOCKS = [
   {
@@ -162,6 +171,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  cleanup();
   window.alert = originalAlert;
   vi.restoreAllMocks();
 });
@@ -770,77 +780,69 @@ describe('Organisation Venues Error Handling', () => {
     expect(screen.getByText(/venues/i)).toHaveAttribute('aria-current', 'page');
   });
 
-  test('confirmDelete returns early when no selectedVenueId is set', async () => {
-    // Render component with testExposeConfirm to call confirmDelete without selecting
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgvenues/:orgId"
-                  element={<OrganizationVenues testExposeConfirm={true} />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+  test('useVenueDeletion: confirmDelete returns early when no selection is made', async () => {
+    const deleteVenue = vi.fn().mockResolvedValue({});
+    const { result } = renderHook(() => useVenueDeletion(deleteVenue));
 
-    // Click the test-only confirm button which calls confirmDelete()
-    await userEvent.click(screen.getByTestId('test-confirm-delete'));
-
-    // confirmDelete should return early; errorHandler should not be called and no modal should be present
-    expect(errorHandler).not.toHaveBeenCalled();
-    expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument();
-  });
-
-  test('handles refetch failure by calling errorHandler and keeping modal open', async () => {
-    const refetchError = new Error('Refetch failed');
-    const failingRefetch = vi
-      .fn()
-      .mockImplementation(() => Promise.reject(refetchError));
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgvenues/:orgId"
-                  element={
-                    <OrganizationVenues refetchVenues={failingRefetch} />
-                  }
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for venue to render and open delete modal
-    await waitFor(() =>
-      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
-    );
-    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
-
-    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
-    await userEvent.click(modalDeleteBtn);
-
-    // errorHandler should be called with refetch error and modal should remain open
-    await waitFor(() => {
-      expect(errorHandler).toHaveBeenCalledWith(
-        expect.any(Function),
-        refetchError,
-      );
-      expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
+    await act(async () => {
+      await result.current.confirmDelete();
     });
+
+    expect(deleteVenue).not.toHaveBeenCalled();
+    expect(sharedMocks.errorHandler).not.toHaveBeenCalled();
   });
 
+  test('useVenueDeletion: failing refetch calls errorHandler and keeps modal open', async () => {
+    const deleteVenue = vi.fn().mockResolvedValue({});
+    const refetchError = new Error('Refetch failed');
+    const failingRefetch = vi.fn().mockRejectedValue(refetchError);
+
+    const { result } = renderHook(() =>
+      useVenueDeletion(deleteVenue, failingRefetch),
+    );
+
+    act(() => {
+      result.current.open('venue1');
+    });
+
+    await act(async () => {
+      await result.current.confirmDelete();
+    });
+
+    expect(deleteVenue).toHaveBeenCalledWith({ variables: { id: 'venue1' } });
+    expect(failingRefetch).toHaveBeenCalled();
+    expect(sharedMocks.errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      refetchError,
+    );
+    // modal should remain open due to refetch failure
+    expect(result.current.isOpen).toBe(true);
+    expect(result.current.selectedVenueId).toBe('venue1');
+  });
+
+  test('useVenueDeletion: successful refetch closes modal after delete', async () => {
+    const deleteVenue = vi.fn().mockResolvedValue({});
+    const successfulRefetch = vi.fn().mockResolvedValue(undefined);
+
+    const { result } = renderHook(() =>
+      useVenueDeletion(deleteVenue, successfulRefetch),
+    );
+
+    act(() => {
+      result.current.open('venue1');
+    });
+
+    await act(async () => {
+      await result.current.confirmDelete();
+    });
+
+    expect(deleteVenue).toHaveBeenCalledWith({ variables: { id: 'venue1' } });
+    expect(successfulRefetch).toHaveBeenCalled();
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.selectedVenueId).toBeNull();
+  });
+
+  // keep existing modal-integration close test intact
   test('handleCloseDeleteVenueModal clears selection and closes modal', async () => {
     renderOrganizationVenue(link);
 
@@ -861,130 +863,30 @@ describe('Organisation Venues Error Handling', () => {
     });
   });
 
-  test('TEST-COVER: early-return branch via testExposeConfirm button (coverage)', async () => {
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgvenues/:orgId"
-                  element={<OrganizationVenues testExposeConfirm={true} />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Click the test-only confirm button which calls confirmDelete()
-    const testBtn = await screen.findByTestId('test-confirm-delete');
-    await userEvent.click(testBtn);
-
-    // confirmDelete should return early; errorHandler should not be called
-    expect(sharedMocks.errorHandler).not.toHaveBeenCalled();
-  });
-
-  test('TEST-COVER: confirmDelete happy-path triggers delete mutation and closes modal', async () => {
-    // reuse existing MOCKS which include DELETE_VENUE_MUTATION for venue1
+  test('DeleteModal displays selected venue name and clears it on close', async () => {
     renderOrganizationVenue(link);
 
-    // wait for venue list and open delete modal for venue1
+    // wait for list and trigger delete for venue1
     await waitFor(() =>
       expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
     );
     await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
 
-    // confirm via modal
-    const modalDelete = await screen.findByTestId('modal-delete-btn');
-    await userEvent.click(modalDelete);
+    // Modal should render and show the selected venue's name
+    // The entity name is interpolated into the confirmation sentence inside
+    // the DeleteModal. Scope the lookup to the modal to avoid matching the
+    // venue name that also appears in the venue list.
+    const modal = await screen.findByTestId('deleteVenueModal');
+    await within(modal).findByText(/Updated Venue 1/i, undefined, {
+      timeout: 2000,
+    });
 
-    // wait for modal to close
-    await waitFor(() =>
-      expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument(),
-    );
-    // venue list should still be present
-    expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
-  });
-
-  test('TEST-COVER: injected failing refetch calls errorHandler and keeps modal open', async () => {
-    const refetchError = new Error('Injected refetch failure');
-    const failingRefetch = vi.fn().mockRejectedValue(refetchError);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgvenues/:orgId"
-                  element={
-                    <OrganizationVenues refetchVenues={failingRefetch} />
-                  }
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // wait for venue and open modal
-    await waitFor(() =>
-      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
-    );
-    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
-
-    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
-    await userEvent.click(modalDeleteBtn);
-
-    // failing refetch should trigger errorHandler and keep modal open
-    await waitFor(() => expect(failingRefetch).toHaveBeenCalled());
-    expect(sharedMocks.errorHandler).toHaveBeenCalledWith(
-      expect.any(Function),
-      refetchError,
-    );
-    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
-  });
-
-  test('TEST-COVER: injected successful refetchVenues is called and modal closes', async () => {
-    const successfulRefetch = vi.fn().mockResolvedValue(undefined);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgvenues/:orgId"
-                  element={
-                    <OrganizationVenues refetchVenues={successfulRefetch} />
-                  }
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // wait for venue and open delete modal
-    await waitFor(() =>
-      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
-    );
-    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
-
-    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
-    await userEvent.click(modalDeleteBtn);
-
-    // injected refetch should have been called and modal should be closed
-    await waitFor(() => expect(successfulRefetch).toHaveBeenCalled());
-    await waitFor(() =>
-      expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument(),
-    );
+    // Close the modal via its cancel button inside the modal scope.
+    const cancelBtn = await within(modal).findByTestId('modal-cancel-btn');
+    await userEvent.click(cancelBtn);
+    // The venue name remains in the main list; assert the DeleteModal itself was removed.
+    await waitFor(() => {
+      expect(screen.queryByTestId('deleteVenueModal')).not.toBeInTheDocument();
+    });
   });
 });
