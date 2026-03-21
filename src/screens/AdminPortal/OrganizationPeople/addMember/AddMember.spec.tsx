@@ -9,7 +9,7 @@ import { fireEvent } from '@testing-library/dom';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import AddMember from './AddMember';
 import i18nForTest from 'utils/i18nForTest';
@@ -25,6 +25,40 @@ import {
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
+const MOCK_CREATED_AT_1 = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(1)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toISOString();
+const MOCK_CREATED_AT_2 = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(2)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toISOString();
+const MOCK_CREATED_AT_3 = dayjs
+  .utc()
+  .year(2024)
+  .month(0)
+  .date(3)
+  .hour(0)
+  .minute(0)
+  .second(0)
+  .millisecond(0)
+  .toISOString();
 
 // Mock react-toastify
 const sharedMocks = vi.hoisted(() => ({
@@ -34,7 +68,7 @@ const sharedMocks = vi.hoisted(() => ({
 import React from 'react';
 
 // Mock NotificationToast
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.toast,
 }));
 
@@ -348,7 +382,7 @@ const createMemberConnectionMock = (
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT_1,
               role: 'member',
             },
             cursor: 'cursor1',
@@ -359,10 +393,7 @@ const createMemberConnectionMock = (
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
               avatarURL: null,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(1, 'day')
-                .toISOString(),
+              createdAt: MOCK_CREATED_AT_2,
               role: 'member',
             },
             cursor: 'cursor2',
@@ -472,7 +503,6 @@ function getDataTableBodyRows(): HTMLElement[] {
 describe('AddMember Screen', () => {
   beforeEach(() => {
     setupLocationMock();
-    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -782,7 +812,7 @@ describe('AddMember Screen', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT_1,
             },
           },
         ],
@@ -909,7 +939,8 @@ describe('AddMember Screen', () => {
       );
     });
 
-    await userEvent.click(screen.getByRole('button', { name: /close/i }));
+    const user = userEvent.setup({ delay: null });
+    await user.click(screen.getByRole('button', { name: /close/i }));
   });
 
   test('adds an existing user to organization error', async () => {
@@ -1036,10 +1067,7 @@ describe('AddMember Screen', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(2, 'days')
-                .toISOString(),
+              createdAt: MOCK_CREATED_AT_3,
             },
           },
         ],
@@ -1230,7 +1258,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -1284,7 +1312,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -1329,7 +1357,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password124' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -1337,13 +1365,14 @@ describe('AddMember Screen', () => {
     });
   });
 
-  test('shows error when required fields are missing', async () => {
+  test('prevents double submission when creating a user', async () => {
     const orgId = 'org123';
 
     const registerMock = createRegisterMutationMock({
       name: 'New User',
       email: 'newuser@example.com',
       password: 'password123',
+      role: 'regular',
       isEmailAddressVerified: true,
     });
 
@@ -1369,16 +1398,66 @@ describe('AddMember Screen', () => {
 
     fireEvent.change(nameInput, { target: { value: 'New User' } });
     fireEvent.change(emailInput, { target: { value: 'newuser@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'password123' },
+    });
+
+    const user = userEvent.setup({ delay: null });
+    const submitBtn = screen.getByTestId('modal-submit-btn');
+    // Click submit twice rapidly
+    await user.click(submitBtn);
+    await user.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  test('disables submit button when required fields are missing', async () => {
+    const orgId = 'org123';
+
+    const registerMock = createRegisterMutationMock({
+      name: 'New User',
+      email: 'newuser@example.com',
+      password: 'password123',
+      isEmailAddressVerified: true,
+    });
+
+    const addMemberMock = createAddMemberMutationMock({
+      memberId: 'newUser1',
+      role: 'regular',
+    });
+
+    const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+
+    const nameInput = screen.getByTestId('firstNameInput');
+    const emailInput = screen.getByTestId('emailInput');
+    const passwordInput = screen.getByTestId('passwordInput');
+    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+
+    fireEvent.change(nameInput, { target: { value: 'New User' } });
+    fireEvent.change(emailInput, { target: { value: 'newuser@example.com' } });
     fireEvent.change(passwordInput, { target: { value: '' } });
     fireEvent.change(confirmPasswordInput, {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
-    fireEvent.click(createButton);
-
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
+      const createButton = screen.getByTestId('modal-submit-btn');
+      expect(createButton).toBeDisabled();
     });
   });
 
@@ -1401,7 +1480,7 @@ describe('AddMember Screen', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: null,
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              createdAt: MOCK_CREATED_AT_1,
             },
           },
         ],
@@ -1548,6 +1627,123 @@ describe('AddMember Screen', () => {
     fireEvent.click(forcePrev);
 
     expect(screen.getByTestId('page-info')).toHaveTextContent('Page 1');
+  });
+
+  test('shows error when create user form is submitted with missing required fields via keyboard shortcut', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+
+    // Submit form via Ctrl+Enter with all fields empty to trigger the early return at line 173
+    const form = screen
+      .getByTestId('addNewUserModal')
+      .querySelector('form') as HTMLFormElement;
+    expect(form).not.toBeNull();
+    fireEvent.keyDown(form, { key: 'Enter', ctrlKey: true });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('toggles password visibility via Enter key on password toggle', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const passwordInput = await screen.findByTestId('passwordInput');
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    const showPasswordToggle = screen.getByTestId('showPassword');
+    fireEvent.keyDown(showPasswordToggle, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(passwordInput).toHaveAttribute('type', 'text');
+    });
+
+    fireEvent.keyDown(showPasswordToggle, { key: ' ' });
+
+    await waitFor(() => {
+      expect(passwordInput).toHaveAttribute('type', 'password');
+    });
+  });
+
+  test('toggles confirm password visibility via Enter key on confirm password toggle', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const confirmPasswordInput = await screen.findByTestId(
+      'confirmPasswordInput',
+    );
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+
+    const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(confirmPasswordInput).toHaveAttribute('type', 'text');
+    });
+
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: ' ' });
+
+    await waitFor(() => {
+      expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+    });
+  });
+
+  test('does not toggle password visibility for non-Enter/Space keys', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    const passwordInput = await screen.findByTestId('passwordInput');
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    const showPasswordToggle = screen.getByTestId('showPassword');
+    fireEvent.keyDown(showPasswordToggle, { key: 'Tab' });
+
+    expect(passwordInput).toHaveAttribute('type', 'password');
+
+    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
+
+    const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');
+    fireEvent.keyDown(showConfirmPasswordToggle, { key: 'Tab' });
+
+    expect(confirmPasswordInput).toHaveAttribute('type', 'password');
   });
 
   test('ignores invalid sort option', async () => {

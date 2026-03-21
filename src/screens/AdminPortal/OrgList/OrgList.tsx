@@ -33,9 +33,8 @@ import {
 import styles from './OrgList.module.css';
 
 import OrganizationModal from './modal/OrganizationModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import type { ChangeEvent } from 'react';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
@@ -43,8 +42,8 @@ import Search from '@mui/icons-material/Search';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { Alert } from 'react-bootstrap';
 import RBButton from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { useModalState } from 'shared-components/CRUDModalTemplate';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 interface InterfaceOrgFormState {
   addressLine1: string;
@@ -253,7 +252,7 @@ function OrgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
-  const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createOrg = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const {
@@ -547,14 +546,14 @@ function OrgList(): JSX.Element {
         setFormState={setFormState}
         createOrg={createOrg}
       />
-
-      <BaseModal
-        show={dialogModalisOpen}
-        onHide={toggleDialogModal}
+      {/* Plugin Notification Modal after Org is Created */}
+      <CRUDModalTemplate
+        open={dialogModalisOpen}
+        onClose={toggleDialogModal}
         title={t('manageFeatures')}
-        headerClassName={styles.modalHeader}
-        headerTestId="pluginNotificationHeader"
-        dataTestId="pluginNotificationModal"
+        className={styles.modalHeader}
+        data-testid="pluginNotificationModal"
+        showFooter={false}
       >
         <section id={styles.grid_wrapper}>
           <div>
@@ -582,7 +581,7 @@ function OrgList(): JSX.Element {
             </div>
           </div>
         </section>
-      </BaseModal>
+      </CRUDModalTemplate>
     </div>
   );
 }

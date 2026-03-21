@@ -85,7 +85,16 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
       description: '',
       location: '',
       startDate: todayUTC,
-      endDate: todayUTC,
+      endDate: new Date(
+        Date.UTC(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate() + 1,
+          0,
+          0,
+          0,
+        ),
+      ),
       startTime: nextHour.toTimeString().split(' ')[0],
       endTime: twoHoursLater.toTimeString().split(' ')[0],
       allDay: true,
