@@ -30,20 +30,25 @@ vi.mock('/src/assets/svgs/talawa.svg?react', () => ({
 }));
 
 // Mock the plugin system
-const mockPluginManager = {
-  setApolloClient: vi.fn(),
-  initializePluginSystem: vi.fn().mockResolvedValue(undefined),
-};
+const { mockPluginManager, mockInitializePluginSystemOnce } = vi.hoisted(
+  () => ({
+    mockPluginManager: {
+      setApolloClient: vi.fn(),
+    },
+    mockInitializePluginSystemOnce: vi.fn().mockResolvedValue(undefined),
+  }),
+);
 
-vi.mock('./plugin/manager', () => ({
+vi.mock('plugin/manager', () => ({
   getPluginManager: vi.fn(() => mockPluginManager),
+  initializePluginSystemOnce: mockInitializePluginSystemOnce,
 }));
 
-vi.mock('./plugin/registry', () => ({
+vi.mock('plugin/registry', () => ({
   discoverAndRegisterAllPlugins: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock('./plugin', () => ({
+vi.mock('plugin', () => ({
   usePluginRoutes: vi.fn(() => []),
   usePluginDrawerItems: vi.fn(() => []),
   PluginRouteRenderer: vi.fn(({ route, fallback }) => (
@@ -348,6 +353,7 @@ const renderApp = (mockLink = link, initialRoute = '/') => {
 
 describe('Testing the App Component', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
@@ -389,19 +395,19 @@ describe('Testing the App Component', () => {
   });
 
   it('should initialize plugin system on app startup', async () => {
-    renderApp();
+    renderApp(link, '/admin/orglist');
 
     await waitFor(() => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-      expect(mockPluginManager.initializePluginSystem).toHaveBeenCalled();
+      expect(mockInitializePluginSystemOnce).toHaveBeenCalled();
     });
   });
 
   it('should handle plugin system initialization errors', async () => {
     const error = new Error('Plugin initialization failed');
-    mockPluginManager.initializePluginSystem.mockRejectedValueOnce(error);
+    mockInitializePluginSystemOnce.mockRejectedValueOnce(error);
 
-    renderApp();
+    renderApp(link, '/admin/orglist');
 
     await waitFor(() => {
       expect(console.error).toHaveBeenCalledWith(
@@ -412,9 +418,9 @@ describe('Testing the App Component', () => {
   });
 
   it('should handle regular user permissions correctly', async () => {
-    const { usePluginRoutes } = await import('./plugin');
+    const { usePluginRoutes } = await import('plugin');
 
-    renderApp();
+    renderApp(link, '/admin/orglist');
 
     await waitFor(() => {
       // Regular user should have empty permissions array
@@ -424,9 +430,9 @@ describe('Testing the App Component', () => {
   });
 
   it('should handle administrator user permissions correctly', async () => {
-    const { usePluginRoutes } = await import('./plugin');
+    const { usePluginRoutes } = await import('plugin');
 
-    renderApp(adminLink);
+    renderApp(adminLink, '/admin/orglist');
 
     await waitFor(() => {
       // Admin should have org permissions
@@ -453,7 +459,7 @@ describe('Testing the App Component', () => {
     ];
 
     const noAdminLink = new StaticMockLink(noAdminMocks, true);
-    renderApp(noAdminLink);
+    renderApp(noAdminLink, '/admin/orglist');
 
     // Should handle null adminFor gracefully
     await screen.findByTestId('app-footer');
@@ -465,7 +471,7 @@ describe('Testing the App Component', () => {
 
   it('should handle GraphQL query errors gracefully', async () => {
     // Test that the app doesn't crash with error mocks
-    renderApp(errorLink);
+    renderApp(errorLink, '/admin/orglist');
 
     // Should not crash and should render something (either loading or login page)
     await screen.findByTestId('app-footer');
@@ -485,10 +491,10 @@ describe('Testing the App Component', () => {
       },
     ];
 
-    const { usePluginRoutes } = await import('./plugin');
+    const { usePluginRoutes } = await import('plugin');
     vi.mocked(usePluginRoutes).mockReturnValue(mockPluginRoutes);
 
-    renderApp(adminLink);
+    renderApp(adminLink, '/admin/orglist');
 
     await waitFor(() => {
       // Verify that usePluginRoutes was called, indicating plugin routes are being processed
@@ -513,14 +519,12 @@ describe('Testing the App Component', () => {
 
     // Should handle null user gracefully without crashing
     await screen.findByTestId('app-footer');
-    // Verify plugin system is initialized even with null user
-    await waitFor(() => {
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-    });
+    // Public routes defer plugin initialization.
+    expect(mockPluginManager.setApolloClient).not.toHaveBeenCalled();
   });
 
   it('should handle different plugin route types correctly', async () => {
-    const { usePluginRoutes } = await import('./plugin');
+    const { usePluginRoutes } = await import('plugin');
 
     // Mock different return values for different calls
     vi.mocked(usePluginRoutes)
@@ -541,11 +545,16 @@ describe('Testing the App Component', () => {
       ]) // userOrgPluginRoutes
       .mockReturnValueOnce([]); // userGlobalPluginRoutes
 
-    renderApp(adminLink);
+    renderApp(adminLink, '/admin/orglist');
 
     await waitFor(() => {
-      // Verify that usePluginRoutes was called 4 times for different route types
-      expect(usePluginRoutes).toHaveBeenCalledTimes(4);
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, false);
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], true, true);
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], false, true);
+      expect(usePluginRoutes).toHaveBeenCalledWith(['admin'], false, false);
+      expect(
+        vi.mocked(usePluginRoutes).mock.calls.length,
+      ).toBeGreaterThanOrEqual(4);
     });
   });
 
@@ -581,11 +590,12 @@ describe('Testing the App Component', () => {
   });
 
   it('should handle user with role admin correctly', async () => {
-    renderApp(adminLink);
+    renderApp(adminLink, '/admin/orglist');
 
     await waitFor(() => {
       // Verify plugin system is initialized
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
+      expect(mockInitializePluginSystemOnce).toHaveBeenCalled();
     });
   });
 
@@ -654,5 +664,10 @@ describe('Testing the App Component', () => {
     } finally {
       lsSpy.mockRestore();
     }
+  });
+  it('should NOT initialize plugin system on public routes', async () => {
+    renderApp(link, '/'); // public route
+    await screen.findByTestId('app-footer');
+    expect(mockInitializePluginSystemOnce).not.toHaveBeenCalled();
   });
 });
