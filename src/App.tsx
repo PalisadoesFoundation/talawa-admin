@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
-import { Route, Routes } from 'react-router';
+import { Route, Routes, useLocation } from 'react-router';
 import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/AdminPortal/SecuredRoute/SecuredRoute';
@@ -8,8 +8,7 @@ import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampai
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/Auth/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
-import { getPluginManager } from 'plugin/manager';
-import { discoverAndRegisterAllPlugins } from 'plugin/registry';
+import { getPluginManager, initializePluginSystemOnce } from 'plugin/manager';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -121,7 +120,24 @@ const OAuthCallbackPage = lazy(
 );
 
 const { setItem } = useLocalStorage();
-
+const PUBLIC_ROUTES = new Set([
+  '/',
+  '/register',
+  '/admin',
+  '/forgotPassword',
+  '/verify-email',
+  '/auth/verify-email',
+  '/auth/callback',
+]);
+const normalize = (path: string) => {
+  // Remove trailing slash except for root
+  if (path.length > 1 && path.endsWith('/')) {
+    return path.slice(0, -1);
+  }
+  return path;
+};
+const isPublicRoute = (path: string) =>
+  PUBLIC_ROUTES.has(normalize(path)) || path.startsWith('/event/invitation/');
 /**
  * This is the main function for our application. It sets up all the routes and components,
  * defining how the user can navigate through the app. The function uses React Router's `Routes`
@@ -141,7 +157,7 @@ const { setItem } = useLocalStorage();
 
 function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
-
+  const location = useLocation();
   const { t } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -159,24 +175,24 @@ function App(): React.ReactElement {
   const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
 
   // Initialize plugin system on app startup
+  const isPublic = isPublicRoute(location.pathname);
   useEffect(() => {
-    const initializePlugins = async () => {
+    if (isPublic) return;
+
+    const init = async () => {
       try {
-        // Set Apollo client for plugin manager
-        getPluginManager().setApolloClient(apolloClient);
+        const manager = getPluginManager();
 
-        // Initialize plugin manager
-        await getPluginManager().initializePluginSystem();
+        manager.setApolloClient(apolloClient);
 
-        // Initialize plugin registry
-        await discoverAndRegisterAllPlugins();
+        await initializePluginSystemOnce();
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);
       }
     };
 
-    initializePlugins();
-  }, [apolloClient]);
+    void init();
+  }, [isPublic, apolloClient]);
 
   useEffect(() => {
     if (!loading && data?.user) {
