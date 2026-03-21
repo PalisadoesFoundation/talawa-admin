@@ -72,13 +72,10 @@ import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcru
  * @param refetchVenues - optional injected refetch function for tests
  * @param testExposeConfirm - expose a test-only confirm button when true
  */
-function organizationVenues({
-  refetchVenues,
-  testExposeConfirm,
-}: {
+function organizationVenues(props?: {
   refetchVenues?: () => Promise<unknown>;
   testExposeConfirm?: boolean;
-} = {}): JSX.Element {
+}): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
@@ -156,7 +153,7 @@ function organizationVenues({
     if (!selectedVenueId) return;
     try {
       await deleteVenue({ variables: { id: selectedVenueId } });
-      const refetchFn = refetchVenues ?? venueRefetch;
+      const refetchFn = props?.refetchVenues ?? venueRefetch;
       await refetchFn();
       handleCloseDeleteVenueModal();
     } catch (error) {
@@ -347,7 +344,7 @@ function organizationVenues({
         venueData={editVenueData}
       />
 
-      {testExposeConfirm ? (
+      {props?.testExposeConfirm ? (
         <Button
           variant="secondary"
           data-testid="test-confirm-delete"

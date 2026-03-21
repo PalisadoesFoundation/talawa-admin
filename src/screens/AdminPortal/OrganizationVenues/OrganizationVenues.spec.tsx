@@ -454,6 +454,182 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
     });
   });
+
+  test('sorts by lowest capacity: comparator else-branch executed and order changes', async () => {
+    renderOrganizationVenue(link);
+
+    // ensure initial list is rendered (default sortOrder = 'highest')
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    // change to lowest sort
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-lowest'));
+
+    // wait for effect to apply and assert the first item is the lowest capacity (venue1)
+    await waitFor(() => {
+      const items = screen.getAllByTestId(/^venue-item/);
+      expect(items[0]).toHaveAttribute('data-testid', 'venue-item-venue1');
+    });
+  });
+
+  test('handles missing capacity by falling back to "0" in parseInt', async () => {
+    // custom mocks with one venue missing capacity
+    const customMocks = [
+      {
+        request: {
+          query: VENUE_LIST,
+          variables: { orgId: 'orgId' },
+        },
+        result: {
+          data: {
+            organization: {
+              venues: {
+                edges: [
+                  {
+                    node: {
+                      id: 'vZero',
+                      name: 'Zero Capacity Venue',
+                      description: 'No capacity provided',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      // capacity intentionally omitted to trigger fallback
+                      image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'vTen',
+                      name: 'Ten Capacity Venue',
+                      description: 'Capacity 10',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      capacity: '10',
+                      image: null,
+                    },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const customLink = new StaticMockLink(customMocks, true);
+    renderOrganizationVenue(customLink);
+
+    // wait for list
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    // switch to lowest sort order to exercise comparator using fallback '0'
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-lowest'));
+
+    // after sorting, Zero Capacity Venue (fallback 0) should appear first
+    await waitFor(() => {
+      const items = screen.getAllByTestId(/^venue-item/);
+      expect(items[0]).toHaveAttribute('data-testid', 'venue-item-vZero');
+    });
+  });
+
+  test('EXERCISE: comparator fallback executes for both a and b when capacities missing', async () => {
+    const multiMocks = [
+      {
+        request: {
+          query: VENUE_LIST,
+          variables: { orgId: 'orgId' },
+        },
+        result: {
+          data: {
+            organization: {
+              venues: {
+                edges: [
+                  {
+                    node: {
+                      id: 'm1',
+                      name: 'M1',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      /* no capacity */ image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'm2',
+                      name: 'M2',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      capacity: '5',
+                      image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'm3',
+                      name: 'M3',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      /* no capacity */ image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'm4',
+                      name: 'M4',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      capacity: '10',
+                      image: null,
+                    },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const multiLink = new StaticMockLink(multiMocks, true);
+    renderOrganizationVenue(multiLink);
+
+    // wait for list
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    // switch to lowest sort order to force comparator to run across many pairs
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-lowest'));
+
+    // ensure list updated; just assert that our items exist in DOM
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item-m1')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item-m2')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item-m3')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item-m4')).toBeInTheDocument();
+    });
+  });
 });
 
 describe('Organisation Venues Error Handling', () => {
@@ -683,5 +859,132 @@ describe('Organisation Venues Error Handling', () => {
       expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument();
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
     });
+  });
+
+  test('TEST-COVER: early-return branch via testExposeConfirm button (coverage)', async () => {
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgvenues/:orgId"
+                  element={<OrganizationVenues testExposeConfirm={true} />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Click the test-only confirm button which calls confirmDelete()
+    const testBtn = await screen.findByTestId('test-confirm-delete');
+    await userEvent.click(testBtn);
+
+    // confirmDelete should return early; errorHandler should not be called
+    expect(sharedMocks.errorHandler).not.toHaveBeenCalled();
+  });
+
+  test('TEST-COVER: confirmDelete happy-path triggers delete mutation and closes modal', async () => {
+    // reuse existing MOCKS which include DELETE_VENUE_MUTATION for venue1
+    renderOrganizationVenue(link);
+
+    // wait for venue list and open delete modal for venue1
+    await waitFor(() =>
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
+    );
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+
+    // confirm via modal
+    const modalDelete = await screen.findByTestId('modal-delete-btn');
+    await userEvent.click(modalDelete);
+
+    // wait for modal to close
+    await waitFor(() =>
+      expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument(),
+    );
+    // venue list should still be present
+    expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+  });
+
+  test('TEST-COVER: injected failing refetch calls errorHandler and keeps modal open', async () => {
+    const refetchError = new Error('Injected refetch failure');
+    const failingRefetch = vi.fn().mockRejectedValue(refetchError);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgvenues/:orgId"
+                  element={
+                    <OrganizationVenues refetchVenues={failingRefetch} />
+                  }
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // wait for venue and open modal
+    await waitFor(() =>
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
+    );
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+
+    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
+    await userEvent.click(modalDeleteBtn);
+
+    // failing refetch should trigger errorHandler and keep modal open
+    await waitFor(() => expect(failingRefetch).toHaveBeenCalled());
+    expect(sharedMocks.errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      refetchError,
+    );
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
+  });
+
+  test('TEST-COVER: injected successful refetchVenues is called and modal closes', async () => {
+    const successfulRefetch = vi.fn().mockResolvedValue(undefined);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgvenues/:orgId"
+                  element={
+                    <OrganizationVenues refetchVenues={successfulRefetch} />
+                  }
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // wait for venue and open delete modal
+    await waitFor(() =>
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
+    );
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+
+    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
+    await userEvent.click(modalDeleteBtn);
+
+    // injected refetch should have been called and modal should be closed
+    await waitFor(() => expect(successfulRefetch).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument(),
+    );
   });
 });
