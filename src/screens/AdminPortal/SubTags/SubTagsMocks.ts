@@ -340,6 +340,87 @@ export const MOCKS_WITH_ANCESTORS = [
   },
 ];
 
+export const MOCKS_CREATE_NULL_DATA = [
+  // Default load mock (needed so the page renders)
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1)],
+            pageInfo: {
+              startCursor: 'subTag1',
+              endCursor: 'subTag1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 1,
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+  // Create mutation returns null data
+  {
+    request: {
+      query: CREATE_USER_TAG,
+      variables: {
+        name: 'subTag 12',
+        organizationId: '123',
+        folderId: '1',
+      },
+    },
+    result: {
+      data: null,
+    },
+  },
+];
+
+export const MOCKS_NULL_ANCESTOR_TAGS = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1)],
+            pageInfo: {
+              startCursor: 'subTag1',
+              endCursor: 'subTag1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 1,
+          },
+          ancestorTags: undefined,
+        },
+      },
+    },
+  },
+];
+
 export const MOCKS_CREATE_TAG_ERROR = [
   {
     request: {

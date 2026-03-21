@@ -14,8 +14,10 @@ import SubTags from './SubTags';
 import {
   emptyMocks,
   MOCKS,
+  MOCKS_CREATE_NULL_DATA,
   MOCKS_CREATE_TAG_ERROR,
   MOCKS_ERROR_SUB_TAGS,
+  MOCKS_NULL_ANCESTOR_TAGS,
   MOCKS_WITH_ANCESTORS,
 } from './SubTagsMocks';
 import type { ApolloLink } from '@apollo/client';
@@ -380,6 +382,38 @@ describe('Organisation Tags Page', () => {
     // Last breadcrumb (current tag) should NOT have a caret separator
     const lastBreadcrumb = breadcrumbs[1];
     expect(lastBreadcrumb.querySelector('.fa-caret-right')).toBeNull();
+  });
+
+  it('does not show success toast when create mutation returns null data', async () => {
+    const nullDataLink = new StaticMockLink(MOCKS_CREATE_NULL_DATA, true);
+    renderSubTags(nullDataLink);
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('addSubTagBtn'));
+    await userEvent.type(
+      screen.getByPlaceholderText(translations.tagNamePlaceholder),
+      'subTag 12',
+    );
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    // Wait for mutation to resolve, then verify success toast was NOT called
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('handles null ancestorTags gracefully', async () => {
+    const nullAncestorLink = new StaticMockLink(MOCKS_NULL_ANCESTOR_TAGS, true);
+    renderSubTags(nullAncestorLink);
+    // Should render without crashing, falling back to empty array for ancestorTags
+    await waitFor(() => {
+      expect(screen.getByTestId('manageCurrentTagBtn')).toHaveTextContent(
+        `${translations.manageTag} userTag 1`,
+      );
+    });
+    // Only 1 breadcrumb (the current tag itself), since ancestorTags fell back to []
+    const breadcrumbs = screen.getAllByTestId('redirectToSubTags');
+    expect(breadcrumbs.length).toBe(1);
   });
 
   it('does not navigate when pressing Tab on tag name', async () => {
