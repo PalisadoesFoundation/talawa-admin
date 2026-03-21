@@ -10,7 +10,7 @@ import { useMutation } from '@apollo/client';
 import IconComponent from 'shared-components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { FormEvent } from 'react';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import Button from 'shared-components/Button';
 import {
@@ -157,12 +157,15 @@ function SubTags(): JSX.Element {
     </>
   );
 
-  const handleQueryResult = (data: InterfaceSubTagsQueryResult): void => {
-    if (data?.getChildTags) {
-      setParentTagName(data.getChildTags.name);
-      setAncestorTags(data.getChildTags.ancestorTags ?? []);
-    }
-  };
+  const handleQueryResult = useCallback(
+    (data: InterfaceSubTagsQueryResult): void => {
+      if (data?.getChildTags) {
+        setParentTagName(data.getChildTags.name);
+        setAncestorTags(data.getChildTags.ancestorTags ?? []);
+      }
+    },
+    [],
+  );
 
   return (
     <>

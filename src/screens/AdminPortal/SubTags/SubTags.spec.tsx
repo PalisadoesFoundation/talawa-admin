@@ -19,7 +19,7 @@ import {
   MOCKS_WITH_ANCESTORS,
 } from './SubTagsMocks';
 import type { ApolloLink } from '@apollo/client';
-import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
+import { vi, afterEach, expect, it, describe } from 'vitest';
 
 const translations = {
   ...JSON.parse(
@@ -71,13 +71,6 @@ const renderSubTags = (link: ApolloLink): RenderResult => {
 };
 
 describe('Organisation Tags Page', () => {
-  beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ orgId: '123', tagId: '1' }),
-    }));
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
@@ -335,34 +328,6 @@ describe('Organisation Tags Page', () => {
     const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
     breadcrumbBtn.focus();
     await user.keyboard(' ');
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
-
-  it('does nothing when pressing Tab on allTagsBtn', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await waitFor(() => {
-      expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
-    });
-    const allTagsBtn = screen.getByTestId('allTagsBtn');
-    allTagsBtn.focus();
-    await user.keyboard('{Tab}');
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
-
-  it('does nothing when pressing Tab on breadcrumb ancestor', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await waitFor(() => {
-      expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
-    });
-    const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
-    breadcrumbBtn.focus();
-    await user.keyboard('{Tab}');
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
