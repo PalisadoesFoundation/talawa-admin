@@ -288,8 +288,10 @@ export const emptyMocks = [
           childTags: {
             edges: [],
             pageInfo: {
-              hasNextPage: false,
+              startCursor: null,
               endCursor: null,
+              hasNextPage: false,
+              hasPreviousPage: false,
             },
             totalCount: 0,
           },

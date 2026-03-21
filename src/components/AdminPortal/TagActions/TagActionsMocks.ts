@@ -151,36 +151,6 @@ export const MOCKS = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Org 1',
-            userTags: {
-              edges: userTagEdgesFirst,
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '10',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 12,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
-      variables: {
-        id: '123',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
         where: { name: { starts_with: '' } },
       },
@@ -213,36 +183,6 @@ export const MOCKS = [
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
-        where: { name: { starts_with: 'searchUserTag' } },
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Org 1',
-            userTags: {
-              edges: userTagEdgesSearch,
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '2',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
-      variables: {
-        id: '123',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
       },
     },

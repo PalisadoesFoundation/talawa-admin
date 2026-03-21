@@ -84,10 +84,16 @@ describe('Organisation Tags Page', () => {
     vi.restoreAllMocks();
   });
 
-  it('Component loads correctly', async () => {
+  it('Component loads correctly and displays parent tag name in manage button', async () => {
     renderSubTags(link);
     await waitFor(() => {
       expect(screen.getByText(translations.addChildTag)).toBeInTheDocument();
+    });
+    // Verify handleQueryResult populated the parentTagName from the query
+    await waitFor(() => {
+      expect(screen.getByTestId('manageCurrentTagBtn')).toHaveTextContent(
+        `${translations.manageTag} userTag 1`,
+      );
     });
   });
 

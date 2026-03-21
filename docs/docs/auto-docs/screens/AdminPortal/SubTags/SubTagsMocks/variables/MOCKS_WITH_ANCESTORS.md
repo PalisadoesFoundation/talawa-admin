@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITH\_ANCESTORS**: `object`[]
 
-Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L303)
+Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L305)
 
 ## Type Declaration
 

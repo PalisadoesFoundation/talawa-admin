@@ -6,7 +6,6 @@ import {
   screen,
   cleanup,
   waitFor,
-  act,
   within,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -31,13 +30,6 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -110,8 +102,6 @@ describe('Organisation Tags Page', () => {
   test('Component loads correctly and opens assignToTags modal', async () => {
     const { getByText } = renderTagActionsModal(props[0], link1);
 
-    await wait();
-
     await waitFor(() => {
       expect(getByText(translations.assign)).toBeInTheDocument();
     });
@@ -119,8 +109,6 @@ describe('Organisation Tags Page', () => {
 
   test('Component loads correctly and opens removeFromTags modal', async () => {
     const { getByText } = renderTagActionsModal(props[1], link1);
-
-    await wait();
 
     await waitFor(() => {
       expect(getByText(translations.remove)).toBeInTheDocument();
@@ -139,8 +127,6 @@ describe('Organisation Tags Page', () => {
 
     renderTagActionsModal(props2, link1);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
     });
@@ -154,8 +140,6 @@ describe('Organisation Tags Page', () => {
   test('Renders error component when when subTags query is unsuccessful', async () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link2);
-
-    await wait();
 
     // expand tag 1 to list its subtags
     await waitFor(() => {
@@ -172,8 +156,6 @@ describe('Organisation Tags Page', () => {
   test('searches for tags where the name matches the provided search input', async () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link1);
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -195,8 +177,6 @@ describe('Organisation Tags Page', () => {
   test('Selects and deselects tags', async () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link1);
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
@@ -222,8 +202,6 @@ describe('Organisation Tags Page', () => {
   test('fetches and lists the child tags and then selects and deselects them', async () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link1);
-
-    await wait();
 
     // expand tag 1 to list its subtags
     await waitFor(() => {
@@ -288,8 +266,6 @@ describe('Organisation Tags Page', () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link1);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
     });
@@ -304,8 +280,6 @@ describe('Organisation Tags Page', () => {
   test('Toasts error when something goes wrong while assigning/removing tags', async () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link3);
-    await wait();
-
     // Select tags 2 and 3 to match the mock variables
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
@@ -332,8 +306,6 @@ describe('Organisation Tags Page', () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link1);
 
-    await wait();
-
     // select userTags 2 & 3 and assign them
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
@@ -357,8 +329,6 @@ describe('Organisation Tags Page', () => {
   test('Successfully removes from tags', async () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[1], link1);
-
-    await wait();
 
     // select userTag 2 and remove people from it
     await waitFor(() => {

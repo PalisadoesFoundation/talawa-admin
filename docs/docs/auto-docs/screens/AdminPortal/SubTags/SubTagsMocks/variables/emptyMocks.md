@@ -90,6 +90,14 @@ Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:272](https://github
 
 > **hasNextPage**: `boolean` = `false`
 
+#### result.data.getChildTags.childTags.pageInfo.hasPreviousPage
+
+> **hasPreviousPage**: `boolean` = `false`
+
+#### result.data.getChildTags.childTags.pageInfo.startCursor
+
+> **startCursor**: `any` = `null`
+
 #### result.data.getChildTags.childTags.totalCount
 
 > **totalCount**: `number` = `0`

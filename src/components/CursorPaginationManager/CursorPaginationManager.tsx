@@ -261,7 +261,7 @@ export function CursorPaginationManager<
         onDataChange(newNodes);
       }
     }
-  }, [data, dataPath, onDataChange]);
+  }, [data, dataPath, onDataChange, onQueryResult]);
 
   // Load more handler
   const handleLoadMore = useCallback(async () => {

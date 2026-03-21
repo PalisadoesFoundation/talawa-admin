@@ -5,7 +5,6 @@ import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
 import type { InterfaceTagData } from 'utils/interfaces';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
-import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
@@ -145,145 +144,7 @@ describe('TagNode', () => {
       expect(screen.getByText('subTag 11')).toBeInTheDocument();
     });
   });
-});
 
-describe('TagNode with Mocks', () => {
-  it('renders parent tag name', () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={[]}>
-          <TagNode
-            tag={mockTag}
-            checkedTags={mockCheckedTags}
-            toggleTagSelection={mockToggleTagSelection}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    expect(screen.getByText('Parent Tag')).toBeInTheDocument();
-  });
-
-  it('fetches and displays child tags from MOCKS', async () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={MOCKS}>
-          <TagNode
-            tag={mockTag}
-            checkedTags={mockCheckedTags}
-            toggleTagSelection={mockToggleTagSelection}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    await user.click(expandIcon);
-
-    await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-      expect(screen.getByText('subTag 2')).toBeInTheDocument();
-    });
-  });
-
-  it('handles pagination correctly with load more button', async () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={MOCKS}>
-          <TagNode
-            tag={mockTag}
-            checkedTags={mockCheckedTags}
-            toggleTagSelection={mockToggleTagSelection}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    await user.click(expandIcon);
-
-    await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-      expect(screen.getByText('subTag 2')).toBeInTheDocument();
-    });
-
-    // Trigger load more via CursorPaginationManager button
-    const loadMoreButton = screen.getByTestId('load-more-button');
-    await user.click(loadMoreButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('subTag 11')).toBeInTheDocument();
-    });
-  });
-
-  it('displays error state with MOCKS_ERROR_SUBTAGS_QUERY', async () => {
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
-          <TagNode
-            tag={mockTag}
-            checkedTags={mockCheckedTags}
-            toggleTagSelection={mockToggleTagSelection}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    await user.click(expandIcon);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
-    });
-  });
-});
-
-describe('MOCKS Structure Validation', () => {
-  it('validates the structure of MOCKS[0]', () => {
-    const firstMock = MOCKS1[0];
-
-    expect(firstMock.request.query).toBeDefined();
-    expect(firstMock.request.variables).toEqual({
-      id: '1',
-      first: 10,
-      after: null,
-    });
-    expect(firstMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
-      2,
-    );
-  });
-
-  it('validates the structure of MOCKS[1] (pagination)', () => {
-    const secondMock = MOCKS1[1];
-
-    expect(secondMock.request.query).toBeDefined();
-    expect(secondMock.request.variables).toEqual({
-      id: '1',
-      first: 10,
-      after: 'subTag2',
-    });
-    expect(secondMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
-      1,
-    );
-  });
-
-  it('validates MOCKS_ERROR_SUBTAGS_QUERY structure', () => {
-    const errorMock = MOCKS_ERROR_SUBTAGS_QUERY1[0];
-
-    expect(errorMock.request.query).toBeDefined();
-    expect(errorMock.request.variables).toEqual({
-      id: '1',
-      first: 10,
-      after: null,
-    });
-    expect(errorMock.error).toBeInstanceOf(Error);
-    expect(errorMock.error?.message).toBe(
-      'Mock GraphQL Error for fetching subtags',
-    );
-  });
-});
-
-describe('Edge Cases and Coverage Improvements', () => {
   it('handles tag without childTags (leaf tag)', () => {
     const leafTag: InterfaceTagData = {
       _id: 'leaf-tag',
@@ -316,7 +177,7 @@ describe('Edge Cases and Coverage Improvements', () => {
   it('shows CursorPaginationManager when expanded with valid data', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={MOCKS1}>
+        <MockedProvider mocks={MOCKS}>
           <TagNode
             tag={mockTag}
             checkedTags={mockCheckedTags}
@@ -342,7 +203,7 @@ describe('Edge Cases and Coverage Improvements', () => {
   it('collapses subtags when expand icon is clicked again', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={MOCKS1}>
+        <MockedProvider mocks={MOCKS}>
           <TagNode
             tag={mockTag}
             checkedTags={mockCheckedTags}
