@@ -38,13 +38,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('./OAuthSection.module.css', () => ({
-  default: {
-    divider: 'divider',
-    oauthRow: 'oauthRow',
-  },
-}));
-
 afterEach(() => {
   mockOAuthProviders.GOOGLE.enabled = true;
   mockOAuthProviders.GITHUB.enabled = true;
