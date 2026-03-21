@@ -2027,6 +2027,7 @@
     "deleteVenue": "删除场地",
     "lowestCapacity": "最低容量",
     "noVenues": "未找到场地！",
+    "testConfirmDelete": "测试：确认删除",
     "view": "看法",
     "venueTitleError": "场地名称不能为空！",
     "venueCapacityError": "容量必须是正数！",

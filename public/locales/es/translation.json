@@ -2013,6 +2013,7 @@
     "deleteVenue": "Eliminar lugar",
     "edit": "Editar",
     "view": "Ver",
+    "testConfirmDelete": "Prueba: confirmar eliminación",
     "delete": "Eliminar",
     "venueTitleError": "¡El título del lugar no puede estar vacío!",
     "venueCapacityError": "¡La capacidad debe ser un número positivo!",

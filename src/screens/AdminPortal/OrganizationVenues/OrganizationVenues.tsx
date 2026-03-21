@@ -66,17 +66,26 @@ import VenueCard from 'components/AdminPortal/Venues/VenueCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
-function organizationVenues(): JSX.Element {
-  // Translation hooks for i18n support
+/**
+ * OrganizationVenues component
+ *
+ * @param refetchVenues - optional injected refetch function for tests
+ * @param testExposeConfirm - expose a test-only confirm button when true
+ */
+function organizationVenues({
+  refetchVenues,
+  testExposeConfirm,
+}: {
+  refetchVenues?: () => Promise<unknown>;
+  testExposeConfirm?: boolean;
+} = {}): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
   const { t: tCommon } = useTranslation('common');
 
-  // Setting the document title using the translation hook
   document.title = t('title');
 
-  // State hooks for managing component state
   const [venueModal, setVenueModal] = useState<boolean>(false);
   const [venueModalMode, setVenueModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -88,43 +97,36 @@ function organizationVenues(): JSX.Element {
     useState<InterfaceQueryVenueListItem | null>(null);
   const [venues, setVenues] = useState<InterfaceQueryVenueListItem[]>([]);
 
-  // Getting the organization ID from the URL parameters
   const { orgId } = useParams();
-  if (!orgId) {
-    return <Navigate to="/admin/orglist" />;
-  }
+  if (!orgId) return <Navigate to="/admin/orglist" />;
 
-  // GraphQL query for fetching venue data
   const {
     data: venueData,
     loading: venueLoading,
     error: venueError,
     refetch: venueRefetch,
   } = useQuery(VENUE_LIST, {
-    variables: {
-      orgId: orgId,
-    },
+    variables: { orgId },
   });
 
-  // GraphQL mutation for deleting a venue
   const [deleteVenue, { loading: deletingVenue }] = useMutation(
     DELETE_VENUE_MUTATION,
   );
 
-  // Modal state for delete confirmation
   const {
     isOpen: deleteVenueModalOpen,
     open: openDeleteVenueModal,
     close: closeDeleteVenueModal,
   } = useModalState();
 
-  // The venue id pending deletion
   const [selectedVenueId, setSelectedVenueId] = React.useState<string | null>(
     null,
   );
 
   /**
-   * Request deletion (opens confirmation modal)
+   * Open delete confirmation for given venue id
+   *
+   * @param venueId - id of the venue to mark for deletion and confirm
    */
   const handleDelete = (venueId: string): void => {
     setSelectedVenueId(venueId);
@@ -132,54 +134,68 @@ function organizationVenues(): JSX.Element {
   };
 
   /**
-   * Confirmed deletion executed after user confirms in modal
+   * Consolidated close handler for delete modal
+   *
+   * Clears any selected venue and closes the DeleteModal.
+   */
+  const handleCloseDeleteVenueModal = (): void => {
+    setSelectedVenueId(null);
+    closeDeleteVenueModal();
+  };
+
+  /**
+   * Perform deletion for selected venue and refetch list
+   *
+   * This function is invoked when the user confirms deletion in the
+   * DeleteModal. It performs the GraphQL mutation to delete the venue,
+   * awaits a refetch of the venue list (either injected for tests or
+   * from the query), and then cleans up modal state. Errors are routed
+   * through the global errorHandler so UI can show localized messages.
    */
   const confirmDelete = async (): Promise<void> => {
     if (!selectedVenueId) return;
     try {
       await deleteVenue({ variables: { id: selectedVenueId } });
-      setSelectedVenueId(null);
-      venueRefetch();
-      closeDeleteVenueModal();
+      const refetchFn = refetchVenues ?? venueRefetch;
+      await refetchFn();
+      handleCloseDeleteVenueModal();
     } catch (error) {
       errorHandler(t, error);
     }
   };
 
   /**
-   * Handles the search operation by updating the search term state.
-   * @param term - The search term entered by the user.
+   * Update search term state
+   *
+   * @param term - current search string
    */
-  const handleSearch = (term: string): void => {
-    setSearchTerm(term);
-  };
+  const handleSearch = (term: string): void => setSearchTerm(term);
 
   /**
-   * Updates the search by state when the user selects a search option.
-   * @param value - The field to search by (name or description).
+   * Update which field to search by (name | description)
+   *
+   * @param value - selected search-by option
    */
-  const handleSearchByChange = (value: string): void => {
+  const handleSearchByChange = (value: string): void =>
     setSearchBy(value as 'name' | 'desc');
-  };
 
   /**
-   * Updates the sort order state when the user selects a sort option.
-   * @param value - The order to sort venues by (highest or lowest capacity).
+   * Update sort order for venue list
+   *
+   * @param value - 'highest' or 'lowest'
    */
-  const handleSortChange = (value: string): void => {
+  const handleSortChange = (value: string): void =>
     setSortOrder(value as 'highest' | 'lowest');
-  };
 
   /**
-   * Toggles the visibility of the venue modal.
+   * Toggle visibility of the Venue modal
    */
-  const toggleVenueModal = (): void => {
-    setVenueModal(!venueModal);
-  };
+  const toggleVenueModal = (): void => setVenueModal(!venueModal);
 
   /**
-   * Shows the edit venue modal with the selected venue data.
-   * @param venueItem - The venue data to edit.
+   * Show the edit modal and populate it with the selected venue
+   *
+   * @param venueItem - the venue to edit
    */
   const showEditVenueModal = (venueItem: InterfaceQueryVenueListItem): void => {
     setVenueModalMode('edit');
@@ -188,7 +204,7 @@ function organizationVenues(): JSX.Element {
   };
 
   /**
-   * Shows the create venue modal.
+   * Show the create-venue modal
    */
   const showCreateVenueModal = (): void => {
     setVenueModalMode('create');
@@ -196,17 +212,19 @@ function organizationVenues(): JSX.Element {
     toggleVenueModal();
   };
 
-  // Error handling for venue data fetch
   if (venueError) {
     errorHandler(t, venueError);
   }
 
-  // Updating venues state when venue data changes
+  /**
+   * Synchronize query results into local state and apply client-side
+   * filtering (search) and sorting (capacity) so the UI can render
+   * paginated/filtered results quickly without refetching.
+   */
   useEffect(() => {
-    if (venueData && venueData?.organization?.venues?.edges) {
+    if (venueData?.organization?.venues?.edges) {
       let filteredVenues = venueData.organization.venues.edges;
 
-      // Client-side filtering
       if (searchTerm) {
         filteredVenues = filteredVenues.filter(
           (venue: InterfaceQueryVenueListItem) => {
@@ -214,25 +232,24 @@ function organizationVenues(): JSX.Element {
               return venue.node.name
                 .toLowerCase()
                 .includes(searchTerm.toLowerCase());
-            } else {
-              // searchBy === 'desc'
-              return venue.node.description
-                ?.toLowerCase()
-                .includes(searchTerm.toLowerCase());
             }
+            return venue.node.description
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase());
           },
         );
       }
 
-      // Client-side sorting by capacity
       if (filteredVenues.length > 0) {
-        filteredVenues = [...filteredVenues].sort((a, b) => {
-          const capacityA = parseInt(a.node.capacity || '0');
-          const capacityB = parseInt(b.node.capacity || '0');
-          return sortOrder === 'highest'
-            ? capacityB - capacityA
-            : capacityA - capacityB;
-        });
+        filteredVenues = [...filteredVenues].sort(
+          (a: InterfaceQueryVenueListItem, b: InterfaceQueryVenueListItem) => {
+            const capacityA = parseInt(String(a.node.capacity || '0'));
+            const capacityB = parseInt(String(b.node.capacity || '0'));
+            return sortOrder === 'highest'
+              ? capacityB - capacityA
+              : capacityA - capacityB;
+          },
+        );
       }
 
       setVenues(filteredVenues);
@@ -243,19 +260,14 @@ function organizationVenues(): JSX.Element {
     <>
       <SafeBreadcrumbs
         items={[
-          {
-            translationKey: 'organization',
-            to: `/admin/orgdash/${orgId}`,
-          },
-          {
-            translationKey: 'venues',
-            isCurrent: true,
-          },
+          { translationKey: 'organization', to: `/admin/orgdash/${orgId}` },
+          { translationKey: 'venues', isCurrent: true },
         ]}
       />
+
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
         <SearchFilterBar
-          hasDropdowns={true}
+          hasDropdowns
           searchPlaceholder={`${t('searchBy')} ${tCommon(searchBy)}`}
           searchValue={searchTerm}
           onSearchChange={handleSearch}
@@ -296,7 +308,7 @@ function organizationVenues(): JSX.Element {
               onClick={showCreateVenueModal}
               data-testid="createVenueBtn"
             >
-              <i className="fa fa-plus me-1"></i> {t('addVenue')}
+              <i className="fa fa-plus me-1" /> {t('addVenue')}
             </Button>
           }
         />
@@ -310,16 +322,14 @@ function organizationVenues(): JSX.Element {
               data-testid="orgvenueslist"
             >
               {venues.length ? (
-                venues.map(
-                  (venueItem: InterfaceQueryVenueListItem, index: number) => (
-                    <VenueCard
-                      venueItem={venueItem}
-                      showEditVenueModal={showEditVenueModal}
-                      handleDelete={handleDelete}
-                      key={index}
-                    />
-                  ),
-                )
+                venues.map((venueItem: InterfaceQueryVenueListItem) => (
+                  <VenueCard
+                    venueItem={venueItem}
+                    showEditVenueModal={showEditVenueModal}
+                    handleDelete={handleDelete}
+                    key={venueItem.node.id}
+                  />
+                ))
               ) : (
                 <h6>{t('noVenues')}</h6>
               )}
@@ -327,18 +337,30 @@ function organizationVenues(): JSX.Element {
           </LoadingState>
         </div>
       </Col>
+
       <VenueModal
         show={venueModal}
         onHide={toggleVenueModal}
         refetchVenues={venueRefetch}
         orgId={orgId}
-        edit={venueModalMode === 'edit' ? true : false}
+        edit={venueModalMode === 'edit'}
         venueData={editVenueData}
       />
+
+      {testExposeConfirm ? (
+        <Button
+          variant="secondary"
+          data-testid="test-confirm-delete"
+          onClick={confirmDelete}
+        >
+          {t('testConfirmDelete')}
+        </Button>
+      ) : null}
+
       <DeleteModal
         open={deleteVenueModalOpen}
         title={t('deleteVenue')}
-        onClose={closeDeleteVenueModal}
+        onClose={handleCloseDeleteVenueModal}
         onDelete={confirmDelete}
         loading={deletingVenue}
         entityName={

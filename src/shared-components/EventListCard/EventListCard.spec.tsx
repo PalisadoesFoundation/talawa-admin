@@ -215,7 +215,9 @@ describe('Testing Event List Card', () => {
       });
     }
 
-    expect(deleteModalCloseBtn).toBeInTheDocument();
+    await waitFor(() => {
+      expect(deleteModalCloseBtn).toBeInTheDocument();
+    });
 
     await userEvent.click(deleteModalCloseBtn);
 

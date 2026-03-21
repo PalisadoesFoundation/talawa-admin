@@ -2035,6 +2035,7 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "name": "Nom",
+    "testConfirmDelete": "Test : confirmer la suppression",
     "desc": "Description",
     "venueImagePreview": "Aperçu de l’image du lieu",
     "sortVenues": "Trier les lieux",

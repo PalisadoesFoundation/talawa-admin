@@ -4,9 +4,25 @@
 
 # Function: default()
 
-> **default**(): `Element`
+> **default**(`refetchVenues`): `Element`
 
-Defined in: [src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx#L69)
+Defined in: [src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx#L75)
+
+OrganizationVenues component
+
+## Parameters
+
+### refetchVenues
+
+optional injected refetch function for tests
+
+#### refetchVenues?
+
+() => `Promise`\<`unknown`\>
+
+#### testExposeConfirm?
+
+`boolean`
 
 ## Returns
 
