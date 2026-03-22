@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
-import { Button } from 'shared-components/Button';
-import { BaseModal } from 'shared-components/BaseModal';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';
@@ -10,8 +7,10 @@ import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
+import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 
 export interface InterfaceFundModal {
   isOpen: boolean;
@@ -89,12 +88,17 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const createFundHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     const { fundName, isDefault, isTaxDeductible, isArchived } = formState;
 
+    setIsSubmitting(true);
     try {
       await createFund({
         variables: {
@@ -119,15 +123,20 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       hide();
     } catch (error: unknown) {
       NotificationToast.error((error as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const updateFundHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+    if (isSubmitting) return;
+
     const { fundName, isTaxDeductible } = formState;
 
+    setIsSubmitting(true);
     try {
       const updatedFields: { [key: string]: string | boolean } = {};
 
@@ -164,134 +173,145 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       NotificationToast.success(t('fundUpdated') as string);
     } catch (error: unknown) {
       NotificationToast.error((error as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  return (
-    <BaseModal
-      className={styles.fundModal}
-      show={isOpen}
-      onHide={hide}
-      headerContent={
-        <div className="d-flex justify-content-between align-items-center">
-          <p className={styles.titlemodal} data-testid="modalTitle">
-            {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-          </p>
-        </div>
-      }
-    >
-      <form
-        onSubmitCapture={
-          mode === 'create' ? createFundHandler : updateFundHandler
-        }
-        className="p-3"
+  const modalTitle = t(mode === 'create' ? 'fundCreate' : 'fundUpdate');
+  const isFormValid = !fundNameError && !fundRefError;
+
+  const formContent = (
+    <>
+      <div className="d-flex mb-3 w-100">
+        <FormTextField
+          name="fundName"
+          label={t('fundName')}
+          required
+          value={formState.fundName}
+          touched={touched.fundName}
+          error={fundNameError}
+          onChange={(value) =>
+            setFormState((prev) => ({ ...prev, fundName: value }))
+          }
+          onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
+        />
+      </div>
+
+      <div className="d-flex mb-3 w-100">
+        <FormTextField
+          name="fundId"
+          label={t('fundId')}
+          required
+          value={formState.fundRef}
+          touched={touched.fundRef}
+          error={fundRefError}
+          onChange={(value) =>
+            setFormState((prev) => ({ ...prev, fundRef: value }))
+          }
+          onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
+        />
+      </div>
+
+      <div
+        className={`d-flex mt-2 mb-3 flex-wrap ${
+          mode === 'edit'
+            ? 'justify-content-between'
+            : 'justify-content-start gap-3'
+        }`}
       >
-        <div className="d-flex mb-3 w-100">
-          <FormTextField
-            name="fundName"
-            label={t('fundName')}
-            required
-            value={formState.fundName}
-            touched={touched.fundName}
-            error={fundNameError}
-            onChange={(value) =>
-              setFormState((prev) => ({ ...prev, fundName: value }))
-            }
-            onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
-          />
+        <div className="d-flex align-items-center">
+          <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
+          <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+            <input
+              type="checkbox"
+              id="isTaxDeductibleSwitch"
+              className="form-check-input"
+              checked={formState.isTaxDeductible}
+              data-testid="setisTaxDeductibleSwitch"
+              onChange={() =>
+                setFormState((prev) => ({
+                  ...prev,
+                  isTaxDeductible: !prev.isTaxDeductible,
+                }))
+              }
+            />
+          </div>
         </div>
 
-        <div className="d-flex mb-3 w-100">
-          <FormTextField
-            name="fundId"
-            label={t('fundId')}
-            required
-            value={formState.fundRef}
-            touched={touched.fundRef}
-            error={fundRefError}
-            onChange={(value) =>
-              setFormState((prev) => ({ ...prev, fundRef: value }))
-            }
-            onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
-          />
+        <div className="d-flex align-items-center">
+          <label htmlFor="isDefaultSwitch">{t('default')}</label>
+          <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+            <input
+              type="checkbox"
+              id="isDefaultSwitch"
+              className="form-check-input"
+              checked={formState.isDefault}
+              data-testid="setDefaultSwitch"
+              onChange={() =>
+                setFormState((prev) => ({
+                  ...prev,
+                  isDefault: !prev.isDefault,
+                }))
+              }
+            />
+          </div>
         </div>
 
-        <div
-          className={`d-flex mt-2 mb-3 flex-wrap ${
-            mode === 'edit'
-              ? 'justify-content-between'
-              : 'justify-content-start gap-3'
-          }`}
-        >
+        {mode === 'edit' && (
           <div className="d-flex align-items-center">
-            <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
+            <label htmlFor="archivedSwitch">{t('archived')}</label>
             <div className={`form-check form-switch ms-2 ${styles.switch}`}>
               <input
                 type="checkbox"
-                id="isTaxDeductibleSwitch"
+                id="archivedSwitch"
                 className="form-check-input"
-                checked={formState.isTaxDeductible}
-                data-testid="setisTaxDeductibleSwitch"
+                checked={formState.isArchived}
+                data-testid="archivedSwitch"
                 onChange={() =>
                   setFormState((prev) => ({
                     ...prev,
-                    isTaxDeductible: !prev.isTaxDeductible,
+                    isArchived: !prev.isArchived,
                   }))
                 }
               />
             </div>
           </div>
+        )}
+      </div>
+    </>
+  );
 
-          <div className="d-flex align-items-center">
-            <label htmlFor="isDefaultSwitch">{t('default')}</label>
-            <div className={`form-check form-switch ms-2 ${styles.switch}`}>
-              <input
-                type="checkbox"
-                id="isDefaultSwitch"
-                className="form-check-input"
-                checked={formState.isDefault}
-                data-testid="setDefaultSwitch"
-                onChange={() =>
-                  setFormState((prev) => ({
-                    ...prev,
-                    isDefault: !prev.isDefault,
-                  }))
-                }
-              />
-            </div>
-          </div>
+  if (mode === 'create') {
+    return (
+      <CreateModal
+        open={isOpen}
+        title={modalTitle}
+        onClose={hide}
+        onSubmit={createFundHandler}
+        loading={isSubmitting}
+        submitDisabled={!isFormValid}
+        data-testid="fund-modal"
+        className={styles.fundModal}
+      >
+        {formContent}
+      </CreateModal>
+    );
+  }
 
-          {mode === 'edit' && (
-            <div className="d-flex align-items-center">
-              <label htmlFor="archivedSwitch">{t('archived')}</label>
-              <div className={`form-check form-switch ms-2 ${styles.switch}`}>
-                <input
-                  type="checkbox"
-                  id="archivedSwitch"
-                  className="form-check-input"
-                  checked={formState.isArchived}
-                  data-testid="archivedSwitch"
-                  onChange={() =>
-                    setFormState((prev) => ({
-                      ...prev,
-                      isArchived: !prev.isArchived,
-                    }))
-                  }
-                />
-              </div>
-            </div>
-          )}
-        </div>
-
-        <Button
-          type="submit"
-          className={styles.addButton}
-          data-testid="createFundFormSubmitBtn"
-        >
-          {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-        </Button>
-      </form>
-    </BaseModal>
+  return (
+    <EditModal
+      open={isOpen}
+      title={modalTitle}
+      onClose={hide}
+      onSubmit={updateFundHandler}
+      loading={isSubmitting}
+      submitDisabled={!isFormValid}
+      data-testid="fund-modal"
+      className={styles.fundModal}
+    >
+      {formContent}
+    </EditModal>
   );
 };
 

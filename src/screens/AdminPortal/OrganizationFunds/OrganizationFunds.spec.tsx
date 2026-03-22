@@ -92,12 +92,12 @@ describe('OrganizationFunds Screen =>', () => {
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     mockedUseParams.mockReset();
-    user = userEvent.setup();
+    user = userEvent.setup({ delay: null });
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
+    vi.restoreAllMocks();
   });
 
   vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
@@ -201,8 +201,7 @@ describe('OrganizationFunds Screen =>', () => {
     await user.click(createFundBtn);
 
     await waitFor(() => {
-      const modalTitle = screen.getByTestId('modalTitle');
-      expect(modalTitle).toHaveTextContent(translations.fundCreate);
+      expect(screen.getByTestId('fund-modal')).toBeInTheDocument();
     });
 
     await user.click(screen.getByTestId('modalCloseBtn'));
@@ -336,24 +335,26 @@ describe('OrganizationFunds Screen =>', () => {
       await wait(300);
     }
 
-    const allFundNames = screen.getAllByTestId('fundName');
+    await waitFor(() => {
+      const allFundNames = screen.getAllByTestId('fundName');
 
-    // Find Fund 1 and Fund 2 in the visible list
-    const fund1Index = allFundNames.findIndex(
-      (row) => row.textContent === 'Fund 1',
-    );
-    const fund2Index = allFundNames.findIndex(
-      (row) => row.textContent === 'Fund 2',
-    );
+      // Find Fund 1 and Fund 2 in the visible list
+      const fund1Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 1',
+      );
+      const fund2Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 2',
+      );
 
-    // If both funds are visible on the current page, verify their relative order
-    if (fund1Index >= 0 && fund2Index >= 0) {
-      // Verify Fund 2 (2024-06-21, earlier) appears before Fund 1 (2024-06-22, later) when sorted ASC
-      expect(fund2Index).toBeLessThan(fund1Index);
-    } else {
-      // If they're not both visible (due to pagination), verify that funds are still rendered
-      expect(allFundNames.length).toBeGreaterThan(0);
-    }
+      // If both funds are visible on the current page, verify their relative order
+      if (fund1Index >= 0 && fund2Index >= 0) {
+        // Verify Fund 2 (2024-06-21, earlier) appears before Fund 1 (2024-06-22, later) when sorted ASC
+        expect(fund2Index).toBeLessThan(fund1Index);
+      } else {
+        // If they're not both visible (due to pagination), verify that funds are still rendered
+        expect(allFundNames.length).toBeGreaterThan(0);
+      }
+    });
   });
 
   it('Click on Fund Name', async () => {
@@ -433,7 +434,7 @@ describe('OrganizationFunds Screen =>', () => {
     await user.type(searchField, 'testsearch');
 
     // Verify search text is entered (onChange trims spaces)
-    expect(searchField).toHaveValue('testsearch');
+    await waitFor(() => expect(searchField).toHaveValue('testsearch'));
 
     // Click the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
@@ -536,8 +537,7 @@ describe('OrganizationFunds Screen =>', () => {
       await user.keyboard('{Enter}');
 
       await waitFor(() => {
-        const modalTitle = screen.getByTestId('modalTitle');
-        expect(modalTitle).toHaveTextContent(translations.fundCreate);
+        expect(screen.getByTestId('fund-modal')).toBeInTheDocument();
       });
     });
 
@@ -553,8 +553,7 @@ describe('OrganizationFunds Screen =>', () => {
       await user.click(createFundBtn);
 
       await waitFor(() => {
-        const modalTitle = screen.getByTestId('modalTitle');
-        expect(modalTitle).toHaveTextContent(translations.fundCreate);
+        expect(screen.getByTestId('fund-modal')).toBeInTheDocument();
       });
 
       await user.keyboard('{Escape}');

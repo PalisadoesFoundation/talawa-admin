@@ -8,6 +8,7 @@ import type { ApolloClient } from '@apollo/client';
 import { ILoadedPlugin, IExtensionRegistry } from './types';
 import { PluginGraphQLService } from './graphql-service';
 import { DiscoveryManager } from './managers/discovery';
+import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import { ExtensionRegistryManager } from './managers/extension-registry';
 import { EventManager } from './managers/event-manager';
 import { LifecycleManager } from './managers/lifecycle';
@@ -36,8 +37,6 @@ export class PluginManager {
       this.extensionRegistry,
       this.eventManager,
     );
-
-    this.initializePlugins();
   }
 
   setApolloClient(apolloClient: ApolloClient<unknown>): void {
@@ -74,7 +73,7 @@ export class PluginManager {
       this.markAsInitialized();
     } catch (error) {
       console.error('Failed to initialize plugins:', error);
-      this.markAsInitialized();
+      throw error;
     }
   }
 
@@ -189,8 +188,38 @@ export function getPluginManager(
   return pluginManagerInstance;
 }
 
+let initialized = false;
+let initializing: Promise<void> | null = null;
 export function resetPluginManager(): void {
   pluginManagerInstance = null;
+  initialized = false;
+  initializing = null;
 }
 
+/**
+ * Initializes the plugin system once.
+ * Prevents duplicate work from concurrent calls and allows retry on failure.
+ */
+export const initializePluginSystemOnce = async (): Promise<void> => {
+  if (initialized) return;
+
+  if (!initializing) {
+    initializing = (async () => {
+      try {
+        const manager = getPluginManager();
+        await manager.initializePluginSystem();
+        await discoverAndRegisterAllPlugins();
+        initialized = true;
+      } catch (error) {
+        console.error('Plugin system initialization failed:', error);
+
+        // allow retry
+        initializing = null;
+        throw error;
+      }
+    })();
+  }
+
+  await initializing;
+};
 export default PluginManager;
