@@ -151,6 +151,21 @@ const Calendar: React.FC<
     };
   };
 
+  const buildUtcDayRange = (
+    dayKey: string,
+  ): { startDate: string; endDate: string } => {
+    const [year, month, day] = dayKey.split('-').map(Number);
+
+    const startDate = new Date(
+      Date.UTC(year, month - 1, day, 0, 0, 0, 0),
+    ).toISOString();
+    const endDate = new Date(
+      Date.UTC(year, month - 1, day, 23, 59, 59, 999),
+    ).toISOString();
+
+    return { startDate, endDate };
+  };
+
   const fetchFullDayEvents = async (dayKey: string): Promise<void> => {
     if (!currentUrl || loadingDayKey || dayEventsMap[dayKey]) {
       return;
@@ -159,10 +174,7 @@ const Calendar: React.FC<
     setLoadingDayKey(dayKey);
 
     try {
-      const startDate = dayjs(`${dayKey}T00:00:00`)
-        .startOf('day')
-        .toISOString();
-      const endDate = dayjs(`${dayKey}T00:00:00`).endOf('day').toISOString();
+      const { startDate, endDate } = buildUtcDayRange(dayKey);
 
       const { data } = await fetchDayEvents({
         variables: {

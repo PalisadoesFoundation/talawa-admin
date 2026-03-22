@@ -1512,14 +1512,111 @@ describe('Calendar', () => {
         after: null,
         includeRecurring: true,
         onlyStartOnDay: true,
-        startDate: expect.any(String),
-        endDate: expect.any(String),
+        startDate: `${previewDateString}T00:00:00.000Z`,
+        endDate: `${previewDateString}T23:59:59.999Z`,
       }),
     });
 
     await waitFor(() => {
       expect(screen.getByText('Fetched Extra Event')).toBeInTheDocument();
     });
+  });
+
+  it('should keep preview events visible when lazy day query returns no events', async () => {
+    const previewDate = dayjs().add(21, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+
+    const fetchDayEventsMock = vi.fn().mockResolvedValue({
+      data: {
+        organization: {
+          events: {
+            edges: [],
+          },
+        },
+      },
+    });
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-1' });
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={monthEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    const viewMoreButton = screen.getByTestId('more');
+    const dayCellBeforeClick = viewMoreButton.closest('[data-testid="day"]');
+    expect(dayCellBeforeClick).toHaveAttribute('data-has-events', 'true');
+
+    await userEvent.click(viewMoreButton);
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
+    });
+
+    const dayCellAfterClick = screen
+      .getByTestId('more')
+      .closest('[data-testid="day"]');
+    expect(dayCellAfterClick).toHaveAttribute('data-has-events', 'true');
+    expect(screen.getByText('Base Event 1')).toBeInTheDocument();
   });
 
   describe('Event filtering logic tests', () => {

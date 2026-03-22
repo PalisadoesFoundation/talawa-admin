@@ -136,8 +136,11 @@ const MonthlyCalendarDays: React.FC<MonthlyCalendarDaysProps> = ({
             return false;
           }) || [];
 
+        const fetchedEventsForDay = dayEventsMap[dayKey];
         const resolvedEventsForDay: InterfaceEvent[] =
-          dayEventsMap[dayKey] || baseEventsForDay;
+          fetchedEventsForDay && fetchedEventsForDay.length > 0
+            ? fetchedEventsForDay
+            : baseEventsForDay;
 
         const allEventsList: JSX.Element[] = resolvedEventsForDay.map(
           (event) => (
