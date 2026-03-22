@@ -182,6 +182,9 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
           }
         }) || [];
 
+      const allDayEventsForDate = eventsForDate.filter((event) => event.allDay);
+      const timedEventsForDate = eventsForDate.filter((event) => !event.allDay);
+
       const dayLabel = dayjs(tempDate).format('dddd, MMMM D, YYYY');
       const isToday = dayjs(tempDate).isSame(dayjs(), 'day');
 
@@ -209,6 +212,23 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
               {dayjs(tempDate).format('D')}
             </span>
           </div>
+          <div className={styles.allDayLane} role="presentation">
+            {allDayEventsForDate.map((event) => (
+              <div
+                key={event.id}
+                className={`${styles.allDayEventCard} ${styles.eventCard}`}
+                tabIndex={0}
+              >
+                <EventListCard
+                  {...event}
+                  refetchEvents={refetchEvents}
+                  userRole={userRole}
+                  userId={userId}
+                />
+                <div className={styles.eventTime}>{t('allDay')}</div>
+              </div>
+            ))}
+          </div>
           <div className={styles.dayGrid} role="presentation">
             {timeSlots.map((hour) => (
               <div
@@ -218,26 +238,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
                 aria-label={dayjs().hour(hour).minute(0).format('h A')}
               ></div>
             ))}
-            {eventsForDate.map((event) => {
-              // Handle all-day events differently
-              if (event.allDay) {
-                return (
-                  <div
-                    key={event.id}
-                    className={`${styles.eventContainer} ${styles.eventCard} ${styles.allDayEvent}`}
-                    tabIndex={0}
-                  >
-                    <EventListCard
-                      {...event}
-                      refetchEvents={refetchEvents}
-                      userRole={userRole}
-                      userId={userId}
-                    />
-                    <div className={styles.eventTime}>{t('allDay')}</div>
-                  </div>
-                );
-              }
-
+            {timedEventsForDate.map((event) => {
               // Handle timed events
               if (!event.startAt || !event.endAt) return null;
 

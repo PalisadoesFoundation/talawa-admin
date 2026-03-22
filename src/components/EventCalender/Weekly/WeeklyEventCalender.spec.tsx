@@ -462,9 +462,13 @@ describe('WeeklyEventCalender Component', () => {
     const eventContainer = eventCard.parentElement;
 
     const CELL_HEIGHT_PX = 80;
-    const expectedTop = 14 * CELL_HEIGHT_PX;
-    const expectedHeight = CELL_HEIGHT_PX;
-    const startHour = 14;
+    const startDate = dayjs.utc(mockEvent[0].startAt as string);
+    const endDate = dayjs.utc(mockEvent[0].endAt as string);
+    const startHour = startDate.hour();
+    const startMinute = startDate.minute();
+    const expectedTop = (startHour + startMinute / 60) * CELL_HEIGHT_PX;
+    const expectedHeight =
+      Math.max(endDate.diff(startDate, 'minute'), 15) * (CELL_HEIGHT_PX / 60);
     const offsetIndex = Math.floor(startHour / 3) % 3;
     const offsetPercent = offsetIndex * 2.5;
     const expectedLeft = 2.5 + offsetPercent;
@@ -841,6 +845,97 @@ describe('WeeklyEventCalender Component', () => {
     });
 
     expect(screen.getAllByText('Range All Day')).toHaveLength(2);
+  });
+
+  it('renders multiple all-day events for the same date with all-day labels', () => {
+    const targetDate = dayjs(today)
+      .startOf('week')
+      .add(2, 'day')
+      .format('YYYY-MM-DD');
+    const targetDateEndExclusive = dayjs(targetDate)
+      .add(1, 'day')
+      .format('YYYY-MM-DD');
+
+    const allDayEvents: InterfaceEvent[] = [
+      {
+        ...mockEventData[0],
+        id: 'all-day-a',
+        name: 'All Day A',
+        allDay: true,
+        startDate: targetDate,
+        endDate: targetDateEndExclusive,
+        startAt: null,
+        endAt: null,
+      },
+      {
+        ...mockEventData[0],
+        id: 'all-day-b',
+        name: 'All Day B',
+        allDay: true,
+        startDate: targetDate,
+        endDate: targetDateEndExclusive,
+        startAt: null,
+        endAt: null,
+      },
+    ];
+
+    renderComponent({
+      eventData: allDayEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getByText('All Day A')).toBeInTheDocument();
+    expect(screen.getByText('All Day B')).toBeInTheDocument();
+  });
+
+  it('renders all-day and timed events in the same day without dropping timed events', () => {
+    const sameDayLocal = dayjs(today).startOf('week').add(4, 'day');
+    const sameDayDate = sameDayLocal.format('YYYY-MM-DD');
+    const sameDayEndExclusive = sameDayLocal.add(1, 'day').format('YYYY-MM-DD');
+    const timedStart = sameDayLocal.hour(9).minute(30).second(0).utc();
+    const timedEnd = timedStart.add(90, 'minute');
+
+    const mixedDayEvents: InterfaceEvent[] = [
+      {
+        ...mockEventData[0],
+        id: 'mixed-all-day',
+        name: 'Mixed All Day',
+        allDay: true,
+        startDate: sameDayDate,
+        endDate: sameDayEndExclusive,
+        startAt: null,
+        endAt: null,
+      },
+      {
+        ...mockEventData[0],
+        id: 'mixed-timed',
+        name: 'Mixed Timed',
+        allDay: false,
+        startAt: timedStart.toISOString(),
+        endAt: timedEnd.toISOString(),
+      },
+    ];
+
+    renderComponent({
+      eventData: mixedDayEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getByText('Mixed All Day')).toBeInTheDocument();
+    expect(screen.getByText('Mixed Timed')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `${timedStart.local().format('h:mm A')} - ${timedEnd.local().format('h:mm A')}`,
+      ),
+    ).toBeInTheDocument();
   });
 
   // ── Accessibility ────────────────────────────────────────────────────────

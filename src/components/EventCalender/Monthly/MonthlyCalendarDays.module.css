@@ -1,0 +1,39 @@
+.day_weekends {
+  composes: day_weekends from './EventCalender.module.css';
+}
+
+.day__today {
+  composes: day__today from './EventCalender.module.css';
+}
+
+.day__outside {
+  composes: day__outside from './EventCalender.module.css';
+}
+
+.day__selected {
+  composes: day__selected from './EventCalender.module.css';
+}
+
+.day {
+  composes: day from './EventCalender.module.css';
+}
+
+.day__events {
+  composes: day__events from './EventCalender.module.css';
+}
+
+.expand_list_container {
+  composes: expand_list_container from './EventCalender.module.css';
+}
+
+.expand_event_list {
+  composes: expand_event_list from './EventCalender.module.css';
+}
+
+.event_list {
+  composes: event_list from './EventCalender.module.css';
+}
+
+.btn__more {
+  composes: btn__more from './EventCalender.module.css';
+}

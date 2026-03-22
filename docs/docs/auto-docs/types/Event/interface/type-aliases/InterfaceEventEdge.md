@@ -6,4 +6,4 @@
 
 > **InterfaceEventEdge** = [`IEventEdge`](../interfaces/IEventEdge.md)
 
-Defined in: [src/types/Event/interface.ts:346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L346)
+Defined in: [src/types/Event/interface.ts:350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L350)
