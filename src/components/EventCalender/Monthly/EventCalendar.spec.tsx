@@ -64,6 +64,8 @@ const FIXED_EVENT_START_ISO = dayjs.utc(FIXED_EVENT_START_MS).toISOString();
 const FIXED_EVENT_END_ISO = dayjs.utc(FIXED_EVENT_END_MS).toISOString();
 const FIXED_ALL_DAY_TEST_MS = Date.UTC(2025, 0, 15, 0, 0, 0);
 const FIXED_LAZY_FETCH_SEED_MS = Date.UTC(2025, 0, 1, 10, 0, 0);
+const FIXED_TEST_MONTH = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).month();
+const FIXED_TEST_YEAR = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).year();
 
 const { mockHolidays } = vi.hoisted(() => {
   return {
@@ -276,8 +278,8 @@ describe('Calendar', () => {
               eventData={eventData}
               viewType={ViewType.DAY}
               onMonthChange={onMonthChange}
-              currentMonth={new Date().getMonth()}
-              currentYear={new Date().getFullYear()}
+              currentMonth={FIXED_TEST_MONTH}
+              currentYear={FIXED_TEST_YEAR}
             />
           </I18nextProvider>
         </MockedProvider>
@@ -1502,13 +1504,9 @@ describe('Calendar', () => {
     const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(20, 'day');
     const previewDateString = previewDate.format('YYYY-MM-DD');
     const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
-    const [year, month, day] = previewDateString.split('-').map(Number);
-    const expectedStartDate = new Date(
-      Date.UTC(year, month - 1, day, 0, 0, 0, 0),
-    ).toISOString();
-    const expectedEndDate = new Date(
-      Date.UTC(year, month - 1, day, 23, 59, 59, 999),
-    ).toISOString();
+    const previewLocalDay = dayjs(previewDateString, 'YYYY-MM-DD');
+    const expectedStartDate = previewLocalDay.startOf('day').toISOString();
+    const expectedEndDate = previewLocalDay.endOf('day').toISOString();
 
     const fetchDayEventsMock = vi.fn().mockResolvedValue({
       data: {
@@ -1632,6 +1630,158 @@ describe('Calendar', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Fetched Extra Event')).toBeInTheDocument();
+    });
+  });
+
+  it('should lazy-fetch again after dayEventsResetKey invalidates day cache', async () => {
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(28, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+
+    const fetchDayEventsMock = vi.fn().mockResolvedValue({
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'fetched-after-reset',
+                  name: 'Fetched After Reset',
+                  description: 'Fetched from lazy query after reset',
+                  startAt: null,
+                  endAt: null,
+                  startDate: previewDateString,
+                  endDate: previewEndDateString,
+                  allDay: true,
+                  location: null,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isInviteOnly: false,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: null,
+                  attendees: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-1' });
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    const renderCalendar = (
+      resetKey: number,
+      updatedEventData: InterfaceEvent[] = monthEventData,
+    ): React.ReactElement => (
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={updatedEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    dayEventsResetKey={resetKey}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    const { rerender } = render(renderCalendar(0));
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
+    });
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    const refreshedEventData = [
+      ...monthEventData,
+      {
+        id: 'base-3',
+        name: 'Base Event 3',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u3', name: 'User 3' },
+      },
+    ];
+
+    rerender(renderCalendar(1, refreshedEventData));
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(2);
     });
   });
 
