@@ -35,7 +35,7 @@ export const MOCKS = [
                   endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  fundingRaised: 0,
+                  amountRaised: 0,
                 },
               },
               {
@@ -46,7 +46,7 @@ export const MOCKS = [
                   endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  fundingRaised: 50,
+                  amountRaised: 50,
                 },
               },
               {
@@ -57,7 +57,7 @@ export const MOCKS = [
                   endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  fundingRaised: 100,
+                  amountRaised: 100,
                 },
               },
               {
@@ -68,7 +68,7 @@ export const MOCKS = [
                   endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  fundingRaised: 150,
+                  amountRaised: 150,
                 },
               },
               {
@@ -79,7 +79,7 @@ export const MOCKS = [
                   endAt: BASE_DATE_UTC.add(11, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
-                  fundingRaised: 0,
+                  amountRaised: 0,
                 },
               },
             ],
@@ -113,7 +113,7 @@ export const MOCKS = [
                     .toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  fundingRaised: 0,
+                  amountRaised: 0,
                 },
               },
               {
@@ -126,7 +126,7 @@ export const MOCKS = [
                     .toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
-                  fundingRaised: 0,
+                  amountRaised: 0,
                 },
               },
             ],

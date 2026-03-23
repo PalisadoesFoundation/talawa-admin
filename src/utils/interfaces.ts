@@ -1215,7 +1215,7 @@ export interface InterfaceQueryOrganizationFundCampaigns {
         endAt: string;
         currencyCode: string;
         goalAmount: number;
-        fundingRaised?: number;
+        amountRaised?: number;
       };
     }[];
   };
@@ -1228,6 +1228,7 @@ export interface InterfaceUserCampaign {
   _id: string;
   name: string;
   fundingGoal: number;
+  amountRaised?: number;
   startDate: Date;
   endDate: Date;
   currency: string;
@@ -1320,7 +1321,7 @@ export interface InterfaceCampaignInfo {
   endAt: Date;
   createdAt: string;
   currencyCode: string;
-  fundingRaised?: number;
+  amountRaised?: number;
 }
 
 /**

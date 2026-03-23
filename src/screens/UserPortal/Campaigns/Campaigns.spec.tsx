@@ -384,7 +384,7 @@ describe('Testing User Campaigns Screen', () => {
     expect(progressCells.length).toBeGreaterThan(0);
 
     progressCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('0%');
+      expect(cell).toHaveTextContent('50%');
     });
   });
 
