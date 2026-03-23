@@ -322,5 +322,6 @@
   "networkError": "Network error",
   "organizationCard": {
     "card_aria": "Organization card"
-  }
+  },
+  "oauthSectionAriaLabel": "OAuth login options"
 }

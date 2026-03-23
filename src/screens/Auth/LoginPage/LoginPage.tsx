@@ -48,6 +48,7 @@ import type { InterfaceOrgOption } from 'types/Auth/OrgSelector/interface';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
+import { OAuthSection } from 'components/Auth/OAuthSection/OAuthSection';
 
 const LoginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -326,6 +327,7 @@ const LoginPage = (): JSX.Element => {
                     {tCommon('forgotPassword')}
                   </Link>
                 </div>
+                <OAuthSection mode="login" />
                 {location.pathname !== '/admin' && (
                   <div className="position-relative my-2">
                     <hr />

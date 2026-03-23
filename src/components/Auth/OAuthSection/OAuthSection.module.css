@@ -1,0 +1,9 @@
+.oauthButtonsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+.divider {
+  text-align: center;
+  margin: var(--space-4) 0;
+}
