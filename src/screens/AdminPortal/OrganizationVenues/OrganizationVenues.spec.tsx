@@ -26,7 +26,7 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import OrganizationVenues from './OrganizationVenues';
+import OrganizationVenues, { getVenueNameById } from './OrganizationVenues';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -643,6 +643,42 @@ describe('Organisation Venues', () => {
 });
 
 describe('Organisation Venues Error Handling', () => {
+  test('getVenueNameById returns venue name when id exists', () => {
+    const venues = [
+      {
+        node: {
+          id: 'venue1',
+          name: 'Updated Venue 1',
+          description: 'Updated description for venue 1',
+          createdAt: dayjs().subtract(5, 'year').toISOString(),
+          attachments: [],
+          capacity: 1000,
+          image: null,
+        },
+      },
+    ];
+
+    expect(getVenueNameById(venues, 'venue1')).toBe('Updated Venue 1');
+  });
+
+  test('getVenueNameById returns empty string when id does not exist', () => {
+    const venues = [
+      {
+        node: {
+          id: 'venue1',
+          name: 'Updated Venue 1',
+          description: 'Updated description for venue 1',
+          createdAt: dayjs().subtract(5, 'year').toISOString(),
+          attachments: [],
+          capacity: 1000,
+          image: null,
+        },
+      },
+    ];
+
+    expect(getVenueNameById(venues, 'missing-id')).toBe('');
+  });
+
   test('handles venue query error correctly', async () => {
     const mockError = new Error('Failed to fetch venues');
     const errorLink = new StaticMockLink([
@@ -792,7 +828,7 @@ describe('Organisation Venues Error Handling', () => {
     expect(sharedMocks.errorHandler).not.toHaveBeenCalled();
   });
 
-  test('useVenueDeletion: failing refetch calls errorHandler and keeps modal open', async () => {
+  test('useVenueDeletion: failing refetch calls errorHandler but still closes modal after successful delete', async () => {
     const deleteVenue = vi.fn().mockResolvedValue({});
     const refetchError = new Error('Refetch failed');
     const failingRefetch = vi.fn().mockRejectedValue(refetchError);
@@ -815,7 +851,32 @@ describe('Organisation Venues Error Handling', () => {
       expect.any(Function),
       refetchError,
     );
-    // modal should remain open due to refetch failure
+    // Modal should already be closed because delete succeeded.
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.selectedVenueId).toBeNull();
+  });
+
+  test('useVenueDeletion: delete mutation failure keeps modal open and skips refetch', async () => {
+    const deleteError = new Error('Delete failed');
+    const deleteVenue = vi.fn().mockRejectedValue(deleteError);
+    const refetch = vi.fn().mockResolvedValue(undefined);
+
+    const { result } = renderHook(() => useVenueDeletion(deleteVenue, refetch));
+
+    act(() => {
+      result.current.open('venue1');
+    });
+
+    await act(async () => {
+      await result.current.confirmDelete();
+    });
+
+    expect(deleteVenue).toHaveBeenCalledWith({ variables: { id: 'venue1' } });
+    expect(refetch).not.toHaveBeenCalled();
+    expect(sharedMocks.errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      deleteError,
+    );
     expect(result.current.isOpen).toBe(true);
     expect(result.current.selectedVenueId).toBe('venue1');
   });

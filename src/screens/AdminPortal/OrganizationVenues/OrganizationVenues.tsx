@@ -64,6 +64,15 @@ import VenueCard from 'components/AdminPortal/Venues/VenueCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
+export const getVenueNameById = (
+  venues: InterfaceQueryVenueListItem[],
+  venueId: string,
+): string => {
+  return (
+    venues.find((venueItem) => venueItem.node.id === venueId)?.node.name ?? ''
+  );
+};
+
 /**
  * OrganizationVenues component
  *
@@ -128,12 +137,8 @@ function organizationVenues(props?: {
   } | null>(null);
 
   const openDeleteModal = (venueId: string): void => {
-    const venue = venues.find((v) => v.node.id === venueId);
-    setSelectedVenue(
-      venue
-        ? { id: venueId, name: venue.node.name }
-        : { id: venueId, name: '' },
-    );
+    const venueName = getVenueNameById(venues, venueId);
+    setSelectedVenue({ id: venueId, name: venueName });
     handleDelete(venueId);
   };
 

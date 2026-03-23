@@ -28,11 +28,24 @@ export default function useVenueDeletion(
     if (!selectedVenueId) return;
     try {
       setDeleting(true);
+      // Perform deletion first
       await deleteVenue({ variables: { id: selectedVenueId } });
-      const refetchFn = venueRefetch ?? (() => Promise.resolve());
-      await refetchFn();
+
+      // Close modal immediately after successful delete so UI can't retry
+      // against a resource that no longer exists.
       close();
+
+      // Attempt to refresh the list as a best-effort operation. Any
+      // refetch errors should be reported but must not re-open the modal.
+      const refetchFn = venueRefetch ?? (() => Promise.resolve());
+      try {
+        await refetchFn();
+      } catch (refetchError) {
+        errorHandler(t, refetchError as Error);
+      }
     } catch (error) {
+      // Deletion itself failed — report and keep the modal open so the
+      // user may retry or inspect the error.
       errorHandler(t, error as Error);
     } finally {
       setDeleting(false);
