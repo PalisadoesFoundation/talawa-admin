@@ -2473,6 +2473,7 @@
     "events": "Events",
     "eventsCreatedByOrganization": "Events Created by Organization",
     "today": "Today",
+    "loading": "Loading...",
     "viewLess": "View Less",
     "viewAll": "View all",
     "noHolidaysAvailable": "No holidays available",

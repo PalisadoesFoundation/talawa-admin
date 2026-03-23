@@ -451,6 +451,133 @@ describe('Organisation Events Page', () => {
     });
   });
 
+  test('refetches month preview events after event creation in month view', async () => {
+    const previewVariableMatcher = vi.fn(() => true);
+    const orgVariableMatcher = vi.fn(() => true);
+
+    const link = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
+          },
+          variableMatcher: previewVariableMatcher,
+          result: {
+            data: {
+              organization: {
+                eventsPreview: [],
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+          },
+          variableMatcher: orgVariableMatcher,
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(link);
+
+    await waitFor(() => {
+      expect(previewVariableMatcher).toHaveBeenCalled();
+    });
+
+    const beforeRefetchCalls = previewVariableMatcher.mock.calls.length;
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('mockCreateEventSuccess'));
+
+    await waitFor(() => {
+      expect(previewVariableMatcher.mock.calls.length).toBeGreaterThan(
+        beforeRefetchCalls,
+      );
+    });
+  });
+
+  test('refetches detailed events after event creation in day view', async () => {
+    const previewVariableMatcher = vi.fn(() => true);
+    const detailedVariableMatcher = vi.fn(() => true);
+    const orgVariableMatcher = vi.fn(() => true);
+
+    const link = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
+          },
+          variableMatcher: previewVariableMatcher,
+          result: {
+            data: {
+              organization: {
+                eventsPreview: [],
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+          },
+          variableMatcher: detailedVariableMatcher,
+          result: {
+            data: {
+              organization: {
+                events: {
+                  edges: [],
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+          },
+          variableMatcher: orgVariableMatcher,
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(link);
+
+    await waitFor(() => {
+      expect(previewVariableMatcher).toHaveBeenCalled();
+    });
+
+    await userEvent.click(screen.getByTestId('selectViewType-toggle'));
+    await userEvent.click(await screen.findByTestId('selectViewType-item-Day'));
+
+    await waitFor(() => {
+      expect(detailedVariableMatcher).toHaveBeenCalled();
+    });
+
+    const beforeRefetchCalls = detailedVariableMatcher.mock.calls.length;
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await userEvent.click(screen.getByTestId('mockCreateEventSuccess'));
+
+    await waitFor(() => {
+      expect(detailedVariableMatcher.mock.calls.length).toBeGreaterThan(
+        beforeRefetchCalls,
+      );
+    });
+  });
+
   test('recurrence dropdown options and simple selection', async () => {
     renderWithLink(defaultLink);
 
@@ -556,6 +683,74 @@ describe('Organisation Events Page', () => {
     );
   });
 
+  test('debounces month preview query updates until query date state is synchronized', async () => {
+    const previewVariableMatcher = vi.fn(() => true);
+    const orgVariableMatcher = vi.fn(() => true);
+
+    const dualQueryLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
+          },
+          variableMatcher: previewVariableMatcher,
+          result: {
+            data: {
+              organization: {
+                eventsPreview: [],
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+          },
+          variableMatcher: orgVariableMatcher,
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(dualQueryLink);
+
+    await waitFor(() => {
+      expect(previewVariableMatcher).toHaveBeenCalled();
+    });
+
+    const expectedStartDate = dayjs(new Date(2023, 1, 1))
+      .startOf('month')
+      .toISOString();
+    const expectedEndDate = dayjs(new Date(2023, 1, 1))
+      .endOf('month')
+      .toISOString();
+
+    await userEvent.click(screen.getByTestId('nextmonthordate'));
+
+    expect(previewVariableMatcher.mock.calls).not.toContainEqual([
+      expect.objectContaining({
+        startDate: expectedStartDate,
+        endDate: expectedEndDate,
+      }),
+    ]);
+
+    await wait(360);
+
+    await waitFor(() => {
+      expect(previewVariableMatcher.mock.calls).toContainEqual([
+        expect.objectContaining({
+          startDate: expectedStartDate,
+          endDate: expectedEndDate,
+        }),
+      ]);
+    });
+  });
+
   test('uses month preview query data in month view and passes dayHasMoreMap', async () => {
     const previewDate = dayjs().add(10, 'day');
     const previewDateString = previewDate.format('YYYY-MM-DD');
@@ -638,6 +833,62 @@ describe('Organisation Events Page', () => {
     expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
       'Month View',
     );
+  });
+
+  test('handles month preview day with null events using fallback mapping', async () => {
+    const previewDate = dayjs().add(11, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+
+    const dualQueryLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              organization: {
+                eventsPreview: [
+                  {
+                    date: previewDateString,
+                    totalCount: 0,
+                    hasMore: false,
+                    events: null,
+                  },
+                ],
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(dualQueryLink);
+
+    await waitFor(() => {
+      const events = JSON.parse(
+        screen.getByTestId('event-data-json').textContent || '[]',
+      ) as Array<{ name?: string }>;
+      expect(events).toHaveLength(0);
+    });
+
+    const hasMoreMap = JSON.parse(
+      screen.getByTestId('day-has-more-json').textContent || '{}',
+    ) as Record<string, boolean>;
+    expect(hasMoreMap[previewDateString]).toBe(false);
   });
 
   test('switches to detailed events query when changing view to Day', async () => {

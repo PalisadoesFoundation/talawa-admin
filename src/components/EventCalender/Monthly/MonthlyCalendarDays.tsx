@@ -101,10 +101,11 @@ const MonthlyCalendarDays: React.FC<MonthlyCalendarDaysProps> = ({
     );
   }
 
+  const today = new Date();
+
   return (
     <>
       {days.map((date, index) => {
-        const today = new Date();
         const className = [
           date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
           date.toLocaleDateString() === today.toLocaleDateString()
@@ -240,7 +241,7 @@ const MonthlyCalendarDays: React.FC<MonthlyCalendarDaysProps> = ({
                     }}
                   >
                     {loadingDayKey === dayKey
-                      ? 'Loading...'
+                      ? t('loading')
                       : expanded === index
                         ? t('viewLess')
                         : t('viewAll')}

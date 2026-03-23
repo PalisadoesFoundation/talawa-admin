@@ -156,14 +156,24 @@ const Calendar: React.FC<
   ): { startDate: string; endDate: string } => {
     const [year, month, day] = dayKey.split('-').map(Number);
 
-    const startDate = new Date(
-      Date.UTC(year, month - 1, day, 0, 0, 0, 0),
-    ).toISOString();
+    const startDate = new Date(year, month - 1, day, 0, 0, 0, 0).toISOString();
     const endDate = new Date(
-      Date.UTC(year, month - 1, day, 23, 59, 59, 999),
+      year,
+      month - 1,
+      day,
+      23,
+      59,
+      59,
+      999,
     ).toISOString();
 
     return { startDate, endDate };
+  };
+
+  const resetDayExpansionState = (): void => {
+    setExpanded(-1);
+    setLoadingDayKey(null);
+    setDayEventsMap({});
   };
 
   const fetchFullDayEvents = async (dayKey: string): Promise<void> => {
@@ -220,17 +230,14 @@ const Calendar: React.FC<
   }, [eventData, orgData, userRole, userId]);
 
   useEffect(() => {
-    setExpanded(-1);
-    setLoadingDayKey(null);
-  }, [currentMonth, currentYear]);
+    resetDayExpansionState();
+  }, [currentMonth, currentYear, eventData]);
 
   /**
    * Moves the calendar view to the previous month.
    */
   const handlePrevMonth = (): void => {
-    if (isMonthChangeDisabled) {
-      return;
-    }
+    resetDayExpansionState();
 
     const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
@@ -251,9 +258,7 @@ const Calendar: React.FC<
   }, [holidays, currentMonth]);
 
   const handleNextMonth = (): void => {
-    if (isMonthChangeDisabled) {
-      return;
-    }
+    resetDayExpansionState();
 
     const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
     const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
@@ -261,9 +266,7 @@ const Calendar: React.FC<
   };
 
   const handlePrevDate = (): void => {
-    if (isMonthChangeDisabled) {
-      return;
-    }
+    resetDayExpansionState();
 
     if (viewType === ViewType.WEEK) {
       const newDate = new Date(currentYear, currentMonth, currentDate - 7);
@@ -281,9 +284,7 @@ const Calendar: React.FC<
   };
 
   const handleNextDate = (): void => {
-    if (isMonthChangeDisabled) {
-      return;
-    }
+    resetDayExpansionState();
 
     if (viewType === ViewType.WEEK) {
       const newDate = new Date(currentYear, currentMonth, currentDate + 7);
@@ -307,9 +308,7 @@ const Calendar: React.FC<
   };
 
   const handleTodayButton = (): void => {
-    if (isMonthChangeDisabled) {
-      return;
-    }
+    resetDayExpansionState();
 
     const today = new Date();
     onMonthChange(today.getMonth(), today.getFullYear());

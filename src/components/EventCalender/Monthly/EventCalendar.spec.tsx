@@ -25,6 +25,12 @@ const { mockUseLazyQuery } = vi.hoisted(() => {
   };
 });
 
+const { mockEventListCard } = vi.hoisted(() => {
+  return {
+    mockEventListCard: vi.fn(),
+  };
+});
+
 vi.mock('@apollo/client', async () => {
   const actual =
     await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
@@ -43,9 +49,10 @@ import { UserRole } from 'types/Event/interface';
 vi.mock('shared-components/EventListCard/EventListCard', () => {
   return {
     __esModule: true,
-    default: (props: { name?: string }) => (
-      <div data-testid="event-list-card">{props.name}</div>
-    ),
+    default: (props: { id?: string; name?: string }) => {
+      mockEventListCard(props);
+      return <div data-testid="event-list-card">{props.name}</div>;
+    },
   };
 });
 
@@ -56,6 +63,7 @@ const FIXED_EVENT_END_MS = Date.UTC(2025, 0, 1, 12, 0, 0);
 const FIXED_EVENT_START_ISO = dayjs.utc(FIXED_EVENT_START_MS).toISOString();
 const FIXED_EVENT_END_ISO = dayjs.utc(FIXED_EVENT_END_MS).toISOString();
 const FIXED_ALL_DAY_TEST_MS = Date.UTC(2025, 0, 15, 0, 0, 0);
+const FIXED_LAZY_FETCH_SEED_MS = Date.UTC(2025, 0, 1, 10, 0, 0);
 
 const { mockHolidays } = vi.hoisted(() => {
   return {
@@ -89,6 +97,7 @@ describe('Calendar', () => {
 
   beforeEach(() => {
     mockUseLazyQuery.mockReturnValue([vi.fn()]);
+    mockEventListCard.mockClear();
   });
 
   afterEach(() => {
@@ -254,6 +263,28 @@ describe('Calendar', () => {
       today.toLocaleString('default', { month: 'long' }),
     );
     expect(currentYear).toHaveTextContent(today.getFullYear().toString());
+  });
+
+  it('should render negative timezone label when timezone offset is positive', () => {
+    vi.spyOn(Date.prototype, 'getTimezoneOffset').mockReturnValue(120);
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.DAY}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    expect(screen.getByText('UTC-02:00')).toBeInTheDocument();
   });
 
   afterEach(() => {
@@ -1392,10 +1423,104 @@ describe('Calendar', () => {
     expect(mockOnMonthChange).not.toHaveBeenCalled();
   });
 
+  it('should navigate to previous month in MONTH view when month change is enabled', async () => {
+    const mockOnMonthChange = vi.fn();
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.MONTH}
+              onMonthChange={mockOnMonthChange}
+              isMonthChangeDisabled={false}
+              currentMonth={0}
+              currentYear={2026}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    await userEvent.click(screen.getByTestId('prevmonthordate'));
+
+    expect(mockOnMonthChange).toHaveBeenCalledWith(11, 2025);
+  });
+
+  it('should navigate to next month in MONTH view for a non-December month', async () => {
+    const mockOnMonthChange = vi.fn();
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.MONTH}
+              onMonthChange={mockOnMonthChange}
+              isMonthChangeDisabled={false}
+              currentMonth={5}
+              currentYear={2026}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    await userEvent.click(screen.getByTestId('nextmonthordate'));
+
+    expect(mockOnMonthChange).toHaveBeenCalledWith(6, 2026);
+  });
+
+  it('should navigate to next month in MONTH view for December year rollover', async () => {
+    const mockOnMonthChange = vi.fn();
+
+    render(
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              viewType={ViewType.MONTH}
+              onMonthChange={mockOnMonthChange}
+              isMonthChangeDisabled={false}
+              currentMonth={11}
+              currentYear={2026}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
+    );
+
+    await userEvent.click(screen.getByTestId('nextmonthordate'));
+
+    expect(mockOnMonthChange).toHaveBeenCalledWith(0, 2027);
+  });
+
   it('should lazy-fetch full day events when month day has more and View All is clicked', async () => {
-    const previewDate = dayjs().add(20, 'day');
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(20, 'day');
     const previewDateString = previewDate.format('YYYY-MM-DD');
     const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+    const [year, month, day] = previewDateString.split('-').map(Number);
+    const expectedStartDate = new Date(
+      year,
+      month - 1,
+      day,
+      0,
+      0,
+      0,
+      0,
+    ).toISOString();
+    const expectedEndDate = new Date(
+      year,
+      month - 1,
+      day,
+      23,
+      59,
+      59,
+      999,
+    ).toISOString();
 
     const fetchDayEventsMock = vi.fn().mockResolvedValue({
       data: {
@@ -1512,8 +1637,8 @@ describe('Calendar', () => {
         after: null,
         includeRecurring: true,
         onlyStartOnDay: true,
-        startDate: `${previewDateString}T00:00:00.000Z`,
-        endDate: `${previewDateString}T23:59:59.999Z`,
+        startDate: expectedStartDate,
+        endDate: expectedEndDate,
       }),
     });
 
@@ -1523,7 +1648,7 @@ describe('Calendar', () => {
   });
 
   it('should keep preview events visible when lazy day query returns no events', async () => {
-    const previewDate = dayjs().add(21, 'day');
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(21, 'day');
     const previewDateString = previewDate.format('YYYY-MM-DD');
     const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
 
@@ -1612,11 +1737,672 @@ describe('Calendar', () => {
       expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
     });
 
-    const dayCellAfterClick = screen
-      .getByTestId('more')
-      .closest('[data-testid="day"]');
-    expect(dayCellAfterClick).toHaveAttribute('data-has-events', 'true');
-    expect(screen.getByText('Base Event 1')).toBeInTheDocument();
+    await waitFor(() => {
+      const dayCellAfterClick = screen
+        .getByTestId('more')
+        .closest('[data-testid="day"]');
+      expect(dayCellAfterClick).toHaveAttribute('data-has-events', 'true');
+      expect(screen.getByText('Base Event 1')).toBeInTheDocument();
+    });
+  });
+
+  it('should not lazy-fetch full day events when orgId is missing', async () => {
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(26, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+
+    const fetchDayEventsMock = vi.fn().mockResolvedValue({
+      data: {
+        organization: {
+          events: {
+            edges: [],
+          },
+        },
+      },
+    });
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({});
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={monthEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).not.toHaveBeenCalled();
+      expect(screen.getByText('Base Event 1')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle lazy day query response without organization events edges', async () => {
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(27, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+
+    const fetchDayEventsMock = vi.fn().mockResolvedValue({ data: {} });
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-1' });
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={monthEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
+      expect(screen.getByText('Base Event 1')).toBeInTheDocument();
+      expect(screen.queryByText('Fetched Extra Event')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should map lazy fetched timed event startTime and endTime from startAt and endAt', async () => {
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(23, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+    const timedStartAt = dayjs
+      .utc(FIXED_LAZY_FETCH_SEED_MS)
+      .add(23, 'day')
+      .add(15, 'minute')
+      .toISOString();
+    const timedEndAt = dayjs
+      .utc(FIXED_LAZY_FETCH_SEED_MS)
+      .add(23, 'day')
+      .add(2, 'hour')
+      .add(45, 'minute')
+      .toISOString();
+
+    const fetchDayEventsMock = vi.fn().mockResolvedValue({
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'fetched-timed',
+                  name: 'Fetched Timed Event',
+                  description: 'Fetched timed event',
+                  startAt: timedStartAt,
+                  endAt: timedEndAt,
+                  startDate: previewDateString,
+                  endDate: previewEndDateString,
+                  allDay: false,
+                  location: null,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isInviteOnly: false,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: null,
+                  attendees: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-1' });
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={monthEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
+      const fetchedTimedCall = mockEventListCard.mock.calls.find(
+        (call) => call[0]?.id === 'fetched-timed',
+      );
+      expect(fetchedTimedCall?.[0]).toEqual(
+        expect.objectContaining({
+          startTime: dayjs(timedStartAt).format('HH:mm:ss'),
+          endTime: dayjs(timedEndAt).format('HH:mm:ss'),
+        }),
+      );
+    });
+  });
+
+  it('should map lazy fetched all-day event startTime and endTime to null', async () => {
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(24, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+    const allDayStartAt = dayjs
+      .utc(FIXED_LAZY_FETCH_SEED_MS)
+      .add(24, 'day')
+      .add(5, 'hour')
+      .add(30, 'minute')
+      .toISOString();
+    const allDayEndAt = dayjs
+      .utc(FIXED_LAZY_FETCH_SEED_MS)
+      .add(24, 'day')
+      .add(7, 'hour')
+      .toISOString();
+
+    const fetchDayEventsMock = vi.fn().mockResolvedValue({
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'fetched-all-day',
+                  name: 'Fetched All Day Event',
+                  description: 'Fetched all day event',
+                  startAt: allDayStartAt,
+                  endAt: allDayEndAt,
+                  startDate: previewDateString,
+                  endDate: previewEndDateString,
+                  allDay: true,
+                  location: null,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isInviteOnly: false,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: null,
+                  attendees: [],
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-1' });
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={monthEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
+      const fetchedAllDayCall = mockEventListCard.mock.calls.find(
+        (call) => call[0]?.id === 'fetched-all-day',
+      );
+      expect(fetchedAllDayCall?.[0]).toEqual(
+        expect.objectContaining({
+          startTime: null,
+          endTime: null,
+        }),
+      );
+    });
+  });
+
+  it('should map lazy fetched fallback values for description, timed null start/end, and attendees', async () => {
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(25, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+
+    const fetchDayEventsMock = vi.fn().mockResolvedValue({
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'fetched-fallbacks',
+                  name: 'Fetched Fallback Event',
+                  description: null,
+                  startAt: null,
+                  endAt: null,
+                  startDate: previewDateString,
+                  endDate: previewEndDateString,
+                  allDay: false,
+                  location: null,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isInviteOnly: false,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: null,
+                  attendees: null,
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-1' });
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={monthEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    await userEvent.click(screen.getByTestId('more'));
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
+      const fetchedFallbackCall = mockEventListCard.mock.calls.find(
+        (call) => call[0]?.id === 'fetched-fallbacks',
+      );
+      expect(fetchedFallbackCall?.[0]).toEqual(
+        expect.objectContaining({
+          description: '',
+          startTime: null,
+          endTime: null,
+          attendees: [],
+        }),
+      );
+    });
+  });
+
+  it('should keep preview events visible when lazy day query rejects', async () => {
+    const previewDate = dayjs.utc(FIXED_LAZY_FETCH_SEED_MS).add(22, 'day');
+    const previewDateString = previewDate.format('YYYY-MM-DD');
+    const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
+
+    const fetchDayEventsMock = vi
+      .fn()
+      .mockRejectedValue(new Error('Lazy day query failed'));
+    mockUseLazyQuery.mockReturnValue([fetchDayEventsMock]);
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-1' });
+
+    const monthEventData: InterfaceEvent[] = [
+      {
+        id: 'base-1',
+        name: 'Base Event 1',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u1', name: 'User 1' },
+      },
+      {
+        id: 'base-2',
+        name: 'Base Event 2',
+        description: 'base',
+        startAt: null,
+        endAt: null,
+        startDate: previewDateString,
+        endDate: previewEndDateString,
+        location: '',
+        startTime: null,
+        endTime: null,
+        allDay: true,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'u2', name: 'User 2' },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org-1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={monthEventData}
+                    viewType={ViewType.MONTH}
+                    dayHasMoreMap={{ [previewDateString]: true }}
+                    onMonthChange={vi.fn()}
+                    currentMonth={previewDate.month()}
+                    currentYear={previewDate.year()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    const viewMoreButton = screen.getByTestId('more');
+    await userEvent.click(viewMoreButton);
+
+    await waitFor(() => {
+      expect(fetchDayEventsMock).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Base Event 1')).toBeInTheDocument();
+      expect(screen.getByText('Base Event 2')).toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
   });
 
   describe('Event filtering logic tests', () => {

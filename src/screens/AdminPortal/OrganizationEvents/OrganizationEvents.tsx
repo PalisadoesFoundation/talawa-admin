@@ -79,6 +79,10 @@ interface IEventEdge {
       id: string;
       name: string;
     };
+    attendees?: Array<{
+      id: string;
+      name: string;
+    }>;
     organization?: {
       id: string;
       name: string;
@@ -138,8 +142,8 @@ function organizationEvents(): JSX.Element {
     };
   }, [currentMonth, currentYear, currentDateOfMonth]);
 
-  const handleChangeView = (item: string | null): void => {
-    if (item) setViewType(item as ViewType);
+  const handleChangeView = (item: string | number): void => {
+    setViewType(item as ViewType);
   };
 
   const handleMonthChange = (month: number, year: number): void => {
@@ -324,7 +328,7 @@ function organizationEvents(): JSX.Element {
         id: node.creator?.id || '',
         name: node.creator?.name || '',
       },
-      attendees: [],
+      attendees: node.attendees || [],
       isInviteOnly: Boolean(node.isInviteOnly),
     };
   };
@@ -355,6 +359,10 @@ function organizationEvents(): JSX.Element {
 
   // Filter events based on search term (case-insensitive search across name, description, and location)
   const events: InterfaceEvent[] = useMemo(() => {
+    if (isMonthView) {
+      return allEvents;
+    }
+
     if (!searchByName.trim()) {
       return allEvents;
     }

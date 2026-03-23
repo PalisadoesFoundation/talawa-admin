@@ -666,6 +666,10 @@ export const GET_ORGANIZATION_EVENTS_PREVIEW = gql`
             id
             name
           }
+          attendees {
+            id
+            name
+          }
         }
       }
     }
