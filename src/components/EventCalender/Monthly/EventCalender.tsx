@@ -71,6 +71,7 @@ const Calendar: React.FC<
   userRole,
   userId,
   viewType,
+  dayEventsResetKey,
   dayHasMoreMap = {},
   isMonthChangeDisabled = false,
   onMonthChange,
@@ -173,7 +174,7 @@ const Calendar: React.FC<
   };
 
   const fetchFullDayEvents = async (dayKey: string): Promise<void> => {
-    if (!currentUrl || loadingDayKey || dayEventsMap[dayKey]) {
+    if (!currentUrl || loadingDayKey || dayKey in dayEventsMap) {
       return;
     }
 
@@ -230,6 +231,13 @@ const Calendar: React.FC<
   useEffect(() => {
     resetDayExpansionState();
   }, [currentMonth, currentYear, eventData]);
+
+  useEffect(() => {
+    if (typeof dayEventsResetKey !== 'number') {
+      return;
+    }
+    resetDayExpansionState();
+  }, [dayEventsResetKey]);
 
   /**
    * Moves the calendar view to the previous month.

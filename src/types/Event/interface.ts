@@ -126,6 +126,7 @@ export interface ICalendarProps {
   userRole?: string;
   userId?: string;
   viewType?: ViewType;
+  dayEventsResetKey?: number;
   dayHasMoreMap?: Record<string, boolean>;
   isMonthChangeDisabled?: boolean;
   onMonthChange?: (month: number, year: number) => void;

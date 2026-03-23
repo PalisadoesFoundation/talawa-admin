@@ -128,6 +128,7 @@ function organizationEvents(): JSX.Element {
   const [queryCurrentDateOfMonth, setQueryCurrentDateOfMonth] =
     useState(currentDateOfMonth);
   const [searchByName, setSearchByName] = useState('');
+  const [dayEventsResetKey, setDayEventsResetKey] = useState(0);
   const { orgId: currentUrl } = useParams();
 
   useEffect(() => {
@@ -263,11 +264,15 @@ function organizationEvents(): JSX.Element {
     : detailedNetworkStatus;
 
   const refetchEvents = (): void => {
+    const resetDayEventsCache = (): void => {
+      setDayEventsResetKey((prev) => prev + 1);
+    };
+
     if (isMonthView) {
-      void refetchMonthPreviewEvents();
+      void refetchMonthPreviewEvents().finally(resetDayEventsCache);
       return;
     }
-    void refetchDetailedEvents();
+    void refetchDetailedEvents().finally(resetDayEventsCache);
   };
 
   const isMonthChangeDisabled =
@@ -464,6 +469,7 @@ function organizationEvents(): JSX.Element {
           userId={userId}
           userRole={userRole}
           viewType={viewType}
+          dayEventsResetKey={dayEventsResetKey}
           dayHasMoreMap={monthDayHasMoreMap}
           isMonthChangeDisabled={isMonthChangeDisabled}
           onMonthChange={handleMonthChange}

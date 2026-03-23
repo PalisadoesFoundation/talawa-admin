@@ -193,9 +193,9 @@ describe('WeeklyEventCalender Component', () => {
     // We can find it by finding the parent of the event-list-card
     const eventContainer = eventCard.parentElement;
 
-    // Calculate expected top and height using UTC (matches component's dayjs.utc() parsing)
-    const startDate = dayjs.utc(todayISO);
-    const endDate = dayjs.utc(todayISO).add(1, 'hour');
+    // Calculate expected top and height using utc-to-local conversion (matches component logic)
+    const startDate = dayjs.utc(todayISO).local();
+    const endDate = dayjs.utc(todayISO).local().add(1, 'hour');
     const startHour = startDate.hour();
     const startMinute = startDate.minute();
     const durationMinutes = endDate.diff(startDate, 'minute');
@@ -462,8 +462,8 @@ describe('WeeklyEventCalender Component', () => {
     const eventContainer = eventCard.parentElement;
 
     const CELL_HEIGHT_PX = 80;
-    const startDate = dayjs.utc(mockEvent[0].startAt as string);
-    const endDate = dayjs.utc(mockEvent[0].endAt as string);
+    const startDate = dayjs.utc(mockEvent[0].startAt as string).local();
+    const endDate = dayjs.utc(mockEvent[0].endAt as string).local();
     const startHour = startDate.hour();
     const startMinute = startDate.minute();
     const expectedTop = (startHour + startMinute / 60) * CELL_HEIGHT_PX;

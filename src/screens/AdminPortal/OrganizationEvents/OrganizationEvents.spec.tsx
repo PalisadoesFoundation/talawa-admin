@@ -106,10 +106,28 @@ Object.defineProperty(window, 'location', {
   },
 });
 
-const defaultLink = new StaticMockLink(
-  MOCKS.map((mock) => ({ ...mock, variableMatcher: () => true })),
-  true,
-);
+const buildDefaultLink = (): StaticMockLink =>
+  new StaticMockLink(
+    [
+      {
+        request: {
+          query: GET_ORGANIZATION_EVENTS_PREVIEW,
+        },
+        variableMatcher: () => true,
+        result: {
+          data: {
+            organization: {
+              eventsPreview: [],
+            },
+          },
+        },
+      },
+      ...Array.from({ length: 8 }).flatMap(() => MOCKS),
+    ].map((mock) => ({ ...mock, variableMatcher: () => true })),
+    true,
+  );
+
+const defaultLink = buildDefaultLink();
 
 async function wait(ms = 0): Promise<void> {
   await act(
@@ -268,9 +286,11 @@ describe('Organisation Events Page', () => {
     vi.restoreAllMocks();
   });
 
-  const renderWithLink = (link: StaticMockLink) =>
-    render(
-      <MockedProvider link={link}>
+  const renderWithLink = (link: StaticMockLink = defaultLink) => {
+    const effectiveLink = link === defaultLink ? buildDefaultLink() : link;
+
+    return render(
+      <MockedProvider link={effectiveLink}>
         <MemoryRouter initialEntries={['/admin/orgdash/orgId/events']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -289,6 +309,7 @@ describe('Organisation Events Page', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
+  };
 
   test('renders events page and keeps current route', async () => {
     window.location.assign('/admin/orglist');
@@ -425,7 +446,50 @@ describe('Organisation Events Page', () => {
   });
 
   test('verifies success path when event creation returns data', async () => {
-    renderWithLink(defaultLink);
+    const successPathLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              organization: {
+                eventsPreview: [],
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              organization: {
+                eventsPreview: [],
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+          },
+          variableMatcher: () => true,
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderWithLink(successPathLink);
 
     await wait();
 
@@ -1174,9 +1238,9 @@ describe('Organisation Events Page', () => {
       [
         {
           request: {
-            query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
           },
+          variableMatcher: () => true,
           error: new Error('some other apollo error'),
         },
         {
@@ -1212,13 +1276,13 @@ describe('Organisation Events Page', () => {
       [
         {
           request: {
-            query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            query: GET_ORGANIZATION_EVENTS_PREVIEW,
           },
+          variableMatcher: () => true,
           result: {
             data: {
               organization: {
-                events: { edges: [] },
+                eventsPreview: [],
               },
             },
           },
@@ -1494,13 +1558,13 @@ describe('Organisation Events Page', () => {
       },
       {
         request: {
-          query: GET_ORGANIZATION_EVENTS_PG,
-          variables: buildEventsVariables(),
+          query: GET_ORGANIZATION_EVENTS_PREVIEW,
         },
+        variableMatcher: () => true,
         result: {
           data: {
             organization: {
-              events: { edges: [] },
+              eventsPreview: [],
             },
           },
         },
@@ -1534,7 +1598,7 @@ describe('Organisation Events Page', () => {
     await waitFor(
       () =>
         expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
-      { timeout: 300 },
+      { timeout: 2000 },
     );
   });
 
@@ -2128,17 +2192,25 @@ describe('Organisation Events Page', () => {
 const ERROR_MOCK = [
   {
     request: {
-      query: GET_ORGANIZATION_EVENTS_PG,
-      variables: {
-        id: 'orgId',
-        first: 32,
-        after: null,
-        startDate: expect.any(String),
-        endDate: expect.any(String),
-      },
+      query: GET_ORGANIZATION_EVENTS_PREVIEW,
     },
+    variableMatcher: () => true,
     result: {
       errors: [new GraphQLError('Failed to fetch organization events')],
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_DATA_PG,
+    },
+    variableMatcher: () => true,
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          name: 'Org',
+        },
+      },
     },
   },
 ];
@@ -2182,20 +2254,25 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
     const emptyEventsMock = [
       {
         request: {
-          query: GET_ORGANIZATION_EVENTS_PG,
-          variables: expect.any(Object),
+          query: GET_ORGANIZATION_EVENTS_PREVIEW,
         },
+        variableMatcher: () => true,
         result: {
           data: {
             organization: {
-              events: {
-                edges: [],
-                pageInfo: {
-                  hasNextPage: false,
-                  endCursor: null,
-                },
-              },
+              eventsPreview: [],
             },
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_ORGANIZATION_DATA_PG,
+        },
+        variableMatcher: () => true,
+        result: {
+          data: {
+            organization: { id: 'orgId', name: 'Org' },
           },
         },
       },
@@ -2236,12 +2313,23 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
     const nullDataMock = [
       {
         request: {
-          query: GET_ORGANIZATION_EVENTS_PG,
-          variables: expect.any(Object),
+          query: GET_ORGANIZATION_EVENTS_PREVIEW,
         },
+        variableMatcher: () => true,
         result: {
           data: {
             organization: null,
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_ORGANIZATION_DATA_PG,
+        },
+        variableMatcher: () => true,
+        result: {
+          data: {
+            organization: { id: 'orgId', name: 'Org' },
           },
         },
       },

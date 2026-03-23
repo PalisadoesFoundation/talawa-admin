@@ -195,7 +195,7 @@ const MonthlyCalendarDays: React.FC<MonthlyCalendarDaysProps> = ({
             return;
           }
 
-          if (dayHasMoreMap[dayKey] && !dayEventsMap[dayKey]) {
+          if (dayHasMoreMap[dayKey] && !(dayKey in dayEventsMap)) {
             await fetchFullDayEvents(dayKey);
           }
 

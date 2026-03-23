@@ -1504,22 +1504,10 @@ describe('Calendar', () => {
     const previewEndDateString = previewDate.add(1, 'day').format('YYYY-MM-DD');
     const [year, month, day] = previewDateString.split('-').map(Number);
     const expectedStartDate = new Date(
-      year,
-      month - 1,
-      day,
-      0,
-      0,
-      0,
-      0,
+      Date.UTC(year, month - 1, day, 0, 0, 0, 0),
     ).toISOString();
     const expectedEndDate = new Date(
-      year,
-      month - 1,
-      day,
-      23,
-      59,
-      59,
-      999,
+      Date.UTC(year, month - 1, day, 23, 59, 59, 999),
     ).toISOString();
 
     const fetchDayEventsMock = vi.fn().mockResolvedValue({

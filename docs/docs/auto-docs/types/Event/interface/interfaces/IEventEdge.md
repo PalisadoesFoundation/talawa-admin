@@ -4,7 +4,7 @@
 
 # Interface: IEventEdge
 
-Defined in: [src/types/Event/interface.ts:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L227)
+Defined in: [src/types/Event/interface.ts:228](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L228)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:227](https://github.com/PalisadoesFoun
 
 > **cursor**: `string`
 
-Defined in: [src/types/Event/interface.ts:271](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L271)
+Defined in: [src/types/Event/interface.ts:272](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L272)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:271](https://github.com/PalisadoesFoun
 
 > **node**: `object`
 
-Defined in: [src/types/Event/interface.ts:228](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L228)
+Defined in: [src/types/Event/interface.ts:229](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L229)
 
 #### allDay
 
