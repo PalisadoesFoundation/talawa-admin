@@ -15,11 +15,21 @@
   width: var(--space-11);
   flex-shrink: 0;
   border-right: var(--border-1) solid var(--color-gray-200);
-  padding-top: var(--space-10);
 }
 
 .timeHeader {
-  height: var(--space-10);
+  height: var(--space-11);
+  border-bottom: var(--border-1) solid var(--color-gray-200);
+  background-color: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.allDaySpacer {
+  height: var(--all-day-lane-height, var(--space-10));
+  border-bottom: var(--border-1) solid var(--color-gray-100);
+  background-color: var(--color-white);
 }
 
 .timeSlot {
@@ -107,7 +117,9 @@
   gap: var(--space-1);
   padding: var(--space-1);
   border-bottom: var(--border-1) solid var(--color-gray-100);
-  min-height: var(--space-0);
+  min-height: var(--all-day-lane-height, var(--space-10));
+  height: var(--all-day-lane-height, var(--space-10));
+  overflow: visible;
   background-color: var(--color-white);
 }
 

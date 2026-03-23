@@ -18,7 +18,10 @@ export class AdminEventPage {
       if (req.body.operationName === 'CreateEvent') {
         req.alias = 'CreateEvent';
       }
-      if (req.body.operationName === 'GetOrganizationEvents') {
+      if (
+        req.body.operationName === 'GetOrganizationEvents' ||
+        req.body.operationName === 'GetOrganizationEventsPreview'
+      ) {
         req.alias = 'eventsQuery';
       }
     });

@@ -156,15 +156,11 @@ const Calendar: React.FC<
   ): { startDate: string; endDate: string } => {
     const [year, month, day] = dayKey.split('-').map(Number);
 
-    const startDate = new Date(year, month - 1, day, 0, 0, 0, 0).toISOString();
+    const startDate = new Date(
+      Date.UTC(year, month - 1, day, 0, 0, 0, 0),
+    ).toISOString();
     const endDate = new Date(
-      year,
-      month - 1,
-      day,
-      23,
-      59,
-      59,
-      999,
+      Date.UTC(year, month - 1, day, 23, 59, 59, 999),
     ).toISOString();
 
     return { startDate, endDate };
