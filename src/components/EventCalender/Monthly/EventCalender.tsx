@@ -202,6 +202,8 @@ const Calendar: React.FC<
         ...prev,
         [dayKey]: fetchedEvents,
       }));
+    } catch {
+      // Keep preview events visible when lazy day expansion fetch fails.
     } finally {
       setLoadingDayKey(null);
     }
