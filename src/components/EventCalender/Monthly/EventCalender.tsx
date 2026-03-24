@@ -152,13 +152,17 @@ const Calendar: React.FC<
     };
   };
 
-  const buildLocalDayRange = (
+  const buildUtcDayRange = (
     dayKey: string,
   ): { startDate: string; endDate: string } => {
-    const localDay = dayjs(`${dayKey}T00:00:00`);
-
-    const startDate = localDay.startOf('day').toISOString();
-    const endDate = localDay.endOf('day').toISOString();
+    // Keep day keys stable across timezones for onlyStartOnDay filtering.
+    const [year, month, day] = dayKey.split('-').map(Number);
+    const startDate = new Date(
+      Date.UTC(year, month - 1, day, 0, 0, 0, 0),
+    ).toISOString();
+    const endDate = new Date(
+      Date.UTC(year, month - 1, day, 23, 59, 59, 999),
+    ).toISOString();
 
     return { startDate, endDate };
   };
@@ -177,12 +181,12 @@ const Calendar: React.FC<
     setLoadingDayKey(dayKey);
 
     try {
-      const { startDate, endDate } = buildLocalDayRange(dayKey);
+      const { startDate, endDate } = buildUtcDayRange(dayKey);
 
       const { data } = await fetchDayEvents({
         variables: {
           id: currentUrl,
-          first: 50,
+          first: 25,
           after: null,
           startDate,
           endDate,
