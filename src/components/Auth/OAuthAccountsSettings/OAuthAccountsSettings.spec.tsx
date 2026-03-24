@@ -13,6 +13,27 @@ const mockUseParams = vi.hoisted(() => vi.fn());
 const mockUseLocalStorage = vi.hoisted(() => vi.fn());
 const mockNotificationSuccess = vi.hoisted(() => vi.fn());
 const mockNotificationError = vi.hoisted(() => vi.fn());
+const enabledProvidersMock = vi.hoisted(() => [
+  {
+    id: 'GOOGLE',
+    displayName: 'Google',
+    scopes: ['openid', 'profile', 'email'],
+    clientId: 'test-google-client-id',
+    redirectUri: 'http://localhost/google/callback',
+    enabled: true,
+  },
+  {
+    id: 'GITHUB',
+    displayName: 'GitHub',
+    scopes: ['user:email'],
+    clientId: 'test-github-client-id',
+    redirectUri: 'http://localhost/github/callback',
+    enabled: true,
+  },
+]);
+const mockGetEnabledProviders = vi.hoisted(() =>
+  vi.fn(() => enabledProvidersMock),
+);
 
 const translations = JSON.parse(
   JSON.stringify(
@@ -37,6 +58,10 @@ vi.mock('react-router', async () => {
 
 vi.mock('utils/useLocalstorage', () => ({
   default: mockUseLocalStorage,
+}));
+
+vi.mock('config/oauthProviders', () => ({
+  getEnabledProviders: mockGetEnabledProviders,
 }));
 
 vi.mock('components/Auth/OAuthButton/GoogleOAuthButton', () => ({
@@ -246,6 +271,36 @@ describe('OAuthAccountsSettings', () => {
     expect(screen.queryByTestId('google-link-button')).not.toBeInTheDocument();
     expect(screen.getByTestId('github-link-button')).toBeInTheDocument();
     expect(screen.getByText('GOOGLE')).toBeInTheDocument();
+  });
+
+  it('skips rendering a connected account entry when provider is missing', () => {
+    mockUseParams.mockReturnValue({ userId: 'user-8' });
+    mockUseQuery.mockReturnValue({
+      data: {
+        user: {
+          oauthAccounts: [{ provider: undefined }],
+        },
+      },
+      loading: false,
+      error: undefined,
+      refetch: mockRefetch,
+    });
+
+    render(
+      <I18nextProvider i18n={i18nForTest}>
+        <OAuthAccountsSettings />
+      </I18nextProvider>,
+    );
+
+    expect(
+      screen.getByText(translations.connectedOauthAccounts),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: translations.Unlink }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(translations.noConnectedOauthAccounts),
+    ).not.toBeInTheDocument();
   });
 
   it('unlinks a provider and shows success toast', async () => {
