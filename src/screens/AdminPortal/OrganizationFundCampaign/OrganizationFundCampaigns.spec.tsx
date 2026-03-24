@@ -299,8 +299,8 @@ describe('FundCampaigns Screen', () => {
     const delayedLink = new StaticMockLink(delayedMocks, true);
 
     renderFundCampaign(delayedLink);
-    // Immediately check for loader
-    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+    // Immediately check for DataTable skeleton loader
+    expect(screen.getByTestId('datatable-loading')).toBeInTheDocument();
   });
 
   it('Displays campaigns with dates correctly', async () => {

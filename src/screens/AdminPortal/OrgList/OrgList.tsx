@@ -510,19 +510,15 @@ function OrgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table className={styles.table_fullWidth}>
-            <tbody>
-              <tr>
-                <PaginationList
-                  count={sortedOrganizations.length || 0}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </tr>
-            </tbody>
-          </table>
+          <div className={styles.table_fullWidth}>
+            <PaginationList
+              count={sortedOrganizations.length || 0}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </div>
         </>
       )}
       {/* Create Organization Modal */}
