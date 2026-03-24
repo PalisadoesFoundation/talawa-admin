@@ -54,6 +54,7 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
   centered = true,
   'data-testid': dataTestId,
   submitDisabled = false,
+  customFooter,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
@@ -85,7 +86,7 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
     }
   };
 
-  const customFooter = (
+  const defaultFooter = (
     <>
       <Button
         variant="secondary"
@@ -118,7 +119,7 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
       className={className}
       centered={centered}
       data-testid={dataTestId}
-      customFooter={customFooter}
+      customFooter={customFooter ?? defaultFooter}
     >
       <form
         id="crud-edit-form"

@@ -56,6 +56,16 @@ Additional CSS class name for the modal
 
 ***
 
+### customFooter?
+
+> `optional` **customFooter**: `ReactNode`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L195)
+
+Custom footer content to replace the default edit footer actions.
+
+***
+
 ### data-testid?
 
 > `optional` **data-testid**: `string`
