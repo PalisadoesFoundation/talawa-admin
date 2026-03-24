@@ -207,9 +207,9 @@ const orgFundCampaign = (): JSX.Element => {
       meta: { sortable: true },
     },
     {
-      id: 'fundingRaised',
+      id: 'amountRaised',
       header: t('raised'),
-      accessor: 'fundingRaised',
+      accessor: 'amountRaised',
       render: (value, row) => (
         <div
           className="d-flex justify-content-center fw-bold"
@@ -225,7 +225,7 @@ const orgFundCampaign = (): JSX.Element => {
       id: 'percentageRaised',
       header: t('percentageRaised'),
       accessor: (row) => {
-        const raised = row.fundingRaised ?? 0;
+        const raised = row.amountRaised ?? 0;
         const goal = row.goalAmount;
         return goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
       },

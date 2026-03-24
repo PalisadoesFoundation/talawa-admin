@@ -62,6 +62,7 @@ export const FUND_CAMPAIGN = gql`
             endAt
             currencyCode
             goalAmount
+            amountRaised
           }
         }
       }
@@ -118,6 +119,7 @@ export const USER_FUND_CAMPAIGNS = gql`
                   name
                   currencyCode
                   goalAmount
+                  amountRaised
                   startAt
                   endAt
                 }

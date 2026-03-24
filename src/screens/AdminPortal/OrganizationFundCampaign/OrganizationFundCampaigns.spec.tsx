@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -42,7 +42,7 @@ vi.mock('GraphQl/Queries/fundQueries', async () => {
                 endAt
                 currencyCode
                 goalAmount
-                fundingRaised
+                amountRaised
               }
             }
           }
@@ -107,9 +107,9 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
 
 const mockedUseParams = vi.mocked(useParams);
 
-const link1 = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCK_ERROR, true);
-const link3 = new StaticMockLink(EMPTY_MOCKS, true);
+let link1: StaticMockLink;
+let link2: StaticMockLink;
+let link3: StaticMockLink;
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
@@ -151,9 +151,13 @@ const renderFundCampaign = (link: ApolloLink): RenderResult => {
 describe('FundCampaigns Screen', () => {
   beforeEach(() => {
     mockedUseParams.mockReset();
+    link1 = new StaticMockLink(MOCKS, true);
+    link2 = new StaticMockLink(MOCK_ERROR, true);
+    link3 = new StaticMockLink(EMPTY_MOCKS, true);
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 

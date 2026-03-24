@@ -1,0 +1,59 @@
+.calendar_infocards {
+  composes: calendar_infocards from './EventCalender.module.css';
+}
+
+.holidays_card {
+  composes: holidays_card from './EventCalender.module.css';
+}
+
+.card_title {
+  composes: card_title from './EventCalender.module.css';
+}
+
+.card_list {
+  composes: card_list from './EventCalender.module.css';
+}
+
+.card_list_item {
+  composes: card_list_item from './EventCalender.module.css';
+}
+
+.holiday_date {
+  composes: holiday_date from './EventCalender.module.css';
+}
+
+.holiday_name {
+  composes: holiday_name from './EventCalender.module.css';
+}
+
+.events_card {
+  composes: events_card from './EventCalender.module.css';
+}
+
+.legend {
+  composes: legend from './EventCalender.module.css';
+}
+
+.eventsLegend {
+  composes: eventsLegend from './EventCalender.module.css';
+}
+
+.organizationIndicator {
+  composes: organizationIndicator from './EventCalender.module.css';
+}
+
+.legendText {
+  composes: legendText from './EventCalender.module.css';
+}
+
+.list_container_holidays {
+  composes: list_container_holidays from './EventCalender.module.css';
+}
+
+.holidayIndicator {
+  composes: holidayIndicator from './EventCalender.module.css';
+}
+
+.holidayText {
+  composes: holidayText from './EventCalender.module.css';
+}

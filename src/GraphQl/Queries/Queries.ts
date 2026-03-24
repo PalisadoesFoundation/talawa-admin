@@ -538,6 +538,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
     $startDate: DateTime
     $endDate: DateTime
     $includeRecurring: Boolean
+    $onlyStartOnDay: Boolean
   ) {
     organization(input: { id: $id }) {
       eventsCount
@@ -547,6 +548,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
         startDate: $startDate
         endDate: $endDate
         includeRecurring: $includeRecurring
+        onlyStartOnDay: $onlyStartOnDay
       ) {
         edges {
           node {
@@ -613,6 +615,61 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
         pageInfo {
           hasNextPage
           endCursor
+        }
+      }
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_EVENTS_PREVIEW = gql`
+  query GetOrganizationEventsPreview(
+    $id: String!
+    $startDate: DateTime
+    $endDate: DateTime
+    $includeRecurring: Boolean
+    $perDayLimit: Int
+  ) {
+    organization(input: { id: $id }) {
+      eventsPreview(
+        startDate: $startDate
+        endDate: $endDate
+        includeRecurring: $includeRecurring
+        perDayLimit: $perDayLimit
+      ) {
+        date
+        totalCount
+        hasMore
+        events {
+          id
+          name
+          description
+          startAt
+          endAt
+          startDate
+          endDate
+          allDay
+          location
+          isPublic
+          isRegisterable
+          isInviteOnly
+          isRecurringEventTemplate
+          baseEvent {
+            id
+            name
+          }
+          sequenceNumber
+          totalCount
+          hasExceptions
+          progressLabel
+          recurrenceDescription
+          creator {
+            id
+            name
+          }
+          attendees {
+            id
+            name
+          }
         }
       }
     }

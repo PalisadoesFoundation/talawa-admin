@@ -322,5 +322,6 @@
   "networkError": "网络错误",
   "organizationCard": {
     "card_aria": "机构卡片"
-  }
+  },
+  "oauthSectionAriaLabel": "OAuth 登录选项"
 }

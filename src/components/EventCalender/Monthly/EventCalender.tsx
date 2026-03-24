@@ -37,21 +37,26 @@ import EventListCard from 'shared-components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import type { JSX } from 'react';
+import { useLazyQuery } from '@apollo/client';
 import Button from 'shared-components/Button';
 import styles from './EventCalender.module.css';
+import MonthlyCalendarDays from './MonthlyCalendarDays';
+import CalendarInfoCards from './CalendarInfoCards';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import ChevronRight from '@mui/icons-material/ChevronRight';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
-import HolidayCard from '../../HolidayCards/HolidayCard';
+import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { holidays, weekdays, filterEvents } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
 import WeeklyEventCalender from '../Weekly/WeeklyEventCalender';
 import type {
   InterfaceEvent,
+  InterfaceEventEdge,
   InterfaceCalendarProps,
 } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useParams } from 'react-router';
 
 const Calendar: React.FC<
   InterfaceCalendarProps & {
@@ -66,19 +71,144 @@ const Calendar: React.FC<
   userRole,
   userId,
   viewType,
+  dayEventsResetKey,
+  dayHasMoreMap = {},
+  isMonthChangeDisabled = false,
   onMonthChange,
+  onCurrentDateChange,
   currentMonth,
   currentYear,
+  currentDateOfMonth,
 }) => {
   const { t, i18n } = useTranslation('translation', {
     keyPrefix: 'eventCalendar',
   });
   const { t: tErrors } = useTranslation('errors');
+  const { orgId: currentUrl } = useParams();
   const [selectedDate] = useState<Date | null>(null);
-  const [currentDate, setCurrentDate] = useState(() => new Date().getDate());
+  const [internalCurrentDate, setInternalCurrentDate] = useState(() =>
+    new Date().getDate(),
+  );
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
+  const [loadingDayKey, setLoadingDayKey] = useState<string | null>(null);
+  const [dayEventsMap, setDayEventsMap] = useState<
+    Record<string, InterfaceEvent[]>
+  >({});
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
+  const [fetchDayEvents] = useLazyQuery(GET_ORGANIZATION_EVENTS_PG, {
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-first',
+    errorPolicy: 'all',
+  });
+
+  const currentDate = currentDateOfMonth ?? internalCurrentDate;
+
+  const updateCurrentDate = (dayOfMonth: number): void => {
+    if (onCurrentDateChange) {
+      onCurrentDateChange(dayOfMonth);
+      return;
+    }
+    setInternalCurrentDate(dayOfMonth);
+  };
+
+  const mapEdgeToEvent = (edge: InterfaceEventEdge): InterfaceEvent => {
+    return {
+      id: edge.node.id,
+      name: edge.node.name,
+      description: edge.node.description || '',
+      startAt: edge.node.startAt,
+      endAt: edge.node.endAt,
+      startDate: edge.node.startDate,
+      endDate: edge.node.endDate,
+      startTime: edge.node.allDay
+        ? null
+        : edge.node.startAt
+          ? dayjs(edge.node.startAt).format('HH:mm:ss')
+          : null,
+      endTime: edge.node.allDay
+        ? null
+        : edge.node.endAt
+          ? dayjs(edge.node.endAt).format('HH:mm:ss')
+          : null,
+      allDay: edge.node.allDay,
+      location: edge.node.location || '',
+      isPublic: edge.node.isPublic,
+      isRegisterable: edge.node.isRegisterable,
+      isInviteOnly: edge.node.isInviteOnly,
+      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+      baseEvent: edge.node.baseEvent,
+      sequenceNumber: edge.node.sequenceNumber,
+      totalCount: edge.node.totalCount,
+      hasExceptions: edge.node.hasExceptions,
+      progressLabel: edge.node.progressLabel,
+      recurrenceDescription: edge.node.recurrenceDescription,
+      recurrenceRule: edge.node.recurrenceRule,
+      creator: {
+        id: edge.node.creator?.id || '',
+        name: edge.node.creator?.name || '',
+      },
+      attendees: edge.node.attendees || [],
+    };
+  };
+
+  const buildUtcDayRange = (
+    dayKey: string,
+  ): { startDate: string; endDate: string } => {
+    // Keep day keys stable across timezones for onlyStartOnDay filtering.
+    const [year, month, day] = dayKey.split('-').map(Number);
+    const startDate = new Date(
+      Date.UTC(year, month - 1, day, 0, 0, 0, 0),
+    ).toISOString();
+    const endDate = new Date(
+      Date.UTC(year, month - 1, day, 23, 59, 59, 999),
+    ).toISOString();
+
+    return { startDate, endDate };
+  };
+
+  const resetDayExpansionState = (): void => {
+    setExpanded(-1);
+    setLoadingDayKey(null);
+    setDayEventsMap({});
+  };
+
+  const fetchFullDayEvents = async (dayKey: string): Promise<void> => {
+    if (!currentUrl || loadingDayKey || dayKey in dayEventsMap) {
+      return;
+    }
+
+    setLoadingDayKey(dayKey);
+
+    try {
+      const { startDate, endDate } = buildUtcDayRange(dayKey);
+
+      const { data } = await fetchDayEvents({
+        variables: {
+          id: currentUrl,
+          first: 25,
+          after: null,
+          startDate,
+          endDate,
+          includeRecurring: true,
+          onlyStartOnDay: true,
+        },
+      });
+
+      const fetchedEvents = (data?.organization?.events?.edges || []).map(
+        (edge: InterfaceEventEdge) => mapEdgeToEvent(edge),
+      );
+
+      setDayEventsMap((prev) => ({
+        ...prev,
+        [dayKey]: fetchedEvents,
+      }));
+    } catch {
+      // Keep preview events visible when lazy day expansion fetch fails.
+    } finally {
+      setLoadingDayKey(null);
+    }
+  };
 
   useEffect(() => {
     function handleResize(): void {
@@ -98,10 +228,23 @@ const Calendar: React.FC<
     setEvents(filteredEvents);
   }, [eventData, orgData, userRole, userId]);
 
+  useEffect(() => {
+    resetDayExpansionState();
+  }, [currentMonth, currentYear, eventData]);
+
+  useEffect(() => {
+    if (typeof dayEventsResetKey !== 'number') {
+      return;
+    }
+    resetDayExpansionState();
+  }, [dayEventsResetKey]);
+
   /**
    * Moves the calendar view to the previous month.
    */
   const handlePrevMonth = (): void => {
+    resetDayExpansionState();
+
     const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
     const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
     onMonthChange(newMonth, newYear);
@@ -121,31 +264,37 @@ const Calendar: React.FC<
   }, [holidays, currentMonth]);
 
   const handleNextMonth = (): void => {
+    resetDayExpansionState();
+
     const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
     const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
     onMonthChange(newMonth, newYear);
   };
 
   const handlePrevDate = (): void => {
+    resetDayExpansionState();
+
     if (viewType === ViewType.WEEK) {
       const newDate = new Date(currentYear, currentMonth, currentDate - 7);
-      setCurrentDate(newDate.getDate());
+      updateCurrentDate(newDate.getDate());
       onMonthChange(newDate.getMonth(), newDate.getFullYear());
     } else if (currentDate > 1) {
-      setCurrentDate(currentDate - 1);
+      updateCurrentDate(currentDate - 1);
     } else {
       const newMonth = currentMonth === 0 ? 11 : currentMonth - 1;
       const newYear = currentMonth === 0 ? currentYear - 1 : currentYear;
       const lastDayOfPrevMonth = new Date(newYear, newMonth + 1, 0).getDate();
-      setCurrentDate(lastDayOfPrevMonth);
+      updateCurrentDate(lastDayOfPrevMonth);
       onMonthChange(newMonth, newYear);
     }
   };
 
   const handleNextDate = (): void => {
+    resetDayExpansionState();
+
     if (viewType === ViewType.WEEK) {
       const newDate = new Date(currentYear, currentMonth, currentDate + 7);
-      setCurrentDate(newDate.getDate());
+      updateCurrentDate(newDate.getDate());
       onMonthChange(newDate.getMonth(), newDate.getFullYear());
     } else {
       const lastDayOfCurrentMonth = new Date(
@@ -154,20 +303,22 @@ const Calendar: React.FC<
         0,
       ).getDate();
       if (currentDate < lastDayOfCurrentMonth) {
-        setCurrentDate(currentDate + 1);
+        updateCurrentDate(currentDate + 1);
       } else {
         const newMonth = currentMonth === 11 ? 0 : currentMonth + 1;
         const newYear = currentMonth === 11 ? currentYear + 1 : currentYear;
-        setCurrentDate(1);
+        updateCurrentDate(1);
         onMonthChange(newMonth, newYear);
       }
     }
   };
 
   const handleTodayButton = (): void => {
+    resetDayExpansionState();
+
     const today = new Date();
     onMonthChange(today.getMonth(), today.getFullYear());
-    setCurrentDate(today.getDate());
+    updateCurrentDate(today.getDate());
   };
 
   const timezoneString = `UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${String(
@@ -262,7 +413,7 @@ const Calendar: React.FC<
             <div
               className={
                 expanded === -100
-                  ? styles.expand_list_container
+                  ? styles.expand_list_container_day
                   : styles.list_container
               }
             >
@@ -300,227 +451,13 @@ const Calendar: React.FC<
           </div>
         </div>
 
-        {renderInfoCards()}
+        <CalendarInfoCards
+          filteredHolidays={filteredHolidays}
+          currentYear={currentYear}
+          language={i18n.language}
+        />
       </>
     );
-  };
-
-  const renderInfoCards = (): JSX.Element => (
-    <div className={styles.calendar_infocards}>
-      <section className={styles.holidays_card} aria-label={t('holidays')}>
-        <h3 className={styles.card_title}>{t('holidays')}</h3>
-        <ul className={styles.card_list}>
-          {filteredHolidays.length > 0 ? (
-            filteredHolidays.map((holiday, index) => {
-              // Parse the holiday date (MM-DD format) and get localized month name
-              const holidayDate = dayjs(
-                `${currentYear}-${holiday.date}`,
-                'YYYY-MM-DD',
-              );
-              const localizedMonth = holidayDate
-                .locale(i18n.language)
-                .format('MMMM');
-              const day = holiday.date.slice(3);
-
-              // Create a translation key from the holiday name
-              // Convert to camelCase: "May Day / Labour Day" -> "mayDayLabourDay"
-              const translationKey = holiday.name
-                .replace(/[^\w\s]/g, '') // Remove special characters
-                .split(/\s+/) // Split by whitespace
-                .map((word, idx) =>
-                  idx === 0
-                    ? word.toLowerCase()
-                    : word.charAt(0).toUpperCase() +
-                      word.slice(1).toLowerCase(),
-                )
-                .join('');
-
-              // Get the translated holiday name with fallback
-              const translatedName = t(
-                ['holidayNames', translationKey].join('.'),
-                { defaultValue: holiday.name },
-              );
-
-              return (
-                <li className={styles.card_list_item} key={index}>
-                  <span className={styles.holiday_date}>
-                    {localizedMonth} {day}
-                  </span>
-                  <span className={styles.holiday_name}>{translatedName}</span>
-                </li>
-              );
-            })
-          ) : (
-            <li className={styles.card_list_item}>
-              {t('noHolidaysAvailable')}
-            </li>
-          )}
-        </ul>
-      </section>
-
-      <section className={styles.events_card} aria-label={t('events')}>
-        <h3 className={styles.card_title}>{t('events')}</h3>
-        <div className={styles.legend}>
-          <div className={styles.eventsLegend}>
-            <span className={styles.organizationIndicator}></span>
-            <span className={styles.legendText}>
-              {t('eventsCreatedByOrganization')}
-            </span>
-          </div>
-          <div className={styles.list_container_holidays}>
-            <span className={styles.holidayIndicator}></span>
-            <span className={styles.holidayText}>{t('holidays')}</span>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-
-  const renderDays = (): JSX.Element[] => {
-    const monthStart = new Date(currentYear, currentMonth, 1);
-    const monthEnd = new Date(currentYear, currentMonth + 1, 0);
-    const startDate = new Date(
-      monthStart.getFullYear(),
-      monthStart.getMonth(),
-      monthStart.getDate() - monthStart.getDay(),
-    );
-    const endDate = new Date(
-      monthEnd.getFullYear(),
-      monthEnd.getMonth(),
-      monthEnd.getDate() + (6 - monthEnd.getDay()),
-    );
-    const days = [];
-    let currentDate = startDate;
-    while (currentDate <= endDate) {
-      days.push(currentDate);
-      currentDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate() + 1,
-      );
-    }
-
-    return days.map((date, index) => {
-      const today = new Date();
-      const className = [
-        date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
-        date.toLocaleDateString() === today.toLocaleDateString()
-          ? styles.day__today
-          : '',
-        date.getMonth() !== currentMonth ? styles.day__outside : '',
-        selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
-        styles.day,
-      ].join(' ');
-      const toggleExpand = (index: number): void => {
-        if (expanded === index) setExpanded(-1);
-        else setExpanded(index);
-      };
-
-      const allEventsList: JSX.Element[] =
-        events
-          ?.filter((datas) => {
-            const dateStr = dayjs.utc(date).local().format('YYYY-MM-DD');
-
-            // For all-day events, use startDate
-            if (datas.allDay && datas.startDate) {
-              return datas.startDate === dateStr;
-            }
-
-            // For timed events, use startAt
-            if (datas.startAt) {
-              return (
-                dayjs.utc(datas.startAt).local().format('YYYY-MM-DD') ===
-                dateStr
-              );
-            }
-
-            return false;
-          })
-          .map((datas: InterfaceEvent) => (
-            <EventListCard
-              refetchEvents={refetchEvents}
-              userRole={userRole}
-              key={datas.id}
-              id={datas.id}
-              location={datas.location}
-              name={datas.name}
-              description={datas.description}
-              startAt={datas.startAt}
-              endAt={datas.endAt}
-              startDate={datas.startDate}
-              endDate={datas.endDate}
-              startTime={datas.startTime}
-              endTime={datas.endTime}
-              allDay={datas.allDay}
-              isPublic={datas.isPublic}
-              isRegisterable={datas.isRegisterable}
-              isInviteOnly={Boolean(datas.isInviteOnly)}
-              attendees={datas.attendees || []}
-              creator={datas.creator}
-              userId={userId}
-              // Recurring event fields
-              isRecurringEventTemplate={datas.isRecurringEventTemplate}
-              baseEvent={datas.baseEvent}
-              sequenceNumber={datas.sequenceNumber}
-              totalCount={datas.totalCount}
-              hasExceptions={datas.hasExceptions}
-              progressLabel={datas.progressLabel}
-              recurrenceDescription={datas.recurrenceDescription}
-              recurrenceRule={datas.recurrenceRule}
-            />
-          )) || [];
-
-      const holidayList: JSX.Element[] = filteredHolidays
-        .filter((holiday) => holiday.date === dayjs(date).format('MM-DD'))
-        .map((holiday) => (
-          <HolidayCard key={holiday.name} holidayName={holiday.name} />
-        ));
-
-      const shouldShowViewMore =
-        allEventsList.length > 2 ||
-        (windowWidth <= 700 && allEventsList.length > 0);
-
-      return (
-        <div
-          key={index}
-          className={`${className} ${allEventsList?.length > 0 ? styles.day__events : ''}`}
-          data-testid="day"
-          data-has-events={allEventsList?.length > 0}
-        >
-          {date.getDate()}
-          {date.getMonth() !== currentMonth ? null : (
-            <div
-              className={expanded === index ? styles.expand_list_container : ''}
-            >
-              <div
-                className={
-                  expanded === index
-                    ? styles.expand_event_list
-                    : styles.event_list
-                }
-              >
-                <div>{holidayList}</div>
-                {expanded === index
-                  ? allEventsList
-                  : holidayList?.length > 0
-                    ? allEventsList?.slice(0, 1)
-                    : allEventsList?.slice(0, 2)}
-              </div>
-              {shouldShowViewMore && (
-                <Button
-                  variant="primary"
-                  className={styles.btn__more}
-                  data-testid="more"
-                  onClick={() => toggleExpand(index)}
-                >
-                  {expanded === index ? t('viewLess') : t('viewAll')}
-                </Button>
-              )}
-            </div>
-          )}
-        </div>
-      );
-    });
   };
 
   return (
@@ -538,6 +475,7 @@ const Calendar: React.FC<
                 <Button
                   variant="outlined"
                   className={styles.buttonEventCalendar}
+                  disabled={isMonthChangeDisabled}
                   onClick={
                     viewType === ViewType.DAY || viewType === ViewType.WEEK
                       ? handlePrevDate
@@ -551,6 +489,7 @@ const Calendar: React.FC<
                 <Button
                   variant="outlined"
                   className={styles.buttonEventCalendar}
+                  disabled={isMonthChangeDisabled}
                   onClick={
                     viewType === ViewType.DAY || viewType === ViewType.WEEK
                       ? handleNextDate
@@ -576,6 +515,7 @@ const Calendar: React.FC<
             <div>
               <Button
                 className={styles.editButton}
+                disabled={isMonthChangeDisabled}
                 onClick={handleTodayButton}
                 data-testid="today"
               >
@@ -594,8 +534,33 @@ const Calendar: React.FC<
                   </div>
                 ))}
               </div>
-              <div className={styles.calendar__days}>{renderDays()}</div>
-              {renderInfoCards()}
+              <div className={styles.calendar__days}>
+                <MonthlyCalendarDays
+                  currentYear={currentYear}
+                  currentMonth={currentMonth}
+                  selectedDate={selectedDate}
+                  expanded={expanded}
+                  loadingDayKey={loadingDayKey}
+                  windowWidth={windowWidth}
+                  events={events}
+                  dayEventsMap={dayEventsMap}
+                  dayHasMoreMap={dayHasMoreMap}
+                  filteredHolidays={filteredHolidays}
+                  userRole={userRole}
+                  userId={userId}
+                  refetchEvents={refetchEvents}
+                  toggleExpand={(index) => {
+                    if (expanded === index) setExpanded(-1);
+                    else setExpanded(index);
+                  }}
+                  fetchFullDayEvents={fetchFullDayEvents}
+                />
+              </div>
+              <CalendarInfoCards
+                filteredHolidays={filteredHolidays}
+                currentYear={currentYear}
+                language={i18n.language}
+              />
             </>
           ) : viewType === ViewType.YEAR ? (
             <YearlyEventCalender

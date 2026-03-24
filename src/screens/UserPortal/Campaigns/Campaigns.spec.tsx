@@ -9,7 +9,7 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -17,6 +17,7 @@ import type { ApolloLink } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import Campaigns from './Campaigns';
 import { vi, it, expect, describe } from 'vitest';
+import dayjs from 'dayjs';
 import {
   MOCKS,
   MOCKS_WITH_FUND_NO_CAMPAIGNS,
@@ -26,6 +27,19 @@ import {
   USER_FUND_CAMPAIGNS_ERROR,
   MOCKS_WITH_PENDING_CAMPAIGN,
 } from './CampaignsMocks';
+
+const routerMocks = vi.hoisted(() => ({
+  useParams: vi.fn(),
+}));
+
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -44,10 +58,11 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
 });
 
 const { setItem } = useLocalStorage();
+const mockedUseParams = vi.mocked(useParams);
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
-const link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
+let link1: StaticMockLink;
+let link2: StaticMockLink;
+let link3: StaticMockLink;
 
 const cTranslations = JSON.parse(
   JSON.stringify(
@@ -83,19 +98,16 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
 
 describe('Testing User Campaigns Screen', () => {
   let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     user = userEvent.setup();
     setItem('userId', 'userId');
-  });
+    mockedUseParams.mockReset();
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
 
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: vi.fn(() => ({ orgId: 'orgId' })),
-      };
-    });
+    link1 = new StaticMockLink(MOCKS);
+    link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
+    link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
   });
 
   afterEach(() => {
@@ -121,7 +133,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.unmock('react-router');
+    mockedUseParams.mockReturnValue({});
     render(
       <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/campaigns/']}>
@@ -384,8 +396,122 @@ describe('Testing User Campaigns Screen', () => {
     expect(progressCells.length).toBeGreaterThan(0);
 
     progressCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('0%');
+      expect(cell).toHaveTextContent('50%');
     });
+  });
+
+  it('Falls back to 0 when amountRaised is missing from API response', async () => {
+    const startAt = dayjs().subtract(1, 'day').toISOString();
+    const endAt = dayjs().add(30, 'days').toISOString();
+
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MOCKS[0].request.query,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      campaigns: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'campaignNoRaised',
+                              name: 'Campaign No Raised',
+                              currencyCode: 'USD',
+                              goalAmount: 1000,
+                              startAt,
+                              endAt,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign No Raised')).toBeInTheDocument();
+    });
+
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells.some((cell) => cell.textContent?.includes('$0'))).toBe(
+      true,
+    );
+
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells.some((cell) => cell.textContent?.includes('0%'))).toBe(
+      true,
+    );
+  });
+
+  it('Shows 0% when funding goal is 0', async () => {
+    const startAt = dayjs().subtract(1, 'day').toISOString();
+    const endAt = dayjs().add(30, 'days').toISOString();
+
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MOCKS[0].request.query,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      campaigns: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'campaignZeroGoal',
+                              name: 'Campaign Zero Goal',
+                              currencyCode: 'USD',
+                              goalAmount: 0,
+                              amountRaised: 500,
+                              startAt,
+                              endAt,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign Zero Goal')).toBeInTheDocument();
+    });
+
+    const progressCell = screen.getByTestId('progressCell');
+    expect(progressCell).toHaveTextContent('0%');
   });
 
   it('Renders campaigns list with campaigns data', async () => {

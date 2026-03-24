@@ -322,5 +322,6 @@
   "networkError": "नेटवर्क त्रुटि",
   "organizationCard": {
     "card_aria": "संस्था कार्ड"
-  }
+  },
+  "oauthSectionAriaLabel": "OAuth लॉगिन विकल्प"
 }

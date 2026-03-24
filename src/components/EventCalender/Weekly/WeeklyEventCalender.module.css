@@ -15,11 +15,21 @@
   width: var(--space-11);
   flex-shrink: 0;
   border-right: var(--border-1) solid var(--color-gray-200);
-  padding-top: var(--space-10);
 }
 
 .timeHeader {
-  height: var(--space-10);
+  height: var(--space-11);
+  border-bottom: var(--border-1) solid var(--color-gray-200);
+  background-color: var(--color-white);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.allDaySpacer {
+  height: var(--all-day-lane-height, var(--space-10));
+  border-bottom: var(--border-1) solid var(--color-gray-100);
+  background-color: var(--color-white);
 }
 
 .timeSlot {
@@ -101,6 +111,33 @@
   position: relative;
 }
 
+.allDayLane {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-bottom: var(--border-1) solid var(--color-gray-100);
+  min-height: var(--all-day-lane-height, var(--space-10));
+  height: var(--all-day-lane-height, var(--space-10));
+  overflow: visible;
+  background-color: var(--color-white);
+}
+
+.allDayEventCard {
+  position: relative;
+  background-color: var(--color-blue-100);
+  border-left: var(--border-3) solid var(--color-blue-500);
+  border-top: var(--border-3) solid var(--color-blue-500);
+  border-radius: var(--radius-md);
+  overflow: visible;
+  pointer-events: auto;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: var(--space-8);
+}
+
 .gridCell {
   height: var(--space-12);
   border-bottom: var(--border-1) solid var(--color-gray-50);
@@ -122,14 +159,21 @@
   /* height is set inline by getEventStyle — do NOT override it here */
 }
 
-.allDayEvent {
-  top: var(--space-0);
-  left: 2.5%;
-  height: var(--space-10-75);
-}
-
 /* Inner EventListCard - allow it to size based on content */
 .eventContainer > div:first-child {
+  flex: 0 0 auto;
+  padding: var(--space-1) var(--space-2) !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0;
+  cursor: pointer;
+  min-height: 0 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.allDayEventCard > div:first-child {
   flex: 0 0 auto;
   padding: var(--space-1) var(--space-2) !important;
   box-shadow: none !important;
