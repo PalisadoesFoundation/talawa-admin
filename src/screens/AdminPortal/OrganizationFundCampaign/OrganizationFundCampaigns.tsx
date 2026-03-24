@@ -20,12 +20,16 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button';
 import { DataTable } from 'shared-components/DataTable/DataTable';
-import { useSimpleTableData } from 'shared-components/DataTable/hooks/useSimpleTableData';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
+import type {
+  IColumnDef,
+  ISortState,
+} from 'types/shared-components/DataTable/interface';
 
 interface InterfaceFundCampaignQueryData {
   fund?: {
     name?: string;
+    isArchived?: boolean;
     campaigns?: {
       edges?: Array<{ node: InterfaceCampaignInfo }>;
     };
@@ -45,6 +49,7 @@ const orgFundCampaign = (): JSX.Element => {
 
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
+  const [sortBy, setSortBy] = useState<ISortState[]>([]);
 
   const { isOpen, open, close } = useModalState();
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
@@ -73,35 +78,63 @@ const orgFundCampaign = (): JSX.Element => {
     },
   );
 
-  const extractCampaigns = useCallback(
-    (data: InterfaceFundCampaignQueryData) =>
-      data?.fund?.campaigns?.edges?.map((edge) => edge.node) ?? [],
-    [],
-  );
-
   const {
     rows: campaignsData,
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaign,
-  } = useSimpleTableData<InterfaceCampaignInfo, InterfaceFundCampaignQueryData>(
-    campaignsQuery,
-    { path: extractCampaigns },
-  );
+  } = useTableData<
+    InterfaceCampaignInfo,
+    InterfaceCampaignInfo,
+    InterfaceFundCampaignQueryData
+  >(campaignsQuery, {
+    path: (data) => data?.fund?.campaigns,
+  });
 
-  const filteredCampaigns = useMemo(() => {
-    return campaignsData.filter((currentCampaign) =>
+  const displayedCampaigns = useMemo(() => {
+    const filteredCampaigns = campaignsData.filter((currentCampaign) =>
       currentCampaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
-  }, [campaignsData, searchText]);
+
+    const primarySort = sortBy[0];
+    if (!primarySort) {
+      return filteredCampaigns;
+    }
+
+    const getComparableValue = (campaign: InterfaceCampaignInfo): number => {
+      switch (primarySort.columnId) {
+        case 'startAt':
+          return dayjs(campaign.startAt).valueOf();
+        case 'endAt':
+          return dayjs(campaign.endAt).valueOf();
+        case 'goalAmount':
+          return Number(campaign.goalAmount);
+        default:
+          return 0;
+      }
+    };
+
+    const directionFactor = primarySort.direction === 'desc' ? -1 : 1;
+    return filteredCampaigns
+      .map((campaign, index) => ({ campaign, index }))
+      .sort((a, b) => {
+        const baseDiff =
+          getComparableValue(a.campaign) - getComparableValue(b.campaign);
+        if (baseDiff !== 0) {
+          return baseDiff * directionFactor;
+        }
+        return a.index - b.index;
+      })
+      .map((item) => item.campaign);
+  }, [campaignsData, searchText, sortBy]);
 
   const campaignIndexMap = useMemo(() => {
     const map = new Map<string, number>();
-    filteredCampaigns.forEach((currentCampaign, idx) => {
+    displayedCampaigns.forEach((currentCampaign, idx) => {
       map.set(currentCampaign.id, idx + 1);
     });
     return map;
-  }, [filteredCampaigns]);
+  }, [displayedCampaigns]);
 
   const handleClick = useCallback(
     (campaignId: string): void => {
@@ -111,8 +144,8 @@ const orgFundCampaign = (): JSX.Element => {
   );
 
   const { fundName, isArchived } = useMemo(() => {
-    const currentFundName = campaignsQuery.data?.fund?.name || 'Fund';
-    const currentIsArchived = false;
+    const currentFundName = campaignsQuery.data?.fund?.name ?? '';
+    const currentIsArchived = campaignsQuery.data?.fund?.isArchived ?? false;
     return { fundName: currentFundName, isArchived: currentIsArchived };
   }, [campaignsQuery.data]);
 
@@ -335,7 +368,7 @@ const orgFundCampaign = (): JSX.Element => {
 
       {!campaignLoading &&
       campaignsQuery.data &&
-      filteredCampaigns.length === 0 &&
+      displayedCampaigns.length === 0 &&
       searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
@@ -347,7 +380,7 @@ const orgFundCampaign = (): JSX.Element => {
         />
       ) : !campaignLoading &&
         campaignsQuery.data &&
-        filteredCampaigns.length === 0 ? (
+        displayedCampaigns.length === 0 ? (
         <EmptyState
           icon={<Campaign />}
           message={t('noCampaignsFound')}
@@ -356,16 +389,19 @@ const orgFundCampaign = (): JSX.Element => {
       ) : (
         <div className={styles.listBox}>
           <DataTable<InterfaceCampaignInfo>
-            data={filteredCampaigns}
+            data={displayedCampaigns}
             columns={columns}
             loading={campaignLoading}
             error={null}
             rowKey="id"
+            serverSort
+            sortBy={sortBy}
+            onSortChange={({ sortBy: nextSortBy }) => setSortBy(nextSortBy)}
             paginationMode="client"
             pageSize={10}
             tableClassName={`${styles.listTable} ${styles.overflowVisible}`}
           />
-          {filteredCampaigns.length > 0 && (
+          {displayedCampaigns.length > 0 && (
             <div className={'w-100 text-center my-4'}>
               <h5 className="m-0">{tCommon('endOfResults')}</h5>
             </div>

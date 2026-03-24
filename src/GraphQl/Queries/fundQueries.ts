@@ -53,6 +53,7 @@ export const FUND_CAMPAIGN = gql`
     fund(input: $input) {
       id
       name
+      isArchived
       campaigns(first: 10) {
         edges {
           node {

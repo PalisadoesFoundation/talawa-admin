@@ -15,7 +15,7 @@ import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 import { DataTable } from 'shared-components/DataTable/DataTable';
-import { useSimpleTableData } from 'shared-components/DataTable/hooks/useSimpleTableData';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 interface InterfaceFundListQueryData {
@@ -64,21 +64,18 @@ const organizationFunds = (): JSX.Element => {
     },
   });
 
-  const extractFunds = useCallback(
-    (data: InterfaceFundListQueryData) =>
-      data?.organization?.funds?.edges?.map((edge) => edge.node) ?? [],
-    [],
-  );
-
   const {
     rows: funds,
     loading: fundLoading,
     error: fundError,
     refetch: refetchFunds,
-  } = useSimpleTableData<InterfaceFundInfo, InterfaceFundListQueryData>(
-    fundsQuery,
-    { path: extractFunds },
-  );
+  } = useTableData<
+    InterfaceFundInfo,
+    InterfaceFundInfo,
+    InterfaceFundListQueryData
+  >(fundsQuery, {
+    path: (data) => data?.organization?.funds,
+  });
 
   useEffect(() => {
     document.title = t('funds.title');
