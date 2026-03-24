@@ -193,9 +193,9 @@ describe('WeeklyEventCalender Component', () => {
     // We can find it by finding the parent of the event-list-card
     const eventContainer = eventCard.parentElement;
 
-    // Calculate expected top and height using UTC (matches component's dayjs.utc() parsing)
-    const startDate = dayjs.utc(todayISO);
-    const endDate = dayjs.utc(todayISO).add(1, 'hour');
+    // Calculate expected top and height using utc-to-local conversion (matches component logic)
+    const startDate = dayjs.utc(todayISO).local();
+    const endDate = dayjs.utc(todayISO).local().add(1, 'hour');
     const startHour = startDate.hour();
     const startMinute = startDate.minute();
     const durationMinutes = endDate.diff(startDate, 'minute');
@@ -462,12 +462,14 @@ describe('WeeklyEventCalender Component', () => {
     const eventContainer = eventCard.parentElement;
 
     const CELL_HEIGHT_PX = 80;
-    const expectedTop = 14 * CELL_HEIGHT_PX;
-    const expectedHeight = CELL_HEIGHT_PX;
-    const startHour = 14;
-    const offsetIndex = Math.floor(startHour / 3) % 3;
-    const offsetPercent = offsetIndex * 2.5;
-    const expectedLeft = 2.5 + offsetPercent;
+    const startDate = dayjs.utc(mockEvent[0].startAt as string).local();
+    const endDate = dayjs.utc(mockEvent[0].endAt as string).local();
+    const startHour = startDate.hour();
+    const startMinute = startDate.minute();
+    const expectedTop = (startHour + startMinute / 60) * CELL_HEIGHT_PX;
+    const expectedHeight =
+      Math.max(endDate.diff(startDate, 'minute'), 15) * (CELL_HEIGHT_PX / 60);
+    const expectedLeft = 2;
 
     expect(eventContainer).toHaveStyle(`top: ${expectedTop}px`);
     expect(eventContainer).toHaveStyle(`height: ${expectedHeight}px`);
@@ -536,6 +538,67 @@ describe('WeeklyEventCalender Component', () => {
     expect(screen.getByText('Later Event')).toBeInTheDocument();
   });
 
+  it('sorts events by end time when start times are equal', () => {
+    const sameStart = dayjs(today)
+      .hour(10)
+      .minute(0)
+      .second(0)
+      .utc()
+      .toISOString();
+
+    const sameStartEvents: InterfaceEvent[] = [
+      {
+        id: 'same-start-long',
+        location: 'Test',
+        name: 'Long Event',
+        description: 'Test',
+        startAt: sameStart,
+        endAt: dayjs(sameStart).add(2, 'hour').toISOString(),
+        startTime: '10:00:00',
+        endTime: '12:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+      {
+        id: 'same-start-short',
+        location: 'Test',
+        name: 'Short Event',
+        description: 'Test',
+        startAt: sameStart,
+        endAt: dayjs(sameStart).add(1, 'hour').toISOString(),
+        startTime: '10:00:00',
+        endTime: '11:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+    ];
+
+    renderComponent({
+      eventData: sameStartEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const renderedNames = screen
+      .getAllByTestId('event-list-card')
+      .map((card) => card.textContent);
+
+    expect(renderedNames.indexOf('Short Event')).toBeLessThan(
+      renderedNames.indexOf('Long Event'),
+    );
+  });
+
   it('handles overlapping events with column placement logic', async () => {
     const baseTime = dayjs(today).hour(10).minute(0).second(0).utc();
 
@@ -585,6 +648,84 @@ describe('WeeklyEventCalender Component', () => {
 
     expect(screen.getByText('Event A')).toBeInTheDocument();
     expect(screen.getByText('Event B')).toBeInTheDocument();
+  });
+
+  it('reuses an existing column when a prior column is available', () => {
+    const baseTime = dayjs(today).hour(10).minute(0).second(0).utc();
+
+    const columnReuseEvents: InterfaceEvent[] = [
+      {
+        id: 'reuse-1',
+        location: 'Test',
+        name: 'Col 0 Early',
+        description: 'Test',
+        startAt: baseTime.toISOString(),
+        endAt: baseTime.add(1, 'hour').toISOString(),
+        startTime: '10:00:00',
+        endTime: '11:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+      {
+        id: 'reuse-2',
+        location: 'Test',
+        name: 'Col 1 Long',
+        description: 'Test',
+        startAt: baseTime.add(30, 'minute').toISOString(),
+        endAt: baseTime.add(2, 'hour').toISOString(),
+        startTime: '10:30:00',
+        endTime: '12:00:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+      {
+        id: 'reuse-3',
+        location: 'Test',
+        name: 'Should Reuse Col 0',
+        description: 'Test',
+        startAt: baseTime.add(1, 'hour').toISOString(),
+        endAt: baseTime.add(90, 'minute').toISOString(),
+        startTime: '11:00:00',
+        endTime: '11:30:00',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        isInviteOnly: false,
+        attendees: [],
+        creator: { id: 'creator1', name: 'Creator' },
+      },
+    ];
+
+    renderComponent({
+      eventData: columnReuseEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const firstContainer = screen.getByText('Col 0 Early').parentElement;
+    const secondContainer = screen.getByText('Col 1 Long').parentElement;
+    const thirdContainer = screen.getByText('Should Reuse Col 0').parentElement;
+
+    expect(firstContainer).toBeTruthy();
+    expect(secondContainer).toBeTruthy();
+    expect(thirdContainer).toBeTruthy();
+
+    // With two concurrent columns: col 0 left=2%, col 1 left=50%.
+    // The third event starts when col 0 is free and should reuse that column.
+    expect(firstContainer).toHaveStyle('left: 2%');
+    expect(secondContainer).toHaveStyle('left: 50%');
+    expect(thirdContainer).toHaveStyle('left: 2%');
   });
 
   it('displays multi-day events that start before current day', async () => {
@@ -843,6 +984,97 @@ describe('WeeklyEventCalender Component', () => {
     expect(screen.getAllByText('Range All Day')).toHaveLength(2);
   });
 
+  it('renders multiple all-day events for the same date with all-day labels', () => {
+    const targetDate = dayjs(today)
+      .startOf('week')
+      .add(2, 'day')
+      .format('YYYY-MM-DD');
+    const targetDateEndExclusive = dayjs(targetDate)
+      .add(1, 'day')
+      .format('YYYY-MM-DD');
+
+    const allDayEvents: InterfaceEvent[] = [
+      {
+        ...mockEventData[0],
+        id: 'all-day-a',
+        name: 'All Day A',
+        allDay: true,
+        startDate: targetDate,
+        endDate: targetDateEndExclusive,
+        startAt: null,
+        endAt: null,
+      },
+      {
+        ...mockEventData[0],
+        id: 'all-day-b',
+        name: 'All Day B',
+        allDay: true,
+        startDate: targetDate,
+        endDate: targetDateEndExclusive,
+        startAt: null,
+        endAt: null,
+      },
+    ];
+
+    renderComponent({
+      eventData: allDayEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getByText('All Day A')).toBeInTheDocument();
+    expect(screen.getByText('All Day B')).toBeInTheDocument();
+  });
+
+  it('renders all-day and timed events in the same day without dropping timed events', () => {
+    const sameDayLocal = dayjs(today).startOf('week').add(4, 'day');
+    const sameDayDate = sameDayLocal.format('YYYY-MM-DD');
+    const sameDayEndExclusive = sameDayLocal.add(1, 'day').format('YYYY-MM-DD');
+    const timedStart = sameDayLocal.hour(9).minute(30).second(0).utc();
+    const timedEnd = timedStart.add(90, 'minute');
+
+    const mixedDayEvents: InterfaceEvent[] = [
+      {
+        ...mockEventData[0],
+        id: 'mixed-all-day',
+        name: 'Mixed All Day',
+        allDay: true,
+        startDate: sameDayDate,
+        endDate: sameDayEndExclusive,
+        startAt: null,
+        endAt: null,
+      },
+      {
+        ...mockEventData[0],
+        id: 'mixed-timed',
+        name: 'Mixed Timed',
+        allDay: false,
+        startAt: timedStart.toISOString(),
+        endAt: timedEnd.toISOString(),
+      },
+    ];
+
+    renderComponent({
+      eventData: mixedDayEvents,
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    expect(screen.getByText('Mixed All Day')).toBeInTheDocument();
+    expect(screen.getByText('Mixed Timed')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `${timedStart.local().format('h:mm A')} - ${timedEnd.local().format('h:mm A')}`,
+      ),
+    ).toBeInTheDocument();
+  });
+
   // ── Accessibility ────────────────────────────────────────────────────────
 
   it('renders the week grid with role="grid" and aria-label', () => {
@@ -1004,6 +1236,31 @@ describe('WeeklyEventCalender Component', () => {
     expect(document.activeElement).toBe(lastCell);
   });
 
+  it('ArrowLeft on the first column does not throw or move focus elsewhere', () => {
+    const { container } = renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const cells =
+      container.querySelectorAll<HTMLDivElement>('[data-weekly-col]');
+    const firstCell = cells[0];
+    firstCell.focus();
+
+    expect(() => {
+      firstCell.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }),
+      );
+    }).not.toThrow();
+
+    // Focus stays on first cell since there is no previous column
+    expect(document.activeElement).toBe(firstCell);
+  });
+
   it('renders with data-testid="weekly-calendar-container" on the root element', () => {
     renderComponent({
       eventData: [],
@@ -1017,7 +1274,7 @@ describe('WeeklyEventCalender Component', () => {
     expect(screen.getByTestId('weekly-calendar-container')).toBeInTheDocument();
   });
 
-  it('triggers click on day column when Enter or Space is pressed (l141-143 coverage)', () => {
+  it('triggers click on day column when Enter is pressed', () => {
     renderComponent({
       eventData: [],
       refetchEvents: mockRefetchEvents,
@@ -1038,13 +1295,30 @@ describe('WeeklyEventCalender Component', () => {
     firstCell.dispatchEvent(
       new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }),
     );
-    expect(clickSpy).toHaveBeenCalledTimes(1);
 
-    // Focus and press Space
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('triggers click on day column when Space is pressed', () => {
+    renderComponent({
+      eventData: [],
+      refetchEvents: mockRefetchEvents,
+      orgData: mockOrgData,
+      userRole: UserRole.ADMINISTRATOR,
+      userId: 'admin1',
+      currentDate: today,
+    });
+
+    const dayCells = screen.getAllByRole('gridcell');
+    const firstCell = dayCells[0];
+
+    const clickSpy = vi.spyOn(firstCell, 'click');
+
     firstCell.dispatchEvent(
       new KeyboardEvent('keydown', { key: ' ', bubbles: true }),
     );
-    expect(clickSpy).toHaveBeenCalledTimes(2);
+
+    expect(clickSpy).toHaveBeenCalledTimes(1);
   });
 
   it('handles undefined eventData gracefully (l165 coverage)', () => {

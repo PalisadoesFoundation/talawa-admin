@@ -19,12 +19,13 @@
  */
 
 import React, { useState, useEffect, useMemo, JSX } from 'react';
-import { useQuery } from '@apollo/client';
+import { NetworkStatus, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import styles from './OrganizationEvents.module.css';
 import {
   GET_ORGANIZATION_EVENTS_PG,
+  GET_ORGANIZATION_EVENTS_PREVIEW,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
@@ -55,6 +56,7 @@ interface IEventEdge {
     location?: string | null;
     isPublic: boolean;
     isRegisterable: boolean;
+    isInviteOnly?: boolean;
     // Recurring event fields
     isRecurringEventTemplate?: boolean;
     baseEvent?: {
@@ -73,18 +75,29 @@ interface IEventEdge {
       url: string;
       mimeType: string;
     }>;
-    creator: {
+    creator?: {
       id: string;
       name: string;
     };
-    organization: {
+    attendees?: Array<{
+      id: string;
+      name: string;
+    }>;
+    organization?: {
       id: string;
       name: string;
     };
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
   };
   cursor: string;
+}
+
+interface IEventsPreviewDay {
+  date: string;
+  totalCount: number;
+  hasMore: boolean;
+  events: IEventEdge['node'][];
 }
 
 export enum ViewType {
@@ -107,40 +120,166 @@ function organizationEvents(): JSX.Element {
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentDateOfMonth, setCurrentDateOfMonth] = useState(
+    new Date().getDate(),
+  );
+  const [queryMonth, setQueryMonth] = useState(currentMonth);
+  const [queryYear, setQueryYear] = useState(currentYear);
+  const [queryCurrentDateOfMonth, setQueryCurrentDateOfMonth] =
+    useState(currentDateOfMonth);
   const [searchByName, setSearchByName] = useState('');
+  const [dayEventsResetKey, setDayEventsResetKey] = useState(0);
   const { orgId: currentUrl } = useParams();
 
-  const handleChangeView = (item: string | null): void => {
-    if (item) setViewType(item as ViewType);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setQueryMonth(currentMonth);
+      setQueryYear(currentYear);
+      setQueryCurrentDateOfMonth(currentDateOfMonth);
+    }, 350);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [currentMonth, currentYear, currentDateOfMonth]);
+
+  const handleChangeView = (item: string | number): void => {
+    setViewType(item as ViewType);
   };
 
   const handleMonthChange = (month: number, year: number): void => {
+    if (month === currentMonth && year === currentYear) {
+      return;
+    }
+
+    const daysInTargetMonth = dayjs(new Date(year, month, 1)).daysInMonth();
+    setCurrentDateOfMonth((prev) => Math.min(prev, daysInTargetMonth));
     setCurrentMonth(month);
     setCurrentYear(year);
-    // No manual refetch - let useQuery handle it automatically with cache-first policy
+    // No manual refetch - let useQuery handle variable updates.
   };
 
+  const handleCurrentDateChange = (dayOfMonth: number): void => {
+    setCurrentDateOfMonth(dayOfMonth);
+  };
+
+  const isMonthView = viewType === ViewType.MONTH;
+
+  const effectiveQueryMonth = isMonthView ? queryMonth : currentMonth;
+  const effectiveQueryYear = isMonthView ? queryYear : currentYear;
+  const effectiveQueryCurrentDateOfMonth = isMonthView
+    ? queryCurrentDateOfMonth
+    : currentDateOfMonth;
+
+  const monthStartDate = dayjs(
+    new Date(effectiveQueryYear, effectiveQueryMonth, 1),
+  )
+    .startOf('month')
+    .toISOString();
+  const monthEndDate = dayjs(
+    new Date(effectiveQueryYear, effectiveQueryMonth, 1),
+  )
+    .endOf('month')
+    .toISOString();
+
+  const currentViewDate = dayjs(
+    new Date(
+      effectiveQueryYear,
+      effectiveQueryMonth,
+      effectiveQueryCurrentDateOfMonth,
+    ),
+  );
+
+  const { startDate, endDate } = useMemo(() => {
+    if (viewType === ViewType.DAY) {
+      return {
+        startDate: currentViewDate.startOf('day').toISOString(),
+        endDate: currentViewDate.endOf('day').toISOString(),
+      };
+    }
+
+    if (viewType === ViewType.WEEK) {
+      return {
+        startDate: currentViewDate.startOf('week').toISOString(),
+        endDate: currentViewDate.endOf('week').toISOString(),
+      };
+    }
+
+    return {
+      startDate: monthStartDate,
+      endDate: monthEndDate,
+    };
+  }, [currentViewDate, monthEndDate, monthStartDate, viewType]);
+
+  const detailedFirst =
+    viewType === ViewType.DAY ? 40 : viewType === ViewType.WEEK ? 80 : 120;
+
   const {
-    data: eventData,
-    error: eventDataError,
-    refetch: refetchEvents,
+    data: monthPreviewData,
+    error: monthPreviewError,
+    refetch: refetchMonthPreviewEvents,
+    loading: monthPreviewLoading,
+    networkStatus: monthPreviewNetworkStatus,
+  } = useQuery(GET_ORGANIZATION_EVENTS_PREVIEW, {
+    variables: {
+      id: currentUrl,
+      startDate,
+      endDate,
+      includeRecurring: true,
+      perDayLimit: 2,
+    },
+    skip: !isMonthView,
+    notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-first',
+  });
+
+  const {
+    data: detailedEventData,
+    error: detailedEventError,
+    refetch: refetchDetailedEvents,
+    loading: detailedEventLoading,
+    networkStatus: detailedNetworkStatus,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 199,
+      first: detailedFirst,
       after: null,
-      startDate: dayjs(new Date(currentYear, currentMonth, 1))
-        .startOf('month')
-        .toISOString(),
-      endDate: dayjs(new Date(currentYear, currentMonth, 1))
-        .endOf('month')
-        .toISOString(),
+      startDate,
+      endDate,
       includeRecurring: true,
     },
+    skip: isMonthView,
     notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'cache-first',
+    nextFetchPolicy: 'cache-first',
   });
+
+  const eventDataError = isMonthView ? monthPreviewError : detailedEventError;
+  const eventLoading = isMonthView ? monthPreviewLoading : detailedEventLoading;
+  const networkStatus = isMonthView
+    ? monthPreviewNetworkStatus
+    : detailedNetworkStatus;
+
+  const refetchEvents = (): void => {
+    const resetDayEventsCache = (): void => {
+      setDayEventsResetKey((prev) => prev + 1);
+    };
+
+    if (isMonthView) {
+      void refetchMonthPreviewEvents().finally(resetDayEventsCache);
+      return;
+    }
+    void refetchDetailedEvents().finally(resetDayEventsCache);
+  };
+
+  const isMonthChangeDisabled =
+    isMonthView &&
+    eventLoading &&
+    (networkStatus === NetworkStatus.loading ||
+      networkStatus === NetworkStatus.setVariables);
 
   const {
     data: orgData,
@@ -159,51 +298,76 @@ function organizationEvents(): JSX.Element {
   const userRole =
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
-  // Normalize event data for EventCalendar with proper typing
-  const allEvents: InterfaceEvent[] = (
-    eventData?.organization?.events?.edges || []
-  ).map((edge: IEventEdge) => {
+  const mapNodeToEvent = (node: IEventEdge['node']): InterfaceEvent => {
     return {
-      id: edge.node.id,
-      name: edge.node.name,
-      description: edge.node.description || '',
-      startAt: edge.node.startAt,
-      endAt: edge.node.endAt,
-      startDate: edge.node.startDate,
-      endDate: edge.node.endDate,
-      startTime: edge.node.allDay
+      id: node.id,
+      name: node.name,
+      description: node.description || '',
+      startAt: node.startAt,
+      endAt: node.endAt,
+      startDate: node.startDate,
+      endDate: node.endDate,
+      startTime: node.allDay
         ? null
-        : edge.node.startAt
-          ? dayjs(edge.node.startAt).format('HH:mm:ss')
+        : node.startAt
+          ? dayjs(node.startAt).format('HH:mm:ss')
           : null,
-      endTime: edge.node.allDay
+      endTime: node.allDay
         ? null
-        : edge.node.endAt
-          ? dayjs(edge.node.endAt).format('HH:mm:ss')
+        : node.endAt
+          ? dayjs(node.endAt).format('HH:mm:ss')
           : null,
-      allDay: edge.node.allDay,
-      location: edge.node.location || '',
-      isPublic: edge.node.isPublic,
-      isRegisterable: edge.node.isRegisterable,
-      // Add recurring event information
-      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-      baseEvent: edge.node.baseEvent,
-      sequenceNumber: edge.node.sequenceNumber,
-      totalCount: edge.node.totalCount,
-      hasExceptions: edge.node.hasExceptions,
-      progressLabel: edge.node.progressLabel,
-      recurrenceDescription: edge.node.recurrenceDescription,
-      recurrenceRule: edge.node.recurrenceRule,
+      allDay: node.allDay,
+      location: node.location || '',
+      isPublic: node.isPublic,
+      isRegisterable: node.isRegisterable,
+      isRecurringEventTemplate: node.isRecurringEventTemplate,
+      baseEvent: node.baseEvent,
+      sequenceNumber: node.sequenceNumber,
+      totalCount: node.totalCount,
+      hasExceptions: node.hasExceptions,
+      progressLabel: node.progressLabel,
+      recurrenceDescription: node.recurrenceDescription,
+      recurrenceRule: node.recurrenceRule,
       creator: {
-        id: edge.node.creator.id,
-        name: edge.node.creator.name,
+        id: node.creator?.id || '',
+        name: node.creator?.name || '',
       },
-      attendees: [], // Adjust if attendees are added to schema
+      attendees: node.attendees || [],
+      isInviteOnly: Boolean(node.isInviteOnly),
     };
-  });
+  };
+
+  // Normalize event data for EventCalendar with proper typing
+  const allEvents: InterfaceEvent[] = isMonthView
+    ? (monthPreviewData?.organization?.eventsPreview || []).flatMap(
+        (day: IEventsPreviewDay) =>
+          (day.events || []).map((eventNode) => mapNodeToEvent(eventNode)),
+      )
+    : (detailedEventData?.organization?.events?.edges || []).map(
+        (edge: IEventEdge) => mapNodeToEvent(edge.node),
+      );
+
+  const monthDayHasMoreMap: Record<string, boolean> = useMemo(() => {
+    if (!isMonthView) {
+      return {};
+    }
+
+    return (monthPreviewData?.organization?.eventsPreview || []).reduce(
+      (acc: Record<string, boolean>, day: IEventsPreviewDay) => {
+        acc[day.date] = day.hasMore;
+        return acc;
+      },
+      {},
+    );
+  }, [isMonthView, monthPreviewData]);
 
   // Filter events based on search term (case-insensitive search across name, description, and location)
   const events: InterfaceEvent[] = useMemo(() => {
+    if (isMonthView) {
+      return allEvents;
+    }
+
     if (!searchByName.trim()) {
       return allEvents;
     }
@@ -305,9 +469,14 @@ function organizationEvents(): JSX.Element {
           userId={userId}
           userRole={userRole}
           viewType={viewType}
+          dayEventsResetKey={dayEventsResetKey}
+          dayHasMoreMap={monthDayHasMoreMap}
+          isMonthChangeDisabled={isMonthChangeDisabled}
           onMonthChange={handleMonthChange}
+          onCurrentDateChange={handleCurrentDateChange}
           currentMonth={currentMonth}
           currentYear={currentYear}
+          currentDateOfMonth={currentDateOfMonth}
         />
 
         <CreateEventModal

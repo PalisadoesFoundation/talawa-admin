@@ -34,10 +34,21 @@
   flex-direction: column;
   padding: var(--space-2);
   width: fit-content;
-  z-index: 10;
+  z-index: 50;
   position: absolute;
   top: 0;
   left: 0;
+  background-color: var(--expandListContainer-bg);
+  border: var(--border-1) solid var(--expandListContainer-border);
+  border-radius: var(--space-2);
+  margin: var(--space-2);
+}
+
+.expand_list_container_day {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-2);
+  width: fit-content;
   background-color: var(--expandListContainer-bg);
   border: var(--border-1) solid var(--expandListContainer-border);
   border-radius: var(--space-2);
@@ -78,7 +89,6 @@
   margin: var(--space-1);
   margin-top: var(--space-2);
   border-radius: var(--space-2);
-  z-index: 10;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }

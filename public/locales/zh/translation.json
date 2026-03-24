@@ -2473,6 +2473,7 @@
     "events": "活动",
     "eventsCreatedByOrganization": "组织创建的活动",
     "today": "今天",
+    "loading": "加载中...",
     "viewLess": "查看更少",
     "viewAll": "查看全部",
     "noHolidaysAvailable": "没有可用的节假日",

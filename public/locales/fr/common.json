@@ -322,5 +322,6 @@
   "networkError": "Erreur réseau",
   "organizationCard": {
     "card_aria": "Carte de l'organisation"
-  }
+  },
+  "oauthSectionAriaLabel": "Options de connexion OAuth"
 }
