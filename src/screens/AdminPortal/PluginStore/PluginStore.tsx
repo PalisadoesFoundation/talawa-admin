@@ -155,14 +155,20 @@ export default function PluginStore() {
       </div>
       {/* Pagination Controls */}
       <div className={styles.paginationContainer}>
-        <PaginationList
-          count={filteredPlugins.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          data-testid="plugin-pagination"
-        />
+        <table>
+          <tbody>
+            <tr>
+              <PaginationList
+                count={filteredPlugins.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                data-testid="plugin-pagination"
+              />
+            </tr>
+          </tbody>
+        </table>
       </div>
       {/* Plugin Details Modal */}
       <PluginModal

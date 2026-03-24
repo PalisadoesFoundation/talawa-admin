@@ -493,16 +493,20 @@ export default function Organizations(): React.JSX.Element {
                 </>
               )}
             </div>
-            {/* Use the real dataset size to avoid rendering phantom pages. */}
-            <div>
-              <PaginationList
-                count={organizations.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </div>
+            <table>
+              <tbody>
+                <tr>
+                  {/* Use the real dataset size to avoid rendering phantom pages. */}
+                  <PaginationList
+                    count={organizations.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
