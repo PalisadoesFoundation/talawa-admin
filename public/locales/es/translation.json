@@ -10,6 +10,16 @@
     "continueWith": "Continuar con {{provider}}",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "OAuthAccountsSettings": {
+    "userIdNotAvailable": "ID de usuario no disponible.",
+    "unableToLoadOAuthAccounts": "No se pueden cargar las cuentas OAuth en este momento.",
+    "missingOauthProviders": "Proveedores OAuth faltantes.",
+    "bothGoogleAndGitHubLinked": "Google y GitHub ya están vinculados.",
+    "connectedOauthAccounts": "Cuentas OAuth conectadas.",
+    "noConnectedOauthAccounts": "No hay cuentas OAuth conectadas.",
+    "Unlink": "Desvinculación",
+    "unlinkSuccess": "Se desvincul\u00f3 {{provider}} correctamente."
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "customRecurrence": "Recurrencia personalizada",
