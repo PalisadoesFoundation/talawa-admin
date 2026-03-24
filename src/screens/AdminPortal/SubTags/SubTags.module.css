@@ -177,7 +177,7 @@ form label,
 
 .createButton:hover {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--color-black-30);
+    var(--border-shadow-xs) var(--color-black-25);
   background-color: var(--color-gray-50) !important;
   color: var(--color-gray-700) !important;
   border: var(--border-1) solid var(--color-gray-700) !important;
