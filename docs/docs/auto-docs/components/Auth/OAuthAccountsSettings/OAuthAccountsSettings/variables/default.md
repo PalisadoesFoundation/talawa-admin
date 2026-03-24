@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<`OAuthAccountsSettingsProps`\>
 
-Defined in: [src/components/Auth/OAuthAccountsSettings/OAuthAccountsSettings.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthAccountsSettings/OAuthAccountsSettings.tsx#L35)
+Defined in: [src/components/Auth/OAuthAccountsSettings/OAuthAccountsSettings.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OAuthAccountsSettings/OAuthAccountsSettings.tsx#L32)
 
 Displays OAuth account linkage status and actions for a user.
 

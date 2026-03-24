@@ -18,7 +18,8 @@
     "connectedOauthAccounts": "Comptes OAuth connect\u00e9s.",
     "noConnectedOauthAccounts": "Aucun compte OAuth connect\u00e9.",
     "Unlink": "Dissocier",
-    "unlinkSuccess": "Dissociation r\u00e9ussie de {{provider}}."
+    "unlinkSuccess": "Dissociation r\u00e9ussie de {{provider}}.",
+    "unlinkConfirmation": "Êtes-vous sûr de vouloir dissocier {{provider}} de votre compte ?"
   },
   "ends": "Prend fin",
   "occurrences": "Occurrences",

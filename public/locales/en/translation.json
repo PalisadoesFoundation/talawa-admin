@@ -16,7 +16,8 @@
     "connectedOauthAccounts": "Connected OAuth accounts.",
     "noConnectedOauthAccounts": "No connected OAuth accounts.",
     "Unlink": "Unlink",
-    "unlinkSuccess": "Successfully unlinked {{provider}}."
+    "unlinkSuccess": "Successfully unlinked {{provider}}.",
+    "unlinkConfirmation": "Are you sure you want to unlink your {{provider}} account?"
   },
   "workshops": "Workshops",
   "securedRouteForUser": {

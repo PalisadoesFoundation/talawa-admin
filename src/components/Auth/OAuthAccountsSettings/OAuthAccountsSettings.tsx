@@ -13,6 +13,7 @@ import { OAuthProviderKey } from 'types/Auth/auth';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OAuthAccountsSettings.module.css';
 import { useTranslation } from 'react-i18next';
+import { getEnabledProviders } from 'config/oauthProviders';
 
 /**
  * Props for {@link OAuthAccountsSettings}.
@@ -21,11 +22,7 @@ type OAuthAccountsSettingsProps = {
   id?: string;
 };
 
-/**
- * Provider list used to determine missing OAuth connections.
- */
-const SUPPORTED_PROVIDERS: OAuthProviderKey[] = ['GOOGLE', 'GITHUB'];
-
+const EnabledProviders = getEnabledProviders();
 /**
  * Displays OAuth account linkage status and actions for a user.
  *
@@ -47,8 +44,8 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
 
   const storedUserId = getItem('id') || getItem('userId');
   const currentId =
-    (location.state?.id as string | undefined) ||
     id ||
+    (location.state?.id as string | undefined) ||
     params.userId ||
     (storedUserId as string) ||
     '';
@@ -72,8 +69,15 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
     connectedAccounts.map((account) => account.provider?.toUpperCase()),
   );
 
-  const missingProviders = SUPPORTED_PROVIDERS.filter(
-    (provider) => !connectedProviders.has(provider),
+  const missingProviders = EnabledProviders.filter(
+    (provider) => !connectedProviders.has(provider.id),
+  );
+
+  const hasMissingGoogle = missingProviders.some(
+    (provider) => provider.id === 'GOOGLE',
+  );
+  const hasMissingGitHub = missingProviders.some(
+    (provider) => provider.id === 'GITHUB',
   );
 
   /**
@@ -82,7 +86,13 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
    * @param provider - Provider to unlink.
    * @returns Promise resolved when unlink flow completes.
    */
-  const handleUnlink = async (provider: OAuthProviderKey): Promise<void> => {
+  const handleUnlink = async (provider: string): Promise<void> => {
+    const shouldUnlink = window.confirm(t('unlinkConfirmation', { provider }));
+
+    if (!shouldUnlink) {
+      return;
+    }
+
     try {
       setUnlinkingProvider(provider);
       await unlinkOAuthAccount({
@@ -136,10 +146,10 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
               <p className={styles.message}>{t('bothGoogleAndGitHubLinked')}</p>
             ) : (
               <div className={styles.buttons}>
-                {missingProviders.includes('GOOGLE') && (
+                {hasMissingGoogle && (
                   <GoogleOAuthButton mode="link" size="sm" />
                 )}
-                {missingProviders.includes('GITHUB') && (
+                {hasMissingGitHub && (
                   <GitHubOAuthButton mode="link" size="sm" />
                 )}
               </div>
@@ -157,8 +167,14 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
             ) : (
               <div className={styles.connectedList}>
                 {connectedAccounts.map((account) => {
-                  const provider =
-                    account.provider?.toUpperCase() as OAuthProviderKey;
+                  const provider = account.provider?.toUpperCase() as
+                    | OAuthProviderKey
+                    | undefined;
+
+                  if (!provider) {
+                    return null;
+                  }
+
                   return (
                     <div key={provider} className={styles.connectedItem}>
                       <span className={styles.providerName}>{provider}</span>

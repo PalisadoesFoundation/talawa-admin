@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -75,6 +75,7 @@ describe('OAuthAccountsSettings', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     mockUseLocation.mockReturnValue({ state: undefined });
     mockUseParams.mockReturnValue({});
@@ -100,6 +101,8 @@ describe('OAuthAccountsSettings', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   it('shows no user id message when no id can be resolved', () => {
@@ -226,7 +229,7 @@ describe('OAuthAccountsSettings', () => {
     mockUseQuery.mockReturnValue({
       data: {
         user: {
-          oauthAccounts: [{ provider: 'google' }],
+          oauthAccounts: [{ provider: 'GOOGLE' }],
         },
       },
       loading: false,
@@ -269,6 +272,9 @@ describe('OAuthAccountsSettings', () => {
     );
 
     await waitFor(() => {
+      expect(window.confirm).toHaveBeenCalledWith(
+        translations.unlinkConfirmation.replace('{{provider}}', 'GOOGLE'),
+      );
       expect(mockUnlinkMutation).toHaveBeenCalledWith({
         variables: { provider: 'GOOGLE' },
       });
@@ -276,6 +282,41 @@ describe('OAuthAccountsSettings', () => {
       expect(mockNotificationSuccess).toHaveBeenCalledWith(
         'Successfully unlinked GOOGLE.',
       );
+    });
+  });
+
+  it('does not unlink when confirmation is cancelled', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    mockUseParams.mockReturnValue({ userId: 'user-7' });
+    mockUseQuery.mockReturnValue({
+      data: {
+        user: {
+          oauthAccounts: [{ provider: 'GOOGLE' }],
+        },
+      },
+      loading: false,
+      error: undefined,
+      refetch: mockRefetch,
+    });
+
+    render(
+      <I18nextProvider i18n={i18nForTest}>
+        <OAuthAccountsSettings />
+      </I18nextProvider>,
+    );
+
+    await userEvent.click(
+      screen.getByRole('button', { name: translations.Unlink }),
+    );
+
+    await waitFor(() => {
+      expect(window.confirm).toHaveBeenCalledWith(
+        translations.unlinkConfirmation.replace('{{provider}}', 'GOOGLE'),
+      );
+      expect(mockUnlinkMutation).not.toHaveBeenCalled();
+      expect(mockRefetch).not.toHaveBeenCalled();
+      expect(mockNotificationSuccess).not.toHaveBeenCalled();
+      expect(mockNotificationError).not.toHaveBeenCalled();
     });
   });
 

@@ -1060,6 +1060,9 @@ export const USER_OAUTH_ACCOUNTS = gql`
     user(input: $input) {
       oauthAccounts {
         provider
+        email
+        linkedAt
+        lastUsedAt
       }
     }
   }

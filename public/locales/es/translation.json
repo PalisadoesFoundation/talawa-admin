@@ -17,8 +17,9 @@
     "bothGoogleAndGitHubLinked": "Google y GitHub ya están vinculados.",
     "connectedOauthAccounts": "Cuentas OAuth conectadas.",
     "noConnectedOauthAccounts": "No hay cuentas OAuth conectadas.",
-    "Unlink": "Desvinculación",
-    "unlinkSuccess": "Se desvincul\u00f3 {{provider}} correctamente."
+    "Unlink": "Desvincular",
+    "unlinkSuccess": "Se desvincul\u00f3 {{provider}} correctamente.",
+    "unlinkConfirmation": "¿Estás seguro de que deseas desvincular {{provider}}?"
   },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",

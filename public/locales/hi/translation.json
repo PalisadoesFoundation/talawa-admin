@@ -18,7 +18,8 @@
     "connectedOauthAccounts": "जुड़े हुए OAuth खाते।",
     "noConnectedOauthAccounts": "कोई जुड़े हुए OAuth खाते नहीं हैं।",
     "Unlink": "लिंक रद्द करें",
-    "unlinkSuccess": "{{provider}} को सफलतापूर्वक अलग कर दिया गया।"
+    "unlinkSuccess": "{{provider}} को सफलतापूर्वक अलग कर दिया गया।",
+    "unlinkConfirmation": "क्या आप वाकई {{provider}} को अलग करना चाहते हैं?"
   },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",

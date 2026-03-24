@@ -110,7 +110,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
           {activeTab === tCommon('security') && (
             <div className={styles.securitySection}>
               <Security />
-              <OAuthAccountsSettings />
+              <OAuthAccountsSettings id={userId} />
             </div>
           )}
           {activeTab === tCommon('organizations') && <UserOrganizations />}
