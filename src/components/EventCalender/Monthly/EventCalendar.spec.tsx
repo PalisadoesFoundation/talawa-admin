@@ -1619,7 +1619,7 @@ describe('Calendar', () => {
     expect(fetchDayEventsMock).toHaveBeenCalledWith({
       variables: expect.objectContaining({
         id: 'org-1',
-        first: 50,
+        first: 25,
         after: null,
         includeRecurring: true,
         onlyStartOnDay: true,
