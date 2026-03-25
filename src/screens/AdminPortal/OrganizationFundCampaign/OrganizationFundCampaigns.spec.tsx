@@ -33,6 +33,7 @@ vi.mock('GraphQl/Queries/fundQueries', async () => {
         fund(input: $input) {
           id
           name
+          isArchived
           campaigns(first: 10) {
             edges {
               node {
@@ -438,6 +439,58 @@ describe('FundCampaigns Screen', () => {
     await waitFor(() => {
       expect(screen.getByText('Campaign 1')).toBeInTheDocument();
     });
+  });
+
+  it('should sort campaigns by funding goal when clicking funding goal header', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    const fundingGoalHeader = screen.getByText('Funding Goal');
+    expect(fundingGoalHeader).toBeInTheDocument();
+
+    await userEvent.click(fundingGoalHeader);
+    await waitFor(() => {
+      const goalCells = screen.getAllByTestId('goalCell');
+      expect(goalCells.length).toBeGreaterThan(0);
+    });
+
+    await userEvent.click(fundingGoalHeader);
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+    });
+  });
+
+  it('should disable add campaign button when fund is archived', async () => {
+    mockRouteParams();
+    const archivedFundMocks = [
+      {
+        request: {
+          query: MOCKS[0].request.query,
+          variables: { input: { id: 'fundId' } },
+        },
+        result: {
+          data: {
+            fund: {
+              id: 'fundId',
+              name: 'Archived Fund',
+              isArchived: true,
+              campaigns: { edges: [] },
+            },
+          },
+        },
+      },
+    ];
+
+    const archivedLink = new StaticMockLink(archivedFundMocks, true);
+    renderFundCampaign(archivedLink);
+
+    const addCampaignBtn = await screen.findByTestId('addCampaignBtn');
+    expect(addCampaignBtn).toBeDisabled();
   });
 
   it('should render campaign name cells with correct data-testid', async () => {

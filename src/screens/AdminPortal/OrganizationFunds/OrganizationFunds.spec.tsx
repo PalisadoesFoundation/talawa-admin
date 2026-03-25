@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
@@ -479,6 +480,49 @@ describe('OrganizationFunds Screen =>', () => {
     // Verify "End of results" message is displayed
     await waitFor(() => {
       expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should render archived status when a fund is archived', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    const archivedFundMocks = [
+      {
+        request: {
+          query: MOCKS[0].request.query,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      id: 'archived-fund-1',
+                      name: 'Archived Fund',
+                      createdAt: dayjs().subtract(5, 'days').toISOString(),
+                      isArchived: true,
+                      isTaxDeductible: false,
+                      creator: { name: 'Jane Doe' },
+                      updater: null,
+                      organization: { name: 'Org 1' },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ];
+    const archivedLink = new StaticMockLink(archivedFundMocks, true);
+    renderOrganizationFunds(archivedLink);
+
+    await waitFor(() => {
+      const statusCell = screen.getByTestId('datatable-cell-status');
+      expect(statusCell).toHaveTextContent(/^Archived$/i);
     });
   });
 
