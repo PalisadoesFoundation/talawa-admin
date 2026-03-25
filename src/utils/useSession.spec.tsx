@@ -38,7 +38,9 @@ vi.mock('react-i18next', async (importOriginal) => {
   };
 });
 
-const mockClearAllItems = vi.fn();
+const { mockClearAllItems } = vi.hoisted(() => ({
+  mockClearAllItems: vi.fn(),
+}));
 
 vi.mock('./useLocalstorage', () => ({
   default: vi.fn(() => ({

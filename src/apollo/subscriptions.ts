@@ -60,7 +60,6 @@ export const configureSubscriptions = (nextDeps: ISubscriptionDeps): void => {
 };
 let initialized = false;
 let wsClient: GraphQLWsClient | null = null;
-const { getItem } = useLocalStorage();
 /**
  * Idempotent cleanup function to dispose of the WebSocket client.
  * Safely handles errors and ensures the wsClient is nullified after disposal.
@@ -91,7 +90,14 @@ export const initializeSubscriptions = (): void => {
   wsClient = createClient({
     url: deps.wsUrl,
     connectionParams: () => {
-      let token = getItem('token');
+      let token: string | null = null;
+      try {
+        const storage = useLocalStorage();
+        token = storage?.getItem?.('token') ?? null;
+      } catch {
+        token = null;
+      }
+
       return {
         ...(token ? { authorization: BEARER_PREFIX + token } : {}),
         'Accept-Language': i18n.language,

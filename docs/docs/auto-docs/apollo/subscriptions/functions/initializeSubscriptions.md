@@ -6,7 +6,7 @@
 
 > **initializeSubscriptions**(): `void`
 
-Defined in: [src/apollo/subscriptions.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/apollo/subscriptions.ts#L88)
+Defined in: [src/apollo/subscriptions.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/apollo/subscriptions.ts#L87)
 
 ## Returns
 
