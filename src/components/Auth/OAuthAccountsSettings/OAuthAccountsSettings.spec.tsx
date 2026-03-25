@@ -1,9 +1,11 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import dayjs from 'dayjs';
 import { I18nextProvider } from 'react-i18next';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import OAuthAccountsSettings from './OAuthAccountsSettings';
+import { formatDate } from 'utils/dateFormatter';
 import i18nForTest from 'utils/i18nForTest';
 
 const mockUseQuery = vi.hoisted(() => vi.fn());
@@ -34,7 +36,22 @@ const enabledProvidersMock = vi.hoisted(() => [
 const mockGetEnabledProviders = vi.hoisted(() =>
   vi.fn(() => enabledProvidersMock),
 );
-
+const linkedAtDate = dayjs().subtract(6, 'day').startOf('day').toISOString();
+const lastUsedAtDate = dayjs().subtract(2, 'day').startOf('day').toISOString();
+const oauthAccounts = [
+  {
+    provider: 'GOOGLE',
+    email: 'google.user@example.com',
+    linkedAt: linkedAtDate,
+    lastUsedAt: lastUsedAtDate,
+  },
+  {
+    provider: 'GITHUB',
+    email: 'github.user@example.com',
+    linkedAt: linkedAtDate,
+    lastUsedAt: lastUsedAtDate,
+  },
+];
 const translations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation?.OAuthAccountsSettings ??
@@ -224,7 +241,7 @@ describe('OAuthAccountsSettings', () => {
     mockUseQuery.mockReturnValue({
       data: {
         user: {
-          oauthAccounts: [{ provider: 'GOOGLE' }, { provider: 'GITHUB' }],
+          oauthAccounts: oauthAccounts,
         },
       },
       loading: false,
@@ -254,7 +271,9 @@ describe('OAuthAccountsSettings', () => {
     mockUseQuery.mockReturnValue({
       data: {
         user: {
-          oauthAccounts: [{ provider: 'GOOGLE' }],
+          oauthAccounts: oauthAccounts.filter(
+            (account) => account.provider === 'GOOGLE',
+          ),
         },
       },
       loading: false,
@@ -271,6 +290,15 @@ describe('OAuthAccountsSettings', () => {
     expect(screen.queryByTestId('google-link-button')).not.toBeInTheDocument();
     expect(screen.getByTestId('github-link-button')).toBeInTheDocument();
     expect(screen.getByText('GOOGLE')).toBeInTheDocument();
+    expect(
+      screen.getByText('Email: google.user@example.com'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(`Linked at: ${formatDate(linkedAtDate)}`),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(`Last used: ${formatDate(lastUsedAtDate)}`),
+    ).toBeInTheDocument();
   });
 
   it('skips rendering a connected account entry when provider is missing', () => {
@@ -308,7 +336,7 @@ describe('OAuthAccountsSettings', () => {
     mockUseQuery.mockReturnValue({
       data: {
         user: {
-          oauthAccounts: [{ provider: 'GOOGLE' }],
+          oauthAccounts: [oauthAccounts[0]],
         },
       },
       loading: false,
@@ -346,7 +374,7 @@ describe('OAuthAccountsSettings', () => {
     mockUseQuery.mockReturnValue({
       data: {
         user: {
-          oauthAccounts: [{ provider: 'GOOGLE' }],
+          oauthAccounts: [oauthAccounts[0]],
         },
       },
       loading: false,
@@ -380,7 +408,7 @@ describe('OAuthAccountsSettings', () => {
     mockUseQuery.mockReturnValue({
       data: {
         user: {
-          oauthAccounts: [{ provider: 'GITHUB' }],
+          oauthAccounts: [oauthAccounts[0]],
         },
       },
       loading: false,
@@ -409,7 +437,7 @@ describe('OAuthAccountsSettings', () => {
     mockUseQuery.mockReturnValue({
       data: {
         user: {
-          oauthAccounts: [{ provider: 'GOOGLE' }],
+          oauthAccounts: [oauthAccounts[0]],
         },
       },
       loading: false,

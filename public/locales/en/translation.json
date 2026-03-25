@@ -15,6 +15,9 @@
     "bothGoogleAndGitHubLinked": "Both Google and GitHub are already linked.",
     "connectedOauthAccounts": "Connected OAuth accounts.",
     "noConnectedOauthAccounts": "No connected OAuth accounts.",
+    "emailLabel": "Email",
+    "linkedAtLabel": "Linked at",
+    "lastUsedAtLabel": "Last used",
     "Unlink": "Unlink",
     "unlinkSuccess": "Successfully unlinked {{provider}}.",
     "unlinkConfirmation": "Are you sure you want to unlink your {{provider}} account?"

@@ -17,6 +17,9 @@
     "bothGoogleAndGitHubLinked": "Google 和 GitHub 已经关联。",
     "connectedOauthAccounts": "已连接的 OAuth 帐户。",
     "noConnectedOauthAccounts": "没有已连接的 OAuth 帐户。",
+    "emailLabel": "电子邮件",
+    "linkedAtLabel": "关联时间",
+    "lastUsedAtLabel": "最后使用",
     "Unlink": "取消关联",
     "unlinkSuccess": "已成功取消关联 {{provider}}。",
     "unlinkConfirmation": "您确定要取消关联 {{provider}} 吗？"

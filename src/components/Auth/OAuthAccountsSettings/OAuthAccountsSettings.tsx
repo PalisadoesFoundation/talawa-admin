@@ -14,6 +14,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OAuthAccountsSettings.module.css';
 import { useTranslation } from 'react-i18next';
 import { getEnabledProviders } from 'config/oauthProviders';
+import { formatDate } from 'utils/dateFormatter';
 
 /**
  * Props for {@link OAuthAccountsSettings}.
@@ -62,8 +63,12 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
 
   const [unlinkOAuthAccount] = useMutation(UNLINK_OAUTH_ACCOUNT);
 
-  const connectedAccounts: { provider: string }[] =
-    data?.user?.oauthAccounts ?? [];
+  const connectedAccounts: {
+    provider: string;
+    email: string;
+    linkedAt: string;
+    lastUsedAt: string;
+  }[] = data?.user?.oauthAccounts ?? [];
 
   const connectedProviders = new Set(
     connectedAccounts.map((account) => account.provider?.toUpperCase()),
@@ -177,7 +182,21 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
 
                   return (
                     <div key={provider} className={styles.connectedItem}>
-                      <span className={styles.providerName}>{provider}</span>
+                      <div className={styles.accountInfo}>
+                        <span className={styles.providerName}>{provider}</span>
+                        <div className={styles.metaList}>
+                          <span className={styles.metaItem}>
+                            {t('emailLabel')}: {account.email}
+                          </span>
+                          <span className={styles.metaItem}>
+                            {t('linkedAtLabel')}: {formatDate(account.linkedAt)}
+                          </span>
+                          <span className={styles.metaItem}>
+                            {t('lastUsedAtLabel')}:{' '}
+                            {formatDate(account.lastUsedAt)}
+                          </span>
+                        </div>
+                      </div>
                       <Button
                         type="button"
                         size="sm"
