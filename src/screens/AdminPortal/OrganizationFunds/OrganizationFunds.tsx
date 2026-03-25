@@ -208,10 +208,7 @@ const organizationFunds = (): JSX.Element => {
           size="sm"
           className={styles.editButton}
           data-testid="editFundBtn"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleOpenModal(row, 'edit');
-          }}
+          onClick={() => handleOpenModal(row, 'edit')}
         >
           <i className="fa fa-edit me-1" />
           {t('funds.editFund')}

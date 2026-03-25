@@ -204,11 +204,7 @@ const orgFundCampaign = (): JSX.Element => {
       header: tCommon('startDate'),
       accessor: 'startAt',
       render: (value) => dayjs(String(value)).format('DD/MM/YYYY'),
-      meta: {
-        sortable: true,
-        sortFn: (a, b) =>
-          dayjs(a.startAt).valueOf() - dayjs(b.startAt).valueOf(),
-      },
+      meta: { sortable: true },
     },
     {
       id: 'endAt',
@@ -219,10 +215,7 @@ const orgFundCampaign = (): JSX.Element => {
           {dayjs(String(value)).format('DD/MM/YYYY')}
         </div>
       ),
-      meta: {
-        sortable: true,
-        sortFn: (a, b) => dayjs(a.endAt).valueOf() - dayjs(b.endAt).valueOf(),
-      },
+      meta: { sortable: true },
     },
     {
       id: 'goalAmount',
@@ -314,10 +307,7 @@ const orgFundCampaign = (): JSX.Element => {
           size="sm"
           className={styles.editButton}
           data-testid="editCampaignBtn"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleOpenModal(row, 'edit');
-          }}
+          onClick={() => handleOpenModal(row, 'edit')}
         >
           <i className="fa fa-edit me-1" />
           {t('editCampaign')}
