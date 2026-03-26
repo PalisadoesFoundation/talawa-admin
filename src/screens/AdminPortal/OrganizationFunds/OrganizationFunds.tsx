@@ -16,7 +16,10 @@ import Button from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import type {
+  IColumnDef,
+  ISortState,
+} from 'types/shared-components/DataTable/interface';
 
 interface InterfaceFundListQueryData {
   organization?: {
@@ -45,6 +48,9 @@ const organizationFunds = (): JSX.Element => {
   );
 
   const [searchText, setSearchText] = useState('');
+  const [sortBy, setSortBy] = useState<ISortState[]>([
+    { columnId: 'createdAt', direction: 'desc' },
+  ]);
 
   const handleOpenModal = useCallback(
     (selectedFund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -85,30 +91,35 @@ const organizationFunds = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  const filteredAndSortedFunds = useMemo(() => {
-    let result = [...funds];
+  const displayedFunds = useMemo(() => {
+    const filteredFunds = searchText
+      ? funds.filter((currentFund) =>
+          currentFund.name.toLowerCase().includes(searchText.toLowerCase()),
+        )
+      : [...funds];
 
-    if (searchText) {
-      result = result.filter((currentFund) =>
-        currentFund.name.toLowerCase().includes(searchText.toLowerCase()),
-      );
-    }
-
-    return result.sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      const sortMultiplier = -1; // Default to createdAt_DESC
-      return (dateA - dateB) * sortMultiplier;
-    });
-  }, [funds, searchText]);
+    const directionFactor = sortBy[0]?.direction === 'asc' ? 1 : -1;
+    return filteredFunds
+      .map((fundRow, index) => ({ fundRow, index }))
+      .sort((a, b) => {
+        const dateDiff =
+          new Date(a.fundRow.createdAt).getTime() -
+          new Date(b.fundRow.createdAt).getTime();
+        if (dateDiff !== 0) {
+          return dateDiff * directionFactor;
+        }
+        return a.index - b.index;
+      })
+      .map((item) => item.fundRow);
+  }, [funds, searchText, sortBy]);
 
   const fundIndexMap = useMemo(() => {
     const map = new Map<string, number>();
-    filteredAndSortedFunds.forEach((currentFund, idx) => {
+    displayedFunds.forEach((currentFund, idx) => {
       map.set(currentFund.id, idx + 1);
     });
     return map;
-  }, [filteredAndSortedFunds]);
+  }, [displayedFunds]);
 
   const handleClick = useCallback(
     (fundId: string): void => {
@@ -172,7 +183,7 @@ const organizationFunds = (): JSX.Element => {
           {dayjs(String(value)).format('DD/MM/YYYY')}
         </div>
       ),
-      meta: { sortable: false },
+      meta: { sortable: true },
     },
     {
       id: 'status',
@@ -246,7 +257,7 @@ const organizationFunds = (): JSX.Element => {
 
       {!fundLoading &&
       fundsQuery.data &&
-      filteredAndSortedFunds.length === 0 &&
+      displayedFunds.length === 0 &&
       searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
@@ -256,9 +267,7 @@ const organizationFunds = (): JSX.Element => {
           })}
           dataTestId="funds-search-empty"
         />
-      ) : !fundLoading &&
-        fundsQuery.data &&
-        filteredAndSortedFunds.length === 0 ? (
+      ) : !fundLoading && fundsQuery.data && displayedFunds.length === 0 ? (
         <EmptyState
           icon={<AccountBalanceWallet />}
           message={t('funds.noFundsFound')}
@@ -267,16 +276,19 @@ const organizationFunds = (): JSX.Element => {
       ) : (
         <div className={styles.listBox}>
           <DataTable<InterfaceFundInfo>
-            data={filteredAndSortedFunds}
+            data={displayedFunds}
             columns={columns}
             loading={fundLoading}
             error={null}
             rowKey="id"
+            serverSort
+            sortBy={sortBy}
+            onSortChange={({ sortBy: nextSortBy }) => setSortBy(nextSortBy)}
             paginationMode="client"
             pageSize={10}
             tableClassName={`${styles.listTable} ${styles.overflowVisible}`}
           />
-          {filteredAndSortedFunds.length > 0 && (
+          {displayedFunds.length > 0 && (
             <div className={'w-100 text-center my-4'}>
               <h5 className="m-0">{tCommon('endOfResults')}</h5>
             </div>

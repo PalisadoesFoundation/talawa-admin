@@ -173,7 +173,7 @@ const orgFundCampaign = (): JSX.Element => {
   const columns: IColumnDef<InterfaceCampaignInfo>[] = [
     {
       id: 'id',
-      header: '#',
+      header: tCommon('hash'),
       accessor: 'id',
       render: (_value, row) => (
         <span className={styles.requestsTableItemIndex}>
@@ -328,7 +328,7 @@ const orgFundCampaign = (): JSX.Element => {
           },
           {
             label: t('title'),
-            to: `/admin/orgfunds/${orgId}/campaigns`,
+            to: `/admin/orgfundcampaign/${orgId}/${fundId}`,
           },
         ]}
       />
