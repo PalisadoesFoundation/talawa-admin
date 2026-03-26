@@ -147,7 +147,7 @@ const organizationFunds = (): JSX.Element => {
       accessor: () => 0,
       render: (_value, row) => (
         <span className={styles.requestsTableItemIndex}>
-          {fundIndexMap.get(row.id) ?? 0}
+          {fundIndexMap.get(row.id)}
         </span>
       ),
       meta: { sortable: false },

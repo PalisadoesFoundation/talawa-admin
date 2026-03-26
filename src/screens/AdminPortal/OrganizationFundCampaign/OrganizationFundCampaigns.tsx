@@ -174,7 +174,7 @@ const orgFundCampaign = (): JSX.Element => {
       accessor: 'id',
       render: (_value, row) => (
         <span className={styles.requestsTableItemIndex}>
-          {campaignIndexMap.get(row.id) ?? 0}
+          {campaignIndexMap.get(row.id)}
         </span>
       ),
       meta: { sortable: false },

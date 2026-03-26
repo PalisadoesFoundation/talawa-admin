@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes, useParams } from 'react-router';
+import dayjs from 'dayjs';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -618,6 +619,56 @@ describe('FundCampaigns Screen', () => {
     expect(raised50).toBeInTheDocument();
     expect(raised100).toBeInTheDocument();
     expect(raised150).toBeInTheDocument();
+  });
+
+  it('should show 0 percent progress and $0 raised when goal is zero and amountRaised is missing', async () => {
+    mockRouteParams();
+    const dynamicStartAt = dayjs().subtract(10, 'days').toISOString();
+    const dynamicEndAt = dayjs().add(20, 'days').toISOString();
+    const zeroGoalMocks = [
+      {
+        request: {
+          query: MOCKS[0].request.query,
+          variables: { input: { id: 'fundId' } },
+        },
+        result: {
+          data: {
+            fund: {
+              id: 'fundId',
+              name: 'Fund 1',
+              isArchived: false,
+              campaigns: {
+                edges: [
+                  {
+                    node: {
+                      id: 'campaign-zero',
+                      name: 'Campaign Zero',
+                      startAt: dynamicStartAt,
+                      endAt: dynamicEndAt,
+                      currencyCode: 'USD',
+                      goalAmount: 0,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const zeroGoalLink = new StaticMockLink(zeroGoalMocks, true);
+    renderFundCampaign(zeroGoalLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign Zero')).toBeInTheDocument();
+    });
+
+    const progressCell = screen.getByTestId('progressCell');
+    expect(progressCell).toHaveTextContent('0%');
+
+    const raisedCell = screen.getByTestId('raisedCell');
+    expect(raisedCell).toHaveTextContent('$0');
   });
 
   it('should display end of results message when campaigns are displayed', async () => {
