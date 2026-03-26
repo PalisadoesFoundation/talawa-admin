@@ -1,5 +1,4 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
@@ -18,6 +17,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import { vi, afterEach } from 'vitest';
+
+const ARCHIVED_FUND_CREATED_AT = new Date(Date.UTC(2026, 2, 20)).toISOString();
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -502,7 +503,7 @@ describe('OrganizationFunds Screen =>', () => {
                     node: {
                       id: 'archived-fund-1',
                       name: 'Archived Fund',
-                      createdAt: dayjs().subtract(5, 'days').toISOString(),
+                      createdAt: ARCHIVED_FUND_CREATED_AT,
                       isArchived: true,
                       isTaxDeductible: false,
                       creator: { name: 'Jane Doe' },

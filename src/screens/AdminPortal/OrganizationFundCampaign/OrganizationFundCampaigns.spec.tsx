@@ -489,8 +489,10 @@ describe('FundCampaigns Screen', () => {
     const archivedLink = new StaticMockLink(archivedFundMocks, true);
     renderFundCampaign(archivedLink);
 
-    const addCampaignBtn = await screen.findByTestId('addCampaignBtn');
-    expect(addCampaignBtn).toBeDisabled();
+    await waitFor(() => {
+      const addCampaignBtn = screen.getByTestId('addCampaignBtn');
+      expect(addCampaignBtn).toBeDisabled();
+    });
   });
 
   it('should render campaign name cells with correct data-testid', async () => {
