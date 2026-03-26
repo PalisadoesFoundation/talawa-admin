@@ -47,7 +47,6 @@ vi.mock('react-router', async () => {
 });
 
 const mockedUseParams = vi.mocked(useParams);
-const loadingOverlaySpy = vi.fn();
 
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -98,54 +97,6 @@ describe('OrganizationFunds Screen =>', () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
-  });
-
-  vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
-    const actual = await vi.importActual<
-      typeof import('shared-components/ReportingTable/ReportingTable')
-    >('shared-components/ReportingTable/ReportingTable');
-
-    return {
-      __esModule: true,
-      default: (props: {
-        gridProps?: {
-          slots?: { loadingOverlay?: () => React.ReactNode };
-          onPaginationModelChange?: (model: {
-            page: number;
-            pageSize: number;
-          }) => void;
-        };
-        listProps?: {
-          endMessage?: React.ReactNode;
-        };
-      }) => {
-        loadingOverlaySpy(props.gridProps?.slots?.loadingOverlay?.());
-
-        // Create wrapper to ensure callbacks are properly invoked
-        const wrappedProps = {
-          ...props,
-          gridProps: {
-            ...props.gridProps,
-            // Ensure onPaginationModelChange is called when pagination changes
-            onPaginationModelChange: props.gridProps?.onPaginationModelChange,
-          },
-        };
-
-        const Component = (
-          actual as unknown as {
-            default: React.ComponentType<typeof wrappedProps>;
-          }
-        ).default;
-
-        return (
-          <>
-            <Component {...wrappedProps} />
-            {/* Render endMessage if provided in listProps */}
-            {props.listProps?.endMessage}
-          </>
-        );
-      },
-    };
   });
 
   it('should render the Campaign Pledge screen', async () => {
@@ -315,7 +266,7 @@ describe('OrganizationFunds Screen =>', () => {
 
   it('Sort the Pledges list by Earliest created Date', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
+    renderOrganizationFunds(link1);
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -324,16 +275,11 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find and click on the "Created On" column header to trigger sort (ASC)
-    const createdOnHeader = container.querySelector(
-      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
-    );
-
-    expect(createdOnHeader).toBeInTheDocument();
-    if (createdOnHeader) {
-      await user.click(createdOnHeader);
-      await wait(300);
-    }
+    const createdOnHeader = screen.getByRole('button', {
+      name: translations.createdOn,
+    });
+    await user.click(createdOnHeader);
+    await wait(300);
 
     await waitFor(() => {
       const allFundNames = screen.getAllByTestId('fundName');
@@ -385,7 +331,7 @@ describe('OrganizationFunds Screen =>', () => {
 
   it('handles pagination model change', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
+    renderOrganizationFunds(link1);
 
     await wait();
 
@@ -398,22 +344,10 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find pagination controls in the DataGrid
-    const paginationRoot = container.querySelector(
-      '[class*="MuiTablePagination-root"]',
-    );
-
-    if (paginationRoot) {
-      // Find next page button
-      const nextButton = paginationRoot.querySelector(
-        'button[aria-label*="next"]',
-      ) as HTMLButtonElement | null;
-
-      if (nextButton && !nextButton.disabled) {
-        await user.click(nextButton);
-        await wait(300);
-      }
-    }
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    expect(nextButton).not.toBeDisabled();
+    await user.click(nextButton);
+    await wait(300);
 
     // Verify component is still stable
     await waitFor(() => {
@@ -491,7 +425,7 @@ describe('OrganizationFunds Screen =>', () => {
 
   it('should sort funds by createdAt using sortComparator', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
+    renderOrganizationFunds(link1);
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -502,19 +436,16 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find and click on the "Created On" column header to trigger sort
-    const createdOnHeader = container.querySelector(
-      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
-    );
+    const createdOnHeader = screen.getByRole('button', {
+      name: translations.createdOn,
+    });
 
-    if (createdOnHeader) {
-      await user.click(createdOnHeader);
-      await wait(300);
+    await user.click(createdOnHeader);
+    await wait(300);
 
-      // Click again to toggle sort direction
-      await user.click(createdOnHeader);
-      await wait(300);
-    }
+    // Click again to toggle sort direction
+    await user.click(createdOnHeader);
+    await wait(300);
 
     // Verify created on dates are displayed
     await waitFor(() => {

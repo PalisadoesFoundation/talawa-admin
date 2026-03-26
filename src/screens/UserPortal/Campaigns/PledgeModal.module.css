@@ -1,7 +1,8 @@
 .pledgeModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+  max-width: var(--vw-80);
+  margin-top: var(--vh-2);
+  margin-left: var(--vw-13);
+  color-scheme: light;
 }
 
 .titleModal {
@@ -34,20 +35,215 @@
   color: var(--color-gray-600) !important;
 }
 
+.currencyAmountRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  width: 100%;
+  align-items: flex-start;
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-3);
+  --pledge-compact-box-width: calc(var(--border-1) * 75);
+  --pledge-compact-box-height: calc(var(--border-1) * 25);
+  --pledge-compact-box-radius: calc(var(--border-1) * 6);
+  --pledge-compact-text-size: var(--font-size-xs);
+  --pledge-compact-text-weight: var(--font-weight-lighter);
+  --pledge-compact-line-height: calc(var(--border-1) * 14);
+}
+
+.currencySection,
+.goalSection {
+  width: 100%;
+}
+
+.compactInlineGroup {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  margin-bottom: var(--space-0) !important;
+}
+
+.compactInlineGroup :global(.form-label) {
+  margin-top: var(--space-0) !important;
+  margin-bottom: var(--space-0) !important;
+  align-self: center;
+  flex: 1 1 auto;
+}
+
+.compactInlineGroup :global(.form-select),
+.compactInlineGroup :global(.form-control),
+.compactInlineGroup :global(select),
+.compactInlineGroup :global(input[type='number']) {
+  margin-left: auto;
+  align-self: center;
+  flex: 0 0 auto;
+  width: var(--pledge-compact-box-width);
+  min-width: var(--pledge-compact-box-width);
+  max-width: var(--pledge-compact-box-width);
+}
+
+.currencySection :global(.form-select),
+.currencySection :global(select),
+.goalSection :global(.form-control),
+.goalSection :global(input[type='number']) {
+  width: var(--pledge-compact-box-width);
+  min-width: var(--pledge-compact-box-width);
+  max-width: var(--pledge-compact-box-width);
+  height: var(--pledge-compact-box-height);
+  min-height: var(--pledge-compact-box-height);
+  border-radius: var(--pledge-compact-box-radius);
+  border: var(--border-1) solid var(--color-gray-200) !important;
+  background-color: var(--color-gray-100) !important;
+  box-shadow: none;
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-style: normal;
+  font-weight: var(--pledge-compact-text-weight);
+  font-size: var(--pledge-compact-text-size);
+  line-height: var(--pledge-compact-line-height);
+  padding: var(--space-0) var(--space-3);
+}
+
+.currencySection :global(.form-select),
+.currencySection :global(select) {
+  color-scheme: light !important;
+  appearance: menulist !important;
+  -webkit-appearance: menulist !important;
+}
+
+.currencySection :global(.form-select option),
+.currencySection :global(select option) {
+  background-color: var(--color-white) !important;
+  color: var(--color-black) !important;
+}
+
+.currencySection :global(.form-select option:checked),
+.currencySection :global(select option:checked) {
+  background-color: var(--color-blue-100) !important;
+  color: var(--color-black) !important;
+}
+
+.pledgeModal :global(option) {
+  background-color: var(--color-white) !important;
+  color: var(--color-black) !important;
+}
+
+.goalSection :global(.form-control::placeholder),
+.goalSection :global(input::placeholder),
+.currencySection :global(.form-select::placeholder),
+.currencySection :global(select::placeholder) {
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-style: normal;
+  font-weight: var(--pledge-compact-text-weight);
+  font-size: var(--pledge-compact-text-size);
+  line-height: var(--pledge-compact-line-height);
+  opacity: 1;
+}
+
+.currencySection :global(.form-select:focus),
+.currencySection :global(select:focus),
+.goalSection :global(.form-control:focus),
+.goalSection :global(input:focus) {
+  border-color: var(--color-blue-300);
+  outline: none;
+  box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
+    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
+  background-color: var(--color-gray-100) !important;
+}
+
+@media (max-width: 768px) {
+  .currencyAmountRow {
+    grid-template-columns: 1fr;
+  }
+}
+
 .addButton {
-  margin-bottom: var(--space-4);
+  width: calc(var(--space-24) + var(--space-2) + var(--space-0-5));
+  height: calc(var(--space-10) + var(--space-1) + var(--space-0-5));
+  margin-top: auto;
+  margin-right: auto;
+  margin-bottom: var(--space-0);
+  margin-left: auto;
   color: var(--color-gray-700);
   background-color: var(--color-blue-200);
   border-color: var(--color-blue-200);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
   --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--color-blue-300);
+  border-color: var(--color-blue-300);
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-50);
+  background-color: var(--color-gray-100);
+  border-color: var(--color-gray-100);
+  color: var(--color-gray-600);
+}
+
+.pledgeModal :global(.modal-footer) {
+  width: 100%;
+}
+
+.editActionRow {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+}
+
+.editActionButton,
+.deleteActionButton {
+  width: 100%;
+  height: calc(var(--space-10) + var(--space-1) + var(--space-0-5));
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.editActionButton {
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
   border-color: var(--color-blue-200);
+}
+
+.editActionButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-300);
+  border-color: var(--color-blue-300);
+  color: var(--color-gray-700);
+}
+
+.deleteActionButton {
+  color: var(--color-red-400);
+  background-color: var(--color-red-100);
+  border-color: var(--color-red-100);
+}
+
+.deleteActionButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-100);
+  border-color: var(--color-red-100);
+  color: var(--color-red-400);
+}
+
+.deleteActionButton i {
+  color: var(--color-red-400);
+}
+
+@media (max-width: 768px) {
+  .editActionRow {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
 }

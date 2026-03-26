@@ -36,6 +36,30 @@
   gap: var(--space-2);
 }
 
+.alignLeft {
+  text-align: left;
+}
+
+.alignCenter {
+  text-align: center;
+}
+
+.alignCenter.headerInner {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.alignRight {
+  text-align: right;
+}
+
+.alignRight.headerInner {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .sortIndicator {
   font-size: var(--font-size-xs);
   color: var(--color-gray-400);
@@ -47,4 +71,16 @@
 
 .actionsCol {
   composes: actionsCol from './DataTableShared.module.css';
+}
+
+.contentSpacerRow td {
+  height: var(--space-4);
+  padding: 0;
+  border: 0;
+  background: var(--color-white);
+  pointer-events: none;
+}
+
+.contentSpacerBottom td {
+  height: var(--space-8);
 }

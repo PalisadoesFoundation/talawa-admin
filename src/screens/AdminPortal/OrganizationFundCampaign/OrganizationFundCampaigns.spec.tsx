@@ -42,7 +42,6 @@ vi.mock('GraphQl/Queries/fundQueries', async () => {
                 endAt
                 currencyCode
                 goalAmount
-                amountRaised
               }
             }
           }

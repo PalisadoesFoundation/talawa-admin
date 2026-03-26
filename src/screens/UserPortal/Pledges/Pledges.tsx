@@ -1,9 +1,9 @@
 /**
  * The `Pledges` component is responsible for rendering a user's pledges within a campaign.
  * It fetches pledges data using Apollo Client's `useQuery` hook and displays the data
- * in a DataGrid with search, sorting, pagination, and modal dialogs.
+ * in a DataTable with search, pagination, and modal dialogs.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { Button } from 'shared-components/Button';
 import { ProgressBar } from 'react-bootstrap';
@@ -11,10 +11,7 @@ import styles from './Pledges.module.css';
 import { useTranslation } from 'react-i18next';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import useLocalStorage from 'utils/useLocalstorage';
-import type {
-  InterfacePledgeInfo,
-  InterfaceUserInfoPG,
-} from 'utils/interfaces';
+import type { InterfacePledgeInfo } from 'utils/interfaces';
 import {
   type ApolloError,
   type ApolloQueryResult,
@@ -22,17 +19,23 @@ import {
 } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import {
-  DataGridWrapper,
-  type GridCellParams,
-  type GridColDef,
-} from 'shared-components/DataGridWrapper';
-import Avatar from 'shared-components/Avatar/Avatar';
+import { DataTable } from 'shared-components/DataTable/DataTable';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
-import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';
 import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+
+interface InterfaceUserPledgeRow {
+  id: string;
+  campaign: InterfacePledgeInfo['campaign'];
+  amount: number;
+  currency: string;
+  goalAmount: number;
+  endDate: Date | string | undefined;
+  campaignName: string;
+}
 
 const Pledges = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
@@ -45,16 +48,12 @@ const Pledges = (): JSX.Element => {
   const userId = (userIdFromStorage as string | null) ?? null;
 
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
+  const [searchText, setSearchText] = useState('');
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
   const {
     isOpen: isUpdateModalOpen,
     open: openUpdateModal,
     close: closeUpdateModal,
-  } = useModalState();
-  const {
-    isOpen: isDeleteModalOpen,
-    open: openDeleteModal,
-    close: closeDeleteModal,
   } = useModalState();
 
   type PledgeQueryResult = ApolloQueryResult<{
@@ -88,24 +87,12 @@ const Pledges = (): JSX.Element => {
     fetchPolicy: 'cache-and-network',
   });
 
-  if (!orgId || !userId) {
-    return <Navigate to="/" replace />;
-  }
-
   const handleOpenModal = useCallback(
     (p: InterfacePledgeInfo | null): void => {
       setPledge(p);
       openUpdateModal();
     },
     [openUpdateModal],
-  );
-
-  const handleDeleteClick = useCallback(
-    (p: InterfacePledgeInfo): void => {
-      setPledge(p);
-      openDeleteModal();
-    },
-    [openDeleteModal],
   );
 
   const isNoPledgesFoundError =
@@ -125,6 +112,105 @@ const Pledges = (): JSX.Element => {
     }
   }, [pledgeData, isNoPledgesFoundError]);
 
+  const rows = useMemo<InterfaceUserPledgeRow[]>(() => {
+    return pledges.map((p) => {
+      return {
+        id: p.id,
+        campaign: p.campaign,
+        amount: p.amount,
+        currency: p.campaign?.currencyCode ?? 'USD',
+        goalAmount: p.campaign?.goalAmount ?? 0,
+        endDate: p.campaign?.endAt,
+        campaignName: p.campaign?.name || '',
+      };
+    });
+  }, [pledges]);
+
+  const filteredRows = useMemo<InterfaceUserPledgeRow[]>(() => {
+    const query = searchText.trim().toLowerCase();
+    if (!query) return rows;
+    return rows.filter((row) => row.campaignName.toLowerCase().includes(query));
+  }, [rows, searchText]);
+
+  const columns: IColumnDef<InterfaceUserPledgeRow>[] = [
+    {
+      id: 'associatedCampaign',
+      header: t('associatedCampaign'),
+      accessor: 'campaignName',
+      render: (value) => <>{String(value || '')}</>,
+      meta: { sortable: false },
+    },
+    {
+      id: 'endDate',
+      header: tCommon('endDate'),
+      accessor: 'endDate',
+      render: (value) =>
+        value ? dayjs(String(value)).format('DD/MM/YYYY') : '-',
+      meta: { sortable: false },
+    },
+    {
+      id: 'amount',
+      header: t('pledged'),
+      accessor: 'amount',
+      render: (value, row) => (
+        <div data-testid="amountCell">
+          {currencySymbols[row.currency as keyof typeof currencySymbols]}
+          {Number(value)}
+        </div>
+      ),
+      meta: { sortable: false },
+    },
+    {
+      id: 'donated',
+      header: t('donated'),
+      accessor: 'amount',
+      render: (_value, row) => (
+        <div data-testid="paidCell">
+          {currencySymbols[row.currency as keyof typeof currencySymbols]}0
+        </div>
+      ),
+      meta: { sortable: false },
+    },
+    {
+      id: 'progress',
+      header: t('progress'),
+      accessor: 'goalAmount',
+      render: (_value, row) => (
+        <ProgressBar
+          now={row.goalAmount > 0 ? (row.amount / row.goalAmount) * 100 : 0}
+          label={
+            row.goalAmount > 0
+              ? `${Math.round((row.amount / row.goalAmount) * 100)}%`
+              : '0%'
+          }
+          data-testid="progressBar"
+        />
+      ),
+      meta: { sortable: false },
+    },
+    {
+      id: 'action',
+      header: tCommon('action'),
+      accessor: 'id',
+      render: (_value, row) => (
+        <Button
+          size="sm"
+          className={styles.editButton}
+          data-testid="editPledgeBtn"
+          onClick={() => handleOpenModal(row as unknown as InterfacePledgeInfo)}
+        >
+          <i className="fa fa-edit me-1" />
+          {tCommon('edit')}
+        </Button>
+      ),
+      meta: { sortable: false },
+    },
+  ];
+
+  if (!orgId || !userId) {
+    return <Navigate to="/" replace />;
+  }
+
   if (pledgeError && !isNoPledgesFoundError) {
     return (
       <div className={styles.container + ' bg-white rounded-4 my-3'}>
@@ -140,182 +226,32 @@ const Pledges = (): JSX.Element => {
     );
   }
 
-  const columns: GridColDef[] = [
-    {
-      field: 'pledger',
-      headerName: t('pledgers'),
-      flex: 4,
-      headerAlign: 'center',
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const pledger = params.row.pledger;
-        const users = params.row.users || (pledger ? [pledger] : []);
-        return (
-          <div className="d-flex flex-wrap gap-1">
-            {users
-              .slice(0, 2)
-              .map((user: InterfaceUserInfoPG, index: number) => (
-                <div
-                  className={styles.pledgerContainer}
-                  key={`${user.id}-${index}`}
-                >
-                  {user.avatarURL ? (
-                    <img
-                      src={user.avatarURL}
-                      alt={user.name}
-                      data-testid={'image-pledger-' + user.id}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <Avatar
-                      containerStyle={styles.imageContainerPledge}
-                      avatarStyle={styles.TableImagePledge}
-                      name={user.name}
-                      alt={user.name}
-                      dataTestId={'avatar-pledger-' + user.id}
-                    />
-                  )}
-                  <span>{user.name}</span>
-                </div>
-              ))}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'associatedCampaign',
-      headerName: t('associatedCampaign'),
-      flex: 2,
-      sortable: false,
-      renderCell: (params) => <>{params.row.campaign?.name}</>,
-    },
-    {
-      field: 'endDate',
-      headerName: tCommon('endDate'),
-      flex: 1,
-      sortable: false,
-      renderCell: (params) =>
-        params.row.endDate
-          ? dayjs(params.row.endDate).format('DD/MM/YYYY')
-          : '-',
-    },
-    {
-      field: 'amount',
-      headerName: t('pledged'),
-      flex: 1,
-      sortable: false,
-      renderCell: (params) => (
-        <div data-testid="amountCell">
-          {currencySymbols[params.row.currency]}
-          {params.row.amount}
-        </div>
-      ),
-    },
-    {
-      field: 'donated',
-      headerName: t('donated'),
-      flex: 1,
-      sortable: false,
-      renderCell: (params) => (
-        <div data-testid="paidCell">
-          {currencySymbols[params.row.currency]}0
-        </div>
-      ),
-    },
-    {
-      field: 'progress',
-      headerName: t('progress'),
-      flex: 2,
-      sortable: false,
-      renderCell: (params) => (
-        <ProgressBar
-          now={
-            params.row.goalAmount > 0
-              ? (params.row.amount / params.row.goalAmount) * 100
-              : 0
-          }
-          label={
-            params.row.goalAmount > 0
-              ? `${Math.round(
-                  (params.row.amount / params.row.goalAmount) * 100,
-                )}%`
-              : '0%'
-          }
-          data-testid="progressBar"
-        />
-      ),
-    },
-    {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 1,
-      sortable: false,
-      renderCell: (params) => (
-        <>
-          <Button
-            variant="success"
-            size="sm"
-            data-testid="editPledgeBtn"
-            onClick={() => handleOpenModal(params.row as InterfacePledgeInfo)}
-          >
-            <i className="fa fa-edit" />
-          </Button>
-          <Button
-            size="sm"
-            variant="danger"
-            data-testid="deletePledgeBtn"
-            onClick={() => handleDeleteClick(params.row as InterfacePledgeInfo)}
-          >
-            <i className="fa fa-trash" />
-          </Button>
-        </>
-      ),
-    },
-  ];
-
-  const rows = pledges.map((p) => {
-    const pledger = p.pledger;
-    const users = p.users || (pledger ? [pledger] : []);
-    const pledgerNames = users
-      .map((u: InterfaceUserInfoPG) => u.name)
-      .join(' ');
-
-    return {
-      id: p.id,
-      campaign: p.campaign,
-      pledger: p.pledger,
-      users: p.users,
-      amount: p.amount,
-      currency: p.campaign?.currencyCode,
-      goalAmount: p.campaign?.goalAmount,
-      endDate: p.campaign?.endAt,
-      pledgerName: pledgerNames,
-      campaignName: p.campaign?.name || '',
-    };
-  });
-
   return (
     <LoadingState isLoading={pledgeLoading} variant="spinner">
       <div>
-        <DataGridWrapper
-          rows={rows}
+        <div className="mb-4">
+          <SearchFilterBar
+            searchPlaceholder={tCommon('searchBy', {
+              item: t('campaigns'),
+            })}
+            searchValue={searchText}
+            onSearchChange={(value) => setSearchText(value.trim())}
+            onSearchSubmit={(value: string) => setSearchText(value.trim())}
+            searchInputTestId="searchByInput"
+            searchButtonTestId="searchBtn"
+            hasDropdowns={false}
+          />
+        </div>
+
+        <DataTable
+          data={filteredRows}
           columns={columns}
+          rowKey="id"
           loading={pledgeLoading}
-          emptyStateProps={{
-            message: t('noPledges'),
-          }}
-          searchConfig={{
-            enabled: true,
-            fields: ['pledgerName', 'campaignName'],
-            placeholder: tCommon('searchBy', {
-              item: `${t('pledgers')} or ${t('campaigns')}`,
-            }),
-          }}
-          paginationConfig={{
-            enabled: true,
-            defaultPageSize: 10,
-            pageSizeOptions: [5, 10, 25, 50],
-          }}
+          paginationMode="client"
+          pageSize={10}
+          emptyMessage={t('noPledges')}
+          ariaLabel={t('myPledges')}
         />
 
         {isUpdateModalOpen && pledge && pledge.campaign?.id && (
@@ -327,15 +263,6 @@ const Pledges = (): JSX.Element => {
             campaignId={pledge.campaign.id}
             userId={userId}
             mode="edit"
-          />
-        )}
-
-        {isDeleteModalOpen && pledge && (
-          <PledgeDeleteModal
-            isOpen={isDeleteModalOpen}
-            hide={closeDeleteModal}
-            pledge={pledge}
-            refetchPledge={refetchPledge}
           />
         )}
       </div>

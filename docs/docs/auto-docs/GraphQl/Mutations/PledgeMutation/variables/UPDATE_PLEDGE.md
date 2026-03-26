@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_PLEDGE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L51)
+Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L50)
 
 GraphQL mutation to update a pledge.
 

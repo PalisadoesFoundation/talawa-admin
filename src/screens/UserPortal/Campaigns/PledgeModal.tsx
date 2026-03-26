@@ -14,11 +14,11 @@ import { errorHandler } from 'utils/errorHandler';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import { Autocomplete } from 'shared-components/Autocomplete/Autocomplete';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { FormSelectField } from 'shared-components/FormFieldGroup/FormSelectField';
+import Button from 'shared-components/Button';
+import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';
 
 /**
  * Props for the `PledgeModal` component.
@@ -113,6 +113,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 }) => {
   // Translation functions to support internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t: tCommon } = useTranslation('common');
 
   // State to manage the form inputs for the pledge
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
@@ -123,6 +124,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // State to manage the list of pledgers (users who are part of the pledge)
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Mutation to update an existing pledge
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
@@ -238,6 +240,23 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
+        const maybeGraphQLError = error as {
+          graphQLErrors?: Array<{
+            extensions?: {
+              issues?: Array<{ message?: string }>;
+            };
+          }>;
+        };
+
+        const issueMessage =
+          maybeGraphQLError.graphQLErrors?.[0]?.extensions?.issues?.[0]
+            ?.message;
+
+        if (issueMessage) {
+          NotificationToast.error(issueMessage);
+          return;
+        }
+
         errorHandler(t, error);
       }
     },
@@ -253,6 +272,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       hide,
     ],
   );
+
+  const handleDeleteClick = useCallback((): void => {
+    setIsDeleteModalOpen(true);
+  }, []);
+
+  const handleDeleteModalClose = useCallback((): void => {
+    setIsDeleteModalOpen(false);
+  }, []);
 
   // Form content shared between create and edit modes
   const formContent = (
@@ -294,30 +321,32 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           />
         </div>
       )}
-      <div className="d-flex gap-3 mb-4">
-        <div className="flex-grow-1">
-          <InputLabel id="currency-select-label">{t('currency')}</InputLabel>
-          <Select
-            labelId="currency-select-label"
-            value={pledgeCurrency}
+      <div className={styles.currencyAmountRow}>
+        <div className={styles.currencySection}>
+          <FormSelectField
+            name="currency"
             label={t('currency')}
-            data-testid="currencySelect"
-            fullWidth
-            onChange={(e) => {
+            className={styles.compactInlineGroup}
+            value={pledgeCurrency}
+            onChange={(value) => {
               setFormState({
                 ...formState,
-                pledgeCurrency: e.target.value,
+                pledgeCurrency: value,
               });
             }}
+            touched={false}
+            error={undefined}
+            data-testid="currencySelect"
           >
             {currencyOptions.map((currency) => (
-              <MenuItem key={currency.label} value={currency.value}>
+              <option key={currency.label} value={currency.value}>
                 {currency.label} ({currencySymbols[currency.value]})
-              </MenuItem>
+              </option>
             ))}
-          </Select>
+          </FormSelectField>
         </div>
-        <div className="flex-grow-1">
+
+        <div className={styles.goalSection}>
           <FormTextField
             name="amount"
             label={t('amount')}
@@ -339,7 +368,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 });
               }
             }}
-            className={styles.noOutline}
+            className={styles.compactInlineGroup}
           />
         </div>
       </div>
@@ -348,16 +377,52 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   if (mode === 'edit') {
     return (
-      <EditModal
-        open={isOpen}
-        title={t('editPledge')}
-        onClose={hide}
-        onSubmit={updatePledgeHandler}
-        className={styles.pledgeModal}
-        data-testid="pledgeModal"
-      >
-        <div data-testid="pledgeForm">{formContent}</div>
-      </EditModal>
+      <>
+        <EditModal
+          open={isOpen}
+          title={t('editPledge')}
+          onClose={hide}
+          onSubmit={updatePledgeHandler}
+          className={styles.pledgeModal}
+          data-testid="pledgeModal"
+          customFooter={
+            <div className={styles.editActionRow}>
+              <Button
+                type="submit"
+                form="crud-edit-form"
+                className={styles.editActionButton}
+                data-testid="modal-submit-btn"
+              >
+                <i className="fa fa-edit" />
+                {tCommon('edit')}
+              </Button>
+
+              <Button
+                type="button"
+                className={styles.deleteActionButton}
+                data-testid="modal-delete-btn"
+                onClick={handleDeleteClick}
+                disabled={!pledge?.id}
+              >
+                <i className="fa fa-trash" />
+                {tCommon('delete')}
+              </Button>
+            </div>
+          }
+        >
+          <div data-testid="pledgeForm">{formContent}</div>
+        </EditModal>
+
+        <PledgeDeleteModal
+          isOpen={isDeleteModalOpen}
+          hide={handleDeleteModalClose}
+          pledge={pledge}
+          refetchPledge={() => {
+            refetchPledge();
+            hide();
+          }}
+        />
+      </>
     );
   }
 
@@ -369,6 +434,17 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       onSubmit={createPledgeHandler}
       className={styles.pledgeModal}
       data-testid="pledgeModal"
+      customFooter={
+        <Button
+          type="submit"
+          form="crud-create-form"
+          variant="primary"
+          className={styles.addButton}
+          data-testid="modal-submit-btn"
+        >
+          {tCommon('create')}
+        </Button>
+      }
     >
       <div data-testid="pledgeForm">{formContent}</div>
     </CreateModal>

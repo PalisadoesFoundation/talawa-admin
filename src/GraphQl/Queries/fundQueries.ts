@@ -142,7 +142,6 @@ export const USER_PLEDGES = gql`
       id
       amount
       note
-      createdAt
       updatedAt
       campaign {
         id

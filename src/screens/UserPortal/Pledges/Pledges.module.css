@@ -31,7 +31,7 @@
 }
 
 .container {
-  min-height: 100vh;
+  min-height: var(--vh-100);
 }
 
 .message {
@@ -52,4 +52,22 @@
   border-radius: var(--radius-sm);
   background-color: color-mix(in srgb, var(--color-green-500) 20%, transparent);
   height: var(--space-8);
+}
+
+.editButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-3) var(--space-5);
+  --bs-btn-active-bg: var(--color-blue-300);
+  --bs-btn-active-border-color: transparent;
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--color-blue-300);
+  color: var(--color-gray-700);
+  border-color: transparent;
+  box-shadow: none;
 }

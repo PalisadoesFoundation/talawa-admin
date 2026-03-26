@@ -9,12 +9,12 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { currencySymbols } from 'utils/currency';
 import styles from './FundCampaignPledge.module.css';
-import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
 import Popover from '@mui/material/Popover';
 import Avatar from 'shared-components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
-import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
@@ -23,6 +23,7 @@ import type {
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { getPledgeColumns } from './PledgeColumns';
+import type { InterfacePledgeTableRow } from './PledgeColumns';
 import Button from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 
@@ -48,7 +49,6 @@ const fundCampaignPledge = (): JSX.Element => {
   });
 
   const pledgeModal = useModalState();
-  const deleteModal = useModalState();
 
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
@@ -62,10 +62,6 @@ const fundCampaignPledge = (): JSX.Element => {
   );
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-
-  const [sortBy, setSortBy] = useState<
-    'amount_ASC' | 'amount_DESC' | 'endDate_ASC' | 'endDate_DESC'
-  >('endDate_DESC');
 
   const {
     data: pledgeData,
@@ -120,32 +116,19 @@ const fundCampaignPledge = (): JSX.Element => {
           })
         : pledgesList;
 
-      const sortedPledges = [...filteredPledges].sort((a, b) => {
-        switch (sortBy) {
-          case 'amount_ASC':
-            return a.amount - b.amount;
-          case 'amount_DESC':
-            return b.amount - a.amount;
-          case 'endDate_ASC':
-            return a.endDate.getTime() - b.endDate.getTime();
-          case 'endDate_DESC':
-            return b.endDate.getTime() - a.endDate.getTime();
-        }
-      });
-
       // Get fund info from the campaign's fund property
       const fundInfo =
         pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund;
       const fundName = fundInfo?.name ?? tCommon('funds');
       const fundId = fundInfo?.id ?? null;
       return {
-        pledges: sortedPledges,
+        pledges: filteredPledges,
         totalPledged,
         totalRaised,
         fundName,
         fundId,
       };
-    }, [pledgeData, searchTerm, sortBy, tCommon]);
+    }, [pledgeData, searchTerm, tCommon]);
 
   useEffect(() => {
     if (pledgeData?.fundCampaign) {
@@ -159,10 +142,6 @@ const fundCampaignPledge = (): JSX.Element => {
     }
   }, [pledgeData]);
 
-  useEffect(() => {
-    refetchPledge();
-  }, [sortBy, refetchPledge]);
-
   const handleOpenModal = useCallback(
     (
       selectedPledge: InterfacePledgeInfo | null,
@@ -175,18 +154,10 @@ const fundCampaignPledge = (): JSX.Element => {
     [],
   );
 
-  const handleDeleteClick = useCallback(
-    (selectedPledge: InterfacePledgeInfo): void => {
-      setPledge(selectedPledge);
-      deleteModal.open();
-    },
-    [],
-  );
-
   const handleClick = (
     event:
-      | React.MouseEvent<HTMLDivElement>
-      | React.KeyboardEvent<HTMLDivElement>,
+      | React.MouseEvent<HTMLSpanElement>
+      | React.KeyboardEvent<HTMLSpanElement>,
     users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
@@ -226,12 +197,11 @@ const fundCampaignPledge = (): JSX.Element => {
     id,
     handleClick,
     handleOpenModal,
-    handleDeleteClick,
   });
 
   return (
     <LoadingState isLoading={pledgeLoading} variant="spinner">
-      <div>
+      <div className={styles.pageContainer}>
         <BreadcrumbsComponent
           items={[
             { label: fundName, to: `/admin/orgfunds/${orgId}` },
@@ -336,34 +306,11 @@ const fundCampaignPledge = (): JSX.Element => {
             searchInputTestId="searchPledger"
             searchButtonTestId="searchBtn"
             hasDropdowns={true}
-            dropdowns={[
-              {
-                id: 'sort-pledges',
-                label: tCommon('sort'),
-                title: tCommon('sort'),
-                dataTestIdPrefix: 'filter',
-                selectedOption: sortBy,
-                onOptionChange: (value) =>
-                  setSortBy(
-                    value as
-                      | 'amount_ASC'
-                      | 'amount_DESC'
-                      | 'endDate_ASC'
-                      | 'endDate_DESC',
-                  ),
-                options: [
-                  { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
-                  { label: t('pledges.highestAmount'), value: 'amount_DESC' },
-                  { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
-                  { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
-                ],
-                type: 'sort',
-              },
-            ]}
+            dropdowns={[]}
             additionalButtons={
               <Button
                 variant="success"
-                className={styles.dropdown}
+                className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
                 disabled={!isWithinCampaignDates}
                 onClick={() => handleOpenModal(null, 'create')}
                 data-testid="addPledgeBtn"
@@ -377,26 +324,41 @@ const fundCampaignPledge = (): JSX.Element => {
             }
           />
         </div>
-        <DataGridWrapper
-          rows={pledges.map((pledge) => ({
-            id: pledge.id,
-            users: pledge.users,
-            endDate: pledge.endDate,
-            pledgeDate: pledge.pledgeDate,
-            amount: pledge.amount,
-            currency: pledge.currency,
-          }))}
-          columns={columns}
-          loading={pledgeLoading}
-          emptyStateProps={{
-            icon: 'volunteer_activism',
-            message: t('pledges.noPledges'),
-            dataTestId: 'fund-campaign-pledge-empty-state',
-          }}
-          paginationConfig={{
-            enabled: false,
-          }}
-        />
+        <div className={styles.listBox}>
+          {pledges.length === 0 ? (
+            <EmptyState
+              icon="volunteer_activism"
+              message={t('pledges.noPledges')}
+              dataTestId="fund-campaign-pledge-empty-state"
+            />
+          ) : (
+            <>
+              <DataTable
+                data={pledges.map(
+                  (pledge): InterfacePledgeTableRow => ({
+                    id: pledge.id,
+                    users: pledge.users,
+                    endDate: pledge.endDate,
+                    pledgeDate: pledge.pledgeDate,
+                    amount: pledge.amount,
+                    currency: pledge.currency,
+                  }),
+                )}
+                columns={columns}
+                rowKey="id"
+                loading={pledgeLoading}
+                paginationMode="client"
+                pageSize={10}
+                tableClassName={styles.listTable}
+                emptyMessage={t('pledges.noPledges')}
+                ariaLabel={t('pledges.pledges')}
+              />
+              <div className={'w-100 text-center my-4'}>
+                <h5 className="m-0">{tCommon('endOfResults')}</h5>
+              </div>
+            </>
+          )}
+        </div>
         <PledgeModal
           isOpen={pledgeModal.isOpen}
           hide={pledgeModal.close}
@@ -406,12 +368,6 @@ const fundCampaignPledge = (): JSX.Element => {
           refetchPledge={refetchPledge}
           endDate={pledgeData?.fundCampaign?.endAt as Date}
           mode={pledgeModalMode}
-        />
-        <PledgeDeleteModal
-          isOpen={deleteModal.isOpen}
-          hide={deleteModal.close}
-          pledge={pledge}
-          refetchPledge={refetchPledge}
         />
         <Popover
           id={id}

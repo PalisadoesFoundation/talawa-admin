@@ -82,10 +82,17 @@ export function DataTableTable<T>({
   loadingMore,
   skeletonRows,
 }: InterfaceDataTableTableProps<T>) {
+  const bodyColumnCount =
+    columns.length + (effectiveSelectable ? 1 : 0) + (hasRowActions ? 1 : 0);
+
+  const getAlignClass = (align?: 'left' | 'center' | 'right'): string => {
+    if (align === 'center') return styles.alignCenter;
+    if (align === 'right') return styles.alignRight;
+    return styles.alignLeft;
+  };
+
   return (
     <Table
-      striped
-      hover
       responsive
       className={tableClassNames}
       data-testid="datatable"
@@ -112,6 +119,7 @@ export function DataTableTable<T>({
           {columns.map((col) => {
             const isSortable = col.meta?.sortable !== false;
             const isActive = activeSortBy === col.id;
+            const alignClass = getAlignClass(col.meta?.align);
             const ariaSort: React.AriaAttributes['aria-sort'] = isActive
               ? activeSortDir === 'asc'
                 ? 'ascending'
@@ -122,7 +130,7 @@ export function DataTableTable<T>({
                 key={col.id}
                 scope="col"
                 aria-sort={ariaSort}
-                className={isSortable ? styles.sortable : undefined}
+                className={`${isSortable ? styles.sortable : ''} ${alignClass}`.trim()}
                 tabIndex={isSortable ? 0 : undefined}
                 role={isSortable ? 'button' : undefined}
                 onClick={isSortable ? () => handleHeaderClick(col) : undefined}
@@ -138,7 +146,7 @@ export function DataTableTable<T>({
                 }
                 style={col.meta?.width ? { width: col.meta.width } : undefined}
               >
-                <span className={styles.headerInner}>
+                <span className={`${styles.headerInner} ${alignClass}`}>
                   {renderHeader(col.header)}
                   {isSortable && (
                     <span
@@ -160,6 +168,12 @@ export function DataTableTable<T>({
         </tr>
       </thead>
       <tbody>
+        {!renderRow && sortedRows.length > 0 && (
+          <tr className={styles.contentSpacerRow} aria-hidden="true">
+            <td colSpan={bodyColumnCount} />
+          </tr>
+        )}
+
         {renderRow
           ? sortedRows.map((row, idx) => (
               <React.Fragment key={getKey(row, startIndex + idx)}>
@@ -190,8 +204,13 @@ export function DataTableTable<T>({
                   )}
                   {columns.map((col) => {
                     const val = getCellValue(row, col.accessor);
+                    const alignClass = getAlignClass(col.meta?.align);
                     return (
-                      <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
+                      <td
+                        key={col.id}
+                        className={alignClass}
+                        data-testid={`datatable-cell-${col.id}`}
+                      >
                         {renderCell(col, val, row)}
                       </td>
                     );
@@ -204,6 +223,15 @@ export function DataTableTable<T>({
                 </tr>
               );
             })}
+
+        {!renderRow && sortedRows.length > 0 && (
+          <tr
+            className={`${styles.contentSpacerRow} ${styles.contentSpacerBottom}`}
+            aria-hidden="true"
+          >
+            <td colSpan={bodyColumnCount} />
+          </tr>
+        )}
 
         {loadingMore && (
           <LoadingMoreRows

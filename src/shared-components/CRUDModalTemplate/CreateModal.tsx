@@ -52,6 +52,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   centered = true,
   'data-testid': dataTestId,
   submitDisabled = false,
+  customFooter,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
@@ -93,7 +94,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
     }
   };
 
-  const customFooter = (
+  const defaultFooter = (
     <>
       <Button
         variant="secondary"
@@ -126,7 +127,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
       className={className}
       centered={centered}
       data-testid={dataTestId}
-      customFooter={customFooter}
+      customFooter={customFooter ?? defaultFooter}
     >
       <form
         id="crud-create-form"

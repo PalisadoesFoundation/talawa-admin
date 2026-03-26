@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserListQueryResponse
 
-Defined in: [src/utils/interfaces.ts:1402](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1402)
+Defined in: [src/utils/interfaces.ts:1478](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1478)
 
 GraphQL response type for user list queries.
 
@@ -14,7 +14,7 @@ GraphQL response type for user list queries.
 
 > `optional` **allUsers**: `object`
 
-Defined in: [src/utils/interfaces.ts:1403](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1403)
+Defined in: [src/utils/interfaces.ts:1479](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1479)
 
 #### edges?
 
