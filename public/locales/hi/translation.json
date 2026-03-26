@@ -10,6 +10,20 @@
     "continueWith": "{{provider}} के साथ जारी रखें",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "OAuthAccountsSettings": {
+    "userIdNotAvailable": "उपयोगकर्ता ID उपलब्ध नहीं है।",
+    "unableToLoadOAuthAccounts": "अभी OAuth खातों को लोड नहीं कर सकते।",
+    "missingOauthProviders": "OAuth प्रदाता गायब हैं।",
+    "bothGoogleAndGitHubLinked": "Google और GitHub पहले से जुड़े हुए हैं।",
+    "connectedOauthAccounts": "जुड़े हुए OAuth खाते।",
+    "noConnectedOauthAccounts": "कोई जुड़े हुए OAuth खाते नहीं हैं।",
+    "emailLabel": "ईमेल",
+    "linkedAtLabel": "लिंक किया गया",
+    "lastUsedAtLabel": "अंतिम उपयोग",
+    "Unlink": "लिंक रद्द करें",
+    "unlinkSuccess": "{{provider}} को सफलतापूर्वक अलग कर दिया गया।",
+    "unlinkConfirmation": "क्या आप वाकई {{provider}} को अलग करना चाहते हैं?"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
