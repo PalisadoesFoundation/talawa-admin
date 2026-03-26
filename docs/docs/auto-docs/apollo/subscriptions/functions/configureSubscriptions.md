@@ -6,7 +6,7 @@
 
 > **configureSubscriptions**(`nextDeps`): `void`
 
-Defined in: [src/apollo/subscriptions.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/apollo/subscriptions.ts#L58)
+Defined in: [src/apollo/subscriptions.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/apollo/subscriptions.ts#L63)
 
 ## Parameters
 

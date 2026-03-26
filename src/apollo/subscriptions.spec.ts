@@ -65,9 +65,37 @@ vi.mock('graphql-ws', () => ({
   createClient: createClientMock,
 }));
 
-vi.mock('utils/useLocalstorage', () => ({
-  default: useLocalstorageMock,
-}));
+vi.mock('utils/useLocalstorage', () => {
+  const getStorageKey = (prefix: string, key: string): string => {
+    return `${prefix}_${key}`;
+  };
+
+  const mockGetItem = <T>(prefix: string, key: string): T | null => {
+    const prefixedKey = getStorageKey(prefix, key);
+    try {
+      if (shouldThrowOnGetItem) {
+        throw new Error('localStorage unavailable');
+      }
+      const data = mockStorageData[prefixedKey];
+      return data ? (JSON.parse(data) as T) : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const mockSetItem = (prefix: string, key: string, value: unknown): void => {
+    const prefixedKey = getStorageKey(prefix, key);
+    mockStorageData[prefixedKey] = JSON.stringify(value);
+  };
+
+  return {
+    default: useLocalstorageMock,
+    PREFIX: 'Talawa-admin',
+    getItem: mockGetItem,
+    setItem: mockSetItem,
+    getStorageKey,
+  };
+});
 vi.mock('utils/i18n', () => ({
   default: {
     language: 'en',
@@ -107,7 +135,7 @@ describe('subscriptions', () => {
     const errorLink = { kind: 'error-link' };
     const httpLink = { kind: 'http-link' };
 
-    useLocalstorageMock().setItem('token', 'test-token');
+    mockStorageData['Talawa-admin_token'] = JSON.stringify('test-token');
 
     configureSubscriptions({
       client: { setLink } as never,
