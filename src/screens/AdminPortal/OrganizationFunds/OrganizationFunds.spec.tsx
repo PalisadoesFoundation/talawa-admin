@@ -527,37 +527,34 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
-  it('should sort funds by createdAt using sortComparator', async () => {
+  it('should sort funds by createdAt from DataTable header interactions', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
+    renderOrganizationFunds(link1);
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
     });
 
-    // Wait for funds to load
     await waitFor(() => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find and click on the "Created On" column header to trigger sort
-    const createdOnHeader = container.querySelector(
-      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
-    );
+    const initialOrder = screen
+      .getAllByTestId('fundName')
+      .map((element) => element.textContent);
 
-    if (createdOnHeader) {
-      await user.click(createdOnHeader);
-      await wait(300);
+    const createdOnHeader =
+      screen.queryByRole('button', { name: /created on/i }) ??
+      screen.getByText(/created on/i);
 
-      // Click again to toggle sort direction
-      await user.click(createdOnHeader);
-      await wait(300);
-    }
+    await user.click(createdOnHeader);
+    await wait(300);
 
-    // Verify created on dates are displayed
     await waitFor(() => {
-      const createdOnElements = screen.getAllByTestId('createdOn');
-      expect(createdOnElements.length).toBeGreaterThan(0);
+      const nextOrder = screen
+        .getAllByTestId('fundName')
+        .map((element) => element.textContent);
+      expect(nextOrder).not.toEqual(initialOrder);
     });
   });
 

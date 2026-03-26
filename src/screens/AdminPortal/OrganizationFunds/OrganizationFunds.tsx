@@ -100,17 +100,12 @@ const organizationFunds = (): JSX.Element => {
 
     const directionFactor = sortBy[0]?.direction === 'asc' ? 1 : -1;
     return filteredFunds
-      .map((fundRow, index) => ({ fundRow, index }))
       .sort((a, b) => {
         const dateDiff =
-          new Date(a.fundRow.createdAt).getTime() -
-          new Date(b.fundRow.createdAt).getTime();
-        if (dateDiff !== 0) {
-          return dateDiff * directionFactor;
-        }
-        return a.index - b.index;
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        return dateDiff * directionFactor;
       })
-      .map((item) => item.fundRow);
+      .map((item) => item);
   }, [funds, searchText, sortBy]);
 
   const fundIndexMap = useMemo(() => {

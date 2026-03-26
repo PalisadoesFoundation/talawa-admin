@@ -102,16 +102,13 @@ const orgFundCampaign = (): JSX.Element => {
     }
 
     const getComparableValue = (campaign: InterfaceCampaignInfo): number => {
-      switch (primarySort.columnId) {
-        case 'startAt':
-          return dayjs(campaign.startAt).valueOf();
-        case 'endAt':
-          return dayjs(campaign.endAt).valueOf();
-        case 'goalAmount':
-          return Number(campaign.goalAmount);
-        default:
-          return 0;
+      if (primarySort.columnId === 'startAt') {
+        return dayjs(campaign.startAt).valueOf();
       }
+      if (primarySort.columnId === 'endAt') {
+        return dayjs(campaign.endAt).valueOf();
+      }
+      return Number(campaign.goalAmount);
     };
 
     const directionFactor = primarySort.direction === 'desc' ? -1 : 1;
