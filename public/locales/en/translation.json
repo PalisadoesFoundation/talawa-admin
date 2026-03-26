@@ -8,6 +8,20 @@
     "continueWith": "Continue with {{provider}}",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "OAuthAccountsSettings": {
+    "userIdNotAvailable": "User ID not available.",
+    "unableToLoadOAuthAccounts": "Unable to load OAuth accounts right now.",
+    "missingOauthProviders": "Missing OAuth providers.",
+    "bothGoogleAndGitHubLinked": "Both Google and GitHub are already linked.",
+    "connectedOauthAccounts": "Connected OAuth accounts.",
+    "noConnectedOauthAccounts": "No connected OAuth accounts.",
+    "emailLabel": "Email",
+    "linkedAtLabel": "Linked at",
+    "lastUsedAtLabel": "Last used",
+    "Unlink": "Unlink",
+    "unlinkSuccess": "Successfully unlinked {{provider}}.",
+    "unlinkConfirmation": "Are you sure you want to unlink your {{provider}} account?"
+  },
   "workshops": "Workshops",
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."

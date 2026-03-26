@@ -78,24 +78,26 @@
 }
 
 .btn__more {
-  border: 0;
+  border: var(--border-1) solid var(--color-gray-600);
   font-size: var(--font-size-sm);
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-600);
   font-weight: var(--font-weight-semibold);
   position: relative;
   display: inline-block;
   padding: var(--space-2) var(--space-4);
   margin: var(--space-1);
   margin-top: var(--space-2);
-  border-radius: var(--space-2);
+  border-radius: var(--radius-md);
+  z-index: 10;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
-.btn__more:hover {
-  background-color: var(--color-primary-dark);
-  color: var(--color-white);
+.btn__more:is(:hover, :active) {
+  background-color: var(--color-gray-400) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
 }
 
 @media only screen and (max-width: 576px) {

@@ -1054,6 +1054,20 @@ export const USER_DETAILS = gql`
   }
 `;
 
+// Query a user's linked OAuth provider accounts
+export const USER_OAUTH_ACCOUNTS = gql`
+  query UserOAuthAccounts($input: QueryUserInput!) {
+    user(input: $input) {
+      oauthAccounts {
+        provider
+        email
+        linkedAt
+        lastUsedAt
+      }
+    }
+  }
+`;
+
 export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
   query EventsByOrganizationConnection(
     $organization_id: ID!
