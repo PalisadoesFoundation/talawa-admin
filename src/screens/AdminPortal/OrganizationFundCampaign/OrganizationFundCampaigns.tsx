@@ -312,7 +312,6 @@ const orgFundCampaign = (): JSX.Element => {
                 variant="determinate"
                 value={100}
                 size={32}
-                thickness={4}
                 className={styles.progressCircleBackground}
               />
               <CircularProgress
@@ -362,7 +361,7 @@ const orgFundCampaign = (): JSX.Element => {
           }}
         >
           <i className="fa fa-edit me-1" />
-          {t('editCampaign')}
+          {tCommon('edit')}
         </Button>
       ),
     },

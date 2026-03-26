@@ -41,6 +41,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
   slotProps,
   slots: customSlots,
   format = 'MM/DD/YYYY',
+  placeholder,
 }) => {
   const generatedId = useId();
   const effectiveName = name || generatedId;
@@ -120,6 +121,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                     {...inputProps}
                     {...other}
                     id={inputId}
+                    placeholder={placeholder}
                     required={required}
                     disabled={disabled}
                     aria-required={required}

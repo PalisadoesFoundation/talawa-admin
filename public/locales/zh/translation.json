@@ -1011,6 +1011,8 @@
   "fundCampaign": {
     "title": "募捐活动",
     "campaignName": "活动名称",
+    "manageFundCampaign": "管理募捐活动",
+    "createFundCampaign": "创建募捐活动",
     "campaignOptions": "选项",
     "fundingGoal": "资金目标",
     "progress": "进度",
@@ -1042,7 +1044,11 @@
     "dateRangeRequired": "请选择有效的日期范围",
     "campaignNameRequired": "活动名称是必填项",
     "invalidDate": "选择的日期无效",
-    "endDateBeforeStart": "结束日期不能早于开始日期"
+    "endDateBeforeStart": "结束日期不能早于开始日期",
+    "enterCampaignName": "输入活动名称",
+    "enterStartDate": "输入开始日期",
+    "enterEndDate": "输入结束日期",
+    "selectCurrency": "选择货币"
   },
   "pledges": {
     "createFailed": "创建认捐失败",

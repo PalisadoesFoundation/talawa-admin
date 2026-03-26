@@ -1011,6 +1011,8 @@
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
     "campaignName": "Nom de la campagne",
+    "manageFundCampaign": "Gérer la campagne de fonds",
+    "createFundCampaign": "Créer une campagne de fonds",
     "campaignOptions": "Options",
     "fundingGoal": "Objectif de financement",
     "progress": "Progrès",
@@ -1042,7 +1044,11 @@
     "dateRangeRequired": "Veuillez sélectionner une plage de dates valide",
     "campaignNameRequired": "Le nom de la campagne est obligatoire",
     "invalidDate": "Date invalide sélectionnée",
-    "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début"
+    "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début",
+    "enterCampaignName": "Entrez le nom de la campagne",
+    "enterStartDate": "Entrez la date de début",
+    "enterEndDate": "Entrez la date de fin",
+    "selectCurrency": "Sélectionner la devise"
   },
   "pledges": {
     "createFailed": "Échec de la création de l'engagement",

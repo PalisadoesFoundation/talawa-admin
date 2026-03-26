@@ -49,4 +49,6 @@ export interface InterfaceDatePickerProps {
   slots?: Record<string, React.ElementType>;
   /** Format of the date displayed in the input (e.g., "MM/DD/YYYY", "YYYY-MM-DD") */
   format?: string;
+  /** Placeholder text displayed when the date field is empty */
+  placeholder?: string;
 }
