@@ -382,6 +382,7 @@ const orgFundCampaign = (): JSX.Element => {
             loading={campaignLoading}
             error={null}
             rowKey="id"
+            // Parent handles sorting via `sortBy` and `displayedCampaigns`.
             serverSort
             sortBy={sortBy}
             onSortChange={({ sortBy: nextSortBy }) => setSortBy(nextSortBy)}

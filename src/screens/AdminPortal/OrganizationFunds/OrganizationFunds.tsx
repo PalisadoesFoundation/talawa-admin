@@ -277,6 +277,7 @@ const organizationFunds = (): JSX.Element => {
             loading={fundLoading}
             error={null}
             rowKey="id"
+            // Parent handles sorting via `sortBy` and `displayedFunds`.
             serverSort
             sortBy={sortBy}
             onSortChange={({ sortBy: nextSortBy }) => setSortBy(nextSortBy)}
