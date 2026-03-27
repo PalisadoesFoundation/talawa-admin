@@ -486,7 +486,9 @@ describe('OrganizationFunds Screen =>', () => {
       .getAllByTestId('fundName')
       .map((element) => element.textContent);
 
-    const createdOnHeader = screen.getByText(/created on/i);
+    const createdOnHeader =
+      screen.queryByRole('button', { name: /created on/i }) ??
+      screen.getByRole('columnheader', { name: /created on/i });
 
     await user.click(createdOnHeader);
 
