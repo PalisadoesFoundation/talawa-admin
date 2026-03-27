@@ -38,6 +38,7 @@ const organizationFunds = (): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
 
   const { orgId } = useParams();
+  const safeOrgId = orgId ?? '';
   const navigate = useNavigate();
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
@@ -87,10 +88,6 @@ const organizationFunds = (): JSX.Element => {
     document.title = t('funds.title');
   }, [t]);
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const displayedFunds = useMemo(() => {
     const filteredFunds = searchText
       ? funds.filter((currentFund) =>
@@ -118,10 +115,14 @@ const organizationFunds = (): JSX.Element => {
 
   const handleClick = useCallback(
     (fundId: string): void => {
-      navigate(`/admin/orgfundcampaign/${orgId}/${fundId}`);
+      navigate(`/admin/orgfundcampaign/${safeOrgId}/${fundId}`);
     },
-    [navigate, orgId],
+    [navigate, safeOrgId],
   );
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   if (fundError) {
     return (

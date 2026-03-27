@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -19,14 +19,6 @@ import {
 import { vi, afterEach } from 'vitest';
 
 const ARCHIVED_FUND_CREATED_AT = new Date(Date.UTC(2026, 2, 20)).toISOString();
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -49,7 +41,6 @@ vi.mock('react-router', async () => {
 });
 
 const mockedUseParams = vi.mocked(useParams);
-const loadingOverlaySpy = vi.fn();
 
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -100,54 +91,6 @@ describe('OrganizationFunds Screen =>', () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
-  });
-
-  vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
-    const actual = await vi.importActual<
-      typeof import('shared-components/ReportingTable/ReportingTable')
-    >('shared-components/ReportingTable/ReportingTable');
-
-    return {
-      __esModule: true,
-      default: (props: {
-        gridProps?: {
-          slots?: { loadingOverlay?: () => React.ReactNode };
-          onPaginationModelChange?: (model: {
-            page: number;
-            pageSize: number;
-          }) => void;
-        };
-        listProps?: {
-          endMessage?: React.ReactNode;
-        };
-      }) => {
-        loadingOverlaySpy(props.gridProps?.slots?.loadingOverlay?.());
-
-        // Create wrapper to ensure callbacks are properly invoked
-        const wrappedProps = {
-          ...props,
-          gridProps: {
-            ...props.gridProps,
-            // Ensure onPaginationModelChange is called when pagination changes
-            onPaginationModelChange: props.gridProps?.onPaginationModelChange,
-          },
-        };
-
-        const Component = (
-          actual as unknown as {
-            default: React.ComponentType<typeof wrappedProps>;
-          }
-        ).default;
-
-        return (
-          <>
-            <Component {...wrappedProps} />
-            {/* Render endMessage if provided in listProps */}
-            {props.listProps?.endMessage}
-          </>
-        );
-      },
-    };
   });
 
   it('should render the Campaign Pledge screen', async () => {
@@ -382,8 +325,6 @@ describe('OrganizationFunds Screen =>', () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     const { container } = renderOrganizationFunds(link1);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
     });
@@ -406,7 +347,9 @@ describe('OrganizationFunds Screen =>', () => {
 
       if (nextButton && !nextButton.disabled) {
         await user.click(nextButton);
-        await wait(300);
+        await waitFor(() => {
+          expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+        });
       }
     }
 
@@ -543,12 +486,9 @@ describe('OrganizationFunds Screen =>', () => {
       .getAllByTestId('fundName')
       .map((element) => element.textContent);
 
-    const createdOnHeader =
-      screen.queryByRole('button', { name: /created on/i }) ??
-      screen.getByText(/created on/i);
+    const createdOnHeader = screen.getByText(/created on/i);
 
     await user.click(createdOnHeader);
-    await wait(300);
 
     await waitFor(() => {
       const nextOrder = screen
