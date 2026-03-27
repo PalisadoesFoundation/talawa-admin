@@ -42,18 +42,19 @@ describe('getPledgeColumns', () => {
     vi.restoreAllMocks();
   });
 
-  const mockT = vi.fn((key: string) => key);
-  const mockTCommon = vi.fn((key: string, options?: { count?: number }) =>
-    options?.count ? `${key}_${options.count}` : key,
-  );
   const mockHandleClick = vi.fn();
   const mockHandleOpenModal = vi.fn();
 
   const defaultProps = {
-    t: mockT as unknown as Parameters<typeof getPledgeColumns>[0]['t'],
-    tCommon: mockTCommon as unknown as Parameters<
-      typeof getPledgeColumns
-    >[0]['tCommon'],
+    labels: {
+      pledgers: 'pledges.pledgers',
+      pledgeDate: 'pledges.pledgeDate',
+      pledged: 'pledges.pledged',
+      donated: 'pledges.donated',
+      action: 'action',
+      edit: 'edit',
+    },
+    getMoreCountLabel: (count: number) => `moreCount_${count}`,
     id: 'test-popover-id',
     handleClick: mockHandleClick,
     handleOpenModal: mockHandleOpenModal,

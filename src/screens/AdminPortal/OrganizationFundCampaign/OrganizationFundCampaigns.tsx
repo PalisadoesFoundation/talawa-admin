@@ -30,6 +30,14 @@ import Button from 'shared-components/Button';
 
 const PAGE_SIZE = 10;
 
+/**
+ * Renders the organization fund campaigns listing screen.
+ *
+ * Displays campaign data for a selected fund with search, sorting, edit/create
+ * actions, and loading/error/empty states.
+ *
+ * @returns Fund campaign management screen for an organization fund.
+ */
 const OrganizationFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');

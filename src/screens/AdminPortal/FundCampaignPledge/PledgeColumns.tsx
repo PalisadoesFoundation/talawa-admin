@@ -1,5 +1,4 @@
 import React from 'react';
-import type { TFunction } from 'i18next';
 import dayjs from 'dayjs';
 import Button from 'shared-components/Button';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -24,8 +23,15 @@ export interface InterfacePledgeTableRow {
  * Props for the getPledgeColumns function.
  */
 interface InterfacePledgeColumnsProps {
-  t: TFunction<'translation', undefined>;
-  tCommon: TFunction<'common', undefined>;
+  labels: {
+    pledgers: string;
+    pledgeDate: string;
+    pledged: string;
+    donated: string;
+    action: string;
+    edit: string;
+  };
+  getMoreCountLabel: (count: number) => string;
   id: string | undefined;
   handleClick: (
     event:
@@ -45,15 +51,15 @@ interface InterfacePledgeColumnsProps {
  * @returns An array of DataTable columns for the pledges table.
  */
 export const getPledgeColumns = ({
-  t,
-  tCommon,
+  labels,
+  getMoreCountLabel,
   id,
   handleClick,
   handleOpenModal,
 }: InterfacePledgeColumnsProps): IColumnDef<InterfacePledgeTableRow>[] => [
   {
     id: 'pledgers',
-    header: t('pledges.pledgers'),
+    header: labels.pledgers,
     accessor: 'users',
     render: (value, row) => {
       const users = (value as InterfaceUserInfoPG[]) || [];
@@ -100,7 +106,7 @@ export const getPledgeColumns = ({
               }}
               data-testid={`moreContainer-${row.id}`}
             >
-              {tCommon('moreCount', { count: extraUsers.length })}
+              {getMoreCountLabel(extraUsers.length)}
             </span>
           )}
         </div>
@@ -112,7 +118,7 @@ export const getPledgeColumns = ({
   },
   {
     id: 'pledgeDate',
-    header: t('pledges.pledgeDate'),
+    header: labels.pledgeDate,
     accessor: 'pledgeDate',
     render: (value) =>
       value ? dayjs(String(value)).format('DD/MM/YYYY') : '-',
@@ -124,7 +130,7 @@ export const getPledgeColumns = ({
   },
   {
     id: 'amount',
-    header: t('pledges.pledged'),
+    header: labels.pledged,
     accessor: 'amount',
     render: (value, row) => (
       <div
@@ -142,7 +148,7 @@ export const getPledgeColumns = ({
   },
   {
     id: 'donated',
-    header: t('pledges.donated'),
+    header: labels.donated,
     accessor: 'amount',
     render: (_value, row) => (
       <div
@@ -159,7 +165,7 @@ export const getPledgeColumns = ({
   },
   {
     id: 'action',
-    header: tCommon('action'),
+    header: labels.action,
     accessor: 'id',
     render: (_value, row) => (
       <Button
@@ -171,7 +177,7 @@ export const getPledgeColumns = ({
         }
       >
         <i className="fa fa-edit me-1" />
-        {tCommon('edit')}
+        {labels.edit}
       </Button>
     ),
     meta: {

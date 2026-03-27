@@ -192,8 +192,15 @@ const fundCampaignPledge = (): JSX.Element => {
   }
 
   const columns = getPledgeColumns({
-    t,
-    tCommon,
+    labels: {
+      pledgers: t('pledges.pledgers'),
+      pledgeDate: t('pledges.pledgeDate'),
+      pledged: t('pledges.pledged'),
+      donated: t('pledges.donated'),
+      action: tCommon('action'),
+      edit: tCommon('edit'),
+    },
+    getMoreCountLabel: (count: number) => tCommon('moreCount', { count }),
     id,
     handleClick,
     handleOpenModal,
