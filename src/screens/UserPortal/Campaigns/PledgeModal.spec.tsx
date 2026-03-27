@@ -372,8 +372,8 @@ describe('PledgeModal', () => {
         ).toBeInTheDocument(),
       );
 
-      const cancelButton = screen.getByTestId('modal-cancel-btn');
-      await user.click(cancelButton);
+      const closeButton = screen.getByTestId('modalCloseBtn');
+      await user.click(closeButton);
 
       expect(pledgeProps[0].hide).toHaveBeenCalled();
     });
@@ -1013,7 +1013,10 @@ describe('PledgeModal', () => {
 
       // 2. Select the option
       const options = await screen.findAllByRole('option');
-      await user.click(options[0]);
+      const harveOption =
+        options.find((option) => option.textContent?.includes('Harve Lance')) ||
+        options[0];
+      await user.click(harveOption);
       await waitFor(() => expect(input).toHaveValue('Harve Lance'));
 
       // 3. Clear the selection
@@ -1156,9 +1159,12 @@ describe('PledgeModal', () => {
 
       // Try to select an option if available
       const options = screen.getAllByRole('option');
-      if (options.length > 0) {
+      const harveOption =
+        options.find((option) => option.textContent?.includes('Harve Lance')) ||
+        options[0];
+      if (harveOption) {
         await act(async () => {
-          await user.click(options[0]);
+          await user.click(harveOption);
         });
       }
 

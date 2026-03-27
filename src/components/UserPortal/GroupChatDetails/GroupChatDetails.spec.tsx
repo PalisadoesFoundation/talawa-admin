@@ -13,7 +13,6 @@ import {
   filledMockChat,
   incompleteMockChat,
   failingMocks,
-  delayedMocks,
   ORGANIZATION_MEMBERS as ORG_MEMBERS_QUERY,
 } from './GroupChatDetailsMocks';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
@@ -1331,9 +1330,14 @@ describe('GroupChatDetails', () => {
     it('should show LoadingState spinner while chat details are loading', async () => {
       useLocalStorage().setItem('userId', 'user1');
 
+      const extendedDelayedMocks = mocks.map((mock) => ({
+        ...mock,
+        delay: 1000,
+      }));
+
       render(
         <I18nextProvider i18n={i18n}>
-          <MockedProvider mocks={delayedMocks} cache={testCache}>
+          <MockedProvider mocks={extendedDelayedMocks} cache={testCache}>
             <GroupChatDetails
               toggleGroupChatDetailsModal={vi.fn()}
               groupChatDetailsModalisOpen={true}
@@ -1352,8 +1356,8 @@ describe('GroupChatDetails', () => {
 
       // Wait for spinner to appear during the ORGANIZATION_MEMBERS query loading
       await waitFor(() => {
-        const spinner = document.querySelector('[data-testid="spinner"]');
-        expect(spinner).toBeInTheDocument();
+        expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
       });
     });
 

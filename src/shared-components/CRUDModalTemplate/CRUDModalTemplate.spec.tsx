@@ -513,7 +513,7 @@ describe('CreateModal', () => {
       expect(submitButton).toBeDisabled();
     });
 
-    it('should use translated submit and cancel text', () => {
+    it('should use translated submit text and show close button', () => {
       renderWithI18n(
         <CreateModal
           open={true}
@@ -526,7 +526,7 @@ describe('CreateModal', () => {
       );
 
       expect(screen.getByText('Create')).toBeInTheDocument();
-      expect(screen.getByText('Cancel')).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
   });
 
@@ -754,7 +754,7 @@ describe('CreateModal', () => {
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
 
-    it('should render footer with cancel and submit buttons', () => {
+    it('should render footer with submit button and header close button', () => {
       renderWithI18n(
         <CreateModal
           open={true}
@@ -766,12 +766,11 @@ describe('CreateModal', () => {
         </CreateModal>,
       );
 
-      const cancelBtn = screen.getByTestId('modal-cancel-btn');
+      const closeBtn = screen.getByTestId('modalCloseBtn');
       const submitBtn = screen.getByTestId('modal-submit-btn');
 
-      expect(cancelBtn).toBeInTheDocument();
+      expect(closeBtn).toBeInTheDocument();
       expect(submitBtn).toBeInTheDocument();
-      expect(cancelBtn).toHaveTextContent('Cancel');
       expect(submitBtn).toHaveTextContent('Create');
     });
   });

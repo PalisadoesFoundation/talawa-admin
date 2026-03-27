@@ -539,7 +539,7 @@ describe('Testing User Campaigns Screen', () => {
       return campaignCells.map((cell) => cell.textContent || '');
     };
 
-    const startDateHeader = screen.getByRole('columnheader', {
+    const startDateHeader = screen.getByRole('button', {
       name: /start date/i,
     });
     expect(startDateHeader).toBeInTheDocument();
@@ -572,7 +572,7 @@ describe('Testing User Campaigns Screen', () => {
       return campaignCells.map((cell) => cell.textContent || '');
     };
 
-    const endDateHeader = screen.getByRole('columnheader', {
+    const endDateHeader = screen.getByRole('button', {
       name: /end date/i,
     });
     expect(endDateHeader).toBeInTheDocument();
@@ -597,9 +597,7 @@ describe('Testing User Campaigns Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Future School Campaign')).toBeInTheDocument();
-      // StatusBadge handles translation, 'pending' status usually maps to 'Pending' text
-      // We can also check by data-testid if text is variable
-      const text = screen.getByText(/Pending/i);
+      const text = screen.getByText(/Not Started/i);
       expect(text).toBeInTheDocument();
     });
   });

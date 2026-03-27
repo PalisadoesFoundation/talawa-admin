@@ -20,7 +20,10 @@ import { MOCKS, MOCK_ERROR } from '../OrganizationFundCampaignMocks';
 import type { InterfaceCampaignModal } from './types';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
 import { vi } from 'vitest';
-import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
+import {
+  DELETE_CAMPAIGN_MUTATION,
+  UPDATE_CAMPAIGN_MUTATION,
+} from 'GraphQl/Mutations/CampaignMutation';
 import CampaignModal from './CampaignModal';
 
 dayjs.extend(utc);
@@ -68,12 +71,14 @@ vi.mock('shared-components/BaseModal/BaseModal', () => ({
   __esModule: true,
   default: ({
     children,
+    footer,
     show,
     onHide,
     title,
     dataTestId,
   }: {
     children: ReactNode;
+    footer?: ReactNode;
     show: boolean;
     onHide: () => void;
     title: string;
@@ -86,6 +91,7 @@ vi.mock('shared-components/BaseModal/BaseModal', () => ({
           close
         </button>
         {children}
+        {footer}
       </div>
     ) : null,
 }));
@@ -262,6 +268,18 @@ const getFundingGoalInput = () =>
 
 const getCurrencySelect = () =>
   screen.getByTestId('currencySelect') as HTMLSelectElement;
+
+const getSubmitCampaignButton = () => {
+  const button =
+    screen.queryByTestId('editCampaignBtn') ??
+    screen.queryByTestId('submitCampaignBtn');
+
+  if (!button) {
+    throw new Error('Submit/Edit campaign button not found in modal');
+  }
+
+  return button;
+};
 
 // Setup userEvent instance for better async handling
 const setupUser = () => userEvent.setup();
@@ -445,6 +463,36 @@ const UPDATE_AUTO_ADJUST_END_DATE_MOCK = [
   },
 ];
 
+const DELETE_CAMPAIGN_SUCCESS_MOCK = [
+  {
+    request: {
+      query: DELETE_CAMPAIGN_MUTATION,
+      variables: {
+        id: 'campaignId1',
+      },
+    },
+    result: {
+      data: {
+        deleteFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
+];
+
+const DELETE_CAMPAIGN_ERROR_MOCK = [
+  {
+    request: {
+      query: DELETE_CAMPAIGN_MUTATION,
+      variables: {
+        id: 'campaignId1',
+      },
+    },
+    error: new Error('Delete campaign error'),
+  },
+];
+
 // Mock links removed from module scope - now created per-test in beforeEach
 
 describe('CampaignModal', () => {
@@ -457,6 +505,8 @@ describe('CampaignModal', () => {
   let noFieldsMockLink: StaticMockLink;
   let currencyOnlyMockLink: StaticMockLink;
   let autoAdjustEndDateMockLink: StaticMockLink;
+  let deleteSuccessMockLink: StaticMockLink;
+  let deleteErrorMockLink: StaticMockLink;
 
   beforeEach(() => {
     // Create fresh instances for each test to ensure isolation
@@ -470,6 +520,8 @@ describe('CampaignModal', () => {
     autoAdjustEndDateMockLink = new StaticMockLink(
       UPDATE_AUTO_ADJUST_END_DATE_MOCK,
     );
+    deleteSuccessMockLink = new StaticMockLink(DELETE_CAMPAIGN_SUCCESS_MOCK);
+    deleteErrorMockLink = new StaticMockLink(DELETE_CAMPAIGN_ERROR_MOCK);
   });
 
   afterEach(() => {
@@ -729,7 +781,7 @@ describe('CampaignModal', () => {
       await user.type(fundingGoal, '200');
     });
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     expect(submitBtn).toBeInTheDocument();
     await user.click(submitBtn);
 
@@ -788,7 +840,7 @@ describe('CampaignModal', () => {
     await user.clear(campaignName);
     await user.type(campaignName, 'Updated For Loading Test');
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
 
     // Submit button should be enabled before clicking
     expect(submitBtn).not.toBeDisabled();
@@ -803,7 +855,10 @@ describe('CampaignModal', () => {
 
       // The CRUDModalTemplate replaces the form with the loading state,
       // so the submit button is removed from the DOM.
-      expect(screen.queryByTestId('submitCampaignBtn')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('submitCampaignBtn') ??
+          screen.queryByTestId('editCampaignBtn'),
+      ).not.toBeInTheDocument();
     });
 
     // Now resolve the mutation manually
@@ -836,7 +891,7 @@ describe('CampaignModal', () => {
     // The component should return to idle state, showing the form again.
     await waitFor(() => {
       expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
-      const btn = screen.getByTestId('submitCampaignBtn');
+      const btn = getSubmitCampaignButton();
       expect(btn).toBeInTheDocument();
       expect(btn).toBeEnabled();
     });
@@ -878,7 +933,7 @@ describe('CampaignModal', () => {
       await user.type(fundingGoal, '400');
     });
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     expect(submitBtn).toBeInTheDocument();
 
     await user.click(submitBtn);
@@ -888,6 +943,97 @@ describe('CampaignModal', () => {
       );
       expect(campaignProps[1].refetchCampaign).toHaveBeenCalled();
       expect(campaignProps[1].hide).toHaveBeenCalled();
+    });
+  });
+
+  it('should delete campaign successfully and close delete modal', async () => {
+    const user = setupUser();
+    const editProps = {
+      ...campaignProps[1],
+      hide: vi.fn(),
+      refetchCampaign: vi.fn(),
+    };
+
+    renderCampaignModal(deleteSuccessMockLink, editProps, cache);
+
+    await user.click(screen.getByTestId('deleteCampaignBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('campaign-delete-modal')).toBeInTheDocument();
+    });
+
+    const modalDeleteButton = screen.getByTestId('modal-delete-btn');
+    await user.click(modalDeleteButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.deletedCampaign,
+      );
+      expect(editProps.refetchCampaign).toHaveBeenCalled();
+      expect(editProps.hide).toHaveBeenCalled();
+      expect(
+        screen.queryByTestId('campaign-delete-modal'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('should return early from delete when campaign id is missing', async () => {
+    const user = setupUser();
+    const editPropsWithoutCampaignId: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: null,
+      hide: vi.fn(),
+      refetchCampaign: vi.fn(),
+    };
+
+    renderCampaignModal(
+      deleteSuccessMockLink,
+      editPropsWithoutCampaignId,
+      cache,
+    );
+
+    await user.click(screen.getByTestId('deleteCampaignBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('campaign-delete-modal')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('modal-delete-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalledWith(
+        translations.deletedCampaign,
+      );
+      expect(editPropsWithoutCampaignId.refetchCampaign).not.toHaveBeenCalled();
+      expect(editPropsWithoutCampaignId.hide).not.toHaveBeenCalled();
+      expect(screen.getByTestId('campaign-delete-modal')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle delete error and reset delete loading state', async () => {
+    const user = setupUser();
+    const editProps = {
+      ...campaignProps[1],
+      hide: vi.fn(),
+      refetchCampaign: vi.fn(),
+    };
+
+    renderCampaignModal(deleteErrorMockLink, editProps, cache);
+
+    await user.click(screen.getByTestId('deleteCampaignBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('campaign-delete-modal')).toBeInTheDocument();
+    });
+
+    const modalDeleteButton = screen.getByTestId('modal-delete-btn');
+    await user.click(modalDeleteButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Delete campaign error',
+      );
+      expect(editProps.refetchCampaign).not.toHaveBeenCalled();
+      expect(editProps.hide).not.toHaveBeenCalled();
+      expect(screen.getByTestId('campaign-delete-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('modal-delete-btn')).toBeEnabled();
     });
   });
 
@@ -925,7 +1071,7 @@ describe('CampaignModal', () => {
       await user.type(fundingGoal, '200');
     });
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     await waitFor(() => {
@@ -969,7 +1115,7 @@ describe('CampaignModal', () => {
       await user.type(fundingGoal, '400');
     });
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     expect(submitBtn).toBeInTheDocument();
     await user.click(submitBtn);
 
@@ -1004,7 +1150,7 @@ describe('CampaignModal', () => {
     await user.type(campaignName, 'Updated Name');
 
     // Submit the form
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     // Wait for success message which indicates the mutation was called
@@ -1068,7 +1214,7 @@ describe('CampaignModal', () => {
       baseDate.add(2, 'month').format('DD/MM/YYYY'),
     );
     // Submit the form
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     // Wait for success message which indicates the mutation was called
@@ -1098,7 +1244,7 @@ describe('CampaignModal', () => {
     renderCampaignModal(noFieldsMockLink, unchangedProps, cache);
 
     // Don't change any values, just submit the form
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     // Wait for success message which indicates the mutation was called
@@ -1174,7 +1320,7 @@ describe('CampaignModal', () => {
     await user.selectOptions(currencySelect, 'EUR');
 
     // Submit the form
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     // Wait for success message which indicates the mutation was called
@@ -1216,7 +1362,7 @@ describe('CampaignModal', () => {
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     // Assert validation UI shows the required error message
@@ -1247,7 +1393,7 @@ describe('CampaignModal', () => {
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     // Assert validation UI shows the required error message
@@ -1302,7 +1448,7 @@ describe('CampaignModal', () => {
     await user.clear(getEndDateInput());
     await user.type(getEndDateInput(), end);
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1322,7 +1468,7 @@ describe('CampaignModal', () => {
     await user.clear(getStartDateInput());
     await user.clear(getEndDateInput());
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1338,7 +1484,7 @@ describe('CampaignModal', () => {
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     await waitFor(() => {
@@ -1359,7 +1505,7 @@ describe('CampaignModal', () => {
     await user.clear(getStartDateInput());
     await user.clear(getEndDateInput());
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     await waitFor(() => {
@@ -1389,7 +1535,7 @@ describe('CampaignModal', () => {
     await user.clear(getEndDateInput());
     await user.type(getEndDateInput(), end);
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1410,7 +1556,7 @@ describe('CampaignModal', () => {
     await user.clear(getStartDateInput());
     await user.clear(getEndDateInput());
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     await waitFor(() => {
@@ -1437,7 +1583,7 @@ describe('CampaignModal', () => {
     await user.clear(getEndDateInput());
     await user.type(getEndDateInput(), end);
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     await waitFor(() => {
@@ -1458,7 +1604,7 @@ describe('CampaignModal', () => {
     await user.clear(getStartDateInput());
     await user.clear(getEndDateInput());
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1484,7 +1630,7 @@ describe('CampaignModal', () => {
     await user.clear(getEndDateInput());
     await user.type(getEndDateInput(), endDate);
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1505,7 +1651,7 @@ describe('CampaignModal', () => {
     await user.clear(getStartDateInput());
     await user.clear(getEndDateInput());
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1531,7 +1677,7 @@ describe('CampaignModal', () => {
     await user.clear(getEndDateInput());
     await user.type(getEndDateInput(), endDate);
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1606,7 +1752,7 @@ describe('CampaignModal', () => {
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1626,7 +1772,7 @@ describe('CampaignModal', () => {
     await user.clear(getStartDateInput());
     await user.clear(getEndDateInput());
 
-    await user.click(screen.getByTestId('submitCampaignBtn'));
+    await user.click(getSubmitCampaignButton());
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -1742,7 +1888,7 @@ describe('CampaignModal', () => {
     // is correctly updated, which we verify via the mutation payload.
 
     // Submit the form to verify the mutation payload contains auto-adjusted dates
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    const submitBtn = getSubmitCampaignButton();
     await user.click(submitBtn);
 
     // Verify success - the mock's variableMatcher ensures startAt === endAt

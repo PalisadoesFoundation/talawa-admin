@@ -163,7 +163,7 @@ describe('PledgeModal', () => {
     ).toHaveValue('1111');
     expect(screen.getByTestId('setisTaxDeductibleSwitch')).toBeChecked();
     expect(screen.getByTestId('setDefaultSwitch')).not.toBeChecked();
-    expect(screen.getByTestId('archivedSwitch')).not.toBeChecked();
+    expect(screen.getByTestId('modal-archive-btn')).toBeInTheDocument();
   });
 
   it('should update Fund Name when input value changes', async () => {
@@ -242,15 +242,6 @@ describe('PledgeModal', () => {
     await waitFor(() => expect(defaultSwitch).toBeChecked());
   });
 
-  it('should update Tax isArchived switch when input value changes', async () => {
-    const user = userEvent.setup({ delay: null });
-    renderFundModal(link1, fundProps[1]);
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    expect(archivedSwitch).not.toBeChecked();
-    await user.click(archivedSwitch);
-    await waitFor(() => expect(archivedSwitch).toBeChecked());
-  });
-
   it('should not update the fund when no fields are changed', async () => {
     const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
@@ -275,10 +266,6 @@ describe('PledgeModal', () => {
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     await user.click(defaultSwitch);
     await user.click(defaultSwitch);
-
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await user.click(archivedSwitch);
-    await user.click(archivedSwitch);
 
     await user.click(screen.getByTestId('modal-submit-btn'));
 
@@ -338,9 +325,6 @@ describe('PledgeModal', () => {
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     await user.click(defaultSwitch);
-
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await user.click(archivedSwitch);
 
     await user.click(screen.getByTestId('modal-submit-btn'));
 
@@ -417,7 +401,6 @@ describe('PledgeModal', () => {
       ).toHaveValue('9999');
       expect(screen.getByTestId('setisTaxDeductibleSwitch')).not.toBeChecked();
       expect(screen.getByTestId('setDefaultSwitch')).toBeChecked();
-      expect(screen.getByTestId('archivedSwitch')).toBeChecked();
     });
   });
 

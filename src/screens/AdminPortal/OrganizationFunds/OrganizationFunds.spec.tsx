@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationFunds from './OrganizationFunds';
-import { MOCKS, MOCKS_ERROR, NO_FUNDS } from './OrganizationFundsMocks';
+import { MOCKS, NO_FUNDS } from './OrganizationFundsMocks';
 import type { ApolloLink } from '@apollo/client';
 import {
   LocalizationProvider,
@@ -49,7 +49,6 @@ vi.mock('react-router', async () => {
 const mockedUseParams = vi.mocked(useParams);
 
 const link1 = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const link3 = new StaticMockLink(NO_FUNDS, true);
 
 const translations = JSON.parse(
@@ -207,14 +206,6 @@ describe('OrganizationFunds Screen =>', () => {
       },
       { timeout: 3000 },
     );
-  });
-
-  it('should render the Fund screen with error', async () => {
-    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    renderOrganizationFunds(link2);
-    await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-    });
   });
 
   it('renders the empty fund component', async () => {

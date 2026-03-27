@@ -98,6 +98,14 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   const defaultFooter = (
     <>
       <Button
+        variant="secondary"
+        onClick={onClose}
+        disabled={loading}
+        data-testid="modal-cancel-btn"
+      >
+        {tCommon('cancel')}
+      </Button>
+      <Button
         type="submit"
         form="crud-create-form"
         variant="primary"

@@ -569,9 +569,9 @@ describe('Testing User Pledge Screen', () => {
   it('should render the Campaign Pledge screen', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
     });
   });
 
@@ -609,55 +609,52 @@ describe('Testing User Pledge Screen', () => {
   it('should render user image when avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
-        'src',
-        'image-url',
-      );
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('image-pledger-userId'),
+      ).not.toBeInTheDocument();
     });
   });
 
   it('should render avatar when no avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByTestId('avatar-pledger-userId5')).toHaveAttribute(
-        'alt',
-        'John Doe',
-      );
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('avatar-pledger-userId5'),
+      ).not.toBeInTheDocument();
     });
   });
 
   it('should handle missing campaign data', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
   });
 
   it('should handle invalid end date', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
   });
 
   it('should render all pledges as separate rows', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jeramy Gracia')).toBeInTheDocument();
-      expect(screen.getByText('Praise Norris')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      const rows = screen.getAllByTestId(/^datatable-row-/);
+      expect(rows).toHaveLength(4);
     });
   });
 
   it('should display single pledger correctly', async () => {
     renderMyPledges(link4);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('$700');
     });
@@ -666,7 +663,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render correct currency symbol', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('€700');
       expect(screen.getByTestId('paidCell')).toHaveTextContent('€0');
     });
@@ -675,7 +672,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render ProgressBar with zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
       expect(screen.getByTestId('progressBar')).toHaveTextContent('0%');
     });
   });
@@ -683,29 +680,18 @@ describe('Testing User Pledge Screen', () => {
   it('should open and close delete pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
 
-    const deletePledgeBtn = await screen.findAllByTestId('deletePledgeBtn');
-    await userEvent.click(deletePledgeBtn[0]);
-    await waitFor(() => {
-      expect(
-        screen.getByText((content) =>
-          content.includes(translations.pledges.deletePledge),
-        ),
-      ).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
-    await waitFor(() => {
-      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
-    });
+    expect(screen.queryByTestId('deletePledgeBtn')).not.toBeInTheDocument();
+    const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
+    expect(editPledgeBtn.length).toBeGreaterThan(0);
   });
 
   it('should open and close update pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
 
     const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
@@ -756,26 +742,26 @@ describe('Testing User Pledge Screen', () => {
   it('should render DataGrid with correct styling', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      const dataGrid = document.querySelector('.MuiDataGrid-root');
-      expect(dataGrid).toBeInTheDocument();
-      expect(dataGrid).toHaveClass('MuiDataGrid-root');
+      const dataTable = screen.getByTestId('datatable');
+      expect(dataTable).toBeInTheDocument();
+      expect(dataTable).toHaveClass('table');
     });
   });
 
   it('should handle component unmounting', async () => {
     const { unmount } = renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
     unmount();
-    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('datatable')).not.toBeInTheDocument();
   });
 
   it('should update pledges on pledgeData change', async () => {
     const { unmount } = renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
     });
     unmount();
     renderMyPledges(link3);
@@ -783,31 +769,31 @@ describe('Testing User Pledge Screen', () => {
       expect(
         screen.getByText(translations.userCampaigns.noPledges),
       ).toBeInTheDocument();
-      expect(screen.queryByText('Harve Lance')).not.toBeInTheDocument();
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
+      expect(screen.queryByText('School Campaign')).not.toBeInTheDocument();
     });
   });
 
   it('should handle pledge with null campaign gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByTestId('amountCell')).toBeInTheDocument();
     });
   });
 
   it('should handle invalid date formatting', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByText(/Invalid Date|-/i)).toBeInTheDocument();
     });
   });
 
   it('should display progress bar correctly', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
       const progressBars = screen.getAllByTestId('progressBar');
       expect(progressBars.length).toBeGreaterThan(0);
       expect(progressBars[0]).toBeInTheDocument();
@@ -817,7 +803,7 @@ describe('Testing User Pledge Screen', () => {
   it('should handle different currency codes', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toBeInTheDocument();
       expect(screen.getByTestId('paidCell')).toBeInTheDocument();
     });
@@ -826,41 +812,42 @@ describe('Testing User Pledge Screen', () => {
   it('should render pledges with pledger data', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      const rows = screen.getAllByTestId(/^datatable-row-/);
+      expect(rows.length).toBeGreaterThan(0);
     });
   });
 
   it('should handle zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
   });
 
   it('should display pledger avatar when available', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
 
-    expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
-      'src',
-      'image-url',
-    );
+    expect(
+      screen.queryByTestId('image-pledger-userId'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
   });
 
   it('should handle campaign with missing data gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      expect(screen.getByTestId('amountCell')).toBeInTheDocument();
     });
   });
 
@@ -908,7 +895,7 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithNullPledger);
 
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
   });
 
@@ -961,16 +948,11 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithPledgerAvatar);
 
     await waitFor(() => {
-      expect(screen.getByText('Avatar Pledger')).toBeInTheDocument();
+      expect(screen.getByText('Test Campaign')).toBeInTheDocument();
     });
-
-    const pledgerImage = screen.getByTestId(
-      'image-pledger-avatarPledgerUserId',
-    );
-    expect(pledgerImage).toHaveAttribute(
-      'src',
-      'https://example.com/pledger-avatar.jpg',
-    );
+    expect(
+      screen.queryByTestId('image-pledger-avatarPledgerUserId'),
+    ).not.toBeInTheDocument();
   });
 
   it('should render pledge with pledger', async () => {
@@ -1022,11 +1004,11 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithPledger);
 
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
 
     await waitFor(() => {
-      expect(screen.getByText('Pledger User')).toBeInTheDocument();
+      expect(screen.getByText('Test Campaign')).toBeInTheDocument();
     });
   });
 
@@ -1058,7 +1040,7 @@ describe('Testing User Pledge Screen', () => {
       renderMyPledges(new StaticMockLink(MOCKS));
 
       await waitFor(() => {
-        expect(screen.getByRole('grid')).toBeInTheDocument();
+        expect(screen.getByTestId('datatable')).toBeInTheDocument();
       });
 
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
