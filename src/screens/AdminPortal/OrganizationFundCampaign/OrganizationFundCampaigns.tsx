@@ -145,6 +145,7 @@ const orgFundCampaign = (): JSX.Element => {
     const currentIsArchived = campaignsQuery.data?.fund?.isArchived ?? false;
     return { fundName: currentFundName, isArchived: currentIsArchived };
   }, [campaignsQuery.data]);
+  const isFundStatePending = campaignLoading || !campaignsQuery.data?.fund;
 
   if (!fundId || !orgId) {
     return <Navigate to={'/'} />;
@@ -346,7 +347,7 @@ const orgFundCampaign = (): JSX.Element => {
           onClick={() => handleOpenModal(null, 'create')}
           className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
           data-testid="addCampaignBtn"
-          disabled={isArchived}
+          disabled={isFundStatePending || isArchived}
         >
           <i className={'fa fa-plus me-2'} />
           {t('addCampaign')}
