@@ -79,6 +79,7 @@ export const disposeWsClient = async (): Promise<void> => {
   const clientToDispose = wsClient;
   wsClient = null;
   initialized = false;
+  deps?.client.setLink(ApolloLink.from([deps.errorLink, deps.httpLink]));
   try {
     const result = clientToDispose.dispose();
     if (result instanceof Promise) {
