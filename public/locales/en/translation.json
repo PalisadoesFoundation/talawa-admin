@@ -2211,6 +2211,7 @@
     "campaignStatus": "Status",
     "fundGoal": "Fund Goal",
     "percentRaised": "% Raised",
+    "campaignProgress": "Campaign progress: {{percentage}}%",
     "createFirstCampaign": "Create your first fundraising campaign to see it here.",
     "campaignEnded": "Campaign ended"
   },

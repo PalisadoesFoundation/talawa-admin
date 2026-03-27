@@ -6,7 +6,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { Button } from 'shared-components/Button';
-import { ProgressBar } from 'react-bootstrap';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import styles from './Pledges.module.css';
 import { useTranslation } from 'react-i18next';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
@@ -31,6 +32,7 @@ interface InterfaceUserPledgeRow {
   id: string;
   campaign: InterfacePledgeInfo['campaign'];
   amount: number;
+  amountRaised: number;
   currency: string;
   goalAmount: number;
   endDate: Date | string | undefined;
@@ -118,6 +120,7 @@ const Pledges = (): JSX.Element => {
         id: p.id,
         campaign: p.campaign,
         amount: p.amount,
+        amountRaised: p.campaign?.amountRaised ?? 0,
         currency: p.campaign?.currencyCode ?? 'USD',
         goalAmount: p.campaign?.goalAmount ?? 0,
         endDate: p.campaign?.endAt,
@@ -138,7 +141,7 @@ const Pledges = (): JSX.Element => {
       header: t('associatedCampaign'),
       accessor: 'campaignName',
       render: (value) => <>{String(value || '')}</>,
-      meta: { sortable: false },
+      meta: { sortable: false, align: 'center' },
     },
     {
       id: 'endDate',
@@ -146,7 +149,7 @@ const Pledges = (): JSX.Element => {
       accessor: 'endDate',
       render: (value) =>
         value ? dayjs(String(value)).format('DD/MM/YYYY') : '-',
-      meta: { sortable: false },
+      meta: { sortable: false, align: 'center' },
     },
     {
       id: 'amount',
@@ -158,7 +161,7 @@ const Pledges = (): JSX.Element => {
           {Number(value)}
         </div>
       ),
-      meta: { sortable: false },
+      meta: { sortable: false, align: 'center' },
     },
     {
       id: 'donated',
@@ -169,24 +172,67 @@ const Pledges = (): JSX.Element => {
           {currencySymbols[row.currency as keyof typeof currencySymbols]}0
         </div>
       ),
-      meta: { sortable: false },
+      meta: { sortable: false, align: 'center' },
     },
     {
       id: 'progress',
       header: t('progress'),
       accessor: 'goalAmount',
-      render: (_value, row) => (
-        <ProgressBar
-          now={row.goalAmount > 0 ? (row.amount / row.goalAmount) * 100 : 0}
-          label={
-            row.goalAmount > 0
-              ? `${Math.round((row.amount / row.goalAmount) * 100)}%`
-              : '0%'
-          }
-          data-testid="progressBar"
-        />
-      ),
-      meta: { sortable: false },
+      render: (_value, row) => {
+        const percentage =
+          row.goalAmount > 0
+            ? Math.min((row.amountRaised / row.goalAmount) * 100, 100)
+            : 0;
+        const angle = (percentage / 100) * 360;
+        const radians = ((angle - 90) * Math.PI) / 180;
+        const x = 16 + 16 * Math.cos(radians);
+        const y = 16 + 16 * Math.sin(radians);
+        const largeArcFlag = angle > 180 ? 1 : 0;
+        const sectorPath =
+          percentage >= 100
+            ? ''
+            : `M 16 16 L 16 0 A 16 16 0 ${largeArcFlag} 1 ${x} ${y} Z`;
+        const pieClassName =
+          percentage >= 100
+            ? styles.progressComplete
+            : percentage >= 50
+              ? styles.progressHalf
+              : styles.progressLow;
+
+        return (
+          <Box
+            className={styles.progressCellContainer}
+            data-testid="progressBar"
+          >
+            <svg
+              className={`${styles.progressPie} ${pieClassName}`}
+              viewBox="0 0 32 32"
+              role="img"
+              aria-label={t('campaignProgress', {
+                percentage: percentage.toFixed(0),
+              })}
+            >
+              <circle cx="16" cy="16" r="16" className={styles.progressTrack} />
+              {percentage >= 100 ? (
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="16"
+                  className={styles.progressSlice}
+                />
+              ) : (
+                percentage > 0 && (
+                  <path d={sectorPath} className={styles.progressSlice} />
+                )
+              )}
+            </svg>
+            <Typography variant="body2" className={styles.progressTypography}>
+              {percentage.toFixed(0)}%
+            </Typography>
+          </Box>
+        );
+      },
+      meta: { sortable: false, align: 'center' },
     },
     {
       id: 'action',
@@ -203,7 +249,7 @@ const Pledges = (): JSX.Element => {
           {tCommon('edit')}
         </Button>
       ),
-      meta: { sortable: false },
+      meta: { sortable: false, align: 'center' },
     },
   ];
 
@@ -228,7 +274,7 @@ const Pledges = (): JSX.Element => {
 
   return (
     <LoadingState isLoading={pledgeLoading} variant="spinner">
-      <div>
+      <div className={styles.contentWrapper}>
         <div className="mb-4">
           <SearchFilterBar
             searchPlaceholder={tCommon('searchBy', {
@@ -247,6 +293,7 @@ const Pledges = (): JSX.Element => {
           data={filteredRows}
           columns={columns}
           rowKey="id"
+          tableClassName={styles.uniformTableLayout}
           loading={pledgeLoading}
           paginationMode="client"
           pageSize={10}

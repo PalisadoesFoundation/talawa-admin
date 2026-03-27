@@ -4,7 +4,6 @@ import Search from '@mui/icons-material/Search';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -175,6 +174,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
           data-testid="campaignName"
           onClick={() => handleClick(row.id)}
         >
+          <i className="fa fa-link me-1" aria-hidden="true" />
           {String(value)}
         </Button>
       ),
@@ -222,6 +222,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
       ),
       meta: {
         sortable: true,
+        align: 'center',
       },
     },
     {
@@ -239,6 +240,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
       ),
       meta: {
         sortable: false,
+        align: 'center',
       },
     },
     {
@@ -249,39 +251,49 @@ const OrganizationFundCampaign = (): JSX.Element => {
         const raised = row.amountRaised ?? 0;
         const goal = row.goalAmount;
         const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
+        const angle = (percentage / 100) * 360;
+        const radians = ((angle - 90) * Math.PI) / 180;
+        const x = 16 + 16 * Math.cos(radians);
+        const y = 16 + 16 * Math.sin(radians);
+        const largeArcFlag = angle > 180 ? 1 : 0;
+        const sectorPath =
+          percentage >= 100
+            ? ''
+            : `M 16 16 L 16 0 A 16 16 0 ${largeArcFlag} 1 ${x} ${y} Z`;
+        const pieClassName =
+          percentage >= 100
+            ? styles.progressComplete
+            : percentage >= 50
+              ? styles.progressHalf
+              : styles.progressLow;
 
         return (
           <Box
             className={styles.progressCellContainer}
             data-testid="progressCell"
           >
-            <Box className={styles.progressCircleContainer}>
-              <CircularProgress
-                variant="determinate"
-                value={100}
-                size={32}
-                className={styles.progressCircleBackground}
-              />
-              <CircularProgress
-                variant="determinate"
-                value={percentage}
-                size={32}
-                thickness={4}
-                aria-label={t('campaignProgress', {
-                  percentage: percentage.toFixed(0),
-                })}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-valuenow={percentage}
-                className={`${styles.progressCircleForeground} ${
-                  percentage >= 100
-                    ? styles.progressComplete
-                    : percentage >= 50
-                      ? styles.progressHalf
-                      : styles.progressLow
-                }`}
-              />
-            </Box>
+            <svg
+              className={`${styles.progressPie} ${pieClassName}`}
+              viewBox="0 0 32 32"
+              role="img"
+              aria-label={t('campaignProgress', {
+                percentage: percentage.toFixed(0),
+              })}
+            >
+              <circle cx="16" cy="16" r="16" className={styles.progressTrack} />
+              {percentage >= 100 ? (
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="16"
+                  className={styles.progressSlice}
+                />
+              ) : (
+                percentage > 0 && (
+                  <path d={sectorPath} className={styles.progressSlice} />
+                )
+              )}
+            </svg>
             <Typography variant="body2" className={styles.progressTypography}>
               {percentage.toFixed(0)}%
             </Typography>
@@ -290,6 +302,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
       },
       meta: {
         sortable: false,
+        align: 'center',
       },
     },
     {
@@ -312,6 +325,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
       ),
       meta: {
         sortable: false,
+        align: 'center',
       },
     },
   ];

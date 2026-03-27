@@ -1238,6 +1238,7 @@ export interface InterfaceUserCampaign {
  * Defines a fund node shape used by user campaign listing queries.
  */
 export interface InterfaceUserCampaignNode {
+  isArchived?: boolean;
   campaigns?: {
     edges: {
       node: {
@@ -1411,6 +1412,7 @@ export interface InterfacePledgeInfo {
     endAt: Date;
     currencyCode: string;
     goalAmount: number;
+    amountRaised?: number;
   };
   amount: number;
   note?: string | null;

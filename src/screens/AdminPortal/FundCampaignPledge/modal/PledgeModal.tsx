@@ -307,6 +307,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             disabled={isSubmitting || !isAmountValid}
             data-testid="modal-submit-btn"
           >
+            <i className="fa fa-pencil me-1" />
             {tCommon('create')}
           </Button>
         }

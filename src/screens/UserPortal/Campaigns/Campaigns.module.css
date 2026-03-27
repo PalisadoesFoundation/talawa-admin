@@ -97,3 +97,76 @@
   color: var(--color-gray-500);
   opacity: 1;
 }
+
+.progressPie {
+  --pie-fill-color: var(--color-blue-500);
+  width: var(--space-8);
+  height: var(--space-8);
+  display: block;
+}
+
+.progressTrack {
+  fill: var(--color-gray-100);
+}
+
+.progressSlice {
+  fill: var(--pie-fill-color);
+}
+
+.progressComplete {
+  --pie-fill-color: var(--color-green-500);
+}
+
+.progressHalf {
+  --pie-fill-color: var(--color-yellow-500);
+}
+
+.progressLow {
+  --pie-fill-color: var(--color-blue-500);
+}
+
+.progressTypography {
+  font-weight: var(--font-weight-bold);
+}
+
+.progressCellContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.uniformTableLayout {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.uniformTableLayout thead th:nth-child(1),
+.uniformTableLayout tbody td:nth-child(1) {
+  width: 4%;
+}
+
+.uniformTableLayout thead th:nth-child(2),
+.uniformTableLayout tbody td:nth-child(2) {
+  width: 18%;
+}
+
+.uniformTableLayout thead th:nth-child(3),
+.uniformTableLayout tbody td:nth-child(3),
+.uniformTableLayout thead th:nth-child(4),
+.uniformTableLayout tbody td:nth-child(4),
+.uniformTableLayout thead th:nth-child(5),
+.uniformTableLayout tbody td:nth-child(5) {
+  width: 10%;
+}
+
+.uniformTableLayout thead th:nth-child(6),
+.uniformTableLayout tbody td:nth-child(6),
+.uniformTableLayout thead th:nth-child(7),
+.uniformTableLayout tbody td:nth-child(7),
+.uniformTableLayout thead th:nth-child(8),
+.uniformTableLayout tbody td:nth-child(8),
+.uniformTableLayout thead th:nth-child(9),
+.uniformTableLayout tbody td:nth-child(9) {
+  width: 12%;
+}

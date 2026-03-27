@@ -2209,6 +2209,7 @@
     "endDate": "Fecha de Finalización",
     "fundGoal": "Meta de Financiación",
     "percentRaised": "% Recaudado",
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%",
     "searchCampaigns": "Buscar campañas",
     "createFirstCampaign": "Crea tu primera campaña de recaudación de fondos para verla aquí.",
     "campaignEnded": "Campaña finalizada",

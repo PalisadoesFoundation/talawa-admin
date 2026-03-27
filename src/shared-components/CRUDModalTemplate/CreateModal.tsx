@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import CreateIcon from '@mui/icons-material/Create';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
@@ -97,19 +98,12 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   const defaultFooter = (
     <>
       <Button
-        variant="secondary"
-        onClick={onClose}
-        disabled={loading}
-        data-testid="modal-cancel-btn"
-      >
-        {tCommon('cancel')}
-      </Button>
-      <Button
         type="submit"
         form="crud-create-form"
         variant="primary"
         disabled={loading || submitDisabled}
         data-testid="modal-submit-btn"
+        icon={<CreateIcon />}
       >
         {tCommon('create')}
       </Button>

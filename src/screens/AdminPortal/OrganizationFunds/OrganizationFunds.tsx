@@ -224,6 +224,7 @@ const organizationFunds = (): JSX.Element => {
             data-testid="fundName"
             onClick={() => handleClick(row.id)}
           >
+            <i className="fa fa-link me-1" aria-hidden="true" />
             {String(value)}
           </Button>
         );

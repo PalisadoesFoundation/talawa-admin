@@ -214,6 +214,35 @@ const fundCampaignPledge = (): JSX.Element => {
             { translationKey: 'pledges.pledges', isCurrent: true },
           ]}
         />
+        <div className={`${styles.btnsContainerPledge} align-items-center`}>
+          <SearchFilterBar
+            searchPlaceholder={t('pledges.searchPledger')}
+            searchValue={searchTerm}
+            onSearchChange={(value) => setSearchTerm(value.trim())}
+            onSearchSubmit={(value: string) => {
+              setSearchTerm(value.trim());
+            }}
+            searchInputTestId="searchPledger"
+            searchButtonTestId="searchBtn"
+            hasDropdowns={true}
+            dropdowns={[]}
+            additionalButtons={
+              <Button
+                variant="success"
+                className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
+                disabled={!isWithinCampaignDates}
+                onClick={() => handleOpenModal(null, 'create')}
+                data-testid="addPledgeBtn"
+                title={
+                  !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
+                }
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('pledges.addPledge')}
+              </Button>
+            }
+          />
+        </div>
         <div className={styles.overviewContainer}>
           <div className={styles.titleContainer}>
             <h3>{campaignInfo?.name}</h3>
@@ -294,35 +323,6 @@ const fundCampaignPledge = (): JSX.Element => {
               </div>
             </div>
           </div>
-        </div>
-        <div className={`${styles.btnsContainerPledge} align-items-center`}>
-          <SearchFilterBar
-            searchPlaceholder={t('pledges.searchPledger')}
-            searchValue={searchTerm}
-            onSearchChange={(value) => setSearchTerm(value.trim())}
-            onSearchSubmit={(value: string) => {
-              setSearchTerm(value.trim());
-            }}
-            searchInputTestId="searchPledger"
-            searchButtonTestId="searchBtn"
-            hasDropdowns={true}
-            dropdowns={[]}
-            additionalButtons={
-              <Button
-                variant="success"
-                className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
-                disabled={!isWithinCampaignDates}
-                onClick={() => handleOpenModal(null, 'create')}
-                data-testid="addPledgeBtn"
-                title={
-                  !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
-                }
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('pledges.addPledge')}
-              </Button>
-            }
-          />
         </div>
         <div className={styles.listBox}>
           {pledges.length === 0 ? (

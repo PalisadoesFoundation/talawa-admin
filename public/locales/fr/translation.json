@@ -2229,6 +2229,7 @@
     "campaignStatus": "Statut",
     "fundGoal": "Objectif de Financement",
     "percentRaised": "% Collecté",
+    "campaignProgress": "Progression de la campagne : {{percentage}}%",
     "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
     "campaignEnded": "Campagne terminée"
   },

@@ -2224,6 +2224,7 @@
     "campaignStatus": "स्थिति",
     "fundGoal": "वित्त पोषण लक्ष्य",
     "percentRaised": "% एकत्रित",
+    "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
     "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
     "campaignEnded": "अभियान समाप्त हो गया"
   },

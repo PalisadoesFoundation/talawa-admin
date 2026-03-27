@@ -114,6 +114,7 @@ const Campaigns = (): JSX.Element => {
 
   const campaigns = useMemo((): CampaignWithStatus[] => {
     return fundRows
+      .filter((fundNode) => !fundNode.isArchived)
       .flatMap((fundNode) => fundNode.campaigns?.edges ?? [])
       .map(({ node: campaign }) => {
         const today = dayjs().startOf('day');
@@ -216,11 +217,13 @@ const Campaigns = (): JSX.Element => {
       render: (value) => (
         <StatusBadge
           variant={value as 'active' | 'inactive' | 'pending'}
+          label={value === 'pending' ? 'Not Started' : undefined}
           dataTestId="campaignStatus"
         />
       ),
       meta: {
         sortable: false,
+        align: 'left',
       },
     },
     {
@@ -232,6 +235,7 @@ const Campaigns = (): JSX.Element => {
         sortable: true,
         sortFn: (a, b) =>
           dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf(),
+        align: 'center',
       },
     },
     {
@@ -247,6 +251,7 @@ const Campaigns = (): JSX.Element => {
         sortable: true,
         sortFn: (a, b) =>
           dayjs(a.endDate).valueOf() - dayjs(b.endDate).valueOf(),
+        align: 'center',
       },
     },
     {
@@ -261,6 +266,7 @@ const Campaigns = (): JSX.Element => {
       ),
       meta: {
         sortable: true,
+        align: 'center',
       },
     },
     {
@@ -275,6 +281,7 @@ const Campaigns = (): JSX.Element => {
       ),
       meta: {
         sortable: false,
+        align: 'center',
       },
     },
     {
@@ -285,15 +292,58 @@ const Campaigns = (): JSX.Element => {
         const raised = row.amountRaised ?? 0;
         const goal = row.fundingGoal;
         const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
+        const angle = (percentage / 100) * 360;
+        const radians = ((angle - 90) * Math.PI) / 180;
+        const x = 16 + 16 * Math.cos(radians);
+        const y = 16 + 16 * Math.sin(radians);
+        const largeArcFlag = angle > 180 ? 1 : 0;
+        const sectorPath =
+          percentage >= 100
+            ? ''
+            : `M 16 16 L 16 0 A 16 16 0 ${largeArcFlag} 1 ${x} ${y} Z`;
+        const pieClassName =
+          percentage >= 100
+            ? styles.progressComplete
+            : percentage >= 50
+              ? styles.progressHalf
+              : styles.progressLow;
 
         return (
-          <Box data-testid="progressCell">
-            <Typography>{percentage.toFixed(0)}%</Typography>
+          <Box
+            className={styles.progressCellContainer}
+            data-testid="progressCell"
+          >
+            <svg
+              className={`${styles.progressPie} ${pieClassName}`}
+              viewBox="0 0 32 32"
+              role="img"
+              aria-label={t('campaignProgress', {
+                percentage: percentage.toFixed(0),
+              })}
+            >
+              <circle cx="16" cy="16" r="16" className={styles.progressTrack} />
+              {percentage >= 100 ? (
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="16"
+                  className={styles.progressSlice}
+                />
+              ) : (
+                percentage > 0 && (
+                  <path d={sectorPath} className={styles.progressSlice} />
+                )
+              )}
+            </svg>
+            <Typography variant="body2" className={styles.progressTypography}>
+              {percentage.toFixed(0)}%
+            </Typography>
           </Box>
         );
       },
       meta: {
         sortable: false,
+        align: 'center',
       },
     },
     {
@@ -327,6 +377,7 @@ const Campaigns = (): JSX.Element => {
       },
       meta: {
         sortable: false,
+        align: 'center',
       },
     },
   ];
@@ -365,6 +416,7 @@ const Campaigns = (): JSX.Element => {
           data={filteredCampaigns}
           columns={columns}
           rowKey="_id"
+          tableClassName={styles.uniformTableLayout}
           loading={campaignLoading}
           paginationMode="client"
           pageSize={PAGE_SIZE}

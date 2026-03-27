@@ -1,32 +1,28 @@
-.progressCircleContainer {
-  position: relative;
-  display: inline-flex;
+.progressPie {
+  --pie-fill-color: var(--color-blue-500);
+  width: var(--space-8);
+  height: var(--space-8);
+  display: block;
 }
 
-.progressCircleBackground {
-  color: var(--color-gray-100);
+.progressTrack {
+  fill: var(--color-gray-100);
 }
 
-.overflowVisible {
-  overflow: visible;
-}
-
-.progressCircleForeground {
-  position: absolute;
-  left: 0;
-  top: 0;
+.progressSlice {
+  fill: var(--pie-fill-color);
 }
 
 .progressComplete {
-  color: var(--color-green-500);
+  --pie-fill-color: var(--color-green-500);
 }
 
 .progressHalf {
-  color: var(--color-yellow-500);
+  --pie-fill-color: var(--color-yellow-500);
 }
 
 .progressLow {
-  color: var(--color-blue-500);
+  --pie-fill-color: var(--color-blue-500);
 }
 
 .progressTypography {

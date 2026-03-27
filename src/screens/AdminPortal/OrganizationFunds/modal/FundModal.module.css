@@ -412,12 +412,12 @@
 
 .deleteActionButton {
   background: var(--color-red-100);
-  color: var(--color-red-500);
+  color: var(--color-red-400);
 }
 
 .deleteActionButton:hover {
   background: var(--color-red-100);
-  color: var(--color-red-500);
+  color: var(--color-red-400);
 }
 
 .archiveActionButton {
@@ -449,7 +449,7 @@
 }
 
 .deleteActionButton i {
-  color: var(--color-red-500);
+  color: var(--color-red-400);
 }
 
 @media (max-width: 991px) {
