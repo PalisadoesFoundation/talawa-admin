@@ -61,6 +61,9 @@ const BEARER_PREFIX = 'Bearer ';
 
 let deps: ISubscriptionDeps | null = null;
 export const configureSubscriptions = (nextDeps: ISubscriptionDeps): void => {
+  if (initialized || wsClient) {
+    throw new Error('Dispose subscriptions before reconfiguring them');
+  }
   deps = nextDeps;
 };
 let initialized = false;
@@ -81,10 +84,7 @@ export const disposeWsClient = async (): Promise<void> => {
   initialized = false;
   deps?.client.setLink(ApolloLink.from([deps.errorLink, deps.httpLink]));
   try {
-    const result = clientToDispose.dispose();
-    if (result instanceof Promise) {
-      await result;
-    }
+    await clientToDispose.dispose();
   } catch (error) {
     console.error('Error disposing WebSocket client:', error);
   }
