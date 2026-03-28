@@ -4,7 +4,14 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { InMemoryCache, ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { cleanup, render, screen, waitFor, act } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  act,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -656,6 +663,62 @@ describe('CampaignModal', () => {
     );
     expect(getCurrencySelect()).toHaveValue('USD');
     expect(getFundingGoalInput()).toHaveValue(100);
+  });
+
+  it('should render start and end date fields with create actions in create mode', async () => {
+    renderCampaignModal(link1, campaignProps[0], cache);
+
+    await waitFor(() => {
+      expect(getStartDateInput()).toBeInTheDocument();
+      expect(getEndDateInput()).toBeInTheDocument();
+      expect(screen.getByTestId('submitCampaignBtn')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('editCampaignBtn')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('deleteCampaignBtn')).not.toBeInTheDocument();
+  });
+
+  it('should render edit and delete actions in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('editCampaignBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('deleteCampaignBtn')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('submitCampaignBtn')).not.toBeInTheDocument();
+  });
+
+  it('should normalize negative campaign goalAmount to 0 on load', async () => {
+    const negativeGoalProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: {
+        ...(campaignProps[1].campaign as InterfaceCampaignInfo),
+        goalAmount: -25,
+      },
+    };
+
+    renderCampaignModal(link1, negativeGoalProps, cache);
+
+    await waitFor(() => {
+      expect(getFundingGoalInput()).toHaveValue(0);
+    });
+  });
+
+  it('should normalize non-finite campaign goalAmount to 0 on load', async () => {
+    const nonFiniteGoalProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: {
+        ...(campaignProps[1].campaign as InterfaceCampaignInfo),
+        goalAmount: Number.POSITIVE_INFINITY,
+      },
+    };
+
+    renderCampaignModal(link1, nonFiniteGoalProps, cache);
+
+    await waitFor(() => {
+      expect(getFundingGoalInput()).toHaveValue(0);
+    });
   });
 
   it('should update fundingGoal when input value changes', async () => {
@@ -1639,6 +1702,32 @@ describe('CampaignModal', () => {
     });
   });
 
+  it('shows error when creating campaign with invalid parsed date values', async () => {
+    const user = setupUser();
+    const createPropsWithInvalidDates: InterfaceCampaignModal = {
+      ...campaignProps[0],
+      campaign: {
+        id: 'invalid-create-campaign',
+        name: 'Create Invalid Date Campaign',
+        goalAmount: 100,
+        startAt: new Date('invalid'),
+        endAt: new Date('invalid'),
+        currencyCode: 'USD',
+        createdAt: baseDate.toISOString(),
+      },
+    };
+
+    renderCampaignModal(link1, createPropsWithInvalidDates, cache);
+
+    await user.click(getSubmitCampaignButton());
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.invalidDate,
+      );
+    });
+  });
+
   it('shows error when updating campaign with invalid date', async () => {
     const user = setupUser();
     renderCampaignModal(link1, campaignProps[1], cache);
@@ -1683,6 +1772,47 @@ describe('CampaignModal', () => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         translations.endDateBeforeStart,
       );
+    });
+  });
+
+  it('shows error when updating campaign with invalid parsed date values', async () => {
+    const user = setupUser();
+    const editPropsWithInvalidDates: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: {
+        ...(campaignProps[1].campaign as InterfaceCampaignInfo),
+        startAt: new Date('invalid'),
+        endAt: new Date('invalid'),
+      },
+    };
+
+    renderCampaignModal(link1, editPropsWithInvalidDates, cache);
+
+    await user.click(getSubmitCampaignButton());
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.invalidDate,
+      );
+    });
+  });
+
+  it('closes delete modal when delete modal close button is clicked', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    await user.click(screen.getByTestId('deleteCampaignBtn'));
+
+    const deleteModal = await screen.findByTestId('campaign-delete-modal');
+    const deleteModalCloseButton =
+      within(deleteModal).getByTestId('modalCloseBtn');
+
+    await user.click(deleteModalCloseButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('campaign-delete-modal'),
+      ).not.toBeInTheDocument();
     });
   });
 

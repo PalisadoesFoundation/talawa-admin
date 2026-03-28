@@ -223,6 +223,30 @@ describe('getPledgeColumns', () => {
       });
       expect(result).toBe(dayjs.utc(pledgeDate).format('DD/MM/YYYY'));
     });
+
+    it('should sort pledgeDate using ascending timestamp comparator', () => {
+      const columns = getPledgeColumns(defaultProps);
+      const dateColumn = columns[1];
+      const sortFn = dateColumn.meta?.sortFn;
+
+      expect(sortFn).toBeDefined();
+
+      const earlierDate = dayjs.utc().subtract(2, 'day').toDate();
+      const laterDate = dayjs.utc().subtract(1, 'day').toDate();
+
+      const rowA = {
+        pledgeDate: earlierDate,
+      } as InterfacePledgeTableRow;
+      const rowB = {
+        pledgeDate: laterDate,
+      } as InterfacePledgeTableRow;
+
+      const ascendingResult = sortFn?.(rowA, rowB);
+      const descendingResult = sortFn?.(rowB, rowA);
+
+      expect(ascendingResult).toBeLessThan(0);
+      expect(descendingResult).toBeGreaterThan(0);
+    });
   });
 
   describe('amount column', () => {

@@ -6,7 +6,13 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -514,6 +520,56 @@ const USER_PLEDGES_NO_ASSOCIATED_RESOURCES_ERROR = [
   },
 ];
 
+const createProgressMock = (
+  amountRaised: number,
+  goalAmount: number,
+  campaignName = 'Progress Campaign',
+) => [
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        input: { userId: 'userId' },
+        where: {},
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'progressPledgeId',
+            amount: 700,
+            note: 'Progress note',
+            updatedAt: dayjs().toISOString(),
+            campaign: {
+              id: 'progressCampaignId',
+              name: campaignName,
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
+              currencyCode: 'USD',
+              goalAmount,
+              amountRaised,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId',
+              name: 'Harve Lance',
+              avatarURL: 'image-url',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+];
+
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_PLEDGES_ERROR);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
@@ -648,6 +704,69 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('datatable')).toBeInTheDocument();
       const rows = screen.getAllByTestId(/^datatable-row-/);
       expect(rows).toHaveLength(4);
+    });
+  });
+
+  it('should keep all rows when search query is empty or whitespace', async () => {
+    const user = userEvent.setup({ delay: null });
+    renderMyPledges(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    const initialRows = screen.getAllByTestId(/^datatable-row-/);
+    const searchInput = screen.getByTestId('searchByInput');
+    await user.clear(searchInput);
+    await user.type(searchInput, '   ');
+    await user.click(screen.getByTestId('searchBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getAllByTestId(/^datatable-row-/)).toHaveLength(
+        initialRows.length,
+      );
+    });
+  });
+
+  it('should filter rows by campaign name when query is provided', async () => {
+    const user = userEvent.setup({ delay: null });
+    renderMyPledges(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await user.clear(searchInput);
+    await user.type(searchInput, 'school');
+    await user.click(screen.getByTestId('searchBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should trim search text in onSearchChange and filter rows', async () => {
+    const user = userEvent.setup({ delay: null });
+    renderMyPledges(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await user.clear(searchInput);
+    await user.type(searchInput, '   school   ');
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
     });
   });
 
@@ -798,6 +917,42 @@ describe('Testing User Pledge Screen', () => {
       expect(progressBars.length).toBeGreaterThan(0);
       expect(progressBars[0]).toBeInTheDocument();
     });
+  });
+
+  it('should render full progress slice as circle when percentage reaches 100', async () => {
+    const fullProgressLink = new StaticMockLink(createProgressMock(200, 100));
+    renderMyPledges(fullProgressLink);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('progressBar')).toBeInTheDocument();
+      expect(screen.getByTestId('progressBar')).toHaveTextContent('100%');
+    });
+
+    const progressSvg = within(screen.getByTestId('progressBar')).getByRole(
+      'img',
+    );
+    expect(progressSvg.querySelectorAll('path')).toHaveLength(0);
+    expect(progressSvg.querySelectorAll('circle')).toHaveLength(2);
+    expect(progressSvg.getAttribute('class')).toContain('progressComplete');
+  });
+
+  it('should render partial progress arc path when percentage is between 50 and 100', async () => {
+    const halfProgressLink = new StaticMockLink(createProgressMock(60, 100));
+    renderMyPledges(halfProgressLink);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('progressBar')).toBeInTheDocument();
+      expect(screen.getByTestId('progressBar')).toHaveTextContent('60%');
+    });
+
+    const progressSvg = within(screen.getByTestId('progressBar')).getByRole(
+      'img',
+    );
+    const slicePath = progressSvg.querySelector('path');
+
+    expect(slicePath).not.toBeNull();
+    expect(slicePath?.getAttribute('d')).toContain('A 16 16 0 1 1');
+    expect(progressSvg.getAttribute('class')).toContain('progressHalf');
   });
 
   it('should handle different currency codes', async () => {

@@ -1,11 +1,18 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import dayjs from 'dayjs';
 import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { cleanup, render, screen, waitFor } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -13,12 +20,14 @@ import { MemoryRouter, Route, Routes, useParams } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
+import * as useTableDataHook from 'shared-components/DataTable/hooks/useTableData';
 import OrganizationFundCampaign from './OrganizationFundCampaigns';
 import {
   EMPTY_MOCKS,
   MOCKS,
   MOCK_ERROR,
 } from './OrganizationFundCampaignMocks';
+import styles from './OrganizationFundCampaigns.module.css';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 vi.mock('GraphQl/Queries/fundQueries', async () => {
@@ -516,6 +525,178 @@ describe('FundCampaigns Screen', () => {
     expect(hasAnyPercent).toBe(true);
   });
 
+  it('should render low, half and complete progress variants', async () => {
+    mockRouteParams();
+    const startAt = dayjs().add(1, 'day').toDate();
+    const endAt = dayjs().add(31, 'day').toDate();
+
+    const useTableDataSpy = vi
+      .spyOn(useTableDataHook, 'useTableData')
+      .mockReturnValue({
+        rows: [
+          {
+            id: 'campaignLow',
+            name: 'Campaign Low',
+            goalAmount: 100,
+            amountRaised: 0,
+            startAt,
+            endAt,
+            createdAt: startAt,
+            currencyCode: 'USD',
+          },
+          {
+            id: 'campaignHalf',
+            name: 'Campaign Half',
+            goalAmount: 100,
+            amountRaised: 50,
+            startAt,
+            endAt,
+            createdAt: startAt,
+            currencyCode: 'USD',
+          },
+          {
+            id: 'campaignOver',
+            name: 'Campaign Over',
+            goalAmount: 100,
+            amountRaised: 150,
+            startAt,
+            endAt,
+            createdAt: startAt,
+            currencyCode: 'USD',
+          },
+        ],
+      } as ReturnType<typeof useTableDataHook.useTableData>);
+
+    renderFundCampaign(link1);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByRole('img', { name: /Campaign progress: 0%/i }).length,
+      ).toBeGreaterThan(0);
+      expect(
+        screen.getByRole('img', { name: /Campaign progress: 50%/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getAllByRole('img', { name: /Campaign progress: 100%/i }).length,
+      ).toBeGreaterThan(0);
+    });
+
+    const lowProgressSvg = screen.getAllByRole('img', {
+      name: /Campaign progress: 0%/i,
+    })[0];
+    const lowProgressCell = lowProgressSvg.closest(
+      '[data-testid="progressCell"]',
+    );
+    expect(lowProgressCell).not.toBeNull();
+    if (!lowProgressCell) {
+      throw new Error('Expected low progress cell to exist');
+    }
+    expect(lowProgressSvg).toHaveClass(styles.progressLow);
+    expect(lowProgressCell.querySelector('path')).toBeNull();
+
+    const halfProgressSvg = screen.getByRole('img', {
+      name: /Campaign progress: 50%/i,
+    });
+    const halfProgressCell = halfProgressSvg.closest(
+      '[data-testid="progressCell"]',
+    );
+    expect(halfProgressCell).not.toBeNull();
+    if (!halfProgressCell) {
+      throw new Error('Expected half progress cell to exist');
+    }
+    expect(halfProgressSvg).toHaveClass(styles.progressHalf);
+    const halfPath = halfProgressCell.querySelector('path');
+    expect(halfPath).not.toBeNull();
+    expect(halfPath?.getAttribute('d')).toContain('A 16 16 0 0 1');
+
+    const completeProgressSvg = screen.getAllByRole('img', {
+      name: /Campaign progress: 100%/i,
+    })[0];
+    const completeProgressCell = completeProgressSvg.closest(
+      '[data-testid="progressCell"]',
+    );
+    expect(completeProgressCell).not.toBeNull();
+    if (!completeProgressCell) {
+      throw new Error('Expected complete progress cell to exist');
+    }
+    expect(completeProgressSvg).toHaveClass(styles.progressComplete);
+    expect(completeProgressCell.querySelector('path')).toBeNull();
+
+    useTableDataSpy.mockRestore();
+  });
+
+  it('should render large arc for percentages above 50 and fallback to 0 when goal is zero', async () => {
+    mockRouteParams();
+    const startAt = dayjs().add(1, 'day').toDate();
+    const endAt = dayjs().add(31, 'day').toDate();
+
+    const useTableDataSpy = vi
+      .spyOn(useTableDataHook, 'useTableData')
+      .mockReturnValue({
+        rows: [
+          {
+            id: 'campaignArc',
+            name: 'Campaign Arc',
+            goalAmount: 100,
+            amountRaised: 75,
+            startAt,
+            endAt,
+            createdAt: startAt,
+            currencyCode: 'USD',
+          },
+          {
+            id: 'campaignZeroGoal',
+            name: 'Campaign Zero Goal',
+            goalAmount: 0,
+            amountRaised: 25,
+            startAt,
+            endAt,
+            createdAt: startAt,
+            currencyCode: 'USD',
+          },
+        ],
+      } as ReturnType<typeof useTableDataHook.useTableData>);
+
+    renderFundCampaign(link1);
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('img', { name: /Campaign progress: 75%/i }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('img', { name: /Campaign progress: 0%/i }),
+      ).toBeInTheDocument();
+    });
+
+    const arcProgressSvg = screen.getByRole('img', {
+      name: /Campaign progress: 75%/i,
+    });
+    const arcProgressCell = arcProgressSvg.closest(
+      '[data-testid="progressCell"]',
+    );
+    expect(arcProgressCell).not.toBeNull();
+    if (!arcProgressCell) {
+      throw new Error('Expected arc progress cell to exist');
+    }
+    const arcPath = arcProgressCell.querySelector('path');
+    expect(arcPath).not.toBeNull();
+    expect(arcPath?.getAttribute('d')).toContain('A 16 16 0 1 1');
+
+    const zeroGoalProgressSvg = screen.getByRole('img', {
+      name: /Campaign progress: 0%/i,
+    });
+    const zeroGoalProgressCell = zeroGoalProgressSvg.closest(
+      '[data-testid="progressCell"]',
+    );
+    expect(zeroGoalProgressCell).not.toBeNull();
+    if (!zeroGoalProgressCell) {
+      throw new Error('Expected zero-goal progress cell to exist');
+    }
+    expect(zeroGoalProgressCell.querySelector('path')).toBeNull();
+
+    useTableDataSpy.mockRestore();
+  });
+
   it('should display raised cells with currency symbol', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
@@ -534,6 +715,67 @@ describe('FundCampaigns Screen', () => {
       /[$€£₹¥]/.test(cell.textContent ?? ''),
     );
     expect(hasCurrencyValue).toBe(true);
+  });
+
+  it('should fallback amountRaised to 0 and render index/raised/progress cells', async () => {
+    mockRouteParams();
+    const startAt = dayjs().add(2, 'day').toISOString();
+    const endAt = dayjs().add(32, 'day').toISOString();
+
+    const missingRaisedMocks = [
+      {
+        request: {
+          query: MOCKS[0].request.query,
+          variables: {
+            input: { id: 'fundId' },
+          },
+        },
+        result: {
+          data: {
+            fund: {
+              id: 'fundId',
+              name: 'Fund 1',
+              campaigns: {
+                edges: [
+                  {
+                    node: {
+                      id: 'campaignMissingRaised',
+                      name: 'Campaign Missing Raised',
+                      startAt,
+                      endAt,
+                      currencyCode: 'USD',
+                      goalAmount: 100,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    renderFundCampaign(new StaticMockLink(missingRaisedMocks, true));
+
+    const campaignButton = await screen.findByRole('button', {
+      name: /Campaign Missing Raised/i,
+    });
+    const row = campaignButton.closest('tr');
+    expect(row).not.toBeNull();
+
+    const indexCell = (row as HTMLElement).querySelector(
+      `.${styles.requestsTableItemIndex}`,
+    );
+    expect(indexCell).not.toBeNull();
+    expect(indexCell).toHaveTextContent('1');
+
+    const raisedCell = within(row as HTMLElement).getByTestId('raisedCell');
+    expect(raisedCell).toHaveTextContent('$0');
+
+    const progressSvg = within(row as HTMLElement).getByRole('img', {
+      name: /Campaign progress: 0%/i,
+    });
+    expect(progressSvg).toBeInTheDocument();
   });
 
   it('should display end of results message when campaigns are displayed', async () => {

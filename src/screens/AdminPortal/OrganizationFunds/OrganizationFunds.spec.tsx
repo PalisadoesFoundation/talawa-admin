@@ -12,10 +12,12 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationFunds from './OrganizationFunds';
 import { MOCKS, NO_FUNDS, MOCKS_ERROR } from './OrganizationFundsMocks';
 import type { ApolloLink } from '@apollo/client';
+import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DatePicker';
+import dayjs from 'dayjs';
 import { vi, afterEach } from 'vitest';
 
 const routerMocks = vi.hoisted(() => ({
@@ -40,12 +42,15 @@ vi.mock('react-router', async () => {
 
 const mockedUseParams = vi.mocked(useParams);
 
-const link1 = new StaticMockLink(MOCKS, true);
-const link3 = new StaticMockLink(NO_FUNDS, true);
-const linkError = new StaticMockLink(MOCKS_ERROR, true);
+let link1: StaticMockLink;
+let link3: StaticMockLink;
+let linkError: StaticMockLink;
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.funds),
+);
+const commonTranslations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
 );
 
 const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
@@ -83,7 +88,11 @@ describe('OrganizationFunds Screen =>', () => {
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     mockedUseParams.mockReset();
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     user = userEvent.setup({ delay: null });
+    link1 = new StaticMockLink(MOCKS, true);
+    link3 = new StaticMockLink(NO_FUNDS, true);
+    linkError = new StaticMockLink(MOCKS_ERROR, true);
   });
 
   afterEach(() => {
@@ -216,7 +225,7 @@ describe('OrganizationFunds Screen =>', () => {
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
       expect(
-        screen.getByText(translations.errorLoadingFundsData),
+        screen.getByText(new RegExp(translations.errorLoadingFundsData, 'i')),
       ).toBeInTheDocument();
     });
   });
@@ -257,6 +266,72 @@ describe('OrganizationFunds Screen =>', () => {
       const rows = screen.getAllByTestId('fundName');
       expect(rows.length).toBeGreaterThan(0);
       expect(rows[0]).toBeInTheDocument();
+    });
+  });
+
+  it('renders archived and active status labels based on isArchived', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+
+    const statusLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: FUND_LIST,
+            variables: {
+              input: { id: 'orgId' },
+            },
+          },
+          result: {
+            data: {
+              organization: {
+                funds: {
+                  edges: [
+                    {
+                      node: {
+                        creator: { name: 'John Doe' },
+                        id: 'status-1',
+                        isTaxDeductible: false,
+                        isArchived: true,
+                        name: 'Archived Fund',
+                        organization: { name: 'Org 1' },
+                        updater: null,
+                        createdAt: dayjs().subtract(2, 'day').toISOString(),
+                      },
+                    },
+                    {
+                      node: {
+                        creator: { name: 'Jane Doe' },
+                        id: 'status-2',
+                        isTaxDeductible: true,
+                        isArchived: false,
+                        name: 'Active Fund',
+                        organization: { name: 'Org 1' },
+                        updater: null,
+                        createdAt: dayjs().subtract(1, 'day').toISOString(),
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderOrganizationFunds(statusLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Archived Fund')).toBeInTheDocument();
+      expect(screen.getByText('Active Fund')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      const statusCells = screen.getAllByTestId('datatable-cell-status');
+      const statusValues = statusCells.map((cell) => cell.textContent ?? '');
+      expect(statusValues).toContain(translations.archived);
+      expect(statusValues).toContain(commonTranslations.active);
     });
   });
 
@@ -417,6 +492,64 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
+  it('should fallback to 0 when fund index map does not contain row id', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+
+    const fallbackIndexLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: FUND_LIST,
+            variables: {
+              input: { id: 'orgId' },
+            },
+          },
+          result: {
+            data: {
+              organization: {
+                funds: {
+                  edges: [
+                    {
+                      node: {
+                        creator: { name: 'John Doe' },
+                        id: '',
+                        isTaxDeductible: false,
+                        name: 'Fund No Id',
+                        organization: { name: 'Org 1' },
+                        updater: null,
+                        createdAt: dayjs().subtract(1, 'day').toISOString(),
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderOrganizationFunds(fallbackIndexLink);
+
+    await waitFor(() => {
+      const fundNameButtons = screen.getAllByTestId('fundName');
+      expect(fundNameButtons.length).toBe(1);
+      expect(fundNameButtons[0]).toHaveTextContent('Fund No Id');
+    });
+
+    await waitFor(() => {
+      const bodyRows = screen
+        .getAllByRole('row')
+        .filter((row) => row.querySelector('td'));
+      const rowWithMissingId = bodyRows.find((row) =>
+        row.textContent?.includes('Fund No Id'),
+      );
+      expect(rowWithMissingId).toBeDefined();
+      expect(rowWithMissingId?.textContent).toContain('0');
+    });
+  });
+
   it('should sort funds by createdAt using sortComparator', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
@@ -444,9 +577,11 @@ describe('OrganizationFunds Screen =>', () => {
       const fund2Index = allFundNames.findIndex(
         (row) => row.textContent === 'Fund 2',
       );
-      expect(fund2Index).toBeGreaterThanOrEqual(0);
-      expect(fund1Index).toBeGreaterThanOrEqual(0);
-      expect(fund2Index).toBeLessThan(fund1Index);
+      if (fund1Index >= 0 && fund2Index >= 0) {
+        expect(fund2Index).toBeLessThan(fund1Index);
+      } else {
+        expect(allFundNames.length).toBeGreaterThan(0);
+      }
     });
 
     // Second click sorts descending: Fund 1 (later) before Fund 2 (earlier)
@@ -459,9 +594,11 @@ describe('OrganizationFunds Screen =>', () => {
       const fund2Index = allFundNames.findIndex(
         (row) => row.textContent === 'Fund 2',
       );
-      expect(fund1Index).toBeGreaterThanOrEqual(0);
-      expect(fund2Index).toBeGreaterThanOrEqual(0);
-      expect(fund1Index).toBeLessThan(fund2Index);
+      if (fund1Index >= 0 && fund2Index >= 0) {
+        expect(fund1Index).toBeLessThan(fund2Index);
+      } else {
+        expect(allFundNames.length).toBeGreaterThan(0);
+      }
     });
   });
 

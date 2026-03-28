@@ -134,7 +134,7 @@ const Campaigns = (): JSX.Element => {
           _id: campaign.id,
           name: campaign.name,
           fundingGoal: campaign.goalAmount,
-          amountRaised: campaign.amountRaised ?? 0,
+          amountRaised: campaign.amountRaised,
           startDate: new Date(campaign.startAt),
           endDate: new Date(campaign.endAt),
           currency: campaign.currencyCode,

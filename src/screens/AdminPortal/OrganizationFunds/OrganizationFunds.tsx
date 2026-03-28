@@ -135,10 +135,6 @@ const organizationFunds = (): JSX.Element => {
     document.title = t('funds.title');
   }, [t]);
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const filteredAndSortedFunds = useMemo(() => {
     let result = [...funds];
 
@@ -163,6 +159,26 @@ const organizationFunds = (): JSX.Element => {
     navigate(`/admin/orgfundcampaign/${orgId}/${fundId}`);
   };
 
+  // Header titles for the funds table
+  const headerTitles: string[] = [
+    tCommon('hash'),
+    t('funds.fundName'),
+    tCommon('createdOn'),
+    tCommon('status'),
+    t('funds.associatedCampaigns'),
+    tCommon('action'),
+  ];
+
+  const fundIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    filteredAndSortedFunds.forEach((item, index) => {
+      if (item.id) {
+        map.set(item.id, index + 1);
+      }
+    });
+    return map;
+  }, [filteredAndSortedFunds]);
+
   if (fundError) {
     return (
       <div className={styles.whiteContainer}>
@@ -179,24 +195,6 @@ const organizationFunds = (): JSX.Element => {
       </div>
     );
   }
-
-  // Header titles for the funds table
-  const headerTitles: string[] = [
-    tCommon('hash'),
-    t('funds.fundName'),
-    tCommon('createdOn'),
-    tCommon('status'),
-    t('funds.associatedCampaigns'),
-    tCommon('action'),
-  ];
-
-  const fundIndexMap = useMemo(() => {
-    const map = new Map<string, number>();
-    filteredAndSortedFunds.forEach((item, index) => {
-      map.set(item.id, index + 1);
-    });
-    return map;
-  }, [filteredAndSortedFunds]);
 
   const columns: IColumnDef<InterfaceFundInfo>[] = [
     {
@@ -308,6 +306,10 @@ const organizationFunds = (): JSX.Element => {
       },
     },
   ];
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   return (
     <div>
