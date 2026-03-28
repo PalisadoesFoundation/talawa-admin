@@ -86,8 +86,8 @@ const useUserProfile = (
     }
 
     try {
-      clearAllItems();
       await disposeWsClient();
+      clearAllItems();
       endSession();
       // Only navigate if not aborted
       if (!abortController.signal.aborted) {

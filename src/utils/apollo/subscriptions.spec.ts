@@ -275,13 +275,16 @@ describe('subscriptions', () => {
         initializeSubscriptions,
         disposeWsClient,
       } = await import('./subscriptions');
+      const setLink = vi.fn();
+      const errorLink = { kind: 'error-link' };
+      const httpLink = { kind: 'http-link' };
       const disposeMock = vi.fn();
       createClientMock.mockReturnValue({ dispose: disposeMock });
 
       configureSubscriptions({
-        client: { setLink: vi.fn() } as never,
-        errorLink: {} as never,
-        httpLink: {} as never,
+        client: { setLink } as never,
+        errorLink: errorLink as never,
+        httpLink: httpLink as never,
         wsUrl: 'ws://example.test/graphql',
       });
 
@@ -292,6 +295,11 @@ describe('subscriptions', () => {
       await disposeWsClient();
 
       expect(disposeMock).toHaveBeenCalledTimes(1);
+      expect(apolloLinkFromMock).toHaveBeenLastCalledWith([
+        errorLink,
+        httpLink,
+      ]);
+      expect(setLink).toHaveBeenLastCalledWith({ kind: 'composed-link' });
     });
 
     it('is idempotent when wsClient is null', async () => {
