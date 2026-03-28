@@ -150,7 +150,6 @@ export const useUpdateEventHandler = () => {
       // This prevents unnecessary splits when only updating metadata
       if (
         updateOption === 'following' &&
-        recurrence !== null &&
         hasRecurrenceChanged
       ) {
         updateInput.recurrence = recurrence;
