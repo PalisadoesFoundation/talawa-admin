@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
-import { disposeWsClient } from 'apollo/subscriptions';
+import { disposeWsClient } from 'utils/apollo/subscriptions';
 import useLocalStorage from './useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 

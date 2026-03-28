@@ -32,7 +32,10 @@ import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import { disposeWsClient, configureSubscriptions } from 'apollo/subscriptions';
+import {
+  disposeWsClient,
+  configureSubscriptions,
+} from 'utils/apollo/subscriptions';
 const theme = createTheme({
   palette: {
     primary: {

@@ -7,7 +7,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
-import * as subscriptionsModule from 'apollo/subscriptions';
+import * as subscriptionsModule from 'utils/apollo/subscriptions';
 
 // Mock dependencies
 vi.mock('@apollo/client', () => ({
@@ -30,7 +30,7 @@ vi.mock('react-i18next', async (importOriginal) => {
   };
 });
 
-vi.mock('apollo/subscriptions', () => {
+vi.mock('utils/apollo/subscriptions', () => {
   const mockDisposeWsClient = vi.fn();
   return {
     disposeWsClient: mockDisposeWsClient,

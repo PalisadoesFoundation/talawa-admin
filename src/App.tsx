@@ -16,7 +16,7 @@ import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import { initializeSubscriptions } from 'apollo/subscriptions';
+import { initializeSubscriptions } from 'utils/apollo/subscriptions';
 const OrganizationScreen = lazy(
   () => import('components/AdminPortal/OrganizationScreen/OrganizationScreen'),
 );

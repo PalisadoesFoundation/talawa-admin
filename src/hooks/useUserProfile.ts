@@ -17,7 +17,7 @@ import {
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
-import { disposeWsClient } from 'apollo/subscriptions';
+import { disposeWsClient } from 'utils/apollo/subscriptions';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 import { useMemo, useState, useRef, useEffect } from 'react';
 
