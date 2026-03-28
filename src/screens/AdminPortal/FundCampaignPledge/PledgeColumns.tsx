@@ -12,6 +12,7 @@ import styles from './PledgeColumns.module.css';
 
 export interface InterfacePledgeTableRow {
   id: string;
+  original: InterfacePledgeInfo;
   users: InterfaceUserInfoPG[];
   endDate: Date;
   pledgeDate: Date;
@@ -172,9 +173,7 @@ export const getPledgeColumns = ({
         size="sm"
         className={styles.editButton}
         data-testid="editPledgeBtn"
-        onClick={() =>
-          handleOpenModal(row as unknown as InterfacePledgeInfo, 'edit')
-        }
+        onClick={() => handleOpenModal(row.original, 'edit')}
       >
         <i className="fa fa-edit me-1" />
         {labels.edit}

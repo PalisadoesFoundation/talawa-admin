@@ -82,9 +82,6 @@ export function DataTableTable<T>({
   loadingMore,
   skeletonRows,
 }: InterfaceDataTableTableProps<T>) {
-  const bodyColumnCount =
-    columns.length + (effectiveSelectable ? 1 : 0) + (hasRowActions ? 1 : 0);
-
   const getAlignClass = (align?: 'left' | 'center' | 'right'): string => {
     if (align === 'center') return styles.alignCenter;
     if (align === 'right') return styles.alignRight;
@@ -168,26 +165,51 @@ export function DataTableTable<T>({
         </tr>
       </thead>
       <tbody>
-        {!renderRow && sortedRows.length > 0 && (
-          <tr className={styles.contentSpacerRow} aria-hidden="true">
-            <td colSpan={bodyColumnCount} />
-          </tr>
-        )}
-
         {renderRow
-          ? sortedRows.map((row, idx) => (
-              <React.Fragment key={getKey(row, startIndex + idx)}>
-                {renderRow(row, idx)}
-              </React.Fragment>
-            ))
+          ? sortedRows.map((row, idx) => {
+              const renderedRow = renderRow(row, idx);
+              const rowKeyValue = getKey(row, startIndex + idx);
+
+              if (!React.isValidElement(renderedRow)) {
+                return (
+                  <React.Fragment key={rowKeyValue}>
+                    {renderedRow}
+                  </React.Fragment>
+                );
+              }
+
+              const isFirst = idx === 0;
+              const isLast = idx === sortedRows.length - 1;
+              const existingClassName =
+                (renderedRow.props as { className?: string }).className || '';
+              const className = [
+                existingClassName,
+                isFirst ? styles.firstDataRow : '',
+                isLast ? styles.lastDataRow : '',
+              ]
+                .filter(Boolean)
+                .join(' ');
+
+              return (
+                <React.Fragment key={rowKeyValue}>
+                  {React.cloneElement(
+                    renderedRow as React.ReactElement<{ className?: string }>,
+                    { className },
+                  )}
+                </React.Fragment>
+              );
+            })
           : sortedRows.map((row, idx) => {
               const rowKeyValue = getKey(row, startIndex + idx);
               const isRowSelected = currentSelection.has(rowKeyValue);
+              const isFirst = idx === 0;
+              const isLast = idx === sortedRows.length - 1;
               return (
                 <tr
                   key={rowKeyValue}
                   data-testid={`datatable-row-${rowKeyValue}`}
                   data-selected={isRowSelected}
+                  className={`${isFirst ? styles.firstDataRow : ''} ${isLast ? styles.lastDataRow : ''}`.trim()}
                 >
                   {effectiveSelectable && (
                     <td className={styles.selectCol}>
@@ -223,15 +245,6 @@ export function DataTableTable<T>({
                 </tr>
               );
             })}
-
-        {!renderRow && sortedRows.length > 0 && (
-          <tr
-            className={`${styles.contentSpacerRow} ${styles.contentSpacerBottom}`}
-            aria-hidden="true"
-          >
-            <td colSpan={bodyColumnCount} />
-          </tr>
-        )}
 
         {loadingMore && (
           <LoadingMoreRows

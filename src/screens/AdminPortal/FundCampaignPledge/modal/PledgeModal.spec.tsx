@@ -369,6 +369,7 @@ describe('PledgeModal', () => {
 
       expect(createdAt).toBe(FIXED_CREATED_AT);
       expect(updatedAt).toBe(FIXED_UPDATED_AT);
+      expect(input).toHaveAttribute('readonly');
     });
   });
 

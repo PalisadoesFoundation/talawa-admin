@@ -73,14 +73,10 @@
   composes: actionsCol from './DataTableShared.module.css';
 }
 
-.contentSpacerRow td {
-  height: var(--space-4);
-  padding: 0;
-  border: 0;
-  background: var(--color-white);
-  pointer-events: none;
+.firstDataRow td {
+  padding-top: var(--space-4);
 }
 
-.contentSpacerBottom td {
-  height: var(--space-8);
+.lastDataRow td {
+  padding-bottom: var(--space-8);
 }

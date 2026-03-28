@@ -272,7 +272,19 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const actionColumn = columns[4];
 
-      const row = { id: '1', amount: 100 };
+      const originalPledge = {
+        id: '1',
+        amount: 100,
+        currency: 'USD',
+        createdAt: dayjs.utc().toISOString(),
+        pledger: {
+          id: 'u1',
+          name: 'John Doe',
+          avatarURL: null,
+        },
+      };
+
+      const row = { id: '1', amount: 100, original: originalPledge };
 
       render(<>{renderColumnCell(actionColumn, row)}</>);
 
@@ -280,7 +292,10 @@ describe('getPledgeColumns', () => {
       await user.click(editButton);
 
       await waitFor(() => {
-        expect(mockHandleOpenModal).toHaveBeenCalledWith(row, 'edit');
+        expect(mockHandleOpenModal).toHaveBeenCalledWith(
+          originalPledge,
+          'edit',
+        );
       });
     });
   });

@@ -202,6 +202,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           data-testid="pledgerSelect"
           options={pledgers}
           value={formState.pledgeUsers[0] || null}
+          readOnly={mode === 'edit'}
           filterSelectedOptions={true}
           getOptionLabel={(member: InterfaceUserInfoPG): string =>
             `${member.name || ''}`

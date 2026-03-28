@@ -1042,8 +1042,7 @@
     "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio",
     "enterCampaignName": "Ingrese el nombre de la campaña",
     "enterStartDate": "Ingrese la fecha de inicio",
-    "enterEndDate": "Ingrese la fecha de finalización",
-    "selectCurrency": "Seleccionar moneda"
+    "enterEndDate": "Ingrese la fecha de finalización"
   },
   "pledges": {
     "createFailed": "Error al crear el compromiso",

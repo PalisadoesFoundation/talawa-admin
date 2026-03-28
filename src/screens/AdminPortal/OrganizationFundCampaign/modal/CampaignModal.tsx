@@ -103,6 +103,8 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
   const [deleteCampaign] = useMutation(DELETE_CAMPAIGN_MUTATION);
 
+  const isEditMode = mode === 'edit';
+
   const isNameInvalid = touched.campaignName && !campaignName.trim();
 
   const createCampaignHandler = async (
@@ -351,7 +353,11 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                     };
                   });
                 }}
-                minDate={dayjs(new Date())}
+                minDate={
+                  isEditMode && campaignDateRange.startDate
+                    ? dayjs(campaignDateRange.startDate)
+                    : dayjs(new Date())
+                }
               />
             </div>
 

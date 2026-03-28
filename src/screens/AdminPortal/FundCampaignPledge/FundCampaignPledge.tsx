@@ -14,6 +14,7 @@ import Popover from '@mui/material/Popover';
 import Avatar from 'shared-components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import { DataTable } from 'shared-components/DataTable/DataTable';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import type {
   InterfacePledgeInfo,
@@ -31,6 +32,13 @@ import { useModalState } from 'shared-components/CRUDModalTemplate';
  * Renders the Fund Campaign Pledges screen with pledge management, search/sort, and progress tracking.
  */
 const fundCampaignPledge = (): JSX.Element => {
+  type FundCampaignPledgeNode =
+    InterfaceQueryFundCampaignsPledges['pledges']['edges'][number]['node'] & {
+      users?: InterfaceUserInfoPG[];
+      note?: string | null;
+      updatedAt?: string;
+    };
+
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -63,72 +71,92 @@ const fundCampaignPledge = (): JSX.Element => {
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const pledgeQueryResult = useQuery<{
+    fundCampaign: InterfaceQueryFundCampaignsPledges;
+  }>(FUND_CAMPAIGN_PLEDGE, {
+    variables: { input: { id: fundCampaignId } },
+  });
+
   const {
-    data: pledgeData,
+    rows: pledgeRows,
     loading: pledgeLoading,
     error: pledgeError,
-    refetch: refetchPledge,
-  } = useQuery<{ fundCampaign: InterfaceQueryFundCampaignsPledges }>(
-    FUND_CAMPAIGN_PLEDGE,
-    {
-      variables: { input: { id: fundCampaignId } },
-    },
-  );
+  } = useTableData<
+    FundCampaignPledgeNode,
+    InterfacePledgeTableRow,
+    { fundCampaign: InterfaceQueryFundCampaignsPledges }
+  >(pledgeQueryResult, {
+    path: (data) => data.fundCampaign?.pledges,
+    transformNode: (node) => {
+      const allUsers =
+        'users' in node && Array.isArray(node.users)
+          ? node.users
+          : [node.pledger];
 
-  const { pledges, totalPledged, totalRaised, fundName, fundId } =
-    useMemo(() => {
-      let totalPledged = 0;
-      let totalRaised = 0;
-
-      const pledgesList =
-        pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
-          const amount = edge.node.amount || 0;
-          totalPledged += amount;
-          // Assuming there's no raised amount for now,
-          // this should be updated when raised amount data is available
-          totalRaised += 0;
-
-          const allUsers =
-            'users' in edge.node && Array.isArray(edge.node.users)
-              ? edge.node.users
-              : [edge.node.pledger];
-
-          return {
-            id: edge.node.id,
-            amount: amount,
-            pledgeDate: edge.node.createdAt
-              ? new Date(edge.node.createdAt)
-              : new Date(),
-            endDate: pledgeData.fundCampaign.endAt
-              ? new Date(pledgeData.fundCampaign.endAt)
-              : new Date(),
-            users: allUsers.filter(Boolean),
-            currency: pledgeData.fundCampaign.currencyCode || 'USD',
-          };
-        }) ?? [];
-
-      const filteredPledges = searchTerm
-        ? pledgesList.filter((pledge) => {
-            const search = searchTerm.toLowerCase();
-            return pledge.users.some((user) =>
-              user.name?.toLowerCase().includes(search),
-            );
-          })
-        : pledgesList;
-
-      // Get fund info from the campaign's fund property
-      const fundInfo =
-        pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund;
-      const fundName = fundInfo?.name ?? tCommon('funds');
-      const fundId = fundInfo?.id ?? null;
       return {
-        pledges: filteredPledges,
-        totalPledged,
-        totalRaised,
-        fundName,
-        fundId,
+        id: node.id,
+        original: {
+          id: node.id,
+          campaign: {
+            id: node.campaign?.id ?? '',
+            name: node.campaign?.name ?? '',
+            endAt: pledgeQueryResult.data?.fundCampaign?.endAt ?? new Date(),
+            currencyCode:
+              pledgeQueryResult.data?.fundCampaign?.currencyCode ?? 'USD',
+            goalAmount: pledgeQueryResult.data?.fundCampaign?.goalAmount ?? 0,
+          },
+          amount: node.amount || 0,
+          note: node.note,
+          currency: pledgeQueryResult.data?.fundCampaign?.currencyCode || 'USD',
+          createdAt: node.createdAt ?? new Date().toISOString(),
+          updatedAt: node.updatedAt,
+          pledger: node.pledger,
+          users: allUsers.filter(Boolean),
+        },
+        amount: node.amount || 0,
+        pledgeDate: node.createdAt ? new Date(node.createdAt) : new Date(),
+        endDate: pledgeQueryResult.data?.fundCampaign?.endAt
+          ? new Date(pledgeQueryResult.data.fundCampaign.endAt)
+          : new Date(),
+        users: allUsers.filter(Boolean),
+        currency: pledgeQueryResult.data?.fundCampaign?.currencyCode || 'USD',
       };
-    }, [pledgeData, searchTerm, tCommon]);
+    },
+    deps: [pledgeQueryResult.data?.fundCampaign?.endAt],
+  });
+
+  const { data: pledgeData, refetch: refetchPledge } = pledgeQueryResult;
+
+  const filteredPledges = useMemo(() => {
+    if (!searchTerm) return pledgeRows;
+
+    const search = searchTerm.toLowerCase();
+    return pledgeRows.filter((pledge) =>
+      pledge.users.some((user) => user.name?.toLowerCase().includes(search)),
+    );
+  }, [pledgeRows, searchTerm]);
+
+  const { totalPledged, totalRaised } = useMemo(() => {
+    const totalPledged = pledgeRows.reduce(
+      (total, pledge) => total + (pledge.amount || 0),
+      0,
+    );
+
+    // Raised amount data is not available yet in this query response.
+    const totalRaised = 0;
+
+    return { totalPledged, totalRaised };
+  }, [pledgeRows]);
+
+  const { fundName, fundId } = useMemo(() => {
+    const fundInfo =
+      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund;
+
+    return {
+      fundName: fundInfo?.name ?? tCommon('funds'),
+      fundId: fundInfo?.id ?? null,
+    };
+  }, [pledgeData, tCommon]);
 
   useEffect(() => {
     if (pledgeData?.fundCampaign) {
@@ -332,25 +360,27 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
         <div className={styles.listBox}>
-          {pledges.length === 0 ? (
-            <EmptyState
-              icon="volunteer_activism"
-              message={t('pledges.noPledges')}
-              dataTestId="fund-campaign-pledge-empty-state"
-            />
+          {filteredPledges.length === 0 ? (
+            searchTerm ? (
+              <EmptyState
+                icon="search"
+                message="noResultsFound"
+                description={tCommon('noResultsFoundFor', {
+                  query: `"${searchTerm}"`,
+                })}
+                dataTestId="fund-campaign-pledge-search-empty-state"
+              />
+            ) : (
+              <EmptyState
+                icon="volunteer_activism"
+                message={t('pledges.noPledges')}
+                dataTestId="fund-campaign-pledge-empty-state"
+              />
+            )
           ) : (
             <>
               <DataTable
-                data={pledges.map(
-                  (pledge): InterfacePledgeTableRow => ({
-                    id: pledge.id,
-                    users: pledge.users,
-                    endDate: pledge.endDate,
-                    pledgeDate: pledge.pledgeDate,
-                    amount: pledge.amount,
-                    currency: pledge.currency,
-                  }),
-                )}
+                data={filteredPledges}
                 columns={columns}
                 rowKey="id"
                 loading={pledgeLoading}

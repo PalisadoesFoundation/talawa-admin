@@ -3,7 +3,7 @@
  * It fetches pledges data using Apollo Client's `useQuery` hook and displays the data
  * in a DataTable with search, pagination, and modal dialogs.
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { Button } from 'shared-components/Button';
 import Box from '@mui/material/Box';
@@ -13,14 +13,11 @@ import { useTranslation } from 'react-i18next';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
-import {
-  type ApolloError,
-  type ApolloQueryResult,
-  useQuery,
-} from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
 import { Navigate, useParams } from 'react-router';
@@ -30,6 +27,7 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 interface InterfaceUserPledgeRow {
   id: string;
+  original: InterfacePledgeInfo;
   campaign: InterfacePledgeInfo['campaign'];
   amount: number;
   amountRaised: number;
@@ -49,7 +47,6 @@ const Pledges = (): JSX.Element => {
   const { orgId } = useParams();
   const userId = (userIdFromStorage as string | null) ?? null;
 
-  const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [searchText, setSearchText] = useState('');
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
   const {
@@ -58,26 +55,11 @@ const Pledges = (): JSX.Element => {
     close: closeUpdateModal,
   } = useModalState();
 
-  type PledgeQueryResult = ApolloQueryResult<{
-    getPledgesByUserId: InterfacePledgeInfo[];
-  }>;
-  interface IPledgeRefetchFn {
-    (): Promise<PledgeQueryResult>;
-  }
-
   const shouldSkip = !orgId || !userId;
 
-  const {
-    data: pledgeData,
-    loading: pledgeLoading,
-    error: pledgeError,
-    refetch: refetchPledge,
-  }: {
-    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: IPledgeRefetchFn;
-  } = useQuery(USER_PLEDGES, {
+  const pledgesQueryResult = useQuery<{
+    getPledgesByUserId: InterfacePledgeInfo[];
+  }>(USER_PLEDGES, {
     skip: shouldSkip,
     variables: shouldSkip
       ? undefined
@@ -88,6 +70,33 @@ const Pledges = (): JSX.Element => {
         },
     fetchPolicy: 'cache-and-network',
   });
+
+  const {
+    rows,
+    loading: pledgeLoading,
+    refetch: refetchPledge,
+  } = useTableData<
+    InterfacePledgeInfo,
+    InterfaceUserPledgeRow,
+    { getPledgesByUserId: InterfacePledgeInfo[] }
+  >(pledgesQueryResult, {
+    path: (data) => ({
+      edges: (data.getPledgesByUserId ?? []).map((node) => ({ node })),
+    }),
+    transformNode: (p) => ({
+      id: p.id,
+      original: p,
+      campaign: p.campaign,
+      amount: p.amount,
+      amountRaised: p.campaign?.amountRaised ?? 0,
+      currency: p.campaign?.currencyCode ?? 'USD',
+      goalAmount: p.campaign?.goalAmount ?? 0,
+      endDate: p.campaign?.endAt,
+      campaignName: p.campaign?.name || '',
+    }),
+  });
+
+  const { error: pledgeError } = pledgesQueryResult;
 
   const handleOpenModal = useCallback(
     (p: InterfacePledgeInfo | null): void => {
@@ -103,31 +112,6 @@ const Pledges = (): JSX.Element => {
         ?.code;
       return code === 'arguments_associated_resources_not_found';
     }) ?? false;
-
-  useEffect(() => {
-    if (pledgeData?.getPledgesByUserId) {
-      setPledges(pledgeData.getPledgesByUserId);
-      return;
-    }
-    if (isNoPledgesFoundError) {
-      setPledges([]);
-    }
-  }, [pledgeData, isNoPledgesFoundError]);
-
-  const rows = useMemo<InterfaceUserPledgeRow[]>(() => {
-    return pledges.map((p) => {
-      return {
-        id: p.id,
-        campaign: p.campaign,
-        amount: p.amount,
-        amountRaised: p.campaign?.amountRaised ?? 0,
-        currency: p.campaign?.currencyCode ?? 'USD',
-        goalAmount: p.campaign?.goalAmount ?? 0,
-        endDate: p.campaign?.endAt,
-        campaignName: p.campaign?.name || '',
-      };
-    });
-  }, [pledges]);
 
   const filteredRows = useMemo<InterfaceUserPledgeRow[]>(() => {
     const query = searchText.trim().toLowerCase();
@@ -243,7 +227,7 @@ const Pledges = (): JSX.Element => {
           size="sm"
           className={styles.editButton}
           data-testid="editPledgeBtn"
-          onClick={() => handleOpenModal(row as unknown as InterfacePledgeInfo)}
+          onClick={() => handleOpenModal(row.original)}
         >
           <i className="fa fa-edit me-1" />
           {tCommon('edit')}

@@ -1047,8 +1047,7 @@
     "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début",
     "enterCampaignName": "Entrez le nom de la campagne",
     "enterStartDate": "Entrez la date de début",
-    "enterEndDate": "Entrez la date de fin",
-    "selectCurrency": "Sélectionner la devise"
+    "enterEndDate": "Entrez la date de fin"
   },
   "pledges": {
     "createFailed": "Échec de la création de l'engagement",

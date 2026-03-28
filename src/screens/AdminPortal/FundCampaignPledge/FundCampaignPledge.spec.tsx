@@ -8,7 +8,13 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { render, screen, waitFor, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  within,
+  cleanup,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -213,6 +219,95 @@ const updatedMocks = {
                 pledger: {
                   __typename: 'User',
                   id: '4',
+                  name: 'John Doe4',
+                  avatarURL: null,
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+};
+
+const sortingBaseDate = dayjs.utc().startOf('day');
+
+const SORTING_MOCK = {
+  request: {
+    query: FUND_CAMPAIGN_PLEDGE,
+    variables: {
+      input: { id: 'fundCampaignId' },
+    },
+  },
+  result: {
+    data: {
+      fundCampaign: {
+        __typename: 'FundCampaign',
+        id: 'sorting-campaign',
+        name: 'Sorting Campaign',
+        startAt: dayjs.utc().subtract(1, 'month').toISOString(),
+        endAt: dayjs.utc().add(1, 'month').toISOString(),
+        currencyCode: 'USD',
+        goalAmount: 5000,
+        pledges: {
+          __typename: 'PledgeConnection',
+          edges: [
+            {
+              __typename: 'PledgeEdge',
+              node: {
+                __typename: 'Pledge',
+                id: 's1',
+                amount: 100,
+                createdAt: sortingBaseDate.add(2, 'day').toISOString(),
+                pledger: {
+                  __typename: 'User',
+                  id: 'u1',
+                  name: 'John Doe',
+                  avatarURL: null,
+                },
+              },
+            },
+            {
+              __typename: 'PledgeEdge',
+              node: {
+                __typename: 'Pledge',
+                id: 's2',
+                amount: 200,
+                createdAt: sortingBaseDate.toISOString(),
+                pledger: {
+                  __typename: 'User',
+                  id: 'u2',
+                  name: 'Jane Doe',
+                  avatarURL: null,
+                },
+              },
+            },
+            {
+              __typename: 'PledgeEdge',
+              node: {
+                __typename: 'Pledge',
+                id: 's3',
+                amount: 150,
+                createdAt: sortingBaseDate.add(3, 'day').toISOString(),
+                pledger: {
+                  __typename: 'User',
+                  id: 'u3',
+                  name: 'John Doe3',
+                  avatarURL: null,
+                },
+              },
+            },
+            {
+              __typename: 'PledgeEdge',
+              node: {
+                __typename: 'Pledge',
+                id: 's4',
+                amount: 175,
+                createdAt: sortingBaseDate.add(1, 'day').toISOString(),
+                pledger: {
+                  __typename: 'User',
+                  id: 'u4',
                   name: 'John Doe4',
                   avatarURL: null,
                 },
@@ -478,7 +573,21 @@ describe('Testing Campaign Pledge Screen', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
   });
+
+  const getRenderedAmountOrder = (): number[] => {
+    const rows = Array.from(
+      document.querySelectorAll('[data-testid^="datatable-row-"]'),
+    );
+
+    return rows.map((row) => {
+      const amountText =
+        within(row as HTMLElement).getByTestId('amountCell').textContent || '0';
+      return Number(amountText.replace(/[^\d.]/g, ''));
+    });
+  };
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     mockParamsState.orgId = '';
@@ -1017,79 +1126,82 @@ describe('Testing Campaign Pledge Screen', () => {
   });
 
   it('Sort the Pledges list by Lowest Amount', async () => {
-    renderFundCampaignPledge(link1);
+    const sortingLink = new StaticMockLink([SORTING_MOCK]);
+    renderFundCampaignPledge(sortingLink);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    expect(screen.queryByTestId('filter-toggle')).not.toBeInTheDocument();
+    const pledgedSortBtn = screen.getByRole('button', {
+      name: translations.pledged,
+    });
+
+    await userEvent.click(pledgedSortBtn);
 
     await waitFor(() => {
-      const amountCells = screen.getAllByTestId('amountCell');
-      expect(amountCells).toHaveLength(4);
-      const amountValues = amountCells.map((cell) => cell.textContent?.trim());
-      expect(amountValues).toEqual(
-        expect.arrayContaining(['$100', '$150', '$175', '$200']),
-      );
+      expect(getRenderedAmountOrder()).toEqual([100, 150, 175, 200]);
     });
   });
 
   it('Sort the Pledges list by Highest Amount', async () => {
-    renderFundCampaignPledge(link1);
+    const sortingLink = new StaticMockLink([SORTING_MOCK]);
+    renderFundCampaignPledge(sortingLink);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    expect(screen.queryByTestId('filter-toggle')).not.toBeInTheDocument();
+    const pledgedSortBtn = screen.getByRole('button', {
+      name: translations.pledged,
+    });
+
+    await userEvent.click(pledgedSortBtn);
+    await userEvent.click(pledgedSortBtn);
 
     await waitFor(() => {
-      const amountCells = screen.getAllByTestId('amountCell');
-      expect(amountCells).toHaveLength(4);
-      const amountValues = amountCells.map((cell) => cell.textContent?.trim());
-      expect(amountValues).toEqual(
-        expect.arrayContaining(['$100', '$150', '$175', '$200']),
-      );
+      expect(getRenderedAmountOrder()).toEqual([200, 175, 150, 100]);
     });
   });
 
   it('Sort the Pledges list by latest endDate', async () => {
-    renderFundCampaignPledge(link1);
+    const sortingLink = new StaticMockLink([SORTING_MOCK]);
+    renderFundCampaignPledge(sortingLink);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    expect(screen.queryByTestId('filter-toggle')).not.toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Doe')).toBeInTheDocument();
+    const pledgeDateSortBtn = screen.getByRole('button', {
+      name: translations.pledgeDate,
     });
 
+    await userEvent.click(pledgeDateSortBtn);
+    await userEvent.click(pledgeDateSortBtn);
+
     await waitFor(() => {
-      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$100');
+      // latest pledgeDate first
+      expect(getRenderedAmountOrder()).toEqual([150, 100, 175, 200]);
     });
   });
 
-  // Fix sorting by earliest endDate test
   it('Sort the Pledges list by earliest endDate', async () => {
-    renderFundCampaignPledge(link1);
+    const sortingLink = new StaticMockLink([SORTING_MOCK]);
+    renderFundCampaignPledge(sortingLink);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    expect(screen.queryByTestId('filter-toggle')).not.toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Doe')).toBeInTheDocument();
+    const pledgeDateSortBtn = screen.getByRole('button', {
+      name: translations.pledgeDate,
     });
 
+    await userEvent.click(pledgeDateSortBtn);
+
     await waitFor(() => {
-      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$100');
+      // earliest pledgeDate first
+      expect(getRenderedAmountOrder()).toEqual([200, 175, 100, 150]);
     });
   });
 

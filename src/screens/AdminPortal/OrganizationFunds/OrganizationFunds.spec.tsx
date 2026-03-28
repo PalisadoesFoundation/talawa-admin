@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -10,21 +10,13 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationFunds from './OrganizationFunds';
-import { MOCKS, NO_FUNDS } from './OrganizationFundsMocks';
+import { MOCKS, NO_FUNDS, MOCKS_ERROR } from './OrganizationFundsMocks';
 import type { ApolloLink } from '@apollo/client';
 import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import { vi, afterEach } from 'vitest';
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -50,6 +42,7 @@ const mockedUseParams = vi.mocked(useParams);
 
 const link1 = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(NO_FUNDS, true);
+const linkError = new StaticMockLink(MOCKS_ERROR, true);
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.funds),
@@ -216,6 +209,18 @@ describe('OrganizationFunds Screen =>', () => {
     );
   });
 
+  it('should render error UI when funds query fails', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(linkError);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+      expect(
+        screen.getByText(translations.errorLoadingFundsData),
+      ).toBeInTheDocument();
+    });
+  });
+
   it('Should display loading state', () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     const delayedMocks = [
@@ -270,7 +275,6 @@ describe('OrganizationFunds Screen =>', () => {
       name: translations.createdOn,
     });
     await user.click(createdOnHeader);
-    await wait(300);
 
     await waitFor(() => {
       const allFundNames = screen.getAllByTestId('fundName');
@@ -324,8 +328,6 @@ describe('OrganizationFunds Screen =>', () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
     });
@@ -338,11 +340,12 @@ describe('OrganizationFunds Screen =>', () => {
     const nextButton = screen.getByRole('button', { name: /next/i });
     expect(nextButton).not.toBeDisabled();
     await user.click(nextButton);
-    await wait(300);
 
-    // Verify component is still stable
+    // Verify page changes by checking first-page row disappears and later row appears
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      expect(screen.queryByText('Fund 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Extra Fund 11')).toBeInTheDocument();
     });
   });
 
@@ -431,17 +434,34 @@ describe('OrganizationFunds Screen =>', () => {
       name: translations.createdOn,
     });
 
+    // First click sorts ascending: Fund 2 (earlier) before Fund 1 (later)
     await user.click(createdOnHeader);
-    await wait(300);
-
-    // Click again to toggle sort direction
-    await user.click(createdOnHeader);
-    await wait(300);
-
-    // Verify created on dates are displayed
     await waitFor(() => {
-      const createdOnElements = screen.getAllByTestId('createdOn');
-      expect(createdOnElements.length).toBeGreaterThan(0);
+      const allFundNames = screen.getAllByTestId('fundName');
+      const fund1Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 1',
+      );
+      const fund2Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 2',
+      );
+      expect(fund2Index).toBeGreaterThanOrEqual(0);
+      expect(fund1Index).toBeGreaterThanOrEqual(0);
+      expect(fund2Index).toBeLessThan(fund1Index);
+    });
+
+    // Second click sorts descending: Fund 1 (later) before Fund 2 (earlier)
+    await user.click(createdOnHeader);
+    await waitFor(() => {
+      const allFundNames = screen.getAllByTestId('fundName');
+      const fund1Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 1',
+      );
+      const fund2Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 2',
+      );
+      expect(fund1Index).toBeGreaterThanOrEqual(0);
+      expect(fund2Index).toBeGreaterThanOrEqual(0);
+      expect(fund1Index).toBeLessThan(fund2Index);
     });
   });
 
