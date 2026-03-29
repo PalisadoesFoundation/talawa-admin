@@ -138,6 +138,7 @@
   "overview": "Aperçu",
   "events": "Événements",
   "tags": "Étiquettes",
+  "viewSubTagsOf": "Voir les sous-étiquettes de {{tagName}}",
   "memberDetailNumberExample": "Ex. +1234567890",
   "commentUpdatedSuccessfully": "Commentaire mis à jour avec succès",
   "memberDetailExampleLane": "Ex. Allée 2",
@@ -321,5 +322,6 @@
   "networkError": "Erreur réseau",
   "organizationCard": {
     "card_aria": "Carte de l'organisation"
-  }
+  },
+  "oauthSectionAriaLabel": "Options de connexion OAuth"
 }

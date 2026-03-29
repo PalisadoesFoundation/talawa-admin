@@ -773,6 +773,14 @@ describe('ActionItemModal', () => {
         expect(screen.getByTestId('modal-submit-btn')).toBeInTheDocument();
       });
 
+      const groupInput = within(
+        await screen.findByTestId('volunteerGroupSelect'),
+      ).getByRole('combobox');
+
+      await waitFor(() => {
+        expect(groupInput).toHaveValue('Test Group 1');
+      });
+
       await user.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(

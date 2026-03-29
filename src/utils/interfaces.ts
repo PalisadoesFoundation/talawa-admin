@@ -1215,7 +1215,7 @@ export interface InterfaceQueryOrganizationFundCampaigns {
         endAt: string;
         currencyCode: string;
         goalAmount: number;
-        fundingRaised?: number;
+        amountRaised?: number;
       };
     }[];
   };
@@ -1228,9 +1228,41 @@ export interface InterfaceUserCampaign {
   _id: string;
   name: string;
   fundingGoal: number;
+  amountRaised?: number;
   startDate: Date;
   endDate: Date;
   currency: string;
+}
+
+/**
+ * Defines a fund node shape used by user campaign listing queries.
+ */
+export interface InterfaceUserCampaignNode {
+  isArchived?: boolean;
+  campaigns?: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        currencyCode: string;
+        goalAmount: number;
+        amountRaised?: number;
+        startAt: string;
+        endAt: string;
+      };
+    }[];
+  };
+}
+
+/**
+ * Defines the response structure for user fund campaigns query.
+ */
+export interface InterfaceUserFundCampaignQueryResponse {
+  organization: {
+    funds: {
+      edges: { node: InterfaceUserCampaignNode | null }[];
+    };
+  } | null;
 }
 
 /**
@@ -1310,6 +1342,17 @@ export interface InterfaceFundInfo {
 }
 
 /**
+ * Defines the fund list query response structure for organization funds.
+ */
+export interface InterfaceFundListQueryResponse {
+  organization: {
+    funds: {
+      edges: { node: InterfaceFundInfo | null }[];
+    };
+  };
+}
+
+/**
  * Defines the structure for campaign information.
  */
 export interface InterfaceCampaignInfo {
@@ -1320,8 +1363,43 @@ export interface InterfaceCampaignInfo {
   endAt: Date;
   createdAt: string;
   currencyCode: string;
-  fundingRaised?: number;
+  amountRaised?: number;
 }
+
+/**
+ * Defines the raw campaign node structure returned by fund campaign queries.
+ */
+export interface InterfaceFundCampaignNode {
+  id: string;
+  name: string;
+  startAt: string;
+  endAt: string;
+  currencyCode: string;
+  goalAmount: number;
+  amountRaised?: number;
+  createdAt?: string;
+}
+
+/**
+ * Defines the fund campaign query response structure.
+ */
+export interface InterfaceFundCampaignQueryResponse {
+  fund: {
+    id: string;
+    name: string;
+    isArchived?: boolean;
+    campaigns: {
+      edges: { node: InterfaceFundCampaignNode | null }[];
+    };
+  };
+}
+
+/**
+ * Defines the campaign table row structure for organization fund campaigns.
+ */
+export type CampaignRow = InterfaceCampaignInfo & {
+  amountRaised?: number;
+};
 
 /**
  * Defines the structure for pledge information.
@@ -1334,6 +1412,7 @@ export interface InterfacePledgeInfo {
     endAt: Date;
     currencyCode: string;
     goalAmount: number;
+    amountRaised?: number;
   };
   amount: number;
   note?: string | null;

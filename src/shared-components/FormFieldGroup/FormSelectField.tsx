@@ -24,6 +24,7 @@ export const FormSelectField: React.FC<InterfaceFormSelectFieldProps> = ({
   helpText,
   error,
   touched,
+  className,
   value,
   onChange,
   children,
@@ -37,6 +38,7 @@ export const FormSelectField: React.FC<InterfaceFormSelectFieldProps> = ({
       helpText={helpText}
       error={error}
       touched={touched}
+      className={className}
     >
       <Form.Control
         as="select"

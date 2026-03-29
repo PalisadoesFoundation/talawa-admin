@@ -32,7 +32,7 @@
  * />
  * ```
  */
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -56,6 +56,8 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
   userId,
   currentDate,
 }) => {
+  const weeklyCalendarRef = useRef<HTMLDivElement | null>(null);
+
   const { t: tErrors } = useTranslation('errors');
   const { t } = useTranslation('translation', {
     keyPrefix: 'weeklyEventCalender',
@@ -82,37 +84,155 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
   const timeSlots = Array.from({ length: 24 }, (_, i) => i);
 
   const CELL_HEIGHT_PX = 80; // matches --space-12 (5rem = 80px) in CSS
+  const ALL_DAY_LANE_BASE_HEIGHT_PX = 40; // matches --space-10 (2.5rem)
+  const ALL_DAY_EVENT_HEIGHT_PX = 32; // matches --space-8 (2rem)
+  const ALL_DAY_LANE_PADDING_PX = 8; // top + bottom padding (2 * --space-1)
+  const ALL_DAY_LANE_GAP_PX = 4; // matches --space-1
 
-  const getEventStyle = (start: string, end: string) => {
-    // Use dayjs.utc() so hours/minutes match the UTC values stored by EventForm
-    const startDate = dayjs.utc(start);
-    const endDate = dayjs.utc(end);
-    // Clamp to current day boundaries
-    const startHour = startDate.hour();
-    const startMinute = startDate.minute();
-    const endOfDay = startDate.endOf('day');
-    const clampedEnd = endDate.isAfter(endOfDay) ? endOfDay : endDate;
-    const durationMinutes = Math.max(clampedEnd.diff(startDate, 'minute'), 15); // minimum 15min visibility
+  const getTimedEventPlacement = (
+    start: string,
+    end: string,
+    dayDate: Date,
+  ) => {
+    // Position timed events in the local-time grid for the rendered day.
+    const startDate = dayjs.utc(start).local();
+    const endDate = dayjs.utc(end).local();
+    const dayStart = dayjs(dayDate).startOf('day');
+    const dayEnd = dayjs(dayDate).endOf('day');
+
+    const clampedStart = startDate.isBefore(dayStart) ? dayStart : startDate;
+    const clampedEnd = endDate.isAfter(dayEnd) ? dayEnd : endDate;
+
+    const startHour = clampedStart.hour();
+    const startMinute = clampedStart.minute();
+    const durationMinutes = Math.max(
+      clampedEnd.diff(clampedStart, 'minute'),
+      15,
+    ); // minimum 15min visibility
 
     const top = (startHour + startMinute / 60) * CELL_HEIGHT_PX;
     const height = Math.max((durationMinutes / 60) * CELL_HEIGHT_PX, 20); // min 20px so tiny events are visible
 
-    // Google Calendar style: slight offset based on hour to allow overlapping visibility
-    // Offset cycles every 3 hours (0, 2, 4... hours get different offsets)
-    const offsetIndex = Math.floor(startHour / 3) % 3;
-    const offsetPercent = offsetIndex * 2.5; // 0%, 2.5%, 5% offset
+    return {
+      clampedStart,
+      clampedEnd,
+      top,
+      height,
+    };
+  };
+
+  const getTimedEventStyle = (
+    top: number,
+    height: number,
+    columnIndex: number,
+    columnCount: number,
+  ): React.CSSProperties => {
+    const safeColumnCount = Math.max(columnCount, 1);
+    const availableWidthPercent = 96;
+    const widthPercent = availableWidthPercent / safeColumnCount;
+    const horizontalPaddingPercent = 2;
+    const gutterPercent = 0.5;
 
     return {
       top: `${top}px`,
       height: `${height}px`,
-      left: `${2.5 + offsetPercent}%`,
+      left: `${horizontalPaddingPercent + widthPercent * columnIndex}%`,
+      width: `${Math.max(widthPercent - gutterPercent, 8)}%`,
+      zIndex: columnIndex + 1,
     };
   };
+
+  const weekDates = useMemo(() => {
+    const dates: Date[] = [];
+    const currentWeekStart = new Date(weekStart);
+
+    for (let i = 0; i < 7; i++) {
+      const tempDate = new Date(currentWeekStart);
+      tempDate.setDate(currentWeekStart.getDate() + i);
+      dates.push(tempDate);
+    }
+
+    return dates;
+  }, [weekStart]);
+
+  const getEventsForDate = React.useCallback(
+    (date: Date) =>
+      events?.filter((event) => {
+        const current = dayjs(date).startOf('day');
+
+        if (event.allDay) {
+          // For all-day events, use startDate and endDate
+          if (!event.startDate) return false;
+          const eventStart = dayjs(event.startDate).startOf('day');
+          // Backend stores all-day endDate as exclusive (RFC 5545)
+          const eventEndExclusive = event.endDate
+            ? dayjs(event.endDate).startOf('day')
+            : eventStart.add(1, 'day');
+          return (
+            current.isSame(eventStart) ||
+            (current.isAfter(eventStart) && current.isBefore(eventEndExclusive))
+          );
+        }
+
+        // For timed events, use startAt and endAt
+        if (!event.startAt || !event.endAt) return false;
+        const eventStart = dayjs.utc(event.startAt).local();
+        const eventEnd = dayjs.utc(event.endAt).local();
+        const dayStart = current;
+        const nextDayStart = dayStart.add(1, 'day');
+
+        // Half-open interval overlap: [eventStart, eventEnd) intersects [dayStart, nextDayStart)
+        // This avoids showing events on days where they only touch the midnight boundary.
+        return eventEnd.isAfter(dayStart) && eventStart.isBefore(nextDayStart);
+      }) || [],
+    [events],
+  );
+
+  const allDayLaneHeight = useMemo(() => {
+    const maxAllDayEvents = weekDates.reduce((max, date) => {
+      const allDayCount = getEventsForDate(date).filter(
+        (event) => event.allDay,
+      ).length;
+      return Math.max(max, allDayCount);
+    }, 0);
+
+    if (maxAllDayEvents === 0) {
+      return ALL_DAY_LANE_BASE_HEIGHT_PX;
+    }
+
+    return Math.max(
+      ALL_DAY_LANE_BASE_HEIGHT_PX,
+      ALL_DAY_LANE_PADDING_PX +
+        maxAllDayEvents * ALL_DAY_EVENT_HEIGHT_PX +
+        (maxAllDayEvents - 1) * ALL_DAY_LANE_GAP_PX,
+    );
+  }, [
+    weekDates,
+    getEventsForDate,
+    ALL_DAY_LANE_BASE_HEIGHT_PX,
+    ALL_DAY_EVENT_HEIGHT_PX,
+    ALL_DAY_LANE_PADDING_PX,
+    ALL_DAY_LANE_GAP_PX,
+  ]);
+
+  useEffect(() => {
+    if (!weeklyCalendarRef.current) return;
+
+    weeklyCalendarRef.current.style.setProperty(
+      '--all-day-lane-height',
+      `${allDayLaneHeight}px`,
+    );
+
+    return () => {
+      weeklyCalendarRef.current?.style.removeProperty('--all-day-lane-height');
+    };
+  }, [allDayLaneHeight]);
 
   const renderTimeColumn = (): JSX.Element => {
     return (
       <div className={styles.timeColumn} role="presentation">
         <div className={styles.timeHeader} role="presentation"></div>
+        <div className={styles.allDaySpacer} role="presentation"></div>
         {timeSlots.map((hour) => (
           <div key={hour} className={styles.timeSlot} role="presentation">
             <span className={styles.timeLabel}>
@@ -146,41 +266,95 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
 
   const renderWeekDays = (): JSX.Element[] => {
     const days: JSX.Element[] = [];
-    const currentWeekStart = new Date(weekStart);
 
-    for (let i = 0; i < 7; i++) {
-      const tempDate = new Date(currentWeekStart);
-      tempDate.setDate(currentWeekStart.getDate() + i);
+    for (let i = 0; i < weekDates.length; i++) {
+      const tempDate = weekDates[i];
 
-      const eventsForDate =
-        events?.filter((event) => {
-          const current = dayjs(tempDate).startOf('day');
+      const eventsForDate = getEventsForDate(tempDate);
 
-          if (event.allDay) {
-            // For all-day events, use startDate and endDate
-            if (!event.startDate) return false;
-            const eventStart = dayjs(event.startDate).startOf('day');
-            // Backend stores all-day endDate as exclusive (RFC 5545)
-            const eventEndExclusive = event.endDate
-              ? dayjs(event.endDate).startOf('day')
-              : eventStart.add(1, 'day');
-            return (
-              current.isSame(eventStart) ||
-              (current.isAfter(eventStart) &&
-                current.isBefore(eventEndExclusive))
-            );
-          } else {
-            // For timed events, use startAt and endAt
-            if (!event.startAt || !event.endAt) return false;
-            const eventStart = dayjs.utc(event.startAt).local().startOf('day');
-            const eventEnd = dayjs.utc(event.endAt).local().startOf('day');
-            return (
-              current.isSame(eventStart) ||
-              current.isSame(eventEnd) ||
-              (current.isAfter(eventStart) && current.isBefore(eventEnd))
-            );
+      const allDayEventsForDate = eventsForDate.filter((event) => event.allDay);
+      const timedEventsForDate = eventsForDate.filter((event) => !event.allDay);
+
+      const positionedTimedEvents = (() => {
+        const withPlacement = timedEventsForDate
+          .filter((event) => event.startAt && event.endAt)
+          .map((event) => ({
+            event,
+            ...getTimedEventPlacement(
+              event.startAt as string,
+              event.endAt as string,
+              tempDate,
+            ),
+          }))
+          .filter((entry) => entry.clampedEnd.isAfter(entry.clampedStart))
+          .sort((a, b) => {
+            const startDiff =
+              a.clampedStart.valueOf() - b.clampedStart.valueOf();
+            if (startDiff !== 0) return startDiff;
+            return a.clampedEnd.valueOf() - b.clampedEnd.valueOf();
+          });
+
+        const overlapGroups: (typeof withPlacement)[] = [];
+        let currentGroup: typeof withPlacement = [];
+        let currentGroupLatestEnd: dayjs.Dayjs | null = null;
+
+        withPlacement.forEach((entry) => {
+          if (
+            currentGroup.length === 0 ||
+            (currentGroupLatestEnd &&
+              entry.clampedStart.isBefore(currentGroupLatestEnd))
+          ) {
+            currentGroup.push(entry);
+            currentGroupLatestEnd =
+              currentGroupLatestEnd &&
+              currentGroupLatestEnd.isAfter(entry.clampedEnd)
+                ? currentGroupLatestEnd
+                : entry.clampedEnd;
+            return;
           }
-        }) || [];
+
+          overlapGroups.push(currentGroup);
+          currentGroup = [entry];
+          currentGroupLatestEnd = entry.clampedEnd;
+        });
+
+        if (currentGroup.length > 0) {
+          overlapGroups.push(currentGroup);
+        }
+
+        return overlapGroups.flatMap((group) => {
+          const columnEndTimes: dayjs.Dayjs[] = [];
+
+          const withColumns = group.map((entry) => {
+            let assignedColumn = -1;
+            for (let col = 0; col < columnEndTimes.length; col++) {
+              if (!entry.clampedStart.isBefore(columnEndTimes[col])) {
+                assignedColumn = col;
+                break;
+              }
+            }
+
+            if (assignedColumn === -1) {
+              assignedColumn = columnEndTimes.length;
+              columnEndTimes.push(entry.clampedEnd);
+            } else {
+              columnEndTimes[assignedColumn] = entry.clampedEnd;
+            }
+
+            return {
+              ...entry,
+              columnIndex: assignedColumn,
+            };
+          });
+
+          const columnCount = Math.max(columnEndTimes.length, 1);
+
+          return withColumns.map((entry) => ({
+            ...entry,
+            columnCount,
+          }));
+        });
+      })();
 
       const dayLabel = dayjs(tempDate).format('dddd, MMMM D, YYYY');
       const isToday = dayjs(tempDate).isSame(dayjs(), 'day');
@@ -209,6 +383,23 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
               {dayjs(tempDate).format('D')}
             </span>
           </div>
+          <div className={styles.allDayLane} role="presentation">
+            {allDayEventsForDate.map((event) => (
+              <div
+                key={event.id}
+                className={`${styles.allDayEventCard} ${styles.eventCard}`}
+                tabIndex={0}
+              >
+                <EventListCard
+                  {...event}
+                  refetchEvents={refetchEvents}
+                  userRole={userRole}
+                  userId={userId}
+                />
+                <div className={styles.eventTime}>{t('allDay')}</div>
+              </div>
+            ))}
+          </div>
           <div className={styles.dayGrid} role="presentation">
             {timeSlots.map((hour) => (
               <div
@@ -218,13 +409,18 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
                 aria-label={dayjs().hour(hour).minute(0).format('h A')}
               ></div>
             ))}
-            {eventsForDate.map((event) => {
-              // Handle all-day events differently
-              if (event.allDay) {
+            {positionedTimedEvents.map(
+              ({ event, top, height, columnIndex, columnCount }) => {
                 return (
                   <div
                     key={event.id}
-                    className={`${styles.eventContainer} ${styles.eventCard} ${styles.allDayEvent}`}
+                    className={`${styles.eventContainer} ${styles.eventCard}`}
+                    style={getTimedEventStyle(
+                      top,
+                      height,
+                      columnIndex,
+                      columnCount,
+                    )}
                     tabIndex={0}
                   >
                     <EventListCard
@@ -233,34 +429,14 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
                       userRole={userRole}
                       userId={userId}
                     />
-                    <div className={styles.eventTime}>{t('allDay')}</div>
+                    <div className={styles.eventTime}>
+                      {dayjs.utc(event.startAt).local().format('h:mm A')} -{' '}
+                      {dayjs.utc(event.endAt).local().format('h:mm A')}
+                    </div>
                   </div>
                 );
-              }
-
-              // Handle timed events
-              if (!event.startAt || !event.endAt) return null;
-
-              return (
-                <div
-                  key={event.id}
-                  className={`${styles.eventContainer} ${styles.eventCard}`}
-                  style={getEventStyle(event.startAt, event.endAt)}
-                  tabIndex={0}
-                >
-                  <EventListCard
-                    {...event}
-                    refetchEvents={refetchEvents}
-                    userRole={userRole}
-                    userId={userId}
-                  />
-                  <div className={styles.eventTime}>
-                    {dayjs.utc(event.startAt).local().format('h:mm A')} -{' '}
-                    {dayjs.utc(event.endAt).local().format('h:mm A')}
-                  </div>
-                </div>
-              );
-            })}
+              },
+            )}
           </div>
         </div>,
       );
@@ -276,6 +452,7 @@ const WeeklyEventCalender: React.FC<InterfaceWeeklyEventCalenderProps> = ({
       resetButtonText={tErrors('resetButton')}
     >
       <div
+        ref={weeklyCalendarRef}
         className={styles.weeklyCalendar}
         data-testid="weekly-calendar-container"
       >

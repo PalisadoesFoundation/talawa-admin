@@ -247,6 +247,7 @@
   "nextPage": "Siguiente página",
   "pageNumber": "Página {{page}}",
   "tags": "Etiquetas",
+  "viewSubTagsOf": "Ver subetiquetas de {{tagName}}",
   "loadMoreItems": "Cargar más elementos",
   "loadMore": "Cargar Más",
   "loadOlderMessages": "Cargar mensajes más antiguos",
@@ -321,5 +322,6 @@
   "networkError": "Error de red",
   "organizationCard": {
     "card_aria": "Tarjeta de organización"
-  }
+  },
+  "oauthSectionAriaLabel": "Opciones de inicio de sesión OAuth"
 }

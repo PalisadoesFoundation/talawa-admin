@@ -52,6 +52,7 @@ import UserTags from 'components/UserDetails/UserTags';
 import { useParams } from 'react-router-dom';
 import Security from './Security';
 import useLocalStorage from 'utils/useLocalstorage';
+import OAuthAccountsSettings from 'components/Auth/OAuthAccountsSettings/OAuthAccountsSettings';
 
 const MemberDetail: React.FC = (): JSX.Element => {
   const { getItem } = useLocalStorage();
@@ -106,7 +107,12 @@ const MemberDetail: React.FC = (): JSX.Element => {
           {activeTab === tCommon('overview') && (
             <UserContactDetails id={userId} />
           )}
-          {activeTab === tCommon('security') && <Security />}
+          {activeTab === tCommon('security') && (
+            <div className={styles.securitySection}>
+              <Security />
+              <OAuthAccountsSettings id={userId} />
+            </div>
+          )}
           {activeTab === tCommon('organizations') && <UserOrganizations />}
           {activeTab === tCommon('events') && (
             <UserEvents orgId={orgId} userId={userId} />

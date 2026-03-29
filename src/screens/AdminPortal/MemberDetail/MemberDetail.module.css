@@ -1,23 +1,27 @@
 .peopleTabComponent {
-  background: #fff;
-  padding-top: 1rem;
-  border-radius: 20px;
-  margin: 1rem;
+  background: var(--color-white);
+  padding-top: var(--space-5);
+  border-radius: var(--radius-xl);
+  margin: var(--space-5);
 }
 
 .peopleTabNavbarButtonHeader {
   display: flex;
   flex-direction: row;
-  gap: 1rem;
-  margin-left: 4rem;
-  margin-top: 2rem;
+  gap: var(--space-5);
+  margin-left: var(--space-11);
+  margin-top: var(--space-8);
 }
 
 .peopleTabComponentSection {
-  border-radius: 10px;
+  border-radius: var(--border-8);
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 1rem 3rem;
+  padding: var(--space-5) var(--space-10);
+}
+
+.securitySection {
+  width: 100%;
 }

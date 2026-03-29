@@ -44,17 +44,34 @@
   vertical-align: middle;
 }
 
+.fundNameButton {
+  color: var(--color-blue-500);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-weight: var(--font-weight-regular);
+}
+
+.fundNameButton:hover {
+  color: var(--color-blue-500);
+  text-decoration: underline;
+}
+
 .editButton {
   background-color: var(--color-blue-200);
   color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-3) var(--space-5);
+  --bs-btn-active-bg: var(--color-blue-300);
+  --bs-btn-active-border-color: transparent;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--color-blue-300);
+  color: var(--color-gray-700);
+  border-color: transparent;
   box-shadow: none;
 }
 
@@ -75,11 +92,10 @@
 }
 
 .createFundButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-white) !important;
+  box-shadow: none;
 }
 
 .createFundButton:active {
@@ -98,10 +114,6 @@
 }
 
 .listTable {
-  width: 100%;
-  background-color: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
   margin-top: var(--space-5);
 }
 

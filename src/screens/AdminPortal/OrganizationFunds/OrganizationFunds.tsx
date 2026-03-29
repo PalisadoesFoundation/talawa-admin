@@ -2,46 +2,27 @@ import { useQuery } from '@apollo/client';
 import AccountBalanceWallet from '@mui/icons-material/AccountBalanceWallet';
 import Search from '@mui/icons-material/Search';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
-import Stack from '@mui/material/Stack';
-import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import TableLoader from 'shared-components/TableLoader/TableLoader';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import type { InterfaceFundInfo } from 'utils/interfaces';
-import {
-  ReportingRow,
-  ReportingTableColumn,
-  ReportingTableGridProps,
-} from 'types/ReportingTable/interface';
-import {
-  PAGE_SIZE,
-  ROW_HEIGHT,
-  dataGridStyle as baseDataGridStyle,
-} from 'types/ReportingTable/utils';
+import type {
+  InterfaceFundInfo,
+  InterfaceFundListQueryResponse,
+} from 'utils/interfaces';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
-const dataGridStyle = {
-  ...baseDataGridStyle,
-  '& .MuiDataGrid-row': {
-    ...baseDataGridStyle['& .MuiDataGrid-row'],
-    cursor: 'pointer',
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-hover-bg)',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-hover-bg)',
-  },
-};
+const PAGE_SIZE = 10;
 
 /**
  * `organizationFunds` component displays a list of funds for a specific organization,
@@ -125,23 +106,7 @@ const organizationFunds = (): JSX.Element => {
     [],
   );
 
-  const {
-    data: fundData,
-    loading: fundLoading,
-    error: fundError,
-    refetch: refetchFunds,
-  }: {
-    data?: {
-      organization: {
-        funds: {
-          edges: { node: InterfaceFundInfo }[];
-        };
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_LIST, {
+  const fundQueryResult = useQuery<InterfaceFundListQueryResponse>(FUND_LIST, {
     skip: !orgId,
     variables: {
       input: {
@@ -150,22 +115,25 @@ const organizationFunds = (): JSX.Element => {
     },
   });
 
+  const {
+    rows: funds,
+    loading: fundLoading,
+    error: fundError,
+    refetch: refetchFunds,
+  } = useTableData<
+    InterfaceFundInfo,
+    InterfaceFundInfo,
+    InterfaceFundListQueryResponse
+  >(fundQueryResult, {
+    path: (data) => data.organization.funds,
+  });
+
+  const fundData = fundQueryResult.data;
+
   // Set the document title based on the translation
   useEffect(() => {
     document.title = t('funds.title');
   }, [t]);
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
-  const funds = useMemo(() => {
-    return (
-      fundData?.organization?.funds?.edges.map(
-        (edge: { node: InterfaceFundInfo }) => edge.node,
-      ) ?? []
-    );
-  }, [fundData]);
 
   const filteredAndSortedFunds = useMemo(() => {
     let result = [...funds];
@@ -191,6 +159,26 @@ const organizationFunds = (): JSX.Element => {
     navigate(`/admin/orgfundcampaign/${orgId}/${fundId}`);
   };
 
+  // Header titles for the funds table
+  const headerTitles: string[] = [
+    tCommon('hash'),
+    t('funds.fundName'),
+    tCommon('createdOn'),
+    tCommon('status'),
+    t('funds.associatedCampaigns'),
+    tCommon('action'),
+  ];
+
+  const fundIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    filteredAndSortedFunds.forEach((item, index) => {
+      if (item.id) {
+        map.set(item.id, index + 1);
+      }
+    });
+    return map;
+  }, [filteredAndSortedFunds]);
+
   if (fundError) {
     return (
       <div className={styles.whiteContainer}>
@@ -208,92 +196,80 @@ const organizationFunds = (): JSX.Element => {
     );
   }
 
-  // Header titles for the funds table
-  const headerTitles: string[] = [
-    tCommon('hash'),
-    t('funds.fundName'),
-    tCommon('createdOn'),
-    tCommon('status'),
-    t('funds.associatedCampaigns'),
-    tCommon('action'),
-  ];
-
-  const columns: ReportingTableColumn[] = [
+  const columns: IColumnDef<InterfaceFundInfo>[] = [
     {
-      field: 'sl_no',
-      headerName: tCommon('hash'),
-      flex: 1,
-      minWidth: 'space-11',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
+      id: 'sl_no',
+      header: tCommon('hash'),
+      accessor: 'id',
+      render: (_value, row) => (
         <span className={styles.requestsTableItemIndex}>
-          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
+          {fundIndexMap.get(row.id) ?? 0}
         </span>
       ),
-    },
-    {
-      field: 'fundName',
-      headerName: t('funds.fundName'),
-      flex: 2,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return <div data-testid="fundName">{params.row.name}</div>;
+      meta: {
+        sortable: false,
       },
     },
     {
-      field: 'createdAt',
-      headerName: tCommon('createdOn'),
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: true,
-      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      renderCell: (params: GridCellParams) => {
+      id: 'fundName',
+      header: t('funds.fundName'),
+      accessor: 'name',
+      render: (value, row) => {
+        return (
+          <Button
+            variant="link"
+            className={styles.fundNameButton}
+            data-testid="fundName"
+            onClick={() => handleClick(row.id)}
+          >
+            <i className="fa fa-link me-1" aria-hidden="true" />
+            {String(value)}
+          </Button>
+        );
+      },
+      meta: {
+        sortable: false,
+      },
+    },
+    {
+      id: 'createdAt',
+      header: tCommon('createdOn'),
+      accessor: 'createdAt',
+      render: (value) => {
         return (
           <div data-testid="createdOn">
-            {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
+            {dayjs(String(value)).format('DD/MM/YYYY')}
           </div>
         );
       },
-    },
-    {
-      field: 'status',
-      headerName: t('funds.status'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return params.row.isArchived ? t('funds.archived') : tCommon('active');
+      meta: {
+        sortable: true,
+        sortFn: (a, b) =>
+          dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
       },
     },
     {
-      field: 'assocCampaigns',
-      headerName: t('funds.assocCampaigns'),
-      flex: 2,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'status',
+      header: t('funds.status'),
+      accessor: 'isArchived',
+      render: (value) => {
+        return value ? t('funds.archived') : tCommon('active');
+      },
+      meta: {
+        sortable: false,
+      },
+    },
+    {
+      id: 'assocCampaigns',
+      header: t('funds.assocCampaigns'),
+      accessor: 'id',
+      render: (value) => {
         return (
           <Button
             size="sm"
             className={styles.editButton}
             aria-label={t('funds.viewCampaigns')}
-            onClick={() => handleClick(params.row.id as string)}
+            onClick={() => handleClick(value as string)}
             data-testid="viewBtn"
           >
             <i className="fa fa-eye me-1" />
@@ -301,26 +277,23 @@ const organizationFunds = (): JSX.Element => {
           </Button>
         );
       },
+      meta: {
+        sortable: false,
+      },
     },
     {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 2,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'action',
+      header: tCommon('action'),
+      accessor: 'id',
+      render: (_value, row) => {
         return (
           <Button
             size="sm"
-            // className="me-2 rounded"
             className={styles.editButton}
             data-testid="editFundBtn"
             onClick={(e) => {
               e.stopPropagation();
-              handleOpenModal(params.row as InterfaceFundInfo, 'edit');
+              handleOpenModal(row, 'edit');
             }}
           >
             <i className="fa fa-edit me-1" />
@@ -328,32 +301,15 @@ const organizationFunds = (): JSX.Element => {
           </Button>
         );
       },
+      meta: {
+        sortable: false,
+      },
     },
   ];
 
-  const gridProps: ReportingTableGridProps = {
-    sx: { ...dataGridStyle },
-    paginationMode: 'client',
-    getRowId: (row: InterfaceFundInfo) => row.id,
-    rowCount: filteredAndSortedFunds.length,
-    pageSizeOptions: [PAGE_SIZE],
-    loading: fundLoading,
-    hideFooter: true,
-    slots: {
-      noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('funds.noFundsFound')}
-        </Stack>
-      ),
-    },
-    getRowClassName: () => `${styles.rowBackground} ${styles.overflowVisible}`,
-    isRowSelectable: () => false,
-    disableColumnMenu: true,
-    rowHeight: ROW_HEIGHT,
-    autoHeight: true,
-    onRowClick: (params: { row: { id: string } }) =>
-      handleClick(params.row.id as string),
-  };
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   return (
     <div>
@@ -404,27 +360,24 @@ const organizationFunds = (): JSX.Element => {
           {fundLoading ? (
             <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
-            <ReportingTable
-              rows={
-                filteredAndSortedFunds.map((fund) => ({
-                  ...fund,
-                })) as ReportingRow[]
-              }
-              columns={columns}
-              gridProps={gridProps}
-              listProps={{
-                loader: <TableLoader noOfCols={6} noOfRows={2} />,
-                className: `${styles.listTable} ${styles.overflowVisible}`,
-                ['data-testid']: 'funds-list',
-                scrollThreshold: 0.9,
-                endMessage:
-                  filteredAndSortedFunds.length > 0 ? (
-                    <div className={'w-100 text-center my-4'}>
-                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
-                    </div>
-                  ) : null,
-              }}
-            />
+            <>
+              <DataTable
+                data={filteredAndSortedFunds}
+                columns={columns}
+                rowKey="id"
+                loading={fundLoading}
+                paginationMode="client"
+                pageSize={PAGE_SIZE}
+                tableClassName={styles.listTable}
+                emptyMessage={t('funds.noFundsFound')}
+                ariaLabel={t('funds.title')}
+              />
+              {filteredAndSortedFunds.length > 0 && (
+                <div className={'w-100 text-center my-4'}>
+                  <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}

@@ -24,6 +24,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   onChange,
   disabled,
   hideLabel,
+  className,
   'data-testid': dataTestId,
   ...props
 }) => {
@@ -52,6 +53,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       error={error}
       touched={touched}
       hideLabel={hideLabel}
+      className={className}
     >
       {startAdornment || endAdornment ? (
         <React.Fragment>

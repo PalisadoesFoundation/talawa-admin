@@ -10,6 +10,20 @@
     "continueWith": "{{provider}} के साथ जारी रखें",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "OAuthAccountsSettings": {
+    "userIdNotAvailable": "उपयोगकर्ता ID उपलब्ध नहीं है।",
+    "unableToLoadOAuthAccounts": "अभी OAuth खातों को लोड नहीं कर सकते।",
+    "missingOauthProviders": "OAuth प्रदाता गायब हैं।",
+    "bothGoogleAndGitHubLinked": "Google और GitHub पहले से जुड़े हुए हैं।",
+    "connectedOauthAccounts": "जुड़े हुए OAuth खाते।",
+    "noConnectedOauthAccounts": "कोई जुड़े हुए OAuth खाते नहीं हैं।",
+    "emailLabel": "ईमेल",
+    "linkedAtLabel": "लिंक किया गया",
+    "lastUsedAtLabel": "अंतिम उपयोग",
+    "Unlink": "लिंक रद्द करें",
+    "unlinkSuccess": "{{provider}} को सफलतापूर्वक अलग कर दिया गया।",
+    "unlinkConfirmation": "क्या आप वाकई {{provider}} को अलग करना चाहते हैं?"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
@@ -978,9 +992,13 @@
     "createFund": "फंड बनाएँ",
     "fundName": "फंड का नाम",
     "fundId": "फंड (संदर्भ) आईडी",
+    "enterFundName": "फंड का नाम दर्ज करें",
+    "enterFundId": "फंड आईडी दर्ज करें",
     "taxDeductible": "कर ड्यूटी कटाई",
     "default": "डिफ़ॉल्ट",
+    "defaultFund": "डिफ़ॉल्ट फंड",
     "archived": "आर्काइव",
+    "unarchive": "अनआर्काइव",
     "fundCreate": "फंड बनाएँ",
     "fundUpdate": "फंड अपडेट करें",
     "fundDelete": "फंड को हटाएँ",
@@ -1005,6 +1023,8 @@
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
     "campaignName": "कैंपेन का नाम",
+    "manageFundCampaign": "फंड अभियान प्रबंधित करें",
+    "createFundCampaign": "फंड अभियान बनाएं",
     "campaignOptions": "विकल्प",
     "fundingGoal": "फंडिंग उद्देश्य",
     "progress": "प्रगति",
@@ -1036,7 +1056,11 @@
     "dateRangeRequired": "कृपया एक मान्य तिथि सीमा चुनें",
     "campaignNameRequired": "कैंपेन का नाम आवश्यक है",
     "invalidDate": "अमान्य तिथि चुनी गई है",
-    "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
+    "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती",
+    "enterCampaignName": "कैंपेन का नाम दर्ज करें",
+    "enterStartDate": "प्रारंभ तिथि दर्ज करें",
+    "enterEndDate": "समाप्ति तिथि दर्ज करें",
+    "selectCurrency": "मुद्रा का चयन करें"
   },
   "pledges": {
     "createFailed": "प्रतिज्ञा बनाने में विफल",
@@ -2201,6 +2225,7 @@
     "campaignStatus": "स्थिति",
     "fundGoal": "वित्त पोषण लक्ष्य",
     "percentRaised": "% एकत्रित",
+    "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
     "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
     "campaignEnded": "अभियान समाप्त हो गया"
   },
@@ -2474,6 +2499,7 @@
     "events": "इवेंट्स",
     "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
     "today": "आज",
+    "loading": "लोड हो रहा है...",
     "viewLess": "कम देखें",
     "viewAll": "सब देखें",
     "noHolidaysAvailable": "कोई छुट्टियाँ उपलब्ध नहीं हैं",

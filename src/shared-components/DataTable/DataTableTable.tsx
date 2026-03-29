@@ -82,10 +82,14 @@ export function DataTableTable<T>({
   loadingMore,
   skeletonRows,
 }: InterfaceDataTableTableProps<T>) {
+  const getAlignClass = (align?: 'left' | 'center' | 'right'): string => {
+    if (align === 'center') return styles.alignCenter;
+    if (align === 'right') return styles.alignRight;
+    return styles.alignLeft;
+  };
+
   return (
     <Table
-      striped
-      hover
       responsive
       className={tableClassNames}
       data-testid="datatable"
@@ -112,6 +116,7 @@ export function DataTableTable<T>({
           {columns.map((col) => {
             const isSortable = col.meta?.sortable !== false;
             const isActive = activeSortBy === col.id;
+            const alignClass = getAlignClass(col.meta?.align);
             const ariaSort: React.AriaAttributes['aria-sort'] = isActive
               ? activeSortDir === 'asc'
                 ? 'ascending'
@@ -122,7 +127,7 @@ export function DataTableTable<T>({
                 key={col.id}
                 scope="col"
                 aria-sort={ariaSort}
-                className={isSortable ? styles.sortable : undefined}
+                className={`${isSortable ? styles.sortable : ''} ${alignClass}`.trim()}
                 tabIndex={isSortable ? 0 : undefined}
                 role={isSortable ? 'button' : undefined}
                 onClick={isSortable ? () => handleHeaderClick(col) : undefined}
@@ -138,7 +143,7 @@ export function DataTableTable<T>({
                 }
                 style={col.meta?.width ? { width: col.meta.width } : undefined}
               >
-                <span className={styles.headerInner}>
+                <span className={`${styles.headerInner} ${alignClass}`}>
                   {renderHeader(col.header)}
                   {isSortable && (
                     <span
@@ -161,19 +166,50 @@ export function DataTableTable<T>({
       </thead>
       <tbody>
         {renderRow
-          ? sortedRows.map((row, idx) => (
-              <React.Fragment key={getKey(row, startIndex + idx)}>
-                {renderRow(row, idx)}
-              </React.Fragment>
-            ))
+          ? sortedRows.map((row, idx) => {
+              const renderedRow = renderRow(row, idx);
+              const rowKeyValue = getKey(row, startIndex + idx);
+
+              if (!React.isValidElement(renderedRow)) {
+                return (
+                  <React.Fragment key={rowKeyValue}>
+                    {renderedRow}
+                  </React.Fragment>
+                );
+              }
+
+              const isFirst = idx === 0;
+              const isLast = idx === sortedRows.length - 1;
+              const existingClassName =
+                (renderedRow.props as { className?: string }).className || '';
+              const className = [
+                existingClassName,
+                isFirst ? styles.firstDataRow : '',
+                isLast ? styles.lastDataRow : '',
+              ]
+                .filter(Boolean)
+                .join(' ');
+
+              return (
+                <React.Fragment key={rowKeyValue}>
+                  {React.cloneElement(
+                    renderedRow as React.ReactElement<{ className?: string }>,
+                    { className },
+                  )}
+                </React.Fragment>
+              );
+            })
           : sortedRows.map((row, idx) => {
               const rowKeyValue = getKey(row, startIndex + idx);
               const isRowSelected = currentSelection.has(rowKeyValue);
+              const isFirst = idx === 0;
+              const isLast = idx === sortedRows.length - 1;
               return (
                 <tr
                   key={rowKeyValue}
                   data-testid={`datatable-row-${rowKeyValue}`}
                   data-selected={isRowSelected}
+                  className={`${isFirst ? styles.firstDataRow : ''} ${isLast ? styles.lastDataRow : ''}`.trim()}
                 >
                   {effectiveSelectable && (
                     <td className={styles.selectCol}>
@@ -190,8 +226,13 @@ export function DataTableTable<T>({
                   )}
                   {columns.map((col) => {
                     const val = getCellValue(row, col.accessor);
+                    const alignClass = getAlignClass(col.meta?.align);
                     return (
-                      <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
+                      <td
+                        key={col.id}
+                        className={alignClass}
+                        data-testid={`datatable-cell-${col.id}`}
+                      >
                         {renderCell(col, val, row)}
                       </td>
                     );

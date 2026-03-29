@@ -1,11 +1,12 @@
 import React from 'react';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { getPledgeColumns } from './PledgeColumns';
-import type { GridRenderCellParams } from 'shared-components/DataGridWrapper';
+import type { InterfacePledgeTableRow } from './PledgeColumns';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import userEvent from '@testing-library/user-event';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 dayjs.extend(utc);
 
@@ -41,29 +42,41 @@ describe('getPledgeColumns', () => {
     vi.restoreAllMocks();
   });
 
-  const mockT = vi.fn((key: string) => key);
-  const mockTCommon = vi.fn((key: string, options?: { count?: number }) =>
-    options?.count ? `${key}_${options.count}` : key,
-  );
   const mockHandleClick = vi.fn();
   const mockHandleOpenModal = vi.fn();
-  const mockHandleDeleteClick = vi.fn();
 
   const defaultProps = {
-    t: mockT as unknown as Parameters<typeof getPledgeColumns>[0]['t'],
-    tCommon: mockTCommon as unknown as Parameters<
-      typeof getPledgeColumns
-    >[0]['tCommon'],
+    labels: {
+      pledgers: 'pledges.pledgers',
+      pledgeDate: 'pledges.pledgeDate',
+      pledged: 'pledges.pledged',
+      donated: 'pledges.donated',
+      action: 'action',
+      edit: 'edit',
+    },
+    getMoreCountLabel: (count: number) => `moreCount_${count}`,
     id: 'test-popover-id',
     handleClick: mockHandleClick,
     handleOpenModal: mockHandleOpenModal,
-    handleDeleteClick: mockHandleDeleteClick,
+  };
+
+  const renderColumnCell = (
+    column: IColumnDef<InterfacePledgeTableRow>,
+    row: Partial<InterfacePledgeTableRow>,
+  ): React.ReactNode => {
+    const accessor = column.accessor;
+    const value =
+      typeof accessor === 'function'
+        ? accessor(row as InterfacePledgeTableRow)
+        : (row as Record<string, unknown>)[accessor as string];
+
+    return column.render?.(value, row as InterfacePledgeTableRow);
   };
 
   it('should return 5 column definitions', () => {
     const columns = getPledgeColumns(defaultProps);
     expect(columns).toHaveLength(5);
-    expect(columns.map((c) => c.field)).toEqual([
+    expect(columns.map((c) => c.id)).toEqual([
       'pledgers',
       'pledgeDate',
       'amount',
@@ -77,16 +90,14 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
 
-      const params = {
-        row: {
-          id: '1',
-          users: [
-            { id: 'u1', name: 'John Doe', avatarURL: 'http://avatar.jpg' },
-          ],
-        },
-      } as GridRenderCellParams;
+      const row = {
+        id: '1',
+        users: [{ id: 'u1', name: 'John Doe', avatarURL: 'http://avatar.jpg' }],
+      };
 
-      const { container } = render(<>{pledgersColumn.renderCell?.(params)}</>);
+      const { container } = render(
+        <>{renderColumnCell(pledgersColumn, row)}</>,
+      );
 
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(container.querySelector('img')).toHaveAttribute(
@@ -99,14 +110,12 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
 
-      const params = {
-        row: {
-          id: '1',
-          users: [{ id: 'u1', name: 'Jane Doe', avatarURL: null }],
-        },
-      } as GridRenderCellParams;
+      const row = {
+        id: '1',
+        users: [{ id: 'u1', name: 'Jane Doe', avatarURL: null }],
+      };
 
-      render(<>{pledgersColumn.renderCell?.(params)}</>);
+      render(<>{renderColumnCell(pledgersColumn, row)}</>);
 
       expect(screen.getByTestId('mock-avatar')).toBeInTheDocument();
       expect(screen.getAllByText('Jane Doe').length).toBeGreaterThan(0);
@@ -120,17 +129,15 @@ describe('getPledgeColumns', () => {
         { id: 'u2', name: 'Extra User 1', avatarURL: null },
         { id: 'u3', name: 'Extra User 2', avatarURL: null },
       ];
-      const params = {
-        row: {
-          id: '1',
-          users: [
-            { id: 'u1', name: 'Main User', avatarURL: null },
-            ...extraUsers,
-          ],
-        },
-      } as GridRenderCellParams;
+      const row = {
+        id: '1',
+        users: [
+          { id: 'u1', name: 'Main User', avatarURL: null },
+          ...extraUsers,
+        ],
+      };
 
-      render(<>{pledgersColumn.renderCell?.(params)}</>);
+      render(<>{renderColumnCell(pledgersColumn, row)}</>);
 
       const moreContainer = screen.getByTestId('moreContainer-1');
       expect(moreContainer).toBeInTheDocument();
@@ -149,17 +156,15 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
 
-      const params = {
-        row: {
-          id: '1',
-          users: [
-            { id: 'u1', name: 'Main User', avatarURL: null },
-            { id: 'u2', name: 'Extra User', avatarURL: null },
-          ],
-        },
-      } as GridRenderCellParams;
+      const row = {
+        id: '1',
+        users: [
+          { id: 'u1', name: 'Main User', avatarURL: null },
+          { id: 'u2', name: 'Extra User', avatarURL: null },
+        ],
+      };
 
-      render(<>{pledgersColumn.renderCell?.(params)}</>);
+      render(<>{renderColumnCell(pledgersColumn, row)}</>);
 
       const moreContainer = screen.getByTestId('moreContainer-1');
       expect(moreContainer).toHaveAttribute('role', 'button');
@@ -176,14 +181,14 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
 
-      const params = {
-        row: {
-          id: '1',
-          users: [],
-        },
-      } as GridRenderCellParams;
+      const row = {
+        id: '1',
+        users: [],
+      };
 
-      const { container } = render(<>{pledgersColumn.renderCell?.(params)}</>);
+      const { container } = render(
+        <>{renderColumnCell(pledgersColumn, row)}</>,
+      );
 
       expect(container.querySelector('[data-testid^="mainUser-"]')).toBeNull();
       expect(
@@ -195,13 +200,13 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
 
-      const params = {
-        row: {
-          id: '1',
-        },
-      } as GridRenderCellParams;
+      const row = {
+        id: '1',
+      };
 
-      const { container } = render(<>{pledgersColumn.renderCell?.(params)}</>);
+      const { container } = render(
+        <>{renderColumnCell(pledgersColumn, row)}</>,
+      );
 
       expect(container.querySelector('[data-testid^="mainUser-"]')).toBeNull();
     });
@@ -213,14 +218,34 @@ describe('getPledgeColumns', () => {
       const dateColumn = columns[1];
 
       const pledgeDate = dayjs.utc().month(2).date(15).hour(10).toISOString();
-      const params = {
-        row: {
-          pledgeDate,
-        },
-      } as GridRenderCellParams;
-
-      const result = dateColumn.renderCell?.(params);
+      const result = renderColumnCell(dateColumn, {
+        pledgeDate: pledgeDate as unknown as Date,
+      });
       expect(result).toBe(dayjs.utc(pledgeDate).format('DD/MM/YYYY'));
+    });
+
+    it('should sort pledgeDate using ascending timestamp comparator', () => {
+      const columns = getPledgeColumns(defaultProps);
+      const dateColumn = columns[1];
+      const sortFn = dateColumn.meta?.sortFn;
+
+      expect(sortFn).toBeDefined();
+
+      const earlierDate = dayjs.utc().subtract(2, 'day').toDate();
+      const laterDate = dayjs.utc().subtract(1, 'day').toDate();
+
+      const rowA = {
+        pledgeDate: earlierDate,
+      } as InterfacePledgeTableRow;
+      const rowB = {
+        pledgeDate: laterDate,
+      } as InterfacePledgeTableRow;
+
+      const ascendingResult = sortFn?.(rowA, rowB);
+      const descendingResult = sortFn?.(rowB, rowA);
+
+      expect(ascendingResult).toBeLessThan(0);
+      expect(descendingResult).toBeGreaterThan(0);
     });
   });
 
@@ -229,14 +254,11 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const amountColumn = columns[2];
 
-      const params = {
-        row: {
-          amount: 1000,
-          currency: 'USD',
-        },
-      } as GridRenderCellParams;
-
-      render(<>{amountColumn.renderCell?.(params)}</>);
+      render(
+        <>
+          {renderColumnCell(amountColumn, { amount: 1000, currency: 'USD' })}
+        </>,
+      );
 
       const cell = screen.getByTestId('amountCell');
       expect(cell).toHaveTextContent('$');
@@ -247,14 +269,9 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const amountColumn = columns[2];
 
-      const params = {
-        row: {
-          amount: 500,
-          currency: 'EUR',
-        },
-      } as GridRenderCellParams;
-
-      render(<>{amountColumn.renderCell?.(params)}</>);
+      render(
+        <>{renderColumnCell(amountColumn, { amount: 500, currency: 'EUR' })}</>,
+      );
 
       const cell = screen.getByTestId('amountCell');
       expect(cell).toHaveTextContent('€');
@@ -267,13 +284,7 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const donatedColumn = columns[3];
 
-      const params = {
-        row: {
-          currency: 'USD',
-        },
-      } as GridRenderCellParams;
-
-      render(<>{donatedColumn.renderCell?.(params)}</>);
+      render(<>{renderColumnCell(donatedColumn, { currency: 'USD' })}</>);
 
       const cell = screen.getByTestId('paidCell');
       expect(cell).toHaveTextContent('$0');
@@ -285,33 +296,30 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const actionColumn = columns[4];
 
-      const row = { id: '1', amount: 100 };
-      const params = { row } as GridRenderCellParams;
+      const originalPledge = {
+        id: '1',
+        amount: 100,
+        currency: 'USD',
+        createdAt: dayjs.utc().toISOString(),
+        pledger: {
+          id: 'u1',
+          name: 'John Doe',
+          avatarURL: null,
+        },
+      };
 
-      render(<>{actionColumn.renderCell?.(params)}</>);
+      const row = { id: '1', amount: 100, original: originalPledge };
+
+      render(<>{renderColumnCell(actionColumn, row)}</>);
 
       const editButton = screen.getByTestId('editPledgeBtn');
       await user.click(editButton);
 
       await waitFor(() => {
-        expect(mockHandleOpenModal).toHaveBeenCalledWith(row, 'edit');
-      });
-    });
-
-    it('should call handleDeleteClick on delete button click', async () => {
-      const columns = getPledgeColumns(defaultProps);
-      const actionColumn = columns[4];
-
-      const row = { id: '1', amount: 100 };
-      const params = { row } as GridRenderCellParams;
-
-      render(<>{actionColumn.renderCell?.(params)}</>);
-
-      const deleteButton = screen.getByTestId('deletePledgeBtn');
-      await user.click(deleteButton);
-
-      await waitFor(() => {
-        expect(mockHandleDeleteClick).toHaveBeenCalledWith(row);
+        expect(mockHandleOpenModal).toHaveBeenCalledWith(
+          originalPledge,
+          'edit',
+        );
       });
     });
   });
@@ -321,14 +329,9 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const amountColumn = columns[2];
 
-      const params = {
-        row: {
-          amount: 0,
-          currency: 'USD',
-        },
-      } as GridRenderCellParams;
-
-      render(<>{amountColumn.renderCell?.(params)}</>);
+      render(
+        <>{renderColumnCell(amountColumn, { amount: 0, currency: 'USD' })}</>,
+      );
 
       const cell = screen.getByTestId('amountCell');
       expect(cell).toHaveTextContent('$0');
@@ -338,13 +341,7 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const amountColumn = columns[2];
 
-      const params = {
-        row: {
-          currency: 'USD',
-        },
-      } as GridRenderCellParams;
-
-      render(<>{amountColumn.renderCell?.(params)}</>);
+      render(<>{renderColumnCell(amountColumn, { currency: 'USD' })}</>);
 
       const cell = screen.getByTestId('amountCell');
       expect(cell).toHaveTextContent('$0');
@@ -354,13 +351,7 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const amountColumn = columns[2];
 
-      const params = {
-        row: {
-          amount: 100,
-        },
-      } as GridRenderCellParams;
-
-      render(<>{amountColumn.renderCell?.(params)}</>);
+      render(<>{renderColumnCell(amountColumn, { amount: 100 })}</>);
 
       const cell = screen.getByTestId('amountCell');
       expect(cell).toHaveTextContent('100');
@@ -371,28 +362,22 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const dateColumn = columns[1];
 
-      const params = {
-        row: {},
-      } as GridRenderCellParams;
-
-      const result = dateColumn.renderCell?.(params);
+      const result = renderColumnCell(dateColumn, {});
       expect(result).toBe('-');
     });
 
     it('should handle keydown with Enter/Space/Tab as expected', async () => {
       const columns = getPledgeColumns(defaultProps);
       const pledgersColumn = columns[0];
-      const params = {
-        row: {
-          id: '1',
-          users: [
-            { id: 'u1', name: 'Main', avatarURL: null },
-            { id: 'u2', name: 'Extra', avatarURL: null },
-          ],
-        },
-      } as GridRenderCellParams;
+      const row = {
+        id: '1',
+        users: [
+          { id: 'u1', name: 'Main', avatarURL: null },
+          { id: 'u2', name: 'Extra', avatarURL: null },
+        ],
+      };
 
-      render(<>{pledgersColumn.renderCell?.(params)}</>);
+      render(<>{renderColumnCell(pledgersColumn, row)}</>);
       const moreContainer = screen.getByTestId('moreContainer-1');
 
       // Test Enter key

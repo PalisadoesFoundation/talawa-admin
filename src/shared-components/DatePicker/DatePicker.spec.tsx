@@ -1,12 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import type { DatePickerSlotProps } from '@mui/x-date-pickers';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import DatePicker from './DatePicker';
 import { vi } from 'vitest';
+
+type TestDatePickerSlotProps = Partial<DatePickerSlotProps<false>>;
 
 // Mock FormFieldGroup to control its behavior in tests
 
@@ -500,7 +502,7 @@ describe('DatePicker', () => {
           onChange={mockOnChange}
           onBlur={customOnBlur}
           slotProps={{
-            textField: null as any,
+            textField: null as unknown as TestDatePickerSlotProps['textField'],
           }}
           data-testid="null-slot-blur-test"
         />,
@@ -525,8 +527,8 @@ describe('DatePicker', () => {
           onBlur={customOnBlur}
           slotProps={{
             textField: {
-              onBlur: 'not-a-function' as any,
-            },
+              onBlur: 'not-a-function',
+            } as unknown as TestDatePickerSlotProps['textField'],
           }}
           data-testid="invalid-blur-test"
         />,
@@ -786,6 +788,45 @@ describe('DatePicker', () => {
         />,
       );
       expect(screen.getByPlaceholderText('Enter date')).toBeInTheDocument();
+    });
+
+    it('uses string placeholder from slotProps.textField when component placeholder is not provided', () => {
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          value={null}
+          onChange={mockOnChange}
+          slotProps={{
+            textField: {
+              placeholder: 'Slot placeholder',
+            },
+          }}
+          data-testid="slot-placeholder-check"
+        />,
+      );
+
+      const input = screen.getByTestId('slot-placeholder-check');
+      expect(input).toHaveAttribute('placeholder', 'Slot placeholder');
+    });
+
+    it('ignores non-string placeholder from slotProps.textField', () => {
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          value={null}
+          onChange={mockOnChange}
+          slotProps={{
+            textField: {
+              placeholder: 123 as unknown as string,
+            },
+          }}
+          data-testid="non-string-slot-placeholder-check"
+        />,
+      );
+
+      const input = screen.getByTestId('non-string-slot-placeholder-check');
+      expect(input).not.toHaveAttribute('placeholder', '123');
+      expect(input.getAttribute('placeholder')).toBeNull();
     });
 
     it('merges custom slots with textField slot', () => {

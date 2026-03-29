@@ -430,8 +430,8 @@ describe('CreateEventModal', () => {
           variables: expect.objectContaining({
             input: expect.objectContaining({
               isPublic: false,
-              isInviteOnly: true,
               isRegisterable: false,
+              isInviteOnly: true,
             }),
           }),
         }),
@@ -1493,7 +1493,7 @@ describe('CreateEventModal', () => {
       expect(startDateInput).toHaveValue(now.format('YYYY-MM-DD'));
 
       const endDateInput = screen.getByTestId('eventEndAt');
-      expect(endDateInput).toHaveValue(now.format('YYYY-MM-DD'));
+      expect(endDateInput).toHaveValue(now.add(1, 'day').format('YYYY-MM-DD'));
     });
 
     it('sets default start date to today (no month crossing)', () => {

@@ -26,7 +26,7 @@ export class OrganizationSetupPage extends BasePage<OrganizationSetupPage> {
     'modalOrganizationAddressLine1';
   private readonly organizationAddressLine2Input =
     'modalOrganizationAddressLine2';
-  private readonly submitOrganizationFormButton = 'submitOrganizationForm';
+  private readonly submitOrganizationFormButton = 'modal-submit-btn';
   private readonly pluginNotificationModal = 'pluginNotificationModal';
   private readonly closePluginNotificationButton = 'enableEverythingForm';
   private readonly goToStoreLink = 'goToStore';

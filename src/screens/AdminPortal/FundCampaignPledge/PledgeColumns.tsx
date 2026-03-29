@@ -1,63 +1,69 @@
 import React from 'react';
-import type {
-  GridCellParams,
-  TokenAwareGridColDef,
-} from 'shared-components/DataGridWrapper';
-import type { TFunction } from 'i18next';
 import dayjs from 'dayjs';
-import { Button } from 'shared-components/Button';
+import Button from 'shared-components/Button';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import styles from './PledgeColumns.module.css';
+
+export interface InterfacePledgeTableRow {
+  id: string;
+  original: InterfacePledgeInfo;
+  users: InterfaceUserInfoPG[];
+  endDate: Date;
+  pledgeDate: Date;
+  amount: number;
+  currency: string;
+}
 
 /**
  * Props for the getPledgeColumns function.
  */
 interface InterfacePledgeColumnsProps {
-  t: TFunction<'translation', undefined>;
-  tCommon: TFunction<'common', undefined>;
+  labels: {
+    pledgers: string;
+    pledgeDate: string;
+    pledged: string;
+    donated: string;
+    action: string;
+    edit: string;
+  };
+  getMoreCountLabel: (count: number) => string;
   id: string | undefined;
   handleClick: (
     event:
-      | React.MouseEvent<HTMLDivElement>
-      | React.KeyboardEvent<HTMLDivElement>,
+      | React.MouseEvent<HTMLSpanElement>
+      | React.KeyboardEvent<HTMLSpanElement>,
     users: InterfaceUserInfoPG[],
   ) => void;
   handleOpenModal: (
     pledge: InterfacePledgeInfo | null,
     mode: 'edit' | 'create',
   ) => void;
-  handleDeleteClick: (pledge: InterfacePledgeInfo) => void;
 }
 
 /**
  * Returns the column definitions for the pledges DataGrid.
  * @param props - The props containing translation functions and event handlers.
- * @returns An array of GridColDef for the pledges table.
+ * @returns An array of DataTable columns for the pledges table.
  */
 export const getPledgeColumns = ({
-  t,
-  tCommon,
+  labels,
+  getMoreCountLabel,
   id,
   handleClick,
   handleOpenModal,
-  handleDeleteClick,
-}: InterfacePledgeColumnsProps): TokenAwareGridColDef[] => [
+}: InterfacePledgeColumnsProps): IColumnDef<InterfacePledgeTableRow>[] => [
   {
-    field: 'pledgers',
-    headerName: t('pledges.pledgers'),
-    flex: 3,
-    minWidth: 'space-10',
-    align: 'left',
-    headerAlign: 'center',
-    headerClassName: `${styles.tableHeader}`,
-    sortable: false,
-    renderCell: (params: GridCellParams) => {
-      const users = params.row.users || [];
+    id: 'pledgers',
+    header: labels.pledgers,
+    accessor: 'users',
+    render: (value, row) => {
+      const users = (value as InterfaceUserInfoPG[]) || [];
       const mainUsers = users.slice(0, 1);
       const extraUsers = users.slice(1);
 
@@ -66,8 +72,8 @@ export const getPledgeColumns = ({
           {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
             <div
               className={styles.pledgerContainer}
-              key={`${params.row.id}-main-${index}`}
-              data-testid={`mainUser-${params.row.id}-${index}`}
+              key={`${row.id}-main-${index}`}
+              data-testid={`mainUser-${row.id}-${index}`}
             >
               {user.avatarURL ? (
                 <img
@@ -87,7 +93,7 @@ export const getPledgeColumns = ({
             </div>
           ))}
           {extraUsers.length > 0 && (
-            <div
+            <span
               className={styles.moreContainer}
               aria-describedby={id}
               role="button"
@@ -99,99 +105,83 @@ export const getPledgeColumns = ({
                   handleClick(event, extraUsers);
                 }
               }}
-              data-testid={`moreContainer-${params.row.id}`}
+              data-testid={`moreContainer-${row.id}`}
             >
-              {tCommon('moreCount', { count: extraUsers.length })}
-            </div>
+              {getMoreCountLabel(extraUsers.length)}
+            </span>
           )}
         </div>
       );
     },
+    meta: {
+      sortable: false,
+    },
   },
   {
-    field: 'pledgeDate',
-    headerName: t('pledges.pledgeDate'),
-    flex: 1,
-    minWidth: 'space-15',
-    align: 'center',
-    headerAlign: 'center',
-    headerClassName: `${styles.tableHeader}`,
-    sortable: false,
-    renderCell: (params: GridCellParams) =>
-      params.row.pledgeDate
-        ? dayjs(params.row.pledgeDate).format('DD/MM/YYYY')
-        : '-',
+    id: 'pledgeDate',
+    header: labels.pledgeDate,
+    accessor: 'pledgeDate',
+    render: (value) =>
+      value ? dayjs(String(value)).format('DD/MM/YYYY') : '-',
+    meta: {
+      sortable: true,
+      sortFn: (a, b) =>
+        dayjs(a.pledgeDate).valueOf() - dayjs(b.pledgeDate).valueOf(),
+    },
   },
   {
-    field: 'amount',
-    headerName: t('pledges.pledged'),
-    flex: 1,
-    minWidth: 'space-13',
-    align: 'center',
-    headerAlign: 'center',
-    headerClassName: `${styles.tableHeader}`,
-    sortable: false,
-    renderCell: (params: GridCellParams) => (
+    id: 'amount',
+    header: labels.pledged,
+    accessor: 'amount',
+    render: (value, row) => (
       <div
         className="d-flex justify-content-center fw-bold"
         data-testid="amountCell"
       >
-        {currencySymbols[params.row.currency as keyof typeof currencySymbols] ||
-          ''}
-        {params.row.amount?.toLocaleString('en-US') ?? 0}
+        {currencySymbols[row.currency as keyof typeof currencySymbols] || ''}
+        {((value as number) ?? 0).toLocaleString('en-US')}
       </div>
     ),
+    meta: {
+      sortable: true,
+      align: 'center',
+    },
   },
   {
-    field: 'donated',
-    headerName: t('pledges.donated'),
-    flex: 1,
-    minWidth: 'space-13',
-    align: 'center',
-    headerAlign: 'center',
-    headerClassName: `${styles.tableHeader}`,
-    sortable: false,
-    renderCell: (params: GridCellParams) => (
+    id: 'donated',
+    header: labels.donated,
+    accessor: 'amount',
+    render: (_value, row) => (
       <div
         className="d-flex justify-content-center fw-bold"
         data-testid="paidCell"
       >
-        {currencySymbols[params.row.currency as keyof typeof currencySymbols]}0
+        {currencySymbols[row.currency as keyof typeof currencySymbols]}0
       </div>
     ),
+    meta: {
+      sortable: false,
+      align: 'center',
+    },
   },
   {
-    field: 'action',
-    headerName: tCommon('action'),
-    flex: 1,
-    minWidth: 'space-13',
-    align: 'center',
-    headerAlign: 'center',
-    headerClassName: `${styles.tableHeader}`,
-    sortable: false,
-    renderCell: (params: GridCellParams) => (
-      <>
-        <Button
-          variant="success"
-          size="sm"
-          className={`me-2 ${styles.editButton}`}
-          data-testid="editPledgeBtn"
-          onClick={() =>
-            handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
-          }
-        >
-          <i className="fa fa-edit" />
-        </Button>
-        <Button
-          size="sm"
-          variant="danger"
-          className="rounded"
-          data-testid="deletePledgeBtn"
-          onClick={() => handleDeleteClick(params.row as InterfacePledgeInfo)}
-        >
-          <i className="fa fa-trash" />
-        </Button>
-      </>
+    id: 'action',
+    header: labels.action,
+    accessor: 'id',
+    render: (_value, row) => (
+      <Button
+        size="sm"
+        className={styles.editButton}
+        data-testid="editPledgeBtn"
+        onClick={() => handleOpenModal(row.original, 'edit')}
+      >
+        <i className="fa fa-edit me-1" />
+        {labels.edit}
+      </Button>
     ),
+    meta: {
+      sortable: false,
+      align: 'center',
+    },
   },
 ];

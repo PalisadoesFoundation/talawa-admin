@@ -62,6 +62,7 @@ export const FUND_CAMPAIGN = gql`
             endAt
             currencyCode
             goalAmount
+            amountRaised
           }
         }
       }
@@ -111,6 +112,7 @@ export const USER_FUND_CAMPAIGNS = gql`
       funds(first: 32) {
         edges {
           node {
+            isArchived
             campaigns(first: 32) {
               edges {
                 node {
@@ -118,6 +120,7 @@ export const USER_FUND_CAMPAIGNS = gql`
                   name
                   currencyCode
                   goalAmount
+                  amountRaised
                   startAt
                   endAt
                 }
@@ -140,7 +143,6 @@ export const USER_PLEDGES = gql`
       id
       amount
       note
-      createdAt
       updatedAt
       campaign {
         id
@@ -148,6 +150,8 @@ export const USER_PLEDGES = gql`
         startAt
         endAt
         currencyCode
+        goalAmount
+        amountRaised
       }
       pledger {
         id
