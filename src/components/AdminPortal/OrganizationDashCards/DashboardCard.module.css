@@ -1,14 +1,14 @@
 /**
- * DashboardCard — stat widget
- * ----------------------------
- * White card with subtle shadow, icon pill, large metric number.
- * Supports hover lift for quick-access feel.
+ * DashboardCard — KPI stat widget
+ * ---------------------------------
+ * Vertical layout: label + icon in header, large number below.
+ * Follows Apple/Stripe/Vercel stat card conventions.
  */
 
 .cardBodyMainDiv {
-  border-radius: 20px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   background-color: #ffffff;
   width: 100%;
   transition:
@@ -18,84 +18,71 @@
 }
 
 .cardBodyMainDiv:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07), 0 12px 28px rgba(0, 0, 0, 0.07);
   transform: translateY(-2px);
 }
 
 .cardBody {
-  padding: 1.375rem 1.25rem;
+  padding: 1.25rem 1.375rem 1.375rem;
   display: flex;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-@media (max-width: 600px) {
-  .cardBody {
-    min-height: 110px;
-  }
-}
-
-.cardBodymain {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.625rem;
   width: 100%;
 }
 
-/* ── Icon column ─────────────────────────────────────────────────────────────── */
-.iconCol {
-  flex-shrink: 0;
+/* ── Top row: label left, icon right ────────────────────────────────────────── */
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 }
 
+/* ── Icon — bare, no background pill ────────────────────────────────────────── */
 .cardbodyIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
-  background-color: #e8f0fd;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  color: #0071e3;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
-  transition: background-color 0.18s ease;
+  color: #0071e3;
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
 }
 
 .cardBodyMainDiv:hover .cardbodyIcon {
-  background-color: #0071e3;
-  color: #ffffff;
+  opacity: 1;
 }
 
-.cardBodyMainDiv:hover .cardbodyIcon svg,
-.cardBodyMainDiv:hover .cardbodyIcon path {
-  fill: #ffffff;
-  color: #ffffff;
+.cardbodyIcon svg,
+.cardbodyIcon path {
+  fill: #0071e3;
+  color: #0071e3;
 }
 
-/* ── Content column ──────────────────────────────────────────────────────────── */
-.contentCol {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: 0;
-}
-
+/* ── Metric number ───────────────────────────────────────────────────────────── */
 .cardBodyNumber {
-  font-size: 1.5rem;
+  font-size: 2.25rem;
   font-weight: 700;
   color: #1d1d1f;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.035em;
+  line-height: 1;
 }
 
+/* ── Label ───────────────────────────────────────────────────────────────────── */
 .cardBodySecondaryText {
   font-size: 0.8125rem;
   font-weight: 500;
   color: #6e6e73;
   letter-spacing: -0.005em;
+  text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ── Unused legacy classes kept as no-ops to avoid TS errors ─────────────────── */
+.cardBodymain {}
+.iconCol {}
+.contentCol {}

@@ -60,28 +60,17 @@ const SidebarBase = ({
       data-testid="leftDrawerContainer"
     >
       {/* Branding Section */}
-      <div
-        className={`d-flex align-items-center ${
-          hideDrawer ? 'justify-content-center' : 'justify-content-between'
+      <button
+        className={`${styles.toggleBtn} ${
+          hideDrawer ? styles.toggleBtnCollapsed : styles.toggleBtnExpanded
         }`}
+        data-testid="toggleBtn"
+        onClick={handleToggle}
+        onKeyDown={handleKeyDown}
+        type="button"
+        aria-label={tCommon('toggleSidebar')}
       >
-        <button
-          className="d-flex align-items-center btn p-0 border-0 bg-transparent"
-          data-testid="toggleBtn"
-          onClick={handleToggle}
-          onKeyDown={handleKeyDown}
-          type="button"
-          aria-label={tCommon('toggleSidebar')}
-        >
-          <FaBars
-            className={`${styles.hamburgerIcon} ${
-              hideDrawer
-                ? styles.hamburgerIconCollapsed
-                : styles.hamburgerIconExpanded
-            }`}
-            size={22}
-          />
-        </button>
+        <FaBars className={styles.hamburgerIcon} size={22} />
         <div
           className={
             hideDrawer
@@ -94,7 +83,7 @@ const SidebarBase = ({
             {tCommon(portalText)}
           </div>
         </div>
-      </div>
+      </button>
 
       {/* Optional Header Content (e.g., Organization Section) */}
       {headerContent}

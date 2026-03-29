@@ -3,7 +3,16 @@
  */
 
 .pageContent {
-  padding-right: 1.75rem;
+  padding: 0 1.75rem 1.75rem 0;
+}
+
+/* ── Page subtitle (layout title is rendered by SuperAdminScreen) ────────────── */
+.pageSubtitle {
+  font-size: 0.9375rem;
+  color: #6e6e73;
+  margin-top: 0.25rem;
+  margin-bottom: 1.5rem;
+  padding: 0 1.75rem;
 }
 
 /* ── Sort dropdown ───────────────────────────────────────────────────────────── */
@@ -33,32 +42,31 @@
   outline-offset: 1px;
 }
 
-/* ── Org dropdown ────────────────────────────────────────────────────────────── */
+/* ── Upload button ───────────────────────────────────────────────────────────── */
 .createorgdropdown {
-  background-color: #f5f5f7;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: #0071e3;
+  border: 1px solid #0071e3;
   height: 2.5rem;
-  margin-top: 1rem;
-  color: #1d1d1f;
+  color: #ffffff;
   border-radius: 8px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   transition:
-    border-color 0.15s ease,
+    background-color 0.15s ease,
     box-shadow 0.15s ease;
 }
 
 .createorgdropdown:active,
 .createorgdropdown:hover {
-  background-color: #f5f5f7;
-  border-color: #0071e3;
-  color: #1d1d1f;
-  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.15);
+  background-color: #005cc4;
+  border-color: #005cc4;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3);
 }
 
 /* ── Plugin grid ─────────────────────────────────────────────────────────────── */
 .pluginListContainer {
-  margin-top: 1.75rem;
+  margin-top: 1rem;
 }
 
 /* ── Pagination ──────────────────────────────────────────────────────────────── */
@@ -68,7 +76,7 @@
   justify-content: end;
 }
 
-/* ── Upload button margin ────────────────────────────────────────────────────── */
+/* ── Upload button icon margin ───────────────────────────────────────────────── */
 .uploadPlugin {
-  margin-inline-end: 0.75rem;
+  margin-inline-end: 0.5rem;
 }

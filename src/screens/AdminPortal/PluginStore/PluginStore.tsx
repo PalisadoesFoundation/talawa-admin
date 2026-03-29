@@ -145,6 +145,7 @@ export default function PluginStore() {
 
   return (
     <div className={styles.pageContent} data-testid="plugin-store-page">
+      <p className={styles.pageSubtitle}>{t('subtitle')}</p>
       <SearchFilterBar
         searchPlaceholder={t('searchPlaceholder')}
         searchValue={searchTerm}

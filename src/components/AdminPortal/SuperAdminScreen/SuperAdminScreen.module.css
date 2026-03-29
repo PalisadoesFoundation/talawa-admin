@@ -30,7 +30,15 @@
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1.75rem;
+  padding: 1.25rem 1.75rem 0.75rem 1.75rem;
+}
+
+.navContainer h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.03em;
+  margin: 0;
 }
 
 /* ── "Open drawer" strip (mobile tap-target) ──────────────────────────────── */
