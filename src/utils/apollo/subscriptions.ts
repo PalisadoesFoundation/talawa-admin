@@ -50,14 +50,13 @@ import { createClient } from 'graphql-ws';
 import i18n from 'utils/i18n';
 import type { Client as GraphQLWsClient } from 'graphql-ws';
 import { getItem, PREFIX } from 'utils/useLocalstorage';
-
+import { BEARER_PREFIX } from 'Constant/common';
 interface ISubscriptionDeps {
   client: ApolloClient<NormalizedCacheObject>;
   errorLink: ApolloLink;
   httpLink: ApolloLink;
   wsUrl: string;
 }
-const BEARER_PREFIX = 'Bearer ';
 
 let deps: ISubscriptionDeps | null = null;
 export const configureSubscriptions = (nextDeps: ISubscriptionDeps): void => {

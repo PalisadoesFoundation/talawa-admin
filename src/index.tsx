@@ -22,7 +22,7 @@ import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import { BEARER_PREFIX } from 'Constant/common';
 import App from './App';
 import { store } from './state/store';
 import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
@@ -51,7 +51,6 @@ import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import { refreshToken } from 'utils/getRefreshToken';
 
 const { getItem, clearAllItems } = useLocalStorage();
-const BEARER_PREFIX = 'Bearer ';
 
 if (import.meta.env.DEV) {
   // Adds messages only in a dev environment
