@@ -1,7 +1,15 @@
+/**
+ * PaginationList — MUI table pagination alignment overrides
+ */
+
 .pagination :global(.MuiTablePagination-selectLabel) {
   margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6e6e73;
 }
 
 .pagination :global(.MuiTablePagination-displayedRows) {
   margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6e6e73;
 }

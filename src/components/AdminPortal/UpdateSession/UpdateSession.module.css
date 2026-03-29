@@ -1,57 +1,64 @@
+/**
+ * UpdateSession — session timeout slider card
+ */
+
+/* ── MUI Slider overrides ────────────────────────────────────────────────────── */
 .slider .MuiSlider-track {
-  background-color: var(--slider-bg) !important;
-  border-color: var(--slider-bg) !important;
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
 }
 
 .slider .MuiSlider-thumb {
-  background-color: var(--slider-bg) !important;
+  background-color: #0071e3 !important;
 }
 
 .slider .MuiSlider-rail {
-  background-color: var(--slider-rail-bg) !important;
+  background-color: #e5e5ea !important;
 }
 
+/* ── Card ────────────────────────────────────────────────────────────────────── */
 .updateTimeoutCard {
   width: 100%;
   max-width: 700px;
-  background: var(--updateTimeoutCard-bg);
-  border: none;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
   border-radius: 16px;
-  filter: drop-shadow(0px 4px 15.3px rgba(0, 0, 0, 0.08));
-  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  padding: 1.25rem;
 }
 
 .updateTimeoutCardHeader {
   background: none;
-  padding: 16px;
+  padding: 1rem;
   border-bottom: none;
 }
 
 .updateTimeoutCardTitle {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', 'SF Pro Display', system-ui, sans-serif;
   font-weight: 600;
-  font-size: 24px;
-  color: var(--updateTimeoutCardTitle-color);
+  font-size: 1.5rem;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
 }
 
 .updateTimeoutCardBody {
-  padding: 20px;
+  padding: 1.25rem;
 }
 
 .updateTimeoutCurrent {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', 'SF Pro Text', system-ui, sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  color: var(--updateTimeoutCurrent-color);
-  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #6e6e73;
+  margin-bottom: 1.25rem;
 }
 
 .updateTimeoutLabel {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Inter', 'SF Pro Text', system-ui, sans-serif;
   font-weight: 400;
-  font-size: 16px;
-  color: var(--updateTimeoutLabel-color);
-  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #6e6e73;
+  margin-bottom: 0.625rem;
 }
 
 .updateTimeoutLabelsContainer {
@@ -61,43 +68,47 @@
 }
 
 .updateTimeoutValue {
-  color: var(--updateTimeoutValue-color);
-  font-weight: bold;
+  color: #1d1d1f;
+  font-weight: 700;
 }
 
 .updateTimeoutSliderLabels {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
-  color: var(--updateTimeoutSliderLabels);
+  font-size: 0.875rem;
+  color: #6e6e73;
 }
 
+/* ── Save button ─────────────────────────────────────────────────────────────── */
 .updateTimeoutButtonContainer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 20px;
+  margin-top: 1.25rem;
 }
 
 .updateTimeoutButton {
-  width: 112px;
-  height: 36px;
-  background: var(--updateTimeoutButton-bg);
-  border-radius: 6px;
-  font-family: 'Lato', sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  color: var(--updateTimeoutButton-color);
+  min-width: 7rem;
+  height: 2.25rem;
+  background: #0071e3;
+  border-radius: 8px;
+  font-family: 'Inter', 'SF Pro Text', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   box-shadow: none;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .updateTimeoutButton:hover {
-  background-color: var(--updateTimeoutButton-bg-hover);
-  border-color: var(--updateTimeoutButton-border-hover);
-  box-shadow: none;
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
 }
 
 .updateTimeoutButton:active {

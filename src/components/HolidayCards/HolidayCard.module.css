@@ -1,12 +1,16 @@
+/**
+ * HolidayCard — holiday label in calendar cells
+ */
+
 .holidayCard {
-  color: var(--color-black);
-  background-color: var(--color-black);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
+  color: #ffffff;
+  background-color: #ff9f0a;
+  font-size: 0.75rem;
+  font-weight: 500;
   display: flex;
-  padding: var(--space-3) var(--space-2);
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.25rem;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

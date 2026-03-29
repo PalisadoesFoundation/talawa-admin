@@ -34,6 +34,8 @@ import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
+import './style/talawa-theme.css';
+import './style/widgets.css';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 const theme = createTheme({
   palette: {

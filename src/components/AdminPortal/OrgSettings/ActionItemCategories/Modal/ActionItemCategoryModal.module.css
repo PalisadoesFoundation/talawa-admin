@@ -1,3 +1,7 @@
+/**
+ * ActionItemCategoryModal — create/edit action item category
+ */
+
 .createModal {
   margin-top: 20vh;
   margin-left: 13vw;
@@ -5,22 +9,27 @@
 }
 
 .titlemodal {
-  color: var(--titlemodal-color);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-3xl);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
   width: 65%;
-  margin-bottom: var(--space-0);
+  margin-bottom: 0;
 }
 
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  --bs-btn-active-bg: #0071e3;
+  --bs-btn-active-border-color: transparent;
+  transition: background-color 0.15s ease;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #d1e3fa;
+  border-color: transparent;
 }

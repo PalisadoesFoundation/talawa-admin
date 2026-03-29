@@ -1,28 +1,33 @@
+/**
+ * ActionItemViewModal — read-only action item view dialog
+ */
+
+/* ── Input overrides ─────────────────────────────────────────────────────────── */
 .noOutline input {
   outline: none;
 }
 
 .noOutline input:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--shadow-offset-sm);
+  outline: 2px solid rgba(0, 113, 227, 0.4);
+  outline-offset: 2px;
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-400) !important;
+  -webkit-text-fill-color: #aeaeb2 !important;
 }
 
 .noOutline input:disabled:focus-visible {
-  outline: var(--border-2) solid var(--color-gray-400);
-  outline-offset: var(--shadow-offset-sm);
+  outline: 2px solid rgba(174, 174, 178, 0.4);
+  outline-offset: 2px;
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-400) !important;
+  color: #aeaeb2 !important;
 }
 
 .noOutline:focus-within {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--shadow-offset-sm);
+  outline: 2px solid rgba(0, 113, 227, 0.4);
+  outline-offset: 2px;
 }
 
 .noOutline:is(:hover, :active, .show):not(:focus-within) {

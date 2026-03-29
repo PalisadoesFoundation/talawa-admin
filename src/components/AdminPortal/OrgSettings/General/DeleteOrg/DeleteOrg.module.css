@@ -1,65 +1,100 @@
+/**
+ * DeleteOrg — delete organization card and confirmation
+ */
+
 .DeleteOrgCard {
-  --color-black-rgb: 0, 0, 0;
-  border-radius: var(--space-3);
-  box-shadow: 0 var(--space-1) var(--space-2)
-    rgba(var(--color-black-rgb), 0.075);
-  border: none;
-  height: var(--space-20) !important;
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  min-height: 5rem;
   width: 98% !important;
 }
 
 .deleteCardHeader {
-  background-color: var(--color-gray-100);
-  border-top-left-radius: var(--radius-sm) !important;
-  border-top-right-radius: var(--radius-sm) !important;
-  padding-top: var(--space-5);
-  padding-bottom: var(--space-5);
+  background-color: #f5f5f7;
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  font-weight: 600;
+  color: #1d1d1f;
 }
 
 .textBox {
-  padding-top: var(--space-3);
-  padding-bottom: var(--space-3);
+  padding: 0.75rem 0;
+  color: #6e6e73;
+  font-size: 0.9375rem;
 }
 
+/* ── Delete button ───────────────────────────────────────────────────────────── */
 .deleteButton {
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  border: var(--border-1) solid var(--color-red-500);
-  padding: var(--space-2) var(--space-10);
+  background-color: #fff1f0;
+  color: #ff3b30;
+  border: 1px solid rgba(255, 59, 48, 0.2);
+  padding: 0.5rem 2.5rem;
   cursor: pointer;
   display: block;
-  margin: var(--space-4) auto;
-  border-radius: var(--radius-sm);
-  height: var(--space-11);
+  margin: 1rem auto;
+  border-radius: 10px;
+  height: 2.75rem;
   text-align: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .deleteButton:hover,
 .deleteButton:active,
 .deleteButton:focus {
-  background-color: var(--color-red-100) !important;
-  color: var(--color-red-500);
-  box-shadow: var(--border-shadow-xs) var(--hover-shadow);
+  background-color: #ffe5e3 !important;
+  color: #ff3b30;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.2);
   outline: none;
 }
 
 .icon {
-  margin-right: var(--space-3);
+  margin-right: 0.75rem;
 }
 
+/* ── Confirmation modal ──────────────────────────────────────────────────────── */
 .modalHeaderDelete {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
+  background-color: #ff3b30;
+  color: #ffffff;
+  border: none;
+  padding: 1rem 1.5rem;
+  border-radius: 14px 14px 0 0;
+  font-weight: 600;
 }
 
 .btnDelete {
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--active-item-color) !important;
-  color: var(--color-black);
+  background-color: #f5f5f7;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #1d1d1f;
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.15s ease;
+}
+
+.btnDelete:hover {
+  background-color: #e5e5ea;
 }
 
 .btnConfirmDelete {
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
+  background-color: #fff1f0;
+  color: #ff3b30;
   border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btnConfirmDelete:hover {
+  background-color: #ffe5e3;
+  box-shadow: 0 2px 8px rgba(255, 59, 48, 0.2);
 }

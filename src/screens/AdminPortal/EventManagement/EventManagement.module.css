@@ -1,25 +1,42 @@
-/* -- EventManagement.tsx -- */
+/**
+ * EventManagement — tab buttons for event sections
+ */
 
+/* ── Selected tab ────────────────────────────────────────────────────────────── */
 .eventManagementSelectedBtn {
-  color: var(--color-gray-700);
-  background-color: var(--color-gray-100) !important;
-  border: var(--border-1) solid var(--color-gray-400) !important;
-  height: var(--space-9);
+  color: #0071e3;
+  background-color: #e8f0fd !important;
+  border: 1.5px solid #0071e3 !important;
+  height: 40px;
+  border-radius: 9px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .eventManagementSelectedBtn:hover {
-  color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-400);
+  color: #0071e3 !important;
+  background-color: #d1e4fb !important;
 }
 
+/* ── Unselected tab ──────────────────────────────────────────────────────────── */
 .eventManagementBtn {
-  color: var(--color-gray-400);
-  background-color: var(--color-white) !important;
-  border-color: var(--color-gray-100) !important;
-  height: var(--space-9);
+  color: #6e6e73;
+  background-color: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+  height: 40px;
+  border-radius: 9px;
+  font-weight: 450;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .eventManagementBtn:hover {
-  color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-100);
+  color: #1d1d1f !important;
+  background-color: #f5f5f7 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
 }

@@ -1,3 +1,7 @@
+/**
+ * Requests — volunteer request management screen
+ */
+
 .container {
   min-height: 100vh;
 }
@@ -8,66 +12,72 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
-
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '⚠️';
-    margin-right: var(--space-3);
-  }
+  font-size: 2.5rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
 .iconLg {
-  font-size: var(--font-size-3xl);
+  font-size: 1.875rem;
+  color: #ff3b30;
 }
 
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
+/* ── Avatar images ───────────────────────────────────────────────────────────── */
 .tableImages {
   object-fit: cover;
   width: 100%;
   height: auto;
   border-radius: 0;
-  margin-right: var(--space-3);
+  margin-right: 0.75rem;
 }
 
 .avatarContainer {
-  width: var(--space-7);
-  height: var(--space-7);
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .imageContainer {
-  width: var(--space-10);
-  height: var(--space-10);
-  border-radius: 100%;
-  margin-right: var(--space-4);
-  margin-top: var(--space-4);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .imageContainer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 100%;
+  border-radius: 50%;
 }
 
 .iconButton {
-  min-width: var(--space-8);
+  min-width: 2rem;
 }
 
+/* ── Data grid container ─────────────────────────────────────────────────────── */
 .dataGridContainer {
-  background-color: var(--color-white);
-  border-radius: var(--radius-xl);
+  background-color: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .dataGridContainer :global(.MuiDataGrid-columnHeaders),
@@ -81,12 +91,11 @@
 
 .dataGridContainer :global(.MuiDataGrid-row:hover),
 .dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
-  background-color: transparent;
+  background-color: #f5f5f7;
 }
 
 .rowBackgrounds {
-  background-color: var(--color-white);
-  max-height: var(--space-14);
+  background-color: #ffffff;
+  max-height: 3.5rem;
   overflow-y: auto;
-  /* Handle content overflow */
 }

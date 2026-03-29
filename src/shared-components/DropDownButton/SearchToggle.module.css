@@ -1,21 +1,25 @@
+/**
+ * SearchToggle — search-within-dropdown toggle button
+ */
+
 .dropdownToggle {
-  min-width: var(--space-18);
+  min-width: 180px;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
+  gap: 0.75rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 10px;
   transition:
-    background-color 0.2s,
-    border-color 0.2s,
-    box-shadow 0.2s;
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .dropdownToggle:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--space-2);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
 .dropdownToggle:disabled {
@@ -24,14 +28,14 @@
 }
 
 .dropdownCaret {
-  transition: transform 0.2s;
-  margin-right: var(--space-3);
+  transition: transform 0.2s ease;
+  margin-right: 0.75rem;
 }
 
 .dropdownIcon {
   display: inline-flex;
   align-items: center;
-  margin-left: var(--space-3);
+  margin-left: 0.75rem;
 }
 
 .searchToggleContainer {
@@ -40,4 +44,9 @@
 
 .searchToggleInput {
   background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  color: #1d1d1f;
+  width: 100%;
 }

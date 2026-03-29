@@ -1,27 +1,37 @@
+/**
+ * VolunteerContainer — toggle view between volunteer sub-screens
+ */
+
 .toggleGroup {
   width: 50%;
-  min-width: var(--space-21);
-  margin: var(--space-3) var(--space-0);
+  min-width: 336px;
+  margin: 0.75rem 0;
 }
 
 .toggleBtn {
-  padding: var(--space-0);
-  height: var(--space-8);
+  padding: 0;
+  height: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-400);
-  border: var(--border-1) solid var(--color-gray-100);
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 #individualRadio,
 #requestsRadio,
 #groupsRadio {
-  color: var(--color-blue-500);
+  color: #0071e3;
 }
 
 .toggleBtn:hover {
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-100);
+  color: #1d1d1f;
+  background-color: #ebebf0;
+  border-color: rgba(0, 0, 0, 0.12);
 }

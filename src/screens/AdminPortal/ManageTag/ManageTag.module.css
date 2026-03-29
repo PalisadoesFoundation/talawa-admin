@@ -1,3 +1,8 @@
+/**
+ * ManageTag — tag member management screen
+ */
+
+/* ── Error state ─────────────────────────────────────────────────────────────── */
 .errorContainer {
   min-height: 100vh;
 }
@@ -8,38 +13,47 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
-
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '⚠️';
-    margin-right: var(--space-3);
-  }
+  font-size: 2rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeader {
-  font-weight: bold;
+  font-weight: 600;
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
+/* ── Edit button ─────────────────────────────────────────────────────────────── */
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border-color: transparent;
+  --bs-btn-active-bg: #0071e3;
+  --bs-btn-active-border-color: transparent;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #0071e3;
+  border-color: transparent;
+  color: #ffffff;
   box-shadow: none;
 }
 
+/* ── Layout ──────────────────────────────────────────────────────────────────── */
 .head {
   margin-top: 0;
   margin-bottom: 0;
@@ -47,11 +61,11 @@
 }
 
 .mainpageright > hr {
-  margin-top: var(--space-6);
+  margin-top: 1.5rem;
   width: 100%;
-  margin-left: calc(var(--space-5) * -1);
-  margin-right: calc(var(--space-5) * -1);
-  margin-bottom: var(--space-6);
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 @media screen and (max-width: 575.5px) {
@@ -66,84 +80,88 @@
   }
 }
 
+/* ── Buttons toolbar ─────────────────────────────────────────────────────────── */
 .btnsContainer {
   display: flex;
-  margin: var(--space-9) 0;
+  margin: 2.25rem 0;
   align-items: center;
 }
 
 .createButton:global(.btn) {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-4);
-  width: var(--space-16);
-  height: var(--space-10);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 0.5rem 1rem;
+  width: 130px;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .createButton:global(.btn):hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: none;
 }
 
 .createButton:global(.btn):focus-visible {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  outline: 2px solid var(--color-gray-700);
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: none;
+  outline: 2px solid rgba(0, 113, 227, 0.3);
   outline-offset: 2px;
 }
 
 .createButton:global(.btn):active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  background-color: #ebebf0;
+  border-color: rgba(0, 0, 0, 0.18);
 }
 
+/* ── Breadcrumbs ─────────────────────────────────────────────────────────────── */
 .tagsBreadCrumbs {
-  color: var(--color-gray-400);
+  color: #6e6e73;
   cursor: pointer;
+  transition: color 0.15s ease;
+}
 
-  /* Prevent layout shift */
-  &::after {
-    display: block;
-    content: attr(data-text);
-    font-weight: var(--font-weight-semibold);
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-  }
+.tagsBreadCrumbs::after {
+  display: block;
+  content: attr(data-text);
+  font-weight: 600;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .tagsBreadCrumbs:hover,
 .tagsBreadCrumbs:focus-visible {
-  color: var(--color-blue-700);
-  font-weight: var(--font-weight-semibold);
+  color: #0071e3;
+  font-weight: 600;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+/* ── Scrollable div ──────────────────────────────────────────────────────────── */
 .manageTagScrollableDiv {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-gray-300) var(--color-gray-100);
-  max-height: calc(100vh - var(--space-20));
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+  max-height: calc(100vh - 5rem);
   overflow: auto;
-  margin-top: var(--space-6);
+  margin-top: 1.5rem;
 }
 
+/* ── Row backgrounds ─────────────────────────────────────────────────────────── */
 .rowBackgrounds {
-  background-color: var(--color-white);
-  max-height: var(--space-14);
+  background-color: #ffffff;
+  max-height: 3.5rem;
   overflow-y: auto;
 }
 
+/* ── Tag actions divider ─────────────────────────────────────────────────────── */
 .tagActionsDivider {
-  border-color: var(--color-gray-200);
+  border-color: rgba(0, 0, 0, 0.08);
   border-style: solid;
-  border-width: var(--border-2);
+  border-width: 2px;
   width: 85%;
 }

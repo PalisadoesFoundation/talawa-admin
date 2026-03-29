@@ -1,4 +1,6 @@
-/* ErrorBoundaryWrapper Fallback UI Styles */
+/**
+ * ErrorBoundaryWrapper — error boundary fallback UI
+ */
 
 .errorBoundaryFallback {
   display: flex;
@@ -7,7 +9,7 @@
   min-height: 200px;
   width: 100%;
   padding: 2rem;
-  background-color: var(--bs-body-bg, #f2f7ff);
+  background-color: #f5f5f7;
 }
 
 .errorContent {
@@ -16,80 +18,51 @@
   width: 100%;
 }
 
+/* ── Error heading ───────────────────────────────────────────────────────────── */
 .errorTitle {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--bs-danger, #dc3545);
+  color: #ff3b30;
+  letter-spacing: -0.02em;
 }
 
 .errorMessage {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   margin-bottom: 1.5rem;
-  color: var(--bs-body-color, #212529);
-  line-height: 1.5;
+  color: #6e6e73;
+  line-height: 1.6;
 }
 
+/* ── Reset button ────────────────────────────────────────────────────────────── */
 .resetButton {
   padding: 0.5rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--bs-white, #ffffff);
-  background-color: var(--bs-primary, #0d6efd);
-  border: 1px solid var(--bs-primary, #0d6efd);
-  border-radius: var(--bs-border-radius, 0.375rem);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #0071e3;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .resetButton:hover {
-  background-color: var(--bs-primary-hover, #0b5ed7);
-  border-color: var(--bs-primary-hover, #0b5ed7);
-}
-
-.resetButton:focus {
-  outline: none;
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
 }
 
 .resetButton:focus-visible {
-  outline: 2px solid var(--bs-primary, #0d6efd);
+  outline: 2px solid rgba(0, 113, 227, 0.4);
   outline-offset: 2px;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 .resetButton:active {
-  background-color: var(--bs-primary-active, #0a58ca);
-  border-color: var(--bs-primary-active, #0a58ca);
+  transform: scale(0.98);
 }
 
-/* Dark theme support */
-[data-theme='dark'] .errorBoundaryFallback {
-  background-color: var(--bs-dark-bg, #212529);
-}
-
-[data-theme='dark'] .errorTitle {
-  color: var(--bs-danger, #dc3545);
-}
-
-[data-theme='dark'] .errorMessage {
-  color: var(--bs-light, #f8f9fa);
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-  .resetButton {
-    border-width: 2px;
-  }
-
-  .resetButton:focus {
-    outline-width: 3px;
-  }
-}
-
-/* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .resetButton {
     transition: none;

@@ -1,6 +1,14 @@
+/**
+ * Review — individual review card
+ */
+
 .reviewCard {
-  width: var(--space-20);
-  max-height: var(--space-22);
+  width: 20rem;
+  max-height: 22rem;
   overflow: auto;
-  margin-bottom: var(--space-2);
+  margin-bottom: 0.5rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 12px;
+  padding: 1rem;
 }

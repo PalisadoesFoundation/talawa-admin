@@ -1,10 +1,15 @@
+/**
+ * OrganizationFundCampaigns — fund campaigns management screen
+ */
+
+/* ── Progress circle ─────────────────────────────────────────────────────────── */
 .progressCircleContainer {
   position: relative;
   display: inline-flex;
 }
 
 .progressCircleBackground {
-  color: var(--color-gray-100);
+  color: #e5e5ea;
 }
 
 .overflowVisible {
@@ -18,124 +23,139 @@
 }
 
 .progressComplete {
-  color: var(--color-green-500);
+  color: #34c759;
 }
 
 .progressHalf {
-  color: var(--color-yellow-500);
+  color: #ffd60a;
 }
 
 .progressLow {
-  color: var(--color-blue-500);
+  color: #0071e3;
 }
 
 .progressTypography {
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
 }
 
 .progressCellContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
+  gap: 0.75rem;
 }
 
+/* ── White container card ────────────────────────────────────────────────────── */
 .whiteContainer {
-  background-color: var(--color-white);
-  border-radius: var(--radius-xl);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
+  background-color: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
+/* ── Empty / error state ─────────────────────────────────────────────────────── */
 .message {
   margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
-
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '⚠️';
-    margin-right: var(--space-3);
-  }
+  font-size: 2.5rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
 .errorIconLarge {
-  font-size: var(--font-size-3xl);
+  font-size: 1.875rem;
+  color: #ff3b30;
 }
 
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .requestsTableItemIndex {
   vertical-align: middle;
+  color: #6e6e73;
 }
 
+/* ── Edit button ─────────────────────────────────────────────────────────────── */
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  --bs-btn-active-bg: #0071e3;
+  --bs-btn-active-border-color: transparent;
+  transition: background-color 0.15s ease;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #0071e3;
+  border-color: transparent;
+  color: #ffffff;
   box-shadow: none;
 }
 
+/* ── Container margins ───────────────────────────────────────────────────────── */
 .organizationFundCampaignContainer {
-  margin: var(--space-3) 0;
+  margin: 0.75rem 0;
 }
 
 .rowBackgroundOrganizationFundCampaign {
-  background-color: var(--color-white);
-  max-height: var(--space-14);
+  background-color: #ffffff;
+  max-height: 3.5rem;
 }
 
+/* ── Search row ──────────────────────────────────────────────────────────────── */
 .searchContainerRow {
   display: flex;
   align-items: center;
-  margin-bottom: var(--space-5);
-  margin-top: var(--space-5);
-  gap: var(--space-5);
+  margin-bottom: 1.25rem;
+  margin-top: 1.25rem;
+  gap: 1.25rem;
 }
 
+/* ── Create button ───────────────────────────────────────────────────────────── */
 .createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-4);
-  width: var(--space-16);
-  height: var(--space-10);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 0.5rem 1rem;
+  width: 130px;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .createButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 .createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  background-color: #ebebf0;
+  border-color: rgba(0, 0, 0, 0.18);
 }
 
+/* ── Button utilities ────────────────────────────────────────────────────────── */
 .buttonNoWrap {
   white-space: nowrap;
 }
@@ -144,6 +164,7 @@
   margin: 0;
 }
 
+/* ── List layout ─────────────────────────────────────────────────────────────── */
 .listBox {
   width: 100%;
   flex: 1;
@@ -151,8 +172,9 @@
 
 .listTable {
   width: 100%;
-  background-color: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
-  margin-top: var(--space-5);
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 1.25rem;
+  margin-top: 1.25rem;
 }

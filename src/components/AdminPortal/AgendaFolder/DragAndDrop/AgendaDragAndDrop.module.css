@@ -1,34 +1,53 @@
+/**
+ * AgendaDragAndDrop — drag-and-drop agenda reordering
+ */
+
+/* ── Row ─────────────────────────────────────────────────────────────────────── */
 .agendaItemRow {
-  border: var(--border-1) solid var(--agendaItemRow-border);
-  transition: box-shadow 0.2s ease;
-  background-color: var(--agendaItemRow-bg);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 10px;
+  transition:
+    box-shadow 0.2s ease,
+    background-color 0.15s ease;
+  background-color: #ffffff;
+  margin-bottom: 0.5rem;
 }
 
 .agendaItemRow:hover {
-  background-color: var(--agendaItemRow-bg-hover);
+  background-color: #fafafa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
+/* ── Dragging state ──────────────────────────────────────────────────────────── */
 .dragging {
-  box-shadow: var(--shadow-offset-none) var(--shadow-offset-md)
-    var(--shadow-blur-lg) var(--dragging-box-shadow);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
   z-index: 1000;
-  background-color: var(--dragging-bg);
+  background-color: #ffffff;
+  border-color: rgba(0, 113, 227, 0.2);
 }
 
+/* ── Category chip ───────────────────────────────────────────────────────────── */
 .categoryChip {
   display: inline-flex;
   align-items: center;
-  background-color: var(--categoryChip-bg);
-  border-radius: var(--radius-2xl);
-  padding: var(--space-0) var(--space-6);
-  font-size: var(--font-size-sm);
-  height: var(--space-8);
+  background-color: #e8f0fd;
+  border-radius: 100px;
+  padding: 0 1rem;
+  font-size: 0.8125rem;
+  height: 2rem;
+  color: #0071e3;
+  font-weight: 500;
   white-space: nowrap;
-  margin: var(--space-4);
+  margin: 1rem;
 }
 
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeadAgendaItems {
-  background-color: var(--tableHeadAgendaItems-bg) !important;
-  color: var(--tableHeadAgendaItems-color);
-  padding: var(--space-8);
+  background-color: #f5f5f7 !important;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1rem;
 }

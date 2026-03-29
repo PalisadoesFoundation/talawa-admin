@@ -1,23 +1,29 @@
+/**
+ * NotificationIcon — bell icon with dropdown notification list
+ */
+
 .colorWhite {
-  color: var(--colorWhite, #fff);
+  color: #ffffff;
 }
 
+/* ── Dropdown panel ──────────────────────────────────────────────────────────── */
 .glassMenu {
-  background: var(--modalHeader-bg, #fff) !important;
+  background: #ffffff !important;
   backdrop-filter: blur(8px);
-  border-radius: 5px;
-  min-width: 250px !important;
-  max-width: 270px;
-  padding: 8px 0;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 14px;
+  min-width: 280px !important;
+  max-width: 300px;
+  padding: 0.5rem 0;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1), 0 8px 32px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+/* ── Notification row ────────────────────────────────────────────────────────── */
 .notificationItem {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 8px 16px;
+  gap: 0.625rem;
+  padding: 0.5rem 1rem;
   border-radius: 8px;
   min-height: 48px;
   max-width: 300px;
@@ -25,8 +31,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   background: transparent;
-  transition: background 0.2s;
+  transition: background-color 0.15s ease;
   cursor: default;
+  margin: 0 0.25rem;
 }
 
 .clickable {
@@ -34,30 +41,33 @@
 }
 
 .notificationItem:hover {
-  background: var(--sidebar-option-bg-hover, rgba(154, 151, 151, 0.15));
+  background: #f5f5f7;
 }
 
+/* ── Unread dot ──────────────────────────────────────────────────────────────── */
 .notificationDot {
-  width: 10px;
-  height: 10px;
-  background: var(--primaryText-color, #0a0a0a);
+  width: 8px;
+  height: 8px;
+  background: #0071e3;
   border-radius: 50%;
-  margin-right: 8px;
+  margin-right: 0.5rem;
   flex-shrink: 0;
 }
 
+/* ── Notification text ───────────────────────────────────────────────────────── */
 .notificationText {
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.97em;
-  color: var(--primaryText-color, #222);
+  font-size: 0.875rem;
+  color: #1d1d1f;
 }
 
+/* ── Bell icon button ────────────────────────────────────────────────────────── */
 .iconButton {
   width: 36px !important;
   height: 36px !important;
-  margin-right: 8px;
+  margin-right: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -67,6 +77,7 @@
   box-shadow: none !important;
   outline: none !important;
   padding: 0 !important;
+  transition: opacity 0.15s ease;
 }
 
 .iconButton:focus,
@@ -77,15 +88,20 @@
   outline: none !important;
 }
 
+.iconButton:hover {
+  opacity: 0.75;
+}
+
 .iconContainer {
   position: relative;
   display: inline-block;
 }
 
 .bellIcon {
-  color: var(--primaryText-color, #3b3b3b);
+  color: #1d1d1f;
 }
 
+/* ── Unread count badge ──────────────────────────────────────────────────────── */
 .unreadBadge {
   position: absolute;
   top: -6px;
@@ -93,14 +109,14 @@
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  background: var(--errorIcon-color, #d63031);
-  color: var(--colorWhite, #fff);
-  border-radius: 12px;
-  font-size: 11px;
+  background: #ff3b30;
+  color: #ffffff;
+  border-radius: 100px;
+  font-size: 0.6875rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  box-shadow: 0 0 0 2px var(--colorWhite, #fff);
-  /* Simulated outline */
+  box-shadow: 0 0 0 2px #ffffff;
+  font-weight: 700;
 }

@@ -1,7 +1,20 @@
+/**
+ * MessageImage — image attachment thumbnail in chat
+ */
+
 .messageAttachment {
-  height: var(--space-13);
-  width: var(--space-13);
-  border-radius: var(--space-4);
+  height: 6rem;
+  width: 6rem;
+  border-radius: 10px;
   object-fit: cover;
-  margin: var(--space-4) var(--space-0) var(--space-4) var(--space-4);
+  margin: 1rem 0 1rem 1rem;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.messageAttachment:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }

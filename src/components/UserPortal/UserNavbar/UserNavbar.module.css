@@ -1,23 +1,28 @@
+/**
+ * UserNavbar — top navigation bar for user portal
+ * --------------------------------------------------
+ */
+
 .talawaImage {
-  width: 40px;
-  height: auto;
-  margin-top: -5px;
-  border: 2px solid white;
-  margin-right: 10px;
-  background-color: white;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
+  background-color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  margin-right: 0.625rem;
+  object-fit: contain;
 }
 
 .boxShadow {
-  box-shadow: 4px 4px 8px 4px #c8c8c8;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
 .colorWhite {
-  color: white;
+  color: #ffffff;
 }
 
 .colorPrimary {
-  background: #31bb6b;
+  background-color: #0071e3;
 }
 
 .link {

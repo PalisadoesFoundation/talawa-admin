@@ -1,59 +1,66 @@
+/**
+ * OrgSettings — settings tabs + header buttons
+ */
+
+/* ── Settings tabs container ────────────────────────────────────────────────── */
+.settingsTabs {
+  display: flex;
+  gap: 0.5rem;
+  background-color: #ffffff;
+  padding: 1rem 1.125rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Inactive tab button ─────────────────────────────────────────────────────── */
 .headerBtn:global(.btn) {
-  background: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-400);
-  border-radius: var(--border-8);
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 9px;
   height: auto;
-  padding: var(--space-5);
-  padding-left: var(--space-8);
-  padding-right: var(--space-8);
-  color: var(--color-gray-400);
+  padding: 0.5rem 1.25rem;
+  color: #6e6e73;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .headerBtn:global(.btn):active {
-  background: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-400);
-  border-radius: var(--border-8);
-  height: auto;
-  width: auto;
-  padding-left: var(--space-8);
-  padding-right: var(--space-8);
-  color: var(--color-gray-400);
-}
-
-.activeTabBtn:global(.btn) {
-  background: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-700);
-  border-radius: var(--border-8);
-  color: var(--color-gray-700);
-}
-
-.activeTabBtn:global(.btn):active {
-  background: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
-}
-
-.settingsTabs {
-  display: flex;
-  gap: var(--space-4);
-  background-color: var(--color-white);
-  padding: var(--space-6) var(--space-5);
-  border-radius: var(--radius-xl);
+  background: #f5f5f7;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  color: #1d1d1f;
 }
 
 .headerBtn:global(.btn):hover {
-  border: var(--border-1) solid var(--color-gray-400);
-  background: var(--color-white);
-  border-radius: var(--border-8);
-  box-shadow: var(--border-1-5) var(--border-1-5) var(--border-1-5)
-    var(--shadow-spread-none) rgba(0, 0, 0, 0.3);
-  color: var(--color-gray-400);
+  background: #f5f5f7;
+  border: 1.5px solid rgba(0, 0, 0, 0.12);
+  color: #1d1d1f;
+  box-shadow: none;
+}
+
+/* ── Active tab button ───────────────────────────────────────────────────────── */
+.activeTabBtn:global(.btn) {
+  background: #e8f0fd;
+  border: 1.5px solid #0071e3;
+  border-radius: 9px;
+  color: #0071e3;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.activeTabBtn:global(.btn):active {
+  background: #d1e4fb;
+  border: 1.5px solid #0071e3;
+  color: #0071e3;
 }
 
 .activeTabBtn:global(.btn):hover {
-  box-shadow: var(--border-1-5) var(--border-1-5) var(--border-1-5)
-    var(--shadow-spread-none) rgba(0, 0, 0, 0.3);
-  background: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  background: #d1e4fb;
+  border: 1.5px solid #0071e3;
+  color: #0071e3;
+  box-shadow: none;
 }

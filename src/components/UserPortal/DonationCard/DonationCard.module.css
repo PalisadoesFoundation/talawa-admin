@@ -1,8 +1,19 @@
+/**
+ * DonationCard — individual donation row/card
+ */
+
 .donationAvatar {
   height: 100%;
   aspect-ratio: 1 / 1;
-  background-color: var(--color-white);
-  border-radius: var(--radius-full);
+  background-color: #e8f0fd;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  object-fit: cover;
+  color: #0071e3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
 }
 
 .donationDetails {
@@ -13,7 +24,7 @@
 
 .donationRow {
   display: block;
-  margin-bottom: var(--space-2);
+  margin-bottom: 0.375rem;
 }
 
 .donationRow:last-child {
@@ -21,10 +32,14 @@
 }
 
 .donorName {
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
+  color: #1d1d1f;
+  font-size: 0.9375rem;
+  letter-spacing: -0.01em;
 }
 
 .donationMeta {
-  font-size: var(--font-size-sm);
-  color: var(--color-blue-500);
+  font-size: 0.875rem;
+  color: #0071e3;
+  font-weight: 500;
 }

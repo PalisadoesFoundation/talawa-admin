@@ -1,3 +1,7 @@
+/**
+ * PluginInjector — test background utility (dev use only)
+ */
+
 .testRedBackground {
-  background-color: var(--color-red-500);
+  background-color: #ff3b30;
 }

@@ -1,44 +1,62 @@
+/**
+ * OrganizationDashboard — main admin overview page
+ * --------------------------------------------------
+ * Stat cards at top, recent posts + upcoming events below.
+ */
+
+/* ── Section heading helpers ─────────────────────────────────────────────────── */
 .requestsIcon {
-  color: var(--color-gray-700);
+  color: #6e6e73;
 }
 
-.membershipEmptyContainer {
-  min-height: var(--space-15);
+.iconGrey {
+  fill: #6e6e73;
 }
 
 .flex {
   display: flex;
 }
 
-.iconGrey {
-  fill: var(--color-gray-700);
-}
-
+/* ── Content cards (posts, membership, etc.) ────────────────────────────────── */
 .cardHeader {
-  padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
-  border-bottom: var(--border-1) solid var(--color-gray-100);
+  padding: 1.125rem 1.25rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #ffffff;
 }
 
 .cardHeader .cardTitle {
-  font-size: var(--font-size-19);
-  font-weight: var(--font-weight-semibold);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
 .containerBody {
-  padding: var(--space-5);
+  padding: 1.25rem;
 }
 
 .emptyContainer {
-  padding: var(--space-5);
+  padding: 2rem 1.25rem;
   text-align: center;
-  color: var(--color-gray-700);
+  color: #a1a1a6;
+  font-size: 0.9rem;
 }
 
+.membershipEmptyContainer {
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Volunteer ranking avatar ────────────────────────────────────────────────── */
 .rankings {
   aspect-ratio: 1;
-  border-radius: var(--radius-full);
-  width: var(--space-10);
+  border-radius: 50%;
+  width: 40px;
+  object-fit: cover;
+  border: 2px solid rgba(0, 0, 0, 0.06);
 }

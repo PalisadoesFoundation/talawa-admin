@@ -1,11 +1,60 @@
+/**
+ * OrgPeopleListCard — member list card action buttons
+ * Previously used composes from app-fixed.module.css — now standalone
+ */
+
 .closeButton {
-  composes: closeButton from '../../../style/app-fixed.module.css';
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.375rem;
+  color: #6e6e73;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.closeButton:hover {
+  background-color: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .addButton {
-  composes: addButton from '../../../style/app-fixed.module.css';
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.addButton:hover {
+  background-color: #d1e3fa;
 }
 
 .removeButton {
-  composes: removeButton from '../../../style/app-fixed.module.css';
+  background-color: #fff1f0;
+  color: #ff3b30;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.removeButton:hover {
+  background-color: #ff3b30;
+  color: #ffffff;
 }

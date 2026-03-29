@@ -1,10 +1,15 @@
+/**
+ * UserSidebarOrg — user portal org-scoped sidebar
+ */
+
 .profileCardContainer {
-  background-color: #e8f4f8;
-  padding: 10px;
-  border-radius: 8px;
-  margin: 10px;
+  background-color: #e8f0fd;
+  padding: 0.625rem;
+  border-radius: 12px;
+  margin: 0.5rem 0;
 }
 
+/* Switch portal nav link */
 .switchPortalWrapper :global(a) {
   display: flex;
   align-items: center;
@@ -12,12 +17,21 @@
   max-width: 100%;
   text-align: start;
   text-decoration: none;
-  margin-bottom: 0.8rem;
-  border-radius: 12px;
-  font-size: 16px;
-  padding: 0.6rem;
-  padding-left: 0.8rem;
+  margin-bottom: 2px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  padding: 0.5625rem 0.625rem;
   outline: none;
   border: none;
   overflow: hidden;
+  font-family: inherit;
+  letter-spacing: -0.005em;
+  color: #1d1d1f;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.switchPortalWrapper :global(a):hover {
+  background-color: #f5f5f7;
 }

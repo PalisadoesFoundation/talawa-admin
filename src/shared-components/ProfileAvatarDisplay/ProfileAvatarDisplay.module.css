@@ -1,12 +1,19 @@
+/**
+ * ProfileAvatarDisplay — reusable avatar with shape/size variants
+ */
+
 .container {
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #e8f0fd;
+  color: #0071e3;
+  font-weight: 600;
 }
 
 .containerWithBorder {
-  border: 2px solid #e0e0e0;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .image {
@@ -14,7 +21,7 @@
   height: 100%;
 }
 
-/* Shape variants */
+/* ── Shape variants ──────────────────────────────────────────────────────────── */
 .shapeCircle {
   border-radius: 50%;
 }
@@ -24,10 +31,10 @@
 }
 
 .shapeRounded {
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
-/* Size variants */
+/* ── Size variants ───────────────────────────────────────────────────────────── */
 .sizeSmall {
   width: 40px;
   height: 40px;
@@ -43,55 +50,41 @@
   height: 80px;
 }
 
-/* Object fit variants for image */
-.objectFitCover {
-  object-fit: cover;
-}
+/* ── Object fit variants ─────────────────────────────────────────────────────── */
+.objectFitCover { object-fit: cover; }
+.objectFitContain { object-fit: contain; }
+.objectFitFill { object-fit: fill; }
+.objectFitNone { object-fit: none; }
+.objectFitScaleDown { object-fit: scale-down; }
 
-.objectFitContain {
-  object-fit: contain;
-}
-
-.objectFitFill {
-  object-fit: fill;
-}
-
-.objectFitNone {
-  object-fit: none;
-}
-
-.objectFitScaleDown {
-  object-fit: scale-down;
-}
-
-/* Clickable state for enlarge functionality */
+/* ── Clickable state ─────────────────────────────────────────────────────────── */
 .clickable {
   cursor: pointer;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .clickable:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.04);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .clickable:focus {
-  outline: 2px solid #007bff;
+  outline: 3px solid rgba(0, 113, 227, 0.3);
   outline-offset: 2px;
 }
 
-/* Modal styles */
+/* ── Enlarge modal ───────────────────────────────────────────────────────────── */
 .modalHeader {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .modalBody {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 1.25rem;
   min-height: 300px;
 }
 
@@ -99,7 +92,7 @@
   max-width: 100%;
   max-height: 70vh;
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .enlargedFallback {
@@ -108,4 +101,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #e8f0fd;
+  border-radius: 14px;
+  color: #0071e3;
 }

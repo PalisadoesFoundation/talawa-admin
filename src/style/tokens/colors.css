@@ -1,33 +1,57 @@
+/**
+ * Color tokens — Apple-inspired palette
+ * ----------------------------------------
+ * These primitives are used by component modules and by semantic tokens
+ * in talawa-theme.css. Do not use these directly in components — prefer
+ * the semantic design tokens instead.
+ */
+
 :root {
+  /* ── Neutrals ─────────────────────────────────────────────────────────────── */
   --color-white: #ffffff;
   --color-black: #000000;
-
-  --color-gray-50: #f8f9fa;
-  --color-gray-100: #eaebef;
-  --color-gray-200: #d1d5db;
-  --color-gray-300: #adb5bd;
-  --color-gray-400: #808080;
-  --color-gray-500: #707070;
-  --color-gray-600: #6c757d;
-  --color-gray-700: #4b5563;
-  --color-gray-800: #343a40;
-  --color-gray-900: #212529;
-
-  --color-blue-100: #d3e3fd;
-  --color-blue-200: #a8c7fa;
-  --color-blue-500: #1778f2;
-  --color-blue-600: #286fe0;
-  --color-blue-700: #0056b3;
-  --color-blue-800: #0000ff;
-
-  --color-red-100: #f8d6dc;
-  --color-red-500: #ff4d4f;
-
-  --color-green-100: #dbf6db;
-  --color-green-500: #31bb6b;
-
-  --color-yellow-100: #fff3cd;
-  --color-yellow-500: #febc59;
-  --color-yellow-600: #856404;
   --color-white-60: rgba(255, 255, 255, 0.6);
+
+  /* Apple-inspired gray scale */
+  --color-gray-50: #f5f5f7;   /* Apple page bg */
+  --color-gray-100: #ebebf0;
+  --color-gray-200: #d1d1d6;
+  --color-gray-300: #c7c7cc;
+  --color-gray-400: #aeaeb2;
+  --color-gray-500: #8e8e93;
+  --color-gray-600: #636366;
+  --color-gray-700: #4b4b4e;  /* near --color-gray-700 in old system */
+  --color-gray-800: #3a3a3c;
+  --color-gray-900: #1d1d1f;  /* Apple near-black */
+
+  /* ── Blue (Apple brand) ───────────────────────────────────────────────────── */
+  --color-blue-50:  #e5f2ff;
+  --color-blue-100: #cce4ff;
+  --color-blue-200: #99c8ff;
+  --color-blue-500: #0071e3;  /* Apple blue */
+  --color-blue-600: #006edb;
+  --color-blue-700: #005eb8;
+  --color-blue-800: #004a99;
+
+  /* ── Red (iOS red) ────────────────────────────────────────────────────────── */
+  --color-red-50:  #fff0ef;
+  --color-red-100: #ffd9d7;
+  --color-red-500: #ff3b30;
+
+  /* ── Green (iOS green) ───────────────────────────────────────────────────── */
+  --color-green-50:  #eaf9ee;
+  --color-green-100: #c9f0d5;
+  --color-green-500: #34c759;
+
+  /* ── Yellow / Orange ─────────────────────────────────────────────────────── */
+  --color-yellow-50:  #fff4e5;
+  --color-yellow-100: #ffdea0;
+  --color-yellow-500: #ff9500;   /* iOS orange */
+  --color-yellow-600: #c87400;
+
+  /* ── Teal / Cyan (informational) ─────────────────────────────────────────── */
+  --color-teal-500: #32ade6;
+
+  /* ── Purple ───────────────────────────────────────────────────────────────── */
+  --color-purple-500: #8b5cf6;
 }

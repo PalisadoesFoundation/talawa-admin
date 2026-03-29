@@ -1,102 +1,131 @@
+/**
+ * AdvertisementRegister — advertisement creation/edit form
+ */
+
+/* ── Buttons ─────────────────────────────────────────────────────────────────── */
 .removeButton {
-  margin-bottom: var(--space-4);
-  background-color: var(--removeButton-bg);
-  color: var(--removeButton-color);
-  margin-right: var(--space-4);
-  --bs-btn-border-color: var(--removeButton-border);
+  margin-bottom: 1rem;
+  background-color: #fff1f0;
+  color: #ff3b30;
+  margin-right: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  --bs-btn-border-color: transparent;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--removeButton-bg-hover) !important;
-  border-color: var(--removeButton-border-hover);
-  color: var(--removeButton-color-hover);
+  background-color: #ffe5e3 !important;
+  border-color: transparent;
+  color: #ff3b30;
 }
 
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--addButton-font);
-  background-color: var(--light-blue);
-  border-color: var(--addButton-bg);
+  margin-bottom: 1rem;
+  color: #0071e3;
+  background-color: #e8f0fd;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
   --bs-btn-focus-box-shadow: none;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover) !important;
-  border-color: var(--addButton-border-hover);
+  background-color: #d1e3fa !important;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.15);
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
-  background-color: var(--disabled-btn);
-  border-color: var(--addButton-bg);
+  margin-bottom: 1rem;
+  background-color: #e5e5ea;
+  border-color: transparent;
+  color: #aeaeb2;
 }
 
+/* ── Type dropdown ───────────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-gray-50);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: #f5f5f7;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #1d1d1f;
   position: relative;
   display: flex !important;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  gap: var(--space-2);
-  border-radius: var(--radius-md);
-  padding: 0 var(--space-3);
+  gap: 0.5rem;
+  border-radius: 10px;
+  padding: 0 0.75rem;
   width: auto;
-  height: var(--space-10);
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease;
 }
 
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
+  background-color: #e5e5ea !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #1d1d1f !important;
   box-shadow: none !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--space-1) solid var(--color-blue-200);
-  outline-offset: var(--space-1);
+  outline: 2px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
+/* ── Input fields ────────────────────────────────────────────────────────────── */
 .inputField {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  background-color: var(--eventManagement-button-bg);
-  border: var(--border-1) solid var(--input-shadow);
-  box-shadow: var(--drop-shadow);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-/* Placeholder styling */
 .inputField::placeholder {
-  color: var(--inputField-placeholder-color) !important;
+  color: #aeaeb2 !important;
   opacity: 1;
 }
 
 .inputField:focus {
-  border: var(--border-0) solid var(--inputField-border-focus) !important;
-  background-color: var(--inputField-bg-focus) !important;
-  box-shadow: var(--drop-shadow);
+  border-color: rgba(0, 113, 227, 0.4) !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1) !important;
   outline: none;
-  transition: box-shadow 0.2s ease;
 }
 
+/* ── Preview ─────────────────────────────────────────────────────────────────── */
 .previewAdvertisementRegister {
   display: flex;
   position: relative;
   width: 100%;
-  margin-top: var(--space-4);
+  margin-top: 1rem;
   overflow: hidden;
   justify-content: center;
-  border: var(--border-1) solid var(--previewAdvertisementRegister-border);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 10px;
+  background-color: #f5f5f7;
 }
 
 .previewAdvertisementRegister img,
 .previewAdvertisementRegister video {
-  max-width: var(--space-23);
+  max-width: 28rem;
   width: 100%;
   height: auto;
   object-fit: cover;
-  /* keep for images */
 }

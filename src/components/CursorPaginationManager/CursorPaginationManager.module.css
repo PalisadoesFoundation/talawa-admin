@@ -1,3 +1,7 @@
+/**
+ * CursorPaginationManager — load-more pagination wrapper
+ */
+
 .paginationContainer {
   display: flex;
   flex-direction: column;
@@ -16,27 +20,29 @@
   justify-content: center;
   align-items: center;
   padding: 1.5rem 0;
-  border-top: 1px solid var(--pagination-border-top, #e5e7eb);
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
 }
 
+/* ── Load more button ────────────────────────────────────────────────────────── */
 .loadMoreButton {
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
+  padding: 0.625rem 2rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  color: var(--pagination-btn-color, #555555);
-  background-color: var(--pagination-btn-bg, #a8c7fa);
-  border: 2px solid var(--pagination-btn-border, #eaebef);
-  border-radius: 0.375rem;
+  color: #0071e3;
+  background-color: #e8f0fd;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
 }
 
 .loadMoreButton:hover:not(:disabled) {
-  background-color: var(--pagination-btn-bg-hover, #1778f2);
-  color: var(--pagination-btn-color-hover, #ffffff);
-  border-color: var(--pagination-btn-border-hover, #555555);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #d1e3fa;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.15);
+  transform: translateY(-1px);
 }
 
 .loadMoreButton:active:not(:disabled) {
@@ -44,18 +50,21 @@
 }
 
 .loadMoreButton:disabled {
-  background-color: var(--pagination-btn-bg-disabled, #e7f0fe);
-  opacity: 0.6;
+  background-color: #f5f5f7;
+  color: #aeaeb2;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
 .loadMoreButton:focus-visible {
-  outline: 2px solid var(--pagination-btn-bg-focus, #1778f2);
+  outline: 2px solid rgba(0, 113, 227, 0.4);
   outline-offset: 2px;
 }
 
+/* ── State message ───────────────────────────────────────────────────────────── */
 .stateMessage {
   text-align: center;
   padding: 2rem;
-  color: var(--bs-secondary, #6c757d);
+  color: #6e6e73;
+  font-size: 0.9375rem;
 }

@@ -1,71 +1,90 @@
+/**
+ * Donate — user portal donation screen
+ */
+
+/* ── Add button ──────────────────────────────────────────────────────────────── */
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  background-color: #0071e3;
+  border-color: #0071e3;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #0077ed !important;
+  border-color: #0077ed !important;
+  color: #ffffff !important;
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  background-color: #f5f5f7;
+  border-color: #d1d1d6;
+  color: #a1a1a6;
 }
 
+/* ── Dropdown ────────────────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-gray-50);
-  min-width: var(--space-15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  background-color: #ffffff;
+  min-width: 140px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  color: #6e6e73;
   position: relative;
   display: inline-block;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
-.dropdown:is(:hover, :active, .show, :disabled, :checked) {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+.dropdown:is(:hover, :active, .show) {
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--border-2) solid var(--color-blue-200);
-  border: var(--border-1) solid var(--color-gray-700);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  border: 1.5px solid #0071e3;
 }
 
+/* ── Primary color button ────────────────────────────────────────────────────── */
 .colorPrimary {
-  background: var(--color-blue-200);
-  color: var(--color-gray-700);
+  background: #0071e3;
+  color: #ffffff;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 .colorPrimary:hover,
 .colorPrimary:focus,
 .colorPrimary:active {
-  background-color: var(--color-blue-200);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  color: var(--color-gray-700);
+  background-color: #0077ed;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
 }
 
+/* ── Main container ──────────────────────────────────────────────────────────── */
 .mainContainer50 {
   width: 50%;
   flex-grow: 3;
-  padding: var(--space-5);
+  padding: 1.25rem;
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: var(--color-gray-50);
+  background-color: #f5f5f7;
+}
+
+.mainContainer50::-webkit-scrollbar {
+  display: none;
 }
 
 .inputContainer {
@@ -74,26 +93,30 @@
   margin: 0;
 }
 
-.box:hover {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  transition: box-shadow 0.2s ease;
-}
-
+/* ── Donation box card ───────────────────────────────────────────────────────── */
 .box {
   width: auto;
-  background-color: var(--color-white);
-  margin-top: var(--space-5);
-  padding: var(--space-6);
-  border: var(--border-1) solid var(--color-gray-100);
-  border-radius: var(--space-4);
+  background-color: #ffffff;
+  margin-top: 1.25rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.box:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
 }
 
 .heading {
-  font-size: var(--font-size-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
 .width100 {
@@ -101,12 +124,12 @@
 }
 
 .donateBtn {
-  padding-inline: var(--space-5);
+  padding-inline: 1.25rem;
 }
 
-/* Base container pattern */
+/* ── Base container ──────────────────────────────────────────────────────────── */
 .container {
-  padding-top: var(--space-11);
+  padding-top: 2.75rem;
   flex-grow: 1;
   display: flex;
   flex-direction: column;

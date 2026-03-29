@@ -1,71 +1,74 @@
-/* -- EventAgenda.tsx -- */
+/**
+ * EventAgenda — agenda items list within event management
+ */
 
 .container {
-  min-height: var(--space-29);
+  min-height: 20rem;
 }
 
+/* ── Empty/error state ───────────────────────────────────────────────────────── */
 .message {
   margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--error-icon-size, var(--font-size-3xl));
-  color: var(--bs-danger, var(--errorIcon-color));
-  margin-bottom: var(--space-5);
-
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '⚠️';
-    margin-right: var(--space-4);
-  }
+  font-size: 2rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
+/* ── Agenda item header ──────────────────────────────────────────────────────── */
 .eventAgendaItemContainer h2 {
-  margin: var(--space-4) var(--space-0);
+  margin: 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
-@media (max-width: var(--breakpoint-md)) {
-  .btnsContainer {
-    margin-bottom: var(--space-0);
-    display: flex;
-    flex-direction: column;
-  }
-
-  .createAgendaItemButton {
-    position: absolute;
-    top: var(--space-5);
-    right: var(--space-8);
-  }
-}
-
+/* ── Button bar ──────────────────────────────────────────────────────────────── */
 .btnsContainer {
   display: flex;
-  margin: var(--space-9) var(--space-0);
+  margin: 1.5rem 0;
   align-items: center;
-  gap: var(--space-6);
+  gap: 1.5rem;
 }
 
 .btnsContainer > :first-child {
-  flex: 1 1 var(--space-22);
-  min-width: var(--space-21);
+  flex: 1 1 auto;
+  min-width: 14rem;
   max-width: 100%;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
-/* Base button layout */
 .btnsContainer .btnsBlock button {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: var(--space-0);
+  margin-top: 0;
+}
+
+@media (max-width: 768px) {
+  .btnsContainer {
+    margin-bottom: 0;
+    flex-direction: column;
+  }
+
+  .createAgendaItemButton {
+    position: absolute;
+    top: 1.25rem;
+    right: 2rem;
+  }
 }

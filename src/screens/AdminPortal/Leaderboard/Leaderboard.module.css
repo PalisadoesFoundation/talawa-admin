@@ -1,56 +1,81 @@
+/**
+ * Leaderboard — volunteer ranking screen
+ */
+
 .message {
-  margin-top: 25%;
+  margin-top: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  color: #6e6e73;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
 }
 
 .icon {
-  margin: var(--space-0-5);
+  margin: 0.125rem;
+  color: #a1a1a6;
 }
 
 .leaderboardContainer {
-  margin-top: var(--space-7);
-  margin-left: var(--space-3);
-  margin-right: var(--space-3);
-  background-color: var(--color-white);
-  padding: var(--space-5);
-  padding-top: var(--space-3);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 var(--space-1) var(--space-2) rgba(0, 0, 0, 0.075);
+  margin-top: 1.5rem;
+  background-color: #ffffff;
+  padding: 1.25rem;
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* ── MUI DataGrid overrides ──────────────────────────────────────────────────── */
 .dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: calc(var(--space-1) * -1);
+  outline: 2px solid #0071e3;
+  outline-offset: -2px;
 }
 
 .dataGridStyle .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: calc(var(--space-1) * -1);
+  outline: 2px solid #0071e3;
+  outline-offset: -2px;
 }
 
 .dataGridStyle .MuiDataGrid-row:hover {
-  background-color: var(--color-gray-50);
+  background-color: #f5f5f7;
 }
 
 .dataGridStyle .MuiDataGrid-row.Mui-hovered {
-  background-color: var(--color-gray-50);
+  background-color: #f5f5f7;
 }
 
 .dataGridStyle .MuiDataGrid-root {
-  border-radius: var(--radius-md);
+  border-radius: 12px;
+  border: none;
+  font-family: inherit;
 }
 
 .dataGridStyle .MuiDataGrid-main {
-  border-radius: var(--radius-md);
+  border-radius: 12px;
 }
 
+.dataGridStyle .MuiDataGrid-columnHeader {
+  background-color: #f5f5f7;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #6e6e73;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ── Volunteer cell ──────────────────────────────────────────────────────────── */
 .volunteerCell {
   display: flex;
-  font-weight: var(--font-weight-bold);
   align-items: center;
-  margin-left: var(--space-6);
+  font-weight: 600;
+  color: #0071e3;
   cursor: pointer;
+  gap: 0.5rem;
+  transition: opacity 0.15s ease;
+}
+
+.volunteerCell:hover {
+  opacity: 0.8;
 }

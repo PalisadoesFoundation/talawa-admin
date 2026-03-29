@@ -1,30 +1,34 @@
+/**
+ * PageNotFound — 404 error page
+ */
+
 .pageNotFound {
   position: relative;
-  bottom: var(--space-1);
+  bottom: 0.25rem;
 }
 
 .pageNotFound h3 {
-  font-family: 'Roboto', sans-serif;
-  font-weight: normal;
-  letter-spacing: var(--letter-spacing-wider);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.08em;
 }
 
 .pageNotFound .brand span {
-  margin-top: var(--space-10);
-  font-size: var(--font-size-4xl);
+  margin-top: 2.5rem;
+  font-size: 2.5rem;
 }
 
 .pageNotFound .brand h3 {
-  font-weight: var(--font-weight-lighter);
-  margin: var(--space-4) 0 0 0;
+  font-weight: 300;
+  margin: 1rem 0 0;
 }
 
 .pageNotFound h1.head {
-  font-size: var(--font-size-8xl);
-  font-weight: var(--font-weight-heavy);
-  color: var(--color-blue-200);
+  font-size: 8rem;
+  font-weight: 900;
+  color: #0071e3;
   letter-spacing: 0;
-  margin: var(--space-4) 0 0 0;
+  margin: 1rem 0 0;
 }
 
 .pageNotFound h1.head span {
@@ -37,8 +41,8 @@
   position: absolute;
   top: 50%;
   width: 50%;
-  height: var(--letter-spacing-wider);
-  background: var(--color-white);
+  height: 0.08em;
+  background: #ffffff;
   content: '';
 }
 
@@ -52,33 +56,29 @@
 
 @media (max-width: 992px) {
   .pageNotFound h1.head {
-    font-size: var(--font-size-7xl);
-    letter-spacing: 0;
+    font-size: 7rem;
   }
 }
 
 @media (max-width: 768px) {
   .pageNotFound h1.head {
-    font-size: var(--font-size-6xl);
-    letter-spacing: 0;
+    font-size: 6rem;
   }
 }
 
 @media (max-width: 650px) {
   .pageNotFound h1.head {
-    font-size: var(--font-size-6xl);
-    letter-spacing: 0;
+    font-size: 6rem;
   }
 }
 
 @media (max-width: 480px) {
   .pageNotFound .brand h3 {
-    font-size: var(--font-size-xl);
+    font-size: 1.25rem;
   }
 
   .pageNotFound h1.head {
-    font-size: var(--font-size-6xl);
-    letter-spacing: 0;
+    font-size: 6rem;
   }
 
   .pageNotFound h1.head span:before,
@@ -95,6 +95,6 @@
   }
 
   .pageNotFound p {
-    font-size: var(--font-size-lg);
+    font-size: 1.125rem;
   }
 }

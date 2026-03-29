@@ -1,75 +1,98 @@
+/**
+ * Volunteers — individual volunteer management screen
+ */
+
 .message {
   margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .icon {
-  margin: var(--space-0-5);
+  margin: 0.125rem;
+  color: #a1a1a6;
 }
 
 .iconLg {
-  font-size: var(--font-size-3xl);
+  font-size: 1.875rem;
+  color: #ff3b30;
 }
 
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
+/* ── Avatar images ───────────────────────────────────────────────────────────── */
 .tableImages {
   object-fit: cover;
   width: 100%;
   height: auto;
   border-radius: 0;
-  margin-right: var(--space-3);
+  margin-right: 0.75rem;
 }
 
 .avatarContainer {
-  width: var(--space-7);
-  height: var(--space-7);
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .imageContainer {
-  width: var(--space-10);
-  height: var(--space-10);
-  border-radius: 100%;
-  margin-right: var(--space-4);
-  margin-top: var(--space-4);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .imageContainer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 100%;
+  border-radius: 50%;
 }
 
+/* ── Icon button ─────────────────────────────────────────────────────────────── */
 .iconButton {
-  min-width: var(--space-8);
+  min-width: 2rem;
 }
 
+/* ── Actions button ──────────────────────────────────────────────────────────── */
 .actionsButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-blue-200);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: 1px solid #c7dcf9;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .actionsButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--shadow-blur-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-blue-200);
+  background-color: #0071e3;
+  color: #ffffff;
+  border-color: #0071e3;
 }
 
+/* ── Data grid container ─────────────────────────────────────────────────────── */
 .dataGridContainer {
-  background-color: var(--color-white);
-  border-radius: var(--radius-xl);
+  background-color: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .dataGridContainer :global(.MuiDataGrid-columnHeaders),
@@ -83,12 +106,12 @@
 
 .dataGridContainer :global(.MuiDataGrid-row:hover),
 .dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
-  background-color: transparent;
+  background-color: #f5f5f7;
 }
 
+/* ── Row backgrounds ─────────────────────────────────────────────────────────── */
 .rowBackgrounds {
-  background-color: var(--color-white);
-  max-height: var(--space-14);
+  background-color: #ffffff;
+  max-height: 3.5rem;
   overflow-y: auto;
-  /* Handle content overflow */
 }

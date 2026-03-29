@@ -1,22 +1,29 @@
-/* SidebarPluginSection.module.css */
+/**
+ * SidebarPluginSection — plugin nav items in the left sidebar
+ */
 
 .titleHeader {
   line-height: normal;
-  font-weight: bolder;
-  padding: 10px;
+  font-weight: 600;
+  padding: 0.625rem;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
 .simpleHeader {
-  font-size: 1.1rem;
+  font-size: 0.9375rem;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
+  font-weight: 500;
+  color: #1d1d1f;
 }
 
 .regularHeader {
-  font-size: 1.1rem;
+  font-size: 0.9375rem;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
-  color: var(--bs-secondary);
+  color: #6e6e73;
+  font-weight: 500;
 }
 
 .pluginIcon {
@@ -24,6 +31,7 @@
   height: 25px;
 }
 
+/* ── Nav items ───────────────────────────────────────────────────────────────── */
 .leftDrawerActiveButton,
 .leftDrawerInactiveButton {
   position: relative;
@@ -36,38 +44,47 @@
 }
 
 .leftDrawerActiveButton {
-  background-color: var(--leftDrawer-active-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
-  font-weight: bold;
+  background-color: #0071e3;
+  color: #ffffff;
+  font-weight: 600;
+  border-radius: 10px;
 }
 
 .leftDrawerInactiveButton {
-  background-color: var(--leftDrawer-inactive-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
+  background-color: transparent;
+  color: #1d1d1f;
 }
 
 .leftDrawerInactiveButton:hover {
-  background-color: var(--leftDrawer-inactive-button-hover-bg);
+  background-color: #f5f5f7;
+  border-radius: 10px;
 }
 
+/* ── Sidebar buttons ─────────────────────────────────────────────────────────── */
 .sidebarBtn {
   background-color: transparent;
-  color: var(--sidebar-option-text-inactive);
-  font-weight: normal;
+  color: #6e6e73;
+  font-weight: 400;
   cursor: pointer;
+  border-radius: 10px;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .sidebarBtn:hover {
-  background-color: var(--sidebar-option-bg-hover);
-  color: var(--sidebar-option-text-active);
+  background-color: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .sidebarBtnActive {
-  background-color: var(--sidebar-option-bg);
-  color: var(--sidebar-option-text-active);
-  font-weight: bold;
+  background-color: #e8f0fd;
+  color: #0071e3;
+  font-weight: 600;
+  border-radius: 10px;
 }
 
+/* ── Icon wrapper ────────────────────────────────────────────────────────────── */
 .iconWrapper {
   width: 36px;
   min-width: 36px;

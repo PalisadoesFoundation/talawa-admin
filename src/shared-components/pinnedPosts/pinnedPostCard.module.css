@@ -1,3 +1,7 @@
+/**
+ * PinnedPostCard — pinned post card in org dashboard
+ */
+
 .postCardContainer {
   width: 340px;
   height: 380px;
@@ -5,47 +9,73 @@
 
 .card {
   width: 340px;
-  border-radius: 2px;
+  border-radius: 14px;
   overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.18s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .cardHeader {
   height: 49px;
+  background-color: #ffffff;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
 }
 
 .pushPin {
   font-size: 20px;
+  color: #ff9500;
 }
 
 .creatorName {
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6e6e73;
 }
 
 .moreOptionsButton {
   font-size: 20px;
+  color: #6e6e73;
 }
 
 .postMedia {
   height: 195px;
   width: 100%;
+  object-fit: cover;
 }
 
 .cardContent {
   height: 136px;
+  background-color: #ffffff;
+  padding: 0.75rem 1rem;
 }
 
-/* Scoped button styles with parent class for proper specificity */
+/* ── View post button ────────────────────────────────────────────────────────── */
 .postCardContainer .viewPostButton {
-  background-color: #a8c7fa;
-  color: black;
+  background-color: #e8f0fd;
+  color: #0071e3;
   text-transform: none;
   border-radius: 8px;
-  padding: 8px 24px;
-  font-size: 0.9rem;
+  padding: 0.5rem 1.5rem;
+  font-size: 0.875rem;
   font-weight: 500;
+  border: 1.5px solid #c7dcf9;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .postCardContainer .viewPostButton:hover {
-  background-color: #8bb5e8;
+  background-color: #0071e3;
+  color: #ffffff;
+  border-color: #0071e3;
 }

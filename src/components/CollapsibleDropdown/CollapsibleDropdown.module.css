@@ -1,25 +1,35 @@
+/**
+ * CollapsibleDropdown — sidebar expandable nav group
+ */
+
 .collapsibleDropdownIconWrapper {
-  width: var(--space-8);
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .collapsibleDropdownIconWrapperSm {
-  width: var(--space-8);
+  width: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* ── Button states ───────────────────────────────────────────────────────────── */
 .leftDrawerActiveButton,
 .leftDrawerInactiveButton {
   position: relative;
   transition: all 0.2s ease;
+}
 
-  &:active {
-    transform: scale(0.98);
-  }
+.leftDrawerActiveButton:active,
+.leftDrawerInactiveButton:active {
+  transform: scale(0.98);
 }
 
 .leftDrawerCollapseActiveButton {
-  background-color: var(--color-gray-200);
-  color: var(--color-black);
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+  border-radius: 10px;
 }

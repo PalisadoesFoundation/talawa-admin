@@ -1,135 +1,145 @@
+/**
+ * Requests — membership request approval screen
+ */
+
+/* ── Table ───────────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
 }
 
 .rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  transition: background-color 0.15s ease;
+}
+
+.rowBackground:hover {
+  background-color: #f5f5f7;
 }
 
 .hoverShadowOnly:hover,
 .hoverShadowOnly:focus-visible,
 .hoverShadowOnly:active {
-  box-shadow: var(--hover-shadow);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-/* -- RequestsTableItem.tsx -- */
-
+/* ── Table cell padding ──────────────────────────────────────────────────────── */
 .requestsTableItemIndex {
-  padding-inline-start: var(--space-9);
+  padding-inline-start: 2.25rem;
   vertical-align: middle;
 }
 
 .requestsTableItemName {
-  padding-inline-start: var(--space-7);
+  padding-inline-start: 1.75rem;
   vertical-align: middle;
 }
 
 .requestsTableItemEmail {
-  padding-inline-start: var(--space-7);
+  padding-inline-start: 1.75rem;
   vertical-align: middle;
 }
 
+/* ── Accept button ───────────────────────────────────────────────────────────── */
 .requestsAcceptButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-blue-200);
-  width: var(--logo-md);
-  height: var(--logo-xs);
-  margin-inline-start: calc(var(--space-5) * -1);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: 1.5px solid #c7dcf9;
+  border-radius: 8px;
+  width: 80px;
+  height: 40px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-inline-start: -1.25rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.requestsRejectButton {
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  border-color: var(--color-red-100);
-  width: var(--logo-md);
-  height: var(--logo-xs);
-  margin-inline-start: calc(var(--space-5) * -1);
+.requestsAcceptButton:hover {
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
 }
 
 .requestsAcceptButton:focus-visible {
-  background-color: var(--color-blue-200) !important;
-  color: var(--color-gray-700);
-  box-shadow:
-    0 0 0 var(--border-shadow-xs) currentColor,
-    var(--hover-shadow);
-  outline: none;
-}
-
-.requestsRejectButton:focus-visible {
-  background-color: var(--color-red-100) !important;
-  color: var(--color-red-500);
-  box-shadow:
-    0 0 0 var(--border-shadow-xs) currentColor,
-    var(--hover-shadow);
-  outline: none;
+  background-color: #e8f0fd !important;
+  color: #0071e3;
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
 .requestsAcceptButton:disabled,
 .requestsAcceptButton.disabled {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-300) !important;
-  border-color: var(--color-gray-300) !important;
+  background-color: #f5f5f7 !important;
+  color: #a1a1a6 !important;
+  border-color: #d1d1d6 !important;
   cursor: not-allowed;
   opacity: 0.6;
   pointer-events: none;
+}
+
+/* ── Reject button ───────────────────────────────────────────────────────────── */
+.requestsRejectButton {
+  background-color: #fff0ef;
+  color: #c0392b;
+  border: 1.5px solid #ffd5d2;
+  border-radius: 8px;
+  width: 80px;
+  height: 40px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  margin-inline-start: -1.25rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.requestsRejectButton:hover {
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30 !important;
+  color: #ffffff !important;
+}
+
+.requestsRejectButton:focus-visible {
+  background-color: #fff0ef !important;
+  color: #c0392b;
+  outline: 3px solid rgba(255, 59, 48, 0.3);
+  outline-offset: 2px;
 }
 
 .requestsRejectButton:disabled,
 .requestsRejectButton.disabled {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-300) !important;
-  border-color: var(--color-gray-300) !important;
+  background-color: #f5f5f7 !important;
+  color: #a1a1a6 !important;
+  border-color: #d1d1d6 !important;
   cursor: not-allowed;
   opacity: 0.6;
   pointer-events: none;
 }
 
-@media (max-width: 1020px) {
-  .requestsTableItemIndex {
-    padding-inline-start: var(--space-8);
-  }
-
-  .requestsTableItemName,
-  .requestsTableItemEmail {
-    padding-inline-start: var(--space-5);
-  }
-
-  .requestsAcceptButton,
-  .requestsRejectButton {
-    margin-inline-start: calc(var(--space-2) * -1);
-  }
-}
-
-@media (max-width: 520px) {
-  .requestsTableItemIndex,
-  .requestsTableItemName,
-  .requestsTableItemEmail {
-    padding-inline-start: var(--space-5);
-  }
-
-  .requestsAcceptButton,
-  .requestsRejectButton {
-    margin-inline-start: 0;
-    width: 100%;
-  }
-}
-
+/* ── Avatar ──────────────────────────────────────────────────────────────────── */
 .avatarStyle {
-  border-radius: 100%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  object-fit: cover;
 }
 
 .userAvatar {
   border-radius: 50%;
-  margin-inline-end: var(--space-7);
-  width: var(--logo-xs);
-  height: var(--logo-xs);
+  margin-inline-end: 1.75rem;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  object-fit: cover;
 }
 
+/* ── Layout ──────────────────────────────────────────────────────────────────── */
 .listBox {
   width: 100%;
   flex: 1;
@@ -138,4 +148,35 @@
 .listTable {
   width: 100%;
   overflow: visible;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 1020px) {
+  .requestsTableItemIndex {
+    padding-inline-start: 2rem;
+  }
+
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1.25rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: -0.375rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .requestsTableItemIndex,
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1.25rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: 0;
+    width: 100%;
+  }
 }

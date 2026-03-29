@@ -1,0 +1,458 @@
+/**
+ * Talawa Widget Library
+ * ======================
+ * Reusable, scoped CSS class utilities for Apple-inspired UI widgets.
+ * Import this file where you need ready-made widget patterns.
+ *
+ * Usage:
+ *   import 'style/widgets.css';
+ *   <div className="tw-stat-card"> ... </div>
+ *
+ * All widget classes are prefixed with `tw-` (Talawa Widget) to avoid
+ * conflicts with Bootstrap, MUI, or component-level CSS modules.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   1. STAT CARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-stat-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.05);
+  padding: 1.375rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.18s ease;
+}
+
+.tw-stat-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.tw-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background-color: #e8f0fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  color: #0071e3;
+  flex-shrink: 0;
+  transition: background-color 0.18s ease;
+}
+
+.tw-stat-card:hover .tw-stat-icon {
+  background-color: #0071e3;
+  color: #ffffff;
+}
+
+.tw-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.tw-stat-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6e6e73;
+  letter-spacing: -0.005em;
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   2. SECTION CARD (content panel)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-section-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.tw-section-header {
+  padding: 1.125rem 1.375rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: #ffffff;
+}
+
+.tw-section-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
+}
+
+.tw-section-body {
+  padding: 1.25rem 1.375rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3. PAGE HEADER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-page-header {
+  margin-bottom: 1.5rem;
+}
+
+.tw-page-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.tw-page-subtitle {
+  font-size: 0.9375rem;
+  color: #6e6e73;
+  margin-top: 0.25rem;
+  letter-spacing: -0.005em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4. PILL TAG / BADGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1875rem 0.625rem;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.tw-tag-blue {
+  background: #e8f0fd;
+  color: #0052a3;
+}
+
+.tw-tag-green {
+  background: #eaf9ee;
+  color: #1a6632;
+}
+
+.tw-tag-orange {
+  background: #fff4e5;
+  color: #874d00;
+}
+
+.tw-tag-red {
+  background: #fff0ef;
+  color: #c0392b;
+}
+
+.tw-tag-gray {
+  background: #f5f5f7;
+  color: #6e6e73;
+}
+
+.tw-tag-purple {
+  background: #f3eeff;
+  color: #5b21b6;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. ACTION BUTTON ROW
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-action-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   6. EMPTY STATE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #6e6e73;
+}
+
+.tw-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #f5f5f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #a1a1a6;
+  margin-bottom: 0.25rem;
+}
+
+.tw-empty-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
+}
+
+.tw-empty-desc {
+  font-size: 0.875rem;
+  color: #6e6e73;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   7. LIST ITEM ROW
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  transition: background-color 0.15s ease;
+}
+
+.tw-list-item:hover {
+  background-color: #f5f5f7;
+}
+
+.tw-list-item + .tw-list-item {
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 0;
+}
+
+.tw-list-item:last-child {
+  border-radius: 0 0 12px 12px;
+}
+
+.tw-list-item:first-child {
+  border-radius: 12px 12px 0 0;
+}
+
+.tw-list-item:only-child {
+  border-radius: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   8. AVATAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  flex-shrink: 0;
+  background-color: #e8f0fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0071e3;
+  font-weight: 600;
+}
+
+.tw-avatar-sm  { width: 28px; height: 28px; font-size: 0.75rem; }
+.tw-avatar-md  { width: 36px; height: 36px; font-size: 0.875rem; }
+.tw-avatar-lg  { width: 48px; height: 48px; font-size: 1rem; }
+.tw-avatar-xl  { width: 64px; height: 64px; font-size: 1.25rem; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   9. SEARCH INPUT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 0.5rem 0.875rem;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.tw-search:focus-within {
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+}
+
+.tw-search-icon {
+  color: #a1a1a6;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.tw-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9375rem;
+  color: #1d1d1f;
+  width: 100%;
+  font-family: inherit;
+  min-width: 160px;
+}
+
+.tw-search-input::placeholder {
+  color: #a1a1a6;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   10. FLOATING ACTION BUTTON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.6875rem 1.25rem;
+  background: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 100px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.28);
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+  white-space: nowrap;
+}
+
+.tw-fab:hover {
+  background: #0077ed;
+  box-shadow: 0 6px 20px rgba(0, 113, 227, 0.36);
+}
+
+.tw-fab:active {
+  transform: scale(0.97);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   11. DIVIDER WITH LABEL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-divider-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #a1a1a6;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 1rem 0 0.5rem;
+}
+
+.tw-divider-label::before,
+.tw-divider-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   12. PROGRESS BAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-progress-track {
+  height: 6px;
+  background: #f0f0f5;
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.tw-progress-fill {
+  height: 100%;
+  border-radius: 100px;
+  background: #0071e3;
+  transition: width 0.4s ease;
+}
+
+.tw-progress-fill.success { background: #34c759; }
+.tw-progress-fill.warning { background: #ff9500; }
+.tw-progress-fill.danger  { background: #ff3b30; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   13. SKELETON LOADERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-skeleton {
+  background: linear-gradient(90deg, #f0f0f5 25%, #e8e8f0 50%, #f0f0f5 75%);
+  background-size: 400px 100%;
+  border-radius: 8px;
+  animation: tw-shimmer 1.5s ease-in-out infinite;
+}
+
+.tw-skeleton-text  { height: 1rem; }
+.tw-skeleton-title { height: 1.5rem; }
+.tw-skeleton-block { height: 3rem; }
+.tw-skeleton-avatar { width: 40px; height: 40px; border-radius: 50%; }
+.tw-skeleton-card  { height: 120px; border-radius: 16px; }
+
+@keyframes tw-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   14. HELPER UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Surface backgrounds */
+.tw-surface-1 { background-color: #ffffff; }
+.tw-surface-2 { background-color: #f5f5f7; }
+.tw-surface-3 { background-color: #ebebf0; }
+
+/* Text shorthands */
+.tw-text-primary   { color: #1d1d1f; }
+.tw-text-secondary { color: #6e6e73; }
+.tw-text-tertiary  { color: #a1a1a6; }
+.tw-text-brand     { color: #0071e3; }
+.tw-text-success   { color: #34c759; }
+.tw-text-warning   { color: #ff9500; }
+.tw-text-danger    { color: #ff3b30; }
+
+/* Radius shorthands */
+.tw-rounded-sm  { border-radius: 6px; }
+.tw-rounded-md  { border-radius: 10px; }
+.tw-rounded-lg  { border-radius: 14px; }
+.tw-rounded-xl  { border-radius: 18px; }
+.tw-rounded-2xl { border-radius: 24px; }
+
+/* Elevation shorthands */
+.tw-shadow-1 { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.tw-shadow-2 { box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05); }
+.tw-shadow-3 { box-shadow: 0 4px 16px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.06); }
+.tw-shadow-4 { box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.08); }

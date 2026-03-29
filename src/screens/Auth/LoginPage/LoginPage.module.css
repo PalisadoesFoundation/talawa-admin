@@ -1,177 +1,148 @@
-.active_tab {
-  -webkit-animation: fadeIn 0.3s ease-in-out;
-  animation: fadeIn 0.3s ease-in-out;
+/**
+ * LoginPage — Apple-inspired split-screen auth
+ * ----------------------------------------------
+ * Left:  dark gradient brand panel with logo & social links
+ * Right: clean white form panel — centered, generous padding
+ */
+
+/* ── Root layout ─────────────────────────────────────────────────────────────── */
+.login_background {
+  min-height: 100vh;
+  background-color: #f5f5f7;
+}
+
+.row {
+  min-height: 100vh;
+  margin: 0 !important;
+}
+
+/* ── LEFT — brand panel ──────────────────────────────────────────────────────── */
+.row .left_portion {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 3rem 2rem;
+  background: linear-gradient(155deg, #1a1a2e 0%, #16213e 45%, #0d3b66 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle decorative circles */
+.row .left_portion::before {
+  content: '';
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 113, 227, 0.18) 0%,
+    transparent 70%
+  );
+  top: -100px;
+  right: -100px;
+  pointer-events: none;
+}
+
+.row .left_portion::after {
+  content: '';
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(52, 199, 89, 0.12) 0%,
+    transparent 70%
+  );
+  bottom: -80px;
+  left: -60px;
+  pointer-events: none;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 1;
+  position: relative;
+}
+
+.inner p {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+
+.row .left_portion .inner .palisadoes_logo {
+  width: 120px;
+  height: auto;
+  filter: brightness(0) invert(1);
 }
 
 .communityLogo {
   object-fit: contain;
-}
-
-.email_button {
-  --bs-btn-active-bg: var(--color-blue-200);
-  --bs-btn-active-border-color: var(--color-blue-200);
-  --bs-btn-hover-bg: var(--color-blue-200);
-  --bs-btn-hover-border-color: var(--color-blue-200);
-  position: absolute;
-  z-index: 10;
-  bottom: 0;
-  right: 0;
-  height: 100%;
-  display: flex;
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  justify-content: center;
-  align-items: center;
-  color: var(--color-gray-700);
-}
-
-.email_button:hover {
-  color: var(--color-gray-700) !important;
-  box-shadow:
-    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
-    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
+  filter: brightness(0) invert(1);
+  max-width: 140px;
+  height: auto;
 }
 
 .socialIcons {
   display: flex;
-  gap: var(--space-5);
+  gap: 1rem;
   justify-content: center;
-}
-
-.login_background {
-  min-height: 100vh;
-}
-
-.login_btn {
-  font-weight: bold;
-  color: var(--color-gray-700);
-  --bs-btn-bg: var(--color-blue-200);
-  --bs-btn-border-color: var(--color-blue-200);
-  --bs-btn-hover-bg: var(--color-blue-200);
-  --bs-btn-hover-border-color: var(--color-blue-200);
-  --bs-btn-active-color: var(--color-blue-200);
-  --bs-btn-active-bg: var(--color-blue-200);
-  --bs-btn-active-border-color: var(--color-blue-200);
-  --bs-btn-disabled-bg: var(--color-blue-200);
-  --bs-btn-disabled-border-color: var(--color-blue-200);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
-  width: 100%;
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-}
-
-.login_btn:hover {
-  color: var(--color-gray-700) !important;
-  box-shadow:
-    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
-    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
-}
-
-.langChangeBtnStyle {
-  --bs-btn-active-bg: var(--color-blue-200);
-  --bs-btn-active-border-color: var(--color-blue-200);
-  --bs-btn-active-color: var(--color-blue-500);
-  width: var(--space-14);
-  height: var(--space-9);
-  padding: var(--space-3);
-  color: var(--color-blue-500);
-  border-color: var(--color-blue-200);
-  background-color: transparent;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-}
-
-.langChangeBtnStyle:hover {
-  background-color: var(--color-blue-200) !important;
-  border-color: var(--color-blue-200) !important;
-}
-
-.talawa_logo {
-  height: clamp(var(--space-10), 8vw, var(--space-12));
-  width: auto;
-  aspect-ratio: 1;
-  display: block;
-  margin: var(--space-7) auto var(--space-5);
-
-  @media (prefers-reduced-motion: no-preference) {
-    -webkit-animation: zoomIn 0.3s ease-in-out;
-    animation: zoomIn 0.3s ease-in-out;
-  }
-}
-
-.password_checks {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: var(--space-5);
-}
-
-.password_check_element {
-  padding: var(--space-3) 0;
-}
-
-.password_check_element_top {
-  margin-top: var(--space-1);
-}
-
-.password_check_element_bottom {
-  margin-bottom: var(--space-6);
-}
-
-.reg_btn {
-  font-weight: bold;
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  --bs-btn-hover-bg: var(--color-gray-100);
-  --bs-btn-hover-border-color: var(--color-gray-100);
-  --bs-btn-active-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-gray-100);
-  --bs-btn-active-border-color: var(--color-gray-100);
-  margin-top: var(--space-5);
-  color: var(--color-gray-700);
-  margin-bottom: var(--space-5);
-  width: 100%;
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-}
-
-.reg_btn:hover {
-  color: var(--color-gray-700) !important;
-  box-shadow:
-    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
-    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
-}
-
-.row .left_portion {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.row .left_portion .inner .palisadoes_logo {
-  width: var(--logo-lg);
-  height: auto;
-}
-
-.row .right_portion {
-  min-height: 100vh;
+  margin-top: 2rem;
+  z-index: 1;
   position: relative;
-  overflow-y: scroll;
+}
+
+.socialIcons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition:
+    background 0.18s ease,
+    transform 0.15s ease;
+}
+
+.socialIcons a:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-2px);
+}
+
+.socialIcons img {
+  width: 18px;
+  height: 18px;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+/* ── RIGHT — form panel ──────────────────────────────────────────────────────── */
+.row .right_portion {
+  position: relative;
+  min-height: 100vh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: var(--space-5) var(--space-9);
-  background: var(--color-white);
+  padding: 2rem 3.5rem;
+  background: #ffffff;
 }
 
 .row .right_portion::-webkit-scrollbar {
-  width: var(--space-3);
+  width: 4px;
 }
 
 .row .right_portion::-webkit-scrollbar-track {
@@ -179,53 +150,210 @@
 }
 
 .row .right_portion::-webkit-scrollbar-thumb {
-  background-color: var(--color-black);
-  border-radius: var(--radius-sm);
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 100px;
 }
 
-.row .right_portion .langChangeBtn {
-  margin: 0;
+/* ── Language toggle — top-right ────────────────────────────────────────────── */
+.row .right_portion .langChangeBtn,
+.langChangeBtn {
   position: absolute;
-  top: var(--space-5);
-  right: var(--space-9);
+  top: 1.25rem;
+  right: 1.75rem;
   left: auto;
+  z-index: 10;
 }
 
+.langChangeBtnStyle {
+  width: auto;
+  height: 36px;
+  padding: 0 0.75rem;
+  color: #6e6e73;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.langChangeBtnStyle:hover {
+  background-color: #f5f5f7 !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+  color: #1d1d1f !important;
+}
+
+/* ── Talawa logo ─────────────────────────────────────────────────────────────── */
+.talawa_logo {
+  height: 52px;
+  width: auto;
+  display: block;
+  margin: 0 auto 2rem;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fadeSlideDown 0.4s cubic-bezier(0.2, 0, 0, 1) both;
+  }
+}
+
+.marginTopForReg {
+  margin-top: 3rem !important;
+}
+
+/* ── Tab panels ─────────────────────────────────────────────────────────────── */
+.active_tab {
+  animation: fadeIn 0.25s ease-out both;
+}
+
+/* ── Auth action buttons ─────────────────────────────────────────────────────── */
+.login_btn {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 0.75rem;
+  padding: 0.6875rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: #ffffff !important;
+  background-color: #0071e3;
+  border-color: #0071e3;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+  cursor: pointer;
+}
+
+.login_btn:hover {
+  background-color: #0077ed !important;
+  border-color: #0077ed !important;
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.32) !important;
+  color: #ffffff !important;
+}
+
+.login_btn:active {
+  transform: scale(0.98);
+}
+
+.reg_btn {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  padding: 0.6875rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  color: #1d1d1f !important;
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.08);
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease;
+  cursor: pointer;
+}
+
+.reg_btn:hover {
+  background-color: #ebebf0 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #1d1d1f !important;
+}
+
+.reg_btn a {
+  color: inherit !important;
+  text-decoration: none;
+}
+
+/* ── "OR" divider text ──────────────────────────────────────────────────────── */
 .orText {
   display: block;
   position: absolute;
-  top: calc(var(--space-2) * -1);
-  left: calc(50% - 2.6rem);
-  margin: 0 auto;
-  padding: var(--space-3) var(--space-8);
-  z-index: 100;
-  background: var(--color-white);
-  color: var(--color-gray-600);
+  top: -0.625rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 0.875rem;
+  background: #ffffff;
+  color: #a1a1a6;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
 }
 
-.row .orText {
-  display: block;
+/* ── Email button (inside input group) ─────────────────────────────────────── */
+.email_button {
   position: absolute;
-  top: calc(var(--space-3) * -1);
-  left: calc(50% - 2.6rem);
-  margin: 0 auto;
-  padding: var(--space-2) var(--space-8);
-  z-index: 100;
-  background: var(--color-white);
-  color: var(--color-gray-600);
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.875rem;
+  background-color: #e8f0fd;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0071e3;
+  border-radius: 0 10px 10px 0;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  cursor: pointer;
 }
 
+.email_button:hover {
+  background-color: #0071e3 !important;
+  color: #ffffff !important;
+}
+
+/* ── Password checks ────────────────────────────────────────────────────────── */
+.password_checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  margin-top: 0.5rem;
+}
+
+.password_check_element {
+  padding: 0.25rem 0;
+  font-size: 0.8125rem;
+  color: #6e6e73;
+}
+
+.password_check_element_top {
+  margin-top: 0.25rem;
+}
+
+.password_check_element_bottom {
+  margin-bottom: 0.75rem;
+}
+
+/* ── Misc ────────────────────────────────────────────────────────────────────── */
 .selectOrgText {
   width: 100%;
 }
 
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 992px) {
+  .row .right_portion {
+    padding: 2rem 2.5rem;
+  }
+
   .row .left_portion {
-    padding: var(--space-0) var(--space-8);
+    padding: 2rem 1.5rem;
   }
 
   .row .left_portion .inner .palisadoes_logo {
-    width: 100%;
+    width: 100px;
   }
 }
 
@@ -234,93 +362,64 @@
     flex-direction: column-reverse;
   }
 
-  .row .right_portion,
   .row .left_portion {
-    height: unset;
+    height: auto;
+    padding: 2rem 1.25rem;
+    min-height: 200px;
   }
 
   .row .right_portion {
     min-height: 100vh;
     overflow-y: unset;
-  }
-
-  .row .left_portion .inner {
-    display: flex;
-    justify-content: center;
-  }
-
-  .row .left_portion .inner .palisadoes_logo {
-    height: var(--logo-sm);
-    width: unset;
-    position: absolute;
-    margin: var(--space-3);
-    top: 0;
-    right: 0;
-    z-index: 100;
-  }
-
-  .row .left_portion .inner p {
-    margin-bottom: 0;
-    padding: var(--space-5);
-  }
-
-  .socialIcons {
-    margin-bottom: var(--space-5);
+    padding: 2rem 1.5rem;
   }
 }
 
 @media (max-width: 576px) {
   .row .right_portion {
-    padding: var(--space-5) var(--space-5) var(--space-0) var(--space-5);
+    padding: 1.5rem 1.25rem;
   }
 
   .row .right_portion .langChangeBtn {
-    position: absolute;
-    top: var(--space-5);
-    right: var(--space-5);
-    left: auto;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .talawa_logo {
+    height: 44px;
   }
 
   .marginTopForReg {
-    margin-top: var(--space-11) !important;
-  }
-
-  .row .right_portion .talawa_logo {
-    height: var(--logo-md);
-    margin: var(--space-0) auto var(--space-8) auto;
-  }
-
-  .socialIcons {
-    margin-bottom: var(--space-5);
+    margin-top: 3.5rem !important;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .talawa_logo {
-    animation: none;
-  }
-
-  .active_tab {
-    animation: none;
-  }
-}
-
-/* Animations */
-@keyframes zoomIn {
+/* ── Animations ─────────────────────────────────────────────────────────────── */
+@keyframes fadeSlideDown {
   from {
     opacity: 0;
-    transform: scale(0.3);
+    transform: translateY(-12px);
   }
-  50% {
+  to {
     opacity: 1;
+    transform: translateY(0);
   }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talawa_logo,
+  .active_tab {
+    animation: none;
   }
 }

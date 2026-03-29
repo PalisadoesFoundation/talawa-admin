@@ -1,12 +1,16 @@
+/**
+ * EventListCard — compact event pill/card used in calendar day cells
+ */
+
 .cardsEventListCard {
-  background-color: var(--cardsEventListCard-bg);
-  border: var(--border-0) solid var(--cardsEventListCard-border);
-  border-radius: var(--radius-lg);
+  background-color: #e8f0fd;
+  border: none;
+  border-radius: 6px;
   overflow: hidden;
-  height: var(--space-8);
+  height: 2rem;
   cursor: pointer;
-  padding: 0 var(--space-2);
-  transition: transform 0.2s;
+  padding: 0 0.5rem;
+  transition: transform 0.15s ease, background-color 0.15s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,21 +18,23 @@
 
 .cardsEventListCard:hover {
   transform: scale(1.02);
+  background-color: #d1e4fb;
 }
 
 .cardsEventListCard > p {
-  font-size: var(--font-size-xs);
-  margin-top: 0px;
-  margin-bottom: var(--space-2);
+  font-size: 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #0052a3;
 }
 
 .cardsEventListCard a {
-  color: var(--cardsEventListCard-a-color);
-  font-weight: var(--font-weight-semibold);
+  color: #0052a3;
+  font-weight: 600;
 }
 
 .cardsEventListCard a:hover {
-  color: var(--cardsEventListCard-a-color-hover);
+  color: #0071e3;
 }
 
 .cardsEventListCard:last-child:nth-last-child(odd) {
@@ -51,15 +57,16 @@
   width: 20%;
   border: none;
   box-shadow: none;
-  margin-top: var(--space-2);
+  margin-top: 0.5rem;
 }
 
 .eventtitle {
-  margin-bottom: 0px;
+  margin-bottom: 0;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-size: var(--font-size-xs);
-  color: var(--cardsEventListCard-h2-color);
+  font-size: 0.75rem;
+  color: #0052a3;
   text-align: center;
+  font-weight: 500;
 }

@@ -1,6 +1,20 @@
+/**
+ * TableRow — check-in table row button
+ */
+
 .buttonStyle {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  margin: var(--space-3);
-  padding: var(--space-3);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: none;
+  border-radius: 8px;
+  margin: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.buttonStyle:hover {
+  background-color: #d1e3fa;
 }

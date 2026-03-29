@@ -1,16 +1,23 @@
+/**
+ * GroupModal — volunteer group create/edit modal
+ */
+
+/* ── Modal sizing ────────────────────────────────────────────────────────────── */
 .groupModal {
   max-width: 80vw;
   margin-top: 2vh;
   margin-left: 13vw;
 }
 
-.groupModal .modal-dialog {
+.groupModal :global(.modal-dialog) {
   max-width: 80vw;
   margin: 2vh auto;
 }
 
-.groupModal .modal-content {
-  border-radius: var(--radius-lg);
+.groupModal :global(.modal-content) {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 @media (max-width: 768px) {
@@ -19,68 +26,90 @@
     max-width: 90%;
   }
 
-  .groupModal .modal-dialog {
+  .groupModal :global(.modal-dialog) {
     max-width: 90%;
     margin: 10vh auto;
   }
 }
 
+/* ── Modal title ─────────────────────────────────────────────────────────────── */
 .titlemodal {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-3xl);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.375rem;
   width: 65%;
-  margin-bottom: var(--space-0);
+  margin-bottom: 0;
+  letter-spacing: -0.02em;
 }
 
+/* ── Close button ────────────────────────────────────────────────────────────── */
 .modalCloseBtn {
-  width: var(--space-9);
-  height: var(--space-9);
-  padding: var(--space-5);
+  width: 36px;
+  height: 36px;
+  padding: 1.25rem;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 8px;
+  transition: background-color 0.15s ease;
 }
 
+.modalCloseBtn:hover {
+  background-color: #f5f5f7;
+}
+
+/* ── Toggle group (individual / requests / groups) ───────────────────────────── */
 .toggleGroup {
   width: 50%;
-  min-width: var(--space-21);
-  margin: var(--space-3) var(--space-0);
+  min-width: 336px;
+  margin: 0.75rem 0;
 }
 
 .toggleBtn {
-  padding: var(--space-0);
-  height: var(--space-8);
+  padding: 0;
+  height: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-400);
-  border: var(--border-1) solid var(--color-gray-200);
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 #individualRadio,
 #requestsRadio,
 #groupsRadio {
-  color: var(--color-blue-500);
+  color: #0071e3;
 }
 
 .toggleBtn:hover {
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-200);
+  background-color: #ebebf0;
+  color: #1d1d1f;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* ── Form fields ─────────────────────────────────────────────────────────────── */
 .noOutline input {
   outline: none;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.875rem;
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-600);
+  -webkit-text-fill-color: #6e6e73;
+  background-color: #f5f5f7;
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-600);
+  color: #6e6e73;
   opacity: 1;
+  background-color: #f5f5f7;
 }
 
 .noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
@@ -88,63 +117,93 @@
 }
 
 .noOutline :is(input, textarea):focus-visible {
-  outline: var(--border-1) solid var(--color-blue-500);
-  outline-offset: var(--space-1);
+  outline: 3px solid rgba(0, 113, 227, 0.2);
+  outline-offset: 2px;
+  border-color: #0071e3;
 }
 
+/* ── Register button ─────────────────────────────────────────────────────────── */
 .regBtn {
-  margin-top: var(--space-5);
-  border: var(--border-1) solid var(--color-gray-200);
-  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-xs)
-    var(--color-gray-200);
-  padding: var(--space-4) var(--space-4);
-  border-radius: var(--radius-sm);
-  background-color: var(--color-blue-700);
+  margin-top: 1.25rem;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
+  padding: 1rem;
+  border-radius: 10px;
+  background-color: #0071e3;
   width: 100%;
-  font-size: var(--font-size-md);
-  color: var(--color-white);
+  font-size: 0.9375rem;
+  color: #ffffff;
   outline: none;
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   cursor: pointer;
+  letter-spacing: -0.005em;
   transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+}
+
+.regBtn:hover {
+  background-color: #0077ed;
+  box-shadow: 0 6px 16px rgba(0, 113, 227, 0.32);
+}
+
+.regBtn:active {
+  transform: scale(0.98);
 }
 
 .regBtn:focus-visible {
-  outline: var(--border-1) solid var(--color-blue-300);
-  outline-offset: var(--space-1);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
+/* ── Modal table ─────────────────────────────────────────────────────────────── */
 .modalTable {
-  max-height: var(--space-17);
+  max-height: 420px;
   overflow-y: auto;
 }
 
+.modalTable::-webkit-scrollbar {
+  width: 5px;
+}
+
+.modalTable::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 100px;
+}
+
+/* ── Avatars ─────────────────────────────────────────────────────────────────── */
 .TableImage {
   object-fit: cover;
-  margin-right: var(--space-2);
-  width: var(--space-10);
-  height: var(--space-10);
-  border-radius: var(--radius-full);
+  margin-right: 0.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .avatarContainer {
-  width: var(--space-7);
-  height: var(--space-7);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .imageContainer {
-  width: var(--space-11);
-  height: var(--space-11);
-  border-radius: var(--radius-full);
-  margin-right: var(--space-4);
-  margin-top: var(--space-4);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  overflow: hidden;
+  background-color: #e8f0fd;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .imageContainer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--radius-full);
+  border-radius: 50%;
 }

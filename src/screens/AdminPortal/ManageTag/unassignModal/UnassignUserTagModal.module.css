@@ -1,68 +1,83 @@
+/**
+ * UnassignUserTagModal — confirm unassigning a tag from a user
+ */
+
+/* ── Modal header ────────────────────────────────────────────────────────────── */
 .modalHeader:global(.modal-header) {
   border: none;
-  background-color: var(--color-white);
-  padding: var(--space-5);
-  color: var(--color-black);
+  background-color: #ffffff;
+  padding: 1.25rem 1.5rem;
+  color: #1d1d1f;
 }
 
-/* Make sure the modal title is dark grey */
 .modalHeader:global(.modal-header) div,
 .modalHeader:global(.modal-header) :global(.modal-title) {
-  color: var(--color-gray-700);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
 }
 
-/* Close button styling */
 .modalHeader:global(.modal-header) :global(button.close),
 .modalHeader:global(.modal-header) :global(.btn-close) {
-  color: var(--color-red-500);
-  opacity: 1;
+  color: #6e6e73 !important;
+  opacity: 0.75;
 }
 
+/* ── Remove button ───────────────────────────────────────────────────────────── */
 .removeButton:global(.btn) {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
+  margin-bottom: 1rem;
+  background-color: #fff1f0;
+  color: #ff3b30;
+  margin-right: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .removeButton:global(.btn):is(:hover, :active) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: #ff3b30;
+  border-color: #ff3b30;
+  color: #ffffff;
 }
 
 .removeButton:global(.btn):focus-visible {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
-  outline: 2px solid var(--color-red-500);
+  background-color: #ff3b30;
+  border-color: #ff3b30;
+  color: #ffffff;
+  outline: 2px solid rgba(255, 59, 48, 0.4);
   outline-offset: 2px;
 }
 
+/* ── Add/cancel button ───────────────────────────────────────────────────────── */
 .addButton:global(.btn) {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  margin-bottom: 1rem;
+  color: #ffffff;
+  background-color: #0071e3;
+  border-color: #0071e3;
+  border-radius: 8px;
+  font-weight: 500;
   --bs-btn-focus-box-shadow: none;
+  transition: background-color 0.15s ease;
 }
 
 .addButton:global(.btn):is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #0077ed;
+  border-color: #0077ed;
 }
 
 .addButton:global(.btn):focus-visible {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
-  outline: 2px solid var(--color-blue-500);
+  background-color: #0077ed;
+  border-color: #0077ed;
+  outline: 2px solid rgba(0, 113, 227, 0.4);
   outline-offset: 2px;
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  background-color: #e5e5ea;
+  border-color: transparent;
+  color: #aeaeb2;
 }

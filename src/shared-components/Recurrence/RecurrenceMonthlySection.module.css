@@ -1,5 +1,14 @@
+/**
+ * RecurrenceMonthlySection — monthly recurrence type selector
+ */
+
+/* ── Dropdown ────────────────────────────────────────────────────────────────── */
 .dropdown {
-  min-width: calc(var(--space-13) + var(--space-2));
+  min-width: 7rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #ffffff;
+  color: #1d1d1f;
 }
 
 .dropdown button {
@@ -7,35 +16,42 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: calc(-1 * (var(--space-2) + var(--space-1)));
+  margin-left: -0.75rem;
 }
 
 .dropdownMenu {
   width: 100%;
   min-width: unset;
-  padding: var(--space-3) 0;
-  border-radius: var(--radius-2xl);
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-white);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--color-gray-600);
-  max-height: var(--space-17);
+  padding: 0.75rem 0;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.06);
+  max-height: 13rem;
   overflow-y: auto;
 }
 
 .dropdownItem {
-  padding: var(--space-4) var(--space-5);
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-800);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  color: #1d1d1f;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
 .dropdownItem:hover,
 .dropdownItem:focus {
-  background: var(--color-blue-100);
+  background: #f5f5f7;
 }
 
 .dropdownItemSelected {
-  background: var(--color-blue-100);
-  color: var(--color-blue-500);
-  font-weight: var(--font-weight-semibold);
+  background: #e8f0fd;
+  color: #0071e3;
+  font-weight: 600;
+}
+
+.dropdownItemSelected:hover {
+  background: #d1e3fa;
 }

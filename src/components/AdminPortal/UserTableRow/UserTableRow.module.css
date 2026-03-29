@@ -1,8 +1,14 @@
+/**
+ * UserTableRow — user table row cells
+ */
+
 .gridCell {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-size: 0.9375rem;
+  color: #1d1d1f;
 }
 
 .gridCellPointer {

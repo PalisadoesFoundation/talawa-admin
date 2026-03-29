@@ -1,8 +1,13 @@
+/**
+ * UserGlobalScreen — global user portal layout shell
+ */
+
+/* ── Page container ──────────────────────────────────────────────────────────── */
 .pageContainer {
   display: flex;
   flex-direction: column;
-  height: var(--layout-vh-100);
-  padding: var(--space-5) var(--space-7) 0 var(--space-22);
+  height: 100vh;
+  padding: 1.25rem 1.75rem 0 5.5rem;
 }
 
 .drawer {
@@ -13,125 +18,185 @@
   flex: 1;
 }
 
+/* ── Sidebar expand/contract ─────────────────────────────────────────────────── */
 @keyframes moveLeft {
-  from {
-    transform: translateX(var(--space-11));
-  }
-
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(2.75rem); }
+  to   { transform: translateX(0); }
 }
 
 @keyframes moveRight {
-  from {
-    transform: translateX(calc(-1 * var(--space-11)));
-  }
-
-  to {
-    transform: translateX(0);
-  }
+  from { transform: translateX(-2.75rem); }
+  to   { transform: translateX(0); }
 }
 
 .expand {
-  margin-left: var(--space-13);
-  padding-left: var(--space-11);
-  animation: moveLeft 0.9s ease-in-out;
+  margin-left: 3.25rem;
+  padding-left: 2.75rem;
+  animation: moveLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .contract {
-  padding-left: var(--space-22);
-  animation: moveRight 0.5s ease-in-out;
+  padding-left: 5.5rem;
+  animation: moveRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Open drawer strip ───────────────────────────────────────────────────────── */
 .opendrawer {
-  --bs-btn-active-color: var(--color-gray-50);
-  --bs-btn-active-bg: var(--color-gray-50);
-  --bs-btn-active-border-color: var(--color-gray-50);
   position: fixed;
   display: flex;
   align-items: center;
   justify-content: center;
   top: 0;
   left: 0;
-  width: var(--space-7);
-  height: var(--layout-vh-100);
+  width: 1.75rem;
+  height: 100vh;
   z-index: 9999;
-  background-color: var(--color-gray-50);
+  background-color: rgba(245, 245, 247, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: none;
-  border-radius: var(--radius-none);
-  margin-right: var(--space-6);
-  color: var(--color-black);
+  border-radius: 0;
+  margin-right: 1.5rem;
+  color: #6e6e73;
+  transition: background-color 0.2s ease;
 }
 
-.collapseSidebarButton:active,
-.opendrawer:active {
-  background-color: var(--color-gray-50);
+.opendrawer:active,
+.collapseSidebarButton:active {
+  background-color: rgba(245, 245, 247, 0.95);
 }
 
-.collapseSidebarButton {
-  --bs-btn-active-color: var(--color-gray-50);
-  --bs-btn-active-bg: var(--color-gray-50);
-  --bs-btn-active-border-color: var(--color-gray-50);
-  position: fixed;
-  height: var(--space-9);
-  bottom: var(--space-0);
-  z-index: 9999;
-  width: var(--space-19);
-  background-color: var(--color-gray-50);
-  color: var(--color-black);
-  border: none;
-  border-radius: var(--radius-none);
-}
-
-.collapseSidebarButton:hover,
 .opendrawer:hover {
-  opacity: 1;
-  transition: background-color 0.5s ease;
-  background-color: var(--color-gray-50);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      var(--color-gray-200);
-  color: var(--color-black);
+  background-color: #e8f0fd;
+  color: #0071e3;
 }
 
+/* ── Collapse sidebar button ─────────────────────────────────────────────────── */
+.collapseSidebarButton {
+  position: fixed;
+  height: 2.25rem;
+  bottom: 0;
+  z-index: 9999;
+  width: 4.75rem;
+  background-color: rgba(245, 245, 247, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #6e6e73;
+  border: none;
+  border-radius: 0;
+  transition: background-color 0.2s ease;
+}
+
+.collapseSidebarButton:hover {
+  background-color: #e8f0fd;
+  color: #0071e3;
+  box-shadow: none;
+}
+
+/* ── Profile dropdown ────────────────────────────────────────────────────────── */
+.profileDropdownBtn {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  padding: 0.375rem 1rem 0.25rem 0.25rem;
+  margin: 0.5rem 1rem 1rem 1rem;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
+  display: flex;
+  align-items: center;
+}
+
+.profileDropdownBtn:hover {
+  background-color: #f5f5f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.profileImage {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.25;
+}
+
+.profileName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1d1d1f;
+}
+
+.profileRole {
+  font-size: 0.75rem;
+  color: #6e6e73;
+  font-weight: 500;
+}
+
+.logoutBtn {
+  color: #ff3b30;
+  font-weight: 500;
+}
+
+.profileDropdownMenu {
+  min-width: 200px !important;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
 @media (max-height: 900px) {
   .collapseSidebarButton {
-    height: var(--space-8);
-    width: var(--space-21);
+    height: 2rem;
+    width: 5.25rem;
   }
 }
 
 @media (max-height: 650px) {
   .pageContainer {
-    padding: var(--space-5) var(--space-7) 0 var(--space-19);
+    padding: 1.25rem 1.75rem 0 4.75rem;
   }
 
   .collapseSidebarButton {
-    width: var(--space-18);
-    height: var(--space-6);
+    width: 4.5rem;
+    height: 1.5rem;
   }
 
   .opendrawer {
-    width: var(--space-8);
+    width: 2rem;
   }
 }
 
 @media (max-width: 1120px) {
   .collapseSidebarButton {
-    width: var(--space-19);
+    width: 4.75rem;
   }
 }
 
 @media (max-width: 820px) {
   .pageContainer {
-    padding-left: var(--space-5);
+    padding-left: 1.25rem;
   }
 
   .opendrawer {
-    width: var(--space-7);
+    width: 1.75rem;
   }
 
   .contract,
@@ -146,70 +211,4 @@
     left: 0;
     right: 0;
   }
-}
-
-/* Profile Dropdown Styles */
-.profileDropdownBtn {
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-lg);
-  padding: var(--space-2) var(--space-4) var(--space-1) var(--space-1);
-  margin: var(--space-2) var(--space-4) var(--space-4) var(--space-4);
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-}
-
-.profileDropdownBtn:hover {
-  background-color: var(--color-gray-50);
-  box-shadow: 0 var(--shadow-offset-xs) var(--shadow-blur-sm)
-    var(--color-gray-200);
-  border-color: var(--color-gray-300);
-}
-
-.profileContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding-right: var(--space-2);
-}
-
-.imageContainer {
-  position: relative;
-}
-
-.profileImage {
-  width: var(--space-9);
-  height: var(--space-9);
-  border-radius: var(--border-radius-circle);
-  object-fit: cover;
-  border: var(--border-2) solid var(--color-gray-100);
-}
-
-.profileText {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  line-height: 1.2;
-}
-
-.profileName {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-gray-800);
-}
-
-.profileRole {
-  font-size: var(--font-size-xs);
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-medium);
-}
-
-.logoutBtn {
-  color: var(--color-red-500);
-  font-weight: var(--font-weight-medium);
-}
-
-.profileDropdownMenu {
-  min-width: var(--space-16) !important;
 }

@@ -1,8 +1,24 @@
+/**
+ * EventRegistrantsWrapper — create/invite registrant button row
+ */
+
 .createButton {
-  background-color: var(--createButton-bg);
-  color: var(--createButton-color);
-  border: 1px solid var(--createButton-border);
+  background-color: #0071e3;
+  color: #ffffff;
+  border: none;
   margin: 0 1.5rem;
-  width: 10rem;
-  height: 3rem;
+  min-width: 9rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.createButton:hover {
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
 }

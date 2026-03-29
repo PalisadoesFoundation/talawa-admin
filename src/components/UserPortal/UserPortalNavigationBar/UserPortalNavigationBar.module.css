@@ -1,19 +1,23 @@
+/**
+ * UserPortalNavigationBar — user portal top navigation
+ */
+
 .talawaImage {
-  width: 40px;
-  height: auto;
-  margin-top: -5px;
-  border: 2px solid white;
-  margin-right: 10px;
-  background-color: white;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  margin-right: 0.625rem;
+  object-fit: contain;
 }
 
 .colorWhite {
-  color: white;
+  color: #ffffff;
 }
 
 .colorPrimary {
-  background: #31bb6b;
+  background-color: #0071e3;
 }
 
 .link {
@@ -22,11 +26,11 @@
 }
 
 .offcanvasContainer {
-  background-color: #31bb6b;
-  color: white;
+  background-color: #0071e3;
+  color: #ffffff;
 }
 
-/* Test utility classes */
+/* Test utility */
 .testCustomPadding {
-  padding: 10px;
+  padding: 0.625rem;
 }

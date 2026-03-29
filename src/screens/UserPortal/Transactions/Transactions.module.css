@@ -1,9 +1,13 @@
+/**
+ * Transactions — user portal transactions layout
+ */
+
 .mainContainer50 {
   width: 50%;
   flex-grow: 3;
-  padding: var(--space-5);
+  padding: 1.25rem;
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: var(--color-gray-50);
+  background-color: #f5f5f7;
 }

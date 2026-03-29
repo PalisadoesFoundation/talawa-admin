@@ -1,42 +1,53 @@
+/**
+ * UpcomingEvents — volunteer upcoming events list
+ */
+
 .container {
   min-height: 100%;
+  background-color: #f5f5f7;
 }
 
+/* ── Empty / error state ─────────────────────────────────────────────────────── */
 .message {
-  margin-top: 25%;
+  margin-top: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
+  font-size: 2.5rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
+/* ── Title ───────────────────────────────────────────────────────────────────── */
 .titleContainerVolunteer {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 0.25rem;
 }
 
 .titleContainerVolunteer h3 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-700);
-  margin-top: var(--space-2);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin-top: 0.5rem;
+  letter-spacing: -0.02em;
 }
 
+/* ── Filter row ──────────────────────────────────────────────────────────────── */
 .searchFilterContainer {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: stretch;
-  margin: var(--space-3) 0;
+  margin: 0.75rem 0;
   padding: 0;
-  gap: var(--space-1);
+  gap: 0.25rem;
   flex-wrap: wrap;
-  min-height: var(--space-10);
+  min-height: 2.5rem;
 }

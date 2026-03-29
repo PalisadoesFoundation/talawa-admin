@@ -1,22 +1,25 @@
+/**
+ * Invitations — volunteer invitations screen
+ */
+
 .container {
   min-height: 100vh;
+  background-color: #f5f5f7;
 }
 
+/* ── Empty / error state ─────────────────────────────────────────────────────── */
 .message {
-  margin-top: 25%;
+  margin-top: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
-}
-
-.errorIcon::before {
-  content: '⚠️';
-  margin-right: var(--space-3);
+  font-size: 2.5rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }

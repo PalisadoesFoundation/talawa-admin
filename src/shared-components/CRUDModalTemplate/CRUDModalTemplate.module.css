@@ -1,21 +1,21 @@
 /**
- * CRUD Modal Template Styles
- *
- * These styles provide consistent appearance for all modal templates.
- * Where possible, global CSS classes from app-fixed.module.css are used.
+ * CRUDModalTemplate — loading overlay, delete warning, form containers
  */
+
+/* ── Loading overlay ─────────────────────────────────────────────────────────── */
 .loadingOverlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(3px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1050;
-  border-radius: 0.3rem;
+  border-radius: 14px;
 }
 
 .loadingSpinner {
@@ -26,22 +26,27 @@
 }
 
 .loadingText {
-  color: #555555;
+  color: #6e6e73;
   font-size: 0.875rem;
+  font-weight: 500;
 }
 
+/* ── Error alert ─────────────────────────────────────────────────────────────── */
 .errorAlert {
   margin-bottom: 1rem;
+  border-radius: 10px;
 }
 
+/* ── Modal body ──────────────────────────────────────────────────────────────── */
 .modalBody {
   position: relative;
   min-height: 100px;
 }
 
+/* ── Delete warning ──────────────────────────────────────────────────────────── */
 .deleteWarningIcon {
   font-size: 3rem;
-  color: #dc3545;
+  color: #ff3b30;
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -50,22 +55,25 @@
   text-align: center;
   margin-bottom: 1rem;
   font-size: 1rem;
-  color: #333;
+  color: #1d1d1f;
+  line-height: 1.5;
 }
 
 .entityName {
   font-weight: 600;
-  color: #dc3545;
+  color: #ff3b30;
 }
 
+/* ── Recurring options ───────────────────────────────────────────────────────── */
 .recurringOptions {
   margin-top: 1rem;
   padding: 1rem;
-  background-color: #f8f9fa;
-  border-radius: 0.25rem;
-  border: 1px solid #dee2e6;
+  background-color: #f5f5f7;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+/* ── Form layout ─────────────────────────────────────────────────────────────── */
 .viewModalField {
   margin-bottom: 1rem;
 }
@@ -78,6 +86,7 @@
   padding: 1rem;
 }
 
+/* ── Footer buttons ──────────────────────────────────────────────────────────── */
 .footerButtons {
   display: flex;
   gap: 0.5rem;
@@ -85,6 +94,7 @@
   width: 100%;
 }
 
+/* ── Accessibility ───────────────────────────────────────────────────────────── */
 .visuallyHidden {
   position: absolute;
   width: 1px;
@@ -98,30 +108,40 @@
 }
 
 .focusVisible:focus-visible {
-  outline: 2px solid #1778f2;
+  outline: 3px solid rgba(0, 113, 227, 0.3);
   outline-offset: 2px;
 }
 
-/* Button style for add/create actions (primary variant) */
+/* ── Action buttons ──────────────────────────────────────────────────────────── */
 .addButton {
-  background-color: var(--addButton-bg, #a8c7fa);
-  border: 1px solid var(--addButton-border, #eaebef);
-  color: var(--addButton-font, #555555);
+  background-color: #e8f0fd;
+  border: 1.5px solid #c7dcf9;
+  color: #0071e3;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .addButton:hover {
-  background-color: var(--addButton-bg-hover, #1778f2);
-  border-color: var(--addButton-border-hover, #555555);
+  background-color: #0071e3;
+  border-color: #0071e3;
+  color: #ffffff;
 }
 
-/* Button style for remove/delete actions (danger variant) */
 .removeButton {
-  background-color: #dc3545;
-  border-color: #dc3545;
-  color: #fff;
+  background-color: #ff3b30;
+  border-color: #ff3b30;
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
 }
 
 .removeButton:hover {
-  background-color: #c82333;
-  border-color: #bd2130;
+  background-color: #ff453a;
+  border-color: #ff453a;
 }

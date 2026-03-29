@@ -1,3 +1,7 @@
+/**
+ * UserSidebar — user portal left navigation sidebar
+ */
+
 .switchPortalWrapper :global(a) {
   display: flex;
   align-items: center;
@@ -5,12 +9,28 @@
   max-width: 100%;
   text-align: start;
   text-decoration: none;
-  margin-bottom: 0.8rem;
-  border-radius: 12px;
-  font-size: 16px;
-  padding: 0.6rem;
-  padding-left: 0.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: 0.5rem;
+  padding-left: 0.75rem;
   outline: none;
   border: none;
   overflow: hidden;
+  color: #6e6e73;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.switchPortalWrapper :global(a:hover) {
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.switchPortalWrapper :global(a.active) {
+  background-color: #e8f0fd;
+  color: #0071e3;
+  font-weight: 600;
 }

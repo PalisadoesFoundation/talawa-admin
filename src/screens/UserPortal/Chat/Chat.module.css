@@ -1,135 +1,145 @@
+/**
+ * Chat — user portal chat screen
+ * --------------------------------
+ */
+
 .containerHeight {
   height: 88vh;
-  padding: var(--space-5);
+  padding: 1rem;
 }
 
+/* ── Main container ───────────────────────────────────────────────────────── */
 .mainContainer {
   width: 100%;
-  max-width: var(--space-29);
-  margin: var(--space-0) auto;
+  max-width: 1400px;
+  margin: 0 auto;
   flex-grow: 3;
   max-height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-xl);
-  background-color: var(--color-white);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--color-gray-200);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
+/* ── Chat message area ─────────────────────────────────────────────────────── */
 .chatContainer {
   flex: 3;
   display: flex;
   flex-direction: column;
-  margin: var(--space-5);
-  border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-lg);
+  margin: 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 14px;
   overflow-y: auto;
-  background-color: var(--color-gray-50);
+  background-color: #f5f5f7;
   min-height: 0;
-  /* Allow flex shrinking */
 }
 
 .chatContainer::-webkit-scrollbar {
   display: none;
 }
 
+/* ── Contacts sidebar ──────────────────────────────────────────────────────── */
 .contactContainer {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: var(--space-21);
-  max-width: var(--space-23);
-  border-right: var(--border-1) solid var(--color-gray-200);
-  background-color: var(--color-gray-50);
+  min-width: 280px;
+  max-width: 340px;
+  border-right: 1px solid rgba(0, 0, 0, 0.07);
+  background-color: #ffffff;
 }
 
+/* ── Add chat header ───────────────────────────────────────────────────────── */
 .addChatContainer {
-  margin: var(--space-0) var(--space-6);
-  padding: var(--space-6) var(--space-0) var(--space-4) var(--space-0);
-  border-bottom: var(--border-2) solid var(--color-black);
+  margin: 0 1.25rem;
+  padding: 1.25rem 0 0.875rem;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .contactCardContainer {
-  padding: var(--space-4) var(--space-5);
+  padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 0.25rem;
 }
 
 .chatHeadingContainer {
-  padding: var(--space-4);
+  padding: 0.75rem 1rem;
 }
 
 .borderNone {
   border: none;
 }
 
+/* ── Accordion (chat types) ─────────────────────────────────────────────────── */
 .accordion-button:focus {
   box-shadow: none;
 }
 
 .accordion-button:not(.collapsed) {
-  color: var(--color-gray-900);
-  background-color: var(--color-white);
+  color: #1d1d1f;
+  background-color: #ffffff;
 }
 
 .chatType {
-  --bs-accordion-btn-bg: var(--color-white);
-  --bs-accordion-active-bg: var(--color-white);
-  --bs-accordion-active-color: var(--color-black);
+  --bs-accordion-btn-bg: #ffffff;
+  --bs-accordion-active-bg: #ffffff;
+  --bs-accordion-active-color: #1d1d1f;
   --bs-accordion-btn-focus-box-shadow: none;
   --bs-accordion-border-width: 0;
 }
 
 .chatType > button {
-  padding-bottom: var(--space-0);
+  padding-bottom: 0;
 }
 
 .createChat {
-  background-color: var(--color-white);
+  background-color: #ffffff;
   border: none;
 }
 
-.opendrawer {
-  position: fixed;
+/* ── Filter buttons ────────────────────────────────────────────────────────── */
+.filters {
+  padding: 1rem 0 0 1rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-  width: var(--space-9);
-  height: 100vh;
-  z-index: 9999;
-  background-color: var(--color-gray-50);
-  border: none;
-  border-radius: var(--radius-none);
-  margin-right: var(--space-6);
-  color: var(--color-black);
+  gap: 0.5rem;
 }
 
-.opendrawer:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+.filterButton {
+  border-radius: 100px;
+  padding: 0.3125rem 0.75rem;
+  background-color: #ffffff;
+  color: #6e6e73;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
-.collapseSidebarButton:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+.selectedBtn,
+.filterButton:hover {
+  border: 1.5px solid #34c759;
+  background-color: #eaf9ee;
+  color: #1a6632;
 }
 
+/* ── Custom toggle dropdown ────────────────────────────────────────────────── */
 .customToggle {
-  padding: var(--space-0);
+  padding: 0;
   background: none;
   border: none;
-  margin-right: var(--space-5);
+  margin-right: 0.875rem;
   --bs-btn-active-bg: none;
 }
 
 .customToggle svg {
-  color: var(--color-black);
+  color: #6e6e73;
 }
 
 .customToggle::after {
@@ -143,80 +153,6 @@
   border: none;
 }
 
-.customToggle svg {
-  color: var(--color-black);
-}
-
-@media (max-width: 1120px) {
-  .collapseSidebarButton {
-    width: var(--space-18);
-  }
-}
-
-@media (max-height: 650px) {
-  .collapseSidebarButton {
-    width: var(--space-18);
-    height: var(--space-6);
-  }
-
-  .opendrawer {
-    width: var(--space-8);
-  }
-}
-
-/* For tablets */
-@media (max-width: 820px) {
-  .contract,
-  .expand {
-    animation: none;
-  }
-
-  .opendrawer {
-    width: var(--space-7);
-  }
-
-  .collapseSidebarButton {
-    width: 100%;
-    left: 0;
-    right: 0;
-  }
-}
-
-.accordionBody {
-  height: calc(100vh / 2 - var(--space-8) - var(--space-11)) !important;
-  overflow-y: scroll;
-}
-
-.accordionBody::-webkit-scrollbar {
-  display: none;
-}
-
-.filters {
-  padding: var(--space-6) var(--space-0) var(--space-0) var(--space-6);
-  display: flex;
-  gap: var(--space-3);
-}
-
-.filterButton {
-  border-radius: var(--radius-lg);
-  padding: var(--space-2) var(--space-4);
-  background-color: var(--color-white);
-  color: var(--color-gray-400);
-  border: var(--border-1) solid var(--color-gray-400);
-}
-
-.selectedBtn,
-.filterButton:hover {
-  border: var(--border-1) solid var(--color-green-100);
-  background-color: var(--color-green-100);
-  color: var(--color-white);
-}
-
-.dropdownToggle {
-  cursor: pointer;
-}
-
-/* Hide label and caret for icon-only dropdown button */
 .customToggle [class*='buttonLabel'],
 .customToggle [class*='dropdownCaret'] {
   display: none;
@@ -226,8 +162,88 @@
   min-width: auto !important;
 }
 
+.dropdownToggle {
+  cursor: pointer;
+}
+
+/* ── Open drawer strip ────────────────────────────────────────────────────── */
+.opendrawer {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  width: 2.5rem;
+  height: 100vh;
+  z-index: 9999;
+  background-color: rgba(245, 245, 247, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: none;
+  border-radius: 0;
+  margin-right: 1.25rem;
+  color: #6e6e73;
+  transition: background-color 0.2s ease;
+}
+
+.opendrawer:hover {
+  background-color: #e8f0fd;
+  color: #0071e3;
+}
+
+.collapseSidebarButton:hover {
+  background-color: #e8f0fd;
+}
+
+/* ── Accordion body ────────────────────────────────────────────────────────── */
+.accordionBody {
+  height: calc(50vh - 5rem) !important;
+  overflow-y: auto;
+}
+
+.accordionBody::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Contact card list ─────────────────────────────────────────────────────── */
 .contactCardList {
   max-height: calc(100vh - 200px);
   overflow-y: auto;
   flex: 1;
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
+@media (max-width: 1120px) {
+  .collapseSidebarButton {
+    width: 260px;
+  }
+}
+
+@media (max-height: 650px) {
+  .collapseSidebarButton {
+    width: 260px;
+    height: 1.25rem;
+  }
+
+  .opendrawer {
+    width: 2rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .contract,
+  .expand {
+    animation: none;
+  }
+
+  .opendrawer {
+    width: 1.75rem;
+  }
+
+  .collapseSidebarButton {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
 }

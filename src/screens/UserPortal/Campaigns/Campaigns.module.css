@@ -1,36 +1,48 @@
+/**
+ * Campaigns — user portal campaigns screen
+ */
+
+/* ── Campaign card wrapper ───────────────────────────────────────────────────── */
 .whiteContainer {
-  background-color: var(--color-white);
-  border-radius: var(--space-5);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
+  background-color: #ffffff;
+  border-radius: 14px;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
+/* ── Empty / error state ─────────────────────────────────────────────────────── */
 .message {
-  margin-top: 25%;
+  margin-top: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
-
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '⚠️';
-    margin-right: var(--space-2);
-  }
+  font-size: 2.5rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
 .errorIconLarge {
-  font-size: var(--font-size-3xl);
+  font-size: 2rem;
+  color: #ff3b30;
 }
 
+/* ── Table ───────────────────────────────────────────────────────────────────── */
 .tableHeader {
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: #6e6e73;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background-color: #f5f5f7;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
 }
 
 .requestsTableItemIndex {
@@ -38,8 +50,13 @@
 }
 
 .rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-black);
-  max-height: var(--space-14);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  max-height: 80px;
   overflow-y: auto;
+  transition: background-color 0.15s ease;
+}
+
+.rowBackground:hover {
+  background-color: #f5f5f7;
 }

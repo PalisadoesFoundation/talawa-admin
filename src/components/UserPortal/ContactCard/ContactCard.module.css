@@ -1,5 +1,9 @@
+/**
+ * ContactCard — chat contact row in sidebar
+ */
+
 .contactCardWrapper {
-  /* Hook for small per-card overrides; no layout duplication */
+  /* Hook for small per-card overrides */
 }
 
 .contentInner {
@@ -8,18 +12,26 @@
   width: 100%;
   cursor: pointer;
   padding: 0;
+  border-radius: 10px;
+  transition: background-color 0.15s ease;
+}
+
+.contentInner:hover {
+  background-color: #f5f5f7;
 }
 
 .contentInner:focus-visible {
-  outline: 2px solid var(--focus-color, #007bff);
+  outline: 2px solid rgba(0, 113, 227, 0.5);
   outline-offset: 2px;
 }
 
+/* ── Selected state ──────────────────────────────────────────────────────────── */
 .selected {
-  background-color: var(--contact-selected-bg, rgba(196, 255, 211, 0.3));
-  border-radius: 8px;
+  background-color: #e8f0fd;
+  border-radius: 10px;
 }
 
+/* ── Title row ───────────────────────────────────────────────────────────────── */
 .titleRow {
   display: flex;
   justify-content: space-between;
@@ -32,39 +44,45 @@
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
-  min-width: 0; /* allow truncation */
+  min-width: 0;
   overflow: hidden;
 }
 
+/* ── Last message preview ────────────────────────────────────────────────────── */
 .lastMessage {
   margin: 0;
-  font-size: 0.875rem;
-  color: rgba(163, 163, 163, 0.84);
+  font-size: 0.8125rem;
+  color: #a1a1a6;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
+/* ── Avatar ──────────────────────────────────────────────────────────────────── */
 .contactImage {
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  background-color: #e8f0fd;
 }
 
+/* ── Unread badge ────────────────────────────────────────────────────────────── */
 .unseenBadge {
-  border-radius: 999px;
-  min-width: 28px;
-  height: 28px;
+  border-radius: 100px;
+  min-width: 22px;
+  height: 22px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--removeButton-bg, #f8d6dc);
-  color: var(--removeButton-color, #c8102e);
+  background-color: #0071e3;
+  color: #ffffff;
   font-weight: 600;
-  font-size: 0.8rem;
-  padding: 0 6px;
+  font-size: 0.75rem;
+  padding: 0 5px;
+  flex-shrink: 0;
 }
 
 .contentInner > button {

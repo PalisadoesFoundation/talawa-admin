@@ -1,26 +1,25 @@
 /**
- * Shared styles for DataTable components to avoid code duplication.
- * These classes should be composed locally where needed.
+ * DataTable Shared — reusable base classes composed by other DataTable modules
  */
 
 .dataTableWrapper {
   width: 100%;
   position: relative;
   overflow-x: auto;
+  border-radius: 14px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
+/* ── Skeleton cell ───────────────────────────────────────────────────────────── */
 .dataSkeletonCell {
-  height: var(--space-5);
+  height: 1rem;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--color-gray-200) 25%,
-    var(--color-gray-100) 50%,
-    var(--color-gray-200) 75%
-  );
+  background: linear-gradient(90deg, #f0f0f5 25%, #e8e8f0 50%, #f0f0f5 75%);
   background-size: 200px 100%;
-  border-radius: var(--radius-sm);
-  animation: datatable-loading 1.2s ease-in-out infinite;
+  border-radius: 6px;
+  animation: datatable-loading 1.4s ease-in-out infinite;
 }
 
 @keyframes datatable-loading {
@@ -33,12 +32,13 @@
   }
 }
 
+/* ── Accessibility ──────────────────────────────────────────────────────────── */
 .visuallyHidden {
   position: absolute;
-  width: var(--space-0-5);
-  height: var(--space-0-5);
+  width: 1px;
+  height: 1px;
   padding: 0;
-  margin: calc(var(--space-0-5) * -1);
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   clip-path: inset(50%);
@@ -46,16 +46,20 @@
   border-width: 0;
 }
 
+/* ── Column helpers ──────────────────────────────────────────────────────────── */
 .selectCol {
-  width: var(--space-10);
+  width: 48px;
   text-align: center;
   vertical-align: middle;
 }
 
 .selectCol input[type='checkbox'] {
   cursor: pointer;
-  width: var(--space-5);
-  height: var(--space-5);
+  width: 1rem;
+  height: 1rem;
+  border-radius: 4px;
+  accent-color: #0071e3;
+  transform: scale(1.1);
 }
 
 .actionsCol {
@@ -63,30 +67,40 @@
   text-align: right;
 }
 
+/* ── Bulk action button ──────────────────────────────────────────────────────── */
 .bulkBtn {
-  border: var(--border-1) solid var(--color-gray-200);
-  background-color: var(--color-white);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-md);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  background-color: #ffffff;
+  padding: 0.3125rem 0.75rem;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.15s ease;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #1d1d1f;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .bulkBtn:hover:not(:disabled) {
-  background-color: var(--color-gray-100);
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.12);
 }
 
 .bulkBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* ── Loading overlay ─────────────────────────────────────────────────────────── */
 .dataLoadingOverlay {
   position: absolute;
   inset: 0;
   display: grid;
   place-items: center;
-  background-color: var(--color-white-60);
+  background-color: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 1;
+  border-radius: inherit;
 }

@@ -1,43 +1,76 @@
+/**
+ * VenueCard — venue card with image, title, capacity
+ */
+
+/* ── Venue image ─────────────────────────────────────────────────────────────── */
 .venueimage {
   width: 100%;
   aspect-ratio: 3 / 2;
   object-fit: cover;
   display: block;
+  border-radius: 12px 12px 0 0;
 }
 
+/* ── Title ───────────────────────────────────────────────────────────────────── */
 .title {
-  font-size: var(--space-5);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-left: var(--space-1);
+  margin-left: 0.25rem;
+  letter-spacing: -0.01em;
 }
 
+/* ── Capacity badge ──────────────────────────────────────────────────────────── */
 .capacityLabel {
-  background-color: var(--capacityLabel-bg);
-  color: var(--capacityLabel-color);
-  height: var(--space-6);
-  font-size: var(--space-4);
-  font-weight: bolder;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--space-3);
+  height: 24px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-radius: 100px;
   position: relative;
   overflow: hidden;
+  background-color: #eaf9ee;
+  color: #1a6632;
+  display: inline-flex;
+  align-items: center;
 }
 
+/* ── Action buttons ──────────────────────────────────────────────────────────── */
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--addButton-font);
-  background-color: var(--light-blue);
-  border-color: var(--addButton-bg);
-  --bs-btn-focus-box-shadow: none;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  background-color: #0071e3;
+  border-color: #0071e3;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.addButton:hover {
+  background-color: #0077ed;
+  border-color: #0077ed;
 }
 
 .removeButton {
-  margin-bottom: var(--space-4);
-  margin-right: var(--space-4);
-  background-color: var(--removeButton-bg);
-  color: var(--removeButton-color);
-  --bs-btn-border-color: var(--removeButton-border);
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+  background-color: #fff0ef;
+  color: #c0392b;
+  border: 1.5px solid #ffd5d2;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.removeButton:hover {
+  background-color: #ff3b30;
+  border-color: #ff3b30;
+  color: #ffffff;
 }

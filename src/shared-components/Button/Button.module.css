@@ -1,3 +1,10 @@
+/**
+ * Button — shared button component
+ * ----------------------------------
+ * Wraps Bootstrap's .btn with Apple-style refinements.
+ * Supports sizes, variants, loading state.
+ */
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -14,39 +21,52 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
-  font-weight: var(--font-weight-semibold);
+  gap: 0.375rem;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Inter',
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  border-radius: 10px;
+  letter-spacing: -0.005em;
   transition:
-    transform 120ms ease,
-    box-shadow 120ms ease,
-    opacity 120ms ease;
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.12s ease,
+    opacity 0.15s ease;
+  -webkit-font-smoothing: antialiased;
 }
 
 .button:focus-visible {
-  outline: var(--border-3) solid
-    var(--primary-theme-color, var(--color-blue-500));
-  outline-offset: var(--border-1);
+  outline: 2px solid #0071e3;
+  outline-offset: 2px;
 }
 
 .button:active {
-  transform: translateY(1px);
+  transform: scale(0.97);
 }
 
 .fullWidth {
   width: 100%;
 }
 
+/* Content wrappers */
 .content {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
+  gap: 0.375rem;
 }
 
 .label {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0.375rem;
 }
 
 .icon {
@@ -55,59 +75,65 @@
 }
 
 .iconStart {
-  margin-right: var(--space-2);
+  margin-right: 0.125rem;
 }
 
 .iconEnd {
-  margin-left: var(--space-2);
+  margin-left: 0.125rem;
 }
 
+/* Size variant */
 .sizeXl {
-  padding: var(--space-4) var(--space-6);
-  font-size: var(--font-size-md);
-  letter-spacing: var(--letter-spacing-wide);
+  padding: 0.6875rem 1.25rem;
+  font-size: 1rem;
+  border-radius: 12px;
 }
 
+/* Loading */
 .isLoading {
   cursor: wait;
+  opacity: 0.85;
 }
 
+/* Outlined variants (global — used across many components) */
 :global(.btn-outlined),
 :global(.btn-outline) {
-  color: var(--primary-theme-color, var(--color-blue-500));
+  color: #0071e3;
   background-color: transparent;
-  border: var(--border-1) solid currentColor;
+  border: 1.5px solid #0071e3;
 }
 
 :global(.btn-outlined:hover),
 :global(.btn-outline:hover),
 :global(.btn-outlined:focus-visible),
 :global(.btn-outline:focus-visible) {
-  color: var(--color-white);
-  background-color: var(--primary-theme-color, var(--color-blue-500));
-  border-color: var(--primary-theme-color, var(--color-blue-500));
+  color: #ffffff;
+  background-color: #0071e3;
+  border-color: #0071e3;
 }
 
 :global(.btn-outlined:active),
 :global(.btn-outline:active) {
-  color: var(--color-white);
-  background-color: var(--primary-theme-color, var(--color-blue-500));
-  border-color: var(--primary-theme-color, var(--color-blue-500));
+  color: #ffffff;
+  background-color: #006edb;
+  border-color: #006edb;
 }
 
 :global(.btn-outlined:disabled),
 :global(.btn-outline:disabled),
 :global(.btn-outlined.disabled),
 :global(.btn-outline.disabled) {
-  opacity: 0.65;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
+/* ── Loading spinner ─────────────────────────────────────────────────────────── */
 .spinner {
   width: 1em;
   height: 1em;
-  border: var(--border-2) solid currentColor;
+  border: 2px solid currentColor;
   border-right-color: transparent;
-  border-radius: var(--radius-full);
-  animation: spin 0.75s linear infinite;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
 }

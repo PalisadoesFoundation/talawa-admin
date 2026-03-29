@@ -1,3 +1,39 @@
+/**
+ * SuperAdminScreen — global admin layout shell
+ * ----------------------------------------------
+ * Main content area that sits to the right of the collapsible sidebar.
+ * Handles both expanded and collapsed sidebar offsets smoothly.
+ */
+
+/* ── Page container ─────────────────────────────────────────────────────────── */
+.pageContainer {
+  padding: 2rem 2.5rem;
+  min-height: 100vh;
+  background-color: #f5f5f7;
+  transition: padding-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Sidebar width aliases ────────────────────────────────────────────────── */
+.collapsedDrawer {
+  width: var(--sidebar-collapsed-width, 72px);
+  overflow-x: hidden;
+}
+
+.expandedDrawer {
+  width: var(--sidebar-expanded-width, 260px);
+  overflow-x: hidden;
+}
+
+/* ── Nav / header bar ─────────────────────────────────────────────────────── */
+.navContainer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.75rem;
+}
+
+/* ── "Open drawer" strip (mobile tap-target) ──────────────────────────────── */
 .opendrawer {
   position: fixed;
   display: flex;
@@ -5,59 +41,67 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: 40px;
+  width: 36px;
   height: 100vh;
   z-index: 9999;
-  background-color: rgba(245, 245, 245);
+  background-color: rgba(245, 245, 247, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: none;
-  border-radius: 0px;
-  margin-right: 20px;
-  color: black;
+  border-radius: 0;
+  color: #6e6e73;
+  transition: background-color 0.2s ease;
 }
 
 .opendrawer:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+  background-color: #e8f0fd;
+  color: #0071e3;
 }
 
-@media (max-height: 650px) {
-  .collapseSidebarButton {
-    width: 250px;
-    height: 20px;
-  }
-
-  .opendrawer {
-    width: 30px;
-  }
-  .pageContainer {
-    padding: 1rem 1.5rem 0 calc(270px);
-  }
+/* ── Collapse sidebar button ─────────────────────────────────────────────── */
+.collapseSidebarButton {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 9999;
+  height: 36px;
+  width: var(--sidebar-expanded-width, 260px);
+  background-color: rgba(245, 245, 247, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #6e6e73;
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
 }
 
+.collapseSidebarButton:hover,
+.opendrawer:hover {
+  opacity: 1;
+  color: #0071e3;
+}
+
+/* ── Layout animation classes ─────────────────────────────────────────────── */
+.expand {
+  padding-left: calc(var(--sidebar-collapsed-width, 72px) + 1.5rem);
+}
+
+.contract {
+  padding-left: calc(var(--sidebar-expanded-width, 260px) + 1.5rem);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 1120px) {
   .collapseSidebarButton {
-    width: calc(250px);
+    width: 270px;
   }
 }
 
-/* For tablets */
 @media (max-width: 820px) {
-  .containerHeight {
-    height: 100vh;
-    padding: 2rem;
-  }
-
-  .scrollableCardBody {
-    max-height: 40vh;
-  }
-
-  .contract,
-  .expand {
-    animation: none;
-  }
-
   .opendrawer {
-    width: 25px;
+    width: 28px;
   }
 
   .collapseSidebarButton {
@@ -65,56 +109,19 @@
     left: 0;
     right: 0;
   }
+
   .pageContainer {
-    padding-left: 2.5rem;
+    padding-left: 2rem;
   }
 }
 
-.collapseSidebarButton {
-  position: fixed;
-  height: 40px;
-  bottom: 0;
-  z-index: 9999;
-  width: calc(300px + 2rem);
-  background-color: rgba(245, 245, 245, 0.7);
-  color: black;
-  border: none;
-  border-radius: 0px;
-}
+@media (max-height: 650px) {
+  .opendrawer {
+    width: 28px;
+  }
 
-.collapseSidebarButton:hover,
-.opendrawer:hover {
-  opacity: 1;
-  color: black !important;
-}
-
-.expand {
-  margin-left: 100px;
-  padding-left: 4rem;
-  animation: moveLeft 0.9s ease-in-out;
-}
-
-.contract {
-  padding-left: calc(300px + 2rem + 1.5rem);
-  animation: moveRight 0.5s ease-in-out;
-}
-
-.navContainer {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  align-items: center;
-  padding: 25px;
-  padding-left: 35px;
-  padding-right: 35px;
-}
-
-.collapsedDrawer {
-  width: var(--sidebar-collapsed-width);
-  overflow-x: hidden !important;
-}
-
-.expandedDrawer {
-  width: var(--sidebar-expanded-width);
-  overflow-x: hidden !important;
+  .pageContainer {
+    padding: 1rem 1.5rem;
+    padding-left: calc(var(--sidebar-collapsed-width, 72px) + 1rem);
+  }
 }

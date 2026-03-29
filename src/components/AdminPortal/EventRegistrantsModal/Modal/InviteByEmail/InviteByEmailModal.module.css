@@ -1,5 +1,13 @@
+/**
+ * InviteByEmailModal — invite by email form modal
+ */
+
 .modalHeader {
-  background-color: var(--tableHeader-bg);
+  background-color: #f5f5f7;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  color: #1d1d1f;
 }
 
 .emailField {
@@ -7,32 +15,71 @@
 }
 
 .nameField {
-  width: var(--space-17);
-  margin-left: var(--space-4);
+  width: 13.75rem;
+  margin-left: 1rem;
 }
 
 .removeButton {
-  margin-left: var(--space-3);
+  margin-left: 0.75rem;
+  background-color: #fff1f0;
+  color: #ff3b30;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.removeButton:hover {
+  background-color: #ffe5e3;
 }
 
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--addButton-font);
-  background-color: var(--light-blue);
-  border-color: var(--addButton-bg);
+  margin-bottom: 1rem;
+  color: #0071e3;
+  background-color: #e8f0fd;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
   --bs-btn-focus-box-shadow: none;
+  transition: background-color 0.15s ease;
+}
+
+.addButton:hover {
+  background-color: #d1e3fa;
 }
 
 .recipientsContainer {
   display: flex;
   align-items: center;
-  margin-bottom: var(--space-3);
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
 }
 
 .setRecipientsButton {
-  margin-bottom: var(--space-3);
+  margin-bottom: 0.75rem;
+  background-color: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.setRecipientsButton:hover {
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
 }
 
 .emailHelp {
-  color: var(--color-gray-600);
+  color: #6e6e73;
+  font-size: 0.8125rem;
 }

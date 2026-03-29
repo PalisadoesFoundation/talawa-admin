@@ -1,22 +1,22 @@
-/* -- AgendaItemsDeleteModal.tsx -- */
+/**
+ * AgendaItemsDeleteModal — delete agenda item confirmation
+ */
 
 .agendaItemModal {
   max-width: 80vw;
-  margin-top: var(--space-10);
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2.5rem auto;
 }
 
-@media (max-width: var(--breakpoint-md)) {
+@media (max-width: 768px) {
   .agendaItemModal {
-    margin: var(--space-12) auto;
+    margin: 3rem auto;
     max-width: 90%;
   }
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+@media (max-width: 576px) {
   .agendaItemModal {
-    margin: var(--space-9) auto;
+    margin: 2.25rem auto;
     max-width: 95%;
   }
 }

@@ -1,24 +1,29 @@
+/**
+ * RecurrenceFrequencySection — frequency selector (daily/weekly/etc)
+ */
+
 .sectionContainer {
-  margin-bottom: var(--space-4);
+  margin-bottom: 1rem;
 }
 
 .inlineRow {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
 .label {
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: #6e6e73;
+  font-size: 0.875rem;
 }
 
 .recurrenceRuleNumberInput {
-  width: var(--space-12);
+  width: 5rem;
   display: inline-block;
-  padding-top: var(--space-2);
-  padding-bottom: var(--space-2);
+  padding-top: 0.375rem;
+  padding-bottom: 0.375rem;
 }
 
 .dropdownButton {
@@ -28,14 +33,16 @@
   align-items: center;
 }
 
-/* Migrated from app-fixed.module.css */
+/* ── Frequency dropdown ──────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--dropdown-bg);
-  min-width: var(--space-14);
-  color: var(--dropdown-font-color);
+  background-color: #ffffff;
+  min-width: 7rem;
+  color: #1d1d1f;
   position: relative;
   display: inline-block;
-  margin-left: var(--space-1);
+  margin-left: 0.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 }
 
 .dropdownMenu {

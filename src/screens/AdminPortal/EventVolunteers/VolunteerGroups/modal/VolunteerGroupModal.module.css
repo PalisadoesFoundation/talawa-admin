@@ -1,26 +1,33 @@
+/**
+ * VolunteerGroupModal — modal to create/edit a volunteer group
+ */
+
 .groupModal {
   max-width: 80vw;
   margin: 2vh auto;
 }
 
+/* ── Modal title ─────────────────────────────────────────────────────────────── */
 .titlemodal {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-3xl);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
   width: 65%;
-  margin-bottom: var(--space-0);
+  margin-bottom: 0;
 }
 
+/* ── Input wrappers ──────────────────────────────────────────────────────────── */
 .noOutline input {
   outline: none;
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-400);
+  -webkit-text-fill-color: #aeaeb2;
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-400);
+  color: #aeaeb2;
   opacity: 1;
 }
 
@@ -28,44 +35,62 @@
   outline: none;
 }
 
+/* ── Submit button ───────────────────────────────────────────────────────────── */
 .regBtn {
-  margin-top: var(--space-5);
-  border: var(--border-1) solid var(--color-gray-200);
-  box-shadow: var(--shadow-offset-none, 0) var(--shadow-offset-sm)
-    var(--shadow-blur-xs) var(--color-gray-200);
-  padding: var(--space-4) var(--space-4);
-  border-radius: var(--radius-sm);
-  background-color: var(--color-blue-700);
+  margin-top: 1.25rem;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 0.625rem 1rem;
+  border-radius: 10px;
+  background-color: #0071e3;
   width: 100%;
-  font-size: var(--font-size-md);
-  color: var(--color-white);
+  font-size: 0.9375rem;
+  color: #ffffff;
   outline: none;
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   cursor: pointer;
   transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
 }
 
+.regBtn:hover {
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+}
+
+.regBtn:active {
+  transform: scale(0.98);
+}
+
+.regBtn:focus-visible {
+  outline: 2px solid rgba(0, 113, 227, 0.4);
+  outline-offset: 2px;
+}
+
+/* ── Radio group ─────────────────────────────────────────────────────────────── */
 .radioFieldset {
   border: 0;
   padding: 0;
 }
 
 .radioLegend {
-  margin-bottom: var(--space-2);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-normal);
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: #6e6e73;
 }
 
 .radioGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 0.5rem;
 }
 
 .radioOption {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0.5rem;
+  accent-color: #0071e3;
 }

@@ -1,7 +1,12 @@
+/**
+ * CreateGroupChat — group chat creation modal
+ */
+
 .modalContent {
-  width: var(--space-25);
+  width: 380px;
 }
 
+/* ── Group info section ──────────────────────────────────────────────────────── */
 .groupInfo {
   display: flex;
   flex-direction: column;
@@ -10,75 +15,83 @@
 }
 
 .chatImage {
-  height: var(--logo-md);
-  border-radius: var(--radius-full);
-  width: var(--logo-md);
+  height: 80px;
+  border-radius: 50%;
+  width: 80px;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
+/* ── Edit image button ───────────────────────────────────────────────────────── */
 .editImgBtn {
-  padding: var(--space-1) var(--space-2) var(--space-2) var(--space-3);
-  border-radius: var(--radius-full);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-400);
-  color: var(--color-gray-400);
+  padding: 0.25rem 0.5rem 0.5rem 0.75rem;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #6e6e73;
   outline: none;
   position: relative;
-  top: calc(-1 * var(--space-9));
-  left: var(--space-9);
+  top: -2.25rem;
+  left: 2.25rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
+.editImgBtn:hover {
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+/* ── Search input ────────────────────────────────────────────────────────────── */
 .input {
   flex: 1;
   position: relative;
-  padding-inline-end: var(--space-8);
-  width: var(--space-24);
-}
-
-.input:active {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  background-color: var(--color-gray-50);
-  border-color: var(--color-gray-200);
-  color: var(--color-gray-700);
+  padding-inline-end: 2rem;
+  width: 350px;
 }
 
 .input:focus {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  border-color: var(--color-gray-200);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+  border-color: #0071e3;
 }
 
+/* ── Table container ─────────────────────────────────────────────────────────── */
 .tableContainer {
-  height: var(--space-23);
+  height: 360px;
   overflow-y: scroll;
   overflow-x: hidden;
 }
 
+.tableContainer::-webkit-scrollbar {
+  width: 5px;
+}
+
+.tableContainer::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 100px;
+}
+
+/* ── Utilities ───────────────────────────────────────────────────────────────── */
 .borderNone {
   border: none;
 }
 
 .colorPrimary {
-  background: var(--color-blue-200);
-  color: var(--color-gray-700);
-  --bs-btn-active-bg: var(--color-blue-200);
+  background: #0071e3;
+  color: #ffffff;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .colorPrimary:hover,
 .colorPrimary:focus,
 .colorPrimary:active {
-  background-color: var(--color-blue-200);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  color: var(--color-gray-700);
+  background-color: #0077ed;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.28);
 }

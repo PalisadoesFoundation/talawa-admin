@@ -1,107 +1,113 @@
+/**
+ * EditUserTagModal — modal to rename a user tag
+ */
+
+/* ── Modal header ────────────────────────────────────────────────────────────── */
 .modalHeader:global(.modal-header) {
   border: none;
-  background-color: var(--color-white);
-  padding: var(--space-5);
-  color: var(--color-black);
+  background-color: #ffffff;
+  padding: 1.25rem 1.5rem;
+  color: #1d1d1f;
 }
 
-/* Make sure the modal title is dark grey */
 .modalHeader:global(.modal-header) div,
 .modalHeader:global(.modal-header) :global(.modal-title) {
-  color: var(--color-gray-700);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
 }
 
-/* Close button styling */
 .modalHeader:global(.modal-header) :global(button.close),
 .modalHeader:global(.modal-header) :global(.btn-close) {
-  color: var(--color-red-500);
-  opacity: 1;
+  color: #6e6e73 !important;
+  opacity: 0.75;
 }
 
-/* Form Labels */
-:global(.modal-header) ~ :global(.modal-body) :global(.form-label) {
-  color: var(--color-black);
-  font-weight: normal;
-  padding-bottom: 0;
-  font-size: var(--font-size-md);
-  margin-top: var(--space-4);
-}
-
-/* Input Fields - Update the existing inputField class */
+/* ── Input field ─────────────────────────────────────────────────────────────── */
 .inputField:global(.form-control) {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-200);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--shadow-spread-none) rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-/* Placeholder styling */
 .inputField:global(.form-control)::placeholder {
-  color: var(--color-gray-500);
+  color: #a1a1a6;
   opacity: 1;
 }
 
 .inputField:global(.form-control):focus {
-  border: var(--border-0) solid var(--color-gray-200);
-  background-color: var(--color-gray-50);
+  border-color: #0071e3;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
 }
 
 .inputField:global(.form-control):focus-visible {
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
-    var(--shadow-spread-none) rgba(0, 0, 0, 0.25);
-  outline: 2px solid var(--color-blue-500);
-  outline-offset: 2px;
-  transition: box-shadow 0.2s ease;
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+  outline: none;
 }
 
+/* ── Remove button ───────────────────────────────────────────────────────────── */
 .removeButton:global(.btn) {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
+  margin-bottom: 1rem;
+  background-color: #fff1f0;
+  color: #ff3b30;
+  margin-right: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .removeButton:global(.btn):is(:hover, :active) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: #ff3b30;
+  border-color: #ff3b30;
+  color: #ffffff;
 }
 
 .removeButton:global(.btn):focus-visible {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
-  outline: 2px solid var(--color-red-500);
+  background-color: #ff3b30;
+  border-color: #ff3b30;
+  color: #ffffff;
+  outline: 2px solid rgba(255, 59, 48, 0.4);
   outline-offset: 2px;
 }
 
+/* ── Add button ──────────────────────────────────────────────────────────────── */
 .addButton:global(.btn) {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  margin-bottom: 1rem;
+  color: #ffffff;
+  background-color: #0071e3;
+  border-color: #0071e3;
+  border-radius: 8px;
+  font-weight: 500;
   --bs-btn-focus-box-shadow: none;
+  transition: background-color 0.15s ease;
 }
 
 .addButton:global(.btn):is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #0077ed;
+  border-color: #0077ed;
 }
 
 .addButton:global(.btn):focus-visible {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
-  outline: 2px solid var(--color-blue-500);
+  background-color: #0077ed;
+  border-color: #0077ed;
+  outline: 2px solid rgba(0, 113, 227, 0.4);
   outline-offset: 2px;
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  margin-bottom: 1rem;
+  background-color: #e5e5ea;
+  border-color: transparent;
+  color: #aeaeb2;
 }

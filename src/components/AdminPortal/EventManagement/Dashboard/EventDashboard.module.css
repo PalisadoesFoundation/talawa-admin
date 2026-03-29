@@ -1,83 +1,111 @@
+/**
+ * EventDashboard — event detail overview
+ */
+
+/* ── CTA stat cards ──────────────────────────────────────────────────────────── */
 .ctacards {
-  padding: var(--space-6);
+  padding: 1.25rem 1.5rem;
   width: 100%;
   display: flex;
-  background-color: var(--ctacards-bg);
-  margin: 0 var(--space-2);
   align-items: center;
-  border: 1px solid var(--ctacards-border);
-  border-radius: var(--space-3);
-}
-.ctacards span {
-  color: var(--ctacards-span-color);
-  font-size: var(--font-size-sm);
+  gap: 1rem;
+  background-color: #ffffff;
+  margin: 0 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
 }
 
+.ctacards:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.ctacards span {
+  color: #6e6e73;
+  font-size: 0.8125rem;
+}
+
+/* ── Event layout ─────────────────────────────────────────────────────────────── */
 .eventContainer {
   display: flex;
-  align-items: start;
+  align-items: flex-start;
+  gap: 1.5rem;
 }
 
 .eventDetailsBox {
   position: relative;
   box-sizing: border-box;
-  background: var(--eventDetailsBox-bg);
+  background: #ffffff;
   width: 66%;
-  padding: var(--space-2);
-  border-radius: var(--space-3);
-  margin-bottom: 0;
-  margin-top: var(--space-6);
+  padding: 1.5rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  margin-top: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* ── Title & description ──────────────────────────────────────────────────────── */
 .titlename {
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-2xl);
-  padding: var(--space-5);
-  padding-bottom: 0;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
   width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding: 1.25rem 1.25rem 0;
 }
 
 .description {
-  color: var(--description-color);
-  font-weight: var(--font-weight-lighter);
-  font-size: var(--font-size-sm);
+  color: #6e6e73;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.6;
   word-wrap: break-word;
-  padding: var(--space-5);
-  padding-bottom: 0;
+  padding: 0.75rem 1.25rem 0;
 }
 
+/* ── Location / org row ───────────────────────────────────────────────────────── */
 .toporgloc {
-  font-size: var(--font-size-md);
-  padding: var(--space-3);
+  font-size: 0.9375rem;
+  padding: 0.75rem;
+  color: #1d1d1f;
 }
 
 .toporgloc span {
-  color: var(--toporgloc-color);
+  color: #6e6e73;
 }
 
+/* ── Time display ─────────────────────────────────────────────────────────────── */
 .time {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--space-4);
+  padding: 1rem;
   width: fit-content;
+  gap: 1.5rem;
 }
 
 .startTime,
 .endTime {
   display: flex;
-  font-size: var(--font-size-xl);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
 .startDate,
 .endDate {
-  color: var(--endDate-color);
-  font-size: var(--font-size-sm);
+  color: #6e6e73;
+  font-size: 0.8125rem;
 }
 
 .to {
-  padding-right: var(--space-3);
+  padding-right: 0.75rem;
+  color: #6e6e73;
+  font-size: 0.875rem;
 }

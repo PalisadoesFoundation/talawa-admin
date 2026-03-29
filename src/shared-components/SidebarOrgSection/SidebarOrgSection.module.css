@@ -1,22 +1,27 @@
-/* SidebarOrgSection.module.css */
+/**
+ * SidebarOrgSection — organization switcher in sidebar header
+ * --------------------------------------------------------------
+ */
 
-/* Extracted from .leftDrawer .organizationContainer button and .profileContainer */
+/* ── Org profile container ───────────────────────────────────────────────────── */
 .profileContainer {
   position: relative;
-  margin: 0.7rem 0;
-  padding: 2.5rem 0.1rem;
-  border-radius: 16px;
-  background-color: var(--LeftDrawer-org-profileContainer-bg) !important;
-  padding-right: 10px;
-  padding-left: 10px;
-
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.625rem;
+  border-radius: 12px;
+  background-color: #e8f0fd;
   border: none;
   width: 100%;
-  height: 52px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   outline: none;
   cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.profileContainer:hover {
+  background-color: #d1e4fb;
 }
 
 .profileContainer:focus {
@@ -24,29 +29,43 @@
 }
 
 .profileContainer:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid #0071e3;
   outline-offset: 2px;
 }
 
+/* ── Avatar ─────────────────────────────────────────────────────────────────── */
 .imageContainer {
-  width: 68px;
-  margin-right: 8px;
-  margin-bottom: 1px;
-  /* adjusted from 10px to align better? app-fixed had 10px */
+  width: 40px;
+  margin-right: 0.625rem;
+  flex-shrink: 0;
 }
 
 .imageContainer img {
-  height: 52px;
-  width: 52px;
+  height: 36px;
+  width: 36px;
   border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
 }
 
-.ProfileRightContainer {
+.avatarContainer {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+}
+
+/* ── Text area ──────────────────────────────────────────────────────────────── */
+.ProfileRightContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
   flex: 1;
+  min-width: 0;
 }
 
 .profileText {
@@ -55,11 +74,13 @@
   flex: 1;
   text-align: start;
   overflow: hidden;
+  min-width: 0;
 }
 
 .primaryText {
-  font-size: 1.1rem;
+  font-size: 0.875rem;
   font-weight: 600;
+  color: #0052a3;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -67,70 +88,65 @@
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
-  color: var(--bs-emphasis-color, var(--primaryText-color));
+  letter-spacing: -0.005em;
 }
 
 .secondaryText {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 400;
-  color: var(--leftDrawer-secondaryText-color);
+  color: #5b7ca7;
   display: block;
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ArrowIcon {
-  margin-right: 5px;
+  margin-right: 2px;
+  color: #5b7ca7;
+  flex-shrink: 0;
 }
 
-.avatarContainer {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  font-size: 1.5rem;
-}
-
+/* ── Colors ─────────────────────────────────────────────────────────────────── */
 .bgDanger {
-  background-color: var(--bs-danger) !important;
+  background-color: #ff3b30 !important;
 }
 
-/* Responsive styles from app-fixed.module.css */
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-height: 900px) {
   .profileContainer {
-    margin: 0.6rem 0;
-    padding: 2.2rem 0.1rem;
+    margin: 0.375rem 0;
+    min-height: 44px;
   }
 
   .primaryText {
-    font-size: 1rem;
-  }
-
-  .secondaryText {
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
   }
 }
 
 @media (max-height: 650px) {
   .profileContainer {
-    margin: 0.2rem 0;
-    padding: 1.6rem 0rem;
+    margin: 0.25rem 0;
+    min-height: 38px;
+    padding: 0.375rem 0.5rem;
   }
 
   .primaryText {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
 
   .secondaryText {
-    font-size: 0.6rem;
+    font-size: 0.6875rem;
   }
 
   .imageContainer {
-    width: 40px;
-    margin-left: 5px;
-    margin-right: 10px;
+    width: 32px;
+    margin-right: 0.5rem;
   }
 
   .imageContainer img {
-    width: 40px;
-    height: 100%;
+    width: 30px;
+    height: 30px;
   }
 }

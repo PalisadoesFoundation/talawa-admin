@@ -1,30 +1,43 @@
+/**
+ * OrganizationEvents — events list + create event modal
+ */
+
+/* ── Sort / filter dropdown ──────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-gray-50);
-  width: var(--space-16);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: #ffffff;
+  width: 140px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  color: #6e6e73;
   position: relative;
   display: inline-block;
-  border-radius: var(--radius-md);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
   box-shadow: none !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--space-1) solid var(--color-blue-200);
-  outline-offset: var(--space-1);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
+/* ── Main page layout ────────────────────────────────────────────────────────── */
 .mainpageright > hr {
   width: 100%;
-  margin-block: var(--space-6);
-  margin-inline: calc(var(--space-5) * -1);
+  margin-block: 1.5rem;
+  margin-inline: -1.25rem;
+  border-color: rgba(0, 0, 0, 0.06);
 }
 
 @media screen and (max-width: 1200px) {
@@ -39,40 +52,52 @@
   }
 }
 
+/* ── Events header row ───────────────────────────────────────────────────────── */
 .justifyspOrganizationEvents {
   justify-content: space-between;
-  margin-top: var(--space-6);
+  margin-top: 1.5rem;
 }
 
+/* ── Add event icon ──────────────────────────────────────────────────────────── */
 .addIconStyle {
-  font-size: var(--font-size-2xl);
-  margin-bottom: var(--space-1);
-  margin-right: var(--space-1);
+  font-size: 1.25rem;
+  margin-bottom: 2px;
+  margin-right: 4px;
 }
 
+/* ── Modal title ─────────────────────────────────────────────────────────────── */
 .titlemodalOrganizationEvents {
-  color: var(--color-gray-700);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-2);
-  border-bottom: var(--border-3) solid var(--color-gray-100);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
   width: 65%;
 }
 
+/* ── Close button ────────────────────────────────────────────────────────────── */
 .closeButtonOrganizationEvents {
-  color: var(--color-red-500);
-  margin-right: var(--space-2);
-  background-color: var(--color-red-100);
-  border: var(--border-1) solid var(--color-white);
+  color: #c0392b;
+  margin-right: 0.5rem;
+  background-color: #fff0ef;
+  border: 1.5px solid #ffd5d2 !important;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .closeButtonOrganizationEvents:is(:hover, :focus-visible) {
-  color: var(--color-red-100);
-  background-color: var(--color-red-500);
-  border: var(--border-1) solid var(--color-white);
+  color: #ffffff !important;
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30 !important;
 }
 
 .closeButtonOrganizationEvents:focus-visible {
-  outline: var(--space-1) solid var(--color-blue-200);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }

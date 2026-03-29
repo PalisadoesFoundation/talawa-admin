@@ -1,35 +1,43 @@
+/**
+ * Posts — organization posts list with sort dropdown
+ */
+
+/* ── Sort dropdown ───────────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-gray-50) !important;
-  border: var(--border-1) solid var(--color-gray-600) !important;
-  color: var(--color-gray-600) !important;
+  background-color: #ffffff !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  color: #6e6e73 !important;
   position: relative;
-  /* !important needed to override Bootstrap's display on .btn */
   display: flex !important;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  gap: var(--space-2);
-  border-radius: var(--radius-md);
-  padding: 0 var(--space-3);
+  gap: 0.5rem;
+  border-radius: 10px;
+  padding: 0 0.75rem;
   width: auto;
-  height: var(--space-10);
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
-/* :global(.show) targets Bootstrap's .show class added to open dropdowns */
-/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
-  box-shadow: none !important;
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--space-1) solid var(--color-blue-200);
-  outline-offset: var(--space-1);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
+/* ── Layout containers ───────────────────────────────────────────────────────── */
 .list_box {
   overflow-y: auto;
   width: auto;

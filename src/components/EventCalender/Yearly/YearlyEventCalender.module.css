@@ -1,38 +1,51 @@
+/**
+ * YearlyEventCalender — yearly calendar view
+ */
+
+/* ── Day cells ───────────────────────────────────────────────────────────────── */
 .day__today {
-  background-color: var(--dayToday-bg);
-  font-weight: var(--font-weight-bold);
-  text-decoration: underline;
-  color: var(--dayToday-color);
+  background-color: #0071e3;
+  font-weight: 700;
+  color: #ffffff;
+  border-radius: 50%;
 }
 
 .day__outside {
-  background-color: var(--dayOutside-bg);
-  color: var(--dayOutside-color);
+  background-color: transparent;
+  color: #c7c7cc;
 }
 
 .day__yearly {
-  border-radius: var(--space-2);
-  font-size: var(--font-size-sm);
-  padding: var(--space-2);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  padding: 0.375rem;
   text-align: center;
-  height: var(--space-8);
+  height: 2rem;
 }
 
 .day__events {
-  background-color: var(--dayEvents-bg);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  font-weight: 600;
 }
 
+/* ── Expanded event list ─────────────────────────────────────────────────────── */
 .expand_list_container {
   display: flex;
   flex-direction: column;
-  padding: var(--space-2);
+  padding: 0.5rem;
   width: fit-content;
   z-index: 10;
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: var(--space-2);
-  margin: var(--space-2);
+  border-radius: 12px;
+  margin: 0.5rem;
+  background-color: #ffffff;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.1),
+    0 8px 32px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .expand_event_list {
@@ -43,124 +56,141 @@
 .event_list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  border-radius: var(--space-2);
-  margin: var(--space-2);
+  gap: 0.375rem;
+  border-radius: 6px;
+  margin: 0.375rem;
 }
 
+/* ── "More" button ───────────────────────────────────────────────────────────── */
 .btn__more {
   border: 0;
-  font-size: var(--font-size-sm);
-  background-color: initial;
-  color: var(--btnMore-color);
-  font-weight: var(--font-weight-semibold);
+  font-size: 0.8125rem;
+  background-color: transparent;
+  color: #0071e3;
+  font-weight: 600;
   position: relative;
   display: block;
-  margin: var(--space-1);
-  height: var(--space-2);
-  width: var(--space-2);
+  margin: 0.25rem;
+  height: 0.75rem;
+  width: 0.75rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
 }
 
 .btn__more:hover {
-  color: var(--btnMore-color-hover);
+  color: #0077ed;
 }
 
 @media only screen and (max-width: 576px) {
   .btn__more {
-    font-size: var(--font-size-xs);
+    font-size: 0.75rem;
   }
 }
 
+/* ── Close button variants ───────────────────────────────────────────────────── */
 .closebtnYearlyEventCalender {
-  padding: var(--space-3);
+  padding: 0.75rem;
 }
 
 .closebtnYearlyEventCalenderTopSpacing {
-  margin-top: var(--space-2);
+  margin-top: 0.5rem;
 }
 
 .closebtnYearlyEventCalenderBottomSpacing {
-  margin-bottom: var(--space-2);
+  margin-bottom: 0.5rem;
 }
 
+/* ── Event dot ───────────────────────────────────────────────────────────────── */
 .circularButton {
-  width: var(--space-2);
-  height: var(--space-2);
-  background-color: var(--color-red-500);
-  border-radius: var(--radius-full);
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #0071e3;
+  border-radius: 50%;
   display: inline-block;
-  margin-left: var(--space-2);
+  margin-left: 0.5rem;
 }
 
+/* ── Layout: 4-column grid ───────────────────────────────────────────────────── */
 .columnYearlyEventCalender {
   float: left;
   width: 25%;
-  padding: var(--space-3);
+  padding: 0.75rem;
 }
 
 @media only screen and (max-width: 576px) {
   .columnYearlyEventCalender {
     float: left;
     width: 100%;
-    padding: var(--space-3);
+    padding: 0.75rem;
   }
 }
 
 .cardYearlyEventCalender {
-  padding: var(--space-5);
+  padding: 1.25rem;
   text-align: center;
-  height: var(--space-21);
+  height: 18rem;
 }
 
 .cardHeaderYearlyEventCalender {
   text-align: left;
 }
 
+/* ── Calendar grid ───────────────────────────────────────────────────────────── */
 .calendar__days {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-rows: repeat(5, 1fr);
-  margin-bottom: var(--space-8);
+  margin-bottom: 1.5rem;
 }
 
 .yearlyCalendar {
-  max-width: var(--space-29);
+  max-width: 64rem;
   margin: 0 auto;
 }
 
 .weekdayHeaderRow {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-bottom: var(--space-3);
-  padding: 0 var(--space-3);
+  margin-bottom: 0.75rem;
+  padding: 0 0.75rem;
 }
 
 .weekdayHeaderCell {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: var(--font-weight-semibold);
-  padding: var(--space-2);
-  font-size: var(--font-size-sm);
+  font-weight: 600;
+  padding: 0.375rem;
+  font-size: 0.8125rem;
+  color: #6e6e73;
 }
 
 .yearlyCalendarHeader {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: var(--space-6);
+  margin-bottom: 1.5rem;
 }
 
 .buttonEventCalendar {
-  border-radius: var(--radius-pill);
-  color: var(--buttonEventCalendar-color);
+  border-radius: 100px;
+  color: #6e6e73;
   border: 0;
+  background-color: transparent;
+  transition: color 0.15s ease;
+  cursor: pointer;
+}
+
+.buttonEventCalendar:hover {
+  color: #0071e3;
 }
 
 .year {
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-semibold);
-  margin: 0 var(--space-6);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+  margin: 0 1.5rem;
 }
 
 .rowYearlyEventCalender::after {
@@ -170,12 +200,12 @@
 }
 
 .yearlyCalender {
-  background-color: var(--yearlyCalender-bg);
+  background-color: #ffffff;
   box-sizing: border-box;
 }
 
 .calendar {
-  font-family: var(--font-family-sans, 'Outfit', sans-serif);
-  padding: var(--space-6);
-  background-color: var(--calendar-bg);
+  font-family: 'Inter', 'SF Pro Text', system-ui, sans-serif;
+  padding: 1.5rem;
+  background-color: #f5f5f7;
 }

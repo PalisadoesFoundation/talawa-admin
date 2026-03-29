@@ -1,10 +1,14 @@
+/**
+ * AddPeopleToTag — add/remove people from a tag modal
+ */
+
 .dataGridContainer {
-  height: var(--space-21);
+  height: 18rem;
   overflow: auto;
 }
 
 .errorContainer {
-  min-height: var(--vh-100);
+  min-height: 100vh;
 }
 
 .errorMessage {
@@ -13,117 +17,148 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-3xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
+  font-size: 2rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+  font-size: 0.9375rem;
+  font-weight: 600;
 }
 
+/* ── Buttons ─────────────────────────────────────────────────────────────────── */
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-500);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  --bs-btn-active-bg: #0071e3;
+  --bs-btn-active-border-color: transparent;
+  transition: background-color 0.15s ease;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-500);
+  background-color: #0071e3;
+  border-color: transparent;
+  color: #ffffff;
   box-shadow: none;
 }
 
 .removeButton {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
+  margin-bottom: 1rem;
+  background-color: #fff1f0;
+  color: #ff3b30;
+  margin-right: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  --bs-btn-border-color: transparent;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500) !important;
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30;
+  color: #ffffff;
 }
 
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-500);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  margin-bottom: 1rem;
+  color: #0071e3;
+  background-color: #e8f0fd;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
   --bs-btn-focus-box-shadow: none;
+  transition: background-color 0.15s ease;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500) !important;
-  border-color: var(--color-gray-500);
+  background-color: #0071e3 !important;
+  border-color: transparent;
+  color: #ffffff;
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-blue-100);
-  border-color: var(--color-blue-200);
+  margin-bottom: 1rem;
+  background-color: #e5e5ea;
+  border-color: transparent;
+  color: #aeaeb2;
 }
 
+/* ── Modal header ────────────────────────────────────────────────────────────── */
 .modalHeader {
   border: none;
-  background-color: var(--color-white) !important;
-  padding: var(--space-5);
-  color: var(--color-black);
+  background-color: #ffffff !important;
+  padding: 1.25rem 1.5rem;
+  color: #1d1d1f;
 }
 
 .modalHeader div,
 .modalHeader .modal-title {
-  color: var(--color-gray-700) !important;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
+  color: #1d1d1f !important;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
 }
 
 .modalHeader button.close,
 .modalHeader .btn-close {
-  color: var(--color-red-500) !important;
-  opacity: 1;
+  color: #6e6e73 !important;
+  opacity: 0.75;
 }
 
+/* ── Scroll area ─────────────────────────────────────────────────────────────── */
 .scrollContainer {
-  height: var(--space-13);
+  height: 6rem;
   overflow-y: auto;
-  margin-bottom: var(--space-5);
+  margin-bottom: 1.25rem;
 }
 
 .memberBadge {
   display: flex;
   align-items: center;
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 var(--shadow-offset-xs) var(--shadow-blur-sm)
-    var(--color-gray-300);
+  padding: 0.375rem 1rem;
+  border-radius: 100px;
+  background-color: #e8f0fd;
+  color: #0071e3;
+  font-size: 0.875rem;
+  font-weight: 500;
+  gap: 0.375rem;
 }
 
 .removeFilterIcon {
   cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.removeFilterIcon:hover {
+  opacity: 1;
 }
 
 .loadingDiv {
-  min-height: var(--space-21);
+  min-height: 18rem;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-black);
-  max-height: var(--space-14);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  max-height: 3.5rem;
   overflow-y: auto;
 }

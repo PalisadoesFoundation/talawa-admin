@@ -1,18 +1,52 @@
+/**
+ * EventRegistrants — event registrant list
+ */
+
 .modalHeader {
-  background-color: var(--tableHeader-bg);
+  background-color: #f5f5f7;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  color: #1d1d1f;
 }
 
 .underlineText {
-  color: #555;
+  color: #6e6e73;
   text-decoration: underline;
+  font-size: 0.875rem;
+  cursor: pointer;
 }
 
+/* ── Action buttons ──────────────────────────────────────────────────────────── */
 .inviteButton {
-  background-color: #6cc9a6;
-  color: #fff;
+  background-color: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.inviteButton:hover {
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
 }
 
 .addButton {
-  background-color: #a8c7fa;
-  color: #555;
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: none;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.5rem 1.25rem;
+  transition: background-color 0.15s ease;
+}
+
+.addButton:hover {
+  background-color: #d1e3fa;
 }

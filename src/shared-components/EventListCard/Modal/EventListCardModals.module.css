@@ -1,95 +1,117 @@
-@import '../../../style/tokens/index.css';
+/**
+ * EventListCardModals — event list card edit/create modal
+ */
 
 .modalHeader {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 1rem 1.5rem;
+  font-weight: 600;
 }
 
+/* ── Buttons ─────────────────────────────────────────────────────────────────── */
 .addButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-red-100);
-  padding: var(--space-2) var(--space-4);
-  font-weight: var(--font-weight-medium);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: none;
+  padding: 0.375rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
 }
 
 .addButton:hover {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
+  background-color: #d1e3fa;
+  color: #0071e3;
 }
 
 .removeButton {
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  border: var(--border-1) solid var(--color-red-100);
-  padding: var(--space-2) var(--space-4);
-  font-weight: var(--font-weight-medium);
+  background-color: #fff1f0;
+  color: #ff3b30;
+  border: none;
+  padding: 0.375rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .removeButton:hover {
-  background-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: #ff3b30;
+  color: #ffffff;
 }
 
+/* ── Form inputs ─────────────────────────────────────────────────────────────── */
 .inputField {
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-200);
-  color: var(--color-gray-700);
-  padding: var(--space-2);
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  color: #1d1d1f;
+  padding: 0.5rem 0.75rem;
   width: 100%;
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--shadow-spread-none) var(--color-black-alpha-10);
-  margin-top: var(--space-2);
-  margin-bottom: var(--space-2);
+  box-shadow: none;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .inputField:focus {
-  border-color: var(--color-blue-500);
+  border-color: rgba(0, 113, 227, 0.4);
   outline: none;
-  box-shadow: 0 0 0 4px var(--color-blue-200);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
 }
 
+/* ── Date row ────────────────────────────────────────────────────────────────── */
 .datebox {
-  margin-right: var(--space-4);
+  margin-right: 1rem;
   flex: 1;
 }
 
 .datediv {
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--space-3);
-  gap: var(--space-4);
+  margin-bottom: 0.75rem;
+  gap: 1rem;
 }
 
 .checkboxdiv {
-  margin-top: var(--space-3);
+  margin-top: 0.75rem;
 }
 
+/* ── Settings row ────────────────────────────────────────────────────────────── */
 .dispflexOrganizationEvents {
   display: flex;
   align-items: center;
-  margin-bottom: var(--space-2);
+  margin-bottom: 0.5rem;
   justify-content: space-between;
 }
 
 .switch {
-  margin-left: var(--space-2);
+  margin-left: 0.5rem;
 }
 
 .dropdown {
   width: 100%;
 }
 
+/* ── Preview section ─────────────────────────────────────────────────────────── */
 .previewEventListCardModals {
   display: flex;
   flex-direction: row;
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-md);
-  margin: var(--space-0);
-  color: var(--color-gray-700);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin: 0;
+  color: #1d1d1f;
 }
 
 .previewForm label {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-700);
+  font-weight: 600;
+  color: #1d1d1f;
+  font-size: 0.875rem;
 }

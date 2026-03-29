@@ -1,29 +1,42 @@
+/**
+ * AgendaFolderUpdateModal — update agenda folder form
+ */
+
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: 1.5rem;
 }
 
 .regBtn {
-  margin-top: var(--space-5);
-  border: var(--border-1) solid var(--regBtn-border);
-  box-shadow: var(--shadow-offset-none) var(--shadow-offset-sm)
-    var(--shadow-blur-sm) var(--regBtn-box-shadow);
-  padding: var(--space-5) var(--space-5);
-  border-radius: var(--radius-sm);
-  background-color: var(--regBtn-bg);
+  margin-top: 1.25rem;
+  border: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  padding: 0.625rem 1.25rem;
+  border-radius: 10px;
+  background-color: #0071e3;
   width: 100%;
-  font-size: var(--font-size-md);
-  color: var(--regBtn-color);
+  font-size: 0.9375rem;
+  color: #ffffff;
   outline: none;
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   cursor: pointer;
   transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+    background-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.regBtn:hover {
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+}
+
+.regBtn:active {
+  transform: scale(0.98);
 }
 
 .regBtn:focus-visible {
-  outline: var(--border-1) solid var(--color-blue-300);
-  outline-offset: var(--space-1);
+  outline: 2px solid rgba(0, 113, 227, 0.4);
+  outline-offset: 2px;
 }

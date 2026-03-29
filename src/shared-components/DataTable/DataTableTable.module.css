@@ -1,3 +1,7 @@
+/**
+ * DataTableTable — the actual <table> element styles
+ */
+
 .visuallyHidden {
   composes: visuallyHidden from './DataTableShared.module.css';
 }
@@ -6,22 +10,29 @@
   composes: selectCol from './DataTableShared.module.css';
 }
 
+/* ── Sortable column headers ─────────────────────────────────────────────────── */
 .sortable {
   cursor: pointer;
   user-select: none;
   outline: none;
+  border-radius: 6px;
+  transition: background-color 0.15s ease;
+}
+
+.sortable:hover {
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .sortable:focus {
-  outline: var(--border-2) solid var(--color-blue-600);
-  outline-offset: var(--border-2);
+  outline: 2px solid #0071e3;
+  outline-offset: 2px;
 }
 
 .sortable:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-600);
-  outline-offset: var(--border-2);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-200);
-  background: var(--color-blue-100);
+  outline: 2px solid #0071e3;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.18);
+  background-color: #e8f0fd;
 }
 
 .sortable:focus:not(:focus-visible) {
@@ -30,19 +41,23 @@
   background: transparent;
 }
 
+/* ── Header inner layout ─────────────────────────────────────────────────────── */
 .headerInner {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0.375rem;
 }
 
+/* ── Sort indicator ──────────────────────────────────────────────────────────── */
 .sortIndicator {
-  font-size: var(--font-size-xs);
-  opacity: 0.5;
+  font-size: 0.7rem;
+  opacity: 0.45;
+  transition: opacity 0.15s ease;
 }
 
 .active {
   opacity: 1;
+  color: #0071e3;
 }
 
 .actionsCol {

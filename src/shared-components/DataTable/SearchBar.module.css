@@ -1,23 +1,41 @@
+/**
+ * DataTable SearchBar — inline search input
+ */
+
 .searchWrap {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
-  border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-md);
-  padding: var(--space-2) var(--space-3);
-  background: var(--color-white);
+  gap: 0.375rem;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 0.4375rem 0.75rem;
+  background: #ffffff;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.searchWrap:focus-within {
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
 }
 
 .searchInput {
   border: none;
   outline: none;
-  min-width: var(--space-17);
+  min-width: 220px;
+  font-size: 0.9rem;
+  color: #1d1d1f;
+  background: transparent;
+  font-family: inherit;
+}
+
+.searchInput::placeholder {
+  color: #a1a1a6;
 }
 
 .searchInput:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-600);
-  outline-offset: var(--border-2);
-  border-radius: var(--radius-sm);
+  outline: none;
 }
 
 .searchInput:focus:not(:focus-visible) {
@@ -28,14 +46,16 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  padding: var(--space-1) var(--space-2);
-  font-size: var(--font-size-15);
-  color: var(--color-gray-900);
+  padding: 0.125rem 0.25rem;
+  font-size: 0.9rem;
+  color: #a1a1a6;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 4px;
+  transition: color 0.15s ease;
 }
 
 .searchClear:hover {
-  color: var(--color-black);
+  color: #1d1d1f;
 }

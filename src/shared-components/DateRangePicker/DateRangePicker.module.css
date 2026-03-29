@@ -1,108 +1,116 @@
+/**
+ * DateRangePicker — date range picker with presets
+ */
+
 .root {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .controlsRow {
   display: flex;
   flex-direction: row;
-  gap: var(--space-4);
+  gap: 1rem;
   align-items: flex-end;
   flex-wrap: wrap;
-  margin-top: calc(var(--space-2) * -2.5);
+  margin-top: -0.625rem;
 }
 
 .controlsRow > div {
   flex: 1;
-  min-width: var(--space-18);
+  min-width: 11rem;
 }
 
 .presetRow {
   display: flex;
-  gap: var(--space-3);
+  gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: var(--space-3);
+  margin-top: 0.75rem;
 }
 
+/* ── Preset buttons ──────────────────────────────────────────────────────────── */
 .presetButton {
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
-  border: var(--border-2) solid var(--color-gray-200) !important;
+  padding: 0.375rem 0.75rem;
+  border-radius: 100px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
   background: transparent !important;
-  color: var(--color-gray-800) !important;
+  color: #6e6e73 !important;
   cursor: pointer;
-  font-size: var(--font-size-sm);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .presetButton:hover {
-  color: var(--color-gray-800) !important;
-  background-color: var(--color-gray-100) !important;
-  border-color: var(--color-gray-300) !important;
+  color: #1d1d1f !important;
+  background-color: #f5f5f7 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
 }
 
 .presetButtonActive {
-  background: var(--color-blue-600) !important;
-  color: var(--color-blue-600) !important;
-  border-color: var(--color-blue-600) !important;
+  background: #0071e3 !important;
+  color: #ffffff !important;
+  border-color: #0071e3 !important;
 }
 
-/* Input Group styling */
+/* ── Input group ─────────────────────────────────────────────────────────────── */
 .inputGroup {
   display: flex !important;
   align-items: stretch;
-  /* Ensure equal height */
-  border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-md);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   overflow: hidden;
   padding: 0;
-  margin-bottom: var(--space-5);
-  background-color: var(--color-white);
-  font-size: var(--font-size-sm);
+  margin-bottom: 1.25rem;
+  background-color: #ffffff;
+  font-size: 0.875rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-/* Target the Bootstrap Form.Label within our group */
+.inputGroup:focus-within {
+  border-color: rgba(0, 113, 227, 0.4);
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+}
+
 .inputGroup > :global(.form-label) {
   margin-bottom: 0 !important;
-  padding: var(--space-2) var(--space-4);
-  /* 0.375rem -> 6px (use space-2=4px), 0.75rem -> space-4 */
-  background-color: var(--color-gray-100) !important;
-  /* Slightly darker to distinguish */
-  border-right: var(--border-1) solid var(--color-gray-200);
+  padding: 0.375rem 1rem;
+  background-color: #f5f5f7 !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.07);
   display: flex;
   align-items: center;
   white-space: nowrap;
-  font-weight: var(--font-weight-medium);
-  /* Slightly bolder */
-  color: var(--color-blue-600);
-  min-height: var(--space-9);
-  /* Standard bootstrap input height */
+  font-weight: 500;
+  color: #0071e3;
+  min-height: 2.25rem;
 }
 
-/* Hide any nested form-labels (from inner DatePicker) */
 .inputGroup :global(.form-group) :global(.form-label) {
   display: none !important;
 }
 
-/* Target the wrapper div of DatePicker (inner FormGroup) */
 .inputGroup > div {
   flex: 1;
   margin-bottom: 0 !important;
   display: flex;
 }
 
-/* Remove border from the actual input to seamlessly blend it */
 .inputGroup :global(.form-control) {
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;
   height: 100% !important;
-  min-height: var(--space-9);
+  min-height: 2.25rem;
   background-color: transparent;
 }
 
-/* Ensure the inner wrapper handles full height */
 .inputGroup :global(.MuiFormControl-root) {
   height: 100%;
   width: 100%;
@@ -114,7 +122,6 @@
   border-radius: 0;
 }
 
-/* Remove MUI default fieldset border */
 .inputGroup :global(fieldset) {
   border: none !important;
 }

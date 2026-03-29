@@ -1,42 +1,54 @@
+/**
+ * PeopleTabNavbar — tabs for members/admins/blocked users
+ */
+
 .calendarEventHeader {
   width: 100%;
-  border-radius: var(--radius-lg);
-  padding: var(--space-3);
+  border-radius: 10px;
+  padding: 0.75rem;
 }
 
 .calendar__header {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: var(--space-4);
+  gap: 1rem;
   flex-wrap: wrap;
   margin-right: 0;
 }
 
 .peopleTabNavbarAlignment {
   display: flex;
-  gap: var(--space-8);
+  gap: 2rem;
   align-items: center;
-  margin-left: var(--space-6);
+  margin-left: 1.5rem;
 }
 
 .selectTypeEventHeader {
-  border-radius: var(--radius-lg);
-  margin: var(--space-4);
+  border-radius: 10px;
+  margin: 1rem;
 }
 
+/* ── Dropdown item ───────────────────────────────────────────────────────────── */
 .dropdownItemButton {
-  background-color: var(--dropdownItem-bg) !important;
-  color: var(--dropdownItem-color) !important;
+  background-color: #ffffff !important;
+  color: #1d1d1f !important;
   border: none !important;
-  box-shadow: var(--dropdownItem-box-shadow) !important;
-  border-radius: var(--radius-md);
+  box-shadow: none !important;
+  border-radius: 8px;
   display: flex;
   align-items: center;
+  font-size: 0.875rem;
+  transition: background-color 0.12s ease;
 }
 
+.dropdownItemButton:hover {
+  background-color: #f5f5f7 !important;
+}
+
+/* ── Dropdown container ──────────────────────────────────────────────────────── */
 .dropdown {
-  color: var(--dropdown-font-color) !important;
+  color: #6e6e73 !important;
   position: relative;
   display: inline-block;
   width: 100%;
@@ -46,14 +58,16 @@
   filter: brightness(0) invert(1);
 }
 
-/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .dropdown :global(.dropdown-menu) {
   min-width: 100% !important;
   width: 100% !important;
-  margin-top: var(--space-1);
-  border-radius: var(--radius-lg);
+  margin-top: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
+/* ── Buttons block ───────────────────────────────────────────────────────────── */
 .btnsBlock > * {
   margin: 0 !important;
   height: 100% !important;

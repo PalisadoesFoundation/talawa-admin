@@ -1,68 +1,74 @@
+/**
+ * PluginStore — plugin discovery screen
+ */
+
 .pageContent {
-  padding-right: var(--space-7);
+  padding-right: 1.75rem;
 }
 
+/* ── Sort dropdown ───────────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-gray-50);
-  min-width: var(--space-15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  background-color: #ffffff;
+  min-width: 120px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  color: #1d1d1f;
+  font-size: 0.875rem;
+  font-weight: 500;
   position: relative;
   display: inline-block;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.dropdown:is(
-  :hover,
-  :focus,
-  :active,
-  :focus-visible,
-  .show,
-  :disabled,
-  :checked
-) {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      color-mix(in srgb, var(--color-gray-800), transparent 85%);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+.dropdown:is(:hover, :focus, :active, :focus-visible, .show, :disabled, :checked) {
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.15);
+  border-color: #0071e3;
+  color: #1d1d1f;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--border-2) solid var(--color-blue-200);
+  outline: 2px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 1px;
 }
 
+/* ── Org dropdown ────────────────────────────────────────────────────────────── */
 .createorgdropdown {
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-700);
-  height: var(--space-10);
-  margin-top: var(--space-4);
-  color: var(--color-gray-700);
+  background-color: #f5f5f7;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 2.5rem;
+  margin-top: 1rem;
+  color: #1d1d1f;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .createorgdropdown:active,
 .createorgdropdown:hover {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-700);
-  color: var(--color-gray-700);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      color-mix(in srgb, var(--color-gray-800), transparent 85%);
+  background-color: #f5f5f7;
+  border-color: #0071e3;
+  color: #1d1d1f;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.15);
 }
 
+/* ── Plugin grid ─────────────────────────────────────────────────────────────── */
 .pluginListContainer {
-  margin-top: var(--space-7);
+  margin-top: 1.75rem;
 }
 
+/* ── Pagination ──────────────────────────────────────────────────────────────── */
 .paginationContainer {
-  margin-top: var(--space-8);
+  margin-top: 2rem;
   display: flex;
   justify-content: end;
 }
 
+/* ── Upload button margin ────────────────────────────────────────────────────── */
 .uploadPlugin {
-  margin-inline-end: var(--space-3);
+  margin-inline-end: 0.75rem;
 }

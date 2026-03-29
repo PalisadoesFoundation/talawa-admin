@@ -1,11 +1,28 @@
+/**
+ * SortingButton — sort order dropdown trigger
+ */
+
 .dropdown {
   position: relative;
   display: inline-block;
-  background-color: var(--color-gray-100) !important;
-  color: var(--color-gray-700) !important;
-  font-weight: var(--font-weight-heavy) !important;
+  background-color: #ffffff !important;
+  color: #6e6e73 !important;
+  font-weight: 500 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.dropdown:is(:hover, :active, .show) {
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25) !important;
 }
 
 .iconRightMargin {
-  margin-left: var(--space-4);
+  margin-left: 1rem;
 }

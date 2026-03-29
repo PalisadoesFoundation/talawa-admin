@@ -1,42 +1,58 @@
+/**
+ * People — user portal people/members list
+ */
+
+/* ── Main container ──────────────────────────────────────────────────────────── */
 .mainContainer_people {
-  margin-top: var(--space-8);
+  margin-top: 2rem;
   width: 100%;
   flex-grow: 3;
   max-height: 90vh;
   overflow: auto;
-  padding: 0 var(--space-5);
+  padding: 0 1.25rem;
 }
 
+.mainContainer_people::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Page header ─────────────────────────────────────────────────────────────── */
 .calendar__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: nowrap;
   width: 100%;
-  gap: var(--space-5);
+  gap: 1.25rem;
 }
 
-/* 3. Mobile responsiveness: Only allow wrapping on actual small screens */
 @media (max-width: 768px) {
   .calendar__header {
     flex-wrap: wrap;
   }
 }
 
+/* ── Content area ────────────────────────────────────────────────────────────── */
 .people_content {
   display: flex;
   flex-direction: column;
-  min-height: calc(100% - var(--space-9));
+  min-height: calc(100% - 2.25rem);
 }
 
+/* ── Table header row ────────────────────────────────────────────────────────── */
 .people_card_header {
-  background-color: var(--color-gray-100);
+  background-color: #f5f5f7;
   display: flex;
-  border: var(--border-1) solid var(--color-gray-200);
-  padding: var(--space-5) var(--space-7);
-  margin-top: var(--space-7);
-  border-top-left-radius: var(--radius-xl);
-  border-top-right-radius: var(--radius-xl);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 0.75rem 1.75rem;
+  margin-top: 1.75rem;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #6e6e73;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .people_card_header_col_1 {
@@ -47,23 +63,29 @@
   flex: 2;
 }
 
+/* ── Table body ──────────────────────────────────────────────────────────────── */
 .people_card_main_container {
   display: flex;
   flex-direction: column;
-  border: var(--border-1) solid var(--color-gray-100);
-  padding: var(--space-5) var(--space-7);
-  gap: var(--space-6);
-  border-bottom-left-radius: var(--radius-2xl);
-  border-bottom-right-radius: var(--radius-2xl);
-  background-color: var(--color-white);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: none;
+  padding: 0.75rem 1.75rem;
+  gap: 1.5rem;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  background-color: #ffffff;
 }
 
+/* ── Table wrapper ───────────────────────────────────────────────────────────── */
 .peopleTable {
-  margin-top: var(--space-7);
-  border-radius: var(--radius-xl);
+  margin-top: 1.75rem;
+  border-radius: 14px;
   overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
+/* ── Avatar cell ─────────────────────────────────────────────────────────────── */
 .avatarCell {
   display: flex;
   justify-content: center;
@@ -71,8 +93,9 @@
 }
 
 .avatarImage {
-  width: var(--logo-xs);
-  height: var(--logo-xs);
-  border-radius: var(--radius-full);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }

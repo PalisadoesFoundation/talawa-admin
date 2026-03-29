@@ -1,15 +1,23 @@
+/**
+ * OrgList — organization list screen
+ * -------------------------------------
+ * Card grid layout for browsing organizations.
+ */
+
+/* ── Page container ─────────────────────────────────────────────────────────── */
 .orgListContainer {
-  padding-left: var(--space-8);
-  padding-right: var(--space-8);
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 @media (max-width: 768px) {
   .orgListContainer {
-    padding-left: var(--space-5);
-    padding-right: var(--space-5);
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 }
 
+/* ── Header row: search + actions ──────────────────────────────────────────── */
 .calendar__header {
   display: flex !important;
   flex-direction: row !important;
@@ -17,9 +25,9 @@
   justify-content: space-between !important;
   flex-wrap: nowrap !important;
   width: 100%;
-  gap: var(--space-5);
-  margin-bottom: var(--space-8);
-  margin-top: var(--space-5);
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  margin-top: 1.25rem;
 }
 
 @media (max-width: 768px) {
@@ -28,64 +36,57 @@
   }
 }
 
+/* ── Filter dropdown ─────────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-gray-50) !important;
-  min-width: var(--space-15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700) !important;
+  background-color: #ffffff !important;
+  min-width: 140px;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  color: #1d1d1f !important;
   position: relative;
   display: inline-block;
+  font-size: 0.9rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.dropdown:is(
-  :hover,
-  :focus,
-  :active,
-  :focus-visible,
-  .show,
-  :disabled,
-  :checked
-) {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      var(--shadow-spread-none);
-  border: var(--border-1) solid var(--color-gray-700) !important;
-  color: var(--color-gray-700) !important;
-}
-
-.dropdown:is(:focus, :focus-visible) {
-  outline: var(--border-2) solid var(--color-blue-200);
-  border: var(--border-1) solid var(--color-gray-700);
+.dropdown:is(:hover, :focus, :active, :focus-visible) {
+  border-color: #0071e3 !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14) !important;
+  color: #1d1d1f !important;
 }
 
 .createorgdropdown {
-  background-color: var(--color-gray-100) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
-  color: var(--color-gray-700);
-  padding: var(--space-4) var(--space-4);
+  background-color: #f5f5f7 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+  color: #1d1d1f;
+  padding: 0.5rem 0.875rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .createorgdropdown:active,
 .createorgdropdown:hover {
-  background-color: var(--color-gray-100) !important;
-  border-color: var(--color-gray-700) !important;
-  color: var(--color-gray-700) !important;
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      var(--color-gray-300);
+  background-color: #ebebf0 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  color: #1d1d1f !important;
 }
+
+/* ── Card list grid ──────────────────────────────────────────────────────────── */
 .listBoxOrgList {
   display: flex;
   flex-wrap: wrap;
+  gap: 1rem;
   overflow: unset !important;
 }
 
 .listBoxOrgList .itemCardOrgList {
-  width: 50%;
+  width: calc(50% - 0.5rem);
 }
 
 @media (max-width: 1440px) {
@@ -94,66 +95,66 @@
   }
 }
 
+/* ── Loading skeleton ────────────────────────────────────────────────────────── */
 .itemCardOrgList .loadingWrapper {
-  background-color: var(--color-white);
-  margin: var(--space-3);
-  height: calc(var(--space-14) + var(--space-8));
-  padding: var(--space-5);
-  border-radius: var(--border-8);
-  outline: var(--border-1) solid var(--color-gray-100);
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 1.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   position: relative;
+  height: 130px;
 }
 
 .itemCardOrgList .loadingWrapper .button {
   position: absolute;
-  height: var(--space-3);
-  width: var(--space-13);
-  bottom: var(--space-5);
-  right: var(--space-5);
+  height: 0.5rem;
+  width: 6rem;
+  bottom: 1.25rem;
+  right: 1.25rem;
   z-index: 1;
+  border-radius: 100px;
 }
 
 .itemCardOrgList .loadingWrapper .innerContainer {
   display: flex;
+  gap: 1rem;
 }
 
 .itemCardOrgList .loadingWrapper .innerContainer .orgImgContainer {
-  width: var(--space-14);
-  height: var(--space-14);
-  border-radius: var(--border-4);
+  width: 120px;
+  height: 80px;
+  border-radius: 10px;
+  flex-shrink: 0;
 }
 
 .itemCardOrgList .loadingWrapper .innerContainer .content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  margin-left: var(--space-5);
+  gap: 0.5rem;
+  padding-top: 0.25rem;
 }
 
 .itemCardOrgList .loadingWrapper .innerContainer .content h5 {
-  height: var(--space-7);
+  height: 1.25rem;
   width: 60%;
-  margin-bottom: var(--space-4);
-}
-
-.itemCardOrgList .loadingWrapper .innerContainer .content h6[title='Location'] {
-  display: block;
-  width: 45%;
-  height: var(--space-5);
+  border-radius: 6px;
+  margin-bottom: 0;
 }
 
 .itemCardOrgList .loadingWrapper .innerContainer .content h6 {
   display: block;
-  width: 30%;
-  height: var(--space-5);
-  margin-bottom: var(--space-4);
+  width: 35%;
+  height: 1rem;
+  border-radius: 6px;
+  margin-bottom: 0;
 }
 
 @media (max-width: 450px) {
   .itemCardOrgList .loadingWrapper {
-    height: unset;
-    margin: var(--space-3) 0;
-    padding: var(--space-6) var(--space-7);
+    height: auto;
+    margin: 0;
   }
 
   .itemCardOrgList .loadingWrapper .innerContainer {
@@ -161,9 +162,9 @@
   }
 
   .itemCardOrgList .loadingWrapper .innerContainer .orgImgContainer {
-    height: var(--space-17);
+    height: 120px;
     width: 100%;
-    margin-bottom: var(--space-4);
+    border-radius: 10px;
   }
 
   .itemCardOrgList .loadingWrapper .innerContainer .content {
@@ -171,88 +172,88 @@
   }
 
   .itemCardOrgList .loadingWrapper .button {
-    bottom: 0;
-    right: 0;
-    border-radius: var(--radius-md);
     position: relative;
+    bottom: auto;
+    right: auto;
     margin-left: auto;
     display: block;
+    border-radius: 8px;
   }
 }
 
+/* ── Modal overrides ─────────────────────────────────────────────────────────── */
 .modalHeader {
   border: none;
-  background-color: var(--color-white) !important;
-  padding: var(--space-5);
-  color: var(--color-black);
+  background-color: #ffffff !important;
+  padding: 1.25rem 1.5rem;
+  color: #1d1d1f;
 }
 
 .modalHeader div,
 .modalHeader .modal-title {
-  color: var(--color-gray-700) !important;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
+  color: #1d1d1f !important;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
 }
 
 .modalHeader button.close,
 .modalHeader .btn-close {
-  color: var(--color-red-500) !important;
+  color: #ff3b30 !important;
   opacity: 1;
 }
 
+/* ── Plugin store button ─────────────────────────────────────────────────────── */
 .pluginStoreBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.table_fullWidth {
-  width: 100%;
-}
-
-#grid_wrapper {
-  align-items: flex-start;
-}
-
-.titlemodaldialog {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-2);
-  border-bottom: var(--border-3) solid var(--color-gray-100);
-  width: 65%;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .pluginStoreBtnContainer {
   display: flex;
-  gap: var(--space-5);
-  margin-top: var(--space-5);
+  gap: 0.75rem;
+  margin-top: 1.25rem;
   justify-content: flex-start;
   align-items: center;
 }
 
 .enableEverythingBtn {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-blue-200);
-  padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-medium);
-  transition: all 0.2s ease;
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: 1.5px solid #0071e3;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .enableEverythingBtn:hover {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
-  border-color: var(--color-blue-500);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      var(--color-gray-300);
+  background-color: #0071e3;
+  color: #ffffff;
+}
+
+/* ── Misc helpers ────────────────────────────────────────────────────────────── */
+.table_fullWidth {
+  width: 100%;
+}
+
+.titlemodaldialog {
+  color: #6e6e73;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.06);
+  width: 65%;
+  letter-events: -0.01em;
 }
 
 .orgImgContainer {
@@ -261,6 +262,7 @@
   align-items: center;
   position: relative;
   overflow: hidden;
+  border-radius: 12px;
 }
 
 .button {
@@ -271,15 +273,19 @@
 
 .button i {
   height: min-content;
-  margin-right: var(--border-4);
+  margin-right: 0.25rem;
 }
 
 .loadingWrapper {
   position: relative;
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .innerContainer {
   display: flex;
+  gap: 1rem;
 }
 
 .content {
@@ -293,7 +299,8 @@
 }
 
 .warningAlert {
-  margin-bottom: var(--space-5);
+  margin-bottom: 1rem;
+  border-radius: 10px;
 }
 
 .notVerifiedContainer {
@@ -303,42 +310,28 @@
 }
 
 .plusIcon {
-  margin-right: var(--space-2);
+  margin-right: 0.25rem;
 }
 
+/* ── Shimmer skeleton animation ──────────────────────────────────────────────── */
 .shimmerText {
-  animation-duration: 2.2s;
-  animation-fill-mode: forwards;
-  animation-iteration-count: infinite;
-  animation-name: shimmer;
-  animation-timing-function: linear;
-  background: var(--color-gray-200);
+  animation: shimmer 1.8s linear infinite;
   background: linear-gradient(
     to right,
-    var(--color-gray-50) 8%,
-    var(--color-gray-100) 18%,
-    var(--color-gray-50) 33%
+    #f0f0f5 8%,
+    #e8e8f0 18%,
+    #f0f0f5 33%
   );
-  background-size: calc(var(--space-25)+var(--space-50)) 100%;
-}
-
-@-webkit-keyframes shimmer {
-  0% {
-    background-position: -100% var(--space-0);
-  }
-
-  100% {
-    background-position: 100% var(--space-0);
-  }
+  background-size: 1200px 100%;
+  border-radius: 6px;
 }
 
 @keyframes shimmer {
   0% {
-    background-position: calc((var(--space-25) + var(--space-50)) * -1)
-      var(--space-0);
+    background-position: -1200px 0;
   }
 
   100% {
-    background-position: calc(var(--space-25) + var(--space-50)) var(--space-0);
+    background-position: 1200px 0;
   }
 }

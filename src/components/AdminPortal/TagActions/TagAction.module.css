@@ -1,3 +1,7 @@
+/**
+ * TagAction — tag action row item
+ */
+
 .tagActionsScrollableDiv {
   height: 300px;
   overflow: auto;

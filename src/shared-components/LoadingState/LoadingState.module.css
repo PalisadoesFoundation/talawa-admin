@@ -1,59 +1,73 @@
+/**
+ * LoadingState — page-level loading skeleton and spinner
+ * --------------------------------------------------------
+ */
+
 :root {
   --skeleton-bg-pos-start: 200% 0;
   --skeleton-bg-pos-end: -200% 0;
 }
-/* -- Loader.tsx -- */
 
+/* ── Full-page spinner wrapper ───────────────────────────────────────────────── */
 .spinner_wrapper {
-  height: var(--vh-100);
+  height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #f5f5f7;
 }
 
 .spinnerXl {
-  width: var(--space-13);
-  height: var(--space-13);
-  border-width: var(--border-8);
+  width: 6rem;
+  height: 6rem;
+  border-width: 5px;
+  border-color: rgba(0, 113, 227, 0.18);
+  border-top-color: #0071e3;
 }
 
 .spinnerLg {
-  height: var(--space-11);
-  width: var(--space-11);
-  border-width: var(--border-4);
+  height: 4rem;
+  width: 4rem;
+  border-width: 4px;
+  border-color: rgba(0, 113, 227, 0.18);
+  border-top-color: #0071e3;
 }
 
 .spinnerSm {
-  height: var(--space-8);
-  width: var(--space-8);
-  border-width: var(--border-3);
+  height: 2rem;
+  width: 2rem;
+  border-width: 3px;
+  border-color: rgba(0, 113, 227, 0.18);
+  border-top-color: #0071e3;
 }
 
-/* -- LoadingState.tsx -- */
-
+/* ── Overlay-style loading ───────────────────────────────────────────────────── */
 .loadingContainer {
   position: relative;
-  min-height: var(--space-17);
+  min-height: 220px;
 }
 
 .loadingOverlay {
   position: absolute;
   inset: 0;
-  background-color: var(--color-white);
-  opacity: 0.8;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 100;
+  border-radius: inherit;
 }
 
 .loadingContent {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
+/* ── Skeleton container ──────────────────────────────────────────────────────── */
 .skeletonContainer {
-  padding: var(--space-5);
+  padding: 1.25rem;
   width: 100%;
 }
 
@@ -61,52 +75,56 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-7);
+  margin-bottom: 1.5rem;
 }
 
 .skeletonContent {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: 0.75rem;
 }
 
 .skeletonRow {
   display: flex;
-  gap: var(--space-5);
+  gap: 1rem;
   align-items: center;
 }
 
+/* Shimmer animation base */
 .skeletonItem {
   background: linear-gradient(
     90deg,
-    var(--color-gray-200) 25%,
-    var(--color-gray-100) 50%,
-    var(--color-gray-200) 75%
+    #f0f0f5 25%,
+    #e8e8f0 50%,
+    #f0f0f5 75%
   );
   background-size: 200% 100%;
-  animation: skeletonPulse 1.5s ease-in-out infinite;
-  border-radius: var(--radius-sm);
+  animation: skeletonPulse 1.6s ease-in-out infinite;
+  border-radius: 8px;
 }
 
 .skeletonTitle {
-  height: var(--space-8);
+  height: 2rem;
   width: 40%;
+  border-radius: 8px;
 }
 
 .skeletonButton {
-  height: var(--space-9);
-  width: var(--space-13);
-  border-radius: var(--radius-md);
+  height: 2.5rem;
+  width: 6rem;
+  border-radius: 10px;
 }
 
 .skeletonCell {
-  height: var(--space-10);
+  height: 3rem;
   flex: 1;
+  border-radius: 8px;
 }
 
 .skeletonCellSmall {
-  height: var(--space-8);
-  width: var(--space-13);
+  height: 2rem;
+  width: 6rem;
+  border-radius: 8px;
 }
 
 @keyframes skeletonPulse {

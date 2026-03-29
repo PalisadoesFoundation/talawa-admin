@@ -1,6 +1,10 @@
+/**
+ * OrgContribution — organization contributions sidebar layout
+ */
+
 .sidebar {
   z-index: 0;
-  padding-top: var(--space-2);
+  padding-top: 0.5rem;
   margin: 0;
   height: 100%;
   position: relative;
@@ -8,11 +12,11 @@
 
 .sidebar:after {
   content: '';
-  background-color: var(--color-gray-100);
+  background-color: rgba(0, 0, 0, 0.07);
   position: absolute;
-  width: var(--space-1);
-  height: var(--space-26);
-  top: var(--space-4);
+  width: 1px;
+  height: 6.5rem;
+  top: 1rem;
   right: 0;
   display: block;
   pointer-events: none;
@@ -21,39 +25,46 @@
 @media only screen and (max-width: 600px) {
   .sidebar {
     position: relative;
-    bottom: var(--space-6);
+    bottom: 1.5rem;
   }
 }
 
 .sidebarsticky {
-  padding-left: var(--space-10);
-  margin-top: var(--space-3);
+  padding-left: 2.5rem;
+  margin-top: 0.75rem;
 }
 
 .searchLabel {
-  margin-top: calc(var(--space-4) * -1);
+  margin-top: -1rem;
 }
 
 .searchInput {
   text-decoration: none;
-  margin-bottom: var(--space-10);
-  border-color: var(--color-gray-100);
+  margin-bottom: 2.5rem;
+  border-color: rgba(0, 0, 0, 0.08);
   width: 80%;
-  border-radius: var(--radius-md);
-  padding-top: var(--space-2);
-  padding-bottom: var(--space-2);
-  padding-right: var(--space-4);
-  padding-left: var(--space-4);
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
   box-shadow: none;
+  background-color: #ffffff;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.searchInput:focus {
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+  outline: none;
 }
 
 .searchtitle {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-2);
-  border-bottom: var(--border-3) solid var(--color-blue-200);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #0071e3;
   width: 60%;
 }
 
@@ -64,7 +75,7 @@
 
 @media screen and (max-width: 575.5px) {
   .justifysp {
-    padding-left: var(--space-10);
+    padding-left: 2.5rem;
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -72,21 +83,21 @@
 }
 
 .logintitle {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-8);
-  padding-bottom: var(--space-2);
-  border-bottom: var(--border-3) solid var(--color-blue-200);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 3px solid #0071e3;
   width: 15%;
 }
 
 .mainpageright > hr {
-  margin-top: var(--space-6);
+  margin-top: 1.5rem;
   width: 100%;
-  margin-left: calc(var(--space-5) * -1);
-  margin-right: calc(var(--space-5) * -1);
-  margin-bottom: var(--space-6);
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  margin-bottom: 1.5rem;
 }
 
 @media screen and (max-width: 575.5px) {

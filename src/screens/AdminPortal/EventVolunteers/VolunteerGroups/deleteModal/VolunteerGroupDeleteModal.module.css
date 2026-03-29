@@ -1,14 +1,19 @@
+/**
+ * VolunteerGroupDeleteModal — confirm delete for a volunteer group
+ */
+
 .volunteerModal {
   max-width: 80vw;
   margin: 2vh auto;
 }
 
 .titlemodal {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-3xl);
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
   width: 65%;
-  margin-bottom: var(--space-0);
+  margin-bottom: 0;
 }
 
 .radioFieldset {
@@ -17,19 +22,21 @@
 }
 
 .radioLegend {
-  margin-bottom: var(--space-2);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-normal);
+  margin-bottom: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: #6e6e73;
 }
 
 .radioGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: 0.5rem;
 }
 
 .radioOption {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: 0.5rem;
+  accent-color: #0071e3;
 }

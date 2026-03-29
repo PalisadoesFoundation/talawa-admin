@@ -1,15 +1,28 @@
+/**
+ * CreateDirectChat — direct message creation modal
+ */
+
 .modalContent {
-  width: var(--space-25);
+  width: 380px;
 }
 
 .inputContainer {
   position: relative;
   flex: 1;
-  margin: var(--space-0);
+  margin: 0;
 }
 
 .tableContainer {
-  height: var(--space-23);
+  height: 360px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.tableContainer::-webkit-scrollbar {
+  width: 5px;
+}
+
+.tableContainer::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 100px;
 }

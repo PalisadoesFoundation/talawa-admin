@@ -1,8 +1,16 @@
+/**
+ * CheckInModal — attendee check-in data grid modal
+ */
+
 .checkInModalHeader {
-  background-color: var(--color-gray-100);
+  background-color: #f5f5f7;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  color: #1d1d1f;
 }
 
 .checkInDataGridContainer {
-  height: var(--space-25);
+  height: 28rem;
   width: 100%;
 }

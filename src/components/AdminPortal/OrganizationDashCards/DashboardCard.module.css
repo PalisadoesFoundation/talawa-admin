@@ -1,21 +1,38 @@
+/**
+ * DashboardCard — stat widget
+ * ----------------------------
+ * White card with subtle shadow, icon pill, large metric number.
+ * Supports hover lift for quick-access feel.
+ */
+
 .cardBodyMainDiv {
-  border-radius: 1.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  border: none;
-  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  background-color: #ffffff;
   width: 100%;
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.18s ease;
+  overflow: hidden;
+}
+
+.cardBodyMainDiv:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06), 0 12px 32px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .cardBody {
-  padding: 1rem 0rem;
+  padding: 1.375rem 1.25rem;
   display: flex;
-  width: 100% !important;
-  justify-content: center;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 @media (max-width: 600px) {
   .cardBody {
-    min-height: 120px;
+    min-height: 110px;
   }
 }
 
@@ -23,38 +40,62 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  gap: 1rem;
   width: 100%;
 }
 
+/* ── Icon column ─────────────────────────────────────────────────────────────── */
 .iconCol {
-  padding-inline-end: 0.75rem;
+  flex-shrink: 0;
 }
 
 .cardbodyIcon {
-  font-size: 2rem;
-  height: 3rem;
-  color: #555555;
-  background-color: #eaebef;
-  width: 3rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background-color: #e8f0fd;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  font-size: 1.25rem;
+  color: #0071e3;
+  flex-shrink: 0;
+  transition: background-color 0.18s ease;
 }
 
+.cardBodyMainDiv:hover .cardbodyIcon {
+  background-color: #0071e3;
+  color: #ffffff;
+}
+
+.cardBodyMainDiv:hover .cardbodyIcon svg,
+.cardBodyMainDiv:hover .cardbodyIcon path {
+  fill: #ffffff;
+  color: #ffffff;
+}
+
+/* ── Content column ──────────────────────────────────────────────────────────── */
 .contentCol {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
 }
 
 .cardBodyNumber {
-  color: black;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.2;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .cardBodySecondaryText {
-  font-size: 0.75rem;
-  color: gray;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6e6e73;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

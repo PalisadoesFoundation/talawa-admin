@@ -1,25 +1,34 @@
+/**
+ * OrganizationAgendaCategory — agenda item categories management
+ */
+
 .container {
   min-height: 100vh;
 }
 
+/* ── Empty state ──────────────────────────────────────────────────────────────── */
 .message {
   margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--error-icon-size, 40px);
-  color: var(--bs-danger, var(--errorIcon-color));
+  font-size: 2.5rem;
+  color: #ff3b30;
   margin-bottom: 1rem;
 }
 
+/* ── Button bar ──────────────────────────────────────────────────────────────── */
 .btnsContainer {
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
+  gap: 1rem;
 }
 
 @media (max-width: 1020px) {
@@ -35,22 +44,26 @@
   }
 }
 
-/* Add Button */
-
+/* ── Add button ──────────────────────────────────────────────────────────────── */
 .addButton {
-  margin-bottom: 10px;
-  color: var(--addButton-font);
-  background-color: var(--light-blue);
-  border-color: var(--addButton-bg);
+  margin-bottom: 0.625rem;
+  color: #0071e3;
+  background-color: #e8f0fd;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
   --bs-btn-focus-box-shadow: none;
+  transition: background-color 0.15s ease;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover) !important;
-  border-color: var(--addButton-border-hover);
+  background-color: #d1e3fa !important;
+  border-color: transparent;
 }
 
 .addButton:disabled {
-  background-color: var(--disabled-btn);
-  border-color: var(--addButton-bg);
+  background-color: #e5e5ea;
+  border-color: transparent;
+  color: #aeaeb2;
 }

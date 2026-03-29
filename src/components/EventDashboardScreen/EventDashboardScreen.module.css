@@ -1,25 +1,28 @@
-/* Component-specific CSS module for EventDashboardScreen */
-/* Currently empty as the test file only imports the shared CSS without using specific classes */
+/**
+ * EventDashboardScreen — event management layout shell
+ */
+
 .containerHeightEventDash {
-  height: calc(100vh - var(--nav-height));
+  height: calc(100vh - 60px);
 }
 
 .mainContainerEventDashboard {
   width: 50%;
   flex-grow: 3;
-  padding: var(--space-8);
+  padding: 1.5rem;
   max-height: 100%;
   overflow: auto;
 }
 
 .colorLight {
-  background-color: var(--color-gray-50);
+  background-color: #f5f5f7;
 }
 
 .gap {
-  gap: var(--space-6);
+  gap: 1.5rem;
 }
 
+/* ── Open/close drawer controls ──────────────────────────────────────────────── */
 .opendrawer {
   position: fixed;
   display: flex;
@@ -27,14 +30,22 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: var(--space-10);
-  height: var(--space-28);
+  width: 2.5rem;
+  height: 100vh;
   z-index: 9999;
-  background-color: var(--color-gray-50);
+  background-color: rgba(245, 245, 247, 0.8);
+  backdrop-filter: blur(8px);
   border: none;
   border-radius: 0;
-  margin-right: var(--space-6);
-  color: var(--color-black);
+  margin-right: 1.5rem;
+  color: #6e6e73;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.opendrawer:hover {
+  background-color: #e8f0fd;
+  color: #0071e3;
 }
 
 .collapseSidebarButton {
@@ -44,22 +55,41 @@
 }
 
 .drawer {
-  width: var(--space-7);
+  width: 1.75rem;
 }
 
 .pageContainer {
-  padding-left: var(--space-9);
+  padding-left: 2.25rem;
 }
 
+/* ── Sidebar animation ───────────────────────────────────────────────────────── */
 .expand {
-  margin-left: var(--space-13);
-  padding-left: var(--space-11);
+  margin-left: 4.5rem;
+  padding-left: 2.75rem;
   animation: moveLeft 0.9s ease-in-out;
 }
 
 .contract {
-  padding-left: calc(var(--space-23) + var(--space-8) + var(--space-6));
+  padding-left: 18rem;
   animation: moveRight 0.5s ease-in-out;
+}
+
+@keyframes moveLeft {
+  from {
+    margin-left: 16.25rem;
+  }
+  to {
+    margin-left: 4.5rem;
+  }
+}
+
+@keyframes moveRight {
+  from {
+    padding-left: 4.5rem;
+  }
+  to {
+    padding-left: 18rem;
+  }
 }
 
 .flexOne {

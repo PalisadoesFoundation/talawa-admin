@@ -1,3 +1,7 @@
+/**
+ * UserTags — user tags tab table
+ */
+
 .peopleTabUserTagContainer {
   width: 100%;
 }
@@ -8,73 +12,83 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: var(--space-5);
+  gap: 1.25rem;
 }
 
 .peopleTabUserTagComponentSection {
   width: 100%;
   max-width: 100%;
   overflow-x: auto;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
 }
 
 .peopleTabUserTagTable {
   width: 100%;
+  border-collapse: collapse;
 }
 
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .peopleTabUserTagTableHeader {
-  background-color: var(--color-gray-50);
-  border-top-width: var(--border-1);
-  border-bottom-width: var(--border-1);
-  border-color: var(--color-gray-100);
-  border-style: solid;
+  background-color: #f5f5f7;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 .peopleTabUserTagColumnHeader {
-  background: var(--color-gray-200);
-  border: var(--border-1) solid var(--color-gray-200);
+  background: #f5f5f7;
+  border: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 .peopleTabUserTagTableHeaderCell {
-  padding: var(--space-4) var(--space-7);
+  padding: 1rem 1.75rem;
   text-align: left;
-  font-size: var(--font-size-15);
-  color: var(--color-black);
+  font-size: 0.8125rem;
+  color: #6e6e73;
   text-transform: uppercase;
-  height: var(--space-11);
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  height: 2.75rem;
 }
 
+/* ── Table body ──────────────────────────────────────────────────────────────── */
 .peopleTabUserTagTableBody {
-  background: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-200);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 .peopleTabUserTagTableCell {
-  padding: var(--space-5) var(--space-7);
+  padding: 1.25rem 1.75rem;
   white-space: nowrap;
-  font-size: var(--font-size-sm);
-  line-height: var(--space-6);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #1d1d1f;
 }
 
+.peopleTabUserTagTableRow:hover {
+  background-color: #fafafa;
+}
+
+/* ── Link buttons ────────────────────────────────────────────────────────────── */
 .peopleTabUserTagCreatedByButton {
-  color: var(--color-blue-600);
+  color: #0071e3;
   cursor: pointer;
-  transition: 0.2s ease;
-  text-decoration: underline var(--color-blue-500);
+  transition: color 0.15s ease;
+  text-decoration: underline rgba(0, 113, 227, 0.4);
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
 }
 
 .peopleTabUserTagCreatedByButton:hover {
   text-decoration: underline;
-  color: var(--color-blue-700);
+  color: #0077ed;
 }
 
-.peopleTabUserTagTableRow:hover {
-  background-color: var(--color-gray-50);
-}
-
+/* ── No results ──────────────────────────────────────────────────────────────── */
 .peopleTabUserTagNoResults {
   text-align: center;
-  padding: var(--space-10);
-  color: var(--color-gray-500);
-  font-size: var(--font-size-md);
+  padding: 2.5rem;
+  color: #6e6e73;
+  font-size: 0.9375rem;
 }

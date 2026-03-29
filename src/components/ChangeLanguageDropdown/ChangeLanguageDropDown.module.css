@@ -1,23 +1,31 @@
+/**
+ * ChangeLanguageDropDown — language selector button
+ */
+
 .changeLanguageBtn {
-  border-width: 2px;
-  background-color: var(--changelangauge-btn-bg);
-  color: var(--changelangauge-btn-color);
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  color: #1d1d1f;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border-color: var(--changelangauge-btn-border);
+  border-radius: 10px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 49px;
-  width: 160px;
-  font-size: 0.8rem;
+  height: 2.625rem;
+  min-width: 10rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+  cursor: pointer;
 }
 
 .changeLanguageBtn:hover,
 .changeLanguageBtn:active,
 .changeLanguageBtn:focus {
-  background-color: #ffffff !important;
-  color: var(--changelangauge-btn-color) !important;
-  border-color: var(--changelangauge-btn-border) !important;
-  box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
+  background-color: #f5f5f7 !important;
+  color: #1d1d1f !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }

@@ -1,32 +1,45 @@
-/* EventListCardDeleteModal.module.css */
+/**
+ * EventListCardDeleteModal — delete event confirmation buttons
+ */
 
 .addButton {
-  margin-bottom: var(--space-2);
-  color: var(--addButton-font);
-  background-color: var(--addButton-bg);
-  border-color: var(--addButton-bg);
+  margin-bottom: 0.5rem;
+  color: #0071e3;
+  background-color: #e8f0fd;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--addButton-border-hover);
+  background-color: #d1e3fa;
+  border-color: transparent;
 }
 
 .addButton:disabled {
-  background-color: var(--disabled-btn);
-  border-color: var(--addButton-bg);
+  background-color: #e5e5ea;
+  border-color: transparent;
+  color: #aeaeb2;
 }
 
 .removeButton {
-  margin-bottom: var(--space-2);
-  background-color: var(--removeButton-bg);
-  color: var(--removeButton-color);
-  margin-right: var(--space-2);
-  border-color: var(--removeButton-border);
+  margin-bottom: 0.5rem;
+  background-color: #fff1f0;
+  color: #ff3b30;
+  margin-right: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--removeButton-bg-hover);
-  border-color: var(--removeButton-border-hover);
-  color: var(--removeButton-color-hover);
+  background-color: #ff3b30;
+  border-color: #ff3b30;
+  color: #ffffff;
 }

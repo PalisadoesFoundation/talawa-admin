@@ -1,36 +1,60 @@
+/**
+ * EventAttendance — attendance list for an event
+ */
+
 .membername {
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--membername-color);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
   text-decoration: none;
 }
 
+.membername:hover {
+  color: #0071e3;
+}
+
 .eventsAttended {
-  color: var(--eventsAttended-membername-color);
+  color: #6e6e73;
+  font-size: 0.875rem;
 }
 
+/* ── Create button ───────────────────────────────────────────────────────────── */
 .createButton {
-  background-color: var(--createButton-bg) !important;
-  color: var(--createButton-color) !important;
-  border: 1px solid var(--createButton-border) !important;
-  margin: 5px 10px;
-  width: 10rem;
-  height: 3rem;
+  background-color: #0071e3 !important;
+  color: #ffffff !important;
+  border: none !important;
+  margin: 0.375rem 0.625rem;
+  min-width: 9rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
+.createButton:hover {
+  background-color: #0077ed !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+}
+
+/* ── Search input ────────────────────────────────────────────────────────────── */
 .input {
   flex: 1;
   position: relative;
-  padding-right: 30px;
-  padding-inline-end: 30px;
-  width: 425px;
+  padding-right: 1.875rem;
+  max-width: 26rem;
 }
 
+/* ── Dropdown ────────────────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
-  color: var(--dropdown-font-color) !important;
+  background-color: #ffffff !important;
+  min-width: 9.375rem;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #1d1d1f !important;
+  border-radius: 10px;
   position: relative;
   display: inline-block;
 }

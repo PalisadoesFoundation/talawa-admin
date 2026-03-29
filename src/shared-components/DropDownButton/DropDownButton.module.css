@@ -1,23 +1,27 @@
+/**
+ * DropDownButton — reusable dropdown trigger + menu
+ */
+
 .dropdownContainer {
   position: relative;
   display: inline-block;
 }
 
 .dropdownToggle {
-  width: var(--space-16);
+  width: 130px;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-4);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
-  transition: all 0.2s;
+  gap: 0.75rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
 .dropdownToggle:focus {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--space-2);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
 .dropdownToggle:disabled {
@@ -33,7 +37,7 @@
 }
 
 .dropdownCaret {
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
 }
 
 .dropdownOpen .dropdownCaret {
@@ -49,33 +53,36 @@
   align-items: center;
 }
 
+/* ── Dropdown menu ───────────────────────────────────────────────────────────── */
 .dropdownMenu {
-  min-width: var(--space-18);
-  padding: var(--space-3) 0;
-  border-radius: var(--radius-2xl);
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-white);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--color-gray-600);
-  max-height: var(--space-17);
+  min-width: 180px;
+  padding: 0.5rem 0;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 8px 32px rgba(0, 0, 0, 0.08);
+  max-height: 420px;
   overflow-y: auto;
 }
 
 .dropdownItem {
-  padding: var(--space-4) var(--space-5);
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-800);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  color: #1d1d1f;
+  border-radius: 0;
+  transition: background-color 0.12s ease;
 }
 
 .dropdownItem:hover,
 .dropdownItem:focus {
-  background: var(--color-blue-100);
+  background: #f0f6ff;
+  color: #0071e3;
 }
 
 .dropdownItemSelected {
-  background: var(--color-blue-100);
-  color: var(--color-blue-500);
-  font-weight: var(--font-weight-semibold);
+  background: #e8f0fd;
+  color: #0071e3;
+  font-weight: 600;
 }
 
 .dropdownItemDisabled {

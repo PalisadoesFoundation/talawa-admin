@@ -1,96 +1,117 @@
+/**
+ * OrganizationScreen — admin org screen layout shell
+ */
+
+/* ── Page container ──────────────────────────────────────────────────────────── */
 .pageContainer {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: var(--space-5) var(--space-7) var(--space-0)
-    calc(300px + var(--space-8) + var(--space-7));
+  padding: 1.25rem 1.75rem 0 calc(300px + 3.75rem);
 }
 
+/* ── Sidebar states ──────────────────────────────────────────────────────────── */
 .expand {
-  padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-7));
-  animation: moveLeft 0.5s ease-in-out;
+  padding-left: calc(var(--sidebar-collapsed-width, 72px) + 1.75rem);
+  animation: moveLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.contract {
+  padding-left: calc(300px + 3.75rem);
+  animation: moveRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes moveLeft {
+  from { padding-left: calc(300px + 3.75rem); }
+  to   { padding-left: calc(72px + 1.75rem); }
+}
+
+@keyframes moveRight {
+  from { padding-left: calc(72px + 1.75rem); }
+  to   { padding-left: calc(300px + 3.75rem); }
+}
+
+/* ── Avatar ──────────────────────────────────────────────────────────────────── */
 .avatarStyle {
-  border-radius: 100%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  object-fit: cover;
 }
 
+/* ── Profile button ──────────────────────────────────────────────────────────── */
 .profileContainer {
   border: none;
-  padding: var(--space-8) var(--space-3);
-  height: var(--space-10);
-  border-radius: var(--radius-md) var(--radius-none) var(--radius-none)
-    var(--radius-md);
+  padding: 2rem 0.75rem;
+  height: 2.5rem;
+  border-radius: 10px 0 0 10px;
   display: flex;
   align-items: center;
-  background-color: white !important;
-  box-shadow:
-    0 var(--shadow-offset-md) var(--shadow-offset-md) 0 var(--color-gray-200),
-    0 var(--shadow-blur-md) 20px 0 var(--color-gray-200);
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.18s ease;
 }
 
 .profileContainer:focus {
   outline: none;
-  background-color: var(--bs-gray-100);
+  background-color: #f5f5f7;
 }
 
 .imageContainer {
-  width: var(--space-10);
+  width: 2.5rem;
 }
 
 .profileContainer .profileText {
   flex: 1;
   text-align: start;
   overflow: hidden;
-  margin-right: var(--space-2);
+  margin-right: 0.5rem;
 }
 
 .angleDown {
-  margin-left: var(--space-2);
+  margin-left: 0.5rem;
+  color: #6e6e73;
 }
 
 .profileContainer .profileText .primaryText {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
 }
 
 .profileContainer .profileText .secondaryText {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
-  color: var(--bs-secondary);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: #6e6e73;
   display: block;
   text-transform: capitalize;
 }
 
-.contract {
-  padding-left: calc(300px + var(--space-8) + var(--space-7));
-  animation: moveRight 0.5s ease-in-out;
-}
-
+/* ── Sidebar collapse/open buttons ──────────────────────────────────────────── */
 .collapseSidebarButton {
   position: fixed;
-  height: var(--space-9);
+  height: 2.25rem;
   bottom: 0;
   z-index: 100;
-  width: calc(300px + var(--space-8));
-  background-color: var(--color-gray-50);
-  color: black;
+  width: calc(300px + 2rem);
+  background-color: rgba(245, 245, 247, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #6e6e73;
   border: none;
-  border-radius: var(--radius-none);
+  border-radius: 0;
+  transition: background-color 0.2s ease;
 }
 
-.collapseSidebarButton:hover,
-.opendrawer:hover {
-  opacity: 1;
-  color: black !important;
+.collapseSidebarButton:hover {
+  background-color: #e8f0fd;
+  color: #0071e3;
 }
 
 .opendrawer {
@@ -100,16 +121,25 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: var(--space-9);
+  width: 2.25rem;
   height: 100vh;
   z-index: 100;
-  background-color: var(--color-gray-50);
+  background-color: rgba(245, 245, 247, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: none;
-  border-radius: var(--radius-none);
-  margin-right: var(--space-8);
-  color: black;
+  border-radius: 0;
+  margin-right: 2rem;
+  color: #6e6e73;
+  transition: background-color 0.2s ease;
 }
 
+.opendrawer:hover {
+  background-color: #e8f0fd;
+  color: #0071e3;
+}
+
+/* ── Profile dropdown ────────────────────────────────────────────────────────── */
 .profileDropdown {
   background-color: transparent !important;
 }
@@ -119,73 +149,64 @@
   background-color: transparent !important;
 }
 
-.dropdownToggle {
-  background-image: url(/public/images/svg/angleDown.svg);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: azure;
-}
-
 .dropdownToggle::after {
   border-top: none !important;
   border-bottom: none !important;
 }
 
-.opendrawer:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+/* ── Flex helpers ────────────────────────────────────────────────────────────── */
+.flexContainerColumn {
+  flex: 1;
 }
 
-.collapseSidebarButton:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+.titleMargin {
+  margin-top: 1rem;
 }
 
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
 @media (max-width: 1120px) {
   .contract {
-    padding-left: calc(276px + var(--space-8) + var(--space-7));
+    padding-left: calc(276px + 3.75rem);
   }
 
   .collapseSidebarButton {
-    width: calc(250px + var(--space-8));
+    width: calc(250px + 2rem);
   }
 }
 
 @media (max-height: 900px) {
   .pageContainer {
-    padding: var(--space-5) var(--space-7) var(--space-0)
-      calc(300px + var(--space-8));
+    padding: 1.25rem 1.75rem 0 calc(300px + 2rem);
   }
 
   .collapseSidebarButton {
-    height: var(--space-8);
-    width: calc(300px + var(--space-5));
+    height: 2rem;
+    width: calc(300px + 1.25rem);
   }
 }
 
 @media (max-height: 650px) {
   .pageContainer {
-    padding: var(--space-5) var(--space-7) var(--space-0) calc(270px);
+    padding: 1.25rem 1.75rem 0 270px;
   }
 
   .collapseSidebarButton {
-    width: var(--space-18);
-    height: var(--space-8);
+    width: 4.5rem;
+    height: 2rem;
   }
 
   .opendrawer {
-    width: var(--space-8);
+    width: 2rem;
   }
 }
 
-/* For tablets */
 @media (max-width: 820px) {
   .pageContainer {
-    padding-left: var(--space-9);
+    padding-left: 2.25rem;
   }
 
   .opendrawer {
-    width: var(--space-7);
+    width: 1.75rem;
   }
 
   .contract,
@@ -198,14 +219,4 @@
     left: 0;
     right: 0;
   }
-}
-
-/* -- OrganizationScreen specific styles -- */
-
-.flexContainerColumn {
-  flex: 1;
-}
-
-.titleMargin {
-  margin-top: var(--space-4);
 }

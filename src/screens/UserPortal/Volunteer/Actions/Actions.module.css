@@ -1,49 +1,69 @@
+/**
+ * Volunteer Actions — action items list for volunteers
+ */
+
+/* ── Empty state ─────────────────────────────────────────────────────────────── */
 .message {
-  margin-top: 25%;
+  margin-top: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
-
-.name {
-  margin-inline-start: var(--space-3);
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .loadingHeading {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-red-500);
+  font-weight: 600;
+  color: #ff3b30;
   text-align: center;
+}
+
+/* ── Assignee name row ───────────────────────────────────────────────────────── */
+.name {
+  margin-inline-start: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1d1d1f;
 }
 
 .assigneeName {
   display: flex;
   align-items: center;
-  font-weight: var(--font-weight-bold);
-}
-.icon {
-  margin: var(--space-0-5);
+  font-weight: 600;
+  color: #1d1d1f;
+  font-size: 0.9375rem;
 }
 
+.icon {
+  margin: 0.125rem;
+  color: #6e6e73;
+}
+
+/* ── Avatar ──────────────────────────────────────────────────────────────────── */
 .imageContainer {
-  width: var(--space-11);
-  height: var(--space-11);
-  border-radius: var(--radius-full);
-  margin-right: var(--space-4);
-  margin-top: var(--space-4);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+  background-color: #e8f0fd;
 }
 
 .imageContainer img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--radius-full);
+  border-radius: 50%;
 }
 
 .tableImage {
   object-fit: cover;
-  margin-right: var(--space-2);
-  width: var(--space-10);
-  height: var(--space-10);
-  border-radius: var(--radius-full);
+  margin-right: 0.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }

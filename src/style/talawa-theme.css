@@ -1,0 +1,791 @@
+/**
+ * Talawa Apple-Inspired Design System
+ * =====================================
+ * A clean, crisp, consistent design language inspired by Apple's Human Interface
+ * Guidelines. This file overrides all semantic token variables defined in
+ * app-fixed.module.css and establishes the single source of truth for the visual
+ * system across both Admin and User portals.
+ *
+ * Structure:
+ *   1. Brand & Accent
+ *   2. Backgrounds & Surfaces
+ *   3. Typography
+ *   4. Borders & Elevation
+ *   5. Sidebar & Navigation
+ *   6. Buttons
+ *   7. Forms & Inputs
+ *   8. Status Colors
+ *   9. Component Tokens
+ *  10. Skeleton / Loading
+ *  11. Misc Legacy Overrides
+ */
+
+:root {
+  /* ─── 1. BRAND & ACCENT ─────────────────────────────────────────────────── */
+  --primary-theme-color: #0071e3;
+  --primary-hover: #0077ed;
+  --primary-pressed: #006edb;
+  --primary-muted: #e8f0fd;
+  --primary-muted-hover: #d1e4fb;
+
+  --success-green-color: #34c759;
+  --success-bg: #eaf9ee;
+  --warning-color: #ff9500;
+  --warning-bg: #fff4e5;
+  --danger-color: #ff3b30;
+  --danger-bg: #fff0ef;
+  --info-color: #007aff;
+  --info-bg: #e5f2ff;
+
+  /* ─── 2. BACKGROUNDS & SURFACES ─────────────────────────────────────────── */
+  --app-bg: #f5f5f7;
+  --surface-bg: #ffffff;
+  --surface-secondary: #f5f5f7;
+  --surface-tertiary: #ebebf0;
+  --surface-overlay: rgba(0, 0, 0, 0.4);
+  --surface-elevated: #ffffff;
+  --box-bg: #ffffff;
+  --colorlight-bg: #f5f5f7;
+  --containerHeight-bg: #f5f5f7;
+  --mainContainer50-bg: #f5f5f7;
+  --rowBackground-bg: #ffffff;
+  --rowBackgrounds-bg: #ffffff;
+  --row-bg: #ffffff;
+  --row-bg-scroll: rgba(0, 0, 0, 0.08);
+  --row-hover-bg: #f5f5f7;
+  --row-color: #6e6e73;
+  --inputColor-bg: #f5f5f7;
+  --pledgeContainer-bg: rgba(52, 199, 89, 0.12);
+  --popup-bg: #ffffff;
+  --popup-color: #1d1d1f;
+  --popup-border: rgba(0, 0, 0, 0.08);
+  --popup-box-shadow: rgba(0, 0, 0, 0.12);
+  --people-card-container-bg: #ffffff;
+  --people-card-header-bg: #f5f5f7;
+  --people-card-header-border: rgba(0, 0, 0, 0.06);
+  --people-card-container-border: rgba(0, 0, 0, 0.06);
+  --pageNotFound-bg: #ffffff;
+  --pageNotFound-color: #0071e3;
+  --createButton-bg: #ffffff;
+  --createButton-bg-hover: #f5f5f7;
+  --createButton-bg-active: #ebebf0;
+  --profile-container-bg: #ffffff;
+  --profile-container-bg-focus: #f5f5f7;
+  --customcell-bg: #f5f5f7;
+  --customcell-color: #1d1d1f;
+  --eventManagementBtn-bg: #ffffff;
+  --eventManagementSelectedBtn-bg: #e8f0fd;
+  --opendrawer-bg: #f5f5f7;
+  --opendrawer-bg-active: #e8f0fd;
+  --collapseSidebarButton-bg: #f5f5f7;
+  --collapseSidebarButton-bg-active: #e8f0fd;
+  --outlineBtn-bg: #ffffff;
+  --outlineBtn-bg-disabled: #ffffff;
+  --toggleBtn-bg: #ffffff;
+  --chevronIcon-bg: #ffffff;
+  --chevronRightbtn-bg: #ffffff;
+  --filterButton-bg: #1d1d1f;
+  --sidebar-bg: rgba(0, 0, 0, 0.06);
+  --updateTimeoutCard-bg: #ffffff;
+  --memberfont-bg: #f5f5f7;
+  --loginToggle-button-bg: #f5f5f7;
+  --LoginToggle-button-bg: #f5f5f7;
+  --LoginToggle-button-bg-hover: #f5f5f7;
+  --LoginToggle-button-bg-active: #e8f0fd;
+  --orText-bg: #ffffff;
+  --inactiveTab-bg: rgba(255, 255, 255, 0.9);
+  --inactiveTab-bg-hover: #f5f5f7;
+  --activeTab-bg: #f5f5f7;
+  --activeTab-bg-hover: #6e6e73;
+  --disabled-btn: #e8f0fd;
+  --signOut-container-bg: #e8f0fd;
+  --signOutBtn-bg: #e8f0fd;
+  --tableHeader-bg: #f5f5f7;
+  --tableHeader-success-bg: #34c759;
+  --modalHeader-bg: #ffffff;
+
+  /* ─── 3. TYPOGRAPHY ─────────────────────────────────────────────────────── */
+  --primaryText-color: #1d1d1f;
+  --secondText-color: #6e6e73;
+  --tertiary-text-color: #a1a1a6;
+  --tableHeader-color: #1d1d1f;
+  --modalHeader-color: #1d1d1f;
+  --modalTitle-color: #6e6e73;
+  --titlemodal-color: #6e6e73;
+  --titlemodal-org-event-color: #6e6e73;
+  --formLabel-color: #1d1d1f;
+  --profileText-color: #6e6e73;
+  --singledetails_dl-color: #6e6e73;
+  --cardBody-color: #6e6e73;
+  --cardBody-st-color: #0071e3;
+  --cardBody-tw-st-color: #a1a1a6;
+  --searchtitle-color: #6e6e73;
+  --logintitle-color: #6e6e73;
+  --subContainer-color: #6e6e73;
+  --titleContainerVolunteer-color: #6e6e73;
+  --rowBackground-color: #1d1d1f;
+  --orgUserTagsScrollableDiv-color: #a1a1a6;
+  --manageTagScrollableDiv-color: #a1a1a6;
+  --subTagsScrollableDiv-color: #a1a1a6;
+  --searchIcon-color: #6e6e73;
+  --tagsBreadCrumbs-color: #6e6e73;
+  --tagsBreadCrumbs-color-hover: #0071e3;
+  --subTagsLink-color: #0071e3;
+  --subTagsLink-color-hover: #0077ed;
+  --eventsAttended-membername-color: #0071e3;
+  --membername-color: #0071e3;
+  --membername-color-hover: #0077ed;
+  --hyperlink-text-color: #0071e3;
+  --hyperlink-text-color-hover: #0077ed;
+  --updateTimeoutCurrent-color: #1d1d1f;
+  --updateTimeoutLabel-color: #1d1d1f;
+  --updateTimeoutValue-color: #0071e3;
+  --updateTimeoutSliderLabels: #6e6e73;
+  --updateTimeoutCardTitle-color: #1d1d1f;
+  --customToggle-color: #1d1d1f;
+  --toggleBtn-color: #6e6e73;
+  --toggleBtn-color-hover: #1d1d1f;
+  --chevronIcon-color: #6e6e73;
+  --collapse-Sidebar-Button-fill: #1d1d1f;
+  --opendrawer-color-active: #0071e3;
+  --collapseSidebarButton-color-active: #0071e3;
+  --collapseSidebarButton-od-color-hover: #1d1d1f;
+  --createButton-color: #6e6e73;
+  --createButton-color-hover: #1d1d1f;
+  --createButton-color-active: #6e6e73;
+  --closeButtonOrgPost-color: #6e6e73;
+  --closeButton-color: #ff3b30;
+  --closeButton-bg: #ffffff;
+  --titlemodal-org-event-border: rgba(0, 0, 0, 0.08);
+  --titlemodal-color: #6e6e73;
+  --titleContainerVolunteer-color: #6e6e73;
+  --Login-button-color-hover: #ffffff;
+  --login-button-color: #ffffff;
+  --login-button-color-hover: #ffffff;
+  --LoginToggle-button-color: #6e6e73;
+  --LoginToggle-button-color-active: #0071e3;
+  --LoginToggle-button-color-active-hover: #0071e3;
+  --langChange-button-color: #0071e3;
+  --langChange-button-color-active: #0071e3;
+  --addButton-font: #ffffff;
+  --eventManagementBtn-color: #6e6e73;
+  --eventManagementBtn-color-hover: #1d1d1f;
+  --eventManagementSelectedBtn-color: #0071e3;
+  --eventManagementSelectedBtn-color-hover: #0071e3;
+  --actionsButton-color: #ffffff;
+  --actionsButton-bg-color: #0071e3;
+  --unblockButton-font: #ffffff;
+  --editButton-font: #ffffff;
+  --colorPrimary-color: #ffffff;
+  --colorPrimary-color-active: #ffffff;
+  --colorWhite: #ffffff;
+  --pagination-btn-color: #6e6e73;
+  --pagination-btn-color-hover: #ffffff;
+  --sidebar-option-text-inactive: #1d1d1f;
+  --sidebar-option-text-active: #ffffff;
+  --leftDrawer-button-text-color: #1d1d1f;
+  --orText-color: #a1a1a6;
+  --btnsContainerOrgPost-outline: #d1d1d6;
+  --groupsLabel-color: #6e6e73;
+  --regBtn-color: #ffffff;
+  --memberfont-color: #1d1d1f;
+  --outlineBtn-color: #0071e3;
+  --outlineBtn-color-hover: #ffffff;
+  --outlineBtn-color-disabled: #a1a1a6;
+  --filter-button-color: #a1a1a6;
+  --filterButton-color: #a1a1a6;
+  --filterButton-color-hover: #ffffff;
+  --updateTimeoutButton-color: #ffffff;
+  --font-size-header: 14px;
+  --font-size-table-body: 13px;
+
+  /* ─── 4. BORDERS & ELEVATION ─────────────────────────────────────────────── */
+  --box-border: rgba(0, 0, 0, 0.08);
+  --border-default: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.12);
+  --inputField-border: rgba(0, 0, 0, 0.12);
+  --inputField-border-focus: #0071e3;
+  --input-shadow-color: rgba(0, 0, 0, 0.06);
+  --inputFieldModal: rgba(0, 0, 0, 0.12);
+  --inputFieldModal-bg: #ffffff;
+  --inputField-bg: #ffffff;
+  --dateboxMemberDetail-border: rgba(0, 0, 0, 0.08);
+  --dateboxEvents-border: rgba(0, 0, 0, 0.08);
+  --memberfontbtn-border: rgba(0, 0, 0, 0.08);
+  --sidebarsticky-border: rgba(0, 0, 0, 0.06);
+  --cardHeader-border: rgba(0, 0, 0, 0.06);
+  --searchtitle-border: #0071e3;
+  --logintitle-border: #0071e3;
+  --addChatContainer-border: rgba(0, 0, 0, 0.12);
+  --chatContainer-border: rgba(0, 0, 0, 0.08);
+  --addButton-border: rgba(0, 0, 0, 0.08);
+  --addButton-border-hover: #0071e3;
+  --unblockButton-border: rgba(0, 0, 0, 0.08);
+  --unblockButton-border-hover: #0071e3;
+  --removeButton-border: #ffd9d7;
+  --removeButton-border-hover: #ff3b30;
+  --editButton-border: rgba(0, 0, 0, 0.08);
+  --editButton-border-active: #0071e3;
+  --editButton-border-hover: #0071e3;
+  --regBtn-border: rgba(0, 0, 0, 0.12);
+  --regBtn-box-shadow: rgba(0, 0, 0, 0.06);
+  --toggleBtn-border: rgba(0, 0, 0, 0.08);
+  --toggleBtn-border-hover: rgba(0, 0, 0, 0.12);
+  --createButton-border: rgba(0, 0, 0, 0.12);
+  --createButton-border-hover: rgba(0, 0, 0, 0.16);
+  --createButton-border-active: rgba(0, 0, 0, 0.2);
+  --createButton-box-shadow-hover: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --eventManagementBtn-border: rgba(0, 0, 0, 0.08);
+  --eventManagementBtn-border-hover: rgba(0, 0, 0, 0.12);
+  --eventManagementSelectedBtn-border: #0071e3;
+  --eventManagementSelectedBtn-border-hover: #0071e3;
+  --actionsButton-border: #0071e3;
+  --actionsButton-border-hover: #0071e3;
+  --actionsButton-box-shadow-hover: rgba(0, 113, 227, 0.3);
+  --outlineBtn-border: #0071e3;
+  --outlineBtn-hover-border: #0071e3;
+  --outlineBtn-border-disabled: #d1d1d6;
+  --filterButton-border: rgba(0, 0, 0, 0.12);
+  --filterButton-border-hover: #0071e3;
+  --updateTimeoutButton-border-hover: #0071e3;
+  --modal-width: 640px;
+  --modal-max-width: 680px;
+  --pagination-btn-border: rgba(0, 0, 0, 0.08);
+  --pagination-btn-border-hover: #0071e3;
+  --pagination-border-top: rgba(0, 0, 0, 0.06);
+  --activeTab-border: rgba(0, 0, 0, 0.08);
+  --activeTab-border-hover: #6e6e73;
+  --activeTab-outline-focus: #0071e3;
+  --inactiveTab-border: rgba(0, 0, 0, 0.08);
+  --inActTab-outline-focus: #0071e3;
+  --inActiveTab-outline-focus: #0071e3;
+  --inactiveTab-border-hover: rgba(0, 0, 0, 0.12);
+  --errorState-border: #ffd9d7;
+  --regBtn-bg: #0071e3;
+  --LoginToggle-button-border: rgba(0, 0, 0, 0.08);
+  --LoginToggle-button-border-hover: rgba(0, 0, 0, 0.12);
+  --LoginToggle-button-border-active: #0071e3;
+  --LoginToggle-button-border-active-hover: #0071e3;
+  --langChange-button-border: rgba(0, 0, 0, 0.08);
+  --langChange-button-bg-hover: #e8f0fd;
+  --langChange-button-border-hover: #0071e3;
+  --login-button-border: #0071e3;
+  --login-button-border-hover: #0077ed;
+  --login-button-border-active: #006edb;
+  --login-button-border-disabled: rgba(0, 113, 227, 0.5);
+  --switch-border-checked: #0071e3;
+  --switch-box-shadow-checked: rgba(0, 113, 227, 0.3);
+  --switch-border-focus: rgba(0, 0, 0, 0.12);
+  --drop-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --themeOverlay-bg: #0071e3;
+
+  /* ─── 5. SIDEBAR & NAVIGATION ─────────────────────────────────────────────── */
+  --sidebar-collapsed-width: 72px;
+  --sidebar-expanded-width: 260px;
+  --leftDrawer-bg: #ffffff;
+  --leftDrawer-fixedModule-bg: #ffffff;
+  --leftDrawer-scrollbar-color: rgba(0, 0, 0, 0.08);
+  --leftDrawer-optionList-bg: #f5f5f7;
+  --LeftDrawer-org-profileContainer-bg: #e8f0fd;
+  --leftDrawer-profileContainer-bg: #f5f5f7;
+  --leftDrawer-secondaryText-color: #6e6e73;
+  --leftDrawer-inactive-button-hover-bg: #f5f5f7;
+  --leftDrawer-collapse-active-button-bg: #e8f0fd;
+  --leftDrawer-inactive-button-bg: transparent;
+  --leftDrawer-active-button-bg: #0071e3;
+  --leftDrawer-button-text-color: #1d1d1f;
+  --activeItem-bg: #e8f0fd;
+  --active-item-color: #0071e3;
+  --active-item-color-hover: #0077ed;
+  --user-sidebar-org-item-bg: #e8f0fd;
+  --sidebar-option-bg: #e8f0fd;
+  --sidebar-option-bg-hover: #f5f5f7;
+
+  /* ─── 6. BUTTONS ─────────────────────────────────────────────────────────── */
+  /* Primary / Add */
+  --addButton-bg: #0071e3;
+  --addButton-bg-hover: #0077ed;
+
+  /* Unblock */
+  --unblockButton-bg: #0071e3;
+  --unblockButton-bg-hover: #0077ed;
+
+  /* Remove / Danger */
+  --removeButton-bg: #fff0ef;
+  --removeButton-color: #ff3b30;
+  --removeButton-bg-hover: #ff3b30;
+  --removeButton-color-hover: #ffffff;
+
+  /* Edit */
+  --editButton-bg: #e8f0fd;
+  --editButton-bg-active: #0071e3;
+  --editButton-bg-hover: #0071e3;
+
+  /* Regular */
+  --regularBtn-bg: #0071e3;
+  --regularBtn-border: #0071e3;
+  --regularBtn-bg-hover: #0077ed;
+  --regularBtn-font-hover: #ffffff;
+  --regularBtn-border-hover: #0077ed;
+
+  /* Actions */
+  --actionsButton-bg: #0071e3;
+
+  /* Search */
+  --searchButton-bg: #e8f0fd;
+  --searchButton-color: #0071e3;
+  --searchButton-border: rgba(0, 0, 0, 0.08);
+  --searchButton-border-hover: #0071e3;
+  --searchButton-color-hover: #0071e3;
+  --searchButton-border-focus: #0071e3;
+  --searchButton-bg-hover: #e8f0fd;
+  --searchButton-bg-active: #e8f0fd;
+
+  /* Login */
+  --login-button-bg: #0071e3;
+  --login-button-bg-hover: #0077ed;
+  --login-button-bg-active: #006edb;
+  --login-button-bg-disabled: rgba(0, 113, 227, 0.5);
+
+  /* Outline */
+  --outlineBtn-hover-bg: #0071e3;
+  --outlineBtn-disabled: #d1d1d6;
+
+  /* colorPrimary */
+  --colorPrimary-bg: #0071e3;
+  --colorPrimary-bg-active: #0077ed;
+
+  /* Tabs */
+  --activeTab-color: #1d1d1f;
+  --activeTab-color-hover: #ffffff;
+  --inactiveTab-color: #6e6e73;
+  --inactiveTab-color-hover: #1d1d1f;
+
+  /* Switch */
+  --switch-bg-checked: #0071e3;
+
+  /* Slider */
+  --slider-bg: #0071e3;
+  --slider-rail-bg: rgba(0, 0, 0, 0.08);
+
+  /* updateTimeout button */
+  --updateTimeoutButton-bg: #0071e3;
+  --updateTimeoutButton-bg-hover: #0077ed;
+
+  /* filterButton */
+  --filterButton-bg-hover: #0071e3;
+
+  /* Progress */
+  --progress-track-color: rgba(0, 0, 0, 0.08);
+  --progress-complete-color: #34c759;
+  --progress-half-color: #ff9500;
+  --progress-low-color: #0071e3;
+
+  /* Status */
+  --active-color: #0071e3;
+  --active-border-color: #0071e3;
+  --pending-color: #ff9500;
+  --pending-border-color: #ff9500;
+  --acceptedStatus-color: #34c759;
+  --acceptedStatus-fill: #34c759;
+  --pendingStatus-color: #ff9500;
+  --pendingStatus-fill: #ff9500;
+
+  /* ─── 7. ERROR STATES ─────────────────────────────────────────────────────── */
+  --errorState-color: #ff3b30;
+  --errorState-bg: #fff0ef;
+  --errorIcon-color: #ff3b30;
+
+  /* ─── 8. SKELETON LOADING ─────────────────────────────────────────────────── */
+  --skeleton-base: #f0f0f5;
+  --skeleton-highlight: #f8f8fc;
+
+  /* ─── 9. LOADER ───────────────────────────────────────────────────────────── */
+  --loader-size: 10em;
+  --loader-border: rgba(255, 255, 255, 0.2);
+  --loader-border-left: #0071e3;
+
+  /* ─── 10. MISC OVERRIDES ──────────────────────────────────────────────────── */
+  --collapseBtn-op-bg-hover: #f5f5f7;
+  --csb-od-bg-hover: #0077ed;
+  --collapseSidebarButton-od-bg-hover: #f5f5f7;
+  --collapseSidebarButton-od-bg-active: #e8f0fd;
+  --opendrawer-border-active: #0071e3;
+  --collapseSidebarButton-border-active: #0071e3;
+  --datatable-focus-outline: #0071e3;
+}
+
+/* ─── GLOBAL LAYOUT OVERRIDES ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Inter',
+    'SF Pro Display',
+    'SF Pro Text',
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #1d1d1f;
+  background-color: #f5f5f7;
+  letter-spacing: -0.01em;
+}
+
+#root {
+  min-height: 100vh;
+  background-color: #f5f5f7;
+}
+
+/* ─── FORM INPUTS ──────────────────────────────────────────────────────────── */
+.form-control,
+.form-select {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  border-radius: 10px !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.12) !important;
+  background-color: #ffffff !important;
+  color: #1d1d1f !important;
+  padding: 0.6rem 0.875rem !important;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease !important;
+  box-shadow: none !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #0071e3 !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.18) !important;
+  background-color: #ffffff !important;
+  outline: none !important;
+}
+
+.form-control::placeholder {
+  color: #a1a1a6 !important;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1d1d1f;
+  margin-bottom: 0.375rem;
+  letter-spacing: -0.005em;
+}
+
+/* ─── CARD BASE ─────────────────────────────────────────────────────────────── */
+.card {
+  border: none !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+  background-color: #ffffff !important;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #ffffff !important;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.06) !important;
+  padding: 1.125rem 1.25rem !important;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #1d1d1f;
+}
+
+.card-body {
+  padding: 1.25rem !important;
+}
+
+/* ─── MODAL OVERRIDES ──────────────────────────────────────────────────────── */
+.modal-content {
+  border: none !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.18) !important;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.06) !important;
+  padding: 1.25rem 1.5rem !important;
+  background-color: #ffffff !important;
+}
+
+.modal-title {
+  font-size: 1.0625rem !important;
+  font-weight: 600 !important;
+  color: #1d1d1f !important;
+  letter-spacing: -0.01em;
+}
+
+.modal-body {
+  padding: 1.5rem !important;
+}
+
+.modal-footer {
+  border-top: 1.5px solid rgba(0, 0, 0, 0.06) !important;
+  padding: 1rem 1.5rem !important;
+  background-color: #f5f5f7 !important;
+  gap: 0.5rem;
+}
+
+/* ─── BUTTONS ──────────────────────────────────────────────────────────────── */
+.btn {
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    border-color 0.18s ease;
+  letter-spacing: -0.005em;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+  font-weight: 500 !important;
+}
+
+.btn-primary:hover {
+  background-color: #0077ed !important;
+  border-color: #0077ed !important;
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.3) !important;
+}
+
+.btn-primary:active {
+  background-color: #006edb !important;
+  border-color: #006edb !important;
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background-color: #f5f5f7 !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #1d1d1f !important;
+}
+
+.btn-secondary:hover {
+  background-color: #ebebf0 !important;
+}
+
+.btn-danger {
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30 !important;
+  color: #ffffff !important;
+}
+
+.btn-danger:hover {
+  background-color: #e0352b !important;
+  border-color: #e0352b !important;
+}
+
+.btn-success {
+  background-color: #34c759 !important;
+  border-color: #34c759 !important;
+  color: #ffffff !important;
+}
+
+.btn-outline-primary {
+  color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: #0071e3 !important;
+  color: #ffffff !important;
+}
+
+.btn-outline-secondary {
+  color: #6e6e73 !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #f5f5f7 !important;
+  color: #1d1d1f !important;
+  border-color: rgba(0, 0, 0, 0.16) !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-secondary:hover,
+.btn-outline-secondary:active,
+.btn-outline-success:hover,
+.btn-outline-success:active,
+.btn-outline-warning:hover,
+.btn-outline-warning:active,
+.btn-outline-info:hover,
+.btn-outline-info:active {
+  color: #fff !important;
+}
+
+/* ─── BADGES ───────────────────────────────────────────────────────────────── */
+.badge {
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.3em 0.6em;
+  letter-spacing: 0.005em;
+}
+
+/* ─── TABLE OVERRIDES ──────────────────────────────────────────────────────── */
+.table {
+  font-size: 0.9rem;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th {
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+  padding: 0.75rem 1rem;
+}
+
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f5f5f7;
+}
+
+.table tbody td {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  color: #1d1d1f;
+}
+
+/* ─── DROPDOWN OVERRIDES ───────────────────────────────────────────────────── */
+.dropdown-menu {
+  border: none !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.14) !important;
+  padding: 0.5rem !important;
+  background-color: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dropdown-item {
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9375rem;
+  color: #1d1d1f;
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.dropdown-item:active {
+  background-color: #e8f0fd;
+  color: #0071e3;
+}
+
+.dropdown-divider {
+  margin: 0.375rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ─── TOAST OVERRIDES ──────────────────────────────────────────────────────── */
+.Toastify__toast {
+  border-radius: 14px !important;
+  font-family: inherit !important;
+  font-size: 0.9rem !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14) !important;
+}
+
+.Toastify__toast--success {
+  background: #eaf9ee !important;
+  color: #1a6632 !important;
+}
+
+.Toastify__toast--error {
+  background: #fff0ef !important;
+  color: #c0392b !important;
+}
+
+.Toastify__toast--warning {
+  background: #fff4e5 !important;
+  color: #874d00 !important;
+}
+
+/* ─── SCROLLBAR ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* ─── FOCUS RINGS ──────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #0071e3;
+  outline-offset: 2px;
+}
+
+/* ─── HR DIVIDER ───────────────────────────────────────────────────────────── */
+hr {
+  border-color: rgba(0, 0, 0, 0.08);
+  opacity: 1;
+}
+
+/* ─── SELECTION ────────────────────────────────────────────────────────────── */
+::selection {
+  background-color: rgba(0, 113, 227, 0.2);
+  color: #1d1d1f;
+}
+
+/* ─── SHIMMER ANIMATION ────────────────────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(
+    to right,
+    #f0f0f5 8%,
+    #e8e8f0 18%,
+    #f0f0f5 33%
+  ) !important;
+  background-size: 1200px 100% !important;
+}

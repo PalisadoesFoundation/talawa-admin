@@ -1,64 +1,102 @@
+/**
+ * SidebarNavItem — individual navigation item
+ * ---------------------------------------------
+ * Inactive: transparent bg, dark text
+ * Active:   brand-blue pill, white text + icon
+ * Hover:    very light gray fill
+ */
+
 .leftDrawerActiveButton,
 .leftDrawerInactiveButton {
   position: relative;
-  transition: all 0.2s ease;
-
-  &:active {
-    transform: scale(0.98);
-  }
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+  border-radius: 10px;
 }
 
+.leftDrawerActiveButton:active,
+.leftDrawerInactiveButton:active {
+  transform: scale(0.97);
+}
+
+/* Active state — solid brand-blue pill */
 .leftDrawerActiveButton {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-weight: var(--font-weight-bold);
+  background-color: #0071e3;
+  color: #ffffff !important;
+  font-weight: 600;
 }
 
-.leftDrawerActiveButton:hover :global(.arrow-indicator) {
-  transform: translateY(-50%) scale(1.1);
-  opacity: 1;
+.leftDrawerActiveButton svg,
+.leftDrawerActiveButton path,
+.leftDrawerActiveButton .iconWrapper svg,
+.leftDrawerActiveButton .iconWrapper path {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
+/* Inactive state */
 .leftDrawerInactiveButton {
   background-color: transparent;
-  color: var(--color-black);
+  color: #1d1d1f;
+  font-weight: 450;
 }
 
 .leftDrawerInactiveButton:hover {
-  background-color: var(--color-gray-100);
+  background-color: #f5f5f7;
+  color: #1d1d1f;
 }
 
+/* Sidebar button — collapsed icon-only mode */
 .sidebarBtn {
   background-color: transparent;
-  color: var(--color-black);
-  font-weight: var(--font-weight-regular);
+  color: #6e6e73;
+  font-weight: 400;
   cursor: pointer;
+  border-radius: 10px;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .sidebarBtn:hover {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: #f5f5f7;
+  color: #1d1d1f;
 }
 
 .sidebarBtnActive {
-  background-color: var(--color-gray-200);
-  color: var(--color-black);
-  font-weight: var(--font-weight-bold);
+  background-color: #0071e3;
+  color: #ffffff !important;
+  font-weight: 600;
 }
 
+.sidebarBtnActive svg,
+.sidebarBtnActive path {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+}
+
+/* ── Icon wrapper ───────────────────────────────────────────────────────────── */
 .iconWrapper {
-  width: var(--space-8);
-  min-width: var(--space-8);
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
 
-.simpleLinkVariant {
-  height: var(--space-9);
-}
-
+/* ── Link content ───────────────────────────────────────────────────────────── */
 .linkContent {
   display: flex;
   align-items: center;
+  gap: 0.625rem;
+}
+
+/* ── Simple link variant ────────────────────────────────────────────────────── */
+.simpleLinkVariant {
+  height: 40px;
 }

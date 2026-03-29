@@ -1,15 +1,119 @@
+/**
+ * BlockUser — block/unblock members screen
+ */
+
+/* ── Buttons toolbar ─────────────────────────────────────────────────────────── */
 .btnsContainer {
   display: flex;
-  margin: var(--space-9) 0;
+  margin: 2.25rem 0;
   align-items: center;
+  gap: 0.75rem;
 }
 
 .btnsContainer > :first-child {
-  flex: 1 1 var(--space-21);
-  min-width: var(--space-18);
+  flex: 1 1 300px;
+  min-width: 200px;
   max-width: 100%;
 }
 
+/* ── List container ──────────────────────────────────────────────────────────── */
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+/* ── Custom table ────────────────────────────────────────────────────────────── */
+.custom_table {
+  border-radius: 14px;
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.custom_table tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.15s ease;
+}
+
+.custom_table tbody tr:hover {
+  background-color: #f5f5f7;
+  box-shadow: none;
+}
+
+.custom_table tbody tr:focus-within {
+  outline: 2px solid #0071e3;
+  outline-offset: -2px;
+}
+
+.custom_table tbody td:focus {
+  outline: 2px solid #0071e3;
+  outline-offset: -2px;
+}
+
+/* ── Unblock button ──────────────────────────────────────────────────────────── */
+.unblockButton.unblockButton {
+  margin-bottom: 1rem;
+  color: #0071e3;
+  background-color: #e8f0fd;
+  border: 1.5px solid #c7dcf9 !important;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.unblockButton.unblockButton:is(:hover, :active, :focus) {
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+}
+
+.unbanIcon {
+  color: #0071e3;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  margin-right: 0.375rem;
+}
+
+.unblockButton.unblockButton:hover .unbanIcon {
+  color: #ffffff;
+}
+
+/* ── Block (ban) button ──────────────────────────────────────────────────────── */
+.banIcon {
+  color: #c0392b;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+  margin-right: 0.375rem;
+}
+
+.removeButton.removeButton:hover .banIcon {
+  color: #ffffff;
+}
+
+.removeButton.removeButton {
+  margin-bottom: 1rem;
+  background-color: #fff0ef;
+  color: #c0392b;
+  margin-right: 1rem;
+  border: 1.5px solid #ffd5d2 !important;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.removeButton.removeButton:is(:hover, :active, :focus) {
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30 !important;
+  color: #ffffff !important;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
 @media (max-width: 520px) {
   .btnsContainer {
     margin-bottom: 0;
@@ -19,7 +123,7 @@
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
-    margin: var(--space-7) 0;
+    margin: 1.75rem 0;
   }
 
   .btnsContainer > :first-child {
@@ -35,84 +139,4 @@
     display: flex;
     flex-direction: column;
   }
-}
-
-.listBox {
-  width: 100%;
-  flex: 1;
-}
-
-.custom_table {
-  border-radius: var(--radius-xl);
-  background-color: var(--color-gray-100);
-}
-
-.custom_table tbody tr {
-  background-color: var(--color-gray-200);
-}
-
-.custom_table tbody tr:hover {
-  background-color: var(--color-gray-100);
-  box-shadow: 0 0 0 var(--shadow-spread-xs) rgba(0, 0, 0, 0.1);
-}
-
-.custom_table tbody tr:focus-within {
-  outline: var(--border-2) solid var(--color-black);
-  outline-offset: calc(var(--border-2) * -1);
-}
-
-.custom_table tbody td:focus {
-  outline: var(--border-2) solid var(--color-black);
-  outline-offset: calc(var(--border-2) * -1);
-}
-
-.unblockButton.unblockButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-600);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-gray-100);
-  --bs-btn-focus-box-shadow: none;
-}
-
-.unblockButton.unblockButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-blue-500);
-}
-
-.unbanIcon {
-  color: var(--color-gray-600);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-0-5);
-  margin-right: var(--space-2);
-}
-
-.unblockButton.unblockButton:hover .unbanIcon {
-  color: var(--color-white);
-}
-
-.banIcon {
-  color: var(--color-red-500);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-0-5);
-  margin-right: var(--space-2);
-}
-
-.removeButton.removeButton:hover .banIcon {
-  color: var(--color-white);
-}
-
-.removeButton.removeButton {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
-}
-
-.removeButton.removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
 }

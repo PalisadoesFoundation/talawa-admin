@@ -1,47 +1,68 @@
+/**
+ * OrganizationPeople — members data grid screen
+ */
+
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-red-500);
-  font-weight: var(--font-weight-bold);
+  background-color: #f5f5f7;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: #6e6e73;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
+/* ── Member name / link ──────────────────────────────────────────────────────── */
 .eventsAttended,
 .membername {
-  color: var(--color-blue-200);
+  color: #0071e3;
 }
 
 .membername {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-blue-200);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #0071e3;
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
 .membername:hover {
-  color: var(--color-blue-500);
+  color: #0077ed;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .subtleBlueGrey {
-  color: var(--color-blue-200);
+  color: #0071e3;
 }
 
 .subtleBlueGrey:hover {
-  color: var(--color-blue-500);
+  color: #0077ed;
 }
 
+/* ── Buttons ─────────────────────────────────────────────────────────────────── */
 .removeButton {
-  margin-bottom: var(--space-5);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-5);
-  --bs-btn-border-color: var(--color-red-100);
+  margin-bottom: 1.25rem;
+  margin-right: 1.25rem;
+  background-color: #fff0ef;
+  color: #c0392b;
+  border: 1.5px solid #ffd5d2 !important;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30 !important;
+  color: #ffffff !important;
 }
 
+/* ── Calendar header ─────────────────────────────────────────────────────────── */
 .calendar__header {
   display: flex;
   flex-direction: row;
@@ -49,7 +70,7 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   width: 100%;
-  gap: var(--space-5);
+  gap: 1.25rem;
 }
 
 @media (max-width: 768px) {
@@ -58,6 +79,7 @@
   }
 }
 
+/* ── Layout helpers ──────────────────────────────────────────────────────────── */
 .flexCenter {
   display: flex;
   align-items: center;
@@ -73,47 +95,52 @@
   height: 100%;
 }
 
+/* ── Avatar ──────────────────────────────────────────────────────────────────── */
 .avatarImage {
   object-fit: cover;
-  border-radius: var(--radius-full);
-  width: var(--avatar-size, var(--logo-xs));
-  height: var(--avatar-size, var(--logo-xs));
+  border-radius: 50%;
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .avatarPlaceholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-full);
-  background-color: var(--color-gray-50);
+  border-radius: 50%;
+  background-color: #e8f0fd;
+  color: #0071e3;
+  font-weight: 600;
 }
 
 .avatarPlaceholderSize {
-  width: var(--avatar-size, var(--logo-xs));
-  height: var(--avatar-size, var(--logo-xs));
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
 }
 
 .memberNameFontSize {
-  font-size: var(--font-size-md);
+  font-size: 0.9375rem;
 }
 
+/* ── Org people data grid ────────────────────────────────────────────────────── */
 .orgPeopleGrid {
-  padding-right: var(--space-7);
+  padding-right: 1.75rem;
 }
 
 .orgPeopleGrid [data-field='sl_no'],
 .orgPeopleGrid [data-field='profile'] {
-  min-width: var(--space-10);
+  min-width: 80px;
 }
 
 .orgPeopleGrid [data-field='name'],
 .orgPeopleGrid [data-field='email'] {
-  min-width: var(--space-15);
+  min-width: 160px;
 }
 
 .orgPeopleGrid [data-field='joined'],
 .orgPeopleGrid [data-field='action'] {
-  min-width: var(--space-13);
+  min-width: 120px;
 }
 
 .orgPeopleGrid .membersAddHeader {
@@ -123,14 +150,19 @@
 
 .orgPeopleGrid .membersAddToggle {
   width: auto;
-  min-width: var(--space-16);
+  min-width: 120px;
 }
 
 .orgPeopleGrid .membersSortContainer,
 .orgPeopleGrid .membersSortToggle,
 .orgPeopleGrid .membersAddContainer,
 .orgPeopleGrid .membersAddToggle {
-  background-color: var(--color-gray-50) !important;
+  background-color: #f5f5f7 !important;
+  border-radius: 8px;
+  border: 1.5px solid rgba(0, 0, 0, 0.08) !important;
+  color: #1d1d1f;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .orgPeopleGrid .membersSortContainer:is(:hover, :active),
@@ -146,8 +178,8 @@
 .orgPeopleGrid .membersSortContainer:global(.show) .membersSortToggle,
 .orgPeopleGrid .membersAddToggle:is(:hover, :active),
 .orgPeopleGrid .membersAddContainer:global(.show) .membersAddToggle {
-  background-color: var(--color-gray-500) !important;
-  border: var(--border-1) solid var(--color-gray-500) !important;
-  color: var(--color-white) !important;
+  background-color: #0071e3 !important;
+  border: 1.5px solid #0071e3 !important;
+  color: #ffffff !important;
   box-shadow: none !important;
 }

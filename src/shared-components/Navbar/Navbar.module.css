@@ -1,14 +1,18 @@
+/**
+ * Navbar — shared event-calendar header with search and view toggles
+ */
+
 .calendarEventHeader {
   width: 100%;
-  border-radius: var(--radius-lg);
-  padding: var(--space-2);
+  border-radius: 10px;
+  padding: 0.5rem;
 }
 
 .calendar__header {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: var(--space-3);
+  gap: 0.75rem;
   flex-wrap: wrap;
   margin-right: 0;
 }
@@ -16,45 +20,54 @@
 .space {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
-  margin: 0 var(--space-1);
+  gap: 0.25rem;
+  margin: 0 0.25rem;
 }
 
+/* ── Dropdown ────────────────────────────────────────────────────────────────── */
 .dropdown {
   position: relative;
   display: inline-block;
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-600);
-  border-radius: var(--radius-md);
+  background-color: #ffffff;
+  color: #6e6e73;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-gray-800) !important;
-  box-shadow: none !important;
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25) !important;
 }
 
-/* Ensure the dropdown menu matches the button width perfectly */
 .dropdown :global(.dropdown-menu) {
   min-width: 100% !important;
   width: 100% !important;
-  margin-top: var(--space-1);
-  border-radius: var(--radius-lg);
+  margin-top: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
+/* ── Buttons row ─────────────────────────────────────────────────────────────── */
 .btnsBlock {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-1);
+  gap: 0.25rem;
   width: auto;
   flex-shrink: 0;
   margin: 0;
 }
 
 .selectTypeEventHeader {
-  border-radius: var(--radius-md);
+  border-radius: 10px;
 }

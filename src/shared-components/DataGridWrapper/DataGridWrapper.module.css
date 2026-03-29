@@ -1,5 +1,11 @@
+/**
+ * DataGridWrapper — toolbar above data grid
+ */
+
 .toolbar {
   display: flex;
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: center;
+  flex-wrap: wrap;
 }

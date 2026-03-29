@@ -1,4 +1,31 @@
+/**
+ * RegistrationForm — submit button
+ */
+
 .submitBtn {
   width: 100%;
-  margin-top: var(--space-5);
+  margin-top: 1.5rem;
+  height: 48px;
+  background-color: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+  box-shadow: 0 4px 16px rgba(0, 113, 227, 0.28);
+}
+
+.submitBtn:hover {
+  background-color: #0077ed;
+  box-shadow: 0 6px 20px rgba(0, 113, 227, 0.36);
+}
+
+.submitBtn:active {
+  transform: scale(0.98);
 }

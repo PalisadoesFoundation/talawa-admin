@@ -1,131 +1,147 @@
-/* Add Button */
+/**
+ * SubTags — sub-tag management screen
+ */
 
+/* ── Add button ──────────────────────────────────────────────────────────────── */
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  margin-bottom: 1rem;
+  color: #ffffff;
+  background-color: #0071e3;
+  border-color: #0071e3;
+  border-radius: 8px;
+  font-weight: 500;
   --bs-btn-focus-box-shadow: none;
+  transition: background-color 0.15s ease;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500) !important;
-  border-color: var(--color-gray-700);
+  background-color: #0077ed !important;
+  border-color: #0077ed;
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  margin-bottom: 1rem;
+  background-color: #e5e5ea;
+  border-color: transparent;
+  color: #aeaeb2;
 }
 
-/* Ban Icon*/
+/* ── Remove button ───────────────────────────────────────────────────────────── */
+.removeButton {
+  margin-bottom: 1rem;
+  background-color: #fff1f0;
+  color: #ff3b30;
+  margin-right: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
 
 .banIcon {
-  color: var(--color-red-500);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--space-1);
-  margin-right: var(--space-2);
+  color: #ff3b30;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  margin-right: 0.5rem;
+  transition: color 0.15s ease;
 }
 
 .removeButton:hover .banIcon {
-  color: var(--color-white) !important;
-}
-
-/* Remove Button */
-
-.removeButton {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
+  color: #ffffff !important;
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500) !important;
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30;
+  color: #ffffff;
 }
 
-/* Modal Header*/
-
+/* ── Modal header ────────────────────────────────────────────────────────────── */
 .modalHeader {
   border: none;
-  background-color: var(--color-white) !important;
-  padding: var(--space-5);
-  color: var(--color-black);
+  background-color: #ffffff !important;
+  padding: 1.25rem 1.5rem;
+  color: #1d1d1f;
 }
 
-/* Make sure the modal title is dark grey */
 .modalHeader div,
 .modalHeader .modal-title {
-  color: var(--color-gray-700) !important;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
+  color: #1d1d1f !important;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
 }
 
-/* Close button styling */
 .modalHeader button.close,
 .modalHeader .btn-close {
-  color: var(--color-red-500) !important;
-  opacity: 1;
+  color: #6e6e73 !important;
+  opacity: 0.75;
 }
 
-/* Form Labels */
+/* ── Input field ─────────────────────────────────────────────────────────────── */
 .inputField label,
 form label,
 .form-label {
-  color: var(--color-black) !important;
-  font-weight: var(--font-weight-regular);
+  color: #1d1d1f !important;
+  font-weight: 400;
   padding-bottom: 0;
-  font-size: var(--font-size-md);
-  margin-top: var(--space-4);
+  font-size: 0.9375rem;
+  margin-top: 1rem;
 }
 
-/* Input Fields */
 .inputField {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-100);
-  box-shadow: 0 var(--border-shadow-1) var(--border-shadow-2) rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: none;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
-/* Placeholder styling */
 .inputField::placeholder {
-  color: var(--color-gray-500) !important;
+  color: #a1a1a6 !important;
   opacity: 1;
 }
 
 .inputField:focus {
-  border: var(--border-0) solid var(--color-gray-300) !important;
-  background-color: var(--color-white) !important;
-  box-shadow: 0 var(--border-shadow-1) var(--border-shadow-1)
-    rgba(0, 0, 0, 0.25);
+  border-color: #0071e3 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
   outline: none;
   transition: box-shadow 0.2s ease;
 }
 
-/* Edit Button */
+.inputField > button {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
 
+/* ── Edit button ─────────────────────────────────────────────────────────────── */
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border-color: transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  --bs-btn-active-bg: #0071e3;
+  --bs-btn-active-border-color: transparent;
+  transition: background-color 0.15s ease;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #0071e3;
+  border-color: transparent;
+  color: #ffffff;
   box-shadow: none;
 }
 
-/* Error */
-
+/* ── Error state ─────────────────────────────────────────────────────────────── */
 .errorContainer {
   min-height: 100vh;
 }
@@ -136,76 +152,69 @@ form label,
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
+  font-size: 2.5rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
-.errorIcon::before {
-  content: '\26A0\FE0F';
-  margin-right: var(--space-3);
-}
-
-/* Row Background */
-
+/* ── Row background ──────────────────────────────────────────────────────────── */
 .rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-black);
-  max-height: var(--space-14);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  max-height: 3.5rem;
   overflow-y: auto;
 }
 
-.inputField > button {
-  padding-top: var(--space-4);
-  padding-bottom: var(--space-4);
-}
-
-/* Create Button*/
-
+/* ── Create button ───────────────────────────────────────────────────────────── */
 .createButton {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
-  margin: var(--space-2) var(--space-4);
-  width: var(--space-16);
-  height: var(--space-10);
+  background-color: #ffffff !important;
+  color: #1d1d1f !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px;
+  margin: 0.5rem 1rem;
+  width: 130px;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .createButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
+  background-color: #f5f5f7 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  box-shadow: none;
 }
 
 .createButton:active {
-  color: var(--color-gray-400) !important;
-  background-color: var(--color-gray-100) !important;
-  border: var(--border-1) solid var(--color-gray-400) !important;
+  background-color: #ebebf0 !important;
+  border-color: rgba(0, 0, 0, 0.18) !important;
 }
 
-/* Table Header */
-
+/* ── Table header ────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
+  background-color: #f5f5f7;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
+/* ── Breadcrumbs ─────────────────────────────────────────────────────────────── */
 .tagsBreadCrumbs {
-  color: var(--color-gray-400);
+  color: #6e6e73;
   cursor: pointer;
+  transition: color 0.15s ease;
 }
 
 .tagsBreadCrumbs::after {
   display: block;
   content: attr(data-text);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   height: 0;
   overflow: hidden;
   visibility: hidden;
@@ -213,20 +222,23 @@ form label,
 
 .tagsBreadCrumbs:hover,
 .tagsBreadCrumbs:focus {
-  color: var(--color-blue-700);
-  font-weight: var(--font-weight-semibold);
+  color: #0071e3;
+  font-weight: 600;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+/* ── Sub-tag link ────────────────────────────────────────────────────────────── */
 .subTagsLink i {
   visibility: hidden;
 }
 
 .subTagsLink:hover,
 .subTagsLink:focus {
-  color: var(--color-blue-200);
-  font-weight: var(--font-weight-semibold);
+  color: #0071e3;
+  font-weight: 600;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .subTagsLink:hover i,
@@ -235,23 +247,26 @@ form label,
 }
 
 .subTagsLink {
-  color: var(--color-blue-700);
-  font-weight: var(--font-weight-medium);
+  color: #0071e3;
+  font-weight: 500;
   cursor: pointer;
+  font-size: 0.9375rem;
+  transition: color 0.15s ease;
 }
 
 .subTagsLink::after {
   display: block;
   content: attr(data-text);
-  font-weight: var(--font-weight-semibold);
+  font-weight: 600;
   height: 0;
   overflow: hidden;
   visibility: hidden;
 }
 
+/* ── Scrollable div ──────────────────────────────────────────────────────────── */
 .subTagsScrollableDiv {
-  scrollbar-width: auto;
-  scrollbar-color: var(--color-gray-400) var(--color-gray-100);
-  max-height: calc(100vh - var(--space-20));
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+  max-height: calc(100vh - 5rem);
   overflow: auto;
 }

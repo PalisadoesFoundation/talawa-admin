@@ -1,58 +1,47 @@
+/**
+ * EventStats — event statistics layout
+ */
+
+/* ── Loading spinner ─────────────────────────────────────────────────────────── */
 .loader,
 .loader:after {
   border-radius: 50%;
-  width: var(--loader-size);
-  height: var(--loader-size);
+  width: 4rem;
+  height: 4rem;
 }
 
 .loader {
-  margin: 35vh auto var(--space-11) auto;
-  font-size: var(--space-3);
+  margin: 35vh auto 2.75rem auto;
+  font-size: 0.625rem;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid var(--loader-border);
-  border-right: 1.1em solid var(--loader-border);
-  border-bottom: 1.1em solid var(--loader-border);
-  border-left: 1.1em solid var(--loader-border-left);
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
+  border-top: 4px solid rgba(0, 113, 227, 0.1);
+  border-right: 4px solid rgba(0, 113, 227, 0.1);
+  border-bottom: 4px solid rgba(0, 113, 227, 0.1);
+  border-left: 4px solid #0071e3;
   transform: translateZ(0);
-  -webkit-animation: load8 1.1s infinite linear;
   animation: load8 1.1s infinite linear;
-}
-
-@-webkit-keyframes load8 {
-  0% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
 }
 
 @keyframes load8 {
   0% {
-    -webkit-transform: rotate(0deg);
     transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
 
+/* ── Stats layout ────────────────────────────────────────────────────────────── */
 .stackEvents {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: var(--space-4) var(--space-6);
-  padding: var(--space-4) var(--space-6);
+  margin: 1rem 1.5rem;
+  padding: 1rem 1.5rem;
   overflow: hidden;
-  gap: var(--space-1);
-  column-gap: var(--space-1);
+  gap: 0.5rem;
 }
 
 @media screen and (min-width: 768px) {
@@ -60,19 +49,19 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    padding: var(--space-0) var(--space-8);
-    margin: var(--space-0) var(--space-6);
-    gap: var(--space-3);
-    column-gap: var(--space-2);
+    padding: 0 2rem;
+    margin: 0 1.5rem;
+    gap: 0.75rem;
   }
 }
 
 @media screen and (min-width: 820px) {
   .stackEvents {
-    margin: var(--space-0) var(--space-9);
+    margin: 0 2.25rem;
   }
 }
 
 .headerPrimary {
-  background-color: var(--primary);
+  background-color: #0071e3;
+  color: #ffffff;
 }

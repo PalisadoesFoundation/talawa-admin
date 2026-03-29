@@ -1,20 +1,28 @@
+/**
+ * UserProfile — user profile settings card
+ */
+
+/* ── Card header ─────────────────────────────────────────────────────────────── */
 .cardHeader {
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid var(--cardHeader-border, #e9ecef);
-  background-color: var(--bg-header, #ffffff);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  background-color: #ffffff;
 }
 
 .cardTitle {
   font-weight: 600;
-  font-size: 1.2rem;
-  color: var(--cardTitle-color, #000000);
+  font-size: 1.125rem;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
+/* ── Card body ───────────────────────────────────────────────────────────────── */
 .cardBody {
   padding: 1.5rem;
-  color: var(--cardBody-color, #495057);
+  color: #6e6e73;
 }
 
+/* ── Profile layout ──────────────────────────────────────────────────────────── */
 .profileContainer {
   display: flex;
   align-items: center;
@@ -25,6 +33,10 @@
   width: 100px;
   height: 100px;
   flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  background-color: #e8f0fd;
 }
 
 .imgContainer img {
@@ -34,6 +46,7 @@
   object-fit: cover;
 }
 
+/* ── Profile info ────────────────────────────────────────────────────────────── */
 .profileDetails {
   display: flex;
   flex-direction: column;
@@ -43,5 +56,7 @@
 .userProfileName {
   font-weight: 700;
   font-size: 1.75rem;
-  color: var(--primaryText-color, #000000);
+  color: #1d1d1f;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
 }

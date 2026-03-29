@@ -1,6 +1,13 @@
+/**
+ * SidebarBase — Apple-inspired navigation rail
+ * -----------------------------------------------
+ * Clean white sidebar with a subtle right border.
+ * Smooth collapse / expand with CSS transition.
+ * Active items use the brand-blue pill highlight.
+ */
+
+/* ── Container ─────────────────────────────────────────────────────────────── */
 .leftDrawer {
-  width: calc(300px + 2rem);
-  min-height: 100%;
   position: fixed;
   top: 0;
   left: 0;
@@ -8,41 +15,43 @@
   z-index: 100;
   display: flex;
   flex-direction: column;
-  padding: 0.8rem 1rem 0 1rem;
-  background-color: var(--leftDrawer-fixedModule-bg) !important;
-  transition: 0.5s;
-  font-family: var(--bs-leftDrawer-font-family);
-  overflow-x: hidden !important;
+  padding: 1rem 0.75rem 1rem 0.75rem;
+  background-color: #ffffff;
+  border-right: 1px solid rgba(0, 0, 0, 0.07);
+  transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-x: hidden;
+  overflow-y: hidden;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    'Inter',
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-.activeDrawer {
-  width: calc(300px + 2rem);
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  animation: comeToRightBigScreen 0.5s ease-in-out;
+/* Expanded */
+.expandedDrawer {
+  width: var(--sidebar-expanded-width, 260px);
 }
 
-.inactiveDrawer {
-  position: fixed;
-  top: 0;
-  left: calc(-300px - 2rem);
-  bottom: 0;
-  animation: goToLeftBigScreen 0.5s ease-in-out;
+/* Collapsed */
+.collapsedDrawer {
+  width: var(--sidebar-collapsed-width, 72px);
+  min-width: var(--sidebar-collapsed-width, 72px);
+  max-width: var(--sidebar-collapsed-width, 72px);
 }
 
-.sidebarcompheight {
-  flex-grow: 1;
-  overflow-x: hidden !important;
-}
-
+/* ── Branding header ────────────────────────────────────────────────────────── */
 .sidebarBrandingContainer {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  gap: 0.625rem;
   margin-right: auto;
-  padding-left: 5px;
+  min-width: 0;
+  padding-left: 4px;
+  overflow: hidden;
 }
 
 .sidebarBrandingContainerHidden {
@@ -50,34 +59,64 @@
 }
 
 .talawaLogo {
-  width: 65px;
-  height: 60px;
-}
-
-.talawaLogoContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
 }
 
 .talawaText {
-  font-size: 20px;
-  font-weight: 500;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.01em;
 }
 
-.titleHeader {
-  font-size: 23px;
-  line-height: normal;
-  font-weight: bolder;
-  padding: 10px;
+.sidebarText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #1d1d1f;
+}
+
+/* ── Toggle / hamburger ─────────────────────────────────────────────────────── */
+.hamburgerIcon {
+  cursor: pointer;
+  color: #6e6e73;
+  transition:
+    color 0.18s ease,
+    transform 0.22s ease;
+  flex-shrink: 0;
+}
+
+.hamburgerIcon:hover {
+  color: #1d1d1f;
+}
+
+.hamburgerIconExpanded {
+  margin-left: 4px;
+}
+
+.hamburgerIconCollapsed {
+  margin-left: 0;
+}
+
+/* ── Scrollable nav area ────────────────────────────────────────────────────── */
+.sidebarcompheight {
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  margin-top: 0.5rem;
 }
 
 .optionList {
+  overflow-x: hidden;
   overflow-y: hidden;
-  overflow-x: hidden !important;
   scrollbar-width: thin;
-  scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
-  transition: overflow 0.3s ease-in-out;
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+  transition: overflow 0.2s ease;
 }
 
 .optionList:hover {
@@ -85,7 +124,7 @@
 }
 
 .optionList::-webkit-scrollbar {
-  width: 1px;
+  width: 4px;
 }
 
 .optionList::-webkit-scrollbar-track {
@@ -93,14 +132,15 @@
 }
 
 .optionList::-webkit-scrollbar-thumb {
-  background-color: transparent;
-  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 100px;
 }
 
 .optionList::-webkit-scrollbar-thumb:hover {
-  background-color: var(--leftDrawer-optionList-bg);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
+/* Nav items — base */
 .optionList button,
 .optionList a {
   display: flex;
@@ -109,285 +149,223 @@
   max-width: 100%;
   text-align: start;
   text-decoration: none;
-  margin-bottom: 0.8rem;
-  border-radius: 12px;
-  font-size: 16px;
-  padding: 0.6rem;
-  padding-left: 0.8rem;
+  margin-bottom: 2px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 450;
+  padding: 0.5625rem 0.625rem;
   outline: none;
   border: none;
   overflow: hidden;
+  letter-spacing: -0.005em;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.collapseBtn {
-  height: 48px;
-  border: none;
+/* ── Active / inactive nav state ────────────────────────────────────────────── */
+.leftDrawerActiveButton,
+.leftDrawerInactiveButton {
+  position: relative;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
+.leftDrawerActiveButton:active,
+.leftDrawerInactiveButton:active {
+  transform: scale(0.97);
+}
+
+.leftDrawerActiveButton {
+  background-color: #0071e3;
+  color: #ffffff !important;
+  font-weight: 600;
+}
+
+.leftDrawerActiveButton svg,
+.leftDrawerActiveButton path {
+  fill: #ffffff;
+  color: #ffffff;
+}
+
+.leftDrawerInactiveButton {
+  background-color: transparent;
+  color: #1d1d1f;
+}
+
+.leftDrawerInactiveButton:hover {
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.leftDrawerCollapseActiveButton {
+  background-color: #e8f0fd;
+  color: #0071e3;
+}
+
+/* ── Profile card wrapper ───────────────────────────────────────────────────── */
+.profileCardWrapper {
+  opacity: 1;
+  transition: opacity 0.2s ease;
+}
+
+.profileCardHidden {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  overflow: hidden;
+}
+
+/* ── Switch-portal button wrapper ─────────────────────────────────────────── */
+.switchPortalWrapper {
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+  padding-top: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Footer section ─────────────────────────────────────────────────────────── */
+.userSidebarOrgFooter {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ── Profile container (inside footer) ─────────────────────────────────────── */
 .profileContainer {
-  border: none;
-  width: 100%;
-  height: 52px;
-  border-radius: 16px;
   display: flex;
   align-items: center;
-  background-color: var(--leftDrawer-profileContainer-bg);
+  width: 100%;
+  border-radius: 12px;
+  padding: 0.5rem 0.625rem;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
-.profileContainer:focus {
-  outline: none;
+.profileContainer:hover {
+  background-color: #f5f5f7;
 }
 
 .profileContainer:focus-visible {
-  outline: 2px solid var(--primary-color);
+  outline: 2px solid #0071e3;
   outline-offset: 2px;
 }
 
-.imageContainer {
-  width: 68px;
-  margin-right: 8px;
-  margin-bottom: 10px;
+.profileContainer img {
+  height: 36px;
+  width: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
-.profileContainer img {
-  height: 52px;
-  width: 52px;
-  border-radius: 50%;
+.imageContainer {
+  width: 44px;
+  margin-right: 0.5rem;
+  flex-shrink: 0;
 }
 
 .profileTextUserSidebarOrg {
   flex: 1;
+  min-width: 0;
   text-align: start;
   overflow: hidden;
 }
 
 .primaryText {
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 600;
+  color: #1d1d1f;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
-  word-wrap: break-word;
   white-space: normal;
+  letter-spacing: -0.005em;
 }
 
 .secondaryText {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 400;
-  color: var(--leftDrawer-secondaryText-color);
+  color: #6e6e73;
   display: block;
   text-transform: capitalize;
-}
-
-.leftDrawerActiveButton,
-.leftDrawerInactiveButton {
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.leftDrawerActiveButton:active,
-.leftDrawerInactiveButton:active {
-  transform: scale(0.98);
-}
-
-.leftDrawerActiveButton {
-  background-color: var(--leftDrawer-active-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
-  font-weight: bold;
-}
-
-.leftDrawerActiveButton:hover .arrow-indicator {
-  transform: translateY(-50%) scale(1.1);
-  opacity: 1;
-}
-
-.leftDrawerInactiveButton {
-  background-color: var(--leftDrawer-inactive-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
-}
-
-.leftDrawerInactiveButton:hover {
-  background-color: var(--leftDrawer-inactive-button-hover-bg);
-}
-
-.leftDrawerCollapseActiveButton {
-  background-color: var(--leftDrawer-collapse-active-button-bg);
-  color: var(--leftDrawer-button-text-color, black);
-}
-
-.userSidebarOrgFooter {
-  margin-top: 60px !important;
-}
-
-.hamburgerIcon {
-  cursor: pointer;
-  color: var(--primaryText-color);
-  transition: transform 0.3s ease;
-  height: 38px;
-}
-
-.hamburgerIconExpanded {
-  margin-left: 10px;
-}
-
-.hamburgerIconCollapsed {
-  margin-left: 0;
-}
-
-.collapsedDrawer {
-  width: var(--sidebar-collapsed-width);
-  min-width: var(--sidebar-collapsed-width);
-  max-width: var(--sidebar-collapsed-width);
-  overflow-x: hidden !important;
-}
-
-.leftDrawer.collapsedDrawer {
-  width: var(--sidebar-collapsed-width) !important;
-  max-width: var(--sidebar-collapsed-width);
-}
-
-.sidebarText {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: var(--primaryText-color);
 }
 
-.expandedDrawer {
-  width: var(--sidebar-expanded-width);
-  overflow-x: hidden !important;
+/* ── Misc ────────────────────────────────────────────────────────────────────── */
+.titleHeader {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #a1a1a6;
+  padding: 0.75rem 0.625rem 0.375rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-@media (max-width: 1120px) {
-  .leftDrawer {
-    width: calc(250px + 2rem);
-    padding: 1rem 1rem 0 1rem;
-  }
+.collapseBtn {
+  height: 44px;
+  border: none;
 }
 
-@media (max-height: 900px) {
-  .leftDrawer {
-    width: calc(300px + 1rem);
-  }
-
-  .talawaLogo {
-    width: 38px;
-    height: 38px;
-    margin-right: 0.4rem;
-  }
-
-  .talawaText {
-    font-size: 1rem;
-  }
-
-  .optionList button {
-    margin-bottom: 0.05rem;
-    font-size: 16px;
-    padding-left: 0.8rem;
-  }
-
-  .primaryText {
-    font-size: 1rem;
-  }
-
-  .secondaryText {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-height: 650px) {
-  .leftDrawer {
-    padding: 0.5rem 0.8rem 0 0.8rem;
-    width: calc(250px);
-  }
-
-  .talawaText {
-    font-size: 0.8rem;
-  }
-
-  .titleHeader {
-    font-size: 16px;
-  }
-
-  .optionList button {
-    margin-bottom: 0.05rem;
-    font-size: 14px;
-    padding: 0.4rem;
-    padding-left: 0.8rem;
-  }
-
-  .primaryText {
-    font-size: 0.8rem;
-  }
-
-  .secondaryText {
-    font-size: 0.6rem;
-  }
-
-  .imageContainer {
-    width: 40px;
-    margin-left: 5px;
-    margin-right: 10px;
-  }
-
-  .imageContainer img {
-    width: 40px;
-    height: 100%;
-  }
-}
-
+/* ── Responsive ─────────────────────────────────────────────────────────────── */
 @media (max-width: 820px) {
   .leftDrawer.expandedDrawer {
     width: 100%;
     left: 0;
     right: 0;
+    box-shadow: 0 0 0 100vw rgba(0, 0, 0, 0.3);
   }
 
   .collapsedDrawer {
-    width: var(--sidebar-collapsed-width);
-    max-width: var(--sidebar-collapsed-width);
+    width: var(--sidebar-collapsed-width, 72px);
+    max-width: var(--sidebar-collapsed-width, 72px);
     right: auto;
-    box-sizing: border-box;
-  }
-
-  .inactiveDrawer {
-    opacity: 0;
-    left: 0;
-    z-index: -1;
-    animation: closeDrawer 0.2s ease-in-out;
   }
 }
 
-@keyframes comeToRightBigScreen {
-  0% {
-    left: -100%;
-  }
-
-  100% {
-    left: 0;
+@media (max-width: 1120px) {
+  .leftDrawer {
+    padding: 0.875rem 0.625rem;
   }
 }
 
-@keyframes goToLeftBigScreen {
-  0% {
-    left: 0;
+@media (max-height: 650px) {
+  .leftDrawer {
+    padding: 0.5rem 0.625rem;
   }
 
-  100% {
-    left: -100%;
-  }
-}
-
-@keyframes closeDrawer {
-  0% {
-    opacity: 1;
-    z-index: 100;
+  .talawaLogo {
+    width: 26px;
+    height: 26px;
   }
 
-  100% {
-    opacity: 0;
-    z-index: -1;
+  .talawaText {
+    font-size: 0.8rem;
+  }
+
+  .optionList button,
+  .optionList a {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8125rem;
+    margin-bottom: 1px;
+  }
+
+  .primaryText {
+    font-size: 0.8125rem;
+  }
+
+  .secondaryText {
+    font-size: 0.6875rem;
+  }
+
+  .imageContainer {
+    width: 36px;
+    margin-right: 0.375rem;
   }
 }

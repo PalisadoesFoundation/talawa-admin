@@ -1,16 +1,19 @@
+/**
+ * CardItemLoading — skeleton state for card item rows
+ */
+
 .cardItem {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* Vertically centers the items */
   justify-content: flex-start;
   height: 6rem;
   padding: 0.75rem;
   gap: 1.5rem;
-  background-color: #f7f8fa;
-  border: 1px solid var(--cardItem-border);
-  border-radius: 8px;
-  margin-top: 20px;
+  background-color: #f5f5f7;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  margin-top: 1.25rem;
 }
 
 .cardItem .iconWrapper {
@@ -21,8 +24,9 @@
   justify-content: center;
   align-items: center;
 }
+
 .themeOverlay {
-  background: var(--cardItem-iconWrapper-bg);
+  background: #0071e3;
   position: absolute;
   top: 0;
   right: 0;
@@ -39,10 +43,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-left: 3px;
+  color: #1d1d1f;
 }
 
 .titlePlaceholder {
-  --card-item-loading-height: 1.5rem;
   display: inline-block;
-  height: var(--card-item-loading-height);
+  height: 1.5rem;
+  background-color: #e5e5ea;
+  border-radius: 6px;
+  width: 70%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }

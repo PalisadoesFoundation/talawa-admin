@@ -1,7 +1,12 @@
+/**
+ * DashboardStats — stat grid row
+ */
+
 .flex {
   display: flex;
 }
 
 .iconGrey {
-  fill: var(--color-gray-700);
+  fill: #6e6e73;
+  color: #6e6e73;
 }

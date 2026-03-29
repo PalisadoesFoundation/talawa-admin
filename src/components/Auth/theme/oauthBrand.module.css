@@ -1,29 +1,37 @@
+/**
+ * oauthBrand — branded OAuth button variants (Google, GitHub)
+ */
+
 .logo {
-  width: var(--font-size-xl);
-  height: var(--font-size-xl);
+  width: 20px;
+  height: 20px;
 }
 
+/* ── Google ─────────────────────────────────────────────────────────────────── */
 .googleButton {
-  background-color: var(--color-white) !important;
-  color: var(--color-black);
-  border: var(--space-5) solid var(--color-white);
+  background-color: #ffffff !important;
+  color: #1d1d1f !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 .googleButton:hover {
-  background-color: var(--color-white) !important;
-  color: var(--color-black) !important;
+  background-color: #f5f5f7 !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  color: #1d1d1f !important;
 }
 
+/* ── GitHub ─────────────────────────────────────────────────────────────────── */
 .githubButton {
-  background-color: var(--color-gray-900) !important;
-  color: var(--color-white);
-  border: var(--space-5) solid var(--color-black);
+  background-color: #1d1d1f !important;
+  color: #ffffff !important;
+  border: 1.5px solid #1d1d1f !important;
 }
 
 .githubButton:hover {
-  background-color: var(--color-black) !important;
+  background-color: #2d2d2f !important;
+  border-color: #2d2d2f !important;
 }
 
 .githubButton:active {
-  background-color: var(--color-black) !important;
+  background-color: #000000 !important;
 }

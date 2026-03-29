@@ -1,81 +1,97 @@
+/**
+ * EventHeader — calendar header with search + view controls
+ */
+
 .calendarEventHeader {
   width: 100%;
-  border-radius: var(--radius-lg);
-  padding: var(--space-2);
+  border-radius: 10px;
+  padding: 0.5rem;
 }
 
+/* ── Header row ──────────────────────────────────────────────────────────────── */
 .calendar__header {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: var(--space-1);
+  gap: 0.25rem;
   flex-wrap: wrap;
-  margin-left: calc(var(--space-1) * 2);
-  margin-top: calc(var(--space-6) * -1);
+  margin-left: 0.5rem;
+  margin-top: -1.5rem;
 }
 
 .calendar__search {
-  flex: 0 1 calc(var(--space-27) + var(--space-6));
-  min-width: var(--space-24);
+  flex: 0 1 480px;
+  min-width: 280px;
   max-width: 100%;
-  margin-left: calc(var(--space-2) * -1);
+  margin-left: -0.375rem;
 }
 
+/* ── Buttons block ───────────────────────────────────────────────────────────── */
 .btnsBlock {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-4);
+  gap: 1rem;
   width: auto;
   flex-shrink: 0;
-  height: var(--space-9);
-  margin-top: var(--space-10);
-  margin-left: calc(var(--space-1) * -20);
+  height: 2.25rem;
+  margin-top: 2.5rem;
+  margin-left: -5rem;
 }
 
 .btnsBlock .dropdown {
-  min-width: var(--space-15);
+  min-width: 140px;
   position: relative;
   background-color: transparent;
   border: none;
 }
 
 .btnsBlock button.dropdown {
-  background-color: var(--color-gray-50);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  color: #6e6e73;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
-  border-radius: var(--radius-md);
+  gap: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .btnsBlock .dropdown :global(.btn) {
-  background-color: var(--color-gray-50);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: #ffffff;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  color: #6e6e73;
   width: 100%;
-  border-radius: var(--radius-md);
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .btnsBlock button.dropdown:hover,
 .btnsBlock .dropdown :global(.btn):hover {
-  background-color: var(--color-gray-400);
-  border-color: var(--color-gray-600);
-  color: var(--color-gray-800);
+  background-color: #0071e3;
+  border-color: #0071e3;
+  color: #ffffff;
 }
 
-/* Ensure the dropdown menu matches the button width perfectly */
+/* ── Dropdown menu ───────────────────────────────────────────────────────────── */
 .dropdown :global(.dropdown-menu) {
   min-width: 100% !important;
   width: 100% !important;
-  margin-top: var(--radius-sm);
-  border-radius: var(--radius-lg);
+  margin-top: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
 
-@media screen and (max-width: var(--breakpoint-md)) {
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media screen and (max-width: 768px) {
   .calendar__header {
     flex-wrap: wrap;
     height: auto;
@@ -85,7 +101,7 @@
     flex: 1 1 100%;
     min-width: 100%;
     margin-left: 0;
-    margin-bottom: var(--space-4);
+    margin-bottom: 1rem;
   }
 
   .btnsBlock {

@@ -1,18 +1,22 @@
+/**
+ * ErrorPanel — centered error state display
+ */
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: var(--space-17);
-  padding: var(--space-8) var(--space-5);
+  min-height: 420px;
+  padding: 2rem 1.25rem;
 }
 
 .message {
   text-align: center;
-  max-width: var(--space-26);
+  max-width: 480px;
 }
 
 .errorIcon {
-  color: var(--bs-danger, #dc3545);
-  font-size: var(--font-size-4xl);
-  margin-bottom: var(--space-5);
+  color: #ff3b30;
+  font-size: 2.5rem;
+  margin-bottom: 1.25rem;
 }

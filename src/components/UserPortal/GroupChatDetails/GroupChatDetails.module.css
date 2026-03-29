@@ -1,52 +1,45 @@
+/**
+ * GroupChatDetails — group chat info panel (members, edit name, etc.)
+ */
+
+/* ── Table ───────────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--tableHeader-green) !important;
-  color: var(--tableHeader-color);
+  background-color: #f5f5f7 !important;
+  color: #6e6e73;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .tableBody {
-  font-size: var(--font-size-table-body);
+  font-size: 0.9375rem;
+  color: #1d1d1f;
 }
 
+/* ── Role badge ──────────────────────────────────────────────────────────────── */
 .roleBadge {
-  --badge-padding-x: 0.65em;
-  --badge-padding-y: 0.35em;
-
   display: inline-block;
-  padding: var(--badge-padding-y) var(--badge-padding-x);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1;
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: calc(var(--radius-xs) + var(--radius-sm));
-  background-color: var(--color-green-500);
-  color: var(--color-gray-900);
-  margin-left: var(--space-3);
+  border-radius: 100px;
+  background-color: #eaf9ee;
+  color: #1a6632;
+  margin-left: 0.75rem;
 }
 
-.hiddenInput {
-  display: none;
-}
-
-.dropdownToggle {
-  color: var(--color-black);
-  border: none;
-  padding: var(--space-1);
-  background: none;
-  box-shadow: none;
-  width: var(--space-6);
-}
-
-.removeItem {
-  color: var(--bs-danger);
-}
-
+/* ── Modal ───────────────────────────────────────────────────────────────────── */
 .modalContent {
-  width: var(--modal-width);
-  max-width: var(--modal-max-width);
+  width: var(--modal-width, 600px);
+  max-width: var(--modal-max-width, 600px);
 }
 
+/* ── Group info header ───────────────────────────────────────────────────────── */
 .groupInfo {
   display: flex;
   flex-direction: column;
@@ -55,60 +48,87 @@
 }
 
 .groupImage {
-  margin-bottom: var(--space-5);
+  margin-bottom: 1.25rem;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  object-fit: cover;
 }
 
 .editImgBtn {
-  padding: var(--space-1) var(--space-3) var(--space-3) var(--space-4);
-  border-radius: var(--radius-full);
-  background-color: var(--editImgBtn-bg);
-  border: var(--border-1) solid var(--editImgBtn-border);
-  color: var(--editImgBtn-color);
+  padding: 0.25rem 0.75rem 0.75rem 1rem;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  color: #6e6e73;
   position: relative;
-  top: calc(var(--space-9) * -1);
-  left: var(--space-9);
+  top: -2.25rem;
+  left: 2.25rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.editImgBtn:hover {
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 .editImgBtn:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--space-1);
+  outline: 3px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 2px;
 }
 
+/* ── Edit chat name ──────────────────────────────────────────────────────────── */
 .editChatNameContainer {
   display: flex;
-  gap: var(--space-7);
+  gap: 1.75rem;
   align-items: center;
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-5);
+  font-size: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.editChatNameContainer h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.01em;
 }
 
 .editChatNameContainer input {
   border: none;
-  border-bottom: var(--border-1) solid var(--editChatNameContainer-border);
+  border-bottom: 1.5px solid #0071e3;
   outline: none;
-  padding: var(--space-0) var(--space-3);
+  padding: 0 0.75rem;
+  font-size: 1.125rem;
+  color: #1d1d1f;
+  background: transparent;
+  transition: border-color 0.15s ease;
 }
 
 .editChatNameContainer input:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--space-1);
+  outline: none;
+  border-bottom-color: #0071e3;
 }
 
-.editChatNameContainer h3 {
-  margin: var(--space-0);
-}
-
+/* ── Cancel icon ─────────────────────────────────────────────────────────────── */
 .cancelIcon {
-  color: var(--icon-cancel);
+  color: #ff3b30;
   cursor: pointer;
-  font-size: var(--font-size-md);
+  font-size: 0.9375rem;
+  transition: color 0.15s ease;
 }
 
+.cancelIcon:hover {
+  color: #ff453a;
+}
+
+/* ── Member list ─────────────────────────────────────────────────────────────── */
 .memberList {
-  max-height: var(--space-23);
+  max-height: 360px;
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge legacy */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .memberList::-webkit-scrollbar {
@@ -118,7 +138,7 @@
 .listItem {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: 1.25rem;
 }
 
 .groupMembersList {
@@ -128,41 +148,43 @@
 }
 
 .groupMembersList p {
-  margin: var(--space-0);
-  color: var(--groupMemberList-p-color);
+  margin: 0;
+  color: #6e6e73;
+  font-size: 0.875rem;
 }
 
 .membersImage {
-  width: var(--space-9) !important;
+  width: 36px !important;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
+/* ── Chat user details ───────────────────────────────────────────────────────── */
 .chatUserDetails {
   display: flex;
   align-items: center;
   width: 100%;
-  gap: var(--space-5);
+  gap: 1.25rem;
   justify-content: space-between;
 }
 
+/* ── Search input ────────────────────────────────────────────────────────────── */
 .input {
   flex: 1;
   position: relative;
-  padding-right: var(--space-9);
-  padding-inline-end: var(--space-9);
-  width: var(--space-25);
+  padding-right: 2.25rem;
+  padding-inline-end: 2.25rem;
+  width: 380px;
 }
 
-.input:active {
-  box-shadow: var(--dropdownItem-box-shadow) !important;
-  background-color: var(--create-button-bg-color);
-  border-color: var(--input-shadow) !important;
-  color: var(--input-text-color);
-}
 .input:focus {
-  box-shadow: var(--dropdownItem-box-shadow) !important;
-  border-color: var(--input-shadow) !important;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+  border-color: #0071e3;
 }
 
+/* ── Header section ──────────────────────────────────────────────────────────── */
 .headerSection {
   display: flex;
   justify-content: space-between;
@@ -171,12 +193,45 @@
 
 .headerGroupInfo {
   margin-bottom: 0;
-  line-height: var(--line-height-normal);
-  font-size: var(--font-size-xl);
+  line-height: 1.4;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  letter-spacing: -0.02em;
+}
+
+/* ── Dropdown ────────────────────────────────────────────────────────────────── */
+.dropdownToggle {
+  color: #6e6e73;
+  border: none;
+  padding: 0.25rem;
+  background: none;
+  box-shadow: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition: background-color 0.15s ease;
+}
+
+.dropdownToggle:hover {
+  background-color: #f5f5f7;
+  color: #1d1d1f;
+}
+
+.removeItem {
+  color: #ff3b30;
+}
+
+/* ── Misc ────────────────────────────────────────────────────────────────────── */
+.hiddenInput {
+  display: none;
 }
 
 .userName {
-  margin-left: var(--space-3);
+  margin-left: 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1d1d1f;
 }
 
 .dropdown {

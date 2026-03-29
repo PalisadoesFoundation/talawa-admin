@@ -1,11 +1,21 @@
+/**
+ * ProfileDropdown — user profile dropdown button in sidebar
+ */
+
 .logoutBtn {
-  color: var(--color-red-500);
+  color: #ff3b30;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.logoutBtn:hover {
+  color: #ff453a;
 }
 
 .profileContainer {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0.75rem;
 }
 
 .imageContainer {
@@ -13,27 +23,37 @@
 }
 
 .avatarStyle {
-  width: var(--space-9);
-  height: var(--space-9);
-  border-radius: var(--radius-full);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  object-fit: cover;
+  background-color: #e8f0fd;
+  color: #0071e3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
 }
 
 .profileText {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 1px;
 }
 
 .primaryText {
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-900);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1d1d1f;
+  letter-spacing: -0.005em;
 }
 
 .secondaryText {
-  font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-xs);
-  color: var(--color-gray-500);
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: #6e6e73;
+  text-transform: capitalize;
 }
 
 .dropdownToggle {
@@ -41,4 +61,9 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.dropdownToggle:hover {
+  opacity: 0.75;
 }

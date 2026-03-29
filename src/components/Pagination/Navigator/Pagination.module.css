@@ -1,4 +1,8 @@
+/**
+ * Pagination — navigator container
+ */
+
 .container {
   flex-shrink: 0;
-  margin-inline-start: 20px;
+  margin-inline-start: 1.25rem;
 }

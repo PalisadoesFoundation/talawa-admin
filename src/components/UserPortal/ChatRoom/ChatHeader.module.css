@@ -1,41 +1,54 @@
+/**
+ * ChatHeader — sticky header inside a chat room
+ */
+
 .header {
   position: sticky;
-  top: var(--space-0);
-  background: white;
+  top: 0;
+  background: #ffffff;
+  z-index: 10;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  padding-bottom: 0.5rem;
 }
 
+/* ── User info row ───────────────────────────────────────────────────────────── */
 .userInfo {
   display: flex;
-  border-bottom: var(--space-1) solid var(--color-black);
-  padding-bottom: var(--space-3);
+  padding-bottom: 0.75rem;
   align-items: center;
-  margin-top: var(--space-3);
-  gap: var(--space-4);
+  margin-top: 0.75rem;
+  gap: 1rem;
 }
 
 .contactImage {
-  width: var(--space-9) !important;
-  height: auto !important;
-  border-radius: var(--space-4);
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .userDetails {
   display: flex;
   align-items: center;
-  font-size: var(--font-size-sm);
-  gap: var(--space-3);
-}
-
-.userDetails .subtitle {
-  font-size: var(--font-size-xs);
-  color: var(--color-gray-400);
-  margin: 0;
+  font-size: 0.875rem;
+  gap: 0.75rem;
 }
 
 .userDetails .title {
-  font-size: var(--font-size-lg);
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.userDetails .subtitle {
+  font-size: 0.75rem;
+  color: #6e6e73;
   margin: 0;
 }

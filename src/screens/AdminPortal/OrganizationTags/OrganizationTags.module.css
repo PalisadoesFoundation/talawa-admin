@@ -1,67 +1,85 @@
+/**
+ * OrganizationTags — tags management screen
+ */
+
+/* ── Error state ─────────────────────────────────────────────────────────────── */
 .errorContainer {
   min-height: 100vh;
+  background-color: #f5f5f7;
 }
 
 .errorMessage {
-  margin-top: 25%;
+  margin-top: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  gap: 0.75rem;
+  color: #6e6e73;
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
-
-  &::before {
-    content: '⚠️';
-  }
+  font-size: 2.5rem;
+  color: #ff3b30;
+  margin-bottom: 1.25rem;
 }
 
+/* ── Table ───────────────────────────────────────────────────────────────────── */
 .tableHeader {
-  background-color: var(--color-red-500);
-  font-weight: var(--font-weight-bold);
+  background-color: #f5f5f7;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: #6e6e73;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07) !important;
 }
 
 .tableItemIndex {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-gray-700);
+  font-weight: 500;
+  color: #6e6e73;
+  font-size: 0.875rem;
 }
 
+/* ── Breadcrumb links ────────────────────────────────────────────────────────── */
 .tagsBreadCrumbs {
-  color: var(--color-gray-400);
+  color: #6e6e73;
   cursor: pointer;
-  &::after {
-    display: block;
-    content: attr(data-text);
-    font-weight: var(--font-weight-semibold);
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-  }
+  font-size: 0.9375rem;
+  transition: color 0.15s ease;
+}
+
+.tagsBreadCrumbs::after {
+  display: block;
+  content: attr(data-text);
+  font-weight: 600;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .tagsBreadCrumbs:hover,
 .tagsBreadCrumbs:focus {
-  color: var(--color-blue-800);
-  font-weight: var(--font-weight-semibold);
+  color: #0071e3;
+  font-weight: 600;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+/* ── Sub-tags link ───────────────────────────────────────────────────────────── */
 .subTagsLink i {
   visibility: hidden;
 }
 
 .subTagsLink:hover,
 .subTagsLink:focus {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
+  color: #6e6e73;
+  font-weight: 600;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .subTagsLink:hover i,
@@ -70,143 +88,156 @@
 }
 
 .subTagsLink {
-  color: var(--color-blue-800);
-  font-weight: var(--font-weight-medium);
+  color: #0071e3;
+  font-weight: 500;
   cursor: pointer;
-
-  &::after {
-    display: block;
-    content: attr(data-text);
-    font-weight: var(--font-weight-semibold);
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-  }
+  font-size: 0.9375rem;
+  transition: color 0.15s ease;
 }
 
+.subTagsLink::after {
+  display: block;
+  content: attr(data-text);
+  font-weight: 600;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+/* ── Scrollable div ──────────────────────────────────────────────────────────── */
 .orgUserTagsScrollableDiv {
-  scrollbar-width: auto;
-  scrollbar-color: var(--color-gray-300) transparent;
-  max-height: calc(100vh - var(--space-20));
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+  max-height: calc(100vh - 5rem);
   overflow: auto;
   position: sticky;
   top: 0;
 }
 
+/* ── Buttons ─────────────────────────────────────────────────────────────────── */
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  background-color: #e8f0fd;
+  color: #0071e3;
+  border: 1.5px solid #c7dcf9;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
   box-shadow: none;
 }
 
 .createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-3);
-  width: var(--space-16);
-  height: var(--space-10);
+  background-color: #ffffff;
+  color: #1d1d1f;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  margin: 0.375rem 0.75rem;
+  width: 130px;
+  height: 2.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .createButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  background-color: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: none;
 }
 
 .createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  background-color: #ebebf0;
+  border-color: rgba(0, 0, 0, 0.18);
 }
 
 .inputField {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-200);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg) rgba(0, 0, 0, 0.1);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .inputField::placeholder {
-  color: var(--color-gray-500);
+  color: #a1a1a6;
   opacity: 1;
 }
 
 .inputField:focus {
-  border: var(--border-0) solid var(--color-gray-300);
-  background-color: var(--color-gray-50);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
-    rgba(0, 0, 0, 0.25);
+  border-color: #0071e3;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
   outline: none;
-  transition: box-shadow 0.2s ease;
 }
 
 .removeButton {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-5);
-  --bs-btn-border-color: var(--color-red-100);
+  margin-bottom: 1rem;
+  background-color: #fff0ef;
+  color: #c0392b;
+  margin-right: 1.25rem;
+  border: 1.5px solid #ffd5d2 !important;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: #ff3b30 !important;
+  border-color: #ff3b30 !important;
+  color: #ffffff !important;
 }
 
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  background-color: #0071e3;
+  border-color: #0071e3;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-600);
-  border-color: var(--color-gray-700);
+  background-color: #0077ed !important;
+  border-color: #0077ed !important;
+  color: #ffffff !important;
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
+  margin-bottom: 1rem;
+  opacity: 0.45;
 }
 
+/* ── Buttons toolbar ─────────────────────────────────────────────────────────── */
 .btnsContainer {
   display: flex;
-  margin: var(--space-9) 0;
+  margin: 2.25rem 0;
   align-items: center;
-}
-
-.btnsContainer {
-  display: flex;
-  align-items: center;
-  gap: var(--space-5);
+  gap: 1.25rem;
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .btnsContainer > :first-child {
-  flex: 1 1 var(--space-21);
-  min-width: var(--space-18);
+  flex: 1 1 300px;
+  min-width: 200px;
   max-width: 100%;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -217,10 +248,11 @@
   margin-top: 0;
 }
 
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
-    margin: var(--space-7) 0;
+    margin: 1.75rem 0;
   }
 
   .btnsContainer > div {
@@ -231,19 +263,14 @@
 
   .btnsContainer .btnsBlock {
     display: block;
-    margin: var(--space-7) 0 0 0;
+    margin: 1.75rem 0 0;
     justify-content: space-between;
   }
 
   .btnsContainer .btnsBlock button {
     margin: 0;
-    margin-left: 0;
     width: 100%;
-    max-width: var(--space-27);
-  }
-
-  .btnsContainer .btnsBlock div button {
-    margin-right: var(--space-7);
+    max-width: 420px;
   }
 }
 
@@ -254,7 +281,7 @@
 
   .btnsContainer .btnsBlock {
     display: block;
-    margin-top: var(--space-5);
+    margin-top: 1.25rem;
     margin-right: 0;
   }
 
@@ -263,7 +290,7 @@
   }
 
   .btnsContainer .btnsBlock button {
-    margin-bottom: var(--space-5);
+    margin-bottom: 1.25rem;
     margin-right: 0;
     width: 100%;
   }

@@ -1,18 +1,33 @@
+/**
+ * Scroll styles — Apple-style minimal scrollbar
+ */
+
 .customScroll {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
+
 .customScroll::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
+
 .customScroll::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 6px;
+  background: transparent;
+  border-radius: 100px;
 }
+
 .customScroll::-webkit-scrollbar-thumb {
-  background: var(--bs-gray-500);
-  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.14);
+  border-radius: 100px;
+  transition: background 0.2s ease;
 }
+
 .customScroll::-webkit-scrollbar-thumb:hover {
-  background: var(--bs-gray-600);
-  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+/* Firefox */
+.customScroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.14) transparent;
 }

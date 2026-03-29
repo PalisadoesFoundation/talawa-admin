@@ -1,29 +1,36 @@
+/**
+ * SearchFilterBar — top-of-screen action toolbar
+ * -------------------------------------------------
+ * Horizontally laid-out search input + filter/action buttons.
+ * Wraps gracefully on small viewports.
+ */
+
 .btnsContainerSearchBar {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  margin: var(--space-7) 0 var(--space-7) 0;
-  padding: 0 var(--space-8) 0 var(--space-3);
-  align-items: stretch;
-  gap: var(--space-1);
+  margin: 1.25rem 0;
+  padding: 0 0.5rem;
+  gap: 0.625rem;
   flex-wrap: wrap;
-  min-height: var(--space-10);
+  min-height: 44px;
 }
 
 .btnsBlockSearchBar {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0.5rem;
 }
 
+/* Accessibility — visually hidden, readable by screen readers */
 .screenReaderOnly {
   position: absolute;
-  width: 0;
-  height: 0;
+  width: 1px;
+  height: 1px;
   padding: 0;
-  margin: calc(-1 * var(--space-5));
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

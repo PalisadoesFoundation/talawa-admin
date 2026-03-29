@@ -1,60 +1,80 @@
+/**
+ * UserContactDetails — member contact detail card
+ */
+
 .allRound {
-  border-radius: var(--space-4);
+  border-radius: 1rem;
 }
 
 .cardControl {
-  margin-bottom: var(--space-5);
+  margin-bottom: 1.25rem;
   display: none;
 }
 
 .inputColor {
-  background: var(--color-gray-100);
+  background: #f5f5f7;
 }
 
 .saveChangesBtn {
-  background-color: var(--color-primary-200);
-  color: var(--color-gray-700);
+  background-color: #0071e3;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.saveChangesBtn:hover {
+  background-color: #0077ed;
+  box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
 }
 
 .topRadius {
-  border-top-left-radius: var(--space-6);
-  border-top-right-radius: var(--space-6);
-  color: var(--color-gray-700);
-  background: var(--color-gray-200);
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+  color: #1d1d1f;
+  background: #e5e5ea;
 }
 
 .userContactDetailPersonalCardHeader {
-  padding: var(--space-4) var(--space-5);
+  padding: 1rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top-left-radius: var(--space-2);
-  border-top-right-radius: var(--space-2);
-  background: var(--color-gray-200);
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background: #e5e5ea;
 }
 
 .userContactDetailContactAvatarUrl {
-  width: var(--space-8);
-  height: var(--space-8);
+  width: 2rem;
+  height: 2rem;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 .userContactDetailContactAvatarEditIcon {
   cursor: pointer;
-  font-size: var(--font-size-md);
+  font-size: 0.9375rem;
   border: none;
+  background: none;
+  color: #6e6e73;
 }
 
 .dateboxMemberDetail {
-  border-radius: var(--space-2);
-  border-color: var(--color-gray-300);
+  border-radius: 0.5rem;
+  border-color: rgba(0, 0, 0, 0.1);
   outline: none;
   box-shadow: none;
-  background: var(--color-gray-100);
+  background: #f5f5f7;
   display: flex;
   align-items: center;
 }
 
 .dropdownField button span {
-  font-size: var(--font-size-sm);
+  font-size: 0.875rem;
 }

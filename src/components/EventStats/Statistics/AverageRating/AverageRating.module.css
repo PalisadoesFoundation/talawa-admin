@@ -1,17 +1,22 @@
+/**
+ * AverageRating — star rating display card
+ */
+
 .cardContainer {
-  margin: var(--space-4) var(--space-6);
-  padding: var(--space-4);
-  background-color: var(--box-bg);
-  box-shadow: var(--drop-shadow);
-  border-radius: var(--space-2);
+  margin: 1rem 1.5rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.07);
 }
 
 .ratingFilled {
-  color: var(--rating-star-filled);
+  color: #f59e0b;
 }
 
 .ratingHover {
-  color: var(--rating-star-hover);
+  color: #fbbf24;
 }
 
 .ratingIcon {
@@ -20,4 +25,5 @@
 
 .ratingEmptyIcon {
   font-size: inherit;
+  color: #e5e5ea;
 }

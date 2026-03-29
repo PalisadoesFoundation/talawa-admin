@@ -1,22 +1,27 @@
+/**
+ * OrganizationVenues — venues management screen
+ */
+
+/* ── Buttons toolbar ─────────────────────────────────────────────────────────── */
 .btnsContainer {
   display: flex;
-  margin: var(--space-9) 0;
+  margin: 2.25rem 0;
   align-items: center;
-  gap: var(--space-5);
+  gap: 1.25rem;
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .btnsContainer > :first-child {
-  flex: 1 1 var(--space-21);
-  min-width: var(--space-18);
+  flex: 1 1 336px;
+  min-width: 288px;
   max-width: 100%;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -34,7 +39,7 @@
 
   .btnsContainer .btnsBlock {
     display: block;
-    margin-top: var(--space-5);
+    margin-top: 1.25rem;
     margin-right: 0;
   }
 
@@ -43,7 +48,7 @@
   }
 
   .btnsContainer .btnsBlock button {
-    margin-bottom: var(--space-5);
+    margin-bottom: 1.25rem;
     margin-right: 0;
     width: 100%;
   }
@@ -52,7 +57,7 @@
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
-    margin: var(--space-7) 0;
+    margin: 1.75rem 0;
   }
 
   .btnsContainer > div {
@@ -63,19 +68,19 @@
 
   .btnsContainer .btnsBlock {
     display: block;
-    margin: var(--space-7) 0 0 0;
+    margin: 1.75rem 0 0;
   }
 
   .btnsContainer .btnsBlock button {
-    margin-bottom: var(--space-5);
+    margin-bottom: 1.25rem;
     margin-right: 0;
     width: 100%;
-    max-width: var(--space-27);
+    max-width: 432px;
     margin-left: 0;
   }
 
   .btnsContainer .btnsBlock div button {
-    margin-right: var(--space-7);
+    margin-right: 1.75rem;
   }
 
   .btnsContainer .input {
@@ -83,43 +88,40 @@
   }
 }
 
+/* ── Sort/filter dropdown ────────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-gray-50);
-  min-width: var(--space-15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  background-color: #ffffff;
+  min-width: 120px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  color: #1d1d1f;
+  font-size: 0.875rem;
+  font-weight: 500;
   position: relative;
   display: inline-block;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.dropdown:is(
-  :hover,
-  :focus,
-  :active,
-  :focus-visible,
-  .show,
-  :disabled,
-  :checked
-) {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+.dropdown:is(:hover, :focus, :active, :focus-visible, .show, :disabled, :checked) {
+  box-shadow: 0 2px 8px rgba(0, 113, 227, 0.15);
+  border-color: #0071e3;
+  color: #1d1d1f;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--border-2) solid var(--color-blue-200);
+  outline: 2px solid rgba(0, 113, 227, 0.3);
+  outline-offset: 1px;
 }
 
+/* ── Page layout ─────────────────────────────────────────────────────────────── */
 .mainpageright > hr {
-  margin-top: var(--space-8);
+  margin-top: 2rem;
   width: 100%;
-  margin-left: calc(var(--space-5) * -1);
-  margin-right: calc(var(--space-5) * -1);
-  margin-bottom: var(--space-8);
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
+  margin-bottom: 2rem;
 }
 
 @media screen and (max-width: 575.5px) {

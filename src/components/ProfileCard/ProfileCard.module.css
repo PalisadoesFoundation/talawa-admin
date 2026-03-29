@@ -1,15 +1,31 @@
+/**
+ * ProfileCard — user avatar + name in sidebar footer
+ * ----------------------------------------------------
+ */
+
 .dropdownContainer {
   width: 100%;
 }
 
 .displayName {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
 .profileContainer {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  width: 100%;
+}
+
+.profileContainer:hover {
+  background-color: #f5f5f7;
 }
 
 .imageContainer {
@@ -17,29 +33,38 @@
 }
 
 .avatarStyle {
-  width: var(--space-10);
-  height: var(--space-10);
-  border-radius: var(--radius-full);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
   object-fit: cover;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
 }
 
 .profileTextUserSidebarOrg {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 1px;
   flex: 1;
+  min-width: 0;
 }
 
 .primaryText {
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-900);
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #1d1d1f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: -0.005em;
 }
 
 .secondaryText {
-  font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-xs);
-  color: var(--color-gray-600);
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: #6e6e73;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chevronRightbtn {
@@ -51,9 +76,16 @@
   align-items: center;
   justify-content: center;
   margin-left: auto;
+  flex-shrink: 0;
+  color: #a1a1a6;
+  transition: color 0.15s ease;
+}
+
+.chevronRightbtn:hover {
+  color: #6e6e73;
 }
 
 .chevronIcon {
-  color: var(--color-gray-600);
-  font-size: var(--font-size-lg);
+  color: #a1a1a6;
+  font-size: 1rem;
 }

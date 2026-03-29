@@ -1,8 +1,13 @@
+/**
+ * RecurringEventVolunteerModal — select recurrence scope for volunteer sign-up
+ */
+
 .radioFieldset {
   border: 0;
   padding: 0;
 }
 
+/* Visually hidden legend (screen reader only) */
 .radioLegend {
   position: absolute;
   width: 1px;
@@ -18,22 +23,26 @@
 .radioGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: 0.75rem;
 }
 
 .radioOption {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-2);
+  gap: 0.5rem;
+  accent-color: #0071e3;
 }
 
 .radioLabel {
   flex: 1;
   cursor: pointer;
+  font-size: 0.9375rem;
+  color: #1d1d1f;
 }
 
 .radioDescription {
-  font-size: var(--font-size-sm);
-  color: var(--color-gray-600);
-  margin-top: var(--space-1);
+  font-size: 0.875rem;
+  color: #6e6e73;
+  margin-top: 0.25rem;
+  line-height: 1.5;
 }
