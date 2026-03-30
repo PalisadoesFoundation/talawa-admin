@@ -10,3 +10,14 @@
   fill: #6e6e73;
   color: #6e6e73;
 }
+
+.cardBtn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}

@@ -23,10 +23,10 @@
 }
 
 .cardBody {
-  padding: 1.25rem 1.375rem 1.375rem;
+  padding: 1.5rem 1.75rem 1.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.75rem;
   width: 100%;
 }
 
@@ -43,8 +43,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   color: #0071e3;
   opacity: 0.75;
@@ -59,6 +59,8 @@
 .cardbodyIcon path {
   fill: #0071e3;
   color: #0071e3;
+  width: 40px;
+  height: 40px;
 }
 
 /* ── Metric number ───────────────────────────────────────────────────────────── */

@@ -163,7 +163,7 @@ const UserScreen = (): React.JSX.Element => {
         )}
       </div>
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? styles.contentContainer : ''}`}
+        className={hideDrawer ? styles.expand : styles.contract}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">

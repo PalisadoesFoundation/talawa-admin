@@ -3,25 +3,34 @@
  */
 
 /* ── Sidebar expand/contract animations ─────────────────────────────────────── */
-.expand {
-  margin-left: 3.25rem;
-  padding-left: 2.75rem;
-  animation: moveLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.contract {
-  padding-left: 5.5rem;
-  animation: moveRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 @keyframes moveLeft {
-  from { margin-left: 5.5rem; }
-  to   { margin-left: 3.25rem; }
+  from { padding-left: calc(var(--sidebar-expanded-width, 345px) + 1.75rem); }
+  to   { padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.75rem); }
 }
 
 @keyframes moveRight {
-  from { padding-left: 2.75rem; }
-  to   { padding-left: 5.5rem; }
+  from { padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.75rem); }
+  to   { padding-left: calc(var(--sidebar-expanded-width, 345px) + 1.75rem); }
+}
+
+/* Collapsed sidebar — content shifts left */
+.expand,
+.marginLeft80 {
+  padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.75rem);
+}
+
+.expand {
+  animation: moveLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Expanded sidebar — content shifts right */
+.contract,
+.marginLeft260 {
+  padding-left: calc(var(--sidebar-expanded-width, 345px) + 1.75rem);
+}
+
+.contract {
+  animation: moveRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Main container ──────────────────────────────────────────────────────────── */
@@ -116,10 +125,11 @@
 
 @media (max-width: 820px) {
   .contract,
-  .expand {
+  .expand,
+  .marginLeft80,
+  .marginLeft260 {
     animation: none;
-    margin-left: 0;
-    padding-left: 0;
+    padding-left: 2.25rem;
   }
 }
 

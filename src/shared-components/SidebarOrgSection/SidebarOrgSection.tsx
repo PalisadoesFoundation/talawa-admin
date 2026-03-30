@@ -33,7 +33,6 @@ import type {
   IOrganizationData,
 } from 'types/shared-components/SidebarOrgSection/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import Button from 'shared-components/Button';
 
 const SidebarOrgSection = ({
   orgId,
@@ -57,27 +56,26 @@ const SidebarOrgSection = ({
   return (
     <div className={`${styles.organizationContainer} pe-3`}>
       {loading ? (
-        <Button
+        <div
           className={`${styles.profileContainer} shimmer`}
           data-testid="orgBtn"
-          type="button"
         />
       ) : !data?.organization ? (
         !isProfilePage && (
-          <Button
-            type="button"
-            className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
-            disabled
+          <div
+            className={`${styles.profileContainer} ${styles.bgDanger}`}
             data-testid="sidebar-org-error"
           >
             <div className="px-3">
               <WarningAmberOutlined />
             </div>
-            {tErrors('errorLoading', { entity: 'Organization' })}
-          </Button>
+            <span className={styles.errorText}>
+              {tErrors('errorLoading', { entity: 'Organization' })}
+            </span>
+          </div>
         )
       ) : (
-        <Button
+        <button
           type="button"
           className={styles.profileContainer}
           data-testid="OrgBtn"
@@ -101,10 +99,10 @@ const SidebarOrgSection = ({
               </span>
             </div>
             <div className={styles.ArrowIcon}>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
+              <AngleRightIcon />
             </div>
           </div>
-        </Button>
+        </button>
       )}
     </div>
   );

@@ -4,29 +4,31 @@
 
 /* ── Sidebar expand/contract ─────────────────────────────────────────────────── */
 @keyframes moveLeft {
-  from { transform: translateX(2.75rem); }
-  to   { transform: translateX(0); }
+  from { padding-left: calc(var(--sidebar-expanded-width, 345px) + 1.75rem); }
+  to   { padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.75rem); }
 }
 
 @keyframes moveRight {
-  from { transform: translateX(-2.75rem); }
-  to   { transform: translateX(0); }
+  from { padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.75rem); }
+  to   { padding-left: calc(var(--sidebar-expanded-width, 345px) + 1.75rem); }
+}
+
+/* Base layout — separate properties, no shorthand to avoid cascade conflicts */
+.expand,
+.contract {
+  padding-top: 1.25rem;
+  padding-right: 1.75rem;
+  padding-bottom: 0;
 }
 
 .expand {
-  margin-left: 3.25rem;
-  padding-left: 2.75rem;
+  padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.75rem);
   animation: moveLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .contract {
-  padding-left: 5.5rem;
+  padding-left: calc(var(--sidebar-expanded-width, 345px) + 1.75rem);
   animation: moveRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ── Content area ────────────────────────────────────────────────────────────── */
-.contentContainer {
-  margin-left: 3.25rem;
 }
 
 .titleContainer {
@@ -116,21 +118,11 @@
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────────── */
-@media (max-width: 1120px) {
-  .contract {
-    padding-left: 5.25rem;
-  }
-}
-
 @media (max-width: 820px) {
   .contract,
-  .expand {
-    animation: none;
-    margin-left: 0;
-    padding-left: 1.25rem;
-  }
-
+  .expand,
   .contentContainer {
-    margin-left: 0;
+    animation: none;
+    padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.25rem);
   }
 }

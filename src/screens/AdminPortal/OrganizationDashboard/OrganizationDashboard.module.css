@@ -18,6 +18,16 @@
 }
 
 /* ── Content cards (posts, membership, etc.) ────────────────────────────────── */
+.contentCard {
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  width: 100%;
+}
+
+
 .cardHeader {
   padding: 1.125rem 1.25rem 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
