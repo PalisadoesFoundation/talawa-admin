@@ -4,15 +4,15 @@
 }
 
 .dropdownToggle {
-  width: var(--space-16);
+  min-width: var(--space-16);
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-4);
-  font-size: var(--font-size-sm);
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4-5);
+  font-size: var(--font-size-14);
   font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
-  transition: all 0.2s;
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
 }
 
 .dropdownToggle:focus {

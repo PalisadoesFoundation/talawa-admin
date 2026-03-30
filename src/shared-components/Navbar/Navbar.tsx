@@ -76,12 +76,13 @@ export default function PageHeader({
 
         {search && (
           <SearchBar
+            className={styles.searchBar}
             placeholder={search.placeholder}
             onSearch={search.onSearch}
             inputTestId={search.inputTestId}
             buttonTestId={search.buttonTestId}
-            showSearchButton={true} //  true
-            showLeadingIcon={true} //  true (Magnifying glass)
+            showSearchButton={true}
+            showLeadingIcon={true}
             showClearButton={true}
           />
         )}

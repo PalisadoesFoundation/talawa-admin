@@ -108,12 +108,17 @@
 }
 
 .createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-3);
-  padding: var(--space-2) var(--space-4);
-  height: var(--space-10);
+  background-color: var(--color-white);
+  color: var(--color-gray-900);
+  border: var(--border-1-5) solid var(--color-black-10);
+  border-radius: var(--radius-md);
+  margin: var(--space-3-5) var(--space-4);
+  width: auto;
+  min-width: var(--space-11-5);
+  white-space: nowrap;
+  height: var(--space-9);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
 }
 
 .createButton:hover {
