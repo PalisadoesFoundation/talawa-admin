@@ -100,6 +100,7 @@ const SearchFilterBar: React.FC<InterfaceSearchFilterBarProps> = ({
         {translations.searchInputAriaDescription}
       </span>
       <SearchBar
+        className={styles.searchBar}
         placeholder={searchPlaceholder}
         value={internalSearchValue}
         onSearch={handleSearchSubmit}

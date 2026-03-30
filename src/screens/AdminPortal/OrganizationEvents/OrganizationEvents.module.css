@@ -5,11 +5,13 @@
 /* ── Sort / filter dropdown ──────────────────────────────────────────────────── */
 .dropdown {
   background-color: #ffffff;
-  width: 140px;
+  width: auto;
+  white-space: nowrap;
   border: 1.5px solid rgba(0, 0, 0, 0.1);
   color: #6e6e73;
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   border-radius: 10px;
   font-size: 0.875rem;
   font-weight: 500;

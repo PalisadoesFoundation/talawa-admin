@@ -140,8 +140,10 @@
   border: 1.5px solid rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   margin: 0.375rem 0.75rem;
-  width: 130px;
-  height: 2.5rem;
+  width: auto;
+  min-width: 180px;
+  white-space: nowrap;
+  height: 40px;
   font-size: 0.875rem;
   font-weight: 500;
 }
