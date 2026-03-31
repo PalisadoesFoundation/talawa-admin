@@ -16,10 +16,25 @@
   font-size: 0.875rem;
   font-weight: 500;
   border-radius: 10px;
-  transition: all 0.2s ease;
+  /* Toolbar-consistent default state: white background, subtle border, dark text */
+  background-color: #ffffff !important;
+  color: #6e6e73 !important;
+  border: 1.5px solid rgba(0, 0, 0, 0.1) !important;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.dropdownToggle:focus {
+.dropdownToggle:is(:hover, :active),
+:global(.show) > .dropdownToggle {
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+.dropdownToggle:focus-visible {
   outline: 3px solid rgba(0, 113, 227, 0.3);
   outline-offset: 2px;
 }

@@ -244,6 +244,7 @@ const UserScreen = (): React.JSX.Element => {
             variant="light"
             menuClassName={styles.profileDropdownMenu}
             showCaret={false}
+            buttonLabel="▼"
           />
         </div>
         <Outlet />
