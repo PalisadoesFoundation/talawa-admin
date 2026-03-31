@@ -21,28 +21,26 @@
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   width: 100%;
   margin: var(--space-7) 0;
 }
 
-/* ── Search bar ──────────────────────────────────────────────────────────────── */
-.searchBar {
-  flex: 1 1 var(--space-23);
+/* ── Search bar wrapper (flex item) ──────────────────────────────────────────── */
+.searchBarWrapper {
+  flex: 1 1 var(--space-11-75);
   min-width: 0;
   max-width: var(--space-24-5);
   height: var(--control-height);
-  margin: 0 !important;
+  margin: 0;
+  display: flex;
+  align-items: stretch;
 }
 
-.searchBar > div {
-  min-width: 0 !important;
+.searchBarWrapper > * {
+  flex: 1 1 auto;
+  min-width: 0;
   height: 100%;
-}
-
-.searchBar > button {
-  height: 100%;
-  width: var(--control-height);
 }
 
 /* ── Filters block ───────────────────────────────────────────────────────────── */
@@ -87,11 +85,12 @@
 @media (max-width: 600px) {
   .toolbarRow {
     flex-direction: column;
+    flex-wrap: wrap;
     align-items: stretch;
     margin: var(--space-5) 0;
   }
 
-  .searchBar {
+  .searchBarWrapper {
     max-width: 100%;
     width: 100%;
   }

@@ -106,21 +106,22 @@ const Toolbar: React.FC<InterfaceToolbarProps> = ({
                 {search.ariaDescription}
               </span>
             )}
-            <SearchBar
-              className={styles.searchBar}
-              placeholder={search.placeholder}
-              value={internalSearchValue}
-              onSearch={handleSearchSubmit}
-              onChange={handleSearchChange}
-              inputTestId={search.inputTestId}
-              buttonTestId={search.buttonTestId}
-              showSearchButton
-              showLeadingIcon
-              showClearButton
-              aria-describedby={
-                search.ariaDescription ? 'toolbar-search-desc' : undefined
-              }
-            />
+            <div className={styles.searchBarWrapper}>
+              <SearchBar
+                placeholder={search.placeholder}
+                value={internalSearchValue}
+                onSearch={handleSearchSubmit}
+                onChange={handleSearchChange}
+                inputTestId={search.inputTestId}
+                buttonTestId={search.buttonTestId}
+                showSearchButton
+                showLeadingIcon
+                showClearButton
+                aria-describedby={
+                  search.ariaDescription ? 'toolbar-search-desc' : undefined
+                }
+              />
+            </div>
           </>
         )}
 
