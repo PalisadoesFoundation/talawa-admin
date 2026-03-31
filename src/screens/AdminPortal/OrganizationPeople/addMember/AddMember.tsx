@@ -43,7 +43,7 @@ import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from './AddMember.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
@@ -368,10 +368,11 @@ function AddMember({
 
   return (
     <>
-      <PageHeader
+      <Toolbar
         rootClassName={rootClassName}
-        sorting={[
+        filters={[
           {
+            type: 'sort',
             title: translateOrgPeople('addMembers'),
             options: [
               {

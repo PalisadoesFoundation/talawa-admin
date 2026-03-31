@@ -58,6 +58,9 @@ export interface InterfaceDropDownProps {
    * coupling to test IDs.
    */
   toggleClassName?: string;
+
+  /** Optional type for auto-selecting icon: 'sort' shows SortIcon, 'filter' shows FilterAltOutlined */
+  type?: 'sort' | 'filter';
 }
 
 /**

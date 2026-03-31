@@ -35,4 +35,7 @@
   --space-27: 50rem;
   --space-28: 56.25rem;
   --space-29: 87.5rem;
+  --control-height-sm: 2rem;       /* 32px */
+  --control-height:    2.5rem;     /* 40px */
+  --control-height-lg: 3rem;       /* 48px */
 }

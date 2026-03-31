@@ -127,6 +127,30 @@
   cursor: not-allowed;
 }
 
+/* ── Toolbar action button variant ───────────────────────────────────────────── */
+:global(.btn-toolbar-action) {
+  background-color: #ffffff;
+  color: #1d1d1f;
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  white-space: nowrap;
+  height: var(--control-height, 2.5rem);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+:global(.btn-toolbar-action:hover),
+:global(.btn-toolbar-action:focus-visible) {
+  background-color: #0071e3 !important;
+  border-color: #0071e3 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
 /* ── Loading spinner ─────────────────────────────────────────────────────────── */
 .spinner {
   width: 1em;

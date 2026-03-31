@@ -61,7 +61,7 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import Button from 'shared-components/Button';
@@ -344,28 +344,31 @@ const BlockUser = (): JSX.Element => {
   return (
     <>
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <SearchFilterBar
-          hasDropdowns={true}
-          searchPlaceholder={t('searchByName')}
-          searchValue={searchTerm}
-          onSearchChange={handleSearch}
-          searchInputTestId="searchByName"
-          searchButtonTestId="searchBtn"
-          dropdowns={[
+        <Toolbar
+          search={{
+            placeholder: t('searchByName'),
+            value: searchTerm,
+            onChange: handleSearch,
+            onSearch: handleSearch,
+            inputTestId: 'searchByName',
+            buttonTestId: 'searchBtn',
+          }}
+          filters={[
             {
               id: 'block-user-view',
               label: t('view'),
               type: 'filter',
+              title: t('view'),
               options: [
                 { label: t('allMembers'), value: 'allMembers' },
                 { label: t('blockedUsers'), value: 'blockedUsers' },
               ],
-              selectedOption: showBlockedMembers
+              selected: showBlockedMembers
                 ? t('blockedUsers')
                 : t('allMembers'),
-              onOptionChange: (value) =>
+              onChange: (value) =>
                 setShowBlockedMembers(value === 'blockedUsers'),
-              dataTestIdPrefix: 'blockUserView',
+              testIdPrefix: 'blockUserView',
             },
           ]}
         />
