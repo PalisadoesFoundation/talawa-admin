@@ -6,6 +6,12 @@ type EqualityMockProps = InterfaceAutocompleteMockProps & {
   isOptionEqualToValue?: (a: unknown, b: unknown) => boolean;
 };
 
+/**
+ * Creates a mock Autocomplete component that invokes `isOptionEqualToValue`.
+ *
+ * @param onResult - Callback that receives the comparison result.
+ * @returns A mock Autocomplete component for tests.
+ */
 const createIsOptionEqualToValueMock = (
   onResult: (result: boolean) => void,
 ): React.FC<EqualityMockProps> => {
