@@ -1,0 +1,36 @@
+import React from 'react';
+import type { InterfaceAutocompleteMockProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
+
+type EqualityMockProps = InterfaceAutocompleteMockProps & {
+  options?: { id: string; name?: string }[];
+  isOptionEqualToValue?: (a: unknown, b: unknown) => boolean;
+};
+
+const createIsOptionEqualToValueMock = (
+  onResult: (result: boolean) => void,
+): React.FC<EqualityMockProps> => {
+  const IsOptionEqualToValueMock: React.FC<EqualityMockProps> = ({
+    options,
+    isOptionEqualToValue,
+    renderInput,
+  }) => {
+    if (options?.length && isOptionEqualToValue) {
+      onResult(isOptionEqualToValue(options[0], options[0]));
+    }
+
+    return (
+      <div data-testid="autocomplete-equality-mock">
+        {renderInput?.({
+          InputProps: { ref: React.createRef<HTMLInputElement>() },
+          id: 'equality-autocomplete',
+          disabled: false,
+          inputProps: {},
+        })}
+      </div>
+    );
+  };
+
+  return IsOptionEqualToValueMock;
+};
+
+export default createIsOptionEqualToValueMock;
