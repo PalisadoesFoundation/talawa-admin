@@ -22,16 +22,16 @@ vi.mock('plugin/manager', () => ({
 }));
 
 // Mock the GraphQL hooks
-const { mockCreatePlugin, mockUpdatePlugin, mockDeletePlugin, mockReload } =
+const { mockInstallPlugin, mockUpdatePlugin, mockDeletePlugin, mockReload } =
   vi.hoisted(() => ({
-    mockCreatePlugin: vi.fn(),
+    mockInstallPlugin: vi.fn(),
     mockUpdatePlugin: vi.fn(),
     mockDeletePlugin: vi.fn(),
     mockReload: vi.fn(),
   }));
 
 vi.mock('plugin/graphql-service', () => ({
-  useCreatePlugin: () => [mockCreatePlugin],
+  useInstallPlugin: () => [mockInstallPlugin],
   useUpdatePlugin: () => [mockUpdatePlugin],
   useDeletePlugin: () => [mockDeletePlugin],
 }));
@@ -92,7 +92,7 @@ describe('usePluginActions', () => {
       mockPluginManager,
     );
     mockRefetch.mockResolvedValue({});
-    mockCreatePlugin.mockResolvedValue({});
+    mockInstallPlugin.mockResolvedValue({});
     mockUpdatePlugin.mockResolvedValue({});
     mockDeletePlugin.mockResolvedValue({});
   });
@@ -120,7 +120,7 @@ describe('usePluginActions', () => {
   });
 
   it('should successfully install a plugin', async () => {
-    mockUpdatePlugin.mockResolvedValue({});
+    mockInstallPlugin.mockResolvedValue({});
     mockPluginManager.installPlugin.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
@@ -134,11 +134,10 @@ describe('usePluginActions', () => {
       await result.current.handleInstallPlugin(mockPlugin);
     });
 
-    expect(mockUpdatePlugin).toHaveBeenCalledWith({
+    expect(mockInstallPlugin).toHaveBeenCalledWith({
       variables: {
         input: {
-          id: 'db-plugin-id',
-          isInstalled: true,
+          pluginId: 'test-plugin',
         },
       },
     });
@@ -238,7 +237,7 @@ describe('usePluginActions', () => {
   });
 
   it('should handle installation failure in GraphQL', async () => {
-    mockUpdatePlugin.mockRejectedValue(new Error('GraphQL error'));
+    mockInstallPlugin.mockRejectedValue(new Error('GraphQL error'));
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -254,12 +253,13 @@ describe('usePluginActions', () => {
     expect(result.current.loading).toBe(false);
   });
 
-  it('should throw error when plugin is not found in database during installation', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  it('should install plugin even when plugin data list is empty', async () => {
+    mockInstallPlugin.mockResolvedValue({});
+    mockPluginManager.installPlugin.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
       usePluginActions({
-        pluginData: { getPlugins: [] }, // No plugins in database
+        pluginData: { getPlugins: [] },
         refetch: mockRefetch,
       }),
     );
@@ -268,21 +268,19 @@ describe('usePluginActions', () => {
       await result.current.handleInstallPlugin(mockPlugin);
     });
 
-    // Verify error was logged
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Failed to install plugin:',
-      expect.any(Error),
-    );
-
-    // updatePlugin should not be called since plugin was not found
-    expect(mockUpdatePlugin).not.toHaveBeenCalled();
+    expect(mockInstallPlugin).toHaveBeenCalledWith({
+      variables: {
+        input: {
+          pluginId: 'test-plugin',
+        },
+      },
+    });
+    expect(mockPluginManager.installPlugin).toHaveBeenCalledWith('test-plugin');
     expect(result.current.loading).toBe(false);
-
-    consoleSpy.mockRestore();
   });
 
   it('should handle installation failure in plugin manager', async () => {
-    mockUpdatePlugin.mockResolvedValue({});
+    mockInstallPlugin.mockResolvedValue({});
     mockPluginManager.installPlugin.mockResolvedValue(false);
 
     const { result } = renderHook(() =>
@@ -461,7 +459,7 @@ describe('usePluginActions', () => {
   });
 
   it('should set loading state correctly during installation', async () => {
-    mockUpdatePlugin.mockImplementation(
+    mockInstallPlugin.mockImplementation(
       () => new Promise((resolve) => setTimeout(resolve, 100)),
     );
     mockPluginManager.installPlugin.mockResolvedValue(true);
