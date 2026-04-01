@@ -23,7 +23,7 @@
     "@mui/x-data-grid": "^8.22.0",
     "@mui/x-date-pickers": "^8.14.0",
     "@pdfme/common": "^5.2.11",
-    "@pdfme/generator": "^5.2.3",
+    "@pdfme/generator": "^5.5.10",
     "@pdfme/schemas": "^5.1.6",
     "@reduxjs/toolkit": "^2.11.2",
     "@remix-run/router": "^1.23.0",
