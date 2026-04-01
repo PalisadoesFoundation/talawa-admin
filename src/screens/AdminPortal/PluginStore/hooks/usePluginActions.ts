@@ -11,8 +11,12 @@ import {
   type IPlugin,
 } from 'plugin/graphql-service';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
-const { adminPluginFileService } =
-  await import('plugin/services/AdminPluginFileService');
+
+const getAdminPluginFileService = async () => {
+  const { adminPluginFileService } =
+    await import('plugin/services/AdminPluginFileService');
+  return adminPluginFileService;
+};
 
 interface IUsePluginActionsProps {
   pluginData?: { getPlugins?: IPlugin[] };
@@ -135,6 +139,7 @@ export function usePluginActions({
 
         // Remove plugin folder from admin filesystem
         try {
+          const adminPluginFileService = await getAdminPluginFileService();
           const success = await adminPluginFileService.removePlugin(
             pluginToUninstall.id,
           );
