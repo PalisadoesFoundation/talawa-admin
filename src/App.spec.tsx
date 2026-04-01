@@ -363,9 +363,11 @@ const setupAdminAuthState = (): void => {
   removeItem('AdminFor');
 };
 
+const { clearAllItems } = useLSModule.useLocalStorage();
 describe('Testing the App Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearAllItems();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
