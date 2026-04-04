@@ -1059,8 +1059,7 @@
     "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती",
     "enterCampaignName": "कैंपेन का नाम दर्ज करें",
     "enterStartDate": "प्रारंभ तिथि दर्ज करें",
-    "enterEndDate": "समाप्ति तिथि दर्ज करें",
-    "selectCurrency": "मुद्रा का चयन करें"
+    "enterEndDate": "समाप्ति तिथि दर्ज करें"
   },
   "pledges": {
     "createFailed": "प्रतिज्ञा बनाने में विफल",
@@ -2408,6 +2407,7 @@
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
+    "subtitle": "अपने संगठन की क्षमताओं को बढ़ाने के लिए प्लगइन खोजें और प्रबंधित करें।",
     "searchPlaceholder": "प्लगइन खोजें...",
     "allPlugins": "सभी प्लगइन",
     "installedPlugins": "स्थापित प्लगइन",

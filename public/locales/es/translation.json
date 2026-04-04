@@ -21,7 +21,7 @@
     "linkedAtLabel": "Vinculado el",
     "lastUsedAtLabel": "Último uso",
     "Unlink": "Desvincular",
-    "unlinkSuccess": "Se desvincul\u00f3 {{provider}} correctamente.",
+    "unlinkSuccess": "Se desvinculó {{provider}} correctamente.",
     "unlinkConfirmation": "¿Estás seguro de que deseas desvincular {{provider}}?"
   },
   "ends": "Finaliza",
@@ -269,7 +269,7 @@
     "avatar": "Avatar de {{title}}",
     "eventLocation": "Ubicación del evento",
     "eventDate": "Fecha del evento",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Publicado el:",
     "author": "Autor:"
   },
@@ -2390,6 +2390,7 @@
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
+    "subtitle": "Descubre y gestiona plugins para ampliar las capacidades de tu organización.",
     "searchPlaceholder": "Buscar plugins...",
     "allPlugins": "Todos los Plugins",
     "installedPlugins": "Plugins Instalados",

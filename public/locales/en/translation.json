@@ -2390,6 +2390,7 @@
   },
   "pluginStore": {
     "title": "Plugin Store",
+    "subtitle": "Discover and manage plugins to extend your organization's capabilities.",
     "searchPlaceholder": "Search plugins...",
     "allPlugins": "All Plugins",
     "installedPlugins": "Installed Plugins",

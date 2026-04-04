@@ -2,10 +2,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import { FaBars } from 'react-icons/fa';
+import Button from 'shared-components/Button';
 import styles from './SidebarBase.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ISidebarBaseProps } from '../../types/SidebarBase/interface';
-import Button from 'shared-components/Button';
 
 /**
  * SidebarBase Component
@@ -61,28 +61,17 @@ const SidebarBase = ({
       data-testid="leftDrawerContainer"
     >
       {/* Branding Section */}
-      <div
-        className={`d-flex align-items-center ${
-          hideDrawer ? 'justify-content-center' : 'justify-content-between'
+      <Button
+        className={`${styles.toggleBtn} ${
+          hideDrawer ? styles.toggleBtnCollapsed : styles.toggleBtnExpanded
         }`}
+        data-testid="toggleBtn"
+        onClick={handleToggle}
+        onKeyDown={handleKeyDown}
+        type="button"
+        aria-label={tCommon('toggleSidebar')}
       >
-        <Button
-          className="d-flex align-items-center btn p-0 border-0 bg-transparent"
-          data-testid="toggleBtn"
-          onClick={handleToggle}
-          onKeyDown={handleKeyDown}
-          type="button"
-          aria-label={tCommon('toggleSidebar')}
-        >
-          <FaBars
-            className={`${styles.hamburgerIcon} ${
-              hideDrawer
-                ? styles.hamburgerIconCollapsed
-                : styles.hamburgerIconExpanded
-            }`}
-            size={22}
-          />
-        </Button>
+        <FaBars className={styles.hamburgerIcon} size={22} />
         <div
           className={
             hideDrawer
@@ -95,7 +84,7 @@ const SidebarBase = ({
             {tCommon(portalText)}
           </div>
         </div>
-      </div>
+      </Button>
 
       {/* Optional Header Content (e.g., Organization Section) */}
       {headerContent}

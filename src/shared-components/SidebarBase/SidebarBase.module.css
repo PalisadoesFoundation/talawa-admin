@@ -72,6 +72,45 @@
   padding: var(--space-4);
 }
 
+/* ── Toggle / hamburger ─────────────────────────────────────────────────────── */
+
+/* Button wrapper — shared */
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  border: none;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  padding: 0;
+}
+
+.toggleBtn:hover {
+  background-color: var(--color-gray-50);
+}
+
+/* Expanded: icon + branding side by side at left */
+.toggleBtnExpanded {
+  padding: var(--space-3-75) var(--space-3-75);
+  gap: var(--space-3-75);
+}
+
+/* Collapsed: icon-only, centered — mirrors nav item alignment */
+.toggleBtnCollapsed {
+  padding: var(--space-3-75) var(--space-3-75);
+  justify-content: center;
+}
+
+.sidebarcompheight {
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  margin-top: var(--space-6);
+}
+
 .optionList {
   overflow-y: hidden;
   overflow-x: hidden !important;
@@ -224,7 +263,14 @@
 .hamburgerIcon {
   cursor: pointer;
   color: var(--color-gray-900);
-  transition: transform 0.3s ease;
+  transition:
+    color 0.18s ease,
+    transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.toggleBtn:hover .hamburgerIcon {
+  color: var(--color-gray-900);
 }
 
 .hamburgerIconExpanded {

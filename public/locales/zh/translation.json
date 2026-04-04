@@ -1047,8 +1047,7 @@
     "endDateBeforeStart": "结束日期不能早于开始日期",
     "enterCampaignName": "输入活动名称",
     "enterStartDate": "输入开始日期",
-    "enterEndDate": "输入结束日期",
-    "selectCurrency": "选择货币"
+    "enterEndDate": "输入结束日期"
   },
   "pledges": {
     "createFailed": "创建认捐失败",
@@ -2408,6 +2407,7 @@
   },
   "pluginStore": {
     "title": "插件商店",
+    "subtitle": "发现并管理插件以扩展您组织的能力。",
     "searchPlaceholder": "搜索插件...",
     "allPlugins": "所有插件",
     "installedPlugins": "已安装插件",
