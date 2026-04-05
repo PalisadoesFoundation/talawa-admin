@@ -63,6 +63,8 @@
 .cardbodyIcon path {
   fill: var(--color-blue-500);
   color: var(--color-blue-500);
+  width: var(--space-8);
+  height: var(--space-8);
 }
 
 /* ── Metric number ───────────────────────────────────────────────────────────── */

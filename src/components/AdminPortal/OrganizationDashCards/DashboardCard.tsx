@@ -27,7 +27,6 @@
  * This file defines the `DashboardCard` component used in the Talawa Admin project.
  */
 import React from 'react';
-import { Card } from 'react-bootstrap';
 import styles from './DashboardCard.module.css';
 
 const dashBoardCard = (props: {
@@ -37,8 +36,8 @@ const dashBoardCard = (props: {
 }): JSX.Element => {
   const { icon, count, title } = props;
   return (
-    <Card className={styles.cardBodyMainDiv}>
-      <Card.Body className={styles.cardBody}>
+    <div className={styles.cardBodyMainDiv}>
+      <div className={styles.cardBody}>
         <div className={styles.cardTop}>
           <span
             data-testid="cardTitle"
@@ -51,8 +50,8 @@ const dashBoardCard = (props: {
         <span data-testid="cardCount" className={styles.cardBodyNumber}>
           {count ?? 0}
         </span>
-      </Card.Body>
-    </Card>
+      </div>
+    </div>
   );
 };
 
