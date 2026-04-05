@@ -60,7 +60,7 @@ import Row from 'react-bootstrap/Row';
 import Add from '@mui/icons-material/Add';
 import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
 import PostCard from 'shared-components/postCard/PostCard';
 import styles from './posts.module.css';
@@ -339,14 +339,15 @@ export default function PostsPage() {
     <>
       <Row>
         <div className={styles.mainpagerightOrgPost}>
-          <PageHeader
+          <Toolbar
             search={{
               placeholder: t('searchTitle'),
               onSearch: handleSearch,
               inputTestId: 'searchByName',
             }}
-            sorting={[
+            filters={[
               {
+                type: 'sort',
                 title: t('sortPost'),
                 options: [
                   { label: t('latest'), value: 'latest' },
