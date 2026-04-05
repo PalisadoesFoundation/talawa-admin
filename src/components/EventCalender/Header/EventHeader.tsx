@@ -58,7 +58,7 @@ function EventHeader({
             onSearch={() => {}}
             inputTestId="searchEvent"
             buttonTestId="searchButton"
-            showSearchButton={true}
+            showSearchButton={false}
             showLeadingIcon={true}
             showClearButton={true}
             buttonAriaLabel={t('search')}
