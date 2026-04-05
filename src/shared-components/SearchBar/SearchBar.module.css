@@ -3,8 +3,8 @@
   align-items: center;
   border: var(--border-1) solid var(--color-gray-200);
   border-radius: var(--radius-lg);
-  background-color: var(--color-gray-50);
-  box-shadow: 0 var(--space-4) var(--space-6) var(--color-blue-shadow-light);
+  background-color: var(--color-white);
+  box-shadow: 0 var(--space-0-5) var(--space-3) var(--color-black-4);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -14,7 +14,7 @@
   width: auto;
   min-width: var(--space-16);
   height: var(--space-10-5);
-  margin: var(--space-10) 0;
+  margin: 0;
   max-width: var(--space-27);
   gap: var(--space-3);
 }

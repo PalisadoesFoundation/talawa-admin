@@ -10,6 +10,7 @@
   flex-direction: column;
   padding: var(--space-4) var(--space-5) var(--space-0) var(--space-5);
   background-color: var(--color-gray-50) !important;
+  border-right: var(--border-1) solid var(--color-gray-200);
   transition: 0.5s ease;
   font-family: var(--bs-leftDrawer-font-family);
   overflow-x: hidden !important;
@@ -61,8 +62,8 @@
 }
 
 .talawaText {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
 }
 
 .titleHeader {
@@ -80,9 +81,11 @@
   align-items: center;
   width: 100%;
   border-radius: var(--radius-lg);
-  border: none;
+  border: none !important;
   outline: none;
-  background: transparent;
+  background: transparent !important;
+  color: var(--color-gray-900) !important;
+  text-decoration: none !important;
   cursor: pointer;
   transition: background-color 0.15s ease;
   padding: 0;
@@ -274,11 +277,61 @@
 }
 
 .hamburgerIconExpanded {
-  margin-left: var(--space-3);
+  margin-left: var(--space-0);
 }
 
 .hamburgerIconCollapsed {
   margin-left: var(--space-0);
+}
+
+/* Non-interactive branding row shown when sidebar is expanded */
+.brandingOnly {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Full-height wrapper — centers the collapse button vertically via flexbox, no transforms */
+.collapseWrapper {
+  position: absolute;
+  top: var(--space-0);
+  right: var(--space-0);
+  bottom: var(--space-0);
+  width: var(--space-11);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 101;
+}
+
+/* Circle collapse button — sits inside .collapseWrapper */
+.collapseCircleBtn {
+  width: var(--space-8);
+  height: var(--space-8);
+  min-width: var(--space-8);
+  min-height: var(--space-8);
+  border-radius: var(--radius-full) !important;
+  background-color: var(--color-white) !important;
+  border: var(--border-1) solid var(--color-gray-200) !important;
+  color: var(--color-gray-600) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-0) !important;
+  box-shadow: var(--space-0) var(--space-0-5) var(--space-3)
+    var(--color-black-4);
+  text-decoration: none !important;
+  pointer-events: all;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.collapseCircleBtn:hover {
+  background-color: var(--color-gray-100) !important;
+  box-shadow: var(--space-0) var(--space-1) var(--space-4) var(--color-black-7);
 }
 
 .collapsedDrawer {
@@ -286,6 +339,14 @@
   min-width: var(--space-12);
   max-width: var(--space-12);
   overflow-x: hidden !important;
+}
+
+/* Center icons in collapsed state so they align with the hamburger above */
+.collapsedDrawer .optionList button,
+.collapsedDrawer .optionList a {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .leftDrawer.collapsedDrawer {
@@ -328,7 +389,7 @@
   }
 
   .optionList button {
-    margin-bottom: var(--space-0-5);
+    margin-bottom: var(--space-3);
     font-size: var(--font-size-lg);
     padding-left: var(--space-4);
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaChevronLeft } from 'react-icons/fa';
 import Button from 'shared-components/Button';
 import styles from './SidebarBase.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -60,31 +60,48 @@ const SidebarBase = ({
       style={backgroundColor ? { backgroundColor } : undefined}
       data-testid="leftDrawerContainer"
     >
-      {/* Branding Section */}
-      <Button
-        className={`${styles.toggleBtn} ${
-          hideDrawer ? styles.toggleBtnCollapsed : styles.toggleBtnExpanded
-        }`}
-        data-testid="toggleBtn"
-        onClick={handleToggle}
-        onKeyDown={handleKeyDown}
-        type="button"
-        aria-label={tCommon('toggleSidebar')}
-      >
-        <FaBars className={styles.hamburgerIcon} size={22} />
+      {/* Branding / Toggle Section */}
+      {hideDrawer ? (
+        // Collapsed: hamburger button to expand
+        <Button
+          variant="link"
+          className={`${styles.toggleBtn} ${styles.toggleBtnCollapsed}`}
+          data-testid="toggleBtn"
+          onClick={handleToggle}
+          onKeyDown={handleKeyDown}
+          type="button"
+          aria-label={tCommon('toggleSidebar')}
+        >
+          <FaBars className={styles.hamburgerIcon} size={22} />
+        </Button>
+      ) : (
+        // Expanded: branding display only (no hamburger)
         <div
-          className={
-            hideDrawer
-              ? styles.sidebarBrandingContainerHidden
-              : styles.sidebarBrandingContainer
-          }
+          className={`${styles.toggleBtn} ${styles.toggleBtnExpanded} ${styles.brandingOnly}`}
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>
             {tCommon(portalText)}
           </div>
         </div>
-      </Button>
+      )}
+
+      {/* Circle collapse button — full-height wrapper centers button via flexbox, no transforms */}
+      {!hideDrawer && (
+        <div className={styles.collapseWrapper}>
+          <Button
+            variant="link"
+            className={styles.collapseCircleBtn}
+            data-testid="toggleBtn"
+            onClick={handleToggle}
+            onKeyDown={handleKeyDown}
+            type="button"
+            aria-label={tCommon('toggleSidebar')}
+          >
+            <FaChevronLeft size={14} />
+          </Button>
+        </div>
+      )}
 
       {/* Optional Header Content (e.g., Organization Section) */}
       {headerContent}

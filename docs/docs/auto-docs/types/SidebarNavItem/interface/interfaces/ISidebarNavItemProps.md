@@ -32,6 +32,14 @@ Defined in: [src/types/SidebarNavItem/interface.ts:11](https://github.com/Palisa
 
 ***
 
+### iconSize?
+
+> `optional` **iconSize**: `number`
+
+Defined in: [src/types/SidebarNavItem/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L27)
+
+***
+
 ### iconType?
 
 > `optional` **iconType**: `"svg"` \| `"react-icon"`

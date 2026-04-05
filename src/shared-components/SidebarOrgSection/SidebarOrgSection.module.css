@@ -15,16 +15,19 @@
   margin: var(--space-3-5) 0;
   padding: var(--space-3) var(--space-3-75);
   border-radius: var(--radius-xl);
-  background-color: var(--color-gray-50);
-  border: var(--border-1) solid var(--color-black-6);
+  background-color: var(--color-gray-50) !important;
+  border: var(--border-1) solid var(--color-black-6) !important;
   min-height: var(--space-13);
   cursor: pointer;
   text-align: left;
   transition: background-color 0.15s ease;
+  color: inherit !important;
+  text-decoration: none !important;
 }
 
 .profileContainer:hover {
-  background-color: var(--color-gray-100);
+  background-color: var(--color-gray-100) !important;
+  color: inherit !important;
 }
 
 .profileContainer:focus {

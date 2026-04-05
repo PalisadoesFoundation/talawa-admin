@@ -126,11 +126,13 @@ const UserSidebar = ({
               />
             </div>
           )}
-          {!hideDrawer && (
-            <div>
-              <ProfileCard portal="user" />
-            </div>
-          )}
+          <div
+            className={
+              hideDrawer ? styles.profileCardHidden : styles.profileCardWrapper
+            }
+          >
+            <ProfileCard portal="user" />
+          </div>
           <SignOut hideDrawer={hideDrawer} />
         </>
       }

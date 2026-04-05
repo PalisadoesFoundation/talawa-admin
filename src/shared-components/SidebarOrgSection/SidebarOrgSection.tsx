@@ -77,6 +77,7 @@ const SidebarOrgSection = ({
         )
       ) : (
         <Button
+          variant="link"
           type="button"
           className={styles.profileContainer}
           data-testid="OrgBtn"

@@ -114,7 +114,7 @@ const Toolbar: React.FC<InterfaceToolbarProps> = ({
                 onChange={handleSearchChange}
                 inputTestId={search.inputTestId}
                 buttonTestId={search.buttonTestId}
-                showSearchButton
+                showSearchButton={false}
                 showLeadingIcon
                 showClearButton
                 aria-describedby={

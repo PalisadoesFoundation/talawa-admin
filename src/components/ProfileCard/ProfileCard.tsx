@@ -79,7 +79,13 @@ const ProfileCard = ({
 
   return (
     <div className={styles.dropdownContainer}>
-      <div className={styles.profileContainer}>
+      <Button
+        variant="link"
+        className={styles.profileContainer}
+        data-testid="profileBtn"
+        onClick={() => navigate(profileDestination)}
+        aria-label={tCommon('navigateToProfile')}
+      >
         <div className={styles.imageContainer}>
           <ProfileAvatarDisplay
             dataTestId="display-img"
@@ -100,15 +106,8 @@ const ProfileCard = ({
             {`${userRole}`}
           </span>
         </div>
-        <Button
-          className={styles.chevronRightbtn}
-          data-testid="profileBtn"
-          onClick={() => navigate(profileDestination)}
-          aria-label={tCommon('navigateToProfile')}
-        >
-          <ChevronRightIcon className={styles.chevronIcon} />
-        </Button>
-      </div>
+        <ChevronRightIcon className={styles.chevronIcon} />
+      </Button>
     </div>
   );
 };
