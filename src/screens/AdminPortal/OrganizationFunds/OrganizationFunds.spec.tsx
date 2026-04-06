@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -10,21 +10,15 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationFunds from './OrganizationFunds';
-import { MOCKS, MOCKS_ERROR, NO_FUNDS } from './OrganizationFundsMocks';
+import { MOCKS, NO_FUNDS, MOCKS_ERROR } from './OrganizationFundsMocks';
 import type { ApolloLink } from '@apollo/client';
+import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DatePicker';
+import dayjs from 'dayjs';
 import { vi, afterEach } from 'vitest';
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -47,14 +41,16 @@ vi.mock('react-router', async () => {
 });
 
 const mockedUseParams = vi.mocked(useParams);
-const loadingOverlaySpy = vi.fn();
 
-const link1 = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
-const link3 = new StaticMockLink(NO_FUNDS, true);
+let link1: StaticMockLink;
+let link3: StaticMockLink;
+let linkError: StaticMockLink;
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.funds),
+);
+const commonTranslations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
 );
 
 const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
@@ -92,60 +88,16 @@ describe('OrganizationFunds Screen =>', () => {
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     mockedUseParams.mockReset();
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     user = userEvent.setup({ delay: null });
+    link1 = new StaticMockLink(MOCKS, true);
+    link3 = new StaticMockLink(NO_FUNDS, true);
+    linkError = new StaticMockLink(MOCKS_ERROR, true);
   });
 
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
-  });
-
-  vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
-    const actual = await vi.importActual<
-      typeof import('shared-components/ReportingTable/ReportingTable')
-    >('shared-components/ReportingTable/ReportingTable');
-
-    return {
-      __esModule: true,
-      default: (props: {
-        gridProps?: {
-          slots?: { loadingOverlay?: () => React.ReactNode };
-          onPaginationModelChange?: (model: {
-            page: number;
-            pageSize: number;
-          }) => void;
-        };
-        listProps?: {
-          endMessage?: React.ReactNode;
-        };
-      }) => {
-        loadingOverlaySpy(props.gridProps?.slots?.loadingOverlay?.());
-
-        // Create wrapper to ensure callbacks are properly invoked
-        const wrappedProps = {
-          ...props,
-          gridProps: {
-            ...props.gridProps,
-            // Ensure onPaginationModelChange is called when pagination changes
-            onPaginationModelChange: props.gridProps?.onPaginationModelChange,
-          },
-        };
-
-        const Component = (
-          actual as unknown as {
-            default: React.ComponentType<typeof wrappedProps>;
-          }
-        ).default;
-
-        return (
-          <>
-            <Component {...wrappedProps} />
-            {/* Render endMessage if provided in listProps */}
-            {props.listProps?.endMessage}
-          </>
-        );
-      },
-    };
   });
 
   it('should render the Campaign Pledge screen', async () => {
@@ -258,20 +210,24 @@ describe('OrganizationFunds Screen =>', () => {
     );
   });
 
-  it('should render the Fund screen with error', async () => {
-    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    renderOrganizationFunds(link2);
-    await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-    });
-  });
-
   it('renders the empty fund component', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link3);
     await waitFor(() =>
       expect(screen.getByText(translations.noFundsFound)).toBeInTheDocument(),
     );
+  });
+
+  it('should render error UI when funds query fails', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(linkError);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+      expect(
+        screen.getByText(new RegExp(translations.errorLoadingFundsData, 'i')),
+      ).toBeInTheDocument();
+    });
   });
 
   it('Should display loading state', () => {
@@ -313,9 +269,75 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
+  it('renders archived and active status labels based on isArchived', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+
+    const statusLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: FUND_LIST,
+            variables: {
+              input: { id: 'orgId' },
+            },
+          },
+          result: {
+            data: {
+              organization: {
+                funds: {
+                  edges: [
+                    {
+                      node: {
+                        creator: { name: 'John Doe' },
+                        id: 'status-1',
+                        isTaxDeductible: false,
+                        isArchived: true,
+                        name: 'Archived Fund',
+                        organization: { name: 'Org 1' },
+                        updater: null,
+                        createdAt: dayjs().subtract(2, 'day').toISOString(),
+                      },
+                    },
+                    {
+                      node: {
+                        creator: { name: 'Jane Doe' },
+                        id: 'status-2',
+                        isTaxDeductible: true,
+                        isArchived: false,
+                        name: 'Active Fund',
+                        organization: { name: 'Org 1' },
+                        updater: null,
+                        createdAt: dayjs().subtract(1, 'day').toISOString(),
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderOrganizationFunds(statusLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Archived Fund')).toBeInTheDocument();
+      expect(screen.getByText('Active Fund')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      const statusCells = screen.getAllByTestId('datatable-cell-status');
+      const statusValues = statusCells.map((cell) => cell.textContent ?? '');
+      expect(statusValues).toContain(translations.archived);
+      expect(statusValues).toContain(commonTranslations.active);
+    });
+  });
+
   it('Sort the Pledges list by Earliest created Date', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
+    renderOrganizationFunds(link1);
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -324,16 +346,10 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find and click on the "Created On" column header to trigger sort (ASC)
-    const createdOnHeader = container.querySelector(
-      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
-    );
-
-    expect(createdOnHeader).toBeInTheDocument();
-    if (createdOnHeader) {
-      await user.click(createdOnHeader);
-      await wait(300);
-    }
+    const createdOnHeader = screen.getByRole('button', {
+      name: translations.createdOn,
+    });
+    await user.click(createdOnHeader);
 
     await waitFor(() => {
       const allFundNames = screen.getAllByTestId('fundName');
@@ -385,9 +401,7 @@ describe('OrganizationFunds Screen =>', () => {
 
   it('handles pagination model change', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
-
-    await wait();
+    renderOrganizationFunds(link1);
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -398,26 +412,15 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find pagination controls in the DataGrid
-    const paginationRoot = container.querySelector(
-      '[class*="MuiTablePagination-root"]',
-    );
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    expect(nextButton).not.toBeDisabled();
+    await user.click(nextButton);
 
-    if (paginationRoot) {
-      // Find next page button
-      const nextButton = paginationRoot.querySelector(
-        'button[aria-label*="next"]',
-      ) as HTMLButtonElement | null;
-
-      if (nextButton && !nextButton.disabled) {
-        await user.click(nextButton);
-        await wait(300);
-      }
-    }
-
-    // Verify component is still stable
+    // Verify page changes by checking first-page row disappears and later row appears
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      expect(screen.queryByText('Fund 1')).not.toBeInTheDocument();
+      expect(screen.getByText('Extra Fund 11')).toBeInTheDocument();
     });
   });
 
@@ -489,9 +492,67 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
+  it('should fallback to 0 when fund index map does not contain row id', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+
+    const fallbackIndexLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: FUND_LIST,
+            variables: {
+              input: { id: 'orgId' },
+            },
+          },
+          result: {
+            data: {
+              organization: {
+                funds: {
+                  edges: [
+                    {
+                      node: {
+                        creator: { name: 'John Doe' },
+                        id: '',
+                        isTaxDeductible: false,
+                        name: 'Fund No Id',
+                        organization: { name: 'Org 1' },
+                        updater: null,
+                        createdAt: dayjs().subtract(1, 'day').toISOString(),
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      ],
+      true,
+    );
+
+    renderOrganizationFunds(fallbackIndexLink);
+
+    await waitFor(() => {
+      const fundNameButtons = screen.getAllByTestId('fundName');
+      expect(fundNameButtons.length).toBe(1);
+      expect(fundNameButtons[0]).toHaveTextContent('Fund No Id');
+    });
+
+    await waitFor(() => {
+      const bodyRows = screen
+        .getAllByRole('row')
+        .filter((row) => row.querySelector('td'));
+      const rowWithMissingId = bodyRows.find((row) =>
+        row.textContent?.includes('Fund No Id'),
+      );
+      expect(rowWithMissingId).toBeDefined();
+      expect(rowWithMissingId?.textContent).toContain('0');
+    });
+  });
+
   it('should sort funds by createdAt using sortComparator', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
-    const { container } = renderOrganizationFunds(link1);
+    renderOrganizationFunds(link1);
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -502,24 +563,42 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find and click on the "Created On" column header to trigger sort
-    const createdOnHeader = container.querySelector(
-      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
-    );
+    const createdOnHeader = screen.getByRole('button', {
+      name: translations.createdOn,
+    });
 
-    if (createdOnHeader) {
-      await user.click(createdOnHeader);
-      await wait(300);
-
-      // Click again to toggle sort direction
-      await user.click(createdOnHeader);
-      await wait(300);
-    }
-
-    // Verify created on dates are displayed
+    // First click sorts ascending: Fund 2 (earlier) before Fund 1 (later)
+    await user.click(createdOnHeader);
     await waitFor(() => {
-      const createdOnElements = screen.getAllByTestId('createdOn');
-      expect(createdOnElements.length).toBeGreaterThan(0);
+      const allFundNames = screen.getAllByTestId('fundName');
+      const fund1Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 1',
+      );
+      const fund2Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 2',
+      );
+      if (fund1Index >= 0 && fund2Index >= 0) {
+        expect(fund2Index).toBeLessThan(fund1Index);
+      } else {
+        expect(allFundNames.length).toBeGreaterThan(0);
+      }
+    });
+
+    // Second click sorts descending: Fund 1 (later) before Fund 2 (earlier)
+    await user.click(createdOnHeader);
+    await waitFor(() => {
+      const allFundNames = screen.getAllByTestId('fundName');
+      const fund1Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 1',
+      );
+      const fund2Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 2',
+      );
+      if (fund1Index >= 0 && fund2Index >= 0) {
+        expect(fund1Index).toBeLessThan(fund2Index);
+      } else {
+        expect(allFundNames.length).toBeGreaterThan(0);
+      }
     });
   });
 

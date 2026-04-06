@@ -38,7 +38,13 @@ vi.mock('react-i18next', async (importOriginal) => {
   };
 });
 
-const mockClearAllItems = vi.fn();
+vi.mock('utils/apollo/subscriptions', () => ({
+  disposeWsClient: vi.fn().mockResolvedValue(undefined),
+}));
+
+const { mockClearAllItems } = vi.hoisted(() => ({
+  mockClearAllItems: vi.fn(),
+}));
 
 vi.mock('./useLocalstorage', () => ({
   default: vi.fn(() => ({

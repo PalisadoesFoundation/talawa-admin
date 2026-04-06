@@ -43,6 +43,7 @@ vi.mock('./UploadPluginModal', () => ({
 
 // Mock GraphQL mutations and queries
 const mockCreatePlugin = vi.fn();
+const mockInstallPlugin = vi.fn();
 const mockUpdatePlugin = vi.fn();
 const mockDeletePlugin = vi.fn();
 const mockGetAllPlugins = vi.fn();
@@ -57,6 +58,7 @@ vi.mock('plugin/graphql-service', () => ({
     refetch: mockRefetch,
   }),
   useCreatePlugin: () => [mockCreatePlugin],
+  useInstallPlugin: () => [mockInstallPlugin],
   useUpdatePlugin: () => [mockUpdatePlugin],
   useDeletePlugin: () => [mockDeletePlugin],
 }));
@@ -150,6 +152,7 @@ describe('PluginStore', () => {
     mockGetAllPlugins.mockReturnValue({
       getPlugins: mockGraphQLPlugins,
     });
+    mockInstallPlugin.mockResolvedValue({});
 
     // Mock admin plugin file service
     (adminPluginFileService.adminPluginFileService

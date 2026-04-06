@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { DataTableTable } from './DataTableTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import styles from './DataTableTable.module.css';
 
 type Row = { id: string; name: string; value?: number };
 
@@ -249,6 +250,48 @@ describe('DataTableTable', () => {
     render(<DataTableTable<Row> {...props} />);
     const th = screen.getByRole('button', { name: /name/i });
     expect(th).toHaveStyle({ width: widthValue });
+  });
+
+  it('applies right alignment class when column meta align is right', () => {
+    const props = defaultProps({
+      columns: [
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { align: 'right' },
+        },
+      ],
+    });
+
+    render(<DataTableTable<Row> {...props} />);
+
+    const header = screen.getByRole('button', { name: /name/i });
+    expect(header).toHaveClass(styles.alignRight);
+
+    const cells = screen.getAllByTestId('datatable-cell-name');
+    expect(cells[0]).toHaveClass(styles.alignRight);
+  });
+
+  it('applies center alignment class when column meta align is center', () => {
+    const props = defaultProps({
+      columns: [
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { align: 'center' },
+        },
+      ],
+    });
+
+    render(<DataTableTable<Row> {...props} />);
+
+    const header = screen.getByRole('button', { name: /name/i });
+    expect(header).toHaveClass(styles.alignCenter);
+
+    const cells = screen.getAllByTestId('datatable-cell-name');
+    expect(cells[0]).toHaveClass(styles.alignCenter);
   });
 
   it('renders header from function when header is a function', () => {

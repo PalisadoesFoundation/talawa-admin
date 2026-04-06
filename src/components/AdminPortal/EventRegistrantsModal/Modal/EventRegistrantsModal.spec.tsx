@@ -31,6 +31,7 @@ import { InterfaceBaseModalProps } from 'types/AdminPortal/EventRegistrantsModal
 import {
   EnhancedAutocompleteMock,
   createGetOptionLabelMock,
+  createIsOptionEqualToValueMock,
 } from 'test-utils/mocks/shared-autocomplete';
 
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
@@ -262,6 +263,62 @@ const makeEventDetailsRecurringMock = (): ApolloMock => ({
           id: 'RRULE:FREQ=DAILY',
         },
       },
+    },
+  },
+});
+
+const makeEventDetailsWithOrganizationMock = (
+  organizationId: string,
+): ApolloMock => ({
+  request: {
+    query: EVENT_DETAILS,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      event: {
+        id: 'event123',
+        recurrenceRule: null,
+        organization: {
+          id: organizationId,
+        },
+      },
+    },
+  },
+});
+
+const makeEventDetailsWithoutEventMock = (): ApolloMock => ({
+  request: {
+    query: EVENT_DETAILS,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      event: null,
+    },
+  },
+});
+
+const makeMembersForOrganizationMock = (
+  organizationId: string,
+): ApolloMock => ({
+  request: {
+    query: MEMBERS_LIST,
+    variables: { organizationId },
+  },
+  result: {
+    data: {
+      usersByOrganizationId: [
+        {
+          id: 'fallback-user-1',
+          name: 'Fallback Member',
+          emailAddress: 'fallback@example.com',
+          role: 'member',
+          avatarURL: null,
+          createdAt: dayjs.utc().subtract(1, 'week').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'week').toISOString(),
+        },
+      ],
     },
   },
 });
@@ -2376,6 +2433,232 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await waitFor(
       () => {
         expect(addRegistrantSpy).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 5000 },
+    );
+  });
+});
+
+describe('EventRegistrantsModal - Coverage for Org Fallback and Input Rendering', () => {
+  afterEach(() => {
+    cleanup();
+    vi.clearAllMocks();
+  });
+
+  test('uses event organization id when orgId prop is empty', async () => {
+    renderWithProviders(
+      [
+        makeEventDetailsWithOrganizationMock('org-fallback-123'),
+        makeAttendeesEmptyMock(),
+        makeMembersForOrganizationMock('org-fallback-123'),
+      ],
+      {
+        ...defaultProps,
+        orgId: '',
+      },
+    );
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 5000 });
+
+    const option = await screen.findByTestId(
+      'option-fallback-user-1',
+      {},
+      { timeout: 5000 },
+    );
+    expect(option).toHaveTextContent('Fallback Member');
+  });
+
+  test('skips members query when both orgId and event organization are unavailable', async () => {
+    renderWithProviders(
+      [makeEventDetailsWithoutEventMock(), makeAttendeesEmptyMock()],
+      {
+        ...defaultProps,
+        orgId: '',
+      },
+    );
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 5000 });
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('no-options')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    expect(screen.getByText('No Registrations found')).toBeInTheDocument();
+  });
+
+  test('renders MUI TextField input and accepts typing without crashing', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 5000 });
+
+    const muiInput = await screen.findByTestId(
+      'shared-autocomplete-input',
+      {},
+      { timeout: 5000 },
+    );
+    expect(muiInput).toBeInTheDocument();
+
+    await userEvent.type(muiInput, 'harve');
+    expect(muiInput).toHaveValue('harve');
+  });
+
+  test('covers isAdding guard branch when add is triggered while pending', async () => {
+    vi.resetModules();
+
+    vi.doMock('shared-components/Autocomplete', async () => {
+      const { SimpleAutocompleteMock } =
+        await import('test-utils/mocks/shared-autocomplete');
+      return {
+        __esModule: true,
+        Autocomplete: SimpleAutocompleteMock,
+      };
+    });
+
+    vi.doMock('shared-components/Button', () => ({
+      __esModule: true,
+      default: (props: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+        const { onClick, children, disabled, ...rest } = props;
+        return (
+          <button
+            type="button"
+            onClick={onClick}
+            data-disabled={String(!!disabled)}
+            {...rest}
+          >
+            {children}
+          </button>
+        );
+      },
+    }));
+
+    const slowMutation = vi
+      .fn()
+      .mockImplementation(
+        () => new Promise((resolve) => setTimeout(resolve, 300)),
+      );
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof ApolloClient>('@apollo/client');
+      return {
+        ...actual,
+        useMutation: () => [
+          slowMutation,
+          {
+            loading: false,
+            error: undefined,
+            called: false,
+            client: {} as ApolloClient.ApolloClient<object>,
+            reset: vi.fn(),
+          },
+        ],
+      };
+    });
+
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
+
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithOneMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 5000 });
+
+    const input = await screen.findByTestId(
+      'shared-autocomplete-input',
+      {},
+      { timeout: 5000 },
+    );
+    await userEvent.type(input, 'John');
+    const option = await screen.findByTestId(
+      'option-user1',
+      {},
+      { timeout: 5000 },
+    );
+    await userEvent.click(option);
+
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 5000 },
+    );
+    await userEvent.click(addButton);
+
+    await waitFor(
+      () => {
+        expect(addButton).toHaveAttribute('data-disabled', 'true');
+      },
+      { timeout: 5000 },
+    );
+
+    await userEvent.click(addButton);
+
+    await waitFor(
+      () => {
+        expect(slowMutation).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 5000 },
+    );
+  });
+
+  test('covers isOptionEqualToValue callback branch', async () => {
+    vi.resetModules();
+    const equalitySpy = vi.fn();
+
+    vi.doMock('shared-components/Autocomplete', () => ({
+      __esModule: true,
+      Autocomplete: createIsOptionEqualToValueMock(equalitySpy),
+    }));
+
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
+
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithOneMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 5000 });
+
+    await waitFor(
+      () => {
+        expect(equalitySpy).toHaveBeenCalledWith(true);
       },
       { timeout: 5000 },
     );

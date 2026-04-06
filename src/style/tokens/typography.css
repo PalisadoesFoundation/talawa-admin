@@ -1,26 +1,44 @@
+/**
+ * Typography tokens — Apple-inspired type scale
+ * -----------------------------------------------
+ */
+
 :root {
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-15: 0.9375rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-19: 1.2rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-28: 1.75rem;
-  --font-size-3xl: 2rem;
-  --font-size-4xl: 3rem;
+  /* ── Font families ────────────────────────────────────────────────────────── */
+  --font-family-base:
+    -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', 'SF Pro Text',
+    'Helvetica Neue', Arial, sans-serif;
+  --font-family-mono:
+    ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', 'Courier New', monospace;
+
+  /* ── Font sizes ───────────────────────────────────────────────────────────── */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.8125rem; /* 13px */
+  --font-size-14: 0.875rem; /* 14px */
+  --font-size-9: 0.9rem; /* ~14.4px, tables/toasts */
+  --font-size-15: 0.9375rem; /* 15px */
+  --font-size-md: 1rem; /* 16px */
+  --font-size-lg: 1.0625rem; /* 17px — Apple body */
+  --font-size-19: 1.1875rem; /* 19px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-28: 1.75rem; /* 28px */
+  --font-size-3xl: 2rem; /* 32px */
+  --font-size-4xl: 3rem; /* 48px */
   --font-size-5xl: 6.25rem;
   --font-size-6xl: 9.375rem;
   --font-size-7xl: 12.5rem;
   --font-size-8xl: 15.625rem;
 
+  /* ── Line heights ─────────────────────────────────────────────────────────── */
   --line-height-none: 1;
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;
   --line-height-loose: 1.6;
   --line-height-relaxed: 1.75;
 
+  /* ── Font weights ─────────────────────────────────────────────────────────── */
   --font-weight-lighter: 300;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -28,9 +46,12 @@
   --font-weight-bold: 700;
   --font-weight-heavy: 800;
 
-  --letter-spacing-tight: -0.01em;
+  /* ── Letter spacing ───────────────────────────────────────────────────────── */
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-snug: -0.01em;
+  --letter-spacing-snug-half: -0.005em;
   --letter-spacing-normal: 0;
-  --letter-spacing-wide: 0.02em;
-  --letter-spacing-wider: 0.0625em;
-  --letter-spacing-extra-wide: 1.5625em;
+  --letter-spacing-wide: 0.01em;
+  --letter-spacing-wider: 0.04em;
+  --letter-spacing-extra-wide: 0.08em;
 }

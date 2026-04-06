@@ -488,16 +488,21 @@ function getDataTableBodyRows(): HTMLElement[] {
   const table = screen.getByTestId('datatable');
   const tbody = table.querySelector('tbody');
   if (tbody) {
-    return Array.from(tbody.querySelectorAll('tr'));
+    return Array.from(tbody.querySelectorAll('tr')).filter(
+      (row) =>
+        row.hasAttribute('data-testid') &&
+        row.getAttribute('data-testid')?.startsWith('datatable-row-'),
+    );
   }
-  // Fallback: skip header row(s) by counting rows that contain columnheader cells
+
+  // Fallback: use role-based rows and exclude header/spacer rows.
   const rows = within(table).getAllByRole('row');
-  const headerCount = within(table).queryAllByRole('columnheader').length;
-  expect(headerCount).toBeGreaterThanOrEqual(0);
-  const headerRowCount = rows.filter(
-    (row) => within(row).queryAllByRole('columnheader').length > 0,
-  ).length;
-  return rows.slice(headerRowCount);
+  return rows.filter(
+    (row) =>
+      within(row).queryAllByRole('columnheader').length === 0 &&
+      !row.hasAttribute('aria-hidden') &&
+      row.getAttribute('data-testid')?.startsWith('datatable-row-') === true,
+  );
 }
 
 describe('AddMember Screen', () => {

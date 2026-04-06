@@ -2,8 +2,7 @@
  * Campaigns Component
  *
  * This component renders a list of fundraising campaigns for a specific organization.
- * It provides functionality for searching, sorting, and viewing pledges for campaigns.
- * The component uses ReportingTable for consistent table display.
+ * It provides functionality for searching campaigns and adding pledges.
  */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
@@ -14,8 +13,25 @@ import Campaign from '@mui/icons-material/Campaign';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button from 'shared-components/Button/Button';
+import Button from 'shared-components/Button';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import useLocalStorage from 'utils/useLocalstorage';
+import PledgeModal from './PledgeModal';
+import { USER_FUND_CAMPAIGNS, USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
+import { useQuery } from '@apollo/client';
+import type {
+  InterfacePledgeInfo,
+  InterfaceUserCampaign,
+  InterfaceUserCampaignNode,
+  InterfaceUserFundCampaignQueryResponse,
+} from 'utils/interfaces';
+import { currencySymbols } from 'utils/currency';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import dayjs from 'dayjs';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 /**
  * Extended interface for campaigns with computed status
@@ -25,40 +41,7 @@ export type CampaignWithStatus = InterfaceUserCampaign & {
   [key: string]: unknown;
 };
 
-import { type GridCellParams } from 'shared-components/DataGridWrapper';
-import useLocalStorage from 'utils/useLocalstorage';
-import PledgeModal from './PledgeModal';
-import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
-import { useQuery } from '@apollo/client';
-import type { InterfaceUserCampaign } from 'utils/interfaces';
-import { currencySymbols } from 'utils/currency';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
-import dayjs from 'dayjs';
-import {
-  ReportingRow,
-  ReportingTableColumn,
-  ReportingTableGridProps,
-} from 'types/ReportingTable/interface';
-import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
-
-const dataGridStyle = {
-  borderRadius: 'var(--table-head-radius)',
-  backgroundColor: 'var(--row-background)',
-  '& .MuiDataGrid-row': {
-    backgroundColor: 'var(--row-background)',
-    '&:focus-within': { outline: 'none' },
-  },
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'var(--row-background)',
-  },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-background)',
-  },
-  '& .MuiDataGrid-cell:focus': { outline: 'none' },
-  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
-};
+const PAGE_SIZE = 10;
 
 const Campaigns = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
@@ -79,17 +62,41 @@ const Campaigns = (): JSX.Element => {
     close: closeModalState,
   } = useModalState();
 
+  const campaignQueryResult = useQuery<InterfaceUserFundCampaignQueryResponse>(
+    USER_FUND_CAMPAIGNS,
+    {
+      variables: {
+        input: { id: orgId as string },
+      },
+      fetchPolicy: 'cache-first',
+      skip: !orgId || !userId,
+    },
+  );
+
   const {
-    data: campaignData,
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  } = useQuery(USER_FUND_CAMPAIGNS, {
+  } = campaignQueryResult;
+
+  const { data: userPledgesData } = useQuery<{
+    getPledgesByUserId: InterfacePledgeInfo[];
+  }>(USER_PLEDGES, {
     variables: {
-      input: { id: orgId as string },
+      input: { userId },
+      where: {},
+      orderBy: 'endDate_DESC',
     },
-    fetchPolicy: 'cache-first',
     skip: !orgId || !userId,
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const { rows: fundRows } = useTableData<
+    InterfaceUserCampaignNode,
+    InterfaceUserCampaignNode,
+    InterfaceUserFundCampaignQueryResponse
+  >(campaignQueryResult, {
+    path: (data) => data.organization?.funds,
   });
 
   const openModal = useCallback(
@@ -106,61 +113,57 @@ const Campaigns = (): JSX.Element => {
   }, [closeModalState]);
 
   const campaigns = useMemo((): CampaignWithStatus[] => {
-    if (!campaignData?.organization?.funds?.edges) {
-      return [];
-    }
+    return fundRows
+      .filter((fundNode) => !fundNode.isArchived)
+      .flatMap((fundNode) => fundNode.campaigns?.edges ?? [])
+      .map(({ node: campaign }) => {
+        const today = dayjs().startOf('day');
+        const startDate = dayjs(campaign.startAt).startOf('day');
+        const endDate = dayjs(campaign.endAt).startOf('day');
 
-    return campaignData.organization.funds.edges
-      .flatMap(
-        (fundEdge: { node: { campaigns?: { edges: unknown[] } } }) =>
-          fundEdge?.node?.campaigns?.edges ?? [],
-      )
-      .map(
-        ({
-          node: campaign,
-        }: {
-          node: {
-            id: string;
-            name: string;
-            currencyCode: string;
-            goalAmount: number;
-            amountRaised?: number;
-            startAt: string;
-            endAt: string;
-          };
-        }) => {
-          const today = dayjs().startOf('day');
-          const startDate = dayjs(campaign.startAt).startOf('day');
-          const endDate = dayjs(campaign.endAt).startOf('day');
+        let status: 'active' | 'inactive' | 'pending';
+        if (endDate.isBefore(today)) {
+          status = 'inactive';
+        } else if (!startDate.isAfter(today) && !endDate.isBefore(today)) {
+          status = 'active';
+        } else {
+          status = 'pending';
+        }
 
-          let status: 'active' | 'inactive' | 'pending';
-          if (endDate.isBefore(today)) {
-            status = 'inactive';
-          } else if (!startDate.isAfter(today) && !endDate.isBefore(today)) {
-            status = 'active';
-          } else {
-            status = 'pending';
-          }
-
-          return {
-            _id: campaign.id,
-            name: campaign.name,
-            fundingGoal: campaign.goalAmount,
-            amountRaised: campaign.amountRaised ?? 0,
-            startDate: new Date(campaign.startAt),
-            endDate: new Date(campaign.endAt),
-            currency: campaign.currencyCode,
-            status,
-          };
-        },
-      );
-  }, [campaignData]);
+        return {
+          _id: campaign.id,
+          name: campaign.name,
+          fundingGoal: campaign.goalAmount,
+          amountRaised: campaign.amountRaised,
+          startDate: new Date(campaign.startAt),
+          endDate: new Date(campaign.endAt),
+          currency: campaign.currencyCode,
+          status,
+        };
+      });
+  }, [fundRows]);
 
   const filteredCampaigns = useMemo(() => {
     return campaigns.filter((campaign: CampaignWithStatus) =>
       campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [campaigns, searchText]);
+
+  const campaignIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    filteredCampaigns.forEach((item, index) => {
+      map.set(item._id, index + 1);
+    });
+    return map;
+  }, [filteredCampaigns]);
+
+  const pledgedCampaignIds = useMemo(() => {
+    return new Set(
+      (userPledgesData?.getPledgesByUserId ?? [])
+        .map((pledge) => pledge.campaign?.id)
+        .filter((id): id is string => Boolean(id)),
+    );
+  }, [userPledgesData]);
 
   if (!orgId || !userId) {
     return <Navigate to="/" replace />;
@@ -184,213 +187,242 @@ const Campaigns = (): JSX.Element => {
     );
   }
 
-  const columns: ReportingTableColumn[] = [
+  const columns: IColumnDef<CampaignWithStatus>[] = [
     {
-      field: 'id',
-      headerName: t('campaignIndex'),
-      flex: 1,
-      minWidth: 'space-11',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
+      id: 'id',
+      header: t('campaignIndex'),
+      accessor: '_id',
+      render: (_value, row) => (
         <span className={styles.requestsTableItemIndex}>
-          {params.api.getRowIndexRelativeToVisibleRows(params.row._id) + 1}
+          {campaignIndexMap.get(row._id) ?? 0}
         </span>
       ),
-    },
-    {
-      field: 'name',
-      headerName: t('campaignName'),
-      flex: 2,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <div data-testid="campaignName">{params.row.name}</div>
-      ),
-    },
-    {
-      field: 'status',
-      headerName: t('campaignStatus'),
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <StatusBadge
-          variant={(params.row as CampaignWithStatus).status}
-          dataTestId="campaignStatus"
-        />
-      ),
-    },
-    {
-      field: 'startDate',
-      headerName: t('startDate'),
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: true,
-      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.startDate).format('DD/MM/YYYY'),
-    },
-    {
-      field: 'endDate',
-      headerName: t('endDate'),
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: true,
-      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
-      renderCell: (params: GridCellParams) => (
-        <div data-testid="endDateCell">
-          {dayjs(params.row.endDate).format('DD/MM/YYYY')}
-        </div>
-      ),
-    },
-    {
-      field: 'fundingGoal',
-      headerName: t('fundGoal'),
-      flex: 1,
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: true,
-      renderCell: (params: GridCellParams) => (
-        <div className="fw-bold" data-testid="goalCell">
-          {currencySymbols[params.row.currency]}
-          {params.row.fundingGoal}
-        </div>
-      ),
-    },
-    {
-      field: 'amountRaised',
-      headerName: t('amountRaised'),
-      flex: 1,
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <div className="fw-bold" data-testid="raisedCell">
-          {currencySymbols[params.row.currency]}
-          {params.row.amountRaised ?? 0}
-        </div>
-      ),
-    },
-    {
-      field: 'percentageRaised',
-      headerName: t('percentRaised'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const raised = params.row.amountRaised ?? 0;
-        const goal = params.row.fundingGoal as number;
-        const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
-
-        return (
-          <Box data-testid="progressCell">
-            <Typography>{percentage.toFixed(0)}%</Typography>
-          </Box>
-        );
+      meta: {
+        sortable: false,
       },
     },
     {
-      field: 'action',
-      headerName: t('addPledge'),
-      flex: 1.5,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const campaign = params.row as InterfaceUserCampaign;
-        const isEnded = new Date(campaign.endDate) < new Date();
+      id: 'name',
+      header: t('campaignName'),
+      accessor: 'name',
+      render: (value) => <div data-testid="campaignName">{String(value)}</div>,
+      meta: {
+        sortable: false,
+      },
+    },
+    {
+      id: 'status',
+      header: t('campaignStatus'),
+      accessor: 'status',
+      render: (value) => (
+        <StatusBadge
+          variant={value as 'active' | 'inactive' | 'pending'}
+          label={value === 'pending' ? 'Not Started' : undefined}
+          dataTestId="campaignStatus"
+        />
+      ),
+      meta: {
+        sortable: false,
+        align: 'left',
+      },
+    },
+    {
+      id: 'startDate',
+      header: t('startDate'),
+      accessor: 'startDate',
+      render: (value) => dayjs(String(value)).format('DD/MM/YYYY'),
+      meta: {
+        sortable: true,
+        sortFn: (a, b) =>
+          dayjs(a.startDate).valueOf() - dayjs(b.startDate).valueOf(),
+        align: 'center',
+      },
+    },
+    {
+      id: 'endDate',
+      header: t('endDate'),
+      accessor: 'endDate',
+      render: (value) => (
+        <div data-testid="endDateCell">
+          {dayjs(String(value)).format('DD/MM/YYYY')}
+        </div>
+      ),
+      meta: {
+        sortable: true,
+        sortFn: (a, b) =>
+          dayjs(a.endDate).valueOf() - dayjs(b.endDate).valueOf(),
+        align: 'center',
+      },
+    },
+    {
+      id: 'fundingGoal',
+      header: t('fundGoal'),
+      accessor: 'fundingGoal',
+      render: (value, row) => (
+        <div className="fw-bold" data-testid="goalCell">
+          {currencySymbols[row.currency]}
+          {value as number}
+        </div>
+      ),
+      meta: {
+        sortable: true,
+        align: 'center',
+      },
+    },
+    {
+      id: 'amountRaised',
+      header: t('amountRaised'),
+      accessor: 'amountRaised',
+      render: (value, row) => (
+        <div className="fw-bold" data-testid="raisedCell">
+          {currencySymbols[row.currency]}
+          {(value as number) ?? 0}
+        </div>
+      ),
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
+    },
+    {
+      id: 'percentageRaised',
+      header: t('percentRaised'),
+      accessor: 'amountRaised',
+      render: (_value, row) => {
+        const raised = row.amountRaised ?? 0;
+        const goal = row.fundingGoal;
+        const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
+        const angle = (percentage / 100) * 360;
+        const radians = ((angle - 90) * Math.PI) / 180;
+        const x = 16 + 16 * Math.cos(radians);
+        const y = 16 + 16 * Math.sin(radians);
+        const largeArcFlag = angle > 180 ? 1 : 0;
+        const sectorPath =
+          percentage >= 100
+            ? ''
+            : `M 16 16 L 16 0 A 16 16 0 ${largeArcFlag} 1 ${x} ${y} Z`;
+        const pieClassName =
+          percentage >= 100
+            ? styles.progressComplete
+            : percentage >= 50
+              ? styles.progressHalf
+              : styles.progressLow;
+
+        return (
+          <Box
+            className={styles.progressCellContainer}
+            data-testid="progressCell"
+          >
+            <svg
+              className={`${styles.progressPie} ${pieClassName}`}
+              viewBox="0 0 32 32"
+              role="img"
+              aria-label={t('campaignProgress', {
+                percentage: percentage.toFixed(0),
+              })}
+            >
+              <circle cx="16" cy="16" r="16" className={styles.progressTrack} />
+              {percentage >= 100 ? (
+                <circle
+                  cx="16"
+                  cy="16"
+                  r="16"
+                  className={styles.progressSlice}
+                />
+              ) : (
+                percentage > 0 && (
+                  <path d={sectorPath} className={styles.progressSlice} />
+                )
+              )}
+            </svg>
+            <Typography variant="body2" className={styles.progressTypography}>
+              {percentage.toFixed(0)}%
+            </Typography>
+          </Box>
+        );
+      },
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
+    },
+    {
+      id: 'action',
+      header: t('addPledge'),
+      accessor: '_id',
+      render: (_value, row) => {
+        const canCreatePledge = row.status === 'active';
+        const hasAlreadyPledged = pledgedCampaignIds.has(row._id);
+        const isEnded = row.status === 'inactive';
 
         return (
           <Button
             size="sm"
-            variant={isEnded ? 'outline-secondary' : 'outline-success'}
+            className={styles.addPledgeButton}
             data-testid="addPledgeBtn"
-            disabled={isEnded}
+            disabled={!canCreatePledge || hasAlreadyPledged}
             onClick={(e) => {
               e.stopPropagation();
-              openModal(campaign);
+              if (!canCreatePledge || hasAlreadyPledged) return;
+              openModal(row);
             }}
-            aria-label={isEnded ? t('campaignEnded') : t('addPledge')}
+            aria-label={
+              !canCreatePledge && isEnded ? t('campaignEnded') : t('addPledge')
+            }
           >
             <i className="fa fa-plus me-1" aria-hidden="true" />
             {t('addPledge')}
           </Button>
         );
       },
+      meta: {
+        sortable: false,
+        align: 'center',
+      },
     },
   ];
 
-  const gridProps: ReportingTableGridProps = {
-    sx: { ...dataGridStyle },
-    paginationMode: 'client',
-    getRowId: (row: InterfaceUserCampaign) => row._id,
-    rowCount: filteredCampaigns.length,
-    pageSizeOptions: [PAGE_SIZE],
-    loading: campaignLoading,
-    hideFooter: true,
-    compactColumns: columns.length >= 7,
-    slots: {
-      noRowsOverlay: () => (
+  return (
+    <div className={styles.campaignsContainer}>
+      <div className={styles.searchContainerRow}>
+        <SearchFilterBar
+          searchPlaceholder={t('searchCampaigns')}
+          searchValue={searchText}
+          onSearchChange={setSearchText}
+          searchInputTestId="searchByInput"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={false}
+        />
+
+        <Button
+          variant="success"
+          className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
+          data-testid="myPledgesBtn"
+          onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
+        >
+          {t('myPledges')}
+        </Button>
+      </div>
+
+      {!campaignLoading && filteredCampaigns.length === 0 ? (
         <EmptyState
           icon={<Campaign />}
           message={t('noCampaigns')}
           description={t('createFirstCampaign')}
           dataTestId="campaigns-empty-state"
         />
-      ),
-    },
-    getRowClassName: () => `${styles.rowBackground}`,
-    isRowSelectable: () => false,
-    disableColumnMenu: true,
-    rowHeight: ROW_HEIGHT,
-    autoHeight: true,
-  };
-
-  return (
-    <>
-      <SearchFilterBar
-        searchPlaceholder={t('searchCampaigns')}
-        searchValue={searchText}
-        onSearchChange={setSearchText}
-        searchInputTestId="searchByInput"
-        searchButtonTestId="searchBtn"
-        hasDropdowns={false}
-      />
-
-      <Button
-        variant="success"
-        data-testid="myPledgesBtn"
-        onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
-      >
-        {t('myPledges')}
-      </Button>
-
-      <ReportingTable
-        rows={filteredCampaigns as ReportingRow[]}
-        columns={columns}
-        gridProps={gridProps}
-        listProps={{ ['data-testid']: 'campaigns-list' }}
-      />
+      ) : (
+        <DataTable
+          data={filteredCampaigns}
+          columns={columns}
+          rowKey="_id"
+          tableClassName={styles.uniformTableLayout}
+          loading={campaignLoading}
+          paginationMode="client"
+          pageSize={PAGE_SIZE}
+          ariaLabel={t('campaigns')}
+        />
+      )}
 
       <PledgeModal
         isOpen={modalState}
@@ -401,7 +433,7 @@ const Campaigns = (): JSX.Element => {
         refetchPledge={refetchCampaigns}
         mode="create"
       />
-    </>
+    </div>
   );
 };
 

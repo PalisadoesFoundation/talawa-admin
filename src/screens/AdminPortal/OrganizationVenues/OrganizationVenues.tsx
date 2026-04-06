@@ -57,22 +57,37 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Navigate, useParams } from 'react-router';
 import VenueModal from 'components/AdminPortal/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
+import useVenueDeletion from '../../../hooks/useVenueDeletion';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/AdminPortal/Venues/VenueCard';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
-function organizationVenues(): JSX.Element {
-  // Translation hooks for i18n support
+export const getVenueNameById = (
+  venues: InterfaceQueryVenueListItem[],
+  venueId: string,
+): string => {
+  return (
+    venues.find((venueItem) => venueItem.node.id === venueId)?.node.name ?? ''
+  );
+};
+
+/**
+ * OrganizationVenues component
+ *
+ * @param refetchVenues - optional injected refetch function for tests
+ */
+function organizationVenues(props?: {
+  refetchVenues?: () => Promise<unknown>;
+}): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
   });
   const { t: tCommon } = useTranslation('common');
 
-  // Setting the document title using the translation hook
   document.title = t('title');
 
-  // State hooks for managing component state
   const [venueModal, setVenueModal] = useState<boolean>(false);
   const [venueModalMode, setVenueModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -84,74 +99,86 @@ function organizationVenues(): JSX.Element {
     useState<InterfaceQueryVenueListItem | null>(null);
   const [venues, setVenues] = useState<InterfaceQueryVenueListItem[]>([]);
 
-  // Getting the organization ID from the URL parameters
   const { orgId } = useParams();
-  if (!orgId) {
-    return <Navigate to="/admin/orglist" />;
-  }
+  if (!orgId) return <Navigate to="/admin/orglist" />;
 
-  // GraphQL query for fetching venue data
   const {
     data: venueData,
     loading: venueLoading,
     error: venueError,
     refetch: venueRefetch,
   } = useQuery(VENUE_LIST, {
-    variables: {
-      orgId: orgId,
-    },
+    variables: { orgId },
   });
 
-  // GraphQL mutation for deleting a venue
   const [deleteVenue] = useMutation(DELETE_VENUE_MUTATION);
 
-  /**
-   * Handles the deletion of a venue by ID.
-   * @param venueId - The ID of the venue to delete.
-   */
-  const handleDelete = async (venueId: string): Promise<void> => {
-    try {
-      await deleteVenue({ variables: { id: venueId } });
-      venueRefetch();
-    } catch (error) {
-      errorHandler(t, error);
-    }
+  // Allow tests to inject a custom refetch function via props.refetchVenues.
+  // Prefer the injected function when present, otherwise use the query's refetch.
+  const deletion = useVenueDeletion(
+    deleteVenue,
+    props?.refetchVenues ?? venueRefetch,
+  );
+
+  const {
+    open: handleDelete,
+    close: handleCloseDeleteVenueModal,
+    confirmDelete,
+    isOpen: deleteVenueModalOpenHook,
+    deleting: deletingHook,
+  } = deletion;
+
+  // Cache selected venue id and name locally to avoid scanning the venues array
+  // on every render when the modal is rendered. This improves performance for
+  // large lists and preserves the canonical deletion logic in the hook.
+  const [selectedVenue, setSelectedVenue] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+
+  const openDeleteModal = (venueId: string): void => {
+    const venueName = getVenueNameById(venues, venueId);
+    setSelectedVenue({ id: venueId, name: venueName });
+    handleDelete(venueId);
+  };
+
+  const handleCloseAndClear = (): void => {
+    setSelectedVenue(null);
+    handleCloseDeleteVenueModal();
   };
 
   /**
-   * Handles the search operation by updating the search term state.
-   * @param term - The search term entered by the user.
+   * Update search term state
+   *
+   * @param term - current search string
    */
-  const handleSearch = (term: string): void => {
-    setSearchTerm(term);
-  };
+  const handleSearch = (term: string): void => setSearchTerm(term);
 
   /**
-   * Updates the search by state when the user selects a search option.
-   * @param value - The field to search by (name or description).
+   * Update which field to search by (name | description)
+   *
+   * @param value - selected search-by option
    */
-  const handleSearchByChange = (value: string): void => {
+  const handleSearchByChange = (value: string): void =>
     setSearchBy(value as 'name' | 'desc');
-  };
 
   /**
-   * Updates the sort order state when the user selects a sort option.
-   * @param value - The order to sort venues by (highest or lowest capacity).
+   * Update sort order for venue list
+   *
+   * @param value - 'highest' or 'lowest'
    */
-  const handleSortChange = (value: string): void => {
+  const handleSortChange = (value: string): void =>
     setSortOrder(value as 'highest' | 'lowest');
-  };
 
   /**
-   * Toggles the visibility of the venue modal.
+   * Toggle visibility of the Venue modal
    */
-  const toggleVenueModal = (): void => {
-    setVenueModal(!venueModal);
-  };
+  const toggleVenueModal = (): void => setVenueModal(!venueModal);
 
   /**
-   * Shows the edit venue modal with the selected venue data.
-   * @param venueItem - The venue data to edit.
+   * Show the edit modal and populate it with the selected venue
+   *
+   * @param venueItem - the venue to edit
    */
   const showEditVenueModal = (venueItem: InterfaceQueryVenueListItem): void => {
     setVenueModalMode('edit');
@@ -160,7 +187,7 @@ function organizationVenues(): JSX.Element {
   };
 
   /**
-   * Shows the create venue modal.
+   * Show the create-venue modal
    */
   const showCreateVenueModal = (): void => {
     setVenueModalMode('create');
@@ -168,17 +195,19 @@ function organizationVenues(): JSX.Element {
     toggleVenueModal();
   };
 
-  // Error handling for venue data fetch
   if (venueError) {
     errorHandler(t, venueError);
   }
 
-  // Updating venues state when venue data changes
+  /**
+   * Synchronize query results into local state and apply client-side
+   * filtering (search) and sorting (capacity) so the UI can render
+   * paginated/filtered results quickly without refetching.
+   */
   useEffect(() => {
-    if (venueData && venueData?.organization?.venues?.edges) {
+    if (venueData?.organization?.venues?.edges) {
       let filteredVenues = venueData.organization.venues.edges;
 
-      // Client-side filtering
       if (searchTerm) {
         filteredVenues = filteredVenues.filter(
           (venue: InterfaceQueryVenueListItem) => {
@@ -186,25 +215,24 @@ function organizationVenues(): JSX.Element {
               return venue.node.name
                 .toLowerCase()
                 .includes(searchTerm.toLowerCase());
-            } else {
-              // searchBy === 'desc'
-              return venue.node.description
-                ?.toLowerCase()
-                .includes(searchTerm.toLowerCase());
             }
+            return venue.node.description
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase());
           },
         );
       }
 
-      // Client-side sorting by capacity
       if (filteredVenues.length > 0) {
-        filteredVenues = [...filteredVenues].sort((a, b) => {
-          const capacityA = parseInt(a.node.capacity || '0');
-          const capacityB = parseInt(b.node.capacity || '0');
-          return sortOrder === 'highest'
-            ? capacityB - capacityA
-            : capacityA - capacityB;
-        });
+        filteredVenues = [...filteredVenues].sort(
+          (a: InterfaceQueryVenueListItem, b: InterfaceQueryVenueListItem) => {
+            const capacityA = parseInt(String(a.node.capacity || '0'));
+            const capacityB = parseInt(String(b.node.capacity || '0'));
+            return sortOrder === 'highest'
+              ? capacityB - capacityA
+              : capacityA - capacityB;
+          },
+        );
       }
 
       setVenues(filteredVenues);
@@ -215,64 +243,59 @@ function organizationVenues(): JSX.Element {
     <>
       <SafeBreadcrumbs
         items={[
-          {
-            translationKey: 'organization',
-            to: `/admin/orgdash/${orgId}`,
-          },
-          {
-            translationKey: 'venues',
-            isCurrent: true,
-          },
+          { translationKey: 'organization', to: `/admin/orgdash/${orgId}` },
+          { translationKey: 'venues', isCurrent: true },
         ]}
       />
-      <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
-        <SearchFilterBar
-          hasDropdowns={true}
-          searchPlaceholder={`${t('searchBy')} ${tCommon(searchBy)}`}
-          searchValue={searchTerm}
-          onSearchChange={handleSearch}
-          searchInputTestId="searchInput"
-          searchButtonTestId="searchBtn"
-          dropdowns={[
-            {
-              id: 'org-venue-SearchBy',
-              label: '',
-              type: 'filter',
-              title: t('searchBy'),
-              options: [
-                { label: tCommon('name'), value: 'name' },
-                { label: tCommon('description'), value: 'desc' },
-              ],
-              selectedOption: searchBy,
-              onOptionChange: (value) => handleSearchByChange(value.toString()),
-              dataTestIdPrefix: 'searchByButton',
-            },
-            {
-              id: 'org-venue-Venues',
-              label: '',
-              type: 'sort',
-              title: t('sortVenues'),
-              options: [
-                { label: t('highestCapacity'), value: 'highest' },
-                { label: t('lowestCapacity'), value: 'lowest' },
-              ],
-              selectedOption: sortOrder,
-              onOptionChange: (value) => handleSortChange(value.toString()),
-              dataTestIdPrefix: 'sortVenues',
-            },
-          ]}
-          additionalButtons={
-            <Button
-              variant="success"
-              className={styles.dropdown}
-              onClick={showCreateVenueModal}
-              data-testid="createVenueBtn"
-            >
-              <i className="fa fa-plus me-1"></i> {t('addVenue')}
-            </Button>
-          }
-        />
-      </div>
+
+      <Toolbar
+        search={{
+          placeholder: `${t('searchBy')} ${tCommon(searchBy)}`,
+          value: searchTerm,
+          onChange: handleSearch,
+          onSearch: handleSearch,
+          inputTestId: 'searchInput',
+          buttonTestId: 'searchBtn',
+        }}
+        filters={[
+          {
+            id: 'org-venue-SearchBy',
+            label: '',
+            type: 'filter',
+            title: t('searchBy'),
+            options: [
+              { label: tCommon('name'), value: 'name' },
+              { label: tCommon('description'), value: 'desc' },
+            ],
+            selected: searchBy,
+            onChange: (value) => handleSearchByChange(value.toString()),
+            testIdPrefix: 'searchByButton',
+          },
+          {
+            id: 'org-venue-Venues',
+            label: '',
+            type: 'sort',
+            title: t('sortVenues'),
+            options: [
+              { label: t('highestCapacity'), value: 'highest' },
+              { label: t('lowestCapacity'), value: 'lowest' },
+            ],
+            selected: sortOrder,
+            onChange: (value) => handleSortChange(value.toString()),
+            testIdPrefix: 'sortVenues',
+          },
+        ]}
+        actions={
+          <Button
+            variant="success"
+            className={styles.dropdown}
+            onClick={showCreateVenueModal}
+            data-testid="createVenueBtn"
+          >
+            <i className="fa fa-plus me-1"></i> {t('addVenue')}
+          </Button>
+        }
+      />
 
       <Col>
         <div className={styles.mainpageright}>
@@ -282,16 +305,14 @@ function organizationVenues(): JSX.Element {
               data-testid="orgvenueslist"
             >
               {venues.length ? (
-                venues.map(
-                  (venueItem: InterfaceQueryVenueListItem, index: number) => (
-                    <VenueCard
-                      venueItem={venueItem}
-                      handleDelete={handleDelete}
-                      showEditVenueModal={showEditVenueModal}
-                      key={index}
-                    />
-                  ),
-                )
+                venues.map((venueItem: InterfaceQueryVenueListItem) => (
+                  <VenueCard
+                    venueItem={venueItem}
+                    showEditVenueModal={showEditVenueModal}
+                    handleDelete={openDeleteModal}
+                    key={venueItem.node.id}
+                  />
+                ))
               ) : (
                 <h6>{t('noVenues')}</h6>
               )}
@@ -299,13 +320,24 @@ function organizationVenues(): JSX.Element {
           </LoadingState>
         </div>
       </Col>
+
       <VenueModal
         show={venueModal}
         onHide={toggleVenueModal}
         refetchVenues={venueRefetch}
         orgId={orgId}
-        edit={venueModalMode === 'edit' ? true : false}
+        edit={venueModalMode === 'edit'}
         venueData={editVenueData}
+      />
+
+      <DeleteModal
+        open={deleteVenueModalOpenHook}
+        title={t('deleteVenue')}
+        onClose={handleCloseAndClear}
+        onDelete={confirmDelete}
+        loading={deletingHook}
+        entityName={selectedVenue?.name ?? undefined}
+        data-testid="deleteVenueModal"
       />
     </>
   );

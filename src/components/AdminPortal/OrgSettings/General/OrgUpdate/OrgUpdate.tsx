@@ -273,14 +273,14 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           </FormFieldGroup>
 
           <Row className="mt-3">
-            <Col sm={6} className="d-flex align-items-center">
+            <Col sm={6} className={styles.checkboxField}>
               <FormCheckField
                 name="isPublic"
                 id="isPublic"
                 label={t('isPublic')}
                 type="checkbox"
                 data-testid="user-reg-switch"
-                // "Is Public" is the inverse of "user registration required"
+                // "Open to Public" is the inverse of "user registration required"
                 checked={!userRegistrationRequiredChecked}
                 onChange={() =>
                   setuserRegistrationRequiredChecked(

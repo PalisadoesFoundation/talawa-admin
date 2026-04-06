@@ -48,7 +48,6 @@ import {
   EVENT_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { Autocomplete } from 'shared-components/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
@@ -107,8 +106,11 @@ export const EventRegistrantsModal = ({
     variables: { eventId: eventId },
   });
 
+  const membersOrganizationId = orgId || eventData?.event?.organization?.id;
+
   const { data: memberData } = useQuery(MEMBERS_LIST, {
-    variables: { organizationId: orgId },
+    variables: { organizationId: membersOrganizationId },
+    skip: !membersOrganizationId,
   });
 
   const [isAdding, setIsAdding] = useState(false);
@@ -218,6 +220,9 @@ export const EventRegistrantsModal = ({
             getOptionLabel={(member: InterfaceUser): string =>
               member.name || t('unknownUser')
             }
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            label={t('addRegistrantLabel') as string}
+            placeholder={t('addRegistrantPlaceholder') as string}
             renderOption={(props, option: InterfaceUser) => (
               <li {...props} key={option.id}>
                 <div className={styles.avatarContainer}>
@@ -261,26 +266,6 @@ export const EventRegistrantsModal = ({
               </div>
             }
             options={memberData?.usersByOrganizationId || []}
-            renderInput={(params) => (
-              <FormTextField
-                name="addRegistrant"
-                label={t('addRegistrantLabel') as string}
-                ref={params.InputProps.ref}
-                value={inputValue}
-                placeholder={t('addRegistrantPlaceholder') as string}
-                data-testid="autocomplete"
-                id={params.id}
-                disabled={params.disabled}
-                fullWidth
-                onChange={(v: string) => {
-                  if (params.inputProps?.onChange) {
-                    params.inputProps.onChange({
-                      target: { value: v },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                  }
-                }}
-              />
-            )}
             value={member}
           />
           <br />

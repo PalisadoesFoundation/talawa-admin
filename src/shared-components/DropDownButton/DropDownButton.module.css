@@ -4,19 +4,34 @@
 }
 
 .dropdownToggle {
-  width: var(--space-16);
+  min-width: calc(var(--control-height) * 3);
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4) var(--space-4);
-  font-size: var(--font-size-sm);
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4-5);
+  font-size: var(--font-size-14);
   font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
-  transition: all 0.2s;
+  border-radius: var(--radius-lg);
+  /* Toolbar-consistent default state: white background, subtle border, dark text */
+  background-color: var(--color-white) !important;
+  color: var(--color-gray-mid) !important;
+  border: var(--border-1-5) solid var(--color-black-10) !important;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.dropdownToggle:focus {
-  outline: var(--border-2) solid var(--color-blue-500);
+.dropdownToggle:is(:hover, :active),
+:global(.show) > .dropdownToggle {
+  background-color: var(--color-blue-500) !important;
+  border-color: var(--color-blue-500) !important;
+  color: var(--color-white) !important;
+  box-shadow: none !important;
+}
+
+.dropdownToggle:focus-visible {
+  outline: var(--border-3) solid var(--color-blue-alpha-30);
   outline-offset: var(--space-2);
 }
 

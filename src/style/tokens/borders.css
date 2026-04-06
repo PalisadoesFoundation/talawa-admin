@@ -1,24 +1,35 @@
+/**
+ * Border & shadow tokens — Apple-inspired elevation system
+ * ----------------------------------------------------------
+ */
+
 :root {
+  /* ── Border widths ────────────────────────────────────────────────────────── */
   --border-0: 0.1px;
   --border-1: 1px;
   --border-1-5: 1.5px;
   --border-2: 2px;
   --border-3: 3px;
   --border-4: 4px;
-  --border-6: 6px;
   --border-8: 8px;
 
+  /* ── Border radii ─────────────────────────────────────────────────────────── */
   --radius-none: 0;
-  --radius-xs: 0.125rem;
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.8rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.5rem;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px; /* Apple standard button/input */
+  --radius-xl: 12px; /* Apple card */
+  --radius-1-5xl: 14px; /* between xl=12 and 2xl=16 */
+  --radius-2xl: 16px; /* Apple larger card */
+  --radius-2-5xl: 18px; /* between 2xl=16 and 3xl=20 */
+  --radius-3xl: 20px; /* Apple modal */
+  --radius-4xl: 24px; /* Legacy alias kept for compatibility */
   --radius-full: 50%;
   --radius-pill: 100rem;
 
-  --border-shadow-xs: 2.5px;
+  /* ── Shadow specs ─────────────────────────────────────────────────────────── */
+  --border-shadow-xs: 2px;
   --border-shadow-1: 4px;
   --border-shadow-2: 8px;
 
@@ -26,15 +37,22 @@
   --shadow-offset-sm: 2px;
   --shadow-offset-md: 4px;
   --shadow-offset-lg: 8px;
-  --shadow-blur-xl: 16px;
-  --shadow-blur-2xl: 32px;
 
   --shadow-blur-xs: 2px;
-  --shadow-blur-sm: 3px;
-  --shadow-blur-md: 4px;
-  --shadow-blur-lg: 8px;
+  --shadow-blur-sm: 4px;
+  --shadow-blur-md: 8px;
+  --shadow-blur-lg: 16px;
+  --shadow-blur-xl: 24px;
+  --shadow-blur-2xl: 40px;
 
   --shadow-spread-none: 0;
   --shadow-spread-xs: 1px;
-  --shadow-spread-sm: 3px;
+  --shadow-spread-sm: 2px;
+
+  /* ── Elevation shadows ────────────────────────────────────────────────────── */
+  --shadow-1: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-2: 0 2px 8px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-3: 0 4px 16px rgba(0, 0, 0, 0.09), 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-4: 0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-5: 0 16px 48px rgba(0, 0, 0, 0.16), 0 8px 24px rgba(0, 0, 0, 0.1);
 }

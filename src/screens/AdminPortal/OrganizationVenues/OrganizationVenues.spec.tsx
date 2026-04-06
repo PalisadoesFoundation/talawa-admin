@@ -13,12 +13,20 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, render, screen, waitFor, within } from '@testing-library/react';
+import {
+  act,
+  render,
+  screen,
+  waitFor,
+  within,
+  renderHook,
+  cleanup,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import OrganizationVenues from './OrganizationVenues';
+import OrganizationVenues, { getVenueNameById } from './OrganizationVenues';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -28,6 +36,7 @@ import type { ApolloLink } from '@apollo/client';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { errorHandler } from 'utils/errorHandler';
+import useVenueDeletion from '../../../hooks/useVenueDeletion';
 
 const MOCKS = [
   {
@@ -162,6 +171,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  cleanup();
   window.alert = originalAlert;
   vi.restoreAllMocks();
 });
@@ -410,6 +420,32 @@ describe('Organisation Venues', () => {
     });
   });
 
+  test('confirms deletion when modal delete is clicked', async () => {
+    renderOrganizationVenue(link);
+
+    // Wait for venues to load before interacting
+    await waitFor(() =>
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
+    );
+
+    // Open the delete confirmation modal
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+
+    // Find and click the modal delete button to confirm
+    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
+    await userEvent.click(modalDeleteBtn);
+
+    // Wait for mutation to complete and modal to close
+    await wait(100);
+
+    await waitFor(() => {
+      // Modal delete button should no longer be present (modal closed)
+      expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument();
+      // Venue list should still be rendered after refetch
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+    });
+  });
+
   test('displays loader when data is loading', () => {
     renderOrganizationVenue(link);
     expect(screen.getByTestId('loading-state')).toBeInTheDocument();
@@ -428,9 +464,221 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
     });
   });
+
+  test('sorts by lowest capacity: comparator else-branch executed and order changes', async () => {
+    renderOrganizationVenue(link);
+
+    // ensure initial list is rendered (default sortOrder = 'highest')
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    // change to lowest sort
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-lowest'));
+
+    // wait for effect to apply and assert the first item is the lowest capacity (venue1)
+    await waitFor(() => {
+      const items = screen.getAllByTestId(/^venue-item/);
+      expect(items[0]).toHaveAttribute('data-testid', 'venue-item-venue1');
+    });
+  });
+
+  test('handles missing capacity by falling back to "0" in parseInt', async () => {
+    // custom mocks with one venue missing capacity
+    const customMocks = [
+      {
+        request: {
+          query: VENUE_LIST,
+          variables: { orgId: 'orgId' },
+        },
+        result: {
+          data: {
+            organization: {
+              venues: {
+                edges: [
+                  {
+                    node: {
+                      id: 'vZero',
+                      name: 'Zero Capacity Venue',
+                      description: 'No capacity provided',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      // capacity intentionally omitted to trigger fallback
+                      image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'vTen',
+                      name: 'Ten Capacity Venue',
+                      description: 'Capacity 10',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      capacity: '10',
+                      image: null,
+                    },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const customLink = new StaticMockLink(customMocks, true);
+    renderOrganizationVenue(customLink);
+
+    // wait for list
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    // switch to lowest sort order to exercise comparator using fallback '0'
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-lowest'));
+
+    // after sorting, Zero Capacity Venue (fallback 0) should appear first
+    await waitFor(() => {
+      const items = screen.getAllByTestId(/^venue-item/);
+      expect(items[0]).toHaveAttribute('data-testid', 'venue-item-vZero');
+    });
+  });
+
+  test('EXERCISE: comparator fallback executes for both a and b when capacities missing', async () => {
+    const multiMocks = [
+      {
+        request: {
+          query: VENUE_LIST,
+          variables: { orgId: 'orgId' },
+        },
+        result: {
+          data: {
+            organization: {
+              venues: {
+                edges: [
+                  {
+                    node: {
+                      id: 'm1',
+                      name: 'M1',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      /* no capacity */ image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'm2',
+                      name: 'M2',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      capacity: '5',
+                      image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'm3',
+                      name: 'M3',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      /* no capacity */ image: null,
+                    },
+                  },
+                  {
+                    node: {
+                      id: 'm4',
+                      name: 'M4',
+                      description: '',
+                      createdAt: dayjs().toISOString(),
+                      attachments: [],
+                      capacity: '10',
+                      image: null,
+                    },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const multiLink = new StaticMockLink(multiMocks, true);
+    renderOrganizationVenue(multiLink);
+
+    // wait for list
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    // switch to lowest sort order to force comparator to run across many pairs
+    await userEvent.click(screen.getByTestId('sortVenues-toggle'));
+    await userEvent.click(screen.getByTestId('sortVenues-item-lowest'));
+
+    // ensure list updated; just assert that our items exist in DOM
+    await waitFor(() => {
+      expect(screen.getByTestId('venue-item-m1')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item-m2')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item-m3')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item-m4')).toBeInTheDocument();
+    });
+  });
 });
 
 describe('Organisation Venues Error Handling', () => {
+  test('getVenueNameById returns venue name when id exists', () => {
+    const venues = [
+      {
+        node: {
+          id: 'venue1',
+          name: 'Updated Venue 1',
+          description: 'Updated description for venue 1',
+          createdAt: dayjs().subtract(5, 'year').toISOString(),
+          attachments: [],
+          capacity: 1000,
+          image: null,
+        },
+      },
+    ];
+
+    expect(getVenueNameById(venues, 'venue1')).toBe('Updated Venue 1');
+  });
+
+  test('getVenueNameById returns empty string when id does not exist', () => {
+    const venues = [
+      {
+        node: {
+          id: 'venue1',
+          name: 'Updated Venue 1',
+          description: 'Updated description for venue 1',
+          createdAt: dayjs().subtract(5, 'year').toISOString(),
+          attachments: [],
+          capacity: 1000,
+          image: null,
+        },
+      },
+    ];
+
+    expect(getVenueNameById(venues, 'missing-id')).toBe('');
+  });
+
   test('handles venue query error correctly', async () => {
     const mockError = new Error('Failed to fetch venues');
     const errorLink = new StaticMockLink([
@@ -517,6 +765,10 @@ describe('Organisation Venues Error Handling', () => {
 
     await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
 
+    // Modal should open; confirm deletion via modal delete button
+    const modalDeleteBtn = await screen.findByTestId('modal-delete-btn');
+    await userEvent.click(modalDeleteBtn);
+
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),
@@ -562,5 +814,140 @@ describe('Organisation Venues Error Handling', () => {
 
     // Verify current page breadcrumb (Venues) has aria-current
     expect(screen.getByText(/venues/i)).toHaveAttribute('aria-current', 'page');
+  });
+
+  test('useVenueDeletion: confirmDelete returns early when no selection is made', async () => {
+    const deleteVenue = vi.fn().mockResolvedValue({});
+    const { result } = renderHook(() => useVenueDeletion(deleteVenue));
+
+    await act(async () => {
+      await result.current.confirmDelete();
+    });
+
+    expect(deleteVenue).not.toHaveBeenCalled();
+    expect(sharedMocks.errorHandler).not.toHaveBeenCalled();
+  });
+
+  test('useVenueDeletion: failing refetch calls errorHandler but still closes modal after successful delete', async () => {
+    const deleteVenue = vi.fn().mockResolvedValue({});
+    const refetchError = new Error('Refetch failed');
+    const failingRefetch = vi.fn().mockRejectedValue(refetchError);
+
+    const { result } = renderHook(() =>
+      useVenueDeletion(deleteVenue, failingRefetch),
+    );
+
+    act(() => {
+      result.current.open('venue1');
+    });
+
+    await act(async () => {
+      await result.current.confirmDelete();
+    });
+
+    expect(deleteVenue).toHaveBeenCalledWith({ variables: { id: 'venue1' } });
+    expect(failingRefetch).toHaveBeenCalled();
+    expect(sharedMocks.errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      refetchError,
+    );
+    // Modal should already be closed because delete succeeded.
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.selectedVenueId).toBeNull();
+  });
+
+  test('useVenueDeletion: delete mutation failure keeps modal open and skips refetch', async () => {
+    const deleteError = new Error('Delete failed');
+    const deleteVenue = vi.fn().mockRejectedValue(deleteError);
+    const refetch = vi.fn().mockResolvedValue(undefined);
+
+    const { result } = renderHook(() => useVenueDeletion(deleteVenue, refetch));
+
+    act(() => {
+      result.current.open('venue1');
+    });
+
+    await act(async () => {
+      await result.current.confirmDelete();
+    });
+
+    expect(deleteVenue).toHaveBeenCalledWith({ variables: { id: 'venue1' } });
+    expect(refetch).not.toHaveBeenCalled();
+    expect(sharedMocks.errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      deleteError,
+    );
+    expect(result.current.isOpen).toBe(true);
+    expect(result.current.selectedVenueId).toBe('venue1');
+  });
+
+  test('useVenueDeletion: successful refetch closes modal after delete', async () => {
+    const deleteVenue = vi.fn().mockResolvedValue({});
+    const successfulRefetch = vi.fn().mockResolvedValue(undefined);
+
+    const { result } = renderHook(() =>
+      useVenueDeletion(deleteVenue, successfulRefetch),
+    );
+
+    act(() => {
+      result.current.open('venue1');
+    });
+
+    await act(async () => {
+      await result.current.confirmDelete();
+    });
+
+    expect(deleteVenue).toHaveBeenCalledWith({ variables: { id: 'venue1' } });
+    expect(successfulRefetch).toHaveBeenCalled();
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.selectedVenueId).toBeNull();
+  });
+
+  // keep existing modal-integration close test intact
+  test('handleCloseDeleteVenueModal clears selection and closes modal', async () => {
+    renderOrganizationVenue(link);
+
+    // Wait for venues and open delete modal
+    await waitFor(() =>
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
+    );
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+
+    // Find the No/cancel button inside the modal and click it
+    const noButton = await screen.findByTestId('modal-cancel-btn');
+    await userEvent.click(noButton);
+
+    // Modal should be closed afterwards
+    await waitFor(() => {
+      expect(screen.queryByTestId('modal-delete-btn')).not.toBeInTheDocument();
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+    });
+  });
+
+  test('DeleteModal displays selected venue name and clears it on close', async () => {
+    renderOrganizationVenue(link);
+
+    // wait for list and trigger delete for venue1
+    await waitFor(() =>
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
+    );
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+
+    // Modal should render and show the selected venue's name
+    // The entity name is interpolated into the confirmation sentence inside
+    // the DeleteModal. Scope the lookup to the modal to avoid matching the
+    // venue name that also appears in the venue list.
+    const modal = await screen.findByTestId('deleteVenueModal');
+    await within(modal).findByText(/Updated Venue 1/i, undefined, {
+      timeout: 2000,
+    });
+
+    // Close the modal via its cancel button inside the modal scope.
+    const cancelBtn = await within(modal).findByTestId('modal-cancel-btn');
+    await userEvent.click(cancelBtn);
+    // The venue name remains in the main list; assert the DeleteModal itself was removed.
+    await waitFor(() => {
+      expect(screen.queryByTestId('deleteVenueModal')).not.toBeInTheDocument();
+    });
   });
 });

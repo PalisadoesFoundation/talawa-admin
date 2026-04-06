@@ -1,6 +1,7 @@
 import DatePicker from 'shared-components/DatePicker';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import CreateIcon from '@mui/icons-material/Create';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'shared-components/Button';
@@ -13,9 +14,11 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
   CREATE_CAMPAIGN_MUTATION,
+  DELETE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 import {
   FormTextField,
   FormSelectField,
@@ -48,13 +51,28 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
 
+  const normalizeGoalAmount = (value: unknown): number => {
+    if (value === null || value === undefined || value === '') {
+      return 0;
+    }
+
+    const parsed = Number(value);
+
+    if (!Number.isFinite(parsed) || parsed < 0) {
+      return 0;
+    }
+
+    return Math.trunc(parsed);
+  };
+
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
     campaignCurrency: campaign?.currencyCode ?? 'USD',
-    campaignGoal: campaign?.goalAmount ?? 0,
+    campaignGoal: normalizeGoalAmount(campaign?.goalAmount),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [campaignDateRange, setCampaignDateRange] = useState<IDateRangeValue>({
     startDate: campaign?.startAt ?? null,
@@ -68,7 +86,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   useEffect(() => {
     setFormState({
       campaignCurrency: campaign?.currencyCode ?? 'USD',
-      campaignGoal: campaign?.goalAmount ?? 0,
+      campaignGoal: normalizeGoalAmount(campaign?.goalAmount),
       campaignName: campaign?.name ?? '',
     });
 
@@ -83,6 +101,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
   const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
+  const [deleteCampaign] = useMutation(DELETE_CAMPAIGN_MUTATION);
+
+  const isEditMode = mode === 'edit';
 
   const isNameInvalid = touched.campaignName && !campaignName.trim();
 
@@ -129,7 +150,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         variables: {
           name: campaignName.trim(),
           currencyCode: campaignCurrency,
-          goalAmount: Number(campaignGoal),
+          goalAmount: normalizeGoalAmount(campaignGoal),
           startAt: dayjs(campaignDateRange.startDate).toISOString(),
           endAt: dayjs(campaignDateRange.endDate).toISOString(),
           fundId,
@@ -201,7 +222,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         updatedFields.currencyCode = campaignCurrency;
       }
       if (campaign?.goalAmount !== campaignGoal) {
-        updatedFields.goalAmount = Number(campaignGoal);
+        updatedFields.goalAmount = normalizeGoalAmount(campaignGoal);
       }
       if (
         !dayjs(campaign?.startAt).isSame(dayjs(campaignDateRange.startDate))
@@ -238,148 +259,225 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     }
   };
 
+  const deleteCampaignHandler = async (): Promise<void> => {
+    if (isSubmitting || !campaign?.id) return;
+
+    try {
+      setIsSubmitting(true);
+      await deleteCampaign({
+        variables: {
+          id: campaign.id,
+        },
+      });
+
+      NotificationToast.success(t('deletedCampaign') as string);
+      setIsDeleteModalOpen(false);
+      refetchCampaign();
+      hide();
+    } catch (error: unknown) {
+      errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <CRUDModalTemplate
-      className={styles.campaignModal}
-      open={isOpen}
-      onClose={hide}
-      data-testid="campaignModal"
-      title={t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
-      showFooter={false}
-      loading={isSubmitting}
-    >
-      <form
-        onSubmitCapture={
-          mode === 'edit' ? updateCampaignHandler : createCampaignHandler
-        }
-        className="p-3"
+    <>
+      <CRUDModalTemplate
+        className={styles.campaignModal}
+        open={isOpen}
+        onClose={hide}
+        data-testid="campaignModal"
+        title={t(mode === 'edit' ? 'manageFundCampaign' : 'createFundCampaign')}
+        showFooter={false}
+        loading={isSubmitting}
       >
-        <div className="d-flex mb-3 w-100">
-          <FormTextField
-            name="campaignName"
-            label={t('campaignName')}
-            required
-            error={isNameInvalid ? tCommon('required') : undefined}
-            touched={touched.campaignName}
-            value={campaignName}
-            data-testid="campaignNameInput"
-            onBlur={() =>
-              setTouched((prev) => ({ ...prev, campaignName: true }))
-            }
-            onChange={(value) =>
-              setFormState({
-                ...formState,
-                campaignName: value,
-              })
-            }
-          />
-        </div>
-
-        <div className="d-flex gap-4 mx-auto mb-3">
-          <DatePicker
-            format="DD/MM/YYYY"
-            label={tCommon('startDate')}
-            value={dayjs(campaignDateRange.startDate)}
-            className={styles.noOutline}
-            data-testid="campaignStartDate"
-            onChange={(date: Dayjs | null): void => {
-              // We must update state even if null/invalid to let validation catch it
-              const newStart = date ? date.toDate() : null;
-
-              setCampaignDateRange((prev: IDateRangeValue) => {
-                let newEnd = prev.endDate;
-
-                // Auto-update end date if start date moves after it
-                if (date && date.isValid() && prev.endDate) {
-                  const startDay = dayjs(date);
-                  const endDay = dayjs(prev.endDate);
-
-                  if (startDay.isAfter(endDay)) {
-                    newEnd = date.toDate();
-                  }
-                }
-
-                return {
-                  startDate: newStart,
-                  endDate: newEnd,
-                };
-              });
-            }}
-            minDate={dayjs(new Date())}
-          />
-
-          <DatePicker
-            format="DD/MM/YYYY"
-            label={tCommon('endDate')}
-            className={styles.noOutline}
-            value={dayjs(campaignDateRange.endDate)}
-            data-testid="campaignEndDate"
-            onChange={(date: Dayjs | null): void => {
-              const newEnd = date ? date.toDate() : null;
-              setCampaignDateRange((prev: IDateRangeValue) => ({
-                ...prev,
-                endDate: newEnd,
-              }));
-            }}
-            minDate={dayjs(campaignDateRange.startDate)}
-          />
-        </div>
-
-        <div className="d-flex gap-4 mb-4">
-          <FormSelectField
-            name="campaign-currency"
-            label={t('currency')}
-            value={campaignCurrency}
-            data-testid="currencySelect"
-            onChange={(value) =>
-              setFormState({
-                ...formState,
-                campaignCurrency: value,
-              })
-            }
-          >
-            {currencyOptions.map((currency) => (
-              <option key={currency.label} value={currency.value}>
-                {currency.label} ({currencySymbols[currency.value]})
-              </option>
-            ))}
-          </FormSelectField>
-
-          <FormTextField
-            name="fundingGoal"
-            label={t('fundingGoal')}
-            type="number"
-            value={String(campaignGoal)}
-            data-testid="fundingGoalInput"
-            onChange={(value) => {
-              if (value === '') {
+        <form
+          id="campaignForm"
+          onSubmitCapture={
+            mode === 'edit' ? updateCampaignHandler : createCampaignHandler
+          }
+        >
+          {/* Campaign Name */}
+          <div className={styles.fieldRow}>
+            <FormTextField
+              name="campaignName"
+              id="campaignName"
+              label={t('campaignName')}
+              placeholder={t('enterCampaignName')}
+              error={isNameInvalid ? tCommon('required') : undefined}
+              touched={touched.campaignName}
+              value={campaignName}
+              data-testid="campaignNameInput"
+              onBlur={() =>
+                setTouched((prev) => ({ ...prev, campaignName: true }))
+              }
+              onChange={(value) =>
                 setFormState({
                   ...formState,
-                  campaignGoal: 0,
-                });
-              } else {
-                const parsed = parseInt(value);
-                if (!isNaN(parsed)) {
+                  campaignName: value,
+                })
+              }
+            />
+          </div>
+
+          {/* Start Date and End Date */}
+          <div className={styles.twoColumnRow}>
+            <div className={styles.fieldRow}>
+              <DatePicker
+                name="startDate"
+                label={tCommon('startDate')}
+                format="DD/MM/YYYY"
+                placeholder={t('enterStartDate')}
+                value={dayjs(campaignDateRange.startDate)}
+                className={styles.noOutline}
+                data-testid="campaignStartDate"
+                onChange={(date: Dayjs | null): void => {
+                  const newStart = date ? date.toDate() : null;
+
+                  setCampaignDateRange((prev: IDateRangeValue) => {
+                    let newEnd = prev.endDate;
+
+                    if (date && date.isValid() && prev.endDate) {
+                      const startDay = dayjs(date);
+                      const endDay = dayjs(prev.endDate);
+
+                      if (startDay.isAfter(endDay)) {
+                        newEnd = date.toDate();
+                      }
+                    }
+
+                    return {
+                      startDate: newStart,
+                      endDate: newEnd,
+                    };
+                  });
+                }}
+                minDate={
+                  isEditMode && campaignDateRange.startDate
+                    ? dayjs(campaignDateRange.startDate)
+                    : dayjs(new Date())
+                }
+              />
+            </div>
+
+            <div className={styles.fieldRow}>
+              <DatePicker
+                name="endDate"
+                label={tCommon('endDate')}
+                format="DD/MM/YYYY"
+                placeholder={t('enterEndDate')}
+                value={dayjs(campaignDateRange.endDate)}
+                className={styles.noOutline}
+                data-testid="campaignEndDate"
+                onChange={(date: Dayjs | null): void => {
+                  const newEnd = date ? date.toDate() : null;
+                  setCampaignDateRange((prev: IDateRangeValue) => ({
+                    ...prev,
+                    endDate: newEnd,
+                  }));
+                }}
+                minDate={dayjs(campaignDateRange.startDate)}
+              />
+            </div>
+          </div>
+
+          {/* Currency and Funding Goal */}
+          <div className={styles.currencyAndGoalRow}>
+            <div className={styles.currencySection}>
+              <FormSelectField
+                name="campaignCurrency"
+                label={t('currency')}
+                className={styles.compactInlineGroup}
+                value={campaignCurrency}
+                data-testid="currencySelect"
+                onChange={(value) =>
                   setFormState({
                     ...formState,
-                    campaignGoal: Math.max(0, parsed),
-                  });
+                    campaignCurrency: value,
+                  })
                 }
-              }
-            }}
-          />
-        </div>
+              >
+                {currencyOptions.map((currency) => (
+                  <option key={currency.label} value={currency.value}>
+                    {currency.label} ({currencySymbols[currency.value]}){' '}
+                  </option>
+                ))}
+              </FormSelectField>
+            </div>
 
-        <Button
-          type="submit"
-          className={styles.addButton}
-          data-testid="submitCampaignBtn"
-          disabled={isSubmitting}
-        >
-          {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
-        </Button>
-      </form>
-    </CRUDModalTemplate>
+            <div className={styles.goalSection}>
+              <FormTextField
+                id="fundingGoal"
+                name="fundingGoal"
+                label={t('fundingGoal')}
+                className={styles.compactInlineGroup}
+                type="number"
+                placeholder="0"
+                value={String(normalizeGoalAmount(campaignGoal))}
+                data-testid="fundingGoalInput"
+                onChange={(value) => {
+                  setFormState({
+                    ...formState,
+                    campaignGoal: normalizeGoalAmount(value),
+                  });
+                }}
+                min={0}
+              />
+            </div>
+          </div>
+
+          {mode === 'create' && (
+            <Button
+              type="submit"
+              className={styles.addButton}
+              data-testid="submitCampaignBtn"
+              disabled={isSubmitting}
+              icon={<CreateIcon />}
+            >
+              {tCommon('create')}
+            </Button>
+          )}
+
+          {mode === 'edit' && (
+            <div className={styles.editActionRow}>
+              <Button
+                type="submit"
+                className={styles.editActionButton}
+                data-testid="editCampaignBtn"
+                disabled={isSubmitting}
+              >
+                <i className="fa fa-edit" />
+                {tCommon('edit')}
+              </Button>
+
+              <Button
+                type="button"
+                className={styles.deleteActionButton}
+                data-testid="deleteCampaignBtn"
+                disabled={isSubmitting}
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                <i className="fa fa-trash" />
+                {tCommon('delete')}
+              </Button>
+            </div>
+          )}
+        </form>
+      </CRUDModalTemplate>
+
+      <DeleteModal
+        open={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title={t('deleteCampaign')}
+        onDelete={deleteCampaignHandler}
+        loading={isSubmitting}
+        entityName={campaign?.name}
+        data-testid="campaign-delete-modal"
+      >
+        <p>{t('deleteCampaignMsg')}</p>
+      </DeleteModal>
+    </>
   );
 };
 

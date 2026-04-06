@@ -60,6 +60,8 @@ const mapVariantToBootstrap = (variant: ButtonVariant | undefined): string => {
       return 'outline-primary';
     case 'text':
       return 'link';
+    case 'toolbar':
+      return 'toolbar-action';
     default:
       return 'primary';
   }

@@ -1,0 +1,68 @@
+.oauthCard {
+  border-radius: var(--radius-xl);
+  width: 100%;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.heading {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.message {
+  margin: 0;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.connectedList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.connectedItem {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.providerName {
+  font-weight: var(--font-weight-medium);
+}
+
+.accountInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.metaList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.metaItem {
+  color: var(--bs-secondary-color);
+  font-size: var(--font-size-sm);
+}

@@ -73,3 +73,13 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:60](https:/
 Consumer override: extra class name(s) for the toggle button, merged with btnStyle.
 Use from parent screens (e.g. CSS module classes) to style the toggle without
 coupling to test IDs.
+
+***
+
+### type?
+
+> `optional` **type**: `"filter"` \| `"sort"`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L63)
+
+Optional type for auto-selecting icon: 'sort' shows SortIcon, 'filter' shows FilterAltOutlined

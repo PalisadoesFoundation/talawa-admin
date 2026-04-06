@@ -27,6 +27,7 @@ import {
   USER_FUND_CAMPAIGNS_ERROR,
   MOCKS_WITH_PENDING_CAMPAIGN,
 } from './CampaignsMocks';
+import { USER_FUND_CAMPAIGNS, USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -290,6 +291,294 @@ describe('Testing User Campaigns Screen', () => {
     expect(disabledButton).toBeDisabled();
   });
 
+  it('does not open pledge modal when campaign is not active and user has not pledged', async () => {
+    const startAt = dayjs().subtract(30, 'day').toISOString();
+    const endAt = dayjs().subtract(1, 'day').toISOString();
+
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: USER_FUND_CAMPAIGNS,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      isArchived: false,
+                      campaigns: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'campaignEndedOnly',
+                              name: 'Ended Campaign',
+                              currencyCode: 'USD',
+                              goalAmount: 1000,
+                              amountRaised: 250,
+                              startAt,
+                              endAt,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            input: { userId: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [],
+          },
+        },
+      },
+    ]);
+
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Ended Campaign')).toBeInTheDocument();
+    });
+
+    const addPledgeButton = screen.getByTestId('addPledgeBtn');
+    expect(addPledgeButton).toBeDisabled();
+
+    // Force trigger the click handler to execute the !canCreatePledge branch.
+    addPledgeButton.removeAttribute('disabled');
+    addPledgeButton.click();
+
+    expect(screen.queryByTestId('pledgeForm')).not.toBeInTheDocument();
+  });
+
+  it('keeps add pledge enabled when pledges have only invalid campaign ids', async () => {
+    const startAt = dayjs().subtract(1, 'day').toISOString();
+    const endAt = dayjs().add(30, 'day').toISOString();
+
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: USER_FUND_CAMPAIGNS,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      isArchived: false,
+                      campaigns: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'campaignIdActive',
+                              name: 'Active Campaign',
+                              currencyCode: 'USD',
+                              goalAmount: 1000,
+                              amountRaised: 100,
+                              startAt,
+                              endAt,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            input: { userId: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [
+              {
+                id: 'pledge-1',
+                amount: 50,
+                note: 'pledge with null campaign',
+                updatedAt: dayjs().toISOString(),
+                campaign: null,
+                pledger: {
+                  id: 'userId',
+                  name: 'User One',
+                  avatarURL: null,
+                },
+              },
+              {
+                id: 'pledge-2',
+                amount: 75,
+                note: 'pledge with empty campaign id',
+                updatedAt: dayjs().toISOString(),
+                campaign: {
+                  id: '',
+                  name: 'Unknown',
+                  startAt,
+                  endAt,
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                  amountRaised: 10,
+                },
+                pledger: {
+                  id: 'userId',
+                  name: 'User One',
+                  avatarURL: null,
+                },
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Active Campaign')).toBeInTheDocument();
+    });
+
+    const addPledgeButton = screen.getByTestId('addPledgeBtn');
+    expect(addPledgeButton).toBeEnabled();
+  });
+
+  it('disables add pledge only for campaigns with valid pledged campaign ids', async () => {
+    const startAt = dayjs().subtract(1, 'day').toISOString();
+    const endAt = dayjs().add(30, 'day').toISOString();
+
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: USER_FUND_CAMPAIGNS,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      isArchived: false,
+                      campaigns: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'campaignIdActive',
+                              name: 'Active Campaign',
+                              currencyCode: 'USD',
+                              goalAmount: 1000,
+                              amountRaised: 100,
+                              startAt,
+                              endAt,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            input: { userId: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [
+              {
+                id: 'pledge-3',
+                amount: 75,
+                note: 'pledge with valid campaign id',
+                updatedAt: dayjs().toISOString(),
+                campaign: {
+                  id: 'campaignIdActive',
+                  name: 'Active Campaign',
+                  startAt,
+                  endAt,
+                  currencyCode: 'USD',
+                  goalAmount: 1000,
+                  amountRaised: 100,
+                },
+                pledger: {
+                  id: 'userId',
+                  name: 'User One',
+                  avatarURL: null,
+                },
+              },
+              {
+                id: 'pledge-4',
+                amount: 50,
+                note: 'pledge with null campaign',
+                updatedAt: dayjs().toISOString(),
+                campaign: null,
+                pledger: {
+                  id: 'userId',
+                  name: 'User One',
+                  avatarURL: null,
+                },
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Active Campaign')).toBeInTheDocument();
+    });
+
+    const addPledgeButton = screen.getByTestId('addPledgeBtn');
+    expect(addPledgeButton).toBeDisabled();
+
+    // Force trigger the click handler to execute the guard branch:
+    // if (!canCreatePledge || hasAlreadyPledged) return;
+    addPledgeButton.removeAttribute('disabled');
+    addPledgeButton.click();
+    expect(screen.queryByTestId('pledgeForm')).not.toBeInTheDocument();
+  });
+
   it('Handles fund with no campaigns gracefully', async () => {
     const link = new StaticMockLink(MOCKS_WITH_FUND_NO_CAMPAIGNS);
     renderCampaigns(link);
@@ -398,6 +687,156 @@ describe('Testing User Campaigns Screen', () => {
     progressCells.forEach((cell) => {
       expect(cell).toHaveTextContent('50%');
     });
+  });
+
+  it('renders complete progress pie when raised amount reaches or exceeds goal', async () => {
+    const startAt = dayjs().subtract(1, 'day').toISOString();
+    const endAt = dayjs().add(30, 'days').toISOString();
+
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: USER_FUND_CAMPAIGNS,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      isArchived: false,
+                      campaigns: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'campaignFullProgress',
+                              name: 'Campaign Full Progress',
+                              currencyCode: 'USD',
+                              goalAmount: 100,
+                              amountRaised: 150,
+                              startAt,
+                              endAt,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            input: { userId: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [],
+          },
+        },
+      },
+    ]);
+
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign Full Progress')).toBeInTheDocument();
+    });
+
+    const progressCell = screen.getByTestId('progressCell');
+    expect(progressCell).toHaveTextContent('100%');
+
+    const progressSvg = progressCell.querySelector('svg');
+    expect(progressSvg).toBeTruthy();
+    expect(progressSvg?.className.baseVal).toContain('progressComplete');
+    expect(progressSvg?.querySelector('path')).toBeNull();
+    expect(progressSvg?.querySelectorAll('circle').length).toBe(2);
+  });
+
+  it('renders large-arc progress slice for percentages above 50 and below 100', async () => {
+    const startAt = dayjs().subtract(1, 'day').toISOString();
+    const endAt = dayjs().add(30, 'days').toISOString();
+
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: USER_FUND_CAMPAIGNS,
+          variables: {
+            input: { id: 'orgId' },
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [
+                  {
+                    node: {
+                      isArchived: false,
+                      campaigns: {
+                        edges: [
+                          {
+                            node: {
+                              id: 'campaignLargeArc',
+                              name: 'Campaign Large Arc',
+                              currencyCode: 'USD',
+                              goalAmount: 100,
+                              amountRaised: 75,
+                              startAt,
+                              endAt,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            input: { userId: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [],
+          },
+        },
+      },
+    ]);
+
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign Large Arc')).toBeInTheDocument();
+    });
+
+    const progressCell = screen.getByTestId('progressCell');
+    expect(progressCell).toHaveTextContent('75%');
+
+    const progressPath = progressCell.querySelector('path');
+    expect(progressPath).toBeTruthy();
+    expect(progressPath?.getAttribute('d')).toContain('A 16 16 0 1 1');
   });
 
   it('Falls back to 0 when amountRaised is missing from API response', async () => {
@@ -539,7 +978,7 @@ describe('Testing User Campaigns Screen', () => {
       return campaignCells.map((cell) => cell.textContent || '');
     };
 
-    const startDateHeader = screen.getByRole('columnheader', {
+    const startDateHeader = screen.getByRole('button', {
       name: /start date/i,
     });
     expect(startDateHeader).toBeInTheDocument();
@@ -572,7 +1011,7 @@ describe('Testing User Campaigns Screen', () => {
       return campaignCells.map((cell) => cell.textContent || '');
     };
 
-    const endDateHeader = screen.getByRole('columnheader', {
+    const endDateHeader = screen.getByRole('button', {
       name: /end date/i,
     });
     expect(endDateHeader).toBeInTheDocument();
@@ -597,10 +1036,43 @@ describe('Testing User Campaigns Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Future School Campaign')).toBeInTheDocument();
-      // StatusBadge handles translation, 'pending' status usually maps to 'Pending' text
-      // We can also check by data-testid if text is variable
-      const text = screen.getByText(/Pending/i);
+      const text = screen.getByText(/Not Started/i);
       expect(text).toBeInTheDocument();
     });
+  });
+
+  it('falls back to 0 when campaign index map does not contain row id', async () => {
+    const originalMapGet = Map.prototype.get;
+    const mapGetSpy = vi.spyOn(Map.prototype, 'get');
+    mapGetSpy.mockImplementation(function (
+      this: Map<unknown, unknown>,
+      key: unknown,
+    ) {
+      if (key === 'campaignId1' || key === 'campaignId2') {
+        return undefined;
+      }
+      return originalMapGet.call(this, key);
+    });
+
+    try {
+      renderCampaigns(link1);
+
+      await waitFor(() => {
+        expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        const bodyRows = screen
+          .getAllByRole('row')
+          .filter((row) => row.querySelector('td'));
+        const schoolRow = bodyRows.find((row) =>
+          row.textContent?.includes('School Campaign'),
+        );
+        expect(schoolRow).toBeDefined();
+        expect(schoolRow?.textContent).toContain('0');
+      });
+    } finally {
+      mapGetSpy.mockRestore();
+    }
   });
 });

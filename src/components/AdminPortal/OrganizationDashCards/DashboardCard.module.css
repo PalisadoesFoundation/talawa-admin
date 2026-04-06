@@ -1,60 +1,97 @@
+/**
+ * DashboardCard — KPI stat widget
+ * ---------------------------------
+ * Vertical layout: label + icon in header, large number below.
+ * Follows Apple/Stripe/Vercel stat card conventions.
+ */
+
 .cardBodyMainDiv {
-  border-radius: 1.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  border: none;
-  height: auto;
+  border-radius: var(--radius-2xl);
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-xs) var(--color-black-4),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black-5);
+  border: var(--border-1) solid var(--color-black-6);
+  background-color: var(--color-white);
   width: 100%;
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.18s ease;
+  overflow: hidden;
+}
+
+.cardBodyMainDiv:hover {
+  box-shadow:
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black-7),
+    0 var(--shadow-offset-lg) var(--shadow-blur-xl) var(--color-black-7);
+  transform: translateY(-2px);
 }
 
 .cardBody {
-  padding: 1rem 0rem;
+  padding: var(--space-6) var(--space-6-5) var(--space-6-5);
   display: flex;
-  width: 100% !important;
-  justify-content: center;
+  flex-direction: column;
+  gap: var(--space-3-75);
+  width: 100%;
 }
 
-@media (max-width: 600px) {
-  .cardBody {
-    min-height: 120px;
-  }
-}
-
-.cardBodymain {
+/* ── Top row: label left, icon right ────────────────────────────────────────── */
+.cardTop {
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
 }
 
-.iconCol {
-  padding-inline-end: 0.75rem;
-}
-
+/* ── Icon — bare, no background pill ────────────────────────────────────────── */
 .cardbodyIcon {
-  font-size: 2rem;
-  height: 3rem;
-  color: #555555;
-  background-color: #eaebef;
-  width: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  width: var(--space-8);
+  height: var(--space-8);
+  flex-shrink: 0;
+  color: var(--color-blue-500);
+  opacity: 0.75;
+  transition: opacity 0.15s ease;
 }
 
-.contentCol {
-  display: flex;
-  flex-direction: column;
+.cardBodyMainDiv:hover .cardbodyIcon {
+  opacity: 1;
 }
 
+.cardbodyIcon svg,
+.cardbodyIcon path {
+  fill: var(--color-blue-500);
+  color: var(--color-blue-500);
+  width: var(--space-8);
+  height: var(--space-8);
+}
+
+/* ── Metric number ───────────────────────────────────────────────────────────── */
 .cardBodyNumber {
-  color: black;
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.2;
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-900);
+  letter-spacing: -0.035em;
+  line-height: var(--line-height-none);
 }
 
+/* ── Label ───────────────────────────────────────────────────────────────────── */
 .cardBodySecondaryText {
-  font-size: 0.75rem;
-  color: gray;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-mid);
+  letter-spacing: var(--letter-spacing-snug-half);
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Unused legacy classes kept as no-ops to avoid TS errors ─────────────────── */
+.cardBodymain {
+}
+.iconCol {
+}
+.contentCol {
 }

@@ -25,6 +25,10 @@ vi.mock('./Security', () => ({
   default: () => <div data-testid="security-panel" />,
 }));
 
+vi.mock('components/Auth/OAuthAccountsSettings/OAuthAccountsSettings', () => ({
+  default: () => <div data-testid="oauth-accounts-settings" />,
+}));
+
 vi.mock('react-router-dom', () => ({
   useParams: () => mockUseParams(),
 }));
@@ -181,6 +185,14 @@ describe('MemberDetail', () => {
       'data-active',
       'true',
     );
+  });
+
+  it('renders OAuth account settings on security tab', async () => {
+    render(<MemberDetail />);
+
+    await userEvent.click(screen.getByTestId('tab-security'));
+
+    expect(screen.getByTestId('oauth-accounts-settings')).toBeInTheDocument();
   });
 
   it('switches back to overview tab', async () => {

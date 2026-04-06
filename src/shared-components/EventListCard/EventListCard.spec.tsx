@@ -200,15 +200,18 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
+    // Find and click the event delete modal close/cancel button by stable test id
     const deleteModalCloseBtn = await screen.findByTestId(
       'eventDeleteModalCloseBtn',
     );
-
-    expect(deleteModalCloseBtn).toBeInTheDocument();
-
     await userEvent.click(deleteModalCloseBtn);
 
-    expect(screen.getByTestId('eventDeleteModalCloseBtn')).toBeInTheDocument();
+    // After clicking the 'No' button the delete modal should be closed
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('eventDeleteModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
 
     const previewModal = screen.getByTestId('previewEventModal');
     const previewCloseBtn = within(previewModal).getByTestId('modalCloseBtn');

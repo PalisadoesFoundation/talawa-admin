@@ -29,11 +29,9 @@
  * is rendered with a large font size.
  *
  */
-import {
-  QuestionMarkOutlined,
-  ContactPageOutlined,
-  NewspaperOutlined,
-} from '@mui/icons-material';
+import QuestionMarkOutlined from '@mui/icons-material/QuestionMarkOutlined';
+import ContactPageOutlined from '@mui/icons-material/ContactPageOutlined';
+import NewspaperOutlined from '@mui/icons-material/NewspaperOutlined';
 import ActionItemIcon from 'assets/svgs/actionItem.svg?react';
 import React from 'react';
 import BlockUserIcon from 'assets/svgs/blockUser.svg?react';
@@ -69,6 +67,8 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
       return (
         <OrganizationsIcon
           stroke={props.fill}
+          width={props.width}
+          height={props.height}
           data-testid="Icon-Component-MyOrganizationsIcon"
         />
       );
@@ -109,6 +109,8 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
       return (
         <SettingsIcon
           stroke={props.fill}
+          width={props.width}
+          height={props.height}
           data-testid="Icon-Component-SettingsIcon"
         />
       );

@@ -15,6 +15,10 @@ import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
+import {
+  DELETE_FUND_MUTATION,
+  UPDATE_FUND_MUTATION,
+} from 'GraphQl/Mutations/FundMutation';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import * as apollo from '@apollo/client';
@@ -142,6 +146,64 @@ const mutationReturn = [
   },
 ] satisfies ReturnType<typeof apollo.useMutation>;
 
+const DELETE_FUND_SUCCESS_MOCK = {
+  request: {
+    query: DELETE_FUND_MUTATION,
+    variables: {
+      id: 'fundId',
+    },
+  },
+  result: {
+    data: {
+      deleteFund: {
+        id: 'fundId',
+      },
+    },
+  },
+};
+
+const DELETE_FUND_ERROR_MOCK = {
+  request: {
+    query: DELETE_FUND_MUTATION,
+    variables: {
+      id: 'fundId',
+    },
+  },
+  error: new Error('Delete failed'),
+};
+
+const ARCHIVE_FUND_SUCCESS_MOCK = {
+  request: {
+    query: UPDATE_FUND_MUTATION,
+    variables: {
+      input: {
+        id: 'fundId',
+        isArchived: true,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateFund: {
+        id: 'fundId',
+      },
+    },
+  },
+};
+
+const ARCHIVE_FUND_ERROR_MOCK = {
+  request: {
+    query: UPDATE_FUND_MUTATION,
+    variables: {
+      input: {
+        id: 'fundId',
+        isArchived: true,
+      },
+    },
+  },
+  error: new Error('Archive failed'),
+};
+
 describe('PledgeModal', () => {
   afterEach(() => {
     cleanup();
@@ -163,7 +225,7 @@ describe('PledgeModal', () => {
     ).toHaveValue('1111');
     expect(screen.getByTestId('setisTaxDeductibleSwitch')).toBeChecked();
     expect(screen.getByTestId('setDefaultSwitch')).not.toBeChecked();
-    expect(screen.getByTestId('archivedSwitch')).not.toBeChecked();
+    expect(screen.getByTestId('modal-archive-btn')).toBeInTheDocument();
   });
 
   it('should update Fund Name when input value changes', async () => {
@@ -242,15 +304,6 @@ describe('PledgeModal', () => {
     await waitFor(() => expect(defaultSwitch).toBeChecked());
   });
 
-  it('should update Tax isArchived switch when input value changes', async () => {
-    const user = userEvent.setup({ delay: null });
-    renderFundModal(link1, fundProps[1]);
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    expect(archivedSwitch).not.toBeChecked();
-    await user.click(archivedSwitch);
-    await waitFor(() => expect(archivedSwitch).toBeChecked());
-  });
-
   it('should not update the fund when no fields are changed', async () => {
     const user = userEvent.setup({ delay: null });
     renderFundModal(link1, fundProps[1]);
@@ -275,10 +328,6 @@ describe('PledgeModal', () => {
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     await user.click(defaultSwitch);
     await user.click(defaultSwitch);
-
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await user.click(archivedSwitch);
-    await user.click(archivedSwitch);
 
     await user.click(screen.getByTestId('modal-submit-btn'));
 
@@ -338,9 +387,6 @@ describe('PledgeModal', () => {
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     await user.click(defaultSwitch);
-
-    const archivedSwitch = screen.getByTestId('archivedSwitch');
-    await user.click(archivedSwitch);
 
     await user.click(screen.getByTestId('modal-submit-btn'));
 
@@ -417,7 +463,6 @@ describe('PledgeModal', () => {
       ).toHaveValue('9999');
       expect(screen.getByTestId('setisTaxDeductibleSwitch')).not.toBeChecked();
       expect(screen.getByTestId('setDefaultSwitch')).toBeChecked();
-      expect(screen.getByTestId('archivedSwitch')).toBeChecked();
     });
   });
 
@@ -587,6 +632,173 @@ describe('PledgeModal', () => {
       expect(
         screen.getByLabelText(translations.fundName, { exact: false }),
       ).toHaveValue('');
+    });
+  });
+
+  it('should delete fund successfully and call side effects', async () => {
+    const user = userEvent.setup({ delay: null });
+    const hide = vi.fn();
+    const refetchFunds = vi.fn();
+
+    const deleteLink = new StaticMockLink([DELETE_FUND_SUCCESS_MOCK]);
+    renderFundModal(deleteLink, {
+      ...fundProps[1],
+      hide,
+      refetchFunds,
+      mode: 'edit',
+    });
+
+    const openDeleteButton = screen.getByTestId('modal-delete-btn');
+    await user.click(openDeleteButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('fund-delete-modal')).toBeInTheDocument();
+    });
+
+    const deleteButtons = screen.getAllByTestId('modal-delete-btn');
+    const confirmDeleteButton = deleteButtons[deleteButtons.length - 1];
+    await user.click(confirmDeleteButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundDeleted,
+      );
+      expect(refetchFunds).toHaveBeenCalled();
+      expect(hide).toHaveBeenCalled();
+    });
+  });
+
+  it('should show delete error toast when delete fund fails', async () => {
+    const user = userEvent.setup({ delay: null });
+    const hide = vi.fn();
+    const refetchFunds = vi.fn();
+
+    const deleteErrorLink = new StaticMockLink([DELETE_FUND_ERROR_MOCK]);
+    renderFundModal(deleteErrorLink, {
+      ...fundProps[1],
+      hide,
+      refetchFunds,
+      mode: 'edit',
+    });
+
+    const openDeleteButton = screen.getByTestId('modal-delete-btn');
+    await user.click(openDeleteButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('fund-delete-modal')).toBeInTheDocument();
+    });
+
+    const deleteButtons = screen.getAllByTestId('modal-delete-btn');
+    const confirmDeleteButton = deleteButtons[deleteButtons.length - 1];
+    await user.click(confirmDeleteButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('Delete failed');
+      expect(refetchFunds).not.toHaveBeenCalled();
+      expect(hide).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should not attempt delete when fund id is missing', async () => {
+    const user = userEvent.setup({ delay: null });
+    const hide = vi.fn();
+    const refetchFunds = vi.fn();
+
+    renderFundModal(link1, {
+      ...fundProps[1],
+      fund: null,
+      hide,
+      refetchFunds,
+      mode: 'edit',
+    });
+
+    const openDeleteButton = screen.getByTestId('modal-delete-btn');
+    await user.click(openDeleteButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('fund-delete-modal')).toBeInTheDocument();
+    });
+
+    const deleteButtons = screen.getAllByTestId('modal-delete-btn');
+    const confirmDeleteButton = deleteButtons[deleteButtons.length - 1];
+    await user.click(confirmDeleteButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+      expect(refetchFunds).not.toHaveBeenCalled();
+      expect(hide).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should archive fund successfully and update archive button label', async () => {
+    const user = userEvent.setup({ delay: null });
+    const refetchFunds = vi.fn();
+
+    const archiveLink = new StaticMockLink([ARCHIVE_FUND_SUCCESS_MOCK]);
+    renderFundModal(archiveLink, {
+      ...fundProps[1],
+      refetchFunds,
+      mode: 'edit',
+    });
+
+    const archiveButton = screen.getByTestId('modal-archive-btn');
+    expect(archiveButton).toHaveTextContent(translations.archived);
+
+    await user.click(archiveButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundUpdated,
+      );
+      expect(refetchFunds).toHaveBeenCalled();
+      expect(screen.getByTestId('modal-archive-btn')).toHaveTextContent(
+        translations.unarchive,
+      );
+      expect(screen.getByTestId('modal-archive-btn')).not.toBeDisabled();
+    });
+  });
+
+  it('should show archive error and reset submitting state on failure', async () => {
+    const user = userEvent.setup({ delay: null });
+    const refetchFunds = vi.fn();
+
+    const archiveErrorLink = new StaticMockLink([ARCHIVE_FUND_ERROR_MOCK]);
+    renderFundModal(archiveErrorLink, {
+      ...fundProps[1],
+      refetchFunds,
+      mode: 'edit',
+    });
+
+    const archiveButton = screen.getByTestId('modal-archive-btn');
+    await user.click(archiveButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('Archive failed');
+      expect(refetchFunds).not.toHaveBeenCalled();
+      expect(screen.getByTestId('modal-archive-btn')).not.toBeDisabled();
+    });
+  });
+
+  it('should not attempt archive when fund id is missing', async () => {
+    const user = userEvent.setup({ delay: null });
+    const refetchFunds = vi.fn();
+
+    renderFundModal(link1, {
+      ...fundProps[1],
+      fund: null,
+      refetchFunds,
+      mode: 'edit',
+    });
+
+    const archiveButton = screen.getByTestId('modal-archive-btn');
+    await user.click(archiveButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+      expect(refetchFunds).not.toHaveBeenCalled();
+      expect(screen.getByTestId('modal-archive-btn')).not.toBeDisabled();
     });
   });
 });

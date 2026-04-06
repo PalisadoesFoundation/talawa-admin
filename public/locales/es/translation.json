@@ -10,6 +10,20 @@
     "continueWith": "Continuar con {{provider}}",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "OAuthAccountsSettings": {
+    "userIdNotAvailable": "ID de usuario no disponible.",
+    "unableToLoadOAuthAccounts": "No se pueden cargar las cuentas OAuth en este momento.",
+    "missingOauthProviders": "Proveedores OAuth faltantes.",
+    "bothGoogleAndGitHubLinked": "Google y GitHub ya están vinculados.",
+    "connectedOauthAccounts": "Cuentas OAuth conectadas.",
+    "noConnectedOauthAccounts": "No hay cuentas OAuth conectadas.",
+    "emailLabel": "Correo electrónico",
+    "linkedAtLabel": "Vinculado el",
+    "lastUsedAtLabel": "Último uso",
+    "Unlink": "Desvincular",
+    "unlinkSuccess": "Se desvinculó {{provider}} correctamente.",
+    "unlinkConfirmation": "¿Estás seguro de que deseas desvincular {{provider}}?"
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "customRecurrence": "Recurrencia personalizada",
@@ -255,7 +269,7 @@
     "avatar": "Avatar de {{title}}",
     "eventLocation": "Ubicación del evento",
     "eventDate": "Fecha del evento",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Publicado el:",
     "author": "Autor:"
   },
@@ -961,9 +975,13 @@
     "createFund": "Crear fondo",
     "fundName": "Nombre del fondo",
     "fundId": "ID de referencia del fondo",
+    "enterFundName": "Ingrese el nombre del fondo",
+    "enterFundId": "Ingrese el ID del fondo",
     "taxDeductible": "Deducible de impuestos",
     "default": "Predeterminado",
+    "defaultFund": "Fondo predeterminado",
     "archived": "Archivado",
+    "unarchive": "Desarchivar",
     "fundCreate": "Crear fondo",
     "fundUpdate": "Actualizar fondo",
     "fundDelete": "Eliminar fondo",
@@ -988,6 +1006,8 @@
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
     "campaignName": "Nombre de la campaña",
+    "manageFundCampaign": "Gestionar campaña de fondos",
+    "createFundCampaign": "Crear campaña de fondos",
     "campaignOptions": "Opciones",
     "fundingGoal": "Meta de financiación",
     "progress": "Progreso",
@@ -1019,7 +1039,10 @@
     "dateRangeRequired": "Por favor, seleccione un rango de fechas válido",
     "campaignNameRequired": "El nombre de la campaña es obligatorio",
     "invalidDate": "Fecha seleccionada no válida",
-    "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio"
+    "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio",
+    "enterCampaignName": "Ingrese el nombre de la campaña",
+    "enterStartDate": "Ingrese la fecha de inicio",
+    "enterEndDate": "Ingrese la fecha de finalización"
   },
   "pledges": {
     "createFailed": "Error al crear el compromiso",
@@ -2010,6 +2033,7 @@
     "highestCapacity": "Mayor capacidad",
     "lowestCapacity": "Menor capacidad",
     "noVenues": "¡No se encontraron lugares!",
+    "deleteVenue": "Eliminar lugar",
     "edit": "Editar",
     "view": "Ver",
     "delete": "Eliminar",
@@ -2185,6 +2209,7 @@
     "endDate": "Fecha de Finalización",
     "fundGoal": "Meta de Financiación",
     "percentRaised": "% Recaudado",
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%",
     "searchCampaigns": "Buscar campañas",
     "createFirstCampaign": "Crea tu primera campaña de recaudación de fondos para verla aquí.",
     "campaignEnded": "Campaña finalizada",
@@ -2365,6 +2390,7 @@
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
+    "subtitle": "Descubre y gestiona plugins para ampliar las capacidades de tu organización.",
     "searchPlaceholder": "Buscar plugins...",
     "allPlugins": "Todos los Plugins",
     "installedPlugins": "Plugins Instalados",

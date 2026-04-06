@@ -41,3 +41,11 @@ export const UPDATE_FUND_MUTATION = gql`
     }
   }
 `;
+
+export const DELETE_FUND_MUTATION = gql`
+  mutation DeleteFund($id: ID!) {
+    deleteFund(input: { id: $id }) {
+      id
+    }
+  }
+`;

@@ -6,7 +6,7 @@
 
 > **VoteState** = `object`
 
-Defined in: [src/utils/interfaces.ts:1592](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1592)
+Defined in: [src/utils/interfaces.ts:1670](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1670)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:1592](https://github.com/PalisadoesFoundati
 
 > **hasVoted**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1592](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1592)
+Defined in: [src/utils/interfaces.ts:1670](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1670)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/utils/interfaces.ts:1592](https://github.com/PalisadoesFoundati
 
 > **voteType**: [`VoteType`](VoteType.md)
 
-Defined in: [src/utils/interfaces.ts:1592](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1592)
+Defined in: [src/utils/interfaces.ts:1670](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1670)

@@ -156,6 +156,16 @@ The new date value.
 
 ***
 
+### placeholder?
+
+> `optional` **placeholder**: `string`
+
+Defined in: [src/types/shared-components/DatePicker/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DatePicker/interface.ts#L53)
+
+Placeholder text displayed when the date field is empty
+
+***
+
 ### required?
 
 > `optional` **required**: `boolean`

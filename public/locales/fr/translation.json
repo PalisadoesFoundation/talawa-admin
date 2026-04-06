@@ -10,6 +10,20 @@
     "continueWith": "Continuer avec {{provider}}",
     "ariaLabel": "{{provider}} {{mode}}"
   },
+  "OAuthAccountsSettings": {
+    "userIdNotAvailable": "ID utilisateur non disponible.",
+    "unableToLoadOAuthAccounts": "Impossible de charger les comptes OAuth en ce moment.",
+    "missingOauthProviders": "Fournisseurs OAuth manquants.",
+    "bothGoogleAndGitHubLinked": "Google et GitHub sont déjà liés.",
+    "connectedOauthAccounts": "Comptes OAuth connectés.",
+    "noConnectedOauthAccounts": "Aucun compte OAuth connecté.",
+    "emailLabel": "E-mail",
+    "linkedAtLabel": "Lié le",
+    "lastUsedAtLabel": "Dernière utilisation",
+    "Unlink": "Dissocier",
+    "unlinkSuccess": "Dissociation réussie de {{provider}}.",
+    "unlinkConfirmation": "Êtes-vous sûr de vouloir dissocier {{provider}} de votre compte ?"
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
@@ -966,9 +980,13 @@
     "createFund": "Créer un fonds",
     "fundName": "Nom du fonds",
     "fundId": "ID de référence du fonds",
+    "enterFundName": "Entrez le nom du fonds",
+    "enterFundId": "Entrez l'ID du fonds",
     "taxDeductible": "Déductible d'impôt",
     "default": "Par défaut",
+    "defaultFund": "Fonds par défaut",
     "archived": "Archivé",
+    "unarchive": "Désarchiver",
     "fundCreate": "Créer un fonds",
     "fundUpdate": "Mettre à jour le fonds",
     "fundDelete": "Supprimer le fonds",
@@ -993,6 +1011,8 @@
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
     "campaignName": "Nom de la campagne",
+    "manageFundCampaign": "Gérer la campagne de fonds",
+    "createFundCampaign": "Créer une campagne de fonds",
     "campaignOptions": "Options",
     "fundingGoal": "Objectif de financement",
     "progress": "Progrès",
@@ -1024,7 +1044,10 @@
     "dateRangeRequired": "Veuillez sélectionner une plage de dates valide",
     "campaignNameRequired": "Le nom de la campagne est obligatoire",
     "invalidDate": "Date invalide sélectionnée",
-    "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début"
+    "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début",
+    "enterCampaignName": "Entrez le nom de la campagne",
+    "enterStartDate": "Entrez la date de début",
+    "enterEndDate": "Entrez la date de fin"
   },
   "pledges": {
     "createFailed": "Échec de la création de l'engagement",
@@ -2024,6 +2047,7 @@
     "venueUpdated": "Les détails du lieu ont été mis à jour avec succès",
     "sort": "Trier",
     "highestCapacity": "Capacité la plus élevée",
+    "deleteVenue": "Supprimer le lieu",
     "lowestCapacity": "Capacité la plus basse",
     "noVenues": "Aucun lieu trouvé !",
     "view": "Voir",
@@ -2205,6 +2229,7 @@
     "campaignStatus": "Statut",
     "fundGoal": "Objectif de Financement",
     "percentRaised": "% Collecté",
+    "campaignProgress": "Progression de la campagne : {{percentage}}%",
     "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
     "campaignEnded": "Campagne terminée"
   },
@@ -2382,6 +2407,7 @@
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
+    "subtitle": "Découvrez et gérez des plugins pour étendre les capacités de votre organisation.",
     "searchPlaceholder": "Rechercher des plugins...",
     "allPlugins": "Tous les Plugins",
     "installedPlugins": "Plugins Installés",

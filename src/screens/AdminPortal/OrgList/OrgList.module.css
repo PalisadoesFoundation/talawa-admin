@@ -61,15 +61,19 @@
 }
 
 .createorgdropdown {
-  background-color: var(--color-gray-100) !important;
+  background-color: var(--color-white) !important;
   border: var(--border-1) solid var(--color-gray-700) !important;
   color: var(--color-gray-700);
   padding: var(--space-4) var(--space-4);
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
 }
 
 .createorgdropdown:active,
 .createorgdropdown:hover {
-  background-color: var(--color-gray-100) !important;
+  background-color: var(--color-white) !important;
   border-color: var(--color-gray-700) !important;
   color: var(--color-gray-700) !important;
   box-shadow:

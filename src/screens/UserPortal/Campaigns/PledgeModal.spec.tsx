@@ -24,6 +24,7 @@ import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import { GraphQLError } from 'graphql';
 import { vi } from 'vitest';
 import { setupLocalStorageMock } from 'test-utils/localStorageMock';
 import PledgeModal, {
@@ -48,6 +49,35 @@ const { toast } = vi.hoisted(() => ({
 vi.mock('react-toastify', () => ({
   toast,
 }));
+
+vi.mock(
+  'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal',
+  () => ({
+    default: ({
+      isOpen,
+      hide,
+      refetchPledge,
+    }: {
+      isOpen: boolean;
+      hide: () => void;
+      refetchPledge: () => void;
+    }) =>
+      isOpen ? (
+        <>
+          <button
+            type="button"
+            data-testid="mock-delete-confirm"
+            onClick={refetchPledge}
+          >
+            Confirm Delete
+          </button>
+          <button type="button" data-testid="mock-delete-close" onClick={hide}>
+            Close Delete
+          </button>
+        </>
+      ) : null,
+  }),
+);
 
 // UPDATE: Add the generic type here
 vi.mock('@mui/x-date-pickers', async () => {
@@ -372,8 +402,8 @@ describe('PledgeModal', () => {
         ).toBeInTheDocument(),
       );
 
-      const cancelButton = screen.getByTestId('modal-cancel-btn');
-      await user.click(cancelButton);
+      const closeButton = screen.getByTestId('modalCloseBtn');
+      await user.click(closeButton);
 
       expect(pledgeProps[0].hide).toHaveBeenCalled();
     });
@@ -641,6 +671,49 @@ describe('PledgeModal', () => {
         { timeout: 2000 },
       );
     });
+
+    it('should show graphQL issue message from create pledge error payload', async () => {
+      const issueMessage = 'Pledger already has an active pledge';
+
+      const issueErrorMock = [
+        USER_DETAILS_MOCK,
+        {
+          request: {
+            query: CREATE_PLEDGE,
+            variables: {
+              campaignId: 'campaignId',
+              amount: 100,
+              pledgerId: 'userId',
+            },
+          },
+          result: {
+            errors: [
+              new GraphQLError('Validation failed', {
+                extensions: {
+                  issues: [{ message: issueMessage }],
+                },
+              }),
+            ],
+          },
+        },
+      ];
+
+      const createOnlyLink = new StaticMockLink(issueErrorMock);
+      renderPledgeModal(createOnlyLink, pledgeProps[0]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith(
+          issueMessage,
+          expect.any(Object),
+        );
+      });
+    });
   });
 
   describe('Pledge Update', () => {
@@ -792,6 +865,60 @@ describe('PledgeModal', () => {
         },
         { timeout: 2000 },
       );
+    });
+
+    it('should call refetch and hide when delete modal callback is invoked', async () => {
+      const updateLink = new StaticMockLink(BASE_PLEDGE_MODAL_MOCKS);
+
+      await act(async () => {
+        renderPledgeModal(updateLink, pledgeProps[1]);
+      });
+
+      await waitFor(() =>
+        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
+      );
+
+      await user.click(screen.getByTestId('modal-delete-btn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('mock-delete-confirm')).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByTestId('mock-delete-confirm'));
+
+      await waitFor(() => {
+        expect(pledgeProps[1].refetchPledge).toHaveBeenCalled();
+        expect(pledgeProps[1].hide).toHaveBeenCalled();
+      });
+    });
+
+    it('should close delete modal without calling parent callbacks', async () => {
+      const updateLink = new StaticMockLink(BASE_PLEDGE_MODAL_MOCKS);
+
+      await act(async () => {
+        renderPledgeModal(updateLink, pledgeProps[1]);
+      });
+
+      await waitFor(() =>
+        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
+      );
+
+      await user.click(screen.getByTestId('modal-delete-btn'));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('mock-delete-close')).toBeInTheDocument();
+      });
+
+      await user.click(screen.getByTestId('mock-delete-close'));
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('mock-delete-close'),
+        ).not.toBeInTheDocument();
+      });
+
+      expect(pledgeProps[1].refetchPledge).not.toHaveBeenCalled();
+      expect(pledgeProps[1].hide).not.toHaveBeenCalled();
     });
   });
 
@@ -1013,7 +1140,10 @@ describe('PledgeModal', () => {
 
       // 2. Select the option
       const options = await screen.findAllByRole('option');
-      await user.click(options[0]);
+      const harveOption =
+        options.find((option) => option.textContent?.includes('Harve Lance')) ||
+        options[0];
+      await user.click(harveOption);
       await waitFor(() => expect(input).toHaveValue('Harve Lance'));
 
       // 3. Clear the selection
@@ -1156,9 +1286,12 @@ describe('PledgeModal', () => {
 
       // Try to select an option if available
       const options = screen.getAllByRole('option');
-      if (options.length > 0) {
+      const harveOption =
+        options.find((option) => option.textContent?.includes('Harve Lance')) ||
+        options[0];
+      if (harveOption) {
         await act(async () => {
-          await user.click(options[0]);
+          await user.click(harveOption);
         });
       }
 

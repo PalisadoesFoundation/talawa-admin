@@ -31,7 +31,7 @@
 }
 
 .container {
-  min-height: 100vh;
+  min-height: var(--vh-100);
 }
 
 .message {
@@ -52,4 +52,90 @@
   border-radius: var(--radius-sm);
   background-color: color-mix(in srgb, var(--color-green-500) 20%, transparent);
   height: var(--space-8);
+}
+
+.editButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-3) var(--space-5);
+  --bs-btn-active-bg: var(--color-blue-300);
+  --bs-btn-active-border-color: transparent;
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--color-blue-300);
+  color: var(--color-gray-700);
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.progressPie {
+  --pie-fill-color: var(--color-blue-500);
+  width: var(--space-8);
+  height: var(--space-8);
+  display: block;
+}
+
+.progressTrack {
+  fill: var(--color-gray-100);
+}
+
+.progressSlice {
+  fill: var(--pie-fill-color);
+}
+
+.progressComplete {
+  --pie-fill-color: var(--color-green-500);
+}
+
+.progressHalf {
+  --pie-fill-color: var(--color-yellow-500);
+}
+
+.progressLow {
+  --pie-fill-color: var(--color-blue-500);
+}
+
+.progressTypography {
+  font-weight: var(--font-weight-bold);
+}
+
+.progressCellContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.contentWrapper {
+  padding-right: var(--space-7);
+}
+
+.uniformTableLayout {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.uniformTableLayout thead th:nth-child(1),
+.uniformTableLayout tbody td:nth-child(1),
+.uniformTableLayout thead th:nth-child(6),
+.uniformTableLayout tbody td:nth-child(6) {
+  width: 15%;
+}
+
+.uniformTableLayout thead th:nth-child(2),
+.uniformTableLayout tbody td:nth-child(2) {
+  width: 13%;
+}
+
+.uniformTableLayout thead th:nth-child(3),
+.uniformTableLayout tbody td:nth-child(3),
+.uniformTableLayout thead th:nth-child(4),
+.uniformTableLayout tbody td:nth-child(4),
+.uniformTableLayout thead th:nth-child(5),
+.uniformTableLayout tbody td:nth-child(5) {
+  width: 14%;
 }

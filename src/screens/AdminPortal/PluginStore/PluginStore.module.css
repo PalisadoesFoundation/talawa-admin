@@ -1,5 +1,14 @@
 .pageContent {
-  padding-right: var(--space-7);
+  padding: var(--space-0) var(--space-7) var(--space-7) var(--space-0);
+}
+
+/* ── Page subtitle (layout title is rendered by SuperAdminScreen) ────────────── */
+.pageSubtitle {
+  font-size: var(--font-size-15);
+  color: var(--color-gray-mid);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-7);
+  padding: var(--space-0) var(--space-7);
 }
 
 .dropdown {
@@ -33,28 +42,31 @@
   outline: var(--border-2) solid var(--color-blue-200);
 }
 
+/* ── Upload button ───────────────────────────────────────────────────────────── */
 .createorgdropdown {
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-700);
-  height: var(--space-10);
-  margin-top: var(--space-4);
-  color: var(--color-gray-700);
+  background-color: var(--color-blue-500);
+  border: var(--border-1) solid var(--color-blue-500);
+  height: var(--space-9);
+  color: var(--color-white);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-semibold);
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .createorgdropdown:active,
 .createorgdropdown:hover {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-700);
-  color: var(--color-gray-700);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      color-mix(in srgb, var(--color-gray-800), transparent 85%);
+  background-color: var(--color-blue-700);
+  border-color: var(--color-blue-700);
+  color: var(--color-white);
+  box-shadow: 0 var(--shadow-offset-sm) var(--border-shadow-2)
+    var(--color-blue-alpha-30);
 }
 
 .pluginListContainer {
-  margin-top: var(--space-7);
+  margin-top: var(--space-5);
 }
 
 .paginationContainer {
@@ -63,6 +75,7 @@
   justify-content: end;
 }
 
+/* ── Upload button icon margin ───────────────────────────────────────────────── */
 .uploadPlugin {
   margin-inline-end: var(--space-3);
 }

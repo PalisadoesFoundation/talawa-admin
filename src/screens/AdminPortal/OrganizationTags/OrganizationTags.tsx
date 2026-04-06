@@ -46,7 +46,7 @@ import type {
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
@@ -324,29 +324,31 @@ function OrganizationTags(): JSX.Element {
             className={styles.btnsContainer}
             data-testid="organizationTags-header"
           >
-            <SearchFilterBar
-              hasDropdowns={true}
-              searchPlaceholder={tCommon('searchByName')}
-              searchValue={tagSearchName}
-              onSearchChange={(value) => setTagSearchName(value.trim())}
-              searchInputTestId="searchByName"
-              searchButtonTestId="searchBtn"
-              dropdowns={[
+            <Toolbar
+              search={{
+                placeholder: tCommon('searchByName'),
+                value: tagSearchName,
+                onChange: (value) => setTagSearchName(value.trim()),
+                onSearch: (value) => setTagSearchName(value.trim()),
+                inputTestId: 'searchByName',
+                buttonTestId: 'searchBtn',
+              }}
+              filters={[
                 {
                   id: 'tags-sort',
                   label: t('sortTags'),
                   type: 'sort',
+                  title: t('sortTags'),
                   options: [
                     { label: tCommon('Latest'), value: 'latest' },
                     { label: tCommon('Oldest'), value: 'oldest' },
                   ],
-                  selectedOption:
-                    tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
-                  onOptionChange: (value) => handleSortChange(value.toString()),
-                  dataTestIdPrefix: 'sortTags',
+                  selected: tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
+                  onChange: (value) => handleSortChange(value.toString()),
+                  testIdPrefix: 'sortTags',
                 },
               ]}
-              additionalButtons={
+              actions={
                 <Button
                   onClick={() => {
                     setTagName('');
