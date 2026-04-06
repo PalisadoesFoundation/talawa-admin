@@ -1,22 +1,33 @@
 /* SidebarOrgSection.module.css */
 
-/* Extracted from .leftDrawer .organizationContainer button and .profileContainer */
-.profileContainer {
-  position: relative;
-  margin: 0.7rem 0;
-  padding: 2.5rem 0.1rem;
-  border-radius: 16px;
-  background-color: var(--LeftDrawer-org-profileContainer-bg) !important;
-  padding-right: 10px;
-  padding-left: 10px;
+/* ── Org container ───────────────────────────────────────────────────────────── */
+.organizationContainer {
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-1) solid var(--color-black-7);
+  margin-bottom: var(--space-2);
+}
 
-  border: none;
-  width: 100%;
-  height: 52px;
+/* ── Org profile button ──────────────────────────────────────────────────────── */
+.profileContainer {
   display: flex;
   align-items: center;
-  outline: none;
+  width: 100%;
+  margin: var(--space-3-5) 0;
+  padding: var(--space-3) var(--space-3-75);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-gray-50) !important;
+  border: var(--border-1) solid var(--color-black-6) !important;
+  min-height: var(--space-13);
   cursor: pointer;
+  text-align: left;
+  transition: background-color 0.15s ease;
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.profileContainer:hover {
+  background-color: var(--color-gray-100) !important;
+  color: inherit !important;
 }
 
 .profileContainer:focus {
@@ -24,28 +35,36 @@
 }
 
 .profileContainer:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--primary-color);
+  outline-offset: var(--border-2);
 }
 
 .imageContainer {
-  width: 68px;
-  margin-right: 8px;
-  margin-bottom: 1px;
-  /* adjusted from 10px to align better? app-fixed had 10px */
+  width: var(--space-9);
+  height: var(--space-9);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  flex-shrink: 0;
+  margin-right: var(--space-3-75);
+  background-color: var(--color-gray-100);
 }
 
-.imageContainer img {
-  height: 52px;
-  width: 52px;
-  border-radius: 50%;
+.imageContainer img,
+.imageContainer > div,
+.imageContainer > div > img {
+  width: var(--space-9);
+  height: var(--space-9);
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  display: block;
 }
 
+/* ── Text area ──────────────────────────────────────────────────────────────── */
 .ProfileRightContainer {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 15px;
+  justify-content: space-between;
+  gap: var(--space-3-5);
   flex: 1;
 }
 
@@ -58,8 +77,9 @@
 }
 
 .primaryText {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-900);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -67,70 +87,81 @@
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
-  color: var(--bs-emphasis-color, var(--primaryText-color));
 }
 
 .secondaryText {
-  font-size: 0.8rem;
-  font-weight: 400;
-  color: var(--leftDrawer-secondaryText-color);
+  font-size: var(--font-size-9);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-gray-mid);
   display: block;
   text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: var(--space-0-5);
 }
 
 .ArrowIcon {
-  margin-right: 5px;
+  flex-shrink: 0;
+  color: var(--color-gray-sub);
+  display: flex;
+  align-items: center;
 }
 
-.avatarContainer {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  font-size: 1.5rem;
+.ArrowIcon svg,
+.ArrowIcon path {
+  fill: var(--color-gray-sub);
+  color: var(--color-gray-sub);
+  width: var(--space-3-5);
+  height: var(--space-3-5);
 }
 
+/* ── Error state ─────────────────────────────────────────────────────────────── */
 .bgDanger {
-  background-color: var(--bs-danger) !important;
+  background-color: var(--color-red-50) !important;
+  border-color: var(--color-red-100) !important;
+  cursor: default;
 }
 
-/* Responsive styles from app-fixed.module.css */
+.errorText {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-red-500);
+}
+
+/* Responsive styles */
 @media (max-height: 900px) {
   .profileContainer {
-    margin: 0.6rem 0;
-    padding: 2.2rem 0.1rem;
-  }
-
-  .primaryText {
-    font-size: 1rem;
-  }
-
-  .secondaryText {
-    font-size: 0.8rem;
+    margin: var(--space-2) 0;
+    min-height: var(--space-9-5);
   }
 }
 
 @media (max-height: 650px) {
   .profileContainer {
-    margin: 0.2rem 0;
-    padding: 1.6rem 0rem;
-  }
-
-  .primaryText {
-    font-size: 0.8rem;
-  }
-
-  .secondaryText {
-    font-size: 0.6rem;
+    margin: var(--space-2) 0;
+    min-height: var(--space-8-5);
+    padding: var(--space-3-5) var(--space-3);
   }
 
   .imageContainer {
-    width: 40px;
-    margin-left: 5px;
-    margin-right: 10px;
+    width: var(--space-7-5);
+    height: var(--space-7-5);
+    margin-right: var(--space-3);
   }
 
-  .imageContainer img {
-    width: 40px;
-    height: 100%;
+  .imageContainer img,
+  .imageContainer > div,
+  .imageContainer > div > img {
+    width: var(--space-7-5);
+    height: var(--space-7-5);
+  }
+
+  .primaryText {
+    font-size: var(--font-size-sm);
+  }
+
+  .secondaryText {
+    font-size: var(--font-size-xs);
   }
 }

@@ -41,6 +41,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
   slotProps,
   slots: customSlots,
   format = 'MM/DD/YYYY',
+  placeholder,
 }) => {
   const generatedId = useId();
   const effectiveName = name || generatedId;
@@ -112,6 +113,12 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                 ...other
               } = props;
 
+              const resolvedPlaceholder =
+                placeholder ??
+                (typeof other.placeholder === 'string'
+                  ? other.placeholder
+                  : undefined);
+
               return (
                 <div
                   className={`${styles.wrapper} ${textFieldClassName || ''}`.trim()}
@@ -120,6 +127,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                     {...inputProps}
                     {...other}
                     id={inputId}
+                    placeholder={resolvedPlaceholder}
                     required={required}
                     disabled={disabled}
                     aria-required={required}

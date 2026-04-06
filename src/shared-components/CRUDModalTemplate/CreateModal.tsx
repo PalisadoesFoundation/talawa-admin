@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import CreateIcon from '@mui/icons-material/Create';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
@@ -52,6 +53,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   centered = true,
   'data-testid': dataTestId,
   submitDisabled = false,
+  customFooter,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
@@ -93,7 +95,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
     }
   };
 
-  const customFooter = (
+  const defaultFooter = (
     <>
       <Button
         variant="secondary"
@@ -109,6 +111,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
         variant="primary"
         disabled={loading || submitDisabled}
         data-testid="modal-submit-btn"
+        icon={<CreateIcon />}
       >
         {tCommon('create')}
       </Button>
@@ -126,7 +129,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
       className={className}
       centered={centered}
       data-testid={dataTestId}
-      customFooter={customFooter}
+      customFooter={customFooter ?? defaultFooter}
     >
       <form
         id="crud-create-form"

@@ -14,7 +14,7 @@ import PaginationList from 'shared-components/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
-
+import { BEARER_PREFIX } from 'Constant/common';
 interface InterfaceCurrentUserType {
   user: {
     id: string;
@@ -166,7 +166,7 @@ function OrgList(): JSX.Element {
   );
   const token = getItem('token');
   const context = token
-    ? { headers: { authorization: 'Bearer ' + token } }
+    ? { headers: { authorization: BEARER_PREFIX + token } }
     : { headers: {} };
   // Fetch current user status (consolidated query with network-only for fresh data)
   const {

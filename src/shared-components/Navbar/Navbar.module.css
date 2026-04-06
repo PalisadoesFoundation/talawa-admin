@@ -6,10 +6,10 @@
 
 .calendar__header {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: flex-start;
-  gap: var(--space-3);
-  flex-wrap: wrap;
+  gap: var(--space-5);
+  flex-wrap: nowrap;
   margin-right: 0;
 }
 
@@ -55,6 +55,37 @@
   margin: 0;
 }
 
+/* Force every button inside a btnsBlock (sort dropdowns + action buttons)
+   to the same 40 px height as the search bar. */
+.btnsBlock button {
+  height: var(--space-9);
+}
+
 .selectTypeEventHeader {
   border-radius: var(--radius-md);
+}
+
+/* ── PageHeader search bar — scoped via className prop ──────────────────────── */
+/* .searchBar is passed as className to <SearchBar> so it lands on the outer   */
+/* container div alongside the CSS-Module-hashed searchBarContainer class.     */
+.searchBar {
+  height: var(--space-9) !important;
+  margin: 0 !important;
+  flex: 1 1 var(--space-11-75);
+  min-width: 0;
+  max-width: var(--space-24-5);
+}
+
+/* Remove the 40rem min-width on the inner input wrapper */
+.searchBar > div {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Constrain the search icon button to match container height */
+.searchBar > button {
+  height: 100% !important;
+  width: var(--space-9) !important;
 }

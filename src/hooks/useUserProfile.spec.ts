@@ -7,6 +7,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
+import * as subscriptionsModule from 'utils/apollo/subscriptions';
 
 // Mock dependencies
 vi.mock('@apollo/client', () => ({
@@ -18,11 +19,23 @@ vi.mock('react-router', () => ({
   useNavigate: vi.fn(),
 }));
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-i18next')>();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      i18n: { language: 'en' },
+    }),
+  };
+});
+
+vi.mock('utils/apollo/subscriptions', () => {
+  const mockDisposeWsClient = vi.fn();
+  return {
+    disposeWsClient: mockDisposeWsClient,
+  };
+});
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(),
@@ -155,6 +168,7 @@ describe('useUserProfile', () => {
     });
 
     expect(mockLogoutMutation).toHaveBeenCalled();
+    expect(vi.mocked(subscriptionsModule.disposeWsClient)).toHaveBeenCalled();
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(mockEndSession).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/');

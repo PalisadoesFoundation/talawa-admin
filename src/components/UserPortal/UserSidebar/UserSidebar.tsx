@@ -108,7 +108,7 @@ const UserSidebar = ({
       hideDrawer={hideDrawer}
       setHideDrawer={setHideDrawer}
       portalType="user"
-      backgroundColor="var(--sidebar-bg-user)"
+      backgroundColor="var(--color-white)"
       persistToggleState={true}
       headerContent={headerContent}
       footerContent={
@@ -126,11 +126,13 @@ const UserSidebar = ({
               />
             </div>
           )}
-          {!hideDrawer && (
-            <div>
-              <ProfileCard portal="user" />
-            </div>
-          )}
+          <div
+            className={
+              hideDrawer ? styles.profileCardHidden : styles.profileCardWrapper
+            }
+          >
+            <ProfileCard portal="user" />
+          </div>
           <SignOut hideDrawer={hideDrawer} />
         </>
       }

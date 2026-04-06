@@ -1,22 +1,5 @@
 /**
  * Modal that confirms deletion of a pledge.
- *
- * @remarks
- * Uses DeleteModal template from CRUDModalTemplate for consistent UI and behavior.
- *
- * @param props - Component props including visibility flag, pledge details, and callbacks.
- *
- * @returns React element for the delete pledge modal.
- *
- * @example
- * ```tsx
- * <PledgeDeleteModal
- *   isOpen={true}
- *   hide={() => setShowModal(false)}
- *   pledge={selectedPledge}
- *   refetchPledge={fetchPledges}
- * />
- * ```
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -17,6 +17,7 @@ import {
   TEST_ID_PEOPLE_EMAIL,
   TEST_ID_PEOPLE_ROLE,
   DUMMY_DATE_TIME_PREFIX,
+  BEARER_PREFIX,
 } from './common';
 
 afterEach(() => {
@@ -168,6 +169,18 @@ describe('common constants and helpers', () => {
   describe('DUMMY_DATE_TIME_PREFIX', () => {
     it('should be 2015-03-04T', () => {
       expect(DUMMY_DATE_TIME_PREFIX).toBe('2015-03-04T');
+    });
+  });
+
+  describe('BEARER_PREFIX', () => {
+    it('should be Bearer with trailing space', () => {
+      expect(BEARER_PREFIX).toBe('Bearer ');
+    });
+
+    it('should be used for Authorization header construction', () => {
+      const token = 'test-token-12345';
+      const authHeader = BEARER_PREFIX + token;
+      expect(authHeader).toBe('Bearer test-token-12345');
     });
   });
 });

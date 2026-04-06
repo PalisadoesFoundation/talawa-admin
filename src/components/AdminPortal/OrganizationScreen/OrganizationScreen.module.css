@@ -1,18 +1,19 @@
 .pageContainer {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: var(--vh-100);
   padding: var(--space-5) var(--space-7) var(--space-0)
     calc(300px + var(--space-8) + var(--space-7));
 }
 
 .expand {
   padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-7));
+  padding-right: calc(var(--space-6) + var(--space-2));
   animation: moveLeft 0.5s ease-in-out;
 }
 
 .avatarStyle {
-  border-radius: 100%;
+  border-radius: var(--radius-full);
 }
 
 .profileContainer {
@@ -72,6 +73,7 @@
 
 .contract {
   padding-left: calc(300px + var(--space-8) + var(--space-7));
+  padding-right: calc(var(--space-6) + var(--space-2));
   animation: moveRight 0.5s ease-in-out;
 }
 
@@ -101,7 +103,7 @@
   top: 0;
   left: 0;
   width: var(--space-9);
-  height: 100vh;
+  height: var(--vh-100);
   z-index: 100;
   background-color: var(--color-gray-50);
   border: none;

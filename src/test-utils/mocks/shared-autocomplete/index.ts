@@ -8,3 +8,4 @@
 export { default as SimpleAutocompleteMock } from './SimpleAutocompleteMock';
 export { default as EnhancedAutocompleteMock } from './EnhancedAutocompleteMock';
 export { default as createGetOptionLabelMock } from './createGetOptionLabelMock';
+export { default as createIsOptionEqualToValueMock } from './createIsOptionEqualToValueMock';

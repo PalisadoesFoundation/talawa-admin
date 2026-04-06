@@ -27,7 +27,7 @@ import {
 import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { languages } from 'utils/languages';
 import Button from 'shared-components/Button';
@@ -198,32 +198,35 @@ function OrganizationPeople(): JSX.Element {
         ]}
       />
       <div className={styles.orgPeopleGrid}>
-        <SearchFilterBar
-          hasDropdowns={true}
-          searchPlaceholder={t('searchFullName')}
-          searchValue={searchTerm}
-          onSearchChange={(value) => setSearchTerm(value)}
-          searchInputTestId="member-search-input"
-          searchButtonTestId="searchBtn"
+        <Toolbar
+          search={{
+            placeholder: t('searchFullName'),
+            value: searchTerm,
+            onChange: (value) => setSearchTerm(value),
+            onSearch: (value) => setSearchTerm(value),
+            inputTestId: 'member-search-input',
+            buttonTestId: 'searchBtn',
+          }}
           containerClassName={styles.calendar__header}
-          dropdowns={[
+          filters={[
             {
               id: 'organization-people-sort',
               label: tCommon('sort'),
               type: 'sort',
+              title: tCommon('sort'),
               options: [
                 { label: tCommon('members'), value: 'members' },
                 { label: tCommon('admin'), value: 'admin' },
                 { label: tCommon('users'), value: 'users' },
               ],
-              selectedOption: STATE_TO_OPTION[state] ?? 'members',
-              onOptionChange: (value) => handleSortChange(value.toString()),
-              dataTestIdPrefix: 'sort',
+              selected: STATE_TO_OPTION[state] ?? 'members',
+              onChange: (value) => handleSortChange(value.toString()),
+              testIdPrefix: 'sort',
               containerClassName: styles.membersSortContainer,
               toggleClassName: styles.membersSortToggle,
             },
           ]}
-          additionalButtons={
+          actions={
             <AddMember
               rootClassName={styles.membersAddHeader}
               containerClassName={styles.membersAddContainer}

@@ -4,9 +4,9 @@
 
 # Function: getPledgeColumns()
 
-> **getPledgeColumns**(`props`): [`TokenAwareGridColDef`](../../../../../types/DataGridWrapper/interface/type-aliases/TokenAwareGridColDef.md)[]
+> **getPledgeColumns**(`props`): [`IColumnDef`](../../../../../types/shared-components/DataTable/column/interfaces/IColumnDef.md)\<[`InterfacePledgeTableRow`](../interfaces/InterfacePledgeTableRow.md), `unknown`\>[]
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx#L42)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx#L54)
 
 Returns the column definitions for the pledges DataGrid.
 
@@ -20,6 +20,6 @@ The props containing translation functions and event handlers.
 
 ## Returns
 
-[`TokenAwareGridColDef`](../../../../../types/DataGridWrapper/interface/type-aliases/TokenAwareGridColDef.md)[]
+[`IColumnDef`](../../../../../types/shared-components/DataTable/column/interfaces/IColumnDef.md)\<[`InterfacePledgeTableRow`](../interfaces/InterfacePledgeTableRow.md), `unknown`\>[]
 
-An array of GridColDef for the pledges table.
+An array of DataTable columns for the pledges table.

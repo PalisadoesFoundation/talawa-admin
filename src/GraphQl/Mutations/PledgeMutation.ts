@@ -27,7 +27,6 @@ export const CREATE_PLEDGE = gql`
       id
       amount
       note
-      createdAt
       updatedAt
       campaign {
         id
@@ -54,7 +53,6 @@ export const UPDATE_PLEDGE = gql`
       id
       amount
       note
-      createdAt
       updatedAt
       campaign {
         id

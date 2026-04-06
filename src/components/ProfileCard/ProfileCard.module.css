@@ -6,10 +6,22 @@
   white-space: nowrap;
 }
 .profileContainer {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3);
+  width: 100%;
+  border-radius: var(--radius-xl) !important;
+  background-color: var(--color-gray-100) !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  border: none !important;
+}
+
+.profileContainer:hover {
+  background-color: var(--color-gray-200) !important;
 }
 
 .imageContainer {
@@ -42,18 +54,9 @@
   color: var(--color-gray-600);
 }
 
-.chevronRightbtn {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-}
-
 .chevronIcon {
-  color: var(--color-gray-600);
+  color: var(--color-gray-500);
   font-size: var(--font-size-lg);
+  margin-left: auto;
+  flex-shrink: 0;
 }

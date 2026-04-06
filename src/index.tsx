@@ -6,17 +6,16 @@ import {
   ApolloClient,
   ApolloProvider,
   InMemoryCache,
-  split,
   Observable,
   fromPromise,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
-import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import './assets/css/app.css';
 import './style/tokens/index.css';
+import './style/talawa-theme.css';
+import './style/widgets.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
@@ -25,7 +24,7 @@ import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import { BEARER_PREFIX } from 'Constant/common';
 import App from './App';
 import { store } from './state/store';
 import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
@@ -35,6 +34,10 @@ import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import {
+  disposeWsClient,
+  configureSubscriptions,
+} from 'utils/apollo/subscriptions';
 const theme = createTheme({
   palette: {
     primary: {
@@ -50,7 +53,6 @@ import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import { refreshToken } from 'utils/getRefreshToken';
 
 const { getItem, clearAllItems } = useLocalStorage();
-const BEARER_PREFIX = 'Bearer ';
 
 if (import.meta.env.DEV) {
   // Adds messages only in a dev environment
@@ -124,18 +126,20 @@ const errorLink = onError(
 
           return fromPromise(
             refreshToken()
-              .then((success) => {
+              .then(async (success) => {
                 if (success) {
                   resolvePendingRequests();
                   return true;
                 } else {
                   // Refresh failed, clear storage and redirect
+                  await disposeWsClient();
                   clearAllItems();
                   window.location.href = '/';
                   return false;
                 }
               })
-              .catch(() => {
+              .catch(async () => {
+                await disposeWsClient();
                 clearAllItems();
                 window.location.href = '/';
                 return false;
@@ -201,23 +205,6 @@ const uploadLink = createUploadLink({
   useGETForQueries: false,
 });
 
-const wsLink = new GraphQLWsLink(
-  createClient({
-    url: BACKEND_WEBSOCKET_URL,
-    connectionParams: () => {
-      const token = getItem('token');
-      const authParams = token ? { authorization: BEARER_PREFIX + token } : {};
-      return {
-        ...authParams,
-        'Accept-Language': i18n.language,
-      };
-    },
-    on: {
-      // WebSocket connection events - debug logs removed for production
-    },
-  }),
-);
-
 // Create HTTP link with authentication
 const httpLink = ApolloLink.from([
   authLink, // Only apply to HTTP operations
@@ -226,21 +213,8 @@ const httpLink = ApolloLink.from([
   uploadLink,
 ]);
 
-// The split function routes operations correctly
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
-  },
-  wsLink, // WebSocket for subscriptions (auth via connectionParams)
-  httpLink, // HTTP with auth headers for queries/mutations
-);
-
 // Simplified combined link
-const combinedLink = ApolloLink.from([errorLink, splitLink]);
+const combinedLink = ApolloLink.from([errorLink, httpLink]);
 
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache({
@@ -299,6 +273,13 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
     },
   }),
   link: combinedLink,
+});
+
+configureSubscriptions({
+  client,
+  errorLink,
+  httpLink,
+  wsUrl: BACKEND_WEBSOCKET_URL,
 });
 const fallbackLoader = <div className="loader"></div>;
 

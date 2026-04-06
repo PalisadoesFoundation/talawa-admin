@@ -1,32 +1,28 @@
-.progressCircleContainer {
-  position: relative;
-  display: inline-flex;
+.progressPie {
+  --pie-fill-color: var(--color-blue-500);
+  width: var(--space-8);
+  height: var(--space-8);
+  display: block;
 }
 
-.progressCircleBackground {
-  color: var(--color-gray-100);
+.progressTrack {
+  fill: var(--color-gray-100);
 }
 
-.overflowVisible {
-  overflow: visible;
-}
-
-.progressCircleForeground {
-  position: absolute;
-  left: 0;
-  top: 0;
+.progressSlice {
+  fill: var(--pie-fill-color);
 }
 
 .progressComplete {
-  color: var(--color-green-500);
+  --pie-fill-color: var(--color-green-500);
 }
 
 .progressHalf {
-  color: var(--color-yellow-500);
+  --pie-fill-color: var(--color-yellow-500);
 }
 
 .progressLow {
-  color: var(--color-blue-500);
+  --pie-fill-color: var(--color-blue-500);
 }
 
 .progressTypography {
@@ -82,17 +78,34 @@
   vertical-align: middle;
 }
 
+.campaignNameButton {
+  color: var(--color-blue-500);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-weight: var(--font-weight-regular);
+}
+
+.campaignNameButton:hover {
+  color: var(--color-blue-500);
+  text-decoration: underline;
+}
+
 .editButton {
   background-color: var(--color-blue-200);
   color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
+  padding: var(--space-3) var(--space-5);
+  --bs-btn-active-bg: var(--color-blue-300);
+  --bs-btn-active-border-color: transparent;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--color-blue-300);
+  color: var(--color-gray-700);
+  border-color: transparent;
   box-shadow: none;
 }
 
@@ -109,7 +122,6 @@
   display: flex;
   align-items: center;
   margin-bottom: var(--space-5);
-  margin-top: var(--space-5);
   gap: var(--space-5);
 }
 
@@ -123,11 +135,10 @@
 }
 
 .createButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  background-color: var(--color-gray-400) !important;
+  border-color: var(--color-gray-300) !important;
+  color: var(--color-white) !important;
+  box-shadow: none;
 }
 
 .createButton:active {
@@ -150,9 +161,5 @@
 }
 
 .listTable {
-  width: 100%;
-  background-color: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--space-5);
   margin-top: var(--space-5);
 }

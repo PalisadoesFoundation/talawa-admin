@@ -36,7 +36,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
@@ -423,7 +423,7 @@ function organizationEvents(): JSX.Element {
         />
         <div className={styles.mainpageright}>
           <div className={styles.justifyspOrganizationEvents}>
-            <PageHeader
+            <Toolbar
               search={{
                 placeholder: t('searchEventName'),
                 onSearch: (value: string) => {
@@ -432,8 +432,9 @@ function organizationEvents(): JSX.Element {
                 inputTestId: 'searchEvent',
                 buttonTestId: 'searchButton',
               }}
-              sorting={[
+              filters={[
                 {
+                  type: 'sort',
                   title: t('viewType'),
                   selected: viewType,
                   options: [
@@ -448,15 +449,13 @@ function organizationEvents(): JSX.Element {
               ]}
               actions={
                 <Button
-                  className={styles.dropdown}
+                  variant="toolbar"
                   onClick={createEventModal.open}
                   data-testid="createEventModalBtn"
                   data-cy="createEventModalBtn"
                 >
-                  <div>
-                    <AddIcon className={styles.addIconStyle} />
-                    <span>{t('createEvent')}</span>
-                  </div>
+                  <AddIcon className={styles.addIconStyle} />
+                  <span>{t('createEvent')}</span>
                 </Button>
               }
             />

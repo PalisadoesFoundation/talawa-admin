@@ -4,28 +4,47 @@
 
 .dataTableBase {
   font-size: var(--font-size-sm);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-200);
+  border-radius: var(--radius-xl);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
 }
 
 /* Header cells: match DataGridWrapper typography and density */
 .dataTableBase thead th {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-gray-700);
-  background-color: var(--color-gray-50);
+  background-color: var(--color-gray-100);
+  height: calc(var(--space-11) + var(--border-3));
   padding: var(--space-3) var(--space-4);
   border-bottom: var(--border-2) solid var(--color-gray-200);
   white-space: nowrap;
+  vertical-align: middle;
 }
 
 /* Body cells: consistent padding and vertical alignment */
 .dataTableBase tbody td {
   padding: var(--space-3) var(--space-4);
   vertical-align: middle;
-  border-bottom-color: var(--color-gray-100);
+  border-bottom: 0;
+  background-color: var(--color-white);
+}
+
+.dataTableBase tbody td a,
+.dataTableBase tbody td .btn-link {
+  color: var(--color-blue-500);
+}
+
+.dataTableBase tbody td a:hover,
+.dataTableBase tbody td .btn-link:hover {
+  color: var(--color-blue-500);
 }
 
 .dataTableBase tbody tr:hover td {
-  background-color: var(--color-gray-50);
+  background-color: var(--color-white);
 }
 
 .dataTableBase thead th:hover {

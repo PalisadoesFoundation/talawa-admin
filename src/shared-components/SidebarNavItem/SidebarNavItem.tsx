@@ -50,7 +50,10 @@ const SidebarNavItem = ({
   useSimpleButton = false,
   iconType,
   dataCy,
+  iconSize,
 }: ISidebarNavItemProps): React.ReactElement => {
+  const resolvedSize = iconSize ?? ICON_SIZE;
+
   const renderIcon = useCallback(
     (isActive: boolean): React.ReactNode => {
       if (!React.isValidElement(icon) || typeof icon.type === 'string') {
@@ -61,12 +64,11 @@ const SidebarNavItem = ({
       const isReactIcon = iconType === 'react-icon';
 
       if (isReactIcon) {
-        // Handle React Icons with style prop
         return React.cloneElement(
           icon as React.ReactElement<{ style?: React.CSSProperties }>,
           {
             style: {
-              fontSize: ICON_SIZE,
+              fontSize: resolvedSize,
               color: isActive ? 'var(--bs-black)' : 'var(--bs-secondary)',
             },
           },
@@ -74,6 +76,7 @@ const SidebarNavItem = ({
       }
 
       // Handle SVG icons with fill/stroke props
+      // strokeWidth: 1.5 normalises thin-stroke icons (e.g. plugins.svg default stroke-width=1)
       return React.cloneElement<React.SVGProps<SVGSVGElement>>(
         icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
         {
@@ -82,8 +85,9 @@ const SidebarNavItem = ({
               ? 'var(--color-black)'
               : 'var(--bs-secondary)'
             : 'none',
-          width: ICON_SIZE,
-          height: ICON_SIZE,
+          width: resolvedSize,
+          height: resolvedSize,
+          strokeWidth: useSimpleButton ? undefined : 1.5,
           stroke: useSimpleButton
             ? undefined
             : isActive
@@ -92,7 +96,7 @@ const SidebarNavItem = ({
         },
       );
     },
-    [icon, useSimpleButton, iconType],
+    [icon, useSimpleButton, iconType, resolvedSize],
   );
 
   return (

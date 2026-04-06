@@ -156,6 +156,11 @@ export interface InterfaceCreateModalProps extends InterfaceCrudModalBaseProps {
    *
    */
   submitDisabled?: boolean;
+
+  /**
+   * Custom footer content to replace the default create footer actions.
+   */
+  customFooter?: ReactNode;
 }
 
 /**
@@ -188,6 +193,11 @@ export interface InterfaceEditModalProps extends InterfaceCrudModalBaseProps {
    * Useful for dirty form checking
    */
   submitDisabled?: boolean;
+
+  /**
+   * Custom footer content to replace the default edit footer actions.
+   */
+  customFooter?: ReactNode;
 }
 
 /**

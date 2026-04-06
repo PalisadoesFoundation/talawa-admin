@@ -488,6 +488,8 @@ export const shouldSkipFile = (file: string): boolean => {
     normalized.includes('/tokens/') ||
     normalized === 'src/style/app-fixed.module.css' ||
     normalized === 'src/assets/css/app.css' ||
+    normalized === 'src/style/talawa-theme.css' ||
+    normalized === 'src/style/widgets.css' ||
     normalized.startsWith('src/test-utils/validate-tokens') ||
     normalized.startsWith('src/style/tokens/') ||
     normalized.endsWith('.spec.ts') ||

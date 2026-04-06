@@ -135,3 +135,8 @@ export const TEST_ID_PEOPLE_ROLE = (id: string): string => `people-role-${id}`;
  * Maximum length for the displayed user name before truncation.
  */
 export const MAX_NAME_LENGTH = 20;
+
+/**
+ * Prefix for Authorization header values (e.g., `Bearer <token>`).
+ */
+export const BEARER_PREFIX = 'Bearer ';
