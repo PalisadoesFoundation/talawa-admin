@@ -208,13 +208,11 @@ describe('Organisation Tags Page', () => {
       ).toBeInTheDocument();
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
-    // Test trimming: add spaces that should be trimmed by the component
     await user.clear(input);
     await user.type(input, '  searchSubTag  ');
-    await user.click(screen.getByTestId('searchBtn'));
 
-    // should render the two searched tags from the mock data
-    // where name starts with "searchSubTag" (mocks are configured for this)
+    // SearchFilterBar uses debounced onChange (no search button),
+    // so wait for the debounce to trigger and results to render
     await waitFor(() => {
       const buttons = screen.getAllByTestId('manageTagBtn');
       expect(buttons.length).toEqual(2);

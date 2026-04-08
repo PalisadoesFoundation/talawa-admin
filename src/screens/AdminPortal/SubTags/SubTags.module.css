@@ -104,7 +104,7 @@ form label,
   border: var(--border-0) solid var(--color-gray-300) !important;
   background-color: var(--color-white) !important;
   box-shadow: 0 var(--border-shadow-1) var(--border-shadow-1)
-    var(--color-black-25);
+    var(--color-black-20);
   outline: none;
   transition: box-shadow 0.2s ease;
 }
@@ -177,7 +177,7 @@ form label,
 
 .createButton:hover {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--color-black-25);
+    var(--border-shadow-xs) var(--color-black-20);
   background-color: var(--color-gray-50) !important;
   color: var(--color-gray-700) !important;
   border: var(--border-1) solid var(--color-gray-700) !important;
