@@ -1,7 +1,7 @@
 .dropdown {
-  background-color: var(--color-gray-50) !important;
-  border: var(--border-1) solid var(--color-gray-600) !important;
-  color: var(--color-gray-600) !important;
+  background-color: var(--color-white) !important;
+  border: var(--border-1) solid var(--color-gray-400) !important;
+  color: var(--color-gray-700) !important;
   position: relative;
   /* !important needed to override Bootstrap's display on .btn */
   display: flex !important;
@@ -19,8 +19,8 @@
 /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
+  background-color: var(--color-blue-500) !important;
+  border-color: var(--color-blue-500) !important;
   color: var(--color-white) !important;
   box-shadow: none !important;
 }

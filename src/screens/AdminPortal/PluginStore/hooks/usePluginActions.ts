@@ -4,13 +4,22 @@
 import { useState, useCallback } from 'react';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
-import { useUpdatePlugin, useDeletePlugin } from 'plugin/graphql-service';
-import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
+import {
+  useUpdatePlugin,
+  useDeletePlugin,
+  useInstallPlugin,
+  type IPlugin,
+} from 'plugin/graphql-service';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
-import type { IPlugin } from 'plugin/graphql-service';
+const getAdminPluginFileService = async () => {
+  const { adminPluginFileService } =
+    await import('plugin/services/AdminPluginFileService');
+  return adminPluginFileService;
+};
 
 interface IUsePluginActionsProps {
-  pluginData?: { getPlugins: IPlugin[] };
+  pluginData?: { getPlugins?: IPlugin[] };
   refetch: () => Promise<unknown>;
 }
 
@@ -19,34 +28,23 @@ export function usePluginActions({
   refetch,
 }: IUsePluginActionsProps) {
   const [loading, setLoading] = useState(false);
-  const [showUninstallModal, setShowUninstallModal] = useState(false);
   const [pluginToUninstall, setPluginToUninstall] =
     useState<IPluginMeta | null>(null);
+  const uninstallModal = useModalState();
 
   const [updatePlugin] = useUpdatePlugin();
   const [deletePlugin] = useDeletePlugin();
+  const [installPlugin] = useInstallPlugin();
 
   const handleInstallPlugin = useCallback(
     async (plugin: IPluginMeta) => {
       setLoading(true);
       try {
-        // Find the existing plugin in the database
-        const existingPlugin = pluginData?.getPlugins?.find(
-          (p: IPlugin) => p.pluginId === plugin.id,
-        );
-
-        if (!existingPlugin) {
-          throw new Error(
-            'Plugin not found in database. Please upload it first.',
-          );
-        }
-
-        // Mark the plugin as installed using updatePlugin mutation
-        await updatePlugin({
+        // First, call the API to mark the plugin as installed
+        await installPlugin({
           variables: {
             input: {
-              id: existingPlugin.id,
-              isInstalled: true,
+              pluginId: plugin.id,
             },
           },
         });
@@ -68,7 +66,7 @@ export function usePluginActions({
         setLoading(false);
       }
     },
-    [pluginData, updatePlugin, refetch],
+    [installPlugin, refetch],
   );
 
   const togglePluginStatus = useCallback(
@@ -113,10 +111,13 @@ export function usePluginActions({
     [pluginData, updatePlugin, refetch],
   );
 
-  const uninstallPlugin = useCallback((plugin: IPluginMeta) => {
-    setPluginToUninstall(plugin);
-    setShowUninstallModal(true);
-  }, []);
+  const uninstallPlugin = useCallback(
+    (plugin: IPluginMeta) => {
+      setPluginToUninstall(plugin);
+      uninstallModal.open();
+    },
+    [uninstallModal],
+  );
 
   const handleUninstallConfirm = useCallback(async () => {
     if (!pluginToUninstall) return;
@@ -138,6 +139,7 @@ export function usePluginActions({
 
         // Remove plugin folder from admin filesystem
         try {
+          const adminPluginFileService = await getAdminPluginFileService();
           const success = await adminPluginFileService.removePlugin(
             pluginToUninstall.id,
           );
@@ -172,19 +174,19 @@ export function usePluginActions({
       console.error('Failed to uninstall plugin:', error);
     } finally {
       setLoading(false);
-      setShowUninstallModal(false);
+      uninstallModal.close();
       setPluginToUninstall(null);
     }
-  }, [pluginToUninstall, pluginData, deletePlugin, refetch]);
+  }, [pluginToUninstall, pluginData, deletePlugin, refetch, uninstallModal]);
 
   const closeUninstallModal = useCallback(() => {
-    setShowUninstallModal(false);
+    uninstallModal.close();
     setPluginToUninstall(null);
-  }, []);
+  }, [uninstallModal]);
 
   return {
     loading,
-    showUninstallModal,
+    showUninstallModal: uninstallModal.isOpen,
     pluginToUninstall,
     handleInstallPlugin,
     togglePluginStatus,

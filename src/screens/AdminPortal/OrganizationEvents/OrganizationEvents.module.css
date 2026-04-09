@@ -1,11 +1,19 @@
 .dropdown {
-  background-color: var(--color-gray-50);
-  width: var(--space-16);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: var(--color-white);
+  width: auto;
+  white-space: nowrap;
+  border: var(--border-1-5) solid var(--color-black-10);
+  color: var(--color-gray-mid);
   position: relative;
-  display: inline-block;
-  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .dropdown:is(:hover, :active),

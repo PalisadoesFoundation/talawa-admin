@@ -1,0 +1,781 @@
+/**
+ * Talawa Apple-Inspired Design System
+ * =====================================
+ * A clean, crisp, consistent design language inspired by Apple's Human Interface
+ * Guidelines. This file overrides all semantic token variables defined in
+ * app-fixed.module.css and establishes the single source of truth for the visual
+ * system across both Admin and User portals.
+ *
+ * Structure:
+ *   1. Brand & Accent
+ *   2. Backgrounds & Surfaces
+ *   3. Typography
+ *   4. Borders & Elevation
+ *   5. Sidebar & Navigation
+ *   6. Buttons
+ *   7. Forms & Inputs
+ *   8. Status Colors
+ *   9. Component Tokens
+ *  10. Skeleton / Loading
+ *  11. Misc Legacy Overrides
+ */
+
+:root {
+  /* ─── 1. BRAND & ACCENT ─────────────────────────────────────────────────── */
+  --primary-theme-color: var(--color-blue-500);
+  --primary-hover: var(--color-blue-450);
+  --primary-pressed: var(--color-blue-600);
+  --primary-muted: var(--color-blue-muted);
+  --primary-muted-hover: var(--color-blue-muted-hover);
+
+  --success-green-color: var(--color-green-500);
+  --success-bg: var(--color-green-50);
+  --warning-color: var(--color-yellow-500);
+  --warning-bg: var(--color-yellow-50);
+  --danger-color: var(--color-red-500);
+  --danger-bg: var(--color-red-50);
+  --info-color: var(--color-info-500);
+  --info-bg: var(--color-blue-50);
+
+  /* ─── 2. BACKGROUNDS & SURFACES ─────────────────────────────────────────── */
+  --app-bg: var(--color-gray-50);
+  --surface-bg: var(--color-white);
+  --surface-secondary: var(--color-gray-50);
+  --surface-tertiary: var(--color-gray-100);
+  --surface-overlay: var(--color-black-40);
+  --surface-elevated: var(--color-white);
+  --box-bg: var(--color-white);
+  --colorlight-bg: var(--color-gray-50);
+  --containerHeight-bg: var(--color-gray-50);
+  --mainContainer50-bg: var(--color-gray-50);
+  --rowBackground-bg: var(--color-white);
+  --rowBackgrounds-bg: var(--color-white);
+  --row-bg: var(--color-white);
+  --row-bg-scroll: var(--color-black-8);
+  --row-hover-bg: var(--color-gray-50);
+  --row-color: var(--color-gray-mid);
+  --inputColor-bg: var(--color-gray-50);
+  --pledgeContainer-bg: var(--color-green-alpha-12);
+  --popup-bg: var(--color-white);
+  --popup-color: var(--color-gray-900);
+  --popup-border: var(--color-black-8);
+  --popup-box-shadow: var(--color-black-12);
+  --people-card-container-bg: var(--color-white);
+  --people-card-header-bg: var(--color-gray-50);
+  --people-card-header-border: var(--color-black-6);
+  --people-card-container-border: var(--color-black-6);
+  --pageNotFound-bg: var(--color-white);
+  --pageNotFound-color: var(--color-blue-500);
+  --createButton-bg: var(--color-white);
+  --createButton-bg-hover: var(--color-gray-50);
+  --createButton-bg-active: var(--color-gray-100);
+  --profile-container-bg: var(--color-white);
+  --profile-container-bg-focus: var(--color-gray-50);
+  --customcell-bg: var(--color-gray-50);
+  --customcell-color: var(--color-gray-900);
+  --eventManagementBtn-bg: var(--color-white);
+  --eventManagementSelectedBtn-bg: var(--color-blue-muted);
+  --opendrawer-bg: var(--color-gray-50);
+  --opendrawer-bg-active: var(--color-blue-muted);
+  --collapseSidebarButton-bg: var(--color-gray-50);
+  --collapseSidebarButton-bg-active: var(--color-blue-muted);
+  --outlineBtn-bg: var(--color-white);
+  --outlineBtn-bg-disabled: var(--color-white);
+  --toggleBtn-bg: var(--color-white);
+  --chevronIcon-bg: var(--color-white);
+  --chevronRightbtn-bg: var(--color-white);
+  --filterButton-bg: var(--color-gray-900);
+  --sidebar-bg: var(--color-black-6);
+  --updateTimeoutCard-bg: var(--color-white);
+  --memberfont-bg: var(--color-gray-50);
+  --loginToggle-button-bg: var(--color-gray-50);
+  --LoginToggle-button-bg: var(--color-gray-50);
+  --LoginToggle-button-bg-hover: var(--color-gray-50);
+  --LoginToggle-button-bg-active: var(--color-blue-muted);
+  --orText-bg: var(--color-white);
+  --inactiveTab-bg: var(--color-white-90);
+  --inactiveTab-bg-hover: var(--color-gray-50);
+  --activeTab-bg: var(--color-gray-50);
+  --activeTab-bg-hover: var(--color-gray-mid);
+  --disabled-btn: var(--color-blue-muted);
+  --signOut-container-bg: var(--color-blue-muted);
+  --signOutBtn-bg: var(--color-blue-muted);
+  --tableHeader-bg: var(--color-gray-50);
+  --tableHeader-success-bg: var(--color-green-500);
+  --modalHeader-bg: var(--color-white);
+
+  /* ─── 3. TYPOGRAPHY ─────────────────────────────────────────────────────── */
+  --primaryText-color: var(--color-gray-900);
+  --secondText-color: var(--color-gray-mid);
+  --tertiary-text-color: var(--color-gray-sub);
+  --tableHeader-color: var(--color-gray-900);
+  --modalHeader-color: var(--color-gray-900);
+  --modalTitle-color: var(--color-gray-mid);
+  --titlemodal-color: var(--color-gray-mid);
+  --titlemodal-org-event-color: var(--color-gray-mid);
+  --formLabel-color: var(--color-gray-900);
+  --profileText-color: var(--color-gray-mid);
+  --singledetails_dl-color: var(--color-gray-mid);
+  --cardBody-color: var(--color-gray-mid);
+  --cardBody-st-color: var(--color-blue-500);
+  --cardBody-tw-st-color: var(--color-gray-sub);
+  --searchtitle-color: var(--color-gray-mid);
+  --logintitle-color: var(--color-gray-mid);
+  --subContainer-color: var(--color-gray-mid);
+  --titleContainerVolunteer-color: var(--color-gray-mid);
+  --rowBackground-color: var(--color-gray-900);
+  --orgUserTagsScrollableDiv-color: var(--color-gray-sub);
+  --manageTagScrollableDiv-color: var(--color-gray-sub);
+  --subTagsScrollableDiv-color: var(--color-gray-sub);
+  --searchIcon-color: var(--color-gray-mid);
+  --tagsBreadCrumbs-color: var(--color-gray-mid);
+  --tagsBreadCrumbs-color-hover: var(--color-blue-500);
+  --subTagsLink-color: var(--color-blue-500);
+  --subTagsLink-color-hover: var(--color-blue-450);
+  --eventsAttended-membername-color: var(--color-blue-500);
+  --membername-color: var(--color-blue-500);
+  --membername-color-hover: var(--color-blue-450);
+  --hyperlink-text-color: var(--color-blue-500);
+  --hyperlink-text-color-hover: var(--color-blue-450);
+  --updateTimeoutCurrent-color: var(--color-gray-900);
+  --updateTimeoutLabel-color: var(--color-gray-900);
+  --updateTimeoutValue-color: var(--color-blue-500);
+  --updateTimeoutSliderLabels: var(--color-gray-mid);
+  --updateTimeoutCardTitle-color: var(--color-gray-900);
+  --customToggle-color: var(--color-gray-900);
+  --toggleBtn-color: var(--color-gray-mid);
+  --toggleBtn-color-hover: var(--color-gray-900);
+  --chevronIcon-color: var(--color-gray-mid);
+  --collapse-Sidebar-Button-fill: var(--color-gray-900);
+  --opendrawer-color-active: var(--color-blue-500);
+  --collapseSidebarButton-color-active: var(--color-blue-500);
+  --collapseSidebarButton-od-color-hover: var(--color-gray-900);
+  --createButton-color: var(--color-gray-mid);
+  --createButton-color-hover: var(--color-gray-900);
+  --createButton-color-active: var(--color-gray-mid);
+  --closeButtonOrgPost-color: var(--color-gray-mid);
+  --closeButton-color: var(--color-red-500);
+  --closeButton-bg: var(--color-white);
+  --titlemodal-org-event-border: var(--color-black-8);
+  --Login-button-color-hover: var(--color-white);
+  --login-button-color: var(--color-white);
+  --login-button-color-hover: var(--color-white);
+  --LoginToggle-button-color: var(--color-gray-mid);
+  --LoginToggle-button-color-active: var(--color-blue-500);
+  --LoginToggle-button-color-active-hover: var(--color-blue-500);
+  --langChange-button-color: var(--color-blue-500);
+  --langChange-button-color-active: var(--color-blue-500);
+  --addButton-font: var(--color-white);
+  --eventManagementBtn-color: var(--color-gray-mid);
+  --eventManagementBtn-color-hover: var(--color-gray-900);
+  --eventManagementSelectedBtn-color: var(--color-blue-500);
+  --eventManagementSelectedBtn-color-hover: var(--color-blue-500);
+  --actionsButton-color: var(--color-white);
+  --actionsButton-bg-color: var(--color-blue-500);
+  --unblockButton-font: var(--color-white);
+  --editButton-font: var(--color-white);
+  --colorPrimary-color: var(--color-white);
+  --colorPrimary-color-active: var(--color-white);
+  --colorWhite: var(--color-white);
+  --pagination-btn-color: var(--color-gray-mid);
+  --pagination-btn-color-hover: var(--color-white);
+  --sidebar-option-text-inactive: var(--color-gray-900);
+  --sidebar-option-text-active: var(--color-white);
+  --leftDrawer-button-text-color: var(--color-gray-900);
+  --orText-color: var(--color-gray-sub);
+  --btnsContainerOrgPost-outline: var(--color-gray-200);
+  --groupsLabel-color: var(--color-gray-mid);
+  --regBtn-color: var(--color-white);
+  --memberfont-color: var(--color-gray-900);
+  --outlineBtn-color: var(--color-blue-500);
+  --outlineBtn-color-hover: var(--color-white);
+  --outlineBtn-color-disabled: var(--color-gray-sub);
+  --filter-button-color: var(--color-gray-sub);
+  --filterButton-color: var(--color-gray-sub);
+  --filterButton-color-hover: var(--color-white);
+  --updateTimeoutButton-color: var(--color-white);
+  --font-size-header: var(--font-size-14);
+  --font-size-table-body: var(--font-size-sm);
+
+  /* ─── 4. BORDERS & ELEVATION ─────────────────────────────────────────────── */
+  --box-border: var(--color-black-8);
+  --border-default: var(--color-black-8);
+  --border-strong: var(--color-black-12);
+  --inputField-border: var(--color-black-12);
+  --inputField-border-focus: var(--color-blue-500);
+  --input-shadow-color: var(--color-black-6);
+  --inputFieldModal: var(--color-black-12);
+  --inputFieldModal-bg: var(--color-white);
+  --inputField-bg: var(--color-white);
+  --dateboxMemberDetail-border: var(--color-black-8);
+  --dateboxEvents-border: var(--color-black-8);
+  --memberfontbtn-border: var(--color-black-8);
+  --sidebarsticky-border: var(--color-black-6);
+  --cardHeader-border: var(--color-black-6);
+  --searchtitle-border: var(--color-blue-500);
+  --logintitle-border: var(--color-blue-500);
+  --addChatContainer-border: var(--color-black-12);
+  --chatContainer-border: var(--color-black-8);
+  --addButton-border: var(--color-black-8);
+  --addButton-border-hover: var(--color-blue-500);
+  --unblockButton-border: var(--color-black-8);
+  --unblockButton-border-hover: var(--color-blue-500);
+  --removeButton-border: var(--color-red-100);
+  --removeButton-border-hover: var(--color-red-500);
+  --editButton-border: var(--color-black-8);
+  --editButton-border-active: var(--color-blue-500);
+  --editButton-border-hover: var(--color-blue-500);
+  --regBtn-border: var(--color-black-12);
+  --regBtn-box-shadow: var(--color-black-6);
+  --toggleBtn-border: var(--color-black-8);
+  --toggleBtn-border-hover: var(--color-black-12);
+  --createButton-border: var(--color-black-12);
+  --createButton-border-hover: var(--color-black-16);
+  --createButton-border-active: var(--color-black-20);
+  --createButton-box-shadow-hover: 0 2px 8px var(--color-black-12);
+  --eventManagementBtn-border: var(--color-black-8);
+  --eventManagementBtn-border-hover: var(--color-black-12);
+  --eventManagementSelectedBtn-border: var(--color-blue-500);
+  --eventManagementSelectedBtn-border-hover: var(--color-blue-500);
+  --actionsButton-border: var(--color-blue-500);
+  --actionsButton-border-hover: var(--color-blue-500);
+  --actionsButton-box-shadow-hover: var(--color-blue-alpha-30);
+  --outlineBtn-border: var(--color-blue-500);
+  --outlineBtn-hover-border: var(--color-blue-500);
+  --outlineBtn-border-disabled: var(--color-gray-200);
+  --filterButton-border: var(--color-black-12);
+  --filterButton-border-hover: var(--color-blue-500);
+  --updateTimeoutButton-border-hover: var(--color-blue-500);
+  --modal-width: var(--space-26);
+  --modal-max-width: var(--space-26-5);
+  --pagination-btn-border: var(--color-black-8);
+  --pagination-btn-border-hover: var(--color-blue-500);
+  --pagination-border-top: var(--color-black-6);
+  --activeTab-border: var(--color-black-8);
+  --activeTab-border-hover: var(--color-gray-mid);
+  --activeTab-outline-focus: var(--color-blue-500);
+  --inactiveTab-border: var(--color-black-8);
+  --inActTab-outline-focus: var(--color-blue-500);
+  --inActiveTab-outline-focus: var(--color-blue-500);
+  --inactiveTab-border-hover: var(--color-black-12);
+  --errorState-border: var(--color-red-100);
+  --regBtn-bg: var(--color-blue-500);
+  --LoginToggle-button-border: var(--color-black-8);
+  --LoginToggle-button-border-hover: var(--color-black-12);
+  --LoginToggle-button-border-active: var(--color-blue-500);
+  --LoginToggle-button-border-active-hover: var(--color-blue-500);
+  --langChange-button-border: var(--color-black-8);
+  --langChange-button-bg-hover: var(--color-blue-muted);
+  --langChange-button-border-hover: var(--color-blue-500);
+  --login-button-border: var(--color-blue-500);
+  --login-button-border-hover: var(--color-blue-450);
+  --login-button-border-active: var(--color-blue-600);
+  --login-button-border-disabled: var(--color-blue-alpha-50);
+  --switch-border-checked: var(--color-blue-500);
+  --switch-box-shadow-checked: var(--color-blue-alpha-30);
+  --switch-border-focus: var(--color-black-12);
+  --drop-shadow: 0 2px 8px var(--color-black-12);
+  --hover-shadow: 0 4px 16px var(--color-black-10);
+  --themeOverlay-bg: var(--color-blue-500);
+
+  /* ─── 5. SIDEBAR & NAVIGATION ─────────────────────────────────────────────── */
+  --sidebar-collapsed-width: var(--space-4-75);
+  --sidebar-expanded-width: var(--space-16-5);
+  --leftDrawer-bg: var(--color-white);
+  --leftDrawer-fixedModule-bg: var(--color-white);
+  --leftDrawer-scrollbar-color: var(--color-black-8);
+  --leftDrawer-optionList-bg: var(--color-gray-50);
+  --LeftDrawer-org-profileContainer-bg: var(--color-blue-muted);
+  --leftDrawer-profileContainer-bg: var(--color-gray-50);
+  --leftDrawer-secondaryText-color: var(--color-gray-mid);
+  --leftDrawer-inactive-button-hover-bg: var(--color-gray-50);
+  --leftDrawer-collapse-active-button-bg: var(--color-blue-muted);
+  --leftDrawer-inactive-button-bg: transparent;
+  --leftDrawer-active-button-bg: var(--color-blue-500);
+  --leftDrawer-button-text-color: var(--color-gray-900);
+  --activeItem-bg: var(--color-blue-muted);
+  --active-item-color: var(--color-blue-500);
+  --active-item-color-hover: var(--color-blue-450);
+  --user-sidebar-org-item-bg: var(--color-blue-muted);
+  --sidebar-option-bg: var(--color-blue-muted);
+  --sidebar-option-bg-hover: var(--color-gray-50);
+
+  /* ─── 6. BUTTONS ─────────────────────────────────────────────────────────── */
+  /* Primary / Add */
+  --addButton-bg: var(--color-blue-500);
+  --addButton-bg-hover: var(--color-blue-450);
+
+  /* Unblock */
+  --unblockButton-bg: var(--color-blue-500);
+  --unblockButton-bg-hover: var(--color-blue-450);
+
+  /* Remove / Danger */
+  --removeButton-bg: var(--color-red-50);
+  --removeButton-color: var(--color-red-500);
+  --removeButton-bg-hover: var(--color-red-500);
+  --removeButton-color-hover: var(--color-white);
+
+  /* Edit */
+  --editButton-bg: var(--color-blue-muted);
+  --editButton-bg-active: var(--color-blue-500);
+  --editButton-bg-hover: var(--color-blue-500);
+
+  /* Regular */
+  --regularBtn-bg: var(--color-blue-500);
+  --regularBtn-border: var(--color-blue-500);
+  --regularBtn-bg-hover: var(--color-blue-450);
+  --regularBtn-font-hover: var(--color-white);
+  --regularBtn-border-hover: var(--color-blue-450);
+
+  /* Actions */
+  --actionsButton-bg: var(--color-blue-500);
+
+  /* Search */
+  --searchButton-bg: var(--color-blue-muted);
+  --searchButton-color: var(--color-blue-500);
+  --searchButton-border: var(--color-black-8);
+  --searchButton-border-hover: var(--color-blue-500);
+  --searchButton-color-hover: var(--color-blue-500);
+  --searchButton-border-focus: var(--color-blue-500);
+  --searchButton-bg-hover: var(--color-blue-muted);
+  --searchButton-bg-active: var(--color-blue-muted);
+
+  /* Login */
+  --login-button-bg: var(--color-blue-500);
+  --login-button-bg-hover: var(--color-blue-450);
+  --login-button-bg-active: var(--color-blue-600);
+  --login-button-bg-disabled: var(--color-blue-alpha-50);
+
+  /* Outline */
+  --outlineBtn-hover-bg: var(--color-blue-500);
+  --outlineBtn-disabled: var(--color-gray-200);
+
+  /* colorPrimary */
+  --colorPrimary-bg: var(--color-blue-500);
+  --colorPrimary-bg-active: var(--color-blue-450);
+
+  /* Tabs */
+  --activeTab-color: var(--color-gray-900);
+  --activeTab-color-hover: var(--color-white);
+  --inactiveTab-color: var(--color-gray-mid);
+  --inactiveTab-color-hover: var(--color-gray-900);
+
+  /* Switch */
+  --switch-bg-checked: var(--color-blue-500);
+
+  /* Slider */
+  --slider-bg: var(--color-blue-500);
+  --slider-rail-bg: var(--color-black-8);
+
+  /* updateTimeout button */
+  --updateTimeoutButton-bg: var(--color-blue-500);
+  --updateTimeoutButton-bg-hover: var(--color-blue-450);
+
+  /* filterButton */
+  --filterButton-bg-hover: var(--color-blue-500);
+
+  /* Progress */
+  --progress-track-color: var(--color-black-8);
+  --progress-complete-color: var(--color-green-500);
+  --progress-half-color: var(--color-yellow-500);
+  --progress-low-color: var(--color-blue-500);
+
+  /* Status */
+  --active-color: var(--color-blue-500);
+  --active-border-color: var(--color-blue-500);
+  --pending-color: var(--color-yellow-500);
+  --pending-border-color: var(--color-yellow-500);
+  --acceptedStatus-color: var(--color-green-500);
+  --acceptedStatus-fill: var(--color-green-500);
+  --pendingStatus-color: var(--color-yellow-500);
+  --pendingStatus-fill: var(--color-yellow-500);
+
+  /* ─── 7. ERROR STATES ─────────────────────────────────────────────────────── */
+  --errorState-color: var(--color-red-500);
+  --errorState-bg: var(--color-red-50);
+  --errorIcon-color: var(--color-red-500);
+
+  /* ─── 8. SKELETON LOADING ─────────────────────────────────────────────────── */
+  --skeleton-base: var(--color-skeleton-base);
+  --skeleton-highlight: var(--color-skeleton-highlight);
+
+  /* ─── 9. LOADER ───────────────────────────────────────────────────────────── */
+  --loader-size: 10em;
+  --loader-border: var(--color-white-20);
+  --loader-border-left: var(--color-blue-500);
+
+  /* ─── 10. MISC OVERRIDES ──────────────────────────────────────────────────── */
+  --collapseBtn-op-bg-hover: var(--color-gray-50);
+  --csb-od-bg-hover: var(--color-blue-450);
+  --collapseSidebarButton-od-bg-hover: var(--color-gray-50);
+  --collapseSidebarButton-od-bg-active: var(--color-blue-muted);
+  --opendrawer-border-active: var(--color-blue-500);
+  --collapseSidebarButton-border-active: var(--color-blue-500);
+  --datatable-focus-outline: var(--color-blue-500);
+}
+
+/* ─── GLOBAL LAYOUT OVERRIDES ─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-15);
+  line-height: var(--line-height-normal);
+  color: var(--primaryText-color);
+  background-color: var(--app-bg);
+  letter-spacing: var(--letter-spacing-snug);
+}
+
+#root {
+  min-height: 100vh;
+  background-color: var(--app-bg);
+}
+
+/* ─── FORM INPUTS ──────────────────────────────────────────────────────────── */
+.form-control,
+.form-select {
+  font-family: inherit;
+  font-size: var(--font-size-15);
+  border-radius: var(--radius-lg) !important;
+  border: var(--border-1-5) solid var(--border-strong) !important;
+  background-color: var(--surface-bg) !important;
+  color: var(--primaryText-color) !important;
+  padding: var(--space-3-6) var(--space-4-5) !important;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease !important;
+  box-shadow: none !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--primary-theme-color) !important;
+  box-shadow: 0 0 0 var(--border-3) var(--color-blue-alpha-18) !important;
+  background-color: var(--surface-bg) !important;
+  outline: none !important;
+}
+
+.form-control::placeholder {
+  color: var(--tertiary-text-color) !important;
+}
+
+.form-label {
+  font-size: var(--font-size-14);
+  font-weight: var(--font-weight-medium);
+  color: var(--primaryText-color);
+  margin-bottom: var(--space-3-5);
+  letter-spacing: var(--letter-spacing-snug-half);
+}
+
+/* ─── CARD BASE ─────────────────────────────────────────────────────────────── */
+.card {
+  border: none !important;
+  border-radius: var(--radius-2xl) !important;
+  box-shadow: 0 2px 8px var(--color-black-6) !important;
+  background-color: var(--surface-bg) !important;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: var(--surface-bg) !important;
+  border-bottom: var(--border-1-5) solid var(--sidebarsticky-border) !important;
+  padding: var(--space-5-5) var(--space-6) !important;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-15);
+  color: var(--primaryText-color);
+}
+
+.card-body {
+  padding: var(--space-6) !important;
+}
+
+/* ─── MODAL OVERRIDES ──────────────────────────────────────────────────────── */
+.modal-content {
+  border: none !important;
+  border-radius: var(--radius-3xl) !important;
+  box-shadow: 0 8px 40px var(--color-black-18) !important;
+  overflow: hidden;
+}
+
+.modal-header {
+  border-bottom: var(--border-1-5) solid var(--sidebarsticky-border) !important;
+  padding: var(--space-6) var(--space-7) !important;
+  background-color: var(--surface-bg) !important;
+}
+
+.modal-title {
+  font-size: var(--font-size-lg) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  color: var(--primaryText-color) !important;
+  letter-spacing: var(--letter-spacing-snug);
+}
+
+.modal-body {
+  padding: var(--space-7) !important;
+}
+
+.modal-footer {
+  border-top: var(--border-1-5) solid var(--sidebarsticky-border) !important;
+  padding: var(--space-5) var(--space-7) !important;
+  background-color: var(--app-bg) !important;
+  gap: var(--space-3);
+}
+
+/* ─── BUTTONS ──────────────────────────────────────────────────────────────── */
+.btn {
+  font-family: inherit;
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3) var(--space-5);
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    border-color 0.18s ease;
+  letter-spacing: var(--letter-spacing-snug-half);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background-color: var(--primary-theme-color) !important;
+  border-color: var(--primary-theme-color) !important;
+  color: var(--surface-bg) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover) !important;
+  border-color: var(--primary-hover) !important;
+  box-shadow: 0 2px 8px var(--actionsButton-box-shadow-hover) !important;
+}
+
+.btn-primary:active {
+  background-color: var(--primary-pressed) !important;
+  border-color: var(--primary-pressed) !important;
+  transform: scale(0.97);
+}
+
+.btn-secondary {
+  background-color: var(--app-bg) !important;
+  border-color: var(--border-default) !important;
+  color: var(--primaryText-color) !important;
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface-tertiary) !important;
+}
+
+.btn-danger {
+  background-color: var(--danger-color) !important;
+  border-color: var(--danger-color) !important;
+  color: var(--surface-bg) !important;
+}
+
+.btn-danger:hover {
+  background-color: var(--color-red-hover) !important;
+  border-color: var(--color-red-hover) !important;
+}
+
+.btn-success {
+  background-color: var(--success-green-color) !important;
+  border-color: var(--success-green-color) !important;
+  color: var(--surface-bg) !important;
+}
+
+.btn-outline-primary {
+  color: var(--primary-theme-color) !important;
+  border-color: var(--primary-theme-color) !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: var(--primary-theme-color) !important;
+  color: var(--surface-bg) !important;
+}
+
+.btn-outline-secondary {
+  color: var(--secondText-color) !important;
+  border-color: var(--border-strong) !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--app-bg) !important;
+  color: var(--primaryText-color) !important;
+  border-color: var(--createButton-border-hover) !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:active,
+.btn-outline-secondary:hover,
+.btn-outline-secondary:active,
+.btn-outline-success:hover,
+.btn-outline-success:active,
+.btn-outline-warning:hover,
+.btn-outline-warning:active,
+.btn-outline-info:hover,
+.btn-outline-info:active {
+  color: var(--surface-bg) !important;
+}
+
+/* ─── BADGES ───────────────────────────────────────────────────────────────── */
+.badge {
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: 0.3em 0.6em;
+  letter-spacing: 0.005em;
+}
+
+/* ─── TABLE OVERRIDES ──────────────────────────────────────────────────────── */
+.table {
+  font-size: var(--font-size-9);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th {
+  background-color: var(--app-bg);
+  color: var(--primaryText-color);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  border-bottom: var(--border-1-5) solid var(--border-default) !important;
+  padding: var(--space-4) var(--space-5);
+}
+
+.table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background-color: var(--app-bg);
+}
+
+.table tbody td {
+  border-bottom: var(--border-1) solid var(--color-black-5);
+  padding: var(--space-4) var(--space-5);
+  vertical-align: middle;
+  color: var(--primaryText-color);
+}
+
+/* ─── DROPDOWN OVERRIDES ───────────────────────────────────────────────────── */
+.dropdown-menu {
+  border: none !important;
+  border-radius: var(--radius-1-5xl) !important;
+  box-shadow: 0 8px 32px var(--color-black-14) !important;
+  padding: var(--space-3) !important;
+  background-color: var(--color-white-98) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dropdown-item {
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-15);
+  color: var(--primaryText-color);
+  transition: background-color 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: var(--app-bg);
+  color: var(--primaryText-color);
+}
+
+.dropdown-item:active {
+  background-color: var(--primary-muted);
+  color: var(--primary-theme-color);
+}
+
+.dropdown-divider {
+  margin: var(--space-3-5) 0;
+  border-top: var(--border-1) solid var(--sidebarsticky-border);
+}
+
+/* ─── TOAST OVERRIDES ──────────────────────────────────────────────────────── */
+.Toastify__toast {
+  border-radius: var(--radius-1-5xl) !important;
+  font-family: inherit !important;
+  font-size: var(--font-size-9) !important;
+  box-shadow: 0 4px 24px var(--color-black-14) !important;
+}
+
+.Toastify__toast--success {
+  background: var(--success-bg) !important;
+  color: var(--color-green-dark) !important;
+}
+
+.Toastify__toast--error {
+  background: var(--danger-bg) !important;
+  color: var(--color-red-dark) !important;
+}
+
+.Toastify__toast--warning {
+  background: var(--warning-bg) !important;
+  color: var(--color-orange-dark) !important;
+}
+
+/* ─── SCROLLBAR ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-black-20);
+}
+
+/* ─── FOCUS RINGS ──────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: var(--border-2) solid var(--primary-theme-color);
+  outline-offset: var(--border-2);
+}
+
+/* ─── HR DIVIDER ───────────────────────────────────────────────────────────── */
+hr {
+  border-color: var(--border-default);
+  opacity: 1;
+}
+
+/* ─── SELECTION ────────────────────────────────────────────────────────────── */
+::selection {
+  background-color: var(--color-blue-alpha-20);
+  color: var(--primaryText-color);
+}
+
+/* ─── SHIMMER ANIMATION ────────────────────────────────────────────────────── */
+.shimmer {
+  background: linear-gradient(
+    to right,
+    var(--color-skeleton-base) 8%,
+    var(--color-skeleton-mid) 18%,
+    var(--color-skeleton-base) 33%
+  ) !important;
+  background-size: 1200px 100% !important;
+}

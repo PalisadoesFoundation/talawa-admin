@@ -1,0 +1,546 @@
+/**
+ * Talawa Widget Library
+ * ======================
+ * Reusable, scoped CSS class utilities for Apple-inspired UI widgets.
+ * Import this file where you need ready-made widget patterns.
+ *
+ * Usage:
+ *   import 'style/widgets.css';
+ *   <div className="tw-stat-card"> ... </div>
+ *
+ * All widget classes are prefixed with `tw-` (Talawa Widget) to avoid
+ * conflicts with Bootstrap, MUI, or component-level CSS modules.
+ */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   1. STAT CARD
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-stat-card {
+  background: var(--surface-bg);
+  border-radius: var(--radius-3xl);
+  border: var(--border-1) solid var(--color-black-5);
+  box-shadow:
+    0 1px 4px var(--color-black-4),
+    0 4px 16px var(--color-black-5);
+  padding: var(--space-6-5) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  transition:
+    box-shadow 0.22s ease,
+    transform 0.18s ease;
+}
+
+.tw-stat-card:hover {
+  box-shadow:
+    0 4px 12px var(--color-black-6),
+    0 12px 32px var(--color-black-8);
+  transform: translateY(-2px);
+}
+
+.tw-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-1-5xl);
+  background-color: var(--primary-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xl);
+  color: var(--primary-theme-color);
+  flex-shrink: 0;
+  transition: background-color 0.18s ease;
+}
+
+.tw-stat-card:hover .tw-stat-icon {
+  background-color: var(--primary-theme-color);
+  color: var(--surface-bg);
+}
+
+.tw-stat-value {
+  font-size: var(--font-size-28);
+  font-weight: var(--font-weight-bold);
+  color: var(--primaryText-color);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.03em;
+}
+
+.tw-stat-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--secondText-color);
+  letter-spacing: var(--letter-spacing-snug-half);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   2. SECTION CARD (content panel)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-section-card {
+  background: var(--surface-bg);
+  border-radius: var(--radius-3xl);
+  border: var(--border-1) solid var(--color-black-5);
+  box-shadow:
+    0 1px 4px var(--color-black-4),
+    0 4px 16px var(--color-black-5);
+  overflow: hidden;
+}
+
+.tw-section-header {
+  padding: var(--space-5-5) var(--space-6-5);
+  border-bottom: var(--border-1) solid var(--sidebarsticky-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  background: var(--surface-bg);
+}
+
+.tw-section-title {
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-semibold);
+  color: var(--primaryText-color);
+  letter-spacing: var(--letter-spacing-snug);
+}
+
+.tw-section-body {
+  padding: var(--space-6) var(--space-6-5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3. PAGE HEADER
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-page-header {
+  margin-bottom: var(--space-7);
+}
+
+.tw-page-title {
+  font-size: 1.875rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--primaryText-color);
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.tw-page-subtitle {
+  font-size: var(--font-size-15);
+  color: var(--secondText-color);
+  margin-top: var(--space-2);
+  letter-spacing: var(--letter-spacing-snug-half);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4. PILL TAG / BADGE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2-5) var(--space-3-75);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-wide);
+  white-space: nowrap;
+}
+
+.tw-tag-blue {
+  background: var(--primary-muted);
+  color: var(--color-blue-dark);
+}
+
+.tw-tag-green {
+  background: var(--success-bg);
+  color: var(--color-green-dark);
+}
+
+.tw-tag-orange {
+  background: var(--warning-bg);
+  color: var(--color-orange-dark);
+}
+
+.tw-tag-red {
+  background: var(--danger-bg);
+  color: var(--color-red-dark);
+}
+
+.tw-tag-gray {
+  background: var(--app-bg);
+  color: var(--secondText-color);
+}
+
+.tw-tag-purple {
+  background: var(--color-purple-50);
+  color: var(--color-purple-dark);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   5. ACTION BUTTON ROW
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-action-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   6. EMPTY STATE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-10) var(--space-8);
+  text-align: center;
+  color: var(--secondText-color);
+}
+
+.tw-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-2xl);
+  background: var(--app-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-2xl);
+  color: var(--tertiary-text-color);
+  margin-bottom: var(--space-2);
+}
+
+.tw-empty-title {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--primaryText-color);
+  letter-spacing: var(--letter-spacing-snug);
+}
+
+.tw-empty-desc {
+  font-size: var(--font-size-14);
+  color: var(--secondText-color);
+  max-width: 320px;
+  line-height: var(--line-height-normal);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   7. LIST ITEM ROW
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4-5);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-xl);
+  transition: background-color 0.15s ease;
+}
+
+.tw-list-item:hover {
+  background-color: var(--app-bg);
+}
+
+.tw-list-item + .tw-list-item {
+  border-top: var(--border-1) solid var(--color-black-4);
+  border-radius: 0;
+}
+
+.tw-list-item:last-child {
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+.tw-list-item:first-child {
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.tw-list-item:only-child {
+  border-radius: var(--radius-xl);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   8. AVATAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  border: var(--border-1-5) solid var(--color-black-7);
+  flex-shrink: 0;
+  background-color: var(--primary-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-theme-color);
+  font-weight: var(--font-weight-semibold);
+}
+
+.tw-avatar-sm {
+  width: 28px;
+  height: 28px;
+  font-size: var(--font-size-xs);
+}
+.tw-avatar-md {
+  width: 36px;
+  height: 36px;
+  font-size: var(--font-size-14);
+}
+.tw-avatar-lg {
+  width: 48px;
+  height: 48px;
+  font-size: var(--font-size-md);
+}
+.tw-avatar-xl {
+  width: 64px;
+  height: 64px;
+  font-size: var(--font-size-xl);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   9. SEARCH INPUT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--surface-bg);
+  border: var(--border-1-5) solid var(--color-black-10);
+  border-radius: var(--radius-xl);
+  padding: var(--space-3) var(--space-4-5);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.tw-search:focus-within {
+  border-color: var(--primary-theme-color);
+  box-shadow: 0 0 0 var(--border-3) var(--color-blue-alpha-14);
+}
+
+.tw-search-icon {
+  color: var(--tertiary-text-color);
+  font-size: var(--font-size-md);
+  flex-shrink: 0;
+}
+
+.tw-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: var(--font-size-15);
+  color: var(--primaryText-color);
+  width: 100%;
+  font-family: inherit;
+  min-width: 160px;
+}
+
+.tw-search-input::placeholder {
+  color: var(--tertiary-text-color);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   10. FLOATING ACTION BUTTON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3-5);
+  padding: 0.6875rem var(--space-6);
+  background: var(--primary-theme-color);
+  color: var(--surface-bg);
+  border: none;
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-snug-half);
+  cursor: pointer;
+  box-shadow: 0 4px 16px var(--color-blue-alpha-28);
+  transition:
+    background-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+  white-space: nowrap;
+}
+
+.tw-fab:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 6px 20px var(--color-blue-alpha-36);
+}
+
+.tw-fab:active {
+  transform: scale(0.97);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   11. DIVIDER WITH LABEL
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-divider-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  color: var(--tertiary-text-color);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  margin: var(--space-5) 0 var(--space-3);
+}
+
+.tw-divider-label::before,
+.tw-divider-label::after {
+  content: '';
+  flex: 1;
+  height: var(--border-1);
+  background: var(--color-black-7);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   12. PROGRESS BAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-progress-track {
+  height: 6px;
+  background: var(--color-skeleton-base);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.tw-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--primary-theme-color);
+  transition: width 0.4s ease;
+}
+
+.tw-progress-fill.success {
+  background: var(--success-green-color);
+}
+.tw-progress-fill.warning {
+  background: var(--warning-color);
+}
+.tw-progress-fill.danger {
+  background: var(--danger-color);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   13. SKELETON LOADERS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tw-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-skeleton-base) 25%,
+    var(--color-skeleton-mid) 50%,
+    var(--color-skeleton-base) 75%
+  );
+  background-size: 400px 100%;
+  border-radius: var(--radius-md);
+  animation: tw-shimmer 1.5s ease-in-out infinite;
+}
+
+.tw-skeleton-text {
+  height: var(--font-size-md);
+}
+.tw-skeleton-title {
+  height: var(--font-size-2xl);
+}
+.tw-skeleton-block {
+  height: var(--space-10);
+}
+.tw-skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.tw-skeleton-card {
+  height: 120px;
+  border-radius: var(--radius-2xl);
+}
+
+@keyframes tw-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   14. HELPER UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Surface backgrounds */
+.tw-surface-1 {
+  background-color: var(--surface-bg);
+}
+.tw-surface-2 {
+  background-color: var(--app-bg);
+}
+.tw-surface-3 {
+  background-color: var(--surface-tertiary);
+}
+
+/* Text shorthands */
+.tw-text-primary {
+  color: var(--primaryText-color);
+}
+.tw-text-secondary {
+  color: var(--secondText-color);
+}
+.tw-text-tertiary {
+  color: var(--tertiary-text-color);
+}
+.tw-text-brand {
+  color: var(--primary-theme-color);
+}
+.tw-text-success {
+  color: var(--success-green-color);
+}
+.tw-text-warning {
+  color: var(--warning-color);
+}
+.tw-text-danger {
+  color: var(--danger-color);
+}
+
+/* Radius shorthands */
+.tw-rounded-sm {
+  border-radius: var(--radius-sm);
+}
+.tw-rounded-md {
+  border-radius: var(--radius-lg);
+}
+.tw-rounded-lg {
+  border-radius: var(--radius-1-5xl);
+}
+.tw-rounded-xl {
+  border-radius: var(--radius-2-5xl);
+}
+.tw-rounded-2xl {
+  border-radius: var(--radius-4xl);
+}
+
+/* Elevation shorthands */
+.tw-shadow-1 {
+  box-shadow: var(--shadow-1);
+}
+.tw-shadow-2 {
+  box-shadow: var(--shadow-2);
+}
+.tw-shadow-3 {
+  box-shadow: var(--shadow-3);
+}
+.tw-shadow-4 {
+  box-shadow: var(--shadow-4);
+}

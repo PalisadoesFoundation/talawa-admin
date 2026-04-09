@@ -3,17 +3,28 @@
   --space-0-5: 0.0625rem;
   --space-1: 0.125rem;
   --space-2: 0.25rem;
+  --space-2-5: 0.1875rem; /* 3px */
   --space-3: 0.5rem;
+  --space-3-5: 0.375rem; /* 6px */
+  --space-3-6: 0.6rem; /* form input padding */
+  --space-3-75: 0.625rem; /* 10px */
   --space-4: 0.75rem;
+  --space-4-5: 0.875rem; /* 14px */
+  --space-4-75: 4.5rem; /* 72px — sidebar collapsed width */
   --space-5: 1rem;
+  --space-5-5: 1.125rem; /* 18px */
   --space-6: 1.25rem;
+  --space-6-5: 1.375rem; /* 22px */
   --space-7: 1.5rem;
+  --space-7-5: 1.875rem; /* 30px */
   --space-8: 2rem;
+  --space-8-5: 2.375rem; /* 38px */
   --space-9: 2.5rem;
+  --space-9-5: 2.875rem; /* 46px */
   --space-10: 3rem;
-  --space-10-5: 3.5625rem;
-  --space-10-75: 3.75rem;
   --space-11: 4rem;
+  --space-11-5: 11.25rem; /* 180px */
+  --space-11-75: 12.5rem; /* 200px */
   --space-12: 5rem;
   --space-13: 6rem;
   --space-14: 7.5rem;
@@ -27,9 +38,15 @@
   --space-22: 21.875rem;
   --space-23: 25rem;
   --space-24: 26.25rem;
+  --space-24-5: 30rem; /* 480px */
   --space-25: 31.25rem;
+  --space-16-5: 16.25rem; /* 260px — sidebar expanded width */
   --space-26: 40rem;
+  --space-26-5: 42.5rem; /* 680px — modal max-width */
   --space-27: 50rem;
   --space-28: 56.25rem;
   --space-29: 87.5rem;
+  --control-height-sm: 2rem; /* 32px */
+  --control-height: 2.5rem; /* 40px */
+  --control-height-lg: 3rem; /* 48px */
 }

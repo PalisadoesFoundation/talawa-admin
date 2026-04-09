@@ -280,8 +280,9 @@ function OrganizationDashboard(): JSX.Element {
 
   return (
     <>
+      {/* ── Stat cards — full page width so they're proportional ───────────── */}
       <Row className="mt-4">
-        <Col xl={8}>
+        <Col xs={12}>
           <DashboardStats
             memberCount={memberCount}
             adminCount={adminCount}
@@ -315,28 +316,35 @@ function OrganizationDashboard(): JSX.Element {
               await navigate(blockUserLink);
             }}
           />
-          {membershipRequestData?.organization &&
-            pendingMembershipRequests.length > 0 && (
-              <Row>
-                <Col xs={6} sm={4} className="mb-4">
-                  <Button
-                    type="button"
-                    className="p-0 m-0 border-0 bg-transparent w-100 text-start"
-                    onClick={(): void => {
-                      navigate(requestLink);
-                    }}
-                    aria-label={tCommon('requests')}
-                  >
-                    <DashBoardCard
-                      count={pendingMembershipRequests.length}
-                      title={tCommon('requests')}
-                      icon={<UsersIcon className={styles.requestsIcon} />}
-                    />
-                  </Button>
-                </Col>
-              </Row>
-            )}
+        </Col>
+      </Row>
 
+      {/* ── Optional pending requests stat card ────────────────────────────── */}
+      {membershipRequestData?.organization &&
+        pendingMembershipRequests.length > 0 && (
+          <Row className="mb-2">
+            <Col xs={6} md={4} className="mb-4">
+              <Button
+                type="button"
+                className={styles.cardBtnWrapper}
+                onClick={(): void => {
+                  navigate(requestLink);
+                }}
+                aria-label={tCommon('requests')}
+              >
+                <DashBoardCard
+                  count={pendingMembershipRequests.length}
+                  title={tCommon('requests')}
+                  icon={<UsersIcon className={styles.requestsIcon} />}
+                />
+              </Button>
+            </Col>
+          </Row>
+        )}
+
+      {/* ── Content row — events/posts left, requests/rankings right ───────── */}
+      <Row>
+        <Col xl={8}>
           <Row>
             <UpcomingEventsCard
               upcomingEvents={upcomingEvents}
@@ -345,16 +353,14 @@ function OrganizationDashboard(): JSX.Element {
                 await navigate(eventsLink);
               }}
             />
-
-            <Col lg={6} className="mb-4 ">
-              <Card className="rounded-4 border-2 border-gray-300">
+            <Col lg={6} className="mb-4">
+              <Card className={styles.contentCard}>
                 <div className={styles.cardHeader}>
                   <div className={styles.cardTitle}>{t('latestPosts')}</div>
                   <Button
                     size="sm"
                     variant="light"
                     data-testid="viewAllPosts"
-                    className=""
                     onClick={async (): Promise<void> => {
                       await navigate(postsLink);
                     }}
@@ -403,119 +409,78 @@ function OrganizationDashboard(): JSX.Element {
             </Col>
           </Row>
         </Col>
+
         <Col xl={4}>
-          <Row className="mb-4">
-            <Card border="0" className="rounded-4">
-              <div className={styles.cardHeader}>
-                <div className={styles.cardTitle}>
-                  {t('membershipRequests')}
-                </div>
-                <Button
-                  size="sm"
-                  variant="light"
-                  data-testid="viewAllMembershipRequests"
-                  onClick={async (): Promise<void> => {
-                    await navigate(requestLink);
-                  }}
-                >
-                  {t('viewAll')}
-                </Button>
-              </div>
-              <Card.Body className={styles.containerBody}>
-                <LoadingState
-                  isLoading={loadingMembershipRequests}
-                  variant="custom"
-                  customLoader={[...Array(4)].map((_, index) => (
-                    <CardItemLoading key={'requestsLoading_' + index} />
-                  ))}
-                >
-                  {pendingMembershipRequests.length === 0 ? (
-                    <div
-                      className={`${styles.emptyContainer} ${styles.membershipEmptyContainer}`}
-                    >
-                      <h6>{t('noMembershipRequests')}</h6>
-                    </div>
-                  ) : (
-                    pendingMembershipRequests
-                      .slice(0, 8)
-                      .map(
-                        (request: {
-                          status: string;
-                          membershipRequestId: string;
-                          user: { name: string; avatarURL?: string };
-                        }) => (
-                          <CardItem
-                            type="MembershipRequest"
-                            key={request.membershipRequestId}
-                            title={request.user.name}
-                            image={request.user.avatarURL}
-                          />
-                        ),
-                      )
-                  )}
-                </LoadingState>
-              </Card.Body>
-            </Card>
-          </Row>
-          <Row>
-            <Card border="0" className="rounded-4">
-              <div className={styles.cardHeader}>
-                <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
-                <Button
-                  size="sm"
-                  variant="light"
-                  data-testid="viewAllLeadeboard"
-                  onClick={async (): Promise<void> => {
-                    await Promise.resolve(
-                      NotificationToast.success(t('comingSoon')),
-                    );
-                  }}
-                >
-                  {t('viewAll')}
-                </Button>
-              </div>
-              <Card.Body className={`${styles.containerBody} p-0`}>
-                {/* {rankingsLoading ? (
-                  [...Array(3)].map((_, index) => {
-                    return <CardItemLoading key={`rankingLoading_${index}`} />;
-                  })
-                ) : rankings.length == 0 ? (
-                  <div className={styles.emptyContainer}>
-                    <h6>{t('noVolunteers')}</h6>
+          <div className={`${styles.contentCard} mb-4`}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>{t('membershipRequests')}</div>
+              <Button
+                size="sm"
+                variant="light"
+                data-testid="viewAllMembershipRequests"
+                onClick={async (): Promise<void> => {
+                  await navigate(requestLink);
+                }}
+              >
+                {t('viewAll')}
+              </Button>
+            </div>
+            <div className={styles.containerBody}>
+              <LoadingState
+                isLoading={loadingMembershipRequests}
+                variant="custom"
+                customLoader={[...Array(4)].map((_, index) => (
+                  <CardItemLoading key={'requestsLoading_' + index} />
+                ))}
+              >
+                {pendingMembershipRequests.length === 0 ? (
+                  <div
+                    className={`${styles.emptyContainer} ${styles.membershipEmptyContainer}`}
+                  >
+                    <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
-                  rankings.map(({ rank, user, hoursVolunteered }, index) => {
-                    return (
-                      <div key={`ranking_${index}`}>
-                        <div className="d-flex ms-4 mt-1 mb-3">
-                          <div className="fw-bold me-2">
-                            {rank <= 3 ? (
-                              <img
-                                src={
-                                  rank === 1
-                                    ? gold
-                                    : rank === 2
-                                      ? silver
-                                      : bronze
-                                }
-                                alt="gold"
-                                className={styles.rankings}
-                              />
-                            ) : (
-                              rank
-                            )}
-                          </div>
-                          <div className="me-2 mt-2">{`${user.firstName} ${user.lastName}`}</div>
-                          <div className="mt-2">- {hoursVolunteered} hours</div>
-                        </div>
-                        {index < 2 && <hr />}
-                      </div>
-                    );
-                  })
-                )} */}
-              </Card.Body>
-            </Card>
-          </Row>
+                  pendingMembershipRequests
+                    .slice(0, 8)
+                    .map(
+                      (request: {
+                        status: string;
+                        membershipRequestId: string;
+                        user: { name: string; avatarURL?: string };
+                      }) => (
+                        <CardItem
+                          type="MembershipRequest"
+                          key={request.membershipRequestId}
+                          title={request.user.name}
+                          image={request.user.avatarURL}
+                        />
+                      ),
+                    )
+                )}
+              </LoadingState>
+            </div>
+          </div>
+
+          <div className={styles.contentCard}>
+            <div className={styles.cardHeader}>
+              <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
+              <Button
+                size="sm"
+                variant="light"
+                data-testid="viewAllLeadeboard"
+                onClick={async (): Promise<void> => {
+                  await Promise.resolve(
+                    NotificationToast.success(t('comingSoon')),
+                  );
+                }}
+              >
+                {t('viewAll')}
+              </Button>
+            </div>
+            <div className={`${styles.containerBody} ${styles.emptyContainer}`}>
+              <h6>{t('comingSoon')}</h6>
+            </div>
+          </div>
         </Col>
       </Row>
     </>

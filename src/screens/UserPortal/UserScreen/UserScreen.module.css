@@ -1,59 +1,37 @@
 @keyframes moveLeft {
   from {
-    transform: translateX(var(--space-11));
+    padding-left: calc(var(--sidebar-expanded-width, 345px) + var(--space-6-5));
   }
-
   to {
-    transform: translateX(0);
+    padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-6-5));
   }
 }
 
 @keyframes moveRight {
   from {
-    transform: translateX(calc(-1 * var(--space-11)));
+    padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-6-5));
   }
-
   to {
-    transform: translateX(0);
+    padding-left: calc(var(--sidebar-expanded-width, 345px) + var(--space-6-5));
   }
+}
+
+/* Base layout — separate properties, no shorthand to avoid cascade conflicts */
+.expand,
+.contract {
+  padding-top: var(--space-6);
+  padding-right: var(--space-6-5);
+  padding-bottom: 0;
 }
 
 .expand {
-  margin-left: var(--space-13);
-  padding-left: var(--space-11);
-  padding-right: var(--space-11);
-  animation: moveLeft 0.9s ease-in-out;
+  padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-6-5));
+  animation: moveLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .contract {
-  padding-left: var(--space-22);
-  padding-right: var(--space-2);
-  animation: moveRight 0.5s ease-in-out;
-}
-
-@media (max-width: 1120px) {
-  .contract {
-    padding-left: var(--space-21);
-  }
-}
-
-/* For tablets */
-@media (max-width: 820px) {
-  .contract,
-  .expand {
-    animation: none;
-    margin-left: 0;
-    padding-left: var(--space-5);
-    padding-right: var(--space-5);
-  }
-
-  .contentContainer {
-    margin-left: 0;
-  }
-}
-
-.contentContainer {
-  margin-left: var(--space-13);
+  padding-left: calc(var(--sidebar-expanded-width, 345px) + var(--space-6-5));
+  animation: moveRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .titleContainer {
@@ -90,7 +68,8 @@
 
 .profileDropdownBtn:hover {
   background-color: var(--color-gray-50);
-  box-shadow: 0 2px 8px var(--color-gray-200);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-md)
+    var(--color-gray-200);
   border-color: var(--color-gray-300);
 }
 
@@ -140,4 +119,14 @@
 .profileDropdownMenu {
   /* Override Bootstrap dropdown default min-width */
   min-width: var(--space-16) !important;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────────── */
+@media (max-width: 820px) {
+  .contract,
+  .expand,
+  .contentContainer {
+    animation: none;
+    padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-6));
+  }
 }

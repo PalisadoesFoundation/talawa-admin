@@ -13,7 +13,7 @@ import type {
   InterfaceFundInfo,
   InterfaceFundListQueryResponse,
 } from 'utils/interfaces';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
@@ -313,29 +313,29 @@ const organizationFunds = (): JSX.Element => {
 
   return (
     <div>
-      <div className={styles.searchContainerRowNoTopMargin}>
-        <SearchFilterBar
-          searchPlaceholder={t('funds.searchFunds')}
-          searchValue={searchText}
-          onSearchChange={(value) => setSearchText(value.trim())}
-          onSearchSubmit={(value: string) => {
+      <Toolbar
+        search={{
+          placeholder: t('funds.searchFunds'),
+          value: searchText,
+          onChange: (value) => setSearchText(value.trim()),
+          onSearch: (value: string) => {
             setSearchText(value.trim());
-          }}
-          searchInputTestId="searchByName"
-          searchButtonTestId="searchButton"
-          hasDropdowns={false}
-        />
-
-        <Button
-          variant="success"
-          onClick={() => handleOpenModal(null, 'create')}
-          className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
-          data-testid="createFundBtn"
-        >
-          <i className="fa fa-plus me-2" aria-hidden="true" />
-          {t('funds.createFund')}
-        </Button>
-      </div>
+          },
+          inputTestId: 'searchByName',
+          buttonTestId: 'searchButton',
+        }}
+        actions={
+          <Button
+            variant="success"
+            onClick={() => handleOpenModal(null, 'create')}
+            className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
+            data-testid="createFundBtn"
+          >
+            <i className="fa fa-plus me-2" aria-hidden="true" />
+            {t('funds.createFund')}
+          </Button>
+        }
+      />
 
       {!fundLoading &&
       fundData &&

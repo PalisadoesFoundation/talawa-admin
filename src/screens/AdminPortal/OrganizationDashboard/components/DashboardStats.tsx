@@ -63,8 +63,8 @@ import VenuesIcon from 'assets/svgs/venues.svg?react';
 import DashBoardCard from 'components/AdminPortal/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/AdminPortal/OrganizationDashCards/Loader/DashboardCardLoading';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import styles from './DashboardStats.module.css';
 import Button from 'shared-components/Button';
+import styles from './DashboardStats.module.css';
 
 interface InterfaceDashboardStatsProps {
   memberCount: number;
@@ -108,7 +108,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           {[...Array(6)].map((_, index) => (
             <Col
               xs={6}
-              sm={4}
+              md={4}
               className="mb-4"
               key={`orgLoading_${index}`}
               data-testid="fallback-ui"
@@ -120,10 +120,10 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
       }
     >
       <Row className={styles.flex}>
-        <Col xs={6} sm={4} className="mb-4">
+        <Col xs={6} md={4} className="mb-4">
           <Button
             type="button"
-            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            className={styles.cardBtn}
             data-testid="membersCount"
             onClick={onMembersClick}
             aria-label={tCommon('members')}
@@ -135,10 +135,10 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             />
           </Button>
         </Col>
-        <Col xs={6} sm={4} className="mb-4">
+        <Col xs={6} md={4} className="mb-4">
           <Button
             type="button"
-            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            className={styles.cardBtn}
             data-testid="adminsCount"
             onClick={onAdminsClick}
             aria-label={tCommon('admins')}
@@ -150,10 +150,10 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             />
           </Button>
         </Col>
-        <Col xs={6} sm={4} className="mb-4">
+        <Col xs={6} md={4} className="mb-4">
           <Button
             type="button"
-            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            className={styles.cardBtn}
             data-testid="postsCount"
             onClick={onPostsClick}
             aria-label={tCommon('posts')}
@@ -165,10 +165,10 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             />
           </Button>
         </Col>
-        <Col xs={6} sm={4} className="mb-4">
+        <Col xs={6} md={4} className="mb-4">
           <Button
             type="button"
-            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            className={styles.cardBtn}
             data-testid="eventsCount"
             onClick={onEventsClick}
             aria-label={tCommon('events')}
@@ -180,10 +180,10 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             />
           </Button>
         </Col>
-        <Col xs={6} sm={4} className="mb-4">
+        <Col xs={6} md={4} className="mb-4">
           <Button
             type="button"
-            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            className={styles.cardBtn}
             data-testid="blockedUsersCount"
             onClick={onBlockedUsersClick}
             aria-label={tCommon('blockedUsers')}
@@ -195,10 +195,10 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             />
           </Button>
         </Col>
-        <Col xs={6} sm={4} className="mb-4">
+        <Col xs={6} md={4} className="mb-4">
           <Button
             type="button"
-            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            className={styles.cardBtn}
             data-testid="venuesCount"
             onClick={onVenuesClick}
             aria-label={tCommon('venues')}

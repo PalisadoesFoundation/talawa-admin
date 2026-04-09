@@ -23,4 +23,6 @@ export interface ISidebarNavItemProps {
   iconType?: 'react-icon' | 'svg';
   /* (Optional) Cypress E2E test selector (data-cy attribute) */
   dataCy?: string;
+  /* (Optional) Override the rendered icon size in pixels (react-icons and SVG). Use to compensate for icons with non-square viewBoxes. */
+  iconSize?: number;
 }

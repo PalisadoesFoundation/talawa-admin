@@ -2,6 +2,7 @@ import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
+import * as Apollo from '@apollo/client';
 import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -351,9 +352,22 @@ const renderApp = (mockLink = link, initialRoute = '/') => {
   );
 };
 
+/**
+ * Helper function to set up admin authentication state in localStorage.
+ * Used to pre-authenticate tests that require admin role.
+ */
+const setupAdminAuthState = (): void => {
+  const { setItem, removeItem } = useLSModule.useLocalStorage();
+  setItem('IsLoggedIn', 'TRUE');
+  setItem('role', 'administrator');
+  removeItem('AdminFor');
+};
+
+const { clearAllItems } = useLSModule.useLocalStorage();
 describe('Testing the App Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearAllItems();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
@@ -363,19 +377,31 @@ describe('Testing the App Component', () => {
     vi.restoreAllMocks();
   });
 
-  it('Regular user sees user portal when accessing admin routes', async () => {
-    renderApp(link, '/admin/orglist');
+  it('Unauthenticated user is redirected to login when accessing admin routes', async () => {
+    const useQuerySpy = vi.spyOn(Apollo, 'useQuery');
 
-    await waitFor(
-      () => {
-        // User should see user portal, not admin portal
-        expect(
-          screen.getByTestId('mock-user-organizations'),
-        ).toBeInTheDocument();
-        expect(screen.queryByTestId('mock-org-list')).not.toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
+    try {
+      renderApp(link, '/admin/orglist');
+
+      await waitFor(
+        () => {
+          // Unauthenticated access to admin routes should land on login.
+          expect(screen.getByTestId('app-footer')).toBeInTheDocument();
+          expect(screen.queryByTestId('mock-org-list')).not.toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+
+      // Verify CURRENT_USER query was NOT skipped (protected route requires auth check)
+      const currentUserCall = useQuerySpy.mock.calls.find(
+        ([query]) => query === CURRENT_USER,
+      );
+      // Protected routes like /admin/orglist should NOT skip the query
+      // so the SecuredRoute component can validate authentication
+      expect(currentUserCall?.[1]).toMatchObject({ skip: false });
+    } finally {
+      useQuerySpy.mockRestore();
+    }
   });
 
   it('Login page shows footer for unauthenticated users', async () => {
@@ -431,6 +457,8 @@ describe('Testing the App Component', () => {
 
   it('should handle administrator user permissions correctly', async () => {
     const { usePluginRoutes } = await import('plugin');
+
+    setupAdminAuthState();
 
     renderApp(adminLink, '/admin/orglist');
 
@@ -526,6 +554,8 @@ describe('Testing the App Component', () => {
   it('should handle different plugin route types correctly', async () => {
     const { usePluginRoutes } = await import('plugin');
 
+    setupAdminAuthState();
+
     // Mock different return values for different calls
     vi.mocked(usePluginRoutes)
       .mockReturnValueOnce([]) // adminGlobalPluginRoutes
@@ -590,6 +620,8 @@ describe('Testing the App Component', () => {
   });
 
   it('should handle user with role admin correctly', async () => {
+    setupAdminAuthState();
+
     renderApp(adminLink, '/admin/orglist');
 
     await waitFor(() => {
@@ -669,5 +701,36 @@ describe('Testing the App Component', () => {
     renderApp(link, '/'); // public route
     await screen.findByTestId('app-footer');
     expect(mockInitializePluginSystemOnce).not.toHaveBeenCalled();
+
+    const errorMessages = vi
+      .mocked(console.error)
+      .mock.calls.flat()
+      .map((value) => String(value));
+
+    expect(
+      errorMessages.some((message) =>
+        message.includes(
+          'No more mocked responses for the query: query CurrentUser',
+        ),
+      ),
+    ).toBe(false);
+  });
+
+  it('should skip CURRENT_USER query on public routes', async () => {
+    const useQuerySpy = vi.spyOn(Apollo, 'useQuery');
+
+    try {
+      renderApp(link2, '/');
+      await screen.findByTestId('app-footer');
+
+      const currentUserCall = useQuerySpy.mock.calls.find(
+        ([query]) => query === CURRENT_USER,
+      );
+
+      expect(currentUserCall).toBeDefined();
+      expect(currentUserCall?.[1]).toMatchObject({ skip: true });
+    } finally {
+      useQuerySpy.mockRestore();
+    }
   });
 });

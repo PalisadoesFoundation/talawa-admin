@@ -22,6 +22,7 @@ export type ButtonVariant =
   | 'outline'
   | 'contained'
   | 'text'
+  | 'toolbar'
   | (string & {});
 
 /**

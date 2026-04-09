@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/AdminPortal/OrganizationDashCards/DashboardCard.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrganizationDashCards/DashboardCard.tsx#L34)
+Defined in: [src/components/AdminPortal/OrganizationDashCards/DashboardCard.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrganizationDashCards/DashboardCard.tsx#L32)
 
 ## Parameters
 

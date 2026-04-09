@@ -156,8 +156,11 @@ const isPublicRoute = (path: string) =>
  */
 
 function App(): React.ReactElement {
-  const { data, loading } = useQuery(CURRENT_USER);
   const location = useLocation();
+  const isPublic = isPublicRoute(location.pathname);
+  const { data, loading } = useQuery(CURRENT_USER, {
+    skip: isPublic, // Skip the query on public routes
+  });
   const { t } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -175,7 +178,6 @@ function App(): React.ReactElement {
   const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
 
   // Initialize plugin system on app startup
-  const isPublic = isPublicRoute(location.pathname);
   useEffect(() => {
     if (isPublic) return;
 
@@ -195,6 +197,7 @@ function App(): React.ReactElement {
   }, [isPublic, apolloClient]);
 
   useEffect(() => {
+    if (isPublic) return;
     if (!loading && data?.user) {
       const auth = data.user;
       setItem('IsLoggedIn', 'TRUE');
@@ -205,7 +208,7 @@ function App(): React.ReactElement {
       // setItem('UserImage', auth.avatarURL|| "");
       initializeSubscriptions();
     }
-  }, [data, loading, setItem]);
+  }, [data, loading, setItem, isPublic]);
 
   return (
     <ErrorBoundaryWrapper

@@ -61,7 +61,7 @@ import useVenueDeletion from '../../../hooks/useVenueDeletion';
 import { DeleteModal } from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/AdminPortal/Venues/VenueCard';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 export const getVenueNameById = (
@@ -248,54 +248,54 @@ function organizationVenues(props?: {
         ]}
       />
 
-      <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
-        <SearchFilterBar
-          hasDropdowns
-          searchPlaceholder={`${t('searchBy')} ${tCommon(searchBy)}`}
-          searchValue={searchTerm}
-          onSearchChange={handleSearch}
-          searchInputTestId="searchInput"
-          searchButtonTestId="searchBtn"
-          dropdowns={[
-            {
-              id: 'org-venue-SearchBy',
-              label: '',
-              type: 'filter',
-              title: t('searchBy'),
-              options: [
-                { label: tCommon('name'), value: 'name' },
-                { label: tCommon('description'), value: 'desc' },
-              ],
-              selectedOption: searchBy,
-              onOptionChange: (value) => handleSearchByChange(value.toString()),
-              dataTestIdPrefix: 'searchByButton',
-            },
-            {
-              id: 'org-venue-Venues',
-              label: '',
-              type: 'sort',
-              title: t('sortVenues'),
-              options: [
-                { label: t('highestCapacity'), value: 'highest' },
-                { label: t('lowestCapacity'), value: 'lowest' },
-              ],
-              selectedOption: sortOrder,
-              onOptionChange: (value) => handleSortChange(value.toString()),
-              dataTestIdPrefix: 'sortVenues',
-            },
-          ]}
-          additionalButtons={
-            <Button
-              variant="success"
-              className={styles.dropdown}
-              onClick={showCreateVenueModal}
-              data-testid="createVenueBtn"
-            >
-              <i className="fa fa-plus me-1" /> {t('addVenue')}
-            </Button>
-          }
-        />
-      </div>
+      <Toolbar
+        search={{
+          placeholder: `${t('searchBy')} ${tCommon(searchBy)}`,
+          value: searchTerm,
+          onChange: handleSearch,
+          onSearch: handleSearch,
+          inputTestId: 'searchInput',
+          buttonTestId: 'searchBtn',
+        }}
+        filters={[
+          {
+            id: 'org-venue-SearchBy',
+            label: '',
+            type: 'filter',
+            title: t('searchBy'),
+            options: [
+              { label: tCommon('name'), value: 'name' },
+              { label: tCommon('description'), value: 'desc' },
+            ],
+            selected: searchBy,
+            onChange: (value) => handleSearchByChange(value.toString()),
+            testIdPrefix: 'searchByButton',
+          },
+          {
+            id: 'org-venue-Venues',
+            label: '',
+            type: 'sort',
+            title: t('sortVenues'),
+            options: [
+              { label: t('highestCapacity'), value: 'highest' },
+              { label: t('lowestCapacity'), value: 'lowest' },
+            ],
+            selected: sortOrder,
+            onChange: (value) => handleSortChange(value.toString()),
+            testIdPrefix: 'sortVenues',
+          },
+        ]}
+        actions={
+          <Button
+            variant="success"
+            className={styles.dropdown}
+            onClick={showCreateVenueModal}
+            data-testid="createVenueBtn"
+          >
+            <i className="fa fa-plus me-1"></i> {t('addVenue')}
+          </Button>
+        }
+      />
 
       <Col>
         <div className={styles.mainpageright}>

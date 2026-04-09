@@ -1,5 +1,5 @@
 .membername {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-blue-200);
   text-decoration: none;
@@ -102,19 +102,27 @@
 .people_card_header {
   background-color: var(--color-gray-100);
   display: flex;
+  align-items: center;
   border: var(--border-1) solid var(--color-gray-200);
   padding: var(--space-5) var(--space-7);
   margin-top: var(--space-7);
   border-top-left-radius: var(--radius-xl);
   border-top-right-radius: var(--radius-xl);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
 }
 
 .people_card_header_col_1 {
   flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .people_card_header_col_2 {
   flex: 2;
+  display: flex;
+  align-items: center;
 }
 
 .people_card_main_container {
@@ -133,6 +141,7 @@
   align-items: center;
   padding: var(--space-3) 0;
   border-bottom: var(--border-1) solid var(--color-gray-100);
+  font-size: var(--font-size-lg);
 }
 
 .peopleRow:last-child {
