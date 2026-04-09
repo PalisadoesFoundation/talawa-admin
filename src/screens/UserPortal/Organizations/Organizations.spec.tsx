@@ -504,7 +504,6 @@ test('Screen should be rendered properly', async () => {
   await waitFor(() => {
     expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
-    expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
     expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
   });
 });
@@ -558,8 +557,7 @@ test('should search organizations when clicking search button', async () => {
   await userEvent.clear(searchInput);
   await userEvent.type(searchInput, 'Search Term');
 
-  const searchButton = screen.getByTestId('searchBtn');
-  await userEvent.click(searchButton);
+  await userEvent.keyboard('{Enter}');
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -705,7 +703,7 @@ test('should switch between organization mode', async () => {
   );
 
   await waitFor(() => {
-    expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   });
 
   const modeButton = screen.getByTestId('modeChangeBtn-container');
@@ -733,8 +731,7 @@ test('should handle search with special characters', async () => {
   await userEvent.type(searchInput, '@#$%');
   expect(searchInput.value).toBe('@#$%');
 
-  const searchButton = screen.getByTestId('searchBtn');
-  await userEvent.click(searchButton);
+  await userEvent.keyboard('{Enter}');
 
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
@@ -1703,8 +1700,7 @@ test('should search in joined mode (mode 1) via doSearch', async () => {
   const searchInput = screen.getByTestId('searchInput');
   await userEvent.clear(searchInput);
   await userEvent.type(searchInput, 'test');
-  const searchButton = screen.getByTestId('searchBtn');
-  await userEvent.click(searchButton);
+  await userEvent.keyboard('{Enter}');
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -1792,8 +1788,7 @@ test('should search in created mode (mode 2) via doSearch', async () => {
   const searchInput = screen.getByTestId('searchInput');
   await userEvent.clear(searchInput);
   await userEvent.type(searchInput, 'test');
-  const searchButton = screen.getByTestId('searchBtn');
-  await userEvent.click(searchButton);
+  await userEvent.keyboard('{Enter}');
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -2021,7 +2016,7 @@ test('should search joined organizations in mode 1', async () => {
   );
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn-toggle')).toBeInTheDocument();
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
   await userEvent.click(screen.getByTestId('modeChangeBtn-toggle'));
@@ -2034,17 +2029,13 @@ test('should search joined organizations in mode 1', async () => {
   const searchInput = screen.getByTestId('searchInput');
   await userEvent.clear(searchInput);
   await userEvent.type(searchInput, 'joined-search');
-  await userEvent.click(screen.getByTestId('searchBtn'));
+  await userEvent.keyboard('{Enter}');
 
   await waitFor(() => {
-    // Note: StaticMockLink doesn’t behave like a real refetch, so we assert
-    // the stable initial mock data ('JoinedInitial') and the input value
-    // instead of expecting the refetched organization name to appear—all other
-    // assertions rely on the initial state to avoid flakiness.
     expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
       'joined-search',
     );
-    expect(screen.getByTestId('org-name-JoinedInitial')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-JoinedRefetch')).toBeInTheDocument();
     expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });
@@ -2091,6 +2082,7 @@ test('should search created organizations in mode 2', async () => {
             },
           },
         },
+        maxUsageCount: 3,
       },
       {
         request: {
@@ -2128,7 +2120,7 @@ test('should search created organizations in mode 2', async () => {
   );
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn-toggle')).toBeInTheDocument();
+    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
   await userEvent.click(screen.getByTestId('modeChangeBtn-toggle'));
@@ -2141,17 +2133,13 @@ test('should search created organizations in mode 2', async () => {
   const searchInput = screen.getByTestId('searchInput');
   await userEvent.clear(searchInput);
   await userEvent.type(searchInput, 'created-search');
-  await userEvent.click(screen.getByTestId('searchBtn'));
+  await userEvent.keyboard('{Enter}');
 
   await waitFor(() => {
-    // Note: StaticMockLink doesn’t behave like a real refetch, so we assert
-    // the stable initial mock data ('CreatedInitial') and the input value
-    // instead of expecting the refetched organization name to appear—all other
-    // assertions rely on the initial state to avoid flakiness.
     expect((screen.getByTestId('searchInput') as HTMLInputElement).value).toBe(
       'created-search',
     );
-    expect(screen.getByTestId('org-name-CreatedInitial')).toBeInTheDocument();
+    expect(screen.getByTestId('org-name-CreatedRefetch')).toBeInTheDocument();
     expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
   });

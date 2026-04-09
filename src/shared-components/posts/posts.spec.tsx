@@ -127,45 +127,47 @@ vi.mock('shared-components/pinnedPosts/pinnedPostsLayout', () => ({
   ),
 }));
 
-// Mock PageHeader component
-vi.mock('shared-components/Navbar/Navbar', () => ({
+// Mock Toolbar component
+vi.mock('shared-components/Toolbar/Toolbar', () => ({
   default: ({
     search,
-    sorting,
+    filters,
     actions,
   }: {
-    search: {
-      placeholder: string;
+    search?: {
+      placeholder?: string;
       onSearch: (term: string) => void;
-      inputTestId: string;
+      inputTestId?: string;
     };
-    sorting: Array<{
+    filters?: Array<{
       options: Array<{ label: string; value: string }>;
       selected: string;
       onChange: (option: string) => void;
-      testIdPrefix: string;
+      testIdPrefix?: string;
     }>;
-    actions: React.ReactNode;
+    actions?: React.ReactNode;
   }) => (
     <div data-testid="page-header">
-      <input
-        data-testid={search.inputTestId}
-        placeholder={search.placeholder}
-        onChange={(e) => search.onSearch(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            search.onSearch((e.target as HTMLInputElement).value);
-          }
-        }}
-      />
-      {sorting.map((sort, index) => (
+      {search && (
+        <input
+          data-testid={search.inputTestId}
+          placeholder={search.placeholder}
+          onChange={(e) => search.onSearch(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              search.onSearch((e.target as HTMLInputElement).value);
+            }
+          }}
+        />
+      )}
+      {filters?.map((filter, index) => (
         <div key={index}>
           <select
-            data-testid={`${sort.testIdPrefix}-select`}
-            value={sort.selected}
-            onChange={(e) => sort.onChange(e.target.value)}
+            data-testid={`${filter.testIdPrefix}-select`}
+            value={filter.selected}
+            onChange={(e) => filter.onChange(e.target.value)}
           >
-            {sort.options.map((opt) => (
+            {filter.options.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>

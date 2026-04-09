@@ -478,8 +478,8 @@ describe('UserGlobalScreen', () => {
 
       const mainContainer = screen.getByTestId('mainpageright');
 
-      // Initially should have pageContainer class
-      expect(mainContainer).toHaveClass('pageContainer');
+      // Initially drawer is shown, so container has contract class
+      expect(mainContainer).toHaveClass('contract');
     });
 
     it('should apply expand class when drawer is hidden', async () => {
@@ -491,7 +491,7 @@ describe('UserGlobalScreen', () => {
       await user.click(closeButton);
 
       const mainContainer = screen.getByTestId('mainpageright');
-      expect(mainContainer).toHaveClass('pageContainer', 'expand');
+      expect(mainContainer).toHaveClass('expand');
     });
 
     it('should apply contract class when drawer is shown', async () => {
@@ -507,7 +507,7 @@ describe('UserGlobalScreen', () => {
       await user.click(openButton);
 
       const mainContainer = screen.getByTestId('mainpageright');
-      expect(mainContainer).toHaveClass('pageContainer', 'contract');
+      expect(mainContainer).toHaveClass('contract');
     });
 
     it('should apply correct button classes', async () => {
@@ -532,7 +532,6 @@ describe('UserGlobalScreen', () => {
       const mainContainer = screen.getByTestId('mainpageright');
 
       // With initial state set to false, should have contract class
-      expect(mainContainer).toHaveClass('pageContainer');
       expect(mainContainer).toHaveClass('contract');
       expect(mainContainer).not.toHaveClass('expand');
     });

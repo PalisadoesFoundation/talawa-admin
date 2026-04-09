@@ -22,6 +22,7 @@ describe('SortingButton', () => {
         ariaLabel,
         buttonLabel,
         icon,
+        type,
         parentContainerStyle,
         dataTestIdPrefix,
       } = props;
@@ -37,7 +38,17 @@ describe('SortingButton', () => {
             data-testid={`${dataTestIdPrefix}-toggle`}
             aria-label={ariaLabel}
           >
-            {icon}
+            {icon ? (
+              <img src={icon as string} alt="sortingIcon" />
+            ) : (
+              type && (
+                <span
+                  data-testid="sorting-icon"
+                  data-icon-type={type}
+                  aria-hidden="true"
+                />
+              )
+            )}
             {buttonLabel}
           </button>
 
@@ -273,15 +284,12 @@ describe('SortingButton', () => {
       expect(container).toHaveAttribute('id', 'custom-dropdown');
     });
 
-    it('should render img icon when icon prop is provided', () => {
-      render(<SortingButton {...defaultProps} icon="/icons/custom-sort.svg" />);
+    it('should render type-based icon when type prop is provided', () => {
+      render(<SortingButton {...defaultProps} type="sort" />);
 
-      const img = screen.getByAltText('sortingIcon');
-      expect(img).toBeInTheDocument();
-      expect(img).toHaveAttribute('src', '/icons/custom-sort.svg');
-
-      // default MUI icon should NOT be rendered
-      expect(screen.queryByTestId('sorting-icon')).not.toBeInTheDocument();
+      const icon = screen.getByTestId('sorting-icon');
+      expect(icon).toBeInTheDocument();
+      expect(icon).toHaveAttribute('data-icon-type', 'sort');
     });
   });
 
