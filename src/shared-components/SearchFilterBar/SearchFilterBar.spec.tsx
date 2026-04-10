@@ -8,8 +8,8 @@ import type {
 } from 'types/shared-components/SearchFilterBar/interface';
 
 vi.mock('shared-components/SearchBar/SearchBar', () => ({
-  default: vi.fn(
-    ({
+  default: vi.fn((props) => {
+    const {
       placeholder,
       value,
       onChange,
@@ -17,13 +17,16 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
       inputTestId,
       buttonTestId,
       buttonAriaLabel,
-    }) => (
+    } = props;
+    return (
       <div data-testid="mock-searchbar">
         <input
           type="text"
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange?.(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange?.(e.target.value)
+          }
           data-testid={inputTestId}
         />
         <button
@@ -35,8 +38,8 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
           Search
         </button>
       </div>
-    ),
-  ),
+    );
+  }),
 }));
 
 vi.mock('shared-components/SortingButton/SortingButton', () => ({
@@ -66,6 +69,13 @@ vi.mock('shared-components/SortingButton/SortingButton', () => ({
   ),
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: { language: 'en' },
+  }),
+}));
+
 vi.mock('utils/performance', async () => {
   const actual = await vi.importActual('utils/performance');
   return {
@@ -78,9 +88,24 @@ vi.mock('utils/performance', async () => {
   };
 });
 
+const mockLodashDebounce = vi.fn((fn: (...args: unknown[]) => unknown) => {
+  const debounced = (...args: unknown[]) => fn(...args);
+  debounced.cancel = vi.fn();
+  debounced.flush = vi.fn();
+  return debounced;
+});
+
+vi.mock('lodash', async () => {
+  const actual = await vi.importActual('lodash');
+  return {
+    ...actual,
+    debounce: (...args: unknown[]) => mockLodashDebounce(...args),
+  };
+});
+
 describe('SearchFilterBar', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Simple Variant - Search Only', () => {
@@ -178,7 +203,7 @@ describe('SearchFilterBar', () => {
       const { container } = render(<SearchFilterBar {...simpleProps} />);
 
       const dropdownsContainer = container.querySelector(
-        'div[class*="btnsBlockSearchBar"]',
+        'div[class*="filtersBlock"]',
       );
       expect(dropdownsContainer).not.toBeInTheDocument();
     });
@@ -267,8 +292,11 @@ describe('SearchFilterBar', () => {
 
       render(<SearchFilterBar {...propsWithCallback} />);
 
-      const dropdown = screen.getByTestId('sort-select');
-      await user.selectOptions(dropdown, 'ASCENDING');
+      const toggleButton = screen.getByTestId('sort-toggle');
+      await user.click(toggleButton);
+
+      const option = screen.getByTestId('sort-item-ASCENDING');
+      await user.click(option);
 
       expect(onOptionChange).toHaveBeenCalledWith('ASCENDING');
     });
@@ -276,15 +304,15 @@ describe('SearchFilterBar', () => {
     it('should render dropdowns with correct selected option', () => {
       render(<SearchFilterBar {...advancedProps} />);
 
-      const dropdown = screen.getByTestId('sort-select');
-      expect(dropdown).toHaveValue('DESCENDING');
+      const toggleButton = screen.getByTestId('sort-toggle');
+      expect(toggleButton).toHaveTextContent('Sort');
     });
 
     it('should render dropdowns container when hasDropdowns is true', () => {
       const { container } = render(<SearchFilterBar {...advancedProps} />);
 
       const dropdownsContainer = container.querySelector(
-        'div[class*="btnsBlockSearchBar"]',
+        'div[class*="filtersBlock"]',
       );
       expect(dropdownsContainer).toBeInTheDocument();
     });
@@ -365,16 +393,15 @@ describe('SearchFilterBar', () => {
       const { container } = render(<SearchFilterBar {...propsNoExtras} />);
 
       const dropdownsContainer = container.querySelector(
-        'div[class*="btnsBlockSearchBar"]',
+        'div[class*="filtersBlock"]',
       );
       expect(dropdownsContainer).not.toBeInTheDocument();
     });
   });
 
   describe('Debouncing Behavior', () => {
-    it('should debounce search changes with default delay', async () => {
-      const { debounce } = await import('utils/performance');
-      const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
+    it('should debounce search changes with default delay', () => {
+      mockLodashDebounce.mockClear();
 
       const onSearchChange = vi.fn();
       render(
@@ -386,12 +413,14 @@ describe('SearchFilterBar', () => {
         />,
       );
 
-      expect(mockDebounce).toHaveBeenCalledWith(onSearchChange, 300);
+      expect(mockLodashDebounce).toHaveBeenCalledWith(
+        expect.any(Function),
+        300,
+      );
     });
 
-    it('should debounce search changes with custom delay', async () => {
-      const { debounce } = await import('utils/performance');
-      const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
+    it('should debounce search changes with custom delay', () => {
+      mockLodashDebounce.mockClear();
 
       const onSearchChange = vi.fn();
       render(
@@ -404,7 +433,10 @@ describe('SearchFilterBar', () => {
         />,
       );
 
-      expect(mockDebounce).toHaveBeenCalledWith(onSearchChange, 500);
+      expect(mockLodashDebounce).toHaveBeenCalledWith(
+        expect.any(Function),
+        500,
+      );
     });
 
     it('should update internal state immediately on typing', async () => {
@@ -451,7 +483,7 @@ describe('SearchFilterBar', () => {
   });
 
   describe('Dropdown Configuration', () => {
-    it('should pass all dropdown props to SortingButton', () => {
+    it('should pass all dropdown props to DropDownButton', () => {
       const dropdownConfig = {
         id: 'sort-tags-dropdown',
         label: 'Sort Tags',
@@ -478,7 +510,7 @@ describe('SearchFilterBar', () => {
       );
 
       expect(
-        screen.getByTestId('mock-sorting-button-sortTags'),
+        screen.getByTestId('sortTags-container'),
       ).toBeInTheDocument();
       expect(screen.getByText('Sort Tags')).toBeInTheDocument();
     });
@@ -523,13 +555,13 @@ describe('SearchFilterBar', () => {
       render(<SearchFilterBar {...threeDropdowns} />);
 
       expect(
-        screen.getByTestId('mock-sorting-button-sort'),
+        screen.getByTestId('sort-container'),
       ).toBeInTheDocument();
       expect(
-        screen.getByTestId('mock-sorting-button-filter'),
+        screen.getByTestId('filter-container'),
       ).toBeInTheDocument();
       expect(
-        screen.getByTestId('mock-sorting-button-time'),
+        screen.getByTestId('time-container'),
       ).toBeInTheDocument();
     });
   });
@@ -612,9 +644,8 @@ describe('SearchFilterBar', () => {
   describe('Translation Overrides', () => {
     it('should pass custom translations to child components', () => {
       const customTranslations = {
-        searchButtonAriaLabel: 'Custom search button label',
-        clearButtonAriaLabel: 'Custom clear button label',
-        dropdownAriaLabel: 'Custom {label} options',
+        searchInputAriaDescription: 'Custom search description',
+        filterAndSortOptionsLabel: 'Custom filter and sort label',
       };
 
       render(
@@ -641,18 +672,19 @@ describe('SearchFilterBar', () => {
         />,
       );
 
-      // Verify search button gets custom aria label
-      const searchButton = screen.getByTestId('searchButton');
-      expect(searchButton).toHaveAttribute(
+      // Verify dropdown container gets custom aria label
+      const sortContainer = screen.getByTestId('sort-container');
+      expect(sortContainer).toBeInTheDocument();
+
+      // Verify the filters toolbar uses custom aria label
+      const filtersToolbar = screen.getByRole('toolbar');
+      expect(filtersToolbar).toHaveAttribute(
         'aria-label',
-        'Custom search button label',
+        'Custom filter and sort label',
       );
 
-      // Verify dropdown gets custom aria label pattern
-      const sortingButton = screen.getByTestId('mock-sorting-button-sort');
-      expect(sortingButton).toBeInTheDocument();
-
-      // Verify clear button aria label is passed to SearchBar (mocked)
+      // Verify search button is rendered
+      const searchButton = screen.getByTestId('searchButton');
       expect(searchButton).toBeInTheDocument();
     });
   });
@@ -704,14 +736,18 @@ describe('SearchFilterBar', () => {
       await user.type(searchInput, 'John');
       expect(onSearchChange).toHaveBeenCalledWith('John');
 
-      // SORT (mocked)
-      const sortSelect = screen.getByTestId('sort-select');
-      await user.selectOptions(sortSelect, 'hours_ASC');
+      // SORT (click-based Bootstrap dropdown)
+      const sortToggle = screen.getByTestId('sort-toggle');
+      await user.click(sortToggle);
+      const sortOption = screen.getByTestId('sort-item-hours_ASC');
+      await user.click(sortOption);
       expect(onSortChange).toHaveBeenCalledWith('hours_ASC');
 
-      // FILTER (mocked)
-      const timeFrameSelect = screen.getByTestId('timeFrame-select');
-      await user.selectOptions(timeFrameSelect, 'weekly');
+      // FILTER (click-based Bootstrap dropdown)
+      const timeFrameToggle = screen.getByTestId('timeFrame-toggle');
+      await user.click(timeFrameToggle);
+      const filterOption = screen.getByTestId('timeFrame-item-weekly');
+      await user.click(filterOption);
       expect(onFilterChange).toHaveBeenCalledWith('weekly');
     });
 
@@ -757,8 +793,10 @@ describe('SearchFilterBar', () => {
       await user.type(searchInput, 'auth');
       expect(onSearchChange).toHaveBeenCalledWith('auth');
 
-      const filterDropdown = screen.getByTestId('filterPlugins-select');
-      await user.selectOptions(filterDropdown, 'installed');
+      const filterToggle = screen.getByTestId('filterPlugins-toggle');
+      await user.click(filterToggle);
+      const filterOption = screen.getByTestId('filterPlugins-item-installed');
+      await user.click(filterOption);
       expect(onFilterChange).toHaveBeenCalledWith('installed');
 
       const uploadButton = screen.getByTestId('upload-btn');

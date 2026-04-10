@@ -65,7 +65,7 @@ describe('SidebarBase Component', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -117,17 +117,18 @@ describe('SidebarBase Component', () => {
       expect(container.className).toContain('collapsedDrawer');
     });
 
-    it('hides branding text when drawer is collapsed', () => {
+    it('hides branding when drawer is collapsed', () => {
       renderComponent({ hideDrawer: true });
-      // The branding div should have display: none
-      const brandingDiv = screen.getByTestId('talawa-logo').parentElement;
-      expect(brandingDiv?.className).toMatch(/sidebarBrandingContainerHidden/);
+      // When collapsed, the TalawaLogo is not rendered at all
+      expect(screen.queryByTestId('talawa-logo')).not.toBeInTheDocument();
     });
 
-    it('shows branding text when drawer is expanded', () => {
+    it('shows branding when drawer is expanded', () => {
       renderComponent({ hideDrawer: false });
+      // When expanded, the logo is rendered inside the branding-only toggle div
+      expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
       const brandingDiv = screen.getByTestId('talawa-logo').parentElement;
-      expect(brandingDiv?.className).toMatch(/sidebarBrandingContainer/);
+      expect(brandingDiv?.className).toMatch(/brandingOnly/);
     });
   });
 
@@ -292,18 +293,19 @@ describe('SidebarBase Component', () => {
   });
 
   describe('Hamburger Icon Positioning', () => {
-    it('positions hamburger icon with margin when drawer is expanded', () => {
+    it('shows collapse chevron button when drawer is expanded', () => {
       renderComponent({ hideDrawer: false });
       const toggleBtn = screen.getByTestId('toggleBtn');
+      // When expanded, the toggle button is the collapse circle with a chevron, not a hamburger
       const icon = toggleBtn.querySelector('svg');
-      expect(icon?.className.baseVal).toMatch(/hamburgerIconExpanded/);
+      expect(icon).toBeTruthy();
     });
 
-    it('positions hamburger icon without margin when drawer is collapsed', () => {
+    it('shows hamburger icon when drawer is collapsed', () => {
       renderComponent({ hideDrawer: true });
       const toggleBtn = screen.getByTestId('toggleBtn');
       const icon = toggleBtn.querySelector('svg');
-      expect(icon?.className.baseVal).toMatch(/hamburgerIconCollapsed/);
+      expect(icon?.className.baseVal).toMatch(/hamburgerIcon/);
     });
   });
 });

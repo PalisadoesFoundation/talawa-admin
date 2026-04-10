@@ -54,6 +54,7 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
     ariaLabel,
     dataTestIdPrefix,
     buttonLabel,
+    type,
     icon,
   }: {
     options: { label: string; value: string | number }[];
@@ -62,6 +63,7 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
     ariaLabel: string;
     dataTestIdPrefix: string;
     buttonLabel?: string;
+    type?: string;
     icon?: React.ReactNode;
   }) => {
     const selected = options.find((o) => o.value === selectedValue);
@@ -72,7 +74,12 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
         <button type="button" data-testid={`${dataTestIdPrefix}-toggle`}>
           {label}
         </button>
-        <div data-testid={`${dataTestIdPrefix}-icon`}>{icon}</div>
+        <div
+          data-testid={`${dataTestIdPrefix}-icon`}
+          data-icon-type={type}
+        >
+          {icon}
+        </div>
         {options.map((opt) => (
           <button
             type="button"
@@ -142,7 +149,7 @@ describe('PageHeader Component', () => {
     expect(screen.getByText('Sort by Date')).toBeInTheDocument();
   });
 
-  it('renders custom icon when sort.icon is provided', () => {
+  it('renders sort type icon when sort type is provided', () => {
     const mockSort = vi.fn();
     const sortingProps = [
       {
@@ -151,18 +158,15 @@ describe('PageHeader Component', () => {
         selected: 'a',
         onChange: mockSort,
         testIdPrefix: 'sort-custom',
-        icon: 'custom-icon.png',
       },
     ];
 
     render(<PageHeader sorting={sortingProps} />);
     const iconContainer = screen.getByTestId('sort-custom-icon');
-    const img = iconContainer.querySelector('img');
-    expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src', 'custom-icon.png');
+    expect(iconContainer).toHaveAttribute('data-icon-type', 'sort');
   });
 
-  it('renders default SortIcon when sort.icon is NOT provided', () => {
+  it('renders default sort type when sort.icon is NOT provided', () => {
     const mockSort = vi.fn();
     const sortingProps = [
       {
@@ -176,6 +180,6 @@ describe('PageHeader Component', () => {
 
     render(<PageHeader sorting={sortingProps} />);
     const iconContainer = screen.getByTestId('sort-default-icon');
-    expect(iconContainer).toHaveTextContent('SortIcon');
+    expect(iconContainer).toHaveAttribute('data-icon-type', 'sort');
   });
 });

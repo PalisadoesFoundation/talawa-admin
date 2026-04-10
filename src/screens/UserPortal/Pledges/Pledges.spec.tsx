@@ -720,7 +720,7 @@ describe('Testing User Pledge Screen', () => {
     const searchInput = screen.getByTestId('searchByInput');
     await user.clear(searchInput);
     await user.type(searchInput, '   ');
-    await user.click(screen.getByTestId('searchBtn'));
+    await user.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
@@ -743,7 +743,7 @@ describe('Testing User Pledge Screen', () => {
     const searchInput = screen.getByTestId('searchByInput');
     await user.clear(searchInput);
     await user.type(searchInput, 'school');
-    await user.click(screen.getByTestId('searchBtn'));
+    await user.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
