@@ -349,8 +349,6 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
     expect(screen.getByTestId('searchname')).toHaveAttribute(
       'placeholder',
       translations.searchAdvertisements,
@@ -376,10 +374,9 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
     await userEvent.clear(screen.getByTestId('searchname'));
     await userEvent.type(screen.getByTestId('searchname'), 'Cookie shop 6');
-    await userEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.keyboard('{Enter}');
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -409,14 +406,13 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
 
     await userEvent.clear(screen.getByTestId('searchname'));
     await userEvent.type(
       screen.getByTestId('searchname'),
       'this is an active advertisement 6',
     );
-    await userEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.keyboard('{Enter}');
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -446,10 +442,9 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
     await userEvent.clear(screen.getByTestId('searchname'));
     await userEvent.type(screen.getByTestId('searchname'), 'Cookie shop 6');
-    await userEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.keyboard('{Enter}');
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -479,13 +474,12 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
     await userEvent.clear(screen.getByTestId('searchname'));
     await userEvent.type(
       screen.getByTestId('searchname'),
       'this is a completed advertisement 6',
     );
-    await userEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.keyboard('{Enter}');
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -515,10 +509,9 @@ describe('Testing Advertisement Component', () => {
     await wait();
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
     await userEvent.clear(screen.getByTestId('searchname'));
     await userEvent.type(screen.getByTestId('searchname'), 'BandhanSearchedIt');
-    await userEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.keyboard('{Enter}');
     expect(
       screen.getAllByText('Ads not present for this campaign.'),
     ).toHaveLength(2); // both completed and active tab

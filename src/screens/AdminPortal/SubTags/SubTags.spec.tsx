@@ -1,7 +1,14 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -239,10 +246,9 @@ describe('Organisation Tags Page', () => {
       ).toBeInTheDocument();
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
-    // Test trimming: add spaces that should be trimmed by the component
-    await user.clear(input);
-    await user.type(input, '  searchSubTag  ');
-    await user.click(screen.getByTestId('searchBtn'));
+    // Set value at once to avoid intermediate unmatched queries
+    fireEvent.change(input, { target: { value: '  searchSubTag  ' } });
+    await user.keyboard('{Enter}');
 
     // should render the two searched tags from the mock data
     // where name starts with "searchSubTag" (mocks are configured for this)

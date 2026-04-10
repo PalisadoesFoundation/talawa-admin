@@ -352,29 +352,29 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    const searchBtn = await screen.findByTestId('searchButton');
+    const searchInput = screen.getByTestId(/searchByName/i);
     const search1 = 'John';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search1);
-    await userEvent.click(searchBtn);
+    await userEvent.type(searchInput, search1);
+    await userEvent.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
     });
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search2);
+    await userEvent.type(searchInput, search2);
 
     const search3 =
       'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search3);
+    await userEvent.type(searchInput, search3);
 
     const search4 = 'Sam{backspace}{backspace}P{backspace}';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search4);
+    await userEvent.type(searchInput, search4);
 
     const search5 = 'Xe';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search5);
-    await userEvent.clear(screen.getByTestId(/searchByName/i));
-    await userEvent.click(searchBtn);
+    await userEvent.type(searchInput, search5);
+    await userEvent.clear(searchInput);
+    await userEvent.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(screen.getByTestId('testcomp')).toBeInTheDocument();
@@ -396,7 +396,6 @@ describe('Testing Users screen', () => {
       );
     });
 
-    const searchBtn = await screen.findByTestId('searchButton');
     const searchInput = screen.getByTestId(/searchByName/i);
 
     await act(async () => {
@@ -405,7 +404,7 @@ describe('Testing Users screen', () => {
     });
 
     await act(async () => {
-      await userEvent.click(searchBtn);
+      await userEvent.keyboard('{Enter}');
     });
 
     // Wait for the "no results" message
@@ -675,7 +674,7 @@ describe('Testing Users screen', () => {
 
       const searchInput = await screen.findByTestId('searchByName');
       await userEvent.type(searchInput, 'John');
-      await userEvent.click(screen.getByTestId('searchButton'));
+      await userEvent.keyboard('{Enter}');
 
       await waitFor(() => {
         expect(screen.getByTestId('testcomp')).toBeInTheDocument();
@@ -683,7 +682,7 @@ describe('Testing Users screen', () => {
 
       // Clear search
       await userEvent.clear(searchInput);
-      await userEvent.click(screen.getByTestId('searchButton'));
+      await userEvent.keyboard('{Enter}');
 
       await waitFor(() => {
         expect(screen.queryByText(/no results found/i)).not.toBeInTheDocument();
@@ -836,14 +835,14 @@ describe('Testing Users screen', () => {
 
       const searchInput = await screen.findByTestId('searchByName');
       await userEvent.type(searchInput, 'John');
-      await userEvent.click(screen.getByTestId('searchButton'));
+      await userEvent.keyboard('{Enter}');
 
       await waitFor(() => {
         expect(screen.getByTestId('testcomp')).toBeInTheDocument();
       });
 
       // Same search again
-      await userEvent.click(screen.getByTestId('searchButton'));
+      await userEvent.keyboard('{Enter}');
 
       await waitFor(() => {
         expect(screen.getByTestId('testcomp')).toBeInTheDocument();
@@ -1305,8 +1304,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     const input = await screen.findByTestId('searchByName');
     await userEvent.type(input, 'zzzz');
-    const searchButton = await screen.findByTestId('searchButton');
-    await userEvent.click(searchButton);
+    await userEvent.keyboard('{Enter}');
 
     expect(await screen.findByText(/no results found/i)).toBeInTheDocument();
   });
@@ -1325,8 +1323,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     const input = await screen.findByTestId('searchByName');
 
     await userEvent.clear(input);
-    const searchButton = await screen.findByTestId('searchButton');
-    await userEvent.click(searchButton);
+    await userEvent.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(input).toHaveValue('');
@@ -1451,8 +1448,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await userEvent.type(input, 'John');
     await userEvent.clear(input);
-    const searchButton = await screen.findByTestId('searchButton');
-    await userEvent.click(searchButton);
+    await userEvent.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(input).toHaveValue('');

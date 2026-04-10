@@ -22,6 +22,21 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+/**
+ * Sets a controlled React input's value atomically via native setter + event.
+ * Avoids userEvent.type which fires a query per keystroke in server-side search.
+ */
+function setNativeInputValue(input: HTMLElement, value: string): void {
+  const nativeSetter = Object.getOwnPropertyDescriptor(
+    HTMLInputElement.prototype,
+    'value',
+  )?.set;
+  nativeSetter?.call(input, value);
+  input.dispatchEvent(
+    new InputEvent('input', { bubbles: true, inputType: 'insertText' }),
+  );
+}
+
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({
     orgId: 'orgId',
@@ -201,6 +216,24 @@ const CUSTOM_MOCKS = [
         where: {
           orgId: 'orgId',
           userId: 'userId',
+          name_contains: 'Group',
+        },
+        orderBy: 'volunteers_DESC',
+      },
+    },
+    result: {
+      data: {
+        getEventVolunteerGroups: [group1, group2],
+      },
+    },
+  },
+  {
+    request: {
+      query: EVENT_VOLUNTEER_GROUP_LIST,
+      variables: {
+        where: {
+          orgId: 'orgId',
+          userId: 'userId',
           name_contains: 'Group 1',
         },
         orderBy: 'volunteers_DESC',
@@ -321,7 +354,7 @@ describe('Groups Screen [User Portal]', () => {
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
   });
 
@@ -387,7 +420,7 @@ describe('Groups Screen [User Portal]', () => {
 
     // Clear and type in the search input
     await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'Group 1');
+    setNativeInputValue(searchInput, 'Group 1');
 
     // Wait for debounce (300ms) and refetch
     await waitFor(
@@ -417,7 +450,7 @@ describe('Groups Screen [User Portal]', () => {
     // Type in search to trigger the leaderName variable assignment (line 96)
     const searchInput = screen.getByTestId('searchByInput');
     await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'Teresa');
+    setNativeInputValue(searchInput, 'Teresa');
 
     // Wait for debounce (300ms) and query with leaderName variable to execute
     // This ensures line 96 (vars.leaderName = searchTerm.trim()) is covered
@@ -425,12 +458,11 @@ describe('Groups Screen [User Portal]', () => {
       () => {
         // Verify that Group 2 is filtered out (only Teresa's group should show)
         expect(screen.queryByText('Group 2')).not.toBeInTheDocument();
+        // Verify the filtered result shows only Group 1 (led by Teresa)
+        expect(screen.getByText('Group 1')).toBeInTheDocument();
       },
       { timeout: 2000 },
     );
-
-    // Verify the filtered result shows only Group 1 (led by Teresa)
-    expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 
   it('trims whitespace when searching by leader name', async () => {
@@ -438,6 +470,7 @@ describe('Groups Screen [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
+      expect(screen.getByText('Group 2')).toBeInTheDocument();
     });
 
     // Change searchBy to leader to enable leaderName code path
@@ -447,24 +480,19 @@ describe('Groups Screen [User Portal]', () => {
     const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
-    // Type leader name with whitespace to test trim() functionality
+    // Search by leader name with whitespace padding to verify trim() behavior
     const searchInput = screen.getByTestId('searchByInput');
     await userEvent.clear(searchInput);
-    // This will set debouncedSearchTerm to '   Teresa   '
-    await userEvent.type(searchInput, '   Teresa   ');
+    setNativeInputValue(searchInput, '   Teresa   ');
 
-    // Wait for debounce and query execution
-    // The vars.leaderName = debouncedSearchTerm.trim() line should execute
+    // Wait for debounce and query execution with leaderName variable (trimmed)
     await waitFor(
       () => {
-        // Verify query completed with trimmed value
-        const groupNames = screen.getAllByTestId('groupName');
-        expect(groupNames.length).toBeGreaterThanOrEqual(1);
+        expect(screen.queryByText('Group 2')).not.toBeInTheDocument();
+        expect(screen.getByText('Group 1')).toBeInTheDocument();
       },
-      { timeout: 1500 },
+      { timeout: 3000 },
     );
-
-    expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 
   it('renders empty state when groups list is empty', async () => {
@@ -632,7 +660,7 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, 'test');
+    setNativeInputValue(searchInput, 'test');
 
     // Unmount while debounce is pending
     unmount();
@@ -647,11 +675,13 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput') as HTMLInputElement;
-    await userEvent.type(searchInput, 'Group');
+    setNativeInputValue(searchInput, 'Group');
 
-    // Open modal
-    const viewButtons = screen.getAllByTestId('viewGroupBtn');
-    expect(viewButtons.length).toBeGreaterThan(0);
+    // Wait for grid to reload after search change, then open modal
+    const viewButtons = await screen.findAllByTestId('viewGroupBtn');
+    await waitFor(() => {
+      expect(viewButtons.length).toBeGreaterThan(0);
+    });
     await userEvent.click(viewButtons[0]);
 
     // Search text should still be there
@@ -798,7 +828,7 @@ describe('Groups Screen [User Portal]', () => {
     const searchInput = screen.getByTestId('searchByInput');
 
     // Type and then clear
-    await userEvent.type(searchInput, 'test');
+    setNativeInputValue(searchInput, 'test');
     await userEvent.clear(searchInput);
 
     // Wait for debounce
@@ -821,7 +851,7 @@ describe('Groups Screen [User Portal]', () => {
     const searchInput = screen.getByTestId('searchByInput');
 
     // Type search with spaces
-    await userEvent.type(searchInput, '   Group 1   ');
+    setNativeInputValue(searchInput, '   Group 1   ');
 
     // Wait for debounce - should trim spaces
     await waitFor(
@@ -953,7 +983,7 @@ describe('Groups Screen [User Portal]', () => {
 
     // Test search input functionality
     const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, 'test');
+    setNativeInputValue(searchInput, 'test');
     expect(searchInput).toHaveValue('test');
 
     await userEvent.clear(searchInput);
@@ -965,7 +995,7 @@ describe('Groups Screen [User Portal]', () => {
     const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
-    await userEvent.type(searchInput, 'leader test');
+    setNativeInputValue(searchInput, 'leader test');
     expect(searchInput).toHaveValue('leader test');
   });
 
@@ -982,7 +1012,7 @@ describe('Groups Screen [User Portal]', () => {
     await userEvent.click(leaderOption);
 
     const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, '   '); // whitespace only
+    setNativeInputValue(searchInput, '   '); // whitespace only
     await userEvent.clear(searchInput);
 
     expect(searchInput).toHaveValue('');
@@ -996,7 +1026,7 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, 'test group');
+    setNativeInputValue(searchInput, 'test group');
 
     expect(searchInput).toHaveValue('test group');
   });
@@ -1009,7 +1039,7 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, '  test group  ');
+    setNativeInputValue(searchInput, '  test group  ');
 
     expect(searchInput).toHaveValue('  test group  ');
   });
@@ -1027,7 +1057,7 @@ describe('Groups Screen [User Portal]', () => {
     await userEvent.click(leaderOption);
 
     const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, 'leader name');
+    setNativeInputValue(searchInput, 'leader name');
 
     expect(searchInput).toHaveValue('leader name');
   });
@@ -1056,7 +1086,7 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, 'group name');
+    setNativeInputValue(searchInput, 'group name');
 
     expect(searchInput).toHaveValue('group name');
   });
@@ -1132,7 +1162,7 @@ describe('Groups Screen [User Portal]', () => {
     expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
 
     // Test that server-side search is enabled
-    await userEvent.type(searchInput, 'test');
+    setNativeInputValue(searchInput, 'test');
     expect(searchInput).toHaveValue('test');
   });
 
@@ -1332,7 +1362,7 @@ describe('Groups Screen [User Portal]', () => {
     const searchInput = screen.getByTestId('searchByInput');
 
     // Type in search input to trigger server-side search
-    await userEvent.type(searchInput, 'test search');
+    setNativeInputValue(searchInput, 'test search');
 
     // Verify the search term is set
     expect(searchInput).toHaveValue('test search');
@@ -1403,13 +1433,15 @@ describe('Groups Screen [User Portal]', () => {
 
     const searchInput = screen.getByTestId('searchByInput');
 
-    // Type multiple characters quickly to test debounce
-    await userEvent.type(searchInput, 'Group');
+    // Paste atomically — avoids triggering a server-side query for each
+    // intermediate character (which would error since no mocks exist for
+    // partial strings like 'G', 'Gr', etc.)
+    setNativeInputValue(searchInput, 'Group 1');
 
-    // Wait for debounce (300ms)
     await waitFor(
       () => {
-        expect(searchInput).toHaveValue('Group');
+        expect(searchInput).toHaveValue('Group 1');
+        expect(screen.queryByText('Group 2')).not.toBeInTheDocument();
       },
       { timeout: 1500 },
     );
@@ -1435,11 +1467,14 @@ describe('Groups Screen [User Portal]', () => {
 
     const searchInput = screen.getByTestId('searchByInput');
 
-    // Type and submit search
-    await userEvent.type(searchInput, 'Group 1');
+    // Paste atomically to avoid intermediate query errors
+    setNativeInputValue(searchInput, 'Group 1');
     await userEvent.keyboard('{Enter}');
 
     // Verify search is handled
     expect(searchInput).toHaveValue('Group 1');
+
+    // Verify the grid is still rendered after search submit
+    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 });

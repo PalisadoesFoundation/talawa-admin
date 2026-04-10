@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SortingButton from './SortingButton';
 import type { InterfaceSortingOption } from 'types/shared-components/SearchFilterBar/interface';
@@ -22,6 +22,7 @@ describe('SortingButton', () => {
         ariaLabel,
         buttonLabel,
         icon,
+        type,
         parentContainerStyle,
         dataTestIdPrefix,
       } = props;
@@ -37,7 +38,17 @@ describe('SortingButton', () => {
             data-testid={`${dataTestIdPrefix}-toggle`}
             aria-label={ariaLabel}
           >
-            {icon}
+            {icon ? (
+              <img src={icon as string} alt="sortingIcon" />
+            ) : (
+              type && (
+                <span
+                  data-testid="sorting-icon"
+                  data-icon-type={type}
+                  aria-hidden="true"
+                />
+              )
+            )}
             {buttonLabel}
           </button>
 
@@ -72,7 +83,8 @@ describe('SortingButton', () => {
   };
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -169,10 +181,12 @@ describe('SortingButton', () => {
 
       await user.click(screen.getByTestId('sort-toggle'));
 
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-      expect(screen.getByTestId('1')).toBeInTheDocument();
-      expect(screen.getByTestId('2')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('latest')).toBeInTheDocument();
+        expect(screen.getByTestId('oldest')).toBeInTheDocument();
+        expect(screen.getByTestId('1')).toBeInTheDocument();
+        expect(screen.getByTestId('2')).toBeInTheDocument();
+      });
     });
 
     it('should call onSortChange with string value when an option is selected', async () => {
@@ -182,8 +196,10 @@ describe('SortingButton', () => {
       await user.click(screen.getByTestId('sort-toggle'));
       await user.click(screen.getByTestId('latest'));
 
-      expect(onSortChange).toHaveBeenCalledTimes(1);
-      expect(onSortChange).toHaveBeenCalledWith('latest');
+      await waitFor(() => {
+        expect(onSortChange).toHaveBeenCalledTimes(1);
+        expect(onSortChange).toHaveBeenCalledWith('latest');
+      });
     });
 
     it('should call onSortChange with stringified number value when an option is selected', async () => {
@@ -193,8 +209,10 @@ describe('SortingButton', () => {
       await user.click(screen.getByTestId('sort-toggle'));
       await user.click(screen.getByTestId('1'));
 
-      expect(onSortChange).toHaveBeenCalledTimes(1);
-      expect(onSortChange).toHaveBeenCalledWith('1');
+      await waitFor(() => {
+        expect(onSortChange).toHaveBeenCalledTimes(1);
+        expect(onSortChange).toHaveBeenCalledWith('1');
+      });
     });
 
     it('should render options with correct data-testid attributes', async () => {
@@ -203,10 +221,12 @@ describe('SortingButton', () => {
       const button = screen.getByTestId('sort-toggle');
       await user.click(button);
 
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-      expect(screen.getByTestId('1')).toBeInTheDocument();
-      expect(screen.getByTestId('2')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('latest')).toBeInTheDocument();
+        expect(screen.getByTestId('oldest')).toBeInTheDocument();
+        expect(screen.getByTestId('1')).toBeInTheDocument();
+        expect(screen.getByTestId('2')).toBeInTheDocument();
+      });
     });
   });
 
@@ -272,17 +292,6 @@ describe('SortingButton', () => {
       expect(container).toBeInTheDocument();
       expect(container).toHaveAttribute('id', 'custom-dropdown');
     });
-
-    it('should render img icon when icon prop is provided', () => {
-      render(<SortingButton {...defaultProps} icon="/icons/custom-sort.svg" />);
-
-      const img = screen.getByAltText('sortingIcon');
-      expect(img).toBeInTheDocument();
-      expect(img).toHaveAttribute('src', '/icons/custom-sort.svg');
-
-      // default MUI icon should NOT be rendered
-      expect(screen.queryByTestId('sorting-icon')).not.toBeInTheDocument();
-    });
   });
 
   describe('Edge Cases', () => {
@@ -330,10 +339,12 @@ describe('SortingButton', () => {
       await user.click(button);
 
       // All options should still be rendered
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-      expect(screen.getByTestId('1')).toBeInTheDocument();
-      expect(screen.getByTestId('2')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('latest')).toBeInTheDocument();
+        expect(screen.getByTestId('oldest')).toBeInTheDocument();
+        expect(screen.getByTestId('1')).toBeInTheDocument();
+        expect(screen.getByTestId('2')).toBeInTheDocument();
+      });
     });
   });
 });

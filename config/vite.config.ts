@@ -159,24 +159,28 @@ export default defineConfig(({ mode }) => {
         debug: process.env.NODE_ENV === 'development',
         basePath: 'src/plugin/available',
       }),
-      istanbul({
-        extension: ['.js', '.ts', '.jsx', '.tsx'],
-        requireEnv: true,
-        cypress: true,
-        include: [
-          'src/screens/**/*.{js,jsx,ts,tsx}',
-          'src/components/**/*.{js,jsx,ts,tsx}',
-          'src/subComponents/**/*.{js,jsx,ts,tsx}',
-        ],
-        exclude: [
-          'node_modules/**',
-          'cypress/**',
-          'coverage/**',
-          '.nyc_output/**',
-          'src/**/*.spec.{ts,tsx,js,jsx}',
-          'src/**/__tests__/**',
-        ],
-      }),
+      ...(process.env.CYPRESS_COVERAGE === 'true'
+        ? [
+            istanbul({
+              extension: ['.js', '.ts', '.jsx', '.tsx'],
+              requireEnv: true,
+              cypress: true,
+              include: [
+                'src/screens/**/*.{js,jsx,ts,tsx}',
+                'src/components/**/*.{js,jsx,ts,tsx}',
+                'src/subComponents/**/*.{js,jsx,ts,tsx}',
+              ],
+              exclude: [
+                'node_modules/**',
+                'cypress/**',
+                'coverage/**',
+                '.nyc_output/**',
+                'src/**/*.spec.{ts,tsx,js,jsx}',
+                'src/**/__tests__/**',
+              ],
+            }),
+          ]
+        : []),
     ],
     // Development server configuration
     server: {
@@ -203,42 +207,43 @@ export default defineConfig(({ mode }) => {
           secure: false,
           ws: true,
           configure: (proxy) => {
-            // Log outgoing request
-            proxy.on('proxyReq', (proxyReq, req) => {
-              console.log('\n[PROXY REQUEST]');
-              console.log('Method:', req.method);
-              console.log('URL:', req.url);
-              console.log('Target:', apiTarget + req.url);
-              console.log('Headers:', JSON.stringify(req.headers, null, 2));
+            const verbose = env.ALLOW_LOGS === 'true';
 
-              // Check if body exists and log it
-              let body = '';
-              req.on('data', (chunk) => {
-                body += chunk.toString();
-              });
-              req.on('end', () => {
-                if (body) {
-                  console.log('Body:', body);
-                }
-              });
-            });
+            if (verbose) {
+              proxy.on('proxyReq', (proxyReq, req) => {
+                console.log('\n[PROXY REQUEST]');
+                console.log('Method:', req.method);
+                console.log('URL:', req.url);
+                console.log('Target:', apiTarget + req.url);
+                console.log('Headers:', JSON.stringify(req.headers, null, 2));
 
-            // Log response
-            proxy.on('proxyRes', (proxyRes, req) => {
-              console.log('\n[PROXY RESPONSE]');
-              console.log('Status:', proxyRes.statusCode);
-              console.log('URL:', req.url);
+                let body = '';
+                req.on('data', (chunk) => {
+                  body += chunk.toString();
+                });
+                req.on('end', () => {
+                  if (body) {
+                    console.log('Body:', body);
+                  }
+                });
+              });
 
-              let responseBody = '';
-              proxyRes.on('data', (chunk) => {
-                responseBody += chunk.toString();
+              proxy.on('proxyRes', (proxyRes, req) => {
+                console.log('\n[PROXY RESPONSE]');
+                console.log('Status:', proxyRes.statusCode);
+                console.log('URL:', req.url);
+
+                let responseBody = '';
+                proxyRes.on('data', (chunk) => {
+                  responseBody += chunk.toString();
+                });
+                proxyRes.on('end', () => {
+                  if (responseBody) {
+                    console.log('Response Body:', responseBody);
+                  }
+                });
               });
-              proxyRes.on('end', () => {
-                if (responseBody) {
-                  console.log('Response Body:', responseBody);
-                }
-              });
-            });
+            }
 
             proxy.on('error', (err) => {
               console.error('\n[PROXY ERROR]', err.message);

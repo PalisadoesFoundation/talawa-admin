@@ -127,45 +127,47 @@ vi.mock('shared-components/pinnedPosts/pinnedPostsLayout', () => ({
   ),
 }));
 
-// Mock PageHeader component
-vi.mock('shared-components/Navbar/Navbar', () => ({
+// Mock Toolbar component
+vi.mock('shared-components/Toolbar/Toolbar', () => ({
   default: ({
     search,
-    sorting,
+    filters,
     actions,
   }: {
-    search: {
-      placeholder: string;
+    search?: {
+      placeholder?: string;
       onSearch: (term: string) => void;
-      inputTestId: string;
+      inputTestId?: string;
     };
-    sorting: Array<{
+    filters?: Array<{
       options: Array<{ label: string; value: string }>;
       selected: string;
       onChange: (option: string) => void;
-      testIdPrefix: string;
+      testIdPrefix?: string;
     }>;
-    actions: React.ReactNode;
+    actions?: React.ReactNode;
   }) => (
     <div data-testid="page-header">
-      <input
-        data-testid={search.inputTestId}
-        placeholder={search.placeholder}
-        onChange={(e) => search.onSearch(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            search.onSearch((e.target as HTMLInputElement).value);
-          }
-        }}
-      />
-      {sorting.map((sort, index) => (
+      {search && (
+        <input
+          data-testid={search.inputTestId}
+          placeholder={search.placeholder}
+          onChange={() => {}}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              search.onSearch((e.target as HTMLInputElement).value);
+            }
+          }}
+        />
+      )}
+      {filters?.map((filter, index) => (
         <div key={index}>
           <select
-            data-testid={`${sort.testIdPrefix}-select`}
-            value={sort.selected}
-            onChange={(e) => sort.onChange(e.target.value)}
+            data-testid={`${filter.testIdPrefix}-select`}
+            value={filter.selected}
+            onChange={(e) => filter.onChange(e.target.value)}
           >
-            {sort.options.map((opt) => (
+            {filter.options.map((opt) => (
               <option key={opt.value} value={opt.value}>
                 {opt.label}
               </option>
@@ -789,9 +791,9 @@ describe('PostsPage Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
 
-      // Enter search term
+      // Enter search term and press Enter to trigger search
       await user.clear(searchInput);
-      await user.type(searchInput, 'test');
+      await user.type(searchInput, 'test{Enter}');
 
       // Wait for filtering to activate
       await waitFor(
@@ -802,8 +804,9 @@ describe('PostsPage Component', () => {
         { timeout: 3000 },
       );
 
-      // Clear search term
+      // Clear search term and press Enter to trigger reset
       await user.clear(searchInput);
+      await user.type(searchInput, '{Enter}');
 
       await waitFor(
         () => {
@@ -840,7 +843,7 @@ describe('PostsPage Component', () => {
 
     const searchInput = screen.getByTestId('searchByName');
     await user.clear(searchInput);
-    await user.type(searchInput, 'test search');
+    await user.type(searchInput, 'test search{Enter}');
 
     // Should show error toast for GraphQL error
     await waitFor(() => {
@@ -1026,17 +1029,18 @@ describe('Infinite Scroll', () => {
 
     const searchInput = screen.getByTestId('searchByName');
 
-    // Enter search term to activate filtering
+    // Enter search term and press Enter to activate filtering
     await user.clear(searchInput);
-    await user.type(searchInput, 'test');
+    await user.type(searchInput, 'test{Enter}');
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');
       expect(renderer.getAttribute('data-is-filtering')).toBe('true');
     });
 
-    // Clear search to return to paginated view
+    // Clear search and press Enter to return to paginated view
     await user.clear(searchInput);
+    await user.type(searchInput, '{Enter}');
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');

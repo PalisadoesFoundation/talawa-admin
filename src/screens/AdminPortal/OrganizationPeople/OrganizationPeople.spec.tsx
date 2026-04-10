@@ -25,7 +25,7 @@ import {
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceSearchFilterBarAdvanced } from 'types/shared-components/SearchFilterBar/interface';
+import type { InterfaceToolbarProps } from 'types/shared-components/Toolbar/interface';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -45,35 +45,28 @@ vi.mock('./addMember/AddMember', () => ({
   ),
 }));
 
-vi.mock(
-  'shared-components/SearchFilterBar/SearchFilterBar',
-  async (importOriginal) => {
-    const actual =
-      await importOriginal<
-        typeof import('shared-components/SearchFilterBar/SearchFilterBar')
-      >();
-    return {
-      default: (props: React.ComponentProps<typeof actual.default>) => (
-        <>
-          <actual.default {...props} />
-          <button
-            type="button"
-            data-testid="trigger-invalid-sort"
-            onClick={() => {
-              if (props.hasDropdowns) {
-                (
-                  props as InterfaceSearchFilterBarAdvanced
-                ).dropdowns?.[0]?.onOptionChange?.('invalid');
-              }
-            }}
-          >
-            Invalid Sort
-          </button>
-        </>
-      ),
-    };
-  },
-);
+vi.mock('shared-components/Toolbar/Toolbar', async (importOriginal) => {
+  const actual =
+    await importOriginal<typeof import('shared-components/Toolbar/Toolbar')>();
+  return {
+    default: (props: InterfaceToolbarProps) => (
+      <>
+        <actual.default {...props} />
+        <button
+          type="button"
+          data-testid="trigger-invalid-sort"
+          onClick={() => {
+            const handler = props.filters?.[0]?.onChange;
+            if (!handler) throw new Error('Expected filter onChange handler');
+            handler('invalid');
+          }}
+        >
+          Invalid Sort
+        </button>
+      </>
+    ),
+  };
+});
 
 vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
   default: ({
