@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import SortingButton from './SortingButton';
 import type { InterfaceSortingOption } from 'types/shared-components/SearchFilterBar/interface';
@@ -83,6 +83,7 @@ describe('SortingButton', () => {
   };
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -180,10 +181,12 @@ describe('SortingButton', () => {
 
       await user.click(screen.getByTestId('sort-toggle'));
 
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-      expect(screen.getByTestId('1')).toBeInTheDocument();
-      expect(screen.getByTestId('2')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('latest')).toBeInTheDocument();
+        expect(screen.getByTestId('oldest')).toBeInTheDocument();
+        expect(screen.getByTestId('1')).toBeInTheDocument();
+        expect(screen.getByTestId('2')).toBeInTheDocument();
+      });
     });
 
     it('should call onSortChange with string value when an option is selected', async () => {
@@ -193,8 +196,10 @@ describe('SortingButton', () => {
       await user.click(screen.getByTestId('sort-toggle'));
       await user.click(screen.getByTestId('latest'));
 
-      expect(onSortChange).toHaveBeenCalledTimes(1);
-      expect(onSortChange).toHaveBeenCalledWith('latest');
+      await waitFor(() => {
+        expect(onSortChange).toHaveBeenCalledTimes(1);
+        expect(onSortChange).toHaveBeenCalledWith('latest');
+      });
     });
 
     it('should call onSortChange with stringified number value when an option is selected', async () => {
@@ -204,8 +209,10 @@ describe('SortingButton', () => {
       await user.click(screen.getByTestId('sort-toggle'));
       await user.click(screen.getByTestId('1'));
 
-      expect(onSortChange).toHaveBeenCalledTimes(1);
-      expect(onSortChange).toHaveBeenCalledWith('1');
+      await waitFor(() => {
+        expect(onSortChange).toHaveBeenCalledTimes(1);
+        expect(onSortChange).toHaveBeenCalledWith('1');
+      });
     });
 
     it('should render options with correct data-testid attributes', async () => {
@@ -214,10 +221,12 @@ describe('SortingButton', () => {
       const button = screen.getByTestId('sort-toggle');
       await user.click(button);
 
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-      expect(screen.getByTestId('1')).toBeInTheDocument();
-      expect(screen.getByTestId('2')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('latest')).toBeInTheDocument();
+        expect(screen.getByTestId('oldest')).toBeInTheDocument();
+        expect(screen.getByTestId('1')).toBeInTheDocument();
+        expect(screen.getByTestId('2')).toBeInTheDocument();
+      });
     });
   });
 
@@ -330,10 +339,12 @@ describe('SortingButton', () => {
       await user.click(button);
 
       // All options should still be rendered
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-      expect(screen.getByTestId('1')).toBeInTheDocument();
-      expect(screen.getByTestId('2')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('latest')).toBeInTheDocument();
+        expect(screen.getByTestId('oldest')).toBeInTheDocument();
+        expect(screen.getByTestId('1')).toBeInTheDocument();
+        expect(screen.getByTestId('2')).toBeInTheDocument();
+      });
     });
   });
 });

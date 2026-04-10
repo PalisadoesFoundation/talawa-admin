@@ -1473,5 +1473,8 @@ describe('Groups Screen [User Portal]', () => {
 
     // Verify search is handled
     expect(searchInput).toHaveValue('Group 1');
+
+    // Verify the grid is still rendered after search submit
+    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 });

@@ -311,7 +311,7 @@ describe('UserGlobalScreen', () => {
       await user.click(closeButton);
 
       // Then click open button to show close button again
-      const openButton = screen.getByTestId('openMenu');
+      const openButton = await screen.findByTestId('openMenu');
       await user.click(openButton);
 
       await waitFor(() => {

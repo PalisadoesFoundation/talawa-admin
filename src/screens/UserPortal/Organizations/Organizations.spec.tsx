@@ -600,12 +600,33 @@ test('should search organizations when pressing Enter key with keyboard helper',
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
-  // Switch to Mode 2 (Created Organizations)
+  // Reopen dropdown and verify mode 1 is now selected
   await userEvent.click(modeButton);
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-item-1').className).toContain(
+      'dropdownItemSelected',
+    );
+    expect(screen.getByTestId('modeChangeBtn-item-0').className).not.toContain(
+      'dropdownItemSelected',
+    );
+  });
+
+  // Switch to Mode 2 (Created Organizations)
   await userEvent.click(screen.getByTestId('modeChangeBtn-item-2'));
 
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+  });
+
+  // Reopen dropdown and verify mode 2 is now selected
+  await userEvent.click(modeButton);
+  await waitFor(() => {
+    expect(screen.getByTestId('modeChangeBtn-item-2').className).toContain(
+      'dropdownItemSelected',
+    );
+    expect(screen.getByTestId('modeChangeBtn-item-1').className).not.toContain(
+      'dropdownItemSelected',
+    );
   });
 });
 
