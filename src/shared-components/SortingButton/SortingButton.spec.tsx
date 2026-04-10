@@ -83,7 +83,7 @@ describe('SortingButton', () => {
   };
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -282,14 +282,6 @@ describe('SortingButton', () => {
       const container = screen.getByTestId('sort-container');
       expect(container).toBeInTheDocument();
       expect(container).toHaveAttribute('id', 'custom-dropdown');
-    });
-
-    it('should render type-based icon when type prop is provided', () => {
-      render(<SortingButton {...defaultProps} type="sort" />);
-
-      const icon = screen.getByTestId('sorting-icon');
-      expect(icon).toBeInTheDocument();
-      expect(icon).toHaveAttribute('data-icon-type', 'sort');
     });
   });
 

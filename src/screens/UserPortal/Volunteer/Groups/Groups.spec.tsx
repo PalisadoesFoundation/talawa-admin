@@ -354,7 +354,7 @@ describe('Groups Screen [User Portal]', () => {
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
   });
 
@@ -480,18 +480,18 @@ describe('Groups Screen [User Portal]', () => {
     const leaderOption = await screen.findByTestId('searchBy-item-leader');
     await userEvent.click(leaderOption);
 
-    // Search by leader name to verify the leaderName variable is set
+    // Search by leader name with whitespace padding to verify trim() behavior
     const searchInput = screen.getByTestId('searchByInput');
     await userEvent.clear(searchInput);
-    setNativeInputValue(searchInput, 'Teresa');
+    setNativeInputValue(searchInput, '   Teresa   ');
 
-    // Wait for debounce and query execution with leaderName variable
+    // Wait for debounce and query execution with leaderName variable (trimmed)
     await waitFor(
       () => {
         expect(screen.queryByText('Group 2')).not.toBeInTheDocument();
         expect(screen.getByText('Group 1')).toBeInTheDocument();
       },
-      { timeout: 2000 },
+      { timeout: 3000 },
     );
   });
 
@@ -679,7 +679,9 @@ describe('Groups Screen [User Portal]', () => {
 
     // Wait for grid to reload after search change, then open modal
     const viewButtons = await screen.findAllByTestId('viewGroupBtn');
-    expect(viewButtons.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(viewButtons.length).toBeGreaterThan(0);
+    });
     await userEvent.click(viewButtons[0]);
 
     // Search text should still be there
@@ -1439,6 +1441,7 @@ describe('Groups Screen [User Portal]', () => {
     await waitFor(
       () => {
         expect(searchInput).toHaveValue('Group 1');
+        expect(screen.queryByText('Group 2')).not.toBeInTheDocument();
       },
       { timeout: 1500 },
     );

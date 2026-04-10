@@ -536,7 +536,7 @@ test('should search organizations when pressing Enter key', async () => {
   });
 });
 
-test('should search organizations when clicking search button', async () => {
+test('should search organizations by typing and submitting with Enter', async () => {
   render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -565,7 +565,7 @@ test('should search organizations when clicking search button', async () => {
   });
 });
 
-test('Mode dropdown switches list correctly', async () => {
+test('should search organizations when pressing Enter key with keyboard helper', async () => {
   setItem('role', 'administrator');
 
   render(

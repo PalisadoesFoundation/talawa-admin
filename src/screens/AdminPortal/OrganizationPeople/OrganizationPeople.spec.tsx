@@ -56,7 +56,9 @@ vi.mock('shared-components/Toolbar/Toolbar', async (importOriginal) => {
           type="button"
           data-testid="trigger-invalid-sort"
           onClick={() => {
-            props.filters?.[0]?.onChange?.('invalid');
+            const handler = props.filters?.[0]?.onChange;
+            if (!handler) throw new Error('Expected filter onChange handler');
+            handler('invalid');
           }}
         >
           Invalid Sort

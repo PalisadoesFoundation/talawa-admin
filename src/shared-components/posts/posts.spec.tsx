@@ -152,7 +152,7 @@ vi.mock('shared-components/Toolbar/Toolbar', () => ({
         <input
           data-testid={search.inputTestId}
           placeholder={search.placeholder}
-          onChange={(e) => search.onSearch(e.target.value)}
+          onChange={() => {}}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               search.onSearch((e.target as HTMLInputElement).value);
@@ -791,9 +791,9 @@ describe('PostsPage Component', () => {
 
       const searchInput = screen.getByTestId('searchByName');
 
-      // Enter search term
+      // Enter search term and press Enter to trigger search
       await user.clear(searchInput);
-      await user.type(searchInput, 'test');
+      await user.type(searchInput, 'test{Enter}');
 
       // Wait for filtering to activate
       await waitFor(
@@ -804,8 +804,9 @@ describe('PostsPage Component', () => {
         { timeout: 3000 },
       );
 
-      // Clear search term
+      // Clear search term and press Enter to trigger reset
       await user.clear(searchInput);
+      await user.type(searchInput, '{Enter}');
 
       await waitFor(
         () => {
@@ -842,7 +843,7 @@ describe('PostsPage Component', () => {
 
     const searchInput = screen.getByTestId('searchByName');
     await user.clear(searchInput);
-    await user.type(searchInput, 'test search');
+    await user.type(searchInput, 'test search{Enter}');
 
     // Should show error toast for GraphQL error
     await waitFor(() => {
@@ -1028,17 +1029,18 @@ describe('Infinite Scroll', () => {
 
     const searchInput = screen.getByTestId('searchByName');
 
-    // Enter search term to activate filtering
+    // Enter search term and press Enter to activate filtering
     await user.clear(searchInput);
-    await user.type(searchInput, 'test');
+    await user.type(searchInput, 'test{Enter}');
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');
       expect(renderer.getAttribute('data-is-filtering')).toBe('true');
     });
 
-    // Clear search to return to paginated view
+    // Clear search and press Enter to return to paginated view
     await user.clear(searchInput);
+    await user.type(searchInput, '{Enter}');
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');
