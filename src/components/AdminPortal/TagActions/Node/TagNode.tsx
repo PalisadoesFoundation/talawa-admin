@@ -35,17 +35,13 @@ import type {
   InterfaceTagData,
 } from 'utils/interfaces';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
+import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagActions/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from './TagNode.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useTranslation } from 'react-i18next';
-interface InterfaceTagNodeProps {
-  tag: InterfaceTagData;
-  checkedTags: Set<string>;
-  toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
-}
 
 /**
  * Renders the Tags which can be expanded to list subtags.

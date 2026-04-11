@@ -61,24 +61,39 @@ import type {
   InterfaceAddPeopleToTagProps,
   InterfaceMemberData,
   InterfaceTagUsersToAssignToQuery,
-  InterfaceQueryUserTagsMembersToAssignTo,
 } from 'types/AdminPortal/Tag/interface';
 import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'types/AdminPortal/Tag/utils';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const GRID_COLUMN_MIN_WIDTH = 100;
+
+const getMemberDisplayName = (member: Partial<InterfaceMemberData>): string => {
+  const displayName = member.name?.trim() ?? '';
+  if (displayName) return displayName;
+
+  const firstName = member.firstName?.trim() ?? '';
+  const lastName = member.lastName?.trim() ?? '';
+
+  if (!firstName && !lastName) return '';
+  if (!firstName) return lastName;
+  if (!lastName) return firstName;
+
+  if (firstName.toLowerCase() === lastName.toLowerCase()) return firstName;
+
+  return `${firstName} ${lastName}`;
+};
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
   hideAddPeopleToTagModal,
   refetchAssignedMembersData,
 }) => {
-  const { tagId: currentTagId } = useParams();
+  const { orgId, tagId: currentTagId } = useParams();
 
   const { t: tErrors } = useTranslation('errors');
 
@@ -89,9 +104,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const { t: tCommon } = useTranslation('common');
 
-  const [memberToAssignToSearchFirstName, setMemberToAssignToSearchFirstName] =
-    useState('');
-  const [memberToAssignToSearchLastName, setMemberToAssignToSearchLastName] =
+  const [memberToAssignToSearchInput, setMemberToAssignToSearchInput] =
     useState('');
 
   const {
@@ -104,20 +117,21 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     USER_TAGS_MEMBERS_TO_ASSIGN_TO,
     {
       variables: {
-        id: currentTagId,
+        organizationId: orgId,
+        tagId: currentTagId,
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: {
-          firstName: { starts_with: memberToAssignToSearchFirstName },
-          lastName: { starts_with: memberToAssignToSearchLastName },
-        },
+        where: memberToAssignToSearchInput
+          ? {
+              name_contains: memberToAssignToSearchInput,
+            }
+          : undefined,
       },
       skip: !addPeopleToTagModalIsOpen,
     },
   );
 
   useEffect(() => {
-    setMemberToAssignToSearchFirstName('');
-    setMemberToAssignToSearchLastName('');
+    setMemberToAssignToSearchInput('');
     userTagsMembersToAssignToRefetch();
   }, [addPeopleToTagModalIsOpen]);
 
@@ -126,44 +140,40 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after:
-          userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo
-            .pageInfo.endCursor, // Fetch after the last loaded cursor
+          userTagsMembersToAssignToData?.organization?.members?.pageInfo
+            ?.endCursor, // Fetch after the last loaded cursor
       },
-      updateQuery: (
-        prevResult: {
-          getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-        },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult: {
-            getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-          };
-        },
-      ) => {
-        if (!fetchMoreResult || !fetchMoreResult.getUsersToAssignTo)
-          return prevResult;
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult?.organization?.members) return prevResult;
 
         return {
-          getUsersToAssignTo: {
-            ...fetchMoreResult.getUsersToAssignTo,
-            usersToAssignTo: {
-              ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo,
+          ...fetchMoreResult,
+          organization: {
+            ...fetchMoreResult.organization,
+            members: {
+              ...fetchMoreResult.organization.members,
               edges: [
-                ...prevResult.getUsersToAssignTo.usersToAssignTo.edges,
-                ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo.edges,
+                ...(prevResult.organization?.members?.edges ?? []),
+                ...(fetchMoreResult.organization?.members?.edges ?? []),
               ],
             },
           },
+          tag: prevResult.tag,
         };
       },
     });
   };
 
+  const assignedMemberIds = new Set(
+    userTagsMembersToAssignToData?.tag?.assignees?.edges
+      ?.map((edge) => edge?.node?.id)
+      .filter((id): id is string => Boolean(id)) ?? [],
+  );
+
   const userTagMembersToAssignTo =
-    userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
-      (edge) => edge.node,
-    ) ?? [];
+    userTagsMembersToAssignToData?.organization?.members?.edges
+      ?.map((edge) => edge.node)
+      .filter((member) => !assignedMemberIds.has(member._id)) ?? [];
 
   const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {
@@ -199,9 +209,18 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       const { data } = await addPeople({
         variables: {
           tagId: currentTagId,
-          userIds: assignToMembers.map((member) => member._id),
+          userId: assignToMembers[0]?._id,
         },
       });
+
+      for (const member of assignToMembers.slice(1)) {
+        await addPeople({
+          variables: {
+            tagId: currentTagId,
+            userId: member._id,
+          },
+        });
+      }
 
       if (data) {
         NotificationToast.success(t('successfullyAssignedToPeople'));
@@ -253,9 +272,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="memberName">
-            {params.row.firstName + ' ' + params.row.lastName}
-          </div>
+          <div data-testid="memberName">{getMemberDisplayName(params.row)}</div>
         );
       },
     },
@@ -339,50 +356,33 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               </div>
             ) : (
               assignToMembers.map((member) => (
-                <div
-                  key={member._id}
-                  className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
-                >
-                  {member.firstName} {member.lastName}
+                <div key={member._id} className={styles.memberBadge}>
+                  {getMemberDisplayName(member)}
                   <Button
                     type="button"
-                    className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
+                    className={styles.removeMemberChipButton}
                     onClick={() => removeMember(member._id)}
                     data-testid="clearSelectedMember"
                     aria-label={t('removeMember')}
-                  />
+                  >
+                    <i className="fa fa-times" aria-hidden="true" />
+                  </Button>
                 </div>
               ))
             )}
           </div>
 
-          <div className="my-3 d-flex flex-wrap gap-3">
-            <div className="flex-grow-1">
-              <SearchBar
-                placeholder={tCommon('firstName')}
-                value={memberToAssignToSearchFirstName}
-                onChange={(value) =>
-                  setMemberToAssignToSearchFirstName(value.trim())
-                }
-                onClear={() => setMemberToAssignToSearchFirstName('')}
-                showSearchButton={false}
-                inputTestId="searchByFirstName"
-                clearButtonTestId="clearFirstNameSearch"
-              />
-            </div>
-            <div className="flex-grow-1">
-              <SearchBar
-                placeholder={tCommon('lastName')}
-                value={memberToAssignToSearchLastName}
-                onChange={(value) =>
-                  setMemberToAssignToSearchLastName(value.trim())
-                }
-                onClear={() => setMemberToAssignToSearchLastName('')}
-                showSearchButton={false}
-                inputTestId="searchByLastName"
-                clearButtonTestId="clearLastNameSearch"
-              />
-            </div>
+          <div className="my-3">
+            <SearchFilterBar
+              hasDropdowns={false}
+              searchPlaceholder={tCommon('searchByName')}
+              searchValue={memberToAssignToSearchInput}
+              onSearchChange={(value) =>
+                setMemberToAssignToSearchInput(value.trim())
+              }
+              searchInputTestId="searchByName"
+              searchButtonTestId="searchByNameBtn"
+            />
           </div>
 
           {userTagsMembersToAssignToLoading ? (
@@ -400,8 +400,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
                   next={loadMoreMembersToAssignTo}
                   hasMore={
-                    userTagsMembersToAssignToData?.getUsersToAssignTo
-                      .usersToAssignTo.pageInfo.hasNextPage ?? false
+                    userTagsMembersToAssignToData?.organization?.members
+                      ?.pageInfo?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
                   scrollableTarget="addPeopleToTagScrollableDiv"

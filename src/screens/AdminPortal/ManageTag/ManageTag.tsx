@@ -50,51 +50,33 @@
  * <ManageTag />
  * ```
  */
-import type { FormEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import IconComponent from 'shared-components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router';
 import { Col } from 'react-bootstrap';
 import Row from 'react-bootstrap/Row';
 import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from './ManageTag.module.css';
-import {
-  DataGrid,
-  type GridCellParams,
-  type TokenAwareGridColDef,
-  convertTokenColumns,
-} from 'shared-components/DataGridWrapper';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import type {
   InterfaceTagAssignedMembersQuery,
-  SortedByType,
   TagActionType,
 } from 'utils/organizationTagsUtils';
-import {
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-  dataGridStyle,
-} from 'utils/organizationTagsUtils';
-import Stack from '@mui/material/Stack';
-import {
-  REMOVE_USER_TAG,
-  UNASSIGN_USER_TAG,
-  UPDATE_USER_TAG,
-} from 'GraphQl/Mutations/TagMutations';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
+import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import AddPeopleToTag from 'components/AdminPortal/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/AdminPortal/TagActions/TagActions';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
-import EditUserTagModal from './editModal/EditUserTagModal';
-import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
-import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -115,18 +97,10 @@ function ManageTag(): JSX.Element {
   const unassignUserTagModal = useModalState();
   const addPeopleToTagModal = useModalState();
   const tagActionsModal = useModalState();
-  const editUserTagModal = useModalState();
-  const removeUserTagModal = useModalState();
 
-  const [unassignUserId, setUnassignUserId] = useState(null);
+  const [unassignUserId, setUnassignUserId] = useState<string | null>(null);
   const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
     useState('');
-  const [assignedMemberSearchFirstName, setAssignedMemberSearchFirstName] =
-    useState('');
-  const [assignedMemberSearchLastName, setAssignedMemberSearchLastName] =
-    useState('');
-  const [assignedMemberSortOrder, setAssignedMemberSortOrder] =
-    useState<SortedByType>('DESCENDING');
   // a state to specify whether we're assigning to tags or removing from tags
   const [tagActionType, setTagActionType] =
     useState<TagActionType>('assignToTags');
@@ -143,67 +117,16 @@ function ManageTag(): JSX.Element {
     loading: userTagAssignedMembersLoading,
     error: userTagAssignedMembersError,
     refetch: userTagAssignedMembersRefetch,
-    fetchMore: fetchMoreAssignedMembers,
   }: InterfaceTagAssignedMembersQuery = useQuery(USER_TAGS_ASSIGNED_MEMBERS, {
     variables: {
       id: currentTagId,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: {
-        firstName: { starts_with: assignedMemberSearchFirstName },
-        lastName: { starts_with: assignedMemberSearchLastName },
-      },
-      sortedBy: { id: assignedMemberSortOrder },
     },
     fetchPolicy: 'no-cache',
   });
 
-  const loadMoreAssignedMembers = (): void => {
-    fetchMoreAssignedMembers({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.pageInfo
-            ?.endCursor,
-      },
-      updateQuery: (
-        prevResult: { getAssignedUsers: InterfaceQueryUserTagsAssignedMembers },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult: {
-            getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
-          };
-        },
-      ) => {
-        if (!fetchMoreResult?.getAssignedUsers) return prevResult;
-
-        return {
-          getAssignedUsers: {
-            ...fetchMoreResult.getAssignedUsers,
-            usersAssignedTo: {
-              ...fetchMoreResult.getAssignedUsers.usersAssignedTo,
-              edges: [
-                ...(prevResult.getAssignedUsers.usersAssignedTo?.edges ?? []),
-                ...(fetchMoreResult.getAssignedUsers.usersAssignedTo?.edges ??
-                  []),
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
-
-  useEffect(() => {
-    const [firstName, ...lastNameParts] = assignedMemberSearchInput
-      .trim()
-      .split(/\s+/);
-    const lastName = lastNameParts.join(' '); // Joins everything after the first word
-    setAssignedMemberSearchFirstName(firstName);
-    setAssignedMemberSearchLastName(lastName);
-  }, [assignedMemberSearchInput]);
-
-  const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
+  const [unassignUserTag, { loading: unassignUserTagLoading }] =
+    useMutation(UNASSIGN_USER_TAG);
 
   const handleUnassignUserTag = async (): Promise<void> => {
     try {
@@ -223,62 +146,8 @@ function ManageTag(): JSX.Element {
     }
   };
 
-  const [edit] = useMutation(UPDATE_USER_TAG);
-
-  const [newTagName, setNewTagName] = useState<string>('');
   const currentTagName =
     userTagAssignedMembersData?.getAssignedUsers.name ?? '';
-
-  useEffect(() => {
-    setNewTagName(userTagAssignedMembersData?.getAssignedUsers.name ?? '');
-  }, [userTagAssignedMembersData]);
-
-  const handleEditUserTag = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-
-    if (newTagName === currentTagName) {
-      NotificationToast.info({
-        key: 'changeNameToEdit',
-        namespace: 'translation',
-      });
-      return;
-    }
-
-    try {
-      await edit({
-        variables: { tagId: currentTagId, name: newTagName },
-      });
-
-      NotificationToast.success({
-        key: 'tagUpdationSuccess',
-        namespace: 'translation',
-      });
-      userTagAssignedMembersRefetch();
-      editUserTagModal.close();
-    } catch (error: unknown) {
-      const errorMessage = getManageTagErrorMessage(error);
-      NotificationToast.error(errorMessage);
-    }
-  };
-
-  const [removeUserTag] = useMutation(REMOVE_USER_TAG);
-  const handleRemoveUserTag = async (): Promise<void> => {
-    try {
-      await removeUserTag({ variables: { id: currentTagId } });
-
-      navigate(`/admin/orgtags/${orgId}`);
-      removeUserTagModal.toggle();
-      NotificationToast.success({
-        key: 'tagRemovalSuccess',
-        namespace: 'translation',
-      });
-    } catch (error: unknown) {
-      const errorMessage = getManageTagErrorMessage(error);
-      NotificationToast.error(errorMessage);
-    }
-  };
 
   if (userTagAssignedMembersError) {
     return (
@@ -298,6 +167,12 @@ function ManageTag(): JSX.Element {
       (edge) => edge.node,
     ) ?? [];
 
+  const filteredAssignedMembers = userTagAssignedMembers.filter((member) =>
+    (member.name ?? '')
+      .toLowerCase()
+      .startsWith(assignedMemberSearchInput.toLowerCase()),
+  );
+
   // get the ancestorTags array and push the current tag in it
   // used for the tag breadcrumbs
   const orgUserTagAncestors = [
@@ -305,147 +180,147 @@ function ManageTag(): JSX.Element {
     { _id: currentTagId, name: currentTagName },
   ];
 
-  const redirectToSubTags = (tagId: string): void => {
-    navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
-  };
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
   };
 
-  const getFullName = (
-    firstName?: string | null,
-    lastName?: string | null,
-  ): string => {
-    return [firstName, lastName]
-      .filter((name): name is string => Boolean(name))
-      .join(' ');
-  };
+  const rowIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    filteredAssignedMembers.forEach((member, index) => {
+      map.set(member._id, index + 1);
+    });
+    return map;
+  }, [filteredAssignedMembers]);
 
-  const columns: TokenAwareGridColDef[] = [
+  const columns: IColumnDef<(typeof filteredAssignedMembers)[number]>[] = [
     {
-      field: 'id',
-      headerName: '#',
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row?.id}</div>;
+      id: 'sl_no',
+      header: tCommon('sl_no'),
+      accessor: '_id',
+      render: (_value, row) => <span>{rowIndexMap.get(row._id) ?? 0}.</span>,
+      meta: {
+        sortable: false,
+        align: 'center',
+        width: 'var(--space-13)',
       },
     },
     {
-      field: 'userName',
-      headerName: tCommon('userName'),
-      flex: 2,
-      minWidth: 'space-13',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="memberName">
-            {getFullName(params.row?.firstName, params.row?.lastName)}
-          </div>
-        );
-      },
+      id: 'userName',
+      header: tCommon('userName'),
+      accessor: 'name',
+      render: (value) => (
+        <span data-testid="memberName" className={styles.memberNameText}>
+          {String(value ?? '')}
+        </span>
+      ),
+      meta: { sortable: false, align: 'left' },
     },
     {
-      field: 'actions',
-      headerName: tCommon('actions'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'actions',
+      header: tCommon('actions'),
+      accessor: '_id',
+      render: (_value, row) => {
         return (
-          <div>
+          <div className={styles.tableActionButtons}>
             <Link
-              to={`/admin/member/${orgId}/${params.row?._id}`}
-              state={{ id: params.row?._id }}
+              to={`/admin/member/${orgId}/${row?._id}`}
+              state={{ id: row?._id }}
               data-testid="viewProfileBtn"
             >
-              <div
-                className={`btn btn-sm btn-primary me-3 ${styles.editButton}`}
-              >
+              <div className={`btn btn-sm btn-primary ${styles.editButton}`}>
                 {t('viewProfile')}
               </div>
             </Link>
 
             <Button
               size="sm"
-              variant="danger"
+              variant="outline-danger"
               onClick={() => {
-                setUnassignUserId(params.row?._id);
+                setUnassignUserId(row?._id);
                 toggleUnassignUserTagModal();
               }}
               data-testid="unassignTagBtn"
+              className={styles.unassignButton}
             >
               {tCommon('unassign')}
             </Button>
           </div>
         );
       },
+      meta: {
+        sortable: false,
+        align: 'center',
+        width: 'var(--space-21)',
+      },
     },
   ];
-
-  const hasMoreAssignedMembers = Boolean(
-    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.pageInfo
-      ?.hasNextPage,
-  );
 
   return (
     <>
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
+          <div
+            className={styles.topBreadcrumb}
+            data-testid="manage-tag-top-breadcrumb"
+          >
+            <Button
+              variant="link"
+              className={styles.topBreadcrumbLink}
+              onClick={() => navigate(`/admin/orgtags/${orgId}`)}
+              data-testid="allTagsBtn"
+              aria-label={t('tags')}
+            >
+              {t('tags')}
+            </Button>
+            {orgUserTagAncestors.map((tag, index) => {
+              const isLast = index === orgUserTagAncestors.length - 1;
+              return (
+                <div
+                  key={tag._id ?? index}
+                  className={styles.topBreadcrumbItemWrap}
+                >
+                  <span className={styles.topBreadcrumbSeparator}>/</span>
+                  {isLast ? (
+                    <span className={styles.topBreadcrumbCurrent}>
+                      {tag.name}
+                    </span>
+                  ) : (
+                    <Button
+                      variant="link"
+                      className={styles.topBreadcrumbLink}
+                      onClick={() => redirectToManageTag(tag._id as string)}
+                      data-testid="redirectToManageTag"
+                    >
+                      {tag.name}
+                    </Button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
           <div className={styles.btnsContainer}>
-            <SearchFilterBar
-              hasDropdowns={true}
-              searchPlaceholder={tCommon('searchByName')}
-              searchValue={assignedMemberSearchInput}
-              onSearchChange={(term) =>
-                setAssignedMemberSearchInput(term.trim())
-              }
-              searchInputTestId="searchInput"
-              searchButtonTestId="searchBtn"
-              dropdowns={[
-                {
-                  id: 'manage-tag-sort',
-                  label: tCommon('sort'),
-                  type: 'sort',
-                  options: [
-                    { label: tCommon('Latest'), value: 'DESCENDING' },
-                    { label: tCommon('Oldest'), value: 'ASCENDING' },
-                  ],
-                  selectedOption: assignedMemberSortOrder,
-                  onOptionChange: (value) =>
-                    setAssignedMemberSortOrder(value as SortedByType),
-                  dataTestIdPrefix: 'sortPeople',
-                },
-              ]}
-              additionalButtons={
-                <>
-                  <Button
-                    variant="success"
-                    onClick={() => redirectToSubTags(currentTagId as string)}
-                    className={`${styles.createButton} mb-2`}
-                    data-testid="subTagsBtn"
-                  >
-                    {t('subTags')}
-                  </Button>
-                  <Button
-                    variant="success"
-                    onClick={addPeopleToTagModal.open}
-                    data-testid="addPeopleToTagBtn"
-                    className={`${styles.createButton} mb-2 ms-3`}
-                  >
-                    <i className={'fa fa-plus me-2'} />
-                    {t('addPeopleToTag')}
-                  </Button>
-                </>
-              }
-            />
+            <div className={styles.searchBarGrow}>
+              <SearchFilterBar
+                hasDropdowns={false}
+                searchPlaceholder={tCommon('searchByName')}
+                searchValue={assignedMemberSearchInput}
+                onSearchChange={(term) =>
+                  setAssignedMemberSearchInput(term.trim())
+                }
+                searchInputTestId="searchInput"
+                searchButtonTestId="searchBtn"
+              />
+            </div>
+            <Button
+              variant="success"
+              onClick={addPeopleToTagModal.open}
+              data-testid="addPeopleToTagBtn"
+              className={styles.createButton}
+            >
+              <i className={'fa fa-plus me-2'} />
+              {t('addPeopleToTag')}
+            </Button>
           </div>
 
           <LoadingState
@@ -454,76 +329,29 @@ function ManageTag(): JSX.Element {
           >
             <Row className="mb-4">
               <Col xs={9}>
-                <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
-                  <div className="ms-3 my-1">
-                    <IconComponent name="Tag" />
-                  </div>
-                  <div
-                    onClick={() => navigate(`/admin/orgtags/${orgId}`)}
-                    className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
-                    data-testid="allTagsBtn"
-                    data-text={t('tags')}
-                  >
-                    {t('tags')}
-                    <i className={'mx-2 fa fa-caret-right'} />
-                  </div>
-                  {orgUserTagAncestors?.map((tag, index) => (
-                    <div
-                      key={index}
-                      className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                      onClick={() => redirectToManageTag(tag._id as string)}
-                      data-testid="redirectToManageTag"
-                      data-text={tag.name}
-                    >
-                      {tag.name}
-                      {orgUserTagAncestors.length - 1 !== index && (
-                        <i className={'mx-2 fa fa-caret-right'} />
-                      )}
-                    </div>
-                  ))}
-                </div>
                 <div
                   id="manageTagScrollableDiv"
                   data-testid="manageTagScrollableDiv"
                   className={styles.manageTagScrollableDiv}
                 >
-                  <InfiniteScroll
-                    dataLength={userTagAssignedMembers.length}
-                    next={loadMoreAssignedMembers}
-                    hasMore={hasMoreAssignedMembers}
-                    loader={<InfiniteScrollLoader />}
-                    scrollableTarget="manageTagScrollableDiv"
-                  >
-                    <DataGrid
-                      disableColumnMenu
-                      columnBufferPx={7}
-                      hideFooter={true}
-                      getRowId={(row) => row.id}
-                      slots={{
-                        noRowsOverlay: () => (
-                          <Stack
-                            height="100%"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            {t('noAssignedMembersFound')}
-                          </Stack>
-                        ),
-                      }}
-                      sx={dataGridStyle}
-                      getRowClassName={() => `${styles.rowBackgrounds}`}
-                      autoHeight
-                      rowHeight={65}
-                      rows={userTagAssignedMembers.map(
-                        (assignedMembers, index) => ({
-                          id: index + 1,
-                          ...assignedMembers,
-                        }),
-                      )}
-                      columns={convertTokenColumns(columns)}
-                      isRowSelectable={() => false}
+                  {!userTagAssignedMembersLoading &&
+                  filteredAssignedMembers.length === 0 ? (
+                    <EmptyState
+                      icon="User"
+                      message={t('noAssignedMembersFound')}
+                      dataTestId="manage-tag-empty-state"
                     />
-                  </InfiniteScroll>
+                  ) : (
+                    <DataTable
+                      data={filteredAssignedMembers}
+                      columns={columns}
+                      loading={userTagAssignedMembersLoading}
+                      rowKey="_id"
+                      paginationMode="client"
+                      pageSize={PAGE_SIZE}
+                      tableClassName={styles.listTable}
+                    />
+                  )}
                 </div>
               </Col>
               <Col className="ms-auto" xs={3}>
@@ -531,41 +359,43 @@ function ManageTag(): JSX.Element {
                   <div className="ms-3 fs-5">{tCommon('actions')}</div>
                 </div>
                 <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
-                  <div
+                  <Button
+                    type="button"
+                    variant="secondary"
                     onClick={() => {
                       setTagActionType('assignToTags');
                       tagActionsModal.open();
                     }}
-                    className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
+                    className={styles.assignTagActionButton}
                     data-testid="assignToTags"
                   >
-                    {t('assignToTags')}
-                  </div>
-                  <div
+                    <span className={styles.actionButtonContent}>
+                      <i
+                        className={`fa fa-tag ${styles.actionButtonIcon}`}
+                        aria-hidden="true"
+                      />
+                      <span>{t('assignToTags')}</span>
+                    </span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
                     onClick={() => {
                       setTagActionType('removeFromTags');
                       tagActionsModal.open();
                     }}
-                    className="mb-1 btn btn-danger btn-sm w-75"
+                    className={styles.removeTagActionButton}
                     data-testid="removeFromTags"
                   >
-                    {t('removeFromTags')}
-                  </div>
+                    <span className={styles.actionButtonContent}>
+                      <i
+                        className={`fa fa-tag ${styles.actionButtonIcon}`}
+                        aria-hidden="true"
+                      />
+                      <span>{t('removeFromTags')}</span>
+                    </span>
+                  </Button>
                   <hr className={styles.tagActionsDivider} />
-                  <div
-                    onClick={editUserTagModal.open}
-                    className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
-                    data-testid="editUserTag"
-                  >
-                    {tCommon('edit')}
-                  </div>
-                  <div
-                    onClick={removeUserTagModal.open}
-                    className="mb-2 btn btn-danger btn-sm w-75"
-                    data-testid="removeTag"
-                  >
-                    {tCommon('remove')}
-                  </div>
                 </div>
               </Col>
             </Row>
@@ -584,27 +414,17 @@ function ManageTag(): JSX.Element {
         tagActionsModalIsOpen={tagActionsModal.isOpen}
         hideTagActionsModal={tagActionsModal.close}
         tagActionType={tagActionType}
+        assigneeIds={userTagAssignedMembers.map((member) => member._id)}
       />
-      {/* Unassign User Tag Modal */}
-      <UnassignUserTagModal
-        unassignUserTagModalIsOpen={unassignUserTagModal.isOpen}
-        toggleUnassignUserTagModal={toggleUnassignUserTagModal}
-        handleUnassignUserTag={handleUnassignUserTag}
-      />
-      {/* Edit User Tag Modal */}
-      <EditUserTagModal
-        editUserTagModalIsOpen={editUserTagModal.isOpen}
-        hideEditUserTagModal={editUserTagModal.close}
-        newTagName={newTagName}
-        setNewTagName={setNewTagName}
-        handleEditUserTag={handleEditUserTag}
-      />
-      {/* Remove User Tag Modal */}
-      <RemoveUserTagModal
-        removeUserTagModalIsOpen={removeUserTagModal.isOpen}
-        toggleRemoveUserTagModal={removeUserTagModal.close}
-        handleRemoveUserTag={handleRemoveUserTag}
-      />
+      <DeleteModal
+        open={unassignUserTagModal.isOpen}
+        title={t('unassignUserTag')}
+        onClose={toggleUnassignUserTagModal}
+        onDelete={handleUnassignUserTag}
+        loading={unassignUserTagLoading}
+      >
+        <p>{t('unassignUserTagMessage')}</p>
+      </DeleteModal>
     </>
   );
 }

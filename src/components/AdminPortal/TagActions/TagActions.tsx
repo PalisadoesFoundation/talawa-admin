@@ -27,156 +27,298 @@
  *
  */
 // translation-check-keyPrefix: manageTag
-import { useMutation } from '@apollo/client';
+import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Button from 'shared-components/Button/Button';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
-import type { InterfaceTagData } from 'utils/interfaces';
 import styles from './TagActions.module.css';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
-  ASSIGN_TO_TAGS,
-  REMOVE_FROM_TAGS,
+  ORGANIZATION_TAGS_AND_FOLDERS,
+  ORGANIZATION_TAGS_WITH_FOLDER,
+} from 'GraphQl/Queries/userTagQueries';
+import {
+  ADD_PEOPLE_TO_TAG,
+  UNASSIGN_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
-import type { TagActionType } from 'utils/organizationTagsUtils';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import TagNode from './Node/TagNode';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
-import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { useTranslation } from 'react-i18next';
-
-interface InterfaceUserTagsAncestorData {
-  _id: string;
-  name: string;
-}
-
-export interface InterfaceTagActionsProps {
-  tagActionsModalIsOpen: boolean;
-  hideTagActionsModal: () => void;
-  tagActionType: TagActionType;
-}
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
+import { getRootFolderIds, renderFolderTree } from './tagTreeRenderer';
+import { loadFolderNode } from './tagFolderLoader';
+import type {
+  InterfaceOrganizationTagsQuery,
+  InterfaceRootFolderQuery,
+  InterfaceTagActionsProps,
+  InterfaceTagFolderItem,
+  InterfaceTagSelectionItem,
+} from 'types/AdminPortal/TagActions/interface';
 
 const TagActions: React.FC<InterfaceTagActionsProps> = ({
   tagActionsModalIsOpen,
   hideTagActionsModal,
   tagActionType,
+  assigneeIds = [],
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const { t: tCommon } = useTranslation('common');
+  const client = useApolloClient();
 
   const { orgId, tagId: currentTagId } = useParams();
 
   const [tagSearchName, setTagSearchName] = useState('');
-  const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
+  const [selectedTags, setSelectedTags] = useState<InterfaceTagSelectionItem[]>(
+    [],
+  );
   const [checkedTags, setCheckedTags] = useState<Set<string>>(new Set());
-  const [addAncestorTagsData, setAddAncestorTagsData] = useState<
-    Set<InterfaceUserTagsAncestorData>
-  >(new Set());
-  const [removeAncestorTagsData, setRemoveAncestorTagsData] = useState<
-    Set<InterfaceUserTagsAncestorData>
-  >(new Set());
-  const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState<
-    Map<string, number>
+  const [expandedFolderIds, setExpandedFolderIds] = useState<Set<string>>(
+    new Set(),
+  );
+  const [folderStateMap, setFolderStateMap] = useState<
+    Map<string, InterfaceTagFolderItem>
   >(new Map());
+  const autoPaginatingRef = useRef(false);
+  const loadingFolderIdsRef = useRef<Set<string>>(new Set());
 
-  void ancestorTagsDataMap;
+  const {
+    data: rootFoldersData,
+    loading: rootFoldersLoading,
+    error: rootFoldersError,
+    fetchMore,
+  } = useQuery<InterfaceRootFolderQuery>(ORGANIZATION_TAGS_AND_FOLDERS, {
+    variables: {
+      id: orgId,
+      tagFoldersFirst: 32,
+    },
+    skip: !tagActionsModalIsOpen || !orgId,
+  });
+
+  const { data: orgTagsData, fetchMore: fetchMoreTags } =
+    useQuery<InterfaceOrganizationTagsQuery>(ORGANIZATION_TAGS_WITH_FOLDER, {
+      variables: {
+        id: orgId,
+        first: 32,
+      },
+      skip: !tagActionsModalIsOpen || !orgId,
+    });
 
   useEffect(() => {
-    setAncestorTagsDataMap((prevMap) => {
-      const newMap = new Map(prevMap);
-
-      addAncestorTagsData.forEach((ancestorTag) => {
-        const prevValue = prevMap.get(ancestorTag._id);
-        if (prevValue !== undefined) {
-          newMap.set(ancestorTag._id, prevValue + 1);
-        } else {
-          newMap.set(ancestorTag._id, 1);
-        }
-      });
-
-      if (addAncestorTagsData.size > 0) {
-        setCheckedTags((prev) => {
-          const next = new Set(prev);
-          addAncestorTagsData.forEach((ancestorTag) => {
-            next.add(ancestorTag._id);
-          });
-          return next;
-        });
-      }
-
-      return newMap;
-    });
-  }, [addAncestorTagsData]);
-
-  useEffect(() => {
-    setAncestorTagsDataMap((prevMap) => {
-      const newMap = new Map(prevMap);
-      const tagsToDelete: string[] = [];
-
-      removeAncestorTagsData.forEach((ancestorTag) => {
-        const prevValue = prevMap.get(ancestorTag._id);
-        if (prevValue === undefined || prevValue === null) {
-          newMap.delete(ancestorTag._id);
-          tagsToDelete.push(ancestorTag._id);
-        } else if (prevValue === 1) {
-          newMap.delete(ancestorTag._id);
-          tagsToDelete.push(ancestorTag._id);
-        } else if (prevValue > 1) {
-          newMap.set(ancestorTag._id, prevValue - 1);
-        }
-      });
-
-      if (tagsToDelete.length > 0) {
-        setCheckedTags((prev) => {
-          const next = new Set(prev);
-          tagsToDelete.forEach((id) => next.delete(id));
-          return next;
-        });
-      }
-
-      return newMap;
-    });
-  }, [removeAncestorTagsData]);
-
-  const selectTag = (tag: InterfaceTagData): void => {
-    const newCheckedTags = new Set(checkedTags);
-    setSelectedTags((selectedTags) => [...selectedTags, tag]);
-    newCheckedTags.add(tag._id);
-    setAddAncestorTagsData(new Set(tag.ancestorTags));
-    setCheckedTags(newCheckedTags);
-  };
-
-  const deSelectTag = (tag: InterfaceTagData): void => {
-    if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
+    if (!tagActionsModalIsOpen || !orgId || !rootFoldersData?.organization) {
       return;
     }
 
-    const newCheckedTags = new Set(checkedTags);
-    setSelectedTags(
-      selectedTags.filter((selectedTag) => selectedTag._id !== tag._id),
-    );
-    newCheckedTags.delete(tag._id);
-    setRemoveAncestorTagsData(new Set(tag.ancestorTags));
-    setCheckedTags(newCheckedTags);
-  };
+    const foldersPageInfo = rootFoldersData.organization.tagFolders?.pageInfo;
+
+    if (!foldersPageInfo?.hasNextPage) {
+      return;
+    }
+
+    if (autoPaginatingRef.current) {
+      return;
+    }
+
+    autoPaginatingRef.current = true;
+
+    void fetchMore({
+      variables: {
+        id: orgId,
+        tagFoldersAfter: foldersPageInfo.endCursor,
+        tagFoldersFirst: 32,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult?.organization) {
+          return prev;
+        }
+
+        const prevFolders = prev.organization?.tagFolders?.edges ?? [];
+        const nextFolders =
+          fetchMoreResult.organization.tagFolders?.edges ?? [];
+        const mergedFoldersById = new Map(
+          prevFolders.map((edge) => [edge.node.id, edge]),
+        );
+        nextFolders.forEach((edge) =>
+          mergedFoldersById.set(edge.node.id, edge),
+        );
+
+        return {
+          ...prev,
+          organization: {
+            ...prev.organization,
+            ...fetchMoreResult.organization,
+            tagFolders: {
+              ...prev.organization?.tagFolders,
+              ...fetchMoreResult.organization.tagFolders,
+              edges: Array.from(mergedFoldersById.values()),
+            },
+          },
+        };
+      },
+    }).finally(() => {
+      autoPaginatingRef.current = false;
+    });
+  }, [fetchMore, orgId, rootFoldersData, tagActionsModalIsOpen]);
+
+  useEffect(() => {
+    if (!tagActionsModalIsOpen || !orgId || !orgTagsData?.organization) {
+      return;
+    }
+
+    const tagsPageInfo = orgTagsData.organization.tags?.pageInfo;
+    if (!tagsPageInfo?.hasNextPage) {
+      return;
+    }
+
+    if (autoPaginatingRef.current) {
+      return;
+    }
+
+    autoPaginatingRef.current = true;
+
+    void fetchMoreTags({
+      variables: {
+        id: orgId,
+        after: tagsPageInfo.endCursor,
+        first: 32,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult?.organization) {
+          return prev;
+        }
+
+        const prevTags = prev.organization?.tags?.edges ?? [];
+        const nextTags = fetchMoreResult.organization.tags?.edges ?? [];
+        const mergedTagsById = new Map(
+          prevTags.map((edge) => [edge.node.id, edge]),
+        );
+        nextTags.forEach((edge) => mergedTagsById.set(edge.node.id, edge));
+
+        return {
+          ...prev,
+          organization: {
+            ...prev.organization,
+            ...fetchMoreResult.organization,
+            tags: {
+              ...prev.organization?.tags,
+              ...fetchMoreResult.organization.tags,
+              edges: Array.from(mergedTagsById.values()),
+            },
+          },
+        };
+      },
+    }).finally(() => {
+      autoPaginatingRef.current = false;
+    });
+  }, [fetchMoreTags, orgId, orgTagsData, tagActionsModalIsOpen]);
+
+  useEffect(() => {
+    if (!tagActionsModalIsOpen) {
+      return;
+    }
+
+    const rootFolders = rootFoldersData?.organization?.tagFolders?.edges ?? [];
+
+    if (!rootFolders.length) {
+      return;
+    }
+
+    setFolderStateMap((prev) => {
+      const next = new Map(prev);
+
+      rootFolders.forEach(({ node }) => {
+        const existing = next.get(node.id);
+
+        next.set(node.id, {
+          id: node.id,
+          name: node.name,
+          parentFolderId: node.parentFolder?.id ?? null,
+          childFolderIds: existing?.childFolderIds ?? [],
+          tags: existing?.tags ?? [],
+          loaded: existing?.loaded ?? false,
+          loading: existing?.loading ?? false,
+        });
+      });
+
+      return next;
+    });
+  }, [rootFoldersData, tagActionsModalIsOpen]);
+
+  useEffect(() => {
+    if (!tagActionsModalIsOpen) {
+      setFolderStateMap(new Map());
+      setExpandedFolderIds(new Set());
+      setCheckedTags(new Set());
+      setSelectedTags([]);
+      setTagSearchName('');
+      loadingFolderIdsRef.current = new Set();
+    }
+  }, [tagActionsModalIsOpen]);
+
+  const tagsByFolderMap = useMemo(() => {
+    const grouped = new Map<string, InterfaceTagSelectionItem[]>();
+    const term = tagSearchName.trim().toLowerCase();
+
+    (orgTagsData?.organization?.tags?.edges ?? []).forEach((edge) => {
+      const id = edge.node.id;
+      if (id === currentTagId) {
+        return;
+      }
+
+      const name = edge.node.name;
+      if (term && !name.toLowerCase().includes(term)) {
+        return;
+      }
+
+      const folderId = edge.node.folder?.id;
+      if (!folderId) {
+        return;
+      }
+
+      const list = grouped.get(folderId) ?? [];
+      list.push({ id, name });
+      grouped.set(folderId, list);
+    });
+
+    return grouped;
+  }, [currentTagId, orgTagsData, tagSearchName]);
+
+  useEffect(() => {
+    setFolderStateMap((prev) => {
+      const next = new Map(prev);
+
+      next.forEach((folder, id) => {
+        next.set(id, {
+          ...folder,
+          tags: tagsByFolderMap.get(id) ?? [],
+        });
+      });
+
+      return next;
+    });
+  }, [tagsByFolderMap]);
+
+  const [assignUserTag] = useMutation(ADD_PEOPLE_TO_TAG);
+  const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
 
   const toggleTagSelection = (
-    tag: InterfaceTagData,
+    tag: InterfaceTagSelectionItem,
     isSelected: boolean,
   ): void => {
-    if (isSelected) {
-      selectTag(tag);
-    } else {
-      deSelectTag(tag);
-    }
-  };
+    const nextChecked = new Set(checkedTags);
 
-  const [assignToTags] = useMutation(ASSIGN_TO_TAGS);
-  const [removeFromTags] = useMutation(REMOVE_FROM_TAGS);
+    if (isSelected) {
+      nextChecked.add(tag.id);
+      setSelectedTags((prev) => [...prev, tag]);
+    } else {
+      nextChecked.delete(tag.id);
+      setSelectedTags((prev) =>
+        prev.filter((selected) => selected.id !== tag.id),
+      );
+    }
+
+    setCheckedTags(nextChecked);
+  };
 
   const handleTagAction = async (
     e: FormEvent<HTMLFormElement>,
@@ -188,27 +330,41 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       return;
     }
 
-    const mutationObject = {
-      variables: {
-        currentTagId,
-        selectedTagIds: selectedTags.map((selectedTag) => selectedTag._id),
-      },
-    };
+    if (!assigneeIds.length) {
+      NotificationToast.error(t('noAssignedMembersFound'));
+      return;
+    }
 
     try {
-      const { data } =
-        tagActionType === 'assignToTags'
-          ? await assignToTags(mutationObject)
-          : await removeFromTags(mutationObject);
-
-      if (data) {
-        if (tagActionType === 'assignToTags') {
-          NotificationToast.success(t('successfullyAssignedToTags'));
-        } else {
-          NotificationToast.success(t('successfullyRemovedFromTags'));
+      for (const selectedTag of selectedTags) {
+        for (const assigneeId of assigneeIds) {
+          if (tagActionType === 'assignToTags') {
+            await assignUserTag({
+              variables: {
+                tagId: selectedTag.id,
+                userId: assigneeId,
+              },
+            });
+          } else {
+            await unassignUserTag({
+              variables: {
+                tagId: selectedTag.id,
+                userId: assigneeId,
+              },
+            });
+          }
         }
-        hideTagActionsModal();
       }
+
+      if (tagActionType === 'assignToTags') {
+        NotificationToast.success(t('successfullyAssignedToTags'));
+      } else {
+        NotificationToast.success(t('successfullyRemovedFromTags'));
+      }
+
+      hideTagActionsModal();
+      setSelectedTags([]);
+      setCheckedTags(new Set());
     } catch (error: unknown) {
       if (error instanceof Error) {
         NotificationToast.error(error.message);
@@ -216,154 +372,165 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     }
   };
 
-  return (
+  const searchTerm = tagSearchName.trim().toLowerCase();
+
+  const rootFolderIds = useMemo(
+    () => getRootFolderIds(folderStateMap),
+    [folderStateMap],
+  );
+
+  const toggleFolderExpansion = (folderId: string): void => {
+    const shouldExpand = !expandedFolderIds.has(folderId);
+
+    setExpandedFolderIds((prev) => {
+      const next = new Set(prev);
+
+      if (next.has(folderId)) {
+        next.delete(folderId);
+      } else {
+        next.add(folderId);
+      }
+
+      return next;
+    });
+
+    if (!shouldExpand) {
+      return;
+    }
+
+    const folder = folderStateMap.get(folderId);
+    if (
+      folder &&
+      !folder.loading &&
+      (!folder.loaded ||
+        (folder.loaded &&
+          folder.childFolderIds.length === 0 &&
+          folder.tags.length === 0))
+    ) {
+      void loadFolderNode({
+        folderId,
+        loadingFolderIdsRef,
+        setFolderStateMap,
+        tagsByFolderMap,
+        client,
+        tCommon,
+      });
+    }
+  };
+
+  const modalFooter = (
     <>
-      <BaseModal
-        show={tagActionsModalIsOpen}
-        onHide={hideTagActionsModal}
-        backdrop="static"
-        centered
-        title={
-          tagActionType === 'assignToTags'
-            ? t('assignToTags')
-            : t('removeFromTags')
-        }
-        headerClassName={styles.modalHeader}
-        dataTestId="modalOrganizationHeader"
-        footer={
-          <>
-            <Button
-              variant="danger"
-              className={styles.removeButton}
-              onClick={(): void => hideTagActionsModal()}
-              data-testid="closeTagActionsModalBtn"
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              form="tagActionForm"
-              data-testid="tagActionSubmitBtn"
-              className={styles.addButton}
-            >
-              {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
-            </Button>
-          </>
-        }
+      <Button
+        variant="outline-danger"
+        className={styles.removeButton}
+        onClick={hideTagActionsModal}
+        data-testid="closeTagActionsModalBtn"
       >
-        <form id="tagActionForm" onSubmit={handleTagAction}>
-          <div className="pb-0">
-            <div
-              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
-            >
-              {selectedTags.length === 0 ? (
-                <div className="text-body-tertiary mx-auto">
-                  {t('noTagSelected')}
-                </div>
-              ) : (
-                selectedTags.map((tag: InterfaceTagData) => (
-                  <div
-                    key={tag._id}
-                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
-                  >
-                    {tag.name}
-                    <Button
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent p-0`}
-                      onClick={() => deSelectTag(tag)}
-                      data-testid={`clearSelectedTag${tag._id}`}
-                      aria-label={t('remove')}
-                      variant="outline"
-                    >
-                      <i className="fa fa-times" />
-                    </Button>
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className="mt-3">
-              <SearchBar
-                value={tagSearchName}
-                onChange={(val) => setTagSearchName(val.trim())}
-                placeholder={tCommon('searchByName')}
-                inputTestId="searchByName"
-                autoComplete="off"
-                showSearchButton={false}
-                showLeadingIcon={true}
-                inputClassName={styles.inputField}
-              />
-            </div>
-
-            <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
-              {t('allTags')}
-            </div>
-            <ul
-              id="scrollableDiv"
-              data-testid="scrollableDiv"
-              className={styles.tagActionsScrollableDiv}
-              aria-label={t('allTags')}
-            >
-              {tagActionsModalIsOpen && (
-                <CursorPaginationManager
-                  query={ORGANIZATION_USER_TAGS_LIST}
-                  queryVariables={{
-                    id: orgId,
-                    where: { name: { starts_with: tagSearchName } },
-                  }}
-                  dataPath="organizations.0.userTags"
-                  itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
-                  renderItem={(tag: InterfaceTagData) => (
-                    <li key={tag._id} className="position-relative w-100">
-                      <div
-                        className="d-inline-block w-100"
-                        data-testid="orgUserTag"
-                      >
-                        <TagNode
-                          tag={tag}
-                          checkedTags={checkedTags}
-                          toggleTagSelection={toggleTagSelection}
-                        />
-                      </div>
-
-                      {tag.parentTag && (
-                        <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
-                          <>{'('}</>
-                          {tag.ancestorTags?.map((ancestorTag) => (
-                            <span
-                              key={ancestorTag._id}
-                              className="ms-2 my-0"
-                              data-testid="ancestorTagsBreadCrumbs"
-                            >
-                              {ancestorTag.name}
-                              <i className="ms-2 fa fa-caret-right" />
-                            </span>
-                          ))}
-                          <>{')'}</>
-                        </div>
-                      )}
-                    </li>
-                  )}
-                  keyExtractor={(tag: InterfaceTagData) => tag._id}
-                  loadingComponent={
-                    <div className={styles.loadingDiv}>
-                      <InfiniteScrollLoader />
-                    </div>
-                  }
-                  emptyStateComponent={
-                    <div
-                      className="text-body-tertiary mx-auto"
-                      data-testid="noTagsFoundMessage"
-                    >
-                      {t('noTagsFound')}
-                    </div>
-                  }
-                />
-              )}
-            </ul>
-          </div>
-        </form>
-      </BaseModal>
+        {tCommon('cancel')}
+      </Button>
+      <Button
+        type="submit"
+        form="tagActionForm"
+        data-testid="tagActionSubmitBtn"
+        className={styles.addButton}
+      >
+        {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
+      </Button>
     </>
+  );
+
+  return (
+    <CRUDModalTemplate
+      open={tagActionsModalIsOpen}
+      onClose={hideTagActionsModal}
+      title={
+        tagActionType === 'assignToTags'
+          ? t('assignToTags')
+          : t('removeFromTags')
+      }
+      customFooter={modalFooter}
+      data-testId="tagActionsModal"
+    >
+      <form id="tagActionForm" onSubmit={handleTagAction}>
+        <div
+          className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+        >
+          {selectedTags.length === 0 ? (
+            <div className="text-body-tertiary mx-auto">
+              {t('noTagSelected')}
+            </div>
+          ) : (
+            selectedTags.map((tag) => (
+              <div key={tag.id} className={styles.memberBadge}>
+                {tag.name}
+                <Button
+                  type="button"
+                  className={styles.removeMemberChipButton}
+                  onClick={() => toggleTagSelection(tag, false)}
+                  data-testid={`clearSelectedTag${tag.id}`}
+                  aria-label={t('remove')}
+                >
+                  <i className="fa fa-times" aria-hidden="true" />
+                </Button>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className={styles.searchSection}>
+          <SearchFilterBar
+            hasDropdowns={false}
+            searchPlaceholder={tCommon('searchByName')}
+            searchValue={tagSearchName}
+            onSearchChange={(value) => setTagSearchName(value.trim())}
+            searchInputTestId="searchByName"
+            searchButtonTestId="searchByNameBtn"
+          />
+        </div>
+
+        <div className={styles.listTitle}>{t('allTags')}</div>
+
+        <ul
+          id="scrollableDiv"
+          data-testid="scrollableDiv"
+          className={styles.tagActionsScrollableDiv}
+          aria-label={t('allTags')}
+        >
+          {rootFoldersLoading && rootFolderIds.length === 0 ? (
+            <div className={styles.loadingDiv}>
+              <InfiniteScrollLoader />
+            </div>
+          ) : rootFoldersError ? (
+            <div
+              className="text-danger mx-auto"
+              data-testid="tagsQueryErrorMessage"
+            >
+              {rootFoldersError.message}
+            </div>
+          ) : rootFolderIds.length === 0 ? (
+            <div
+              className="text-body-tertiary mx-auto"
+              data-testid="noTagsFoundMessage"
+            >
+              {t('noTagsFound')}
+            </div>
+          ) : (
+            rootFolderIds.flatMap((folderId) =>
+              renderFolderTree(folderId, 0, {
+                folderStateMap,
+                expandedFolderIds,
+                checkedTags,
+                searchTerm,
+                styles,
+                onToggleFolderExpansion: toggleFolderExpansion,
+                onToggleTagSelection: toggleTagSelection,
+                noTagsFoundText: t('noTagsFound'),
+              }),
+            )
+          )}
+        </ul>
+      </form>
+    </CRUDModalTemplate>
   );
 };
 

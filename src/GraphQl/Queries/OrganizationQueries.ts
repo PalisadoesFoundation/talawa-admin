@@ -243,7 +243,7 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
 `;
 
 export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
-  query OrganizationTags(
+  query OrganizationTagFolders(
     $input: QueryOrganizationInput!
     $after: String
     $before: String
@@ -253,20 +253,30 @@ export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
     organization(input: $input) {
       id
       name
-      tags(after: $after, before: $before, first: $first, last: $last) {
+      tagFolders(after: $after, before: $before, first: $first, last: $last) {
         edges {
           cursor
           node {
             id
             name
             createdAt
-            updater {
+            creator {
               id
               name
             }
-            folder {
-              id
-              name
+            childFolders(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+            tags(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
             }
           }
         }

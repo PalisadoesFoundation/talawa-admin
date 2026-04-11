@@ -6,7 +6,7 @@
 
 > `const` **ASSIGN\_TO\_TAGS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L91)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L148)
 
 GraphQL mutation to assign people to multiple tags.
 

@@ -169,7 +169,7 @@ vi.mock('screens/AdminPortal/ManageTag/ManageTag', () => ({
   default: () => <div data-testid="mock-manage-tag">Mock Manage Tag</div>,
 }));
 
-vi.mock('screens/AdminPortal/SubTags/SubTags', () => ({
+vi.mock('screens/AdminPortal/Tags/Tags', () => ({
   default: () => <div data-testid="mock-sub-tags">Mock Sub Tags</div>,
 }));
 

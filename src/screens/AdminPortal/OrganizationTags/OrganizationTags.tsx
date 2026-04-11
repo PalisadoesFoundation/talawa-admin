@@ -2,7 +2,7 @@
  * OrganizationTags Component
  *
  * This component is responsible for managing and displaying organization tags.
- * It provides functionalities such as searching, sorting, creating, and managing tags.
+ * It provides functionalities such as searching, creating, and managing tags.
  * The component integrates with GraphQL queries and mutations to fetch and update data.
  *
  *
@@ -23,32 +23,80 @@
 import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useNavigate, useParams, Link } from 'react-router';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import IconComponent from 'shared-components/IconComponent/IconComponent';
 import Button from 'shared-components/Button';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
-import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
-import {
-  DataGridWrapper,
-  type GridCellParams,
-} from 'shared-components/DataGridWrapper';
-import type { TokenAwareGridColDef } from 'types/DataGridWrapper/interface';
-import type {
-  InterfaceOrganizationTagsQueryPG,
-  SortedByType,
-} from 'utils/organizationTagsUtils';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
-import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
+import { CREATE_TAG_FOLDER } from 'GraphQl/Mutations/TagMutations';
+import { ORGANIZATION_TAGS_WITH_FOLDER } from 'GraphQl/Queries/userTagQueries';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import ManageFolderModal from 'screens/AdminPortal/ManageTag/ManageFolderModal';
+
+interface InterfaceTagFolderNode {
+  id: string;
+  name: string;
+  createdAt?: string | null;
+  creator?: {
+    id?: string;
+    name?: string | null;
+  } | null;
+  childFolders?: {
+    edges?: Array<{
+      node: {
+        id: string;
+      };
+    }>;
+  };
+  tags?: {
+    edges?: Array<{
+      node: {
+        id: string;
+      };
+    }>;
+  };
+}
+
+interface InterfaceOrganizationTagFoldersQuery {
+  organization?: {
+    id: string;
+    name: string;
+    tagFolders?: {
+      edges: Array<{
+        node: InterfaceTagFolderNode;
+      }>;
+      pageInfo?: {
+        hasNextPage?: boolean;
+        endCursor?: string | null;
+      };
+    };
+  };
+}
+
+interface InterfaceOrganizationTagCountsQuery {
+  organization?: {
+    id: string;
+    tags?: {
+      edges?: Array<{
+        node: {
+          id: string;
+          folder?: {
+            id: string;
+          } | null;
+        };
+      }>;
+    };
+  };
+}
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -62,83 +110,71 @@ function OrganizationTags(): JSX.Element {
     close: hideCreateTagModal,
   } = useModalState();
 
-  const [tagSearchName, setTagSearchName] = useState('');
-  const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
+  const manageTagFolderModal = useModalState();
+
+  const [folderSearchName, setFolderSearchName] = useState('');
 
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const [tagName, setTagName] = useState<string>('');
+  const [folderName, setFolderName] = useState<string>('');
+  const [folderNameTouched, setFolderNameTouched] = useState(false);
+  const [selectedFolder, setSelectedFolder] =
+    useState<InterfaceTagFolderNode | null>(null);
+
+  const folderNameError =
+    folderNameTouched && !folderName.trim() ? tCommon('required') : undefined;
 
   const {
-    data: orgUserTagsData,
-    error: orgUserTagsError,
-    refetch: orgUserTagsRefetch,
-    fetchMore: fetchMoreTags,
-    loading: orgUserTagsLoading,
-  }: InterfaceOrganizationTagsQueryPG = useQuery(
+    data: orgTagFoldersData,
+    error: orgTagFoldersError,
+    refetch: orgTagFoldersRefetch,
+    loading: orgTagFoldersLoading,
+  } = useQuery<InterfaceOrganizationTagFoldersQuery>(
     ORGANIZATION_USER_TAGS_LIST_PG,
     {
       variables: {
         input: { id: orgId },
         first: PAGE_SIZE,
-        where: { name: { starts_with: tagSearchName } },
-        sortedBy: { id: tagSortOrder },
       },
     },
   );
 
-  useEffect(() => {
-    orgUserTagsRefetch();
-  }, []);
-
-  const loadMoreTags = (): void => {
-    if (!orgUserTagsData?.organization?.tags?.pageInfo?.hasNextPage) return;
-    fetchMoreTags({
+  const { data: orgTagsData } = useQuery<InterfaceOrganizationTagCountsQuery>(
+    ORGANIZATION_TAGS_WITH_FOLDER,
+    {
       variables: {
-        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor,
+        id: orgId,
+        first: 32,
       },
-      updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prevResult;
-        return {
-          organization: {
-            ...fetchMoreResult.organization,
-            tags: {
-              ...fetchMoreResult.organization.tags,
-              edges: [
-                ...(prevResult.organization?.tags?.edges || []),
-                ...(fetchMoreResult.organization?.tags?.edges || []),
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
+      skip: !orgId,
+    },
+  );
 
-  const [create] = useMutation(CREATE_USER_TAG);
+  const [createTagFolder] = useMutation(CREATE_TAG_FOLDER);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const createTag = async (
+  const handleCreateTagFolder = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     if (isSubmitting) return;
 
-    if (!tagName.trim()) {
+    if (!folderName.trim()) {
       NotificationToast.error(t('enterTagName'));
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const { data } = await create({
-        variables: { name: tagName, organizationId: orgId },
+      const { data } = await createTagFolder({
+        variables: { name: folderName, organizationId: orgId },
       });
+
       if (data) {
         NotificationToast.success(t('tagCreationSuccess'));
-        orgUserTagsRefetch();
-        setTagName('');
+        orgTagFoldersRefetch();
+        setFolderName('');
         hideCreateTagModal();
       } else {
         NotificationToast.error(t('tagCreationFailed'));
@@ -165,156 +201,180 @@ function OrganizationTags(): JSX.Element {
     );
   };
 
-  const userTagsList =
-    orgUserTagsData?.organization?.tags?.edges?.map(
-      (edge: { node: InterfaceTagDataPG }) => edge.node,
-    ) || [];
+  const tagFolderEdges =
+    orgTagFoldersData?.organization?.tagFolders?.edges ?? [];
+  const tagFoldersList = tagFolderEdges.map((edge) => edge.node);
 
-  const redirectToManageTag = (tagId: string): void => {
-    navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
+  const filteredTagFolders = useMemo(() => {
+    const normalizedSearchValue = folderSearchName.trim().toLowerCase();
+    return tagFoldersList.filter((folder) =>
+      folder.name.toLowerCase().startsWith(normalizedSearchValue),
+    );
+  }, [tagFoldersList, folderSearchName]);
+
+  const tagCountByFolderId = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const organizationTags =
+      orgTagsData?.organization?.tags?.edges?.map((edge) => edge.node) ?? [];
+
+    for (const tag of organizationTags) {
+      const folderId = tag.folder?.id;
+      if (!folderId) continue;
+      counts[folderId] = (counts[folderId] ?? 0) + 1;
+    }
+
+    return counts;
+  }, [orgTagsData]);
+
+  const redirectToChildFolders = (folderId: string): void => {
+    navigate(`/admin/orgtags/${orgId}/tags/${folderId}`);
   };
 
-  const redirectToSubTags = (tagId: string): void => {
-    navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
+  const showManageFolderModal = (folder: InterfaceTagFolderNode): void => {
+    setSelectedFolder(folder);
+    manageTagFolderModal.open();
+  };
+
+  const hideManageFolderModal = (): void => {
+    manageTagFolderModal.close();
+    setSelectedFolder(null);
   };
 
   const renderCountLink = (
-    params: GridCellParams,
+    folderId: string,
     buildPath: (id: string) => string,
     count: number | undefined,
   ) => (
-    <Link className="text-secondary" to={buildPath(params.row.id)}>
+    <Link className="text-secondary" to={buildPath(folderId)}>
       {count ?? 0}
     </Link>
   );
 
-  const columns: TokenAwareGridColDef[] = [
+  const formatCreatedAt = (value?: string | null): string => {
+    if (!value) return '--';
+
+    const parsedDate = new Date(value);
+    if (Number.isNaN(parsedDate.getTime())) return '--';
+
+    return parsedDate.toLocaleDateString();
+  };
+
+  const rowIndexMap = useMemo(() => {
+    const map = new Map<string, number>();
+    filteredTagFolders.forEach((folder, index) => {
+      map.set(folder.id, index + 1);
+    });
+    return map;
+  }, [filteredTagFolders]);
+
+  const columns: IColumnDef<InterfaceTagFolderNode>[] = [
     {
-      field: 'id',
-      headerName: tCommon('sl_no'),
-      flex: 0.5,
-      minWidth: 'space-11',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
+      id: 'sl_no',
+      header: tCommon('sl_no'),
+      accessor: 'id',
+      render: (_value, row) => (
         <span className={styles.tableItemIndex}>
-          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}.
+          {(rowIndexMap.get(row.id) ?? 0).toString()}.
         </span>
       ),
+      meta: { sortable: false },
     },
     {
-      field: 'name',
-      headerName: t('tagName'),
-      flex: 2,
-      minWidth: 'space-15',
-      align: 'left',
-      headerAlign: 'left',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'folderName',
+      header: t('tagName'),
+      accessor: 'name',
+      render: (value, row) => {
         return (
-          <div className="d-flex">
-            {params.row.parentTag &&
-              params.row.ancestorTags?.map((tag: InterfaceTagDataPG) => (
-                <div
-                  key={tag.id}
-                  className={styles.tagsBreadCrumbs}
-                  data-testid="ancestorTagsBreadCrumbs"
-                  data-text={tag.name}
-                >
-                  {tag.name}
-                  <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
-                </div>
-              ))}
-
-            <div
-              className={styles.subTagsLink}
-              data-testid="tagName"
-              onClick={() => redirectToSubTags(params.row.id)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  redirectToSubTags(params.row.id);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              aria-label={tCommon('viewSubTagsOf', {
-                tagName: params.row.name,
-              })}
-            >
-              {params.row.name}
-              <i className={'ms-2 fa fa-caret-right'} aria-hidden="true" />
-            </div>
-          </div>
+          <Button
+            variant="link"
+            className={styles.folderNameButton}
+            data-testid="tagName"
+            onClick={() => redirectToChildFolders(row.id)}
+            aria-label={tCommon('viewSubTagsOf', {
+              tagName: row.name,
+            })}
+          >
+            <i
+              className={`fa fa-folder me-1 ${styles.nameIcon}`}
+              aria-hidden="true"
+            />
+            {String(value)}
+          </Button>
         );
+      },
+      meta: {
+        sortable: false,
       },
     },
     {
-      field: 'totalSubTags',
-      headerName: t('totalSubTags'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'totalSubFolders',
+      header: t('totalSubTags'),
+      accessor: 'id',
+      render: (_value, row) => {
         return renderCountLink(
-          params,
-          (id) => `/admin/orgtags/${orgId}/subTags/${id}`,
-          params.row.childTags?.totalCount,
+          row.id,
+          (id) => `/admin/orgtags/${orgId}/tags/${id}`,
+          row.childFolders?.edges?.length,
         );
+      },
+      meta: {
+        sortable: false,
       },
     },
     {
-      field: 'totalAssignedUsers',
-      headerName: t('totalAssignedUsers'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return renderCountLink(
-          params,
-          (id) => `/admin/orgtags/${orgId}/manageTag/${id}`,
-          params.row.usersAssignedTo?.totalCount,
-        );
+      id: 'totalTags',
+      header: t('totalAssignedUsers'),
+      accessor: 'id',
+      render: (_value, row) => {
+        const fallbackCount = tagCountByFolderId[row.id];
+        const directCount = row.tags?.edges?.length ?? 0;
+        return <span>{fallbackCount ?? directCount}</span>;
+      },
+      meta: {
+        sortable: false,
       },
     },
     {
-      field: 'actions',
-      headerName: tCommon('actions'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'createdBy',
+      header: t('createdBy'),
+      accessor: 'creator',
+      render: (_value, row) => <span>{row.creator?.name ?? '--'}</span>,
+      meta: {
+        sortable: false,
+      },
+    },
+    {
+      id: 'createdAt',
+      header: t('createdAt'),
+      accessor: 'createdAt',
+      render: (value) => (
+        <span>{formatCreatedAt((value as string) ?? null)}</span>
+      ),
+      meta: {
+        sortable: false,
+      },
+    },
+    {
+      id: 'actions',
+      header: tCommon('actions'),
+      accessor: 'id',
+      render: (_value, row) => {
         return (
           <Button
             size="sm"
             variant="outline-primary"
-            onClick={() => redirectToManageTag(params.row.id)}
+            onClick={() => showManageFolderModal(row)}
             data-testid="manageTagBtn"
             className={styles.editButton}
-            aria-label={`${t('manageTag')} ${params.row.name ?? ''}`.trim()}
+            aria-label={`${tCommon('manage')} ${row.name ?? ''}`.trim()}
           >
-            {t('manageTag')}
+            {tCommon('manage')}
           </Button>
         );
       },
+      meta: { sortable: false },
     },
   ];
-
-  const handleSortChange = (value: string): void => {
-    setTagSortOrder(value === 'latest' ? 'DESCENDING' : 'ASCENDING');
-  };
 
   return (
     <>
@@ -325,95 +385,50 @@ function OrganizationTags(): JSX.Element {
             data-testid="organizationTags-header"
           >
             <SearchFilterBar
-              hasDropdowns={true}
+              hasDropdowns={false}
               searchPlaceholder={tCommon('searchByName')}
-              searchValue={tagSearchName}
-              onSearchChange={(value) => setTagSearchName(value.trim())}
+              searchValue={folderSearchName}
+              onSearchChange={(value) => setFolderSearchName(value.trim())}
               searchInputTestId="searchByName"
               searchButtonTestId="searchBtn"
-              dropdowns={[
-                {
-                  id: 'tags-sort',
-                  label: t('sortTags'),
-                  type: 'sort',
-                  options: [
-                    { label: tCommon('Latest'), value: 'latest' },
-                    { label: tCommon('Oldest'), value: 'oldest' },
-                  ],
-                  selectedOption:
-                    tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
-                  onOptionChange: (value) => handleSortChange(value.toString()),
-                  dataTestIdPrefix: 'sortTags',
-                },
-              ]}
-              additionalButtons={
-                <Button
-                  onClick={() => {
-                    setTagName('');
-                    showCreateTagModal();
-                  }}
-                  data-testid="createTagBtn"
-                  className={styles.createButton}
-                  aria-label={t('createTag')}
-                >
-                  <i className="fa fa-plus me-2" />
-                  {t('createTag')}
-                </Button>
-              }
             />
+            <Button
+              onClick={() => {
+                setFolderName('');
+                setFolderNameTouched(false);
+                showCreateTagModal();
+              }}
+              data-testid="createTagBtn"
+              className={`${styles.createButton} ${styles.buttonNoWrap}`}
+              aria-label={t('createTag')}
+            >
+              <i className="fa fa-plus me-2" />
+              {t('createTag')}
+            </Button>
           </div>
 
-          {orgUserTagsError ? (
-            showErrorMessage(orgUserTagsError.message)
+          {orgTagFoldersError ? (
+            showErrorMessage(orgTagFoldersError.message)
           ) : (
             <div className="mb-4">
-              <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">
-                <div className="ms-3 my-1">
-                  <IconComponent name="Tag" />
-                </div>
-
-                <div
-                  className={'fs-4 ms-3 my-1 ' + styles.tagsBreadCrumbs}
-                  data-text={t('tags')}
-                >
-                  {t('tags')}
-                </div>
-              </div>
-
-              <div
-                id="orgUserTagsScrollableDiv"
-                data-testid="orgUserTagsScrollableDiv"
-                className={styles.orgUserTagsScrollableDiv}
-              >
-                <InfiniteScroll
-                  dataLength={userTagsList?.length ?? 0}
-                  next={loadMoreTags}
-                  hasMore={
-                    orgUserTagsData?.organization?.tags?.pageInfo
-                      ?.hasNextPage ?? false
-                  }
-                  loader={
-                    <LoadingState
-                      isLoading={true}
-                      variant="inline"
-                      size="sm"
-                      data-testid="infiniteScrollLoader"
-                    >
-                      {null}
-                    </LoadingState>
-                  }
-                  scrollableTarget="orgUserTagsScrollableDiv"
-                >
-                  <DataGridWrapper<InterfaceTagDataPG>
-                    rows={userTagsList}
-                    columns={columns}
-                    loading={orgUserTagsLoading}
-                    error={undefined}
-                    emptyStateProps={{
-                      message: t('noTagsFound'),
-                    }}
+              <div data-testid="orgUserTagsScrollableDiv">
+                {!orgTagFoldersLoading && filteredTagFolders.length === 0 ? (
+                  <EmptyState
+                    icon="Tag"
+                    message={t('noTagsFound')}
+                    dataTestId="organization-tags-empty-state"
                   />
-                </InfiniteScroll>
+                ) : (
+                  <DataTable<InterfaceTagFolderNode>
+                    data={filteredTagFolders}
+                    columns={columns}
+                    loading={orgTagFoldersLoading}
+                    rowKey="id"
+                    paginationMode="client"
+                    pageSize={PAGE_SIZE}
+                    tableClassName={styles.listTable}
+                  />
+                )}
               </div>
             </div>
           )}
@@ -423,24 +438,48 @@ function OrganizationTags(): JSX.Element {
       <CreateModal
         open={createTagModalIsOpen}
         title={t('tagDetails')}
-        onClose={hideCreateTagModal}
-        onSubmit={createTag}
+        onClose={() => {
+          hideCreateTagModal();
+          setFolderNameTouched(false);
+        }}
+        onSubmit={handleCreateTagFolder}
         loading={isSubmitting}
-        submitDisabled={!tagName.trim()}
+        submitDisabled={Boolean(folderNameError)}
         data-testid="createTagModal"
+        className={`${styles.folderCreateModal} ${styles.createMode}`}
       >
-        <FormTextField
-          name="tagName"
-          label={t('tagName')}
-          placeholder={t('tagNamePlaceholder')}
-          value={tagName}
-          onChange={setTagName}
-          required
-          autoComplete="off"
-          data-testid="tagNameInput"
-          className={styles.inputField}
-        />
+        <div className={styles.fieldRow}>
+          <FormTextField
+            name="folderName"
+            label={t('tagName')}
+            placeholder={t('tagNamePlaceholder')}
+            value={folderName}
+            onChange={(value) => {
+              setFolderName(value);
+              if (!folderNameTouched) {
+                setFolderNameTouched(true);
+              }
+            }}
+            onBlur={() => setFolderNameTouched(true)}
+            touched={folderNameTouched}
+            error={folderNameError}
+            required
+            autoComplete="off"
+            data-testid="tagNameInput"
+          />
+        </div>
       </CreateModal>
+
+      <ManageFolderModal
+        open={manageTagFolderModal.isOpen}
+        folder={selectedFolder}
+        onClose={hideManageFolderModal}
+        onRefetch={orgTagFoldersRefetch}
+        onViewFolder={redirectToChildFolders}
+        modalTestId="manageTagFolderModal"
+        inputTestId="editTagFolderNameInput"
+        deleteModalTestId="delete-tag-folder-modal"
+      />
     </>
   );
 }

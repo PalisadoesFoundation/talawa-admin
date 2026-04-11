@@ -1,14 +1,14 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL mutation to create a user tag.
+ * GraphQL mutation to create a tag.
  *
  * @param name - Name of the tag.
- * @param folderId - Id of the folder/parent tag to organize tags.
+ * @param folderId - Id of the folder that owns this tag.
  * @param organizationId - Organization to which the tag belongs.
  */
 
-export const CREATE_USER_TAG = gql`
+export const CREATE_TAG = gql`
   mutation CreateTag($name: String!, $folderId: ID, $organizationId: ID!) {
     createTag(
       input: {
@@ -17,6 +17,67 @@ export const CREATE_USER_TAG = gql`
         folderId: $folderId
       }
     ) {
+      id
+    }
+  }
+`;
+
+// Backward-compatible alias used by legacy screens/mocks.
+export const CREATE_USER_TAG = CREATE_TAG;
+
+/**
+ * GraphQL mutation to create a tag folder.
+ *
+ * @param name - Name of the folder.
+ * @param organizationId - Organization to which the folder belongs.
+ * @param parentFolderId - Optional parent folder id for nesting.
+ */
+
+export const CREATE_TAG_FOLDER = gql`
+  mutation CreateTagFolder(
+    $name: String!
+    $organizationId: ID!
+    $parentFolderId: ID
+  ) {
+    createTagFolder(
+      input: {
+        name: $name
+        organizationId: $organizationId
+        parentFolderId: $parentFolderId
+      }
+    ) {
+      id
+    }
+  }
+`;
+
+/**
+ * GraphQL mutation to update a tag folder.
+ *
+ * @param id - Id of the folder to update.
+ * @param name - Updated folder name.
+ * @param parentFolderId - Optional updated parent folder id.
+ */
+
+export const UPDATE_TAG_FOLDER = gql`
+  mutation UpdateTagFolder($id: ID!, $name: String, $parentFolderId: ID) {
+    updateTagFolder(
+      input: { id: $id, name: $name, parentFolderId: $parentFolderId }
+    ) {
+      id
+    }
+  }
+`;
+
+/**
+ * GraphQL mutation to delete a tag folder.
+ *
+ * @param id - Id of the folder to delete.
+ */
+
+export const DELETE_TAG_FOLDER = gql`
+  mutation DeleteTagFolder($id: ID!) {
+    deleteTagFolder(input: { id: $id }) {
       id
     }
   }
@@ -31,9 +92,7 @@ export const CREATE_USER_TAG = gql`
 
 export const UNASSIGN_USER_TAG = gql`
   mutation UnassignUserTag($tagId: ID!, $userId: ID!) {
-    unassignUserTag(input: { tagId: $tagId, userId: $userId }) {
-      _id
-    }
+    unassignUserTag(tagId: $tagId, assigneeId: $userId)
   }
 `;
 
@@ -46,8 +105,8 @@ export const UNASSIGN_USER_TAG = gql`
 
 export const UPDATE_USER_TAG = gql`
   mutation UpdateUserTag($tagId: ID!, $name: String!) {
-    updateUserTag(input: { tagId: $tagId, name: $name }) {
-      _id
+    updateTag(input: { id: $tagId, name: $name }) {
+      id
     }
   }
 `;
@@ -60,8 +119,8 @@ export const UPDATE_USER_TAG = gql`
 
 export const REMOVE_USER_TAG = gql`
   mutation RemoveUserTag($id: ID!) {
-    removeUserTag(id: $id) {
-      _id
+    deleteTag(input: { id: $id }) {
+      id
     }
   }
 `;
@@ -74,10 +133,8 @@ export const REMOVE_USER_TAG = gql`
  */
 
 export const ADD_PEOPLE_TO_TAG = gql`
-  mutation AddPeopleToUserTag($tagId: ID!, $userIds: [ID!]!) {
-    addPeopleToUserTag(input: { tagId: $tagId, userIds: $userIds }) {
-      _id
-    }
+  mutation AddPeopleToUserTag($tagId: ID!, $userId: ID!) {
+    assignUserTag(tagId: $tagId, assigneeId: $userId)
   }
 `;
 
@@ -89,12 +146,8 @@ export const ADD_PEOPLE_TO_TAG = gql`
  */
 
 export const ASSIGN_TO_TAGS = gql`
-  mutation AssignToUserTags($currentTagId: ID!, $selectedTagIds: [ID!]!) {
-    assignToUserTags(
-      input: { currentTagId: $currentTagId, selectedTagIds: $selectedTagIds }
-    ) {
-      _id
-    }
+  mutation AssignToUserTags {
+    __typename
   }
 `;
 
@@ -106,11 +159,7 @@ export const ASSIGN_TO_TAGS = gql`
  */
 
 export const REMOVE_FROM_TAGS = gql`
-  mutation RemoveFromUserTags($currentTagId: ID!, $selectedTagIds: [ID!]!) {
-    removeFromUserTags(
-      input: { currentTagId: $currentTagId, selectedTagIds: $selectedTagIds }
-    ) {
-      _id
-    }
+  mutation RemoveFromUserTags {
+    __typename
   }
 `;

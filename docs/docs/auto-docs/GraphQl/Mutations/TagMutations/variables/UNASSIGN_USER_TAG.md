@@ -6,7 +6,7 @@
 
 > `const` **UNASSIGN\_USER\_TAG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L32)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L93)
 
 GraphQL mutation to unsssign a user tag from a user.
 

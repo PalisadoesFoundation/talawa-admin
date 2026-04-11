@@ -4,15 +4,23 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L3)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L86)
 
 ## Properties
+
+### assigneeIds?
+
+> `optional` **assigneeIds**: `string`[]
+
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L90)
+
+***
 
 ### hideTagActionsModal()
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L5)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L88)
 
 #### Returns
 
@@ -24,7 +32,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L4)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L87)
 
 ***
 
@@ -32,4 +40,4 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com
 
 > **tagActionType**: [`TagActionType`](../../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L6)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L89)
