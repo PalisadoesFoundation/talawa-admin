@@ -27,8 +27,6 @@
  * This file defines the `DashboardCard` component used in the Talawa Admin project.
  */
 import React from 'react';
-import { Card, Row } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
 import styles from './DashboardCard.module.css';
 
 const dashBoardCard = (props: {
@@ -38,29 +36,22 @@ const dashBoardCard = (props: {
 }): JSX.Element => {
   const { icon, count, title } = props;
   return (
-    <Card className={`${styles.cardBodyMainDiv}`}>
-      <Card.Body className={styles.cardBody}>
-        <Row className={`${styles.cardBodymain}`}>
-          <Col xs="auto" className={`${styles.iconCol}`}>
-            <div className={`${styles.cardbodyIcon}`}>{icon}</div>
-          </Col>
-          <Col className={`${styles.contentCol}`}>
-            <span
-              data-testid="cardCount"
-              className={`${styles.cardBodyNumber}`}
-            >
-              {count ?? 0}
-            </span>
-            <span
-              data-testid="cardTitle"
-              className={styles.cardBodySecondaryText}
-            >
-              {title}
-            </span>
-          </Col>
-        </Row>
-      </Card.Body>
-    </Card>
+    <div className={styles.cardBodyMainDiv}>
+      <div className={styles.cardBody}>
+        <div className={styles.cardTop}>
+          <span
+            data-testid="cardTitle"
+            className={styles.cardBodySecondaryText}
+          >
+            {title}
+          </span>
+          <div className={styles.cardbodyIcon}>{icon}</div>
+        </div>
+        <span data-testid="cardCount" className={styles.cardBodyNumber}>
+          {count ?? 0}
+        </span>
+      </div>
+    </div>
   );
 };
 

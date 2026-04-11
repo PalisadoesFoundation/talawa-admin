@@ -14,6 +14,18 @@
   fill: var(--color-gray-700);
 }
 
+/* ── Content cards (posts, membership, etc.) ────────────────────────────────── */
+.contentCard {
+  background-color: var(--color-white);
+  border-radius: var(--radius-2xl);
+  border: var(--border-1) solid var(--color-black-6);
+  box-shadow:
+    var(--shadow-1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black-5);
+  overflow: hidden;
+  width: 100%;
+}
+
 .cardHeader {
   padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
   border-bottom: var(--border-1) solid var(--color-gray-100);
@@ -41,4 +53,15 @@
   aspect-ratio: 1;
   border-radius: var(--radius-full);
   width: var(--space-10);
+}
+
+.cardBtnWrapper {
+  display: block;
+  width: 100%;
+  padding: var(--space-0);
+  margin: var(--space-0);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
 }

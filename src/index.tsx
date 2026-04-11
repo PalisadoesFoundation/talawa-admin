@@ -14,6 +14,8 @@ import { onError } from '@apollo/link-error';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import './assets/css/app.css';
 import './style/tokens/index.css';
+import './style/talawa-theme.css';
+import './style/widgets.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles

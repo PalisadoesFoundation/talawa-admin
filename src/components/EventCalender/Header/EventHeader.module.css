@@ -8,15 +8,15 @@
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: var(--space-1);
+  gap: var(--space-4);
   flex-wrap: wrap;
   margin-left: calc(var(--space-1) * 2);
   margin-top: calc(var(--space-6) * -1);
 }
 
 .calendar__search {
-  flex: 0 1 calc(var(--space-27) + var(--space-6));
-  min-width: var(--space-24);
+  flex: 1 1 var(--space-16);
+  min-width: var(--space-16);
   max-width: 100%;
   margin-left: calc(var(--space-2) * -1);
 }
@@ -27,8 +27,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-4);
-  width: auto;
-  flex-shrink: 0;
+  flex: 0 0 auto;
   height: var(--space-9);
   margin-top: var(--space-10-5);
   margin-left: calc(-1 * var(--space-4));
@@ -42,9 +41,9 @@
 }
 
 .btnsBlock button.dropdown {
-  background-color: var(--color-gray-50);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-300);
+  color: var(--color-gray-700);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,18 +52,18 @@
 }
 
 .btnsBlock .dropdown :global(.btn) {
-  background-color: var(--color-gray-50);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-300);
+  color: var(--color-gray-700);
   width: 100%;
   border-radius: var(--radius-md);
 }
 
 .btnsBlock button.dropdown:hover,
 .btnsBlock .dropdown :global(.btn):hover {
-  background-color: var(--color-gray-400);
-  border-color: var(--color-gray-600);
-  color: var(--color-gray-800);
+  background-color: var(--color-blue-500);
+  border-color: var(--color-blue-500);
+  color: var(--color-white);
 }
 
 /* Ensure the dropdown menu matches the button width perfectly */

@@ -23,7 +23,7 @@
 
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { WarningAmberOutlined } from '@mui/icons-material';
+import WarningAmberOutlined from '@mui/icons-material/WarningAmberOutlined';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
@@ -57,27 +57,27 @@ const SidebarOrgSection = ({
   return (
     <div className={`${styles.organizationContainer} pe-3`}>
       {loading ? (
-        <Button
+        <div
           className={`${styles.profileContainer} shimmer`}
           data-testid="orgBtn"
-          type="button"
         />
       ) : !data?.organization ? (
         !isProfilePage && (
-          <Button
-            type="button"
-            className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
-            disabled
+          <div
+            className={`${styles.profileContainer} ${styles.bgDanger}`}
             data-testid="sidebar-org-error"
           >
             <div className="px-3">
               <WarningAmberOutlined />
             </div>
-            {tErrors('errorLoading', { entity: 'Organization' })}
-          </Button>
+            <span className={styles.errorText}>
+              {tErrors('errorLoading', { entity: 'Organization' })}
+            </span>
+          </div>
         )
       ) : (
         <Button
+          variant="link"
           type="button"
           className={styles.profileContainer}
           data-testid="OrgBtn"
@@ -101,7 +101,7 @@ const SidebarOrgSection = ({
               </span>
             </div>
             <div className={styles.ArrowIcon}>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
+              <AngleRightIcon />
             </div>
           </div>
         </Button>

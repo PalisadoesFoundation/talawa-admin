@@ -52,6 +52,8 @@ import type { InterfaceDropDownButtonProps } from 'types/shared-components/DropD
 import styles from './DropDownButton.module.css';
 import { useTranslation } from 'react-i18next';
 import SearchToggle from './SearchToggle';
+import SortIcon from '@mui/icons-material/Sort';
+import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 
 const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   id,
@@ -75,6 +77,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   menuClassName,
   containerClassName,
   toggleClassName,
+  type,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const resolvedSearchPlaceholder =
@@ -235,12 +238,20 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         aria-expanded={isOpen}
         data-testid={`${dataTestIdPrefix}-toggle`}
       >
-        {icon && (
+        {(icon || type) && (
           <span
             className={styles.dropdownIcon}
             data-testid={`${dataTestIdPrefix}-icon`}
           >
-            {icon}
+            {icon ||
+              (type === 'filter' ? (
+                <FilterAltOutlined
+                  data-testid="filter-icon"
+                  aria-hidden="true"
+                />
+              ) : (
+                <SortIcon data-testid="sort-icon" aria-hidden="true" />
+              ))}
           </span>
         )}
         <span className={styles.buttonLabel}>{displayLabel}</span>

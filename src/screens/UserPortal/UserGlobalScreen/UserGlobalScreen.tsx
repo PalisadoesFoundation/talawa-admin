@@ -89,9 +89,7 @@ const UserGlobalScreen = (): JSX.Element => {
         <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       </div>
       <div
-        className={`${styles.pageContainer} ${
-          hideDrawer ? styles.expand : styles.contract
-        } `}
+        className={hideDrawer ? styles.expand : styles.contract}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
@@ -172,7 +170,7 @@ const UserGlobalScreen = (): JSX.Element => {
             variant="light"
             menuClassName={styles.profileDropdownMenu}
             showCaret={false}
-            placeholder=""
+            buttonLabel="▼"
           />
         </div>
         <Outlet />

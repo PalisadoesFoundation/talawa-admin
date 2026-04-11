@@ -1,47 +1,106 @@
+/**
+ * Color tokens — Apple-inspired palette
+ * ----------------------------------------
+ * These primitives are used by component modules and by semantic tokens
+ * in talawa-theme.css. Do not use these directly in components — prefer
+ * the semantic design tokens instead.
+ */
+
 :root {
+  /* ── Neutrals ─────────────────────────────────────────────────────────────── */
   --color-white: #ffffff;
   --color-black: #000000;
-
-  --color-gray-50: #f8f9fa;
-  --color-gray-100: #eaebef;
-  --color-gray-200: #d1d5db;
-  --color-gray-300: #adb5bd;
-  --color-gray-400: #808080;
-  --color-gray-500: #707070;
-  --color-gray-600: #6c757d;
-  --color-gray-700: #4b5563;
-  --color-gray-800: #343a40;
-  --color-gray-900: #212529;
-
-  --color-blue-100: #d3e3fd;
-  --color-blue-200: #a8c7fa;
-  --color-blue-300: #6e94ff;
-  --color-blue-500: #1778f2;
-  --color-blue-600: #286fe0;
-  --color-blue-700: #0056b3;
-  --color-blue-800: #0000ff;
-
-  --color-red-100: #f8d6dc;
-  --color-red-400: #c8102e;
-  --color-red-500: #ff4d4f;
-
-  --color-green-100: #dbf6db;
-  --color-green-500: #31bb6b;
-
-  --color-yellow-100: #fff3cd;
-  --color-yellow-500: #febc59;
-  --color-yellow-600: #856404;
-
-  --color-white-20: rgba(255, 255, 255, 0.2);
-  --color-white-40: rgba(255, 255, 255, 0.4);
   --color-white-60: rgba(255, 255, 255, 0.6);
+
+  /* Apple-inspired gray scale */
+  --color-gray-50: #f5f5f7; /* Apple page bg */
+  --color-gray-100: #ebebf0;
+  --color-gray-200: #d1d1d6;
+  --color-gray-300: #c7c7cc;
+  --color-gray-400: #aeaeb2;
+  --color-gray-500: #8e8e93;
+  --color-gray-600: #636366;
+  --color-gray-700: #4b4b4e; /* near --color-gray-700 in old system */
+  --color-gray-800: #3a3a3c;
+  --color-gray-900: #1d1d1f; /* Apple near-black */
+
+  /* ── Blue (Apple brand) ───────────────────────────────────────────────────── */
+  --color-blue-50: #e5f2ff;
+  --color-blue-100: #cce4ff;
+  --color-blue-200: #99c8ff;
+  --color-blue-450: #0077ed; /* Apple blue hover */
+  --color-blue-500: #0071e3; /* Apple blue */
+  --color-blue-600: #006edb;
+  --color-blue-700: #005eb8;
+  --color-blue-800: #004a99;
+  --color-blue-dark: #0052a3;
+  --color-blue-muted: #e8f0fd;
+  --color-blue-muted-hover: #d1e4fb;
+  --color-blue-alpha-14: rgba(0, 113, 227, 0.14);
+  --color-blue-alpha-18: rgba(0, 113, 227, 0.18);
+  --color-blue-alpha-20: rgba(0, 113, 227, 0.2);
+  --color-blue-alpha-28: rgba(0, 113, 227, 0.28);
+  --color-blue-alpha-30: rgba(0, 113, 227, 0.3);
+  --color-blue-alpha-36: rgba(0, 113, 227, 0.36);
+  --color-blue-alpha-50: rgba(0, 113, 227, 0.5);
+
+  /* ── Red (iOS red) ────────────────────────────────────────────────────────── */
+  --color-red-50: #fff0ef;
+  --color-red-100: #ffd9d7;
+  --color-red-500: #ff3b30;
+  --color-red-hover: #e0352b;
+  --color-red-dark: #c0392b;
+
+  /* ── Green (iOS green) ───────────────────────────────────────────────────── */
+  --color-green-50: #eaf9ee;
+  --color-green-100: #c9f0d5;
+  --color-green-500: #34c759;
+  --color-green-dark: #1a6632;
+  --color-green-alpha-12: rgba(52, 199, 89, 0.12);
+
+  /* ── Yellow / Orange ─────────────────────────────────────────────────────── */
+  --color-yellow-50: #fff4e5;
+  --color-yellow-100: #ffdea0;
+  --color-yellow-500: #ff9500; /* iOS orange */
+  --color-yellow-600: #c87400;
+  --color-orange-dark: #874d00;
+
+  /* ── Teal / Cyan (informational) ─────────────────────────────────────────── */
+  --color-teal-500: #32ade6;
+
+  /* ── Teal / Info ─────────────────────────────────────────────────────────── */
+  --color-info-500: #007aff;
+
+  /* ── Purple ───────────────────────────────────────────────────────────────── */
+  --color-purple-50: #f3eeff;
+  --color-purple-500: #8b5cf6;
+  --color-purple-dark: #5b21b6;
+
+  /* ── Black alpha ──────────────────────────────────────────────────────────── */
+  --color-black-4: rgba(0, 0, 0, 0.04);
   --color-black-5: rgba(0, 0, 0, 0.05);
+  --color-black-6: rgba(0, 0, 0, 0.06);
+  --color-black-7: rgba(0, 0, 0, 0.07);
   --color-black-8: rgba(0, 0, 0, 0.08);
   --color-black-10: rgba(0, 0, 0, 0.1);
-  --color-black-15: rgba(0, 0, 0, 0.15);
+  --color-black-12: rgba(0, 0, 0, 0.12);
+  --color-black-14: rgba(0, 0, 0, 0.14);
+  --color-black-16: rgba(0, 0, 0, 0.16);
+  --color-black-18: rgba(0, 0, 0, 0.18);
   --color-black-20: rgba(0, 0, 0, 0.2);
-  --color-black-25: rgba(0, 0, 0, 0.25);
-  --color-blue-shadow-light: rgba(110, 148, 255, 0.1);
-  --color-blue-shadow-focus: rgba(110, 148, 255, 0.25);
-  --color-blue-shadow-focus-strong: rgba(110, 148, 255, 0.35);
+  --color-black-40: rgba(0, 0, 0, 0.4);
+
+  /* ── White alpha ──────────────────────────────────────────────────────────── */
+  --color-white-20: rgba(255, 255, 255, 0.2);
+  --color-white-90: rgba(255, 255, 255, 0.9);
+  --color-white-98: rgba(255, 255, 255, 0.98);
+
+  /* ── Gray (mid tones not on main scale) ──────────────────────────────────── */
+  --color-gray-mid: #6e6e73;
+  --color-gray-sub: #a1a1a6;
+
+  /* ── Skeleton ─────────────────────────────────────────────────────────────── */
+  --color-skeleton-base: #f0f0f5;
+  --color-skeleton-highlight: #f8f8fc;
+  --color-skeleton-mid: #e8e8f0;
 }

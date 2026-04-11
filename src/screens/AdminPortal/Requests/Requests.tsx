@@ -41,7 +41,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
@@ -342,14 +342,15 @@ const Requests = (): JSX.Element => {
 
   return (
     <div data-testid="testComp">
-      <SearchFilterBar
-        searchPlaceholder={t('requests.searchRequests')}
-        searchValue={searchByName}
-        onSearchChange={handleSearch}
-        onSearchSubmit={handleSearch}
-        searchInputTestId="searchByName"
-        searchButtonTestId="searchButton"
-        hasDropdowns={false}
+      <Toolbar
+        search={{
+          placeholder: t('requests.searchRequests'),
+          value: searchByName,
+          onChange: handleSearch,
+          onSearch: handleSearch,
+          inputTestId: 'searchByName',
+          buttonTestId: 'searchButton',
+        }}
       />
 
       {error ? (

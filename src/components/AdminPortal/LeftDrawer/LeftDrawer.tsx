@@ -73,6 +73,7 @@ const LeftDrawer = ({
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
           iconType="react-icon"
+          iconSize={32}
         />
 
         <SidebarNavItem

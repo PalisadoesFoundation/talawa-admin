@@ -68,6 +68,30 @@
   opacity: 0.9;
 }
 
+/* ── Checkbox row ────────────────────────────────────────────────────────────── */
+/* Bootstrap's .form-check-input uses a negative margin-left that depends on   */
+/* .form-check having padding-left: 1.5em.  When the parent is a flex container */
+/* that assumption breaks and the input overlaps the label.  Reset to flex.     */
+.checkboxField :global(.form-check) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-left: 0;
+}
+
+.checkboxField :global(.form-check-input) {
+  position: static;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.checkboxField :global(.form-check-label) {
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ── Action buttons ──────────────────────────────────────────────────────────── */
 .resetChangesBtn {
   border-width: var(--border-2);
   border-color: var(--color-gray-400);

@@ -1,14 +1,47 @@
+/**
+ * Organizations — user portal organizations list screen
+ */
+
+/* ── Sidebar expand/contract animations ─────────────────────────────────────── */
+@keyframes moveLeft {
+  from {
+    padding-left: calc(var(--sidebar-expanded-width, 345px) + var(--space-6-5));
+  }
+  to {
+    padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-6-5));
+  }
+}
+
+@keyframes moveRight {
+  from {
+    padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-6-5));
+  }
+  to {
+    padding-left: calc(var(--sidebar-expanded-width, 345px) + var(--space-6-5));
+  }
+}
+
+/* Collapsed sidebar — content shifts left */
+.expand,
+.marginLeft80 {
+  padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-6-5));
+}
+
 .expand {
-  margin-left: var(--space-13);
-  padding-left: var(--space-11);
-  animation: moveLeft 0.9s ease-in-out;
+  animation: moveLeft 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Expanded sidebar — content shifts right */
+.contract,
+.marginLeft260 {
+  padding-left: calc(var(--sidebar-expanded-width, 345px) + var(--space-6-5));
 }
 
 .contract {
-  padding-left: var(--space-22);
-  animation: moveRight 0.5s ease-in-out;
+  animation: moveRight 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ── Main container ──────────────────────────────────────────────────────────── */
 .mainContainerOrganization {
   max-height: 100%;
   width: 100%;
@@ -45,10 +78,11 @@
 
 @media (max-width: 820px) {
   .contract,
-  .expand {
+  .expand,
+  .marginLeft80,
+  .marginLeft260 {
     animation: none;
-    margin-left: 0;
-    padding-left: 0;
+    padding-left: calc(var(--space-8) + var(--space-2));
   }
 }
 

@@ -32,7 +32,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Col, Row, Tab, Tabs } from 'react-bootstrap';
@@ -45,7 +45,7 @@ import type { Advertisement } from 'types/AdminPortal/Advertisement/type';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 export default function Advertisements(): JSX.Element {
@@ -196,7 +196,7 @@ export default function Advertisements(): JSX.Element {
             </LoadingState>
           )}
           <Col className={styles.colAdvertisements}>
-            <PageHeader
+            <Toolbar
               search={{
                 placeholder: t('searchAdvertisements'),
                 onSearch: (value) => {
