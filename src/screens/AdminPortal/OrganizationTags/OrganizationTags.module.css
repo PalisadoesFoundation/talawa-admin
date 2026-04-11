@@ -101,6 +101,23 @@
   }
 }
 
+.folderNameButton {
+  color: var(--color-blue-500);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-weight: var(--font-weight-regular);
+}
+
+.folderNameButton:hover {
+  color: var(--color-blue-500);
+  text-decoration: underline;
+}
+
+.nameIcon {
+  color: var(--color-gray-500);
+}
+
 .orgUserTagsScrollableDiv {
   scrollbar-width: auto;
   scrollbar-color: var(--gray-300) transparent;

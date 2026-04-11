@@ -2,16 +2,18 @@ import type { ApolloError } from '@apollo/client';
 
 export interface InterfaceMemberData {
   _id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface InterfaceTagMembersData {
   edges: {
     node: {
       _id: string;
-      firstName: string;
-      lastName: string;
+      name: string;
+      firstName?: string;
+      lastName?: string;
     };
   }[];
   pageInfo: {
@@ -21,6 +23,14 @@ export interface InterfaceTagMembersData {
     hasPreviousPage: boolean;
   };
   totalCount: number;
+}
+
+export interface InterfaceTagAssigneesData {
+  edges: {
+    node: {
+      id: string;
+    } | null;
+  }[];
 }
 
 export interface InterfaceAddPeopleToTagProps {
@@ -46,17 +56,19 @@ export interface InterfaceBaseFetchMoreOptions<T> {
 }
 
 export interface InterfaceQueryUserTagsMembersToAssignTo {
-  name: string;
-  usersToAssignTo: InterfaceTagMembersData;
+  organization?: {
+    id: string;
+    members: InterfaceTagMembersData;
+  };
+  tag?: {
+    id: string;
+    assignees: InterfaceTagAssigneesData;
+  };
 }
 
 export interface InterfaceTagUsersToAssignToQuery extends InterfaceBaseQueryResult {
-  data?: {
-    getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-  };
+  data?: InterfaceQueryUserTagsMembersToAssignTo;
   fetchMore: (
-    options: InterfaceBaseFetchMoreOptions<{
-      getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-    }>,
+    options: InterfaceBaseFetchMoreOptions<InterfaceQueryUserTagsMembersToAssignTo>,
   ) => void;
 }

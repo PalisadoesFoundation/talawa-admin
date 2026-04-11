@@ -144,7 +144,13 @@ export default function OrganizationSidebar(): JSX.Element {
         <b>{tCommon('members')}</b>
       </div>
       {memberLoading ? (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
+        >
           <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
@@ -156,7 +162,12 @@ export default function OrganizationSidebar(): JSX.Element {
                 <div
                   key={member._id}
                   className={`${styles.rounded} ${styles.colorLight}`}
-                  style={{ marginTop: '0.25rem', marginBottom: '0.25rem', padding: '0.5rem', cursor: 'pointer' }}
+                  style={{
+                    marginTop: '0.25rem',
+                    marginBottom: '0.25rem',
+                    padding: '0.5rem',
+                    cursor: 'pointer',
+                  }}
                 >
                   <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <img
@@ -171,7 +182,9 @@ export default function OrganizationSidebar(): JSX.Element {
               );
             })
           ) : (
-            <div style={{ width: '100%', textAlign: 'center' }}>{t('noMembers')}</div>
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              {t('noMembers')}
+            </div>
           )}
         </div>
       )}
@@ -189,7 +202,13 @@ export default function OrganizationSidebar(): JSX.Element {
         <b>{t('events')}</b>
       </div>
       {eventsLoading ? (
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}
+        >
           <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
@@ -200,20 +219,38 @@ export default function OrganizationSidebar(): JSX.Element {
                 <div
                   key={event._id}
                   className={`${styles.rounded} ${styles.colorLight}`}
-                  style={{ marginTop: '0.25rem', marginBottom: '0.25rem', padding: '0.5rem', cursor: 'pointer' }}
+                  style={{
+                    marginTop: '0.25rem',
+                    marginBottom: '0.25rem',
+                    padding: '0.5rem',
+                    cursor: 'pointer',
+                  }}
                 >
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
                       <div className={styles.orgName}>{event.title}</div>
                       <div>
                         <CalendarMonthIcon />
                       </div>
                     </div>
-                    <div className={styles.eventDetails} style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div
+                      className={styles.eventDetails}
+                      style={{ display: 'flex', flexDirection: 'row' }}
+                    >
                       Starts{' '}
                       <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
                     </div>
-                    <div className={styles.eventDetails} style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div
+                      className={styles.eventDetails}
+                      style={{ display: 'flex', flexDirection: 'row' }}
+                    >
                       {t('ends')}{' '}
                       <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
                     </div>
@@ -222,7 +259,9 @@ export default function OrganizationSidebar(): JSX.Element {
               );
             })
           ) : (
-            <div style={{ width: '100%', textAlign: 'center' }}>{t('noEvents')}</div>
+            <div style={{ width: '100%', textAlign: 'center' }}>
+              {t('noEvents')}
+            </div>
           )}
         </div>
       )}

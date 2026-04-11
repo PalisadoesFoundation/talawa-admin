@@ -1116,8 +1116,7 @@ interface InterfaceTagMembersData {
   edges: {
     node: {
       _id: string;
-      firstName: string;
-      lastName: string;
+      name: string;
     };
   }[];
   pageInfo: {

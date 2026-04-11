@@ -91,11 +91,146 @@
   margin: 0;
 }
 
-.cursorPointer {
-  cursor: pointer;
+.listItem {
+  position: relative;
+  width: 100%;
+  list-style: none;
 }
 
-.subtagsScrollableDiv {
-  max-height: var(--space-20);
-  overflow: auto;
+.folderRow {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-2) var(--space-2);
+  color: var(--color-gray-700);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+.folderToggleButton:global(.btn) {
+  width: var(--space-6);
+  height: var(--space-6);
+  min-width: var(--space-6);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0;
+  margin-right: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-gray-600);
+  box-shadow: none;
+}
+
+.folderToggleButton:global(.btn):is(:hover, :active, :focus) {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: none;
+  box-shadow: none;
+}
+
+.folderTogglePlaceholder {
+  width: var(--space-6);
+  height: var(--space-6);
+  display: inline-block;
+  margin-right: var(--space-2);
+}
+
+.folderLoadingRow {
+  min-height: var(--space-8);
+  display: flex;
+  align-items: center;
+}
+
+.folderEmptyRow {
+  min-height: var(--space-8);
+  display: flex;
+  align-items: center;
+  color: var(--color-gray-500);
+  font-size: var(--font-size-sm);
+}
+
+.listItemLabel {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  padding: var(--space-2) var(--space-2);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+
+.tagRow {
+  color: var(--color-gray-700);
+}
+
+.tagName {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-700);
+}
+
+.tagIcon {
+  color: var(--color-gray-700);
+}
+
+.listCheckbox {
+  margin-right: var(--space-2);
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+.indent0 {
+  padding-left: calc(var(--space-5) * 0) !important;
+}
+
+.indent1 {
+  padding-left: calc(var(--space-5) * 1) !important;
+}
+
+.indent2 {
+  padding-left: calc(var(--space-5) * 2) !important;
+}
+
+.indent3 {
+  padding-left: calc(var(--space-5) * 3) !important;
+}
+
+.indent4 {
+  padding-left: calc(var(--space-5) * 4) !important;
+}
+
+.indent5 {
+  padding-left: calc(var(--space-5) * 5) !important;
+}
+
+.indent6 {
+  padding-left: calc(var(--space-5) * 6) !important;
+}
+
+.indent7 {
+  padding-left: calc(var(--space-5) * 7) !important;
+}
+
+.indent8 {
+  padding-left: calc(var(--space-5) * 8) !important;
+}
+
+.indent9 {
+  padding-left: calc(var(--space-5) * 9) !important;
+}
+
+.indent10 {
+  padding-left: calc(var(--space-5) * 10) !important;
+}
+
+.indent11 {
+  padding-left: calc(var(--space-5) * 11) !important;
+}
+
+.indent12 {
+  padding-left: calc(var(--space-5) * 12) !important;
 }

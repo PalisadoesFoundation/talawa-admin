@@ -62,7 +62,7 @@
 }
 
 .errorContainer {
-  min-height: 100vh;
+  min-height: var(--vh-100);
 }
 
 .errorMessage {
@@ -88,6 +88,23 @@
   font-weight: bold;
 }
 
+.memberNameText {
+  color: var(--color-gray-700);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+}
+
+.listTable tbody td {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+}
+
+.tableActionButtons {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
 .editButton {
   background-color: var(--blue-50);
   color: var(--gray-700);
@@ -104,6 +121,48 @@
   margin-top: 0;
   margin-bottom: 0;
   width: 100%;
+}
+
+.topBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+
+.topBreadcrumbItemWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.topBreadcrumbSeparator {
+  color: var(--color-gray-500);
+}
+
+.topBreadcrumbLink:global(.btn) {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-gray-600);
+  text-decoration: none;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.3;
+  box-shadow: none;
+}
+
+.topBreadcrumbLink:global(.btn):is(:hover, :focus-visible) {
+  color: var(--color-blue-700);
+  text-decoration: underline;
+}
+
+.topBreadcrumbCurrent {
+  color: var(--color-gray-700);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
 }
 
 .mainpageright > hr {
@@ -130,6 +189,12 @@
   display: flex;
   margin: var(--space-9) 0;
   align-items: center;
+  gap: var(--space-4);
+}
+
+.searchBarGrow {
+  flex: 1;
+  min-width: 0;
 }
 
 .createButton {
@@ -203,4 +268,232 @@
   border-style: solid;
   border-width: 2px;
   width: 85%;
+}
+
+.assignTagActionButton:global(.btn),
+.removeTagActionButton:global(.btn) {
+  width: 90%;
+  height: calc(var(--space-10) - var(--space-2));
+  border: none;
+  border-radius: calc(var(--radius-md) - var(--space-1));
+  margin: var(--space-2) 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--space-4);
+  font-family: 'Lato', sans-serif;
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  transition: background-color 0.15s ease;
+  box-shadow: none;
+}
+
+.assignTagActionButton:global(.btn),
+.assignTagActionButton:global(.btn):focus,
+.assignTagActionButton:global(.btn):active {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: transparent;
+}
+
+.assignTagActionButton:global(.btn):is(:hover, :focus-visible) {
+  background: var(--color-blue-300);
+  color: var(--color-gray-700);
+  border-color: transparent;
+}
+
+.removeTagActionButton:global(.btn),
+.removeTagActionButton:global(.btn):focus,
+.removeTagActionButton:global(.btn):active {
+  background: var(--color-red-100);
+  color: var(--color-red-400);
+  border-color: transparent;
+}
+
+.removeTagActionButton:global(.btn):is(:hover, :focus-visible) {
+  background: var(--color-red-100);
+  color: var(--color-red-400);
+  border-color: transparent;
+}
+
+.actionButtonContent {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-3);
+}
+
+.actionButtonIcon {
+  font-size: var(--font-size-md);
+  width: var(--space-6);
+  text-align: center;
+}
+
+.modalBase {
+  width: 100%;
+  max-width: none;
+  --folder-modal-width: var(--space-25);
+  --folder-modal-input-height: calc(var(--space-10) + var(--space-2));
+  --folder-modal-input-padding-x: calc(var(--space-5) + var(--space-1));
+}
+
+.manageMode :global(.modal-dialog) {
+  width: min(var(--folder-modal-width), calc(var(--vw-100) - var(--space-8)));
+  max-width: var(--folder-modal-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.manageMode :global(.modal-content) {
+  border: var(--border-1) solid var(--color-black-8);
+  box-shadow: calc(-1 * var(--shadow-offset-xs)) var(--shadow-offset-lg)
+    var(--shadow-blur-xl) var(--color-black-8);
+  border-radius: var(--radius-xl);
+}
+
+.manageMode :global(.modal-title) {
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.manageMode :global(.modal-header .btn-danger) {
+  color: var(--color-red-500) !important;
+}
+
+.manageMode :global(.modal-header .btn-danger:hover) {
+  color: var(--color-red-500) !important;
+}
+
+.manageMode :global(.modal-body) {
+  padding-top: calc(var(--space-2) + var(--space-1));
+}
+
+.manageMode :global(.modal-footer) {
+  border-top: none;
+  padding: var(--space-0) var(--space-5) calc(var(--space-4) + var(--space-1));
+}
+
+.manageMode :global(.modal-footer .btn-secondary) {
+  display: none !important;
+}
+
+.fieldRow {
+  width: 100%;
+  margin-bottom: calc(var(--space-4) + var(--space-1));
+}
+
+.fieldRow :global(.mb-3) {
+  margin-bottom: 0 !important;
+}
+
+.fieldRow :global(label) {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.fieldRow :global(.form-control) {
+  width: 100%;
+  height: var(--folder-modal-input-height);
+  border-radius: var(--radius-md);
+  border: var(--border-1) solid var(--color-gray-200);
+  background: var(--color-gray-50);
+  box-shadow: none;
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-tight);
+  padding: var(--space-0) var(--folder-modal-input-padding-x);
+}
+
+.fieldRow :global(.form-control::placeholder) {
+  color: var(--color-gray-600);
+  opacity: 0.85;
+}
+
+.fieldRow :global(.form-control:focus) {
+  border-color: var(--color-blue-300);
+  box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
+    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
+  background: var(--color-gray-50);
+}
+
+.footerActions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.actionRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.manageMode .editButton,
+.manageMode .deleteButton,
+.manageMode .viewButton {
+  height: calc(var(--space-10) + var(--space-1));
+  width: 100%;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.manageMode .editButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid transparent;
+  box-shadow: none;
+}
+
+.manageMode .editButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-300);
+  color: var(--color-gray-800);
+}
+
+.manageMode .editButton:disabled {
+  background-color: var(--color-blue-100);
+  color: var(--color-gray-600);
+  border-color: transparent;
+}
+
+.manageMode .editButton i {
+  color: inherit;
+  margin-right: var(--space-2);
+}
+
+.manageMode .deleteButton {
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+}
+
+.manageMode .deleteButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.manageMode .viewButton {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.manageMode .viewButton:is(:hover, :active, :focus) {
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-700);
 }

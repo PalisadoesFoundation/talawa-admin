@@ -39,46 +39,36 @@
  */
 // translation-check-keyPrefix: manageTag
 import { useMutation, useQuery } from '@apollo/client';
-import type {
-  GridCellParams,
-  GridColDef,
-} from 'shared-components/DataGridWrapper';
-import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
 import styles from './AddPeopleToTag.module.css';
-import Stack from '@mui/material/Stack';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useTranslation } from 'react-i18next';
-import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { DataTable } from 'shared-components/DataTable/DataTable';
 import type {
   InterfaceAddPeopleToTagProps,
   InterfaceMemberData,
   InterfaceTagUsersToAssignToQuery,
-  InterfaceQueryUserTagsMembersToAssignTo,
 } from 'types/AdminPortal/Tag/interface';
-import {
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-  dataGridStyle,
-} from 'types/AdminPortal/Tag/utils';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'types/AdminPortal/Tag/utils';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-
-const GRID_COLUMN_MIN_WIDTH = 100;
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
   hideAddPeopleToTagModal,
   refetchAssignedMembersData,
 }) => {
-  const { tagId: currentTagId } = useParams();
+  const { orgId, tagId: currentTagId } = useParams();
 
   const { t: tErrors } = useTranslation('errors');
 
@@ -89,90 +79,69 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
   const { t: tCommon } = useTranslation('common');
 
-  const [memberToAssignToSearchFirstName, setMemberToAssignToSearchFirstName] =
+  const [memberToAssignToSearchInput, setMemberToAssignToSearchInput] =
     useState('');
-  const [memberToAssignToSearchLastName, setMemberToAssignToSearchLastName] =
-    useState('');
+  const wasAddPeopleModalOpenRef = useRef(addPeopleToTagModalIsOpen);
 
   const {
     data: userTagsMembersToAssignToData,
     loading: userTagsMembersToAssignToLoading,
     error: userTagsMembersToAssignToError,
     refetch: userTagsMembersToAssignToRefetch,
-    fetchMore: fetchMoreMembersToAssignTo,
   }: InterfaceTagUsersToAssignToQuery = useQuery(
     USER_TAGS_MEMBERS_TO_ASSIGN_TO,
     {
       variables: {
-        id: currentTagId,
+        organizationId: orgId,
+        tagId: currentTagId,
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: {
-          firstName: { starts_with: memberToAssignToSearchFirstName },
-          lastName: { starts_with: memberToAssignToSearchLastName },
-        },
+        where: memberToAssignToSearchInput
+          ? {
+              name_contains: memberToAssignToSearchInput,
+            }
+          : undefined,
       },
       skip: !addPeopleToTagModalIsOpen,
     },
   );
 
   useEffect(() => {
-    setMemberToAssignToSearchFirstName('');
-    setMemberToAssignToSearchLastName('');
-    userTagsMembersToAssignToRefetch();
-  }, [addPeopleToTagModalIsOpen]);
+    const wasModalOpen = wasAddPeopleModalOpenRef.current;
 
-  const loadMoreMembersToAssignTo = (): void => {
-    fetchMoreMembersToAssignTo({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo
-            .pageInfo.endCursor, // Fetch after the last loaded cursor
-      },
-      updateQuery: (
-        prevResult: {
-          getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-        },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult: {
-            getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-          };
-        },
-      ) => {
-        if (!fetchMoreResult || !fetchMoreResult.getUsersToAssignTo)
-          return prevResult;
+    if (!wasModalOpen && addPeopleToTagModalIsOpen) {
+      setMemberToAssignToSearchInput('');
+      userTagsMembersToAssignToRefetch();
+    }
 
-        return {
-          getUsersToAssignTo: {
-            ...fetchMoreResult.getUsersToAssignTo,
-            usersToAssignTo: {
-              ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo,
-              edges: [
-                ...prevResult.getUsersToAssignTo.usersToAssignTo.edges,
-                ...fetchMoreResult.getUsersToAssignTo.usersToAssignTo.edges,
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
+    wasAddPeopleModalOpenRef.current = addPeopleToTagModalIsOpen;
+  }, [addPeopleToTagModalIsOpen, userTagsMembersToAssignToRefetch]);
+
+  const assignedMemberIds = new Set(
+    userTagsMembersToAssignToData?.tag?.assignees?.edges
+      ?.map((edge) => edge?.node?.id)
+      .filter((id): id is string => Boolean(id)) ?? [],
+  );
 
   const userTagMembersToAssignTo =
-    userTagsMembersToAssignToData?.getUsersToAssignTo.usersToAssignTo.edges.map(
-      (edge) => edge.node,
-    ) ?? [];
+    userTagsMembersToAssignToData?.organization?.members?.edges
+      ?.map((edge) => edge.node)
+      .filter((member) => !assignedMemberIds.has(member._id)) ?? [];
 
-  const handleAddOrRemoveMember = (member: InterfaceMemberData): void => {
+  const rowIndexMap = useMemo(() => {
+    const indexMap = new Map<string, number>();
+    userTagMembersToAssignTo.forEach((member, index) => {
+      indexMap.set(member._id, index + 1);
+    });
+    return indexMap;
+  }, [userTagMembersToAssignTo]);
+
+  const handleSelectMember = (member: InterfaceMemberData): void => {
     setAssignToMembers((prevMembers) => {
       const isAssigned = prevMembers.some((m) => m._id === member._id);
       if (isAssigned) {
-        return prevMembers.filter((m) => m._id !== member._id);
-      } else {
-        return [...prevMembers, member];
+        return prevMembers;
       }
+      return [...prevMembers, member];
     });
   };
 
@@ -195,33 +164,60 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       return;
     }
 
-    try {
-      const { data } = await addPeople({
-        variables: {
-          tagId: currentTagId,
-          userIds: assignToMembers.map((member) => member._id),
-        },
-      });
+    const memberIds = assignToMembers
+      .map((member) => member._id)
+      .filter((memberId): memberId is string => Boolean(memberId));
 
-      if (data) {
+    if (!currentTagId || memberIds.length !== assignToMembers.length) {
+      NotificationToast.error(
+        'Unable to assign members due to missing tag or member information.',
+      );
+      setAssignToMembers([]);
+      return;
+    }
+
+    const successfullyAssignedMemberIds: string[] = [];
+
+    try {
+      for (const memberId of memberIds) {
+        const { data } = await addPeople({
+          variables: {
+            tagId: currentTagId,
+            userId: memberId,
+          },
+        });
+
+        if (data) {
+          successfullyAssignedMemberIds.push(memberId);
+        }
+      }
+
+      if (successfullyAssignedMemberIds.length === memberIds.length) {
         NotificationToast.success(t('successfullyAssignedToPeople'));
-        refetchAssignedMembersData();
+        await Promise.resolve(refetchAssignedMembersData());
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
       }
     } catch (error: unknown) {
+      await Promise.resolve(refetchAssignedMembersData());
+      setAssignToMembers([]);
+
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
-      NotificationToast.error(errorMessage);
+      NotificationToast.error(
+        successfullyAssignedMemberIds.length > 0
+          ? `${errorMessage} Assignments were refreshed to avoid partial state.`
+          : errorMessage,
+      );
     }
   };
 
   if (userTagsMembersToAssignToError) {
     return (
-      <div className={`${styles.errorContainer} rounded-4 my-3`}>
+      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingMembers')}
             <br />
             {userTagsMembersToAssignToError.message}
@@ -231,63 +227,70 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: IColumnDef<InterfaceMemberData>[] = [
     {
-      field: 'id',
-      headerName: '#',
-      minWidth: GRID_COLUMN_MIN_WIDTH,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
+      id: 'sl_no',
+      header: tCommon('sl_no'),
+      accessor: '_id',
+      render: (_value, row) => <span>{rowIndexMap.get(row._id) ?? 0}.</span>,
+      meta: {
+        sortable: false,
+        align: 'center',
+        width: 'var(--space-13)',
       },
     },
     {
-      field: 'userName',
-      headerName: t('userName'),
-      flex: 2,
-      minWidth: GRID_COLUMN_MIN_WIDTH,
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'userName',
+      header: t('userName'),
+      accessor: 'name',
+      render: (value, row) => {
+        const isToBeAssigned = assignToMembers.some(
+          (member) => member._id === row._id,
+        );
+
         return (
-          <div data-testid="memberName">
-            {params.row.firstName + ' ' + params.row.lastName}
-          </div>
+          <span
+            data-testid="memberName"
+            className={isToBeAssigned ? styles.selectedMemberRow : ''}
+          >
+            {String(value)}
+          </span>
         );
       },
+      meta: {
+        sortable: false,
+      },
     },
     {
-      field: 'actions',
-      headerName: t('actions'),
-      flex: 1,
-      align: 'center',
-      minWidth: GRID_COLUMN_MIN_WIDTH,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'actions',
+      header: t('actions'),
+      accessor: '_id',
+      render: (_value, row) => {
         const isToBeAssigned = assignToMembers.some(
-          (member) => member._id === params.row._id,
+          (member) => member._id === row._id,
         );
 
         return (
           <Button
             size="sm"
-            onClick={() => handleAddOrRemoveMember(params.row)}
+            onClick={isToBeAssigned ? undefined : () => handleSelectMember(row)}
             data-testid={
-              isToBeAssigned ? 'deselectMemberBtn' : 'selectMemberBtn'
+              isToBeAssigned ? 'selectedMemberBtn' : 'selectMemberBtn'
             }
             className={
-              !isToBeAssigned ? styles.editButton : `btn btn-danger btn-sm`
+              isToBeAssigned ? styles.selectedMemberButton : styles.editButton
             }
-            aria-label={isToBeAssigned ? t('removeMember') : t('addMember')}
+            aria-label={t('addMember')}
+            disabled={isToBeAssigned}
           >
-            {isToBeAssigned ? 'x' : '+'}
+            +
           </Button>
         );
+      },
+      meta: {
+        sortable: false,
+        align: 'center',
+        width: 'var(--space-13)',
       },
     },
   ];
@@ -331,120 +334,61 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       >
         <form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
           <div
-            className={`border border-2 border-dark-subtle-subtle rounded-3 ${styles.scrollContainer}`}
+            className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
           >
             {assignToMembers.length === 0 ? (
-              <div style={{ color: "var(--gray-400, #9ca3af)", margin: "0 auto", textAlign: "center" }}>
+              <div className="text-body-tertiary mx-auto">
                 {t('noOneSelected')}
               </div>
             ) : (
               assignToMembers.map((member) => (
-                <div
-                  key={member._id}
-                  className={`badge bg-dark-subtle text-secondary-emphasis lh-lg ${styles.memberBadge}`}
-                >
-                  {member.firstName} {member.lastName}
+                <div key={member._id} className={styles.memberBadge}>
+                  {member.name}
                   <Button
                     type="button"
-                    className={`${styles.removeFilterIcon} fa fa-times text-body-tertiary`}
+                    className={styles.removeMemberChipButton}
                     onClick={() => removeMember(member._id)}
                     data-testid="clearSelectedMember"
                     aria-label={t('removeMember')}
-                  />
+                  >
+                    <i className="fa fa-times" aria-hidden="true" />
+                  </Button>
                 </div>
               ))
             )}
           </div>
 
-          <div style={{ margin: "12px 0" }}>
-            <div className="flex-grow-1">
-              <SearchBar
-                placeholder={tCommon('firstName')}
-                value={memberToAssignToSearchFirstName}
-                onChange={(value) =>
-                  setMemberToAssignToSearchFirstName(value.trim())
-                }
-                onClear={() => setMemberToAssignToSearchFirstName('')}
-                showSearchButton={false}
-                inputTestId="searchByFirstName"
-                clearButtonTestId="clearFirstNameSearch"
-              />
-            </div>
-            <div className="flex-grow-1">
-              <SearchBar
-                placeholder={tCommon('lastName')}
-                value={memberToAssignToSearchLastName}
-                onChange={(value) =>
-                  setMemberToAssignToSearchLastName(value.trim())
-                }
-                onClear={() => setMemberToAssignToSearchLastName('')}
-                showSearchButton={false}
-                inputTestId="searchByLastName"
-                clearButtonTestId="clearLastNameSearch"
-              />
-            </div>
+          <div className="my-3">
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              value={memberToAssignToSearchInput}
+              onChange={(value) => setMemberToAssignToSearchInput(value.trim())}
+              onSearch={(value) => setMemberToAssignToSearchInput(value.trim())}
+              inputTestId="searchByName"
+              showSearchButton={false}
+              showLeadingIcon
+            />
           </div>
 
-          {userTagsMembersToAssignToLoading ? (
-            <div className={styles.loadingDiv}>
-              <InfiniteScrollLoader />
-            </div>
-          ) : (
-            <>
-              <div
-                id="addPeopleToTagScrollableDiv"
-                data-testid="addPeopleToTagScrollableDiv"
-                className={styles.dataGridContainer}
-              >
-                <InfiniteScroll
-                  dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
-                  next={loadMoreMembersToAssignTo}
-                  hasMore={
-                    userTagsMembersToAssignToData?.getUsersToAssignTo
-                      .usersToAssignTo.pageInfo.hasNextPage ?? false
-                  }
-                  loader={<InfiniteScrollLoader />}
-                  scrollableTarget="addPeopleToTagScrollableDiv"
-                >
-                  <DataGrid
-                    disableColumnMenu
-                    columnBufferPx={7}
-                    hideFooter={true}
-                    getRowId={(row) => row.id}
-                    slots={{
-                      noRowsOverlay: () => (
-                        <Stack
-                          height="100%"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          {t('noMoreMembersFound')}
-                        </Stack>
-                      ),
-                    }}
-                    sx={{
-                      ...dataGridStyle,
-                      '& .MuiDataGrid-topContainer': { position: 'static' },
-                      '& .MuiDataGrid-virtualScrollerContent': {
-                        marginTop: '0',
-                      },
-                    }}
-                    getRowClassName={() => `${styles.rowBackground}`}
-                    autoHeight
-                    rowHeight={65}
-                    rows={userTagMembersToAssignTo?.map(
-                      (membersToAssignTo, index) => ({
-                        id: index + 1,
-                        ...membersToAssignTo,
-                      }),
-                    )}
-                    columns={columns}
-                    isRowSelectable={() => false}
-                  />
-                </InfiniteScroll>
-              </div>
-            </>
-          )}
+          <div data-testid="addPeopleToTagScrollableDiv">
+            {!userTagsMembersToAssignToLoading &&
+            userTagMembersToAssignTo.length === 0 ? (
+              <EmptyState
+                icon="Tag"
+                message={t('noMoreMembersFound')}
+                dataTestId="add-people-to-tag-empty-state"
+              />
+            ) : (
+              <DataTable<InterfaceMemberData>
+                data={userTagMembersToAssignTo}
+                columns={columns}
+                loading={userTagsMembersToAssignToLoading}
+                rowKey="_id"
+                paginationMode="client"
+                pageSize={PAGE_SIZE}
+              />
+            )}
+          </div>
         </form>
       </CRUDModalTemplate>
     </ErrorBoundaryWrapper>
