@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_TAG\_FOLDER**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L62)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L59)
 
 GraphQL mutation to update a tag folder.
 

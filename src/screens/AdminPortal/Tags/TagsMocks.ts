@@ -1,295 +1,236 @@
-import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
+import { CREATE_TAG, CREATE_TAG_FOLDER } from 'GraphQl/Mutations/TagMutations';
+import {
+  ORGANIZATION_TAGS_WITH_FOLDER,
+  TAG_FOLDER_CHILD_FOLDERS,
+} from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
-/**
- * Helper to create tag node structure
- */
-const createTagNode = (
-  id: string,
-  name: string,
-  usersCount: number,
-  childCount: number,
-  ancestorTags: Array<{ _id: string; name: string }>,
-) => ({
-  node: {
-    _id: id,
-    name,
-    usersAssignedTo: { totalCount: usersCount },
-    childTags: { totalCount: childCount },
-    ancestorTags,
-  },
-  cursor: id,
-});
+const ORG_ID = 'orgId';
+const PARENT_FOLDER_ID = 'folder-parent';
 
-const ANCESTOR_TAG_1 = [{ _id: '1', name: 'userTag 1' }];
+const folderVariables = {
+  input: { id: PARENT_FOLDER_ID },
+  first: TAGS_QUERY_DATA_CHUNK_SIZE,
+};
+
+const orgTagsVariables = {
+  id: ORG_ID,
+  first: 32,
+};
+
+const folderDataResult = {
+  tagFolder: {
+    id: PARENT_FOLDER_ID,
+    name: 'Operations',
+    tags: {
+      edges: [
+        {
+          node: {
+            id: 'tag-1',
+            name: 'Urgent',
+            createdAt: '2026-01-05T00:00:00.000Z',
+            creator: { id: 'u1', name: 'Alice' },
+          },
+        },
+      ],
+    },
+    childFolders: {
+      edges: [
+        {
+          node: {
+            id: 'folder-child-1',
+            name: 'Community',
+            createdAt: '2026-01-04T00:00:00.000Z',
+            creator: { id: 'u2', name: 'Bob' },
+            childFolders: { edges: [{ node: { id: 'folder-child-1-1' } }] },
+            tags: { edges: [{ node: { id: 'tag-2' } }] },
+          },
+        },
+      ],
+      pageInfo: {
+        startCursor: 'folder-child-1',
+        endCursor: 'folder-child-1',
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    },
+    parentFolder: {
+      id: 'folder-root',
+      name: 'All Teams',
+      parentFolder: null,
+    },
+  },
+};
+
+const orgTagsResult = {
+  organization: {
+    id: ORG_ID,
+    tags: {
+      edges: [
+        {
+          node: {
+            id: 'tag-1',
+            name: 'Urgent',
+            createdAt: '2026-01-05T00:00:00.000Z',
+            creator: { id: 'u1', name: 'Alice' },
+            folder: { id: PARENT_FOLDER_ID },
+          },
+        },
+      ],
+      pageInfo: {
+        startCursor: 'tag-1',
+        endCursor: 'tag-1',
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    },
+  },
+};
 
 export const MOCKS = [
-  // 1. Default Load (Descending, No Search)
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
+      query: TAG_FOLDER_CHILD_FOLDERS,
+      variables: folderVariables,
+    },
+    result: {
+      data: folderDataResult,
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_TAGS_WITH_FOLDER,
+      variables: orgTagsVariables,
+    },
+    result: {
+      data: orgTagsResult,
+    },
+  },
+  {
+    request: {
+      query: CREATE_TAG_FOLDER,
       variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        name: 'Growth Folder',
+        organizationId: ORG_ID,
+        parentFolderId: PARENT_FOLDER_ID,
       },
     },
     result: {
       data: {
-        getChildTags: {
-          name: 'userTag 1',
-          childTags: {
-            edges: [
-              createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1),
-              createTagNode('subTag2', 'subTag 2', 5, 0, ANCESTOR_TAG_1),
-              createTagNode('subTag3', 'subTag 3', 0, 5, ANCESTOR_TAG_1),
-              createTagNode('subTag4', 'subTag 4', 0, 0, ANCESTOR_TAG_1),
-              createTagNode('subTag5', 'subTag 5', 5, 5, ANCESTOR_TAG_1),
-              createTagNode('subTag6', 'subTag 6', 5, 5, ANCESTOR_TAG_1),
-              createTagNode('subTag7', 'subTag 7', 5, 5, ANCESTOR_TAG_1),
-              createTagNode('subTag8', 'subTag 8', 5, 5, ANCESTOR_TAG_1),
-              createTagNode('subTag9', 'subTag 9', 5, 5, ANCESTOR_TAG_1),
-              createTagNode('subTag10', 'subTag 10', 5, 5, ANCESTOR_TAG_1),
-            ],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '10',
-              hasNextPage: true,
-              hasPreviousPage: false,
-            },
-            totalCount: 11,
-          },
-          ancestorTags: [],
+        createTagFolder: {
+          id: 'folder-new',
         },
       },
     },
   },
-  // 2. Load More (Infinite Scroll)
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
+      query: TAG_FOLDER_CHILD_FOLDERS,
+      variables: folderVariables,
+    },
+    result: {
+      data: folderDataResult,
+    },
+  },
+  {
+    request: {
+      query: CREATE_TAG,
       variables: {
-        id: '1',
-        after: '10',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        name: 'Urgent Tag',
+        organizationId: ORG_ID,
+        folderId: PARENT_FOLDER_ID,
       },
     },
     result: {
       data: {
-        getChildTags: {
-          name: 'userTag 1',
-          childTags: {
-            edges: [
-              createTagNode('subTag11', 'subTag 11', 0, 0, ANCESTOR_TAG_1),
-            ],
-            pageInfo: {
-              startCursor: '11',
-              endCursor: '11',
-              hasNextPage: false,
-              hasPreviousPage: true,
-            },
-            totalCount: 11,
-          },
-          ancestorTags: [],
+        createTag: {
+          id: 'tag-new',
         },
       },
     },
   },
-  // 3. Navigate to a Child Tag (Drill down)
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: 'subTag1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
+      query: TAG_FOLDER_CHILD_FOLDERS,
+      variables: folderVariables,
+    },
+    result: {
+      data: folderDataResult,
+    },
+  },
+];
+
+export const MOCKS_EMPTY = [
+  {
+    request: {
+      query: TAG_FOLDER_CHILD_FOLDERS,
+      variables: folderVariables,
     },
     result: {
       data: {
-        getChildTags: {
-          name: 'subTag 1',
-          childTags: {
-            edges: [
-              createTagNode('subTag1.1', 'subTag 1.1', 5, 5, [
-                { _id: '1', name: 'userTag 1' },
-                { _id: 'subTag1', name: 'subTag 1' },
-              ]),
-            ],
+        tagFolder: {
+          id: PARENT_FOLDER_ID,
+          name: 'Operations',
+          tags: {
+            edges: [],
+          },
+          childFolders: {
+            edges: [],
             pageInfo: {
-              startCursor: 'subTag1.1',
-              endCursor: 'subTag1.1',
+              startCursor: null,
+              endCursor: null,
               hasNextPage: false,
               hasPreviousPage: false,
             },
-            totalCount: 1,
           },
-          ancestorTags: [
-            {
-              _id: '1',
-              name: 'userTag 1',
-            },
-          ],
+          parentFolder: {
+            id: 'folder-root',
+            name: 'All Teams',
+            parentFolder: null,
+          },
         },
       },
     },
   },
-  // 4. Search Functionality
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: 'searchSubTag' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
+      query: ORGANIZATION_TAGS_WITH_FOLDER,
+      variables: orgTagsVariables,
     },
     result: {
       data: {
-        getChildTags: {
-          name: 'userTag 1',
-          childTags: {
-            edges: [
-              createTagNode(
-                'searchSubTag1',
-                'searchSubTag 1',
-                0,
-                0,
-                ANCESTOR_TAG_1,
-              ),
-              createTagNode(
-                'searchSubTag2',
-                'searchSubTag 2',
-                0,
-                0,
-                ANCESTOR_TAG_1,
-              ),
-            ],
+        organization: {
+          id: ORG_ID,
+          tags: {
+            edges: [],
             pageInfo: {
-              startCursor: 'searchSubTag1',
-              endCursor: 'searchSubTag2',
+              startCursor: null,
+              endCursor: null,
               hasNextPage: false,
               hasPreviousPage: false,
             },
-            totalCount: 2,
           },
-          ancestorTags: [],
-        },
-      },
-    },
-  },
-  // 5. Sort Functionality (Ascending - Empty Search)
-  {
-    request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } }, // Fixed: Empty search for standard sort test
-        sortedBy: { id: 'ASCENDING' },
-      },
-    },
-    result: {
-      data: {
-        getChildTags: {
-          name: 'userTag 1',
-          childTags: {
-            edges: [
-              createTagNode(
-                'searchSubTag2',
-                'searchSubTag 2',
-                0,
-                0,
-                ANCESTOR_TAG_1,
-              ),
-              createTagNode(
-                'searchSubTag1',
-                'searchSubTag 1',
-                0,
-                0,
-                ANCESTOR_TAG_1,
-              ),
-            ],
-            pageInfo: {
-              startCursor: 'searchSubTag2',
-              endCursor: 'searchSubTag1',
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-            totalCount: 2,
-          },
-          ancestorTags: [],
-        },
-      },
-    },
-  },
-  // 6. Create Tag Mutation
-  {
-    request: {
-      query: CREATE_USER_TAG,
-      variables: {
-        name: 'subTag 12',
-        organizationId: '123',
-        folderId: '1',
-      },
-    },
-    result: {
-      data: {
-        createUserTag: {
-          _id: 'subTag12',
         },
       },
     },
   },
 ];
 
-export const MOCKS_ERROR_SUB_TAGS = [
+export const MOCKS_ERROR = [
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
+      query: TAG_FOLDER_CHILD_FOLDERS,
+      variables: folderVariables,
     },
     error: new Error('Mock Graphql Error'),
   },
-];
-
-export const emptyMocks = [
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
+      query: ORGANIZATION_TAGS_WITH_FOLDER,
+      variables: orgTagsVariables,
     },
     result: {
-      data: {
-        getChildTags: {
-          name: 'userTag 1',
-          childTags: {
-            edges: [],
-            pageInfo: {
-              hasNextPage: false,
-              endCursor: null,
-            },
-            totalCount: 0,
-          },
-          ancestorTags: [],
-        },
-      },
+      data: orgTagsResult,
     },
   },
 ];
@@ -297,46 +238,63 @@ export const emptyMocks = [
 export const MOCKS_CREATE_TAG_ERROR = [
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: {
-        id: '1',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
+      query: TAG_FOLDER_CHILD_FOLDERS,
+      variables: folderVariables,
     },
     result: {
-      data: {
-        getChildTags: {
-          name: 'userTag 1',
-          childTags: {
-            edges: [
-              createTagNode('subTag1', 'subTag 1', 5, 5, [
-                { _id: '1', name: 'userTag 1' },
-              ]),
-            ],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '1',
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-            totalCount: 1,
-          },
-          ancestorTags: [],
-        },
-      },
+      data: folderDataResult,
     },
   },
   {
     request: {
-      query: CREATE_USER_TAG,
+      query: ORGANIZATION_TAGS_WITH_FOLDER,
+      variables: orgTagsVariables,
+    },
+    result: {
+      data: orgTagsResult,
+    },
+  },
+  {
+    request: {
+      query: CREATE_TAG,
       variables: {
-        name: 'subTag 12',
-        organizationId: '123',
-        folderId: '1',
+        name: 'Tag Error',
+        organizationId: ORG_ID,
+        folderId: PARENT_FOLDER_ID,
       },
     },
     error: new Error('Failed to create tag'),
+  },
+];
+
+export const MOCKS_CREATE_FOLDER_ERROR = [
+  {
+    request: {
+      query: TAG_FOLDER_CHILD_FOLDERS,
+      variables: folderVariables,
+    },
+    result: {
+      data: folderDataResult,
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_TAGS_WITH_FOLDER,
+      variables: orgTagsVariables,
+    },
+    result: {
+      data: orgTagsResult,
+    },
+  },
+  {
+    request: {
+      query: CREATE_TAG_FOLDER,
+      variables: {
+        name: 'Folder Error',
+        organizationId: ORG_ID,
+        parentFolderId: PARENT_FOLDER_ID,
+      },
+    },
+    error: new Error('Failed to create folder'),
   },
 ];

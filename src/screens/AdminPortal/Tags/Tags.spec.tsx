@@ -1,63 +1,24 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
+import { vi, describe, test, expect, afterEach } from 'vitest';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import SubTags from './Tags';
+import Tags from './Tags';
 import {
-  emptyMocks,
   MOCKS,
+  MOCKS_EMPTY,
+  MOCKS_ERROR,
   MOCKS_CREATE_TAG_ERROR,
-  MOCKS_ERROR_SUB_TAGS,
+  MOCKS_CREATE_FOLDER_ERROR,
 } from './TagsMocks';
-import { InMemoryCache, type ApolloLink } from '@apollo/client';
-import * as Apollo from '@apollo/client';
-import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
-
-// Mock react-infinite-scroll-component to easily trigger 'next'
-interface InterfaceInfiniteScrollMockProps {
-  next: () => void;
-  children?: React.ReactNode;
-}
-
-vi.mock('react-infinite-scroll-component', () => ({
-  default: ({ next, children }: InterfaceInfiniteScrollMockProps) => (
-    <div data-testid="infinite-scroll-component">
-      <button type="button" data-testid="trigger-load-more" onClick={next}>
-        Load More
-      </button>
-      {children}
-    </div>
-  ),
-}));
-
-const translations = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.organizationTags ?? {},
-    ),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
-};
-
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_SUB_TAGS, true);
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+import type { ApolloLink } from '@apollo/client';
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -68,49 +29,84 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUserTag: {
-          merge(existing = {}, incoming) {
-            return {
-              ...existing,
-              ...incoming,
-              childTags: {
-                ...existing.childTags,
-                ...incoming.childTags,
-                edges: [
-                  ...(existing.childTags?.edges || []),
-                  ...(incoming.childTags?.edges || []),
-                ],
-              },
-            };
-          },
-        },
-      },
-    },
-  },
-});
+vi.mock('screens/AdminPortal/ManageTag/ManageFolderModal', () => ({
+  default: ({
+    open,
+    folder,
+    onClose,
+  }: {
+    open: boolean;
+    folder: { name?: string } | null;
+    onClose: () => void;
+  }) => (
+    <>
+      <div data-testid="selectedManagedFolder">{folder?.name ?? 'NONE'}</div>
+      {open ? (
+        <div data-testid="manageChildFolderModal">
+          <button
+            type="button"
+            data-testid="closeManageChildFolderModal"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </div>
+      ) : null}
+    </>
+  ),
+}));
 
-const renderSubTags = (link: ApolloLink): RenderResult => {
-  return render(
-    <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/admin/orgtags/123/subTags/1']}>
+vi.mock('screens/AdminPortal/ManageTag/ManageTagModal', () => ({
+  default: ({
+    open,
+    tag,
+    onClose,
+  }: {
+    open: boolean;
+    tag: { name?: string } | null;
+    onClose: () => void;
+  }) => (
+    <>
+      <div data-testid="selectedManagedTag">{tag?.name ?? 'NONE'}</div>
+      {open ? (
+        <div data-testid="manageTagModal">
+          <button
+            type="button"
+            data-testid="closeManageTagModal"
+            onClick={onClose}
+          >
+            Close
+          </button>
+        </div>
+      ) : null}
+    </>
+  ),
+}));
+
+const renderTags = (link: ApolloLink) =>
+  render(
+    <MockedProvider link={link}>
+      <MemoryRouter
+        initialEntries={['/admin/orgtags/orgId/tags/folder-parent']}
+      >
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
                 path="/admin/orgtags/:orgId"
-                element={<div data-testid="orgtagsScreen"></div>}
+                element={<div data-testid="orgTagsScreen" />}
               />
               <Route
                 path="/admin/orgtags/:orgId/manageTag/:tagId"
-                element={<div data-testid="manageTagScreen"></div>}
+                element={<div data-testid="manageTagScreen" />}
               />
               <Route
-                path="/admin/orgtags/:orgId/subTags/:tagId"
-                element={<SubTags />}
+                path="/admin/orgtags/:orgId/tags/folder-child-1"
+                element={<div data-testid="childFolderScreen" />}
+              />
+              <Route
+                path="/admin/orgtags/:orgId/tags/:tagId"
+                element={<Tags />}
               />
             </Routes>
           </I18nextProvider>
@@ -118,303 +114,306 @@ const renderSubTags = (link: ApolloLink): RenderResult => {
       </MemoryRouter>
     </MockedProvider>,
   );
-};
 
-describe('Organisation Tags Page', () => {
-  beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ orgId: '123', tagId: '1' }),
-    }));
-    cache.reset();
-  });
-
+describe('Tags', () => {
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
-    vi.restoreAllMocks(); // Important for restoring the spy on Apollo
+    vi.restoreAllMocks();
   });
 
-  it('Component loads correctly', async () => {
-    const { getByText } = renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(getByText(translations.addChildTag)).toBeInTheDocument();
-    });
-  });
+  test('renders folder and tag rows with create actions', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    renderTags(link);
 
-  it('render error component on unsuccessful subtags query', async () => {
-    const { queryByText } = renderSubTags(link2);
-    await wait();
     await waitFor(() => {
-      expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
+      expect(screen.getByTestId('addFolderBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('addTagBtn')).toBeInTheDocument();
+      expect(screen.getByText('Community')).toBeInTheDocument();
+      expect(screen.getByText('Urgent')).toBeInTheDocument();
     });
   });
 
-  it('opens and closes the create tag modal', async () => {
-    renderSubTags(link);
-    await wait();
+  test('renders error container when folder query fails', async () => {
+    const link = new StaticMockLink(MOCKS_ERROR, true);
+    renderTags(link);
+
     await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+      expect(screen.getByText(/errorOccured/i)).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('addSubTagBtn'));
-    await waitFor(() => {
-      return expect(
-        screen.findByTestId('modal-cancel-btn'),
-      ).resolves.toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('modal-cancel-btn'));
-    await waitFor(() =>
-      expect(screen.queryByTestId('modal-cancel-btn')).not.toBeInTheDocument(),
-    );
   });
 
-  it('navigates to manage tag screen after clicking manage tag option', async () => {
-    renderSubTags(link);
-    await wait();
+  test('renders empty state when no child folders or tags exist', async () => {
+    const link = new StaticMockLink(MOCKS_EMPTY, true);
+    renderTags(link);
+
     await waitFor(() => {
-      expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
+      expect(screen.getByTestId('tags-empty-state')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
+  });
+
+  test('filters rows by search text', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    const user = userEvent.setup();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    });
+
+    await user.type(screen.getByTestId('searchByName'), 'comm');
+
+    await waitFor(() => {
+      expect(screen.getByText('Community')).toBeInTheDocument();
+      expect(screen.queryByText('Urgent')).not.toBeInTheDocument();
+    });
+  });
+
+  test('navigates to child folder route when clicking folder name', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    const user = userEvent.setup();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Community')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText('Community'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('childFolderScreen')).toBeInTheDocument();
+    });
+  });
+
+  test('navigates to manage tag route when clicking a tag row', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    const user = userEvent.setup();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Urgent')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByText('Urgent'));
+
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
     });
   });
 
-  it('navigates to sub tags screen after clicking on a tag', async () => {
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getAllByTestId('tagName')[0]);
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
+  test('navigates to root tags page from breadcrumb all tags button', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    const user = userEvent.setup();
+    renderTags(link);
 
-  it('navigates to the different sub tag screen screen after clicking a tag in the breadcrumbs', async () => {
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getAllByTestId('redirectToSubTags')[0]);
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
-
-  it('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
-    renderSubTags(link);
-    await wait();
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('allTagsBtn'));
+
+    await user.click(screen.getByTestId('allTagsBtn'));
+
     await waitFor(() => {
-      expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
+      expect(screen.getByTestId('orgTagsScreen')).toBeInTheDocument();
     });
   });
 
-  it('navigates to manage tags screen for the current tag after clicking tha manageCurrentTag button', async () => {
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByTestId('manageCurrentTagBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('manageCurrentTagBtn'));
-    await waitFor(() => {
-      expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
-    });
-  });
-
-  it('searchs for tags where the name matches the provided search input', async () => {
+  test('opens and closes manage child folder modal', async () => {
+    const link = new StaticMockLink(MOCKS, true);
     const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Community')).toBeInTheDocument();
+    });
+
+    const manageButtons = screen.getAllByRole('button', { name: /manage/i });
+    await user.click(manageButtons[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('manageChildFolderModal')).toBeInTheDocument();
+      expect(screen.getByTestId('selectedManagedFolder')).toHaveTextContent(
+        'Community',
+      );
+    });
+
+    await user.click(screen.getByTestId('closeManageChildFolderModal'));
+
     await waitFor(() => {
       expect(
-        screen.getByPlaceholderText(translations.searchByName),
-      ).toBeInTheDocument();
-    });
-    const input = screen.getByPlaceholderText(translations.searchByName);
-    // Test trimming: add spaces that should be trimmed by the component
-    await user.clear(input);
-    await user.type(input, '  searchSubTag  ');
-    await user.click(screen.getByTestId('searchBtn'));
-
-    // should render the two searched tags from the mock data
-    // where name starts with "searchSubTag" (mocks are configured for this)
-    await waitFor(() => {
-      const buttons = screen.getAllByTestId('manageTagBtn');
-      expect(buttons.length).toEqual(2);
-    });
-  });
-
-  it('changes the sort order when dropdown selection changes', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(
-        screen.getByPlaceholderText(translations.searchByName),
-      ).toBeInTheDocument();
-    });
-    const sortButton = screen.getByTestId('sortTags-toggle');
-    expect(sortButton).toBeInTheDocument();
-    await user.click(sortButton);
-    const ascendingOption = screen.getByTestId('sortTags-item-ASCENDING');
-    expect(ascendingOption).toBeInTheDocument();
-    await user.click(ascendingOption);
-    await user.click(sortButton);
-    const descendingOption = screen.getByTestId('sortTags-item-DESCENDING');
-    expect(descendingOption).toBeInTheDocument();
-    await user.click(descendingOption);
-  });
-
-  it('Fetches more sub tags with infinite scroll (load more)', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
-    });
-
-    const initialSubTagsDataLength =
-      screen.getAllByTestId('manageTagBtn').length;
-    expect(initialSubTagsDataLength).toBe(10);
-
-    // Trigger load more - this calls the loadMoreSubTags function
-    await user.click(screen.getByTestId('trigger-load-more'));
-
-    await wait();
-
-    // The load more function was called without crashing
-    // The actual updateQuery logic is tested in the separate updateQuery test
-    await waitFor(() => {
-      const tags = screen.getAllByTestId('manageTagBtn');
-      // At minimum, we should still have the original tags
-      expect(tags.length).toBeGreaterThanOrEqual(10);
-    });
-  });
-
-  it('adds a new sub tag to the current tag', async () => {
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('addSubTagBtn'));
-    await userEvent.type(
-      screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      'subTag 12',
-    );
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        translations.tagCreationSuccess,
+        screen.queryByTestId('manageChildFolderModal'),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId('selectedManagedFolder')).toHaveTextContent(
+        'NONE',
       );
     });
   });
 
-  it('navigates to organization tags screen when pressing Enter on allTagsBtn', async () => {
+  test('opens and closes manage tag modal', async () => {
+    const link = new StaticMockLink(MOCKS, true);
     const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
+    renderTags(link);
+
     await waitFor(() => {
-      expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
+      expect(screen.getByText('Urgent')).toBeInTheDocument();
     });
-    const allTagsBtn = screen.getByTestId('allTagsBtn');
-    allTagsBtn.focus();
-    await user.keyboard('{Enter}');
+
+    const manageButtons = screen.getAllByRole('button', { name: /manage/i });
+    await user.click(manageButtons[1]);
+
     await waitFor(() => {
-      expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
+      expect(screen.getByTestId('manageTagModal')).toBeInTheDocument();
+      expect(screen.getByTestId('selectedManagedTag')).toHaveTextContent(
+        'Urgent',
+      );
+    });
+
+    await user.click(screen.getByTestId('closeManageTagModal'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('manageTagModal')).not.toBeInTheDocument();
+      expect(screen.getByTestId('selectedManagedTag')).toHaveTextContent(
+        'NONE',
+      );
     });
   });
 
-  it('navigates to organization tags screen when pressing Space on allTagsBtn', async () => {
+  test('creates child folder successfully', async () => {
+    const link = new StaticMockLink(MOCKS, true);
     const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
-    });
-    const allTagsBtn = screen.getByTestId('allTagsBtn');
-    allTagsBtn.focus();
-    await user.keyboard(' ');
-    await waitFor(() => {
-      expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
-    });
-  });
+    renderTags(link);
 
-  it('navigates to sub tags screen when pressing Enter on breadcrumb ancestor', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
     await waitFor(() => {
-      expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
+      expect(screen.getByTestId('addFolderBtn')).toBeInTheDocument();
     });
-    const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
-    breadcrumbBtn.focus();
-    await user.keyboard('{Enter}');
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
 
-  it('navigates to sub tags screen when pressing Space on breadcrumb ancestor', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
-    });
-    const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
-    breadcrumbBtn.focus();
-    await user.keyboard(' ');
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
-
-  it('does nothing when pressing Tab on allTagsBtn', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
-    const allTagsBtn = screen.getByTestId('allTagsBtn');
-    allTagsBtn.focus();
-    await user.keyboard('{Tab}');
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
-
-  it('does nothing when pressing Tab on breadcrumb ancestor', async () => {
-    const user = userEvent.setup();
-    renderSubTags(link);
-    await wait();
-    const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
-    breadcrumbBtn.focus();
-    await user.keyboard('{Tab}');
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-  });
-
-  it('displays error toast when addSubTag mutation fails', async () => {
-    const errorLink = new StaticMockLink(MOCKS_CREATE_TAG_ERROR, true);
-    renderSubTags(errorLink);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('addSubTagBtn'));
-    await userEvent.type(
-      screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      'subTag 12',
+    await user.click(screen.getByTestId('addFolderBtn'));
+    await user.type(
+      screen.getByTestId('createFolderNameInput'),
+      'Growth Folder',
     );
-    await userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        expect.stringMatching(/success/i),
+      );
+    });
+  });
+
+  test('creates tag successfully', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    const user = userEvent.setup();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addTagBtn')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('addTagBtn'));
+    await user.type(screen.getByTestId('createTagNameInput'), 'Urgent Tag');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        expect.stringMatching(/success/i),
+      );
+    });
+  });
+
+  test('resets tag modal state on close', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    const user = userEvent.setup();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addTagBtn')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('addTagBtn'));
+
+    const tagInput = screen.getByTestId(
+      'createTagNameInput',
+    ) as HTMLInputElement;
+    await user.type(tagInput, 'Temporary Tag');
+    await user.clear(tagInput);
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('modal-submit-btn')).toBeDisabled();
+    });
+
+    await user.click(screen.getByTestId('modal-cancel-btn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createTagNameInput'),
+      ).not.toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('addTagBtn'));
+
+    await waitFor(() => {
+      const reopenedInput = screen.getByTestId(
+        'createTagNameInput',
+      ) as HTMLInputElement;
+      expect(reopenedInput.value).toBe('');
+      expect(screen.getByTestId('modal-submit-btn')).not.toBeDisabled();
+    });
+  });
+
+  test('resets folder modal state on close', async () => {
+    const link = new StaticMockLink(MOCKS, true);
+    const user = userEvent.setup();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addFolderBtn')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('addFolderBtn'));
+
+    const folderInput = screen.getByTestId(
+      'createFolderNameInput',
+    ) as HTMLInputElement;
+    await user.type(folderInput, 'Temporary Folder');
+    await user.clear(folderInput);
+    await user.tab();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('modal-submit-btn')).toBeDisabled();
+    });
+
+    await user.click(screen.getByTestId('modal-cancel-btn'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createFolderNameInput'),
+      ).not.toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('addFolderBtn'));
+
+    await waitFor(() => {
+      const reopenedInput = screen.getByTestId(
+        'createFolderNameInput',
+      ) as HTMLInputElement;
+      expect(reopenedInput.value).toBe('');
+      expect(screen.getByTestId('modal-submit-btn')).not.toBeDisabled();
+    });
+  });
+
+  test('shows error toast when create tag mutation fails', async () => {
+    const link = new StaticMockLink(MOCKS_CREATE_TAG_ERROR, true);
+    const user = userEvent.setup();
+    renderTags(link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addTagBtn')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('addTagBtn'));
+    await user.type(screen.getByTestId('createTagNameInput'), 'Tag Error');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         'Failed to create tag',
@@ -422,70 +421,26 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  it('renders noRowsOverlay when there are no sub tags', async () => {
-    const emptyLink = new StaticMockLink(emptyMocks, true);
-    renderSubTags(emptyLink);
-    await wait();
-    await waitFor(() => {
-      expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
-    });
-  });
-
-  // Coverage test for updateQuery return prevResult if fetchMoreResult is undefined
-  it('updateQuery returns prevResult if fetchMoreResult is undefined', async () => {
-    const fetchMoreSpy = vi.fn();
-    const prevResultMock = {
-      getChildTags: {
-        name: 'Parent',
-        ancestorTags: [],
-        childTags: {
-          pageInfo: { hasNextPage: true, endCursor: 'abc' },
-          edges: [],
-        },
-      },
-    };
-
-    // Spy on useQuery to intercept fetchMore configuration
-    vi.spyOn(Apollo, 'useQuery').mockReturnValue({
-      data: prevResultMock,
-      loading: false,
-      error: undefined,
-      fetchMore: fetchMoreSpy,
-      refetch: vi.fn(),
-      client: {},
-      called: true,
-      networkStatus: 7,
-      variables: {},
-      startPolling: vi.fn(),
-      stopPolling: vi.fn(),
-      subscribeToMore: vi.fn(),
-      updateQuery: vi.fn(),
-    } as unknown as ReturnType<typeof Apollo.useQuery>);
-
+  test('shows error toast when create folder mutation fails', async () => {
+    const link = new StaticMockLink(MOCKS_CREATE_FOLDER_ERROR, true);
     const user = userEvent.setup();
-    render(
-      <MockedProvider>
-        <MemoryRouter initialEntries={['/admin/orgtags/123/subTags/1']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <SubTags />
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderTags(link);
 
-    // Trigger load more which calls fetchMore
-    const trigger = screen.getByTestId('trigger-load-more');
-    await user.click(trigger);
-
-    expect(fetchMoreSpy).toHaveBeenCalled();
-    const updateQueryFn = fetchMoreSpy.mock.calls[0][0].updateQuery;
-
-    // Manually call updateQuery with undefined fetchMoreResult
-    const result = updateQueryFn(prevResultMock, {
-      fetchMoreResult: undefined,
+    await waitFor(() => {
+      expect(screen.getByTestId('addFolderBtn')).toBeInTheDocument();
     });
-    expect(result).toBe(prevResultMock);
+
+    await user.click(screen.getByTestId('addFolderBtn'));
+    await user.type(
+      screen.getByTestId('createFolderNameInput'),
+      'Folder Error',
+    );
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Failed to create folder',
+      );
+    });
   });
 });

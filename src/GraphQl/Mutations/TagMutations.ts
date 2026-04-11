@@ -22,9 +22,6 @@ export const CREATE_TAG = gql`
   }
 `;
 
-// Backward-compatible alias used by legacy screens/mocks.
-export const CREATE_USER_TAG = CREATE_TAG;
-
 /**
  * GraphQL mutation to create a tag folder.
  *
@@ -135,31 +132,5 @@ export const REMOVE_USER_TAG = gql`
 export const ADD_PEOPLE_TO_TAG = gql`
   mutation AddPeopleToUserTag($tagId: ID!, $userId: ID!) {
     assignUserTag(tagId: $tagId, assigneeId: $userId)
-  }
-`;
-
-/**
- * GraphQL mutation to assign people to multiple tags.
- *
- * @param currentTagId - Id of the current tag.
- * @param selectedTagIds - Ids of the selected tags to be assined.
- */
-
-export const ASSIGN_TO_TAGS = gql`
-  mutation AssignToUserTags {
-    __typename
-  }
-`;
-
-/**
- * GraphQL mutation to remove people from multiple tags.
- *
- * @param currentTagId - Id of the current tag.
- * @param selectedTagIds - Ids of the selected tags to be removed from.
- */
-
-export const REMOVE_FROM_TAGS = gql`
-  mutation RemoveFromUserTags {
-    __typename
   }
 `;

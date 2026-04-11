@@ -6,7 +6,7 @@
 
 > `const` **CREATE\_TAG\_FOLDER**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L36)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L33)
 
 GraphQL mutation to create a tag folder.
 
