@@ -139,31 +139,36 @@
   box-shadow: none;
 }
 
-.createButton {
-  background-color: var(--surface);
-  color: var(--gray-900);
-  border: 1.5px solid var(--border);
+.createButton:global(.btn) {
+  background-color: var(--color-white) !important;
+  color: var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-300) !important;
   border-radius: var(--radius-md);
-  margin: 0.875rem 1rem;
+  margin: 0;
   width: auto;
-  min-width: 2.875rem;
+  min-width: var(--space-15);
+  height: var(--space-9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
   white-space: nowrap;
-  height: 2.25rem;
-  font-size: 0.875rem;
-  font-weight: 500;
 }
 
-.createButton:hover {
-  box-shadow: var(--shadow-card);
-  background-color: var(--gray-50);
-  color: var(--gray-700);
-  border: 1px solid var(--gray-700);
+.createButton:global(.btn):is(:hover, :focus-visible, :active) {
+  box-shadow: none;
+  background-color: var(--color-blue-500) !important;
+  color: var(--color-white) !important;
+  border: var(--border-1) solid var(--color-blue-500) !important;
 }
 
-.createButton:active {
-  color: var(--gray-400);
-  background-color: var(--gray-100);
-  border: 1px solid var(--gray-400);
+.buttonNoWrap {
+  white-space: nowrap;
+}
+
+.listTable tbody td {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
 }
 
 .inputField {
